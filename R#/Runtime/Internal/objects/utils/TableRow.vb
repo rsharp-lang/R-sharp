@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::48112bd73ad09e6a0ecb1540b498c0a5, R#\Runtime\Internal\objects\utils\TableRow.vb"
+﻿#Region "Microsoft.VisualBasic::008675953c4f94d14f1a547f2e7d9edf, R#\Runtime\Internal\objects\utils\TableRow.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.Text
 

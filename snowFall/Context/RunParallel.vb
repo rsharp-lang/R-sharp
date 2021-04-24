@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bc10934e9cecfa8caca03cacea43819c, snowFall\Context\RunParallel.vb"
+﻿#Region "Microsoft.VisualBasic::3a0fe71b2fd8966d65582b22f69244c5, snowFall\Context\RunParallel.vb"
 
     ' Author:
     ' 
@@ -45,4 +45,3 @@
 Public Class RunParallel
 
 End Class
-

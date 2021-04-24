@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::af8ea8ba838affa44b9fa5ea07e58909, snowFall\Protocol\workerList.vb"
+﻿#Region "Microsoft.VisualBasic::61f23d031dbc765c36a57d86df0fbf8e, snowFall\Protocol\workerList.vb"
 
     ' Author:
     ' 
@@ -46,4 +46,3 @@ Public Class workerList
     Public Property outfile As String
 
 End Class
-

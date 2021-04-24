@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::14f4efbd5b99a4b4bcccb6811df69bf3, studio\Rsharp_kit\webKit\Html.vb"
+﻿#Region "Microsoft.VisualBasic::5a708b73255601254905eed6f8b82c1f, studio\Rsharp_kit\webKit\Html.vb"
 
     ' Author:
     ' 
@@ -99,4 +99,3 @@ Module Html
     End Function
 
 End Module
-

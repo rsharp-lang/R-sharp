@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ec404c8be14eba603555a4e949429306, snowFall\Context\Serialization.vb"
+﻿#Region "Microsoft.VisualBasic::a74568d928598f54ff40983a15185d41, snowFall\Context\Serialization.vb"
 
     ' Author:
     ' 
@@ -39,11 +39,9 @@
 
 #End Region
 
-
 ''' <summary>
 ''' R# data object serializer
 ''' </summary>
 Public Module Serialization
 
 End Module
-

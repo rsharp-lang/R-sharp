@@ -1,42 +1,43 @@
-﻿#Region "Microsoft.VisualBasic::61c3a76f028efb879f257d53fda47346, LINQ\LINQ\Script\StackParser.vb"
+﻿#Region "Microsoft.VisualBasic::1b9e77240b4316561ac7749d8f6d02a3, R#\Interpreter\ExecuteEngine\Linq\Syntax\StackParser.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Module StackParser
-' 
-'     Function: DoSplitByTopLevelStack, GetParentPair, isKeyword, isKeywordAggregate, isKeywordFrom
-'               isKeywordSelect, SplitByTopLevelStack, SplitOperators, SplitParameters
-' 
-' /********************************************************************************/
+    '     Module StackParser
+    ' 
+    '         Function: DoSplitByTopLevelStack, filter, GetParentPair, isKeyword, isKeywordAggregate
+    '                   isKeywordFrom, isKeywordSelect, SplitByTopLevelStack, SplitOperators, SplitParameters
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

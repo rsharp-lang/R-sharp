@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c83a9e9b4c88b7e53cf38d33ead19fd5, R#\Interpreter\ExecuteEngine\Linq\LinqOutput.vb"
+﻿#Region "Microsoft.VisualBasic::a5ca4dc7b4f940b594f4cb97490dd765, R#\Interpreter\ExecuteEngine\Linq\old\LinqOutput.vb"
 
     ' Author:
     ' 
@@ -34,10 +34,6 @@
     '     Module LinqOutput
     ' 
     '         Function: getOutputSort, populateOutput
-    ' 
-    '     Class LinqOutputUnit
-    ' 
-    '         Function: ToString
     ' 
     ' 
     ' /********************************************************************************/

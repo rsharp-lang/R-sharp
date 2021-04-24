@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e8adae1479be497f040d71eb93eb7c9e, snowFall\Context\ContextAnalysis.vb"
+﻿#Region "Microsoft.VisualBasic::80a15519a93cf8550a5b370e32900d47, snowFall\Context\ContextAnalysis.vb"
 
     ' Author:
     ' 
@@ -54,4 +54,3 @@ Public Module ContextAnalysis
 
     End Function
 End Module
-
