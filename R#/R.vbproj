@@ -674,7 +674,8 @@
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\DataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\ExecutableContext.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\BinaryExpression.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Class1.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\FunctionInvoke.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Literal.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\MemberReference.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Options\TakeItems.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Options\SkipItems.vb" />

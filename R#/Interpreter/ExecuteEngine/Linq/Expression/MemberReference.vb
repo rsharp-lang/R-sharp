@@ -63,19 +63,13 @@ Namespace Interpreter.ExecuteEngine.LINQ
             ElseIf TypeOf memberName Is Literal Then
                 Me.memberName = any.ToString(DirectCast(memberName, Literal).value)
             Else
-                Throw New InvalidExpressionException(memberName.expressionName)
+                Throw New InvalidExpressionException(memberName.name)
             End If
         End Sub
 
-        Public Overrides ReadOnly Property type As Components.TypeCodes
+        Public Overrides ReadOnly Property name As String
             Get
-                Throw New NotImplementedException()
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property expressionName As ExpressionTypes
-            Get
-                Throw New NotImplementedException()
+                Return "x$ref"
             End Get
         End Property
 
@@ -95,10 +89,6 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         Public Overrides Function ToString() As String
             Return $"{symbol}->{memberName}"
-        End Function
-
-        Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
         End Function
     End Class
 End Namespace

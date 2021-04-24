@@ -23,9 +23,5 @@ Namespace Interpreter.ExecuteEngine.LINQ
         Public Overrides Function Exec(result As IEnumerable(Of JavaScriptObject), context As ExecutableContext) As IEnumerable(Of JavaScriptObject)
             Throw New NotImplementedException()
         End Function
-
-        Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
-        End Function
     End Class
 End Namespace

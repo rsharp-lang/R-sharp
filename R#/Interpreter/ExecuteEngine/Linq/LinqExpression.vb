@@ -98,13 +98,13 @@ Namespace Interpreter.ExecuteEngine.LINQ
         ''' <summary>
         ''' 排序之类的操作都被转换为了函数调用
         ''' </summary>
-        Friend output As FunctionInvoke()
+        Friend output As ExpressionSymbols.Closure.FunctionInvoke()
 
         Sub New(locals As IEnumerable(Of DeclareNewSymbol),
                 sequence As Expression,
                 program As ClosureExpression,
                 projection As Expression,
-                output As IEnumerable(Of FunctionInvoke),
+                output As IEnumerable(Of ExpressionSymbols.Closure.FunctionInvoke),
                 stackframe As StackFrame)
 
             Me.locals = locals.ToArray

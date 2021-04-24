@@ -53,7 +53,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         <Extension>
         Public Function getOutputSort(linq As LinqExpression) As (indexBy As Expression, desc As Boolean)
-            Dim sort As FunctionInvoke = linq.output.Where(Function(fun) fun.funcName.ToString = "sort").FirstOrDefault
+            Dim sort As ExpressionSymbols.Closure.FunctionInvoke = linq.output.Where(Function(fun) fun.funcName.ToString = "sort").FirstOrDefault
 
             If sort Is Nothing Then
                 Return Nothing

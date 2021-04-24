@@ -51,27 +51,21 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         Friend ReadOnly symbolName As String
 
+        Public Overrides ReadOnly Property name As String
+            Get
+                Return "&x"
+            End Get
+        End Property
+
         Sub New(name As String)
             Me.symbolName = name
         End Sub
-
-        Public Overrides ReadOnly Property type As Components.TypeCodes
-            Get
-                Throw New NotImplementedException()
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property expressionName As ExpressionTypes
-            Get
-                Throw New NotImplementedException()
-            End Get
-        End Property
 
         Public Overrides Function Exec(context As ExecutableContext) As Object
             Dim symbol As Symbol = context.FindSymbol(symbolName)
 
             If symbol Is Nothing Then
-                Return Message.SymbolNotFound(context, symbolName, type)
+                Return Message.SymbolNotFound(context, symbolName, TypeCodes.generic)
             Else
                 Return symbol.value
             End If
@@ -79,10 +73,6 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         Public Overrides Function ToString() As String
             Return $"&{symbolName}"
-        End Function
-
-        Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
         End Function
     End Class
 End Namespace

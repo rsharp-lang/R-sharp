@@ -130,7 +130,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Return Nothing
         End Function
 
-        Private Function sort(outputs As List(Of FunctionInvoke), stacktrace As StackFrame) As SyntaxResult
+        Private Function sort(outputs As List(Of ExpressionSymbols.Closure.FunctionInvoke), stacktrace As StackFrame) As SyntaxResult
             ' order by xxx asc
             Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(LinqExpressionSyntax.linqKeywordDelimiters)
                 buffer += ++p
@@ -154,7 +154,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
                 Return exprSyntax
             End If
 
-            outputs += New FunctionInvoke("sort", stacktrace, exprSyntax.expression, New Literal(token.Last.isKeyword("descending")))
+            outputs += New ExpressionSymbols.Closure.FunctionInvoke("sort", stacktrace, exprSyntax.expression, New Literal(token.Last.isKeyword("descending")))
 
             Return Nothing
         End Function
@@ -177,7 +177,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
             End If
 
             If TypeOf projection Is VectorLiteral Then
-                projection = New FunctionInvoke("list", stacktrace, DirectCast(projection, VectorLiteral).ToArray)
+                projection = New ExpressionSymbols.Closure.FunctionInvoke("list", stacktrace, DirectCast(projection, VectorLiteral).ToArray)
             End If
 
             Return Nothing
@@ -193,7 +193,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         Friend Function doParseLINQProgram(locals As List(Of DeclareNewSymbol),
                                            ByRef projection As Expression,
-                                           ByRef outputs As List(Of FunctionInvoke),
+                                           ByRef outputs As List(Of ExpressionSymbols.Closure.FunctionInvoke),
                                            ByRef programClosure As ClosureExpression) As SyntaxResult
 
             Dim syntaxResult As New Value(Of SyntaxResult)
@@ -227,7 +227,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
                             Return syntaxResult
                         End If
                     Case "distinct"
-                        outputs += New FunctionInvoke("unique", stacktrace, New SymbolReference("$"))
+                        outputs += New ExpressionSymbols.Closure.FunctionInvoke("unique", stacktrace, New SymbolReference("$"))
                     Case "order"
                         If Not (syntaxResult = sort(outputs, stacktrace)) Is Nothing Then
                             Return syntaxResult

@@ -2,12 +2,17 @@
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
     Public MustInherit Class PipelineKeyword : Inherits LinqKeywordExpression
 
         Public MustOverride Overloads Function Exec(result As IEnumerable(Of JavaScriptObject), context As ExecutableContext) As IEnumerable(Of JavaScriptObject)
+
+        Public Overrides Function Exec(context As ExecutableContext) As Object
+            Throw New NotImplementedException()
+        End Function
 
         ''' <summary>
         ''' 将字符串常量表示转换为变量引用
@@ -26,7 +31,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
                 bin.left = FixLiteral(bin.left)
                 bin.right = FixLiteral(bin.right)
             ElseIf TypeOf expr Is Literal Then
-                expr = New SymbolReference(DirectCast(expr, Literal).ValueStr)
+                expr = New SymbolReference(any.ToString(DirectCast(expr, Literal).value))
             ElseIf TypeOf expr Is FunctionInvoke Then
                 DirectCast(expr, FunctionInvoke).parameters = DirectCast(expr, FunctionInvoke).parameters _
                     .Select(AddressOf FixLiteral) _

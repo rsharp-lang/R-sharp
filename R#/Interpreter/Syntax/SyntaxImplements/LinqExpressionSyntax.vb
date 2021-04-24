@@ -100,7 +100,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .SplitByTopLevelDelimiter(TokenType.keyword)
 
             Dim projection As Expression = Nothing
-            Dim output As New List(Of FunctionInvoke)
+            Dim output As New List(Of ExpressionSymbols.Closure.FunctionInvoke)
             Dim program As ClosureExpression = Nothing
             Dim p As New Pointer(Of Token())(tokens)
             Dim parser As New LinqSyntaxParser(p, opts)

@@ -203,11 +203,11 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             For Each item As Expression In values
                 If TypeOf item Is BinaryExpression Then
                     With DirectCast(item, BinaryExpression)
-                        fields.Add(New NamedValue(Of Expression)(item.ToString, item))
-                    End With
-                ElseIf TypeOf item Is ValueAssign Then
-                    With DirectCast(item, ValueAssign)
-                        fields.Add(New NamedValue(Of Expression)(DirectCast(.left, SymbolReference).symbolName, .right))
+                        If .LikeValueAssign Then
+                            fields.Add(New NamedValue(Of Expression)(DirectCast(.left, SymbolReference).symbolName, .right))
+                        Else
+                            fields.Add(New NamedValue(Of Expression)(item.ToString, item))
+                        End If
                     End With
                 ElseIf TypeOf item Is MemberReference Then
                     With DirectCast(item, MemberReference)
@@ -293,7 +293,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                         .Take(blocks(1).Length - 2) _
                         .GetParameters
 
-                    Return New FunctionInvoke(name, Nothing, params)
+                    Return New FunctionInvoke(name, params)
                 End If
             End If
 
@@ -323,7 +323,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             Dim elements As Expression() = tokenList.GetParameters.ToArray
             Dim vec As New VectorLiteral(elements)
 
-            Return vec
+            Return New RunTimeValueExpression(vec)
         End Function
     End Module
 End Namespace
