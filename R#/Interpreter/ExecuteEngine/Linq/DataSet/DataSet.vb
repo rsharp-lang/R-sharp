@@ -58,7 +58,11 @@ Namespace Interpreter.ExecuteEngine.LINQ
         ''' </summary>
         ''' <returns></returns>
         Friend Overrides Iterator Function PopulatesData() As IEnumerable(Of Object)
-            Throw New NotImplementedException()
+            Dim nrows As Integer = dataframe.nrows
+
+            For i As Integer = 0 To nrows
+
+            Next
         End Function
     End Class
 

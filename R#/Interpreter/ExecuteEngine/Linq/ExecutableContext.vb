@@ -16,6 +16,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
             End Get
         End Property
 
+        <DebuggerStepThrough>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(env As Environment)
             environment = env

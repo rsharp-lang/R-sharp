@@ -35,7 +35,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Return LINQ.Exec(New ExecutableContext(envir))
+            Dim result As Object = LINQ.Exec(New ExecutableContext(envir))
+
+            Return result
         End Function
 
         Friend Shared Function produceSequenceVector(sequence As Object, ByRef isList As Boolean) As Object

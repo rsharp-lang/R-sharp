@@ -91,25 +91,15 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        ''' <summary>
+        ''' get column by name
+        ''' </summary>
+        ''' <returns>
+        ''' this property always returns a vector in full size(length is equals to <see cref="nrows"/>)
+        ''' </returns>
         Default Public ReadOnly Property getColumnVector(columnName As String) As Array
             Get
-                Dim n As Integer = nrows
-                Dim col As Array = columns.TryGetValue(columnName)
-
-                If col Is Nothing Then
-                    Return Nothing
-                ElseIf col.Length = n Then
-                    Return col
-                Else
-                    Dim x As Object = col.GetValue(Scan0)
-                    Dim vec As Array = Array.CreateInstance(x.GetType, nrows)
-
-                    For i As Integer = 0 To vec.Length - 1
-                        Call vec.SetValue(x, i)
-                    Next
-
-                    Return vec
-                End If
+                Return getVector(columnName, fullSize:=True)
             End Get
         End Property
 
@@ -135,9 +125,38 @@ Namespace Runtime.Internal.Object
             Return columns.Keys.ElementAtOrDefault(index - 1)
         End Function
 
+        ''' <summary>
+        ''' get column by name
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getVector(Of T)(name As String) As T()
             Return REnv.asVector(Of T)(columns(name))
+        End Function
+
+        Public Function getVector(name As String, Optional fullSize As Boolean = False) As Array
+            Dim col As Array = columns.TryGetValue(name)
+
+            If col Is Nothing Then
+                ' undefined column was selected
+                Return Nothing
+            End If
+
+            If fullSize Then
+                Dim nrows As Integer = Me.nrows
+                Dim vec As Array = Array.CreateInstance(col.GetType.GetElementType, nrows)
+                Dim getter = New GetVectorElement(col).Getter
+
+                For i As Integer = 0 To nrows - 1
+                    vec.SetValue(getter(i), i)
+                Next
+
+                Return vec
+            Else
+                Return col
+            End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -159,21 +178,7 @@ Namespace Runtime.Internal.Object
                     .columns = DirectCast(asVector(Of String)(selector), String()) _
                         .ToDictionary(Function(colName) colName,
                                       Function(key)
-                                          Dim col As Array = columns(key)
-
-                                          If fullSize Then
-                                              Dim nrows As Integer = Me.nrows
-                                              Dim vec As Array = Array.CreateInstance(col.GetType.GetElementType, nrows)
-                                              Dim getter = New GetVectorElement(col).Getter
-
-                                              For i As Integer = 0 To nrows - 1
-                                                  vec.SetValue(getter(i), i)
-                                              Next
-
-                                              Return vec
-                                          Else
-                                              Return col
-                                          End If
+                                          Return getVector(key, fullSize)
                                       End Function)
                 }
             ElseIf indexType Like RType.integers Then
