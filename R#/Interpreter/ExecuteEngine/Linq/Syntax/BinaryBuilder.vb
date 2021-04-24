@@ -56,6 +56,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             New String() {"/", "*", "%"},
             New String() {"+", "-"},
             New String() {"&"},
+            New String() {">", "<", ">=", "<=", "==", "!="},
             New String() {"&&", "||"}
         }
 
