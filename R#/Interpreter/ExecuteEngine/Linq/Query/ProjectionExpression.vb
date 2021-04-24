@@ -44,7 +44,11 @@ Namespace Interpreter.ExecuteEngine.LINQ
             End If
 
             For Each item As Object In dataset.PopulatesData()
-                Call symbol.SetValue(item, closure)
+                err = symbol.SetValue(item, closure)
+
+                If Not err Is Nothing Then
+                    Return err
+                End If
 
                 For Each line As Expression In executeQueue
                     If TypeOf line Is WhereFilter Then

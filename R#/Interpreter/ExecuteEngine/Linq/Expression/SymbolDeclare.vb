@@ -1,4 +1,6 @@
-﻿Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
+﻿Imports Microsoft.VisualBasic.My
+Imports Microsoft.VisualBasic.My.JavaScript
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -24,6 +26,15 @@ Namespace Interpreter.ExecuteEngine.LINQ
             End Get
         End Property
 
+        Public ReadOnly Property isTuple As Boolean
+            Get
+                Return Not tupleNames.IsNullOrEmpty
+            End Get
+        End Property
+
+        Dim symbolName As String
+        Dim tupleNames As String()
+
         ''' <summary>
         ''' just create new symbol in the target environment
         ''' </summary>
@@ -31,15 +42,21 @@ Namespace Interpreter.ExecuteEngine.LINQ
         ''' <returns>returns nothing</returns>
         Public Overrides Function Exec(context As ExecutableContext) As Object
             If TypeOf symbol Is Literal Then
-                Call context.AddSymbol(any.ToString(DirectCast(symbol, Literal).value), TypeCodes.generic)
+                symbolName = any.ToString(DirectCast(symbol, Literal).value)
+                context.AddSymbol(symbolName, TypeCodes.generic)
             ElseIf TypeOf symbol Is RunTimeValueExpression AndAlso TypeOf DirectCast(symbol, RunTimeValueExpression).R Is VectorLiteral Then
+                Dim symbols As New List(Of String)
+
                 For Each element In DirectCast(DirectCast(symbol, RunTimeValueExpression).R, VectorLiteral)
                     If Not TypeOf element Is DataSets.Literal Then
                         Return Internal.debug.stop("symbol expression in tuple vector should be symbol or literal text!", context)
                     Else
-                        Call context.AddSymbol(any.ToString(DirectCast(element, DataSets.Literal).value), TypeCodes.generic)
+                        Call symbols.Add(any.ToString(DirectCast(element, DataSets.Literal).value))
+                        Call context.AddSymbol(symbols.Last, TypeCodes.generic)
                     End If
                 Next
+
+                tupleNames = symbols.ToArray
             Else
                 Return Internal.debug.stop("symbol expression should be symbol or literal text!", context)
             End If
@@ -47,8 +64,18 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Return Nothing
         End Function
 
-        Public Sub SetValue(value As Object, contex As ExecutableContext)
+        Public Function SetValue(value As Object, contex As ExecutableContext) As Message
+            If Not isTuple Then
+                Call contex.SetSymbol(symbolName, value)
+            ElseIf TypeOf value Is JavaScriptObject Then
+                For Each name As String In tupleNames
+                    Call contex.SetSymbol(name, DirectCast(value, JavaScriptObject)(name))
+                Next
+            Else
+                Return Internal.debug.stop("invalid data type!", contex)
+            End If
 
-        End Sub
+            Return Nothing
+        End Function
     End Class
 End Namespace
