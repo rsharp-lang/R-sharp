@@ -64,7 +64,6 @@ Namespace Development.Package.File
         FunctionByRef
         FunctionDeclare
         ClosureDeclare
-        LinqDeclare
         FormulaDeclare
         LambdaDeclare
         SymbolDeclare
@@ -74,6 +73,12 @@ Namespace Development.Package.File
         SymbolAssign
         SymbolRegexp
         SymbolMemberAssign
+
+        ''' <summary>
+        ''' A linq query epxression in R# scripting 
+        ''' </summary>
+        LinqQuery
+
         Require
 
         Constructor

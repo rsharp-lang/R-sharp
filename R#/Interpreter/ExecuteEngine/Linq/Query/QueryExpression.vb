@@ -21,7 +21,7 @@
         ''' <param name="context"></param>
         ''' <returns></returns>
         Public Function GetSeqValue(context As ExecutableContext) As Object
-            Return sequence.Evaluate(context)
+            Return sequence.Exec(context)
         End Function
 
         ''' <summary>
