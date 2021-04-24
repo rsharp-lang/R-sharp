@@ -110,7 +110,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             Dim blocks As List(Of Token()) = tokenList _
                 .JoinOperators _
                 .SplitByTopLevelStack _
-                .ToList
+                .AsList
 
             For i As Integer = 1 To blocks.Count - 1
                 If i >= blocks.Count Then
@@ -261,6 +261,12 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                     fields.Add(New NamedValue(Of Expression)(DirectCast(item.expression, SymbolReference).symbolName, item.expression))
                 ElseIf TypeOf item.expression Is Literal Then
                     fields.Add(New NamedValue(Of Expression)(any.ToString(DirectCast(item.expression, Literal).value), item.expression))
+                ElseIf TypeOf item.expression Is ValueAssign Then
+                    With DirectCast(item.expression, ValueAssign)
+                        fields.Add(New NamedValue(Of Expression)(.symbolName, New RunTimeValueExpression(.value)))
+                    End With
+                Else
+                    Return New SyntaxParserResult(New SyntaxErrorException("invalid expression type!"))
                 End If
             Next
 

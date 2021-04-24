@@ -784,8 +784,6 @@ test1::println('123');
     End Sub
 
     Sub linqTest()
-        R.debug = False
-
         Call R.Evaluate("
 const table = data.frame(
     X = [1,2,3,4,5],

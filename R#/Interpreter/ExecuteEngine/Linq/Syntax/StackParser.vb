@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::1b9e77240b4316561ac7749d8f6d02a3, R#\Interpreter\ExecuteEngine\Linq\Syntax\StackParser.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module StackParser
-    ' 
-    '         Function: DoSplitByTopLevelStack, filter, GetParentPair, isKeyword, isKeywordAggregate
-    '                   isKeywordFrom, isKeywordSelect, SplitByTopLevelStack, SplitOperators, SplitParameters
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module StackParser
+' 
+'         Function: DoSplitByTopLevelStack, filter, GetParentPair, isKeyword, isKeywordAggregate
+'                   isKeywordFrom, isKeywordSelect, SplitByTopLevelStack, SplitOperators, SplitParameters
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -139,8 +140,11 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                                                          popOnClearStack As Boolean) As IEnumerable(Of Token())
             Dim block As New List(Of Token)
             Dim stack As New Stack(Of String)
+            Dim i As New Pointer(Of Token)(tokenList.Where(Function(t) filter(t)))
 
-            For Each item As Token In tokenList.Where(Function(t) filter(t))
+            Do While Not i.EndRead
+                Dim item As Token = ++i
+
                 If delimiter(item) Then
                     If stack.Count > 1 Then
                         block.Add(item)
@@ -187,7 +191,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                     Else
                         block.Add(item)
 
-                        If isParentStack AndAlso block > 0 Then
+                        If isParentStack AndAlso block > 0 AndAlso i.Current.name <> TokenType.comma Then
                             Yield block.PopAll
                         End If
                     End If
@@ -198,7 +202,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 Else
                     block.Add(item)
                 End If
-            Next
+            Loop
 
             If stack.Count = 1 AndAlso "([{".IndexOf(stack.Peek) = -1 Then
                 If block > 0 Then
