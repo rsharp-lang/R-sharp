@@ -1,5 +1,5 @@
-﻿Imports Microsoft.VisualBasic.My.JavaScript
-Imports SMRUCC.Rsharp.Runtime
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.My.JavaScript
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
@@ -20,8 +20,18 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Me.n = n
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Overrides Function Exec(context As ExecutableContext) As Object
+            Return n.Exec(context)
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Exec(result As IEnumerable(Of JavaScriptObject), context As ExecutableContext) As IEnumerable(Of JavaScriptObject)
-            Throw New NotImplementedException()
+            Return result.Take(count:=CInt(Exec(context)))
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"TAKE {n}"
         End Function
     End Class
 End Namespace

@@ -1,5 +1,4 @@
-﻿Imports SMRUCC.Rsharp.Development.Package.File
-Imports SMRUCC.Rsharp.Runtime.Components
+﻿Imports System.Runtime.CompilerServices
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
@@ -11,6 +10,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
         Public MustOverride ReadOnly Property keyword As String
 
         Public Overrides ReadOnly Property name As String
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return keyword
             End Get

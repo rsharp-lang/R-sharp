@@ -1,7 +1,4 @@
-﻿
-Imports SMRUCC.Rsharp.Runtime
-
-Namespace Interpreter.ExecuteEngine.LINQ
+﻿Namespace Interpreter.ExecuteEngine.LINQ
 
     ''' <summary>
     ''' data filter: ``WHERE &lt;condition>``
@@ -21,7 +18,11 @@ Namespace Interpreter.ExecuteEngine.LINQ
         End Sub
 
         Public Overrides Function Exec(context As ExecutableContext) As Object
-            Throw New NotImplementedException()
+            Return filter.Exec(context)
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"WHERE {filter}"
         End Function
     End Class
 End Namespace
