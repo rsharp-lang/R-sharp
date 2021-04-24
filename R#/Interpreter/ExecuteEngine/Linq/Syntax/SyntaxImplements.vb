@@ -46,6 +46,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Language
@@ -231,7 +232,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                     type = tokenList(3).text
                 End If
 
-                Return New SymbolDeclare With {.symbolName = name, .type = type}
+                Return New SymbolDeclare With {.symbolName = name, .typeName = type}
             ElseIf tokenList(Scan0).isKeyword("where") Then
                 Return New WhereFilter(ParseExpression(tokenList.Skip(1).ToArray))
             ElseIf tokenList(Scan0).isKeyword("in") Then
@@ -287,7 +288,12 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 Dim name As Expression = ParseExpression(blocks(Scan0))
 
                 If TypeOf name Is SymbolReference AndAlso blocks(1).IsClosure Then
-                    Return New FuncEval(name, blocks(1).Skip(1).Take(blocks(1).Length - 2).GetParameters)
+                    Dim params As Expression() = blocks(1) _
+                        .Skip(1) _
+                        .Take(blocks(1).Length - 2) _
+                        .GetParameters
+
+                    Return New FunctionInvoke(name, Nothing, params)
                 End If
             End If
 

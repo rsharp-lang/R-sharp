@@ -670,6 +670,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecutableLoop.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\ExecutableContext.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\BinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\MemberReference.vb" />

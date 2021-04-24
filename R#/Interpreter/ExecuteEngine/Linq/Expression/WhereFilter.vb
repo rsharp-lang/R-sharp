@@ -8,11 +8,18 @@ Namespace Interpreter.ExecuteEngine.LINQ
     ''' </summary>
     Public Class WhereFilter : Inherits LinqKeywordExpression
 
+        Dim filter As Expression
+
         Public Overrides ReadOnly Property keyword As String
             Get
                 Return "WHERE"
             End Get
         End Property
+
+        Sub New(filter As Expression)
+            Me.filter = filter
+        End Sub
+
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Throw New NotImplementedException()

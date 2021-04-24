@@ -7,6 +7,9 @@ Namespace Interpreter.ExecuteEngine.LINQ
     ''' </summary>
     Public Class SymbolDeclare : Inherits LinqKeywordExpression
 
+        Public Property symbolName As String
+        Public Property typeName As String
+
         Public Overrides ReadOnly Property keyword As String
             Get
                 Return "LET"
