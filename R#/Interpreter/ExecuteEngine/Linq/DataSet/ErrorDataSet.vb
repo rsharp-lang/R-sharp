@@ -6,6 +6,10 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         Public Property message As Message
 
+        ''' <summary>
+        ''' populate nothing
+        ''' </summary>
+        ''' <returns></returns>
         Friend Overrides Iterator Function PopulatesData() As IEnumerable(Of Object)
         End Function
     End Class

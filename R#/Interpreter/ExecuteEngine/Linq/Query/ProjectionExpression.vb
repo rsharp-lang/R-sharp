@@ -59,6 +59,8 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
             If Not err Is Nothing Then
                 Return err
+            ElseIf TypeOf dataset Is ErrorDataSet Then
+                Return DirectCast(dataset, ErrorDataSet).message
             End If
 
             For Each item As Object In dataset.PopulatesData()
