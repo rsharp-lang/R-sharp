@@ -136,35 +136,84 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             End If
         End Function
 
+        ''' <summary>
+        ''' <see cref="ProjectionExpression"/>
+        ''' </summary>
+        ''' <param name="symbol"></param>
+        ''' <param name="blocks"></param>
+        ''' <returns></returns>
         <Extension>
-        Private Function CreateProjectionQuery(symbol As Token(), blocks As Token()()) As ProjectionExpression
-            Dim symbolExpr As SymbolDeclare = symbol.ParseExpression
+        Private Function CreateProjectionQuery(symbol As Token(), blocks As Token()()) As SyntaxParserResult
+            Dim symbolExpr As SyntaxParserResult = symbol.ParseExpression
+
+            If symbolExpr.isError Then
+                Return symbolExpr
+            End If
+
             Dim i As Integer = 0
-            Dim seq As Expression = blocks.GetSequence(offset:=i)
-            Dim exec As Expression() = blocks.Skip(i).PopulateExpressions.ToArray
-            Dim proj As Expression = exec.Where(Function(t) TypeOf t Is OutputProjection).FirstOrDefault
+            Dim seq As SyntaxParserResult = blocks.GetSequence(offset:=i)
+            Dim exec As New List(Of Expression)
+
+            If seq.isError Then
+                Return seq
+            End If
+
+            For Each line As SyntaxParserResult In blocks.Skip(i).PopulateExpressions
+                If line.isError Then
+                    Return line
+                Else
+                    exec.Add(line.expression)
+                End If
+            Next
+
+            Dim proj As Expression = exec _
+                .Where(Function(t) TypeOf t Is OutputProjection) _
+                .FirstOrDefault
             Dim opt As New Options(exec.Where(Function(t) TypeOf t Is PipelineKeyword))
             Dim execProgram As Expression() = exec _
                 .Where(Function(t)
                            Return (Not TypeOf t Is PipelineKeyword) AndAlso (Not TypeOf t Is OutputProjection)
                        End Function) _
                 .ToArray
-            Dim Linq As New ProjectionExpression(symbolExpr, seq, execProgram, proj, opt)
+            Dim LINQ As New ProjectionExpression(
+                symbol:=symbolExpr.expression,
+                sequence:=seq.expression,
+                exec:=execProgram,
+                proj:=proj,
+                opt:=opt
+            )
 
-            Return Linq
+            Return LINQ
+        End Function
+
+        ''' <summary>
+        ''' <see cref="AggregateExpression"/>
+        ''' </summary>
+        ''' <param name="symbol"></param>
+        ''' <param name="blocks"></param>
+        ''' <returns></returns>
+        <Extension>
+        Private Function CreateAggregateQuery(symbol As Token(), blocks As Token()()) As SyntaxParserResult
+            Dim symbolExpr As SyntaxParserResult = symbol.ParseExpression
+
+            If symbolExpr.isError Then
+                Return symbolExpr
+            End If
+
+            Return New SyntaxParserResult(New NotImplementedException)
         End Function
 
         <Extension>
-        Private Iterator Function PopulateExpressions(blocks As IEnumerable(Of Token())) As IEnumerable(Of Expression)
+        Private Iterator Function PopulateExpressions(blocks As IEnumerable(Of Token())) As IEnumerable(Of SyntaxParserResult)
             For Each blockLine As Token() In blocks
                 Yield ParseExpression(blockLine)
             Next
         End Function
 
         <Extension>
-        Private Function GetSequence(blocks As Token()(), ByRef offset As Integer) As Expression
+        Private Function GetSequence(blocks As Token()(), ByRef offset As Integer) As SyntaxParserResult
             If Not blocks(Scan0).First.isKeyword("in") Then
-                Throw New SyntaxErrorException
+                Return New SyntaxParserResult(New SyntaxErrorException)
             ElseIf blocks(Scan0).Length = 1 Then
                 offset = 2
                 Return blocks(1).ParseExpression
@@ -172,14 +221,6 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 offset = 1
                 Return blocks(0).ParseExpression
             End If
-        End Function
-
-        <Extension>
-        Private Function CreateAggregateQuery(symbol As Token(), blocks As Token()()) As AggregateExpression
-            Dim symbolExpr As SymbolDeclare = symbol.ParseExpression
-            ' Dim seq As Expression
-
-            Throw New NotImplementedException
         End Function
 
         <Extension>
@@ -224,7 +265,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         End Function
 
         <Extension>
-        Private Function ParseKeywordExpression(tokenList As Token()) As Expression
+        Private Function ParseKeywordExpression(tokenList As Token()) As SyntaxParserResult
             If tokenList(Scan0).isKeywordFrom OrElse tokenList(Scan0).isKeywordAggregate OrElse tokenList(Scan0).isKeyword("let") Then
                 ' declare new symbol
                 Dim name As String = tokenList(1).text
@@ -236,7 +277,13 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
                 Return New SymbolDeclare With {.symbolName = name, .typeName = type}
             ElseIf tokenList(Scan0).isKeyword("where") Then
-                Return New WhereFilter(ParseExpression(tokenList.Skip(1).ToArray))
+                Dim bool = ParseExpression(tokenList.Skip(1).ToArray)
+
+                If bool.isError Then
+                    Return bool
+                End If
+
+                Return New WhereFilter(bool.expression)
             ElseIf tokenList(Scan0).isKeyword("in") Then
                 Return ParseExpression(tokenList.Skip(1).ToArray)
             ElseIf tokenList(Scan0).isKeyword("select") Then
@@ -250,11 +297,29 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                     sortKey = sortKey.Take(sortKey.Length - 1).ToArray
                 End If
 
-                Return New OrderBy(ParseExpression(sortKey), desc)
+                Dim key = ParseExpression(sortKey)
+
+                If key.isError Then
+                    Return key
+                End If
+
+                Return New OrderBy(key.expression, desc)
             ElseIf tokenList(Scan0).isKeyword("take") Then
-                Return New TakeItems(ParseExpression(tokenList.Skip(1).ToArray))
+                Dim n = ParseExpression(tokenList.Skip(1).ToArray)
+
+                If n.isError Then
+                    Return n
+                End If
+
+                Return New TakeItems(n.expression)
             ElseIf tokenList(Scan0).isKeyword("skip") Then
-                Return New SkipItems(ParseExpression(tokenList.Skip(1).ToArray))
+                Dim n = ParseExpression(tokenList.Skip(1).ToArray)
+
+                If n.isError Then
+                    Return n
+                End If
+
+                Return New SkipItems(n.expression)
             Else
                 Throw New SyntaxErrorException
             End If
@@ -266,7 +331,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         End Function
 
         <Extension>
-        Public Function ParseExpression(tokenList As Token()) As Expression
+        Public Function ParseExpression(tokenList As Token()) As SyntaxParserResult
             If tokenList.Length = 1 Then
                 Return tokenList(Scan0).ParseToken
             ElseIf tokenList(Scan0).name = TokenType.keyword Then
@@ -287,15 +352,25 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                         .ToArray
                 End If
             ElseIf blocks.Length = 2 Then
-                Dim name As Expression = ParseExpression(blocks(Scan0))
+                Dim name As SyntaxParserResult = ParseExpression(blocks(Scan0))
 
-                If TypeOf name Is SymbolReference AndAlso blocks(1).IsClosure Then
+                If name.isError Then
+                    Return name
+                End If
+
+                If TypeOf name.expression Is SymbolReference AndAlso blocks(1).IsClosure Then
                     Dim params As Expression() = blocks(1) _
                         .Skip(1) _
                         .Take(blocks(1).Length - 2) _
                         .GetParameters
 
-                    Return New FunctionInvoke(name, params)
+                    Return New FunctionInvoke(name.expression, params)
+                End If
+            End If
+
+            If tokenList.Length = 2 Then
+                If tokenList(Scan0) <> (TokenType.operator, "-") Then
+                    Return New SyntaxParserResult(New SyntaxErrorException(tokenList.Select(Function(t) t.text).JoinBy(" ")))
                 End If
             End If
 

@@ -794,7 +794,7 @@ const table = data.frame(
 let runQuery = {
     FROM [X, Y, Z] 
     IN table
-    WHERE Z > 7000 && Z <= 9000
+    WHERE Z > 7000 && Z <= 9000 x
     ORDER BY Z
     TAKE 10
 }
