@@ -22,5 +22,9 @@ Namespace Interpreter.ExecuteEngine.LINQ
         Public Overrides Function Exec(context As ExecutableContext) As Object
             Return R.Evaluate(context)
         End Function
+
+        Public Overrides Function ToString() As String
+            Return R.ToString
+        End Function
     End Class
 End Namespace

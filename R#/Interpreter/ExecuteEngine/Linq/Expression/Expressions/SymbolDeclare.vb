@@ -83,5 +83,9 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
             Return Nothing
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"LET {symbol} As {typeName}"
+        End Function
     End Class
 End Namespace
