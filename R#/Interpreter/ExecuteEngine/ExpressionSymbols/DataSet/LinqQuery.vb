@@ -1,5 +1,8 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.My.JavaScript
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.LINQ
 Imports SMRUCC.Rsharp.Runtime
@@ -37,7 +40,47 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim result As Object = LINQ.Exec(New ExecutableContext(envir))
 
-            Return result
+            If TypeOf result Is Message Then
+                Return result
+            End If
+
+            If TypeOf LINQ Is ProjectionExpression Then
+                If TypeOf LINQ.dataset Is DataFrameDataSet Then
+                    ' returns a new dataframe
+                    Return newDataFrame(DirectCast(result, JavaScriptObject()), DirectCast(LINQ, ProjectionExpression).project.fields.Keys)
+                Else
+                    ' returns a new sequence
+                    Return result
+                End If
+            Else
+                ' scalar
+                ' returns directly
+                Return result
+            End If
+        End Function
+
+        Private Shared Function newDataFrame(js As JavaScriptObject(), project As String()) As dataframe
+            Dim table As New dataframe With {
+                .columns = New Dictionary(Of String, Array)
+            }
+
+            For Each name As String In project
+                table.columns.Add(name, Array.CreateInstance(GetType(Object), js.Length))
+            Next
+
+            If js.Length = 0 Then
+                Return table
+            End If
+
+            For Each name As String In project
+                Dim vec As Array = table.columns(name)
+
+                For i As Integer = 0 To vec.Length - 1
+                    vec.SetValue(js(i)(name), i)
+                Next
+            Next
+
+            Return table
         End Function
 
         Friend Shared Function produceSequenceVector(sequence As Object, ByRef isList As Boolean) As Object

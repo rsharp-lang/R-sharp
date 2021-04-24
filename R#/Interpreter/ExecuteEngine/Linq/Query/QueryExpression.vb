@@ -10,6 +10,8 @@ Namespace Interpreter.ExecuteEngine.LINQ
         Protected Friend ReadOnly symbol As SymbolDeclare
         Protected Friend ReadOnly executeQueue As Expression()
 
+        Protected Friend dataset As DataSet
+
         Sub New(symbol As SymbolDeclare, sequence As Expression, execQueue As IEnumerable(Of Expression))
             Me.symbol = symbol
             Me.sequence = sequence

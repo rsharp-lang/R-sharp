@@ -13,7 +13,8 @@ Namespace Interpreter.ExecuteEngine.LINQ
     Public Class ProjectionExpression : Inherits QueryExpression
 
         Dim opt As Options
-        Dim project As OutputProjection
+
+        Friend ReadOnly project As OutputProjection
 
         Public Overrides ReadOnly Property name As String
             Get
@@ -63,12 +64,15 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Dim projections As New List(Of JavaScriptObject)
             Dim closure As New ExecutableContext(New Environment(context, context.stackFrame, isInherits:=False))
             Dim skipVal As Boolean
-            Dim dataset As DataSet = GetDataSet(context)
             Dim err As Message = symbol.Exec(closure)
 
             If Not err Is Nothing Then
                 Return err
-            ElseIf TypeOf dataset Is ErrorDataSet Then
+            Else
+                dataset = GetDataSet(context)
+            End If
+
+            If TypeOf dataset Is ErrorDataSet Then
                 Return DirectCast(dataset, ErrorDataSet).message
             End If
 
