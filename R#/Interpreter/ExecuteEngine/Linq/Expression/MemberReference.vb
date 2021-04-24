@@ -42,6 +42,10 @@
 #End Region
 
 Imports Microsoft.VisualBasic.My.JavaScript
+Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.LINQ
@@ -56,18 +60,30 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
             If TypeOf memberName Is SymbolReference Then
                 Me.memberName = DirectCast(memberName, SymbolReference).symbolName
-            ElseIf TypeOf memberName Is Literals Then
-                Me.memberName = any.ToString(memberName.Exec(Nothing))
+            ElseIf TypeOf memberName Is Literal Then
+                Me.memberName = any.ToString(DirectCast(memberName, Literal).value)
             Else
-                Throw New InvalidExpressionException(memberName.name)
+                Throw New InvalidExpressionException(memberName.expressionName)
             End If
         End Sub
+
+        Public Overrides ReadOnly Property type As Components.TypeCodes
+            Get
+                Throw New NotImplementedException()
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property expressionName As ExpressionTypes
+            Get
+                Throw New NotImplementedException()
+            End Get
+        End Property
 
         Public Overrides Function Exec(context As ExecutableContext) As Object
             Dim symbol As Object = Me.symbol.Exec(context)
 
             If symbol Is Nothing Then
-                Throw New NullReferenceException
+                Return Internal.debug.stop({"target symbol is nothing!", "symbol: " & Me.symbol.ToString}, context)
             End If
 
             If TypeOf symbol Is JavaScriptObject Then
@@ -79,6 +95,10 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         Public Overrides Function ToString() As String
             Return $"{symbol}->{memberName}"
+        End Function
+
+        Public Overrides Function Evaluate(envir As Environment) As Object
+            Throw New NotImplementedException()
         End Function
     End Class
 End Namespace

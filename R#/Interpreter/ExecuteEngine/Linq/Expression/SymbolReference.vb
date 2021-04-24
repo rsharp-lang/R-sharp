@@ -41,6 +41,10 @@
 
 #End Region
 
+Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
+
 Namespace Interpreter.ExecuteEngine.LINQ
 
     Public Class SymbolReference : Inherits Expression
@@ -51,15 +55,23 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Me.symbolName = name
         End Sub
 
+        Public Overrides ReadOnly Property type As Components.TypeCodes
+            Get
+                Throw New NotImplementedException()
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property expressionName As ExpressionTypes
+            Get
+                Throw New NotImplementedException()
+            End Get
+        End Property
+
         Public Overrides Function Exec(context As ExecutableContext) As Object
-            Dim symbol As Symbol = context.env.FindSymbol(symbolName)
+            Dim symbol As Symbol = context.FindSymbol(symbolName)
 
             If symbol Is Nothing Then
-                If context.throwError Then
-                    Throw New MissingPrimaryKeyException(symbolName)
-                Else
-                    Return Nothing
-                End If
+                Return Message.SymbolNotFound(context, symbolName, type)
             Else
                 Return symbol.value
             End If
@@ -67,6 +79,10 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         Public Overrides Function ToString() As String
             Return $"&{symbolName}"
+        End Function
+
+        Public Overrides Function Evaluate(envir As Environment) As Object
+            Throw New NotImplementedException()
         End Function
     End Class
 End Namespace

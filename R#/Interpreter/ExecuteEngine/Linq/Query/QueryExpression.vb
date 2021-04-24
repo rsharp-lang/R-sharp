@@ -12,5 +12,20 @@
             Me.sequence = sequence
             Me.executeQueue = execQueue.ToArray
         End Sub
+
+        ''' <summary>
+        ''' get sequence value
+        ''' 
+        ''' evaluate expression for get ``IN ...`` data source
+        ''' </summary>
+        ''' <param name="context"></param>
+        ''' <returns></returns>
+        Public Function GetSeqValue(context As ExecutableContext) As Object
+            Return sequence.Evaluate(context)
+        End Function
+
+        Protected Function GetDataSet(context As ExecutableContext) As DataSet
+            Return DataSet.CreateDataSet(Me, context)
+        End Function
     End Class
 End Namespace

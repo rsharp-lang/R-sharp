@@ -27,11 +27,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
         ''' </returns>
         Public Overrides Function Exec(context As ExecutableContext) As Object
             Dim projections As New List(Of JavaScriptObject)
-            Dim env As Environment = context.environment
-            Dim closure As New ExecutableContext With {
-                .env = New Environment(parent:=env),
-                .throwError = context.throwError
-            }
+            Dim closure As New ExecutableContext(New Environment(context, context.stackFrame, isInherits:=False))
             Dim skipVal As Boolean
             Dim dataset As DataSet = GetDataSet(context)
 
