@@ -72,6 +72,26 @@ Module xlsx
     ''' <param name="sheetIndex">
     ''' the data sheet index or name for read data
     ''' </param>
+    ''' <param name="check_modes">
+    ''' check the data type of each column in the dataframe? 
+    ''' this options is working if the ``raw`` parameter is 
+    ''' set to ``FALSE``. 
+    ''' </param>
+    ''' <param name="check_names">
+    ''' make valid R# symbol names of each column in the dataframe?
+    ''' this options is working if the ``raw`` parameter is set
+    ''' to ``FALSE``.
+    ''' </param>
+    ''' <param name="row_names">
+    ''' A character vector for set row names of the generated dataframe, or 
+    ''' a character name in the dataframe, or an integer value to indicate
+    ''' that which column should be used as the row names of the 
+    ''' dataframe object.
+    ''' 
+    ''' this options is working if the ``raw`` parameter is set
+    ''' to ``FALSE``.
+    ''' </param>
+    ''' <param name="file">the file path of the target xlsx data file.</param>
     ''' <returns></returns>
     ''' 
     <ExportAPI("read.xlsx")>

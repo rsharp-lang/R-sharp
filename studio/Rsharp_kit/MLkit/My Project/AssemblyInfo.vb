@@ -10,10 +10,10 @@ Imports System.Runtime.InteropServices
 #if netcore5=0 then 
 <Assembly: AssemblyTitle("MLkit: R# machine learning toolkit library")>
 <Assembly: AssemblyDescription("MLkit: R# machine learning toolkit library")>
-<Assembly: AssemblyCompany("")>
+<Assembly: AssemblyCompany("SMRUCC/sciBASIC.NET")>
 <Assembly: AssemblyProduct("MLkit")>
 <Assembly: AssemblyCopyright("Copyright © xie.guigang@gcmodeller.org 2020")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyTrademark("R#")>
 
 <Assembly: ComVisible(False)>
 

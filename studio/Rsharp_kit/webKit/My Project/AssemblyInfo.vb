@@ -14,7 +14,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Assembly: AssemblyCompany("SMRUCC")>
 <Assembly: AssemblyProduct("R#")>
 <Assembly: AssemblyCopyright("Copyright © xie.guigang@gcmodeller.org 2020")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyTrademark("R#")>
 
 <Assembly: ComVisible(False)>
 

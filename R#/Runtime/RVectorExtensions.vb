@@ -160,7 +160,9 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="value"></param>
         ''' <param name="type"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' 如果执行出错，这个函数会返回一个错误消息
+        ''' </returns>
         Public Function asVector(value As Object, type As Type, env As Environment) As Object
             Dim arrayType As Type = type.MakeArrayType
             Dim valueType As Type
