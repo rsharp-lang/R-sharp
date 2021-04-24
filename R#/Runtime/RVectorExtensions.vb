@@ -128,6 +128,9 @@ Namespace Runtime
         ''' populate the input x
         ''' </param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' 这个函数只会在确认只有一个向量元素的情况下才会返回单个元素
+        ''' </remarks>
         Public Function [single](x As Object) As Object
             If x Is Nothing Then
                 Return Nothing

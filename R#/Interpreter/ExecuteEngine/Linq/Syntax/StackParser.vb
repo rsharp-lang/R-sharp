@@ -191,7 +191,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                     Else
                         block.Add(item)
 
-                        If isParentStack AndAlso block > 0 AndAlso (i.Current Is Nothing OrElse i.Current.name <> TokenType.comma) Then
+                        If isParentStack AndAlso block > 0 AndAlso (i.Current Is Nothing OrElse (i.Current.name <> TokenType.comma AndAlso i.Current.name <> TokenType.operator)) Then
                             Yield block.PopAll
                         End If
                     End If
