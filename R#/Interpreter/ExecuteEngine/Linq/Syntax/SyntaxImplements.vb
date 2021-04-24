@@ -224,7 +224,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         End Function
 
         <Extension>
-        Friend Function ParseToken(t As Token) As Expression
+        Friend Function ParseToken(t As Token) As SyntaxParserResult
             If t.name = TokenType.identifier Then
                 Return New SymbolReference(t.text)
             ElseIf t.name = TokenType.booleanLiteral OrElse
@@ -234,30 +234,31 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
                 Return New Literal(t)
             Else
-                Throw New NotImplementedException
+                Return New SyntaxParserResult(New NotImplementedException)
             End If
         End Function
 
         <Extension>
-        Private Function GetProjection(tokenList As IEnumerable(Of Token)) As Expression
-            Dim values As Expression() = tokenList.GetParameters.ToArray
+        Private Function GetProjection(tokenList As IEnumerable(Of Token)) As SyntaxParserResult
             Dim fields As New List(Of NamedValue(Of Expression))
 
-            For Each item As Expression In values
-                If TypeOf item Is BinaryExpression Then
-                    With DirectCast(item, BinaryExpression)
+            For Each item As SyntaxParserResult In tokenList.GetParameters
+                If item.isError Then
+                    Return item
+                ElseIf TypeOf item.expression Is BinaryExpression Then
+                    With DirectCast(item.expression, BinaryExpression)
                         If .LikeValueAssign Then
                             fields.Add(New NamedValue(Of Expression)(DirectCast(.left, SymbolReference).symbolName, .right))
                         Else
-                            fields.Add(New NamedValue(Of Expression)(item.ToString, item))
+                            fields.Add(New NamedValue(Of Expression)(item.ToString, item.expression))
                         End If
                     End With
-                ElseIf TypeOf item Is MemberReference Then
-                    With DirectCast(item, MemberReference)
-                        fields.Add(New NamedValue(Of Expression)(.memberName, item))
+                ElseIf TypeOf item.expression Is MemberReference Then
+                    With DirectCast(item.expression, MemberReference)
+                        fields.Add(New NamedValue(Of Expression)(.memberName, item.expression))
                     End With
                 Else
-                    fields.Add(New NamedValue(Of Expression)(item.ToString, item))
+                    fields.Add(New NamedValue(Of Expression)(item.ToString, item.expression))
                 End If
             Next
 
@@ -378,7 +379,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         End Function
 
         <Extension>
-        Private Iterator Function GetParameters(tokenList As IEnumerable(Of Token)) As IEnumerable(Of Expression)
+        Private Iterator Function GetParameters(tokenList As IEnumerable(Of Token)) As IEnumerable(Of SyntaxParserResult)
             Dim blocks As Token()() = tokenList _
                 .SplitParameters _
                 .Select(Function(b)
@@ -396,11 +397,18 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         End Function
 
         <Extension>
-        Private Function GetVector(tokenList As IEnumerable(Of Token)) As Expression
-            Dim elements As Expression() = tokenList.GetParameters.ToArray
-            Dim vec As New VectorLiteral(elements)
+        Private Function GetVector(tokenList As IEnumerable(Of Token)) As SyntaxParserResult
+            Dim elements As New List(Of Expression)
 
-            Return New RunTimeValueExpression(vec)
+            For Each item In tokenList.GetParameters
+                If item.isError Then
+                    Return item
+                Else
+                    elements.Add(item.expression)
+                End If
+            Next
+
+            Return New RunTimeValueExpression(New VectorLiteral(elements))
         End Function
     End Module
 End Namespace

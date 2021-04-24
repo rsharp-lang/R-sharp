@@ -458,6 +458,18 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' get the last element in the sequence
+        ''' </summary>
+        ''' <param name="sequence">a general data sequence</param>
+        ''' <param name="test">
+        ''' if this test function is nothing, then means get the last element in 
+        ''' the sequence. else if the function is not nothing, then means get the
+        ''' last element that which meet this test condition in the sequence
+        ''' data input.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <ExportAPI("last")>
         Public Function last(<RRawVectorArgument>
                              sequence As Object,
@@ -471,7 +483,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Return Rset.getObjectSet(sequence, envir).LastOrDefault
             End If
 
-            Dim lastVal As Object
+            Dim lastVal As Object = Nothing
 
             For Each item As Object In Rset.getObjectSet(sequence, envir)
                 arg = InvokeParameter.CreateLiterals(item)
