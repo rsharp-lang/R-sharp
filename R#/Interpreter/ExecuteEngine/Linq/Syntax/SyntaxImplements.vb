@@ -268,15 +268,32 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         <Extension>
         Private Function ParseKeywordExpression(tokenList As Token()) As SyntaxParserResult
             If tokenList(Scan0).isKeywordFrom OrElse tokenList(Scan0).isKeywordAggregate OrElse tokenList(Scan0).isKeyword("let") Then
-                ' declare new symbol
-                Dim name As String = tokenList(1).text
                 Dim type As String = "any"
+                Dim name As Expression
 
-                If tokenList.Length > 2 Then
-                    type = tokenList(3).text
+                ' declare new symbol
+                ' may be a tuple
+                tokenList = tokenList.Skip(1).ToArray
+
+                If tokenList.Length = 1 Then
+                    ' just a symbol
+                    name = New Literal(tokenList(Scan0))
+                ElseIf tokenList.Length = 3 AndAlso tokenList(1) = (TokenType.keyword, "as") Then
+                    ' a symbol with type constraint
+                    name = New Literal(tokenList(Scan0))
+                    type = tokenList(2).text
+                Else
+                    ' a tuple?
+                    Dim expVal As SyntaxParserResult = tokenList.ParseExpression
+
+                    If expVal.isError Then
+                        Return expVal
+                    Else
+                        name = expVal.expression
+                    End If
                 End If
 
-                Return New SymbolDeclare With {.symbolName = name, .typeName = type}
+                Return New SymbolDeclare With {.symbol = name, .typeName = type}
             ElseIf tokenList(Scan0).isKeyword("where") Then
                 Dim bool = ParseExpression(tokenList.Skip(1).ToArray)
 

@@ -792,9 +792,9 @@ const table = data.frame(
 );
 
 let runQuery = {
-    FROM [X, Y, Z] 
+    FROM [X, Y, Z 5] 
     IN table
-    WHERE Z > 7000 && Z <= 9000 x
+    WHERE Z > 7000 && Z <= 9000 
     ORDER BY Z
     TAKE 10
 }

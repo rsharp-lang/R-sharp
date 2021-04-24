@@ -38,10 +38,10 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Dim skipVal As Boolean
             Dim dataset As DataSet = GetDataSet(context)
 
-            Call closure.AddSymbol(symbol.symbolName, TypeCodes.generic)
+            Call closure.AddSymbol(symbol.symbol, TypeCodes.generic)
 
             For Each item As Object In dataset.PopulatesData()
-                closure.SetSymbol(symbol.symbolName, item)
+                closure.SetSymbol(symbol.symbol, item)
 
                 For Each line As Expression In executeQueue
                     If TypeOf line Is WhereFilter Then
