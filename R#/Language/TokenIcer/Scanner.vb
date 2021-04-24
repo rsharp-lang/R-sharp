@@ -206,6 +206,10 @@ Namespace Language.TokenIcer
             "new"
         }
 
+        Private Shared Function isLINQKeyword(word As String) As Boolean
+            Return Strings.LCase(word) Like keywords
+        End Function
+
         Public Shared Function GetRKeywords() As String()
             Return keywords.Objects
         End Function
@@ -429,10 +433,14 @@ Namespace Language.TokenIcer
         Public Shared Function MeasureToken(text As String) As Token
             text = text.Trim
 
-            If text Like keywords Then
+            If text Like keywords OrElse isLINQKeyword(text) Then
+                ' 在这里转换为小写是因为
+                ' R关键词都是小写的
+                ' 但是LINQ的关键词是不区分大小写的
+                ' 为了保持二者兼容而设定的
                 Return New Token With {
                     .name = TokenType.keyword,
-                    .text = text
+                    .text = text.ToLower
                 }
             End If
 
