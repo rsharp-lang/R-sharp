@@ -39,3 +39,5 @@ print(runQuery);
 # [2, ]   1          5           2055353.9741856
 # [3, ]   2          4           1029857.3195328
 # [4, ]   5          1           721031.6091827
+
+write.csv(runQuery, file = `${dirname(@script)}/queryOut.csv`);
