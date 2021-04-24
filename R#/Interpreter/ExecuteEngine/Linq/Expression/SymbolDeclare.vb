@@ -1,4 +1,4 @@
-﻿Imports SMRUCC.Rsharp.Runtime
+﻿Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
@@ -7,6 +7,10 @@ Namespace Interpreter.ExecuteEngine.LINQ
     ''' </summary>
     Public Class SymbolDeclare : Inherits LinqKeywordExpression
 
+        ''' <summary>
+        ''' is a <see cref="Literal"/> or <see cref="VectorLiteral"/>
+        ''' </summary>
+        ''' <returns></returns>
         Public Property symbol As Expression
         Public Property typeName As String
 
