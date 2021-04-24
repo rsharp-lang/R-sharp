@@ -791,12 +791,15 @@ const table = data.frame(
     Z = runif(5, min = 600, max = 80000)
 );
 
+print(table);
+
 let runQuery = {
-    FROM [X, Y, Z 5] 
+    FROM [X, Y, Z] 
     IN table
     WHERE Z > 7000 && Z <= 9000 
     ORDER BY Z
     TAKE 10
+    SKIP 1
 }
 
 print(runQuery);
