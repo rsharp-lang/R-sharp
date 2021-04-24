@@ -112,15 +112,18 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             'Dim p As New Pointer(Of Token())(tokens)
             'Dim parser As New LinqSyntaxParser(p, opts)
             'Dim [error] As SyntaxResult = parser.doParseLINQProgram(locals, projection, output, program)
-            'Dim stackframe As New StackFrame With {
-            '    .File = opts.source.fileName,
-            '    .Line = tokens.First()(Scan0).span.line,
-            '    .Method = New Method With {
-            '        .Method = "linq_closure",
-            '        .[Module] = "linq_closure",
-            '        .[Namespace] = "SMRUCC/R#"
-            '    }
-            '}
+            Dim stackframe As New StackFrame With {
+                .File = opts.source.fileName,
+                .Line = tokens.First()(Scan0).span.line,
+                .Method = New Method With {
+                    .Method = "linq_closure",
+                    .[Module] = "linq_closure",
+                    .[Namespace] = "SMRUCC/R#"
+                }
+            }
+            Dim LINQ As QueryExpression
+
+            Return New LinqQuery(LINQ)
 
             'If Not [error] Is Nothing AndAlso [error].isException Then
             '    Return [error]
