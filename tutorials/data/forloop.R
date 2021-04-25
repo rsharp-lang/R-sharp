@@ -45,10 +45,10 @@ print((function() {
 	}
 
 	for(i in 1:10) {
-		if (i > 3) {
-			return 999;
+		if (i < 3) {
+			print(i - 1);			
 		} else {
-			print(i);
+			return 999;
 		}
 	}
 })());

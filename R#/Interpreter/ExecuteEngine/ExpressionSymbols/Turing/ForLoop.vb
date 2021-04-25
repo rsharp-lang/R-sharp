@@ -125,7 +125,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
             ' R 语言中的for循环其实就是一个for each循环
             For Each item As Object In envir.DoCall(runLoop)
-                If Program.isException(item) Then
+                If TypeOf item Is BreakLoop Then
+                    Exit For
+                ElseIf Program.isException(item) Then
                     Return item
                 ElseIf TypeOf item Is ReturnValue Then
                     Return item

@@ -167,7 +167,6 @@ Namespace Interpreter
                 ' so we needs wrap the last value with 
                 ' return keyword.
                 last = New ReturnValue(New RuntimeValueLiteral(last))
-                breakLoop = True
             ElseIf Not last Is Nothing AndAlso last.GetType Is GetType(ReturnValue) Then
                 ' the internal closure invoke a returns keyword
                 ' so break the current loop
@@ -189,11 +188,7 @@ Namespace Interpreter
                 breakLoop = True
             End If
 
-            If TypeOf expression Is ContinuteFor Then
-                breakLoop = True
-            ElseIf TypeOf expression Is BreakLoop Then
-                breakLoop = True
-            End If
+            breakLoop = breakLoop OrElse isBreakSignal(expression)
 
             If Not last Is Nothing Then
                 If last.GetType Is GetType(Message) Then
@@ -212,15 +207,27 @@ Namespace Interpreter
                     envir.ifPromise.Add(last)
                     last = DirectCast(last, IfPromise).Value
 
-                    If envir.ifPromise.Last.Result Then
-                        If Not last Is Nothing AndAlso last.GetType Is GetType(ReturnValue) Then
-                            breakLoop = True
-                        End If
+                    If envir.ifPromise.Last.Result AndAlso isBreakSignal(last) Then
+                        breakLoop = True
                     End If
                 End If
             End If
 
             Return last
+        End Function
+
+        Private Shared Function isBreakSignal(last As Object) As Boolean
+            If last Is Nothing Then
+                Return False
+            ElseIf TypeOf last Is ReturnValue Then
+                Return True
+            ElseIf TypeOf last Is BreakLoop Then
+                Return True
+            ElseIf TypeOf last Is ContinuteFor Then
+                Return True
+            Else
+                Return False
+            End If
         End Function
     End Class
 End Namespace
