@@ -1,46 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::043dd513445c425e498d07bb0a118f9a, R#\Interpreter\Syntax\SyntaxTree\Splitter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module Splitter
-    ' 
-    '         Function: SplitByTopLevelDelimiter
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module Splitter
+' 
+'         Function: SplitByTopLevelDelimiter
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -72,9 +73,12 @@ Namespace Interpreter.SyntaxParser
                               End Function
             End If
 
+            Dim i As New Pointer(Of Token)(tokenVector)
+
             ' 使用最顶层的comma进行分割
-            For Each t As Token In tokenVector
+            Do While Not i.EndRead
                 Dim add As Boolean = True
+                Dim t As Token = ++i
 
                 If t.name = TokenType.open Then
                     stack.Push(t)
@@ -87,7 +91,9 @@ Namespace Interpreter.SyntaxParser
                     End If
                 End If
 
-                If isDelimiter(t) OrElse (includeKeyword AndAlso t.name = TokenType.keyword) Then
+                ' 20210425 keyword 后面存在一个括号的时候
+                ' 仅存在函数调用的这一种情况？
+                If isDelimiter(t) OrElse (includeKeyword AndAlso (t.name = TokenType.keyword AndAlso (Not i.Current Is Nothing) AndAlso i.Current.name <> TokenType.open)) Then
                     If stack.Count = 0 Then
                         ' 这个是最顶层的分割
                         If buf > 0 Then
@@ -102,7 +108,7 @@ Namespace Interpreter.SyntaxParser
                 If add Then
                     buf += t
                 End If
-            Next
+            Loop
 
             If buf > 0 Then
                 Return blocks + buf.ToArray
@@ -110,6 +116,5 @@ Namespace Interpreter.SyntaxParser
                 Return blocks
             End If
         End Function
-
     End Module
 End Namespace

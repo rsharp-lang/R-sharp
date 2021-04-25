@@ -81,7 +81,20 @@ Module interpreterTest
         Pause()
     End Sub
 
+    Sub syntaxTest()
+        Call R.Evaluate("	
+    const sampleRows = table 
+		:> rows 
+		:> which(r -> sum("""" != (r :> cells)) >= 4)
+		:> skip(1)
+		;")
+
+        Pause()
+    End Sub
+
     Sub Main()
+        Call syntaxTest()
+
         Call linqTest()
         Call annotationTest()
 
