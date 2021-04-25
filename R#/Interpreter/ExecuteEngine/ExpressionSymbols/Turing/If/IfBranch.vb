@@ -126,6 +126,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                     "argument is of length zero",
                     "test: " & ifTest.ToString
                 }, envir)
+            ElseIf flags.Length > 1 Then
+                Call envir.AddMessage("the condition has length > 1 and only the first element will be used", MSG_TYPES.WRN)
             End If
 
             If True = flags(Scan0) Then
