@@ -684,7 +684,6 @@
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\ValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\VectorLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\RunTimeValueExpression.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\FunctionInvoke.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\Literal.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\MemberReference.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Options\TakeItems.vb" />

@@ -3,7 +3,8 @@
 const table = data.frame(
     X = [1,2,3,4,5],
     Y = [5,4,3,2,1],
-    Z = runif(5, min = -10000, max = 8000000)
+    Z = runif(5, min = -10000, max = 8000000),
+	"A+3" = TRUE
 );
 
 const populateTable as function() {
@@ -24,11 +25,11 @@ print(table);
 
 # run LINQ query on the given table
 let runQuery = {
-    FROM [X, Y, Z] 
+    FROM [X, Y, Z, "A+3"] 
     IN populateTable()
 	# create a table subset with given condition
     WHERE abs(Z) > 100 && Z <= 7950000 + X
-    SELECT X, Y, zz = log(Z) * X, Z 
+    SELECT X, Y, zz = log(Z) * X, Z, sum("A+3") 
     ORDER BY zz DESCENDING
     TAKE 10
     SKIP 1

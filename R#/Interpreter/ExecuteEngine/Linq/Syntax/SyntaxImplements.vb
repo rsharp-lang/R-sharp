@@ -43,10 +43,12 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -352,6 +354,11 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             End If
         End Function
 
+        ''' <summary>
+        ''' (...) or {...}
+        ''' </summary>
+        ''' <param name="tokenList"></param>
+        ''' <returns></returns>
         <Extension>
         Private Function IsClosure(tokenList As Token()) As Boolean
             Return tokenList(Scan0).name = TokenType.open AndAlso tokenList.Last.name = TokenType.close
@@ -399,12 +406,24 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 End If
 
                 If TypeOf name.expression Is SymbolReference AndAlso blocks(1).IsClosure Then
-                    Dim params As Expression() = blocks(1) _
+                    Dim params As New List(Of RExpression)
+                    Dim funcName As String = DirectCast(name.expression, SymbolReference).name
+                    Dim sourceMap As StackFrame = opts.GetStackTrace(blocks(Scan0)(Scan0), funcName)
+
+                    For Each expr As SyntaxResult In blocks(1) _
                         .Skip(1) _
                         .Take(blocks(1).Length - 2) _
-                        .GetParameters(opts)
+                        .GetParameterTokens _
+                        .Select(Function(t) RExpression.CreateExpression(t, opts))
 
-                    Return New FunctionInvoke(name.expression, params)
+                        If expr.isException Then
+                            Return expr
+                        Else
+                            params.Add(expr.expression)
+                        End If
+                    Next
+
+                    Return New RunTimeValueExpression(New FunctionInvoke(funcName, sourceMap, params.ToArray))
                 End If
             End If
 
@@ -418,8 +437,8 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         End Function
 
         <Extension>
-        Private Iterator Function GetParameters(tokenList As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As IEnumerable(Of SyntaxParserResult)
-            Dim blocks As Token()() = tokenList _
+        Private Function GetParameterTokens(tokenList As IEnumerable(Of Token)) As IEnumerable(Of Token())
+            Return tokenList _
                 .SplitParameters _
                 .Select(Function(b)
                             If b(Scan0).name = TokenType.comma Then
@@ -429,8 +448,11 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                             End If
                         End Function) _
                 .ToArray
+        End Function
 
-            For Each block As Token() In blocks
+        <Extension>
+        Private Iterator Function GetParameters(tokenList As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As IEnumerable(Of SyntaxParserResult)
+            For Each block As Token() In tokenList.GetParameterTokens
                 Yield ParseExpression(block, opts)
             Next
         End Function
