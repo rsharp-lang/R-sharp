@@ -1,6 +1,6 @@
 print("loop continute test");
 
-for(i in 1:10) {
+const printMods = for(i in 1:10) {
 	if (i % 2 == 0) {
 		next;
 	}
@@ -10,6 +10,7 @@ for(i in 1:10) {
 }
 
 print("loop continute test job done!");
+print(printMods);
 
 let add1 as function(x) {
 	print(`x + 1 -> ${x+1}`);
