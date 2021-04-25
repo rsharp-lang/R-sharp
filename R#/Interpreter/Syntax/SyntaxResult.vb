@@ -45,8 +45,10 @@
 
 Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.LINQ
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.LINQ.Syntax
 Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports RExpression = SMRUCC.Rsharp.Interpreter.ExecuteEngine.Expression
 
 Namespace Interpreter.SyntaxParser
 
@@ -58,7 +60,7 @@ Namespace Interpreter.SyntaxParser
     Friend Class SyntaxResult
 
         Public ReadOnly [error] As Exception
-        Public ReadOnly expression As Expression
+        Public ReadOnly expression As RExpression
 
         ''' <summary>
         ''' 
@@ -73,7 +75,7 @@ Namespace Interpreter.SyntaxParser
         End Property
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Sub New(syntax As Expression)
+        Public Sub New(syntax As RExpression)
             Me.expression = syntax
         End Sub
 
@@ -101,16 +103,18 @@ Namespace Interpreter.SyntaxParser
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function CreateExpression(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
-            Return Expression.CreateExpression(tokens, opts)
+            Return RExpression.CreateExpression(tokens, opts)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Widening Operator CType(syntax As Expression) As SyntaxResult
+        Public Shared Widening Operator CType(syntax As RExpression) As SyntaxResult
             Return New SyntaxResult(syntax)
         End Operator
 
         Public Shared Narrowing Operator CType(err As SyntaxResult) As SyntaxParserResult
-            Return New SyntaxParserResult(err.error)
+            Return New SyntaxParserResult(err.error) With {
+                .expression = New RunTimeValueExpression(err.expression)
+            }
         End Operator
     End Class
 End Namespace

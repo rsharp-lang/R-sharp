@@ -157,5 +157,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
             Return sequence
         End Function
+
+        Public Overrides Function ToString() As String
+            Return LINQ.Previews
+        End Function
     End Class
 End Namespace

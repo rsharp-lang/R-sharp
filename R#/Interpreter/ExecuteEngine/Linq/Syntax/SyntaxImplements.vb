@@ -312,7 +312,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
                 Return New WhereFilter(New RunTimeValueExpression(bool.expression))
             ElseIf tokenList(Scan0).isKeyword("in") Then
-                Return ParseExpression(tokenList.Skip(1).ToArray, opts)
+                Return RExpression.CreateExpression(tokenList.Skip(1), opts)
             ElseIf tokenList(Scan0).isKeyword("select") Then
                 Return tokenList.Skip(1).GetProjection(opts)
             ElseIf tokenList(Scan0).isKeyword("order") Then

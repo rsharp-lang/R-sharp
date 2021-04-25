@@ -6,6 +6,10 @@ const table = data.frame(
     Z = runif(5, min = -10000, max = 8000000)
 );
 
+const populateTable as function() {
+	table;
+}
+
 print("the raw data matrix is:");
 print(table);
 
@@ -21,9 +25,9 @@ print(table);
 # run LINQ query on the given table
 let runQuery = {
     FROM [X, Y, Z] 
-    IN table
+    IN populateTable()
 	# create a table subset with given condition
-    WHERE abs(Z) > 100 && Z <= 79000 + X
+    WHERE abs(Z) > 100 && Z <= 7950000 + X
     SELECT X, Y, zz = log(Z) * X, Z 
     ORDER BY zz DESCENDING
     TAKE 10
