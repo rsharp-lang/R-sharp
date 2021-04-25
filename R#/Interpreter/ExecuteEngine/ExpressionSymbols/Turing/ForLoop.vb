@@ -131,7 +131,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                     Return item
                 ElseIf TypeOf item Is ReturnValue Then
                     Return item
-                Else
+                ElseIf Not TypeOf item Is ContinuteFor Then
                     result += REnv.single(item)
                 End If
             Next

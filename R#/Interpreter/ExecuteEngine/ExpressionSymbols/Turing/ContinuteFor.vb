@@ -48,6 +48,9 @@ Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
+    ''' <summary>
+    ''' next
+    ''' </summary>
     Public Class ContinuteFor : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
@@ -59,7 +62,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
         End Property
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Return envir("$").value
+            Return Me
         End Function
 
         Public Overrides Function ToString() As String

@@ -1,7 +1,22 @@
+print("loop continute test");
+
+for(i in 1:10) {
+	if (i % 2 == 0) {
+		next;
+	}
+
+	# never display 0 at here
+	print(`${i} MOD 2 = ${i % 2}`);
+}
+
+print("loop continute test job done!");
+
 let add1 as function(x) {
 	print(`x + 1 -> ${x+1}`);
 }
 
+# the last expression value will be the result
+# value of each for loop iteration
 const all = for(i in 1:10 step 2.5) {
 	add1(x = i);
 }
