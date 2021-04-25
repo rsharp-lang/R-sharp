@@ -106,7 +106,7 @@ Namespace Runtime.Internal.Object.Utils
                 End If
             End If
 
-            For i As Integer = 2 To table.Length - 1
+            For i As Integer = If(printContent, 2, 1) To table.Length - 1
                 rIndex = i - 2
                 row(Scan0) = rownames(rIndex)
 
