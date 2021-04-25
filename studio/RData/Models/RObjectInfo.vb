@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ff8f5b44bfb9dfab59aec49cf56a5207, studio\RData\Models\RObjectInfo.vb"
+﻿#Region "Microsoft.VisualBasic::865b111825e997c0b93c20c4840d267d, studio\RData\Models\RObjectInfo.vb"
 
     ' Author:
     ' 
@@ -38,8 +38,6 @@
     ' /********************************************************************************/
 
 #End Region
-
-
 
 ''' <summary>
 ''' Internal attributes of a R object.

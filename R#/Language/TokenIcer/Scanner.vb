@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::52dcf8e5bdc87853af64f6ad0c90edf0, R#\Language\TokenIcer\Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::9a14509edb4ec09e7721ac639a0851e9, R#\Language\TokenIcer\Scanner.vb"
 
     ' Author:
     ' 
@@ -36,8 +36,8 @@
     '         Properties: lastCharIsEscapeSplash
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: finalizeToken, GetRKeywords, GetTokens, MeasureToken, populateToken
-    '                   walkChar
+    '         Function: finalizeToken, GetRKeywords, GetTokens, isLINQKeyword, MeasureToken
+    '                   populateToken, walkChar
     '         Class Escapes
     ' 
     '             Function: ToString
@@ -198,13 +198,17 @@ Namespace Language.TokenIcer
             "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
             "const", "imports", "require", "library",
             "if", "else", "for", "loop", "while", "repeat", "step", "break", "next",
-            "between", "in", "like", "from", "where", "order", "by", "distinct", "select",
+            "between", "in", "like", "from", "where", "order", "by", "distinct", "select", "take", "skip", "into", "aggregate", "join", "on",
             "ascending", "descending",
             "suppress",
             "typeof", "modeof", "valueof",
             "using",
             "new"
         }
+
+        Private Shared Function isLINQKeyword(word As String) As Boolean
+            Return Strings.LCase(word) Like keywords
+        End Function
 
         Public Shared Function GetRKeywords() As String()
             Return keywords.Objects
@@ -429,10 +433,14 @@ Namespace Language.TokenIcer
         Public Shared Function MeasureToken(text As String) As Token
             text = text.Trim
 
-            If text Like keywords Then
+            If text Like keywords OrElse isLINQKeyword(text) Then
+                ' 在这里转换为小写是因为
+                ' R关键词都是小写的
+                ' 但是LINQ的关键词是不区分大小写的
+                ' 为了保持二者兼容而设定的
                 Return New Token With {
                     .name = TokenType.keyword,
-                    .text = text
+                    .text = text.ToLower
                 }
             End If
 

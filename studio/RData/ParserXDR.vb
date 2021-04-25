@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b15d85477413e5e6248ba859e93518db, studio\RData\ParserXDR.vb"
+﻿#Region "Microsoft.VisualBasic::50e056e58f14743034ba1024a35ba627, studio\RData\ParserXDR.vb"
 
     ' Author:
     ' 
@@ -72,4 +72,3 @@ Public Class ParserXDR : Inherits Reader
         Return result
     End Function
 End Class
-

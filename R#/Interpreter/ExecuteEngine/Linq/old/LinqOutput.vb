@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::44a6195a27d2289fbfe263bdb8748136, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqOutput.vb"
+﻿#Region "Microsoft.VisualBasic::a5ca4dc7b4f940b594f4cb97490dd765, R#\Interpreter\ExecuteEngine\Linq\old\LinqOutput.vb"
 
     ' Author:
     ' 
@@ -35,10 +35,6 @@
     ' 
     '         Function: getOutputSort, populateOutput
     ' 
-    '     Class LinqOutputUnit
-    ' 
-    '         Function: ToString
-    ' 
     ' 
     ' /********************************************************************************/
 
@@ -53,7 +49,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         <Extension>
         Public Function getOutputSort(linq As LinqExpression) As (indexBy As Expression, desc As Boolean)
-            Dim sort As FunctionInvoke = linq.output.Where(Function(fun) fun.funcName.ToString = "sort").FirstOrDefault
+            Dim sort As ExpressionSymbols.Closure.FunctionInvoke = linq.output.Where(Function(fun) fun.funcName.ToString = "sort").FirstOrDefault
 
             If sort Is Nothing Then
                 Return Nothing
@@ -75,16 +71,4 @@ Namespace Interpreter.ExecuteEngine.LINQ
             End If
         End Function
     End Module
-
-    Friend Class LinqOutputUnit
-
-        Public key As String
-        Public sortKey As Object
-        Public value As Object
-
-        Public Overrides Function ToString() As String
-            Return $"[{key}] {Scripting.ToString(value, "null")}"
-        End Function
-
-    End Class
 End Namespace

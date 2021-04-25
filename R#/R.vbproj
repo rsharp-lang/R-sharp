@@ -670,8 +670,38 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecutableLoop.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\Linq\LinqSyntaxParser.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\DataFrameDataSet.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\ErrorDataSet.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\SequenceDataSet.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\DataSet.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\ExecutableContext.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\BinaryExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\ValueAssign.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\VectorLiteral.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\RunTimeValueExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\FunctionInvoke.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\Literal.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\MemberReference.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Options\TakeItems.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Options\SkipItems.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Options\OrderBy.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Options\PipelineKeyword.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\SymbolReference.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\WhereFilter.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\SymbolDeclare.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\OutputProjection.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\LinqKeywordExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\NamespaceDoc.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Query\AggregateExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Query\ProjectionExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Query\Options.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Query\QueryExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Syntax\BinaryBuilder.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Syntax\SyntaxParserResult.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Syntax\StackParser.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Syntax\SyntaxImplements.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SymbolExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExecuteBreaks.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\BreakPoint.vb" />
@@ -692,7 +722,6 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\BreakLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\RepeatClosure.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\WhileLoop.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\Linq\LinqOutput.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxBuilderOptions.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CreateObjectSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb" />
@@ -736,7 +765,6 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLine.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\Linq\LinqExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\UsingClosure.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb" />
@@ -764,6 +792,7 @@
     <Compile Include="Interpreter\Program.vb" />
     <Compile Include="Interpreter\RInterpreter.vb" />
     <Compile Include="Language\Code.vb" />
+    <Compile Include="Language\TokenIcer\JoinToken.vb" />
     <Compile Include="Language\TokenIcer\StringInterpolation.vb" />
     <Compile Include="Language\TokenIcer\Token.vb" />
     <Compile Include="Language\TokenIcer\Scanner.vb" />
@@ -978,5 +1007,6 @@
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

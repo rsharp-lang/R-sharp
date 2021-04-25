@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::88aea7debdbb705619b369582f5750be, R#\Runtime\Internal\objects\dataset\list.vb"
+﻿#Region "Microsoft.VisualBasic::49ebfec60c30fc77a3071d58f348462d, R#\Runtime\Internal\objects\dataset\list.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class list
     ' 
-    '         Properties: length, slots
+    '         Properties: data, length, slots
     ' 
     '         Constructor: (+5 Overloads) Sub New
     ' 

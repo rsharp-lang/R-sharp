@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::298a4b857dd91000e1ff276a912fd777, R#\Test\createException.vb"
+﻿#Region "Microsoft.VisualBasic::afa2113c6ca9f14af87fcae9f5442d68, R#\Test\createException.vb"
 
     ' Author:
     ' 
@@ -55,4 +55,3 @@ Module createException
         Throw ex
     End Sub
 End Module
-

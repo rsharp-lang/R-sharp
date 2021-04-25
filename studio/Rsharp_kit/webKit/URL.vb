@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c978ecaef9879b8622150573eaf70a06, studio\Rsharp_kit\webKit\URL.vb"
+﻿#Region "Microsoft.VisualBasic::6e77341e1dd9c9a1bf1936fdf074d242, studio\Rsharp_kit\webKit\URL.vb"
 
     ' Author:
     ' 

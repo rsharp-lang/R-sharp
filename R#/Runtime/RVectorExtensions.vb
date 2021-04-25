@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1e4be3d161bc7da131a5f7111a035235, R#\Runtime\RVectorExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::908b13441c85d4a5cec394733af6dcc1, R#\Runtime\RVectorExtensions.vb"
 
     ' Author:
     ' 
@@ -128,6 +128,9 @@ Namespace Runtime
         ''' populate the input x
         ''' </param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' 这个函数只会在确认只有一个向量元素的情况下才会返回单个元素
+        ''' </remarks>
         Public Function [single](x As Object) As Object
             If x Is Nothing Then
                 Return Nothing

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8a35febaeb5b5e973bf423306f568782, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb"
+﻿#Region "Microsoft.VisualBasic::a56b60a10e4009a80125feff12c93de5, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: [FALSE], [TRUE], expressionName, isNA, isNull
     '                     NA, NULL, type, ValueStr
     ' 
-    '         Constructor: (+8 Overloads) Sub New
+    '         Constructor: (+9 Overloads) Sub New
     '         Function: Evaluate, ToString
     '         Operators: <>, =
     ' 
@@ -50,6 +50,8 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports any = Microsoft.VisualBasic.Scripting
+Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -127,6 +129,22 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Friend Sub New()
         End Sub
 
+        Sub New(token As Token)
+            Me.value = token.literal
+
+            If value Is Nothing Then
+                m_type = TypeCodes.NA
+            ElseIf value.GetType Like RType.integers Then
+                m_type = TypeCodes.integer
+            ElseIf value.GetType Like RType.floats Then
+                m_type = TypeCodes.double
+            ElseIf value.GetType Like RType.characters Then
+                m_type = TypeCodes.string
+            Else
+                m_type = TypeCodes.boolean
+            End If
+        End Sub
+
         Sub New(value As Double)
             Me.m_type = TypeCodes.double
             Me.value = value
@@ -168,15 +186,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Me.value = CLng(value)
         End Sub
 
-        ' <DebuggerStepThrough>
+        <DebuggerStepThrough>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            'If isNA Then
-            '    ' debug test
-            '    Return value
-            'Else
-            '    Return value
-            'End If
             Return value
         End Function
 

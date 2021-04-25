@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7dfbcd9286290c3390b539b80f7bfcd6, R#\System\Package\PackageFile\Serialization\ExpressionTypes.vb"
+﻿#Region "Microsoft.VisualBasic::9d1c32c930216c38e2aebb00281c4aa0, R#\System\Package\PackageFile\Serialization\ExpressionTypes.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     '         [If], [IIf], [Return], [TypeOf], [Using]
     '         [While], [With], Annotation, Binary, ClosureDeclare
     '         Comment, Constructor, ExpressionLiteral, FormulaDeclare, FunctionByRef
-    '         FunctionCall, FunctionDeclare, GetArgument, LambdaDeclare, LinqDeclare
+    '         FunctionCall, FunctionDeclare, GetArgument, LambdaDeclare, LinqQuery
     '         Literal, Require, SequenceLiteral, Shell, StringInterpolation
     '         Suppress, SymbolAssign, SymbolDeclare, SymbolIndex, SymbolMemberAssign
     '         SymbolNamespaceReference, SymbolReference, SymbolRegexp, UnaryNot, VectorLiteral
@@ -64,7 +64,6 @@ Namespace Development.Package.File
         FunctionByRef
         FunctionDeclare
         ClosureDeclare
-        LinqDeclare
         FormulaDeclare
         LambdaDeclare
         SymbolDeclare
@@ -74,6 +73,12 @@ Namespace Development.Package.File
         SymbolAssign
         SymbolRegexp
         SymbolMemberAssign
+
+        ''' <summary>
+        ''' A linq query epxression in R# scripting 
+        ''' </summary>
+        LinqQuery
+
         Require
 
         Constructor

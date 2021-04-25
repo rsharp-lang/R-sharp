@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::be4f996b576bbc7afd233811a483c515, R#\Test\interpreterTest.vb"
+﻿#Region "Microsoft.VisualBasic::f046e3d239b294d7ac3a04c706593d0a, R#\Test\interpreterTest.vb"
 
     ' Author:
     ' 
@@ -33,13 +33,13 @@
 
     ' Module interpreterTest
     ' 
-    '     Sub: acceptorTest, anonymous, appendTest, booleanCLIArgumentTest, closureEnvironmentTest
-    '          closureTest, cVectorTest, debugTest, doCalltest, formulaTest
-    '          functiondeclaretest2, headTest, inlineFunctiontest, isEmptyTest, lastSymbolTest
-    '          Main, markdownTest, missingSymbolInStringInterpolate, moduleTest, negativeValTest
-    '          numberLiteralsTest, objClasstest, orDefaultTest, printClassTest, regexpTest
-    '          sequenceGeneratorTest, strictTest, suppressTest, syntaxErrorTest, unaryNegTest
-    '          usingTest, whileTest, withTest
+    '     Sub: acceptorTest, annotationTest, anonymous, appendTest, booleanCLIArgumentTest
+    '          closureEnvironmentTest, closureTest, cVectorTest, debugTest, doCalltest
+    '          formulaTest, functiondeclaretest2, headTest, inlineFunctiontest, isEmptyTest
+    '          lastSymbolTest, Main, markdownTest, missingSymbolInStringInterpolate, moduleTest
+    '          negativeValTest, numberLiteralsTest, objClasstest, orDefaultTest, printClassTest
+    '          regexpTest, sequenceGeneratorTest, strictTest, suppressTest, syntaxErrorTest
+    '          unaryNegTest, usingTest, whileTest, withTest
     ' module test1
     ' 
     '     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, constantTest
@@ -82,7 +82,7 @@ Module interpreterTest
     End Sub
 
     Sub Main()
-
+        Call linqTest()
         Call annotationTest()
 
         Call doCalltest()
@@ -189,7 +189,7 @@ Module interpreterTest
 
         Call parameterTest()
 
-        Call linqTest()
+
         Call pipelineTest()
 
         Call testScript()
@@ -785,14 +785,25 @@ test1::println('123');
 
     Sub linqTest()
         Call R.Evaluate("
-let x = 8;
-let zzz <- from x as double in list(skip = x, A =5,B =1, C=2,D =3,E =4) 
-           let y as double = x+6
-           where x <= 5 
-           let z = x + 5
-           select [AA = z,BB = y, x^2];
-		   
-print(zzz);
+const table = data.frame(
+    X = [1,2,3,4,5],
+    Y = [5,4,3,2,1],
+    Z = runif(5, min = 600, max = 80000)
+);
+
+print(table);
+
+let runQuery = {
+    FROM [X, Y, Z] 
+    IN table
+    WHERE Z > 700 && Z <= 79000 
+    SELECT X, Y, zz = log(Z) * X, Z 
+    ORDER BY zz DESCENDING
+    TAKE 10
+    SKIP 1
+}
+
+print(runQuery);
 ")
 
         Call Pause()

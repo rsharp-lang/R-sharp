@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::21fd1587b435ce04dfde78f2630ddb31, R#\Interpreter\Syntax\SyntaxTree\ExpressionTree.vb"
+﻿#Region "Microsoft.VisualBasic::307a830bf68b94448b72423dff806839, R#\Interpreter\Syntax\SyntaxTree\ExpressionTree.vb"
 
     ' Author:
     ' 
@@ -128,74 +128,74 @@ Namespace Interpreter.SyntaxParser
                 blocks = tokens.SplitByTopLevelDelimiter(TokenType.operator)
             End If
 
-            If blocks = 1 Then
-                ' 简单的表达式
-                If tokens.isFunctionInvoke Then
-                    Return SyntaxImplements.FunctionInvoke(tokens, opts)
-                ElseIf tokens.isSimpleSymbolIndexer Then
-                    Return SyntaxImplements.SymbolIndexer(tokens, opts)
-                ElseIf tokens.isAcceptor Then
-                    Return FunctionAcceptorSyntax.FunctionAcceptorInvoke(tokens, opts)
-                ElseIf tokens(Scan0).name = TokenType.open Then
-                    Dim openSymbol = tokens(Scan0).text
-
-                    If openSymbol = "[" Then
-                        Return SyntaxImplements.VectorLiteral(tokens, opts)
-                    ElseIf openSymbol = "(" Then
-                        ' (xxxx)
-                        ' (xxxx)[xx]
-                        ' (function(){...})(...)
-                        Dim splitTokens = tokens.SplitByTopLevelDelimiter(TokenType.close)
-
-                        If splitTokens = 2 Then
-                            '  0     1
-                            ' (xxxx |) is a single expression
-                            ' 是一个表达式
-                            Return splitTokens(Scan0) _
-                                .Skip(1) _
-                                .SplitByTopLevelDelimiter(TokenType.operator) _
-                                .ParseBinaryExpression(opts)
-                        ElseIf splitTokens = 4 Then
-                            If splitTokens.Last.Length = 1 AndAlso splitTokens.Last()(Scan0) = (TokenType.close, "]") Then
-                                ' 0      1    2     3
-                                ' (xxxx |) | [xxx | ]
-                                ' symbol indexer
-                                Dim symbolExpression As Token() = splitTokens(Scan0).Skip(1).ToArray
-                                Dim indexerExpression As Token() = splitTokens(2) _
-                                    .JoinIterates(splitTokens.Last) _
-                                    .ToArray
-
-                                Return SyntaxImplements.SymbolIndexer(symbolExpression, indexerExpression, opts)
-                            Else
-                                ' 可能是一个匿名函数的调用
-                                ' (function(...){})(...)
-                                If splitTokens(1).Length = 1 AndAlso splitTokens(1)(Scan0).text = ")" AndAlso
-                                   splitTokens(2)(Scan0).text = "(" AndAlso
-                                   splitTokens.Last.Length = 1 AndAlso splitTokens.Last(Scan0).text = ")" Then
-
-                                    Return splitTokens.ObjectInvoke(opts)
-                                Else
-                                    Return New SyntaxResult(New SyntaxErrorException, opts.debug)
-                                End If
-                            End If
-                        Else
-                            Throw New NotImplementedException
-                        End If
-                    ElseIf openSymbol = "{" Then
-                        ' 是一个可以产生值的closure
-                        Return SyntaxImplements.ClosureExpression(tokens, opts)
-                    End If
-                ElseIf tokens(Scan0).name = TokenType.stringInterpolation Then
-                    Return SyntaxImplements.StringInterpolation(tokens(Scan0), opts)
-                Else
-                    Dim indexer As SyntaxResult = tokens.parseComplexSymbolIndexer(opts)
-
-                    If Not indexer Is Nothing Then
-                        Return indexer
-                    End If
-                End If
-            Else
+            If blocks > 1 Then
                 Return ParseBinaryExpression(blocks, opts)
+            End If
+
+            ' 在下面解析简单的表达式
+            If tokens.isFunctionInvoke Then
+                Return SyntaxImplements.FunctionInvoke(tokens, opts)
+            ElseIf tokens.isSimpleSymbolIndexer Then
+                Return SyntaxImplements.SymbolIndexer(tokens, opts)
+            ElseIf tokens.isAcceptor Then
+                Return FunctionAcceptorSyntax.FunctionAcceptorInvoke(tokens, opts)
+            ElseIf tokens(Scan0).name = TokenType.open Then
+                Dim openSymbol = tokens(Scan0).text
+
+                If openSymbol = "[" Then
+                    Return SyntaxImplements.VectorLiteral(tokens, opts)
+                ElseIf openSymbol = "(" Then
+                    ' (xxxx)
+                    ' (xxxx)[xx]
+                    ' (function(){...})(...)
+                    Dim splitTokens = tokens.SplitByTopLevelDelimiter(TokenType.close)
+
+                    If splitTokens = 2 Then
+                        '  0     1
+                        ' (xxxx |) is a single expression
+                        ' 是一个表达式
+                        Return splitTokens(Scan0) _
+                            .Skip(1) _
+                            .SplitByTopLevelDelimiter(TokenType.operator) _
+                            .ParseBinaryExpression(opts)
+                    ElseIf splitTokens = 4 Then
+                        If splitTokens.Last.Length = 1 AndAlso splitTokens.Last()(Scan0) = (TokenType.close, "]") Then
+                            ' 0      1    2     3
+                            ' (xxxx |) | [xxx | ]
+                            ' symbol indexer
+                            Dim symbolExpression As Token() = splitTokens(Scan0).Skip(1).ToArray
+                            Dim indexerExpression As Token() = splitTokens(2) _
+                                .JoinIterates(splitTokens.Last) _
+                                .ToArray
+
+                            Return SyntaxImplements.SymbolIndexer(symbolExpression, indexerExpression, opts)
+                        Else
+                            ' 可能是一个匿名函数的调用
+                            ' (function(...){})(...)
+                            If splitTokens(1).Length = 1 AndAlso splitTokens(1)(Scan0).text = ")" AndAlso
+                               splitTokens(2)(Scan0).text = "(" AndAlso
+                               splitTokens.Last.Length = 1 AndAlso splitTokens.Last(Scan0).text = ")" Then
+
+                                Return splitTokens.ObjectInvoke(opts)
+                            Else
+                                Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                            End If
+                        End If
+                    Else
+                        Throw New NotImplementedException
+                    End If
+                ElseIf openSymbol = "{" Then
+                    ' 是一个可以产生值的closure
+                    Return SyntaxImplements.ClosureExpression(tokens, opts)
+                End If
+            ElseIf tokens(Scan0).name = TokenType.stringInterpolation Then
+                Return SyntaxImplements.StringInterpolation(tokens(Scan0), opts)
+            Else
+                Dim indexer As SyntaxResult = tokens.parseComplexSymbolIndexer(opts)
+
+                If Not indexer Is Nothing Then
+                    Return indexer
+                End If
             End If
 
             Return New SyntaxResult(New NotImplementedException($"Unsure for parse: '{tokens.Select(Function(t) t.text).JoinBy(" ")}'!"), opts.debug)

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e5304e6dae7b72623e49c06077465cca, studio\RData\Enums\RObjectType.vb"
+﻿#Region "Microsoft.VisualBasic::012234f0de58a8ba35b783b027c68024, studio\RData\Enums\RObjectType.vb"
 
     ' Author:
     ' 
@@ -38,11 +38,9 @@
     ' 
     ' 
     ' 
-    ' 
     ' /********************************************************************************/
 
 #End Region
-
 
 ''' <summary>
 ''' Type of a R object.
@@ -161,5 +159,3 @@ Public Enum RObjectType
     ''' </summary>
     REF = 255
 End Enum
-
-

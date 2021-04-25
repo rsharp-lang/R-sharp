@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cdb6d9b2452d4d5e4f7585018b57b4ef, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqExpression.vb"
+﻿#Region "Microsoft.VisualBasic::e4271e1ae5c7f10e992e8dae625f5bd2, R#\Interpreter\ExecuteEngine\Linq\old\LinqExpression.vb"
 
     ' Author:
     ' 
@@ -98,13 +98,13 @@ Namespace Interpreter.ExecuteEngine.LINQ
         ''' <summary>
         ''' 排序之类的操作都被转换为了函数调用
         ''' </summary>
-        Friend output As FunctionInvoke()
+        Friend output As ExpressionSymbols.Closure.FunctionInvoke()
 
         Sub New(locals As IEnumerable(Of DeclareNewSymbol),
                 sequence As Expression,
                 program As ClosureExpression,
                 projection As Expression,
-                output As IEnumerable(Of FunctionInvoke),
+                output As IEnumerable(Of ExpressionSymbols.Closure.FunctionInvoke),
                 stackframe As StackFrame)
 
             Me.locals = locals.ToArray

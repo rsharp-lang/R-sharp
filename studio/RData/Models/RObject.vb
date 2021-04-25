@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::645ef6f99ae358a845a96e4aec84fba4, studio\RData\Models\RObject.vb"
+﻿#Region "Microsoft.VisualBasic::45ddf2d2d27251dd4acc34950656d97e, studio\RData\Models\RObject.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 ''' <summary>
 ''' Representation of a R object.

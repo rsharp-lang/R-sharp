@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f8de63083793927209b18a008f57cecf, studio\RData\Enums\RdataFormats.vb"
+﻿#Region "Microsoft.VisualBasic::7674894ef25190a68c1f34674338953a, studio\RData\Enums\RdataFormats.vb"
 
     ' Author:
     ' 
@@ -54,4 +54,3 @@ Public Enum RdataFormats
     <Description("ASCII")> ASCII
     <Description("binary")> binary
 End Enum
-

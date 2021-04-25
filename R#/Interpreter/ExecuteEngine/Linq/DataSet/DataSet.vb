@@ -1,0 +1,72 @@
+﻿#Region "Microsoft.VisualBasic::5dfa5e6cff994c287fc833d1d6af2507, R#\Interpreter\ExecuteEngine\Linq\DataSet\DataSet.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    '     Class DataSet
+    ' 
+    '         Function: CreateDataSet
+    ' 
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
+
+Namespace Interpreter.ExecuteEngine.LINQ
+
+    ''' <summary>
+    ''' the linq dataset object, a helper module for 
+    ''' iterates through the data sequence that produced
+    ''' by the <see cref="QueryExpression"/>
+    ''' </summary>
+    Public MustInherit Class DataSet
+
+        Friend MustOverride Function PopulatesData() As IEnumerable(Of Object)
+
+        Friend Shared Function CreateDataSet(queryExpression As QueryExpression, context As ExecutableContext) As DataSet
+            Dim result As Object = queryExpression.GetSeqValue(context)
+
+            If result Is Nothing Then
+                Return New ErrorDataSet With {.message = Internal.debug.stop("null query sequence data!", context)}
+            ElseIf TypeOf result Is Message Then
+                Return New ErrorDataSet With {.message = result}
+            ElseIf TypeOf result Is dataframe Then
+                Return New DataFrameDataSet With {.dataframe = result}
+            Else
+                Return New SequenceDataSet With {.sequence = result}
+            End If
+        End Function
+    End Class
+End Namespace

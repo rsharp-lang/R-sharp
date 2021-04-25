@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cfdd99516240adeddb57a51c7923be51, studio\RData\Models\RVersions.vb"
+﻿#Region "Microsoft.VisualBasic::5905f0ca80dd6c2ee951da46b56da328, studio\RData\Models\RVersions.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,6 @@
     ' 
     '     Function: ToString
     ' 
-    ' 
     ' /********************************************************************************/
 
 #End Region
@@ -54,6 +53,3 @@ Public Class RVersions
     End Function
 
 End Class
-
-
-

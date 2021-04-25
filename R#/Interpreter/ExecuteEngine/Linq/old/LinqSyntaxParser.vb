@@ -1,4 +1,48 @@
-﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+﻿#Region "Microsoft.VisualBasic::916380bebd035a23a868c68b06e9ec2b, R#\Interpreter\ExecuteEngine\Linq\old\LinqSyntaxParser.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    '     Class LinqSyntaxParser
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: doParseLINQProgram, groupBy, local, project, sort
+    '                   which
+    ' 
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -86,7 +130,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Return Nothing
         End Function
 
-        Private Function sort(outputs As List(Of FunctionInvoke), stacktrace As StackFrame) As SyntaxResult
+        Private Function sort(outputs As List(Of ExpressionSymbols.Closure.FunctionInvoke), stacktrace As StackFrame) As SyntaxResult
             ' order by xxx asc
             Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(LinqExpressionSyntax.linqKeywordDelimiters)
                 buffer += ++p
@@ -110,7 +154,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
                 Return exprSyntax
             End If
 
-            outputs += New FunctionInvoke("sort", stacktrace, exprSyntax.expression, New Literal(token.Last.isKeyword("descending")))
+            outputs += New ExpressionSymbols.Closure.FunctionInvoke("sort", stacktrace, exprSyntax.expression, New Literal(token.Last.isKeyword("descending")))
 
             Return Nothing
         End Function
@@ -133,7 +177,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
             End If
 
             If TypeOf projection Is VectorLiteral Then
-                projection = New FunctionInvoke("list", stacktrace, DirectCast(projection, VectorLiteral).ToArray)
+                projection = New ExpressionSymbols.Closure.FunctionInvoke("list", stacktrace, DirectCast(projection, VectorLiteral).ToArray)
             End If
 
             Return Nothing
@@ -149,7 +193,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         Friend Function doParseLINQProgram(locals As List(Of DeclareNewSymbol),
                                            ByRef projection As Expression,
-                                           ByRef outputs As List(Of FunctionInvoke),
+                                           ByRef outputs As List(Of ExpressionSymbols.Closure.FunctionInvoke),
                                            ByRef programClosure As ClosureExpression) As SyntaxResult
 
             Dim syntaxResult As New Value(Of SyntaxResult)
@@ -173,7 +217,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
                     }
                 End If
 
-                Select Case token(Scan0).text
+                Select Case Strings.LCase(token(Scan0).text)
                     Case "let"
                         If Not (syntaxResult = local(locals)) Is Nothing Then
                             Return syntaxResult
@@ -183,7 +227,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
                             Return syntaxResult
                         End If
                     Case "distinct"
-                        outputs += New FunctionInvoke("unique", stacktrace, New SymbolReference("$"))
+                        outputs += New ExpressionSymbols.Closure.FunctionInvoke("unique", stacktrace, New SymbolReference("$"))
                     Case "order"
                         If Not (syntaxResult = sort(outputs, stacktrace)) Is Nothing Then
                             Return syntaxResult

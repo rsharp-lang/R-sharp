@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::23a9eb4f27065bf4a1c6657d1755226f, studio\RData\Models\RExtraInfo.vb"
+﻿#Region "Microsoft.VisualBasic::9410785074ed178aaa03f8479c7823de, studio\RData\Models\RExtraInfo.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.Serialization.JSON
 

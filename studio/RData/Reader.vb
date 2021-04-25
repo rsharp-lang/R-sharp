@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fa964ca2bfcef611bc7462b82246ce03, studio\RData\Reader.vb"
+﻿#Region "Microsoft.VisualBasic::833d9ee394cd8f070341a331e1281e10, studio\RData\Reader.vb"
 
     ' Author:
     ' 
@@ -322,4 +322,3 @@ Public MustInherit Class Reader
         End Select
     End Function
 End Class
-

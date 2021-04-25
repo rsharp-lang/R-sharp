@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b9126e972e3b04fcc938670724dc7d13, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::92757bb346756b7f441a675e5b70bff7, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
     ' Author:
     ' 
@@ -35,10 +35,10 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: all, any, doWhile, first, groupBy
-    '                   groupsSummary, groupSummary, orderBy, produceKeyedSequence, projectAs
-    '                   reverse, runFilterPipeline, runWhichFilter, skip, split
-    '                   take, tryKeyBy, unique, where, whichMax
-    '                   whichMin
+    '                   groupsSummary, groupSummary, last, orderBy, produceKeyedSequence
+    '                   projectAs, reverse, runFilterPipeline, runWhichFilter, skip
+    '                   split, take, tryKeyBy, unique, where
+    '                   whichMax, whichMin
     ' 
     ' 
     ' /********************************************************************************/
@@ -458,6 +458,18 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' get the last element in the sequence
+        ''' </summary>
+        ''' <param name="sequence">a general data sequence</param>
+        ''' <param name="test">
+        ''' if this test function is nothing, then means get the last element in 
+        ''' the sequence. else if the function is not nothing, then means get the
+        ''' last element that which meet this test condition in the sequence
+        ''' data input.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <ExportAPI("last")>
         Public Function last(<RRawVectorArgument>
                              sequence As Object,
@@ -471,7 +483,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Return Rset.getObjectSet(sequence, envir).LastOrDefault
             End If
 
-            Dim lastVal As Object
+            Dim lastVal As Object = Nothing
 
             For Each item As Object In Rset.getObjectSet(sequence, envir)
                 arg = InvokeParameter.CreateLiterals(item)

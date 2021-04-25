@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ea99acbf41287b7fbdfecac205899e6c, R#\Runtime\Internal\objects\utils\TableFormatter.vb"
+﻿#Region "Microsoft.VisualBasic::e2e169477d7265d6de5a5e9713d6d3ca, R#\Runtime\Internal\objects\utils\TableFormatter.vb"
 
 ' Author:
 ' 
@@ -33,7 +33,7 @@
 
 '     Class TableFormatter
 ' 
-'         Function: GetTable
+'         Function: GetFormatters, GetTable, GetTypeArray
 ' 
 ' 
 ' /********************************************************************************/
@@ -53,9 +53,18 @@ Namespace Runtime.Internal.Object.Utils
             Return colNames _
                 .Select(Function(name)
                             Dim arrayType As Type = df(name).GetType
-                            Dim type As RType = RType.GetRSharpType(arrayType)
+                            Dim type As RType
 
-                            Return $"<{type}>"
+                            If arrayType.IsArray Then
+                                arrayType = arrayType.GetElementType
+                            End If
+
+                            If arrayType Is GetType(Object) Then
+                                Return "<any>"
+                            Else
+                                type = RType.GetRSharpType(arrayType)
+                                Return $"<{type}>"
+                            End If
                         End Function) _
                 .ToArray
         End Function

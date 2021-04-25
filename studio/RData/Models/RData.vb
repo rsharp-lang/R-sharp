@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cbf3734ebac54fdb11f205372aff5537, studio\RData\Models\RData.vb"
+﻿#Region "Microsoft.VisualBasic::187b86a52828154c9057fe26d3b37c4d, studio\RData\Models\RData.vb"
 
     ' Author:
     ' 
@@ -38,8 +38,6 @@
     ' /********************************************************************************/
 
 #End Region
-
-
 
 ''' <summary>
 ''' Data contained in a R file.

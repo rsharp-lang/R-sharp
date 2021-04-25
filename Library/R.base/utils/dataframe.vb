@@ -1,46 +1,46 @@
-﻿#Region "Microsoft.VisualBasic::085d59e86a11696c3484b7a410210255, Library\R.base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::b19b941b23d96e81c9a11a2ffc0c2dd0, Library\R.base\utils\dataframe.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Module dataframe
-' 
-'     Constructor: (+1 Overloads) Sub New
-'     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
-'               colnames, column, CreateRowObject, dataframeTable, deserialize
-'               measureColumnVector, openCsv, printRowVector, printTable, project
-'               rawToDataFrame, readCsvRaw, readDataSet, rows, RowToString
-'               transpose, vector
-' 
-' /********************************************************************************/
+    ' Module dataframe
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    '     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
+    '               colnames, column, CreateRowObject, dataframeTable, deserialize
+    '               measureColumnVector, openCsv, printRowVector, printTable, project
+    '               rawToDataFrame, readCsvRaw, readDataSet, rows, rowToString
+    '               RowToString, transpose, vector
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
