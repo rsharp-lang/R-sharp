@@ -82,6 +82,9 @@ Module interpreterTest
     End Sub
 
     Sub syntaxTest()
+
+        Call R.Parse("require(base)")
+
         Call R.Evaluate("	
     const sampleRows = table 
 		:> rows 

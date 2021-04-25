@@ -134,7 +134,15 @@ Namespace Interpreter.SyntaxParser
 
             ' 在下面解析简单的表达式
             If tokens.isFunctionInvoke Then
-                Return SyntaxImplements.FunctionInvoke(tokens, opts)
+                If tokens(Scan0) = (TokenType.keyword, {"require"}) Then
+                    Dim keyword As Token() = {tokens(Scan0)}
+                    Dim content As Token() = tokens.Skip(1).ToArray
+                    Dim join = New List(Of Token()) From {keyword, content}
+
+                    Return join.keywordExpressionHandler(opts)
+                Else
+                    Return SyntaxImplements.FunctionInvoke(tokens, opts)
+                End If
             ElseIf tokens.isSimpleSymbolIndexer Then
                 Return SyntaxImplements.SymbolIndexer(tokens, opts)
             ElseIf tokens.isAcceptor Then
