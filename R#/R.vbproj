@@ -671,6 +671,7 @@
   <ItemGroup>
     <Compile Include="Interpreter\ExecutableLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNumeric.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\DataFrameDataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\ErrorDataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\SequenceDataSet.vb" />

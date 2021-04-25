@@ -23,8 +23,8 @@ let runQuery = {
     FROM [X, Y, Z] 
     IN table
 	# create a table subset with given condition
-    WHERE Z > 100 && Z <= 79000 
-    SELECT X, Y, zz = log(Z) * X, Z 
+    WHERE Z > 100 && Z <= 7900000
+    SELECT X, Y, zz = log(abs(Z)) ^ X, Z, -X 
     ORDER BY zz DESCENDING
     TAKE 10
     SKIP 1
