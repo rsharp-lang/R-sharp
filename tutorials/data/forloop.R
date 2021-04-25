@@ -7,16 +7,21 @@ const all = for(i in 1:10 step 2.5) {
 }
 
 print("all contents:");
-print(all);
+str(all);
 
 # break test of the for loop
+print("break at first, and then the loop break, message will never display:");
 for(i in 1:10) {
 	break;
 	print("this message should never display!");
+	stop("invaid stack info!");
 }
 
+print("test break from another if closure populate out to for loop closre");
 for(i in 1:10) {
 	if (i > 5) {
+		print(i);
+		print("for loop will break at here!");
 		break;
 		print("this message should never display!");
 	}
@@ -47,3 +52,6 @@ print((function() {
 		}
 	}
 })());
+
+
+pause();
