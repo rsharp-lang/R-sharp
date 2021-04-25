@@ -59,7 +59,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
         End Property
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Return envir("$").value
+            Return Me
         End Function
 
         Public Overrides Function ToString() As String

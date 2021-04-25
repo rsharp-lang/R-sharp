@@ -132,14 +132,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Return Internal.debug.stop(message, envir)
         End Function
 
-        Public Function Invoke(parent As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
+        Private Function InitializeEnvironment(parent As Environment, params As InvokeParameter(), ByRef runDispose As Boolean) As [Variant](Of Message, Environment)
             Dim var As DeclareNewSymbol
             Dim value As Object
             Dim arguments As Dictionary(Of String, Object)
             Dim envir As Environment = Me.envir
-            Dim runDispose As Boolean = False
 
             If envir Is Nothing Then
+                runDispose = False
                 envir = parent
             Else
                 runDispose = True
@@ -172,10 +172,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         value = var.value.Evaluate(envir)
 
                         If Program.isException(value) Then
-                            Return value
+                            Return DirectCast(value, Message)
                         End If
                     Else
-                        Return MissingParameters(var, funcName, envir)
+                        Return DirectCast(MissingParameters(var, funcName, envir), Message)
                     End If
                 Else
                     key = "$" & i
@@ -213,6 +213,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     End If
                 End If
             Next
+
+            Return envir
+        End Function
+
+        Public Function Invoke(parent As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
+            Dim runDispose As Boolean = False
+            Dim env = InitializeEnvironment(parent, params, runDispose)
+            Dim envir As Environment
+
+            If env Like GetType(Message) Then
+                Return env.TryCast(Of Message)
+            Else
+                envir = env.TryCast(Of Environment)
+            End If
 
             If runDispose Then
                 Using envir

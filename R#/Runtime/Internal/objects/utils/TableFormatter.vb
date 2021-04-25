@@ -115,8 +115,10 @@ Namespace Runtime.Internal.Object.Utils
                 End If
             End If
 
-            For i As Integer = 2 To table.Length - 1
-                rIndex = i - 2
+            Dim offset As Integer = If(printContent, 2, 1)
+
+            For i As Integer = offset To table.Length - 1
+                rIndex = i - offset
                 row(Scan0) = rownames(rIndex)
 
                 For j As Integer = 0 To df.columns.Count - 1

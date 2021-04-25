@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::9b79f264c57f70ade6f7844aed168a71, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class ForLoop
-    ' 
-    '         Properties: body, expressionName, sequence, stackFrame, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, exec, execParallel, getSequence, RunLoop
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class ForLoop
+' 
+'         Properties: body, expressionName, sequence, stackFrame, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, exec, execParallel, getSequence, RunLoop
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -48,12 +48,13 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Development.Package.File
+Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
@@ -107,6 +108,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
             Me.stackFrame = stackframe
         End Sub
 
+        ''' <summary>
+        ''' run for loop at here
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim result As New List(Of Object)
             Dim runLoop As Func(Of Environment, Object)
@@ -117,13 +123,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 runLoop = AddressOf exec
             End If
 
+            ' R 语言中的for循环其实就是一个for each循环
             For Each item As Object In envir.DoCall(runLoop)
-                If Program.isException(item) Then
+                If TypeOf item Is BreakLoop Then
+                    Exit For
+                ElseIf Program.isException(item) Then
                     Return item
                 ElseIf TypeOf item Is ReturnValue Then
                     Return item
-                Else
-                    result += Runtime.single(item)
+                ElseIf Not TypeOf item Is ContinuteFor Then
+                    result += REnv.single(item)
                 End If
             Next
 

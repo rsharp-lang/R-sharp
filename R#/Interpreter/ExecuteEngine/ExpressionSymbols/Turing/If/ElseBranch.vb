@@ -96,7 +96,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
             If envir.ifPromise = 0 Then
                 Return Internal.debug.stop(New SyntaxErrorException, envir)
             Else
-                Dim last As IfBranch.IfPromise
+                Dim last As IfPromise
 
                 If envir.ifPromise.Last.Result = True Then
                     last = envir.ifPromise.Pop
@@ -106,7 +106,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                     If Program.isException(resultVal) Then
                         Return resultVal
                     Else
-                        last = New IfBranch.IfPromise(resultVal, False) With {
+                        last = New IfPromise(resultVal, False) With {
                             .assignTo = envir.ifPromise.Last.assignTo
                         }
                     End If
@@ -125,12 +125,4 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
         End Function
     End Class
 
-    Public Class ElseIfBranch : Inherits IfBranch
-
-        Public Sub New(ifTest As Expression, trueClosure As ClosureExpression, stackframe As StackFrame)
-            MyBase.New(ifTest, trueClosure, stackframe)
-
-            stackframe.Method.Method = "elseif_closure"
-        End Sub
-    End Class
 End Namespace

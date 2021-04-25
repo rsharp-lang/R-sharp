@@ -63,11 +63,26 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         }
 
         <Extension>
+        Private Function ParseUnary(tokenList As Token(), opts As SyntaxBuilderOptions) As SyntaxParserResult
+            If tokenList(1).isNumeric Then
+                Return New Literal(-Val(tokenList(1).text))
+            ElseIf tokenList(1).name = TokenType.identifier Then
+                Throw New NotImplementedException
+            End If
+        End Function
+
+        <Extension>
         Public Function ParseBinary(tokenList As Token(), opts As SyntaxBuilderOptions) As SyntaxParserResult
-            Dim shrinks As List(Of [Variant](Of String, SyntaxParserResult)) = tokenList _
-                .SplitOperators _
-                .ShrinkTokens(opts) _
-                .AsList
+            Dim shrinks As List(Of [Variant](Of String, SyntaxParserResult))
+
+            If tokenList.Length = 2 AndAlso tokenList(Scan0) = (TokenType.operator, "-") Then
+                Return tokenList.ParseUnary(opts)
+            Else
+                shrinks = tokenList _
+                    .SplitOperators _
+                    .ShrinkTokens(opts) _
+                    .AsList
+            End If
 
             For Each item In From x In shrinks Where Not x Like GetType(String)
                 If item.TryCast(Of SyntaxParserResult).isError Then
