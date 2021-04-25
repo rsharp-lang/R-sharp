@@ -51,6 +51,7 @@ Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports any = Microsoft.VisualBasic.Scripting
+Imports RExpression = SMRUCC.Rsharp.Interpreter.ExecuteEngine.Expression
 
 Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
@@ -303,13 +304,13 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
                 Return New SymbolDeclare With {.symbol = name, .typeName = type}
             ElseIf tokenList(Scan0).isKeyword("where") Then
-                Dim bool = ParseExpression(tokenList.Skip(1).ToArray, opts)
+                Dim bool As SyntaxResult = RExpression.CreateExpression(tokenList.Skip(1), opts)
 
-                If bool.isError Then
-                    Return bool
+                If bool.isException Then
+                    Return New SyntaxParserResult(bool.error)
                 End If
 
-                Return New WhereFilter(bool.expression)
+                Return New WhereFilter(New RunTimeValueExpression(bool.expression))
             ElseIf tokenList(Scan0).isKeyword("in") Then
                 Return ParseExpression(tokenList.Skip(1).ToArray, opts)
             ElseIf tokenList(Scan0).isKeyword("select") Then

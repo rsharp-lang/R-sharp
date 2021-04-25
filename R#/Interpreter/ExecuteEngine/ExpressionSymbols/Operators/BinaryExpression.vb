@@ -50,6 +50,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -73,8 +74,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Sub
 
         Private Shared Function vectorCast(x As vector, env As Environment) As Array
-            Dim type As Type = Runtime.MeasureArrayElementType(x.data)
-            Dim data As Array = Runtime.asVector(x.data, type, env)
+            Dim type As Type = REnv.MeasureArrayElementType(x.data)
+            Dim data As Array = REnv.asVector(x.data, type, env)
 
             Return data
         End Function
@@ -121,19 +122,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             ElseIf tleft?.raw Like RType.logicals AndAlso tright?.raw Like RType.logicals Then
                 Select Case [operator]
                     Case "=="
-                        Return Runtime.Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
-                            x:=Runtime.asVector(Of Boolean)(a),
-                            y:=Runtime.asVector(Of Boolean)(b),
+                        Return Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
+                            x:=REnv.asVector(Of Boolean)(a),
+                            y:=REnv.asVector(Of Boolean)(b),
                             [do]:=Function(x, y) x = y
                         ).ToArray
                     Case "!="
-                        Return Runtime.Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
-                            x:=Runtime.asVector(Of Boolean)(a),
-                            y:=Runtime.asVector(Of Boolean)(b),
+                        Return Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
+                            x:=REnv.asVector(Of Boolean)(a),
+                            y:=REnv.asVector(Of Boolean)(b),
                             [do]:=Function(x, y) x <> y
                         ).ToArray
                     Case "&&"
-                        Return Runtime.Core _
+                        Return Core _
                             .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
                                 x:=Core.asLogical(a),
                                 y:=Core.asLogical(b),
@@ -156,10 +157,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 If TypeOf left Is Literal AndAlso any.ToString(DirectCast(left, Literal).value) = "0" Then
                     Return $"-{right}"
                 Else
-                    Return $"{left} {[operator]} {right}"
+                    Return $"({left} {[operator]} {right})"
                 End If
             Else
-                Return $"{left} {[operator]} {right}"
+                Return $"({left} {[operator]} {right})"
             End If
         End Function
     End Class
