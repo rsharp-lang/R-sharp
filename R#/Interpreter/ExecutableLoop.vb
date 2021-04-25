@@ -208,9 +208,9 @@ Namespace Interpreter
                     Else
 
                     End If
-                ElseIf last.GetType Is GetType(IfBranch.IfPromise) Then
+                ElseIf last.GetType Is GetType(IfPromise) Then
                     envir.ifPromise.Add(last)
-                    last = DirectCast(last, IfBranch.IfPromise).Value
+                    last = DirectCast(last, IfPromise).Value
 
                     If envir.ifPromise.Last.Result Then
                         If Not last Is Nothing AndAlso last.GetType Is GetType(ReturnValue) Then

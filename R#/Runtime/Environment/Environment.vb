@@ -120,7 +120,7 @@ Namespace Runtime
             End Get
         End Property
 
-        Friend ReadOnly ifPromise As New List(Of IfBranch.IfPromise)
+        Friend ReadOnly ifPromise As New List(Of IfPromise)
 
         ''' <summary>
         ''' In the constructor function of <see cref="Runtime.GlobalEnvironment"/>, 
