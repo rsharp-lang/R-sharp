@@ -23,7 +23,7 @@ for(i in 1:10) {
 		print(i);
 		print("for loop will break at here!");
 		break;
-		print("this message should never display!");
+		stop("this error message should never display!");
 	}
 
 	if (i > 5) {
