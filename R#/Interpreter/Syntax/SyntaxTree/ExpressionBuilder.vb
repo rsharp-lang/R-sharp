@@ -141,6 +141,10 @@ Namespace Interpreter.SyntaxParser
                 Else
                     code(Scan0)(Scan0).name = TokenType.identifier
                 End If
+            ElseIf code(Scan0)(Scan0) = (TokenType.keyword, "if") AndAlso code.Any(Function(t) t.Length = 1 AndAlso t(Scan0) = (TokenType.keyword, "else")) Then
+                ' simple iif expression
+                ' if (xxx) a else b
+                Return code.IIfExpression(opts)
             End If
 
             If code = 1 Then

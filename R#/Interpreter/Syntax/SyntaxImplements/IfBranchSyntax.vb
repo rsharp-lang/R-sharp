@@ -1,45 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::6db31fd3db139fe9195c4b92461d925d, R#\Interpreter\Syntax\SyntaxImplements\IfBranchSyntax.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module IfBranchSyntax
-    ' 
-    '         Function: ElseClosure, ElseIfClosure, IfClosure, IIfExpression
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module IfBranchSyntax
+' 
+'         Function: ElseClosure, ElseIfClosure, IfClosure, IIfExpression
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -51,6 +52,33 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module IfBranchSyntax
+
+        <Extension>
+        Public Function IIfExpression(tokens As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim [select] = tokens.Split(Function(t) t.Length = 1 AndAlso t(Scan0) = (TokenType.keyword, "else")).ToArray
+            Dim [else] = Expression.CreateExpression([select](1).IteratesALL, opts)
+            Dim sourceMap = opts.GetStackTrace(tokens(Scan0)(Scan0), "iif")
+
+            tokens = [select](Scan0).IteratesALL.SplitByTopLevelDelimiter(TokenType.close, False, ")", Nothing)
+
+            Dim test = Expression.CreateExpression(tokens(Scan0).Skip(2), opts)
+            Dim [if] = Expression.CreateExpression(tokens.Skip(2).IteratesALL, opts)
+
+            If [else].isException Then
+                Return [else]
+            ElseIf test.isException Then
+                Return test
+            ElseIf [if].isException Then
+                Return [if]
+            End If
+
+            Return New IIfExpression(
+                iftest:=test.expression,
+                trueResult:=[if].expression,
+                falseResult:=[else].expression,
+                stackFrame:=sourceMap
+            )
+        End Function
 
         Public Function IIfExpression(test As Token(), ifelse As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim ifTest = Expression.CreateExpression(test, opts)

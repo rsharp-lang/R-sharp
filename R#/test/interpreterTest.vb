@@ -82,6 +82,10 @@ Module interpreterTest
     End Sub
 
     Sub syntaxTest()
+        ' Call R.Parse("if (aaa) {11/9} else {88^77}")
+
+        Call R.Parse("if(aaa) 11/9 else 88 ^77")
+        Call R.Parse("return(1)")
 
         Call R.Parse("require(base)")
 
