@@ -89,7 +89,7 @@ Module interpreterTest
 
         Call R.Parse("require(base)")
 
-        Call R.Evaluate("	
+        Call R.Parse("	
     const sampleRows = table 
 		:> rows 
 		:> which(r -> sum("""" != (r :> cells)) >= 4)

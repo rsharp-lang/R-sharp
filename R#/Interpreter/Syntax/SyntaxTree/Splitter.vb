@@ -41,6 +41,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Language
@@ -91,9 +92,20 @@ Namespace Interpreter.SyntaxParser
                     End If
                 End If
 
+                Static LINQKeywords As New Index(Of String) From {
+                    "skip", "take", "group", "by", "order"
+                }
+
                 ' 20210425 keyword 后面存在一个括号的时候
                 ' 仅存在函数调用的这一种情况？
-                If isDelimiter(t) OrElse (includeKeyword AndAlso (t.name = TokenType.keyword AndAlso (Not i.Current Is Nothing) AndAlso i.Current.name <> TokenType.open)) Then
+                ' If isDelimiter(t) OrElse (includeKeyword AndAlso (t.name = TokenType.keyword AndAlso (Not i.Current Is Nothing) AndAlso i.Current.name <> TokenType.open)) Then
+                If isDelimiter(t) OrElse (includeKeyword AndAlso t.name = TokenType.keyword) Then
+                    If (includeKeyword AndAlso t.name = TokenType.keyword) Then
+                        If (Not i.Current Is Nothing) AndAlso i.Current.name = TokenType.open AndAlso t.text Like LINQKeywords Then
+                            GoTo Skip
+                        End If
+                    End If
+
                     If stack.Count = 0 Then
                         ' 这个是最顶层的分割
                         If buf > 0 Then
@@ -104,7 +116,7 @@ Namespace Interpreter.SyntaxParser
                         add = False
                     End If
                 End If
-
+Skip:
                 If add Then
                     buf += t
                 End If
