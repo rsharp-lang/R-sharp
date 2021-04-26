@@ -54,6 +54,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -126,6 +127,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <returns></returns>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim value As Object
+            Dim type As TypeCodes = Me.type
 
             If Me.value Is Nothing Then
                 value = Nothing
@@ -140,11 +142,23 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     value = DirectCast(value, String).ParseBoolean
                 End If
 
-                If Not value Is Nothing AndAlso value.GetType.IsArray Then
-                    If attributes.ContainsKey("unit") Then
-                        value = New vector(value, RType.GetType(type)) With {
-                            .unit = New unit With {.name = unit}
-                        }
+                If Not value Is Nothing Then
+                    If (Not value.GetType.IsArray) AndAlso (Not TypeOf value Is vector) Then
+                        If type = TypeCodes.generic Then
+                            type = value.GetType.GetRTypeCode
+                        End If
+
+                        If type = TypeCodes.boolean OrElse type = TypeCodes.double OrElse type = TypeCodes.integer OrElse type = TypeCodes.string Then
+                            value = REnv.TryCastGenericArray({value}, envir)
+                        End If
+                    End If
+
+                    If value.GetType.IsArray Then
+                        If attributes.ContainsKey("unit") Then
+                            value = New vector(value, RType.GetType(type)) With {
+                                .unit = New unit With {.name = unit}
+                            }
+                        End If
                     End If
                 End If
 
