@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::27084324bb8019ca545f8a0f55d0deaa, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DeclareNewSymbol.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class DeclareNewSymbol
-    ' 
-    '         Properties: expressionName, hasInitializeExpression, isTuple, names, stackFrame
-    '                     type, value
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, getParameterView, PushNames, PushTuple, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class DeclareNewSymbol
+' 
+'         Properties: expressionName, hasInitializeExpression, isTuple, names, stackFrame
+'                     type, value
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, getParameterView, PushNames, PushTuple, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -52,6 +52,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -98,6 +99,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Get
         End Property
 
+        Public ReadOnly Property unit As String
+            Get
+                Return attributes.TryGetValue("unit").FirstOrDefault
+            End Get
+        End Property
+
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
         Sub New(names$(), value As Expression, type As TypeCodes, [readonly] As Boolean, stackFrame As StackFrame)
@@ -131,6 +138,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Else
                 If type = TypeCodes.boolean AndAlso TypeOf value Is String Then
                     value = DirectCast(value, String).ParseBoolean
+                End If
+
+                If Not value Is Nothing AndAlso value.GetType.IsArray Then
+                    If attributes.ContainsKey("unit") Then
+                        value = New vector(value, RType.GetType(type)) With {
+                            .unit = New unit With {.name = unit}
+                        }
+                    End If
                 End If
 
                 Try

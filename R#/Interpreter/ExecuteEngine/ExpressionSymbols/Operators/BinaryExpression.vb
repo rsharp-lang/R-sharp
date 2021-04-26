@@ -81,8 +81,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim a As Object = REnv.TryCastGenericArray(left.Evaluate(envir), envir)
-            Dim b As Object = REnv.TryCastGenericArray(right.Evaluate(envir), envir)
+            Dim a As Object = left.Evaluate(envir)
+            Dim b As Object = right.Evaluate(envir)
 
             ' > NULL / NULL
             ' numeric(0)
