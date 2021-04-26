@@ -50,6 +50,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -80,8 +81,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim a As Object = left.Evaluate(envir)
-            Dim b As Object = right.Evaluate(envir)
+            Dim a As Object = REnv.TryCastGenericArray(left.Evaluate(envir), envir)
+            Dim b As Object = REnv.TryCastGenericArray(right.Evaluate(envir), envir)
 
             ' > NULL / NULL
             ' numeric(0)
