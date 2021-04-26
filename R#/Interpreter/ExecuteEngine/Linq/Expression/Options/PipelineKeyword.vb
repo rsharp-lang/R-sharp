@@ -41,8 +41,10 @@
 #End Region
 
 Imports Microsoft.VisualBasic.My.JavaScript
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports any = Microsoft.VisualBasic.Scripting
+Imports RExpression = SMRUCC.Rsharp.Interpreter.ExecuteEngine.Expression
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
@@ -70,10 +72,12 @@ Namespace Interpreter.ExecuteEngine.LINQ
                 bin.right = FixLiteral(bin.right)
             ElseIf TypeOf expr Is Literal Then
                 expr = New SymbolReference(any.ToString(DirectCast(expr, Literal).value))
-            ElseIf TypeOf expr Is FunctionInvoke Then
-                DirectCast(expr, FunctionInvoke).parameters = DirectCast(expr, FunctionInvoke).parameters _
-                    .Select(AddressOf FixLiteral) _
-                    .ToArray
+            ElseIf TypeOf expr Is RunTimeValueExpression Then
+                'Dim Rexpr As RExpression
+
+                'DirectCast(expr, FunctionInvoke).parameters = DirectCast(expr, FunctionInvoke).parameters _
+                '    .Select(AddressOf FixLiteral) _
+                '    .ToArray
             End If
 
             Return expr
