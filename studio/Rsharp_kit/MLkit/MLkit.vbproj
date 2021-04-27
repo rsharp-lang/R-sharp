@@ -291,6 +291,7 @@
     <Compile Include="GA\GAToolkit.vb" />
     <Compile Include="GA\GeneralChromosome.vb" />
     <Compile Include="Manifold.vb" />
+    <Compile Include="hiddenMarkov.vb" />
     <Compile Include="SVM.vb" />
     <Compile Include="zzz.vb" />
     <Compile Include="dataMining\clustering.vb" />
