@@ -18,6 +18,8 @@ Module hiddenMarkov
 
     Sub New()
         Call Internal.ConsolePrinter.AttachConsoleFormatter(Of Alpha)(AddressOf printAlpha)
+        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of Beta)(AddressOf printBeta)
+        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of viterbiSequence)(AddressOf printViterbi)
     End Sub
 
     Private Function printAlpha(a As Alpha) As String
@@ -27,6 +29,33 @@ Module hiddenMarkov
         Call sb.AppendLine(New String("-"c, 32))
 
         For Each line In a.alphas
+            Call sb.AppendLine(line.ToArray.GetJson)
+        Next
+
+        Return sb.ToString
+    End Function
+
+    Private Function printBeta(b As Beta) As String
+        Dim sb As New StringBuilder
+
+        Call sb.AppendLine($"beta: {b.betaF}")
+        Call sb.AppendLine(New String("-"c, 32))
+
+        For Each line In b.betas
+            Call sb.AppendLine(line.ToArray.GetJson)
+        Next
+
+        Return sb.ToString
+    End Function
+
+    Private Function printViterbi(seq As viterbiSequence) As String
+        Dim sb As New StringBuilder
+
+        Call sb.AppendLine($"state sequence: {seq.stateSequence.JoinBy("->")}")
+        Call sb.AppendLine($"termination probability: {seq.terminationProbability}")
+        Call sb.AppendLine(New String("-"c, 32))
+
+        For Each line In seq.trellisSequence
             Call sb.AppendLine(line.ToArray.GetJson)
         Next
 

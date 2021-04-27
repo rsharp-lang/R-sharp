@@ -66,6 +66,7 @@ Module Program
         Call R.LoadLibrary("base", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
         Call R.LoadLibrary("utils", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
         Call R.LoadLibrary("grDevices", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+        Call R.LoadLibrary("math", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
 
         Call Console.WriteLine()
 

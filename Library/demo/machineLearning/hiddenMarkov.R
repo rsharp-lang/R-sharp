@@ -63,6 +63,8 @@ print(seqProbability);
 print("the transition matrix of markovChain:");
 print(markovChain :> transMatrix); 
    
+cat("\n");
+   
 ## Hidden Markov Model
 
 # A Hidden Markov Model requires hidden states, transition probabilities, 
@@ -139,6 +141,8 @@ let bayesResult = HMModel :> bayesTheorem(observation, hiddenState);
 print("probability of a specific hidden state:");
 print(bayesResult);
 
+cat("\n");
+
 ### Hidden Markov Model: Forward Algorithm and Backward Algorithm (Problem 1: Likelihood)
 
 # To find the probability of an observation sequence given a model we can use 
@@ -165,12 +169,16 @@ print(as.object(forwardProbability)$alphaF);
 
 str(forwardProbability);
 
+cat("\n\n");
+
 let backwardProbability = HMModel :> backwardAlgorithm(obSequence);
 # 0.0003171642187500001
 print("backward:");
 print(as.object(backwardProbability)$betaF); 
   
 str(backwardProbability);
+  
+cat("\n\n");
   
 ### Hidden Markov Model: Viterbi Algorithm (Problem 2: Decoding)
 
@@ -194,6 +202,9 @@ let viterbiResult = HMModel :> viterbiAlgorithm(obSequence);
 print("the most likely sequence of hidden states:");
 print(as.object(viterbiResult)$stateSequence);
 
+cat("\n");
+
+print("view of the full viterbi sequence result:");
 str(viterbiResult);
 
 ### Hidden Markov Model: Baum-Welch Algorithm (Problem 3: Learning)
