@@ -361,6 +361,10 @@
       <Project>{6ca54af6-cadc-457e-94b9-384f2990f07e}</Project>
       <Name>hierarchical-clustering</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\DataMining\HMM\HMM.vbproj">
+      <Project>{6F50FB96-D5F3-4B67-BD6B-4E5BC0AE1A15}</Project>
+      <Name>HMM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\DataMining\UMAP\UMAP.vbproj">
       <Project>{c57630a3-33b1-4cad-9dc8-3a9e66ce93ff}</Project>
       <Name>UMAP</Name>
