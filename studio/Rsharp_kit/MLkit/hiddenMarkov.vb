@@ -1,5 +1,6 @@
 ﻿
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.DataMining.HiddenMarkovChain
 Imports Microsoft.VisualBasic.DataMining.HiddenMarkovChain.Models
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
@@ -8,6 +9,8 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("hiddenMarkov")>
+<RTypeExport("state", GetType(StatesObject))>
+<RTypeExport("observable", GetType(Observable))>
 Module hiddenMarkov
 
     ''' <summary>
@@ -47,4 +50,8 @@ Module hiddenMarkov
         End If
     End Function
 
+    <ExportAPI("MarkovChain")>
+    Public Function MarkovChain(states As StatesObject(), init As Double()) As MarkovChain
+        Return New MarkovChain(states, init)
+    End Function
 End Module
