@@ -60,6 +60,7 @@ print(seqProbability);
 # Example:
 
 # [ [ 0.4, 0.4, 0.2 ], [ 0.3, 0.3, 0.4 ], [ 0.2, 0.5, 0.3 ] ]
+print("the transition matrix of markovChain:");
 print(markovChain :> transMatrix); 
    
 ## Hidden Markov Model
@@ -135,6 +136,7 @@ let hiddenState = 'AT-rich';
 # 0.9369369369369369
 let bayesResult = HMModel :> bayesTheorem(observation, hiddenState); 
 
+print("probability of a specific hidden state:");
 print(bayesResult);
 
 ### Hidden Markov Model: Forward Algorithm and Backward Algorithm (Problem 1: Likelihood)
@@ -158,11 +160,17 @@ let obSequence = ['T','C','G','G','A'];
 
 let forwardProbability = HMModel :> forwardAlgorithm(obSequence);
 # 0.0003171642187500001
+print("forward:");
 print(as.object(forwardProbability)$alphaF); 
+
+str(forwardProbability);
 
 let backwardProbability = HMModel :> backwardAlgorithm(obSequence);
 # 0.0003171642187500001
+print("backward:");
 print(as.object(backwardProbability)$betaF); 
+  
+str(backwardProbability);
   
 ### Hidden Markov Model: Viterbi Algorithm (Problem 2: Decoding)
 
@@ -183,7 +191,10 @@ let viterbiResult = HMModel :> viterbiAlgorithm(obSequence);
 
 # So, 
 # [ 'AT-rich', 'AT-rich', 'CG-rich', 'CG-rich', 'CG-rich', ... ] 
+print("the most likely sequence of hidden states:");
 print(as.object(viterbiResult)$stateSequence);
+
+str(viterbiResult);
 
 ### Hidden Markov Model: Baum-Welch Algorithm (Problem 3: Learning)
 
@@ -205,6 +216,7 @@ let maximizedModel = HMModel :> baumWelchAlgorithm(obSequence);
 # algorithm.
 
 # [ [ 0.748722257770877, 0.251277742229123 ], [ 0.08173322039272721, 0.9182667796072727 ] ]
+print("EM (Expectation-Maximization):");
 print(maximizedModel :> transMatrix);  
 
 ### Hidden Markov Model properties
