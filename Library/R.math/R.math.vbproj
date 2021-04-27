@@ -387,6 +387,7 @@
   <ItemGroup>
     <Compile Include="models\lmCall.vb" />
     <Compile Include="math.vb" />
+    <Compile Include="zzz.vb" />
     <Compile Include="symbolic.vb" />
     <Compile Include="stats.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

@@ -158,11 +158,11 @@ let obSequence = ['T','C','G','G','A'];
 
 let forwardProbability = HMModel :> forwardAlgorithm(obSequence);
 # 0.0003171642187500001
-print(forwardProbability$alphaF); 
+print(as.object(forwardProbability)$alphaF); 
 
 let backwardProbability = HMModel :> backwardAlgorithm(obSequence);
 # 0.0003171642187500001
-print(backwardProbability$betaF); 
+print(as.object(backwardProbability)$betaF); 
   
 ### Hidden Markov Model: Viterbi Algorithm (Problem 2: Decoding)
 
@@ -183,7 +183,7 @@ let viterbiResult = HMModel :> viterbiAlgorithm(obSequence);
 
 # So, 
 # [ 'AT-rich', 'AT-rich', 'CG-rich', 'CG-rich', 'CG-rich', ... ] 
-print(viterbiResult$stateSequence);
+print(as.object(viterbiResult)$stateSequence);
 
 ### Hidden Markov Model: Baum-Welch Algorithm (Problem 3: Learning)
 
