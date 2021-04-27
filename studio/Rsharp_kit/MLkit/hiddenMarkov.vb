@@ -1,8 +1,10 @@
 ﻿
+Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.DataMining.HiddenMarkovChain
 Imports Microsoft.VisualBasic.DataMining.HiddenMarkovChain.Models
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
+Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -13,6 +15,23 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <RTypeExport("state", GetType(StatesObject))>
 <RTypeExport("observable", GetType(Observable))>
 Module hiddenMarkov
+
+    Sub New()
+        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of Alpha)(AddressOf printAlpha)
+    End Sub
+
+    Private Function printAlpha(a As Alpha) As String
+        Dim sb As New StringBuilder
+
+        Call sb.AppendLine($"alpha: {a.alphaF}")
+        Call sb.AppendLine(New String("-"c, 32))
+
+        For Each line In a.alphas
+            Call sb.AppendLine(line.ToArray.GetJson)
+        Next
+
+        Return sb.ToString
+    End Function
 
     ''' <summary>
     ''' 
