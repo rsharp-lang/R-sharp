@@ -200,7 +200,9 @@ Namespace Runtime.Interop
         ''' <param name="package"></param>
         ''' <param name="env"></param>
         Public Sub ImportsOperators(package As Type, env As Environment)
-            Dim methods As MethodInfo() = package.GetMethods(BindingFlags.Static)
+            Dim methods As MethodInfo() = package.GetMethods _
+                .Where(Function(m) m.IsStatic) _
+                .ToArray
 
             For Each method As MethodInfo In methods
                 Dim opTag As ROperatorAttribute = method.GetAttribute(Of ROperatorAttribute)
@@ -209,7 +211,10 @@ Namespace Runtime.Interop
                 If Not opTag Is Nothing Then
                     Dim left As RType = RType.GetRSharpType(args(Scan0).ParameterType)
                     Dim right As RType = RType.GetRSharpType(args(1).ParameterType)
-                    Dim invoke As IBinaryOperator = method.CreateDelegate(GetType(IBinaryOperator))
+                    Dim invoke As IBinaryOperator =
+                        Function(x, y, internal)
+                            Return method.Invoke(Nothing, {x, y, internal})
+                        End Function
 
                     Call addBinary(left, right, opTag.operator, invoke, env, [overrides]:=True)
                 End If
