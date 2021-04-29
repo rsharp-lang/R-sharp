@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src \"D:\\GCModeller\\src\\R-sharp\\studio\\test\\test_package\" "
+      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\studio\\test\\serializeTest.R\""
     }
   }
 }
