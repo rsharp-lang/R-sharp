@@ -55,12 +55,30 @@ Namespace Runtime.Interop
 
     Public Delegate Function IBinaryOperator(left As Object, right As Object, env As Environment) As Object
 
+    ''' <summary>
+    ''' execute a binary expression
+    ''' </summary>
     Public Class BinaryOperator
 
+        ''' <summary>
+        ''' the operator symbol text
+        ''' </summary>
+        ''' <returns></returns>
         Public Property operatorSymbol As String
+        ''' <summary>
+        ''' the required type of left
+        ''' </summary>
+        ''' <returns></returns>
         Public Property left As RType
+        ''' <summary>
+        ''' the required type of right
+        ''' </summary>
+        ''' <returns></returns>
         Public Property right As RType
 
+        ''' <summary>
+        ''' the operator evaluation.
+        ''' </summary>
         ReadOnly operation As IBinaryOperator
 
         Sub New(op As IBinaryOperator)
