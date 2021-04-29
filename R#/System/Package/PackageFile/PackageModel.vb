@@ -76,6 +76,10 @@ Namespace Development.Package.File
         Public Property assembly As AssemblyPack
         Public Property unixman As Dictionary(Of String, String)
 
+        Public Overrides Function ToString() As String
+            Return info.ToString
+        End Function
+
         Private Function writeSymbols(zip As ZipArchive, ByRef checksum$) As Dictionary(Of String, String)
             Dim onLoad As DeclareNewFunction
             Dim symbols As New Dictionary(Of String, String)
