@@ -206,9 +206,11 @@ Namespace Development.Package.File.Expressions
                         End Function)
             Dim parms As Integer = reader.ReadByte
             Dim args As New List(Of DeclareNewSymbol)
+            Dim symbol As Expression
 
             For i As Integer = 0 To parms - 1
-                args.Add(BlockReader.ParseBlock(reader).Parse(desc))
+                symbol = BlockReader.ParseBlock(reader).Parse(desc)
+                args.Add(symbol)
             Next
 
             Dim lines As Integer = reader.ReadInt32
