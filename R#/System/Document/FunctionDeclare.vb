@@ -132,6 +132,23 @@ Namespace Development
 
                     Return $"{symbolText} = {valueText(assign.value)}"
 
+                Case GetType(SymbolIndexer)
+
+                    Dim ref As SymbolIndexer = DirectCast(expr, SymbolIndexer)
+
+                    Select Case ref.indexType
+                        Case SymbolIndexers.nameIndex
+                            Return $"{valueText(ref.symbol)}[[{valueText(ref.index)}]]"
+                        Case SymbolIndexers.vectorIndex
+                            Return $"{valueText(ref.symbol)}[{valueText(ref.index)}]"
+                        Case SymbolIndexers.dataframeRows
+                            Return $"{valueText(ref.symbol)}[{valueText(ref.index)}, ]"
+                        Case SymbolIndexers.dataframeColumns
+                            Return $"{valueText(ref.symbol)}[, {valueText(ref.index)}]"
+                        Case Else
+                            Throw New NotImplementedException
+                    End Select
+
                 Case Else
                     Throw New NotImplementedException(expr.ToString)
             End Select
