@@ -150,6 +150,13 @@ Namespace Development.Package
             End Try
         End Function
 
+        ''' <summary>
+        ''' imports all static api method in a given package module. 
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <param name="package"></param>
+        ''' <param name="strict"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function ImportsStaticInternalImpl(envir As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
             Dim [global] As GlobalEnvironment = envir.globalEnvironment
@@ -198,6 +205,8 @@ Namespace Development.Package
             If Not init Is Nothing Then
                 Call init.Invoke(Nothing, {})
             End If
+
+            Call BinaryOperatorEngine.ImportsOperators(package, envir)
 
             Return masked
         End Function

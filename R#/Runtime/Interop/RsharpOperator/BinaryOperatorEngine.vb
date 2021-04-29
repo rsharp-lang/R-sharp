@@ -45,6 +45,7 @@
 
 #End Region
 
+Imports System.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -191,6 +192,28 @@ Namespace Runtime.Interop
             Else
                 Call index(symbol).addOperator(left, right, op, env)
             End If
+        End Sub
+
+        ''' <summary>
+        ''' imports user defined operator
+        ''' </summary>
+        ''' <param name="package"></param>
+        ''' <param name="env"></param>
+        Public Sub ImportsOperators(package As Type, env As Environment)
+            Dim methods As MethodInfo() = package.GetMethods(BindingFlags.Static)
+
+            For Each method As MethodInfo In methods
+                Dim opTag As ROperatorAttribute = method.GetAttribute(Of ROperatorAttribute)
+                Dim args = method.GetParameters
+
+                If Not opTag Is Nothing Then
+                    Dim left As RType = RType.GetRSharpType(args(Scan0).ParameterType)
+                    Dim right As RType = RType.GetRSharpType(args(1).ParameterType)
+                    Dim invoke As IBinaryOperator = method.CreateDelegate(GetType(IBinaryOperator))
+
+                    Call addBinary(left, right, opTag.operator, invoke, env, [overrides]:=True)
+                End If
+            Next
         End Sub
 
     End Module
