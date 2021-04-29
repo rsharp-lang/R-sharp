@@ -115,8 +115,10 @@ Namespace Development.Package.File
             ).ToUpper
 
             For Each tag As KeyValuePair(Of String, String) In meta
-                If writer.ContainsKey(tag.Key) Then
-                    writer(tag.Key).SetValue(index, tag.Value)
+                Dim writeName As String = tag.Key.ToUpper
+
+                If writer.ContainsKey(writeName) Then
+                    writer(writeName).SetValue(index, tag.Value)
                 Else
                     index.meta(tag.Key) = tag.Value
                 End If

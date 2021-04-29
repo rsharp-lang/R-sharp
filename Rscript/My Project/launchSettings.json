@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\mzkit\\dist\\Rscript\\chemoinformatics\\formulaTest.R\" --debug"
+      "commandLineArgs": "--build /src \"D:\\GCModeller\\src\\R-sharp\\studio\\test\\test_package\" "
     }
   }
 }
