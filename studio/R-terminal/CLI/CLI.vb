@@ -193,7 +193,7 @@ R# ""$app"" $cli".Replace("{script}", script.FileName)
         Dim script$ = args <= "/script"
         Dim Rscript As RlangScript = RlangScript.FromFile(script)
         Dim error$ = Nothing
-        Dim program As RProgram = RProgram.CreateProgram(Rscript, [error]:=[error], debug:=False)
+        Dim program As RProgram = RProgram.CreateProgram(Rscript, [error]:=[error], debug:=args.GetBoolean("--debug"))
 
         If Not [error].StringEmpty Then
             Call Log4VB.Println([error], ConsoleColor.Red)
