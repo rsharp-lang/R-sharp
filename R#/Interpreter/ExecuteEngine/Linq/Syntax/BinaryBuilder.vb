@@ -68,6 +68,8 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 Return New Literal(-Val(tokenList(1).text))
             ElseIf tokenList(1).name = TokenType.identifier Then
                 Throw New NotImplementedException
+            Else
+                Throw New NotImplementedException
             End If
         End Function
 
