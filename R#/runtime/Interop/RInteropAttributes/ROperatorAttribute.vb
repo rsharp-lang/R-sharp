@@ -5,6 +5,10 @@
 
         Public ReadOnly Property [operator] As String
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="[operator]"></param>
         Sub New([operator] As String)
             Me.[operator] = [operator]
         End Sub

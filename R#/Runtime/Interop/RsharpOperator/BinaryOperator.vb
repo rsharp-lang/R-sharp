@@ -53,8 +53,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Interop
 
-    Public Delegate Function IBinaryOperator(left As Object, right As Object, env As Environment) As Object
-
     ''' <summary>
     ''' execute a binary expression
     ''' </summary>
