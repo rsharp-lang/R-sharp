@@ -74,7 +74,7 @@ Module package
                 Call env.AddMessage("invalid magic header detected...", MSG_TYPES.WRN)
             End If
 
-            Return BlockReader.Read(io).Parse(New DESCRIPTION)
+            Return BlockReader.ParseBlock(io).Parse(New DESCRIPTION)
         End Using
     End Function
 

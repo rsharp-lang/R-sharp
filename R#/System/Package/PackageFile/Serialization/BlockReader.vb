@@ -126,7 +126,7 @@ Namespace Development.Package.File
             Return magic = Writer.Magic
         End Function
 
-        Friend Shared Function ParseBlock(reader As BinaryReader) As BlockReader
+        Public Shared Function ParseBlock(reader As BinaryReader) As BlockReader
             Dim type As ExpressionTypes = reader.ReadInt32
             Dim size As Integer = reader.ReadInt32
             Dim typecode As TypeCodes = reader.ReadByte
