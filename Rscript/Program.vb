@@ -45,10 +45,10 @@ Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 Imports RscriptText = SMRUCC.Rsharp.Runtime.Components.Rscript
-Imports SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' 
@@ -72,6 +72,17 @@ Module Program
         Using stdin As StreamReader = App.StdInput
             Dim script As New StringBuilder
             Dim line As Value(Of String) = ""
+            Dim check As Boolean = False
+            Dim determineEndOfStream As New Task(Sub() check = stdin.EndOfStream)
+
+            Try
+                determineEndOfStream.TimeoutAfter(100).Wait()
+                check = True
+            Catch ex As Exception
+                ' no stdinput
+                ' just display help
+                Return GetType(CLI).RunCLI(App.CommandLine)
+            End Try
 
             Do While Not stdin.EndOfStream
                 If (line = stdin.ReadLine) Is Nothing Then
