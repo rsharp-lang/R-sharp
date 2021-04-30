@@ -1,48 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::5bd90dbaf85acb11aa1a2043e7cf25de, R#\System\Document\ShellScript\ShellScript.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class ShellScript
-    ' 
-    '         Properties: message
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: AnalysisAllCommands, loadMetaLines, parseDefault, parseMetaData
-    ' 
-    '         Sub: AddArgumentValue, (+22 Overloads) analysisTree, AnalysisTree, PrintUsage
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class ShellScript
+' 
+'         Properties: message
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: AnalysisAllCommands, loadMetaLines, parseDefault, parseMetaData
+' 
+'         Sub: AddArgumentValue, (+22 Overloads) analysisTree, AnalysisTree, PrintUsage
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
+Imports RunCommandLine = SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.CommandLine
 
 Namespace Development.CommandLine
 
@@ -237,10 +238,21 @@ Namespace Development.CommandLine
                 Case GetType(SequenceLiteral) : Call analysisTree(DirectCast(expr, SequenceLiteral), attrs)
                 Case GetType(IIfExpression) : Call analysisTree(DirectCast(expr, IIfExpression), attrs)
                 Case GetType(Require) : Call analysisTree(DirectCast(expr, Require), attrs)
+                Case GetType(MemberValueAssign) : Call analysisTree(DirectCast(expr, MemberValueAssign), attrs)
+                Case GetType(RunCommandLine) : Call analysisTree(DirectCast(expr, RunCommandLine), attrs)
 
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)
             End Select
+        End Sub
+
+        Private Sub analysisTree(expr As RunCommandLine, attrs As ArgumentInfo)
+            Call AnalysisTree(expr.cli, attrs)
+        End Sub
+
+        Private Sub analysisTree(expr As MemberValueAssign, attrs As ArgumentInfo)
+            Call analysisTree(expr.memberReference, attrs)
+            Call AnalysisTree(expr.value, attrs)
         End Sub
 
         Private Sub analysisTree(expr As IIfExpression, attrs As ArgumentInfo)

@@ -79,7 +79,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Property
 
 
-        Dim cli As Expression
+        Friend cli As Expression
 
         Sub New(shell As Expression)
             cli = shell
