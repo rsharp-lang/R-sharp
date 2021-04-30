@@ -53,12 +53,6 @@
 
 Namespace Runtime.Interop
 
-    Public Interface IVectorExpressionLiteral
-
-        Function ParseVector(default$, schema As Type) As Array
-
-    End Interface
-
     ''' <summary>
     ''' 表示这个参数是一个数组，环境系统不应该自动调用getFirst取第一个值
     ''' </summary>
@@ -105,27 +99,4 @@ Namespace Runtime.Interop
         End Function
     End Class
 
-    ''' <summary>
-    ''' 1. 字符串类型默认使用``|``作为分隔符
-    ''' 2. 数值类型默认使用``,``作为分隔符
-    ''' </summary>
-    Public Structure DefaultVectorParser : Implements IVectorExpressionLiteral
-
-        Public Function ParseVector(default$, schema As Type) As Array Implements IVectorExpressionLiteral.ParseVector
-            Select Case schema
-                Case GetType(String)
-                    Return [default]?.Split("|"c)
-                Case GetType(Double)
-                    Return [default]?.Split(","c) _
-                        .Select(AddressOf Val) _
-                        .ToArray
-                Case GetType(Integer)
-                    Return [default]?.Split(","c) _
-                        .Select(AddressOf Integer.Parse) _
-                        .ToArray
-                Case Else
-                    Throw New NotImplementedException(schema.FullName)
-            End Select
-        End Function
-    End Structure
 End Namespace

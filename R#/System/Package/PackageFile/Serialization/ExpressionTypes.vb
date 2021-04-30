@@ -54,20 +54,22 @@
 Namespace Development.Package.File
 
     Public Enum ExpressionTypes As Integer
-        Literal
+        Literal = 1
         VectorLiteral
         SequenceLiteral
         ExpressionLiteral
 
-        StringInterpolation
+        StringInterpolation = 10
         FunctionCall
         FunctionByRef
-        FunctionDeclare
+
+        FunctionDeclare = 20
         ClosureDeclare
         FormulaDeclare
         LambdaDeclare
         SymbolDeclare
-        SymbolReference
+
+        SymbolReference = 30
         SymbolNamespaceReference
         SymbolIndex
         SymbolAssign
@@ -77,16 +79,16 @@ Namespace Development.Package.File
         ''' <summary>
         ''' A linq query epxression in R# scripting 
         ''' </summary>
-        LinqQuery
+        LinqQuery = 40
 
-        Require
+        Require = 50
 
-        Constructor
+        Constructor = 60
 
-        GetArgument
+        GetArgument = 70
         Shell
 
-        [While]
+        [While] = 80
         [For]
         [If]
         [Else]
@@ -99,11 +101,11 @@ Namespace Development.Package.File
         [Using]
         [Do]
 
-        Suppress
+        Suppress = 100
         Annotation
         Comment
 
-        UnaryNot
+        UnaryNot = 110
         Binary
     End Enum
 End Namespace

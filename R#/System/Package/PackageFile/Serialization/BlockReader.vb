@@ -113,17 +113,20 @@ Namespace Development.Package.File
         ''' <param name="reader"></param>
         ''' <returns></returns>
         Public Shared Function Read(reader As BinaryReader) As BlockReader
-            ' check magic
-            Dim magic As String = Encoding.ASCII.GetString(reader.ReadBytes(Writer.Magic.Length))
-
-            If magic <> Writer.Magic Then
+            If Not CheckMagic(reader) Then
                 Throw New InvalidDataException("magic header is not correct!")
             End If
 
-            Return Read(reader, magic.Length)
+            Return Read(reader, Writer.Magic.Length)
         End Function
 
-        Friend Shared Function ParseBlock(reader As BinaryReader) As BlockReader
+        Public Shared Function CheckMagic(reader As BinaryReader) As Boolean
+            ' check magic
+            Dim magic As String = Encoding.ASCII.GetString(reader.ReadBytes(Writer.Magic.Length))
+            Return magic = Writer.Magic
+        End Function
+
+        Public Shared Function ParseBlock(reader As BinaryReader) As BlockReader
             Dim type As ExpressionTypes = reader.ReadInt32
             Dim size As Integer = reader.ReadInt32
             Dim typecode As TypeCodes = reader.ReadByte

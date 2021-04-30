@@ -54,6 +54,9 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Interop
 
+    ''' <summary>
+    ''' execute a binary expression based on the value type selector
+    ''' </summary>
     Public Class BinaryIndex : Implements IReadOnlyId
 
         ''' <summary>
@@ -164,6 +167,12 @@ Namespace Runtime.Interop
             End If
         End Function
 
+        ''' <summary>
+        ''' execute a binary expression when the value of right is nothing
+        ''' </summary>
+        ''' <param name="left"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Function rightNull(left As Object, env As Environment) As Object
             Dim t As RType = typeOfImpl(left)
 
@@ -195,6 +204,12 @@ Namespace Runtime.Interop
             End If
         End Function
 
+        ''' <summary>
+        ''' execute a binary expression when the value of left is nothing
+        ''' </summary>
+        ''' <param name="right"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Function leftNull(right As Object, env As Environment) As Object
             Dim t As RType = typeOfImpl(right)
 

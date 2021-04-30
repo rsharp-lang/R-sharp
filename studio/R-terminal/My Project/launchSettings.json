@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\biodeep\\biodeepdb_v3\\metaCluster\\NPSearch\\test\\plotTest.R\" --debug --ignore-missing-startup-packages",
+      "commandLineArgs": "--syntax /script \"D:\\GCModeller\\src\\R-sharp\\tutorials\\syntaxTest\\loop1.R\" --debug",
       "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\App\\net5.0"
     }
   }

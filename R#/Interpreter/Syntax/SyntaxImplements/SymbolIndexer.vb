@@ -60,19 +60,11 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' <param name="tokens">
         ''' ``a[x]``
         ''' </param>
-        Public Function SymbolIndexer(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim symbol As SyntaxResult = {tokens(Scan0)}.DoCall(Function(code) Expression.CreateExpression(code, opts))
+        ''' 
+        <Extension>
+        Public Function SymbolIndexer(symbol As Expression, tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim indexType As SymbolIndexers
             Dim index As SyntaxResult = Nothing
-
-            If symbol.isException Then
-                Return symbol
-            End If
-
-            tokens = tokens _
-                .Skip(2) _
-                .Take(tokens.Length - 3) _
-                .ToArray
 
             If tokens.isStackOf("[", "]") Then
                 ' 脱掉最外侧的[]
@@ -100,7 +92,28 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return index
             End If
 
-            Return New SymbolIndexer(symbol.expression, index.expression, indexType)
+            Return New SymbolIndexer(symbol, index.expression, indexType)
+        End Function
+
+        ''' <summary>
+        ''' Simple indexer
+        ''' </summary>
+        ''' <param name="tokens">
+        ''' ``a[x]``
+        ''' </param>
+        Public Function SymbolIndexer(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim symbol As SyntaxResult = {tokens(Scan0)}.DoCall(Function(code) Expression.CreateExpression(code, opts))
+
+            If symbol.isException Then
+                Return symbol
+            End If
+
+            tokens = tokens _
+                .Skip(2) _
+                .Take(tokens.Length - 3) _
+                .ToArray
+
+            Return symbol.expression.SymbolIndexer(tokens, opts)
         End Function
 
         ''' <summary>

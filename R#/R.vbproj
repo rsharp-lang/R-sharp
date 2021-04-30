@@ -829,6 +829,12 @@
     <Compile Include="Runtime\Internal\internalInvokes\string\str_padSides.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\castRaw.vb" />
     <Compile Include="Runtime\Internal\objects\utils\TableRow.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\RDefaultExpressionAttribute.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\RApiReturnAttribute.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\ROperatorAttribute.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\VectorMask\DefaultVectorParser.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\VectorMask\IVectorExpressionLiteral.vb" />
+    <Compile Include="Runtime\Interop\RsharpOperator\IBinaryOperator.vb" />
     <Compile Include="Runtime\Serialize\bufferObjects\bitmapBuffer.vb" />
     <Compile Include="Runtime\Serialize\BufferObjects.vb" />
     <Compile Include="Runtime\Serialize\BufferObject.vb" />
@@ -888,7 +894,7 @@
     <Compile Include="Runtime\Interop\RsharpApi\RArgumentList.vb" />
     <Compile Include="Runtime\Interop\REnum.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RDefaultValueAttribute.vb" />
-    <Compile Include="Runtime\Interop\RInteropAttributes\RRawVectorArgumentAttribute.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\VectorMask\RRawVectorArgumentAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSymbolTextArgumentAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSuppressPrintAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb" />
