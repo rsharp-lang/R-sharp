@@ -42,6 +42,7 @@
 Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine
+Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -66,9 +67,19 @@ Module Program
     ''' </summary>
     ''' <returns></returns>
     Private Function Run() As Integer
-        Using stdin As TextReader = App.StdInput
-            Dim script As String = stdin.ReadToEnd
-            Dim Rscript As Rscript = Rscript.AutoHandleScript(script)
+        Using stdin As StreamReader = App.StdInput
+            Dim script As New StringBuilder
+            Dim line As Value(Of String) = ""
+
+            Do While Not stdin.EndOfStream
+                If (line = stdin.ReadLine) Is Nothing Then
+                    Exit Do
+                Else
+                    Call script.AppendLine(line)
+                End If
+            Loop
+
+            Dim Rscript As Rscript = Rscript.AutoHandleScript(script.ToString)
             Dim [error] As String = Nothing
             Dim program As RProgram = RProgram.CreateProgram(Rscript, debug:=False, [error]:=[error])
             Dim ignoreMissingStartupPackages As Boolean = False
