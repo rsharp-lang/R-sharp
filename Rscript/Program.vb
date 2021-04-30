@@ -44,10 +44,26 @@ Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 
+''' <summary>
+''' 
+''' </summary>
 Module Program
 
+    ''' <summary>
+    ''' 1. accept a R script file path
+    ''' 2. accept R script text from standard input.
+    ''' </summary>
+    ''' <returns></returns>
     Public Function Main() As Integer
-        Return GetType(CLI).RunCLI(App.CommandLine, executeFile:=AddressOf Run)
+        Return GetType(CLI).RunCLI(App.CommandLine, executeFile:=AddressOf Run, executeEmpty:=AddressOf Run)
+    End Function
+
+    ''' <summary>
+    ''' Run R script from std_input 
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function Run() As Integer
+        Dim text As String = App.std
     End Function
 
     Private Function Run(filepath$, args As CommandLine) As Integer
