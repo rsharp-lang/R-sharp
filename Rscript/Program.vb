@@ -1,48 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::8266fe2c8cafc8ebb2dea38fe820f61a, Rscript\Program.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Program
-    ' 
-    '     Function: Main, Run
-    ' 
-    ' /********************************************************************************/
+' Module Program
+' 
+'     Function: Main, Run
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.IO
+Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 ''' <summary>
 ''' 
@@ -63,7 +66,36 @@ Module Program
     ''' </summary>
     ''' <returns></returns>
     Private Function Run() As Integer
-        Dim text As String = App.std
+        Using stdin As TextReader = App.StdInput
+            Dim script As String = stdin.ReadToEnd
+            Dim Rscript As Rscript = Rscript.AutoHandleScript(script)
+            Dim [error] As String = Nothing
+            Dim program As RProgram = RProgram.CreateProgram(Rscript, debug:=False, [error]:=[error])
+            Dim ignoreMissingStartupPackages As Boolean = False
+            Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+
+            If Not [error].StringEmpty Then
+                Call App.LogException([error])
+                Call [error].PrintException
+
+                Return 500
+            Else
+                Call R.LoadLibrary("base", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+                Call R.LoadLibrary("utils", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+                Call R.LoadLibrary("grDevices", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+                Call R.LoadLibrary("math", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+
+                Call Console.WriteLine()
+            End If
+
+            Dim result As Object = R.Run(program)
+
+            If (Not result Is Nothing) AndAlso result.GetType Is GetType(Message) Then
+                Return DirectCast(result, Message).level
+            Else
+                Return 0
+            End If
+        End Using
     End Function
 
     Private Function Run(filepath$, args As CommandLine) As Integer
