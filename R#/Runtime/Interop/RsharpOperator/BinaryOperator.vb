@@ -51,7 +51,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
-Namespace Runtime.Interop
+Namespace Runtime.Interop.Operator
 
     ''' <summary>
     ''' execute a binary expression

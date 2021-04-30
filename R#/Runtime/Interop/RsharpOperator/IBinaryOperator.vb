@@ -1,4 +1,4 @@
-﻿Namespace Runtime.Interop
+﻿Namespace Runtime.Interop.Operator
 
     ''' <summary>
     ''' Evaluate of a binary operator
