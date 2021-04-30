@@ -47,6 +47,8 @@ Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
+Imports RscriptText = SMRUCC.Rsharp.Runtime.Components.Rscript
+Imports SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' 
@@ -79,7 +81,7 @@ Module Program
                 End If
             Loop
 
-            Dim Rscript As Rscript = Rscript.AutoHandleScript(script.ToString)
+            Dim Rscript As RscriptText = RscriptText.AutoHandleScript(script.ToString)
             Dim [error] As String = Nothing
             Dim program As RProgram = RProgram.CreateProgram(Rscript, debug:=False, [error]:=[error])
             Dim ignoreMissingStartupPackages As Boolean = False
@@ -87,7 +89,7 @@ Module Program
 
             If Not [error].StringEmpty Then
                 Call App.LogException([error])
-                Call [error].PrintException
+                Call handleResult(Internal.debug.stop([error], R.globalEnvir), R.globalEnvir, Nothing)
 
                 Return 500
             Else
