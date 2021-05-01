@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::95aa4fd28b7bbe0d1f1ed027732997a7, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [date], [dim], [stop], allocate, append
-    '                   appendOfList, appendOfVector, autoDispose, c, cat
-    '                   cbind, colnames, columnVector, doPrintInternal, factors
-    '                   getOption, ifelse, invisible, isEmpty, isEmptyArray
-    '                   isList, isNA, isNull, length, makeNames
-    '                   names, ncol, neg, nrow, objectAddInvoke
-    '                   options, print, rbind, Rdataframe, rep
-    '                   replace, Rlist, rownames, sink, source
-    '                   str, summary, t, uniqueNames, unitOfT
-    '                   warning, year
-    ' 
-    '         Sub: [exit], q, quit, warnings
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [date], [dim], [stop], allocate, append
+'                   appendOfList, appendOfVector, autoDispose, c, cat
+'                   cbind, colnames, columnVector, doPrintInternal, factors
+'                   getOption, ifelse, invisible, isEmpty, isEmptyArray
+'                   isList, isNA, isNull, length, makeNames
+'                   names, ncol, neg, nrow, objectAddInvoke
+'                   options, print, rbind, Rdataframe, rep
+'                   replace, Rlist, rownames, sink, source
+'                   str, summary, t, uniqueNames, unitOfT
+'                   warning, year
+' 
+'         Sub: [exit], q, quit, warnings
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -64,6 +64,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
@@ -92,7 +93,9 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' ### System Date and Time
         ''' </summary>
-        ''' <param name="str"></param>
+        ''' <param name="str">
+        ''' this parameter also can accept the unix timestamp.
+        ''' </param>
         ''' <returns>
         ''' Returns a character string of the current system date and time.
         ''' </returns>
@@ -102,7 +105,15 @@ Namespace Runtime.Internal.Invokes
             If str.IsNullOrEmpty Then
                 Return DateTime.Now
             Else
-                Return str.Select(AddressOf Date.Parse).ToArray
+                Return str _
+                    .Select(Function(s)
+                                If s.IsSimpleNumber Then
+                                    Return DateTimeHelper.FromUnixTimeStamp(Val(s))
+                                Else
+                                    Return Date.Parse(s)
+                                End If
+                            End Function) _
+                    .ToArray
             End If
         End Function
 

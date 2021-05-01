@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5FA10D0C-7EFB-40B4-BB1C-6EFCE819ABF6}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>Rscript.Program</StartupObject>
-    <RootNamespace>Rscript</RootNamespace>
+    <StartupObject>RscriptCommandLine.Program</StartupObject>
+    <RootNamespace>RscriptCommandLine</RootNamespace>
     <AssemblyName>Rscript</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Console</MyType>
@@ -294,6 +294,7 @@
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -340,5 +341,6 @@
     <Content Include="R#.ico" />
   </ItemGroup>
   <Import Project="..\..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems" Label="Shared" />
+  <Import Project="..\studio\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
