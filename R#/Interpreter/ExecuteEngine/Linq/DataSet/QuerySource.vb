@@ -1,5 +1,8 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports any = Microsoft.VisualBasic.Scripting
+Imports RExpression = SMRUCC.Rsharp.Interpreter.ExecuteEngine.Expression
+Imports RLiteral = SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets.Literal
+Imports RSymbolRef = SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets.SymbolReference
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
@@ -20,6 +23,20 @@ Namespace Interpreter.ExecuteEngine.LINQ
                 name = any.ToString(DirectCast(varX, Literal).value)
             ElseIf TypeOf varX Is SymbolReference Then
                 name = DirectCast(varX, SymbolReference).symbolName
+            ElseIf TypeOf varX Is RunTimeValueExpression Then
+                name = getSymbolName(DirectCast(varX, RunTimeValueExpression).R)
+            End If
+
+            Return name
+        End Function
+
+        Private Function getSymbolName(varX As RExpression) As String
+            Dim name As String = varX.ToString
+
+            If TypeOf varX Is RLiteral Then
+                name = DirectCast(varX, RLiteral).ValueStr
+            ElseIf TypeOf varX Is RSymbolRef Then
+                name = DirectCast(varX, RSymbolRef).symbol
             End If
 
             Return name
