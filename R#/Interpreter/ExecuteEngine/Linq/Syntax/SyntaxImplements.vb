@@ -156,6 +156,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             Dim i As Integer = 0
             Dim seq As SyntaxParserResult = blocks.GetSequence(offset:=i, opts:=opts)
             Dim exec As New List(Of Expression)
+            Dim join As DataLeftJoin = Nothing
 
             If seq.isError Then
                 Return seq
@@ -183,6 +184,8 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
                 If binary.isError Then
                     Return binary
+                Else
+                    join = New DataLeftJoin(joinSymbol.expression, joinSeq.expression).SetKeyBinary(binary.expression)
                 End If
 
                 blocks = blocks.Skip(1).ToArray
@@ -212,6 +215,12 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 proj:=proj,
                 opt:=opt
             )
+
+            If Not join Is Nothing Then
+                Call LINQ.joins.Add(join)
+            End If
+
+            Call LINQ.FixProjection()
 
             Return LINQ
         End Function
@@ -349,9 +358,19 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             ElseIf token0.isKeyword("in") Then
                 Return RExpression.CreateExpression(tokenList.Skip(1), opts)
             ElseIf token0.isKeyword("on") Then
+                Dim bin = tokenList.Skip(1).ToArray.ParseBinary(opts)
 
-                Throw New NotImplementedException
+                If bin.isError Then
+                    Return bin
+                End If
 
+                Dim binExpr As BinaryExpression = DirectCast(bin.expression, BinaryExpression)
+
+                If Not binExpr.isEquivalent Then
+                    Return New SyntaxParserResult(New InvalidExpressionException("operator should be equals"))
+                Else
+                    Return bin
+                End If
             ElseIf token0.isKeyword("select") Then
                 Return tokenList.Skip(1).GetProjection(opts)
             ElseIf token0.isKeyword("order") Then

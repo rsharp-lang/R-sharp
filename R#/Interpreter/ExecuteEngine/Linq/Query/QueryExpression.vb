@@ -53,6 +53,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
         Protected Friend ReadOnly executeQueue As Expression()
         Protected Friend ReadOnly source As QuerySource
         Protected Friend dataset As DataSet
+        Protected Friend ReadOnly joins As New List(Of DataLeftJoin)
 
         Sub New(symbol As SymbolDeclare, sequence As Expression, execQueue As IEnumerable(Of Expression))
             Me.source = New QuerySource(symbol, sequence)

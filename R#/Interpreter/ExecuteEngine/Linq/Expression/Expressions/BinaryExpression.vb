@@ -71,6 +71,12 @@ Namespace Interpreter.ExecuteEngine.LINQ
             End Get
         End Property
 
+        Public ReadOnly Property isEquivalent As Boolean
+            Get
+                Return op = "=="
+            End Get
+        End Property
+
         Sub New(left As Expression, right As Expression, op As String)
             Me.left = left
             Me.right = right

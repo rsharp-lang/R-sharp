@@ -808,8 +808,8 @@ test1::println('123');
         Call R.Parse("
 FROM [ID, Name, AddressId] IN employee
 JOIN [ID, AddressLine] IN address
-ON employee.AddressId == address.ID
-WHERE employee.ID > 5
+ON employee$AddressId == address$ID
+WHERE employee$ID > 5
 ")
     End Sub
 

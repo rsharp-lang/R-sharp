@@ -1,4 +1,6 @@
-﻿Namespace Interpreter.ExecuteEngine.LINQ
+﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+
+Namespace Interpreter.ExecuteEngine.LINQ
 
     Public Class DataLeftJoin : Inherits LinqKeywordExpression
 
@@ -26,8 +28,23 @@
             Return Me
         End Function
 
+        Public Function EnumerateFields() As IEnumerable(Of NamedValue(Of Expression))
+            Return anotherData.EnumerateFields(addSymbol:=True)
+        End Function
+
+        Public Function SetKeyBinary(equivalent As BinaryExpression) As DataLeftJoin
+            Return SetKeyBinary(equivalent.left, equivalent.right)
+        End Function
+
         Public Overrides Function Exec(context As ExecutableContext) As Object
             Throw New NotImplementedException()
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return New String() {
+                $"JOIN {anotherData.symbol} IN {anotherData.sequence}",
+                $"ON ({key1} == {key2})"
+            }.JoinBy(vbCrLf)
         End Function
     End Class
 End Namespace

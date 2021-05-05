@@ -151,7 +151,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             Do While Not i.EndRead
                 Dim item As Token = ++i
 
-                If delimiter(item) Then
+                If delimiter(item) AndAlso (item <> (TokenType.operator, "$")) Then
                     If stack.Count > 1 Then
                         block.Add(item)
                     Else
