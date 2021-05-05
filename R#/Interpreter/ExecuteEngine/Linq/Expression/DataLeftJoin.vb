@@ -13,13 +13,22 @@ Namespace Interpreter.ExecuteEngine.LINQ
         ''' <summary>
         ''' join xxx in xxx
         ''' </summary>
-        Dim anotherData As QuerySource
+        Friend ReadOnly anotherData As QuerySource
+
         Dim key1 As MemberReference
         Dim key2 As MemberReference
 
         Sub New(symbol As SymbolDeclare, sequence As Expression)
             anotherData = New QuerySource(symbol, sequence)
         End Sub
+
+        Public Function FindKeySymbol(side As String) As String
+            If QuerySource.getSymbolName(key1.symbol) = side Then
+                Return key1.memberName
+            Else
+                Return key2.memberName
+            End If
+        End Function
 
         Public Function SetKeyBinary(left As MemberReference, right As MemberReference) As DataLeftJoin
             key1 = left
@@ -37,7 +46,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
         End Function
 
         Public Overrides Function Exec(context As ExecutableContext) As Object
-            Throw New NotImplementedException()
+            Return anotherData.sequence.Exec(context)
         End Function
 
         Public Overrides Function ToString() As String

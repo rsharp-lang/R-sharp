@@ -11,12 +11,22 @@ Namespace Interpreter.ExecuteEngine.LINQ
         Protected Friend ReadOnly sequence As Expression
         Protected Friend ReadOnly symbol As SymbolDeclare
 
+        ''' <summary>
+        ''' symbol name of the data source sequence
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property symbolName As String
+            Get
+                Return getSymbolName(sequence)
+            End Get
+        End Property
+
         Sub New(symbol As SymbolDeclare, sequence As Expression)
             Me.symbol = symbol
             Me.sequence = sequence
         End Sub
 
-        Private Function getSymbolName(varX As Expression) As String
+        Friend Shared Function getSymbolName(varX As Expression) As String
             Dim name As String = varX.ToString
 
             If TypeOf varX Is Literal Then
@@ -30,7 +40,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Return name
         End Function
 
-        Private Function getSymbolName(varX As RExpression) As String
+        Private Shared Function getSymbolName(varX As RExpression) As String
             Dim name As String = varX.ToString
 
             If TypeOf varX Is RLiteral Then

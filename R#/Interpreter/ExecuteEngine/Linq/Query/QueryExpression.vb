@@ -44,6 +44,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging
+Imports Microsoft.VisualBasic.Language
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
@@ -82,7 +83,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
         ''' </summary>
         ''' <param name="context"></param>
         ''' <returns></returns>
-        Protected Function GetDataSet(context As ExecutableContext) As DataSet
+        Protected Overridable Function GetDataSet(context As ExecutableContext) As DataSet
             Return DataSet.CreateDataSet(Me, context)
         End Function
     End Class
