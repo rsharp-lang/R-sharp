@@ -80,7 +80,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"SELECT new {{{fields.Select(Function(a) $"{a.Name} = {a.Value}").JoinBy(", ")}}}"
+            Return $"SELECT new {{{vbCrLf}{fields.Select(Function(a) $"    {a.Name} = {a.Value}").JoinBy(", " & vbCrLf)}{vbCrLf}}}"
         End Function
     End Class
 End Namespace
