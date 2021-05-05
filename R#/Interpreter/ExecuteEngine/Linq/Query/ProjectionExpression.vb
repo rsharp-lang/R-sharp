@@ -110,6 +110,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Dim projections As New List(Of JavaScriptObject)
             Dim closure As New ExecutableContext(New Environment(context, context.stackFrame, isInherits:=False))
             Dim skipVal As Boolean
+            Dim symbol As SymbolDeclare = source.symbol
             Dim err As Message = symbol.Exec(closure)
 
             If Not err Is Nothing Then
