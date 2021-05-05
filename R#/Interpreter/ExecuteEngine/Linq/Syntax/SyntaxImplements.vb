@@ -159,9 +159,21 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
             If seq.isError Then
                 Return seq
+            Else
+                blocks = blocks.Skip(i).ToArray
             End If
 
-            For Each line As SyntaxParserResult In blocks.Skip(i).PopulateExpressions(opts)
+            If blocks(Scan0)(Scan0) = (TokenType.keyword, "join") Then
+                Dim joinSymbol As SyntaxParserResult = blocks(Scan0).ParseExpression(opts)
+
+                If joinSymbol.isError Then
+                    Return joinSymbol
+                End If
+
+                blocks = blocks.Skip(4).ToArray
+            End If
+
+            For Each line As SyntaxParserResult In blocks.PopulateExpressions(opts)
                 If line.isError Then
                     Return line
                 Else
@@ -278,7 +290,13 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
         <Extension>
         Private Function ParseKeywordExpression(tokenList As Token(), opts As SyntaxBuilderOptions) As SyntaxParserResult
-            If tokenList(Scan0).isKeywordFrom OrElse tokenList(Scan0).isKeywordAggregate OrElse tokenList(Scan0).isKeyword("let") Then
+            Dim token0 As Token = tokenList(Scan0)
+
+            If token0.isKeywordFrom OrElse
+               token0.isKeywordAggregate OrElse
+               token0.isKeywordJoin OrElse
+               token0.isKeyword("let") Then
+
                 Dim type As String = "any"
                 Dim name As Expression
 
@@ -305,7 +323,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 End If
 
                 Return New SymbolDeclare With {.symbol = name, .typeName = type}
-            ElseIf tokenList(Scan0).isKeyword("where") Then
+            ElseIf token0.isKeyword("where") Then
                 Dim bool As SyntaxResult = RExpression.CreateExpression(tokenList.Skip(1), opts)
 
                 If bool.isException Then
@@ -313,11 +331,11 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 End If
 
                 Return New WhereFilter(New RunTimeValueExpression(bool.expression))
-            ElseIf tokenList(Scan0).isKeyword("in") Then
+            ElseIf token0.isKeyword("in") Then
                 Return RExpression.CreateExpression(tokenList.Skip(1), opts)
-            ElseIf tokenList(Scan0).isKeyword("select") Then
+            ElseIf token0.isKeyword("select") Then
                 Return tokenList.Skip(1).GetProjection(opts)
-            ElseIf tokenList(Scan0).isKeyword("order") Then
+            ElseIf token0.isKeyword("order") Then
                 Dim sortKey = tokenList.Skip(2).ToArray
                 Dim desc As Boolean
 
@@ -333,7 +351,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 End If
 
                 Return New OrderBy(key.expression, desc)
-            ElseIf tokenList(Scan0).isKeyword("take") Then
+            ElseIf token0.isKeyword("take") Then
                 Dim n = ParseExpression(tokenList.Skip(1).ToArray, opts)
 
                 If n.isError Then
@@ -341,7 +359,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 End If
 
                 Return New TakeItems(n.expression)
-            ElseIf tokenList(Scan0).isKeyword("skip") Then
+            ElseIf token0.isKeyword("skip") Then
                 Dim n = ParseExpression(tokenList.Skip(1).ToArray, opts)
 
                 If n.isError Then

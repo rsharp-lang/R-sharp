@@ -69,6 +69,12 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
+        Friend Function isKeywordJoin(t As Token) As Boolean
+            Return isKeyword(t, "join")
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <Extension>
         Friend Function isKeyword(t As Token, text As String) As Boolean
             Return t.name = TokenType.keyword AndAlso t.text.TextEquals(text)
         End Function

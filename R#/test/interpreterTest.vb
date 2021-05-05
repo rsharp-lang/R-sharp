@@ -100,6 +100,7 @@ Module interpreterTest
     End Sub
 
     Sub Main()
+        Call joinParserTest()
         Call syntaxTest()
 
         Call linqTest()
@@ -801,6 +802,15 @@ test1::println('123');
         Call R.Evaluate("print(div(99,1))")
 
         Pause()
+    End Sub
+
+    Sub joinParserTest()
+        Call R.Parse("
+FROM [ID, Name, AddressId] IN employee
+JOIN [ID, AddressLine] IN address
+ON employee.AddressId == address.ID
+WHERE employee.ID > 5
+")
     End Sub
 
     Sub linqTest()
