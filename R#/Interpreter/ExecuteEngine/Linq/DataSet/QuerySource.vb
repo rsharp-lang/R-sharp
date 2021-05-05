@@ -9,5 +9,9 @@
             Me.symbol = symbol
             Me.sequence = sequence
         End Sub
+
+        Public Overrides Function ToString() As String
+            Return $"FROM {symbol} IN {sequence}"
+        End Function
     End Class
 End Namespace

@@ -674,12 +674,14 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNumeric.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfPromise.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\ElseIfBranch.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\QuerySource.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\DataFrameDataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\ErrorDataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\SequenceDataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\DataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\ExecutableContext.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\DataLeftJoin.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\BinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\ValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\VectorLiteral.vb" />

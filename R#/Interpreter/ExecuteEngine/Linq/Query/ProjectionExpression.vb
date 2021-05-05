@@ -160,7 +160,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
         Public Overrides Function ToString() As String
             Dim sb As New StringBuilder
 
-            Call sb.AppendLine($"FROM {symbol} IN {sequence}")
+            Call sb.AppendLine($"FROM {source.symbol} IN {source.sequence}")
 
             For Each line In executeQueue
                 Call sb.AppendLine(line.ToString)
