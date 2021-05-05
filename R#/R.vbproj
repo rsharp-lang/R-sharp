@@ -674,6 +674,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNumeric.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfPromise.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\ElseIfBranch.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\RuntimeVectorDataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\JointDataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\QuerySource.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\DataFrameDataSet.vb" />

@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.My.JavaScript
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
@@ -7,9 +8,8 @@ Namespace Interpreter.ExecuteEngine.LINQ
     ''' </summary>
     Public Class JointDataSet : Inherits DataSet
 
-        ReadOnly main As DataSet
-        ReadOnly mainSymbol As String
-        ReadOnly joins As New List(Of Dictionary(Of String, JavaScriptObject))
+        Dim main As DataSet
+        Dim mainSymbol As String
 
         Sub New(symbol As String, main As DataSet)
             Me.main = main
@@ -25,14 +25,37 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
             Dim mainKey As String = data.FindKeySymbol(mainSymbol)
             Dim rightKey As String = data.FindKeySymbol(data.anotherData.symbolName)
+            Dim raw As Object() = main.PopulatesData.ToArray
+            Dim joinSeq As JavaScriptObject() = New JavaScriptObject(raw.Length - 1) {}
+            Dim rightSeq As Dictionary(Of String, JavaScriptObject) = right _
+                .PopulatesData _
+                .Select(Function(a)
+                            Return DirectCast(a, JavaScriptObject)
+                        End Function) _
+                .GroupBy(Function(a) any.ToString(a(rightKey))) _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return a.First
+                              End Function)
+            Dim leftQuery As String
+
+            For i As Integer = 0 To raw.Length - 1
+                joinSeq(i) = DirectCast(raw(i), JavaScriptObject)
+                leftQuery = any.ToString(joinSeq(i)(mainKey))
+
+                If rightSeq.ContainsKey(leftQuery) Then
+                    ' join two data
+                    joinSeq(i) = JavaScriptObject.Join(joinSeq(i), rightSeq(leftQuery))
+                End If
+            Next
+
+            main = New RuntimeVectorDataSet(joinSeq)
 
             Return Nothing
         End Function
 
-        Friend Overrides Iterator Function PopulatesData() As IEnumerable(Of Object)
-            For Each obj As Object In main.PopulatesData
-
-            Next
+        Friend Overrides Function PopulatesData() As IEnumerable(Of Object)
+            Return main.PopulatesData
         End Function
     End Class
 End Namespace
