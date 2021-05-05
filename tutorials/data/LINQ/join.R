@@ -14,8 +14,8 @@ const address = data.frame(
 let result = {
     FROM [ID, Name, AddressId] IN employee
     JOIN [ID, AddressLine] IN address
-    ON employee.AddressId == address.ID
-    WHERE employee.ID > 5
+    ON employee$AddressId == address$ID
+    WHERE employee$ID > 5
 }
 # will produce a join table output
 # employee.ID, Name, AddressId, address.ID, AddressLine

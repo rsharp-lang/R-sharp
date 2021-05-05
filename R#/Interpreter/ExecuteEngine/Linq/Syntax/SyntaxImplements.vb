@@ -165,12 +165,27 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
             If blocks(Scan0)(Scan0) = (TokenType.keyword, "join") Then
                 Dim joinSymbol As SyntaxParserResult = blocks(Scan0).ParseExpression(opts)
+                Dim joinSeq As SyntaxParserResult = blocks.Skip(1).ToArray.GetSequence(offset:=i, opts:=opts)
 
                 If joinSymbol.isError Then
                     Return joinSymbol
+                ElseIf joinSeq.isError Then
+                    Return joinSeq
+                Else
+                    blocks = blocks.Skip(i + 1).ToArray
                 End If
 
-                blocks = blocks.Skip(4).ToArray
+                If blocks(Scan0)(Scan0) <> (TokenType.keyword, "on") Then
+                    Return New SyntaxParserResult(New SyntaxErrorException("missing 'on' equaliant expression!"))
+                End If
+
+                Dim binary As SyntaxParserResult = blocks(Scan0).ParseExpression(opts)
+
+                If binary.isError Then
+                    Return binary
+                End If
+
+                blocks = blocks.Skip(1).ToArray
             End If
 
             For Each line As SyntaxParserResult In blocks.PopulateExpressions(opts)
@@ -333,6 +348,10 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 Return New WhereFilter(New RunTimeValueExpression(bool.expression))
             ElseIf token0.isKeyword("in") Then
                 Return RExpression.CreateExpression(tokenList.Skip(1), opts)
+            ElseIf token0.isKeyword("on") Then
+
+                Throw New NotImplementedException
+
             ElseIf token0.isKeyword("select") Then
                 Return tokenList.Skip(1).GetProjection(opts)
             ElseIf token0.isKeyword("order") Then
