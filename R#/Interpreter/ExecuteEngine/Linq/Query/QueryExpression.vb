@@ -88,5 +88,13 @@ Namespace Interpreter.ExecuteEngine.LINQ
         Protected Function GetDataSet(context As ExecutableContext) As DataSet
             Return DataSet.CreateDataSet(Me, context)
         End Function
+
+        ''' <summary>
+        ''' do optimization of the current query expression.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Overridable Function Compile() As QueryExpression
+            Return Me
+        End Function
     End Class
 End Namespace
