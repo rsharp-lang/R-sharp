@@ -69,6 +69,12 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
+        Friend Function isKeywordJoin(t As Token) As Boolean
+            Return isKeyword(t, "join")
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <Extension>
         Friend Function isKeyword(t As Token, text As String) As Boolean
             Return t.name = TokenType.keyword AndAlso t.text.TextEquals(text)
         End Function
@@ -145,7 +151,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             Do While Not i.EndRead
                 Dim item As Token = ++i
 
-                If delimiter(item) Then
+                If delimiter(item) AndAlso (item <> (TokenType.operator, "$")) Then
                     If stack.Count > 1 Then
                         block.Add(item)
                     Else

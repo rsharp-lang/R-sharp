@@ -52,7 +52,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
-Namespace Runtime.Interop
+Namespace Runtime.Interop.Operator
 
     ''' <summary>
     ''' execute a binary expression based on the value type selector

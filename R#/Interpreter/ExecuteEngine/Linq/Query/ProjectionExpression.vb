@@ -60,7 +60,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         Dim opt As Options
 
-        Friend ReadOnly project As OutputProjection
+        Friend project As OutputProjection
 
         Public Overrides ReadOnly Property name As String
             Get
@@ -73,31 +73,35 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
             Me.opt = opt
             Me.project = proj
+        End Sub
 
-            If proj Is Nothing Then
-                ' 当不存在投影表达式的时候
-                ' 默认返回所有的symbol
-                If symbol.isTuple Then
-                    Dim fields = DirectCast(symbol.symbol, VectorLiteral).elements _
-                        .Select(Function(a)
-                                    Dim name As String = a.ToString
-
-                                    If TypeOf a Is Literal Then
-                                        name = any.ToString(DirectCast(a, Literal).value)
-                                    ElseIf TypeOf a Is SymbolReference Then
-                                        name = DirectCast(a, SymbolReference).symbolName
-                                    End If
-
-                                    Return New NamedValue(Of Expression)(name, a)
-                                End Function) _
-                        .ToArray
-
-                    project = New OutputProjection(fields)
-                Else
-                    project = New OutputProjection({New NamedValue(Of Expression)("*", symbol.symbol)})
-                End If
+        Public Sub FixProjection()
+            If Not project Is Nothing Then
+                Return
+            ElseIf joins.Count = 0 Then
+                project = AssembleSingleSource()
+            Else
+                project = AssembleMultipleSource()
             End If
         End Sub
+
+        Private Function AssembleMultipleSource() As OutputProjection
+            Dim fields As New List(Of NamedValue(Of Expression))
+
+            Call fields.AddRange(source.EnumerateFields(addSymbol:=True))
+
+            For Each join As DataLeftJoin In joins
+                Call fields.AddRange(join.EnumerateFields)
+            Next
+
+            Return New OutputProjection(fields)
+        End Function
+
+        Private Function AssembleSingleSource() As OutputProjection
+            ' 当不存在投影表达式的时候
+            ' 默认返回所有的symbol
+            Return New OutputProjection(source.EnumerateFields(addSymbol:=False))
+        End Function
 
         ''' <summary>
         ''' 
@@ -110,6 +114,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Dim projections As New List(Of JavaScriptObject)
             Dim closure As New ExecutableContext(New Environment(context, context.stackFrame, isInherits:=False))
             Dim skipVal As Boolean
+            Dim symbol As SymbolDeclare = source.symbol
             Dim err As Message = symbol.Exec(closure)
 
             If Not err Is Nothing Then
@@ -160,7 +165,11 @@ Namespace Interpreter.ExecuteEngine.LINQ
         Public Overrides Function ToString() As String
             Dim sb As New StringBuilder
 
-            Call sb.AppendLine($"FROM {symbol} IN {sequence}")
+            Call sb.AppendLine($"FROM {source.symbol} IN {source.sequence}")
+
+            For Each join As DataLeftJoin In joins
+                Call sb.AppendLine(join.ToString)
+            Next
 
             For Each line In executeQueue
                 Call sb.AppendLine(line.ToString)

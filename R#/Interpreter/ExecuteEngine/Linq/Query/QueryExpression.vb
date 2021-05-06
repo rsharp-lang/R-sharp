@@ -44,22 +44,20 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging
+Imports Microsoft.VisualBasic.Language
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
     Public MustInherit Class QueryExpression : Inherits Expression
         Implements IVisualStudioPreviews
 
-        Protected ReadOnly sequence As Expression
-
-        Protected Friend ReadOnly symbol As SymbolDeclare
         Protected Friend ReadOnly executeQueue As Expression()
-
+        Protected Friend ReadOnly source As QuerySource
         Protected Friend dataset As DataSet
+        Protected Friend ReadOnly joins As New List(Of DataLeftJoin)
 
         Sub New(symbol As SymbolDeclare, sequence As Expression, execQueue As IEnumerable(Of Expression))
-            Me.symbol = symbol
-            Me.sequence = sequence
+            Me.source = New QuerySource(symbol, sequence)
             Me.executeQueue = execQueue.ToArray
         End Sub
 
@@ -77,7 +75,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
         ''' <param name="context"></param>
         ''' <returns></returns>
         Public Function GetSeqValue(context As ExecutableContext) As Object
-            Return sequence.Exec(context)
+            Return source.sequence.Exec(context)
         End Function
 
         ''' <summary>
@@ -85,7 +83,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
         ''' </summary>
         ''' <param name="context"></param>
         ''' <returns></returns>
-        Protected Function GetDataSet(context As ExecutableContext) As DataSet
+        Protected Overridable Function GetDataSet(context As ExecutableContext) As DataSet
             Return DataSet.CreateDataSet(Me, context)
         End Function
 

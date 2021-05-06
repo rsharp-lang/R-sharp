@@ -51,7 +51,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 
-Namespace Runtime.Interop
+Namespace Runtime.Interop.Operator
 
     ''' <summary>
     ''' engine of binary operator in R#

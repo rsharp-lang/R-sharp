@@ -44,8 +44,15 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Interop.CType
 
+    ''' <summary>
+    ''' An interface for cast current object to R# list object.
+    ''' </summary>
     Public Interface ICTypeList
 
+        ''' <summary>
+        ''' cast current object to R# list object.
+        ''' </summary>
+        ''' <returns></returns>
         Function toList() As list
 
     End Interface
