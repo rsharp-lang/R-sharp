@@ -757,6 +757,12 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' do not add extension suffix name for csv data set due to 
+        ''' the reason of csv file extension suffix will be removed
+        ''' automatically in the progress of R compile the data file 
+        ''' into package file.
+        ''' </remarks>
         <ExportAPI("system.file")>
         Public Function systemFile(fileName As String, package$, Optional env As Environment = Nothing) As Object
             Dim filepath As String = env.globalEnvironment.FindSystemFile(fileName, package)
