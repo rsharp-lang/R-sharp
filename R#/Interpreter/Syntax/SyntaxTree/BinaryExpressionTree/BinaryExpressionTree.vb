@@ -148,13 +148,18 @@ Namespace Interpreter.SyntaxParser
             Dim buf As New List(Of [Variant](Of SyntaxResult, String))
             Dim lineNum As Integer = tokenBlocks(Scan0)(Scan0).span.line
             Dim oplist As New List(Of String)
+            Dim syntaxResult As New Value(Of SyntaxResult)
 
             If tokenBlocks.Count = 2 Then
                 If tokenBlocks(Scan0).Length = 1 Then
                     Dim unary = tokenBlocks(Scan0)(Scan0)
 
                     If unary = (TokenType.operator, {"-", "+"}) Then
-                        Return tokenBlocks.joinNegatives(buf, oplist, opts)
+                        If Not syntaxResult = tokenBlocks.joinNegatives(buf, oplist, opts) Is Nothing Then
+                            Return syntaxResult
+                        ElseIf buf = 1 Then
+                            Return buf(Scan0).TryCast(Of SyntaxResult)
+                        End If
                     End If
                 End If
 
@@ -169,7 +174,6 @@ Namespace Interpreter.SyntaxParser
                 End If
             End If
 
-            Dim syntaxResult As New Value(Of SyntaxResult)
             Dim processors As GenericSymbolOperatorProcessor() = {
                 New NameMemberReferenceProcessor(),
                 New NamespaceReferenceProcessor(),
