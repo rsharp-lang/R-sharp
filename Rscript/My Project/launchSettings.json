@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": " --build /src D:\\PlantMAT\\PlantMAT"
+      "commandLineArgs": "--parallel --master \"8885\" --delegate \"Parallel::snowFall\" /@set --internal_pipeline=TRUE"
     }
   }
 }
