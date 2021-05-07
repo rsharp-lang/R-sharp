@@ -68,7 +68,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PlantMAT|x64'">
     <DocumentationFile>Rscript.xml</DocumentationFile>
-    <OutputPath>D:\PlantMAT\Apps\</OutputPath>
+    <OutputPath>D:\PlantMAT\PlantMAT\assembly\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
