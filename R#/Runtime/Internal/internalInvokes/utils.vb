@@ -49,6 +49,7 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Threading
 Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Parsers
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -58,6 +59,7 @@ Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
@@ -500,7 +502,7 @@ Namespace Runtime.Internal.Invokes
                         Call Console.WriteLine(ps.StandardOutput)
                     End If
                 Else
-                    Dim stdout As String = CommandLine.Call(executative, arguments, inputStr.JoinBy(vbLf))
+                    Dim stdout As String = PipelineProcess.Call(executative, arguments, inputStr.JoinBy(vbLf))
 
                     If show_output_on_console Then
                         Call Console.WriteLine(stdout)
@@ -764,13 +766,22 @@ Namespace Runtime.Internal.Invokes
         ''' into package file.
         ''' </remarks>
         <ExportAPI("system.file")>
-        Public Function systemFile(fileName As String, package$, Optional env As Environment = Nothing) As Object
-            Dim filepath As String = env.globalEnvironment.FindSystemFile(fileName, package)
+        Public Function systemFile(fileName As String, Optional package$ = Nothing, Optional env As Environment = Nothing) As Object
+            If Not package.StringEmpty Then
+                If Not RFileSystem.PackageInstalled(package, env) Then
+                    Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
+                Else
+                    fileName = $"{RFileSystem.GetPackageDir(env)}/{package}/{fileName}"
 
-            If filepath.StringEmpty Then
-                Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
+                    If fileName.FileExists Then
+                        Return fileName.GetFullPath
+                    Else
+                        Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
+                        Return Nothing
+                    End If
+                End If
             Else
-                Return filepath
+                Return Internal.debug.stop("not implemented!", env)
             End If
         End Function
 
@@ -797,46 +808,26 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <Extension>
-        Private Function FindSystemFile(env As GlobalEnvironment, fileName As String, package$) As String
-            Dim loaded As Dictionary(Of String, PackageNamespace) = env.attachedNamespace
-            Dim file As String = Nothing
+        Private Function FindSystemFile(env As GlobalEnvironment, fileName As String) As String
+            Dim file As Value(Of String) = ""
+            Dim findFileByName As Func(Of String, String) =
+                Function(dir As String) As String
+                    Dim ls As String() = dir.ListFiles("*").ToArray
 
-            fileName = fileName.Replace("\", "/")
-            fileName = fileName.Replace("//", "/")
+                    For Each filepath As String In ls
+                        If filepath.FileName = fileName Then
+                            Return filepath
+                        End If
+                    Next
 
-            Dim findFileByName = Function(dir As String) As String
-                                     Dim ls As String() = dir.ListFiles("*").ToArray
-
-                                     For Each filepath As String In ls
-                                         If filepath.GetFullPath.Replace("\", "/").EndsWith(fileName) Then
-                                             Return filepath
-                                         End If
-                                     Next
-
-                                     Return Nothing
-                                 End Function
-
-            ' 优先搜索已经加载的程序包
-            If loaded.ContainsKey(package) Then
-                file = findFileByName(loaded(package).libPath)
-            End If
-
-            If Not file Is Nothing Then
-                Return file
-            End If
-
-            Dim packageDir As String
-
-            If App.IsMicrosoftPlatform Then
-                packageDir = $"{env.options.lib_loc}/Library/"
-            Else
-                packageDir = env.options.lib_loc
-            End If
+                    Return Nothing
+                End Function
+            Dim packageDir As String = RFileSystem.GetPackageDir(env)
 
             ' 当搜索失败的时候才会在已经安装的程序列表之中进行搜索
             For Each dir As String In packageDir.ListDirectory
-                If dir.BaseName = package Then
-                    Return findFileByName(dir)
+                If Not (file = findFileByName(dir)).StringEmpty Then
+                    Return file
                 End If
             Next
 
