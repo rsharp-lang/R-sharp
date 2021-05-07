@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src \"D:\\biodeep\\biodeepdb_v3\\metaCluster\\NPSearch\""
+      "commandLineArgs": " --build /src D:\\PlantMAT\\PlantMAT"
     }
   }
 }
