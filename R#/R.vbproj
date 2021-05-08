@@ -856,6 +856,9 @@
     <Compile Include="System\Document\ShellScript\CommandLineArgument.vb" />
     <Compile Include="System\Document\ShellScript\DefaultFormatter.vb" />
     <Compile Include="System\Document\ShellScript\ShellScript.vb" />
+    <Compile Include="System\Package\PackageFile\FileSystem\RegularMatch.vb" />
+    <Compile Include="System\Package\PackageFile\FileSystem\PatternMatch.vb" />
+    <Compile Include="System\Package\PackageFile\FileSystem\Rbuildignore.vb" />
     <Compile Include="System\RuntimeError.vb" />
     <Compile Include="System\Document\FunctionDeclare.vb" />
     <Compile Include="System\Document\Document.vb" />
