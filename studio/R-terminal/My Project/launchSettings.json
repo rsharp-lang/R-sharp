@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--syntax /script \"D:\\GCModeller\\src\\R-sharp\\tutorials\\syntaxTest\\loop1.R\" --debug",
+      "commandLineArgs": "\"D:\\biodeep\\biodeepdb_v3\\metaCluster\\NPSearch\\pipeline\\RunPlantMAT.R\" --debug",
       "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\App\\net5.0"
     }
   }
