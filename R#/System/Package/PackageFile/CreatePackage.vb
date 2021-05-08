@@ -288,9 +288,13 @@ Namespace Development.Package.File
         Private Function getDataSymbols(dir As String, ignores As Rbuildignore) As Dictionary(Of String, String)
             Dim projDir As String = dir.ParentPath
 
+            If projDir.Last <> "/"c Then
+                projDir = $"{projDir}/"
+            End If
+
             Return EnumerateFiles(dir, "*.*") _
                 .Where (Function(filepath)
-                            Return Not ignores.IsFileIgnored(filepath.Replace(projDir, ""))
+                            Return Not ignores.IsFileIgnored(filepath.Replace("\", "/").Replace(projDir, ""))
                         End Function) _
                 .Select(Function(filepath)
                             Return (filepath, read:=getFileReader(filepath))
