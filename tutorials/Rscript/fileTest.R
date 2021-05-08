@@ -1,0 +1,1 @@
+print(system.file("data/NeutralGroup.csv", package = "NPSearch"));

@@ -771,7 +771,7 @@ Namespace Runtime.Internal.Invokes
                 If Not RFileSystem.PackageInstalled(package, env) Then
                     Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
                 Else
-                    fileName = $"{RFileSystem.GetPackageDir(env)}/{package}/{fileName}"
+                    fileName = $"{RFileSystem.GetPackageDir(env)}/{package}/{fileName}".GetFullPath
 
                     If fileName.FileExists Then
                         Return fileName.GetFullPath
