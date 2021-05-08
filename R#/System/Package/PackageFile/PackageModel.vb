@@ -71,6 +71,10 @@ Namespace Development.Package.File
         ''' </summary>
         ''' <returns></returns>
         Public Property symbols As Dictionary(Of String, Expression)
+        ''' <summary>
+        ''' the file names in ``data/`` directory.
+        ''' </summary>
+        ''' <returns></returns>
         Public Property dataSymbols As Dictionary(Of String, String)
         Public Property loading As Dependency()
         Public Property assembly As AssemblyPack

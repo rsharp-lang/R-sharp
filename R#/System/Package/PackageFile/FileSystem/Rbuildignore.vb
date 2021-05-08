@@ -31,9 +31,16 @@ Namespace Development.Package.File
             Return False
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="file">
+        ''' a text file its file path or the content data text itself
+        ''' </param>
+        ''' <returns></returns>
         Public Shared Function CreatePatterns(file As String) As Rbuildignore
             Dim list As String() = file _
-                .ReadAllLines _
+                .LineIterators _
                 .Where(Function(line) Not line.StringEmpty) _
                 .ToArray
             Dim patterns As New List(Of Predicate(Of String))

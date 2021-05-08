@@ -120,6 +120,7 @@ Namespace Development.Package.File
             }
             Dim loading As New List(Of Expression)
             Dim [error] As New Value(Of Message)
+            Dim ignores As Rbuildignore = Rbuildignore.CreatePatterns($"{target}/.Rbuildignore")
 
             Call Console.Write($"* checking for file '{(target & "/DESCRIPTION").GetFullPath}' ... ")
 
@@ -154,7 +155,7 @@ Namespace Development.Package.File
             End If
 
             Call Console.WriteLine($"     query data items for lazy loading...")
-            file.dataSymbols = getDataSymbols($"{target}/data")
+            file.dataSymbols = getDataSymbols($"{target}/data", ignores)
 
             Call Console.WriteLine($"     query package dependency...")
             file.loading = loading.loadingDependency.ToArray
@@ -284,9 +285,16 @@ Namespace Development.Package.File
             Next
         End Function
 
-        Private Function getDataSymbols(dir As String) As Dictionary(Of String, String)
+        Private Function getDataSymbols(dir As String, ignores As Rbuildignore) As Dictionary(Of String, String)
+            Dim projDir As String = dir.ParentPath
+
             Return EnumerateFiles(dir, "*.*") _
-                .Select(Function(filepath) (filepath, read:=getFileReader(filepath))) _
+                .Where (Function(filepath)
+                            Return Not ignores.IsFileIgnored(filepath.Replace(projDir, ""))
+                        End Function) _
+                .Select(Function(filepath)
+                            Return (filepath, read:=getFileReader(filepath))
+                        End Function) _
                 .ToDictionary(Function(path) path.filepath,
                               Function(path)
                                   Return path.read
