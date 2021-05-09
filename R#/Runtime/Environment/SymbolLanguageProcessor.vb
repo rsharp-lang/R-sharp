@@ -18,6 +18,7 @@ Namespace Runtime
             Dim result As Object
 
             If cache.ContainsKey(symbol) Then
+                success = True
                 Return cache(symbol)
             End If
 
