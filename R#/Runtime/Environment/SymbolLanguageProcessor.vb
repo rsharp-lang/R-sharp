@@ -23,7 +23,11 @@ Namespace Runtime
 
             For Each language As KeyValuePair(Of RSymbolLanguageMaskAttribute, ISymbolLanguageParser) In languages
                 If language.Key.IsCurrentPattern(symbol) Then
-                    result = language.Value(symbol, env)
+                    Try
+                        result = language.Value(symbol, env)
+                    Catch ex As Exception
+                        result = New Message
+                    End Try
 
                     If Not TypeOf result Is Message Then
                         success = True
