@@ -210,9 +210,22 @@ Namespace Development.Package
             End If
 
             Call BinaryOperatorEngine.ImportsOperators(package, envir)
+            Call ImportsPackage.ImportsSymbolLanguages(package, envir.globalEnvironment)
 
             Return masked
         End Function
+
+        Private Sub ImportsSymbolLanguages(package As Type, env As GlobalEnvironment)
+            For Each method In From m As MethodInfo
+                               In package.GetMethods
+                               Where m.IsStatic
+                               Let mask As RSymbolLanguageMaskAttribute = m.GetAttribute(Of RSymbolLanguageMaskAttribute)
+                               Where Not mask Is Nothing
+                               Select mask, ptr = m
+
+                Call env.symbolLanguages.AddSymbolLanguage(method.mask, method.ptr)
+            Next
+        End Sub
 
         <Extension>
         Public Sub ImportsInstance(envir As Environment, target As Object)

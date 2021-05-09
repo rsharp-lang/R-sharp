@@ -10,13 +10,15 @@ Namespace Runtime.Interop
         ' 例如实现 H2O - OH 的化学符号运算
 
         Public ReadOnly Property Pattern As Regex
+        Public ReadOnly Property CanBeCached As Boolean
 
         ''' <summary>
         ''' 创建一个自动符号映射标记 
         ''' </summary>
         ''' <param name="pattern">用于测试目标符号文本是否适合用于本解析器的处理</param>
-        Sub New(pattern As String)
+        Sub New(pattern As String, Optional canBeCached As Boolean = False)
             Me.Pattern = New Regex(pattern, RegexOptions.Compiled Or RegexOptions.Singleline)
+            Me.CanBeCached = canBeCached
         End Sub
 
         Public Function IsCurrentPattern(symbol As String) As Boolean

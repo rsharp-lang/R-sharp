@@ -92,6 +92,7 @@ Namespace Runtime
         Public Property lastException As Message
 
         Public ReadOnly Property types As New Dictionary(Of String, RType)
+        Public ReadOnly Property symbolLanguages As SymbolLanguageProcessor
 
         ''' <summary>
         ''' if current executation is comes from the R script executation
@@ -120,6 +121,7 @@ Namespace Runtime
             Me.Rscript = scriptHost
             Me.stdout = New RContentOutput(App.StdOut.DefaultValue, env:=OutputEnvironments.Console)
             Me.log4vb_redirect = options.log4vb_redirect
+            Me.symbolLanguages = New SymbolLanguageProcessor(Me)
 
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
