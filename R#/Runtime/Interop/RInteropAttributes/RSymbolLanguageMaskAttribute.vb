@@ -13,6 +13,12 @@ Namespace Runtime.Interop
         Public ReadOnly Property CanBeCached As Boolean
 
         ''' <summary>
+        ''' <see cref="ITestSymbolTarget"/>
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property Test As Type
+
+        ''' <summary>
         ''' 创建一个自动符号映射标记 
         ''' </summary>
         ''' <param name="pattern">用于测试目标符号文本是否适合用于本解析器的处理</param>
@@ -33,4 +39,8 @@ Namespace Runtime.Interop
 
     Public Delegate Function ISymbolLanguageParser(symbol As String, env As Environment) As Object
 
+    Public Interface ITestSymbolTarget
+        Function Assert(symbol As Object) As Boolean
+
+    End Interface
 End Namespace

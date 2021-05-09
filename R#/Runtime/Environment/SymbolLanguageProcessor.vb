@@ -7,7 +7,7 @@ Namespace Runtime
     Public Class SymbolLanguageProcessor
 
         ReadOnly env As GlobalEnvironment
-        ReadOnly languages As New Dictionary(Of RSymbolLanguageMaskAttribute, ISymbolLanguageParser)
+        ReadOnly languages As New Dictionary(Of RSymbolLanguageMaskAttribute, (parse As ISymbolLanguageParser, test As ITestSymbolTarget))
         ReadOnly cache As New Dictionary(Of String, Object)
 
         Sub New(env As GlobalEnvironment)
@@ -21,18 +21,23 @@ Namespace Runtime
                 Return cache(symbol)
             End If
 
-            For Each language As KeyValuePair(Of RSymbolLanguageMaskAttribute, ISymbolLanguageParser) In languages
-                If language.Key.IsCurrentPattern(symbol) Then
+            For Each lang In languages
+                If lang.Key.IsCurrentPattern(symbol) Then
                     Try
-                        result = language.Value(symbol, env)
+                        result = lang.Value.parse(symbol, env)
                     Catch ex As Exception
                         result = New Message
                     End Try
 
                     If Not TypeOf result Is Message Then
-                        success = True
+                        If Not lang.Value.test Is Nothing AndAlso Not lang.Value.test.Assert(result) Then
+                            success = False
+                            Continue For
+                        Else
+                            success = True
+                        End If
 
-                        If language.Key.CanBeCached Then
+                        If lang.Key.CanBeCached Then
                             cache.Add(symbol, result)
                         End If
 
@@ -48,17 +53,25 @@ Namespace Runtime
 
         Public Function AddSymbolLanguage(tag As RSymbolLanguageMaskAttribute, api As MethodInfo) As Message
             Dim params As ParameterInfo() = api.GetParameters
+            Dim parse As ISymbolLanguageParser
+            Dim test As ITestSymbolTarget = Nothing
+
+            If Not tag.Test Is Nothing Then
+                test = Activator.CreateInstance(tag.Test)
+            End If
 
             If params.Length = 1 Then
                 If Not params(Scan0).ParameterType Is GetType(String) Then
                     Return Nothing
                 Else
-                    languages(tag) = Function(symbol, env) api.Invoke(Nothing, {symbol})
+                    parse = Function(symbol, env) api.Invoke(Nothing, {symbol})
+                    languages(tag) = (parse, test)
                 End If
             ElseIf params.Length > 2 Then
                 Return Nothing
             ElseIf params(1).ParameterType Is GetType(Environment) Then
-                languages(tag) = Function(symbol, env) api.Invoke(Nothing, {symbol, env})
+                parse = Function(symbol, env) api.Invoke(Nothing, {symbol, env})
+                languages(tag) = (parse, test)
             End If
 
             Return Nothing
