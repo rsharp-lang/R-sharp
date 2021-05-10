@@ -261,7 +261,11 @@ Namespace Interpreter.SyntaxParser
                 Return New SyntaxResult(New NotImplementedException, opts.debug)
             ElseIf buf = 3 AndAlso tokens(1) Like GetType(String) AndAlso tokens(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols Then
                 ' set value by name
-                Return New MemberValueAssign(tokens(Scan0), tokens(2))
+                If TypeOf tokens(Scan0).TryCast(Of Expression) Is BinaryExpression Then
+                    Return New ValueAssign({tokens(Scan0).TryCast(Of Expression)}, tokens(2))
+                Else
+                    Return New MemberValueAssign(tokens(Scan0), tokens(2))
+                End If
             ElseIf tokens.isLambdaFunction Then
                 Return SyntaxImplements.DeclareLambdaFunction(tokens(Scan0).VA, tokens(2).VA, lineNum, opts)
             End If
