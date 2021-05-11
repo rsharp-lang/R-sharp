@@ -65,8 +65,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Get
         End Property
 
-        Friend left, right As Expression
-        Friend ReadOnly [operator] As String
+        Public ReadOnly Property left As Expression
+        Public ReadOnly Property right As Expression
+
+        Public ReadOnly Property [operator] As String
 
         Sub New(left As Expression, right As Expression, op$)
             Me.left = left

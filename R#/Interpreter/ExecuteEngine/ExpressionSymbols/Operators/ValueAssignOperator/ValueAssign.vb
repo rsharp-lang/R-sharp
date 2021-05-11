@@ -84,10 +84,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         ''' 可能是对tuple做赋值
         ''' 所以应该是多个变量名称
         ''' </summary>
-        Friend targetSymbols As Expression()
-        Friend isByRef As Boolean
-
+        Public ReadOnly Property targetSymbols As Expression()
         Public ReadOnly Property value As Expression
+
+        Friend isByRef As Boolean
 
         Public ReadOnly Property symbolSize As Integer
             <MethodImpl(MethodImplOptions.AggressiveInlining)>

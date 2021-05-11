@@ -198,6 +198,8 @@ Namespace Runtime.Internal.Object
                 Return CreateFromPopulator(upstream.data.AsObjectEnumerator)
             ElseIf GetType(T).IsInterface AndAlso upstream.elementType.raw.ImplementInterface(Of T) Then
                 Return CreateFromPopulator(upstream.data.AsObjectEnumerator.Select(Function(o) CType(o, T)))
+            ElseIf upstream.elementType.raw.IsInheritsFrom(GetType(T)) Then
+                Return CreateFromPopulator(upstream.data.AsObjectEnumerator.Select(Function(o) CType(o, T)))
             Else
                 Return Message.InCompatibleType(GetType(T), upstream.elementType.raw, env, suppress:=suppress)
             End If
