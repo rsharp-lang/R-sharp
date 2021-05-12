@@ -2103,6 +2103,10 @@ RE0:
                             Call DirectCast(dispose, RFunction).Invoke(env, invokeArgument(obj))
                         End Sub
             ElseIf TypeOf dispose Is String Then
+                If TypeOf x Is vbObject Then
+                    x = DirectCast(x, vbObject).target
+                End If
+
                 If x.GetType.ImplementInterface(GetType(ISaveHandle)) Then
                     Return New AutoFileSave With {
                         .data = x,
