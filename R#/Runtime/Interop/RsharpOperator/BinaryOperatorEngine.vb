@@ -49,7 +49,6 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 
 Namespace Runtime.Interop.Operator
 
@@ -212,36 +211,7 @@ Namespace Runtime.Interop.Operator
                 If Not opTag Is Nothing Then
                     Dim left As RType = RType.GetRSharpType(args(Scan0).ParameterType)
                     Dim right As RType = RType.GetRSharpType(args(1).ParameterType)
-                    Dim invoke As IBinaryOperator
-
-                    ' fix of System.Reflection.TargetParameterCountException: Parameter count mismatch.
-                    If args.Length = 2 Then
-                        invoke = Function(x, y, internal)
-                                     x = RCType.CTypeDynamic(x, left, internal)
-                                     y = RCType.CTypeDynamic(y, right, internal)
-
-                                     If TypeOf x Is Message Then
-                                         Return x
-                                     ElseIf TypeOf y Is Message Then
-                                         Return y
-                                     Else
-                                         Return method.Invoke(Nothing, {x, y})
-                                     End If
-                                 End Function
-                    Else
-                        invoke = Function(x, y, internal)
-                                     x = RCType.CTypeDynamic(x, left, internal)
-                                     y = RCType.CTypeDynamic(y, right, internal)
-
-                                     If TypeOf x Is Message Then
-                                         Return x
-                                     ElseIf TypeOf y Is Message Then
-                                         Return y
-                                     Else
-                                         Return method.Invoke(Nothing, {x, y, internal})
-                                     End If
-                                 End Function
-                    End If
+                    Dim invoke As IBinaryOperator = New ROperatorInvoke(left, right, method).GetInvoke(argsN:=args.Length)
 
                     Call addBinary(left, right, opTag.operator, invoke, env, [overrides]:=True)
                 End If

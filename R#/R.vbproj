@@ -867,6 +867,7 @@
     <Compile Include="Runtime\Interop\RInteropAttributes\ROperatorAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\VectorMask\DefaultVectorParser.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\VectorMask\IVectorExpressionLiteral.vb" />
+    <Compile Include="Runtime\Interop\RsharpOperator\ROperatorInvoke.vb" />
     <Compile Include="Runtime\Interop\RsharpOperator\IBinaryOperator.vb" />
     <Compile Include="Runtime\Serialize\bufferObjects\bitmapBuffer.vb" />
     <Compile Include="Runtime\Serialize\BufferObjects.vb" />
