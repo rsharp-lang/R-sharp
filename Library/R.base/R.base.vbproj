@@ -615,5 +615,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <Import Project="..\JsonHelper\JsonHelper.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
