@@ -21,4 +21,19 @@ const document = '
     </html>
 ';
 
+print("parse of a simple content vector");
+cat("\n");
 str(graphquery::query(Html::parse(document), query));
+
+cat("\n\n");
+
+print("a complex parser example:");
+cat("\n");
+str(graphquery::query(Html::parse(document), graphquery::parseQuery(
+"            
+	a css('a') [{
+		title  text() | trim() 
+		url    attr('href') 
+	}]
+
+")));
