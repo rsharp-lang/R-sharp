@@ -119,9 +119,18 @@ Public Module URL
         Dim httpHeaders As Dictionary(Of String, String) = headers?.AsGeneric(Of String)(env)
         Dim verbose As Boolean = env.globalEnvironment.options.verbose
 
-        Return HttpGet _
-            .BuildWebRequest(url, httpHeaders, Nothing, Nothing) _
-            .UrlGet(echo:=verbose)
+        If url.FileExists Then
+            ' is a local file
+            Return New WebResponseResult With {
+                .url = url,
+                .html = url.ReadAllText,
+                .timespan = 0
+            }
+        Else
+            Return HttpGet _
+                .BuildWebRequest(url, httpHeaders, Nothing, Nothing) _
+                .UrlGet(echo:=verbose)
+        End If
     End Function
 
     ''' <summary>
