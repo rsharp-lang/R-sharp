@@ -3,6 +3,7 @@ imports ["Html", "http", "graphquery"] from "webKit";
 require(JSON, quietly = TRUE);
 
 # title: graphquery commandline tool
+#
 # author: xieguigang
 # description: run graphquery on commandline
 
