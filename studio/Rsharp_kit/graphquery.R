@@ -18,12 +18,15 @@ const query as string = ?"--query" || stop("a graph query script must provided!"
 [@type "file"]
 const savefile as string = ?"--out";
 
+[@info "the output json is in nice print style?"]
+const niceprint as logical = ?"--niceprint";
+
 writeLines(con = savefile) {
 	url
 	:> requests.get
 	:> content
 	:> Html::parse 
 	:> graphquery::query(graphquery::parseQuery(readText(query)), raw = TRUE)
-	:> json_encode
+	:> json_encode(indent = niceprint)
 	;
 }

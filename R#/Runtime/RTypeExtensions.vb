@@ -66,6 +66,8 @@ Namespace Runtime
 
             ' add string type alias
             parseTypecode("character") = TypeCodes.string
+            parseTypecode("logical") = TypeCodes.boolean
+            parseTypecode("numeric") = TypeCodes.double
         End Sub
 
         ''' <summary>
