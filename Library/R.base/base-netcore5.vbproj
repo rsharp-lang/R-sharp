@@ -68,4 +68,6 @@
     <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
   </ItemGroup>
 
+  <Import Project="..\JsonHelper\JsonHelper.projitems" Label="Shared" />
+
 </Project>

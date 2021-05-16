@@ -65,7 +65,7 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "parallel-netcore5", "..\run
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "snowFall-netcore5", "snowFall\snowFall-netcore5.vbproj", "{C97E077F-466F-44F2-8363-D606FC093E5E}"
 EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "webKit-netcore5", "studio\Rsharp_kit\webKit\webKit-netcore5.vbproj", "{56C088D6-6362-4377-8EC8-FD0165EAE0D9}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "webKit.NET5", "studio\Rsharp_kit\webKit\webKit.NET5.vbproj", "{56C088D6-6362-4377-8EC8-FD0165EAE0D9}"
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "MLkit-netcore5", "studio\Rsharp_kit\MLkit\MLkit-netcore5.vbproj", "{4DE5C337-FA74-4EB9-A2BA-A29899031216}"
 EndProject
@@ -117,14 +117,21 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "network_visualizer-netcore5
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "HMM.NET5", "..\runtime\sciBASIC#\Data_science\DataMining\HMM\HMM.NET5.vbproj", "{38A57DEE-B9BC-4976-BB3C-B8B0D478EECA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{DB9C6014-424E-40B5-8860-F65F4B95065F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "JsonHelper", "Library\JsonHelper\JsonHelper.shproj", "{B2AE1422-D7DA-4053-A386-EB2EA9326D68}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Library\R_graphic.interop\R_graphic.interop.projitems*{46f9a10d-8827-474f-bbbb-2ce99a55912f}*SharedItemsImports = 5
+		Library\JsonHelper\JsonHelper.projitems*{4d4f14a7-81f0-4b55-8f6f-13942dd7da8b}*SharedItemsImports = 5
 		Library\R_graphic.interop\R_graphic.interop.projitems*{4de5c337-fa74-4eb9-a2ba-a29899031216}*SharedItemsImports = 5
 		Library\R_graphic.interop\R_graphic.interop.projitems*{53af2b13-ccd5-4f73-94d5-612191e785a9}*SharedItemsImports = 13
+		Library\JsonHelper\JsonHelper.projitems*{56c088d6-6362-4377-8ec8-fd0165eae0d9}*SharedItemsImports = 5
 		Library\R_graphic.interop\R_graphic.interop.projitems*{5b2b4eaa-3d1f-4dd1-830b-70b034be1d89}*SharedItemsImports = 5
 		..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{7df565ae-6e7a-4667-ab6d-9908acbeed8b}*SharedItemsImports = 13
 		studio\Rstudio.common\Rstudio.common.projitems*{9aa7a0bd-50a7-4f14-a2cf-345519a55a3f}*SharedItemsImports = 5
+		Library\JsonHelper\JsonHelper.projitems*{b2ae1422-d7da-4053-a386-eb2ea9326d68}*SharedItemsImports = 13
 		studio\Rstudio.common\Rstudio.common.projitems*{e1995e16-ba23-44ea-81bb-187e93f3d906}*SharedItemsImports = 5
 		..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{e1995e16-ba23-44ea-81bb-187e93f3d906}*SharedItemsImports = 5
 	EndGlobalSection
@@ -3675,10 +3682,12 @@ Global
 		{B7278356-26F2-4694-8117-DF16BABD14AC} = {87F6EBE5-3DD8-41B4-9B04-3A676ACD1E90}
 		{2A40AC8D-84D4-4344-A390-6866F69B3E36} = {EAAB5697-0FBC-4127-82BE-A3AB0480DDFF}
 		{46F9A10D-8827-474F-BBBB-2CE99A55912F} = {EBFBBA84-B91C-41D2-B461-7E5B6A1A9209}
-		{53AF2B13-CCD5-4F73-94D5-612191E785A9} = {EBFBBA84-B91C-41D2-B461-7E5B6A1A9209}
+		{53AF2B13-CCD5-4F73-94D5-612191E785A9} = {DB9C6014-424E-40B5-8860-F65F4B95065F}
 		{5B2B4EAA-3D1F-4DD1-830B-70B034BE1D89} = {EBFBBA84-B91C-41D2-B461-7E5B6A1A9209}
 		{0F8FE287-BE17-4787-8861-8DAD0A7DF5DC} = {CDACA05E-88B1-4337-8D6E-52D96212EB32}
 		{38A57DEE-B9BC-4976-BB3C-B8B0D478EECA} = {4C9749C4-2DF0-4FC5-BB83-3AB71C217001}
+		{DB9C6014-424E-40B5-8860-F65F4B95065F} = {EBFBBA84-B91C-41D2-B461-7E5B6A1A9209}
+		{B2AE1422-D7DA-4053-A386-EB2EA9326D68} = {DB9C6014-424E-40B5-8860-F65F4B95065F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {685F6825-92A4-45A5-8738-721B2AA306B3}
