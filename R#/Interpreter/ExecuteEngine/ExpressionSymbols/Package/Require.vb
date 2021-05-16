@@ -43,11 +43,12 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
@@ -89,7 +90,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         Private Function getOptions(env As Environment) As Dictionary(Of String, Object)
             Dim opts As New Dictionary(Of String, Object)
 
-            For Each opt As ValueAssign In options
+            For Each opt As ValueAssign In options.SafeQuery
                 Dim name As String = ValueAssign.GetSymbol(opt.targetSymbols(Scan0))
                 Dim value As Object = opt.value.Evaluate(env)
 
