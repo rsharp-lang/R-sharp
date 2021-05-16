@@ -160,6 +160,14 @@ Namespace Interpreter.SyntaxParser
                         ElseIf buf = 1 Then
                             Return buf(Scan0).TryCast(Of SyntaxResult)
                         End If
+                    ElseIf unary = (TokenType.operator, "!") Then
+                        Dim value As SyntaxResult = Expression.CreateExpression(tokenBlocks(1), opts)
+
+                        If value.isException Then
+                            Return value
+                        Else
+                            Return New UnaryNot(value.expression)
+                        End If
                     End If
                 End If
 

@@ -22,12 +22,22 @@ const savefile as string = ?"--out";
 [@info "the output json is in nice print style?"]
 const niceprint as logical = ?"--niceprint";
 
-writeLines(con = savefile) {
+[@info "R debug view?"]
+const Rdump as logical = ?"--rdump";
+
+let runQuery as function() {
 	url
 	:> requests.get
 	:> content
 	:> Html::parse 
-	:> graphquery::query(graphquery::parseQuery(readText(query)), raw = TRUE)
-	:> json_encode(indent = niceprint)
+	:> graphquery::query(graphquery::parseQuery(readText(query)), raw = !Rdump)
 	;
+}
+
+writeLines(con = savefile) {
+	if (Rdump) {
+		str(runQuery());
+	} else {
+		json_encode(runQuery(), indent = niceprint);
+	}
 }
