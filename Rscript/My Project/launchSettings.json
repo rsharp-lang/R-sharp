@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\tutorials\\closures\\acceptClosure.R\""
+      "commandLineArgs": "--parallel --master \"8854\" --delegate \"Parallel::snowFall\" /@set --internal_pipeline=TRUE"
     }
   }
 }
