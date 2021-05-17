@@ -94,12 +94,28 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns>Double: File size In bytes.</returns>
         ''' <remarks>
-        ''' What constitutes a ‘file’ is OS-dependent but includes directories. (However, directory names must not include a trailing backslash or slash on Windows.) See also the section in the help for file.exists on case-insensitive file systems.
-        ''' The file 'mode’ follows POSIX conventions, giving three octal digits summarizing the permissions for the file owner, the owner's group and for anyone respectively. Each digit is the logical or of read (4), write (2) and execute/search (1) permissions.
+        ''' What constitutes a ‘file’ is OS-dependent but includes directories. (However, 
+        ''' directory names must not include a trailing backslash or slash on Windows.) 
+        ''' See also the section in the help for file.exists on case-insensitive file 
+        ''' systems.
+        ''' 
+        ''' The file 'mode’ follows POSIX conventions, giving three octal digits summarizing 
+        ''' the permissions for the file owner, the owner's group and for anyone respectively. 
+        ''' Each digit is the logical or of read (4), write (2) and execute/search (1) 
+        ''' permissions.
+        ''' 
         ''' See files For how file paths With marked encodings are interpreted.
-        ''' File modes are probably only useful On NTFS file systems, And it seems all three digits refer To the file's owner. The execute/search bits are set for directories, and for files based on their extensions (e.g., ‘.exe’, ‘.com’, ‘.cmd’ and ‘.bat’ files). file.access will give a more reliable view of read/write access availability to the R process.
+        ''' 
+        ''' File modes are probably only useful On NTFS file systems, And it seems all three 
+        ''' digits refer To the file's owner. The execute/search bits are set for directories, 
+        ''' and for files based on their extensions (e.g., ‘.exe’, ‘.com’, ‘.cmd’ and ‘.bat’ 
+        ''' files). file.access will give a more reliable view of read/write access 
+        ''' availability to the R process.
+        ''' 
         ''' UTF-8-encoded file names Not valid in the current locale can be used.
-        ''' Junction points And symbolic links are followed, so information Is given about the file/directory To which the link points rather than about the link.
+        ''' 
+        ''' Junction points And symbolic links are followed, so information Is given about 
+        ''' the file/directory To which the link points rather than about the link.
         ''' </remarks>
         <ExportAPI("file.size")>
         Public Function filesize(x As String) As Long
