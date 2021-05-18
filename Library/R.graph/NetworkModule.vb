@@ -1,48 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::8f4dd6b5fc1bc223e20849f97f72e7f8, Library\R.graph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module NetworkModule
-    ' 
-    '     Function: addEdge, addEdges, addNode, addNodes, attributes
-    '               components, computeNetwork, connectedNetwork, DecomposeGraph, degree
-    '               deleteNode, edgeAttributes, emptyNetwork, eval, getByGroup
-    '               getEdges, getElementByID, getNodes, LoadNetwork, metaData
-    '               nodeAttributes, nodeMass, nodeNames, printGraph, printNode
-    '               SaveNetwork, setAttributes, summaryNodes, trimEdges, typeGroupOfNodes
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module NetworkModule
+' 
+'     Function: addEdge, addEdges, addNode, addNodes, attributes
+'               components, computeNetwork, connectedNetwork, DecomposeGraph, degree
+'               deleteNode, edgeAttributes, emptyNetwork, eval, getByGroup
+'               getEdges, getElementByID, getNodes, LoadNetwork, metaData
+'               nodeAttributes, nodeMass, nodeNames, printGraph, printNode
+'               SaveNetwork, setAttributes, summaryNodes, trimEdges, typeGroupOfNodes
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -513,7 +513,10 @@ Public Module NetworkModule
     ''' Add edges by a given node label tuple list
     ''' </summary>
     ''' <param name="g"></param>
-    ''' <param name="tuples">a given node label tuple list</param>
+    ''' <param name="tuples">a given node label tuple list, 
+    ''' this parameter should be a list of edge names, in 
+    ''' format looks like ``list(tag = [from, to], ...)``.
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("add.edges")>
     <RApiReturn(GetType(NetworkGraph))>
@@ -528,30 +531,40 @@ Public Module NetworkModule
         Dim i As i32 = 1
         Dim weights As Double() = REnv.asVector(Of Double)(weight)
         Dim w As Double
+        Dim err As New Value(Of Message)
+        Dim checkNode As Func(Of String, Message) =
+            Function(id)
+                If g.GetElementByID(id) Is Nothing Then
+                    If ignoreElementNotFound Then
+                        Call g.CreateNode(id)
+                        Call env.AddMessage({
+                            "missing target node for create a new edge...",
+                            "missing node: " & id
+                        }, MSG_TYPES.WRN)
+                    Else
+                        Return Internal.debug.stop({
+                            "missing target node for create a new edge...",
+                            "missing node: " & id
+                        }, env)
+                    End If
+                End If
 
+                Return Nothing
+            End Function
+
+        ' list(tag = [from, to])
         For Each tuple As NamedValue(Of Object) In list.GetSlots(tuples).IterateNameValues
             nodeLabels = REnv.asVector(Of String)(tuple.Value)
             w = weights.ElementAtOrDefault(CInt(i) - 1)
 
-            If g.GetElementByID(nodeLabels(Scan0)) Is Nothing Then
-                If ignoreElementNotFound Then
-                    Call g.CreateNode(nodeLabels(Scan0))
-                    Call env.AddMessage({"missing target node for create a new edge...", "missing node: " & nodeLabels(Scan0)}, MSG_TYPES.WRN)
-                Else
-                    Return Internal.debug.stop({"missing target node for create a new edge...", "missing node: " & nodeLabels(Scan0)}, env)
-                End If
+            If Not err = checkNode(nodeLabels(Scan0)) Is Nothing Then
+                Return CType(err, Message)
+            ElseIf Not err = checkNode(nodeLabels(1)) Is Nothing Then
+                Return CType(err, Message)
+            Else
+                edge = g.CreateEdge(nodeLabels(0), nodeLabels(1))
+                edge.weight = w
             End If
-            If g.GetElementByID(nodeLabels(1)) Is Nothing Then
-                If ignoreElementNotFound Then
-                    Call g.CreateNode(nodeLabels(1))
-                    Call env.AddMessage({"missing target node for create a new edge...", "missing node: " & nodeLabels(1)}, MSG_TYPES.WRN)
-                Else
-                    Return Internal.debug.stop({"missing target node for create a new edge...", "missing node: " & nodeLabels(1)}, env)
-                End If
-            End If
-
-            edge = g.CreateEdge(nodeLabels(0), nodeLabels(1))
-            edge.weight = w
 
             ' 20191226
             ' 如果使用数字作为边的编号的话
