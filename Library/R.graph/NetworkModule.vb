@@ -701,9 +701,13 @@ Public Module NetworkModule
         If values Is Nothing Then
             ' get edge attribute vector
             Return elements.Select(Function(a) If(a.data(name), "")).ToArray
-        Else
-            ' set edge attribute vector
+        ElseIf TypeOf values Is list Then
+            Return elements.SetEdgeAttributesInList(name, values)
 
+            ' set edge attribute vector
+        ElseIf TypeOf values Is vector Then
+            Return Internal.debug.stop(New NotImplementedException, env)
+        Else
             Return Internal.debug.stop(New NotImplementedException, env)
         End If
     End Function
@@ -712,10 +716,14 @@ Public Module NetworkModule
     ''' get or set element attribute values
     ''' </summary>
     ''' <param name="elements"></param>
-    ''' <param name="name$"></param>
+    ''' <param name="name"></param>
     ''' <param name="values"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
+    ''' <remarks>
+    ''' dash style of the edge element could be:
+    ''' solid, dash, dot, dashdot, dashdotdot
+    ''' </remarks>
     <ExportAPI("attributes")>
     Public Function attributes(<RRawVectorArgument> elements As Object, name$,
                                <RByRefValueAssign, RRawVectorArgument>

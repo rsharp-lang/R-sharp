@@ -340,10 +340,10 @@ Module Visualize
         If colors Is Nothing Then
             Return g.graphEdges _
                 .Select(Function(a)
-                            If a.data.color Is Nothing Then
+                            If a.data.style Is Nothing Then
                                 Return Color.Black
                             Else
-                                Return a.data.color.Color
+                                Return a.data.style.Color
                             End If
                         End Function) _
                 .ToArray
@@ -356,7 +356,9 @@ Module Visualize
 
                 Select Case first.GetType
                     Case GetType(String)
-                        unify = DirectCast(first, String).TranslateColor.DoCall(Function(c) New SolidBrush(c))
+                        unify = DirectCast(first, String) _
+                            .TranslateColor _
+                            .DoCall(Function(c) New SolidBrush(c))
                     Case GetType(Color)
                         unify = New SolidBrush(DirectCast(first, Color))
                     Case GetType(SolidBrush)
@@ -366,7 +368,7 @@ Module Visualize
                 End Select
 
                 For Each edge As Edge In g.graphEdges
-                    edge.data.color = unify
+                    edge.data.style = New Pen(unify)
                 Next
             ElseIf values.Length <> g.graphEdges.Count Then
                 Return Internal.debug.stop("the color length is not equals to the edge size!", env)
@@ -376,7 +378,11 @@ Module Visualize
 
                     Select Case first.GetType
                         Case GetType(String)
-                            unify = DirectCast(first, String).TranslateColor.DoCall(Function(c) New SolidBrush(c))
+                            unify = DirectCast(first, String) _
+                                .TranslateColor _
+                                .DoCall(Function(c)
+                                            Return New SolidBrush(c)
+                                        End Function)
                         Case GetType(Color)
                             unify = New SolidBrush(DirectCast(first, Color))
                         Case GetType(SolidBrush)
@@ -385,7 +391,7 @@ Module Visualize
                             Return Internal.debug.stop(Message.InCompatibleType(GetType(Color), first.GetType, env,, NameOf(colors)), env)
                     End Select
 
-                    edge.value.data.color = unify
+                    edge.value.data.style = New Pen(unify)
                 Next
             End If
 
