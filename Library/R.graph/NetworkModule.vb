@@ -517,12 +517,20 @@ Public Module NetworkModule
     ''' this parameter should be a list of edge names, in 
     ''' format looks like ``list(tag = [from, to], ...)``.
     ''' </param>
+    ''' <param name="weight">
+    ''' the edge weights vector
+    ''' </param>
+    ''' <param name="type">
+    ''' the edge types vector
+    ''' </param>
     ''' <returns></returns>
-    <ExportAPI("add.edges")>
+    <ExportAPI("pushEdges")>
     <RApiReturn(GetType(NetworkGraph))>
     Public Function addEdges(g As NetworkGraph, tuples As Object,
                              <RRawVectorArgument>
                              Optional weight As Object = Nothing,
+                             <RRawVectorArgument>
+                             Optional type As Object = Nothing,
                              Optional ignoreElementNotFound As Boolean = True,
                              Optional env As Environment = Nothing) As Object
 
@@ -530,6 +538,7 @@ Public Module NetworkModule
         Dim edge As Edge
         Dim i As i32 = 1
         Dim weights As Double() = REnv.asVector(Of Double)(weight)
+        Dim types As String() = REnv.asVector(Of String)(type)
         Dim w As Double
         Dim err As New Value(Of Message)
         Dim checkNode As Func(Of String, Message) =
@@ -556,6 +565,7 @@ Public Module NetworkModule
         For Each tuple As NamedValue(Of Object) In list.GetSlots(tuples).IterateNameValues
             nodeLabels = REnv.asVector(Of String)(tuple.Value)
             w = weights.ElementAtOrDefault(CInt(i) - 1)
+            type = types.ElementAtOrDefault(CInt(i) - 1)
 
             If Not err = checkNode(nodeLabels(Scan0)) Is Nothing Then
                 Return CType(err, Message)
@@ -564,6 +574,10 @@ Public Module NetworkModule
             Else
                 edge = g.CreateEdge(nodeLabels(0), nodeLabels(1))
                 edge.weight = w
+
+                If Not type Is Nothing Then
+                    edge.data(NamesOf.REFLECTION_ID_MAPPING_INTERACTION_TYPE) = type
+                End If
             End If
 
             ' 20191226
