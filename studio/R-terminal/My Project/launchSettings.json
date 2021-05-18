@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\biodeep\\knapsack\\graphquery\\saveByKeyword.R\" --keyword kaempferol --debug",
+      "commandLineArgs": "\"D:\\biodeep\\knapsack\\graphquery\\saveByKeyword.R\" --keyword Quercetin",
       "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\App\\net5.0"
     }
   }
