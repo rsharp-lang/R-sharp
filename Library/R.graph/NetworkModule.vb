@@ -688,74 +688,22 @@ Public Module NetworkModule
     <Extension>
     Private Function nodeAttributes(elements As node(), name$, values As Object, env As Environment) As Object
         If values Is Nothing Then
-            Return elements _
-                .Select(Function(a)
-                            If name = "color" Then
-                                If a.data.color Is Nothing OrElse Not TypeOf a.data.color Is SolidBrush Then
-                                    Return "black"
-                                Else
-                                    Return DirectCast(a.data.color, SolidBrush).Color.ToHtmlColor
-                                End If
-                            Else
-                                Return If(a.data(name), "")
-                            End If
-                        End Function) _
-                .ToArray
+            Return elements.GetNodeAttributes(name)
         ElseIf TypeOf values Is list Then
-            Dim valList As list = DirectCast(values, list)
-            Dim value As Object
-            Dim element As node
-            Dim hash As Dictionary(Of String, node) = elements.ToDictionary(Function(e) e.label)
-
-            For Each vName As String In valList.slots.Keys
-                value = REnv.single(valList.slots(vName))
-                element = hash.TryGetValue(vName)
-
-                If Not element Is Nothing Then
-                    If name = "color" Then
-                        If TypeOf value Is Brush Then
-                            element.data.color = value
-                        ElseIf TypeOf value Is Color Then
-                            element.data.color = New SolidBrush(DirectCast(value, Color))
-                        Else
-                            element.data.color = any.ToString(value).GetBrush
-                        End If
-                    Else
-                        element.data(name) = any.ToString(value)
-                    End If
-                End If
-            Next
+            Return elements.SetNodeAttributesInList(name, DirectCast(values, list))
         Else
-            Dim valArray As New GetVectorElement(REnv.asVector(Of Object)(values))
-            Dim value As Object
-
-            If name = "color" Then
-                For i As Integer = 0 To elements.Length - 1
-                    value = valArray(i)
-
-                    If TypeOf value Is Brush Then
-                        elements(i).data.color = value
-                    ElseIf TypeOf value Is Color Then
-                        elements(i).data.color = New SolidBrush(DirectCast(value, Color))
-                    Else
-                        elements(i).data.color = any.ToString(value).GetBrush
-                    End If
-                Next
-            Else
-                For i As Integer = 0 To elements.Length - 1
-                    elements(i).data(name) = any.ToString(valArray(i))
-                Next
-            End If
+            Return elements.SetNodeAttributeInVector(name, values)
         End If
-
-        Return Nothing
     End Function
 
     <Extension>
     Private Function edgeAttributes(elements As Edge(), name$, values As Object, env As Environment) As Object
         If values Is Nothing Then
+            ' get edge attribute vector
             Return elements.Select(Function(a) If(a.data(name), "")).ToArray
         Else
+            ' set edge attribute vector
+
             Return Internal.debug.stop(New NotImplementedException, env)
         End If
     End Function
