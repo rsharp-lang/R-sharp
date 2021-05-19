@@ -244,6 +244,10 @@
       <Project>{2dd4be80-ddc3-4767-94a7-10f1c3395716}</Project>
       <Name>mime-htmls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\mime\text%25markdown\markdown.vbproj">
+      <Project>{83ec1406-fe08-46a1-88b3-ce56d7e9961c}</Project>
+      <Name>markdown</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\vs_solutions\dev\VisualStudio\VisualStudio.vbproj">
       <Project>{3a65d811-fc5c-4ad9-8456-8f720ff14c16}</Project>
       <Name>VisualStudio</Name>
