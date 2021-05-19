@@ -40,7 +40,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.MIME.Markup.HTML
+Imports Microsoft.VisualBasic.MIME.Html.Document
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Parser.HtmlParser

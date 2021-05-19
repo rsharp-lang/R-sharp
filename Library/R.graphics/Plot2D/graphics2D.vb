@@ -51,8 +51,8 @@ Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.MIME.Markup
-Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
+Imports Microsoft.VisualBasic.MIME.Html
+Imports Microsoft.VisualBasic.MIME.HTML.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -200,7 +200,7 @@ Module graphics2D
         Dim p2 As PointF = InteropArgumentHelper.getVector2D(b)
         Dim penCSS As String = InteropArgumentHelper.getStrokePenCSS(stroke)
 
-        Return New Shapes.Line(p1, p2, HTML.CSS.Stroke.TryParse(penCSS))
+        Return New Shapes.Line(p1, p2, CSS.Stroke.TryParse(penCSS))
     End Function
 
     <ExportAPI("draw.triangle")>

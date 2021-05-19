@@ -1,7 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.GraphQuery
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
-Imports Microsoft.VisualBasic.MIME.Markup.HTML
+Imports Microsoft.VisualBasic.MIME.Html.Document
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 

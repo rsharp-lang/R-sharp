@@ -49,7 +49,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.MIME.Markup.MarkDown
+Imports Microsoft.VisualBasic.MIME.text.markdown
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports SMRUCC.Rsharp.Development

@@ -45,6 +45,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\mime\text%html\html_netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\mime\text%markdown\markdown.vbproj" />
     <ProjectReference Include="..\..\..\R#\Rsharp-netcore5.vbproj" />
   </ItemGroup>
 

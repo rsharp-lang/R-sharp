@@ -80,7 +80,7 @@ Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Math.Interpolation
-Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
+Imports Microsoft.VisualBasic.MIME.HTML.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp
