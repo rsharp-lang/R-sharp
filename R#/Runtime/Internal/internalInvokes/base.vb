@@ -1273,11 +1273,9 @@ RE0:
         ''' </returns>
         ''' <remarks>
         ''' Options used in base R
-        ''' add.smooth:
-        ''' typically logical, defaulting to TRUE. Could also be set to an integer for specifying how many (simulated) smooths should be added. This is currently only used by plot.lm.
-        '''
-        ''' askYesNo:
-        ''' a function (typically set by a front-end) to ask the user binary response functions in a consistent way, or a vector of strings used by askYesNo to use as default responses for such questions.
+        ''' 
+        ''' + add.smooth: typically logical, defaulting to TRUE. Could also be set to an integer for specifying how many (simulated) smooths should be added. This is currently only used by plot.lm.
+        ''' + askYesNo: a function (typically set by a front-end) to ask the user binary response functions in a consistent way, or a vector of strings used by askYesNo to use as default responses for such questions.
         '''
         ''' browserNLdisabled:
         ''' logical: whether newline is disabled as a synonym for "n" in the browser.
@@ -1540,7 +1538,7 @@ RE0:
 
                 For Each value As KeyValuePair(Of String, Object) In values.slots
                     Try
-                        configs.setOption(value.Key, value.Value)
+                        configs.setOption(value.Key, value.Value, envir)
                     Catch ex As Exception
                         Return Internal.debug.stop(ex, envir)
                     End Try
@@ -1571,7 +1569,7 @@ RE0:
                     End If
 
                     Try
-                        values.slots(name) = configs.setOption(name, any.ToString(cfgValue))
+                        values.slots(name) = configs.setOption(name, any.ToString(cfgValue), envir)
                     Catch ex As Exception
                         Return Internal.debug.stop(ex, envir)
                     End Try
