@@ -104,6 +104,10 @@ Namespace Runtime
         ''' <returns></returns>
         Public ReadOnly Property messages As New List(Of Message)
 
+        ''' <summary>
+        ''' the global environment
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property globalEnvironment As GlobalEnvironment
             Get
                 Return [global]

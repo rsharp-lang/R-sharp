@@ -53,6 +53,7 @@ Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Net.Protocols.ContentTypes
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Development.Package
+Imports REnvironment = SMRUCC.Rsharp.Runtime.Environment
 
 Namespace Development.Configuration
 
@@ -159,7 +160,9 @@ Namespace Development.Configuration
         ''' <summary>
         ''' turn strict mode on?
         ''' </summary>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' option(strict = TRUE/FALSE);
+        ''' </returns>
         Public ReadOnly Property [strict] As Boolean
             Get
                 Return getOption("strict", [default]:="on").ParseBoolean
@@ -243,11 +246,11 @@ Namespace Development.Configuration
         ''' <param name="opt"></param>
         ''' <param name="default$"></param>
         ''' <returns></returns>
-        Public Function getOption(opt$, Optional default$ = Nothing) As String
+        Public Function getOption(opt$, Optional default$ = Nothing, Optional env As REnvironment = Nothing) As String
             If configValues.ContainsKey(opt) Then
                 Return configValues(opt)
             Else
-                Return setOption(opt, [default])
+                Return setOption(opt, [default], env)
             End If
         End Function
 
@@ -261,13 +264,17 @@ Namespace Development.Configuration
         ''' This method will also join/update a variable into the 
         ''' sciBASIC.NET framework runtime.
         ''' </remarks>
-        Public Function setOption(opt$, value$) As Object
+        Public Function setOption(opt$, value$, Optional env As REnvironment = Nothing) As Object
             If configValues.ContainsKey(opt) Then
                 configValues(opt) = value
                 file.config.First(Function(c) c.name = opt).text = value
             Else
                 configValues.Add(opt, value)
                 file.config.Add(New NamedValue With {.name = opt, .text = value})
+            End If
+
+            If Not env Is Nothing AndAlso opt = "strict" Then
+                env.globalEnvironment.Rscript.strict = value.ParseBoolean
             End If
 
             Call flush()

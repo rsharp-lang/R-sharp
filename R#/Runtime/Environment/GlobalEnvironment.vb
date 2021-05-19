@@ -71,6 +71,11 @@ Namespace Runtime
         Public ReadOnly Property options As Options
         Public ReadOnly Property packages As PackageManager
         Public ReadOnly Property attachedNamespace As New Dictionary(Of String, PackageNamespace)
+
+        ''' <summary>
+        ''' the R# script host object
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property Rscript As RInterpreter
         Public ReadOnly Property stdout As RContentOutput
         Public ReadOnly Property log4vb_redirect As Boolean = True
