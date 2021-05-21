@@ -115,6 +115,11 @@ Partial Module CLI
                 retryTimes:=retryTimes,
                 timeoutMS:=timeout
             )
+        Else
+            ' add variable values into environment for debug used
+            For Each arg In arguments
+                Call App.JoinVariable(arg.Key, arg.Value.JoinBy("; "))
+            Next
         End If
 
         Dim parameters As NamedValue(Of Object)() = arguments _
