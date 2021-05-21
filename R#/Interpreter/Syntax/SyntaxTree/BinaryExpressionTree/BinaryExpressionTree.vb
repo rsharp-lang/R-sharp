@@ -171,14 +171,10 @@ Namespace Interpreter.SyntaxParser
                     End If
                 End If
 
-                Dim first As SyntaxResult = Expression.CreateExpression(tokenBlocks(Scan0), opts)
+                Dim index As SyntaxResult = parseSymbolIndex(tokenBlocks, opts)
 
-                If first.isException Then
-                    Return first
-                End If
-
-                If TypeOf first.expression Is SymbolReference Then
-                    Return first.expression.SymbolIndexer(tokenBlocks(1), opts)
+                If Not index Is Nothing Then
+                    Return index
                 End If
             End If
 

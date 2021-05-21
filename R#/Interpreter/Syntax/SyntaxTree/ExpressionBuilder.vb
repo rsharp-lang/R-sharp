@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::4afebfc1b2a9977ce6eda98320f3bd83, R#\Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ExpressionBuilder
-    ' 
-    '         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression, parseInvoke
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ExpressionBuilder
+' 
+'         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression, parseInvoke
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -213,6 +213,12 @@ Namespace Interpreter.SyntaxParser
 
                     If Not result Is Nothing Then
                         Return result
+                    Else
+                        result = parseSymbolIndex(code, opts)
+
+                        If Not result Is Nothing Then
+                            Return result
+                        End If
                     End If
                 End If
             ElseIf code = 3 Then
@@ -275,7 +281,7 @@ Binary:
         End Function
 
         ''' <summary>
-        ''' 
+        ''' a(...)
         ''' </summary>
         ''' <param name="code">code block with 2 elements</param>
         ''' <param name="opts"></param>
@@ -292,6 +298,26 @@ Binary:
             End If
 
             Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' a[...]
+        ''' </summary>
+        ''' <param name="code"></param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
+        Friend Function parseSymbolIndex(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim first As SyntaxResult = Expression.CreateExpression(code(Scan0), opts)
+
+            If first.isException Then
+                Return first
+            End If
+
+            If TypeOf first.expression Is SymbolReference Then
+                Return first.expression.SymbolIndexer(code(1).Skip(1).Take(code(1).Length - 2).ToArray, opts)
+            Else
+                Return Nothing
+            End If
         End Function
 
         Private Function getValueAssign(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
