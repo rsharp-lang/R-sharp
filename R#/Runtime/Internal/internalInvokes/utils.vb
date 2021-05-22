@@ -768,17 +768,24 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("system.file")>
         Public Function systemFile(fileName As String, Optional package$ = Nothing, Optional env As Environment = Nothing) As Object
             If Not package.StringEmpty Then
-                If Not RFileSystem.PackageInstalled(package, env) Then
+                Dim pkgDir As String
+
+                ' 优先从已经加载的程序包位置进行加载操作
+                If env.globalEnvironment.attachedNamespace.ContainsKey(package) Then
+                    pkgDir = env.globalEnvironment.attachedNamespace(package).libPath
+                ElseIf Not RFileSystem.PackageInstalled(package, env) Then
                     Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
                 Else
-                    fileName = $"{RFileSystem.GetPackageDir(env)}/{package}/{fileName}".GetFullPath
+                    pkgDir = $"{RFileSystem.GetPackageDir(env)}/{package}"
+                End If
 
-                    If fileName.FileExists Then
-                        Return fileName.GetFullPath
-                    Else
-                        Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
-                        Return Nothing
-                    End If
+                fileName = $"{pkgDir}/{fileName}".GetFullPath
+
+                If fileName.FileExists Then
+                    Return fileName.GetFullPath
+                Else
+                    Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
+                    Return Nothing
                 End If
             Else
                 Return Internal.debug.stop("not implemented!", env)
