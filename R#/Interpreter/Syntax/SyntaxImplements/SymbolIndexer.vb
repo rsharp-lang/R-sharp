@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::583f63867eaac86c4510072ff5e76ef0, R#\Interpreter\Syntax\SyntaxImplements\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::50975c51463fbe155777353271b72d8b, R#\Interpreter\Syntax\SyntaxImplements\SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module SymbolIndexerSyntax
     ' 
-    '         Function: (+2 Overloads) SymbolIndexer
+    '         Function: (+3 Overloads) SymbolIndexer
     ' 
     '         Sub: parseDataframeIndex, parseIndex
     ' 

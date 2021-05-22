@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bd1cc0f616a82c6437261aad85bcc9f5, R#\System\Package\PackageFile\PackageModel.vb"
+﻿#Region "Microsoft.VisualBasic::fef0db97ea5de2d118c2d773d6ca0e31, R#\System\Package\PackageFile\PackageModel.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: assembly, dataSymbols, info, loading, symbols
     '                     unixman
     ' 
-    '         Function: writeSymbols
+    '         Function: ToString, writeSymbols
     ' 
     '         Sub: copyAssembly, Flush, saveDataSymbols, saveDependency, saveSymbols
     '              saveUnixManIndex, writeIndex, writeRuntime

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d369e9da88bd19fdc8179d24499a374b, R#\Runtime\Interop\RInteropAttributes\RInteropAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::baaafdeb304e7f0cacb7702838ac105c, R#\Runtime\Interop\RInteropAttributes\RInteropAttribute.vb"
 
     ' Author:
     ' 
@@ -49,13 +49,6 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: ToString
-    ' 
-    '     Class RApiReturnAttribute
-    ' 
-    '         Properties: returnTypes
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: GetActualReturnType, ToString
     ' 
     '     Class RBasePackageAttribute
     ' 

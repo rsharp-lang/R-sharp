@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4992689094ddc549d6431ddc24d2de17, R#\System\Package\PackageFile\Serialization\Writer.vb"
+﻿#Region "Microsoft.VisualBasic::cdb2a63d893a89dc00ed93699500f55b, R#\System\Package\PackageFile\Serialization\Writer.vb"
 
     ' Author:
     ' 

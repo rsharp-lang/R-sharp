@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2762d0cc78708eeb25c5242041de51d0, R#\Interpreter\ExecuteEngine\Linq\Query\QueryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::d7ddf3c917b125d13c1efca794682335, R#\Interpreter\ExecuteEngine\Linq\Query\QueryExpression.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: Previews
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: GetDataSet, GetSeqValue
+    '         Function: Compile, GetDataSet, GetSeqValue
     ' 
     ' 
     ' /********************************************************************************/

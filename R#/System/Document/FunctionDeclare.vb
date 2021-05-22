@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::20c83c28fc962201090a0fdba62d8cf2, R#\System\Document\FunctionDeclare.vb"
+﻿#Region "Microsoft.VisualBasic::4b09cfc666085fe0b9b399ae3aa1a682, R#\System\Document\FunctionDeclare.vb"
 
     ' Author:
     ' 

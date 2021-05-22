@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::61e97104b1f14f2a7cd32e4fa61c4edd, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb"
+﻿#Region "Microsoft.VisualBasic::55dc39e5ea06e7a70d280c40c2a14c10, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: expressionName, stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, newDataFrame, produceSequenceVector
+    '         Function: Evaluate, newDataFrame, produceSequenceVector, ToString
     ' 
     ' 
     ' /********************************************************************************/

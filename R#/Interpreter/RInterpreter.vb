@@ -1,51 +1,51 @@
-﻿#Region "Microsoft.VisualBasic::a7169c426f2142ae8b23949b7d2e71e5, R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::80bb80b2bead1500882cb2379300a569, R#\Interpreter\RInterpreter.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class RInterpreter
-' 
-'         Properties: configFile, debug, globalEnvir, redirectError2stdout, Rsharp
-'                     silent, strict, warnings
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: [Set], (+2 Overloads) Evaluate, FromEnvironmentConfiguration, InitializeEnvironment, (+3 Overloads) Invoke
-'                   (+2 Overloads) LoadLibrary, options, RedirectOutput, Run, RunInternal
-'                   Source
-' 
-'         Sub: (+3 Overloads) Add, (+2 Overloads) Dispose, Print, PrintMemory
-' 
-' 
-' /********************************************************************************/
+    '     Class RInterpreter
+    ' 
+    '         Properties: configFile, debug, globalEnvir, redirectError2stdout, Rsharp
+    '                     silent, strict, warnings
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: [Set], (+2 Overloads) Evaluate, FromEnvironmentConfiguration, InitializeEnvironment, (+3 Overloads) Invoke
+    '                   (+2 Overloads) LoadLibrary, options, Parse, RedirectOutput, Run
+    '                   RunInternal, Source
+    ' 
+    '         Sub: (+3 Overloads) Add, (+2 Overloads) Dispose, Print, PrintMemory
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
