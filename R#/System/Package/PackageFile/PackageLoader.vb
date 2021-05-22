@@ -159,6 +159,8 @@ Namespace Development.Package.File
                 Return [error]
             End If
 
+            env.attachedNamespace(meta.Package) = pkg
+
             Return Nothing
         End Function
 
