@@ -54,6 +54,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter
 
 Namespace Development.Package.File
 
@@ -129,12 +130,19 @@ Namespace Development.Package.File
                     Return [error]
                 End If
 
-                Call Console.WriteLine($"        {script.FileName}... done")
+                Call Console.WriteLine($"   {script.FileName}... done")
             Next
 
             onload = temp.symbols.TryGetValue(".onLoad")
 
+            ' 2. run '.onLoad'
+            If Not onload Is Nothing Then
+                Dim result = onload.Invoke(env, params:={})
 
+                If Program.isException(result) Then
+                    Return result
+                End If
+            End If
 
             Return Nothing
         End Function
