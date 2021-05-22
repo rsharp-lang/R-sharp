@@ -100,6 +100,17 @@ Module interpreterTest
     End Sub
 
     Sub symbolIndextest()
+        Call R.Parse("	{
+		if (file.exists(url)) {
+			readText(url)
+		} else {
+			getHtml(url)
+		}
+	}
+	:> Html::parse
+	:> graphquery::query(graphquery, raw = raw)
+	;")
+
         Call R.Parse("Html::parse(keyValues$""Other DBs"")")
     End Sub
 

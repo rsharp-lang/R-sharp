@@ -225,8 +225,17 @@ Namespace Development.Package.File
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' this function just add <see cref="PackageModel.symbols"/>
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="script"></param>
+        ''' <param name="loading">
+        ''' a list of dependency expression
+        ''' </param>
+        ''' <returns></returns>
         <Extension>
-        Private Function buildRscript(file As PackageModel, script As String, ByRef loading As List(Of Expression)) As Message
+        Friend Function buildRscript(file As PackageModel, script As String, ByRef loading As List(Of Expression)) As Message
             Dim error$ = Nothing
             Dim exec As Program = Program.CreateProgram(Rscript.FromFile(script), [error]:=[error])
 
