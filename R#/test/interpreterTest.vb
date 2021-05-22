@@ -99,7 +99,13 @@ Module interpreterTest
         Pause()
     End Sub
 
+    Sub symbolIndextest()
+        Call R.Parse("Html::parse(keyValues$""Other DBs"")")
+    End Sub
+
     Sub Main()
+        Call symbolIndextest()
+
         Call joinParserTest()
         Call syntaxTest()
 
