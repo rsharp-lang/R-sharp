@@ -45,16 +45,16 @@ Imports System.IO
 Imports System.IO.Compression
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Development.Configuration
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Development.Configuration
-Imports Microsoft.VisualBasic.Language
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Interpreter
 
 Namespace Development.Package.File
 
@@ -119,7 +119,16 @@ Namespace Development.Package.File
             Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{projDir}/DESCRIPTION")
             Dim [error] As New Value(Of Message)
             Dim onload As DeclareNewFunction
-            Dim temp As New PackageModel With {.symbols = New Dictionary(Of String, Expression)}
+            Dim temp As New PackageModel With {
+                .symbols = New Dictionary(Of String, Expression)
+            }
+            Dim pkg As New PackageNamespace With {
+                .libPath = projDir,
+                .meta = meta,
+                .assembly = ($"{projDir}/assembly") _
+                    .EnumerateFiles("*.dll") _
+                    .ToDictionary(Function(dll) dll.FileName)
+            }
             Dim loading As New List(Of Expression)
 
             Call Console.WriteLine($"R# package '{meta.Package}' hot load:")
@@ -134,6 +143,7 @@ Namespace Development.Package.File
             Next
 
             onload = temp.symbols.TryGetValue(".onLoad")
+            pkg.dependency = loading.loadingDependency.ToArray
 
             ' 2. run '.onLoad'
             If Not onload Is Nothing Then
@@ -142,6 +152,11 @@ Namespace Development.Package.File
                 If Program.isException(result) Then
                     Return result
                 End If
+            End If
+
+            ' 3. load dependency
+            If Not ([error] = env.loadDependency(pkg)) Is Nothing Then
+                Return [error]
             End If
 
             Return Nothing

@@ -54,7 +54,16 @@ Namespace Development.Package.File
 
         Public Property meta As DESCRIPTION
         Public Property checksum As String
+        ''' <summary>
+        ''' the root directory of the package module to load
+        ''' </summary>
+        ''' <returns></returns>
         Public Property libPath As String
+
+        ''' <summary>
+        ''' [library.dll => md5]
+        ''' </summary>
+        ''' <returns></returns>
         Public Property assembly As Dictionary(Of String, String)
         Public Property dependency As Dependency()
         Public Property symbols As Dictionary(Of String, String)
@@ -68,6 +77,15 @@ Namespace Development.Package.File
             End Get
         End Property
 
+        Sub New()
+        End Sub
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="dir">
+        ''' the root directory of the package module to load
+        ''' </param>
         Sub New(dir As String)
             meta = $"{dir}/index.json".LoadJsonFile(Of DESCRIPTION)
             checksum = $"{dir}/CHECKSUM".ReadFirstLine

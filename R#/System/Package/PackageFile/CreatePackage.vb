@@ -275,7 +275,7 @@ Namespace Development.Package.File
         End Function
 
         <Extension>
-        Private Iterator Function loadingDependency(loading As IEnumerable(Of Expression)) As IEnumerable(Of Dependency)
+        Friend Iterator Function loadingDependency(loading As IEnumerable(Of Expression)) As IEnumerable(Of Dependency)
             Dim allDeps = loading _
                 .Where(Function(i)
                            If Not TypeOf i Is [Imports] Then
