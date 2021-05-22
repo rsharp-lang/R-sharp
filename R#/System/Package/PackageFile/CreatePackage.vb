@@ -121,6 +121,7 @@ Namespace Development.Package.File
             Dim loading As New List(Of Expression)
             Dim [error] As New Value(Of Message)
             Dim ignores As Rbuildignore = Rbuildignore.CreatePatterns($"{target}/.Rbuildignore")
+            Dim resource As Rbuildignore = Rbuildignore.CreatePatterns($"{target}/.Rbuildassets")
 
             Call Console.Write($"* checking for file '{(target & "/DESCRIPTION").GetFullPath}' ... ")
 
@@ -161,11 +162,29 @@ Namespace Development.Package.File
             file.loading = loading.loadingDependency.ToArray
 
             Call Console.WriteLine($"     write binary zip package...")
-            file.Flush(outfile)
+            file.Flush(outfile, createAssetList(resource, baseDir:=target.GetDirectoryFullPath))
 
             Call Console.WriteLine("* done!")
 
             Return Nothing
+        End Function
+
+        Private Function createAssetList(resource As Rbuildignore, baseDir As String) As Dictionary(Of String, String)
+            Dim assets As New Dictionary(Of String, String)
+
+            If baseDir.Last <> "/"c Then
+                baseDir = $"{baseDir}/"
+            End If
+
+            For Each file As String In baseDir.ListFiles("*.*")
+                Dim name As String = file.Replace("\", "/").Replace(baseDir, "")
+
+                If resource.IsFileIgnored(name) Then
+                    Call assets.Add(name, file)
+                End If
+            Next
+
+            Return assets
         End Function
 
         <Extension>

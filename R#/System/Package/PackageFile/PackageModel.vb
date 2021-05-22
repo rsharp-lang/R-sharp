@@ -300,7 +300,7 @@ Namespace Development.Package.File
             End Using
         End Sub
 
-        Public Sub Flush(outfile As Stream)
+        Public Sub Flush(outfile As Stream, assets As Dictionary(Of String, String))
             Dim checksum As String = ""
             Dim md5 As New Md5HashProvider
 
@@ -319,6 +319,13 @@ Namespace Development.Package.File
                     Call file.WriteLine(md5.GetMd5Hash(checksum).ToUpper)
                     Call file.Flush()
                 End Using
+
+                For Each asset As KeyValuePair(Of String, String) In assets
+                    Using file As New BinaryWriter(zip.CreateEntry(asset.Key).Open)
+                        Call file.Write(asset.Value.ReadBinary)
+                        Call file.Flush()
+                    End Using
+                Next
             End Using
         End Sub
 
