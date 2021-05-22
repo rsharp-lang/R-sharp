@@ -145,6 +145,12 @@ Namespace Development.Package.File
             onload = temp.symbols.TryGetValue(".onLoad")
             pkg.dependency = loading.loadingDependency.ToArray
 
+            For Each symbol In temp.symbols
+                If symbol.Key <> ".onLoad" Then
+                    Call symbol.Value.Evaluate(env)
+                End If
+            Next
+
             ' 2. run '.onLoad'
             If Not onload Is Nothing Then
                 Dim result = onload.Invoke(env, params:={})
