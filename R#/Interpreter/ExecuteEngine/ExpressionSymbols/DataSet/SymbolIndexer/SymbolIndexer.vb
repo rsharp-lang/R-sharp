@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::725252857888fbfffb24250649d9cd87, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
-    '                   getColumn, getDataframeRowRange, listSubset, ToString, vectorSubset
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class SymbolIndexer
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
+'                   getColumn, getDataframeRowRange, listSubset, ToString, vectorSubset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,6 +57,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -382,6 +383,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Function
 
         Private Function vectorSubset(obj As Object, indexer As Array, env As Environment) As Object
+            If TypeOf obj Is Group Then
+                Dim group = DirectCast(obj, Group)
+
+                If indexer.Length = 1 Then
+                    Return group(DirectCast(asVector(Of Integer)(indexer), Integer())(Scan0) - 1)
+                Else
+                    Return DirectCast(asVector(Of Integer)(indexer), Integer()) _
+                        .Select(Function(i) group(i - 1)) _
+                        .ToArray
+                End If
+            End If
+
             Dim sequence As Array = REnv.asVector(Of Object)(obj)
             Dim Rarray As RIndex
 
