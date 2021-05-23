@@ -66,6 +66,21 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End Get
         End Property
 
+        ''' <summary>
+        ''' get by 0 based index
+        ''' </summary>
+        ''' <param name="i"></param>
+        ''' <returns></returns>
+        Default Public ReadOnly Property Item(i As Integer) As Object
+            Get
+                If i >= group.Length Then
+                    Return Nothing
+                Else
+                    Return group.GetValue(i)
+                End If
+            End Get
+        End Property
+
         Shared Sub New()
             Call printer.AttachInternalConsoleFormatter(Of Group)(AddressOf InternalToString)
         End Sub
