@@ -114,7 +114,23 @@ Module interpreterTest
         Call R.Parse("Html::parse(keyValues$""Other DBs"")")
     End Sub
 
+    Sub ifTest()
+        Call R.Parse("
+const url = (
+    if (Tcode == ""map"") {
+        ""https://www.kegg.jp/entry/ko%s"";
+    } else {
+        gsub(""https://www.genome.jp/entry/pathway+%c%s"", ""%c"", Tcode);
+    }
+);
+
+")
+
+        Pause()
+    End Sub
+
     Sub Main()
+        Call ifTest()
         Call symbolIndextest()
 
         Call joinParserTest()
