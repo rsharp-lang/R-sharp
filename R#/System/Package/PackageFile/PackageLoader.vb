@@ -170,7 +170,8 @@ Namespace Development.Package.File
             Call (From symbol As Expression
                   In temp.symbols.Values
                   Let type As Type = symbol.GetType
-                  Where type.ImplementInterface(Of RFunction)) _
+                  Where type.ImplementInterface(Of RFunction)
+                  Select DirectCast(symbol, RFunction)) _
                      .DoCall(Sub(list)
                                  Call env.attachedNamespace _
                                     .Add(pkg) _
