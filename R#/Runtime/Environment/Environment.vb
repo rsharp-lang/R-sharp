@@ -246,15 +246,20 @@ Namespace Runtime
         End Sub
 
         Public Sub Clear()
-            If Not parent Is Nothing Then
-                ' 20200304 fix bugs for environment inherits mode
-                If Not symbols Is parent.symbols Then
-                    Call symbols.Clear()
-                End If
-                If Not funcSymbols Is parent.funcSymbols Then
-                    Call funcSymbols.Clear()
-                End If
-            End If
+            ' 20210524
+            ' 在这里为了实现function() xxx
+            ' 闭包
+            ' 在这里不将符号列表清空了，否则会出现找不到符号xxx的问题
+
+            'If Not parent Is Nothing Then
+            '    ' 20200304 fix bugs for environment inherits mode
+            '    If Not symbols Is parent.symbols Then
+            '        Call symbols.Clear()
+            '    End If
+            '    If Not funcSymbols Is parent.funcSymbols Then
+            '        Call funcSymbols.Clear()
+            '    End If
+            'End If
 
             Call ifPromise.Clear()
             Call messages.Clear()
@@ -469,6 +474,23 @@ Namespace Runtime
         Private Iterator Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
             Yield GetEnumerator()
         End Function
+
+        Public Shared Operator &(parent As Environment, closure As Environment) As Environment
+            Dim join As New Environment(closure, closure.stackFrame, isInherits:=False)
+
+            For Each func In parent.funcSymbols
+                If Not join.funcSymbols.ContainsKey(func.Key) Then
+                    join.funcSymbols.Add(func.Key, func.Value)
+                End If
+            Next
+            For Each symbol In parent.symbols
+                If Not join.symbols.ContainsKey(symbol.Key) Then
+                    join.symbols.Add(symbol.Key, symbol.Value)
+                End If
+            Next
+
+            Return join
+        End Operator
 
 #Region "IDisposable Support"
         Private disposedValue As Boolean ' To detect redundant calls

@@ -21,3 +21,5 @@ print(hit()); # 4
 print(hit()); # 5
 print(hit()); # 6
 print(hit()); # 7
+
+pause();
