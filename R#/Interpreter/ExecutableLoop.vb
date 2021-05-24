@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9e896cbb5a2d32434bc35f0179468147, R#\Interpreter\ExecutableLoop.vb"
+﻿#Region "Microsoft.VisualBasic::8ea12209042fd69de4e817b8fe4cd9cc, R#\Interpreter\ExecutableLoop.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Constructor: (+2 Overloads) Sub New
     ' 
-    '         Function: Execute, ExecuteCodeLine
+    '         Function: Execute, ExecuteCodeLine, isBreakSignal
     ' 
     '         Sub: configException, printDebug, printMemoryProfile
     ' 

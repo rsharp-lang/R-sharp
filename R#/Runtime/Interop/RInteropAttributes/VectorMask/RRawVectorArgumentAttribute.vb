@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c4340ceeb03df7a31b388ecae7cacc51, R#\Runtime\Interop\RInteropAttributes\RRawVectorArgumentAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::7da3705ee7c18dd7af54e6395ffa60d9, R#\Runtime\Interop\RInteropAttributes\VectorMask\RRawVectorArgumentAttribute.vb"
 
     ' Author:
     ' 
@@ -31,20 +31,12 @@
 
     ' Summaries:
 
-    '     Interface IVectorExpressionLiteral
-    ' 
-    '         Function: ParseVector
-    ' 
     '     Class RRawVectorArgumentAttribute
     ' 
     '         Properties: containsLiteral, parser, vector
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: GetVector
-    ' 
-    '     Structure DefaultVectorParser
-    ' 
-    '         Function: ParseVector
     ' 
     ' 
     ' /********************************************************************************/

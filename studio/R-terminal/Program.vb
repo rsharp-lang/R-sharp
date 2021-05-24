@@ -123,7 +123,10 @@ Module Program
     End Function
 
     ''' <summary>
-    ''' R# script.R ...
+    ''' R# script.R ... 
+    ''' 
+    ''' + ``--attach`` parameter for hot load a package zip file or package dir without installed.
+    ''' 
     ''' </summary>
     ''' <param name="filepath$"></param>
     ''' <param name="args"></param>
@@ -167,6 +170,8 @@ Module Program
         If Not attach.StringEmpty Then
             If attach.FileExists Then
                 Call R.attachPackageFile(zip:=attach)
+            ElseIf attach.DirectoryExists Then
+                Call PackageLoader2.Hotload(attach, R.globalEnvir)
             Else
                 Call Console.WriteLine($"[warning] the specific attach package file '{attach.GetFullPath}' is not found!")
             End If

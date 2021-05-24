@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c33c939e05a981a8ca233d8a1440441, R#\System\Package\PackageFile\Serialization\BlockReader.vb"
+﻿#Region "Microsoft.VisualBasic::f9a9f509cc6f8fb4cd4800e9d8266d49, R#\System\Package\PackageFile\Serialization\BlockReader.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: body, expression, type
     ' 
-    '         Function: Parse, ParseBlock, (+2 Overloads) Read, ToString
+    '         Function: CheckMagic, Parse, ParseBlock, (+2 Overloads) Read, ToString
     ' 
     ' 
     ' /********************************************************************************/

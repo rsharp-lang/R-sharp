@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::74d6be86e0a8e04036363c8359146e39, R#\System\Package\PackageFile\CreatePackage.vb"
+﻿#Region "Microsoft.VisualBasic::acd407c2da805a2725a38737e04ad9ef, R#\System\Package\PackageFile\CreatePackage.vb"
 
     ' Author:
     ' 
@@ -121,6 +121,7 @@ Namespace Development.Package.File
             Dim loading As New List(Of Expression)
             Dim [error] As New Value(Of Message)
             Dim ignores As Rbuildignore = Rbuildignore.CreatePatterns($"{target}/.Rbuildignore")
+            Dim resource As Rbuildignore = Rbuildignore.CreatePatterns($"{target}/.Rbuildassets")
 
             Call Console.Write($"* checking for file '{(target & "/DESCRIPTION").GetFullPath}' ... ")
 
@@ -161,11 +162,29 @@ Namespace Development.Package.File
             file.loading = loading.loadingDependency.ToArray
 
             Call Console.WriteLine($"     write binary zip package...")
-            file.Flush(outfile)
+            file.Flush(outfile, createAssetList(resource, baseDir:=target.GetDirectoryFullPath))
 
             Call Console.WriteLine("* done!")
 
             Return Nothing
+        End Function
+
+        Private Function createAssetList(resource As Rbuildignore, baseDir As String) As Dictionary(Of String, String)
+            Dim assets As New Dictionary(Of String, String)
+
+            If baseDir.Last <> "/"c Then
+                baseDir = $"{baseDir}/"
+            End If
+
+            For Each file As String In baseDir.ListFiles("*.*")
+                Dim name As String = file.Replace("\", "/").Replace(baseDir, "")
+
+                If resource.IsFileIgnored(name) Then
+                    Call assets.Add(name, file)
+                End If
+            Next
+
+            Return assets
         End Function
 
         <Extension>
@@ -206,8 +225,17 @@ Namespace Development.Package.File
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' this function just add <see cref="PackageModel.symbols"/>
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="script"></param>
+        ''' <param name="loading">
+        ''' a list of dependency expression
+        ''' </param>
+        ''' <returns></returns>
         <Extension>
-        Private Function buildRscript(file As PackageModel, script As String, ByRef loading As List(Of Expression)) As Message
+        Friend Function buildRscript(file As PackageModel, script As String, ByRef loading As List(Of Expression)) As Message
             Dim error$ = Nothing
             Dim exec As Program = Program.CreateProgram(Rscript.FromFile(script), [error]:=[error])
 
@@ -247,7 +275,7 @@ Namespace Development.Package.File
         End Function
 
         <Extension>
-        Private Iterator Function loadingDependency(loading As IEnumerable(Of Expression)) As IEnumerable(Of Dependency)
+        Friend Iterator Function loadingDependency(loading As IEnumerable(Of Expression)) As IEnumerable(Of Dependency)
             Dim allDeps = loading _
                 .Where(Function(i)
                            If Not TypeOf i Is [Imports] Then

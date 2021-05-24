@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4c9a858903dbc495ecc5e64a82c893e9, R#\Runtime\Interop\RsharpOperator\BinaryOperator.vb"
+﻿#Region "Microsoft.VisualBasic::17a37ee8276396e63eff0d7b6faf0cab, R#\Runtime\Interop\RsharpOperator\BinaryOperator.vb"
 
     ' Author:
     ' 
@@ -31,16 +31,12 @@
 
     ' Summaries:
 
-    '     Delegate Function
-    ' 
-    ' 
     '     Class BinaryOperator
     ' 
     '         Properties: left, operatorSymbol, right
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: Execute, ToString
-    ' 
     ' 
     ' 
     ' /********************************************************************************/

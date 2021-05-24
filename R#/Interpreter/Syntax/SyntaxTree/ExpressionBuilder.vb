@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4afebfc1b2a9977ce6eda98320f3bd83, R#\Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb"
+﻿#Region "Microsoft.VisualBasic::802489a9840aa20857935d3f8d57cb6a, R#\Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb"
 
     ' Author:
     ' 
@@ -34,6 +34,7 @@
     '     Module ExpressionBuilder
     ' 
     '         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression, parseInvoke
+    '                   parseSymbolIndex
     ' 
     ' 
     ' /********************************************************************************/
@@ -213,6 +214,12 @@ Namespace Interpreter.SyntaxParser
 
                     If Not result Is Nothing Then
                         Return result
+                    Else
+                        result = parseSymbolIndex(code, opts)
+
+                        If Not result Is Nothing Then
+                            Return result
+                        End If
                     End If
                 End If
             ElseIf code = 3 Then
@@ -275,7 +282,7 @@ Binary:
         End Function
 
         ''' <summary>
-        ''' 
+        ''' a(...)
         ''' </summary>
         ''' <param name="code">code block with 2 elements</param>
         ''' <param name="opts"></param>
@@ -292,6 +299,26 @@ Binary:
             End If
 
             Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' a[...]
+        ''' </summary>
+        ''' <param name="code"></param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
+        Friend Function parseSymbolIndex(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim first As SyntaxResult = Expression.CreateExpression(code(Scan0), opts)
+
+            If first.isException Then
+                Return first
+            End If
+
+            If TypeOf first.expression Is SymbolReference Then
+                Return first.expression.SymbolIndexer(code(1).Skip(1).Take(code(1).Length - 2).ToArray, opts)
+            Else
+                Return Nothing
+            End If
         End Function
 
         Private Function getValueAssign(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult

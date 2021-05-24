@@ -55,8 +55,8 @@ Namespace Interpreter.SyntaxParser
 
     Friend Class PipelineProcessor : Inherits GenericSymbolOperatorProcessor
 
-        Public Sub New()
-            MyBase.New(":>")
+        Public Sub New(altStyle As Boolean)
+            MyBase.New(If(altStyle, "|>", ":>"))
         End Sub
 
         Protected Overrides Function expression(a As [Variant](Of SyntaxResult, String), b As [Variant](Of SyntaxResult, String), opts As SyntaxBuilderOptions) As SyntaxResult

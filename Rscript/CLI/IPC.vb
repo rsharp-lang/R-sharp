@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8283d7165166b789263f7f604c768ce6, Rscript\CLI\IPC.vb"
+﻿#Region "Microsoft.VisualBasic::1400203fbe95f515d5575402992a1573, Rscript\CLI\IPC.vb"
 
     ' Author:
     ' 
@@ -115,6 +115,11 @@ Partial Module CLI
                 retryTimes:=retryTimes,
                 timeoutMS:=timeout
             )
+        Else
+            ' add variable values into environment for debug used
+            For Each arg In arguments
+                Call App.JoinVariable(arg.Key, arg.Value.JoinBy("; "))
+            Next
         End If
 
         Dim parameters As NamedValue(Of Object)() = arguments _

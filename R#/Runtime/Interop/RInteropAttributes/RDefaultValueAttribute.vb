@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ed24fd57ddc7b430f3d11b3f2a7dd3cb, R#\Runtime\Interop\RInteropAttributes\RDefaultValueAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::3fd5164868c1c23aed8781ddfd4f0f91, R#\Runtime\Interop\RInteropAttributes\RDefaultValueAttribute.vb"
 
     ' Author:
     ' 
@@ -37,10 +37,6 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: ParseDefaultValue, ToString
-    ' 
-    '     Class RDefaultExpressionAttribute
-    ' 
-    '         Function: ParseDefaultExpression
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4baad676d57435cad035c435b530987c, R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\BinaryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::00861aa940e86afb00abac7af9f45a8d, R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\BinaryExpression.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class BinaryExpression
     ' 
-    '         Properties: LikeValueAssign, name
+    '         Properties: isEquivalent, LikeValueAssign, name
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: Exec, ToString

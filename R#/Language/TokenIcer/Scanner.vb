@@ -192,7 +192,7 @@ Namespace Language.TokenIcer
         ''' + ==
         ''' </summary>
         Shared ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c, "!"}
-        Shared ReadOnly longOperators As Index(Of String) = {"<=", "<-", "&&", "||", ":>", "::", "<<", "->", "=>", ">=", "==", "!=", "++", "--"}
+        Shared ReadOnly longOperators As Index(Of String) = {"<=", "<-", "&&", "||", ":>", "::", "<<", "->", "=>", ">=", "==", "!=", "++", "--", "|>"}
         Shared ReadOnly shortOperators As Index(Of Char) = {"$"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
         Shared ReadOnly keywords As Index(Of String) = {
             "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
@@ -326,7 +326,7 @@ Namespace Language.TokenIcer
                     ' 如果上一个单词是一个对象引用符号或者小括号
                     ' 则可能是symbol index引用
                     ' 则$符号不应该被加入到缓存之中
-                    If lastPopoutToken Is Nothing Then
+                    If lastPopoutToken Is Nothing OrElse lastPopoutToken.name = TokenType.open Then
                         If buffer > 0 Then
                             ' a$"name b"
                             Return populateToken().joinNext(c)
@@ -447,7 +447,7 @@ Namespace Language.TokenIcer
             Select Case text
                 'Case RInterpreter.lastVariableName
                 '    Return New Token With {.name = TokenType.identifier, .text = text}
-                Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||", "$"
+                Case "|>", ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||", "$"
                     Return New Token With {.name = TokenType.operator, .text = text}
                 Case ":"
                     Return New Token With {.name = TokenType.sequence, .text = text}

@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::d25630e6eb80df5008b077ee867db9e3, R#\System\Package\PackageFile\PackageLoader.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module PackageLoader2
-    ' 
-    '         Function: callOnLoad, CheckPackage, GetPackageDirectory, GetPackageIndex, GetPackageName
-    '                   loadDependency, LoadPackage
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module PackageLoader2
+' 
+'         Function: callOnLoad, CheckPackage, GetPackageDirectory, GetPackageIndex, GetPackageName
+'                   loadDependency, LoadPackage
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -45,14 +45,18 @@ Imports System.IO
 Imports System.IO.Compression
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Development.Configuration
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Development.Configuration
-Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Development.Package.File
 
@@ -113,6 +117,70 @@ Namespace Development.Package.File
             End Using
         End Function
 
+        Public Function Hotload(projDir As String, env As GlobalEnvironment) As Message
+            Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{projDir}/DESCRIPTION")
+            Dim [error] As New Value(Of Message)
+            Dim onload As DeclareNewFunction
+            Dim temp As New PackageModel With {
+                .symbols = New Dictionary(Of String, Expression)
+            }
+            Dim pkg As New PackageNamespace With {
+                .libPath = projDir,
+                .meta = meta,
+                .assembly = ($"{projDir}/assembly") _
+                    .EnumerateFiles("*.dll") _
+                    .ToDictionary(Function(dll) dll.FileName)
+            }
+            Dim loading As New List(Of Expression)
+
+            Call Console.WriteLine($"R# package '{meta.Package}' hot load:")
+
+            ' 1. load R symbols
+            For Each script As String In $"{projDir}/R".ListFiles("*.R")
+                If Not ([error] = temp.buildRscript(script, loading)) Is Nothing Then
+                    Return [error]
+                End If
+
+                Call Console.WriteLine($"   {script.FileName}... done")
+            Next
+
+            onload = temp.symbols.TryGetValue(".onLoad")
+            pkg.dependency = loading.loadingDependency.ToArray
+
+            For Each symbol In temp.symbols
+                If symbol.Key <> ".onLoad" Then
+                    Call symbol.Value.Evaluate(env)
+                End If
+            Next
+
+            ' 2. run '.onLoad'
+            If Not onload Is Nothing Then
+                Dim result = onload.Invoke(env, params:={})
+
+                If Program.isException(result) Then
+                    Return result
+                End If
+            End If
+
+            ' 3. load dependency
+            If Not ([error] = env.loadDependency(pkg)) Is Nothing Then
+                Return [error]
+            End If
+
+            Call (From symbol As Expression
+                  In temp.symbols.Values
+                  Let type As Type = symbol.GetType
+                  Where type.ImplementInterface(Of RFunction)
+                  Select DirectCast(symbol, RFunction)) _
+                     .DoCall(Sub(list)
+                                 Call env.attachedNamespace _
+                                    .Add(pkg) _
+                                    .AddSymbols(list)
+                             End Sub)
+
+            Return Nothing
+        End Function
+
         ''' <summary>
         ''' attach installed package
         ''' </summary>
@@ -122,25 +190,41 @@ Namespace Development.Package.File
             Dim [namespace] As New PackageNamespace(dir)
             Dim debugEcho As Boolean = env.debugMode
             Dim result As New Value(Of Message)
+            Dim symbolExpression As Expression
+            Dim symbols As New List(Of RFunction)
 
             If debugEcho Then
                 Call Console.WriteLine($"load package from directory: '{dir}'.")
             End If
 
+            ' 1. load R symbols
             For Each symbol As NamedValue(Of String) In [namespace].EnumerateSymbols
                 Using bin As New BinaryReader($"{dir}/src/{symbol.Value}".Open)
-                    Call BlockReader.Read(bin).Parse(desc:=[namespace].meta).Evaluate(env)
+                    symbolExpression = BlockReader _
+                        .Read(bin) _
+                        .Parse(desc:=[namespace].meta)
+
+                    Call symbolExpression.Evaluate(env)
+
+                    If symbolExpression.GetType.ImplementInterface(Of RFunction) Then
+                        Call symbols.Add(symbolExpression)
+                    End If
                 End Using
             Next
 
+            ' 2. run '.onLoad'
             If Not (result = env.callOnLoad(pkg:=[namespace])) Is Nothing Then
                 Return result
             End If
+
+            ' 3. load dependency
             If Not (result = env.loadDependency(pkg:=[namespace])) Is Nothing Then
                 Return result
             End If
 
-            env.attachedNamespace([namespace].packageName) = [namespace]
+            Call env.attachedNamespace _
+                .Add([namespace]) _
+                .AddSymbols(symbols)
 
             Return Nothing
         End Function

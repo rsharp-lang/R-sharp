@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9866dd9fd1358111799ecd1577f4a047, R#\Runtime\Internal\internalInvokes\utils.vb"
+﻿#Region "Microsoft.VisualBasic::04173971cda59548506cf515c6d660e4, R#\Runtime\Internal\internalInvokes\utils.vb"
 
 ' Author:
 ' 
@@ -656,8 +656,7 @@ Namespace Runtime.Internal.Invokes
             If package.IsNullOrEmpty Then
                 package = env.globalEnvironment _
                     .attachedNamespace _
-                    .Keys _
-                    .ToArray
+                    .packageNames
             End If
 
             For Each pkgFile As String In package.Select(Function(pkgName) $"{lib_loc}/{pkgName}")
@@ -672,13 +671,13 @@ Namespace Runtime.Internal.Invokes
             ' 直接使用程序包之中的路径文件夹
             Dim attached = env.globalEnvironment.attachedNamespace
 
-            For Each pkgNs As PackageNamespace In package _
-                .Where(Function(ns) attached.ContainsKey(ns)) _
+            For Each pkgNs As NamespaceEnvironment In package _
+                .Where(Function(ns) attached.hasNamespace(ns)) _
                 .Select(Function(ns)
                             Return attached(ns)
                         End Function)
 
-                If Not (err = env.dataSearchByPackageDir(name, pkgNs.libPath, hit)) Is Nothing Then
+                If Not (err = env.dataSearchByPackageDir(name, pkgNs.libpath, hit)) Is Nothing Then
                     Return err.Value
                 ElseIf hit Then
                     Return Nothing
@@ -768,17 +767,24 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("system.file")>
         Public Function systemFile(fileName As String, Optional package$ = Nothing, Optional env As Environment = Nothing) As Object
             If Not package.StringEmpty Then
-                If Not RFileSystem.PackageInstalled(package, env) Then
+                Dim pkgDir As String
+
+                ' 优先从已经加载的程序包位置进行加载操作
+                If env.globalEnvironment.attachedNamespace.hasNamespace(package) Then
+                    pkgDir = env.globalEnvironment.attachedNamespace(package).libpath
+                ElseIf Not RFileSystem.PackageInstalled(package, env) Then
                     Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
                 Else
-                    fileName = $"{RFileSystem.GetPackageDir(env)}/{package}/{fileName}".GetFullPath
+                    pkgDir = $"{RFileSystem.GetPackageDir(env)}/{package}"
+                End If
 
-                    If fileName.FileExists Then
-                        Return fileName.GetFullPath
-                    Else
-                        Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
-                        Return Nothing
-                    End If
+                fileName = $"{pkgDir}/{fileName}".GetFullPath
+
+                If fileName.FileExists Then
+                    Return fileName.GetFullPath
+                Else
+                    Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
+                    Return Nothing
                 End If
             Else
                 Return Internal.debug.stop("not implemented!", env)

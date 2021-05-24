@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a568fcc4e3c200ab519bd3f256a9f973, R#\Interpreter\Syntax\SyntaxImplements\LinqExpressionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::1a403f4b45863a70b4470e0c6c42372a, R#\Interpreter\Syntax\SyntaxImplements\LinqExpressionSyntax.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,48 @@
-﻿
+﻿#Region "Microsoft.VisualBasic::5c6eb8540180d5bbf5ea48d92359cdf7, studio\Rsharp_kit\MLkit\hiddenMarkov.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    ' Module hiddenMarkov
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    '     Function: backwardAlgorithm, baumWelchAlgorithm, bayesTheorem, forwardAlgorithm, getChain
+    '               HMM, MarkovChain, printAlpha, printBeta, printViterbi
+    '               sequenceProb, statesMatrix, transMatrix, viterbiAlgorithm
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.DataMining.HiddenMarkovChain
@@ -162,3 +206,4 @@ Module hiddenMarkov
     End Function
 
 End Module
+

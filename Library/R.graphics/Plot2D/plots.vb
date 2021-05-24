@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::73ead45794c3dab16448bb21a231752b, Library\R.graphics\Plot2D\plots.vb"
+﻿#Region "Microsoft.VisualBasic::700b57b7e76d3b78c0cb8e0821a80c38, Library\R.graphics\Plot2D\plots.vb"
 
     ' Author:
     ' 

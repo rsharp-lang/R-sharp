@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f046e3d239b294d7ac3a04c706593d0a, R#\Test\interpreterTest.vb"
+﻿#Region "Microsoft.VisualBasic::6cb9f4277b19abfa72549ff329cc0d91, R#\Test\interpreterTest.vb"
 
     ' Author:
     ' 
@@ -39,18 +39,18 @@
     '          lastSymbolTest, Main, markdownTest, missingSymbolInStringInterpolate, moduleTest
     '          negativeValTest, numberLiteralsTest, objClasstest, orDefaultTest, printClassTest
     '          regexpTest, sequenceGeneratorTest, strictTest, suppressTest, syntaxErrorTest
-    '          unaryNegTest, usingTest, whileTest, withTest
+    '          syntaxTest, unaryNegTest, usingTest, whileTest, withTest
     ' module test1
     ' 
     '     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, constantTest
     '          dataframeIndexTest, dataframeTest, declareFunctionTest, declareTest, elementIndexerTest
     '          exceptionHandler, forLoop2, forLoopTest, genericTest, iifTest
-    '          ImportsDll, inTest, invokeTest, lambdaTest, lambdaTest2
-    '          lambdaTest3, linqPipelineTest, linqTest, listoperationtest, listTest
-    '          logicalTest, nameAccessorTest, namespaceTest, namesTest, optionsTest
-    '          packageTest, parameterTest, pipelineParameterBugTest, pipelineTest, sourceFunctionTest
-    '          sourceScripttest, StackTest, stringInterpolateTest, symbolNotFoundTest, testScript
-    '          tupleTest, tupleValueAssignTest, whichTest
+    '          ImportsDll, inTest, invokeTest, joinParserTest, lambdaTest
+    '          lambdaTest2, lambdaTest3, linqPipelineTest, linqTest, listoperationtest
+    '          listTest, logicalTest, nameAccessorTest, namespaceTest, namesTest
+    '          optionsTest, packageTest, parameterTest, pipelineParameterBugTest, pipelineTest
+    '          sourceFunctionTest, sourceScripttest, StackTest, stringInterpolateTest, symbolNotFoundTest
+    '          testScript, tupleTest, tupleValueAssignTest, whichTest
     ' module test2
     ' 
     ' 
@@ -99,14 +99,23 @@ Module interpreterTest
         Pause()
     End Sub
 
-    'Sub closureEnvironmentTest()
+    Sub symbolIndextest()
+        Call R.Parse("	{
+		if (file.exists(url)) {
+			readText(url)
+		} else {
+			getHtml(url)
+		}
+	}
+	:> Html::parse
+	:> graphquery::query(graphquery, raw = raw)
+	;")
 
-    'End Sub
-
+        Call R.Parse("Html::parse(keyValues$""Other DBs"")")
+    End Sub
 
     Sub Main()
-
-        Call closureEnvironmentTest()
+        Call symbolIndextest()
 
         Call joinParserTest()
         Call syntaxTest()

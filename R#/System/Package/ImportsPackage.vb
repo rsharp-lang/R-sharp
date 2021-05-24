@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::be0722221ad9e616f6c2e57681e1ad9d, R#\System\Package\ImportsPackage.vb"
+﻿#Region "Microsoft.VisualBasic::21a66486276615f908b90617bf4352f7, R#\System\Package\ImportsPackage.vb"
 
 ' Author:
 ' 
@@ -35,7 +35,7 @@
 ' 
 '         Function: (+2 Overloads) GetAllApi, ImportsStatic, ImportsStaticInternalImpl
 ' 
-'         Sub: ImportsInstance
+'         Sub: ImportsInstance, ImportsSymbolLanguages
 ' 
 ' 
 ' /********************************************************************************/
@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Interop.Operator
 
@@ -187,6 +188,10 @@ Namespace Development.Package
                     masked += symbol.name
                 End If
             Next
+
+            Call [global].attachedNamespace _
+                .Add(package.NamespaceEntry.Namespace, package.Assembly.Location) _
+                .AddSymbols(Rmethods.Select(Function(api) DirectCast(api, RFunction)))
 
             ' load types
             Dim types As RTypeExportAttribute() = package _

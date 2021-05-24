@@ -173,11 +173,14 @@ Namespace Runtime.Interop
             Me.isCollection = raw.ImplementInterface(GetType(IEnumerable)) AndAlso Not raw Is GetType(String)
             Me.mode = raw.GetRTypeCode
             Me.isEnvironment = raw.IsInheritsFrom(GetType(Environment), strict:=False)
+
+            Static countNames As Index(Of String) = {"Count", "count", "Length", "length", "len"}
+
             Me.getCount = raw _
                 .GetProperties(PublicProperty) _
                 .Where(Function(p)
                            Return p.CanRead AndAlso
-                                  p.Name = "Count" AndAlso
+                                  p.Name Like countNames AndAlso
                                   p.PropertyType Is GetType(Integer) AndAlso
                                   p.GetIndexParameters.IsNullOrEmpty
                        End Function) _

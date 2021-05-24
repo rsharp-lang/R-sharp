@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6517c55145cbd09bca46913d6dfa8a31, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
+﻿#Region "Microsoft.VisualBasic::2d9f7ad5ebe6525149f0fd3f3ee1a499, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
 
 ' Author:
 ' 
@@ -171,21 +171,18 @@ Namespace Interpreter.SyntaxParser
                     End If
                 End If
 
-                Dim first As SyntaxResult = Expression.CreateExpression(tokenBlocks(Scan0), opts)
+                Dim index As SyntaxResult = parseSymbolIndex(tokenBlocks, opts)
 
-                If first.isException Then
-                    Return first
-                End If
-
-                If TypeOf first.expression Is SymbolReference Then
-                    Return first.expression.SymbolIndexer(tokenBlocks(1), opts)
+                If Not index Is Nothing Then
+                    Return index
                 End If
             End If
 
             Dim processors As GenericSymbolOperatorProcessor() = {
                 New NameMemberReferenceProcessor(),
                 New NamespaceReferenceProcessor(),
-                New PipelineProcessor(),     ' pipeline操作符是优先度最高的
+                New PipelineProcessor(True),     ' pipeline操作符是优先度最高的
+                New PipelineProcessor(False),
                 New VectorAppendProcessor()  ' append操作符
             }
 

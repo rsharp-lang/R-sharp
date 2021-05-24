@@ -1,45 +1,45 @@
-﻿#Region "Microsoft.VisualBasic::cb54ff6f1f571eb1a1c23eb3d740b87f, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb"
+﻿#Region "Microsoft.VisualBasic::7f30535aea49f8e100662ba3758cb580, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class Require
-' 
-'         Properties: expressionName, packages, type
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: Evaluate, ToString
-' 
-' 
-' /********************************************************************************/
+    '     Class Require
+    ' 
+    '         Properties: expressionName, options, packages, type
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: Evaluate, getOptions, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

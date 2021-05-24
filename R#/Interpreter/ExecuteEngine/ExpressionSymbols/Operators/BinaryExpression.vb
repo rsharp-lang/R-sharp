@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9d6833a0347447dbdad75fab29a378ed, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::c6e95965fa8ff14056a942f353400f31, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb"
 
 ' Author:
 ' 
@@ -33,7 +33,7 @@
 
 '     Class BinaryExpression
 ' 
-'         Properties: expressionName, type
+'         Properties: [operator], expressionName, left, right, type
 ' 
 '         Constructor: (+1 Overloads) Sub New
 '         Function: Evaluate, ToString, vectorCast
@@ -43,6 +43,7 @@
 
 #End Region
 
+Imports System.Text.RegularExpressions
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
@@ -120,7 +121,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End If
 
             ' tleft/tright will be nothing if the element type is void type
-            If tleft?.raw Like RType.characters OrElse tright?.raw Like RType.characters Then
+            If (tleft?.raw Like RType.characters) OrElse (tright?.raw Like RType.characters) OrElse (tright?.raw Is GetType(Regex)) Then
                 Return StringBinaryOperator(envir, a, b, [operator])
             ElseIf tleft?.raw Like RType.logicals AndAlso tright?.raw Like RType.logicals Then
                 Select Case [operator]

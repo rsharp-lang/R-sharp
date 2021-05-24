@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bd1cc0f616a82c6437261aad85bcc9f5, R#\System\Package\PackageFile\PackageModel.vb"
+﻿#Region "Microsoft.VisualBasic::fef0db97ea5de2d118c2d773d6ca0e31, R#\System\Package\PackageFile\PackageModel.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: assembly, dataSymbols, info, loading, symbols
     '                     unixman
     ' 
-    '         Function: writeSymbols
+    '         Function: ToString, writeSymbols
     ' 
     '         Sub: copyAssembly, Flush, saveDataSymbols, saveDependency, saveSymbols
     '              saveUnixManIndex, writeIndex, writeRuntime
@@ -300,7 +300,7 @@ Namespace Development.Package.File
             End Using
         End Sub
 
-        Public Sub Flush(outfile As Stream)
+        Public Sub Flush(outfile As Stream, assets As Dictionary(Of String, String))
             Dim checksum As String = ""
             Dim md5 As New Md5HashProvider
 
@@ -319,6 +319,13 @@ Namespace Development.Package.File
                     Call file.WriteLine(md5.GetMd5Hash(checksum).ToUpper)
                     Call file.Flush()
                 End Using
+
+                For Each asset As KeyValuePair(Of String, String) In assets
+                    Using file As New BinaryWriter(zip.CreateEntry(asset.Key).Open)
+                        Call file.Write(asset.Value.ReadBinary)
+                        Call file.Flush()
+                    End Using
+                Next
             End Using
         End Sub
 

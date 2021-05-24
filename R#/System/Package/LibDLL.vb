@@ -73,8 +73,8 @@ Namespace Development.Package
         Private Shared Function getDllFromAttachedPackages(libDll As String, globalEnvironment As GlobalEnvironment) As String
             Dim location As Value(Of String) = ""
 
-            For Each pkg As PackageNamespace In globalEnvironment.attachedNamespace.Values
-                Dim assemblyDir As String = $"{pkg.libPath}/assembly"
+            For Each pkg As NamespaceEnvironment In globalEnvironment.attachedNamespace
+                Dim assemblyDir As String = $"{pkg.libpath}/assembly"
 
                 If (location = $"{assemblyDir}/{libDll}.dll").FileExists Then
                     Return location
