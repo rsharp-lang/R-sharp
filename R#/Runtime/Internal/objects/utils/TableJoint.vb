@@ -7,7 +7,7 @@ Namespace Runtime.Internal.Object.Utils
     Module TableJoint
 
         <ExportAPI("union_joint")>
-        Public Function union(x As dataframe, y As dataframe, Optional env As Environment = Nothing) As dataframe
+        Public Function union(x As dataframe, y As dataframe, Optional null As Object = Nothing, Optional env As Environment = Nothing) As dataframe
             If x Is Nothing Then
                 Return y
             ElseIf y Is Nothing Then
@@ -24,8 +24,8 @@ Namespace Runtime.Internal.Object.Utils
                 .makeNames(unique:=True) _
                 .Select(Function(vec) (vec, New List(Of Object))) _
                 .ToArray
-            Dim emptyLeft As New TableRow With {.cells = Repeats(Of Object)(Nothing, colleft.Length)}
-            Dim emptyRight As New TableRow With {.cells = Repeats(Of Object)(Nothing, colright.Length)}
+            Dim emptyLeft As New TableRow With {.cells = Repeats(Of Object)(null, colleft.Length)}
+            Dim emptyRight As New TableRow With {.cells = Repeats(Of Object)(null, colright.Length)}
 
             For Each id As String In unionId
                 Dim cl As TableRow = left.TryGetValue(id, [default]:=emptyLeft)
