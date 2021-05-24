@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::04173971cda59548506cf515c6d660e4, R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module utils
-    ' 
-    '         Function: data, dataSearchByPackageDir, debugTool, description, FindSystemFile
-    '                   GetInstalledPackages, head, installPackages, keyGroups, md5
-    '                   memorySize, now, readFile, system, systemFile
-    '                   wget
-    ' 
-    '         Sub: cls, pause, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module utils
+' 
+'         Function: data, dataSearchByPackageDir, debugTool, description, FindSystemFile
+'                   GetInstalledPackages, head, installPackages, keyGroups, md5
+'                   memorySize, now, readFile, system, systemFile
+'                   wget
+' 
+'         Sub: cls, pause, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -656,8 +656,7 @@ Namespace Runtime.Internal.Invokes
             If package.IsNullOrEmpty Then
                 package = env.globalEnvironment _
                     .attachedNamespace _
-                    .Keys _
-                    .ToArray
+                    .packageNames
             End If
 
             For Each pkgFile As String In package.Select(Function(pkgName) $"{lib_loc}/{pkgName}")
@@ -672,13 +671,13 @@ Namespace Runtime.Internal.Invokes
             ' 直接使用程序包之中的路径文件夹
             Dim attached = env.globalEnvironment.attachedNamespace
 
-            For Each pkgNs As PackageNamespace In package _
-                .Where(Function(ns) attached.ContainsKey(ns)) _
+            For Each pkgNs As NamespaceEnvironment In package _
+                .Where(Function(ns) attached.hasNamespace(ns)) _
                 .Select(Function(ns)
                             Return attached(ns)
                         End Function)
 
-                If Not (err = env.dataSearchByPackageDir(name, pkgNs.libPath, hit)) Is Nothing Then
+                If Not (err = env.dataSearchByPackageDir(name, pkgNs.libpath, hit)) Is Nothing Then
                     Return err.Value
                 ElseIf hit Then
                     Return Nothing
@@ -771,8 +770,8 @@ Namespace Runtime.Internal.Invokes
                 Dim pkgDir As String
 
                 ' 优先从已经加载的程序包位置进行加载操作
-                If env.globalEnvironment.attachedNamespace.ContainsKey(package) Then
-                    pkgDir = env.globalEnvironment.attachedNamespace(package).libPath
+                If env.globalEnvironment.attachedNamespace.hasNamespace(package) Then
+                    pkgDir = env.globalEnvironment.attachedNamespace(package).libpath
                 ElseIf Not RFileSystem.PackageInstalled(package, env) Then
                     Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
                 Else
