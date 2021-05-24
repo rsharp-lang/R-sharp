@@ -114,7 +114,23 @@ Module interpreterTest
         Call R.Parse("Html::parse(keyValues$""Other DBs"")")
     End Sub
 
+    Sub ifTest()
+        Call R.Parse("
+const url = (
+    if (Tcode == ""map"") {
+        ""https://www.kegg.jp/entry/ko%s"";
+    } else {
+        gsub(""https://www.genome.jp/entry/pathway+%c%s"", ""%c"", Tcode);
+    }
+);
+
+")
+
+        Pause()
+    End Sub
+
     Sub Main()
+        Call ifTest()
         Call symbolIndextest()
 
         Call joinParserTest()
@@ -607,9 +623,11 @@ print(1.0:10.0);
     }
 }")
         Call R.Evaluate("let inner = x(3)")
-        Call R.Evaluate("print(inner())")
-        Call R.Evaluate("print(inner())")
-        Call R.Evaluate("print(inner())")
+        Call R.Evaluate("print(inner())") ' 3; 3 ^ 2
+        Call R.Evaluate("print(inner())") ' 4; 4 ^ 2
+        Call R.Evaluate("print(inner())") ' 5; 5 ^ 2
+
+        Call R.PrintMemory()
 
         Pause()
     End Sub

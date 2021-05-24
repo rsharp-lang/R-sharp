@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::48412fe0556de288281ad633459c44bd, R#\Runtime\Environment\Environment.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Environment
-    ' 
-    '         Properties: funcSymbols, globalEnvironment, isGlobal, last, messages
-    '                     parent, stackFrame, stackTrace, symbols
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    ' 
-    '         Function: asRVector, AssignSymbol, enumerateFunctions, Evaluate, FindFunction
-    '                   FindFunctionWithNamespaceRestrict, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator, Push
-    '                   ToString
-    ' 
-    '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, redirectError
-    '              redirectWarning, setStackInfo
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Environment
+' 
+'         Properties: funcSymbols, globalEnvironment, isGlobal, last, messages
+'                     parent, stackFrame, stackTrace, symbols
+' 
+'         Constructor: (+3 Overloads) Sub New
+' 
+'         Function: asRVector, AssignSymbol, enumerateFunctions, Evaluate, FindFunction
+'                   FindFunctionWithNamespaceRestrict, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator, Push
+'                   ToString
+' 
+'         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, redirectError
+'              redirectWarning, setStackInfo
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -245,15 +246,20 @@ Namespace Runtime
         End Sub
 
         Public Sub Clear()
-            If Not parent Is Nothing Then
-                ' 20200304 fix bugs for environment inherits mode
-                If Not symbols Is parent.symbols Then
-                    Call symbols.Clear()
-                End If
-                If Not funcSymbols Is parent.funcSymbols Then
-                    Call funcSymbols.Clear()
-                End If
-            End If
+            ' 20210524
+            ' 在这里为了实现function() xxx
+            ' 闭包
+            ' 在这里不将符号列表清空了，否则会出现找不到符号xxx的问题
+
+            'If Not parent Is Nothing Then
+            '    ' 20200304 fix bugs for environment inherits mode
+            '    If Not symbols Is parent.symbols Then
+            '        Call symbols.Clear()
+            '    End If
+            '    If Not funcSymbols Is parent.funcSymbols Then
+            '        Call funcSymbols.Clear()
+            '    End If
+            'End If
 
             Call ifPromise.Clear()
             Call messages.Clear()
@@ -276,27 +282,22 @@ Namespace Runtime
             ElseIf [inherits] AndAlso Not parent Is Nothing Then
                 Return parent.FindSymbol(name)
             ElseIf name.IndexOf("::") > 0 Then
-                Return FindFunctionWithNamespaceRestrict(name, [inherits]:=[inherits])
+                Return FindFunctionWithNamespaceRestrict(name)
             Else
                 Return Nothing
             End If
         End Function
 
-        Public Function FindFunctionWithNamespaceRestrict(name As String, Optional [inherits] As Boolean = True) As Symbol
+        Public Function FindFunctionWithNamespaceRestrict(name As String) As Symbol
             Dim tokens As String() = Strings.Split(name, "::")
-            Dim funcSymbol As Symbol = FindFunction(name:=tokens(1), [inherits]:=[inherits])
+            Dim pkgName As String = tokens(Scan0)
+            Dim symbolName As String = tokens(1)
+            Dim funcSymbol As RFunction = globalEnvironment.attachedNamespace.FindSymbol(pkgName, symbolName)
 
-            If Not funcSymbols Is Nothing Then
-                Dim func As RMethodInfo = funcSymbols(tokens(1)).value
-                Dim pkgInfo As Package = func.GetPackageInfo
-
-                If pkgInfo.namespace <> tokens(Scan0) Then
-                    Return Nothing
-                Else
-                    Return funcSymbol
-                End If
-            Else
+            If funcSymbol Is Nothing Then
                 Return Nothing
+            Else
+                Return New Symbol(symbolName, funcSymbol)
             End If
         End Function
 
@@ -312,6 +313,8 @@ Namespace Runtime
         Public Function FindFunction(name As String, Optional [inherits] As Boolean = True) As Symbol
             If (name.First = "["c AndAlso name.Last = "]"c) Then
                 Return globalEnvironment.FindFunction(name.GetStackValue("[", "]"))
+            ElseIf name.IndexOf("::") > 0 Then
+                Return FindFunctionWithNamespaceRestrict(name)
             End If
 
             If symbols.ContainsKey(name) AndAlso symbols(name).isCallable Then
@@ -471,6 +474,23 @@ Namespace Runtime
         Private Iterator Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
             Yield GetEnumerator()
         End Function
+
+        Public Shared Operator &(parent As Environment, closure As Environment) As Environment
+            Dim join As New Environment(closure, closure.stackFrame, isInherits:=False)
+
+            For Each func In parent.funcSymbols
+                If Not join.funcSymbols.ContainsKey(func.Key) Then
+                    join.funcSymbols.Add(func.Key, func.Value)
+                End If
+            Next
+            For Each symbol In parent.symbols
+                If Not join.symbols.ContainsKey(symbol.Key) Then
+                    join.symbols.Add(symbol.Key, symbol.Value)
+                End If
+            Next
+
+            Return join
+        End Operator
 
 #Region "IDisposable Support"
         Private disposedValue As Boolean ' To detect redundant calls

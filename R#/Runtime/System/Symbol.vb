@@ -182,6 +182,13 @@ Namespace Runtime.Components
             Me.m_val = value
         End Sub
 
+        Sub New(name As String, value As Object)
+            Call Me.New(TypeCodes.generic)
+
+            Me.name = name
+            Me.m_val = value
+        End Sub
+
         Public Function SetValue(x As Object, env As Environment) As Message
             If [readonly] Then
                 Return Internal.debug.stop($"cannot change value of locked binding for '{name}'", env)

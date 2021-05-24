@@ -120,7 +120,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
 
             Dim globalEnv As GlobalEnvironment = env.globalEnvironment
-            Dim method As Symbol = globalEnv.FindFunction(funcName)
+            Dim method As Symbol = globalEnv.FindFunction($"{[namespace]}::{funcName}")
 
             If (Not method Is Nothing) AndAlso
                 TypeOf method.value Is INamespaceReferenceSymbol AndAlso

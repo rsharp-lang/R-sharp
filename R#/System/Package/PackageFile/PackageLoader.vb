@@ -45,6 +45,7 @@ Imports System.IO
 Imports System.IO.Compression
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -55,6 +56,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Development.Package.File
 
@@ -165,7 +167,16 @@ Namespace Development.Package.File
                 Return [error]
             End If
 
-            env.attachedNamespace(meta.Package) = pkg
+            Call (From symbol As Expression
+                  In temp.symbols.Values
+                  Let type As Type = symbol.GetType
+                  Where type.ImplementInterface(Of RFunction)
+                  Select DirectCast(symbol, RFunction)) _
+                     .DoCall(Sub(list)
+                                 Call env.attachedNamespace _
+                                    .Add(pkg) _
+                                    .AddSymbols(list)
+                             End Sub)
 
             Return Nothing
         End Function
@@ -179,6 +190,8 @@ Namespace Development.Package.File
             Dim [namespace] As New PackageNamespace(dir)
             Dim debugEcho As Boolean = env.debugMode
             Dim result As New Value(Of Message)
+            Dim symbolExpression As Expression
+            Dim symbols As New List(Of RFunction)
 
             If debugEcho Then
                 Call Console.WriteLine($"load package from directory: '{dir}'.")
@@ -187,7 +200,15 @@ Namespace Development.Package.File
             ' 1. load R symbols
             For Each symbol As NamedValue(Of String) In [namespace].EnumerateSymbols
                 Using bin As New BinaryReader($"{dir}/src/{symbol.Value}".Open)
-                    Call BlockReader.Read(bin).Parse(desc:=[namespace].meta).Evaluate(env)
+                    symbolExpression = BlockReader _
+                        .Read(bin) _
+                        .Parse(desc:=[namespace].meta)
+
+                    Call symbolExpression.Evaluate(env)
+
+                    If symbolExpression.GetType.ImplementInterface(Of RFunction) Then
+                        Call symbols.Add(symbolExpression)
+                    End If
                 End Using
             Next
 
@@ -201,7 +222,9 @@ Namespace Development.Package.File
                 Return result
             End If
 
-            env.attachedNamespace([namespace].packageName) = [namespace]
+            Call env.attachedNamespace _
+                .Add([namespace]) _
+                .AddSymbols(symbols)
 
             Return Nothing
         End Function
