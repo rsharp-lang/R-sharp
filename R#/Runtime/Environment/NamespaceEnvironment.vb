@@ -52,6 +52,11 @@ Namespace Runtime
             Return attachedNamespace([namespace].packageName)
         End Function
 
+        Public Function Add(pkgName$, libdll$) As NamespaceEnvironment
+            attachedNamespace(pkgName) = New NamespaceEnvironment(pkgName, libdll.ParentPath)
+            Return attachedNamespace(pkgName)
+        End Function
+
         Public Function FindSymbol(namespace$, symbolName$) As RFunction
             If Not attachedNamespace.ContainsKey([namespace]) Then
                 Return Nothing
