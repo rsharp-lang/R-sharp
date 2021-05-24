@@ -99,7 +99,15 @@ Module interpreterTest
         Pause()
     End Sub
 
+    'Sub closureEnvironmentTest()
+
+    'End Sub
+
+
     Sub Main()
+
+        Call closureEnvironmentTest()
+
         Call joinParserTest()
         Call syntaxTest()
 
@@ -590,9 +598,11 @@ print(1.0:10.0);
     }
 }")
         Call R.Evaluate("let inner = x(3)")
-        Call R.Evaluate("print(inner())")
-        Call R.Evaluate("print(inner())")
-        Call R.Evaluate("print(inner())")
+        Call R.Evaluate("print(inner())") ' 3; 3 ^ 2
+        Call R.Evaluate("print(inner())") ' 4; 4 ^ 2
+        Call R.Evaluate("print(inner())") ' 5; 5 ^ 2
+
+        Call R.PrintMemory()
 
         Pause()
     End Sub
