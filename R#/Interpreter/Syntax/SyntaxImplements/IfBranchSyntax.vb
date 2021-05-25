@@ -121,13 +121,31 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
 
             Dim stackframe As StackFrame = opts.GetStackTrace(blocks(Scan0)(Scan0), "if_closure")
-            Dim [if] As New IfBranch(
-                ifTest:=ifTest.expression,
-                trueClosure:=DirectCast(closureInternal.expression, ClosureExpression),
-                stackframe:=stackframe
-            )
 
-            Return New SyntaxResult([if])
+            If blocks = 6 Then
+                ' if () {} else {}
+                Dim elseBlock = blocks(4)
+                Dim elseClosure As SyntaxResult = SyntaxImplements.ClosureExpression(elseBlock.Skip(2), opts)
+
+                If elseClosure.isException Then
+                    Return elseClosure
+                End If
+
+                Return New IIfExpression(
+                    iftest:=ifTest.expression,
+                    trueResult:=closureInternal.expression,
+                    falseResult:=elseClosure.expression,
+                    stackFrame:=stackframe
+                )
+            Else
+                Dim [if] As New IfBranch(
+                    ifTest:=ifTest.expression,
+                    trueClosure:=DirectCast(closureInternal.expression, ClosureExpression),
+                    stackframe:=stackframe
+                )
+
+                Return New SyntaxResult([if])
+            End If
         End Function
 
         Public Function ElseIfClosure(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult

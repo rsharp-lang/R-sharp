@@ -359,7 +359,7 @@ Namespace Runtime.Interop
         ''' <returns></returns>
         Friend Shared Function getValue(arg As RMethodArgument, value As Object, trace$, ByRef envir As Environment, trygetListParam As Boolean) As Object
             If arg.type Like GetType(Environment) Then
-                If value IsNot Nothing And value.GetType.IsInheritsFrom(GetType(Environment)) Then
+                If value IsNot Nothing AndAlso value.GetType.IsInheritsFrom(GetType(Environment)) Then
                     Return value
                 Else
                     Return envir

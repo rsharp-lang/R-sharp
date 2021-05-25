@@ -849,6 +849,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Environment\SymbolNamespaceSolver.vb" />
     <Compile Include="Runtime\Environment\NamespaceEnvironment.vb" />
     <Compile Include="Runtime\Environment\SymbolLanguageProcessor.vb" />
     <Compile Include="Runtime\Environment\ObjectEnvironment.vb" />
@@ -861,6 +862,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\reflections.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\string\str_padSides.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\castRaw.vb" />
+    <Compile Include="Runtime\Internal\objects\utils\TableJoint.vb" />
     <Compile Include="Runtime\Internal\objects\utils\TableRow.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSymbolLanguageMaskAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RDefaultExpressionAttribute.vb" />

@@ -81,6 +81,12 @@ Namespace Runtime.Internal.Object.Converts
                 objType = obj.GetType
             End If
 
+            If (objType Is GetType(vector) AndAlso DirectCast(obj, vector).length = 0) OrElse (objType Is GetType(list) AndAlso DirectCast(obj, list).length = 0) Then
+                If type Is GetType(String) Then
+                    Return Nothing
+                End If
+            End If
+
             If type Is GetType(Boolean) AndAlso objType Like RType.characters Then
                 Return any.ToString([single](obj)).ParseBoolean
             End If
