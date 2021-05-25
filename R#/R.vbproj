@@ -849,6 +849,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Environment\SymbolNamespaceSolver.vb" />
     <Compile Include="Runtime\Environment\NamespaceEnvironment.vb" />
     <Compile Include="Runtime\Environment\SymbolLanguageProcessor.vb" />
     <Compile Include="Runtime\Environment\ObjectEnvironment.vb" />
