@@ -1,60 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::75d8b67a26ceeac310a0735dc59cdeee, R#\Runtime\Internal\invoke.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class invoke
-    ' 
-    '         Properties: ls
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: [stop], getFunction, invalidParameter, invokeInternals, missingParameter
-    ' 
-    '         Sub: pushEnvir
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class invoke
+' 
+'         Properties: ls
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: [stop], getFunction, invalidParameter, invokeInternals, missingParameter
+' 
+'         Sub: pushEnvir
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Package
 
 Namespace Runtime.Internal
 
@@ -111,6 +112,7 @@ Namespace Runtime.Internal
             Call GetType(reflections).DoCall(AddressOf pushEnvir)
             Call GetType(dev).DoCall(AddressOf pushEnvir)
             Call GetType(ranking).DoCall(AddressOf pushEnvir)
+            Call GetType(TableJoint).DoCall(AddressOf pushEnvir)
         End Sub
 
         Private Shared Sub pushEnvir(baseModule As Type)
