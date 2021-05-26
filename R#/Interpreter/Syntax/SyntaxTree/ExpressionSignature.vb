@@ -217,10 +217,15 @@ Namespace Interpreter.SyntaxParser
                 Return False
             Else
                 Dim code = tokens.SplitByTopLevelDelimiter(TokenType.close, tokenText:=")")
+
+                If code <> 3 Then
+                    Return False
+                End If
+
                 Dim pOpen As Token = code(2).First
                 Dim pClose As Token = code(2).Last
 
-                If code = 3 AndAlso pOpen = (TokenType.open, "{") AndAlso pClose = (TokenType.close, "}") Then
+                If pOpen = (TokenType.open, "{") AndAlso pClose = (TokenType.close, "}") Then
                     Return True
                 Else
                     Return False
