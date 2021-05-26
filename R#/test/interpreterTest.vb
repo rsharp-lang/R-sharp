@@ -148,7 +148,16 @@ const url = (
         Pause()
     End Sub
 
+    Sub acceptDoTest()
+        Call R.Parse("
+bitmap(file = `./network.png`) %do% {
+    print('XXXXX');
+}
+")
+    End Sub
+
     Sub Main()
+        Call acceptDoTest()
         Call syntaxTest2()
 
         Call ifTest()
