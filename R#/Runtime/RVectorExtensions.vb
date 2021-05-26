@@ -270,6 +270,12 @@ Namespace Runtime
         ''' <typeparam name="T"></typeparam>
         ''' <param name="value"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' ##### 20210526 因为这个函数会涉及到转换类型的操作，所以性能损耗会非常严重
+        ''' 
+        ''' 所以假若仅仅只需要转换数据对象为数组的话，请避免使用这个函数
+        ''' 应该手动编写代码以提升性能
+        ''' </remarks>
         Public Function asVector(Of T)(value As Object) As Array
             Dim valueType As Type
             Dim typeofT As Type = GetType(T)
@@ -282,6 +288,10 @@ Namespace Runtime
                 End If
 
                 valueType = value.GetType
+            End If
+
+            If GetType(T) Is GetType(Object) AndAlso value.GetType.IsArray Then
+                Return DirectCast(value, Array)
             End If
 
             If TypeOf value Is String AndAlso Not GetType(T) Is GetType(Char) Then
