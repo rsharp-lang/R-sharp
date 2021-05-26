@@ -1,52 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::1af71d31e7c3f12b1efbc91f5f51b03b, Library\R.graph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module NetworkModule
-    ' 
-    '     Function: addEdge, addEdges, addNode, addNodes, attributes
-    '               components, computeNetwork, connectedNetwork, DecomposeGraph, degree
-    '               deleteNode, edgeAttributes, emptyNetwork, eval, getByGroup
-    '               getEdges, getElementByID, getNodes, LoadNetwork, metaData
-    '               nodeAttributes, nodeMass, nodeNames, printGraph, printNode
-    '               SaveNetwork, setAttributes, summaryNodes, trimEdges, typeGroupOfNodes
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module NetworkModule
+' 
+'     Function: addEdge, addEdges, addNode, addNodes, attributes
+'               components, computeNetwork, connectedNetwork, DecomposeGraph, degree
+'               deleteNode, edgeAttributes, emptyNetwork, eval, getByGroup
+'               getEdges, getElementByID, getNodes, LoadNetwork, metaData
+'               nodeAttributes, nodeMass, nodeNames, printGraph, printNode
+'               SaveNetwork, setAttributes, summaryNodes, trimEdges, typeGroupOfNodes
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports System.Drawing
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
@@ -62,12 +61,13 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Emit.Delegates
-Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -75,6 +75,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
+Imports rDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -513,7 +514,7 @@ Public Module NetworkModule
     ''' Add edges by a given node label tuple list
     ''' </summary>
     ''' <param name="g"></param>
-    ''' <param name="tuples">a given node label tuple list, 
+    ''' <param name="data">a given node label tuple list, 
     ''' this parameter should be a list of edge names, in 
     ''' format looks like ``list(tag = [from, to], ...)``.
     ''' </param>
@@ -526,7 +527,7 @@ Public Module NetworkModule
     ''' <returns></returns>
     <ExportAPI("pushEdges")>
     <RApiReturn(GetType(NetworkGraph))>
-    Public Function addEdges(g As NetworkGraph, tuples As Object,
+    Public Function addEdges(g As NetworkGraph, data As Object,
                              <RRawVectorArgument>
                              Optional weight As Object = Nothing,
                              <RRawVectorArgument>
@@ -560,9 +561,47 @@ Public Module NetworkModule
 
                 Return Nothing
             End Function
+        Dim tuplesData As IEnumerable(Of NamedValue(Of Object))
+
+        If TypeOf data Is list Then
+            tuplesData = list.GetSlots(data).IterateNameValues
+        ElseIf TypeOf data Is FormulaExpression Then
+            Dim formula As FormulaExpression = DirectCast(data, FormulaExpression)
+
+            data = env.FindSymbol(formula.var)
+
+            If data Is Nothing Then
+                Return Message.SymbolNotFound(env, formula.var, TypeCodes.generic)
+            Else
+                data = DirectCast(data, Symbol).value
+            End If
+
+            If data Is Nothing Then
+                Return Internal.debug.stop({$"the required object '{formula.var}' can not be nothing!", $"object: {formula.var}"}, env)
+            End If
+
+            Dim table As rDataframe = DirectCast(data, rDataframe)
+            Dim from As String = DirectCast(DirectCast(formula.formula, BinaryExpression).left, SymbolReference).symbol
+            Dim [to] As String = DirectCast(DirectCast(formula.formula, BinaryExpression).right, SymbolReference).symbol
+
+            tuplesData = (Iterator Function() As IEnumerable(Of NamedValue(Of Object))
+                              For Each row In DirectCast(data, rDataframe).forEachRow({from, [to]})
+                                  Yield New NamedValue(Of Object)(row.name, row.value)
+                              Next
+                          End Function)()
+
+        ElseIf TypeOf data Is rDataframe Then
+            tuplesData = (Iterator Function() As IEnumerable(Of NamedValue(Of Object))
+                              For Each row In DirectCast(data, rDataframe).forEachRow({"from", "to"})
+                                  Yield New NamedValue(Of Object)(row.name, row.value)
+                              Next
+                          End Function)()
+        Else
+            Throw New NotImplementedException
+        End If
 
         ' list(tag = [from, to])
-        For Each tuple As NamedValue(Of Object) In list.GetSlots(tuples).IterateNameValues
+        For Each tuple As NamedValue(Of Object) In tuplesData
             nodeLabels = REnv.asVector(Of String)(tuple.Value)
             w = weights.ElementAtOrDefault(CInt(i) - 1)
             type = types.ElementAtOrDefault(CInt(i) - 1)
@@ -585,7 +624,8 @@ Public Module NetworkModule
             ' 极有可能会出现重复的边编号
             ' 所以在这里判断一下
             ' 尽量避免使用数字作为编号
-            If ++i = tuple.Name.ParseInteger OrElse tuple.Name.IsPattern("\[\[\d+\]\]") Then
+            If ++i = tuple.Name.ParseInteger OrElse tuple.Name.IsPattern("(\[\[\d+\]\])|(\[\d+,\s*\])") Then
+                ' fix for list name or dataframe row name
                 edge.ID = $"{edge.U.label}..{edge.V.label}"
             Else
                 edge.ID = tuple.Name
