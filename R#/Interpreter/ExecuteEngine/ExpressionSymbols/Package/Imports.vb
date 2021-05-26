@@ -117,10 +117,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             End Get
         End Property
 
+        ''' <summary>
+        ''' imports package from library
+        ''' </summary>
+        ''' <param name="packages"></param>
+        ''' <param name="library"></param>
+        ''' <param name="source$"></param>
         Sub New(packages As Expression, library As Expression, Optional source$ = Nothing)
             Me.packages = packages
             Me.library = library
             Me.scriptSource = source
+        End Sub
+
+        Sub New(package As String, library As String)
+            Me.packages = New Literal(package)
+            Me.library = New Literal(library)
         End Sub
 
         Public Overrides Function ToString() As String

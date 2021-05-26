@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::f54365cfd923dd1ae02b8f4d8e8cc1fb, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [date], [dim], [stop], allocate, append
-    '                   appendOfList, appendOfVector, autoDispose, c, cat
-    '                   cbind, colnames, columnVector, doPrintInternal, factors
-    '                   getOption, ifelse, invisible, isEmpty, isEmptyArray
-    '                   isList, isNA, isNull, length, makeNames
-    '                   names, ncol, neg, nrow, objectAddInvoke
-    '                   options, print, rbind, Rdataframe, rep
-    '                   replace, Rlist, rownames, sink, source
-    '                   str, summary, t, uniqueNames, unitOfT
-    '                   warning, year
-    ' 
-    '         Sub: [exit], q, quit, warnings
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [date], [dim], [stop], allocate, append
+'                   appendOfList, appendOfVector, autoDispose, c, cat
+'                   cbind, colnames, columnVector, doPrintInternal, factors
+'                   getOption, ifelse, invisible, isEmpty, isEmptyArray
+'                   isList, isNA, isNull, length, makeNames
+'                   names, ncol, neg, nrow, objectAddInvoke
+'                   options, print, rbind, Rdataframe, rep
+'                   replace, Rlist, rownames, sink, source
+'                   str, summary, t, uniqueNames, unitOfT
+'                   warning, year
+' 
+'         Sub: [exit], q, quit, warnings
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -68,6 +68,8 @@ Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -2118,6 +2120,74 @@ RE0:
             End If
 
             Return New RDispose(x, final)
+        End Function
+
+        ''' <summary>
+        ''' # Loading/Attaching and Listing of Packages
+        ''' 
+        ''' library and require load and attach add-on packages.
+        ''' </summary>
+        ''' <param name="package">the name Of a package, given As a name Or 
+        ''' literal character String, Or a character String, depending On 
+        ''' whether character.only Is False (Default) Or True.</param>
+        ''' <param name="env"></param>
+        ''' <returns>Normally library returns (invisibly) the list of attached 
+        ''' packages, but TRUE or FALSE if logical.return is TRUE. When 
+        ''' called as library() it returns an object of class "libraryIQR", 
+        ''' and for library(help=), one of class "packageInfo".
+        ''' 
+        ''' require returns(invisibly) a logical indicating whether the required 
+        ''' package Is available.</returns>
+        ''' <remarks>
+        ''' library(package) and require(package) both load the namespace of 
+        ''' the package with name package and attach it on the search list. 
+        ''' require is designed for use inside other functions; it returns 
+        ''' FALSE and gives a warning (rather than an error as library() does 
+        ''' by default) if the package does not exist. Both functions check 
+        ''' and update the list of currently attached packages and do not 
+        ''' reload a namespace which is already loaded. (If you want to 
+        ''' reload such a package, call detach(unload = TRUE) or unloadNamespace 
+        ''' first.) If you want to load a package without attaching it on 
+        ''' the search list, see requireNamespace.
+        ''' 
+        ''' To suppress messages during the loading of packages use 
+        ''' suppressPackageStartupMessages: this will suppress all messages from 
+        ''' R itself but Not necessarily all those from package authors.
+        ''' 
+        ''' If library Is called With no package Or help argument, it lists all 
+        ''' available packages In the libraries specified by Lib.loc, And returns 
+        ''' the corresponding information In an Object Of Class "libraryIQR". 
+        ''' (The Structure Of this Class may change In future versions.) Use 
+        ''' .packages(all = True) To obtain just the names Of all available packages, 
+        ''' And installed.packages() For even more information.
+        ''' 
+        ''' library(help = somename) computes basic information about the package 
+        ''' somename, And returns this in an object of class "packageInfo". 
+        ''' (The structure of this class may change in future versions.) When 
+        ''' used with the default value (NULL) for lib.loc, the attached packages 
+        ''' are searched before the libraries.
+        ''' </remarks>
+        <ExportAPI("library")>
+        Public Function library(package As String, env As Environment) As Object
+            Dim require As Expression
+
+            If package.IndexOf(":"c) > -1 OrElse package.IndexOf("/"c) > -1 Then
+                With package.StringSplit("[:/]+")
+                    require = New [Imports](.Last, .First)
+                End With
+            Else
+                require = New Require(package)
+            End If
+
+            Dim err = require.Evaluate(env)
+
+            If Program.isException(err) Then
+                Return err
+            Else
+                Return env.globalEnvironment _
+                    .attachedNamespace _
+                    .packageNames
+            End If
         End Function
     End Module
 End Namespace
