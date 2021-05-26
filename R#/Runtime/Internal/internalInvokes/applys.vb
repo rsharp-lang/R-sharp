@@ -327,7 +327,8 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("lapply")>
         Public Function lapply(<RRawVectorArgument> X As Object, FUN As Object,
-                               Optional names As RFunction = Nothing,
+                               <RRawVectorArgument>
+                               Optional names As Object = Nothing,
                                Optional envir As Environment = Nothing) As Object
 
             If X Is Nothing Then
@@ -417,7 +418,7 @@ Namespace Runtime.Internal.Invokes
                            End Function)
         End Function
 
-        Public Function keyNameAuto(names As RFunction, env As Environment) As Func(Of SeqValue(Of Object), String)
+        Public Function keyNameAuto(names As Object, env As Environment) As Func(Of SeqValue(Of Object), String)
             If names Is Nothing Then
                 Return Function(i)
                            Dim name As String = Nothing
@@ -432,12 +433,20 @@ Namespace Runtime.Internal.Invokes
 
                            Return name
                        End Function
-            Else
+            ElseIf names.GetType.ImplementInterface(Of RFunction) Then
+                Dim func As RFunction = DirectCast(names, RFunction)
+
                 Return Function(i)
-                           Dim nameVals = names.Invoke(env, invokeArgument(i.value))
+                           Dim nameVals = func.Invoke(env, invokeArgument(i.value))
                            Dim namesVec = RConversion.asCharacters(nameVals)
 
                            Return getFirst(namesVec)
+                       End Function
+            Else
+                Dim vec As String() = REnv.asVector(Of String)(names)
+
+                Return Function(i)
+                           Return vec(i)
                        End Function
             End If
         End Function
