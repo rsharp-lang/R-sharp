@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::c1ae2e7de60dbb441483588b8a48b662, R#\Runtime\Internal\internalInvokes\string\stringr.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module stringr
-    ' 
-    '         Function: [objToString], base64, base64Decode, bencode, charAt
-    '                   chr, Csprintf, decodeObject, findToStringWithFormat, fromBstring
-    '                   grep, html, json, loadXml, match
-    '                   nchar, paste, regexp, splitSingleStrAuto, sprintfSingle
-    '                   str_empty, str_pad, str_replace, strPad_internal, strsplit
-    '                   substr, tagvalue, tolower, urldecode, xml
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module stringr
+' 
+'         Function: [objToString], base64, base64Decode, bencode, charAt
+'                   chr, Csprintf, decodeObject, findToStringWithFormat, fromBstring
+'                   grep, html, json, loadXml, match
+'                   nchar, paste, regexp, splitSingleStrAuto, sprintfSingle
+'                   str_empty, str_pad, str_replace, strPad_internal, strsplit
+'                   substr, tagvalue, tolower, urldecode, xml
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -63,6 +63,7 @@ Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting
 Imports Microsoft.VisualBasic.Serialization.Bencoding
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -326,12 +327,33 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' encode byte stream or text content into base64 string
         ''' </summary>
-        ''' <param name="raw"></param>
+        ''' <param name="raw">R# object or any supported .NET object</param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("base64")>
         <RApiReturn(GetType(Byte))>
-        Public Function base64(<RRawVectorArgument> raw As Object, Optional env As Environment = Nothing) As Object
+        Public Function base64Str(<RRawVectorArgument> raw As Object,
+                                  Optional chunkSize As Integer = -1,
+                                  Optional env As Environment = Nothing) As Object
+
+            Dim base64 As String
+
+            If TypeOf raw Is Image OrElse TypeOf raw Is Bitmap Then
+                base64 = CType(raw, Image).ToBase64String()
+            Else
+                base64 = rawBufferBase64(raw, env)
+            End If
+
+            If chunkSize > 0 Then
+                base64 = base64 _
+                    .Chunks(lineBreak:=chunkSize) _
+                    .JoinBy(vbLf)
+            End If
+
+            Return base64
+        End Function
+
+        Private Function rawBufferBase64(raw As Object, env As Environment) As Object
             Dim buffer As [Variant](Of Byte(), Message) = Rsharp.Buffer(raw, env)
 
             If buffer Is Nothing Then
