@@ -585,7 +585,7 @@ Public Module NetworkModule
             ' 极有可能会出现重复的边编号
             ' 所以在这里判断一下
             ' 尽量避免使用数字作为编号
-            If ++i = tuple.Name.ParseInteger Then
+            If ++i = tuple.Name.ParseInteger OrElse tuple.Name.IsPattern("\[\[\d+\]\]") Then
                 edge.ID = $"{edge.U.label}..{edge.V.label}"
             Else
                 edge.ID = tuple.Name
