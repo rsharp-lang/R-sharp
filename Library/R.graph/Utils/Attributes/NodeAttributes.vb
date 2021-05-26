@@ -119,7 +119,7 @@ Module NodeAttributes
                     element.data.color = any.ToString(value).GetBrush
                 End If
             ElseIf name = "layout" Then
-                Dim points As Double() = value
+                Dim points As Double() = REnv.asVector(Of Double)(value)
 
                 element.data.initialPostion = New FDGVector2(points(0), points(1))
             Else
