@@ -129,7 +129,28 @@ const url = (
         Pause()
     End Sub
 
+    Sub syntaxTest2()
+        Call Console.WriteLine(R.Parse("readText(http_get(
+    url = url, 
+    streamTo = function(url, cache_file) {
+      writeLines(con = cache_file) {
+        # request from remote server
+        # if the cache is not hit,
+        # and then write it to the cache repository
+        content(requests.get(url));
+      }
+    }, 
+    interval = 3, 
+    filetype = 'html')
+    )
+    ;"))
+
+        Pause()
+    End Sub
+
     Sub Main()
+        Call syntaxTest2()
+
         Call ifTest()
         Call symbolIndextest()
 

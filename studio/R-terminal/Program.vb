@@ -172,7 +172,7 @@ Module Program
             If attach.FileExists Then
                 Call R.attachPackageFile(zip:=attach)
             ElseIf attach.DirectoryExists Then
-                Dim err As Message = PackageLoader2.Hotload(attach, R.globalEnvir)
+                Dim err As Message = PackageLoader2.Hotload(attach.GetDirectoryFullPath, R.globalEnvir)
 
                 If Not err Is Nothing Then
                     Return Rscript.handleResult(err, R.globalEnvir, Nothing)

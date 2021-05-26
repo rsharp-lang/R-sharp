@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::5505a842d443790408b987249fa3bb25, R#\Interpreter\Syntax\SyntaxTree\ExpressionSignature.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ExpressionSignature
-    ' 
-    '         Function: ifElseTriple, isAcceptor, isByRefCall, isComma, isFunctionInvoke
-    '                   isIdentifier, (+2 Overloads) isKeyword, (+2 Overloads) isLambdaFunction, isLiteral, isNamespaceReferenceCall
-    '                   isOneOfKeywords, isOperator, isSequenceSyntax, isSimpleSymbolIndexer, isStackOf
-    '                   isTuple, isValueAssign, parseComplexSymbolIndexer
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ExpressionSignature
+' 
+'         Function: ifElseTriple, isAcceptor, isByRefCall, isComma, isFunctionInvoke
+'                   isIdentifier, (+2 Overloads) isKeyword, (+2 Overloads) isLambdaFunction, isLiteral, isNamespaceReferenceCall
+'                   isOneOfKeywords, isOperator, isSequenceSyntax, isSimpleSymbolIndexer, isStackOf
+'                   isTuple, isValueAssign, parseComplexSymbolIndexer
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -85,6 +85,8 @@ Namespace Interpreter.SyntaxParser
 
         ''' <summary>
         ''' The given code tokens is a lambda function?
+        ''' 
+        ''' x -> ...
         ''' </summary>
         ''' <param name="code"></param>
         ''' <returns></returns>
@@ -97,6 +99,8 @@ Namespace Interpreter.SyntaxParser
 
         ''' <summary>
         ''' The given code tokens is a lambda function?
+        ''' 
+        ''' x -> ...
         ''' </summary>
         ''' <param name="code"></param>
         ''' <returns></returns>
@@ -187,13 +191,40 @@ Namespace Interpreter.SyntaxParser
         End Function
 
         <Extension>
-        Public Function isAcceptor(tokens As Token()) As Boolean
-            Dim code = tokens.SplitByTopLevelDelimiter(TokenType.close, tokenText:=")")
+        Public Function isAnonymous(code As List(Of Token())) As Boolean
+            If code(Scan0)(Scan0) <> (TokenType.keyword, "function") Then
+                Return False
+            End If
 
-            If code = 3 AndAlso code(2).First = (TokenType.open, "{") AndAlso code(2).Last = (TokenType.close, "}") Then
-                Return True
+            If code = 3 Then
+                Dim pOpen As Token = code(2).First
+                Dim pClose As Token = code(2).Last
+
+                Return pOpen = (TokenType.open, "{") AndAlso pClose = (TokenType.close, "}")
+            ElseIf code = 2 Then
+                Dim pOpen As Token = code(1).First
+                Dim pClose As Token = code(1).Last
+
+                Return pOpen = (TokenType.open, "(") AndAlso pClose = (TokenType.close, "}")
             Else
                 Return False
+            End If
+        End Function
+
+        <Extension>
+        Public Function isAcceptor(tokens As Token()) As Boolean
+            If tokens(Scan0) = (TokenType.keyword, "function") Then
+                Return False
+            Else
+                Dim code = tokens.SplitByTopLevelDelimiter(TokenType.close, tokenText:=")")
+                Dim pOpen As Token = code(2).First
+                Dim pClose As Token = code(2).Last
+
+                If code = 3 AndAlso pOpen = (TokenType.open, "{") AndAlso pClose = (TokenType.close, "}") Then
+                    Return True
+                Else
+                    Return False
+                End If
             End If
         End Function
 

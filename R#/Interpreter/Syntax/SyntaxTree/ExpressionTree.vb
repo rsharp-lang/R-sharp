@@ -206,6 +206,18 @@ Namespace Interpreter.SyntaxParser
                 End If
             End If
 
+            If tokens(Scan0) = (TokenType.keyword, "function") Then
+                Dim code = tokens.SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True)
+
+                If code.isAnonymous Then
+                    ' function(xxx) {
+                    '   ...
+                    ' }
+
+                    Return SyntaxImplements.DeclareAnonymousFunction(code, opts)
+                End If
+            End If
+
             Return New SyntaxResult(New NotImplementedException($"Unsure for parse: '{tokens.Select(Function(t) t.text).JoinBy(" ")}'!"), opts.debug)
         End Function
 

@@ -366,7 +366,9 @@ Namespace Runtime.Internal.Invokes
                 Else
                     Return strings _
                         .populates(Of String)(env) _
-                        .Select(Function(str) Encoding.UTF8.GetBytes(str).ToBase64String) _
+                        .Select(Function(str)
+                                    Return Encoding.UTF8.GetBytes(str).ToBase64String
+                                End Function) _
                         .ToArray
                 End If
             End If
