@@ -156,8 +156,10 @@ Module Visualize
         Dim nodeRadius As [Variant](Of Func(Of Node, Single), Single) = Nothing
         Dim err As Message = Nothing
 
-        If nodeSize Is Nothing Then
+        If nodeSize Is Nothing AndAlso minNodeSize > 0 Then
             nodeRadius = minNodeSize
+        ElseIf nodeSize Is Nothing Then
+            nodeRadius = New Func(Of Node, Single)(Function(node) CSng(node.data.size(Scan0)))
         Else
             nodeRadius = getNodeSizeHandler(nodeSize, minNodeSize, env, err)
 
