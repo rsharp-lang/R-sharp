@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::c34edaf4f281f22f14ade59cdce5e0f7, Library\R.graph\Layouts.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Layouts
-    ' 
-    '     Function: (+2 Overloads) forceDirected, orthogonalLayout, randomLayout, SpringForce
-    ' 
-    ' /********************************************************************************/
+' Module Layouts
+' 
+'     Function: (+2 Overloads) forceDirected, orthogonalLayout, randomLayout, SpringForce
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -118,6 +118,7 @@ Module Layouts
     ''' <param name="iterations">The number of layout iterations.</param>
     ''' <returns></returns>
     <ExportAPI("layout.force_directed")>
+    <RApiReturn(GetType(NetworkGraph))>
     Public Function forceDirected(g As NetworkGraph,
                                   Optional ejectFactor As Integer = 6,
                                   Optional condenseFactor As Integer = 3,
@@ -126,11 +127,13 @@ Module Layouts
                                   <RRawVectorArgument> Optional dist As Object = "30,250",
                                   <RRawVectorArgument> Optional size As Object = "1000,1000",
                                   Optional iterations As Integer = 200,
-                                  Optional groupPlanner As Boolean = False,
+                                  <RRawVectorArgument(GetType(String))>
+                                  Optional algorithm$ = "force_directed|group_weighted|edge_weighted",
                                   Optional groupAttraction As Double = 5,
                                   Optional groupRepulsive As Double = 5,
+                                  Optional weightedFactor As Double = 8,
                                   Optional avoids As RectangleF() = Nothing,
-                                  Optional env As Environment = Nothing) As NetworkGraph
+                                  Optional env As Environment = Nothing) As Object
         If g.CheckZero Then
             env.AddMessage("all of the vertex node in your network graph is in ZERO location, do random layout at first...", MSG_TYPES.WRN)
             g = g.doRandomLayout
@@ -140,31 +143,48 @@ Module Layouts
         Dim distStr = InteropArgumentHelper.getSize(dist, "30,256")
         Dim physics As Planner
 
-        If groupPlanner Then
-            physics = New GroupPlanner(
-                g:=g,
-                ejectFactor:=ejectFactor,
-                condenseFactor:=condenseFactor,
-                maxtx:=maxtx,
-                maxty:=maxty,
-                dist_threshold:=distStr,
-                size:=sizeStr,
-                groupAttraction:=groupAttraction,
-                groupRepulsive:=groupRepulsive,
-                avoidRegions:=avoids
-            )
-        Else
-            physics = New Planner(
-                g:=g,
-                ejectFactor:=ejectFactor,
-                condenseFactor:=condenseFactor,
-                maxtx:=maxtx,
-                maxty:=maxty,
-                dist_threshold:=distStr,
-                size:=sizeStr,
-                avoidRegions:=avoids
-            )
-        End If
+        algorithm = algorithm.Split("|"c).First
+
+        Select Case algorithm
+            Case "force_directed"
+                physics = New Planner(
+                    g:=g,
+                    ejectFactor:=ejectFactor,
+                    condenseFactor:=condenseFactor,
+                    maxtx:=maxtx,
+                    maxty:=maxty,
+                    dist_threshold:=distStr,
+                    size:=sizeStr,
+                    avoidRegions:=avoids
+                )
+            Case "group_weighted"
+                physics = New GroupPlanner(
+                    g:=g,
+                    ejectFactor:=ejectFactor,
+                    condenseFactor:=condenseFactor,
+                    maxtx:=maxtx,
+                    maxty:=maxty,
+                    dist_threshold:=distStr,
+                    size:=sizeStr,
+                    groupAttraction:=groupAttraction,
+                    groupRepulsive:=groupRepulsive,
+                    avoidRegions:=avoids
+                )
+            Case "edge_weighted"
+                physics = New EdgeWeightedPlanner(
+                    g:=g,
+                    maxW:=weightedFactor,
+                    ejectFactor:=ejectFactor,
+                    condenseFactor:=condenseFactor,
+                    maxtx:=maxtx,
+                    maxty:=maxty,
+                    dist_threshold:=distStr,
+                    size:=sizeStr,
+                    avoidRegions:=avoids
+                )
+            Case Else
+                Return Internal.debug.stop($"invalid algorithm name: {algorithm}", env)
+        End Select
 
         For i As Integer = 0 To iterations
             Call physics.Collide()
