@@ -645,8 +645,8 @@ Public Module NetworkModule
     ''' <param name="type"></param>
     ''' <param name="nodes"></param>
     ''' <returns></returns>
-    <ExportAPI("set_group")>
-    Public Function typeGroupOfNodes(g As NetworkGraph, type$, nodes As String()) As NetworkGraph
+    <ExportAPI("group")>
+    Public Function typeGroupOfNodes(g As NetworkGraph, nodes As String(), <RByRefValueAssign> type$) As NetworkGraph
         Call nodes _
             .Select(AddressOf g.GetElementByID) _
             .DoEach(Sub(n)
