@@ -240,7 +240,9 @@ Module dataframe
             .columns = cols _
                 .SeqIterator _
                 .AsParallel _
-                .Select(Function(i) (i.i, colVec:=i.value.measureColumnVector(check_modes))) _
+                .Select(Function(i)
+                            Return (i.i, colVec:=i.value.measureColumnVector(check_modes))
+                        End Function) _
                 .OrderBy(Function(i) i.i) _
                 .ToDictionary(Function(col) colNames(col.i),
                               Function(col)
@@ -250,6 +252,10 @@ Module dataframe
 
         If Not row_names Is Nothing Then
             Dim err As New Value(Of Message)
+
+            If TypeOf row_names Is Boolean AndAlso Not DirectCast(row_names, Boolean) Then
+                GoTo ReturnTable
+            End If
 
             row_names = ensureRowNames(row_names, env)
 
@@ -261,6 +267,7 @@ Module dataframe
             End If
         End If
 
+ReturnTable:
         Return dataframe
     End Function
 
