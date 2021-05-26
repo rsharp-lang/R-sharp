@@ -450,6 +450,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\E.vb" />
+    <Compile Include="Models\V.vb" />
     <Compile Include="Utils\Attributes\EdgeAttributes.vb" />
     <Compile Include="Utils\Attributes\NodeAttributes.vb" />
     <Compile Include="zzz.vb" />

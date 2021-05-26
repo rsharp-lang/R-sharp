@@ -126,6 +126,11 @@ Public Module NetworkModule
         Return str.ToString
     End Function
 
+    <ExportAPI("V")>
+    Public Function V(g As NetworkGraph) As Object
+        Return New V(g)
+    End Function
+
     <ExportAPI("metadata")>
     Public Function metaData(title As String,
                              Optional description As String = "n/a",
