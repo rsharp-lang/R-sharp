@@ -223,10 +223,10 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' http/ftp file download
+        ''' retrieving files using HTTP, HTTPS, FTP and FTPS, the most widely used Internet protocols.
         ''' </summary>
         ''' <param name="url"></param>
-        ''' <param name="save"></param>
+        ''' <param name="save">the function will returns a stream object if this parameter is nothing</param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("wget")>
@@ -234,10 +234,15 @@ Namespace Runtime.Internal.Invokes
             If url.StringEmpty Then
                 Return Internal.debug.stop({"Missing url data source for file get!"}, env)
             ElseIf save.StringEmpty Then
-                save = App.CurrentDirectory & "/" & url.Split("?"c).First.BaseName.NormalizePathString(False)
-            End If
+                Dim buffer As New MemoryStream
 
-            Return Http.wget.Download(url, save)
+                Http.wget.Download(url, buffer)
+                buffer.Flush()
+
+                Return buffer
+            Else
+                Return Http.wget.Download(url, save)
+            End If
         End Function
 
         ''' <summary>

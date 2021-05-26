@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::fe621204247aeb12dcf5beb75bca8d2b, R#\Runtime\Internal\internalInvokes\graphics.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module graphics
-    ' 
-    '         Function: bitmap, plot, readImage
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module graphics
+' 
+'         Function: bitmap, plot, readImage
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -131,8 +131,16 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="file">a string specifying the path to the saved image</param>
         ''' <returns>the image in a matrix or array form</returns>
         <ExportAPI("readImage")>
-        Public Function readImage(file As String) As Object
-            Return file.LoadImage
+        Public Function readImage(file As Object, Optional env As Environment = Nothing) As Object
+            If file Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf file Is String Then
+                Return DirectCast(file, String).LoadImage
+            ElseIf TypeOf file Is Stream Then
+                Return Image.FromStream(DirectCast(file, Stream))
+            Else
+                Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
+            End If
         End Function
     End Module
 End Namespace
