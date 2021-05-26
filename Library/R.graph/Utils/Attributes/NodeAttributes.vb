@@ -87,6 +87,14 @@ Module NodeAttributes
                     elements(i).data.color = any.ToString(value).GetBrush
                 End If
             Next
+        ElseIf name = "label" Then
+            For i As Integer = 0 To elements.Length - 1
+                elements(i).data.label = any.ToString(valArray(i))
+            Next
+        ElseIf name = "size" Then
+            For i As Integer = 0 To elements.Length - 1
+                elements(i).data.size = {CDbl(valArray(i))}
+            Next
         Else
             For i As Integer = 0 To elements.Length - 1
                 elements(i).data(name) = any.ToString(valArray(i))
