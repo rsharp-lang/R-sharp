@@ -1,3 +1,7 @@
+# ``R#`` language
+
+R# language is a kind of R liked language implements on .NET environment for GCModeller scripting.
+
 > [WARNING] This project is a work in progress and is not recommended for production use.
 
 <img src="docs/images/R-sharp.png" width="450px" />
