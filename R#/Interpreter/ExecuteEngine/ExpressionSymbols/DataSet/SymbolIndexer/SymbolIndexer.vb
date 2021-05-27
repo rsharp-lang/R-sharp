@@ -395,8 +395,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 End If
             End If
 
-            Dim sequence As Array = REnv.asVector(Of Object)(obj)
+            Dim sequence As Array
             Dim Rarray As RIndex
+
+            If obj.GetType.IsArray Then
+                sequence = obj
+            ElseIf TypeOf obj Is vector Then
+                sequence = DirectCast(obj, vector).data
+            Else
+                ' 20210526 为了避免类型转换带来的性能损耗
+                ' 在这里需要手动判断数组或者向量
+                ' 最后再执行这个函数来转换数组
+                sequence = REnv.asVector(Of Object)(obj)
+            End If
 
             If sequence.Length = 0 Then
                 Return Nothing

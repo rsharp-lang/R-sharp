@@ -83,6 +83,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                 .ToArray
         End Sub
 
+        Sub New(packageName As String)
+            packages = {New Literal(packageName)}
+        End Sub
+
         Sub New(names As IEnumerable(Of String))
             packages = names.Select(Function(name) New Literal(name)).ToArray
         End Sub

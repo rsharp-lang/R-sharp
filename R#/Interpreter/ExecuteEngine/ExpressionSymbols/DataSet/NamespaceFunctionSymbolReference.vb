@@ -140,7 +140,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             If pkg Is Nothing Then
                 funcName = env.FindFunction(funcName)
 
-                If funcName Is Nothing OrElse DirectCast(DirectCast(funcName, Symbol).value, RMethodInfo).GetPackageInfo.namespace <> [namespace] Then
+                If funcName Is Nothing OrElse DirectCast(DirectCast(funcName, Symbol).value, INamespaceReferenceSymbol).namespace <> [namespace] Then
                     Return Internal.debug.stop({$"we can not found any namespace called: '{[namespace]}'!", $"namespace: {[namespace]}"}, env)
                 End If
 

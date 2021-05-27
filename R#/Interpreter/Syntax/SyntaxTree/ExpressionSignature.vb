@@ -170,6 +170,11 @@ Namespace Interpreter.SyntaxParser
                 TokenType.keyword
             }
 
+            If tokens.Length < 3 Then
+                ' a() -> 3 (min size)
+                Return False
+            End If
+
             If Not tokens(Scan0).name Like callableSymbols Then
                 Return False
             ElseIf Not tokens(1) = (TokenType.open, "(") OrElse Not tokens.Last = (TokenType.close, ")") Then
