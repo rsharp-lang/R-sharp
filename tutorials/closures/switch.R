@@ -23,8 +23,9 @@ print(x |> common_compute("sqrt"));
 
 # test other operation
 # like throw error message
-try {
-	print(x |> common_compute("err"));
+const catch = try(x |> common_compute("err")) {
+	# catch ex if this catch block is defined
+	print(error);
 }
 
 common_compute(x, "blabla");
