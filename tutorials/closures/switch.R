@@ -23,4 +23,8 @@ print(x |> common_compute("sqrt"));
 
 # test other operation
 # like throw error message
-print(x |> common_compute("err"));
+try {
+	print(x |> common_compute("err"));
+}
+
+common_compute(x, "blabla");
