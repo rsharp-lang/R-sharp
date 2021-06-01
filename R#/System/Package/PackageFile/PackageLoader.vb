@@ -153,18 +153,18 @@ Namespace Development.Package.File
                 End If
             Next
 
-            ' 2. run '.onLoad'
+            ' 2. load dependency
+            If Not ([error] = env.loadDependency(pkg)) Is Nothing Then
+                Return [error]
+            End If
+
+            ' 3. run '.onLoad'
             If Not onload Is Nothing Then
                 Dim result = onload.Invoke(env, params:={})
 
                 If Program.isException(result) Then
                     Return result
                 End If
-            End If
-
-            ' 3. load dependency
-            If Not ([error] = env.loadDependency(pkg)) Is Nothing Then
-                Return [error]
             End If
 
             Call (From symbol As Expression
