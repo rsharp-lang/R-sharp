@@ -10,6 +10,6 @@ const catch = try(ex -> stop(123)) {
 print(catch);
 
 # get try-error
-const tryErr = try(ex -> stop(123));
+const tryErr = try(stop(123));
 
 print(tryErr);

@@ -23,7 +23,7 @@ print(x |> common_compute("sqrt"));
 
 # test other operation
 # like throw error message
-const catch = try(x |> common_compute("err")) {
+const catch = try(error -> x |> common_compute("err")) {
 	# catch ex if this catch block is defined
 	print(error);
 }
