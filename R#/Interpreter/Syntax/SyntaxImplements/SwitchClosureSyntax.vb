@@ -1,13 +1,10 @@
-﻿Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
-Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
-Imports SMRUCC.Rsharp.Development.Package.File
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
-Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Components
-Imports Microsoft.VisualBasic.Language
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
 Namespace Interpreter.SyntaxParser.SyntaxImplements
 
@@ -55,7 +52,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     Return New SyntaxResult(New Exception("invalid expression for switch options!"), opts.debug)
                 Else
                     With DirectCast(optVal.expression, ValueAssignExpression)
-                        Dim keyStr = FormulaExpression.GetSymbols(.targetSymbols(Scan0))
+                        Dim keyStr As [Variant](Of String(), Exception)
+
+                        If TypeOf .targetSymbols(Scan0) Is Literal Then
+                            keyStr = {DirectCast(.targetSymbols(Scan0), Literal).ValueStr}
+                        Else
+                            keyStr = FormulaExpression.GetSymbols(.targetSymbols(Scan0))
+                        End If
 
                         If keyStr Like GetType(Exception) Then
                             Return New SyntaxResult(keyStr, opts.debug)
