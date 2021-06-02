@@ -382,7 +382,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
         <DebuggerStepThrough>
         Private Shared Function allIsValueAssign(parameters As IEnumerable(Of Expression)) As Boolean
-            Return parameters.All(Function(e) TypeOf e Is ValueAssign)
+            Return parameters.All(Function(e) TypeOf e Is ValueAssignExpression)
         End Function
     End Class
 End Namespace

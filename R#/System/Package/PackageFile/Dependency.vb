@@ -65,7 +65,7 @@ Namespace Development.Package.File
         End Sub
 
         Sub New([imports] As [Imports])
-            library = ValueAssign.GetSymbol([imports].library)
+            library = ValueAssignExpression.GetSymbol([imports].library)
 
             If [imports].packages Is Nothing Then
                 packages = {library}
@@ -74,14 +74,14 @@ Namespace Development.Package.File
                 packages = {DirectCast([imports].packages, Literal).value.ToString}
             Else
                 packages = DirectCast([imports].packages, VectorLiteral).values _
-                    .Select(AddressOf ValueAssign.GetSymbol) _
+                    .Select(AddressOf ValueAssignExpression.GetSymbol) _
                     .ToArray
             End If
         End Sub
 
         Sub New(require As Require)
             packages = require.packages _
-                .Select(AddressOf ValueAssign.GetSymbol) _
+                .Select(AddressOf ValueAssignExpression.GetSymbol) _
                 .ToArray
         End Sub
 

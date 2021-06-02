@@ -228,7 +228,7 @@ Namespace Development.CommandLine
                 Case GetType(BinaryInExpression) : Call analysisTree(DirectCast(expr, BinaryInExpression), attrs)
                 Case GetType(ElseBranch) : Call analysisTree(DirectCast(expr, ElseBranch), attrs)
                 Case GetType(StringInterpolation) : Call analysisTree(DirectCast(expr, StringInterpolation), attrs)
-                Case GetType(ValueAssign) : Call analysisTree(DirectCast(expr, ValueAssign), attrs)
+                Case GetType(ValueAssignExpression) : Call analysisTree(DirectCast(expr, ValueAssignExpression), attrs)
                 Case GetType(DeclareNewFunction) : Call analysisTree(DirectCast(expr, DeclareNewFunction), attrs)
                 Case GetType(ForLoop) : Call analysisTree(DirectCast(expr, ForLoop), attrs)
                 Case GetType(ReturnValue) : Call analysisTree(DirectCast(expr, ReturnValue), attrs)
@@ -297,7 +297,7 @@ Namespace Development.CommandLine
             Call analysisTree(expr.body, attrs)
         End Sub
 
-        Private Sub analysisTree(expr As ValueAssign, attrs As ArgumentInfo)
+        Private Sub analysisTree(expr As ValueAssignExpression, attrs As ArgumentInfo)
             Call AnalysisTree(expr.value, attrs)
         End Sub
 

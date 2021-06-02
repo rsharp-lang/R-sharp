@@ -150,8 +150,8 @@ Namespace Runtime.Internal.Invokes
             Dim val As Object
 
             For Each item As InvokeParameter In DirectCast(values, InvokeParameter())
-                If TypeOf item.value Is ValueAssign Then
-                    val = DirectCast(item.value, ValueAssign).value.Evaluate(env)
+                If TypeOf item.value Is ValueAssignExpression Then
+                    val = DirectCast(item.value, ValueAssignExpression).value.Evaluate(env)
                 Else
                     val = item.value.Evaluate(env)
                 End If

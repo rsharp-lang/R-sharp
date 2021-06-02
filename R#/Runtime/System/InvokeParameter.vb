@@ -67,15 +67,15 @@ Namespace Runtime.Components
                     Return ""
                 ElseIf TypeOf value Is SymbolReference Then
                     Return DirectCast(value, SymbolReference).symbol
-                ElseIf TypeOf value Is ValueAssign Then
-                    Return DirectCast(value, ValueAssign) _
+                ElseIf TypeOf value Is ValueAssignExpression Then
+                    Return DirectCast(value, ValueAssignExpression) _
                         .targetSymbols(Scan0) _
-                        .DoCall(AddressOf ValueAssign.GetSymbol)
+                        .DoCall(AddressOf ValueAssignExpression.GetSymbol)
                 ElseIf TypeOf value Is VectorLiteral Then
                     With DirectCast(value, VectorLiteral)
-                        If .length = 1 AndAlso TypeOf .First Is ValueAssign Then
+                        If .length = 1 AndAlso TypeOf .First Is ValueAssignExpression Then
                             ' [a = b] :> func(...)
-                            Return DirectCast(.First, ValueAssign).targetSymbols(Scan0).ToString
+                            Return DirectCast(.First, ValueAssignExpression).targetSymbols(Scan0).ToString
                         Else
                             Return .ToString
                         End If
@@ -97,7 +97,7 @@ Namespace Runtime.Components
                 If value Is Nothing Then
                     Return False
                 Else
-                    Return TypeOf value Is ValueAssign
+                    Return TypeOf value Is ValueAssignExpression
                 End If
             End Get
         End Property
@@ -114,7 +114,7 @@ Namespace Runtime.Components
             Get
                 If value Is Nothing Then
                     Return False
-                ElseIf TypeOf value Is ValueAssign Then
+                ElseIf TypeOf value Is ValueAssignExpression Then
                     Return True
                 ElseIf hasObjectList AndAlso TypeOf value Is SymbolReference Then
                     Return True
@@ -139,7 +139,7 @@ Namespace Runtime.Components
 
         Sub New(name As String, runtimeValue As Object, index As Integer)
             Me.index = index
-            Me.value = New ValueAssign({name}, New RuntimeValueLiteral(runtimeValue))
+            Me.value = New ValueAssignExpression({name}, New RuntimeValueLiteral(runtimeValue))
         End Sub
 
         ''' <summary>
@@ -151,10 +151,10 @@ Namespace Runtime.Components
         Public Function Evaluate(envir As Environment) As Object
             If value Is Nothing Then
                 Return Nothing
-            ElseIf Not TypeOf value Is ValueAssign Then
+            ElseIf Not TypeOf value Is ValueAssignExpression Then
                 Return value.Evaluate(envir)
             Else
-                Return DirectCast(value, ValueAssign).value.Evaluate(envir)
+                Return DirectCast(value, ValueAssignExpression).value.Evaluate(envir)
             End If
         End Function
 

@@ -70,16 +70,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Property
 
         Public Property packages As Expression()
-        Public Property options As ValueAssign()
+        Public Property options As ValueAssignExpression()
 
         Sub New(names As IEnumerable(Of Expression))
             packages = names.ToArray
             options = packages _
-                .Where(Function(exp) TypeOf exp Is ValueAssign) _
-                .Select(Function(exp) DirectCast(exp, ValueAssign)) _
+                .Where(Function(exp) TypeOf exp Is ValueAssignExpression) _
+                .Select(Function(exp) DirectCast(exp, ValueAssignExpression)) _
                 .ToArray
             packages = packages _
-                .Where(Function(exp) Not TypeOf exp Is ValueAssign) _
+                .Where(Function(exp) Not TypeOf exp Is ValueAssignExpression) _
                 .ToArray
         End Sub
 
@@ -94,8 +94,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         Private Function getOptions(env As Environment) As Dictionary(Of String, Object)
             Dim opts As New Dictionary(Of String, Object)
 
-            For Each opt As ValueAssign In options.SafeQuery
-                Dim name As String = ValueAssign.GetSymbol(opt.targetSymbols(Scan0))
+            For Each opt As ValueAssignExpression In options.SafeQuery
+                Dim name As String = ValueAssignExpression.GetSymbol(opt.targetSymbols(Scan0))
                 Dim value As Object = opt.value.Evaluate(env)
 
                 opts(name) = value
@@ -119,7 +119,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             Dim quietly As Boolean = options.TryGetValue("quietly")
 
             For Each name As Expression In packages
-                pkgName = ValueAssign.GetSymbol(name)
+                pkgName = ValueAssignExpression.GetSymbol(name)
                 message = [global].LoadLibrary(pkgName, silent:=quietly)
 
                 If Not message Is Nothing AndAlso Not quietly Then

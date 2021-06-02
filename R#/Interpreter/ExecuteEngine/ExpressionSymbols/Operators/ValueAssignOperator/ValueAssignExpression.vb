@@ -66,7 +66,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
     ''' <summary>
     ''' Set variable or tuple
     ''' </summary>
-    Public Class ValueAssign : Inherits Expression
+    Public Class ValueAssignExpression : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get

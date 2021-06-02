@@ -158,8 +158,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             If indexVec.length = 2 Then
                 ' [row, column]
                 ' [row, , drop = TRUE]
-                If TypeOf indexVec.values(1) Is ValueAssign Then
-                    Dim opt As ValueAssign = indexVec(1)
+                If TypeOf indexVec.values(1) Is ValueAssignExpression Then
+                    Dim opt As ValueAssignExpression = indexVec(1)
 
                     If TypeOf opt.targetSymbols(Scan0) Is Literal AndAlso DirectCast(opt.targetSymbols(Scan0), Literal) = "drop" Then
                         Dim drop As Boolean = asLogical(opt.value.Evaluate(env))(Scan0)

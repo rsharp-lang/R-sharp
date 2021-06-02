@@ -726,6 +726,7 @@
     <Compile Include="Interpreter\ExecutableLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNumeric.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\SwitchExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\TryCatchExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfPromise.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\ElseIfBranch.vb" />
@@ -787,6 +788,7 @@
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CreateObjectSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\FunctionAcceptorSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\SwitchClosureSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\TryCatchSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\WhileLoopSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CommandLine.vb" />
@@ -842,7 +844,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\SequenceLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IIfExpression.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssign.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssignExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\VectorLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb" />

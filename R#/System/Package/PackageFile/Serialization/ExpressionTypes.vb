@@ -99,6 +99,7 @@ Namespace Development.Package.File
         [Using]
         [Do]
         TryCatch
+        Switch
 
         Suppress = 100
         Annotation

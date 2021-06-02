@@ -201,7 +201,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         .Select(Function(name) New Literal(name)) _
                         .ToArray
 
-                    Call ValueAssign.doValueAssign(envir, names, True, value)
+                    Call ValueAssignExpression.doValueAssign(envir, names, True, value)
                 Else
                     Dim err As Message = Nothing
 
@@ -262,12 +262,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                             Return argVal
                         End If
 
-                        Call ValueAssign.doValueAssign(envir, names, True, argVal)
+                        Call ValueAssignExpression.doValueAssign(envir, names, True, argVal)
                     Else
                         Return MissingParameters(params(i), funcName, envir)
                     End If
                 Else
-                    Call ValueAssign.doValueAssign(envir, names, True, arguments(i))
+                    Call ValueAssignExpression.doValueAssign(envir, names, True, arguments(i))
                 End If
             Next
 

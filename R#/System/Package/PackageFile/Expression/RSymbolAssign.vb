@@ -58,10 +58,10 @@ Namespace Development.Package.File.Expressions
         End Sub
 
         Public Overrides Sub WriteBuffer(ms As MemoryStream, x As Expression)
-            Call WriteBuffer(ms, DirectCast(x, ValueAssign))
+            Call WriteBuffer(ms, DirectCast(x, ValueAssignExpression))
         End Sub
 
-        Public Overloads Sub WriteBuffer(ms As MemoryStream, x As ValueAssign)
+        Public Overloads Sub WriteBuffer(ms As MemoryStream, x As ValueAssignExpression)
             Using outfile As New BinaryWriter(ms)
                 Call outfile.Write(CInt(ExpressionTypes.SymbolAssign))
                 Call outfile.Write(0)
@@ -92,7 +92,7 @@ Namespace Development.Package.File.Expressions
                 Next
 
                 Dim value As Expression = BlockReader.ParseBlock(bin).Parse(desc)
-                Dim assign As New ValueAssign(symbols.ToArray, value)
+                Dim assign As New ValueAssignExpression(symbols.ToArray, value)
 
                 Return assign
             End Using

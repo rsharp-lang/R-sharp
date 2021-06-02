@@ -67,8 +67,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
             End If
 
             Select Case assignTo.GetType
-                Case GetType(ValueAssign)
-                    Return DirectCast(assignTo, ValueAssign).DoValueAssign(envir, Value)
+                Case GetType(ValueAssignExpression)
+                    Return DirectCast(assignTo, ValueAssignExpression).DoValueAssign(envir, Value)
                 Case Else
                     Return Internal.debug.stop(New NotImplementedException, envir)
             End Select
