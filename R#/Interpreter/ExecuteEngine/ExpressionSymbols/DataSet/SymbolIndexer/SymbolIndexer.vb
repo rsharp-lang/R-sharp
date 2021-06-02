@@ -58,6 +58,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -402,6 +403,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 sequence = obj
             ElseIf TypeOf obj Is vector Then
                 sequence = DirectCast(obj, vector).data
+            ElseIf TypeOf obj Is RMethodInfo OrElse TypeOf obj Is DeclareLambdaFunction OrElse TypeOf obj Is DeclareNewFunction Then
+                Return Internal.debug.stop({$"object of type 'closure' is not subsettable", $"closure: {obj}"}, env)
             Else
                 ' 20210526 为了避免类型转换带来的性能损耗
                 ' 在这里需要手动判断数组或者向量
