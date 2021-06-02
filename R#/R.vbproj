@@ -726,6 +726,7 @@
     <Compile Include="Interpreter\ExecutableLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNumeric.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\TryCatchExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfPromise.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\ElseIfBranch.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\RuntimeVectorDataSet.vb" />
@@ -786,6 +787,7 @@
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CreateObjectSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\FunctionAcceptorSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\TryCatchSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\WhileLoopSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CommandLine.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb" />
@@ -911,6 +913,7 @@
     <Compile Include="Runtime\Internal\objects\utils\TableFormatter.vb" />
     <Compile Include="Runtime\Interop\CType\ICType.vb" />
     <Compile Include="Runtime\Serialize\Buffer.vb" />
+    <Compile Include="Runtime\System\TryError.vb" />
     <Compile Include="Runtime\System\GetVectorElement.vb" />
     <Compile Include="System\RFileSystem.vb" />
     <Compile Include="System\Document\MetaTextParser.vb" />

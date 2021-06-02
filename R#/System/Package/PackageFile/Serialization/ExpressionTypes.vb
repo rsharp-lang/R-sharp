@@ -98,6 +98,7 @@ Namespace Development.Package.File
         [Return]
         [Using]
         [Do]
+        TryCatch
 
         Suppress = 100
         Annotation
