@@ -322,7 +322,13 @@ Namespace Runtime
         End Function
 
         <Extension>
-        Private Function fromArray(Of T)(typeofT As Type, value As Object) As Object
+        Private Function fromArray(Of T)(typeofT As Type, value As Object) As Array
+            Dim vec As Array = DirectCast(value, Array)
+
+            If vec.AsObjectEnumerator.All(Function(i) i Is Nothing) Then
+                Return New T(vec.Length - 1) {}
+            End If
+
             If DirectCast(value, Array) _
                 .AsObjectEnumerator _
                 .All(Function(i)
