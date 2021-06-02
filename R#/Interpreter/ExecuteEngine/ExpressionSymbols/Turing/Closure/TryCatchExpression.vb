@@ -48,8 +48,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     Return New TryError(tryVal, sourceMap)
                 Else
                     Using closureEnv As New Environment(envir, sourceMap, isInherits:=False)
-                        closureEnv.Push(exception.symbol, tryVal, [readonly]:=False)
-                        Return [catch].Evaluate(envir)
+                        closureEnv.Push(exception.symbol, New TryError(tryVal, sourceMap), [readonly]:=False)
+                        Return [catch].Evaluate(closureEnv)
                     End Using
                 End If
             Else
