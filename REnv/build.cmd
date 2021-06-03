@@ -1,5 +1,6 @@
 @echo off
 
-SET Rscript=D:\GCModeller\src\R-sharp\App\Rscript.exe
+Rscript --build /save ./REnv.zip
+R# --install.packages /module ./REnv.zip
 
-%Rscript% --build
+REM pause
