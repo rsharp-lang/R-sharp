@@ -210,12 +210,26 @@ Namespace Development.Configuration
             End Get
         End Property
 
-        Sub New(configs As String)
-            Me.New(ConfigFile.Load(configs))
+        Dim saveConfig As Boolean = False
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="configs"></param>
+        ''' <param name="saveConfig">
+        ''' 为R解释器创建配置数据的时候，一般只是修改当前新创建的解释器的环境
+        ''' 并不需要写入配置文件，这个参数总是会设置为FALSE
+        ''' 
+        ''' 当通过命令行修改默认参数配置的时候，才会将这个参数设置为TRUE
+        ''' 保存通过命令行工具所配置的R环境选项
+        ''' 新修改的配置文件将会作为默认配置作为后面启动的R脚本解释器的默认配置值
+        ''' </param>
+        Sub New(configs As String, saveConfig As Boolean)
+            Me.New(ConfigFile.Load(configs), saveConfig)
             Me.localConfig = configs
         End Sub
 
-        Sub New(file As ConfigFile)
+        Sub New(file As ConfigFile, saveConfig As Boolean)
             Me.file = file
             Me.localConfig = ConfigFile.localConfigs
             Me.configValues = file.config _
@@ -223,6 +237,7 @@ Namespace Development.Configuration
                               Function(cfg)
                                   Return cfg.text
                               End Function)
+            Me.saveConfig = saveConfig
 
             For Each config In configValues
                 Call App.JoinVariable(config.Key, config.Value)
@@ -290,9 +305,13 @@ Namespace Development.Configuration
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Sub flush()
-            Call file _
-                .GetXml _
-                .SaveTo(localConfig)
+            ' 20210603 在R之中，设置options好像并不会保存配置文件
+            ' options设置仅在当前环境中有效
+            If saveConfig Then
+                Call file _
+                    .GetXml _
+                    .SaveTo(localConfig)
+            End If
         End Sub
 
 #Region "IDisposable Support"
