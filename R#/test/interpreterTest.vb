@@ -82,6 +82,8 @@ Module interpreterTest
     End Sub
 
     Sub syntaxTest()
+        Call R.Parse("a = data$""Names and Identifiers"";")
+
         ' Call R.Parse("if (aaa) {11/9} else {88^77}")
 
         Call R.Parse("if(aaa) 11/9 else 88 ^77")
@@ -157,6 +159,7 @@ bitmap(file = `./network.png`) %do% {
     End Sub
 
     Sub Main()
+        Call syntaxTest()
         Call acceptDoTest()
         Call syntaxTest2()
 
