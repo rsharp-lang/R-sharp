@@ -200,11 +200,11 @@ Namespace Runtime.Internal.Invokes
 
             Dim dbls As Double() = x _
                 .Select(Function(any, i)
-                            Return Aggregate nth As Double() In nums Into Sum(nth(i))
+                            Return Aggregate nth As Double() In nums Into Average(nth(i))
                         End Function) _
                 .ToArray
 
-            Return dbls.orderNumbers(decreasing)
+            Return dbls.orderNumbers(Not decreasing)
         End Function
     End Module
 End Namespace
