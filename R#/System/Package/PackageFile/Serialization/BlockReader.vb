@@ -100,7 +100,8 @@ Namespace Development.Package.File
                     Case ExpressionTypes.SymbolIndex : Return New RSymbolIndex(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.SymbolReference, ExpressionTypes.SymbolNamespaceReference
                         Return New RSymbolReference(Nothing).GetExpression(buffer, Me, desc)
-                    Case ExpressionTypes.SymbolAssign : Return New RSymbolAssign(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.SymbolAssign, ExpressionTypes.SymbolMemberAssign
+                        Return New RSymbolAssign(Nothing).GetExpression(buffer, Me, desc)
 
                     Case Else
                         Throw New NotImplementedException(expression.Description)

@@ -161,7 +161,7 @@ Namespace Development.Package.File
                 Case GetType(SymbolReference), GetType(NamespaceFunctionSymbolReference) : Return RSymbolRef.GetBuffer(x)
 
                 Case GetType(SymbolIndexer) : Return RSymbolIndex.GetBuffer(x)
-                Case GetType(ValueAssignExpression) : Return RSymbolAssign.GetBuffer(x)
+                Case GetType(ValueAssignExpression), GetType(MemberValueAssign) : Return RSymbolAssign.GetBuffer(x)
 
                 Case GetType(ForLoop) : Return Rfor.GetBuffer(x)
                 Case GetType(IfBranch) : Return Rif.GetBuffer(x)
