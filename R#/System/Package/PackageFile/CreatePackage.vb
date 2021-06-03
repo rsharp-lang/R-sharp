@@ -1,49 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::acd407c2da805a2725a38737e04ad9ef, R#\System\Package\PackageFile\CreatePackage.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module CreatePackage
-    ' 
-    '         Function: Build, buildRscript, buildUnixMan, checkIndex, getAssemblyList
-    '                   getDataSymbols, getFileReader, loadingDependency
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module CreatePackage
+' 
+'         Function: Build, buildRscript, buildUnixMan, checkIndex, getAssemblyList
+'                   getDataSymbols, getFileReader, loadingDependency
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
@@ -63,13 +64,35 @@ Namespace Development.Package.File
             Return Nothing
         End Function
 
-        Private Function getAssemblyList(dir As String) As AssemblyPack
+        <Extension>
+        Private Function filter(dlls As IEnumerable(Of String), assemblyFilters As Index(Of String)) As String()
+            If assemblyFilters Is Nothing Then
+                Return {}
+            Else
+                Return (From file As String
+                        In dlls
+                        Let fileName As String = file.FileName
+                        Where Not fileName Like assemblyFilters
+                        Select file).ToArray
+            End If
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="dir"></param>
+        ''' <param name="assemblyFilters">
+        ''' all of the assembly file that appears in this index list will be 
+        ''' excludes from the package build 
+        ''' </param>
+        ''' <returns></returns>
+        Private Function getAssemblyList(dir As String, assemblyFilters As Index(Of String)) As AssemblyPack
             Dim dlls As String() = dir.EnumerateFiles("*.dll").ToArray
             Dim framework As Value(Of String) = ""
 
             If Not dlls.IsNullOrEmpty Then
                 Return New AssemblyPack With {
-                    .assembly = dlls,
+                    .assembly = dlls.filter(assemblyFilters),
                     .directory = dir,
                     .framework = ".NET Framework 4.8"
                 }
@@ -79,6 +102,7 @@ Namespace Development.Package.File
                 Return New AssemblyPack With {
                     .assembly = framework.Value _
                         .EnumerateFiles("*.dll") _
+                        .filter(assemblyFilters) _
                         .ToArray,
                     .directory = framework,
                     .framework = ".NET Core 5"
@@ -102,7 +126,7 @@ Namespace Development.Package.File
         ''' <returns></returns>
         ''' 
         <Extension>
-        Public Function Build(desc As DESCRIPTION, target As String, outfile As Stream) As Message
+        Public Function Build(desc As DESCRIPTION, target As String, outfile As Stream, Optional assemblyFilters As Index(Of String) = Nothing) As Message
             ' R build output
             '
             ' * checking for file '../mzkit/DESCRIPTION' ... OK
@@ -116,7 +140,7 @@ Namespace Development.Package.File
             Dim file As New PackageModel With {
                 .info = desc,
                 .symbols = New Dictionary(Of String, Expression),
-                .assembly = getAssemblyList($"{target}/assembly")
+                .assembly = getAssemblyList($"{target}/assembly", assemblyFilters)
             }
             Dim loading As New List(Of Expression)
             Dim [error] As New Value(Of Message)
@@ -321,9 +345,9 @@ Namespace Development.Package.File
             End If
 
             Return EnumerateFiles(dir, "*.*") _
-                .Where (Function(filepath)
-                            Return Not ignores.IsFileIgnored(filepath.Replace("\", "/").Replace(projDir, ""))
-                        End Function) _
+                .Where(Function(filepath)
+                           Return Not ignores.IsFileIgnored(filepath.Replace("\", "/").Replace(projDir, ""))
+                       End Function) _
                 .Select(Function(filepath)
                             Return (filepath, read:=getFileReader(filepath))
                         End Function) _
