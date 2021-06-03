@@ -467,7 +467,7 @@ Module plots
                 .ToArray
         }
 
-        Return {data}.Plot(camera, bg:=bg)
+        Return {data}.Plot(camera, bg:=bg, showLegend:=False)
     End Function
 
     Public Function plotODEResult(math As ODEOutput, args As list, env As Environment) As Object
