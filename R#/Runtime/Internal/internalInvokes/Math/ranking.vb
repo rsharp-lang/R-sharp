@@ -42,11 +42,13 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Correlations.Ranking
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports stdNum = System.Math
 
 Namespace Runtime.Internal.Invokes
 
@@ -180,7 +182,29 @@ Namespace Runtime.Internal.Invokes
 
         <Extension>
         Private Function orderStrings(x As String(), decreasing As Boolean) As Integer()
+            Dim nums As New List(Of Double())
+            Dim max As Integer = stdNum.Min(5, x.MaxLengthString.Length)
+            Dim chars As Char()() = x.Select(Function(s) s.ToArray).ToArray
 
+            For i As Integer = 0 To max - 1
+                Dim idx As Integer = i
+                Dim uniq As Index(Of Char) = (From str In chars Where str.Length > idx Select str(idx)) _
+                    .Distinct _
+                    .OrderBy(Function(c) c) _
+                    .ToArray
+                Dim size As Integer = uniq.Count
+                Dim v = (From str In chars Select (size - If(str.Length > idx, uniq.IndexOf(str(idx)), 0)) / size).ToArray
+
+                nums.Add(v)
+            Next
+
+            Dim dbls As Double() = x _
+                .Select(Function(any, i)
+                            Return Aggregate nth As Double() In nums Into Sum(nth(i))
+                        End Function) _
+                .ToArray
+
+            Return dbls.orderNumbers(decreasing)
         End Function
     End Module
 End Namespace
