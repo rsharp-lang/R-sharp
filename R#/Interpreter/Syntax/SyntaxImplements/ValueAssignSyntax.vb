@@ -69,7 +69,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             If value.isException Then
                 Return value
             Else
-                Return New ValueAssign(targetSymbols, value.expression) With {
+                Return New ValueAssignExpression(targetSymbols, value.expression) With {
                     .isByRef = isByRef
                 }
             End If

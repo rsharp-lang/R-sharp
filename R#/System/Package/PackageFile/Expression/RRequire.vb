@@ -75,7 +75,7 @@ Namespace Development.Package.File.Expressions
 
                 Call outfile.Write(CByte(x.packages.Length))
 
-                For Each pkgName As String In x.packages.Select(AddressOf ValueAssign.GetSymbol)
+                For Each pkgName As String In x.packages.Select(AddressOf ValueAssignExpression.GetSymbol)
                     Call outfile.Write(Encoding.ASCII.GetBytes(pkgName))
                     Call outfile.Write(CByte(0))
                 Next

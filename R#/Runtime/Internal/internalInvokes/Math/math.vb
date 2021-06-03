@@ -1,48 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::dbae2d6c71a16397d3bc1f31d5b5daf0, R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module math
-    ' 
-    '         Function: abs, cluster1D, exp, log, log10
-    '                   log2, max, mean, min, pearson
-    '                   pow, rnorm, round, rsd, runif
-    '                   sample, sample_int, sd, sqrt, sum
-    '                   var
-    ' 
-    '         Sub: set_seed
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module math
+' 
+'         Function: abs, cluster1D, exp, log, log10
+'                   log2, max, mean, min, pearson
+'                   pow, rnorm, round, rsd, runif
+'                   sample, sample_int, sd, sqrt, sum
+'                   var
+' 
+'         Sub: set_seed
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -51,6 +51,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
+Imports Microsoft.VisualBasic.Math.Statistics.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
@@ -247,6 +248,49 @@ Namespace Runtime.Internal.Invokes
                     Return array.Where(Function(a) Not a.IsNaNImaginary).Average
                 Else
                     Return array.Average
+                End If
+            End If
+        End Function
+
+        ''' <summary>
+        ''' ### Median Value
+        ''' 
+        ''' Compute the sample median.
+        ''' </summary>
+        ''' <param name="x">an object for which a method has been defined, 
+        ''' or a numeric vector containing the values whose median is to 
+        ''' be computed.</param>
+        ''' <param name="na_rm">
+        ''' a logical value indicating whether NA values should be stripped 
+        ''' before the computation proceeds.
+        ''' </param>
+        ''' <returns>
+        ''' The default method returns a length-one object of the same type 
+        ''' as x, except when x is logical or integer of even length, when 
+        ''' the result will be double.
+        ''' 
+        ''' If there are no values Or If na.rm = False And there are NA 
+        ''' values the result Is NA Of the same type As x (Or more generally 
+        ''' the result Of x[FALSE][NA]).
+        ''' </returns>
+        ''' <remarks>
+        ''' This is a generic function for which methods can be written. 
+        ''' However, the default method makes use of is.na, sort and mean 
+        ''' from package base all of which are generic, and so the default 
+        ''' method will work for most classes (e.g., "Date") for which 
+        ''' a median is a reasonable concept.
+        ''' </remarks>
+        <ExportAPI("median")>
+        Public Function median(x As Array, Optional na_rm As Boolean = False) As Double
+            If x Is Nothing OrElse x.Length = 0 Then
+                Return 0
+            Else
+                Dim array As Double() = REnv.asVector(Of Double)(x).AsObjectEnumerator(Of Double).ToArray
+
+                If na_rm Then
+                    Return array.Where(Function(a) Not a.IsNaNImaginary).Median
+                Else
+                    Return array.Median
                 End If
             End If
         End Function

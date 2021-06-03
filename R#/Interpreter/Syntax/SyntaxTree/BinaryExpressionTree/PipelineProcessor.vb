@@ -108,7 +108,7 @@ Namespace Interpreter.SyntaxParser
 
             If TypeOf a Is VectorLiteral Then
                 With DirectCast(a, VectorLiteral)
-                    If .length = 1 AndAlso TypeOf .First Is ValueAssign Then
+                    If .length = 1 AndAlso TypeOf .First Is ValueAssignExpression Then
                         a = .First
                     End If
                 End With

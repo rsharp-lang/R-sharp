@@ -256,7 +256,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BioDeep_database|x64'">
     <DebugSymbols>true</DebugSymbols>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\..\..\..\biodeep\biodeepdb_v3\Rscript\R\</OutputPath>
+    <OutputPath>..\..\..\..\biodeep\biodeepdb_v3\biodeepdb_v3\assembly\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <DocumentationFile>REnv.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
@@ -669,6 +669,33 @@
     <PlatformTarget>x64</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MetaCardio|AnyCPU'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\MetaCardio\</OutputPath>
+    <DocumentationFile>REnv.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MetaCardio|x86'">
+    <OutputPath>bin\x86\MetaCardio\</OutputPath>
+    <DocumentationFile>REnv.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MetaCardio|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>..\..\..\..\biodeep\bionovogene_health\metacardio\assembly\</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <DocumentationFile>REnv.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -699,6 +726,8 @@
     <Compile Include="Interpreter\ExecutableLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNumeric.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\SwitchExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\TryCatchExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfPromise.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\ElseIfBranch.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\RuntimeVectorDataSet.vb" />
@@ -759,6 +788,8 @@
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CreateObjectSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\FunctionAcceptorSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\SwitchClosureSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\TryCatchSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\WhileLoopSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CommandLine.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb" />
@@ -813,7 +844,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\SequenceLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IIfExpression.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssign.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssignExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\VectorLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb" />
@@ -884,6 +915,7 @@
     <Compile Include="Runtime\Internal\objects\utils\TableFormatter.vb" />
     <Compile Include="Runtime\Interop\CType\ICType.vb" />
     <Compile Include="Runtime\Serialize\Buffer.vb" />
+    <Compile Include="Runtime\System\TryError.vb" />
     <Compile Include="Runtime\System\GetVectorElement.vb" />
     <Compile Include="System\RFileSystem.vb" />
     <Compile Include="System\Document\MetaTextParser.vb" />

@@ -131,7 +131,7 @@ Namespace Interpreter
         ''' <param name="envirConf"></param>
         Sub New(Optional envirConf As Options = Nothing)
             If envirConf Is Nothing Then
-                envirConf = New Options(ConfigFile.localConfigs)
+                envirConf = New Options(ConfigFile.localConfigs, saveConfig:=False)
             End If
 
             globalEnvir = New GlobalEnvironment(Me, envirConf)
@@ -525,7 +525,7 @@ Namespace Interpreter
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Shared Function FromEnvironmentConfiguration(configs As String) As RInterpreter
-            Return New RInterpreter(New Options(configs))
+            Return New RInterpreter(New Options(configs, saveConfig:=False))
         End Function
 
         Private disposedValue As Boolean

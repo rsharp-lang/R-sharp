@@ -105,14 +105,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
             ' initialize the property
             For Each prop As Expression In constructor
-                If Not TypeOf prop Is ValueAssign Then
+                If Not TypeOf prop Is ValueAssignExpression Then
                     Return Internal.debug.stop({
                          $"invalid expression: {prop} !",
-                         $"require: " & GetType(ValueAssign).Name,
+                         $"require: " & GetType(ValueAssignExpression).Name,
                          $"but given: " & prop.expressionName
                     }, envir)
                 Else
-                    With DirectCast(prop, ValueAssign)
+                    With DirectCast(prop, ValueAssignExpression)
                         Dim name = .targetSymbols(Scan0).Evaluate(envir)
                         Dim value = .value.Evaluate(envir)
 

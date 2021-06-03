@@ -121,6 +121,11 @@ Namespace Runtime.Internal.Object
         ''' <param name="input"></param>
         Sub New(model As Type, input As IEnumerable, env As Environment)
             Dim i As i32 = Scan0
+
+            If model Is GetType(Void) Then
+                model = GetType(Object)
+            End If
+
             ' create an empty vector with 
             ' allocable data buffer
             Dim buffer As Array = Array.CreateInstance(model, BufferSize)

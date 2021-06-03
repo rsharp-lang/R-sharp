@@ -127,6 +127,29 @@ Namespace Interpreter.SyntaxParser
                     Return SyntaxImplements.UsingClosure(code.Skip(1), opts)
                 Case "while"
                     Return SyntaxImplements.WhileLoopSyntax.CreateLoopExpression(code, opts)
+                Case "try"
+                    Dim allSeq = code.IteratesALL.ToArray
+
+                    If allSeq.isAcceptor Then
+                        Return TryCatchSyntax.CreateTryError(allSeq, opts)
+                    ElseIf allSeq.isFunctionInvoke Then
+                        Return TryCatchSyntax.CreateTryError(allSeq, opts)
+                    Else
+                        allSeq(Scan0).name = TokenType.identifier
+                        Return Nothing
+                    End If
+
+                Case "switch"
+
+                    Dim allSeq = code.IteratesALL.ToArray
+
+                    If allSeq.isAcceptor Then
+                        Return SwitchClosureSyntax.GetSwitchs(allSeq, opts)
+                    Else
+                        allSeq(Scan0).name = TokenType.identifier
+                        Return Nothing
+                    End If
+
                 Case Else
                     ' may be it is using keyword as identifier name
                     Return Nothing
@@ -408,7 +431,7 @@ Binary:
             If valExpression.isException Then
                 Return valExpression
             Else
-                Return New ValueAssign(symbol, valExpression.expression)
+                Return New ValueAssignExpression(symbol, valExpression.expression)
             End If
         End Function
 

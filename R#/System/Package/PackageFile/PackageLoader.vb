@@ -117,6 +117,14 @@ Namespace Development.Package.File
             End Using
         End Function
 
+        ''' <summary>
+        ''' 程序包调试，测试用api
+        ''' 
+        ''' 在启动的时候对未进行编译的程序包进行热加载
+        ''' </summary>
+        ''' <param name="projDir"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Public Function Hotload(projDir As String, env As GlobalEnvironment) As Message
             Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{projDir}/DESCRIPTION")
             Dim [error] As New Value(Of Message)
@@ -153,18 +161,18 @@ Namespace Development.Package.File
                 End If
             Next
 
-            ' 2. run '.onLoad'
+            ' 2. load dependency
+            If Not ([error] = env.loadDependency(pkg)) Is Nothing Then
+                Return [error]
+            End If
+
+            ' 3. run '.onLoad'
             If Not onload Is Nothing Then
                 Dim result = onload.Invoke(env, params:={})
 
                 If Program.isException(result) Then
                     Return result
                 End If
-            End If
-
-            ' 3. load dependency
-            If Not ([error] = env.loadDependency(pkg)) Is Nothing Then
-                Return [error]
             End If
 
             Call (From symbol As Expression

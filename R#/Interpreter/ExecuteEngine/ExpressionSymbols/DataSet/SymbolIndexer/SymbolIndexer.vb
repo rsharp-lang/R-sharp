@@ -48,16 +48,17 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Package.File
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -158,8 +159,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             If indexVec.length = 2 Then
                 ' [row, column]
                 ' [row, , drop = TRUE]
-                If TypeOf indexVec.values(1) Is ValueAssign Then
-                    Dim opt As ValueAssign = indexVec(1)
+                If TypeOf indexVec.values(1) Is ValueAssignExpression Then
+                    Dim opt As ValueAssignExpression = indexVec(1)
 
                     If TypeOf opt.targetSymbols(Scan0) Is Literal AndAlso DirectCast(opt.targetSymbols(Scan0), Literal) = "drop" Then
                         Dim drop As Boolean = asLogical(opt.value.Evaluate(env))(Scan0)
@@ -402,6 +403,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 sequence = obj
             ElseIf TypeOf obj Is vector Then
                 sequence = DirectCast(obj, vector).data
+            ElseIf TypeOf obj Is RMethodInfo OrElse TypeOf obj Is DeclareLambdaFunction OrElse TypeOf obj Is DeclareNewFunction Then
+                Return Internal.debug.stop({$"object of type 'closure' is not subsettable", $"closure: {obj}"}, env)
             Else
                 ' 20210526 为了避免类型转换带来的性能损耗
                 ' 在这里需要手动判断数组或者向量

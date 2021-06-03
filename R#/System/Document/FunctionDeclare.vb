@@ -118,9 +118,9 @@ Namespace Development
 
                     Return $"{valueText(funCall.funcName)}({args.JoinBy(", ")})"
 
-                Case GetType(ValueAssign)
+                Case GetType(ValueAssignExpression)
 
-                    Dim assign As ValueAssign = DirectCast(expr, ValueAssign)
+                    Dim assign As ValueAssignExpression = DirectCast(expr, ValueAssignExpression)
                     Dim symbol As String() = assign.targetSymbols.Select(AddressOf valueText).ToArray
                     Dim symbolText As String
 

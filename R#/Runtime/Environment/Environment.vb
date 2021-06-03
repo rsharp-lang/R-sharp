@@ -292,7 +292,12 @@ Namespace Runtime
             Dim tokens As String() = Strings.Split(name, "::")
             Dim pkgName As String = tokens(Scan0)
             Dim symbolName As String = tokens(1)
-            Dim funcSymbol As RFunction = globalEnvironment.attachedNamespace.FindSymbol(pkgName, symbolName)
+            Dim attaches = globalEnvironment.attachedNamespace
+            Dim funcSymbol As RFunction = attaches.FindSymbol(pkgName, symbolName)
+
+            If funcSymbol Is Nothing Then
+                funcSymbol = attaches.FindPackageSymbol(pkgName, symbolName, Me)
+            End If
 
             If funcSymbol Is Nothing Then
                 Return Nothing

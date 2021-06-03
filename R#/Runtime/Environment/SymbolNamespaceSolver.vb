@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Serialization.JSON
+﻿Imports System.IO
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
@@ -46,7 +47,29 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public Function FindPackageSymbol(namespace$, symbolName$, env As Environment) As RFunction
-            Throw New NotImplementedException
+            Dim libdir As String = PackageLoader2.GetPackageDirectory(env.globalEnvironment.options, [namespace])
+
+            If Not libdir.DirectoryExists Then
+                Return Nothing
+            End If
+
+            Dim manifest = $"{libdir}/manifest/symbols.json"
+            Dim symbols As Dictionary(Of String, String) = manifest.LoadJsonFile(Of Dictionary(Of String, String))
+
+            If Not symbols.ContainsKey(symbolName) Then
+                Return Nothing
+            End If
+
+            Dim symbolFile As String = $"{libdir}/src/{symbols(symbolName)}"
+            Dim meta As DESCRIPTION = $"{libdir}/index.json".LoadJsonFile(Of DESCRIPTION)
+
+            Using bin As New BinaryReader(symbolFile.Open)
+                Dim symbolExpression = BlockReader _
+                    .Read(bin) _
+                    .Parse(desc:=meta)
+
+                Return symbolExpression.Evaluate(env)
+            End Using
         End Function
 
         Public Overrides Function ToString() As String

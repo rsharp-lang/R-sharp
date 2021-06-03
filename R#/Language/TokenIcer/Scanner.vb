@@ -203,7 +203,7 @@ Namespace Language.TokenIcer
             "suppress",
             "typeof", "modeof", "valueof",
             "using",
-            "new"
+            "new", "try", "switch"
         }
 
         Private Shared Function isLINQKeyword(word As String) As Boolean
@@ -326,7 +326,11 @@ Namespace Language.TokenIcer
                     ' 如果上一个单词是一个对象引用符号或者小括号
                     ' 则可能是symbol index引用
                     ' 则$符号不应该被加入到缓存之中
-                    If lastPopoutToken Is Nothing OrElse lastPopoutToken.name = TokenType.open Then
+                    If lastPopoutToken Is Nothing OrElse
+                        lastPopoutToken.name = TokenType.open OrElse
+                        lastPopoutToken.name = TokenType.operator OrElse
+                        lastPopoutToken.name = TokenType.terminator Then
+
                         If buffer > 0 Then
                             ' a$"name b"
                             Return populateToken().joinNext(c)
