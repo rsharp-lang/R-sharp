@@ -1,48 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::9bac59d57b77f755399ab4894ad37d73, R#\Runtime\Internal\internalInvokes\Math\ranking.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ranking
-    ' 
-    '         Function: order, rank
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ranking
+' 
+'         Function: order, rank
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Correlations.Ranking
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Invokes
 
@@ -145,7 +149,23 @@ Namespace Runtime.Internal.Invokes
         ''' codes, which is particularly appropriate for ordered factors.
         ''' </remarks>
         <ExportAPI("order")>
-        Public Function order(x As Double(), Optional decreasing As Boolean = False) As Integer()
+        <RApiReturn(GetType(Integer))>
+        Public Function order(x As Array, Optional decreasing As Boolean = False, Optional env As Environment = Nothing) As Object
+            Dim generic = REnv.TryCastGenericArray(x, env)
+
+            If Program.isException(generic) Then
+                Return Internal.debug.stop("the input vector should be generic!", env)
+            End If
+
+            If TypeOf generic Is String() Then
+                Return DirectCast(generic, String()).orderStrings(decreasing)
+            Else
+                Return DirectCast(REnv.asVector(Of Double)(generic), Double()).orderNumbers(decreasing)
+            End If
+        End Function
+
+        <Extension>
+        Private Function orderNumbers(x As Double(), decreasing As Boolean) As Integer()
             Dim rank As Integer() = x.OrdinalRankingOrder(desc:=decreasing)
             Dim ii As New List(Of Integer)
             Dim di As Integer
@@ -156,6 +176,11 @@ Namespace Runtime.Internal.Invokes
             Next
 
             Return ii.ToArray
+        End Function
+
+        <Extension>
+        Private Function orderStrings(x As String(), decreasing As Boolean) As Integer()
+
         End Function
     End Module
 End Namespace
