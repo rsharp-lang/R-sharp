@@ -13,7 +13,7 @@ const lorenz = [
 |> deSolve(
 	list(x = 1,y = 1, z = 1), 
 	a = 0, 
-	b = 10
+	b = 40
 )
 ;
 
@@ -28,7 +28,8 @@ bitmap(file = `${dirname(@script)}/lorenz.png`) {
 	lorenz
 	|> plot(
 		vector = list(x = "x", y = "y", z = "z" ), 
-		camera = view
+		camera = view,
+		color  = "brown"
 	)
 	;
 }
