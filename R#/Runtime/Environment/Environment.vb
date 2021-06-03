@@ -296,7 +296,11 @@ Namespace Runtime
             Dim funcSymbol As RFunction = attaches.FindSymbol(pkgName, symbolName)
 
             If funcSymbol Is Nothing Then
-                Return attaches.FindPackageSymbol(pkgName, symbolName, Me)
+                funcSymbol = attaches.FindPackageSymbol(pkgName, symbolName, Me)
+            End If
+
+            If funcSymbol Is Nothing Then
+                Return Nothing
             Else
                 Return New Symbol(symbolName, funcSymbol)
             End If
