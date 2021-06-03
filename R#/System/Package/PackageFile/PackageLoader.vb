@@ -117,6 +117,14 @@ Namespace Development.Package.File
             End Using
         End Function
 
+        ''' <summary>
+        ''' 程序包调试，测试用api
+        ''' 
+        ''' 在启动的时候对未进行编译的程序包进行热加载
+        ''' </summary>
+        ''' <param name="projDir"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Public Function Hotload(projDir As String, env As GlobalEnvironment) As Message
             Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{projDir}/DESCRIPTION")
             Dim [error] As New Value(Of Message)
