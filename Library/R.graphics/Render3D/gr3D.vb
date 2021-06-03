@@ -50,7 +50,7 @@ Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
-<Package("grDevices.gr3D", Category:=APICategories.UtilityTools)>
+<Package("grDevices3D", Category:=APICategories.UtilityTools)>
 Module gr3D
 
     Sub New()
