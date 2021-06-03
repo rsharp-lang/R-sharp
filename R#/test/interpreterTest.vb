@@ -82,6 +82,10 @@ Module interpreterTest
     End Sub
 
     Sub syntaxTest()
+        Call R.Parse("  names = 1;   names$""Removed Synonyms"" = NULL;")
+
+        Pause()
+
         Call R.Parse("a = data$""Names and Identifiers"";")
 
         ' Call R.Parse("if (aaa) {11/9} else {88^77}")
