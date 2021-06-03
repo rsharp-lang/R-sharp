@@ -289,7 +289,7 @@ Module stats
     End Function
 
     ''' <summary>
-    ''' 
+    ''' 行的索引编号应该是以零为底的
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <typeparam name="DataSet"></typeparam>

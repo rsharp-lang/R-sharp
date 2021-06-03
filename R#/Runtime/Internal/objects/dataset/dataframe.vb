@@ -201,7 +201,7 @@ Namespace Runtime.Internal.Object
             If indexType Like RType.logicals Then
                 Return GetByRowIndex(index:=which.IsTrue(asLogical(selector)))
             ElseIf indexType Like RType.integers Then
-                Return GetByRowIndex(index:=asVector(Of Integer)(selector))
+                Return GetByRowIndex(index:=DirectCast(asVector(Of Integer)(selector), Integer()).Select(Function(i) i - 1).ToArray)
             ElseIf indexType Like RType.characters Then
                 Dim indexNames As String() = asVector(Of String)(selector)
                 Dim rowNames As Index(Of String) = Me.getRowNames
@@ -223,7 +223,7 @@ Namespace Runtime.Internal.Object
         End Function
 
         ''' <summary>
-        ''' 
+        ''' 所传递进来这个函数的索引编号应该是以零为底的
         ''' </summary>
         ''' <param name="index">
         ''' index: integer 0 based
@@ -292,6 +292,11 @@ Namespace Runtime.Internal.Object
             Next
         End Function
 
+        ''' <summary>
+        ''' 这个函数返回的是以零为底的索引值
+        ''' </summary>
+        ''' <param name="any"></param>
+        ''' <returns></returns>
         Public Function getRowIndex(any As Object) As Integer
             If TypeOf any Is Array Then
                 any = DirectCast(any, Array).GetValue(Scan0)
@@ -310,6 +315,11 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' 所传递进来的索引编号，应该是以零为底的
+        ''' </summary>
+        ''' <param name="index"></param>
+        ''' <returns></returns>
         Public Function GetByRowIndex(index As Integer()) As dataframe
             Dim subsetRowNumbers As String() = index _
                 .Select(Function(i, j)
