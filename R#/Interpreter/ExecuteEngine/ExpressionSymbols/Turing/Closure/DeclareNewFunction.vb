@@ -182,12 +182,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
                     If arguments.ContainsKey(key) Then
                         value = arguments(key)
+                    ElseIf var.hasInitializeExpression Then
+                        value = var.value.Evaluate(envir)
                     Else
                         ' symbol :> func
                         ' will cause parameter name as symbol name
                         ' produce key not found error
                         ' try to fix such bug
-                        value = arguments(argumentKeys(i))
+                        ' value = arguments(argumentKeys(i))
+                        Return Internal.debug.stop({$"argument '{var.names.First}' is required, but missing!", $"name: {var.names.First}"}, envir)
                     End If
                 End If
 
