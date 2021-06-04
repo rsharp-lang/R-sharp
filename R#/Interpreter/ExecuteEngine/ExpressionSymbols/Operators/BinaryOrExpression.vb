@@ -76,6 +76,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Dim ta As Type = RType.TypeOf(a)
 
             If ta Like RType.logicals Then
+                Dim flags As Boolean() = REnv.asVector(Of Boolean)(a)
+
+                If flags.Length = 1 AndAlso flags(Scan0) = True Then
+                    Return True
+                End If
+
                 ' boolean = a || b
                 Dim b As Object = right.Evaluate(envir)
 
