@@ -58,6 +58,22 @@ Imports IPEndPoint = Microsoft.VisualBasic.Net.IPEndPoint
 
 Partial Module CLI
 
+    <Extension>
+    Private Function tryHandleJSON(json As String) As Dictionary(Of String, String())
+        Try
+            Return json.LoadJSON(Of Dictionary(Of String, String()))
+        Catch ex As Exception
+            Dim stringVals As Dictionary(Of String, String) = json.LoadJSON(Of Dictionary(Of String, String))
+            Dim array As New Dictionary(Of String, String())
+
+            For Each item In stringVals
+                array.Add(item.Key, {item.Value})
+            Next
+
+            Return array
+        End Try
+    End Function
+
     <ExportAPI("--slave")>
     <Usage("--slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [--debug /timeout=<timeout in ms, default=1000> /retry=<retry_times, default=5> /MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]")>
     <Description("Create a R# cluster node for run background or parallel task. This IPC command will run a R# script file that specified by the ``/exec`` argument, and then post back the result data json to the specific master listener.")>
@@ -84,7 +100,7 @@ Partial Module CLI
         Dim script As String = args <= "/exec"
         Dim arguments As Dictionary(Of String, String()) = args("/args") _
             .Base64Decode _
-            .LoadJSON(Of Dictionary(Of String, String()))
+            .tryHandleJSON
         Dim port As Integer = args <= "/PORT"
         Dim master As String = args("/MASTER") Or "localhost"
         Dim entry As String = args <= "/entry"
