@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::5d7fdcc9fd7e7a2fb275d276ffb432b3, R#\Runtime\Internal\internalInvokes\env.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module env
-    ' 
-    '         Function: [get], [set], [typeof], CallInternal, doCall
-    '                   environment, getOutputDevice, globalenv, listOptionItems, lockBinding
-    '                   ls, objects, objectSize, traceback, unlockBinding
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module env
+' 
+'         Function: [get], [set], [typeof], CallInternal, doCall
+'                   environment, getOutputDevice, globalenv, listOptionItems, lockBinding
+'                   ls, objects, objectSize, traceback, unlockBinding
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -422,7 +422,22 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("traceback")>
-        Public Function traceback(Optional env As Environment = Nothing) As ExceptionData
+        <RApiReturn(GetType(ExceptionData))>
+        Public Function traceback(Optional err As Object = Nothing, Optional env As Environment = Nothing) As Object
+            If err Is Nothing Then
+                Return getCurrentTrace(env)
+            ElseIf TypeOf err Is Message Then
+                Return DirectCast(err, Message).environmentStack _
+                    .Select(Function(line) line.ToString) _
+                    .ToArray
+            ElseIf TypeOf err Is TryError Then
+                Return DirectCast(err, TryError).traceback
+            Else
+                Return getCurrentTrace(env)
+            End If
+        End Function
+
+        Private Function getCurrentTrace(env As Environment) As ExceptionData
             Dim exception As Message = env.globalEnvironment.lastException
 
             If exception Is Nothing Then
