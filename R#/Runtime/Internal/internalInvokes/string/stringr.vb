@@ -340,6 +340,8 @@ Namespace Runtime.Internal.Invokes
 
             If TypeOf raw Is Image OrElse TypeOf raw Is Bitmap Then
                 base64 = CType(raw, Image).ToBase64String()
+            ElseIf TypeOf raw Is String Then
+                base64 = Encoding.UTF8.GetBytes(DirectCast(raw, String)).ToBase64String
             Else
                 base64 = rawBufferBase64(raw, env)
             End If
@@ -366,10 +368,9 @@ Namespace Runtime.Internal.Invokes
                 Else
                     Return strings _
                         .populates(Of String)(env) _
-                        .Select(Function(str)
-                                    Return Encoding.UTF8.GetBytes(str).ToBase64String
-                                End Function) _
-                        .ToArray
+                        .GetJson _
+                        .DoCall(AddressOf Encoding.UTF8.GetBytes) _
+                        .ToBase64String
                 End If
             End If
 
