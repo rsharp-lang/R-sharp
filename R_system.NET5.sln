@@ -4314,8 +4314,8 @@ Global
 		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Biostack|x86.Build.0 = Debug|Any CPU
 		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Debug|x64.Build.0 = Debug|Any CPU
+		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Debug|x64.ActiveCfg = Debug|x64
+		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Debug|x64.Build.0 = Debug|x64
 		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Debug|x86.Build.0 = Debug|Any CPU
 		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Docker|Any CPU.ActiveCfg = Debug|Any CPU
@@ -4374,8 +4374,8 @@ Global
 		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Release|x86.Build.0 = Release|Any CPU
 		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Rsharp_app_release|Any CPU.ActiveCfg = Release|Any CPU
 		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
-		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Rsharp_app_release|x64.ActiveCfg = Release|Any CPU
-		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Rsharp_app_release|x64.Build.0 = Release|Any CPU
+		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Rsharp_app_release|x86.ActiveCfg = Release|Any CPU
 		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.Rsharp_app_release|x86.Build.0 = Release|Any CPU
 		{83EC1406-FE08-46A1-88B3-CE56D7E9961C}.RsharpDev|Any CPU.ActiveCfg = Release|Any CPU
