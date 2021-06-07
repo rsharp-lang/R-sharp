@@ -43,7 +43,7 @@
 
 #End Region
 
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Development
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RExpression = SMRUCC.Rsharp.Interpreter.ExecuteEngine.Expression
 
@@ -75,16 +75,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
         End Function
 
         Public Function GetProjectionName() As String
-            Select Case R.GetType
-                Case GetType(FunctionInvoke)
-                    Dim funCalls As FunctionInvoke = R
-                    Dim funcName As String = funCalls.funcName.ToString
-                    Dim dispName As String = $"{funcName}({funCalls.parameters.JoinBy(",")})"
-
-                    Return dispName
-                Case Else
-                    Throw New NotImplementedException(R.GetType.FullName)
-            End Select
+            Return ScriptFormatterPrinter.Format(R)
         End Function
     End Class
 End Namespace
