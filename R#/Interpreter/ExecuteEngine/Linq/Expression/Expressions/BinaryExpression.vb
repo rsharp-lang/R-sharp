@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::00861aa940e86afb00abac7af9f45a8d, R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\BinaryExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class BinaryExpression
-    ' 
-    '         Properties: isEquivalent, LikeValueAssign, name
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Exec, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class BinaryExpression
+' 
+'         Properties: isEquivalent, LikeValueAssign, name
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Exec, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.LINQ
@@ -86,6 +87,13 @@ Namespace Interpreter.ExecuteEngine.LINQ
         Public Overrides Function Exec(context As ExecutableContext) As Object
             Dim x As Object = left.Exec(context)
             Dim y As Object = right.Exec(context)
+
+            If TypeOf x Is vector Then
+                x = DirectCast(x, vector).data.GetValue(Scan0)
+            End If
+            If TypeOf y Is vector Then
+                y = DirectCast(y, vector).data.GetValue(Scan0)
+            End If
 
             Select Case op
                 Case "+" : Return x + y
