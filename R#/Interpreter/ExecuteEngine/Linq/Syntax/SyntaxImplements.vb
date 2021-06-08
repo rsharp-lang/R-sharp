@@ -492,6 +492,13 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 If tokenList(Scan0) <> (TokenType.operator, "-") Then
                     Return New SyntaxParserResult(New SyntaxErrorException(tokenList.Select(Function(t) t.text).JoinBy(" ")))
                 End If
+            ElseIf tokenList.Length = 3 AndAlso tokenList(1) = (TokenType.keyword, "as") Then
+                Dim aliasName As New AliasName(
+                    old:=tokenList(Scan0).text,
+                    [alias]:=tokenList(2).text
+                )
+
+                Return New SyntaxParserResult(aliasName)
             End If
 
             Return tokenList.ParseBinary(opts)

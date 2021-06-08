@@ -730,6 +730,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\TryCatchExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfPromise.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\ElseIfBranch.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\AliasName.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\RuntimeVectorDataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\JointDataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\QuerySource.vb" />

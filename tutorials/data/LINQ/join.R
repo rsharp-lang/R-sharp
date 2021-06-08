@@ -10,14 +10,18 @@ const address = data.frame(
     AddressLine = ["AddressLine1","AddressLine2","AddressLine5","AddressLine6"]
 );
 
+print("view of the raw data table inputs:");
+print(employee);
+print(address);
+
 # the join operation
 let result = {
     FROM [ID, Name, AddressId] IN employee
-    JOIN [ID, AddressLine] IN address
-    ON employee$AddressId == address$ID
-    WHERE employee$ID > 5
+    JOIN [ID as addrId, AddressLine] IN address
+    ON AddressId == addrId
+    WHERE ID > 5
 }
+
 # will produce a join table output
 # employee.ID, Name, AddressId, address.ID, AddressLine
-
 print(result);
