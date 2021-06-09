@@ -72,7 +72,7 @@ Namespace Development.Package.File.Expressions
 
                 Call outfile.Write(context.GetBuffer(x.stackFrame))
                 Call outfile.Write(CType(If(x.is_readonly, 1, 0), Byte))
-                Call outfile.Write(CType(x.names.Length, Byte))
+                Call outfile.Write(CType(x.symbolSize, Byte))
 
                 For Each name As String In x.names
                     Call outfile.Write(Encoding.ASCII.GetBytes(name))
