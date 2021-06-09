@@ -110,12 +110,10 @@ Module plots
         Return RegressionPlot.Plot(lm)
     End Function
 
-    Sub New()
-        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of SerialData)(Function(line) line.ToString)
-    End Sub
-
     <RInitialize>
     Sub Main()
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of SerialData)(Function(line) line.ToString)
+
         Call REnv.Internal.generic.add("plot", GetType(DeclareLambdaFunction), AddressOf plotFormula)
         Call REnv.Internal.generic.add("plot", GetType(ODEOutput), AddressOf plotODEResult)
         Call REnv.Internal.generic.add("plot", GetType(ODEsOut), AddressOf plot_deSolveResult)

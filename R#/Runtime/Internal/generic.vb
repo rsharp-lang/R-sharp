@@ -146,6 +146,10 @@ Namespace Runtime.Internal
                 x = DirectCast(x, vbObject).target
                 type = x.GetType
             End If
+            If type Is GetType(vector) AndAlso Not generics(funcName).ContainsKey(type) Then
+                x = DirectCast(x, vector).data
+                type = x.GetType
+            End If
 
             If Not generics(funcName).ContainsKey(type) Then
                 If TypeOf x Is Object() Then
@@ -165,7 +169,7 @@ Namespace Runtime.Internal
                 Return debug.stop({
                     $"missing loader entry for generic function '{funcName}'!",
                     $"missing implementation for overloads type: {type.FullName}!",
-                    "consider load required package at first!"
+                    $"consider load required package at first!"
                 }, env)
             Else
                 apiCalls = generics(funcName)(type)
