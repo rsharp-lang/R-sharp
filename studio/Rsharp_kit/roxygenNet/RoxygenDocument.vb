@@ -73,7 +73,7 @@ Public Class RoxygenDocument
 
                 docs.declares = New FunctionDeclare With {
                     .name = func.funcName,
-                    .parameters = func.params _
+                    .parameters = func.parameters _
                         .Select(AddressOf FunctionDeclare.GetArgument) _
                         .ToArray,
                     .sourceMap = func.stackFrame

@@ -83,7 +83,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
             Call Me.New(New DeclareNewFunction(
                 body:=bodyClosure,
                 funcName:="else_branch_internal",
-                params:={},
+                parameters:={},
                 stackframe:=stackframe
             ))
         End Sub

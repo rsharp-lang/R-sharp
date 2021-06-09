@@ -87,7 +87,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 ifTest:=ifTest,
                 trueClosure:=New DeclareNewFunction(
                     funcName:="if_closure_internal",
-                    params:={},
+                    parameters:={},
                     body:=trueClosure,
                     stackframe:=stackframe
                 ),

@@ -126,10 +126,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
         Public Function Invoke(parent As Environment, arguments() As InvokeParameter) As Object Implements RFunction.Invoke
             Using envir As New Environment(parent, stackFrame, isInherits:=False)
-                If parameter.names.Length = 0 Then
+                If parameter.symbolSize = 0 Then
                     ' lambda function with no parameter
                     Return closure.Evaluate(envir)
-                ElseIf arguments.Length = 0 AndAlso parameter.names.Length > 0 Then
+                ElseIf arguments.Length = 0 AndAlso parameter.symbolSize > 0 Then
                     ' no value for the required parameter
                     Return DeclareNewFunction.MissingParameters(parameter, name, envir)
                 Else
@@ -163,7 +163,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             '
             Dim argVal As Object
 
-            For i As Integer = 0 To parameter.names.Length - 1
+            For i As Integer = 0 To parameter.symbolSize - 1
                 argVal = arguments(i)
                 env.Push(parameter.names(i), argVal, True, TypeCodes.generic)
             Next

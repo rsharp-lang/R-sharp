@@ -64,10 +64,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <summary>
         ''' 对于tuple类型，会存在多个变量
         ''' </summary>
-        Public ReadOnly Property names As String()
+        Public ReadOnly Property names As IReadOnlyCollection(Of String)
+            Get
+                Return m_names.ToArray
+            End Get
+        End Property
 
         Public ReadOnly Property hasInitializeExpression As Boolean = False
 
+        Friend m_names As String()
         Friend m_value As Expression
         Friend m_type As TypeCodes
         Friend is_readonly As Boolean
@@ -79,15 +84,23 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Property
 
         Public Overrides ReadOnly Property type As TypeCodes
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return m_type
+            End Get
+        End Property
+
+        Public ReadOnly Property symbolSize As Integer
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Get
+                Return m_names.Length
             End Get
         End Property
 
         Public ReadOnly Property isTuple As Boolean
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
-                Return (Not names.IsNullOrEmpty) AndAlso names.Length > 1
+                Return (Not names.IsNullOrEmpty) AndAlso symbolSize > 1
             End Get
         End Property
 
@@ -109,7 +122,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
         Sub New(names$(), value As Expression, type As TypeCodes, [readonly] As Boolean, stackFrame As StackFrame)
-            Me.names = names
+            Me.m_names = names.ToArray
             Me.m_value = value
             Me.m_type = type
             Me.is_readonly = [readonly]
@@ -276,9 +289,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Function
 
         Public Overrides Function ToString() As String
-            If names.Length > 1 Then
+            If symbolSize > 1 Then
                 Return $"Dim [{names.JoinBy(", ")}] As {type.Description} = {any.ToString(value, "NULL")}"
-            ElseIf names.Length = 0 Then
+            ElseIf symbolSize = 0 Then
                 Return "Syntax Error!"
             Else
                 Return $"Dim {names(Scan0)} As {type.Description} = {any.ToString(value, "NULL")}"
@@ -288,7 +301,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Friend Shared Function getParameterView(declares As DeclareNewSymbol) As String
             Dim a$
 
-            If declares.names.Length = 1 Then
+            If declares.symbolSize = 1 Then
                 a = declares.names(Scan0)
             Else
                 a = declares.names.JoinBy(", ")
