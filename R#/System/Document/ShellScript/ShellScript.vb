@@ -294,7 +294,7 @@ Namespace Development.CommandLine
         End Sub
 
         Private Sub analysisTree(expr As DeclareNewFunction, attrs As ArgumentInfo)
-            For Each arg In expr.params
+            For Each arg In expr.parameters
                 Call analysisTree(arg)
             Next
 
