@@ -74,6 +74,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(env As Environment)
             environment = env
+            environment.isLINQContext = True
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

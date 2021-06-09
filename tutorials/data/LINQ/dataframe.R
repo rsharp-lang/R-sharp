@@ -23,6 +23,8 @@ print(table);
 # [4, ]   4          2           4153364.6332209
 # [5, ]   5          1           721031.6091827
 
+const offset = 0;
+
 # run LINQ query on the given table
 let runQuery = {
     FROM [X, Y, Z, "A+3"] 
@@ -32,7 +34,7 @@ let runQuery = {
     SELECT X, Y, zz = log(Z) * X, Z, sum("A+3") 
     ORDER BY zz DESCENDING
     TAKE 10
-    SKIP 1
+    SKIP 1 + offset
 }
 
 print("Get result data table after subset:");

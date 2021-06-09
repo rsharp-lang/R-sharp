@@ -57,7 +57,6 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My
-Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
@@ -175,6 +174,24 @@ Namespace Runtime
 
         Const AlreadyExists$ = "Variable ""{0}"" is already existed, can not declare it again!"
         Const ConstraintInvalid$ = "Value can not match the type constraint!!! ({0} <--> {1})"
+
+        Dim linqContext As Boolean = False
+
+        Public Property isLINQContext As Boolean
+            Get
+                If linqContext Then
+                    Return True
+                ElseIf Not parent Is Nothing Then
+                    Return parent.isLINQContext
+                Else
+                    Return linqContext
+                End If
+            End Get
+            Set(value As Boolean)
+                linqContext = value
+            End Set
+        End Property
+
 
         Sub New()
             symbols = New Dictionary(Of Symbol)

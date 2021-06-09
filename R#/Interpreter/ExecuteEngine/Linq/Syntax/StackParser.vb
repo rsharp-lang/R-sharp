@@ -204,7 +204,8 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                     End If
 
                     If stack.Count = 1 AndAlso "([{".IndexOf(stack.Peek) = -1 Then
-                        stack.Pop()
+                        ' stack.Pop()
+                        Console.Write("")
                     End If
                 Else
                     block.Add(item)

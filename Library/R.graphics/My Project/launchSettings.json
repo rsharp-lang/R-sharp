@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "graphics-netcore5": {
+      "commandName": "Project",
+      "commandLineArgs": "\"E:\\GCModeller\\src\\R-sharp\\tutorials\\data\\LINQ\\dataframe.R\" --debug"
+    }
+  }
+}

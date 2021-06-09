@@ -107,7 +107,10 @@ Public Module Extensions
     End Function
 
     <Extension>
-    Public Function SafeCreateColumns(Of T)(data As IEnumerable(Of T), getKey As Func(Of T, String), getArray As Func(Of T, String())) As Dictionary(Of String, Array)
+    Public Function SafeCreateColumns(Of T)(data As IEnumerable(Of T),
+                                            getKey As Func(Of T, String),
+                                            getArray As Func(Of T, String())) As Dictionary(Of String, Array)
+
         Dim cols As New Dictionary(Of String, Array)
         Dim key As String
         Dim index As Integer = Scan0

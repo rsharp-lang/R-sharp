@@ -189,7 +189,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         <DebuggerStepThrough>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Return value
+            If type = TypeCodes.string AndAlso (Not envir Is Nothing) AndAlso envir.isLINQContext Then
+                If envir.symbols.ContainsKey(ValueStr) Then
+                    Return envir.symbols(ValueStr).value
+                Else
+                    Return value
+                End If
+            Else
+                Return value
+            End If
         End Function
 
         ''' <summary>

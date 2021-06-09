@@ -305,6 +305,10 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                     With DirectCast(item.expression, ValueAssign)
                         fields.Add(New NamedValue(Of Expression)(.symbolName, New RunTimeValueExpression(.value)))
                     End With
+                ElseIf TypeOf item.expression Is RunTimeValueExpression Then
+                    With DirectCast(item.expression, RunTimeValueExpression)
+                        fields.Add(New NamedValue(Of Expression)(.GetProjectionName, item.expression))
+                    End With
                 Else
                     Return New SyntaxParserResult(New SyntaxErrorException("invalid expression type!"))
                 End If
@@ -464,7 +468,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
                 If TypeOf name.expression Is SymbolReference AndAlso blocks(1).IsClosure Then
                     Dim params As New List(Of RExpression)
-                    Dim funcName As String = DirectCast(name.expression, SymbolReference).name
+                    Dim funcName As String = DirectCast(name.expression, SymbolReference).symbolName
                     Dim sourceMap As StackFrame = opts.GetStackTrace(blocks(Scan0)(Scan0), funcName)
 
                     For Each expr As SyntaxResult In blocks(1) _
@@ -488,6 +492,13 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 If tokenList(Scan0) <> (TokenType.operator, "-") Then
                     Return New SyntaxParserResult(New SyntaxErrorException(tokenList.Select(Function(t) t.text).JoinBy(" ")))
                 End If
+            ElseIf tokenList.Length = 3 AndAlso tokenList(1) = (TokenType.keyword, "as") Then
+                Dim aliasName As New AliasName(
+                    old:=tokenList(Scan0).text,
+                    [alias]:=tokenList(2).text
+                )
+
+                Return New SyntaxParserResult(aliasName)
             End If
 
             Return tokenList.ParseBinary(opts)
