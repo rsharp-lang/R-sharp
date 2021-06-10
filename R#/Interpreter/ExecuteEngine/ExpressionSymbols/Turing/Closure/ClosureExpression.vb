@@ -72,23 +72,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             <DebuggerStepThrough>
             Get
-                Return program.execQueue.IsNullOrEmpty
+                Return program.lines = 0
             End Get
         End Property
 
         Public ReadOnly Property bodySize As Integer
             Get
-                Return program.execQueue.Length
+                Return program.lines
             End Get
         End Property
 
-        Dim program As Program
+        Protected ReadOnly program As Program
 
         <DebuggerStepThrough>
         Sub New(code As Expression())
-            program = New Program With {
-                .execQueue = code
-            }
+            program = New Program(code)
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

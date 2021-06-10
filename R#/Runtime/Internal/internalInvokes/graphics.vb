@@ -84,7 +84,11 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("bitmap")>
-        Public Function bitmap(image As Object, Optional file As Object = Nothing, Optional format As ImageFormats = ImageFormats.Png, Optional env As Environment = Nothing) As Object
+        Public Function bitmap(image As Object,
+                               Optional file As Object = Nothing,
+                               Optional format As ImageFormats = ImageFormats.Png,
+                               Optional env As Environment = Nothing) As Object
+
             If image Is Nothing Then
                 Return debug.stop("the source bitmap image can not be nothing!", env)
             End If

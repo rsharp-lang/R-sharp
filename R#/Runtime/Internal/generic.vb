@@ -129,7 +129,22 @@ Namespace Runtime.Internal
 
         <Extension>
         Friend Function invokeGeneric(args As list, x As Object, env As Environment, <CallerMemberName> Optional funcName$ = Nothing) As Object
-            Dim type As Type = x.GetType
+            Dim type As Type
+
+            If x Is Nothing Then
+                Return Internal.debug.stop("object 'x' is nothing!", env)
+            Else
+                type = x.GetType
+            End If
+
+            Dim acceptorArgs As Dictionary(Of String, Object) = env _
+                .parent _
+                .parent _
+                .acceptorArguments
+
+            For Each key As String In acceptorArgs.Keys
+                args.add(key, acceptorArgs(key))
+            Next
 
             If Not generics.ContainsKey(funcName) Then
                 Return missingGenericSymbol(funcName, env)

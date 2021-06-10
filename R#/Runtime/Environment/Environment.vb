@@ -125,6 +125,7 @@ Namespace Runtime
         End Property
 
         Friend ReadOnly ifPromise As New List(Of IfPromise)
+        Friend ReadOnly acceptorArguments As New Dictionary(Of String, Object)
 
         ''' <summary>
         ''' In the constructor function of <see cref="Runtime.GlobalEnvironment"/>, 

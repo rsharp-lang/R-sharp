@@ -68,7 +68,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         <Extension>
-        Public Function FunctionAcceptorInvoke(invoke As FunctionInvoke, firstBody As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+        Private Function FunctionAcceptorInvoke(invoke As FunctionInvoke, firstBody As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim Rscript As Rscript = opts.source
             Dim firstParameterBody As Expression() = firstBody _
                 .Skip(1) _
@@ -81,7 +81,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return New SyntaxResult(New SyntaxErrorException(opts.error), opts.debug)
             End If
 
-            Dim parameterClosure As New ClosureExpression(firstParameterBody)
+            Dim parameterClosure As New AcceptorClosure(firstParameterBody)
             Dim args As New List(Of Expression)
 
             args.Add(parameterClosure)

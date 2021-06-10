@@ -56,10 +56,25 @@ Namespace Interpreter
 
     Public Class Program : Implements IEnumerable(Of Expression)
 
-        Friend execQueue As Expression()
+        ReadOnly execQueue As Expression()
+
+        ''' <summary>
+        ''' the raw Rscript data
+        ''' </summary>
         Friend Rscript As Rscript
 
-        Sub New()
+        Public ReadOnly Property lines As Integer
+            Get
+                If execQueue Is Nothing Then
+                    Return 0
+                Else
+                    Return execQueue.Length
+                End If
+            End Get
+        End Property
+
+        Sub New(lines As IEnumerable(Of Expression))
+            execQueue = lines.ToArray
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -104,8 +119,7 @@ Namespace Interpreter
                 [error] = opts.error
                 Return Nothing
             Else
-                Return New Program With {
-                    .execQueue = exec,
+                Return New Program(exec) With {
                     .Rscript = Rscript
                 }
             End If
