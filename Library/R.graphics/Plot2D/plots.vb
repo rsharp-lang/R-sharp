@@ -128,11 +128,20 @@ Module plots
     End Sub
 
     Public Function plotArray(x As Double(), args As list, env As Environment) As Object
+        Dim line As New SerialData() With {
+            .pts = x _
+                .SeqIterator _
+                .Select(Function(i)
+                            Return New PointData(i.i, i.value)
+                        End Function) _
+                .ToArray
+        }
 
+        Return plotSerials(line, args, env)
     End Function
 
     Public Function plotVector(x As vector, args As list, env As Environment) As Object
-
+        Return plotArray(REnv.asVector(Of Double)(x), args, env)
     End Function
 
     Public Function plot_hclust(cluster As Cluster, args As list, env As Environment) As Object
