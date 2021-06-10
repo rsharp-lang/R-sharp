@@ -152,6 +152,13 @@ Public Module ApiArgumentHelpers
     End Function
 
     Public Function GetFileStream(file As Object, mode As FileAccess, env As Environment) As [Variant](Of Stream, Message)
+        If TypeOf file Is vector Then
+            file = DirectCast(file, vector).data
+        End If
+        If TypeOf file Is Array AndAlso DirectCast(file, Array).Length = 1 Then
+            file = DirectCast(file, Array).GetValue(Scan0)
+        End If
+
         If file Is Nothing Then
             Return Internal.debug.stop({"file output can not be nothing!"}, env)
         ElseIf TypeOf file Is String Then
@@ -162,6 +169,8 @@ Public Module ApiArgumentHelpers
             End If
         ElseIf TypeOf file Is Stream Then
             Return DirectCast(file, Stream)
+        ElseIf TypeOf file Is Byte() Then
+            Return New MemoryStream(DirectCast(file, Byte()))
         Else
             Return Internal.debug.stop(Message.InCompatibleType(GetType(Stream), file.GetType, env,, NameOf(file)), env)
         End If
