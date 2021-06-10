@@ -197,6 +197,7 @@
     <Compile Include="documents\commentDocs.vb" />
     <Compile Include="documents\devStudio.vb" />
     <Compile Include="github.vb" />
+    <Compile Include="sqlite.vb" />
     <Compile Include="package.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
