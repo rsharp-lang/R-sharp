@@ -123,7 +123,17 @@ Module plots
         Call REnv.Internal.generic.add("plot", GetType(Dictionary(Of String, Double)), AddressOf plot_categoryBars)
         Call REnv.Internal.generic.add("plot", GetType(DistanceMatrix), AddressOf plot_corHeatmap)
         Call REnv.Internal.generic.add("plot", GetType(Cluster), AddressOf plot_hclust)
+        Call REnv.Internal.generic.add("plot", GetType(vector), AddressOf plotVector)
+        Call REnv.Internal.generic.add("plot", GetType(Double()), AddressOf plotArray)
     End Sub
+
+    Public Function plotArray(x As Double(), args As list, env As Environment) As Object
+
+    End Function
+
+    Public Function plotVector(x As vector, args As list, env As Environment) As Object
+
+    End Function
 
     Public Function plot_hclust(cluster As Cluster, args As list, env As Environment) As Object
         Dim size$ = InteropArgumentHelper.getSize(args.getByName("size"))
