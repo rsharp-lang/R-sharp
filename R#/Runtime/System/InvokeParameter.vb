@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::1db532c27f60cc32db5b4b6e08ca89a4, R#\Runtime\System\InvokeParameter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class InvokeParameter
-    ' 
-    '         Properties: haveSymbolName, index, isProbablyVectorNameTuple, isSymbolAssign, name
-    '                     value
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: Create, CreateArguments, CreateLiterals, Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class InvokeParameter
+' 
+'         Properties: haveSymbolName, index, isProbablyVectorNameTuple, isSymbolAssign, name
+'                     value
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: Create, CreateArguments, CreateLiterals, Evaluate, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -83,6 +84,12 @@ Namespace Runtime.Components
                 Else
                     Return value.ToString
                 End If
+            End Get
+        End Property
+
+        Public ReadOnly Property isAcceptor As Boolean
+            Get
+                Return TypeOf value Is AcceptorClosure
             End Get
         End Property
 
@@ -189,8 +196,17 @@ Namespace Runtime.Components
                                                hasObjectList As Boolean) As [Variant](Of Message, Dictionary(Of String, Object))
 
             Dim argVals As New Dictionary(Of String, Object)
+            Dim allArgs As InvokeParameter() = arguments.ToArray
+            Dim acceptor As AcceptorClosure = Nothing
 
-            For Each arg As SeqValue(Of InvokeParameter) In arguments.SeqIterator
+            If allArgs.Length > 0 AndAlso allArgs(Scan0).isAcceptor Then
+                acceptor = allArgs(Scan0).value
+                allArgs = allArgs _
+                    .Skip(1) _
+                    .ToArray
+            End If
+
+            For Each arg As SeqValue(Of InvokeParameter) In allArgs.SeqIterator(offset:=If(acceptor Is Nothing, 0, 1))
                 Dim keyName As String
                 Dim argVal As Object
 
@@ -205,11 +221,29 @@ Namespace Runtime.Components
                 If Program.isException(argVal) Then
                     Return DirectCast(argVal, Message)
                 Else
-                    argVals.Add(keyName, argVal)
+                    Call argVals.Add(keyName, argVal)
+
+                    If Not acceptor Is Nothing Then
+                        If arg.value.isSymbolAssign Then
+                            Call env.acceptorArguments.Add(keyName, argVal)
+                        End If
+                    End If
                 End If
             Next
 
-            Return argVals
+            If acceptor Is Nothing Then
+                Return argVals
+            End If
+
+            Dim newAlignArgs As New Dictionary(Of String, Object) From {
+                {"$0", acceptor.Evaluate(env)}
+            }
+
+            For Each keyName As String In argVals.Keys
+                newAlignArgs.Add(keyName, argVals(keyName))
+            Next
+
+            Return newAlignArgs
         End Function
 
         ''' <summary>
