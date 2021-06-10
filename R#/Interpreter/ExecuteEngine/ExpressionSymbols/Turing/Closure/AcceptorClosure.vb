@@ -12,6 +12,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             If TypeOf program.Last Is FunctionInvoke Then
                 Dim arguments = envir.acceptorArguments
                 Dim newProgram As New Program(program.Take(program.lines - 1))
+                Dim lastFunc As FunctionInvoke = program.Last
+                Dim value As Object = newProgram.Execute(envir)
+
+                If Program.isException(value) Then
+                    Return value
+                Else
+                    value = lastFunc.Evaluate(envir)
+                End If
+
+                Return value
             Else
                 Return MyBase.Evaluate(envir)
             End If
