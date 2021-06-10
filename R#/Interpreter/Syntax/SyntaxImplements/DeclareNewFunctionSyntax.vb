@@ -141,7 +141,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Dim func As New DeclareNewFunction(
                     funcName:=funcName,
                     body:=bodyPart.expression,
-                    params:=params.ToArray,
+                    parameters:=params.ToArray,
                     stackframe:=stack
                 )
 

@@ -120,7 +120,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim body As New DeclareNewFunction(
                 body:=loopBody.expression,
                 funcName:="forloop_internal",
-                params:={},
+                parameters:={},
                 stackframe:=stackframe
             )
             Dim [for] As New ForLoop(variables, sequence.expression, body, parallel, stackframe)

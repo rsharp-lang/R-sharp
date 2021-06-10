@@ -50,6 +50,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
@@ -57,7 +58,6 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -93,9 +93,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
         Public ReadOnly Property funcName As String Implements RFunction.name
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
-
-        Public ReadOnly Property params As DeclareNewSymbol()
-
+        Public ReadOnly Property parameters As DeclareNewSymbol()
         Public ReadOnly Property body As ClosureExpression
 
         ''' <summary>
@@ -103,15 +101,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' </summary>
         Friend envir As Environment
 
-        Sub New(funcName$, params As DeclareNewSymbol(), body As ClosureExpression, stackframe As StackFrame)
+        Sub New(funcName$, parameters As DeclareNewSymbol(), body As ClosureExpression, stackframe As StackFrame)
             Me.funcName = funcName
-            Me.params = params
+            Me.parameters = parameters
             Me.body = body
             Me.stackFrame = stackframe
         End Sub
 
         Public Iterator Function getArguments() As IEnumerable(Of NamedValue(Of Expression)) Implements RFunction.getArguments
-            For Each arg As DeclareNewSymbol In params
+            For Each arg As DeclareNewSymbol In Me.parameters
                 For Each name As String In arg.names
                     Yield New NamedValue(Of Expression) With {
                         .Name = name,
@@ -161,8 +159,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End With
 
             ' initialize environment
-            For i As Integer = 0 To Me.params.Length - 1
-                var = Me.params(i)
+            For i As Integer = 0 To Me.parameters.Length - 1
+                var = Me.parameters(i)
 
                 If arguments.ContainsKey(var.names(Scan0)) Then
                     value = arguments(var.names(Scan0))
@@ -184,13 +182,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         value = arguments(key)
                     ElseIf var.hasInitializeExpression Then
                         value = var.value.Evaluate(envir)
-                    Else
+                    ElseIf TypeOf params(i).value Is ValueAssignExpression Then
                         ' symbol :> func
                         ' will cause parameter name as symbol name
                         ' produce key not found error
                         ' try to fix such bug
                         ' value = arguments(argumentKeys(i))
                         Return Internal.debug.stop({$"argument '{var.names.First}' is required, but missing!", $"name: {var.names.First}"}, envir)
+                    Else
+                        key = argumentKeys(i)
+                        value = arguments(key)
                     End If
                 End If
 
@@ -252,14 +253,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 envir = New Environment(parent, stackFrame, isInherits:=False)
             End If
 
-            For i As Integer = 0 To params.Length - 1
-                Dim names As Literal() = params(i).names _
+            For i As Integer = 0 To parameters.Length - 1
+                Dim names As Literal() = parameters(i).names _
                     .Select(Function(name) New Literal(name)) _
                     .ToArray
 
                 If i >= arguments.Length Then
-                    If params(i).hasInitializeExpression Then
-                        argVal = params(i).value.Evaluate(envir)
+                    If parameters(i).hasInitializeExpression Then
+                        argVal = parameters(i).value.Evaluate(envir)
 
                         If Program.isException(argVal) Then
                             Return argVal
@@ -267,7 +268,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
                         Call ValueAssignExpression.doValueAssign(envir, names, True, argVal)
                     Else
-                        Return MissingParameters(params(i), funcName, envir)
+                        Return MissingParameters(parameters(i), funcName, envir)
                     End If
                 Else
                     Call ValueAssignExpression.doValueAssign(envir, names, True, arguments(i))
@@ -301,7 +302,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"declare function '${funcName}'({params.Select(AddressOf DeclareNewSymbol.getParameterView).JoinBy(", ")}) {{
+            Return $"declare function '${funcName}'({parameters.Select(AddressOf DeclareNewSymbol.getParameterView).JoinBy(", ")}) {{
     # function_internal
     {body}
 }}"

@@ -95,7 +95,7 @@ Module devStudio
             Case GetType(DeclareNewFunction)
                 Dim newFunc As DeclareNewFunction = DirectCast(code, DeclareNewFunction)
 
-                For Each a As DeclareNewSymbol In newFunc.params
+                For Each a As DeclareNewSymbol In newFunc.parameters
                     Call getRequiredPackages(a, packageNames, solveSymbols)
                 Next
 

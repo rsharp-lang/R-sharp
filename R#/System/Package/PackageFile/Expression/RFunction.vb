@@ -92,7 +92,7 @@ Namespace Development.Package.File.Expressions
                 End If
 
                 If TypeOf x Is DeclareNewFunction Then
-                    params = DirectCast(x, DeclareNewFunction).params
+                    params = DirectCast(x, DeclareNewFunction).parameters
                     body = DirectCast(x, DeclareNewFunction).body _
                         .EnumerateCodeLines _
                         .ToArray
@@ -222,7 +222,7 @@ Namespace Development.Package.File.Expressions
 
             Return New DeclareNewFunction(
                 funcName:=funcName,
-                params:=args.ToArray,
+                parameters:=args.ToArray,
                 body:=New ClosureExpression(body.ToArray),
                 stackframe:=sourceMap
             ) With {
