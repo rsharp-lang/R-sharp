@@ -235,8 +235,8 @@ Global
 		{6FC88360-095E-460C-B659-700719070B84}.Release|x86.Build.0 = Release|Any CPU
 		{6FC88360-095E-460C-B659-700719070B84}.Rsharp_app_release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FC88360-095E-460C-B659-700719070B84}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
-		{6FC88360-095E-460C-B659-700719070B84}.Rsharp_app_release|x64.ActiveCfg = Release|Any CPU
-		{6FC88360-095E-460C-B659-700719070B84}.Rsharp_app_release|x64.Build.0 = Release|Any CPU
+		{6FC88360-095E-460C-B659-700719070B84}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{6FC88360-095E-460C-B659-700719070B84}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{6FC88360-095E-460C-B659-700719070B84}.Rsharp_app_release|x86.ActiveCfg = Release|Any CPU
 		{6FC88360-095E-460C-B659-700719070B84}.Rsharp_app_release|x86.Build.0 = Release|Any CPU
 		{6FC88360-095E-460C-B659-700719070B84}.sciBASIC.NET-test-release|Any CPU.ActiveCfg = Release|Any CPU
@@ -685,8 +685,8 @@ Global
 		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.Release|x86.Build.0 = Release|Any CPU
 		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.Rsharp_app_release|Any CPU.ActiveCfg = Release|Any CPU
 		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
-		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.Rsharp_app_release|x64.ActiveCfg = Release|Any CPU
-		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.Rsharp_app_release|x64.Build.0 = Release|Any CPU
+		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.Rsharp_app_release|x86.ActiveCfg = Release|Any CPU
 		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.Rsharp_app_release|x86.Build.0 = Release|Any CPU
 		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.sciBASIC.NET-test-release|Any CPU.ActiveCfg = Release|Any CPU
@@ -835,8 +835,8 @@ Global
 		{32228818-26F1-44DF-8D40-347136C743CD}.Release|x86.Build.0 = Release|x86
 		{32228818-26F1-44DF-8D40-347136C743CD}.Rsharp_app_release|Any CPU.ActiveCfg = Release|Any CPU
 		{32228818-26F1-44DF-8D40-347136C743CD}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
-		{32228818-26F1-44DF-8D40-347136C743CD}.Rsharp_app_release|x64.ActiveCfg = Release|x64
-		{32228818-26F1-44DF-8D40-347136C743CD}.Rsharp_app_release|x64.Build.0 = Release|x64
+		{32228818-26F1-44DF-8D40-347136C743CD}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{32228818-26F1-44DF-8D40-347136C743CD}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{32228818-26F1-44DF-8D40-347136C743CD}.Rsharp_app_release|x86.ActiveCfg = Release|x86
 		{32228818-26F1-44DF-8D40-347136C743CD}.Rsharp_app_release|x86.Build.0 = Release|x86
 		{32228818-26F1-44DF-8D40-347136C743CD}.sciBASIC.NET-test-release|Any CPU.ActiveCfg = Surveillance-of-infectious-diseases|Any CPU
@@ -985,8 +985,8 @@ Global
 		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.Release|x86.Build.0 = Release|Any CPU
 		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.Rsharp_app_release|Any CPU.ActiveCfg = Release|Any CPU
 		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
-		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.Rsharp_app_release|x64.ActiveCfg = Release|Any CPU
-		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.Rsharp_app_release|x64.Build.0 = Release|Any CPU
+		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.Rsharp_app_release|x86.ActiveCfg = Release|Any CPU
 		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.Rsharp_app_release|x86.Build.0 = Release|Any CPU
 		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.sciBASIC.NET-test-release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1885,8 +1885,8 @@ Global
 		{7195E03E-D156-4B3F-A284-128DF6960110}.Release|x86.Build.0 = Release|Any CPU
 		{7195E03E-D156-4B3F-A284-128DF6960110}.Rsharp_app_release|Any CPU.ActiveCfg = Release|Any CPU
 		{7195E03E-D156-4B3F-A284-128DF6960110}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
-		{7195E03E-D156-4B3F-A284-128DF6960110}.Rsharp_app_release|x64.ActiveCfg = Release|Any CPU
-		{7195E03E-D156-4B3F-A284-128DF6960110}.Rsharp_app_release|x64.Build.0 = Release|Any CPU
+		{7195E03E-D156-4B3F-A284-128DF6960110}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{7195E03E-D156-4B3F-A284-128DF6960110}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{7195E03E-D156-4B3F-A284-128DF6960110}.Rsharp_app_release|x86.ActiveCfg = Release|Any CPU
 		{7195E03E-D156-4B3F-A284-128DF6960110}.Rsharp_app_release|x86.Build.0 = Release|Any CPU
 		{7195E03E-D156-4B3F-A284-128DF6960110}.sciBASIC.NET-test-release|Any CPU.ActiveCfg = Debug|Any CPU
