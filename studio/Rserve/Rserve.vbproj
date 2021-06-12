@@ -209,11 +209,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Rscript.vb" />
-    <Compile Include="Rweb\RSessionBackend.vb" />
-    <Compile Include="Rweb\RInvoke.vb" />
-    <Compile Include="Rweb\RSession.vb" />
-    <Compile Include="Rweb\Rweb.vb" />
     <Compile Include="Program.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -271,6 +266,10 @@
     <ProjectReference Include="..\..\R#\R.vbproj">
       <Project>{0C2EB77C-39F2-460D-A3F8-CE905F867637}</Project>
       <Name>R</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rserver\Rserver.vbproj">
+      <Project>{7195e03e-d156-4b3f-a284-128df6960110}</Project>
+      <Name>Rserver</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
