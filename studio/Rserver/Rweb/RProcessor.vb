@@ -34,7 +34,7 @@ Public Class RProcessor
 
     Public Sub RscriptHttpPost(request As HttpPOSTRequest, response As HttpResponse)
         ' /<scriptFileName>?...args
-        Dim Rscript As String = Rweb & "/" & request.URL.path & ".R"
+        Dim Rscript As String = RscriptRouter(request)
         Dim args As New Dictionary(Of String, String())(request.URL.query)
         Dim is_background As Boolean = request.GetBoolean("rweb_background")
 
@@ -62,7 +62,7 @@ Public Class RProcessor
         Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure)
             ' /<scriptFileName>?...args
             Dim request As New HttpRequest(p)
-            Dim Rscript As String = Rweb & "/" & request.URL.path & ".R"
+            Dim Rscript As String = RscriptRouter(request)
             Dim is_background As Boolean = request.GetBoolean("rweb_background")
             Dim request_id As String = Rserver.Rweb.NextRequestId
 
@@ -85,6 +85,11 @@ Public Class RProcessor
             End If
         End Using
     End Sub
+
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Private Function RscriptRouter(request As HttpRequest) As String
+        Return $"{Rweb}/{request.URL.path}.R"
+    End Function
 
     Private Sub pushBackResult(request_id$, response As HttpResponse)
         Dim result As BufferObject = requestPostback.TryGetValue(request_id)
@@ -164,6 +169,7 @@ Public Class RProcessor
         If App.IsMicrosoftPlatform Then
             Call App.Shell(Rslave.Path, arguments, CLR:=True, debug:=True).Run()
         Else
+
             Call UNIX.Shell("mono", $"{Rslave.Path.CLIPath} {arguments}", verbose:=True)
         End If
 
