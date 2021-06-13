@@ -120,6 +120,7 @@
     <Compile Include="RInvoke.vb" />
     <Compile Include="RSession\RSession.vb" />
     <Compile Include="RSession\RSessionBackend.vb" />
+    <Compile Include="Rweb\RProcessor.vb" />
     <Compile Include="Rweb\Rweb.vb" />
   </ItemGroup>
   <ItemGroup>
