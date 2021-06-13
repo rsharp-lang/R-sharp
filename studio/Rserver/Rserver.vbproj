@@ -117,9 +117,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Rscript.vb" />
-    <Compile Include="Rweb\RInvoke.vb" />
-    <Compile Include="Rweb\RSession.vb" />
-    <Compile Include="Rweb\RSessionBackend.vb" />
+    <Compile Include="RInvoke.vb" />
+    <Compile Include="RSession\RSession.vb" />
+    <Compile Include="RSession\RSessionBackend.vb" />
     <Compile Include="Rweb\Rweb.vb" />
   </ItemGroup>
   <ItemGroup>
