@@ -182,7 +182,7 @@ Public Class Rweb : Inherits HttpServer
         Dim port As Integer = socket.LocalPort
         Dim master As String = "localhost"
         Dim entry As String = "run"
-        Dim Rslave = RscriptCommandLine.Rscript.FromEnvironment(directory:=App.HOME)
+        Dim Rslave = CLI.Rscript.FromEnvironment(directory:=App.HOME)
 
         Call args.GetJson.__DEBUG_ECHO
 
