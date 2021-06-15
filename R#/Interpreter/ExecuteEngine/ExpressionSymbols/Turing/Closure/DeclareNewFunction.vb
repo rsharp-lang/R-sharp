@@ -241,6 +241,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End If
         End Function
 
+        ''' <summary>
+        ''' direct invoke of this R# function
+        ''' </summary>
+        ''' <param name="arguments"></param>
+        ''' <param name="parent"></param>
+        ''' <returns></returns>
         Public Function Invoke(arguments() As Object, parent As Environment) As Object Implements RFunction.Invoke
             Dim envir As Environment = Me.envir
             Dim argVal As Object
@@ -250,7 +256,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 envir = parent
             Else
                 runDispose = True
-                envir = New Environment(parent, stackFrame, isInherits:=False)
+                envir = New Environment(parent, stackFrame, isInherits:=False) & envir
             End If
 
             For i As Integer = 0 To parameters.Length - 1
