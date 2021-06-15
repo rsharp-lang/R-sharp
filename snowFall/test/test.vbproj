@@ -174,6 +174,10 @@
       <Project>{5fa10d0c-7efb-40b4-bb1c-6efce819abf6}</Project>
       <Name>Rscript</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\studio\Rserver\Rserver.vbproj">
+      <Project>{7195e03e-d156-4b3f-a284-128df6960110}</Project>
+      <Name>Rserver</Name>
+    </ProjectReference>
     <ProjectReference Include="..\snowFall.vbproj">
       <Project>{ac523ae1-b6b9-49bd-8f0a-49ebe02dcb65}</Project>
       <Name>snowFall</Name>
