@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::98238a67b3af8a801c8a5c858e664e98, R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class dataframe
-    ' 
-    '         Properties: columns, ncols, nrows, rownames
-    ' 
-    '         Function: CreateDataFrame, forEachRow, GetByRowIndex, getKeyByIndex, getNames
-    '                   getRowIndex, getRowList, getRowNames, (+2 Overloads) getVector, hasName
-    '                   projectByColumn, setNames, sliceByRow, subsetColData, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class dataframe
+' 
+'         Properties: columns, ncols, nrows, rownames
+' 
+'         Function: CreateDataFrame, forEachRow, GetByRowIndex, getKeyByIndex, getNames
+'                   getRowIndex, getRowList, getRowNames, (+2 Overloads) getVector, hasName
+'                   projectByColumn, setNames, sliceByRow, subsetColData, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -50,6 +50,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -65,6 +66,12 @@ Namespace Runtime.Internal.Object
         ''' <returns></returns>
         Public Property columns As Dictionary(Of String, Array)
         Public Property rownames As String()
+
+        Public ReadOnly Property colnames As String()
+            Get
+                Return columns.Keys.ToArray
+            End Get
+        End Property
 
         ''' <summary>
         ''' column <see cref="Array.Length"/>
@@ -156,6 +163,23 @@ Namespace Runtime.Internal.Object
                 Return vec
             Else
                 Return col
+            End If
+        End Function
+
+        Public Function checkColumnNames(names As IEnumerable(Of String), env As Environment) As Message
+            Dim allNames = names.ToArray
+            Dim missing As New List(Of String)
+
+            For Each name As String In allNames
+                If Not _columns.ContainsKey(name) Then
+                    missing += name
+                End If
+            Next
+
+            If missing > 0 Then
+                Return Internal.debug.stop({$"missing column names: {missing.GetJson}!"}, env)
+            Else
+                Return Nothing
             End If
         End Function
 
