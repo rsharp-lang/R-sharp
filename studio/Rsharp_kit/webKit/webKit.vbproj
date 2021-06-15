@@ -294,7 +294,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GraphQuery.vb" />
-    <Compile Include="HttpServer.vb" />
     <Compile Include="FTP.vb" />
     <Compile Include="Html.vb" />
     <Compile Include="URL.vb" />
