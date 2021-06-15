@@ -264,6 +264,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     .Select(Function(name) New Literal(name)) _
                     .ToArray
 
+                For Each name As String In parameters(i).names
+                    Call envir.Push(name, Nothing, [readonly]:=False)
+                Next
+
                 If i >= arguments.Length Then
                     If parameters(i).hasInitializeExpression Then
                         argVal = parameters(i).value.Evaluate(envir)
