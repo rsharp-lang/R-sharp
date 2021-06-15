@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::01d34b11f666c798d4d62cd315c3369c, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module file
-    ' 
-    '         Function: basename, buffer, close, dataUri, dir_exists
-    '                   dirCopy, dirCreate, dirname, exists, file
-    '                   filecopy, fileinfo, fileInfoByFile, filesize, getwd
-    '                   listDirs, listFiles, loadListInternal, NextTempToken, normalizeFileName
-    '                   normalizePath, openGzip, openZip, readBin, readLines
-    '                   readList, readText, Rhome, saveList, setwd
-    '                   tempdir, tempfile, writeLines
-    ' 
-    '         Sub: fileRemove, fileRename
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module file
+' 
+'         Function: basename, buffer, close, dataUri, dir_exists
+'                   dirCopy, dirCreate, dirname, exists, file
+'                   filecopy, fileinfo, fileInfoByFile, filesize, getwd
+'                   listDirs, listFiles, loadListInternal, NextTempToken, normalizeFileName
+'                   normalizePath, openGzip, openZip, readBin, readLines
+'                   readList, readText, Rhome, saveList, setwd
+'                   tempdir, tempfile, writeLines
+' 
+'         Sub: fileRemove, fileRename
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -54,6 +54,7 @@ Imports System.Reflection
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
@@ -558,7 +559,13 @@ Namespace Runtime.Internal.Invokes
         ''' For strings With marked encoding "bytes".)
         ''' </remarks>
         <ExportAPI("writeLines")>
-        Public Function writeLines(text$(), Optional con As Object = Nothing, Optional sep$ = vbCrLf, Optional env As Environment = Nothing) As Object
+        Public Function writeLines(text As Array,
+                                   Optional con As Object = Nothing,
+                                   Optional sep$ = vbCrLf,
+                                   Optional env As Environment = Nothing) As Object
+
+            Dim textContent As String = text.AsObjectEnumerator.JoinBy(sep)
+
             If con Is Nothing OrElse (TypeOf con Is String AndAlso DirectCast(con, String).StringEmpty) Then
                 Dim stdOut As Action(Of String)
 
@@ -568,15 +575,14 @@ Namespace Runtime.Internal.Invokes
                     stdOut = AddressOf env.globalEnvironment.stdout.WriteLine
                 End If
 
-                Call text.AsObjectEnumerator _
-                    .JoinBy(sep) _
-                    .DoCall(stdOut)
+                Call stdOut(textContent)
             ElseIf TypeOf con Is String Then
-                Call text.AsObjectEnumerator _
-                    .JoinBy(sep) _
-                    .SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
+                Call textContent.SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
             ElseIf TypeOf con Is textBuffer Then
-                DirectCast(con, textBuffer).text = text.AsObjectEnumerator.JoinBy(sep)
+                DirectCast(con, textBuffer).text = textContent
+                Return con
+            ElseIf TypeOf con Is ITextWriter OrElse con.GetType.IsInheritsFrom(GetType(ITextWriter)) Then
+                DirectCast(con, ITextWriter).WriteLine(textContent)
                 Return con
             End If
 
