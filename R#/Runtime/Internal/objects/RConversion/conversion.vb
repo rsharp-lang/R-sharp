@@ -77,6 +77,8 @@ Namespace Runtime.Internal.Object.Converts
         ''' <returns></returns>
         <ExportAPI("as.Date")>
         Public Function asDate2(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Date()
+            ' in R language
+            ' base::as.Date
             Return asDate(obj, env)
         End Function
 
@@ -88,6 +90,7 @@ Namespace Runtime.Internal.Object.Converts
         ''' <returns></returns>
         <ExportAPI("as.date")>
         Public Function asDate(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Date()
+            ' in R# language
             Return Rset _
                 .getObjectSet(obj, env) _
                 .Select(Function(o)
