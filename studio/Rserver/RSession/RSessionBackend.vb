@@ -80,7 +80,7 @@ Public Class RSessionBackend
             If inspector.ContainsKey(guid) Then
                 Dim buffer As Byte() = inspector(guid)
 
-                output.WriteHeader("text/json", buffer.Length)
+                output.WriteHttp("text/json", buffer.Length)
                 output.Write(buffer)
                 output.Flush()
 
@@ -163,7 +163,7 @@ Public Class RSessionBackend
 
         response.AccessControlAllowOrigin = "*"
 
-        Call response.WriteHeader("application/json", buffer.Length)
+        Call response.WriteHttp("application/json", buffer.Length)
         Call response.Write(buffer)
     End Sub
 End Class

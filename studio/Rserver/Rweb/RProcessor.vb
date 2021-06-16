@@ -127,15 +127,15 @@ Public Class RProcessor
                 bytes = buffer.UnGzipStream.ToArray
             End Using
 
-            Call response.WriteHeader("image/png", bytes.Length)
+            Call response.WriteHttp("image/png", bytes.Length)
             Call response.Write(bytes)
         ElseIf TypeOf result Is textBuffer Then
             Dim bytes As Byte() = result.Serialize
 
-            Call response.WriteHeader("html/text", bytes.Length)
+            Call response.WriteHttp("html/text", bytes.Length)
             Call response.Write(bytes)
         Else
-            Call response.WriteHeader("html/text", 0)
+            Call response.WriteHttp("html/text", 0)
             Call response.Write(New Byte() {})
         End If
     End Sub
