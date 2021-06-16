@@ -75,6 +75,17 @@ Namespace Runtime.Internal.Object.Converts
         ''' <param name="obj"></param>
         ''' <param name="env"></param>
         ''' <returns></returns>
+        <ExportAPI("as.Date")>
+        Public Function asDate2(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Date()
+            Return asDate(obj, env)
+        End Function
+
+        ''' <summary>
+        ''' parse string text content as date time values
+        ''' </summary>
+        ''' <param name="obj"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("as.date")>
         Public Function asDate(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Date()
             Return Rset _
