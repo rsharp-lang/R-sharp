@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2533b904c02f833194b16e19cf68deb4, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
+﻿#Region "Microsoft.VisualBasic::305db9a3d500e71dea5d93640947a0f5, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: expressionName, isImportsScript, library, packages, scriptSource
     '                     type
     ' 
-    '         Constructor: (+1 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsExternalScript, importsLibrary
     '                   importsPackages, isImportsAllPackages, LoadLibrary, ToString
     ' 

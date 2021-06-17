@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::792728a01ff0bab99c9582d616c66d27, Library\JsonHelper\RJSON.vb"
+﻿#Region "Microsoft.VisualBasic::8e077869bf8050a6481cb3fb442712d5, Library\JsonHelper\RJSON.vb"
 
     ' Author:
     ' 
@@ -85,4 +85,3 @@ Module RJSON
         End If
     End Function
 End Module
-

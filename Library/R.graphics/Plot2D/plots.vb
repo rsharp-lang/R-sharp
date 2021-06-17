@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::700b57b7e76d3b78c0cb8e0821a80c38, Library\R.graphics\Plot2D\plots.vb"
+﻿#Region "Microsoft.VisualBasic::d2ae95dde155cba9e97fb26ec8fb146e, Library\R.graphics\Plot2D\plots.vb"
 
     ' Author:
     ' 
@@ -33,11 +33,10 @@
 
     ' Module plots
     ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
     '     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, linearRegression
     '               plot_binBox, plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust
-    '               plotFormula, plotODEResult, plotPieChart, plotSerials
+    '               plotArray, plotFormula, plotODEResult, plotPieChart, plotSerials
+    '               plotVector
     ' 
     '     Sub: Main
     ' 

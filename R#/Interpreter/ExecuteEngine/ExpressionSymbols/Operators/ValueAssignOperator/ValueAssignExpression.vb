@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cbed575eb82a1732c6e7f3c849629e08, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssign.vb"
+﻿#Region "Microsoft.VisualBasic::d253274ae17423a14b3665c50f701f53, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssignExpression.vb"
 
     ' Author:
     ' 
@@ -31,7 +31,7 @@
 
     ' Summaries:
 
-    '     Class ValueAssign
+    '     Class ValueAssignExpression
     ' 
     '         Properties: expressionName, symbolSize, targetSymbols, type, value
     ' 

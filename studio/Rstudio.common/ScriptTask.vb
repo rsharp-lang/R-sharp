@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ca9eca8705b325e1ad4eb0771e241c6f, studio\Rstudio.common\ScriptTask.vb"
+﻿#Region "Microsoft.VisualBasic::58979482038d712f626906feb8b019b2, studio\Rstudio.common\ScriptTask.vb"
 
     ' Author:
     ' 
@@ -111,4 +111,3 @@ Module ScriptTask
         CType(state, TaskCompletionSource(Of VoidTypeStruct)).TrySetException(New TimeoutException())
     End Sub
 End Module
-

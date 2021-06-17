@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ec9495299e92e101434c6c3a74ad978f, R#\System\Package\PackageFile\PackageNamespace.vb"
+﻿#Region "Microsoft.VisualBasic::c4ca1e1681557ded00c48a3007902f66, R#\System\Package\PackageFile\PackageNamespace.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: assembly, checksum, datafiles, dependency, framework
     '                     libPath, meta, packageName, runtime, symbols
     ' 
-    '         Constructor: (+1 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: EnumerateSymbols, FindAssemblyPath, ToString
     ' 
     ' 

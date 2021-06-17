@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5c6eb8540180d5bbf5ea48d92359cdf7, studio\Rsharp_kit\MLkit\hiddenMarkov.vb"
+﻿#Region "Microsoft.VisualBasic::123a08e893fc3fedf6bfc14b82b28278, studio\Rsharp_kit\MLkit\hiddenMarkov.vb"
 
     ' Author:
     ' 
@@ -41,7 +41,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -206,4 +205,3 @@ Module hiddenMarkov
     End Function
 
 End Module
-

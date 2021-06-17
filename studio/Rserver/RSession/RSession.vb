@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b4ade6cd231744caccd7640c64877533, studio\Rserve\Rweb\RSession.vb"
+﻿#Region "Microsoft.VisualBasic::b4ade6cd231744caccd7640c64877533, studio\Rserver\RSession\RSession.vb"
 
     ' Author:
     ' 

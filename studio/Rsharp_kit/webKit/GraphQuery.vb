@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::693714015e952620c63ed8c20debb7eb, studio\Rsharp_kit\webKit\GraphQuery.vb"
+﻿#Region "Microsoft.VisualBasic::f188cd41cf02158302ee6899f3466022, studio\Rsharp_kit\webKit\GraphQuery.vb"
 
     ' Author:
     ' 
@@ -75,4 +75,3 @@ Public Module HtmlGraphQuery
         End If
     End Function
 End Module
-

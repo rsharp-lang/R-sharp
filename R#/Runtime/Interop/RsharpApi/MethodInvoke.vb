@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b4f7f158daa8b13f2028268c9470662a, R#\Runtime\Interop\RsharpApi\MethodInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::c40b8c6fe40d013ae3033bd16fd20251, R#\Runtime\Interop\RsharpApi\MethodInvoke.vb"
 
     ' Author:
     ' 
@@ -36,13 +36,6 @@
     '         Properties: isStatic
     ' 
     '         Function: Invoke, ToString
-    ' 
-    '     Class RuntimeValueLiteral
-    ' 
-    '         Properties: expressionName, type, value
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, ToString
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b3ff4136338e6395293f49b762e079cb, R#\System\Package\PackageFile\FileSystem\RegularMatch.vb"
+﻿#Region "Microsoft.VisualBasic::2631f987bd5e728e31469132e17515e3, R#\System\Package\PackageFile\FileSystem\RegularMatch.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Namespace Development.Package.File
 

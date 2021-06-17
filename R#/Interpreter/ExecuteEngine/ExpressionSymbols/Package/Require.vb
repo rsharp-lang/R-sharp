@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7f30535aea49f8e100662ba3758cb580, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb"
+﻿#Region "Microsoft.VisualBasic::421484c14bd68d6af5cea2ec21609464, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: expressionName, options, packages, type
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+3 Overloads) Sub New
     '         Function: Evaluate, getOptions, ToString
     ' 
     ' 

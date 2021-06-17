@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c838850d99b60464d120dd09e8bff5af, Library\R.math\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::122758a67ec15b1a45d675e6ed9fe35a, Library\R.math\zzz.vb"
 
     ' Author:
     ' 
@@ -75,4 +75,3 @@ Public Class zzz
         Return text.ToString
     End Function
 End Class
-

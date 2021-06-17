@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ae8596fafc9febb146b7f4fa6ef0c502, R#\Interpreter\ExecuteEngine\Linq\Syntax\StackParser.vb"
+﻿#Region "Microsoft.VisualBasic::f92ffed09e9590711104f5d59e309ef6, R#\Interpreter\ExecuteEngine\Linq\Syntax\StackParser.vb"
 
     ' Author:
     ' 

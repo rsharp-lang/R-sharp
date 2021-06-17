@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4f470d56a0dd75ae6ed531eb2d22f550, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DeclareNewSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::cd8f5df7ca35ac996ebe4d59a4f00d7d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DeclareNewSymbol.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Class DeclareNewSymbol
     ' 
     '         Properties: expressionName, hasInitializeExpression, isTuple, names, stackFrame
-    '                     type, unit, value
+    '                     symbolSize, type, unit, value
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, getParameterView, PushNames, PushTuple, ToString

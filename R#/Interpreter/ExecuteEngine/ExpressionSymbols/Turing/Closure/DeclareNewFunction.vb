@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5909a51084f9004c9a156bbe1ec6ebf4, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
+﻿#Region "Microsoft.VisualBasic::9b2370c1fd4cb661eeda0b01a0fcc85d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class DeclareNewFunction
     ' 
-    '         Properties: [Namespace], body, expressionName, funcName, params
+    '         Properties: [Namespace], body, expressionName, funcName, parameters
     '                     stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New

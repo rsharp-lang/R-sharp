@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7efd65cac5369cb0404d67c01c87ea20, R#\Runtime\Environment\GlobalEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::4db2458809ecfea28c2766342dc00976, R#\Runtime\Environment\GlobalEnvironment.vb"
 
     ' Author:
     ' 

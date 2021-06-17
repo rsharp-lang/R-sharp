@@ -1,53 +1,53 @@
-﻿#Region "Microsoft.VisualBasic::f54365cfd923dd1ae02b8f4d8e8cc1fb, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::d250a0e7abe38943c72f7fc4e8b71b64, R#\Runtime\Internal\internalInvokes\base.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module base
-' 
-'         Function: [date], [dim], [stop], allocate, append
-'                   appendOfList, appendOfVector, autoDispose, c, cat
-'                   cbind, colnames, columnVector, doPrintInternal, factors
-'                   getOption, ifelse, invisible, isEmpty, isEmptyArray
-'                   isList, isNA, isNull, length, makeNames
-'                   names, ncol, neg, nrow, objectAddInvoke
-'                   options, print, rbind, Rdataframe, rep
-'                   replace, Rlist, rownames, sink, source
-'                   str, summary, t, uniqueNames, unitOfT
-'                   warning, year
-' 
-'         Sub: [exit], q, quit, warnings
-' 
-' 
-' /********************************************************************************/
+    '     Module base
+    ' 
+    '         Function: [date], [dim], [stop], allocate, append
+    '                   appendOfList, appendOfVector, autoDispose, c, cat
+    '                   cbind, colnames, columnVector, doPrintInternal, factors
+    '                   getOption, ifelse, invisible, isEmpty, isEmptyArray
+    '                   isList, isNA, isNull, length, library
+    '                   makeNames, names, ncol, neg, nrow
+    '                   objectAddInvoke, options, print, rbind, Rdataframe
+    '                   rep, replace, Rlist, rownames, sink
+    '                   source, str, summary, t, uniqueNames
+    '                   unitOfT, warning, year
+    ' 
+    '         Sub: [exit], q, quit, warnings
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
