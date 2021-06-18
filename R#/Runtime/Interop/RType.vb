@@ -130,7 +130,9 @@ Namespace Runtime.Interop
             GetType(Integer), GetType(Integer()),
             GetType(Long), GetType(Long()),
             GetType(Short), GetType(Short()),
-            GetType(Byte), GetType(Byte())
+            GetType(Byte), GetType(Byte()),
+            GetType(UInteger), GetType(UInteger()),
+            GetType(ULong), GetType(ULong())
         }
 
         Friend Shared ReadOnly Property floats As Index(Of Type) = {
