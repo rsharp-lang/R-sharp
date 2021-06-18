@@ -125,7 +125,8 @@ Namespace Runtime
             Select Case type
                 Case GetType(String), GetType(String())
                     Return TypeCodes.string
-                Case GetType(Integer), GetType(Integer()), GetType(Long()), GetType(Long), GetType(Short), GetType(Short())
+                Case GetType(Integer), GetType(Integer()), GetType(Long()), GetType(Long), GetType(Short), GetType(Short()),
+                     GetType(UInteger), GetType(UInteger()), GetType(ULong), GetType(ULong())
                     Return TypeCodes.integer
                 Case GetType(Double), GetType(Double()), GetType(Single), GetType(Single())
                     Return TypeCodes.double
