@@ -335,7 +335,8 @@ Namespace Language.TokenIcer
                             ' a$"name b"
                             Return populateToken().joinNext(c)
                         Else
-                            Throw New SyntaxErrorException
+                            buffer += "$"c
+                            Return Nothing
                         End If
                     ElseIf Not (lastPopoutToken.name = TokenType.identifier OrElse lastPopoutToken.name = TokenType.close) Then
                         ' 正则表达式语法
