@@ -186,7 +186,9 @@ Namespace Interpreter.SyntaxParser
 
         <Extension>
         Public Function isSimpleSymbolIndexer(tokens As Token()) As Boolean
-            If Not tokens(Scan0).name = TokenType.identifier Then
+            Dim xToken As Token = tokens(Scan0)
+
+            If Not (xToken.name = TokenType.identifier OrElse xToken.name = TokenType.keyword) Then
                 Return False
             ElseIf Not tokens(1) = (TokenType.open, "[") OrElse Not tokens.Last = (TokenType.close, "]") Then
                 Return False

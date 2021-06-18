@@ -84,7 +84,9 @@ Namespace Development.Package.File
                     Case ExpressionTypes.If : Return New RIf(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.For : Return New RFor(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.Else : Return New RElse(Nothing).GetExpression(buffer, Me, desc)
-                    Case ExpressionTypes.ClosureDeclare : Return New RClosure(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.ClosureDeclare, ExpressionTypes.AcceptorDeclare
+
+                        Return New RClosure(Nothing).GetExpression(buffer, Me, desc)
 
                     Case ExpressionTypes.StringInterpolation : Return New RStringInterpolation(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.Literal,
@@ -97,6 +99,7 @@ Namespace Development.Package.File
 
                     Case ExpressionTypes.Require : Return New RRequire(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.SymbolDeclare : Return New RSymbol(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.Return : Return New RReturns(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.SymbolIndex : Return New RSymbolIndex(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.SymbolReference, ExpressionTypes.SymbolNamespaceReference
                         Return New RSymbolReference(Nothing).GetExpression(buffer, Me, desc)
