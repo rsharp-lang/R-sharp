@@ -58,12 +58,20 @@ Namespace Development.Package.File.Expressions
 
         Public Overrides Sub WriteBuffer(ms As MemoryStream, x As Expression)
             Using outfile As New BinaryWriter(ms)
-                Call WriteBuffer(outfile, DirectCast(x, ClosureExpression))
+                ' 20210618
+                ' the data structure of the acceptor closure and the normal closure epxression
+                ' is identical
+
+                If TypeOf x Is AcceptorClosure Then
+                    Call WriteBuffer(outfile, DirectCast(x, AcceptorClosure))
+                Else
+                    Call WriteBuffer(outfile, DirectCast(x, ClosureExpression))
+                End If
             End Using
         End Sub
 
         Private Overloads Sub WriteBuffer(outfile As BinaryWriter, x As ClosureExpression)
-            Call outfile.Write(CInt(ExpressionTypes.ClosureDeclare))
+            Call outfile.Write(CInt(x.expressionName))
             Call outfile.Write(0)
             Call outfile.Write(CByte(x.type))
 
@@ -86,7 +94,13 @@ Namespace Development.Package.File.Expressions
                     lines(i) = BlockReader.ParseBlock(bin).Parse(desc)
                 Next
 
-                Return New ClosureExpression(lines)
+                If raw.expression = ExpressionTypes.ClosureDeclare Then
+                    Return New ClosureExpression(lines)
+                ElseIf raw.expression = ExpressionTypes.AcceptorDeclare Then
+                    Return New AcceptorClosure(lines)
+                Else
+                    Throw New InvalidCastException(raw.expression.Description)
+                End If
             End Using
         End Function
     End Class

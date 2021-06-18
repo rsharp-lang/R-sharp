@@ -67,6 +67,7 @@ Namespace Development.Package.File
         FormulaDeclare
         LambdaDeclare
         SymbolDeclare
+        AcceptorDeclare
 
         SymbolReference = 30
         SymbolNamespaceReference

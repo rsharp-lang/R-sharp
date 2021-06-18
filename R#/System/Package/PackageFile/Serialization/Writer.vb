@@ -168,7 +168,9 @@ Namespace Development.Package.File
                 Case GetType(ElseBranch) : Return Relse.GetBuffer(x)
                 Case GetType(ExpressionLiteral) : Return RExpr.GetBuffer(x)
 
-                Case GetType(ClosureExpression) : Return RClosure.GetBuffer(x)
+                Case GetType(ClosureExpression), GetType(AcceptorClosure)
+
+                    Return RClosure.GetBuffer(x)
 
                 Case Else
                     Throw New NotImplementedException(x.GetType.FullName)
