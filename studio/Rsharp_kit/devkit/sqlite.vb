@@ -70,11 +70,15 @@ Module sqlite
     End Function
 
     <ExportAPI("ls")>
-    Public Function list(con As Sqlite3Database) As dataframe
+    Public Function list(con As Sqlite3Database, Optional type As String = "table") As dataframe
         Dim tables As Sqlite3SchemaRow() = con.GetTables.ToArray
         Dim summary As New dataframe With {
             .columns = New Dictionary(Of String, Array)
         }
+
+        If (Not type.StringEmpty) AndAlso type <> "*" Then
+            tables = (From item In tables Where item.type = type).ToArray
+        End If
 
         summary.columns("name") = tables.Select(Function(t) t.name).ToArray
         summary.columns("rootPage") = tables.Select(Function(t) t.rootPage).ToArray
