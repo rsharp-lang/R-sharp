@@ -6,7 +6,7 @@ using xcc as sqlite::open(`${dirname(@script)}/xcc.db`) {
     |> print()
     ;
 
-	for(name in ["Pathways", "Orthologs", "Genes"]) {
+	for(name in ["Pathways", "GenePathways"]) {
 		print("view data contents of table:");
 		print(name);
 		
