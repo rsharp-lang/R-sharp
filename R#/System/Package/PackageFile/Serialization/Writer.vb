@@ -95,6 +95,7 @@ Namespace Development.Package.File
         Public ReadOnly Property RString As RStringInterpolation
         Public ReadOnly Property RExpr As RExprLiteral
         Public ReadOnly Property RClosure As RClosure
+        Public ReadOnly Property RReturns As RReturns
 
 #Region "keywords"
         Public ReadOnly Property Rfor As RFor
@@ -125,6 +126,7 @@ Namespace Development.Package.File
             Me.Relse = New RElse(Me)
             Me.RExpr = New RExprLiteral(Me)
             Me.RClosure = New RClosure(Me)
+            Me.RReturns = New RReturns(Me)
         End Sub
 
         Public Function GetBuffer(x As Expression) As Byte()
@@ -171,6 +173,8 @@ Namespace Development.Package.File
                 Case GetType(ClosureExpression), GetType(AcceptorClosure)
 
                     Return RClosure.GetBuffer(x)
+
+                Case GetType(ReturnValue) : Return RReturns.GetBuffer(x)
 
                 Case Else
                     Throw New NotImplementedException(x.GetType.FullName)
