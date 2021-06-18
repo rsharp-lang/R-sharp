@@ -106,7 +106,7 @@ Namespace Development.Package.File.Expressions
                 Next
 
                 If buffer.Position >= buffer.Length Then
-                    value = Literal.NULL
+                    value = Nothing
                 Else
                     sizeOf = bin.ReadInt32
                     value = BlockReader.ParseBlock(bin).Parse(desc)
