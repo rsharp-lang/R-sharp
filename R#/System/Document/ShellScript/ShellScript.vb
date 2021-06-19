@@ -225,7 +225,10 @@ Namespace Development.CommandLine
                 Case GetType(DeclareNewSymbol) : Call analysisTree(DirectCast(expr, DeclareNewSymbol))
                 Case GetType(FunctionInvoke) : Call analysisTree(DirectCast(expr, FunctionInvoke), attrs)
                 Case GetType(IfBranch) : Call analysisTree(DirectCast(expr, IfBranch), attrs)
-                Case GetType(ClosureExpression) : Call analysisTree(DirectCast(expr, ClosureExpression), attrs)
+
+                Case GetType(ClosureExpression), GetType(AcceptorClosure)
+                    Call analysisTree(DirectCast(expr, ClosureExpression), attrs)
+
                 Case GetType(SymbolIndexer) : Call analysisTree(DirectCast(expr, SymbolIndexer), attrs)
                 Case GetType(VectorLiteral) : Call analysisTree(DirectCast(expr, VectorLiteral), attrs)
                 Case GetType(BinaryExpression) : Call analysisTree(DirectCast(expr, BinaryExpression), attrs)
