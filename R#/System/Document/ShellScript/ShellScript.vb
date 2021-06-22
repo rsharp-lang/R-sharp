@@ -214,6 +214,7 @@ Namespace Development.CommandLine
                 TypeOf expr Is SymbolReference OrElse
                 TypeOf expr Is ScriptSymbol OrElse
                 TypeOf expr Is BreakPoint OrElse
+                TypeOf expr Is Regexp OrElse
                 TypeOf expr Is ContinuteFor Then
 
                 Return
