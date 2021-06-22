@@ -376,6 +376,23 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ## File Utilities
+        ''' 
+        ''' </summary>
+        ''' <param name="filenames">character vector giving file paths.</param>
+        ''' <returns>
+        ''' ``file_ext`` returns the file (name) extensions (excluding the leading dot). 
+        ''' (Only purely alphanumeric extensions are recognized.)
+        ''' </returns>
+        <ExportAPI("file_ext")>
+        Public Function file_ext(filenames As String()) As String()
+            Return filenames _
+                .SafeQuery _
+                .Select(AddressOf ExtensionSuffix) _
+                .ToArray
+        End Function
+
+        ''' <summary>
         ''' removes all of the path up to and including the last path separator (if any).
         ''' </summary>
         ''' <param name="fileNames">character vector, containing path names.</param>
