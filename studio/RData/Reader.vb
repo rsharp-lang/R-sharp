@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::833d9ee394cd8f070341a331e1281e10, studio\RData\Reader.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Class Reader
-    ' 
-    '     Function: parse_all, parse_bool, parse_complex, parse_extra_info, parse_R_object
-    '               parse_versions, ParseData, ParseRDataBinary, parseVector
-    ' 
-    ' /********************************************************************************/
+' Class Reader
+' 
+'     Function: parse_all, parse_bool, parse_complex, parse_extra_info, parse_R_object
+'               parse_versions, ParseData, ParseRDataBinary, parseVector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -44,7 +44,9 @@ Imports System.IO
 Imports System.Numerics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.IO
+Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Text
+Imports gzip = Microsoft.VisualBasic.Net.Http.GZipStreamHandler
 
 Public MustInherit Class Reader
 
@@ -299,7 +301,7 @@ Public MustInherit Class Reader
         If format_type = RdataFormats.XDR Then
             Return New ParserXDR(bin, bin.Position).parse_all
         Else
-            Throw New NotImplementedException
+            Throw New NotImplementedException(format_type.Description)
         End If
     End Function
 
@@ -312,13 +314,27 @@ Public MustInherit Class Reader
     ''' <returns>Data contained in the file (versions and object).</returns>
     Public Shared Function ParseData(bin As Stream) As RData
         Dim reader As New BinaryDataReader(bin)
-        Dim filetype = file_type(reader)
+        Dim filetype As FileTypes = file_type(reader)
 
         Select Case filetype
             Case FileTypes.rdata_binary_v2, FileTypes.rdata_binary_v3
                 Return ParseRDataBinary(reader)
+            Case FileTypes.gzip
+                Using ms As New MemoryStream
+                    Dim nbytes As Integer = reader.Length - reader.Position
+
+                    Call ms.Write(reader.ReadBytes(nbytes).AddGzipMagic.ToArray, Scan0, nbytes + 2)
+                    Call ms.Flush()
+                    Call ms.Seek(Scan0, SeekOrigin.Begin)
+
+                    Dim newData = gzip.UnGzipStream(ms)
+
+                    reader = New BinaryDataReader(newData)
+
+                    Return ParseRDataBinary(reader)
+                End Using
             Case Else
-                Throw New NotImplementedException("Unknown file type")
+                Throw New NotImplementedException($"Unknown file type: {filetype.Description}")
         End Select
     End Function
 End Class
