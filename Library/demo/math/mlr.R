@@ -1,17 +1,17 @@
-let a <- [1,2,3,4,5];
-let b <- [5,7,9,11,13];
-let c <- [15,31.5,1.8,1.5,71.5];
-let d <- [3,3,3,3,3.3];
-let e <- [3,3,3,3,3.3];
-let f <- [3,3,3,3,3.3];
-let g <- [3,3,3,3,3.3];
-let h <- [3,3,3,3,3.3];
-let i <- [3,3,3,3,3.3];
-let j <- [3,3,3,3,3.3];
-let k <- [3,3,3,3,3.3];
-let mydata <- data.frame(a, b,c, d, e,f,g,h,i,j,k);
+const a <- [1,2,3,4,5];
+const b <- [5,7,9,11,13];
+const c <- [15,31.5,1.8,1.5,71.5];
+const d <- [3,3,3,3,3.3];
+const e <- [3,3,3,3,3.3];
+const f <- [3,3,3,3,3.3];
+const g <- [3,3,3,3,3.3];
+const h <- [3,3,3,3,3.3];
+const i <- [3,3,3,3,3.3];
+const j <- [3,3,3,3,3.3];
+const k <- [3,3,3,3,3.3];
+const mydata <- data.frame(a, b,c, d, e,f,g,h,i,j,k);
 
-let mlr = lm(b ~ a + c + d, mydata);
+const mlr = lm(b ~ a + c + d, mydata);
 
 print(mlr);
 
