@@ -84,6 +84,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Convertor\Constructor.vb" />
     <Compile Include="Enums\CharFlags.vb" />
     <Compile Include="Enums\RdataFormats.vb" />
     <Compile Include="Enums\RObjectType.vb" />

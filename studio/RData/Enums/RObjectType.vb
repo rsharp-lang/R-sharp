@@ -142,6 +142,12 @@ Public Enum RObjectType
     ''' S4 classes Not Of simple type
     ''' </summary>
     S4 = 25
+
+    ''' <summary>
+    ''' Alternative representations
+    ''' </summary>
+    ALTREP = 238
+
     ''' <summary>
     ''' Empty environment
     ''' </summary>

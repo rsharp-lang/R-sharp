@@ -48,7 +48,27 @@ Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Text
 Imports gzip = Microsoft.VisualBasic.Net.Http.GZipStreamHandler
 
+Public Delegate Function AltRepConstructor(stat As RObject) As (RObjectInfo, Object)
+
 Public MustInherit Class Reader
+
+    Protected ReadOnly altrep_constructor_dict As New Dictionary(Of String, AltRepConstructor) From {
+         {"deferred_string", deferred_string_constructor},
+         {"compact_intseq", compact_intseq_constructor},
+         {"compact_realseq", compact_realseq_constructor},
+         {"wrap_real", wrap_constructor},
+         {"wrap_string", wrap_constructor},
+         {"wrap_logical", wrap_constructor},
+         {"wrap_integer", wrap_constructor},
+         {"wrap_complex", wrap_constructor},
+         {"wrap_raw", wrap_constructor}
+    }
+
+    Protected ReadOnly expand_altrep As Boolean
+
+    Sub New(expand_altrep As Boolean)
+        Me.expand_altrep = expand_altrep
+    End Sub
 
     ''' <summary>
     ''' Parse a boolean.
@@ -143,6 +163,25 @@ Public MustInherit Class Reader
     End Function
 
     ''' <summary>
+    ''' Expand alternative representation to normal object.
+    ''' </summary>
+    ''' <param name="info"></param>
+    ''' <param name="state"></param>
+    ''' <returns></returns>
+    Public Function expand_altrep_to_object(info As RObject, state As RObject) As (RObjectInfo, Object)
+        Dim class_sym As RObject = info.value(0)
+
+        Do While class_sym.info.type = RObjectType.REF
+            class_sym = class_sym.referenced_object
+        Loop
+
+        Dim altrep_name = class_sym.value.value
+        Dim constructor = altrep_constructor_dict(altrep_name)
+
+        Return constructor(state)
+    End Function
+
+    ''' <summary>
     ''' Parse a R object.
     ''' </summary>
     ''' <param name="reference_list"></param>
@@ -178,7 +217,8 @@ Public MustInherit Class Reader
             tag = Nothing
 
             If info.attributes Then
-                Throw New NotImplementedException("Attributes not suported for LIST")
+                attributes = parse_R_object(reference_list)
+                attributes_read = True
             ElseIf info.tag Then
                 tag = parse_R_object(reference_list)
                 tag_read = True
@@ -219,7 +259,7 @@ Public MustInherit Class Reader
                 value = parse_string(length)
             ElseIf length = 0 Then
                 value = ""
-            ElseIf length = 1 Then
+            ElseIf length = -1 Then
                 value = Nothing
             Else
                 Throw New NotImplementedException($"Length of CHAR cannot be {length}")
@@ -236,6 +276,22 @@ Public MustInherit Class Reader
             value = parseVector(Function() parse_R_object(reference_list))
         ElseIf info.type = RObjectType.S4 Then
             value = Nothing
+        ElseIf info.type = RObjectType.ALTREP Then
+            Dim altrep_info = parse_R_object(reference_list)
+            Dim altrep_state = parse_R_object(reference_list)
+            Dim altrep_attr = parse_R_object(reference_list)
+
+            If expand_altrep Then
+                With expand_altrep_to_object(info:=altrep_info, state:=altrep_state)
+                    info = .Item1
+                    value = .Item2
+                End With
+
+                attributes = altrep_attr
+            Else
+                value = (altrep_info, altrep_state, altrep_attr)
+            End If
+
         ElseIf info.type = RObjectType.EMPTYENV Then
             value = Nothing
         ElseIf info.type = RObjectType.GLOBALENV Then
@@ -295,11 +351,11 @@ Public MustInherit Class Reader
     ''' </summary>
     ''' <param name="bin"></param>
     ''' <returns></returns>
-    Public Shared Function ParseRDataBinary(bin As BinaryDataReader) As RData
-        Dim format_type = rdata_format(bin)
+    Public Shared Function ParseRDataBinary(bin As BinaryDataReader, Optional expand_altrep As Boolean = True) As RData
+        Dim format_type As RdataFormats = rdata_format(bin)
 
         If format_type = RdataFormats.XDR Then
-            Return New ParserXDR(bin, bin.Position).parse_all
+            Return New ParserXDR(bin, bin.Position, expand_altrep).parse_all
         Else
             Throw New NotImplementedException(format_type.Description)
         End If
@@ -312,13 +368,13 @@ Public MustInherit Class Reader
     ''' Data extracted of a R file.
     ''' </param>
     ''' <returns>Data contained in the file (versions and object).</returns>
-    Public Shared Function ParseData(bin As Stream) As RData
+    Public Shared Function ParseData(bin As Stream, Optional expand_altrep As Boolean = True) As RData
         Dim reader As New BinaryDataReader(bin)
         Dim filetype As FileTypes = file_type(reader)
 
         Select Case filetype
             Case FileTypes.rdata_binary_v2, FileTypes.rdata_binary_v3
-                Return ParseRDataBinary(reader)
+                Return ParseRDataBinary(reader, expand_altrep)
             Case FileTypes.gzip
                 Using ms As New MemoryStream
                     Dim nbytes As Integer = reader.Length - reader.Position
@@ -329,7 +385,7 @@ Public MustInherit Class Reader
 
                     Using newData As MemoryStream = gzip.UnGzipStream(ms)
                         Call newData.Seek(Scan0, SeekOrigin.Begin)
-                        Return ParseData(newData)
+                        Return ParseData(newData, expand_altrep)
                     End Using
                 End Using
             Case Else
