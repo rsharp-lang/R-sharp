@@ -327,11 +327,10 @@ Public MustInherit Class Reader
                     Call ms.Flush()
                     Call ms.Seek(Scan0, SeekOrigin.Begin)
 
-                    Dim newData = gzip.UnGzipStream(ms)
-
-                    reader = New BinaryDataReader(newData)
-
-                    Return ParseRDataBinary(reader)
+                    Using newData As MemoryStream = gzip.UnGzipStream(ms)
+                        Call newData.Seek(Scan0, SeekOrigin.Begin)
+                        Return ParseData(newData)
+                    End Using
                 End Using
             Case Else
                 Throw New NotImplementedException($"Unknown file type: {filetype.Description}")
