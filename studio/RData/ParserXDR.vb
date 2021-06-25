@@ -51,7 +51,9 @@ Public Class ParserXDR : Inherits Reader
     ReadOnly data As BinaryDataReader
     ReadOnly xdr_parser As Unpacker
 
-    Sub New(data As BinaryDataReader, Optional position As Integer = 0)
+    Sub New(data As BinaryDataReader, Optional position As Integer = 0, Optional expand_altrep As Boolean = True)
+        Call MyBase.New(expand_altrep)
+
         Me.data = data
         Me.data.Position = position
         Me.xdr_parser = New Unpacker(data)

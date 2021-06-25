@@ -1,0 +1,960 @@
+= R serialization: code-reading
+:source-highlighter: coderay
+
+* last updated:{docdatetime}
+
+* This memo is based on R version 3.6.2 (2019-12-22 released)
+
+== Summary
+
+=== Call-hierarchy from R functions to backend c functions
+* As the R internals manual writes (2 .Internal vs .Primitive : https://cran.r-project.org/doc/manuals/r-release/R-ints.html#g_t_002eInternal-vs-_002ePrimitive), the mapping table between an R function and its corresponding C function is stored in `names.c (./src/main/names.c)`; note the following naming exceptions that do not follow the default naming scheme "do_" + R-function-name; the following three different R functions are handled by one C function.
+
+----
+{"serialize",	do_serialize,	0,	11,	5,	{PP_FUNCALL, PREC_FN,	0}},
+{"serializeb",	do_serialize,	1,	11,	5,	{PP_FUNCALL, PREC_FN,	0}},
+{"unserialize",	do_serialize,	2,	11,	2,	{PP_FUNCALL, PREC_FN,	0}},
+
+{"save",	do_save,	0,	111,	6,	{PP_FUNCALL, PREC_FN,	0}},
+{"saveToConn",	do_saveToConn,	0,	111,	6,	{PP_FUNCALL, PREC_FN,	0}},
+{"load",	do_load,	0,	111,	2,	{PP_FUNCALL, PREC_FN,	0}},
+{"loadFromConn2",    do_loadFromConn2,0, 111,	3,	{PP_FUNCALL, PREC_FN,	0}},
+{"loadInfoFromConn2",do_loadFromConn2,1, 11,	1,	{PP_FUNCALL, PREC_FN,	0}},
+{"serializeToConn",	 do_serializeToConn,	0, 111,	5,	{PP_FUNCALL, PREC_FN,	0}},
+{"unserializeFromConn",	 do_unserializeFromConn, 0, 11,	2,	{PP_FUNCALL, PREC_FN,	0}},
+{"serializeInfoFromConn",do_unserializeFromConn, 1, 11,	1,	{PP_FUNCALL, PREC_FN,	0}},
+----
+
+
+* There are at least three pairs of serialization/deserialization-related R functions:
+
+|===
+|R function pair             |purposes
+|save() / load()             |save/load a set of R objects
+|saveRDS() / loadRDS()       |save/load a single R object
+|serialize() / unserialize() |save/load
+|===
+
+* The following table shows R functions(entry-point) and c files
+
+
+[options="header,footer"]
+.R Serialization/Unserialization Call Hierarchy
+|===
+|R functions   |stored R file   |R-side function           |c-entry-point               |stored c file   |key c function
+|save()         |load.R         |saveToConn()              |do_saveToConn()             |saveload.c      |R_Serialize() in serialize.c
+|load()         |load.R         |loadFromConn2()           |do_loadFromConn2()          |saveload.c      |R_Unserialize(), R_SerializeInfo() in serialize.c
+|saveRDS()      |serialize.R    |serializeToConn()         |do_serializeToConn()        |serialize.c     |R_serialize()
+|loadRDS()      |serialize.R    |unserializeFromConn()     |do_unserializeFromConn()    |serialize.c     |R_Unserialize(), R_SerializeInfo()
+|serialize()    |serialize.R    |serializeb()/serialize()  |do_serialize()              |serialize.c     |R_serializeb(), R_serialize()
+|unserialize()  |serialize.R     |unserialize()               |do_serialize()              |serialize.c     |ditto
+6+|  Note: R_Serialize() vs R_serialize() in serialize.c, esp. concerning the number of arguments; R_Serialize() is stored in serialize.c, not saveload.c.
+|===
+
+
+
+* source file location
+
+** R file location
+R-3.6.2/src/library/base/R
+** c file location
+R-3.6.2/src/main
+
+<<<
+
+=== Miscellaneous
+* R's table-like data: data.frame, matrix, time-series, table.
+** Except for tables, the other three types can be handled by a unified, relatively simpler framework. 
+
+
+* There are three key options for each R entry-point functions:
+** versions: 1, 2, 3
+** ASCII vs binary(non-ASCII)
+** compress vs non-compress
+** recognized compression methods: gzip, bzip2, xz
+
+* for writing an RData or RDS file, the core serialization logic is coded in the following c functions:
+** R_Serialize()
+** R_serializeb()
+** steps of serialization by a function call
+. OutFormat: magic code
+. OutInteger: version number
+. WriteItem
+* "word" seems 8 bytes for 64-bit os;
+* The binary expression of N/A, NaN, and Inf are variable-type dependent:
+|===
+|      |character  | factor   | real             | logical  |Note
+| N/A  | FFFFFFFFF | 80000000 | 7FF00000000007A2 | 80000000 |
+| NaN  | 4E614E    |          | 7FF8000000000000 |          |
+| Inf  |           |          | 7FF0000000000000 |          |
+|===
+* The structure of a serialized R object is not an exact copy of its internal structure before its serialization.
+* A serialized STRSXP object is followed by its pointed(member) CHARSXP objects.
+* The serialization of a string-type (0x10: STRSXP) list differs from other numeric types such as integer and real in two respects: each element's length differs from one another and STRSXP type data are followed by the data of its member CHARSXP.
+* A serialized STRSXP list starts with:
+. 4-byte integer: type information with flags
+. 4-byte integer: length (size of this list)
+. 4-byte integer: 1st list member's type information, CHARSXP(0X09), with its encoding bit, frequently 0x04 = 0b100
+. 4-byte integer: the length of chars to follow
+. A sequence of chars: (NA is expressed as -1, i.e., `FF FF FF FF`)
+
+* The following hex pattern appears before a CHARSXP datum;
+----
+0x00040009
+----
+Its binary pattern is as follows, assuming the above hex pattern was serialized with the big-endian layout:
+
+----
+0b 00000000 00000100 00000000 00001001
+----
+
+The above binary pattern indicates the 18th (starting from 0, not 1) from the right (least significant bit) has 1; this pattern suggests the following chars are encoded in ASCII according to the R internals, p. 6.
+For version 2 files that do not include char-encoding information, the 4-byte hex pattern preceding chars is:
+----
+0x00000009
+----
+i.e., no \'4'.
+
+* A integer- or real-type list does not have element-wise type-fields; their type statement comes before a sequence of data just once because their byte-size is fixed, i.e., does not vary.
+
+* Basically, R's serialization logic starts with information about the type of next field; then its length;
+
+
+
+* `read.table()` in utils package returns a data.frame; the core function in `read.table()` is `scan()` and its C-backend function is `do_scan()` in `scan.c`;
+`do_scan()` returns `SEXP ans`; if `isVectorList()` is TRUE, it is indentified as a `data.frame` (see `io.c`, line 1130).
+
+* While R's source files are open-source, their documentation about its serialization/unserialization process is sparse (_R internals_, 1.8 Serialization Formats); for novice developers who want to grasp the outline of serialization/unserialization, the must-read items are:
+** R's official manuals: R internals (Chapter 1, R internal structures) and _Writing R Extensions_(Chapter 5, System and foreign language interface)
+** Peter Dalgaad's presentation for UseR! 2004, _Language interfaces: . Call and . External_
+
+* ? The end of extra information attached to a list is terminated with `0xFFFFFFFF`; why is this termination necessary?.
+* Matrix-type dataset (version 3, for example, state.x77 data in datasets package) starts with ALTREP_SXP,  `"0x000000EE"` (238) and its header part slightly differs from non-ALTREP case:
+----
+00 00 00 EE
+00 00 00 02
+00 00 00 01
+00 04 00 09
+00 00 00 09
+77 72 61 70 5F 72 65 61 6C
+00 00 00 02
+00 00 00 01
+00 04 00 09
+00 00 00 04
+62 61 73 65
+00 00 00 02
+00 00 00 0D
+00 00 00 01
+00 00 00 0E
+00 00 00 FE
+00 00 00 02
+00 00 00 0E
+00 00 01 90
+
+
+
+----
+
+
+* ALTREP new framework
+
+// ALTREP: Alternative Representations for R Objects
+https://svn.r-project.org/R/branches/ALTREP/ALTREP.html
+----
+Serialization
+A class that wants to handle serializing and unserializing its objects should define Serialized_state and Unserialize methods.
+
+The Serialized_state method should return an SEXP which is serialized in the usual way, along with attributes, the name of the ALTREP class, and the package the class is registered with. Unserializing such an object will locate the corresponding class object and call the Unserialize class method with this class object and the serialized state as arguments. The method should return a new object without attributes. The serialized attributes are then unserialized and attached.
+
+The Serialize method can also return a C NULL pointer, in which case the object is serialized in the standard way for its SEXP type.
+----
+
+* When multiple data.frames are saved in one RData file, do they keep their respective serialization structure when they are individually saved as a single file?
+* R's datasets package: data files are stored under ../src/library/datasets/data/
+* R-serialization format does not insert an end-maker of an field; the length of a forthcoming field is given ahead of it.
+* Non-repeating fields are clearly defined by specification whereas repeating ones sometimes terminated by additional, particular byte-patterns, especially, the end of an attribute field.
+
+
+
+
+
+<<<
+
+==== Serialization steps within writeItem() by inferring from the read-back logic of readItem()
+* Serialization logic coded in writeItem() is not straightforward; The outline of this method is:
+. An if-block of handling a special case
+. Label `tailcall:` that marks the beginning of a loop
+. An if-block of handling the ALTREP case
+** One integer is serialized and 3 calls of writeItem():info, state, attributes follows
+. an if-block of handling a non-null persistence-name case
+. the else-block of handling a persistence-name-not-specified case
+. an if-block of handling a non-zero-hash value
+. the else-block of handling zero-hash-value cases
+* within the above zero-hashvalue block,
+. an if-block of handling SYMSXP type
+. the else-block of handling non-SYMSXP types
+. an if-block of handling ENVSXP types
+. the else-block of the none-of-the above cases:
+* within the above non-of-the above block,
+. switch statement with SEXP-tpe-based `switch` block
+* inference from readItem()
+. assertion of one of the arguments, SEXP type, `ref_table` that should have been initialized as (LISTSXP, VECSXP, R_NIlValue)
+. read 4 bytes as an integer as `flags`
+. analyze the contents of the above integer `frags` and initialize `type`, `levs`, `objf`, `hasattr`, and `hastag`
+. the subsequent switch block starts with the above intialized SEXP type:
+* The contents of a typical data.frame after the endcoding segment (assuming version 3, version 2 did not have this segment) starts with a 4-byte hex pattern as follows:
+
+----
+// Byte pattern example 1: no object name; dimension: 12 vars and 10 obs
+
+0x00 00 03 13  if 0x13 means a SEXP type, it is VECSXP, with flags:
+               object: T, attribute: T, tag: 0 = 0b011
+  00 00 00 0C  if 0x0C means some length: a possible interpretation is:
+               how many variables?: 12
+
+  00 00 02 10  if 0x10 means an SEXP type, it is STRSXP and flags:
+               object: F, attribute: T, tag: F 0b010
+  00 00 00 0A  length: how many rows (observations)? 10
+  00 04 00 09  if 0x09 means an SEXP type, it is CHARSXP, with an encoding bit
+               0b100 => Latin-1?
+  00 00 00 03  length of chars follows: 3
+
+// Byte pattern example 2: with an object name, 'wrld96z8', dimension: ditto
+0x00 00 04 02  if 0x02 means an SEXP type, it is LISTXP, with fags:
+               object: F, attribute: F,  tag: T => 0b100
+  00 00 00 01  tag follows: SYMSXP type = 0x01 or length = 1
+  00 04 00 09  if 0x09 means an SEXP type, it is CHARSXP, with an encoding bit
+               0b100 = latin-1?
+  00 00 00 08  length of chars follows: 8
+  77 72 6C 64   w r l d
+  39 36 7A 38   9 6 z 8
+
+  00 00 03 13  if 0x13 means a SEXP type, it is VECSXP and flags: object: T,
+               attribute: T, tag: F,=> 0b011
+  00 00 00 0C  if 0x0C means some length: a possible interpretation is:
+               how many variables?: 12
+
+  00 00 02 10  if 0x10 means an SEXP type, it is STRSXP, with flags: object: F,
+               attribute: T, tag: F => 0b010
+  00 00 00 0A  length: how many rows (observations)? 10
+  00 04 00 09  if 0x09 means an SEXP type, it is CHARSX, with an encoding bit
+  00 00 00 03  length of chars follows: 3
+  42 45 4C     BEL
+
+// Byte pattern example 3: with an object name, 'testdata', dimension: 6 vars and 25 obs
+0x00 00 04 02  if 0x02 means an SEXP type, it is LISTXP,  with fags:
+               object: F, attribute: F,  tag: T => ob100
+  00 00 00 01  SYMSXP or length
+  00 04 00 09  if 0x09 means an SEXP type, it is CHARSXP, with an encoding bit
+  00 00 00 08  length: 8 chars follow
+  74 65 73 74  t e s t
+  64 61 74 61  d a t a
+  00 00 03 13  if 0x13 means an SEXP type, it is VECSXP, with flags:
+               object: T, attribute: T, tag: F
+  00 00 00 06  if 0x06 means some length, it would be 6 (a vector of 6variables)
+  00 00 03 10  if 0x10 means an SEXP type, it is STRSXP, with flags:
+               object: T, attribute: T, tag: F
+  00 00 00 19  length: how many rows (observations)? 25
+  00 04 00 09  if 0x09 means an SEXP type, it is CHARSXP, with an encoding bit
+  00 00 00 08  length of chars follows: 8
+  41 6E 63 68  A n c h
+  75 72 69 61  u r i a
+
+----
+* The above example implies:
+----
+LSTXP: list with name tag: (tag:wrld96z8)
+VECSXP: list with no tag?  (el1, el2, el3, ...)
+----
+
+
+==== Serializing flow
+. Unknown rendering steps are almost all in WriteItem
+[options="header,footer"]
+|===
+| section | sub-section | C functions|
+| header  | type        |            |
+|         | R info      |            |
+|         | encoding    |            |
+| data    | type/ length| WriteItem |
+|         | data        | WriteItem  |
+|         | attributes  | WriteItem  |
+| metadata| attributes  |            |
+4+|                                  |
+|===
+==== string data
+* character field seems prefixed with the 4-byte hex pattern "0x00 04 00 09" for format version 3; for format version 2, it was "0x00 00 00 09"
+
+----
+version 3 case:
+4 bytes: prefix: 00000000000001000000000000001001 or 0x00040009
+4 bytes: length
+x bytes: data
+note: version 2's prefix is:
+00000000000000000000000000001001 or 0x00000009
+----
+* The code-tracing of writeItem() about a String vector implies that a supposed-to-be-int-size length is not 4-byte long but but 8 because this 4-byte segment always appears before the length of a String to follow:
+----
+08 is the length of char bytes to follow:
+00 04 00  09 00 00 00 08 74 65 73  74 64 61 74 61
+----
+
+Code-tracing::
+
+. writeItem()
+Here the length of a string to be dumped is set by `XLENGTH(s);`
+----
+// writeItem() in serialize.c
+case STRSXP:
+  len = XLENGTH(s);
+  WriteLENGTH(stream, s);
+  for (R_xlen_t ix = 0; ix < len; ix++)   //
+    WriteItem(STRING_ELT(s, ix), ref_table, stream);
+  break;
+
+
+  static void WriteLENGTH(R_outpstream_t stream, SEXP s) {
+  #ifdef LONG_VECTOR_SUPPORT
+    if (IS_LONG_VEC(s)) {
+      OutInteger(stream, -1);
+      R_xlen_t len = XLENGTH(s);
+      OutInteger(stream, (int)(len / 4294967296L));
+      OutInteger(stream, (int)(len % 4294967296L));
+    } else
+      OutInteger(stream, LENGTH(s));
+  #else
+    OutInteger(stream, LENGTH(s));
+  #endif
+  }
+
+
+
+note:
+Since Rinternals.h contains the following defintions and Rinlinedfuns.h defines an inline function, XLENGTH_EX() as follows:
+
+/* defined as a macro since fastmatch packages tests for it */
+#define XLENGTH(x) XLENGTH_EX(x)
+
+R_xlen_t XLENGTH_EX(SEXP x);
+
+INLINE_FUN R_xlen_t XLENGTH_EX(SEXP x)
+{
+    return ALTREP(x) ? ALTREP_LENGTH(x) : STDVEC_LENGTH(x);
+}
+// For our case, ALTREP is not applicable; therefore XLENGTH_EX => STDVEC_LENGTH
+// and its definition is include in Rinlinedfuns.h as follows:
+
+#define STDVEC_LENGTH(x) (((VECSEXP) (x))->vecsxp.length)
+#define STDVEC_TRUELENGTH(x) (((VECSEXP) (x))->vecsxp.truelength)
+
+// The above definition and below struct definition imply the size of R_xlen_t matters:
+struct vecsxp_struct {
+    R_xlen_t	length;
+    R_xlen_t	truelength;
+};
+// The following definitions suggest that `typedef ptrdiff_t R_xlen_t;` is chosen for 64-bit windows machines, not `typedef int R_xlen_t;`
+
+// ..\R\source\R-3.6.2\src\gnuwin32\fixed\h\Rconfig.h
+#ifdef _WIN64
+#define SIZEOF_SIZE_T 8
+#else
+#define SIZEOF_SIZE_T 4
+#endif
+
+// Rinternals.h
+/* type for length of (standard, not long) vectors etc */
+typedef int R_len_t;
+#define R_LEN_T_MAX INT_MAX
+
+
+#if (SIZEOF_SIZE_T > 4)
+#define LONG_VECTOR_SUPPORT
+#endif
+
+#ifdef LONG_VECTOR_SUPPORT
+typedef ptrdiff_t R_xlen_t;
+#define R_XLEN_T_MAX 4503599627370496
+#define R_SHORT_LEN_MAX 2147483647
+#else
+typedef int R_xlen_t;
+#define R_XLEN_T_MAX R_LEN_T_MAX
+#endif
+
+SEXP (STRING_ELT)(SEXP x, R_xlen_t i);
+
+
+int  (LENGTH)(SEXP x);
+#define LENGTH(x) LENGTH_EX(x, __FILE__, __LINE__)
+
+int LENGTH_EX(SEXP x, const char *file, int line);
+
+INLINE_FUN int LENGTH_EX(SEXP x, const char *file, int line)
+{
+    if (x == R_NilValue) return 0;
+    R_xlen_t len = XLENGTH(x);
+#ifdef LONG_VECTOR_SUPPORT
+    if (len > R_SHORT_LEN_MAX)
+	R_BadLongVector(x, file, line);
+#endif
+    return (int) len;
+}
+
+
+
+// Rinlinedfuns.h
+#if C99_INLINE_SEMANTICS
+# undef INLINE_FUN
+# ifdef COMPILING_R
+/* force exported copy */
+#  define INLINE_FUN extern inline
+# else
+/* either inline or link to extern version at compiler's choice */
+#  define INLINE_FUN inline
+# endif /* ifdef COMPILING_R */
+#endif /* C99_INLINE_SEMANTICS */
+
+#if !defined(COMPILING_R) && !defined(COMPILING_MEMORY_C) &&	\
+    !defined(TESTING_WRITE_BARRIER)
+/* if not inlining use version in memory.c with more error checking */
+INLINE_FUN SEXP STRING_ELT(SEXP x, R_xlen_t i) {
+    if (ALTREP(x))
+	return ALTSTRING_ELT(x, i);
+    else {
+	SEXP *ps = STDVEC_DATAPTR(x);
+	return ps[i];
+    }
+}
+#else
+SEXP STRING_ELT(SEXP x, R_xlen_t i);
+#endif
+
+#define STDVEC_DATAPTR(x) ((void *) (((SEXPREC_ALIGN *) (x)) + 1))
+#define CHAR(x)		((const char *) STDVEC_DATAPTR(x))
+
+typedef union {
+  VECTOR_SEXPREC s;
+  double align;
+} SEXPREC_ALIGN;
+
+----
+
+
+
+=== R storage units (nodes)
+==== Two types: SEXPREC and VECTOR_SEXPREC
+|===
+| use for     | R object       | c-type    | pointer | size (32-bit/64-bit os)
+| non-vectors | SEXPREC        | structure | SEXP    | 32 bytes/56 bytes
+| vectors     | VECTOR_SEXPREC | structure | VECSXP  | 28 bytes/48 bytes
+|===
+Note: assuming 1 word = 8 bytes for 64-bit-os and 4 bytes for 32-bit-os
+==== Node: SEXPREC
+----
+| sxpinfo (8 byte)                | 8
+| pointer 1: to the attribute     | 8
+| pointer 2: to the next node     | 8
+| pointer 3: to the previous node | 8
+| union                           | 3 words => 8*3=24 bytes or 8 bytes
+----------------------------------+ 32 + 24(8) = 56(40)
+code: Rinternals.h
+
+// The following multiline macro replaces "SEXPREC_HEADER" with
+"struct sxpinfo_struct sxpinfo;
+struct SEXPREC *attrib;
+struct SEXPREC *gengc_next_node, *gengc_prev_node"
+
+#define SEXPREC_HEADER           \
+  struct sxpinfo_struct sxpinfo; \
+  struct SEXPREC *attrib;        \
+  struct SEXPREC *gengc_next_node, *gengc_prev_node
+
+Thus, for "SEXPREC_HEADER;",  it becomes:
+
+"struct sxpinfo_struct sxpinfo;
+struct SEXPREC *attrib;
+struct SEXPREC *gengc_next_node, *gengc_prev_node;"
+
+and the following definition,
+
+typedef struct SEXPREC *SEXP;
+typedef struct SEXPREC {
+  SEXPREC_HEADER;
+  union {
+    struct primsxp_struct primsxp;  // int = 8 bytes
+    struct symsxp_struct symsxp;    // 3*pointer-structure = 3*8 = 24 bytes
+    struct listsxp_struct listsxp;  // ditto
+    struct envsxp_struct envsxp;    // ditto
+    struct closxp_struct closxp;    // ditto
+    struct promsxp_struct promsxp;  // ditto
+  } u;
+} SEXPREC;
+
+becomes the one as follows:
+
+typedef struct SEXPREC {
+    struct sxpinfo_struct sxpinfo;
+    struct SEXPREC *attrib;
+    struct SEXPREC *gengc_next_node, *gengc_prev_node;
+  union {
+    struct primsxp_struct primsxp;
+    struct symsxp_struct symsxp;
+    struct listsxp_struct listsxp;
+    struct envsxp_struct envsxp;
+    struct closxp_struct closxp;
+    struct promsxp_struct promsxp;
+  } u;
+} SEXPREC;
+
+----
+==== Node: VECTOR_SEXPREC
+* The vector types are RAWSXP, CHARSXP, LGLSXP, INTSXP, REALSXP, CPLXSXP, STRSXP, VECSXP, EXPRSXP and WEAKREFSXP.
+----
+Similarly, for the vector case,
+
+typedef struct VECTOR_SEXPREC {
+  SEXPREC_HEADER;
+  struct vecsxp_struct vecsxp;
+} VECTOR_SEXPREC, *VECSEXP;
+
+becomes
+
+typedef struct VECTOR_SEXPREC {
+  struct sxpinfo_struct sxpinfo;
+  struct SEXPREC *attrib;
+  struct SEXPREC *gengc_next_node, *gengc_prev_node;
+  struct vecsxp_struct vecsxp;
+} VECTOR_SEXPREC, *VECSEXP;
+
+| sxpinfo (8 byte)                | 8
+| pointer 1: to the attribute     | 8
+| pointer 2: to the next node     | 8
+| pointer 3: to the previous node | 8
+| length                          | 8 or 4?
+| truelength                      | 8 or 4?
++---------------------------------+---
+                                  | 56 or 48 bytes
+| data                            | ?
+
+CHARSXP
+length, truelength followed by a block of bytes (allowing for the nul terminator).
+
+LGLSXP
+INTSXP
+length, truelength followed by a block of C ints (which are 32 bits on all R platforms)
+
+REALSXP
+length, truelength followed by a block of C doubles.
+
+CPLXSXP
+length, truelength followed by a block of C99 double complexs.
+
+STRSXP
+length, truelength followed by a block of pointers (SEXPs pointing to CHARSXPs).
+
+RAWSXP
+length, truelength followed by a block of bytes.
+
+typedef struct VECTOR_SEXPREC {
+  SEXPREC_HEADER;
+  struct vecsxp_struct vecsxp;
+} VECTOR_SEXPREC, *VECSEXP;
+
+struct vecsxp_struct {
+  R_xlen_t length;
+  R_xlen_t truelength;
+};
+
+----
+
+
+https://www.hackerearth.com/practice/data-structures/linked-list/singly-linked-list/tutorial/
+
+== Serialization in detail
+Warning::
+. When R saves an R object  (SEXPREC or VECTOR_SEXPREC) into a file, R does not copy its exact internal data structure into a file.
+. R's "num" type means not integer but real for serialization
+. save() command serializes the name of an object to be saved in a file whereas saveRDS() command seems not to this.
+
+=== Structure: version 3
+==== Header
+. magic token according to the type of serialization
+. Format version
+. R information
+. encoding
+. R object name or label
+. unknown fields
+==== Data: R object(s)
+* For a data.frame, data are serialized column(variable)-wise.
+* For each column(variable)
+. type
+. length (how many rows)
+. data
+. class information or column-attached attribute information such as a factor's label-value-mapping table
+==== Attribute data (if available)
+. Attribute information attached to a data.frame?
+
+
+== source-code listing: relevant C functions
+
+. R_Serialize(2 arguments) in serialize.c
+[source, C]
+----
+void R_Serialize(SEXP s, R_outpstream_t stream) {
+  SEXP ref_table;
+  int version = stream->version;
+
+  OutFormat(stream);
+
+  switch (version) {
+    case 2:
+      OutInteger(stream, version);
+      OutInteger(stream, R_VERSION);
+      OutInteger(stream, R_Version(2, 3, 0));
+      break;
+    case 3: {
+      OutInteger(stream, version);
+      OutInteger(stream, R_VERSION);
+      OutInteger(stream, R_Version(3, 5, 0));
+      const char *natenc = R_nativeEncoding();
+      int nelen = (int)strlen(natenc);
+      OutInteger(stream, nelen);
+      OutString(stream, natenc, nelen);
+      break;
+    }
+    default:
+      error(_("version %d not supported"), version);
+  }
+
+  PROTECT(ref_table = MakeHashTable());
+  WriteItem(s, ref_table, stream);
+  UNPROTECT(1);
+}
+
+* Do not confuse with R_serialize in serialize.c
+* stream->type => (*stream).type
+----
+[start=2]
+. R_outpstream_st in Rinternal.h
+[source, C]
+----
+typedef struct R_outpstream_st *R_outpstream_t;
+struct R_outpstream_st {
+    R_pstream_data_t data;
+    R_pstream_format_t type;
+    int version;
+    void (*OutChar)(R_outpstream_t, int);
+    void (*OutBytes)(R_outpstream_t, void *, int);
+    SEXP (*OutPersistHookFunc)(SEXP, SEXP);
+    SEXP OutPersistHookData;
+};
+
+----
+
+[start=3]
+. OutFormat() in serialize.c
+[source, C]
+----
+/*
+ * Format Header Reading and Writing
+ *
+ * The header starts with one of three characters, A for ascii, B for
+ * binary, or X for xdr.
+ */
+
+static void OutFormat(R_outpstream_t stream) {
+  /*    if (stream->type == R_pstream_binary_format) {
+          warning(_("binary format is deprecated; using xdr instead"));
+          stream->type = R_pstream_xdr_format;
+          } */
+  switch (stream->type) {
+    case R_pstream_ascii_format:
+    case R_pstream_asciihex_format:
+      stream->OutBytes(stream, "A\n", 2);
+      break;
+      /* on deserialization, asciihex_format is treated exactly the same
+         way as ascii_format; the distinction is handled inside scanf %lg */
+    case R_pstream_binary_format:
+      stream->OutBytes(stream, "B\n", 2);
+      break;
+    case R_pstream_xdr_format:
+      stream->OutBytes(stream, "X\n", 2);
+      break;
+    case R_pstream_any_format:
+      error(_("must specify ascii, binary, or xdr format"));
+    default:
+      error(_("unknown output format"));
+  }
+}
+
+
+----
+
+[start=4]
+. WriteItem() in serialize.c
+[source, c]
+----
+static void WriteItem(SEXP s, SEXP ref_table, R_outpstream_t stream) {
+  int i;
+  SEXP t;
+
+  if (R_compile_pkgs && TYPEOF(s) == CLOSXP && TYPEOF(BODY(s)) != BCODESXP &&
+      !R_disable_bytecode &&
+      (!IS_S4_OBJECT(s) || (!inherits(s, "refMethodDef") &&
+                            !inherits(s, "defaultBindingFunction")))) {
+    /* Do not compile reference class methods in their generators, because
+       the byte-code is dropped as soon as the method is installed into a
+       new environment. This is a performance optimization but it also
+       prevents byte-compiler warnings about no visible binding for super
+       assignment to a class field.
+
+       Do not compile default binding functions, because the byte-code is
+       dropped as fields are set in constructors (just an optimization).
+    */
+
+    SEXP new_s;
+    R_compile_pkgs = FALSE;
+    PROTECT(new_s = R_cmpfun1(s));
+    WriteItem(new_s, ref_table, stream);
+    UNPROTECT(1);
+    R_compile_pkgs = TRUE;
+    return;
+  }
+
+tailcall:
+  R_CheckStack();
+  if (ALTREP(s) && stream->version >= 3) {
+    SEXP info = ALTREP_SERIALIZED_CLASS(s);
+    SEXP state = ALTREP_SERIALIZED_STATE(s);
+    if (info != NULL && state != NULL) {
+      int flags = PackFlags(ALTREP_SXP, LEVELS(s), OBJECT(s), 0, 0);
+      PROTECT(state);
+      PROTECT(info);
+      OutInteger(stream, flags);
+      WriteItem(info, ref_table, stream);
+      WriteItem(state, ref_table, stream);
+      WriteItem(ATTRIB(s), ref_table, stream);
+      UNPROTECT(2); /* state, info */
+      return;
+    }
+    /* else fall through to standard processing */
+  }
+  if ((t = GetPersistentName(stream, s)) != R_NilValue) {
+    R_assert(TYPEOF(t) == STRSXP && LENGTH(t) > 0);
+    PROTECT(t);
+    HashAdd(s, ref_table);
+    OutInteger(stream, PERSISTSXP);
+    OutStringVec(stream, t, ref_table);
+    UNPROTECT(1);
+  } else if ((i = SaveSpecialHook(s)) != 0)
+    OutInteger(stream, i);
+  else if ((i = HashGet(s, ref_table)) != 0)
+    OutRefIndex(stream, i);
+  else if (TYPEOF(s) == SYMSXP) {
+    /* Note : NILSXP can't occur here */
+    HashAdd(s, ref_table);
+    OutInteger(stream, SYMSXP);
+    WriteItem(PRINTNAME(s), ref_table, stream);
+  } else if (TYPEOF(s) == ENVSXP) {
+    HashAdd(s, ref_table);
+    if (R_IsPackageEnv(s)) {
+      SEXP name = R_PackageEnvName(s);
+      warning(_("'%s' may not be available when loading"),
+              CHAR(STRING_ELT(name, 0)));
+      OutInteger(stream, PACKAGESXP);
+      OutStringVec(stream, name, ref_table);
+    } else if (R_IsNamespaceEnv(s)) {
+#ifdef WARN_ABOUT_NAME_SPACES_MAYBE_NOT_AVAILABLE
+      warning(_("namespaces may not be available when loading"));
+#endif
+      OutInteger(stream, NAMESPACESXP);
+      OutStringVec(stream, PROTECT(R_NamespaceEnvSpec(s)), ref_table);
+      UNPROTECT(1);
+    } else {
+      OutInteger(stream, ENVSXP);
+      OutInteger(stream, R_EnvironmentIsLocked(s) ? 1 : 0);
+      WriteItem(ENCLOS(s), ref_table, stream);
+      WriteItem(FRAME(s), ref_table, stream);
+      WriteItem(HASHTAB(s), ref_table, stream);
+      WriteItem(ATTRIB(s), ref_table, stream);
+    }
+  } else {
+    int flags, hastag, hasattr;
+    R_xlen_t len;
+    switch (TYPEOF(s)) {
+      case LISTSXP:
+      case LANGSXP:
+      case CLOSXP:
+      case PROMSXP:
+      case DOTSXP:
+        hastag = TAG(s) != R_NilValue;
+        break;
+      default:
+        hastag = FALSE;
+    }
+    /* With the CHARSXP cache chains maintained through the ATTRIB
+       field the content of that field must not be serialized, so
+       we treat it as not there. */
+    hasattr = (TYPEOF(s) != CHARSXP && ATTRIB(s) != R_NilValue);
+    flags = PackFlags(TYPEOF(s), LEVELS(s), OBJECT(s), hasattr, hastag);
+    OutInteger(stream, flags);
+    switch (TYPEOF(s)) {
+      case LISTSXP:
+      case LANGSXP:
+      case CLOSXP:
+      case PROMSXP:
+      case DOTSXP:
+        /* Dotted pair objects */
+        /* These write their ATTRIB fields first to allow us to avoid
+           recursion on the CDR */
+        if (hasattr) WriteItem(ATTRIB(s), ref_table, stream);
+        if (TAG(s) != R_NilValue) WriteItem(TAG(s), ref_table, stream);
+        WriteItem(CAR(s), ref_table, stream);
+        /* now do a tail call to WriteItem to handle the CDR */
+        s = CDR(s);
+        goto tailcall;
+      case EXTPTRSXP:
+        /* external pointers */
+        HashAdd(s, ref_table);
+        WriteItem(EXTPTR_PROT(s), ref_table, stream);
+        WriteItem(EXTPTR_TAG(s), ref_table, stream);
+        break;
+      case WEAKREFSXP:
+        /* Weak references */
+        HashAdd(s, ref_table);
+        break;
+      case SPECIALSXP:
+      case BUILTINSXP:
+        /* Builtin functions */
+        OutInteger(stream, (int)strlen(PRIMNAME(s)));
+        OutString(stream, PRIMNAME(s), (int)strlen(PRIMNAME(s)));
+        break;
+      case CHARSXP:
+        if (s == NA_STRING)
+          OutInteger(stream, -1);
+        else {
+          OutInteger(stream, LENGTH(s));
+          OutString(stream, CHAR(s), LENGTH(s));
+        }
+        break;
+      case LGLSXP:
+      case INTSXP:
+        len = XLENGTH(s);
+        WriteLENGTH(stream, s);
+        OutIntegerVec(stream, s, len);
+        break;
+      case REALSXP:
+        len = XLENGTH(s);
+        WriteLENGTH(stream, s);
+        OutRealVec(stream, s, len);
+        break;
+      case CPLXSXP:
+        len = XLENGTH(s);
+        WriteLENGTH(stream, s);
+        OutComplexVec(stream, s, len);
+        break;
+      case STRSXP:
+        len = XLENGTH(s);
+        WriteLENGTH(stream, s);
+        for (R_xlen_t ix = 0; ix < len; ix++)
+          WriteItem(STRING_ELT(s, ix), ref_table, stream);
+        break;
+      case VECSXP:
+      case EXPRSXP:
+        len = XLENGTH(s);
+        WriteLENGTH(stream, s);
+        for (R_xlen_t ix = 0; ix < len; ix++)
+          WriteItem(VECTOR_ELT(s, ix), ref_table, stream);
+        break;
+      case BCODESXP:
+        WriteBC(s, ref_table, stream);
+        break;
+      case RAWSXP:
+        len = XLENGTH(s);
+        WriteLENGTH(stream, s);
+        switch (stream->type) {
+          case R_pstream_xdr_format:
+          case R_pstream_binary_format: {
+            R_xlen_t done, this;
+            for (done = 0; done < len; done += this) {
+              this = min2(CHUNK_SIZE, len - done);
+              stream->OutBytes(stream, RAW(s) + done, (int)this);
+            }
+            break;
+          }
+          default:
+            for (R_xlen_t ix = 0; ix < len; ix++) OutByte(stream, RAW(s)[ix]);
+        }
+        break;
+      case S4SXP:
+        break; /* only attributes (i.e., slots) count */
+      default:
+        error(_("WriteItem: unknown type %i"), TYPEOF(s));
+    }
+    if (hasattr) WriteItem(ATTRIB(s), ref_table, stream);
+  }
+}
+----
+
+----
+static SEXP R_serialize(SEXP object, SEXP icon, SEXP ascii, SEXP Sversion,
+                        SEXP fun) {
+  struct R_outpstream_st out;
+  R_pstream_format_t type;
+  SEXP (*hook)(SEXP, SEXP);
+  int version;
+
+  if (Sversion == R_NilValue)
+    version = defaultSerializeVersion();
+  else
+    version = asInteger(Sversion);
+  if (version == NA_INTEGER || version <= 0) error(_("bad version value"));
+
+  hook = fun != R_NilValue ? CallHook : NULL;
+
+  // Prior to 3.2.0 this was logical, values 0/1/NA for binary.
+  int asc = asInteger(ascii);
+  switch (asc) {
+    case 1:
+      type = R_pstream_ascii_format;
+      break;
+    case 2:
+      type = R_pstream_asciihex_format;
+      break;
+    case 3:
+      type = R_pstream_binary_format;
+      break;
+    default:
+      type = R_pstream_xdr_format;
+      break;
+  }
+
+  if (icon == R_NilValue) {
+    RCNTXT cntxt;
+    struct membuf_st mbs;
+    SEXP val;
+
+    /* set up a context which will free the buffer if there is an error */
+    begincontext(&cntxt, CTXT_CCODE, R_NilValue, R_BaseEnv, R_BaseEnv,
+                 R_NilValue, R_NilValue);
+    cntxt.cend = &free_mem_buffer;
+    cntxt.cenddata = &mbs;
+
+    InitMemOutPStream(&out, &mbs, type, version, hook, fun);
+    R_Serialize(object, &out);
+
+    PROTECT(val = CloseMemOutPStream(&out));
+
+    /* end the context after anything that could raise an error but before
+       calling OutTerm so it doesn't get called twice */
+    endcontext(&cntxt);
+
+    UNPROTECT(1); /* val */
+    return val;
+  } else {
+    Rconnection con = getConnection(asInteger(icon));
+    R_InitConnOutPStream(&out, con, type, version, hook, fun);
+    R_Serialize(object, &out);
+    return R_NilValue;
+  }
+}
+----

@@ -53,6 +53,6 @@ Public Class RObject
     Public Property referenced_object As RObject
 
     Public Overrides Function ToString() As String
-        Return MyBase.ToString()
+        Return $"[{info}] {value}"
     End Function
 End Class
