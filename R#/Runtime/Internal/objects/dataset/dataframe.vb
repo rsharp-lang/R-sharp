@@ -207,7 +207,16 @@ Namespace Runtime.Internal.Object
                                       End Function)
                 }
             ElseIf indexType Like RType.integers Then
-                Throw New InvalidCastException
+                Dim colnames As String() = Me.colnames
+
+                Return New dataframe With {
+                    .rownames = rownames,
+                    .columns = DirectCast(asVector(Of Integer)(selector), Integer()) _
+                        .ToDictionary(Function(i) colnames(i - 1),
+                                      Function(key)
+                                          Return getVector(colnames(key - 1), fullSize)
+                                      End Function)
+                }
             ElseIf indexType Like RType.logicals Then
                 Throw New InvalidCastException
             Else

@@ -81,7 +81,7 @@ Module datasetKit
         Dim clusters As list = args.getValue(Of list)("clusters", env)
         Dim bubbleAlpha As Integer = args.getValue("bubble_alpha", env, 0.0) * 255
         Dim legendLabelCSS$ = args.getValue("legendlabel_style", env, CSSFont.PlotLabelNormal)
-        Dim colors As String = args.getValue("colorSet", env, "Set1:c8")
+        Dim colors As String = args.getValue("colorSet", env, "Clusters")
         Dim clusterData As Dictionary(Of String, String) = Nothing
 
         If Not clusters Is Nothing Then
@@ -170,5 +170,18 @@ Module datasetKit
         Using file As Stream = messagepack.Open(IO.FileMode.Open, doClear:=False, [readOnly]:=True)
             Return LabelledVector.CreateDataFrame(MsgPackSerializer.Deserialize(Of LabelledVector())(file), takes)
         End Using
+    End Function
+
+    ''' <summary>
+    ''' create demo matrix for run test
+    ''' </summary>
+    ''' <param name="size"></param>
+    ''' <param name="dimensions"></param>
+    ''' <param name="pzero"></param>
+    ''' <param name="nclass%"></param>
+    ''' <returns></returns>
+    <ExportAPI("gaussian")>
+    Public Function demoMatrix(size As Integer, dimensions As Integer, Optional pzero As Double = 0.8, Optional nclass% = 5) As dataframe
+
     End Function
 End Module

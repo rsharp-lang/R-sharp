@@ -48,5 +48,7 @@ Public Class zzz
         Call GetType(zzz).Assembly _
             .FromAssembly _
             .AppSummary("Welcome to the SMRUCC Machine Learning toolkit!", "", App.StdOut)
+
+        Call Console.WriteLine()
     End Sub
 End Class
