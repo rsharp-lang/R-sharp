@@ -43,6 +43,8 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.IO.MessagePack
 Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
@@ -58,6 +60,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports any = Microsoft.VisualBasic.Scripting
 Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataSet
+Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 
 ''' <summary>
 ''' the machine learning dataset toolkit
@@ -175,13 +178,58 @@ Module datasetKit
     ''' <summary>
     ''' create demo matrix for run test
     ''' </summary>
-    ''' <param name="size"></param>
-    ''' <param name="dimensions"></param>
-    ''' <param name="pzero"></param>
-    ''' <param name="nclass%"></param>
+    ''' <param name="size">number of rows</param>
+    ''' <param name="dimensions">number of columns</param>
+    ''' <param name="pzero">percentage of zero in an entity vector</param>
+    ''' <param name="nclass">number of class tags</param>
     ''' <returns></returns>
     <ExportAPI("gaussian")>
     Public Function demoMatrix(size As Integer, dimensions As Integer, Optional pzero As Double = 0.8, Optional nclass% = 5) As dataframe
+        Dim tagRanges = nclass _
+            .Sequence _
+            .Select(Function(tag)
+                        Return New NamedCollection(Of Func(Of Double))($"class_{tag + 1}", dimensionRange(dimensions, pzero))
+                    End Function) _
+            .ToArray
+        Dim dataset As New List(Of NamedValue(Of Double()))
 
+        For i As Integer = 1 To size
+            Dim tag = tagRanges(randf.NextInteger(nclass))
+            Dim vec = tag.Select(Function(p) p()).ToArray
+
+            dataset.Add(New NamedValue(Of Double()) With {.Name = tag.name, .Value = vec, .Description = i})
+        Next
+
+        Dim matrix As New dataframe With {
+            .columns = New Dictionary(Of String, Array)
+        }
+
+        For i As Integer = 0 To dimensions - 1
+#Disable Warning
+            matrix.columns($"X{i + 1}") = dataset _
+                .Select(Function(d) d.Value(i)) _
+                .ToArray
+#Enable Warning
+        Next
+
+        Return matrix
     End Function
+
+    Private Iterator Function dimensionRange(dimensions As Integer, pzero As Double) As IEnumerable(Of Func(Of Double))
+        For i As Integer = 0 To dimensions - 1
+            Dim min As Double = randf.NextInteger(10000000)
+            Dim max As Double = min * 100
+
+            If randf.NextDouble <= pzero Then
+                Yield Function()
+                          If randf.NextDouble <= pzero Then
+                              Return 0
+                          Else
+                              Return randf.NextDouble(min, max)
+                          End If
+                      End Function
+            End If
+        Next
+    End Function
+
 End Module
