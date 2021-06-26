@@ -220,15 +220,13 @@ Module datasetKit
             Dim min As Double = randf.NextInteger(10000000)
             Dim max As Double = min * 100
 
-            If randf.NextDouble <= pzero Then
-                Yield Function()
-                          If randf.NextDouble <= pzero Then
-                              Return 0
-                          Else
-                              Return randf.NextDouble(min, max)
-                          End If
-                      End Function
-            End If
+            Yield Function()
+                      If randf.NextDouble <= pzero Then
+                          Return 0
+                      Else
+                          Return randf.NextDouble(min, max)
+                      End If
+                  End Function
         Next
     End Function
 

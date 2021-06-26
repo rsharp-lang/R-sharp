@@ -425,7 +425,7 @@ Module stats
             Return Nothing
         ElseIf TypeOf x Is Rdataframe Then
             With DirectCast(x, Rdataframe)
-                raw = .rownames _
+                raw = .getRowNames _
                     .Select(Function(name, i)
                                 Return .dataframeRow(Of Double, DataSet)(name, i)
                             End Function) _
