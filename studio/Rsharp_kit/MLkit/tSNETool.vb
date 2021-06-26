@@ -66,7 +66,7 @@ Public Class tSNEDataSet
     Friend labels As String()
 
     Public Function GetOutput() As dataframe
-        Dim matrix = algorithm.GetSolution
+        Dim matrix = algorithm.GetEmbedding
         Dim result As New dataframe With {.columns = New Dictionary(Of String, Array)}
         Dim width As Integer = matrix(Scan0).Length
 

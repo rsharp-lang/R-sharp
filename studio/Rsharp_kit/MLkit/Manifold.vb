@@ -57,6 +57,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -90,7 +91,7 @@ Module Manifold
             clusterData = clusters.slots _
                 .ToDictionary(Function(a) a.Key,
                               Function(a)
-                                  Return Scripting.ToString([single](a.Value))
+                                  Return any.ToString([single](a.Value))
                               End Function)
         End If
 
