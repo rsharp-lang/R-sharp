@@ -14,6 +14,7 @@ Module tSNETool
 
     Sub New()
         Call Internal.generic.add("plot", GetType(tSNE), AddressOf datasetKit.EmbeddingRender)
+        Call Internal.generic.add("plot", GetType(tSNEDataSet), AddressOf datasetKit.EmbeddingRender)
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(tSNEDataSet), AddressOf createResultTable)
     End Sub
 
