@@ -96,7 +96,7 @@ Module Manifold
         End If
 
         If input.dimension = 2 Then
-            Return input.DrawUmap2D(
+            Return input.DrawEmbedding2D(
                 size:=size,
                 labels:=labels,
                 clusters:=clusterData,
@@ -122,7 +122,7 @@ Module Manifold
                 size = $"{camera.screen.Width},{camera.screen.Height}"
             End If
 
-            Return input.DrawUmap3D(
+            Return input.DrawEmbedding3D(
                 camera:=camera,
                 size:=size,
                 showLabels:=showLabels,
