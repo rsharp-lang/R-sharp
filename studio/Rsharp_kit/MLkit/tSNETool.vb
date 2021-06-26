@@ -21,7 +21,7 @@ Module tSNETool
         Return result.GetOutput
     End Function
 
-    <ExportAPI("algorithm")>
+    <ExportAPI("tSNE_algorithm")>
     Public Function createtSNEAlgorithm(Optional perplexity As Double = 30,
                                         Optional dimension As Integer = 2,
                                         Optional epsilon As Double = 10) As tSNE
