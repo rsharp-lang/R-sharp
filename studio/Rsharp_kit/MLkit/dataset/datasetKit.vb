@@ -41,16 +41,22 @@
 #End Region
 
 Imports System.IO
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.IO.MessagePack
+Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
+Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
+Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports any = Microsoft.VisualBasic.Scripting
 Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataSet
 
 ''' <summary>
@@ -82,7 +88,7 @@ Module datasetKit
             clusterData = clusters.slots _
                 .ToDictionary(Function(a) a.Key,
                               Function(a)
-                                  Return any.ToString([Single](a.Value))
+                                  Return any.ToString([single](a.Value))
                               End Function)
         End If
 

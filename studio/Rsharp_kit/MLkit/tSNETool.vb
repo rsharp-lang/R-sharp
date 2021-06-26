@@ -8,8 +8,13 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 
-<Package("t.SNE")>
+<Package("t-SNE")>
 Module tSNETool
+
+    Sub New()
+        Call Internal.generic.add("plot", GetType(tSNE), AddressOf datasetKit.EmbeddingRender)
+
+    End Sub
 
     <ExportAPI("algorithm")>
     Public Function createtSNEAlgorithm(Optional perplexity As Double = 30,
