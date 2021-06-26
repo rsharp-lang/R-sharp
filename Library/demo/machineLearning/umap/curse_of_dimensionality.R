@@ -44,4 +44,4 @@ const dist = data.frame(dimensions = dims, euclidean = d[d != 0]);
 print(d);
 print(dist);
 
-write.csv(dist, file = `${dirname(@script)}/curse_of_dimensionality.csv`, row.names = FALSE);
+write.csv(dist, file = `${dirname(@script)}/curse_of_dimensionality.csv`, row_names = FALSE);
