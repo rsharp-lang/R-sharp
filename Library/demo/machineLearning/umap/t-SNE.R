@@ -8,6 +8,6 @@ bitmap(file = `${dirname(@script)}/MNIST-LabelledVectorArray-20000x100.t-SNE_sca
 	t.SNE::algorithm()
 	|> data(MNIST_LabelledVectorArray)
 	|> solve(100)
-	|> 
+	|> plot
 	;
 }

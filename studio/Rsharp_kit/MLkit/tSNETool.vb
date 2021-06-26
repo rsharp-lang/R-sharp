@@ -14,8 +14,12 @@ Module tSNETool
 
     Sub New()
         Call Internal.generic.add("plot", GetType(tSNE), AddressOf datasetKit.EmbeddingRender)
-
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(tSNEDataSet), AddressOf createResultTable)
     End Sub
+
+    Private Function createResultTable(result As tSNEDataSet, args As list, env As Environment) As dataframe
+        Return result.GetOutput
+    End Function
 
     <ExportAPI("algorithm")>
     Public Function createtSNEAlgorithm(Optional perplexity As Double = 30,
@@ -56,7 +60,7 @@ Module tSNETool
     End Function
 
     <ExportAPI("solve")>
-    Public Function Solve(tSNE As tSNEDataSet, Optional iterations% = 500) As dataframe
+    Public Function Solve(tSNE As tSNEDataSet, Optional iterations% = 500) As tSNEDataSet
         Dim nEpochs As Integer = iterations
 
         Console.WriteLine("Calculating..")
@@ -69,7 +73,7 @@ Module tSNETool
             End If
         Next
 
-        Return tSNE.GetOutput
+        Return tSNE
     End Function
 
 End Module
