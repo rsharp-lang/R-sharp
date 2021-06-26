@@ -1,6 +1,6 @@
 imports ["dataset", "t.SNE"] from "MLkit";
 
-const MNIST_LabelledVectorArray = "E:\GCModeller\src\runtime\sciBASIC#\Data_science\DataMining\data\umap\MNIST-LabelledVectorArray-60000x100.msgpack"
+const MNIST_LabelledVectorArray = `${dirname(@script)}/MNIST-LabelledVectorArray-60000x100.msgpack`
 |> read.mnist.labelledvector(takes = 25000)
 ;
 
