@@ -13,7 +13,7 @@ print(rownames(MNIST_LabelledVectorArray));
 
 cat("\n\n");
 
-const n as integer = 50;
+const n as integer = 500;
 const raw = MNIST_LabelledVectorArray[1:n, ];
 const euclidean_dimensions as function(raw) {
 	str(raw);
@@ -38,7 +38,7 @@ const euclidean_dimensions as function(raw) {
 rownames(raw) = `X${1:n}`;
 
 const d = euclidean_dimensions(raw);
-const dims = (15:length(d))[d != 0];
+const dims = (2:length(d))[d != 0];
 const dist = data.frame(dimensions = dims, euclidean = d[d != 0]);
 
 print(d);
