@@ -1,28 +1,31 @@
-imports ["dataset", "t-SNE", "clustering"] from "MLkit";
+imports ["dataset", "umap"] from "MLkit";
 
 const filename as string = "MNIST-LabelledVectorArray-60000x100.msgpack";
 const MNIST_LabelledVectorArray = `${dirname(@script)}/${filename}`
-|> read.mnist.labelledvector(takes = 3000)
+|> read.mnist.labelledvector(takes = 10000)
 ;
 const tags as string = rownames(MNIST_LabelledVectorArray);
 
 rownames(MNIST_LabelledVectorArray) = `X${1:nrow(MNIST_LabelledVectorArray)}`;
 
-bitmap(file = `${dirname(@script)}/MNIST-LabelledVectorArray-20000x100.t-SNE_scatter.png`, size = [6000,4000]) {
-	const tSNE = t.SNE()
-	|> data(MNIST_LabelledVectorArray)
-	|> solve(iterations = 200)	
-	;
-	
-	tSNE 
-	|> as.data.frame 
-	|> write.csv(
-		file      = `${dirname(@script)}/MNIST-LabelledVectorArray-20000x100.t-SNE_scatter.csv`, 
-		row.names = tags
+bitmap(file = `${dirname(@script)}/MNIST-LabelledVectorArray-20000x100.umap_scatter.png`, size = [6000,4000]) {
+	const manifold = umap(MNIST_LabelledVectorArray,
+		dimension         = 2, 
+		numberOfNeighbors = 10,
+		localConnectivity = 1,
+		KnnIter           = 64,
+		bandwidth         = 1
 	)
 	;
-		
-	plot(tSNE,
+	
+	manifold$umap
+	|> as.data.frame
+	|> write.csv( 
+		file      = `${dirname(@script)}/MNIST-LabelledVectorArray-20000x100.umap_scatter.csv`, 
+		row.names = tags
+	);
+	
+	plot(manifold$umap,
 		clusters    = lapply(tags, t -> t, names = rownames(MNIST_LabelledVectorArray)), 
 		labels      = rownames(MNIST_LabelledVectorArray),
 		show_bubble = FALSE,

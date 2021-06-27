@@ -44,7 +44,6 @@ Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.IO.MessagePack
 Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
@@ -83,8 +82,9 @@ Module datasetKit
         ' [label => clusterid]
         Dim clusters As list = args.getValue(Of list)("clusters", env)
         Dim bubbleAlpha As Integer = args.getValue("bubble_alpha", env, 0.0) * 255
-        Dim legendLabelCSS$ = args.getValue("legendlabel_style", env, CSSFont.PlotLabelNormal)
+        Dim legendLabelCSS$ = args.getValue("legendlabel", env, CSSFont.PlotLabelNormal)
         Dim colors As String = args.getValue("colorSet", env, "Clusters")
+        Dim padding As String = args.getValue("padding", env, "padding:150px 150px 300px 300px;")
         Dim clusterData As Dictionary(Of String, String) = Nothing
 
         If Not clusters Is Nothing Then
@@ -103,7 +103,8 @@ Module datasetKit
                 pointSize:=pointSize,
                 showConvexHull:=showBubble,
                 legendLabelCSS:=legendLabelCSS,
-                colorSet:=colors
+                colorSet:=colors,
+                padding:=padding
             )
         Else
             Dim camera As Camera = args.getValue(Of Camera)("camera", env)
@@ -132,7 +133,8 @@ Module datasetKit
                 clusters:=clusterData,
                 labelColor:=labelColor,
                 bubbleAlpha:=bubbleAlpha,
-                colorSet:=colors
+                colorSet:=colors,
+                padding:=padding
             )
         End If
     End Function

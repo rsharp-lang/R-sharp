@@ -724,8 +724,9 @@ RE0:
         <ExportAPI("data.frame")>
         <RApiReturn(GetType(dataframe))>
         Public Function Rdataframe(<RListObjectArgument>
-                                   <RRawVectorArgument>
-                                   columns As Object, Optional env As Environment = Nothing) As Object
+                                   <RRawVectorArgument> columns As Object,
+                                   <RRawVectorArgument> Optional row_names As Object = Nothing,
+                                   Optional env As Environment = Nothing) As Object
 
             ' data.frame(a = 1, b = ["g","h","eee"], c = T)
             Dim parameters As InvokeParameter() = columns
