@@ -1,0 +1,8 @@
+﻿,a1,cc,dd,index
+a,3.5,TRUE,single string,1
+b,4,TRUE,single string,2
+c,4.5,TRUE,single string,3
+d,5,TRUE,single string,4
+e,5,TRUE,single string,5
+f,5,FALSE,single string,6
+g,16670,TRUE,single string,7

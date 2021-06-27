@@ -293,7 +293,8 @@ Public Module utils
     <RApiReturn(GetType(Boolean))>
     Public Function write_csv(<RRawVectorArgument> x As Object,
                               Optional file$ = Nothing,
-                              Optional row_names As Boolean = True,
+                              <RRawVectorArgument>
+                              Optional row_names As Object = True,
                               Optional fileEncoding As Object = "",
                               Optional tsv As Boolean = False,
                               Optional env As Environment = Nothing) As Object
@@ -331,7 +332,7 @@ Public Module utils
     End Function
 
     <Extension>
-    Friend Function DataFrameRows(x As Rdataframe, row_names As Boolean, env As Environment) As File
+    Friend Function DataFrameRows(x As Rdataframe, row_names As Object, env As Environment) As File
         Dim matrix As String()() = TableFormatter _
             .GetTable(
                 df:=x,

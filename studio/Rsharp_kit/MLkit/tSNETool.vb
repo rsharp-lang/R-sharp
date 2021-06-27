@@ -22,7 +22,14 @@ Module tSNETool
         Return result.GetOutput
     End Function
 
-    <ExportAPI("tSNE_algorithm")>
+    ''' <summary>
+    ''' create t-SNE algorithm module
+    ''' </summary>
+    ''' <param name="perplexity"></param>
+    ''' <param name="dimension"></param>
+    ''' <param name="epsilon"></param>
+    ''' <returns></returns>
+    <ExportAPI("t.SNE")>
     Public Function createtSNEAlgorithm(Optional perplexity As Double = 30,
                                         Optional dimension As Integer = 2,
                                         Optional epsilon As Double = 10) As tSNE
@@ -64,7 +71,7 @@ Module tSNETool
     Public Function Solve(tSNE As tSNEDataSet, Optional iterations% = 500) As tSNEDataSet
         Dim nEpochs As Integer = iterations
 
-        Console.WriteLine("Calculating..")
+        Console.WriteLine("Calculating...")
 
         For i As Integer = 0 To iterations
             Call tSNE.algorithm.Step()
@@ -92,7 +99,10 @@ Public Class tSNEDataSet : Inherits IDataEmbedding
 
     Public Function GetOutput() As dataframe
         Dim matrix = algorithm.GetEmbedding
-        Dim result As New dataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim result As New dataframe With {
+            .columns = New Dictionary(Of String, Array),
+            .rownames = labels
+        }
         Dim width As Integer = matrix(Scan0).Length
 
         For i As Integer = 0 To width - 1

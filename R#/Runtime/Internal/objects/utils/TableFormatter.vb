@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::2941a071e861294b71858ecb0fd91691, R#\Runtime\Internal\objects\utils\TableFormatter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class TableFormatter
-    ' 
-    '         Function: GetFormatters, GetTable, GetTypeArray
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class TableFormatter
+' 
+'         Function: GetFormatters, GetTable, GetTypeArray
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -44,6 +44,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object.Utils
 
@@ -87,10 +88,13 @@ Namespace Runtime.Internal.Object.Utils
         ''' <summary>
         ''' Each element in a return result array is a row in table matrix
         ''' </summary>
+        ''' <param name="showRowNames">
+        ''' 一个逻辑值开关或者一个向量用于产生替换rownames
+        ''' </param>
         ''' <returns></returns>
         Public Shared Function GetTable(df As dataframe, env As GlobalEnvironment,
                                         Optional printContent As Boolean = True,
-                                        Optional showRowNames As Boolean = True) As String()()
+                                        Optional showRowNames As Object = True) As String()()
 
             Dim table As String()() = New String(df.nrows + If(printContent, 1, 0))() {}
             Dim rIndex As Integer
@@ -101,10 +105,26 @@ Namespace Runtime.Internal.Object.Utils
             Dim typeRow As String() = GetTypeArray(df, colNames)
             Dim formatters As IStringBuilder() = GetFormatters(df, colNames, env, printContent)
 
-            If showRowNames Then
+            showRowNames = REnv.asVector(Of Object)(showRowNames)
+
+            If DirectCast(showRowNames, Array).Length = 1 Then
+                showRowNames = DirectCast(showRowNames, Array).GetValue(Scan0)
+            End If
+
+            If TypeOf showRowNames Is Boolean AndAlso showRowNames = True Then
                 table(Scan0) = row.ToArray
 
                 If printContent Then
+                    table(1) = {"<mode>"}.JoinIterates(typeRow).ToArray
+                End If
+            ElseIf TypeOf showRowNames Is Array Then
+                rownames = REnv.asVector(Of String)(showRowNames)
+                showRowNames = True
+                table(Scan0) = row.ToArray
+
+                If rownames.Length <> df.nrows Then
+                    Throw New InvalidProgramException($"the vector length of rownames ({rownames.Length}) is not equals to dataframe nrows ({df.nrows})!")
+                ElseIf printContent Then
                     table(1) = {"<mode>"}.JoinIterates(typeRow).ToArray
                 End If
             Else

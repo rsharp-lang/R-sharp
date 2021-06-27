@@ -295,6 +295,8 @@ Namespace Runtime.Interop
 
                 If arguments.ContainsKey(arg.name) Then
                     Yield getValue(arg, arguments(arg.name), apiTrace, envir, False)
+                ElseIf arguments.ContainsKey(arg.name.Replace("_", ".")) Then
+                    Yield getValue(arg, arguments(arg.name.Replace("_", ".")), apiTrace, envir, False)
                 ElseIf i >= arguments.Count Then
                     ' default value
                     If arg.type.raw Is GetType(Environment) Then
