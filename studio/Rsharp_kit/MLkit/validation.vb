@@ -87,6 +87,7 @@ Module validation
     End Function
 
     <ExportAPI("AUC")>
+    <RApiReturn(GetType(Double))>
     Public Function AUC(<RRawVectorArgument> ROC As Object, Optional env As Environment = Nothing) As Object
         Dim validates As pipeline = pipeline.TryCreatePipeline(Of Evaluation.Validation)(ROC, env)
 
@@ -95,6 +96,11 @@ Module validation
         End If
 
         Return validates.populates(Of Evaluation.Validation)(env).AUC
+    End Function
+
+    <ExportAPI("prediction")>
+    Public Function prediction(predicts As String(), labels As String()) As Evaluation.Validation()
+
     End Function
 
     <ExportAPI("ANN.ROC")>
