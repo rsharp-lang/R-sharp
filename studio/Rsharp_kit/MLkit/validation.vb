@@ -70,11 +70,12 @@ Module validation
     Public Function PlotROC(roc As ROC, args As list, env As Environment) As Object
         Dim line As SerialData = ROCPlot.CreateSerial(roc)
 
-        line.color = args.getValue("line_color", env, "black").TranslateColor
+        line.color = args.getValue("line_color", env, "steelblue").TranslateColor
         line.lineType = DashStyle.Dash
         line.pointSize = args.getValue("point_size", env, 5)
         line.shape = LegendStyles.Circle
         line.width = args.getValue("line_width", env, 1)
+        line.title = roc.AUC.ToString("F3")
 
         Return ROCPlot.Plot(line)
     End Function
