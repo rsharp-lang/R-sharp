@@ -116,14 +116,18 @@ Namespace Runtime.Internal
         End Sub
 
         Private Shared Sub pushEnvir(baseModule As Type)
-            Call ImportsPackage _
-                .GetAllApi(baseModule, includesInternal:=True) _
-                .Select(Function(m)
-                            Return New RMethodInfo(m)
-                        End Function) _
-                .DoEach(Sub(m)
-                            Call index.Add(m.name, m)
-                        End Sub)
+            Try
+                Call ImportsPackage _
+                    .GetAllApi(baseModule, includesInternal:=True) _
+                    .Select(Function(m)
+                                Return New RMethodInfo(m)
+                            End Function) _
+                    .DoEach(Sub(m)
+                                Call index.Add(m.name, m)
+                            End Sub)
+            Catch ex As Exception
+                Throw ex
+            End Try
         End Sub
 
         Friend Shared Function getFunction(name As String) As RMethodInfo

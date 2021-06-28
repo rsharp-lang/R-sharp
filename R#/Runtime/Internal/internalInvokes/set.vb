@@ -135,11 +135,6 @@ Namespace Runtime.Internal.Invokes
             Return join
         End Function
 
-        <ExportAPI("diff")>
-        Public Function diff(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Object
-            Throw New NotImplementedException
-        End Function
-
         <ExportAPI("index.of")>
         Public Function indexOf(<RRawVectorArgument> x As Object, Optional getKey As Object = Nothing, Optional env As Environment = Nothing) As Object
             If x Is Nothing Then

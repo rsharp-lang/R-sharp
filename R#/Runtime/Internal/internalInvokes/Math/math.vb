@@ -76,15 +76,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("diff")>
         Public Function diff(x As Double()) As Double()
-            Dim diffs As New List(Of Double)
-            Dim base As Double = x(Scan0)
-
-            For Each xi As Double In x.Skip(1)
-                diffs.Add(xi - base)
-                base = xi
-            Next
-
-            Return diffs.ToArray
+            Return NumberGroups.diff(x)
         End Function
 
         ''' <summary>
