@@ -46,6 +46,7 @@ Imports Microsoft.VisualBasic.DataMining.ComponentModel.Evaluation
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
 Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
+Imports Microsoft.VisualBasic.My.JavaScript
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -89,20 +90,43 @@ Module validation
     <ExportAPI("AUC")>
     <RApiReturn(GetType(Double))>
     Public Function AUC(<RRawVectorArgument> ROC As Object, Optional env As Environment = Nothing) As Object
-        Dim validates As pipeline = pipeline.TryCreatePipeline(Of Evaluation.Validation)(ROC, env)
+        If TypeOf ROC Is ROC Then
+            Return DirectCast(ROC, ROC).AUC
+        Else
+            Dim validates As pipeline = pipeline.TryCreatePipeline(Of Evaluation.Validation)(ROC, env)
 
-        If validates.isError Then
-            Return validates.getError
+            If validates.isError Then
+                Return validates.getError
+            End If
+
+            Return validates.populates(Of Evaluation.Validation)(env).AUC
         End If
-
-        Return validates.populates(Of Evaluation.Validation)(env).AUC
     End Function
 
     <ExportAPI("prediction")>
-    Public Function prediction(predicts As Double(), labels As Boolean()) As Evaluation.Validation()
-        Return Evaluation.Validation _
+    Public Function prediction(predicts As Double(), labels As Boolean()) As ROC
+        Dim result = Evaluation.Validation _
             .ROC(predicts.Sequence, Function(i, d) labels(i), Function(i, cut) predicts(i) >= cut) _
             .ToArray
+        Dim ROC As New ROC With {
+            .accuracy = result.Select(Function(x) x.Accuracy).ToArray,
+            .All = result.Select(Function(x) x.All).ToArray,
+            .BER = result.Select(Function(x) x.BER).ToArray,
+            .F1Score = result.Select(Function(x) x.F1Score).ToArray,
+            .F2Score = result.Select(Function(x) x.FbetaScore(2)).ToArray,
+            .FN = result.Select(Function(x) x.FN).ToArray,
+            .FP = result.Select(Function(x) x.FP).ToArray,
+            .FPR = result.Select(Function(x) x.FPR).ToArray,
+            .NPV = result.Select(Function(x) x.NPV).ToArray,
+            .precision = result.Select(Function(x) x.Precision).ToArray,
+            .sensibility = result.Select(Function(x) x.Sensibility).ToArray,
+            .specificity = result.Select(Function(x) x.Specificity).ToArray,
+            .threshold = result.Select(Function(x) x.Threshold).ToArray,
+            .TN = result.Select(Function(x) x.TN).ToArray,
+            .TP = result.Select(Function(x) x.TP).ToArray
+        }
+
+        Return ROC
     End Function
 
     <ExportAPI("ANN.ROC")>
@@ -120,7 +144,7 @@ Module validation
     End Function
 End Module
 
-Public Class ROC
+Public Class ROC : Inherits JavaScriptObject
 
     Public Property threshold As Double()
     Public Property specificity As Double()
@@ -132,10 +156,14 @@ Public Class ROC
     Public Property NPV As Double()
     Public Property F1Score As Double()
     Public Property F2Score As Double()
-    Public Property All As Double()
-    Public Property TP As Double()
-    Public Property FP As Double()
-    Public Property TN As Double()
-    Public Property FN As Double()
+    Public Property All As Integer()
+    Public Property TP As Integer()
+    Public Property FP As Integer()
+    Public Property TN As Integer()
+    Public Property FN As Integer()
+
+    Public Function AUC() As Double
+
+    End Function
 
 End Class
