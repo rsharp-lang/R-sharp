@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::0d443fee17914e9819d1c37b8d495c73, studio\Rsharp_kit\MLkit\validation.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module validation
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: ANN_ROC, AUC, createSampleValidation, Tabular
-    ' 
-    ' /********************************************************************************/
+' Module validation
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: ANN_ROC, AUC, createSampleValidation, Tabular
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -117,3 +117,23 @@ Module validation
         }
     End Function
 End Module
+
+Public Class ROC
+
+    Public Property threshold As Double()
+    Public Property specificity As Double()
+    Public Property sensibility As Double()
+    Public Property accuracy As Double()
+    Public Property precision As Double()
+    Public Property BER As Double()
+    Public Property FPR As Double()
+    Public Property NPV As Double()
+    Public Property F1Score As Double()
+    Public Property F2Score As Double()
+    Public Property All As Double()
+    Public Property TP As Double()
+    Public Property FP As Double()
+    Public Property TN As Double()
+    Public Property FN As Double()
+
+End Class
