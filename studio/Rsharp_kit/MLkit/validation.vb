@@ -107,6 +107,7 @@ Module validation
     Public Function prediction(predicts As Double(), labels As Boolean()) As ROC
         Dim result = Evaluation.Validation _
             .ROC(predicts.Sequence, Function(i, d) labels(i), Function(i, cut) predicts(i) >= cut) _
+            .OrderBy(Function(t) t.Sensibility) _
             .ToArray
         Dim ROC As New ROC With {
             .accuracy = result.Select(Function(x) x.Accuracy).ToArray,
