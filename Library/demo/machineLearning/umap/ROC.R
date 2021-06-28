@@ -18,3 +18,7 @@ print(simple_auc(
 	TPR = pred$sensibility,
 	FPR = pred$FPR
 ));
+
+bitmap(file = `${dirname(@script)}/ROC.png`) {
+	plot(pred);
+}

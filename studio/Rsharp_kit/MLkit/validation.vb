@@ -40,9 +40,14 @@
 
 #End Region
 
+Imports System.Drawing.Drawing2D
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.ChartPlots
+Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
+Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Evaluation
+Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
 Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
@@ -59,7 +64,20 @@ Module validation
 
     Sub New()
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(Evaluation.Validation()), AddressOf Tabular)
+        REnv.Internal.generic.add("plot", GetType(ROC), AddressOf PlotROC)
     End Sub
+
+    Public Function PlotROC(roc As ROC, args As list, env As Environment) As Object
+        Dim line As SerialData = ROCPlot.CreateSerial(roc)
+
+        line.color = args.getValue("line_color", env, "black").TranslateColor
+        line.lineType = DashStyle.Dash
+        line.pointSize = args.getValue("point_size", env, 5)
+        line.shape = LegendStyles.Circle
+        line.width = args.getValue("line_width", env, 1)
+
+        Return ROCPlot.Plot(line)
+    End Function
 
     Public Function Tabular(x As Object, args As list, env As Environment) As Rdataframe
         Dim input As Evaluation.Validation() = DirectCast(x, Evaluation.Validation())
@@ -146,6 +164,7 @@ Module validation
 End Module
 
 Public Class ROC : Inherits JavaScriptObject
+    Implements IEnumerable(Of Evaluation.Validation)
 
     Public Property threshold As Double()
     Public Property specificity As Double()
@@ -179,4 +198,25 @@ Public Class ROC : Inherits JavaScriptObject
         Return Evaluation.SimpleAUC(TPR, FPR)
     End Function
 
+    Protected Overrides Iterator Function IEnumerable_GetEnumerator() As IEnumerator
+        Yield IEnumerable()
+    End Function
+
+    Private Overloads Iterator Function IEnumerable() As IEnumerator(Of Evaluation.Validation) Implements IEnumerable(Of Evaluation.Validation).GetEnumerator
+        If threshold.Length > 1000 Then
+            For i As Integer = 0 To threshold.Length - 1 Step CInt(threshold.Length) / 1000
+                Yield New Evaluation.Validation With {
+                    .Specificity = specificity(i),
+                    .Sensibility = sensibility(i)
+                }
+            Next
+        Else
+            For i As Integer = 0 To threshold.Length - 1
+                Yield New Evaluation.Validation With {
+                    .Specificity = specificity(i),
+                    .Sensibility = sensibility(i)
+                }
+            Next
+        End If
+    End Function
 End Class
