@@ -8,11 +8,13 @@ print(`AUC = ${AUC(pred)}`);
 
 const simple_auc <- function(TPR, FPR){
   # inputs already sorted, best scores first 
-  dFPR <- c(diff(FPR), 0)
-  dTPR <- c(diff(TPR), 0)
-  sum(TPR * dFPR) + sum(dTPR * dFPR)/2
-}
+  const dFPR <- c(diff(FPR), 0);
+  const dTPR <- c(diff(TPR), 0);
+  
+  sum(TPR * dFPR) + sum(dTPR * dFPR) / 2;
+};
 
 print(simple_auc(
-	
+	TPR = pred$sensibility,
+	FPR = pred$FPR
 ));

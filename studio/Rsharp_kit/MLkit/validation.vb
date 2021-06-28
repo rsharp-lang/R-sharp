@@ -148,6 +148,10 @@ Public Class ROC : Inherits JavaScriptObject
 
     Public Property threshold As Double()
     Public Property specificity As Double()
+    ''' <summary>
+    ''' TPR
+    ''' </summary>
+    ''' <returns></returns>
     Public Property sensibility As Double()
     Public Property accuracy As Double()
     Public Property precision As Double()
@@ -163,7 +167,15 @@ Public Class ROC : Inherits JavaScriptObject
     Public Property FN As Integer()
 
     Public Function AUC() As Double
+        Dim TPR = sensibility
+        Dim FPR = Me.FPR
 
+        With TPR.Select(Function(x, i) (x, i)).OrderBy(Function(t) t.x).ToArray
+            TPR = .Select(Function(t) t.x).ToArray
+            FPR = .Select(Function(t) FPR(t.i)).ToArray
+        End With
+
+        Return Evaluation.SimpleAUC(TPR, FPR)
     End Function
 
 End Class
