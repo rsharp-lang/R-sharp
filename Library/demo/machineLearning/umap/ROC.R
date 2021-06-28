@@ -3,7 +3,9 @@ imports "validation" from "MLkit";
 const data = read.csv(file = "github://rsharp-lang/R-sharp/blob/master/Library/demo/machineLearning/umap/ROC.csv");
 const pred = prediction(data[, 1], data[, 2]);
 
-# print(head(as.data.frame(pred)));
+str(data);
+print(head(data));
+
 print(`AUC = ${AUC(pred)}`);
 
 const simple_auc <- function(TPR, FPR){
