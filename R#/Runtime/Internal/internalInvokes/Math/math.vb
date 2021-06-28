@@ -66,6 +66,28 @@ Namespace Runtime.Internal.Invokes
     Module math
 
         ''' <summary>
+        ''' ### Lagged Differences
+        ''' 
+        ''' Returns suitably lagged and iterated differences.
+        ''' </summary>
+        ''' <param name="x">
+        ''' a numeric vector Or matrix containing the values To be differenced.
+        ''' </param>
+        ''' <returns></returns>
+        <ExportAPI("diff")>
+        Public Function diff(x As Double()) As Double()
+            Dim diffs As New List(Of Double)
+            Dim base As Double = x(Scan0)
+
+            For Each xi As Double In x.Skip(1)
+                diffs.Add(xi - base)
+                base = xi
+            Next
+
+            Return diffs.ToArray
+        End Function
+
+        ''' <summary>
         ''' rounds the values in its first argument to the specified number of decimal places (default 0). 
         ''' See *'Details'* about "round to even" when rounding off a 5.
         ''' </summary>
