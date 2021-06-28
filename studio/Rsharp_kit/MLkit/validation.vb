@@ -99,8 +99,10 @@ Module validation
     End Function
 
     <ExportAPI("prediction")>
-    Public Function prediction(predicts As String(), labels As String()) As Evaluation.Validation()
-
+    Public Function prediction(predicts As Double(), labels As Boolean()) As Evaluation.Validation()
+        Return Evaluation.Validation _
+            .ROC(predicts.Sequence, Function(i, d) labels(i), Function(i, cut) predicts(i) >= cut) _
+            .ToArray
     End Function
 
     <ExportAPI("ANN.ROC")>
