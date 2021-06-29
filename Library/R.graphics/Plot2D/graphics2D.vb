@@ -233,8 +233,11 @@ Module graphics2D
     ''' <param name="levels"></param>
     ''' <returns></returns>
     <ExportAPI("scale")>
-    Public Function scale(x As Double(), <RRawVectorArgument> colorSet As Object, Optional levels As Integer = 25) As Object
-        Dim colors As Color() = Designer.GetColors(InteropArgumentHelper.getColorSet(colorSet), n:=levels)
+    Public Function scale(x As Double(), <RRawVectorArgument> colorSet As Object, Optional levels As Integer = 25) As String()
+        Dim colors As String() = Designer _
+            .GetColors(InteropArgumentHelper.getColorSet(colorSet), n:=levels) _
+            .Select(Function(c) c.ToHtmlColor) _
+            .ToArray
         Dim valueRange As New DoubleRange(x)
         Dim levelRange As New DoubleRange({0, levels - 1})
         Dim i As Integer() = x _

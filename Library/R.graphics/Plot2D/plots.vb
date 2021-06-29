@@ -133,91 +133,99 @@ Module plots
         Dim y As Double() = args.findNumberVector(size:=x.Length, env)
         Dim ptSize As Single = args.getValue("point_size", env, 15)
         Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
-        Dim colorSet As String = args.getValue("colorSet", env, "Clusters")
         Dim drawLine As Boolean = y Is Nothing
 
         args.slots!line = drawLine
 
         If Not classList.IsNullOrEmpty Then
-            Dim uniqClass As String() = classList.Distinct.ToArray
-            Dim colors As Dictionary(Of String, Color) = Designer _
-                .GetColors(colorSet, uniqClass.Length) _
-                .Take(uniqClass.Length) _
-                .SeqIterator _
-                .ToDictionary(Function(i) uniqClass(i),
-                              Function(i)
-                                  Return i.value
-                              End Function)
-            Dim classSerials As New Dictionary(Of String, List(Of PointData))
-
-            If classList.Length <> x.Length Then
-                If env.globalEnvironment.Rscript.strict Then
-                    Return Internal.debug.stop({
-                        $"the size of the point class ({classList.Length}) is not equals to the size of the given data point ({x.Length})!",
-                        $"class_size: {classList.Length}",
-                        $"point_size: {x.Length}"
-                    }, env)
-                Else
-                    env.AddMessage($"the size of the point class ({classList.Length}) is not equals to the size of the given data point ({x.Length})!", MSG_TYPES.WRN)
-                End If
-            End If
-
-            For Each label As String In uniqClass
-                classSerials(label) = New List(Of PointData)
-            Next
-
-            If y Is Nothing Then
-                For i As Integer = 0 To x.Length - 1
-                    classSerials(classList(i)).Add(New PointData(classSerials(classList(i)).Count + 1, x(i)))
-                Next
-            Else
-                For i As Integer = 0 To x.Length - 1
-                    classSerials(classList(i)).Add(New PointData(x(i), y(i)))
-                Next
-            End If
-
-            Dim lines As SerialData() = classSerials _
-                .Where(Function(list) list.Value.Count > 0) _
-                .Select(Function(tuple)
-                            Return New SerialData With {
-                                .pts = tuple.Value.ToArray,
-                                .color = colors(tuple.Key),
-                                .pointSize = ptSize,
-                                .shape = LegendStyles.Circle,
-                                .title = tuple.Key,
-                                .width = 5,
-                                .lineType = DashStyle.Dot
-                            }
-                        End Function) _
-                .ToArray
-
-            Return plotSerials(lines, args, env)
+            Return modelWithClass(x, y, ptSize, classList, args, env)
         Else
-            Dim line As SerialData
-
-            If y Is Nothing Then
-                line = New SerialData() With {
-                    .pts = x _
-                        .SeqIterator _
-                        .Select(Function(i)
-                                    Return New PointData(i.i, i.value)
-                                End Function) _
-                        .ToArray,
-                    .pointSize = ptSize,
-                    .title = args.getValue("title", env, "data")
-                }
-            Else
-                line = New SerialData() With {
-                    .pts = x _
-                        .Select(Function(xi, i) New PointData(xi, y(i))) _
-                        .ToArray,
-                    .pointSize = ptSize,
-                    .title = args.getValue("title", env, "x ~ y")
-                }
-            End If
-
-            Return plotSerials(line, args, env)
+            Return modelWithoutClass(x, y, ptSize, args, env)
         End If
+    End Function
+
+    Private Function modelWithClass(x As Double(), y As Double(), ptSize As Single, classList As String(), args As list, env As Environment) As Object
+        Dim colorSet As String = args.getValue("colorSet", env, "Clusters")
+        Dim uniqClass As String() = classList.Distinct.ToArray
+        Dim colors As Dictionary(Of String, Color) = Designer _
+            .GetColors(colorSet, uniqClass.Length) _
+            .Take(uniqClass.Length) _
+            .SeqIterator _
+            .ToDictionary(Function(i) uniqClass(i),
+                          Function(i)
+                              Return i.value
+                          End Function)
+        Dim classSerials As New Dictionary(Of String, List(Of PointData))
+
+        If classList.Length <> x.Length Then
+            If env.globalEnvironment.Rscript.strict Then
+                Return Internal.debug.stop({
+                    $"the size of the point class ({classList.Length}) is not equals to the size of the given data point ({x.Length})!",
+                    $"class_size: {classList.Length}",
+                    $"point_size: {x.Length}"
+                }, env)
+            Else
+                env.AddMessage($"the size of the point class ({classList.Length}) is not equals to the size of the given data point ({x.Length})!", MSG_TYPES.WRN)
+            End If
+        End If
+
+        For Each label As String In uniqClass
+            classSerials(label) = New List(Of PointData)
+        Next
+
+        If y Is Nothing Then
+            For i As Integer = 0 To x.Length - 1
+                classSerials(classList(i)).Add(New PointData(classSerials(classList(i)).Count + 1, x(i)))
+            Next
+        Else
+            For i As Integer = 0 To x.Length - 1
+                classSerials(classList(i)).Add(New PointData(x(i), y(i)))
+            Next
+        End If
+
+        Dim lines As SerialData() = classSerials _
+            .Where(Function(list) list.Value.Count > 0) _
+            .Select(Function(tuple)
+                        Return New SerialData With {
+                            .pts = tuple.Value.ToArray,
+                            .color = colors(tuple.Key),
+                            .pointSize = ptSize,
+                            .shape = LegendStyles.Circle,
+                            .title = tuple.Key,
+                            .width = 5,
+                            .lineType = DashStyle.Dot
+                        }
+                    End Function) _
+            .ToArray
+
+        Return plotSerials(lines, args, env)
+    End Function
+
+    Private Function modelWithoutClass(x As Double(), y As Double(), ptSize As Single, args As list, env As Environment) As Object
+        Dim line As SerialData
+
+        If y Is Nothing Then
+            line = New SerialData() With {
+                .pts = x _
+                    .SeqIterator _
+                    .Select(Function(i)
+                                Return New PointData(i.i, i.value)
+                            End Function) _
+                    .ToArray,
+                .pointSize = ptSize,
+                .title = args.getValue("title", env, "data")
+            }
+        Else
+            line = New SerialData() With {
+                .pts = x _
+                    .Select(Function(xi, i) New PointData(xi, y(i))) _
+                    .ToArray,
+                .pointSize = ptSize,
+                .title = args.getValue("title", env, "x ~ y")
+            }
+        End If
+
+        Return plotSerials(line, args, env)
     End Function
 
     <Extension>
