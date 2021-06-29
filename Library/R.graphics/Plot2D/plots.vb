@@ -47,6 +47,7 @@
 Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataStructures
@@ -148,6 +149,18 @@ Module plots
                                   Return i.value
                               End Function)
             Dim classSerials As New Dictionary(Of String, List(Of PointData))
+
+            If classList.Length <> x.Length Then
+                If env.globalEnvironment.Rscript.strict Then
+                    Return Internal.debug.stop({
+                        $"the size of the point class ({classList.Length}) is not equals to the size of the given data point ({x.Length})!",
+                        $"class_size: {classList.Length}",
+                        $"point_size: {x.Length}"
+                    }, env)
+                Else
+                    env.AddMessage($"the size of the point class ({classList.Length}) is not equals to the size of the given data point ({x.Length})!", MSG_TYPES.WRN)
+                End If
+            End If
 
             For Each label As String In uniqClass
                 classSerials(label) = New List(Of PointData)
