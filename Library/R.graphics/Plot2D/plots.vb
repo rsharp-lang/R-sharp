@@ -130,7 +130,7 @@ Module plots
 
     Public Function plotArray(x As Double(), args As list, env As Environment) As Object
         Dim y As Double() = args.findNumberVector(size:=x.Length, env)
-        Dim ptSize As Single = args.getValue("point_size", env, 10)
+        Dim ptSize As Single = args.getValue("point_size", env, 15)
         Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
         Dim colorSet As String = args.getValue("colorSet", env, "Clusters")
         Dim drawLine As Boolean = y Is Nothing
@@ -188,14 +188,16 @@ Module plots
                                     Return New PointData(i.i, i.value)
                                 End Function) _
                         .ToArray,
-                    .pointSize = ptSize
+                    .pointSize = ptSize,
+                    .title = args.getValue("title", env, "data")
                 }
             Else
                 line = New SerialData() With {
                     .pts = x _
                         .Select(Function(xi, i) New PointData(xi, y(i))) _
                         .ToArray,
-                    .pointSize = ptSize
+                    .pointSize = ptSize,
+                    .title = args.getValue("title", env, "x ~ y")
                 }
             End If
 
