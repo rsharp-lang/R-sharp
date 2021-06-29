@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Module RColorPalette
 
@@ -60,13 +61,17 @@ Module RColorPalette
             Return getColorSequence([default], levels)
         End If
 
+        If TypeOf colorSet Is vector Then
+            colorSet = DirectCast(colorSet, vector).data
+        End If
+
         Dim type As Type = colorSet.GetType
 
         If type.IsArray Then
             If type.GetElementType Is GetType(String) Then
                 Dim array As String() = DirectCast(colorSet, String())
 
-                If array.Length > levels Then
+                If array.Length >= levels Then
                     Return array
                 Else
                     Return getColorSequence(DirectCast(colorSet, String()).JoinBy(","), levels)
@@ -74,8 +79,10 @@ Module RColorPalette
             ElseIf type.GetElementType Is GetType(Color) Then
                 Dim colors As Color() = DirectCast(colorSet, Color())
 
-                If colors.Length > levels Then
-                    Return colors.Select(Function(c) c.ToHtmlColor).ToArray
+                If colors.Length >= levels Then
+                    Return colors _
+                        .Select(Function(c) c.ToHtmlColor) _
+                        .ToArray
                 Else
                     Return getColorSequence(colors.Select(Function(c) c.ToHtmlColor).JoinBy(","), levels)
                 End If

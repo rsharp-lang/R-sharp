@@ -145,15 +145,14 @@ Module plots
     End Function
 
     Private Function modelWithClass(x As Double(), y As Double(), ptSize As Single, classList As String(), args As list, env As Environment) As Object
-        Dim colorSet As String = args.getValue("colorSet", env, "Clusters")
         Dim uniqClass As String() = classList.Distinct.ToArray
-        Dim colors As Dictionary(Of String, Color) = Designer _
-            .GetColors(colorSet, uniqClass.Length) _
+        Dim colorSet As String() = RColorPalette.getColors(args!colorSet, uniqClass.Length, "Clusters")
+        Dim colors As Dictionary(Of String, Color) = colorSet _
             .Take(uniqClass.Length) _
             .SeqIterator _
             .ToDictionary(Function(i) uniqClass(i),
                           Function(i)
-                              Return i.value
+                              Return i.value.TranslateColor
                           End Function)
         Dim classSerials As New Dictionary(Of String, List(Of PointData))
 
@@ -173,13 +172,17 @@ Module plots
             classSerials(label) = New List(Of PointData)
         Next
 
+        Dim point As PointData
+
         If y Is Nothing Then
             For i As Integer = 0 To x.Length - 1
-                classSerials(classList(i)).Add(New PointData(classSerials(classList(i)).Count + 1, x(i)))
+                point = New PointData(classSerials(classList(i)).Count + 1, x(i))
+                classSerials(classList(i)).Add(point)
             Next
         Else
             For i As Integer = 0 To x.Length - 1
-                classSerials(classList(i)).Add(New PointData(x(i), y(i)))
+                point = New PointData(x(i), y(i))
+                classSerials(classList(i)).Add(point)
             Next
         End If
 
@@ -218,9 +221,23 @@ Module plots
                 .title = args.getValue("title", env, "data")
             }
         Else
+            Dim colorSet As Func(Of Integer, String)
+
+            If args.hasName("colorSet") Then
+                Dim colorsMap As String() = RColorPalette.getColors(args!colorSet, x.Length, "Clusters")
+
+                colorSet = Function(i) colorsMap(i)
+            Else
+                colorSet = Function() Nothing
+            End If
+
             line = New SerialData() With {
                 .pts = x _
-                    .Select(Function(xi, i) New PointData(xi, y(i))) _
+                    .Select(Function(xi, i)
+                                Return New PointData(xi, y(i)) With {
+                                    .color = colorSet(i)
+                                }
+                            End Function) _
                     .ToArray,
                 .pointSize = ptSize,
                 .title = args.getValue("title", env, "x ~ y")
