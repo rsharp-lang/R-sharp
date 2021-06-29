@@ -223,8 +223,8 @@ Module plots
         Else
             Dim colorSet As Func(Of Integer, String)
 
-            If args.hasName("colorSet") Then
-                Dim colorsMap As String() = RColorPalette.getColors(args!colorSet, x.Length, "Clusters")
+            If args.hasName("colorSet") AndAlso Not args!colorSet Is Nothing Then
+                Dim colorsMap As String() = RColorPalette.getColors(args!colorSet, x.Length, Nothing)
 
                 colorSet = Function(i) colorsMap(i)
             Else
