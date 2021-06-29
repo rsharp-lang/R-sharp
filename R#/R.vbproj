@@ -922,6 +922,7 @@
     <Compile Include="Runtime\System\TryError.vb" />
     <Compile Include="Runtime\System\GetVectorElement.vb" />
     <Compile Include="System\Document\Printer\ScriptFormatterPrinter.vb" />
+    <Compile Include="System\LambdaCompiler.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RReturns.vb" />
     <Compile Include="System\RFileSystem.vb" />
     <Compile Include="System\Document\MetaTextParser.vb" />
