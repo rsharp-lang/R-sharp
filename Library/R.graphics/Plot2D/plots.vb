@@ -1,51 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::d2ae95dde155cba9e97fb26ec8fb146e, Library\R.graphics\Plot2D\plots.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module plots
-    ' 
-    '     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, linearRegression
-    '               plot_binBox, plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust
-    '               plotArray, plotFormula, plotODEResult, plotPieChart, plotSerials
-    '               plotVector
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module plots
+' 
+'     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, linearRegression
+'               plot_binBox, plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust
+'               plotArray, plotFormula, plotODEResult, plotPieChart, plotSerials
+'               plotVector
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
 Imports System.Drawing.Drawing2D
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataStructures
@@ -79,7 +80,7 @@ Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Math.Interpolation
-Imports Microsoft.VisualBasic.MIME.HTML.CSS
+Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp
@@ -89,6 +90,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
@@ -127,16 +129,40 @@ Module plots
     End Sub
 
     Public Function plotArray(x As Double(), args As list, env As Environment) As Object
-        Dim line As New SerialData() With {
-            .pts = x _
-                .SeqIterator _
-                .Select(Function(i)
-                            Return New PointData(i.i, i.value)
-                        End Function) _
-                .ToArray
-        }
+        Dim line As SerialData
+        Dim y As Double() = args.findNumberVector(size:=x.Length, env)
+
+        If y Is Nothing Then
+            line = New SerialData() With {
+                .pts = x _
+                    .SeqIterator _
+                    .Select(Function(i)
+                                Return New PointData(i.i, i.value)
+                            End Function) _
+                    .ToArray
+            }
+        Else
+            line = New SerialData() With {
+                .pts = x _
+                    .Select(Function(xi, i) New PointData(xi, y(i))) _
+                    .ToArray
+            }
+        End If
 
         Return plotSerials(line, args, env)
+    End Function
+
+    <Extension>
+    Private Function findNumberVector(args As list, size As Integer, env As Environment) As Double()
+        For Each value As Object In args.data
+            value = REnv.asVector(Of Double)(value)
+
+            If TypeOf value Is Double() AndAlso DirectCast(value, Double()).Length = size Then
+                Return value
+            End If
+        Next
+
+        Return Nothing
     End Function
 
     Public Function plotVector(x As vector, args As list, env As Environment) As Object
@@ -164,7 +190,7 @@ Module plots
                 classinfo = DirectCast(list, list).slots _
                     .ToDictionary(Function(a) a.Key,
                                   Function(a)
-                                      Return Scripting.ToString(a.Value)
+                                      Return any.ToString(a.Value)
                                   End Function)
             ElseIf TypeOf list Is Dictionary(Of String, String) Then
                 classinfo = list
@@ -440,7 +466,9 @@ Module plots
             .ToArray
         Dim group As New HistogramGroup With {
             .Samples = s,
-            .Serials = s.Select(Function(a) a.SerialData).ToArray
+            .Serials = s _
+                .Select(Function(a) a.SerialData) _
+                .ToArray
         }
         Dim bgColor As String = InteropArgumentHelper.getColor(bg, "white")
 
@@ -461,7 +489,7 @@ Module plots
         Dim camera As Camera = args!camera
         Dim color As Color = InteropArgumentHelper.getColor(args!color, "black").TranslateColor
         Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
-        Dim title As String = Scripting.ToString(getFirst(args!title), "Plot deSolve")
+        Dim title As String = any.ToString(getFirst(args!title), "Plot deSolve")
         Dim x As Double() = desolve.y(CStr(vector!x)).value
         Dim y As Double() = desolve.y(CStr(vector!y)).value
         Dim z As Double() = desolve.y(CStr(vector!z)).value
@@ -521,7 +549,7 @@ Module plots
         Dim serials As SerialData() = DirectCast(data, SerialData())
         Dim size As String = InteropArgumentHelper.getSize(args!size)
         Dim padding = InteropArgumentHelper.getPadding(args!padding)
-        Dim title As String = Scripting.ToString(getFirst(args!title), "Scatter Plot")
+        Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
         Dim showLegend As Boolean
         Dim spline As Splines = args.getValue(Of Splines)("interplot", env, Splines.None)
 
@@ -575,7 +603,10 @@ Module plots
                     End Function) _
             .ToArray
         Dim serial As New SerialData With {
-            .color = InteropArgumentHelper.getColor(color).TranslateColor.Alpha(alpha),
+            .color = InteropArgumentHelper _
+                .getColor(color) _
+                .TranslateColor _
+                .Alpha(alpha),
             .lineType = DashStyle.Solid,
             .pointSize = ptSize,
             .pts = points,
