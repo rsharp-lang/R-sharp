@@ -141,6 +141,7 @@ Module plots
             Dim uniqClass As String() = classList.Distinct.ToArray
             Dim colors As Dictionary(Of String, Color) = Designer _
                 .GetColors(colorSet, uniqClass.Length) _
+                .Take(uniqClass.Length) _
                 .SeqIterator _
                 .ToDictionary(Function(i) uniqClass(i),
                               Function(i)
@@ -163,6 +164,7 @@ Module plots
             End If
 
             Dim lines As SerialData() = classSerials _
+                .Where(Function(list) list.Value.Count > 0) _
                 .Select(Function(tuple)
                             Return New SerialData With {
                                 .pts = tuple.Value.ToArray,
