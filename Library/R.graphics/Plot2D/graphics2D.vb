@@ -69,7 +69,7 @@ Module graphics2D
     <ExportAPI("legend")>
     Public Function legend(title$, color As Object, Optional font_style As Object = CSSFont.Win10Normal, Optional shape As LegendStyles = LegendStyles.Circle) As LegendObject
         Return New LegendObject With {
-            .color = InteropArgumentHelper.getColor(color),
+            .color = RColorPalette.getColor(color),
             .fontstyle = InteropArgumentHelper.getFontCSS(font_style),
             .style = shape,
             .title = title
@@ -235,7 +235,7 @@ Module graphics2D
     <ExportAPI("scale")>
     Public Function scale(x As Double(), <RRawVectorArgument> colorSet As Object, Optional levels As Integer = 25) As String()
         Dim colors As String() = Designer _
-            .GetColors(InteropArgumentHelper.getColorSet(colorSet), n:=levels) _
+            .GetColors(RColorPalette.getColorSet(colorSet), n:=levels) _
             .Select(Function(c) c.ToHtmlColor) _
             .ToArray
         Dim valueRange As New DoubleRange(x)

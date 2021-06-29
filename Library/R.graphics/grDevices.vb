@@ -296,7 +296,7 @@ break:
         Return pipeline.TryCreatePipeline(Of Object)(color, env) _
             .populates(Of Object)(env) _
             .Select(Function(obj)
-                        Return InteropArgumentHelper.getColor(obj).TranslateColor.Alpha(alpha * 255)
+                        Return RColorPalette.getColor(obj).TranslateColor.Alpha(alpha * 255)
                     End Function) _
             .ToArray
     End Function

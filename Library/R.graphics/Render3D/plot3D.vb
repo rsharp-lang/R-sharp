@@ -66,7 +66,7 @@ Module plot3D
     Private Function plotScatter3D(input As Object, args As list, env As Environment) As GraphicsData
         Dim data As Serial3D()
         Dim camera As Camera = args.getValue(Of Camera)("camera", env)
-        Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
+        Dim bg$ = RColorPalette.getColor(args!bg, "white")
         Dim title As String = Scripting.ToString(getFirst(args!title), "Plot deSolve")
 
         If TypeOf input Is Serial3D Then
@@ -112,7 +112,7 @@ Module plot3D
         Next
 
         Return New Serial3D With {
-            .Color = InteropArgumentHelper _
+            .Color = RColorPalette _
                 .getColor(color) _
                 .DoCall(AddressOf TranslateColor) _
                 .Alpha(alpha),

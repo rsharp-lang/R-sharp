@@ -256,8 +256,8 @@ Module plots
         Dim axisStroke$ = InteropArgumentHelper.getStrokePenCSS(args.getByName("axis"), Stroke.AxisStroke)
         Dim axisFormat$ = args.getValue("axis.format", env, "F1")
         Dim ptSize As Double = args.getValue(Of Double)("pt.size", env, 10)
-        Dim bg$ = InteropArgumentHelper.getColor(args.getByName("background"), "white")
-        Dim pointColor$ = InteropArgumentHelper.getColor(args.getByName("pt.color"), "black")
+        Dim bg$ = RColorPalette.getColor(args.getByName("background"), "white")
+        Dim pointColor$ = RColorPalette.getColor(args.getByName("pt.color"), "black")
         Dim classes As ColorClass() = Nothing
         Dim classinfo As Dictionary(Of String, String) = Nothing
 
@@ -325,7 +325,7 @@ Module plots
     ''' <returns></returns>
     Public Function plot_corHeatmap(dist As DistanceMatrix, args As list, env As Environment) As Object
         Dim title$ = args.GetString("title", "Correlations")
-        Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
+        Dim bg$ = RColorPalette.getColor(args!bg, "white")
         Dim size = InteropArgumentHelper.getSize(args!size, "3600,3000")
         Dim padding$ = InteropArgumentHelper.getPadding(args!padding, "padding: 300px 150px 150px 100px;")
         Dim driver As Drivers = args.GetString("driver", "default").DoCall(AddressOf g.ParseDriverEnumValue)
@@ -425,7 +425,7 @@ Module plots
                                  Optional env As Environment = Nothing) As Object
 
         Dim data As New List(Of FractionData)
-        Dim colorSet As String = InteropArgumentHelper.getColorSet(schema, "Paired:c12")
+        Dim colorSet As String = RColorPalette.getColorSet(schema, "Paired:c12")
         Dim colors As LoopArray(Of Color) = Designer.GetColors(colorSet)
 
         If x Is Nothing Then
@@ -519,7 +519,7 @@ Module plots
 
         Dim items As String() = height.columns(category)
         Dim values As Double() = REnv.asVector(Of Double)(height.columns(value))
-        Dim colors As String() = height.columns(color).AsObjectEnumerator.Select(AddressOf InteropArgumentHelper.getColor).ToArray
+        Dim colors As String() = height.columns(color).AsObjectEnumerator.Select(AddressOf RColorPalette.getColor).ToArray
         Dim minX As Double() = REnv.asVector(Of Double)(height.columns(min))
         Dim maxX As Double() = REnv.asVector(Of Double)(height.columns(max))
         Dim s As HistProfile() = items _
@@ -548,7 +548,7 @@ Module plots
                 .Select(Function(a) a.SerialData) _
                 .ToArray
         }
-        Dim bgColor As String = InteropArgumentHelper.getColor(bg, "white")
+        Dim bgColor As String = RColorPalette.getColor(bg, "white")
 
         Return group.Plot(
             bg:=bgColor,
@@ -565,8 +565,8 @@ Module plots
     Public Function plot_deSolveResult(desolve As ODEsOut, args As list, env As Environment) As Object
         Dim vector As list = args!vector
         Dim camera As Camera = args!camera
-        Dim color As Color = InteropArgumentHelper.getColor(args!color, "black").TranslateColor
-        Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
+        Dim color As Color = RColorPalette.getColor(args!color, "black").TranslateColor
+        Dim bg$ = RColorPalette.getColor(args!bg, "white")
         Dim title As String = any.ToString(getFirst(args!title), "Plot deSolve")
         Dim x As Double() = desolve.y(CStr(vector!x)).value
         Dim y As Double() = desolve.y(CStr(vector!y)).value
@@ -615,7 +615,7 @@ Module plots
             size:=InteropArgumentHelper.getSize(args!size).SizeParser,
             title:=math.ToString,
             padding:=InteropArgumentHelper.getPadding(args!padding),
-            gridFill:=InteropArgumentHelper.getColor(args("grid.fill"), "rgb(250,250,250)")
+            gridFill:=RColorPalette.getColor(args("grid.fill"), "rgb(250,250,250)")
         )
     End Function
 
@@ -643,7 +643,7 @@ Module plots
             Xlabel:=args.getValue("x.lab", env, "X"),
             Ylabel:=args.getValue("y.lab", env, "Y"),
             drawLine:=getFirst(asLogical(args!line)),
-            legendBgFill:=InteropArgumentHelper.getColor(args!legendBgFill, Nothing),
+            legendBgFill:=RColorPalette.getColor(args!legendBgFill, Nothing),
             legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
             showLegend:=showLegend,
             title:=title,
@@ -682,7 +682,7 @@ Module plots
                     End Function) _
             .ToArray
         Dim serial As New SerialData With {
-            .color = InteropArgumentHelper _
+            .color = RColorPalette _
                 .getColor(color) _
                 .TranslateColor _
                 .Alpha(alpha),

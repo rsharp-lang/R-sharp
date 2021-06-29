@@ -261,7 +261,7 @@ Module Visualize
                 getLabelColor = Function(node)
                                     Dim vals = DirectCast(labelColor, DeclareNewFunction).Invoke(env, InvokeParameter.CreateLiterals(node.label))
                                     vals = REnv.getFirst(vals)
-                                    Return InteropArgumentHelper.getColor(vals).TranslateColor
+                                    Return RColorPalette.getColor(vals).TranslateColor
                                 End Function
             Else
                 Return Message.InCompatibleType(GetType(DeclareNewFunction), labelColor.GetType, env,, NameOf(labelColor))
@@ -286,7 +286,7 @@ Module Visualize
             canvasSize:=InteropArgumentHelper.getSize(canvasSize),
             padding:=InteropArgumentHelper.getPadding(padding),
             labelerIterations:=labelerIterations,
-            defaultColor:=InteropArgumentHelper.getColor(defaultColor),
+            defaultColor:=RColorPalette.getColor(defaultColor),
             nodeRadius:=nodeRadius,
             labelTextStroke:=Nothing,
             labelWordWrapWidth:=labelWordWrapWidth,
@@ -321,7 +321,7 @@ Module Visualize
     ''' <returns></returns>
     <ExportAPI("setColors")>
     Public Function colorByTypeGroup(g As NetworkGraph, type$, color As Object) As NetworkGraph
-        Dim colorBrush As New SolidBrush(InteropArgumentHelper.GetRawColor(color))
+        Dim colorBrush As New SolidBrush(RColorPalette.GetRawColor(color))
 
         g.vertex _
             .Where(Function(n)
@@ -415,7 +415,7 @@ Module Visualize
         Else
             For Each node As Node In g.vertex
                 If colors.slots.ContainsKey(node.label) Then
-                    node.data.color = InteropArgumentHelper.getColor(colors.slots(node.label)).GetBrush
+                    node.data.color = RColorPalette.getColor(colors.slots(node.label)).GetBrush
                 End If
             Next
 
