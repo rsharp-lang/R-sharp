@@ -131,6 +131,7 @@ Module plots
     Public Function plotArray(x As Double(), args As list, env As Environment) As Object
         Dim line As SerialData
         Dim y As Double() = args.findNumberVector(size:=x.Length, env)
+        Dim ptSize As Single = args.getValue("point_size", env, 10)
 
         If y Is Nothing Then
             line = New SerialData() With {
@@ -139,13 +140,15 @@ Module plots
                     .Select(Function(i)
                                 Return New PointData(i.i, i.value)
                             End Function) _
-                    .ToArray
+                    .ToArray,
+                .pointSize = ptSize
             }
         Else
             line = New SerialData() With {
                 .pts = x _
                     .Select(Function(xi, i) New PointData(xi, y(i))) _
-                    .ToArray
+                    .ToArray,
+                .pointSize = ptSize
             }
         End If
 
@@ -562,8 +565,8 @@ Module plots
         Return Scatter2D.Plot(
             c:=serials,
             size:=size, padding:=padding,
-            Xlabel:=getFirst(REnv.asVector(Of String)(args("x.lab"))),
-            Ylabel:=getFirst(REnv.asVector(Of String)(args("y.lab"))),
+            Xlabel:=args.getValue("x.lab", env, "X"),
+            Ylabel:=args.getValue("y.lab", env, "Y"),
             drawLine:=getFirst(asLogical(args!line)),
             legendBgFill:=InteropArgumentHelper.getColor(args!legendBgFill, Nothing),
             legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
@@ -574,7 +577,8 @@ Module plots
             hullConvexList:=args.getValue(Of String())("convexHull", env),
             XtickFormat:=args.getValue(Of String)("x.format", env, "F2"),
             YtickFormat:=args.getValue(Of String)("y.format", env, "F2"),
-            interplot:=spline
+            interplot:=spline,
+            axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.PlotSmallTitle)
         )
     End Function
 
