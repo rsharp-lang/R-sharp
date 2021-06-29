@@ -129,30 +129,78 @@ Module plots
     End Sub
 
     Public Function plotArray(x As Double(), args As list, env As Environment) As Object
-        Dim line As SerialData
         Dim y As Double() = args.findNumberVector(size:=x.Length, env)
         Dim ptSize As Single = args.getValue("point_size", env, 10)
+        Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
+        Dim colorSet As String = args.getValue("colorSet", env, "Clusters")
+        Dim drawLine As Boolean = y Is Nothing
 
-        If y Is Nothing Then
-            line = New SerialData() With {
-                .pts = x _
-                    .SeqIterator _
-                    .Select(Function(i)
-                                Return New PointData(i.i, i.value)
-                            End Function) _
-                    .ToArray,
-                .pointSize = ptSize
-            }
+        args.slots!line = drawLine
+
+        If Not classList.IsNullOrEmpty Then
+            Dim uniqClass As String() = classList.Distinct.ToArray
+            Dim colors As Dictionary(Of String, Color) = Designer _
+                .GetColors(colorSet, uniqClass.Length) _
+                .SeqIterator _
+                .ToDictionary(Function(i) uniqClass(i),
+                              Function(i)
+                                  Return i.value
+                              End Function)
+            Dim classSerials As New Dictionary(Of String, List(Of PointData))
+
+            For Each label As String In uniqClass
+                classSerials(label) = New List(Of PointData)
+            Next
+
+            If y Is Nothing Then
+                For i As Integer = 0 To x.Length - 1
+                    classSerials(classList(i)).Add(New PointData(classSerials(classList(i)).Count + 1, x(i)))
+                Next
+            Else
+                For i As Integer = 0 To x.Length - 1
+                    classSerials(classList(i)).Add(New PointData(x(i), y(i)))
+                Next
+            End If
+
+            Dim lines As SerialData() = classSerials _
+                .Select(Function(tuple)
+                            Return New SerialData With {
+                                .pts = tuple.Value.ToArray,
+                                .color = colors(tuple.Key),
+                                .pointSize = ptSize,
+                                .shape = LegendStyles.Circle,
+                                .title = tuple.Key,
+                                .width = 5,
+                                .lineType = DashStyle.Dot
+                            }
+                        End Function) _
+                .ToArray
+
+            Return plotSerials(lines, args, env)
         Else
-            line = New SerialData() With {
-                .pts = x _
-                    .Select(Function(xi, i) New PointData(xi, y(i))) _
-                    .ToArray,
-                .pointSize = ptSize
-            }
-        End If
+            Dim line As SerialData
 
-        Return plotSerials(line, args, env)
+            If y Is Nothing Then
+                line = New SerialData() With {
+                    .pts = x _
+                        .SeqIterator _
+                        .Select(Function(i)
+                                    Return New PointData(i.i, i.value)
+                                End Function) _
+                        .ToArray,
+                    .pointSize = ptSize
+                }
+            Else
+                line = New SerialData() With {
+                    .pts = x _
+                        .Select(Function(xi, i) New PointData(xi, y(i))) _
+                        .ToArray,
+                    .pointSize = ptSize
+                }
+            End If
+
+            Return plotSerials(line, args, env)
+        End If
     End Function
 
     <Extension>
@@ -551,7 +599,7 @@ Module plots
 
         Dim serials As SerialData() = DirectCast(data, SerialData())
         Dim size As String = InteropArgumentHelper.getSize(args!size)
-        Dim padding = InteropArgumentHelper.getPadding(args!padding)
+        Dim padding = InteropArgumentHelper.getPadding(args!padding, [default]:=g.DefaultUltraLargePadding)
         Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
         Dim showLegend As Boolean
         Dim spline As Splines = args.getValue(Of Splines)("interplot", env, Splines.None)
@@ -578,7 +626,7 @@ Module plots
             XtickFormat:=args.getValue(Of String)("x.format", env, "F2"),
             YtickFormat:=args.getValue(Of String)("y.format", env, "F2"),
             interplot:=spline,
-            axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.PlotSmallTitle)
+            axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.Win7VeryLarge)
         )
     End Function
 
