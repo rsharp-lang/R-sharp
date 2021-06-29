@@ -184,7 +184,9 @@ Module plots
         End If
 
         Dim lines As SerialData() = classSerials _
-            .Where(Function(list) list.Value.Count > 0) _
+            .Where(Function(list)
+                       Return list.Value.Count > 0
+                   End Function) _
             .Select(Function(tuple)
                         Return New SerialData With {
                             .pts = tuple.Value.ToArray,
