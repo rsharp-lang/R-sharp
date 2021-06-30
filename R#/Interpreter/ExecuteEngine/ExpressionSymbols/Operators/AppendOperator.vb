@@ -52,7 +52,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
     ''' <summary>
-    ''' ByVal append, not modify the source vector
+    ''' append, not modify the source vector
     ''' 
     ''' ```
     ''' a &lt;&lt; b
@@ -96,7 +96,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
             If type1.IsArray OrElse type1 Is GetType(vector) Then
                 ' y should be vector
-                ' execute the byval append
+                ' execute the append
                 Return Runtime.asVector(Of Object)(x) _
                     .AsObjectEnumerator _
                     .JoinIterates(Runtime.asVector(Of Object)(y).AsObjectEnumerator) _
