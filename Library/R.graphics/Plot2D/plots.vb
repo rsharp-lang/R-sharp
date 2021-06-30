@@ -823,9 +823,9 @@ Module plots
         If data Is Nothing Then
             Return Internal.debug.stop("object 'data' can not be nothing!", env)
         ElseIf TypeOf data Is Rdataframe Then
-            Dim x As Double() = DirectCast(data, Rdataframe).columns("x")
-            Dim y As Double() = DirectCast(data, Rdataframe).columns("y")
-            Dim vals As Double() = DirectCast(data, Rdataframe).columns("data")
+            Dim x As Double() = REnv.asVector(Of Double)(DirectCast(data, Rdataframe).columns("x"))
+            Dim y As Double() = REnv.asVector(Of Double)(DirectCast(data, Rdataframe).columns("y"))
+            Dim vals As Double() = REnv.asVector(Of Double)(DirectCast(data, Rdataframe).columns("data"))
             Dim measures As MeasureData() = x.Select(Function(xi, i) New MeasureData(xi, y(i), vals(i))).ToArray
 
             Return Contour.PlotContour.Plot(measures)
