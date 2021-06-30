@@ -828,7 +828,7 @@ Module plots
             Dim rx As DoubleRange = args.getValue(Of Double())("x", env)
             Dim ry As DoubleRange = args.getValue(Of Double())("y", env)
 
-            Return Contour.Plot(
+            Return Contour.Utils.Plot(
                 fun:=Function(x, y) lambda((x, y)),
                 xrange:=rx,
                 yrange:=ry,
