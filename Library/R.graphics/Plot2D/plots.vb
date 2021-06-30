@@ -1,51 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::d2ae95dde155cba9e97fb26ec8fb146e, Library\R.graphics\Plot2D\plots.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module plots
-    ' 
-    '     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, linearRegression
-    '               plot_binBox, plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust
-    '               plotArray, plotFormula, plotODEResult, plotPieChart, plotSerials
-    '               plotVector
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module plots
+' 
+'     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, linearRegression
+'               plot_binBox, plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust
+'               plotArray, plotFormula, plotODEResult, plotPieChart, plotSerials
+'               plotVector
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
 Imports System.Drawing.Drawing2D
+Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataStructures
@@ -79,7 +81,7 @@ Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Math.Interpolation
-Imports Microsoft.VisualBasic.MIME.HTML.CSS
+Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp
@@ -89,6 +91,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
@@ -127,16 +130,134 @@ Module plots
     End Sub
 
     Public Function plotArray(x As Double(), args As list, env As Environment) As Object
-        Dim line As New SerialData() With {
-            .pts = x _
-                .SeqIterator _
-                .Select(Function(i)
-                            Return New PointData(i.i, i.value)
-                        End Function) _
-                .ToArray
-        }
+        Dim y As Double() = args.findNumberVector(size:=x.Length, env)
+        Dim ptSize As Single = args.getValue("point_size", env, 15)
+        Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
+        Dim drawLine As Boolean = y Is Nothing
+
+        args.slots!line = drawLine
+
+        If Not classList.IsNullOrEmpty Then
+            Return modelWithClass(x, y, ptSize, classList, args, env)
+        Else
+            Return modelWithoutClass(x, y, ptSize, args, env)
+        End If
+    End Function
+
+    Private Function modelWithClass(x As Double(), y As Double(), ptSize As Single, classList As String(), args As list, env As Environment) As Object
+        Dim uniqClass As String() = classList.Distinct.ToArray
+        Dim colorSet As String() = RColorPalette.getColors(args!colorSet, uniqClass.Length, "Clusters")
+        Dim colors As Dictionary(Of String, Color) = colorSet _
+            .Take(uniqClass.Length) _
+            .SeqIterator _
+            .ToDictionary(Function(i) uniqClass(i),
+                          Function(i)
+                              Return i.value.TranslateColor
+                          End Function)
+        Dim classSerials As New Dictionary(Of String, List(Of PointData))
+
+        If classList.Length <> x.Length Then
+            If env.globalEnvironment.Rscript.strict Then
+                Return Internal.debug.stop({
+                    $"the size of the point class ({classList.Length}) is not equals to the size of the given data point ({x.Length})!",
+                    $"class_size: {classList.Length}",
+                    $"point_size: {x.Length}"
+                }, env)
+            Else
+                env.AddMessage($"the size of the point class ({classList.Length}) is not equals to the size of the given data point ({x.Length})!", MSG_TYPES.WRN)
+            End If
+        End If
+
+        For Each label As String In uniqClass
+            classSerials(label) = New List(Of PointData)
+        Next
+
+        Dim point As PointData
+
+        If y Is Nothing Then
+            For i As Integer = 0 To x.Length - 1
+                point = New PointData(classSerials(classList(i)).Count + 1, x(i))
+                classSerials(classList(i)).Add(point)
+            Next
+        Else
+            For i As Integer = 0 To x.Length - 1
+                point = New PointData(x(i), y(i))
+                classSerials(classList(i)).Add(point)
+            Next
+        End If
+
+        Dim lines As SerialData() = classSerials _
+            .Where(Function(list)
+                       Return list.Value.Count > 0
+                   End Function) _
+            .Select(Function(tuple)
+                        Return New SerialData With {
+                            .pts = tuple.Value.ToArray,
+                            .color = colors(tuple.Key),
+                            .pointSize = ptSize,
+                            .shape = LegendStyles.Circle,
+                            .title = tuple.Key,
+                            .width = 5,
+                            .lineType = DashStyle.Dot
+                        }
+                    End Function) _
+            .ToArray
+
+        Return plotSerials(lines, args, env)
+    End Function
+
+    Private Function modelWithoutClass(x As Double(), y As Double(), ptSize As Single, args As list, env As Environment) As Object
+        Dim line As SerialData
+
+        If y Is Nothing Then
+            line = New SerialData() With {
+                .pts = x _
+                    .SeqIterator _
+                    .Select(Function(i)
+                                Return New PointData(i.i, i.value)
+                            End Function) _
+                    .ToArray,
+                .pointSize = ptSize,
+                .title = args.getValue("title", env, "data")
+            }
+        Else
+            Dim colorSet As Func(Of Integer, String)
+
+            If args.hasName("colorSet") AndAlso Not args!colorSet Is Nothing Then
+                Dim colorsMap As String() = RColorPalette.getColors(args!colorSet, x.Length, Nothing)
+
+                colorSet = Function(i) colorsMap(i)
+            Else
+                colorSet = Function() Nothing
+            End If
+
+            line = New SerialData() With {
+                .pts = x _
+                    .Select(Function(xi, i)
+                                Return New PointData(xi, y(i)) With {
+                                    .color = colorSet(i)
+                                }
+                            End Function) _
+                    .ToArray,
+                .pointSize = ptSize,
+                .title = args.getValue("title", env, "x ~ y")
+            }
+        End If
 
         Return plotSerials(line, args, env)
+    End Function
+
+    <Extension>
+    Private Function findNumberVector(args As list, size As Integer, env As Environment) As Double()
+        For Each value As Object In args.data
+            value = REnv.asVector(Of Double)(value)
+
+            If TypeOf value Is Double() AndAlso DirectCast(value, Double()).Length = size Then
+                Return value
+            End If
+        Next
+
+        Return Nothing
     End Function
 
     Public Function plotVector(x As vector, args As list, env As Environment) As Object
@@ -152,8 +273,8 @@ Module plots
         Dim axisStroke$ = InteropArgumentHelper.getStrokePenCSS(args.getByName("axis"), Stroke.AxisStroke)
         Dim axisFormat$ = args.getValue("axis.format", env, "F1")
         Dim ptSize As Double = args.getValue(Of Double)("pt.size", env, 10)
-        Dim bg$ = InteropArgumentHelper.getColor(args.getByName("background"), "white")
-        Dim pointColor$ = InteropArgumentHelper.getColor(args.getByName("pt.color"), "black")
+        Dim bg$ = RColorPalette.getColor(args.getByName("background"), "white")
+        Dim pointColor$ = RColorPalette.getColor(args.getByName("pt.color"), "black")
         Dim classes As ColorClass() = Nothing
         Dim classinfo As Dictionary(Of String, String) = Nothing
 
@@ -164,7 +285,7 @@ Module plots
                 classinfo = DirectCast(list, list).slots _
                     .ToDictionary(Function(a) a.Key,
                                   Function(a)
-                                      Return Scripting.ToString(a.Value)
+                                      Return any.ToString(a.Value)
                                   End Function)
             ElseIf TypeOf list Is Dictionary(Of String, String) Then
                 classinfo = list
@@ -221,7 +342,7 @@ Module plots
     ''' <returns></returns>
     Public Function plot_corHeatmap(dist As DistanceMatrix, args As list, env As Environment) As Object
         Dim title$ = args.GetString("title", "Correlations")
-        Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
+        Dim bg$ = RColorPalette.getColor(args!bg, "white")
         Dim size = InteropArgumentHelper.getSize(args!size, "3600,3000")
         Dim padding$ = InteropArgumentHelper.getPadding(args!padding, "padding: 300px 150px 150px 100px;")
         Dim driver As Drivers = args.GetString("driver", "default").DoCall(AddressOf g.ParseDriverEnumValue)
@@ -321,7 +442,7 @@ Module plots
                                  Optional env As Environment = Nothing) As Object
 
         Dim data As New List(Of FractionData)
-        Dim colorSet As String = InteropArgumentHelper.getColorSet(schema, "Paired:c12")
+        Dim colorSet As String = RColorPalette.getColorSet(schema, "Paired:c12")
         Dim colors As LoopArray(Of Color) = Designer.GetColors(colorSet)
 
         If x Is Nothing Then
@@ -415,7 +536,7 @@ Module plots
 
         Dim items As String() = height.columns(category)
         Dim values As Double() = REnv.asVector(Of Double)(height.columns(value))
-        Dim colors As String() = height.columns(color).AsObjectEnumerator.Select(AddressOf InteropArgumentHelper.getColor).ToArray
+        Dim colors As String() = height.columns(color).AsObjectEnumerator.Select(AddressOf RColorPalette.getColor).ToArray
         Dim minX As Double() = REnv.asVector(Of Double)(height.columns(min))
         Dim maxX As Double() = REnv.asVector(Of Double)(height.columns(max))
         Dim s As HistProfile() = items _
@@ -440,9 +561,11 @@ Module plots
             .ToArray
         Dim group As New HistogramGroup With {
             .Samples = s,
-            .Serials = s.Select(Function(a) a.SerialData).ToArray
+            .Serials = s _
+                .Select(Function(a) a.SerialData) _
+                .ToArray
         }
-        Dim bgColor As String = InteropArgumentHelper.getColor(bg, "white")
+        Dim bgColor As String = RColorPalette.getColor(bg, "white")
 
         Return group.Plot(
             bg:=bgColor,
@@ -459,9 +582,9 @@ Module plots
     Public Function plot_deSolveResult(desolve As ODEsOut, args As list, env As Environment) As Object
         Dim vector As list = args!vector
         Dim camera As Camera = args!camera
-        Dim color As Color = InteropArgumentHelper.getColor(args!color, "black").TranslateColor
-        Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
-        Dim title As String = Scripting.ToString(getFirst(args!title), "Plot deSolve")
+        Dim color As Color = RColorPalette.getColor(args!color, "black").TranslateColor
+        Dim bg$ = RColorPalette.getColor(args!bg, "white")
+        Dim title As String = any.ToString(getFirst(args!title), "Plot deSolve")
         Dim x As Double() = desolve.y(CStr(vector!x)).value
         Dim y As Double() = desolve.y(CStr(vector!y)).value
         Dim z As Double() = desolve.y(CStr(vector!z)).value
@@ -509,7 +632,7 @@ Module plots
             size:=InteropArgumentHelper.getSize(args!size).SizeParser,
             title:=math.ToString,
             padding:=InteropArgumentHelper.getPadding(args!padding),
-            gridFill:=InteropArgumentHelper.getColor(args("grid.fill"), "rgb(250,250,250)")
+            gridFill:=RColorPalette.getColor(args("grid.fill"), "rgb(250,250,250)")
         )
     End Function
 
@@ -520,8 +643,8 @@ Module plots
 
         Dim serials As SerialData() = DirectCast(data, SerialData())
         Dim size As String = InteropArgumentHelper.getSize(args!size)
-        Dim padding = InteropArgumentHelper.getPadding(args!padding)
-        Dim title As String = Scripting.ToString(getFirst(args!title), "Scatter Plot")
+        Dim padding = InteropArgumentHelper.getPadding(args!padding, [default]:=g.DefaultUltraLargePadding)
+        Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
         Dim showLegend As Boolean
         Dim spline As Splines = args.getValue(Of Splines)("interplot", env, Splines.None)
 
@@ -534,10 +657,10 @@ Module plots
         Return Scatter2D.Plot(
             c:=serials,
             size:=size, padding:=padding,
-            Xlabel:=getFirst(REnv.asVector(Of String)(args("x.lab"))),
-            Ylabel:=getFirst(REnv.asVector(Of String)(args("y.lab"))),
+            Xlabel:=args.getValue("x.lab", env, "X"),
+            Ylabel:=args.getValue("y.lab", env, "Y"),
             drawLine:=getFirst(asLogical(args!line)),
-            legendBgFill:=InteropArgumentHelper.getColor(args!legendBgFill, Nothing),
+            legendBgFill:=RColorPalette.getColor(args!legendBgFill, Nothing),
             legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
             showLegend:=showLegend,
             title:=title,
@@ -546,7 +669,8 @@ Module plots
             hullConvexList:=args.getValue(Of String())("convexHull", env),
             XtickFormat:=args.getValue(Of String)("x.format", env, "F2"),
             YtickFormat:=args.getValue(Of String)("y.format", env, "F2"),
-            interplot:=spline
+            interplot:=spline,
+            axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.Win7VeryLarge)
         )
     End Function
 
@@ -575,7 +699,10 @@ Module plots
                     End Function) _
             .ToArray
         Dim serial As New SerialData With {
-            .color = InteropArgumentHelper.getColor(color).TranslateColor.Alpha(alpha),
+            .color = RColorPalette _
+                .getColor(color) _
+                .TranslateColor _
+                .Alpha(alpha),
             .lineType = DashStyle.Solid,
             .pointSize = ptSize,
             .pts = points,
