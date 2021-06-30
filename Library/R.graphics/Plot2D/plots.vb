@@ -71,6 +71,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Math2D.MarchingSquares
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
@@ -822,7 +823,12 @@ Module plots
         If data Is Nothing Then
             Return Internal.debug.stop("object 'data' can not be nothing!", env)
         ElseIf TypeOf data Is Rdataframe Then
-            Throw New NotImplementedException
+            Dim x As Double() = DirectCast(data, Rdataframe).columns("x")
+            Dim y As Double() = DirectCast(data, Rdataframe).columns("y")
+            Dim vals As Double() = DirectCast(data, Rdataframe).columns("data")
+            Dim measures As MeasureData() = x.Select(Function(xi, i) New MeasureData(xi, y(i), vals(i))).ToArray
+
+            Return Contour.PlotContour.Plot(measures)
         ElseIf TypeOf data Is DeclareLambdaFunction Then
             Dim lambda As Func(Of (Double, Double), Double) = DirectCast(data, DeclareLambdaFunction).CreateLambda(Of (Double, Double), Double)(env)
             Dim rx As DoubleRange = args.getValue(Of Double())("x", env)
