@@ -828,7 +828,7 @@ Module plots
             Dim vals As Double() = REnv.asVector(Of Double)(DirectCast(data, Rdataframe).columns("data"))
             Dim measures As MeasureData() = x.Select(Function(xi, i) New MeasureData(xi, y(i), vals(i))).ToArray
 
-            Return Contour.PlotContour.Plot(measures)
+            Return Contour.PlotContour.Plot(measures, colorSet:=RColorPalette.getColorSet(colorSet))
         ElseIf TypeOf data Is DeclareLambdaFunction Then
             Dim lambda As Func(Of (Double, Double), Double) = DirectCast(data, DeclareLambdaFunction).CreateLambda(Of (Double, Double), Double)(env)
             Dim rx As DoubleRange = args.getValue(Of Double())("x", env)
