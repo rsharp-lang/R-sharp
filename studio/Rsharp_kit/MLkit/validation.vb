@@ -69,6 +69,7 @@ Module validation
 
     Public Function PlotROC(roc As ROC, args As list, env As Environment) As Object
         Dim line As SerialData = ROCPlot.CreateSerial(roc)
+        Dim size As String = InteropArgumentHelper.getSize(args!size, "2700,2400")
 
         line.color = args.getValue("line_color", env, "steelblue").TranslateColor
         line.lineType = DashStyle.Dash
@@ -77,7 +78,7 @@ Module validation
         line.width = args.getValue("line_width", env, 1)
         line.title = roc.AUC.ToString("F3")
 
-        Return ROCPlot.Plot(line)
+        Return ROCPlot.Plot(line, size:=size)
     End Function
 
     Public Function Tabular(x As Object, args As list, env As Environment) As Rdataframe
@@ -163,61 +164,3 @@ Module validation
         }
     End Function
 End Module
-
-Public Class ROC : Inherits JavaScriptObject
-    Implements IEnumerable(Of Evaluation.Validation)
-
-    Public Property threshold As Double()
-    Public Property specificity As Double()
-    ''' <summary>
-    ''' TPR
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property sensibility As Double()
-    Public Property accuracy As Double()
-    Public Property precision As Double()
-    Public Property BER As Double()
-    Public Property FPR As Double()
-    Public Property NPV As Double()
-    Public Property F1Score As Double()
-    Public Property F2Score As Double()
-    Public Property All As Integer()
-    Public Property TP As Integer()
-    Public Property FP As Integer()
-    Public Property TN As Integer()
-    Public Property FN As Integer()
-
-    Public Function AUC() As Double
-        Dim TPR = sensibility
-        Dim FPR = Me.FPR
-
-        With TPR.Select(Function(x, i) (x, i)).OrderBy(Function(t) t.x).ToArray
-            TPR = .Select(Function(t) t.x).ToArray
-            FPR = .Select(Function(t) FPR(t.i)).ToArray
-        End With
-
-        Return Evaluation.SimpleAUC(TPR, FPR)
-    End Function
-
-    Protected Overrides Iterator Function IEnumerable_GetEnumerator() As IEnumerator
-        Yield IEnumerable()
-    End Function
-
-    Private Overloads Iterator Function IEnumerable() As IEnumerator(Of Evaluation.Validation) Implements IEnumerable(Of Evaluation.Validation).GetEnumerator
-        If threshold.Length > 1000 Then
-            For i As Integer = 0 To threshold.Length - 1 Step CInt(threshold.Length) / 1000
-                Yield New Evaluation.Validation With {
-                    .Specificity = specificity(i),
-                    .Sensibility = sensibility(i)
-                }
-            Next
-        Else
-            For i As Integer = 0 To threshold.Length - 1
-                Yield New Evaluation.Validation With {
-                    .Specificity = specificity(i),
-                    .Sensibility = sensibility(i)
-                }
-            Next
-        End If
-    End Function
-End Class

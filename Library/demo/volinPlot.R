@@ -1,42 +1,39 @@
-imports "plot.charts" from "R.plot";
+imports "charts" from "graphics";
+imports "validation" from "MLkit";
 
-let data as string = "K:\20200226\20200321\global_para.csv";
-let dataTbl <- read.csv(data);
+options(strict = FALSE);
 
-print(colnames(dataTbl));
+data       = `${dirname(@script)}/data2/MSI_peaktable.csv`;
+sampleinfo = read.csv(`${dirname(@script)}/data2/sampleInfo.csv`); 
+dataTbl    = read.csv(data, row.names = 1);
 
-# for(xlab in colnames(dataTbl)) {
-	# for(ylab in colnames(dataTbl)) {
-		# if (xlab != ylab) {
-			# let x <- as.numeric(dataTbl[, xlab]);
-			# let y <- as.numeric(dataTbl[, ylab]);
-			# let main as string = `${xlab} ~ ${ylab}`;
-			# let line <- serial(x,y, main, color = "black", ptSize = 8);
-			# let save.png as string <- `${dirname(data)}/${basename(data)}/${main :> gsub("(\\|/)", "_", regexp =TRUE)}.png`;
-			
-			# print(save.png);
-			
-			# plot(line, 
-				 # padding = "padding: 300px 125px 200px 250px;",
-				 # x.lab   = xlab,
-				 # y.lab   = ylab,
-				 # legend.anchor = [1900.0, 1450.0],
-				 # legendBgFill = "white",
-				 # showLegend = FALSE,
-				 # title = main
-			# ) 
-			# :> save.graphics(file = save.png)
-			# ;
-		# }
-	# }
-# }
+str(dataTbl);
 
-for(ylab in colnames(dataTbl)) {
-	let y <- as.numeric(dataTbl[, ylab]);	
-	let save.png as string <- `${dirname(data)}/${basename(data)}1/${ylab :> gsub("(\\|/)", "_", regexp =TRUE)}.png`;
-	
-	print(save.png);
-	
+biomarker = "MZ_146.0617";
+biodata   = dataTbl[biomarker, , drop = TRUE];
+
+getVector = function(group) {
+	sample = (sampleinfo[sampleinfo[, "sample_info"] == group, ])[, "ID"];
+	print(sample);
+	sample = unlist(biodata[sample]);
+	print(sample);
+	sample;
+}
+
+sample1 = getVector("X5.Contour");
+sample2 = getVector("X4.Contour");
+
+tag  = c(rep(FALSE, times = length(sample1)), rep(TRUE, times = length(sample2)));
+data = c(sample1, sample2);
+roc  = prediction(data / max(data), tag);
+
+print(roc);
+
+bitmap(file = `${dirname(@script)}/data2/MZ_146.0617_roc.png`) {
+	plot(roc, size = [3600,3300]);
+}
+
+bitmap(file = `${dirname(@script)}/data2/violin.png`) {
 	volinPlot(y, 
 		 margin = "padding: 300px 150px 200px 300px;",
 		 size   = "2700,2700",
@@ -48,7 +45,6 @@ for(ylab in colnames(dataTbl)) {
 		 title = `volin plot of ${ylab}`,
 		 labelAngle = 0,
 		 colorSet = "#94cac1"
-	) 
-	:> save.graphics(file = save.png)
-	;
+	);
 }
+	
