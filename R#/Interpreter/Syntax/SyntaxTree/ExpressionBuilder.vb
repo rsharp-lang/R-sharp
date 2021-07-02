@@ -250,6 +250,14 @@ Namespace Interpreter.SyntaxParser
                             Return result
                         End If
                     End If
+                ElseIf code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "-") Then
+                    Dim number As SyntaxResult = ParseExpression(New List(Of Token()) From {code(1)}, opts)
+
+                    If number.isException Then
+                        Return number
+                    Else
+                        Return New UnaryNumeric("-", number.expression)
+                    End If
                 End If
             ElseIf code = 3 Then
                 If code.isSequenceSyntax Then
