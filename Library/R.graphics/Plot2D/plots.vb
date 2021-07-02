@@ -102,6 +102,7 @@ Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 ''' chartting plots for R#
 ''' </summary>
 <Package("charts", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gmail.com")>
+<RTypeExport("contours", GetType(ContourLayer()))>
 Module plots
 
     ''' <summary>
@@ -129,7 +130,12 @@ Module plots
         Call REnv.Internal.generic.add("plot", GetType(Cluster), AddressOf plot_hclust)
         Call REnv.Internal.generic.add("plot", GetType(vector), AddressOf plotVector)
         Call REnv.Internal.generic.add("plot", GetType(Double()), AddressOf plotArray)
+        Call REnv.Internal.generic.add("plot", GetType(ContourLayer()), AddressOf plotContourLayers)
     End Sub
+
+    Public Function plotContourLayers(contours As ContourLayer(), args As list, env As Environment) As Object
+        Return ContourPlot(contours, colorSet:=args!colorSet, args:=args, env:=env)
+    End Function
 
     Public Function plotArray(x As Double(), args As list, env As Environment) As Object
         Dim y As Double() = args.findNumberVector(size:=x.Length, env)

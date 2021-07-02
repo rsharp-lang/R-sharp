@@ -501,11 +501,22 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' get a .NET type model from a given VB.NET type full name
         ''' </summary>
-        ''' <param name="fullName"></param>
+        ''' <param name="fullName">.NET type name</param>
         ''' <returns></returns>
         <ExportAPI("export")>
         Public Function [typeof](fullName As String) As RType
             Return RType.GetRSharpType(Type.GetType(fullName))
+        End Function
+
+        ''' <summary>
+        ''' get exported type by name
+        ''' </summary>
+        ''' <param name="name">export type name</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("type")>
+        Public Function [gettype](name As String, Optional env As Environment = Nothing) As Type
+            Return env.globalEnvironment.types.TryGetValue(name)
         End Function
     End Module
 End Namespace
