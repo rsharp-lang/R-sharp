@@ -843,7 +843,17 @@ Module plots
                 ysteps:=ry.Length / 200
             )
         Else
-            Return Message.InCompatibleType(GetType(FormulaExpression), data.GetType, env)
+            Dim layers As pipeline = pipeline.TryCreatePipeline(Of ContourLayer)(data, env)
+
+            If layers.isError Then
+                Return Message.InCompatibleType(GetType(FormulaExpression), data.GetType, env)
+            End If
+
+            Return layers _
+                .populates(Of ContourLayer)(env) _
+                .Plot(
+                    colorSet:=RColorPalette.getColorSet(colorSet)
+                )
         End If
     End Function
 End Module
