@@ -88,11 +88,28 @@ Namespace Interpreter.SyntaxParser
 
                 ' a::b view function help info
                 namespaceRef = New NamespaceFunctionSymbolReference(nsSymbol, b.VA.expression, stack)
+            ElseIf TypeOf b.VA.expression Is SymbolIndexer Then
+                Dim indexer As SymbolIndexer = b.VA.expression
+                Dim nsRef = expression(a, New SyntaxResult(indexer.symbol), opts)
+
+                If nsRef.isException Then
+                    Return nsRef
+                Else
+                    indexer = New SymbolIndexer(
+                        symbol:=nsRef.expression,
+                        index:=indexer.index,
+                        indexType:=indexer.indexType
+                    )
+                End If
+
+                Return indexer
             Else
                 Return New SyntaxResult(New SyntaxErrorException, opts.debug)
             End If
 
             Return New SyntaxResult(namespaceRef)
         End Function
+
+
     End Class
 End Namespace
