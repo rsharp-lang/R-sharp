@@ -164,6 +164,9 @@ bitmap(file = `./network.png`) %do% {
     End Sub
 
     Sub Main()
+
+        Call negativeValTest()
+
         Call syntaxTest()
         Call acceptDoTest()
         Call syntaxTest2()
@@ -463,6 +466,10 @@ print(gg);
 
         Dim x# = 8
         Dim y = -x * -2.0E+133
+
+        Call R.Add("x", 88)
+
+        Call R.Print("-x")
 
         Call R.Add("R", 555)
         Call R.Evaluate("let a <- -R * 2E3;")

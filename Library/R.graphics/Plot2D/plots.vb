@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Data
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Histogram
+Imports Microsoft.VisualBasic.Data.ChartPlots.Contour
 Imports Microsoft.VisualBasic.Data.ChartPlots.Fractions
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Canvas
@@ -101,6 +102,7 @@ Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 ''' chartting plots for R#
 ''' </summary>
 <Package("charts", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gmail.com")>
+<RTypeExport("contours", GetType(ContourLayer()))>
 Module plots
 
     ''' <summary>
@@ -128,7 +130,12 @@ Module plots
         Call REnv.Internal.generic.add("plot", GetType(Cluster), AddressOf plot_hclust)
         Call REnv.Internal.generic.add("plot", GetType(vector), AddressOf plotVector)
         Call REnv.Internal.generic.add("plot", GetType(Double()), AddressOf plotArray)
+        Call REnv.Internal.generic.add("plot", GetType(ContourLayer()), AddressOf plotContourLayers)
     End Sub
+
+    Public Function plotContourLayers(contours As ContourLayer(), args As list, env As Environment) As Object
+        Return ContourPlot(contours, colorSet:=args!colorSet, args:=args, env:=env)
+    End Function
 
     Public Function plotArray(x As Double(), args As list, env As Environment) As Object
         Dim y As Double() = args.findNumberVector(size:=x.Length, env)
@@ -828,13 +835,13 @@ Module plots
             Dim vals As Double() = REnv.asVector(Of Double)(DirectCast(data, Rdataframe).columns("data"))
             Dim measures As MeasureData() = x.Select(Function(xi, i) New MeasureData(xi, y(i), vals(i))).ToArray
 
-            Return Contour.PlotContour.Plot(measures, colorSet:=RColorPalette.getColorSet(colorSet))
+            Return PlotContour.Plot(measures, colorSet:=RColorPalette.getColorSet(colorSet))
         ElseIf TypeOf data Is DeclareLambdaFunction Then
             Dim lambda As Func(Of (Double, Double), Double) = DirectCast(data, DeclareLambdaFunction).CreateLambda(Of (Double, Double), Double)(env)
             Dim rx As DoubleRange = args.getValue(Of Double())("x", env)
             Dim ry As DoubleRange = args.getValue(Of Double())("y", env)
 
-            Return Contour.Utils.Plot(
+            Return Contour.HeatMap.Plot(
                 fun:=Function(x, y) lambda((x, y)),
                 xrange:=rx,
                 yrange:=ry,
@@ -842,7 +849,17 @@ Module plots
                 ysteps:=ry.Length / 200
             )
         Else
-            Return Message.InCompatibleType(GetType(FormulaExpression), data.GetType, env)
+            Dim layers As pipeline = pipeline.TryCreatePipeline(Of ContourLayer)(data, env)
+
+            If layers.isError Then
+                Return Message.InCompatibleType(GetType(FormulaExpression), data.GetType, env)
+            End If
+
+            Return layers _
+                .populates(Of ContourLayer)(env) _
+                .Plot(
+                    colorSet:=RColorPalette.getColorSet(colorSet)
+                )
         End If
     End Function
 End Module
