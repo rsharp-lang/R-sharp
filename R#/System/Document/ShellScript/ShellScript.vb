@@ -168,7 +168,16 @@ Namespace Development.CommandLine
             Static none As [Default](Of String) = "-"
 
             For Each arg As CommandLineArgument In arguments
-                Call dev.WriteLine($" {arg.name}: {New String(" "c, maxName.Length - arg.name.Length)}{arg.description Or none}")
+                Dim prefix As String = $" {arg.name}: {New String(" "c, maxName.Length - arg.name.Length)}"
+                Dim descriptionBlock As String = Paragraph _
+                    .SplitParagraph(arg.description Or none, 65) _
+                    .JoinBy(vbCrLf & New String(" "c, prefix.Length))
+
+                Call dev.WriteLine(prefix & descriptionBlock)
+
+                If descriptionBlock.Contains(vbCr) OrElse descriptionBlock.Contains(vbLf) Then
+                    Call dev.WriteLine()
+                End If
             Next
 
             If Not authors.IsNullOrEmpty Then
