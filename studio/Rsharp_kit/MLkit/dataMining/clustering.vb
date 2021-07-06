@@ -75,6 +75,11 @@ Module clustering
 
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(FuzzyCMeansEntity()), AddressOf cmeansSummary)
+        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(
+            type:=GetType(dbscanResult),
+            handler:=Function(result, args, env)
+                         Return DirectCast(result, dbscanResult).cluster.clusterResultDataFrame(args, env)
+                     End Function)
 
         Call REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
     End Sub
@@ -116,6 +121,7 @@ Module clustering
         Return summary
     End Function
 
+    <Extension>
     Public Function clusterResultDataFrame(data As EntityClusterModel(), args As list, env As Environment) As Rdataframe
         Dim table As File = data.ToCsvDoc
         Dim matrix As New Rdataframe With {
