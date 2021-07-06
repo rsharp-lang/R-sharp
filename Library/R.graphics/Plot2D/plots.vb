@@ -131,7 +131,23 @@ Module plots
         Call REnv.Internal.generic.add("plot", GetType(vector), AddressOf plotVector)
         Call REnv.Internal.generic.add("plot", GetType(Double()), AddressOf plotArray)
         Call REnv.Internal.generic.add("plot", GetType(ContourLayer()), AddressOf plotContourLayers)
+
+        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(MeasureData()), AddressOf measureDataTable)
     End Sub
+
+    Private Function measureDataTable(data As MeasureData(), args As list, env As Environment) As Rdataframe
+        Dim x = data.Select(Function(p) p.X).ToArray
+        Dim y = data.Select(Function(p) p.Y).ToArray
+        Dim Z = data.Select(Function(p) p.Z).ToArray
+
+        Return New Rdataframe With {
+            .columns = New Dictionary(Of String, Array) From {
+                {"x", x},
+                {"y", y},
+                {"data", Z}
+            }
+        }
+    End Function
 
     Public Function plotContourLayers(contours As ContourLayer(), args As list, env As Environment) As Object
         Return ContourPlot(contours, colorSet:=args!colorSet, args:=args, env:=env)
