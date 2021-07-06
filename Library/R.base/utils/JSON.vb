@@ -51,10 +51,12 @@ Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Components
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' JSON (JavaScript Object Notation) is a lightweight data-interchange format. 
@@ -125,7 +127,7 @@ Module JSON
     ''' </returns>
     <ExportAPI("json_encode")>
     <RApiReturn(GetType(String))>
-    Public Function json_encode(x As Object,
+    Public Function json_encode(<RRawVectorArgument> x As Object,
                                 Optional maskReadonly As Boolean = False,
                                 Optional indent As Boolean = False,
                                 Optional enumToStr As Boolean = True,
@@ -141,7 +143,27 @@ Module JSON
 
         If x Is Nothing Then
             Return "null"
-        ElseIf Not TypeOf x Is JsonElement Then
+        End If
+
+        If TypeOf x Is vector Then
+            x = DirectCast(x, vector).data
+        End If
+
+        If x.GetType.IsArray Then
+            If DirectCast(x, Array).Length = 1 Then
+                x = DirectCast(x, Array).GetValue(Scan0)
+            ElseIf DirectCast(x, Array).Length = 0 Then
+                Return "[]"
+            Else
+                x = REnv.TryCastGenericArray(DirectCast(x, Array), env)
+            End If
+        End If
+
+        If Program.isException(x) Then
+            Return x
+        End If
+
+        If Not TypeOf x Is JsonElement Then
             x = Encoder.GetObject(x)
             json = x.GetType.GetJsonElement(x, opts)
         Else
