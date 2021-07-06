@@ -416,7 +416,7 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
-        <ExportAPI("normalize.filename")>
+        <ExportAPI("normalizeFileName")>
         Public Function normalizeFileName(strings$()) As String()
             Return strings _
                 .Select(Function(file)
