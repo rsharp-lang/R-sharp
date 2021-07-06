@@ -40,6 +40,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.csv.IO
@@ -118,9 +119,11 @@ Module Manifold
                                    Optional bandwidth As Double = 1,
                                    Optional customNumberOfEpochs As Integer? = Nothing,
                                    Optional customMapCutoff As Double? = Nothing,
+                                   Optional debug As Boolean = False,
                                    Optional env As Environment = Nothing) As Object
         Dim labels As String()
         Dim matrix As Double()()
+        Dim report As RunSlavePipeline.SetProgressEventHandler
 
         If TypeOf data Is Rdataframe Then
             labels = DirectCast(data, Rdataframe).getRowNames
@@ -143,6 +146,13 @@ Module Manifold
             labels = rawMatrix.Keys(distinct:=False)
             matrix = rawMatrix.Select(Function(r) r(cols)).ToArray
         End If
+        If debug OrElse env.globalEnvironment.debugMode Then
+            report = AddressOf RunSlavePipeline.SendProgress
+        Else
+            report = Sub()
+                         ' do nothing
+                     End Sub
+        End If
 
         Dim umap As New Umap(
             distance:=AddressOf DistanceFunctions.CosineForNormalizedVectors,
@@ -152,7 +162,8 @@ Module Manifold
             KnnIter:=KnnIter,
             bandwidth:=bandwidth,
             customNumberOfEpochs:=customNumberOfEpochs,
-            customMapCutoff:=customMapCutoff
+            customMapCutoff:=customMapCutoff,
+            progressReporter:=report
         )
         Dim nEpochs As Integer
 

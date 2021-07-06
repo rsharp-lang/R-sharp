@@ -2,7 +2,7 @@ imports ["dataset", "umap"] from "MLkit";
 
 const filename as string = "MNIST-LabelledVectorArray-60000x100.msgpack";
 const MNIST_LabelledVectorArray = `${dirname(@script)}/${filename}`
-|> read.mnist.labelledvector(takes = 10000)
+|> read.mnist.labelledvector(takes = 50000)
 ;
 const tags as string = rownames(MNIST_LabelledVectorArray);
 
@@ -14,7 +14,8 @@ bitmap(file = `${dirname(@script)}/MNIST-LabelledVectorArray-20000x100.umap_scat
 		numberOfNeighbors = 10,
 		localConnectivity = 1,
 		KnnIter           = 64,
-		bandwidth         = 1
+		bandwidth         = 1,
+		debug             = TRUE
 	)
 	;
 	
