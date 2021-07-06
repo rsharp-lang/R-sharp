@@ -141,18 +141,19 @@ Module plots
         Dim y As Double() = args.findNumberVector(size:=x.Length, env)
         Dim ptSize As Single = args.getValue("point_size", env, 15)
         Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
+        Dim reverse As Boolean = args.getValue(Of Boolean)("reverse", env, False)
         Dim drawLine As Boolean = y Is Nothing
 
         args.slots!line = drawLine
 
         If Not classList.IsNullOrEmpty Then
-            Return modelWithClass(x, y, ptSize, classList, args, env)
+            Return modelWithClass(x, y, ptSize, classList, args, reverse, env)
         Else
-            Return modelWithoutClass(x, y, ptSize, args, env)
+            Return modelWithoutClass(x, y, ptSize, args, reverse, env)
         End If
     End Function
 
-    Private Function modelWithClass(x As Double(), y As Double(), ptSize As Single, classList As String(), args As list, env As Environment) As Object
+    Private Function modelWithClass(x As Double(), y As Double(), ptSize As Single, classList As String(), args As list, reverse As Boolean, env As Environment) As Object
         Dim uniqClass As String() = classList.Distinct.ToArray
         Dim colorSet As String() = RColorPalette.getColors(args!colorSet, uniqClass.Length, "Clusters")
         Dim colors As Dictionary(Of String, Color) = colorSet _
@@ -188,8 +189,10 @@ Module plots
                 classSerials(classList(i)).Add(point)
             Next
         Else
+            Dim maxy As Double = y.Max
+
             For i As Integer = 0 To x.Length - 1
-                point = New PointData(x(i), y(i))
+                point = New PointData(x(i), If(reverse, maxy - y(i), y(i)))
                 classSerials(classList(i)).Add(point)
             Next
         End If
@@ -214,7 +217,7 @@ Module plots
         Return plotSerials(lines, args, env)
     End Function
 
-    Private Function modelWithoutClass(x As Double(), y As Double(), ptSize As Single, args As list, env As Environment) As Object
+    Private Function modelWithoutClass(x As Double(), y As Double(), ptSize As Single, args As list, reverse As Boolean, env As Environment) As Object
         Dim line As SerialData
 
         If y Is Nothing Then
@@ -230,6 +233,7 @@ Module plots
             }
         Else
             Dim colorSet As Func(Of Integer, String)
+            Dim maxy As Double = y.Max
 
             If args.hasName("colorSet") AndAlso Not args!colorSet Is Nothing Then
                 Dim colorsMap As String() = RColorPalette.getColors(args!colorSet, x.Length, Nothing)
@@ -242,7 +246,7 @@ Module plots
             line = New SerialData() With {
                 .pts = x _
                     .Select(Function(xi, i)
-                                Return New PointData(xi, y(i)) With {
+                                Return New PointData(xi, If(reverse, maxy - y(i), y(i))) With {
                                     .color = colorSet(i)
                                 }
                             End Function) _
