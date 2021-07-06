@@ -57,6 +57,16 @@ Imports any = Microsoft.VisualBasic.Scripting
 <HideModuleName>
 Public Module Extensions
 
+    ReadOnly debugLevels As Dictionary(Of String, DebugLevels)
+
+    Sub New()
+        debugLevels = Enums(Of DebugLevels).ToDictionary(Function(flag) flag.Description.ToLower)
+    End Sub
+
+    Public Function ParseDebugLevel(argVal As String) As DebugLevels
+        Return debugLevels.TryGetValue(Strings.LCase(argVal), [default]:=Interpreter.DebugLevels.All)
+    End Function
+
     <DebuggerStepThrough>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <Extension>

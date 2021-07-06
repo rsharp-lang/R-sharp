@@ -139,8 +139,9 @@ Module Program
         Dim verbose As Boolean = args("--verbose")
         Dim attach As String = args("--attach")
 
-        If args("--debug") Then
+        If args.HavebFlag("--debug") OrElse args.ContainsParameter("--debug") Then
             R.debug = True
+            R.globalEnvir.SetDebug(SMRUCC.Rsharp.ParseDebugLevel(args("--debug")))
         End If
 
         If verbose Then

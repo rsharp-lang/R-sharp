@@ -54,6 +54,13 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter
 
+    Public Enum DebugLevels As Byte
+        None
+        Memory
+        Stack
+        All = Memory Or Stack
+    End Enum
+
     ''' <summary>
     ''' 使用for循环执行脚本语句
     ''' </summary>
@@ -81,12 +88,14 @@ Namespace Interpreter
             Dim last As Object = Nothing
             Dim breakLoop As Boolean = False
             Dim debug As Boolean = env.globalEnvironment.debugMode
+            Dim showMemory As Boolean = debug AndAlso (env.globalEnvironment.debugLevel = DebugLevels.All OrElse env.globalEnvironment.debugLevel = DebugLevels.Memory)
+            Dim showExpression As Boolean = debug AndAlso (env.globalEnvironment.debugLevel = DebugLevels.All OrElse env.globalEnvironment.debugLevel = DebugLevels.Stack)
 
             ' The program code loop
             For Each expression As Expression In execQueue
-                last = ExecuteCodeLine(expression, env, breakLoop, debug)
+                last = ExecuteCodeLine(expression, env, breakLoop, showExpression)
 
-                If debug Then
+                If showMemory Then
                     Call printMemoryProfile()
                 End If
 
@@ -144,18 +153,18 @@ Namespace Interpreter
         ''' <returns></returns>
         Public Shared Function ExecuteCodeLine(expression As Expression, envir As Environment,
                                                Optional ByRef breakLoop As Boolean = False,
-                                               Optional debug As Boolean = False) As Object
+                                               Optional showExpression As Boolean = False) As Object
             Dim last As Object
             Dim benchmark As Long = App.NanoTime
 
-            If debug Then
+            If showExpression Then
                 Call printDebug(expression.ToString)
             End If
 
             last = expression.Evaluate(envir)
             benchmark = App.NanoTime - benchmark
 
-            If debug Then
+            If showExpression Then
                 Call printDebug($"[elapse_time] {TimeSpan.FromTicks(benchmark).FormatTime}", ConsoleColor.Green)
             End If
 
