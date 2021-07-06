@@ -34,7 +34,7 @@ Module RColorPalette
         End Select
     End Function
 
-    Public Function getColorSet(colorSet As Object, Optional default$ = "Set1:c12") As String
+    Public Function getColorSet(colorSet As Object, Optional default$ = "Set1:c8") As String
         If colorSet Is Nothing Then
             Return [default]
         End If
