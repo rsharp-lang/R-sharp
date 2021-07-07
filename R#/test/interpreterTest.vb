@@ -168,10 +168,12 @@ bitmap(file = `./network.png`) %do% {
 	print(x);
 })(list(a =1, b = 2));")
 
-        Call R.Parse("'AAAAAAAA'
+        Call R.Evaluate("'AAAAAAAA'
 |> (function(str) {
 	print(str);
 });")
+
+        Pause()
     End Sub
 
     Sub Main()
