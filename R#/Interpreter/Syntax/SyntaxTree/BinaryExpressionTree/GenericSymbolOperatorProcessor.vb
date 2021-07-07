@@ -100,5 +100,11 @@ Namespace Interpreter.SyntaxParser
 
         Public buf As List(Of [Variant](Of SyntaxResult, String))
 
+        Public ReadOnly Property Count As Integer
+            Get
+                Return buf.Count
+            End Get
+        End Property
+
     End Class
 End Namespace

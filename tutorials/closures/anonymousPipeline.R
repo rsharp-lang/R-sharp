@@ -1,4 +1,4 @@
-"AAAAAAAA"
+'AAAAAAAA'
 |> (function(str) {
 	print(str);
 });
