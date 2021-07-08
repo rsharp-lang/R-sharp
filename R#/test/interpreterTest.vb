@@ -163,8 +163,21 @@ bitmap(file = `./network.png`) %do% {
 ")
     End Sub
 
-    Sub Main()
+    Sub pipelineBulder()
+        Dim a = R.Parse("(function(x) {
+	print(x);
+})(list(a =1, b = 2));")
 
+        Call R.Evaluate("'AAAAAAAA'
+|> (function(str) {
+	print(str);
+});")
+
+        Pause()
+    End Sub
+
+    Sub Main()
+        Call pipelineBulder()
         Call negativeValTest()
 
         Call syntaxTest()

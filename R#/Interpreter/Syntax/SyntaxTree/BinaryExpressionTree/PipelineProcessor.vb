@@ -122,6 +122,16 @@ Namespace Interpreter.SyntaxParser
                               Call list.Insert(Scan0, a)
                           End Sub) _
                     .ToArray
+
+            ElseIf TypeOf b Is DeclareNewFunction Then
+                ' anonymousPipeline
+                '
+                ' a |> (function(x) {
+                '   # xxx
+                ' }) 
+                '
+                pip = New FunctionInvoke(b, DirectCast(b, DeclareNewFunction).stackFrame, a)
+
             ElseIf TypeOf b Is SymbolReference Then
                 Dim name$ = DirectCast(b, SymbolReference).symbol
                 Dim stacktrace As New StackFrame With {
