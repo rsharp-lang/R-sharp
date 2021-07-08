@@ -159,17 +159,18 @@ Module plots
         Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
         Dim reverse As Boolean = args.getValue(Of Boolean)("reverse", env, False)
         Dim drawLine As Boolean = y Is Nothing
+        Dim shape As LegendStyles = args.getValue("shape", env, "Circle").ParseLegendStyle
 
         args.slots!line = drawLine
 
         If Not classList.IsNullOrEmpty Then
-            Return modelWithClass(x, y, ptSize, classList, args, reverse, env)
+            Return modelWithClass(x, y, ptSize, classList, args, reverse, shape, env)
         Else
-            Return modelWithoutClass(x, y, ptSize, args, reverse, env)
+            Return modelWithoutClass(x, y, ptSize, args, reverse, shape, env)
         End If
     End Function
 
-    Private Function modelWithClass(x As Double(), y As Double(), ptSize As Single, classList As String(), args As list, reverse As Boolean, env As Environment) As Object
+    Private Function modelWithClass(x As Double(), y As Double(), ptSize As Single, classList As String(), args As list, reverse As Boolean, shape As LegendStyles, env As Environment) As Object
         Dim uniqClass As String() = classList.Distinct.ToArray
         Dim colorSet As String() = RColorPalette.getColors(args!colorSet, uniqClass.Length, "Clusters")
         Dim colors As Dictionary(Of String, Color) = colorSet _
@@ -222,10 +223,10 @@ Module plots
                             .pts = tuple.Value.ToArray,
                             .color = colors(tuple.Key),
                             .pointSize = ptSize,
-                            .shape = LegendStyles.Circle,
+                            .shape = shape,
                             .title = tuple.Key,
                             .width = 5,
-                            .lineType = DashStyle.Dot
+                            .lineType = DashStyle.Custom
                         }
                     End Function) _
             .ToArray
@@ -233,7 +234,7 @@ Module plots
         Return plotSerials(lines, args, env)
     End Function
 
-    Private Function modelWithoutClass(x As Double(), y As Double(), ptSize As Single, args As list, reverse As Boolean, env As Environment) As Object
+    Private Function modelWithoutClass(x As Double(), y As Double(), ptSize As Single, args As list, reverse As Boolean, shape As LegendStyles, env As Environment) As Object
         Dim line As SerialData
 
         If y Is Nothing Then
@@ -245,7 +246,8 @@ Module plots
                             End Function) _
                     .ToArray,
                 .pointSize = ptSize,
-                .title = args.getValue("title", env, "data")
+                .title = args.getValue("title", env, "data"),
+                .shape = shape
             }
         Else
             Dim colorSet As Func(Of Integer, String)
@@ -268,7 +270,8 @@ Module plots
                             End Function) _
                     .ToArray,
                 .pointSize = ptSize,
-                .title = args.getValue("title", env, "x ~ y")
+                .title = args.getValue("title", env, "x ~ y"),
+                .shape = shape
             }
         End If
 
