@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::1092b0ec7e4c2f3f55f7fc14e409dbf2, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module clustering
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
-    '               dbscan, ensureNotIsDistance, fuzzyCMeans, hclust, hleaf
-    '               hnode, Kmeans, showHclust, ToHClust
-    ' 
-    ' /********************************************************************************/
+' Module clustering
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
+'               dbscan, ensureNotIsDistance, fuzzyCMeans, hclust, hleaf
+'               hnode, Kmeans, showHclust, ToHClust
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -54,6 +54,7 @@ Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
 Imports Microsoft.VisualBasic.DataMining.KMeans
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -381,7 +382,7 @@ Module clustering
         If hclust Then
             Return cluster.ToHClust
         Else
-            Return Cluster
+            Return cluster
         End If
     End Function
 
@@ -550,7 +551,8 @@ Module clustering
                            Optional scale As Boolean = False,
                            Optional method As dbScanMethods = dbScanMethods.raw,
                            Optional seeds As Boolean = True,
-                           Optional countmode As Object = Nothing) As dbscanResult
+                           Optional countmode As Object = Nothing,
+                           Optional filterNoise As Boolean = False) As dbscanResult
         Dim x As DataSet()
 
         If data Is Nothing Then
@@ -591,7 +593,13 @@ Module clustering
         End Select
 
         Dim isseed As Integer() = Nothing
-        Dim result = New DbscanAlgorithm(Of DataSet)(dist).ComputeClusterDBSCAN(x, eps, minPts, isseed)
+        Dim result = New DbscanAlgorithm(Of DataSet)(dist).ComputeClusterDBSCAN(
+            allPoints:=x,
+            epsilon:=eps,
+            minPts:=minPts,
+            is_seed:=isseed,
+            filterNoise:=filterNoise
+        )
         Dim clusterData As EntityClusterModel() = result _
             .Select(Function(c)
                         Return c _
