@@ -80,6 +80,7 @@ Namespace Runtime
         Public ReadOnly Property Rscript As RInterpreter
         Public ReadOnly Property stdout As RContentOutput
         Public ReadOnly Property log4vb_redirect As Boolean = True
+        Public ReadOnly Property debugLevel As DebugLevels = DebugLevels.All
 
         ''' <summary>
         ''' <see cref="RInterpreter.debug"/>
@@ -141,6 +142,11 @@ Namespace Runtime
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function doCall(func As String, ParamArray args As NamedValue(Of Object)()) As Object
             Return Rscript.Invoke(func, args)
+        End Function
+
+        Public Function SetDebug(level As DebugLevels) As GlobalEnvironment
+            _debugLevel = level
+            Return Me
         End Function
 
         ''' <summary>

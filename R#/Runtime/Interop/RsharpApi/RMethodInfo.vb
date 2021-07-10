@@ -197,7 +197,9 @@ Namespace Runtime.Interop
                 End If
             Next
 
-            If env.globalEnvironment.Rscript.debug Then
+            Dim showExpression As Boolean = env.globalEnvironment.debugMode AndAlso (env.globalEnvironment.debugLevel = DebugLevels.All OrElse env.globalEnvironment.debugLevel = DebugLevels.Stack)
+
+            If showExpression Then
                 Call ExecutableLoop.printDebug($"[exec] {GetPackageInfo.namespace}::{name}", ConsoleColor.Cyan)
             End If
 
@@ -211,7 +213,7 @@ Namespace Runtime.Interop
                 End Try
             End If
 
-            If env.globalEnvironment.Rscript.debug Then
+            If showExpression Then
                 Call ExecutableLoop.printDebug($"[finished] {GetPackageInfo.namespace}::{name}", ConsoleColor.Gray)
             End If
 

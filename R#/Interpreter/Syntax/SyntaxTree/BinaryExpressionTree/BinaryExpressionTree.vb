@@ -198,7 +198,14 @@ Namespace Interpreter.SyntaxParser
                 If Not (syntaxResult = process.JoinBinaryExpression(queue, oplist, opts)) Is Nothing Then
                     Return syntaxResult
                 End If
+                If queue.Count = 1 Then
+                    Exit For
+                End If
             Next
+
+            If buf = 1 Then
+                Return buf(Scan0)
+            End If
 
             opts.currentLine = tokenBlocks(Scan0).First.span.line
 

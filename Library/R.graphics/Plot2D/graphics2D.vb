@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Math2D.MarchingSquares
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.Math2D
@@ -249,5 +250,13 @@ Module graphics2D
         Return i _
             .Select(Function(index) colors(index)) _
             .ToArray
+    End Function
+
+    <ExportAPI("contour")>
+    Public Function contourPolygon(data As MeasureData()) As ContourLayer()
+        Dim contours As GeneralPath() = ContourLayer.GetContours(data).ToArray
+        Dim result = contours.Select(Function(c) c.GetContour).ToArray
+
+        Return result
     End Function
 End Module

@@ -131,7 +131,23 @@ Module plots
         Call REnv.Internal.generic.add("plot", GetType(vector), AddressOf plotVector)
         Call REnv.Internal.generic.add("plot", GetType(Double()), AddressOf plotArray)
         Call REnv.Internal.generic.add("plot", GetType(ContourLayer()), AddressOf plotContourLayers)
+
+        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(MeasureData()), AddressOf measureDataTable)
     End Sub
+
+    Private Function measureDataTable(data As MeasureData(), args As list, env As Environment) As Rdataframe
+        Dim x = data.Select(Function(p) p.X).ToArray
+        Dim y = data.Select(Function(p) p.Y).ToArray
+        Dim Z = data.Select(Function(p) p.Z).ToArray
+
+        Return New Rdataframe With {
+            .columns = New Dictionary(Of String, Array) From {
+                {"x", x},
+                {"y", y},
+                {"data", Z}
+            }
+        }
+    End Function
 
     Public Function plotContourLayers(contours As ContourLayer(), args As list, env As Environment) As Object
         Return ContourPlot(contours, colorSet:=args!colorSet, args:=args, env:=env)
@@ -141,18 +157,20 @@ Module plots
         Dim y As Double() = args.findNumberVector(size:=x.Length, env)
         Dim ptSize As Single = args.getValue("point_size", env, 15)
         Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
+        Dim reverse As Boolean = args.getValue(Of Boolean)("reverse", env, False)
         Dim drawLine As Boolean = y Is Nothing
+        Dim shape As LegendStyles = args.getValue("shape", env, "Circle").ParseLegendStyle
 
         args.slots!line = drawLine
 
         If Not classList.IsNullOrEmpty Then
-            Return modelWithClass(x, y, ptSize, classList, args, env)
+            Return modelWithClass(x, y, ptSize, classList, args, reverse, shape, env)
         Else
-            Return modelWithoutClass(x, y, ptSize, args, env)
+            Return modelWithoutClass(x, y, ptSize, args, reverse, shape, env)
         End If
     End Function
 
-    Private Function modelWithClass(x As Double(), y As Double(), ptSize As Single, classList As String(), args As list, env As Environment) As Object
+    Private Function modelWithClass(x As Double(), y As Double(), ptSize As Single, classList As String(), args As list, reverse As Boolean, shape As LegendStyles, env As Environment) As Object
         Dim uniqClass As String() = classList.Distinct.ToArray
         Dim colorSet As String() = RColorPalette.getColors(args!colorSet, uniqClass.Length, "Clusters")
         Dim colors As Dictionary(Of String, Color) = colorSet _
@@ -188,8 +206,10 @@ Module plots
                 classSerials(classList(i)).Add(point)
             Next
         Else
+            Dim maxy As Double = y.Max
+
             For i As Integer = 0 To x.Length - 1
-                point = New PointData(x(i), y(i))
+                point = New PointData(x(i), If(reverse, maxy - y(i), y(i)))
                 classSerials(classList(i)).Add(point)
             Next
         End If
@@ -203,10 +223,10 @@ Module plots
                             .pts = tuple.Value.ToArray,
                             .color = colors(tuple.Key),
                             .pointSize = ptSize,
-                            .shape = LegendStyles.Circle,
+                            .shape = shape,
                             .title = tuple.Key,
                             .width = 5,
-                            .lineType = DashStyle.Dot
+                            .lineType = DashStyle.Custom
                         }
                     End Function) _
             .ToArray
@@ -214,7 +234,7 @@ Module plots
         Return plotSerials(lines, args, env)
     End Function
 
-    Private Function modelWithoutClass(x As Double(), y As Double(), ptSize As Single, args As list, env As Environment) As Object
+    Private Function modelWithoutClass(x As Double(), y As Double(), ptSize As Single, args As list, reverse As Boolean, shape As LegendStyles, env As Environment) As Object
         Dim line As SerialData
 
         If y Is Nothing Then
@@ -226,10 +246,12 @@ Module plots
                             End Function) _
                     .ToArray,
                 .pointSize = ptSize,
-                .title = args.getValue("title", env, "data")
+                .title = args.getValue("title", env, "data"),
+                .shape = shape
             }
         Else
             Dim colorSet As Func(Of Integer, String)
+            Dim maxy As Double = y.Max
 
             If args.hasName("colorSet") AndAlso Not args!colorSet Is Nothing Then
                 Dim colorsMap As String() = RColorPalette.getColors(args!colorSet, x.Length, Nothing)
@@ -242,13 +264,14 @@ Module plots
             line = New SerialData() With {
                 .pts = x _
                     .Select(Function(xi, i)
-                                Return New PointData(xi, y(i)) With {
+                                Return New PointData(xi, If(reverse, maxy - y(i), y(i))) With {
                                     .color = colorSet(i)
                                 }
                             End Function) _
                     .ToArray,
                 .pointSize = ptSize,
-                .title = args.getValue("title", env, "x ~ y")
+                .title = args.getValue("title", env, "x ~ y"),
+                .shape = shape
             }
         End If
 

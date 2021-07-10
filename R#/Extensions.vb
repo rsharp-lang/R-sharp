@@ -57,6 +57,16 @@ Imports any = Microsoft.VisualBasic.Scripting
 <HideModuleName>
 Public Module Extensions
 
+    ReadOnly debugLevels As Dictionary(Of String, DebugLevels)
+
+    Sub New()
+        debugLevels = Enums(Of DebugLevels).ToDictionary(Function(flag) flag.Description.ToLower)
+    End Sub
+
+    Public Function ParseDebugLevel(argVal As String) As DebugLevels
+        Return debugLevels.TryGetValue(Strings.LCase(argVal), [default]:=Interpreter.DebugLevels.All)
+    End Function
+
     <DebuggerStepThrough>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <Extension>
@@ -82,7 +92,7 @@ Public Module Extensions
     ''' <returns></returns>
     Public Function GetEncoding(val As Object) As Encoding
         If val Is Nothing Then
-            Return Encoding.Default
+            Return Encodings.UTF8WithoutBOM.CodePage
         ElseIf TypeOf val Is Encoding Then
             Return val
         ElseIf TypeOf val Is Encodings Then
