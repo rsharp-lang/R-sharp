@@ -52,14 +52,32 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("signalProcessing")>
 Module signalProcessing
 
     Sub New()
-
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(SignalPeak()), AddressOf peakTable)
     End Sub
+
+    Private Function peakTable(sigs As SignalPeak(), args As list, env As Environment) As RDataframe
+        Dim data As New Dictionary(Of String, Array) From {
+            {NameOf(SignalPeak.rt), sigs.Select(Function(p) p.rt).ToArray},
+            {NameOf(SignalPeak.rtmin), sigs.Select(Function(p) p.rtmin).ToArray},
+            {NameOf(SignalPeak.rtmax), sigs.Select(Function(p) p.rtmax).ToArray},
+            {NameOf(SignalPeak.signalMax), sigs.Select(Function(p) p.signalMax).ToArray},
+            {NameOf(SignalPeak.snratio), sigs.Select(Function(p) p.snratio).ToArray},
+            {NameOf(SignalPeak.baseline), sigs.Select(Function(p) p.baseline).ToArray},
+            {NameOf(SignalPeak.integration), sigs.Select(Function(p) p.integration).ToArray},
+            {"ticks", sigs.Select(Function(p) p.region.TryCount).ToArray}
+        }
+
+        Return New RDataframe With {
+            .columns = data
+        }
+    End Function
 
     Private Function printSignal(sig As GeneralSignal)
 
@@ -76,7 +94,7 @@ Module signalProcessing
     End Function
 
     <ExportAPI("as.signal")>
-    Public Function asGeneral(measure As vector, signals As vector,
+    Public Function asGeneral(measure As Double(), signals As Double(),
                               Optional title$ = "general signal",
                               <RListObjectArgument>
                               Optional meta As list = Nothing,
@@ -85,7 +103,7 @@ Module signalProcessing
         Return New GeneralSignal With {
             .description = title,
             .Measures = DirectCast(REnv.asVector(Of Double)(measure), Double()),
-            .measureUnit = measure.unit?.ToString Or "n/a".AsDefault,
+            .measureUnit = "n/a",
             .meta = meta.AsGeneric(Of String)(env),
             .reference = App.NextTempName,
             .Strength = DirectCast(REnv.asVector(Of Double)(signals), Double())
