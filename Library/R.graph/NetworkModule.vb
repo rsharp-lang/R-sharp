@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::7a435c59dccb64ee15dda95fae50cca7, Library\R.graph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module NetworkModule
-    ' 
-    '     Function: addEdge, addEdges, addNode, addNodes, attributes
-    '               components, computeNetwork, connectedNetwork, DecomposeGraph, degree
-    '               deleteNode, edgeAttributes, emptyNetwork, eval, getByGroup
-    '               getEdges, getElementByID, getNodes, LoadNetwork, metaData
-    '               nodeAttributes, nodeMass, nodeNames, printGraph, printNode
-    '               SaveNetwork, setAttributes, summaryNodes, trimEdges, typeGroupOfNodes
-    '               V
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module NetworkModule
+' 
+'     Function: addEdge, addEdges, addNode, addNodes, attributes
+'               components, computeNetwork, connectedNetwork, DecomposeGraph, degree
+'               deleteNode, edgeAttributes, emptyNetwork, eval, getByGroup
+'               getEdges, getElementByID, getNodes, LoadNetwork, metaData
+'               nodeAttributes, nodeMass, nodeNames, printGraph, printNode
+'               SaveNetwork, setAttributes, summaryNodes, trimEdges, typeGroupOfNodes
+'               V
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -130,6 +130,60 @@ Public Module NetworkModule
     <ExportAPI("V")>
     Public Function V(g As NetworkGraph) As Object
         Return New V(g)
+    End Function
+
+    <ExportAPI("subgraphFromPoint")>
+    Public Function extractAdjacenciesSubNetwork(g As NetworkGraph, fromPoint As String) As NetworkGraph
+        Dim target As node = g.GetElementByID(fromPoint)
+        Dim connected As node() = target.adjacencies _
+            .EnumerateAllEdges _
+            .Select(Function(e) e.Iterate2Nodes) _
+            .IteratesALL _
+            .Where(Function(d) Not d Is target) _
+            .GroupBy(Function(d) d.label) _
+            .Select(Function(d) d.First) _
+            .ToArray
+        Dim subnet As New NetworkGraph
+
+        Call subnet.CreateNode(target.label, target.data)
+
+        For Each V As node In connected
+            Call subnet.CreateNode(V.label, V.data)
+        Next
+
+        For Each directLink As Edge In target.adjacencies.EnumerateAllEdges
+            Call subnet.CreateEdge(
+                subnet.GetElementByID(directLink.U.label),
+                subnet.GetElementByID(directLink.V.label),
+                directLink.weight,
+                directLink.data
+            )
+        Next
+
+        ' add edges between the connected nodes
+        Dim duplicated As New Index(Of String)
+
+        For Each x As node In connected
+            For Each y As node In connected
+                For Each link As Edge In g.GetEdges(x, y)
+                    Dim key As String = {link.U.label, link.V.label}.OrderBy(Function(str) str).JoinBy("+")
+
+                    If key Like duplicated Then
+                        Continue For
+                    Else
+                        Call duplicated.Add(key)
+                        Call subnet.CreateEdge(
+                            subnet.GetElementByID(link.U.label),
+                            subnet.GetElementByID(link.V.label),
+                            link.weight,
+                            link.data
+                        )
+                    End If
+                Next
+            Next
+        Next
+
+        Return subnet
     End Function
 
     <ExportAPI("metadata")>
