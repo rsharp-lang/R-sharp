@@ -362,8 +362,11 @@ Public Module utils
             .Select(Function(r, i)
                         If inputRowNames Is Nothing Then
                             Return New RowObject(r)
+                        ElseIf i = 0 Then
+                            ' header row
+                            Return New RowObject({""}.JoinIterates(r))
                         Else
-                            Return New RowObject({inputRowNames(i)}.JoinIterates(r))
+                            Return New RowObject({inputRowNames(i - 1)}.JoinIterates(r))
                         End If
                     End Function) _
             .ToArray
