@@ -126,7 +126,7 @@ Namespace Runtime.Internal
                                 Call index.Add(m.name, m)
                             End Sub)
             Catch ex As Exception
-                Throw ex
+                Throw
             End Try
         End Sub
 
