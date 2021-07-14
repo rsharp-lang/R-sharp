@@ -56,7 +56,7 @@ Module RColorPalette
         End If
     End Function
 
-    Public Function getColors(colorSet As Object, levels As Integer, Optional default$ = "Set1:c12") As String()
+    Public Function getColors(colorSet As Object, levels As Integer, Optional default$ = "Set1:c8") As String()
         If colorSet Is Nothing Then
             Return getColorSequence([default], levels)
         End If
