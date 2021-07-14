@@ -3,10 +3,22 @@
   <PropertyGroup>
     <RootNamespace>Rserver</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>Rserver</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineConstants>netcore5=1</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\runtime\httpd\Flute\Flute.NET5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\application%json\JSON-netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\network-netcore5.vbproj" />
+    <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
   </ItemGroup>
 
 </Project>
