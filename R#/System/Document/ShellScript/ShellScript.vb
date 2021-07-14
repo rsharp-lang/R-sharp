@@ -258,10 +258,21 @@ Namespace Development.CommandLine
                 Case GetType(MemberValueAssign) : Call analysisTree(DirectCast(expr, MemberValueAssign), attrs)
                 Case GetType(RunCommandLine) : Call analysisTree(DirectCast(expr, RunCommandLine), attrs)
                 Case GetType(UsingClosure) : Call analysisTree(DirectCast(expr, UsingClosure), attrs)
+                Case GetType(ByRefFunctionCall) : Call analysisTree(DirectCast(expr, ByRefFunctionCall), attrs)
 
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)
             End Select
+        End Sub
+
+        Private Sub analysisTree(expr As ByRefFunctionCall, attrs As ArgumentInfo)
+            Call AnalysisTree(expr.funcRef, attrs)
+            Call AnalysisTree(expr.target, attrs)
+            Call AnalysisTree(expr.value, attrs)
+
+            For Each arg In expr.arguments.SafeQuery
+                Call AnalysisTree(arg, attrs)
+            Next
         End Sub
 
         Private Sub analysisTree(expr As UsingClosure, attrs As ArgumentInfo)
