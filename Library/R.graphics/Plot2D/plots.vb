@@ -86,6 +86,7 @@ Imports Microsoft.VisualBasic.Math.Interpolation
 Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports R.math
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -105,16 +106,6 @@ Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 <RTypeExport("contours", GetType(ContourLayer()))>
 Module plots
 
-    ''' <summary>
-    ''' do plot of the linear regression result
-    ''' </summary>
-    ''' <param name="lm">the linear model</param>
-    ''' <returns></returns>
-    <ExportAPI("linear.regression")>
-    Public Function linearRegression(lm As IFitted) As GraphicsData
-        Return RegressionPlot.Plot(lm)
-    End Function
-
     <RInitialize>
     Sub Main()
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of SerialData)(Function(line) line.ToString)
@@ -132,8 +123,42 @@ Module plots
         Call REnv.Internal.generic.add("plot", GetType(Double()), AddressOf plotArray)
         Call REnv.Internal.generic.add("plot", GetType(ContourLayer()), AddressOf plotContourLayers)
 
+        Call REnv.Internal.generic.add("plot", GetType(WeightedFit), AddressOf plotLinearYFit)
+        Call REnv.Internal.generic.add("plot", GetType(IFitted), AddressOf plotLinearYFit)
+        Call REnv.Internal.generic.add("plot", GetType(lmCall), AddressOf plotLmCall)
+
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(MeasureData()), AddressOf measureDataTable)
     End Sub
+
+    Public Function plotLmCall(lm As lmCall, args As list, env As Environment) As Object
+        Return plotLinearYFit(lm.lm, args, env)
+    End Function
+
+    Public Function plotLinearYFit(fit As IFitted, args As list, env As Environment) As Object
+        Dim size As String = InteropArgumentHelper.getSize(args!size, "1600,1100")
+        Dim gridFill As String = RColorPalette.getColor(args("grid.fill"), "rgb(245,245,245)")
+        Dim showLegend As Boolean = args.getValue("show.legend", env, True)
+        Dim showYFit As Boolean = args.getValue("show.yfit", env, True)
+        Dim padding As String = InteropArgumentHelper.getPadding(args!padding, "padding: 150px 100px 150px 200px")
+        Dim xlab As String = args.getValue("xlab", env, "X")
+        Dim ylab As String = args.getValue("ylab", env, "Y")
+
+        Return fit.Plot(
+            size:=size,
+            gridFill:=gridFill,
+            showLegend:=showLegend,
+            showYFitPoints:=showYFit,
+            showErrorBand:=False,
+            title:=args.getValue(Of String)("main", env, Nothing),
+            margin:=padding,
+            factorFormat:="G4",
+            xAxisTickFormat:="F0",
+            yAxisTickFormat:="G2",
+            xLabel:=xlab,
+            yLabel:=ylab,
+            pointLabelFontCSS:=CSSFont.Win10Normal
+        )
+    End Function
 
     Private Function measureDataTable(data As MeasureData(), args As list, env As Environment) As Rdataframe
         Dim x = data.Select(Function(p) p.X).ToArray
