@@ -559,10 +559,12 @@ Module clustering
             Return Nothing
         ElseIf TypeOf data Is Rdataframe Then
             With DirectCast(data, Rdataframe)
+                Dim rownames As String() = .getRowNames
+
                 x = .nrows _
                     .Sequence _
                     .Select(Function(i)
-                                Dim id As String = .rownames.ElementAtOrDefault(i, i + 1)
+                                Dim id As String = rownames.ElementAtOrDefault(i, i + 1)
                                 Dim row As Dictionary(Of String, Object) = .getRowList(i, drop:=True)
                                 Dim r As New DataSet With {
                                     .ID = id,
@@ -612,6 +614,7 @@ Module clustering
                                     End Function)
                     End Function) _
             .IteratesALL _
+            .OrderBy(Function(d) Integer.Parse(d.Cluster)) _
             .ToArray
 
         Return New dbscanResult With {
