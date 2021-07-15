@@ -701,7 +701,8 @@ Module plots
             XtickFormat:=args.getValue(Of String)("x.format", env, "F2"),
             YtickFormat:=args.getValue(Of String)("y.format", env, "F2"),
             interplot:=spline,
-            axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.Win7VeryLarge)
+            axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.Win7VeryLarge),
+            gridFill:=RColorPalette.getColor(args("grid.fill"), "lightgray")
         )
     End Function
 
