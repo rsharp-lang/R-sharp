@@ -87,38 +87,43 @@ Module math
 
         REnv.Internal.generic.add("plot", GetType(WeightedFit), AddressOf plotLinearYFit)
         REnv.Internal.generic.add("plot", GetType(IFitted), AddressOf plotLinearYFit)
+        REnv.Internal.generic.add("plot", GetType(lmCall), AddressOf plotLmCall)
         REnv.Internal.generic.add("summary", GetType(lmCall), AddressOf summaryFit)
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of lmCall)(Function(o) o.ToString)
     End Sub
 
-    <ExportAPI("yfit.points")>
-    Public Function testPoints(<RRawVectorArgument> x As Object,
-                               <RRawVectorArgument> y As Object,
-                               <RRawVectorArgument> yfit As Object,
-                               Optional env As Environment = Nothing) As IFitError()
+    '<ExportAPI("yfit.points")>
+    'Public Function testPoints(<RRawVectorArgument> x As Object,
+    '                           <RRawVectorArgument> y As Object,
+    '                           <RRawVectorArgument> yfit As Object,
+    '                           Optional env As Environment = Nothing) As IFitError()
 
-        Dim xv As Double() = REnv.asVector(Of Double)(x)
-        Dim yv As Double() = REnv.asVector(Of Double)(y)
-        Dim fitv As Double() = REnv.asVector(Of Double)(yfit)
+    '    Dim xv As Double() = REnv.asVector(Of Double)(x)
+    '    Dim yv As Double() = REnv.asVector(Of Double)(y)
+    '    Dim fitv As Double() = REnv.asVector(Of Double)(yfit)
 
-        Return xv _
-            .Select(Function(xi, i)
-                        Return New TestPoint With {
-                            .X = xi,
-                            .Y = yv(i),
-                            .Yfit = fitv(i)
-                        }
-                    End Function) _
-            .Select(Function(p) DirectCast(p, IFitError)) _
-            .ToArray
+    '    Return xv _
+    '        .Select(Function(xi, i)
+    '                    Return New TestPoint With {
+    '                        .X = xi,
+    '                        .Y = yv(i),
+    '                        .Yfit = fitv(i)
+    '                    }
+    '                End Function) _
+    '        .Select(Function(p) DirectCast(p, IFitError)) _
+    '        .ToArray
+    'End Function
+
+    Public Function plotLmCall(lm As lmCall, args As list, env As Environment) As Object
+        Return plotLinearYFit(lm.lm, args, env)
     End Function
 
     Public Function plotLinearYFit(fit As IFitted, args As list, env As Environment) As Object
-        Dim size As String = InteropArgumentHelper.getSize(args!size, "1600,1200")
+        Dim size As String = InteropArgumentHelper.getSize(args!size, "1600,1100")
         Dim gridFill As String = RColorPalette.getColor(args("grid.fill"), "rgb(245,245,245)")
         Dim showLegend As Boolean = args.getValue("show.legend", env, True)
         Dim showYFit As Boolean = args.getValue("show.yfit", env, True)
-        Dim padding As String = InteropArgumentHelper.getPadding(args!padding, "padding: 200px 100px 150px 200px")
+        Dim padding As String = InteropArgumentHelper.getPadding(args!padding, "padding: 150px 100px 150px 200px")
         Dim xlab As String = args.getValue("xlab", env, "X")
         Dim ylab As String = args.getValue("ylab", env, "Y")
 
@@ -339,7 +344,7 @@ Module math
 
                 Return New lmCall(formula.var, {x_symbol}) With {
                     .formula = formula,
-                    .lm = WeightedLinearRegression.Regress(x, y, w),
+                    .lm = WeightedLinearRegression.Regress(x, y, w, orderOfPolynomial:=1),
                     .data = df.ToString,
                     .weights = $"[{wStr}]"
                 }
