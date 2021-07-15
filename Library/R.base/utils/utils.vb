@@ -333,6 +333,24 @@ Public Module utils
 
     <Extension>
     Friend Function DataFrameRows(x As Rdataframe, row_names As Object, env As Environment) As File
+        Dim inputRowNames As String() = Nothing
+
+        If row_names Is Nothing Then
+            row_names = True
+        End If
+        If row_names.GetType Is GetType(vector) Then
+            row_names = DirectCast(row_names, vector).data
+        End If
+        If row_names.GetType Is GetType(Array) Then
+            If DirectCast(row_names, Array).Length = 1 Then
+                row_names = DirectCast(row_names, Array).GetValue(Scan0)
+            End If
+        End If
+        If Not TypeOf row_names Is Boolean Then
+            inputRowNames = REnv.asVector(Of String)(row_names)
+            row_names = False
+        End If
+
         Dim matrix As String()() = TableFormatter _
             .GetTable(
                 df:=x,
@@ -341,8 +359,15 @@ Public Module utils
                 showRowNames:=row_names
             )
         Dim rows As IEnumerable(Of RowObject) = matrix _
-            .Select(Function(r)
-                        Return New RowObject(r)
+            .Select(Function(r, i)
+                        If inputRowNames Is Nothing Then
+                            Return New RowObject(r)
+                        ElseIf i = 0 Then
+                            ' header row
+                            Return New RowObject({""}.JoinIterates(r))
+                        Else
+                            Return New RowObject({inputRowNames(i - 1)}.JoinIterates(r))
+                        End If
                     End Function) _
             .ToArray
         Dim dataframe As New File(rows)

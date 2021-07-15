@@ -74,7 +74,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Return New r(pattern)
+            Return New r(pattern, RegexICSng)
         End Function
 
         Public Overrides Function ToString() As String

@@ -342,5 +342,9 @@ Namespace Runtime.Internal.Object
                 Return Nothing
             End If
         End Function
+
+        Public Shared Widening Operator CType(data As Dictionary(Of String, Object)) As list
+            Return New list With {.slots = data}
+        End Operator
     End Class
 End Namespace

@@ -43,6 +43,7 @@
 
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -136,7 +137,7 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop("characters component part for trimmed could not be NULL!", env)
             End If
 
-            Dim chars As Char() = characters.ToArray()
+            Dim chars As Char() = CLangStringFormatProvider.ReplaceMetaChars(characters).ToArray()
 
             Return strings _
                 .Select(Function(str)
