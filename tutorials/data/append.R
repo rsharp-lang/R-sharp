@@ -1,3 +1,9 @@
+let aaaa = append("1234", ["aaa","bbb","ccc"]);
+
+print(aaaa);
+
+
+
 let vec = 1:20 step 2;
 
 let a = vec << 199;

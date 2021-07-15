@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::d250a0e7abe38943c72f7fc4e8b71b64, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [date], [dim], [stop], allocate, append
-    '                   appendOfList, appendOfVector, autoDispose, c, cat
-    '                   cbind, colnames, columnVector, doPrintInternal, factors
-    '                   getOption, ifelse, invisible, isEmpty, isEmptyArray
-    '                   isList, isNA, isNull, length, library
-    '                   makeNames, names, ncol, neg, nrow
-    '                   objectAddInvoke, options, print, rbind, Rdataframe
-    '                   rep, replace, Rlist, rownames, sink
-    '                   source, str, summary, t, uniqueNames
-    '                   unitOfT, warning, year
-    ' 
-    '         Sub: [exit], q, quit, warnings
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [date], [dim], [stop], allocate, append
+'                   appendOfList, appendOfVector, autoDispose, c, cat
+'                   cbind, colnames, columnVector, doPrintInternal, factors
+'                   getOption, ifelse, invisible, isEmpty, isEmptyArray
+'                   isList, isNA, isNull, length, library
+'                   makeNames, names, ncol, neg, nrow
+'                   objectAddInvoke, options, print, rbind, Rdataframe
+'                   rep, replace, Rlist, rownames, sink
+'                   source, str, summary, t, uniqueNames
+'                   unitOfT, warning, year
+' 
+'         Sub: [exit], q, quit, warnings
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -602,15 +602,38 @@ Namespace Runtime.Internal.Invokes
             Static collectionCache As New Dictionary(Of Type, MethodInfo)
 
             SyncLock collectionCache
+                Dim xType As Type = x.GetType
 RE0:
-                If collectionCache.ContainsKey(x.GetType) Then
-                    If collectionCache(x.GetType) Is Nothing Then
+                If collectionCache.ContainsKey(xType) Then
+                    If collectionCache(xType) Is Nothing Then
                         ' 之前已经被解析过了
                         ' 但是找不到Add方法
-                        Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {x.GetType.FullName}"}, env)
+                        If TypeOf values Is vector Then
+                            values = DirectCast(values, vector).data
+                        End If
+                        If values.GetType.IsArray Then
+                            If values.GetType.GetElementType Is xType Then
+                                Dim vec As Array = Array.CreateInstance(xType, 1)
+                                vec.SetValue(x, Scan0)
+                                Return env.appendOfVector(vec, values)
+                            Else
+                                Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}"}, env)
+                            End If
+                        Else
+                            If values.GetType Is xType Then
+                                Dim array As Array = Array.CreateInstance(xType, 2)
+                                array.SetValue(x, Scan0)
+                                array.SetValue(values, 1)
+                                Return New vector With {.data = array, .elementType = RType.GetRSharpType(xType)}
+                            Else
+                                Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}"}, env)
+                            End If
+                        End If
+
+                        Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}"}, env)
                     End If
                 Else
-                    collectionCache(x.GetType) = x.GetType _
+                    collectionCache(xType) = xType _
                         .GetMethods(PublicProperty) _
                         .Where(Function(f)
                                    Return f.Name = "Add" AndAlso f.GetParameters.Length = 1
