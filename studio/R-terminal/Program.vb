@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::97671600e795f8c586442c1bb570f404, studio\R-terminal\Program.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Program
-    ' 
-    '     Function: Main, QueryCommandLineArgvs, RunExpression, RunScript
-    ' 
-    '     Sub: attachPackageFile
-    ' 
-    ' /********************************************************************************/
+' Module Program
+' 
+'     Function: Main, QueryCommandLineArgvs, RunExpression, RunScript
+' 
+'     Sub: attachPackageFile
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -47,6 +47,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.CommandLine
 Imports SMRUCC.Rsharp.Development.Configuration
@@ -70,8 +71,12 @@ Module Program
         )
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function QueryCommandLineArgvs(args As CommandLine) As Integer
-        Dim script As String = args.SingleValue
+        Return QueryCommandLineArgvs(script:=args.SingleValue)
+    End Function
+
+    Private Function QueryCommandLineArgvs(script As String) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
 
         If script.IsURLPattern Then
@@ -124,6 +129,28 @@ Module Program
     End Function
 
     ''' <summary>
+    ''' run R script file
+    ''' </summary>
+    ''' <param name="filepath">the file path of the Rscript file.</param>
+    ''' <param name="args"></param>
+    ''' <returns></returns>
+    ''' 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Private Function RunScript(filepath$, args As CommandLine) As Integer
+        Static helpName As Index(Of String) = {"?", "??", "--help", "--usage", "--info"}
+
+        ' unix liked
+        If args.ParameterList.Any(Function(a) Strings.LCase(a.Name) Like helpName) Then
+            ' query commandline arguments
+            ' show commandline help
+            Return Program.QueryCommandLineArgvs(script:=filepath)
+        Else
+            ' run Rscript file
+            Return Program.RunRScriptFile(filepath, args)
+        End If
+    End Function
+
+    ''' <summary>
     ''' R# script.R ... 
     ''' 
     ''' + ``--attach`` parameter for hot load a package zip file or package dir without installed.
@@ -132,7 +159,7 @@ Module Program
     ''' <param name="filepath$"></param>
     ''' <param name="args"></param>
     ''' <returns></returns>
-    Private Function RunScript(filepath$, args As CommandLine) As Integer
+    Private Function RunRScriptFile(filepath$, args As CommandLine) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Dim silent As Boolean = args("--silent")
         Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")

@@ -61,7 +61,7 @@ Module Program
     ''' </summary>
     ''' <returns></returns>
     Public Function Main() As Integer
-        Return GetType(CLI).RunCLI(App.CommandLine, executeFile:=AddressOf Run, executeEmpty:=AddressOf Run)
+        Return GetType(CLI).RunCLI(App.CommandLine, executeFile:=AddressOf RunRscriptFile, executeEmpty:=AddressOf Run)
     End Function
 
     ''' <summary>
@@ -122,7 +122,7 @@ Module Program
         End Using
     End Function
 
-    Private Function Run(filepath$, args As CommandLine) As Integer
+    Private Function RunRscriptFile(filepath As String, args As CommandLine) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
 
