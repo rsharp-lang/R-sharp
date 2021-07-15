@@ -78,6 +78,7 @@ Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 ''' the R# math module
 ''' </summary>
 <Package("math", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@live.com")>
+<RTypeExport("yfit", GetType(WeightedFit))>
 Module math
 
     Sub New()
@@ -87,6 +88,28 @@ Module math
         REnv.Internal.generic.add("summary", GetType(lmCall), AddressOf summaryFit)
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of lmCall)(Function(o) o.ToString)
     End Sub
+
+    <ExportAPI("yfit.points")>
+    Public Function testPoints(<RRawVectorArgument> x As Object,
+                               <RRawVectorArgument> y As Object,
+                               <RRawVectorArgument> yfit As Object,
+                               Optional env As Environment = Nothing) As IFitError()
+
+        Dim xv As Double() = REnv.asVector(Of Double)(x)
+        Dim yv As Double() = REnv.asVector(Of Double)(y)
+        Dim fitv As Double() = REnv.asVector(Of Double)(yfit)
+
+        Return xv _
+            .Select(Function(xi, i)
+                        Return New TestPoint With {
+                            .X = xi,
+                            .Y = yv(i),
+                            .Yfit = fitv(i)
+                        }
+                    End Function) _
+            .Select(Function(p) DirectCast(p, IFitError)) _
+            .ToArray
+    End Function
 
     Public Function plotLinearYFit(fit As IFitted, args As list, env As Environment) As Object
         Dim size As String = InteropArgumentHelper.getSize(args!size, "2100,1600")
