@@ -140,7 +140,9 @@ Module Program
         Static helpName As Index(Of String) = {"?", "??", "--help", "--usage", "--info"}
 
         ' unix liked
-        If args.ParameterList.Any(Function(a) Strings.LCase(a.Name) Like helpName) Then
+        If args.ParameterList.Any(Function(a) Strings.LCase(a.Name) Like helpName) OrElse
+             helpName.Objects.Any(AddressOf args.HavebFlag) Then
+
             ' query commandline arguments
             ' show commandline help
             Return Program.QueryCommandLineArgvs(script:=filepath)
