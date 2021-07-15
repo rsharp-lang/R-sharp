@@ -133,6 +133,7 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "t-SNE.NET5", "..\runtime\sc
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Library\R_graphic.interop\R_graphic.interop.projitems*{1b05b25d-1919-47da-81bf-cf981b241897}*SharedItemsImports = 5
 		Library\R_graphic.interop\R_graphic.interop.projitems*{46f9a10d-8827-474f-bbbb-2ce99a55912f}*SharedItemsImports = 5
 		Library\JsonHelper\JsonHelper.projitems*{4d4f14a7-81f0-4b55-8f6f-13942dd7da8b}*SharedItemsImports = 5
 		Library\R_graphic.interop\R_graphic.interop.projitems*{4de5c337-fa74-4eb9-a2ba-a29899031216}*SharedItemsImports = 5

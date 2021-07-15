@@ -114,8 +114,11 @@
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\MathLambda\symbolic-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\Math\Math.NET5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\ODE\odes-netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Visualization\Plots-statistics\plots_extensions-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
   </ItemGroup>
+
+  <Import Project="..\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
 
 </Project>
