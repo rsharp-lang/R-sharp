@@ -84,6 +84,7 @@ Module math
     Sub New()
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(ODEsOut), AddressOf create_deSolve_DataFrame)
 
+        REnv.Internal.generic.add("plot", GetType(WeightedFit), AddressOf plotLinearYFit)
         REnv.Internal.generic.add("plot", GetType(IFitted), AddressOf plotLinearYFit)
         REnv.Internal.generic.add("summary", GetType(lmCall), AddressOf summaryFit)
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of lmCall)(Function(o) o.ToString)
@@ -121,7 +122,9 @@ Module math
             size:=size,
             gridFill:=gridFill,
             showLegend:=showLegend,
-            showYFitPoints:=showYFit
+            showYFitPoints:=showYFit,
+            showErrorBand:=False,
+            title:=args.getValue(Of String)("main", env, Nothing)
         )
     End Function
 
