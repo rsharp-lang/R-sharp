@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--parallel --master \"8854\" --delegate \"Parallel::snowFall\" /@set --internal_pipeline=TRUE"
+      "commandLineArgs": "\"\\\\192.168.1.239\\linux\\临床与健康\\脉诺康\\脉诺康（DBS）\\样品检测报告\\2021年\\20210709+20210712重做-3\\copy.R\""
     }
   }
 }
