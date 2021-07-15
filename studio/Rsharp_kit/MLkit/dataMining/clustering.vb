@@ -552,7 +552,8 @@ Module clustering
                            Optional method As dbScanMethods = dbScanMethods.raw,
                            Optional seeds As Boolean = True,
                            Optional countmode As Object = Nothing,
-                           Optional filterNoise As Boolean = False) As dbscanResult
+                           Optional filterNoise As Boolean = False,
+                           Optional reorder_class As Boolean = False) As dbscanResult
         Dim x As DataSet()
 
         If data Is Nothing Then
@@ -614,14 +615,21 @@ Module clustering
                                     End Function)
                     End Function) _
             .IteratesALL _
-            .OrderBy(Function(d) Integer.Parse(d.Cluster)) _
             .ToArray
+
+        If reorder_class Then
+            clusterData = clusterData _
+                .OrderBy(Function(d) Integer.Parse(d.Cluster)) _
+                .ToArray
+        End If
 
         Return New dbscanResult With {
             .cluster = clusterData,
             .eps = eps,
             .MinPts = minPts,
-            .isseed = isseed.Select(Function(i) x(i).ID).ToArray
+            .isseed = isseed _
+                .Select(Function(i) x(i).ID) _
+                .ToArray
         }
     End Function
 End Module
