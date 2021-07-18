@@ -46,6 +46,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.MIME.Html.CSS
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -146,14 +147,18 @@ Public Module InteropArgumentHelper
         End If
     End Function
 
-    Public Function getSize(size As Object, Optional default$ = "2700,2000") As String
+    Public Function getSize(size As Object, env As Environment, Optional default$ = "2700,2000") As String
         If size Is Nothing Then
             Return [default]
         ElseIf TypeOf size Is vector Then
             size = DirectCast(size, vector).data
         End If
 
-        Select Case size.GetType
+        size = REnv.TryCastGenericArray(size, env)
+
+        Dim sizeType As Type = size.GetType
+
+        Select Case sizeType
             Case GetType(String)
                 Return size
             Case GetType(String())
@@ -179,6 +184,8 @@ Public Module InteropArgumentHelper
                     Return $"{ .GetValue(0)},{ .GetValue(1)}"
                 End With
             Case Else
+                Call $"invalid data type for get [width,height]: {sizeType.FullName}".Warning
+
                 Return [default]
         End Select
     End Function
