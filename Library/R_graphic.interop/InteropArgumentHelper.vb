@@ -154,7 +154,10 @@ Public Module InteropArgumentHelper
             size = DirectCast(size, vector).data
         End If
 
-        size = REnv.TryCastGenericArray(size, env)
+        If size.GetType.IsArray Then
+            ' cast object() to integer()/string(), etc
+            size = REnv.TryCastGenericArray(size, env)
+        End If
 
         Dim sizeType As Type = size.GetType
 
