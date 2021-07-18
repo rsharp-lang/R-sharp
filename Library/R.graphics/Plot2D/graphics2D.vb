@@ -114,7 +114,7 @@ Module graphics2D
             Return Message.InCompatibleType(GetType(IGraphics), canvas.GetType, env)
         End If
 
-        Call g.DrawLegends(location, legends, gSize:=InteropArgumentHelper.getSize(gSize), regionBorder:=stroke)
+        Call g.DrawLegends(location, legends, gSize:=InteropArgumentHelper.getSize(gSize, env), regionBorder:=stroke)
 
         Select Case g.GetType
             Case GetType(Canvas) : Return DirectCast(g, Canvas).ImageResource

@@ -88,8 +88,8 @@ Module Layouts
             g = g.doRandomLayout
         End If
 
-        Dim sizeStr = InteropArgumentHelper.getSize(size, "10000,10000")
-        Dim distStr = InteropArgumentHelper.getSize(dist, "30,256")
+        Dim sizeStr = InteropArgumentHelper.getSize(size, env, "10000,10000")
+        Dim distStr = InteropArgumentHelper.getSize(dist, env, "30,256")
         Dim physics As Planner = New CircularPlanner(
             g:=g,
             ejectFactor:=ejectFactor,
@@ -139,8 +139,8 @@ Module Layouts
             g = g.doRandomLayout
         End If
 
-        Dim sizeStr = InteropArgumentHelper.getSize(size, "10000,10000")
-        Dim distStr = InteropArgumentHelper.getSize(dist, "30,256")
+        Dim sizeStr = InteropArgumentHelper.getSize(size, env, "10000,10000")
+        Dim distStr = InteropArgumentHelper.getSize(dist, env, "30,256")
         Dim physics As Planner
 
         algorithm = algorithm.Split("|"c).First
@@ -272,10 +272,11 @@ Module Layouts
                                      <RRawVectorArgument>
                                      Optional gridSize As Object = "1000,1000",
                                      Optional delta# = 13,
-                                     Optional layoutIteration% = -1) As NetworkGraph
+                                     Optional layoutIteration% = -1,
+                                     Optional env As Environment = Nothing) As NetworkGraph
 
         Dim size As Size = InteropArgumentHelper _
-            .getSize(gridSize) _
+            .getSize(gridSize, env) _
             .SizeParser
 
         Call Orthogonal.DoLayout(g, size, delta, debug:=True, iterationCount:=layoutIteration)

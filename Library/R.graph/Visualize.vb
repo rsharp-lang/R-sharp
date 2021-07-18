@@ -283,7 +283,7 @@ Module Visualize
         End If
 
         Return g.DrawImage(
-            canvasSize:=InteropArgumentHelper.getSize(canvasSize),
+            canvasSize:=InteropArgumentHelper.getSize(canvasSize, env),
             padding:=InteropArgumentHelper.getPadding(padding),
             labelerIterations:=labelerIterations,
             defaultColor:=RColorPalette.getColor(defaultColor),

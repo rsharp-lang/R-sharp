@@ -135,7 +135,7 @@ Module plots
     End Function
 
     Public Function plotLinearYFit(fit As IFitted, args As list, env As Environment) As Object
-        Dim size As String = InteropArgumentHelper.getSize(args!size, "1600,1100")
+        Dim size As String = InteropArgumentHelper.getSize(args!size, env, "1600,1100")
         Dim gridFill As String = RColorPalette.getColor(args("grid.fill"), "rgb(245,245,245)")
         Dim showLegend As Boolean = args.getValue("show.legend", env, True)
         Dim showYFit As Boolean = args.getValue("show.yfit", env, True)
@@ -321,7 +321,7 @@ Module plots
     End Function
 
     Public Function plot_hclust(cluster As Cluster, args As list, env As Environment) As Object
-        Dim size$ = InteropArgumentHelper.getSize(args.getByName("size"))
+        Dim size$ = InteropArgumentHelper.getSize(args.getByName("size"), env)
         Dim padding$ = InteropArgumentHelper.getPadding(args.getByName("padding"))
         Dim labelStyle$ = InteropArgumentHelper.getFontCSS(args.getByName("label"), CSSFont.PlotLabelNormal)
         Dim linkStroke$ = InteropArgumentHelper.getStrokePenCSS(args.getByName("links"), Stroke.AxisGridStroke)
@@ -399,7 +399,7 @@ Module plots
     Public Function plot_corHeatmap(dist As DistanceMatrix, args As list, env As Environment) As Object
         Dim title$ = args.GetString("title", "Correlations")
         Dim bg$ = RColorPalette.getColor(args!bg, "white")
-        Dim size = InteropArgumentHelper.getSize(args!size, "3600,3000")
+        Dim size = InteropArgumentHelper.getSize(args!size, env, "3600,3000")
         Dim padding$ = InteropArgumentHelper.getPadding(args!padding, "padding: 300px 150px 150px 100px;")
         Dim driver As Drivers = args.GetString("driver", "default").DoCall(AddressOf g.ParseDriverEnumValue)
         Dim colorSet = args.GetString("colors", ColorBrewer.DivergingSchemes.RdBu11)
@@ -529,7 +529,7 @@ Module plots
         If d3 Then
             If camera Is Nothing Then
                 camera = New Camera With {
-                    .screen = InteropArgumentHelper.getSize(size).SizeParser
+                    .screen = InteropArgumentHelper.getSize(size, env).SizeParser
                 }
             End If
 
@@ -539,7 +539,7 @@ Module plots
             ' 2D
             Return PieChart.Plot(
                 data:=data,
-                size:=InteropArgumentHelper.getSize(size)
+                size:=InteropArgumentHelper.getSize(size, env)
             )
         End If
     End Function
@@ -588,7 +588,8 @@ Module plots
                             <RRawVectorArgument> Optional size As Object = "1920,1080",
                             <RRawVectorArgument> Optional padding As Object = g.DefaultPadding,
                             Optional show_grid As Boolean = True,
-                            Optional show_legend As Boolean = True) As Object
+                            Optional show_legend As Boolean = True,
+                            Optional env As Environment = Nothing) As Object
 
         Dim items As String() = height.columns(category)
         Dim values As Double() = REnv.asVector(Of Double)(height.columns(value))
@@ -625,7 +626,7 @@ Module plots
 
         Return group.Plot(
             bg:=bgColor,
-            size:=InteropArgumentHelper.getSize(size),
+            size:=InteropArgumentHelper.getSize(size, env),
             padding:=InteropArgumentHelper.getPadding(padding),
             showGrid:=show_grid,
             xlabel:=xlab,
@@ -666,7 +667,7 @@ Module plots
     End Function
 
     Public Function plotODEResult(math As ODEOutput, args As list, env As Environment) As Object
-        Return math.Plot(size:=InteropArgumentHelper.getSize(args!size))
+        Return math.Plot(size:=InteropArgumentHelper.getSize(args!size, env))
     End Function
 
     ''' <summary>
@@ -685,7 +686,7 @@ Module plots
         Dim points As PointF() = x.Select(Function(xi) New PointF(xi, fx(xi))).ToArray
 
         Return points.Plot(
-            size:=InteropArgumentHelper.getSize(args!size).SizeParser,
+            size:=InteropArgumentHelper.getSize(args!size, env).SizeParser,
             title:=math.ToString,
             padding:=InteropArgumentHelper.getPadding(args!padding),
             gridFill:=RColorPalette.getColor(args("grid.fill"), "rgb(250,250,250)")
@@ -698,7 +699,7 @@ Module plots
         End If
 
         Dim serials As SerialData() = DirectCast(data, SerialData())
-        Dim size As String = InteropArgumentHelper.getSize(args!size)
+        Dim size As String = InteropArgumentHelper.getSize(args!size, env)
         Dim padding = InteropArgumentHelper.getPadding(args!padding, [default]:=g.DefaultUltraLargePadding)
         Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
         Dim showLegend As Boolean
@@ -823,7 +824,7 @@ Module plots
 
         Dim type As Type = REnv.MeasureArrayElementType(data)
 
-        size = InteropArgumentHelper.getSize(size)
+        size = InteropArgumentHelper.getSize(size, env)
         margin = InteropArgumentHelper.getPadding(margin)
 
         If type Is GetType(DataSet) Then
