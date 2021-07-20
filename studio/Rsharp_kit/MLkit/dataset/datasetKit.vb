@@ -72,7 +72,7 @@ Module datasetKit
     End Sub
 
     Friend Function EmbeddingRender(input As IDataEmbedding, args As list, env As Environment) As GraphicsData
-        Dim size$ = InteropArgumentHelper.getSize(args!size)
+        Dim size$ = InteropArgumentHelper.getSize(args!size, env)
         Dim pointSize# = args.getValue("point_size", env, 15.0)
         Dim showLabels As Boolean = args.getValue("show_labels", env, False)
         Dim showBubble As Boolean = args.getValue("show_bubble", env, False)

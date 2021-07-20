@@ -47,6 +47,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.HTML.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
@@ -96,12 +97,13 @@ Module gr3D
                            Optional viewDistance# = -40,
                            Optional fov# = 256,
                            <RRawVectorArgument>
-                           Optional size As Object = "2560,1440") As Camera
+                           Optional size As Object = "2560,1440",
+                           Optional env As Environment = Nothing) As Camera
 
         Return New Camera(InteropArgumentHelper.getVector3D(viewAngle)) With {
             .viewDistance = viewDistance,
             .fov = fov,
-            .screen = InteropArgumentHelper.getSize(size).SizeParser
+            .screen = InteropArgumentHelper.getSize(size, env).SizeParser
         }
     End Function
 End Module

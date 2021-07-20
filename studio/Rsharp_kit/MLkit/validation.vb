@@ -69,7 +69,7 @@ Module validation
 
     Public Function PlotROC(roc As ROC, args As list, env As Environment) As Object
         Dim line As SerialData = ROCPlot.CreateSerial(roc)
-        Dim size As String = InteropArgumentHelper.getSize(args!size, "2700,2400")
+        Dim size As String = InteropArgumentHelper.getSize(args!size, env, "2700,2400")
 
         line.color = args.getValue("line_color", env, "steelblue").TranslateColor
         line.lineType = DashStyle.Dash
