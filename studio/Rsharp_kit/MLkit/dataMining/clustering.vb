@@ -553,7 +553,9 @@ Module clustering
                            Optional seeds As Boolean = True,
                            Optional countmode As Object = Nothing,
                            Optional filterNoise As Boolean = False,
-                           Optional reorder_class As Boolean = False) As dbscanResult
+                           Optional reorder_class As Boolean = False,
+                           Optional densityCut As Double = -1) As dbscanResult
+
         Dim x As DataSet()
 
         If data Is Nothing Then
@@ -601,7 +603,8 @@ Module clustering
             epsilon:=eps,
             minPts:=minPts,
             is_seed:=isseed,
-            filterNoise:=filterNoise
+            filterNoise:=filterNoise,
+            densityCut:=densityCut
         )
         Dim clusterData As EntityClusterModel() = result _
             .Select(Function(c)
