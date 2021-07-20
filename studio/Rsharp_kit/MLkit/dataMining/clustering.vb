@@ -71,7 +71,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <Package("clustering", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@live.com")>
 Module clustering
 
-    Sub New()
+    Friend Sub Main()
         Call REnv.Internal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
 
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
