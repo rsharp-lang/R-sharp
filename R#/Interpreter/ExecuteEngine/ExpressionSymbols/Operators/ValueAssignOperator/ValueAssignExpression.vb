@@ -186,6 +186,40 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Return Nothing
         End Function
 
+        Public Shared Function setFromDataFrame(env As Environment, targetSymbols As Expression(), isbyRef As Boolean, value As Object) As Message
+            Dim data As dataframe = DirectCast(value, dataframe)
+            Dim message As New Value(Of Message)
+
+            If data.ncols < targetSymbols.Length Then
+                ' 设置tuple的值的时候
+                ' dataframe必须要有相同的列数量
+                Return Internal.debug.stop("Number of dataframe column element is not identical to the tuple elements...", env)
+            Else
+                Dim name As String
+
+                ' one by one
+                For Each symbol As Expression In targetSymbols
+                    name = GetSymbol(symbol)
+
+                    If data.hasName(name) Then
+                        value = data.getColumnVector(name)
+                    Else
+                        Return Internal.debug.stop({
+                            $"missing symbol name '{name}' in your dataframe!",
+                            $"symbol: {name}",
+                            $"columns: {data.colnames.JoinBy(", ")}"
+                        }, env)
+                    End If
+
+                    If Not (message = assignSymbol(env, symbol, isbyRef, value)) Is Nothing Then
+                        Return message.Value
+                    End If
+                Next
+            End If
+
+            Return Nothing
+        End Function
+
         Private Shared Function setFromObjectList(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object) As Message
             Dim list As list = DirectCast(value, list)
             Dim message As New Value(Of Message)
@@ -243,6 +277,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
             ElseIf type Is GetType(list) Then
                 Return setFromObjectList(envir, targetSymbols, isByRef, value)
+
+            ElseIf type Is GetType(dataframe) Then
+                Return setFromDataFrame(envir, targetSymbols, isByRef, value)
 
             Else
                 Return Internal.debug.stop(New NotImplementedException, envir)
