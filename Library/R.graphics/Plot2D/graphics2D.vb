@@ -248,7 +248,13 @@ Module graphics2D
             .ToArray
 
         Return i _
-            .Select(Function(index) colors(index)) _
+            .Select(Function(index)
+                        If valueRange.Length = 0 Then
+                            Return 0
+                        Else
+                            Return colors(index)
+                        End If
+                    End Function) _
             .ToArray
     End Function
 
