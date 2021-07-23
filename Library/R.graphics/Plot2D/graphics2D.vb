@@ -250,7 +250,7 @@ Module graphics2D
         Return i _
             .Select(Function(index)
                         If valueRange.Length = 0 Then
-                            Return 0
+                            Return colors(0)
                         Else
                             Return colors(index)
                         End If
