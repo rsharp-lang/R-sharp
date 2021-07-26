@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DE1C8D67-3E8E-436A-A88D-A39A050342E2}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>R.math</RootNamespace>
+    <RootNamespace>Rlapack</RootNamespace>
     <AssemblyName>Rlapack</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
@@ -394,6 +394,7 @@
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
