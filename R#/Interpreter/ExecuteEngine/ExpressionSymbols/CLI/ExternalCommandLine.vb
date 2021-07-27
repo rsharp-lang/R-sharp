@@ -53,6 +53,7 @@ Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -95,9 +96,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                         End Function) _
                 .JoinBy(" ")
             ' Dim process As New IORedirectFile(commandline, isShellCommand:=True, debug:=envir.globalEnvironment.debugMode)
-            Dim process As CommandLine = CommandLine.Parse(commandlineStr)
+            Dim processTokens As String() = CommandLine.ParseTokens(commandlineStr)
             Dim error_code%
-            Dim arguments As String = process.Tokens _
+            Dim arguments As String = processTokens _
                 .Skip(1) _
                 .Select(Function(i) i.CLIToken) _
                 .JoinBy(" ")
@@ -110,7 +111,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                     .DoCall(AddressOf envir.globalEnvironment.messages.Add)
             End If
 
-            Dim std_out$() = PipelineProcess.Call(process.Name, arguments, exitCode:=error_code).LineTokens
+            If envir.globalEnvironment.debugMode Then
+                Call base.print("Run external commandline:", envir)
+                Call base.print(processTokens(Scan0), envir)
+                Call base.print(arguments, envir)
+            End If
+
+            Dim std_out$() = PipelineProcess.Call(processTokens(Scan0), arguments, exitCode:=error_code).LineTokens
 
             If Not envir.globalEnvironment.options.stdout_multipline Then
                 std_out = {std_out.JoinBy(vbCrLf)}

@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"E:\\GCModeller\\src\\R-sharp\\tutorials\\data\\LINQ\\dataframe.R\" --debug",
+      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\tutorials\\commandLineTest.R\"",
       "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\App\\net5.0"
     }
   }
