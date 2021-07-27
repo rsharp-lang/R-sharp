@@ -210,6 +210,15 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' Gets a System.Version object that identifies the operating system.
+        ''' </summary>
+        ''' <returns></returns>
+        <ExportAPI("platformID")>
+        Public Function platformID() As PlatformID
+            Return Win32.OSVersion.Platform
+        End Function
+
+        ''' <summary>
         ''' ### Version Information
         ''' 
         ''' R.Version() provides detailed information about the version of R running.
