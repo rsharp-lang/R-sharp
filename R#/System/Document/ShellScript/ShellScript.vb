@@ -63,7 +63,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
-Imports RunCommandLine = SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.CommandLine
+Imports RunCommandLine = SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.ExternalCommandLine
 
 Namespace Development.CommandLine
 
