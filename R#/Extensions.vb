@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::98a5043c6e5bcb371a43efe446c954c6, R#\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::aabfb5df67569c8d4298d0153f6180c8, R#\Extensions.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,9 @@
 
     ' Module Extensions
     ' 
+    '     Constructor: (+1 Overloads) Sub New
     '     Function: AsRReturn, Buffer, EvaluateFramework, GetEncoding, GetObject
-    '               GetString, SafeCreateColumns
+    '               GetString, ParseDebugLevel, SafeCreateColumns
     ' 
     ' /********************************************************************************/
 

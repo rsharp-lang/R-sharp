@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bb87e15bf2b772eecfd8f39ae9f43b3c, R#\Runtime\RTypeExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::5aeab500956bfdadedea465bf4de9627, R#\Runtime\RTypeExtensions.vb"
 
     ' Author:
     ' 

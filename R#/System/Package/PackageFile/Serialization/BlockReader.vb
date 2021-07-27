@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bd60b7de1acc6ff4f5aae85e1d42120c, R#\System\Package\PackageFile\Serialization\BlockReader.vb"
+﻿#Region "Microsoft.VisualBasic::0ada7107a69ac7bc340d55fd9270e4e1, R#\System\Package\PackageFile\Serialization\BlockReader.vb"
 
     ' Author:
     ' 

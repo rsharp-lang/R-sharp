@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::81949dbab3ac0e88f0ac0d1315faa93c, studio\Rserver\Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::d5a6a1641d8693bb3199036962b927fd, studio\Rserver\Rscript.vb"
 
     ' Author:
     ' 
@@ -269,5 +269,3 @@ Namespace CLI
         End Function
     End Class
 End Namespace
-
-

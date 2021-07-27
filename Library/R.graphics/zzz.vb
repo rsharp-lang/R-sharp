@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8add74a2ccabf1c8472d33198ad496e2, Library\R.graphics\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::76e59132cb60e58832c1e7e5b6494536, Library\R.graphics\zzz.vb"
 
     ' Author:
     ' 
@@ -45,4 +45,3 @@ Public Class zzz
         Call plots.Main()
     End Sub
 End Class
-

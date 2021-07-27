@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::012234f0de58a8ba35b783b027c68024, studio\RData\Enums\RObjectType.vb"
+﻿#Region "Microsoft.VisualBasic::60fccf2140a0080bfe1d5706f616a7f5, studio\RData\Enums\RObjectType.vb"
 
     ' Author:
     ' 

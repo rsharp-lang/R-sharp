@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2ffc2bf7b15f6a37833bae32f60c303a, R#\System\Document\ShellScript\ShellScript.vb"
+﻿#Region "Microsoft.VisualBasic::14e98a42bbd0dcf3eb9499d136ee70fc, R#\System\Document\ShellScript\ShellScript.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,7 @@
     ' 
     '         Function: AnalysisAllCommands, loadMetaLines, parseDefault, parseMetaData
     ' 
-    '         Sub: AddArgumentValue, (+24 Overloads) analysisTree, AnalysisTree, PrintUsage
+    '         Sub: AddArgumentValue, (+26 Overloads) analysisTree, AnalysisTree, PrintUsage
     ' 
     ' 
     ' /********************************************************************************/

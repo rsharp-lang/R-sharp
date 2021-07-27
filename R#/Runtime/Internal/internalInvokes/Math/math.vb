@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ecbfbb06ffbd53d30408a60ba165f336, R#\Runtime\Internal\internalInvokes\Math\math.vb"
+﻿#Region "Microsoft.VisualBasic::5de7182bade72acae7526ca78fedecb4, R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
     ' Author:
     ' 
@@ -33,11 +33,11 @@
 
     '     Module math
     ' 
-    '         Function: abs, cluster1D, exp, log, log10
-    '                   log2, max, mean, median, min
-    '                   pearson, pow, rnorm, round, rsd
-    '                   runif, sample, sample_int, sd, sqrt
-    '                   sum, var
+    '         Function: abs, cluster1D, diff, exp, log
+    '                   log10, log2, max, mean, median
+    '                   min, pearson, pow, rnorm, round
+    '                   rsd, runif, sample, sample_int, sd
+    '                   sqrt, sum, var
     ' 
     '         Sub: set_seed
     ' 

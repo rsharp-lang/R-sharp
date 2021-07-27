@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e4e8aea7fdc38d4f53819e18fab89ed3, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NamespaceReference.vb"
+﻿#Region "Microsoft.VisualBasic::acd7b9715fd359eba16b421e66abac11, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NamespaceReference.vb"
 
     ' Author:
     ' 

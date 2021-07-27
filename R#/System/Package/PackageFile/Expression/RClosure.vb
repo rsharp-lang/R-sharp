@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ac948e2597712b791079aceb444e3c07, R#\System\Package\PackageFile\Expression\RClosure.vb"
+﻿#Region "Microsoft.VisualBasic::41a210a96d64f1185219e688938acd17, R#\System\Package\PackageFile\Expression\RClosure.vb"
 
     ' Author:
     ' 

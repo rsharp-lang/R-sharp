@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2fde56beb6e2b6ad06c17539287bcb95, R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::1c12c4b2c59f7d0610813d3a328f74b6, R#\Runtime\Internal\internalInvokes\file.vb"
 
     ' Author:
     ' 
@@ -35,11 +35,11 @@
     ' 
     '         Function: basename, buffer, close, dataUri, dir_exists
     '                   dirCopy, dirCreate, dirname, exists, file
-    '                   filecopy, fileinfo, fileInfoByFile, filesize, getwd
-    '                   listDirs, listFiles, loadListInternal, NextTempToken, normalizeFileName
-    '                   normalizePath, openGzip, openZip, readBin, readLines
-    '                   readList, readText, Rhome, saveList, setwd
-    '                   tempdir, tempfile, writeLines
+    '                   file_ext, filecopy, fileinfo, fileInfoByFile, filesize
+    '                   getwd, listDirs, listFiles, loadListInternal, NextTempToken
+    '                   normalizeFileName, normalizePath, openGzip, openZip, readBin
+    '                   readLines, readList, readText, Rhome, saveList
+    '                   setwd, tempdir, tempfile, writeLines
     ' 
     '         Sub: fileRemove, fileRename
     ' 
