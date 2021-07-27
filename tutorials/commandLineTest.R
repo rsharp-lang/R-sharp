@@ -5,6 +5,7 @@ const files   = [
 	"cancer_008.raw", "cancer_009.raw"
 ];
 
+[@ioredirect FALSE]
 @`docker run -it --rm -e "WINEDEBUG=-all" -v "${WORKDIR}/:/data"
 	 chambm/pwiz-skyline-i-agree-to-the-vendor-licenses
 	 wine

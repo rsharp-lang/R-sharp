@@ -46,6 +46,7 @@
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development.Package.File
@@ -83,9 +84,17 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
 
         Friend cli As Expression
+        Friend ioRedirect As Boolean = True
 
         Sub New(shell As Expression)
             cli = shell
+        End Sub
+
+        Public Sub SetAttribute(data As NamedValue(Of String))
+            Select Case data.Name.ToLower
+                Case "ioredirect"
+                    ioRedirect = data.Value.ParseBoolean
+            End Select
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
@@ -117,19 +126,25 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                 Call base.print(arguments, envir)
             End If
 
-            Dim std_out$() = PipelineProcess.Call(processTokens(Scan0), arguments, exitCode:=error_code).LineTokens
+            If ioRedirect Then
+                Dim std_out$() = PipelineProcess.Call(processTokens(Scan0), arguments, exitCode:=error_code).LineTokens
 
-            If Not envir.globalEnvironment.options.stdout_multipline Then
-                std_out = {std_out.JoinBy(vbCrLf)}
-            End If
+                If Not envir.globalEnvironment.options.stdout_multipline Then
+                    std_out = {std_out.JoinBy(vbCrLf)}
+                End If
 
-            Return New list With {
-                .slots = New Dictionary(Of String, Object) From {
-                    {"std_out", std_out},
-                    {"error_code", error_code},
-                    {"command", commandlineStr}
+                Return New list With {
+                    .slots = New Dictionary(Of String, Object) From {
+                        {"std_out", std_out},
+                        {"error_code", error_code},
+                        {"command", commandlineStr}
+                    }
                 }
-            }
+            Else
+                Dim process As Process = PipelineProcess.CreatePipeline(processTokens(Scan0), arguments, it:=False)
+                process.WaitForExit()
+                Return process.ExitCode
+            End If
         End Function
 
         Private Shared Function possibleInterpolationFailure(commandline As String, envir As Environment) As Message
