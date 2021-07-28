@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::3ddcabc1a765ba70f75b671145d83d95, R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module utils
-    ' 
-    '         Function: data, dataSearchByPackageDir, debugTool, description, FindSystemFile
-    '                   GetInstalledPackages, head, installPackages, keyGroups, md5
-    '                   memorySize, now, readFile, system, systemFile
-    '                   wget
-    ' 
-    '         Sub: cls, pause, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module utils
+' 
+'         Function: data, dataSearchByPackageDir, debugTool, description, FindSystemFile
+'                   GetInstalledPackages, head, installPackages, keyGroups, md5
+'                   memorySize, now, readFile, system, systemFile
+'                   wget
+' 
+'         Sub: cls, pause, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -53,6 +53,7 @@ Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Parsers
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My
@@ -149,8 +150,8 @@ Namespace Runtime.Internal.Invokes
             Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
             Dim packages As RPkg() = pkgMgr _
                 .AsEnumerable _
-                .OrderBy(Function(pkg) pkg.namespace) _
-                .ToArray
+.OrderBy(Function(pkg) pkg.namespace) _
+.ToArray
             Dim Package As Array = packages.Select(Function(pkg) pkg.namespace).ToArray
             Dim LibPath As Array = packages.Select(Function(pkg) If(pkg.isMissing, "<missing>", pkg.libPath.FileName)).ToArray
             Dim Version As Array = packages.Select(Function(pkg) pkg.info.Revision).ToArray
@@ -164,9 +165,9 @@ Namespace Runtime.Internal.Invokes
             Dim Description As Array = packages _
                 .Select(Function(pkg)
                             Return pkg.GetPackageDescription(envir) _
-                                .LineTokens _
-                                .DefaultFirst("n/a") _
-                                .TrimStart("#"c, " "c)
+.LineTokens _
+.DefaultFirst("n/a") _
+.TrimStart("#"c, " "c)
                         End Function) _
                 .ToArray
             Dim summary As New dataframe With {
@@ -218,7 +219,7 @@ Namespace Runtime.Internal.Invokes
                                   Return keys.SeqIterator _
                                       .Where(Function(name) name.value = key) _
                                       .Select(Function(index) index.i) _
-                                      .ToArray
+.ToArray
                               End Function)
         End Function
 
@@ -333,7 +334,7 @@ Namespace Runtime.Internal.Invokes
                                           Function(key)
                                               Return l.slots(key)
                                           End Function)
-                    }
+}
                 End If
             ElseIf type Is GetType(dataframe) Then
                 Dim df As dataframe = DirectCast(x, dataframe)
@@ -529,6 +530,11 @@ Namespace Runtime.Internal.Invokes
             Return std_out
         End Function
 
+        <ExportAPI("workdir")>
+        Public Function workdir(dir As String) As TemporaryEnvironment
+            Return New TemporaryEnvironment(newLocation:=dir)
+        End Function
+
         <ExportAPI("md5")>
         Public Function md5(<RRawVectorArgument> data As Object, Optional env As Environment = Nothing) As Object
             If data Is Nothing Then
@@ -548,7 +554,6 @@ Namespace Runtime.Internal.Invokes
                     .ToArray
             Else
                 data = RConversion.asRaw(data, ,, env)
-
                 If Not TypeOf data Is Message Then
                     Return data
                 Else
@@ -696,7 +701,6 @@ Namespace Runtime.Internal.Invokes
                  $"dataset: {name}"
             }, env)
         End Function
-
         <Extension>
         Private Function dataSearchByPackageDir(env As Environment, name As String, pkgFile As String, ByRef hit As Boolean) As Message
             Dim dataSymbols = $"{pkgFile}/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, String))
