@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
@@ -17,8 +18,12 @@ Public Class ConfigJSON
         Return config
     End Function
 
-    Public Sub SetCommandLine(env As Environment)
+    Public Function GetArgumentValue(configKey As String) As Object
 
+    End Function
+
+    Public Sub SetCommandLine(env As Environment)
+        ArgumentValue.SetArgumentHandler(AddressOf GetArgumentValue)
     End Sub
 
     ''' <summary>
