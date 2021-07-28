@@ -3,7 +3,7 @@
     "R-netcore5": {
       "commandName": "Project",
       "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\tutorials\\commandline\\using_config.R\" --debug",
-      "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\App\\net5.0"
+      "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\tutorials\\commandline"
     }
   }
 }
