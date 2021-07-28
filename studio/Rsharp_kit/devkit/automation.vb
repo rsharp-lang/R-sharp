@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>
@@ -12,12 +13,12 @@ Module automationUtils
 
     <RInitialize>
     Sub Main(env As Environment)
-        Call ConfigJSON.LoadConfig(env).SetCommandLine(env)
+        Call ConfigJSON.LoadConfig(env)?.SetCommandLine(env)
     End Sub
 
     <ExportAPI("getConfig")>
-    Public Function GetConfig(Optional env As Environment = Nothing) As ConfigJSON
-        Return ConfigJSON.LoadConfig(env)
+    Public Function GetConfig(Optional env As Environment = Nothing) As list
+        Return ConfigJSON.LoadConfig(env)?.getListConfig
     End Function
 
 End Module

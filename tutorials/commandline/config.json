@@ -3,6 +3,6 @@
     "image": {
         "format": "svg",
         "ppi": 300,
-        "filename": "test.png"
+        "filename": "test.svg"
     }
 }

@@ -12,6 +12,10 @@ Public Class ConfigJSON
 
     Dim config As list
 
+    Public Function getListConfig() As list
+        Return config
+    End Function
+
     Public Sub SetCommandLine(env As Environment)
 
     End Sub
