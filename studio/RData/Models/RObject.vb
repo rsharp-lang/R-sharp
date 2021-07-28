@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::45ddf2d2d27251dd4acc34950656d97e, studio\RData\Models\RObject.vb"
+﻿#Region "Microsoft.VisualBasic::7d7e1393d339c942c87de7937571d9dc, studio\RData\Models\RObject.vb"
 
     ' Author:
     ' 

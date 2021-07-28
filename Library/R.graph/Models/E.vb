@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::24902f6e1a002a15f3ad65369815e076, Library\R.graph\Models\E.vb"
+﻿#Region "Microsoft.VisualBasic::c755ee64da38413add77ddfda665c99a, Library\R.graph\Models\E.vb"
 
     ' Author:
     ' 
@@ -72,4 +72,3 @@ Public Class E : Implements RNames, RNameIndex
         Throw New NotImplementedException()
     End Function
 End Class
-

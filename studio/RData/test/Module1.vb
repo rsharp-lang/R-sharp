@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2825665ca9eb4878d091988095b735d1, studio\RData\test\Module1.vb"
+﻿#Region "Microsoft.VisualBasic::416f9da3ff88858a7205a994b1cb8443, studio\RData\test\Module1.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module Module1
     ' 
-    '     Sub: Main
+    '     Sub: Main, testLogical
     ' 
     ' /********************************************************************************/
 

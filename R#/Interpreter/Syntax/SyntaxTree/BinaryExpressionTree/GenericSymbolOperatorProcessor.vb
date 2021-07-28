@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::865fb3a9587d2dcc885c10c222efc623, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\GenericSymbolOperatorProcessor.vb"
+﻿#Region "Microsoft.VisualBasic::a17f774f30c70e68a3d5d7f4b5662a1a, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\GenericSymbolOperatorProcessor.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     ' 
     '     Class SyntaxQueue
     ' 
-    ' 
+    '         Properties: Count
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8ea12209042fd69de4e817b8fe4cd9cc, R#\Interpreter\ExecutableLoop.vb"
+﻿#Region "Microsoft.VisualBasic::be8dda9356ca66999dbd4a22d31815a7, R#\Interpreter\ExecutableLoop.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,14 @@
 
     ' Summaries:
 
+    '     Enum DebugLevels
+    ' 
+    '         Memory, None, Stack
+    ' 
+    '  
+    ' 
+    ' 
+    ' 
     '     Class ExecutableLoop
     ' 
     '         Constructor: (+2 Overloads) Sub New

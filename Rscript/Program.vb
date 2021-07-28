@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2f87e4941f1378f8e3bf386eb5fd219a, Rscript\Program.vb"
+﻿#Region "Microsoft.VisualBasic::257029a62a17ba6eb9872ea92b8a6508, Rscript\Program.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module Program
     ' 
-    '     Function: Main, (+2 Overloads) Run
+    '     Function: Main, Run, RunRscriptFile
     ' 
     ' /********************************************************************************/
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d253274ae17423a14b3665c50f701f53, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssignExpression.vb"
+﻿#Region "Microsoft.VisualBasic::77e900a4834a0769c53877099d0fc6bb, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssignExpression.vb"
 
     ' Author:
     ' 
@@ -37,8 +37,8 @@
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
-    '                   GetSymbol, setByNameIndex, setFromObjectList, setFromVector, setVectorElements
-    '                   ToString
+    '                   GetSymbol, setByNameIndex, setFromDataFrame, setFromObjectList, setFromVector
+    '                   setVectorElements, ToString
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e4c74f61c6c4ecaac68ffbed1ccf7d9d, Library\R.graph\Models\V.vb"
+﻿#Region "Microsoft.VisualBasic::6c7043377563390eaf21d953a35c9c28, Library\R.graph\Models\V.vb"
 
     ' Author:
     ' 
@@ -91,4 +91,3 @@ Public Class V : Implements RNames, RNameIndex
         Throw New NotImplementedException()
     End Function
 End Class
-

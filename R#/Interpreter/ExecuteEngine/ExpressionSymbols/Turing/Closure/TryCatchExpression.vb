@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a6eae2e5e4ba54894b85d88203e30f4c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\TryCatchExpression.vb"
+﻿#Region "Microsoft.VisualBasic::e64635771d1239a54e84a17710be2151, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\TryCatchExpression.vb"
 
     ' Author:
     ' 
@@ -42,7 +42,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Development.Package.File

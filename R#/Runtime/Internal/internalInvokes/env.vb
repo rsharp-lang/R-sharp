@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c5ceb8ec4ab75b7c1c255e8f8b9dfccb, R#\Runtime\Internal\internalInvokes\env.vb"
+﻿#Region "Microsoft.VisualBasic::5d9e7832241be2dcfeed9df9b0a01084, R#\Runtime\Internal\internalInvokes\env.vb"
 
     ' Author:
     ' 
@@ -33,10 +33,10 @@
 
     '     Module env
     ' 
-    '         Function: [get], [set], [typeof], CallInternal, doCall
-    '                   environment, getCurrentTrace, getOutputDevice, globalenv, listOptionItems
-    '                   lockBinding, ls, objects, objectSize, traceback
-    '                   unlockBinding
+    '         Function: [get], [gettype], [set], [typeof], CallInternal
+    '                   doCall, environment, getCurrentTrace, getOutputDevice, globalenv
+    '                   listOptionItems, lockBinding, ls, objects, objectSize
+    '                   traceback, unlockBinding
     ' 
     ' 
     ' /********************************************************************************/

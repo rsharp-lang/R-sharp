@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1e99fb5cdee30fa7cc4b061c0cde3719, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\SwitchExpression.vb"
+﻿#Region "Microsoft.VisualBasic::99b4991f75e3b1c11f9f3c661c71a69b, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\SwitchExpression.vb"
 
     ' Author:
     ' 
@@ -45,7 +45,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Development.Package.File

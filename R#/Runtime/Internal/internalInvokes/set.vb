@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::636ad673ba4e3562ce0c6546cf896f4a, R#\Runtime\Internal\internalInvokes\set.vb"
+﻿#Region "Microsoft.VisualBasic::4e45a7b0b02b88ecea689d4eab94f3ad, R#\Runtime\Internal\internalInvokes\set.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,8 @@
 
     '     Module [set]
     ' 
-    '         Function: createLoop, diff, duplicated, getObjectSet, indexOf
-    '                   intersect, union
+    '         Function: createLoop, duplicated, getObjectSet, indexOf, intersect
+    '                   union
     ' 
     ' 
     ' /********************************************************************************/

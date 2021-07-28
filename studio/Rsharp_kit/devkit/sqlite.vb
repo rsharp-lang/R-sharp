@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1dadd132603ce4f4a6fbf872fb517f10, studio\Rsharp_kit\devkit\sqlite.vb"
+﻿#Region "Microsoft.VisualBasic::8a6640120c49a836ba3bbb64eab7a1ed, studio\Rsharp_kit\devkit\sqlite.vb"
 
     ' Author:
     ' 
@@ -108,4 +108,3 @@ Module sqlite
     End Function
 
 End Module
-

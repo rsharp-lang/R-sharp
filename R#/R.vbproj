@@ -726,6 +726,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecutableLoop.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\ExternalCommandLine.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNumeric.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\AcceptorClosure.vb" />
@@ -831,7 +832,6 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Suppress.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\MemberValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLine.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\UsingClosure.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb" />

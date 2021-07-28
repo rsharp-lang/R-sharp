@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4db2458809ecfea28c2766342dc00976, R#\Runtime\Environment\GlobalEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::7a3f8a4b947d3a7e1bf9f7ac323c3f41, R#\Runtime\Environment\GlobalEnvironment.vb"
 
     ' Author:
     ' 
@@ -33,13 +33,13 @@
 
     '     Class GlobalEnvironment
     ' 
-    '         Properties: attachedNamespace, debugMode, lastException, log4vb_redirect, options
-    '                     packages, Rscript, scriptDir, stdout, symbolLanguages
-    '                     types
+    '         Properties: attachedNamespace, debugLevel, debugMode, lastException, log4vb_redirect
+    '                     options, packages, Rscript, scriptDir, stdout
+    '                     symbolLanguages, types
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: [GetType], doCall, (+2 Overloads) LoadLibrary, MissingPackage
+    '         Function: [GetType], doCall, (+2 Overloads) LoadLibrary, MissingPackage, SetDebug
     ' 
     '         Sub: Dispose, RedirectOutput
     ' 
