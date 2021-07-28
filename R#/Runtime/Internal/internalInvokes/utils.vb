@@ -487,7 +487,7 @@ Namespace Runtime.Internal.Invokes
                                Optional minimized As Boolean = False,
                                Optional invisible As Boolean = True,
                                Optional timeout As Double = 0,
-                               Optional clr As Boolean = False) As Integer
+                               Optional clr As Boolean = False) As String
 
             Dim tokens As String() = CLIParser.GetTokens(command)
             Dim executative As String = tokens(Scan0)
@@ -496,27 +496,29 @@ Namespace Runtime.Internal.Invokes
                 .AsObjectEnumerator _
                 .Select(AddressOf any.ToString) _
                 .ToArray
+            Dim std_out As String
 
             If App.IsMicrosoftPlatform Then
                 If clr Then
                     Dim ps = App.Shell(executative, arguments, CLR:=clr, debug:=True, stdin:=inputStr.JoinBy(vbLf))
 
-                    Call ps.Run()
+                    ps.Run()
+                    std_out = ps.StandardOutput
 
                     If show_output_on_console Then
                         Call Console.WriteLine(ps.StandardOutput)
                     End If
                 Else
-                    Dim stdout As String = PipelineProcess.Call(executative, arguments, inputStr.JoinBy(vbLf))
+                    std_out = PipelineProcess.Call(executative, arguments, inputStr.JoinBy(vbLf))
 
                     If show_output_on_console Then
-                        Call Console.WriteLine(stdout)
+                        Call Console.WriteLine(StdOut)
                     End If
                 End If
             ElseIf clr Then
-                Call UNIX.Shell("mono", $"{executative.CLIPath} {arguments}", verbose:=show_output_on_console, stdin:=inputStr.JoinBy(vbLf))
+                std_out = UNIX.Shell("mono", $"{executative.CLIPath} {arguments}", verbose:=show_output_on_console, stdin:=inputStr.JoinBy(vbLf))
             Else
-                Call UNIX.Shell(
+                std_out = UNIX.Shell(
                     command:=executative,
                     args:=arguments,
                     verbose:=show_output_on_console,
@@ -524,7 +526,7 @@ Namespace Runtime.Internal.Invokes
                 )
             End If
 
-            Return 0
+            Return std_out
         End Function
 
         <ExportAPI("md5")>
