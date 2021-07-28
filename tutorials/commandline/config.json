@@ -1,0 +1,8 @@
+{
+    "dir": "/path/to/file",
+    "image": {
+        "format": "svg",
+        "ppi": 300,
+        "filename": "test.png"
+    }
+}

@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.MIME.application.json.Javascript
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 ''' <summary>
@@ -11,11 +12,15 @@ Public Class ConfigJSON
 
     Dim config As list
 
+    Public Sub SetCommandLine(env As Environment)
+
+    End Sub
+
     ''' <summary>
     ''' just looking for the ``config.json`` file under the current working directory.
     ''' </summary>
     ''' <returns></returns>
-    Public Shared Function LoadConfig() As ConfigJSON
+    Public Shared Function LoadConfig(env As Environment) As ConfigJSON
         Dim config As String = "./config.json"
         Dim json As JsonElement = JsonElement.ParseJSON(jsonStr:=config.ReadAllText)
 
@@ -23,7 +28,7 @@ Public Class ConfigJSON
             Return Nothing
         Else
             Return New ConfigJSON With {
-                .config =
+                .config = json.createRObj(env)
             }
         End If
     End Function

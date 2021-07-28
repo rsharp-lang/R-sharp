@@ -44,6 +44,7 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Interop
 
@@ -98,7 +99,7 @@ Namespace Runtime.Interop
 
         Public Shared Function CreateArgumentModel(Of T As {New, Class})(list As Dictionary(Of String, Object)) As T
             Dim args As Object = New T()
-            Dim schema = DataFramework.Schema(Of T)(PropertyAccess.Writeable, True)
+            Dim schema As Dictionary(Of String, PropertyInfo) = DataFramework.Schema(Of T)(PropertyAccess.Writeable, True)
             Dim value As Object
             Dim target As PropertyInfo
 
@@ -108,7 +109,7 @@ Namespace Runtime.Interop
                     target = schema(slotKey)
 
                     If DataFramework.IsPrimitive(target.PropertyType) Then
-                        value = Runtime.getFirst(value)
+                        value = REnv.getFirst(value)
                     ElseIf target.PropertyType.IsArray Then
                         Throw New NotImplementedException
                     Else
