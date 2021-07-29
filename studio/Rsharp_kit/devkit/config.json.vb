@@ -21,6 +21,7 @@ Public Class ConfigJSON
     Public Function GetArgumentValue(configKey As String) As Object
         Dim path As String() = configKey.Trim("/"c).Split("/"c)
         Dim value As Object = Nothing
+        Dim config As list = Me.config
 
         For Each name As String In path
             value = config.getByName(name)
