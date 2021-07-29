@@ -150,8 +150,9 @@ Namespace Interpreter
                         expr = Expression.CreateExpression(block, opts)
 
                         If expr.isException Then
+                            ' config error message in the options
                             Call errHandler(expr, block)
-                            Exit For
+                            Return
                         Else
                             Yield expr.expression
                         End If
