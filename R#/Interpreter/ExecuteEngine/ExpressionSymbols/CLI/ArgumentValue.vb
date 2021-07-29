@@ -52,6 +52,8 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
+    Public Delegate Function GetArgumentValueHandler(configKey As String) As Object
+
     ''' <summary>
     ''' Get commandline argument or safely get environment symbol value by name
     ''' 
@@ -81,7 +83,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         ''' <returns></returns>
         Public ReadOnly Property name As Expression
 
-        Shared getArgumentValue As Func(Of String, Object)
+        Shared getArgumentValue As GetArgumentValueHandler
 
         Sub New(name As Expression)
             Me.name = name
@@ -92,7 +94,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Sub SetArgumentHandler(handler As Func(Of String, Object))
+        Public Shared Sub SetArgumentHandler(handler As GetArgumentValueHandler)
             getArgumentValue = handler
         End Sub
 
@@ -107,8 +109,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
             If arguments.ContainsParameter(arg) OrElse arguments.HavebFlag(arg) Then
                 Return CType(arguments(arg), String)
-            ElseIf Not getArgumentValue Is Nothing Then
-                Return getArgumentValue(arg)
+            ElseIf getArgumentValue IsNot Nothing AndAlso Not configName.StringEmpty Then
+                Return getArgumentValue(configName)
             End If
 
             Dim symbol As Symbol = envir.FindSymbol(arg)

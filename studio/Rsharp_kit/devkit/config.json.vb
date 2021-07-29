@@ -19,7 +19,20 @@ Public Class ConfigJSON
     End Function
 
     Public Function GetArgumentValue(configKey As String) As Object
+        Dim path As String() = configKey.Trim("/"c).Split("/"c)
+        Dim value As Object = Nothing
 
+        For Each name As String In path
+            value = config.getByName(name)
+
+            If Not TypeOf value Is list Then
+                Exit For
+            Else
+                config = DirectCast(value, list)
+            End If
+        Next
+
+        Return value
     End Function
 
     Public Sub SetCommandLine(env As Environment)
