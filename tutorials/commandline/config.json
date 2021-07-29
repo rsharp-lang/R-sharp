@@ -4,5 +4,9 @@
         "format": "svg",
         "ppi": 500,
         "filename": "test.svg"
+    },
+    "render": {
+        "blur": false,
+        "grayscale": true
     }
 }
