@@ -808,7 +808,7 @@ Module plots
     ''' + ``n`` number of points
     ''' + ``width`` width of violin bounding box
     ''' </remarks>
-    <ExportAPI("violinPlot")>
+    <ExportAPI("violin")>
     Public Function doViolinPlot(data As Array,
                                  <RRawVectorArgument> Optional size As Object = Canvas.Resolution2K.Size,
                                  <RRawVectorArgument> Optional margin As Object = Canvas.Resolution2K.PaddingWithTopTitle,
