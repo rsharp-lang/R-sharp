@@ -87,11 +87,17 @@ Namespace Development.Components
         ''' </summary>
         ''' <param name="zipFile"></param>
         Sub New(zipFile As String)
-            zip = New ZipArchive(zipFile.Open(doClear:=False, [readOnly]:=True), ZipArchiveMode.Read)
+            Call Me.New(zipFile.Open(doClear:=False, [readOnly]:=True))
+        End Sub
+
+        Sub New(zipFile As Stream)
+            zip = New ZipArchive(zipFile, ZipArchiveMode.Read)
             allFiles = New Dictionary(Of String, ZipArchiveEntry)
 
             For Each item As ZipArchiveEntry In zip.Entries
-                Dim key As String = item.FullName.TrimStart("/"c, "\"c).Replace("\"c, "/"c)
+                Dim key As String = item.FullName _
+                    .TrimStart("/"c, "\"c) _
+                    .Replace("\"c, "/"c)
 
                 If allFiles.ContainsKey(key) Then
                     Throw New DuplicateNameException(key)
