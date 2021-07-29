@@ -73,6 +73,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             End Get
         End Property
 
+        Dim configName As String
+
         ''' <summary>
         ''' The argument name
         ''' </summary>
@@ -92,6 +94,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Sub SetArgumentHandler(handler As Func(Of String, Object))
             getArgumentValue = handler
+        End Sub
+
+        Friend Sub SetConfigName(name As String)
+            configName = name
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

@@ -62,9 +62,11 @@ Namespace Interpreter.ExecuteEngine
         Protected Friend Overridable Sub AddCustomAttributes(attrs As IEnumerable(Of NamedValue(Of String())))
             For Each attr As NamedValue(Of String()) In attrs
                 If attributes.ContainsKey(attr.Name) Then
-                    attributes(attr.Name) = attributes(attr.Name).JoinIterates(attr.Value).ToArray
+                    attributes(attr.Name) = attributes(attr.Name) _
+                        .JoinIterates(attr.Value) _
+                        .ToArray
                 Else
-                    attributes.Add(attr.Name, attr.Value)
+                    Call attributes.Add(attr.Name, attr.Value)
                 End If
             Next
         End Sub
