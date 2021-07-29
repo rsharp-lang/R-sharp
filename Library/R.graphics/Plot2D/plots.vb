@@ -817,6 +817,7 @@ Module plots
                                  Optional ylab$ = "y axis",
                                  Optional title$ = "Volin Plot",
                                  Optional labelAngle As Double = -45,
+                                 Optional showStats As Boolean = True,
                                  Optional env As Environment = Nothing) As Object
 
         If data Is Nothing Then
@@ -837,7 +838,8 @@ Module plots
                 colorset:=colorSet,
                 Ylabel:=ylab,
                 title:=title,
-                labelAngle:=labelAngle
+                labelAngle:=labelAngle,
+                showStats:=showStats
             )
         Else
             Dim dataSet As New NamedCollection(Of Double) With {
@@ -853,7 +855,8 @@ Module plots
                 colorset:=colorSet,
                 Ylabel:=ylab,
                 title:=title,
-                labelAngle:=labelAngle
+                labelAngle:=labelAngle,
+                showStats:=showStats
             )
         End If
     End Function
