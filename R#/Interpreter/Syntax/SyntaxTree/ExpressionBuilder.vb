@@ -296,7 +296,7 @@ Namespace Interpreter.SyntaxParser
 
                     Dim annotations = firstBlock.ParseAnnotations.ToArray
                     Dim result = code.Skip(1).AsList.ParseExpression(opts)
-                    Dim attrGroups = annotations _
+                    Dim attrGroups As NamedValue(Of String())() = annotations _
                         .GroupBy(Function(a) a.Name) _
                         .Select(Function(a)
                                     Return New NamedValue(Of String())(a.Key, a.Select(Function(i) i.Value).ToArray)

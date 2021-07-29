@@ -87,6 +87,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
         End Function
 
+        ''' <summary>
+        ''' const x as type = xxx
+        ''' </summary>
+        ''' <param name="code"></param>
+        ''' <param name="[readonly]"></param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function DeclareNewSymbol(code As List(Of Token()), [readonly] As Boolean, opts As SyntaxBuilderOptions) As SyntaxResult
             Dim valSyntaxtemp As SyntaxResult = Nothing

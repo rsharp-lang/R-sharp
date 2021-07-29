@@ -44,6 +44,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.CommandLine
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -96,10 +97,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim arg As String = REnv.getFirst(name.Evaluate(envir))
             Dim value As Object
-            Dim arguments = App.CommandLine
+            Dim arguments As CommandLine = App.CommandLine
 
             If arguments.ContainsParameter(arg) OrElse arguments.HavebFlag(arg) Then
                 Return CType(arguments(arg), String)
+            ElseIf Not getArgumentValue Is Nothing Then
+                Return getArgumentValue(arg)
             End If
 
             Dim symbol As Symbol = envir.FindSymbol(arg)
