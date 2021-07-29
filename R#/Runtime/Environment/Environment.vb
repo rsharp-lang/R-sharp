@@ -1,58 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::c2e887f43fd684a2ca7579724de4059d, R#\Runtime\Environment\Environment.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Environment
-    ' 
-    '         Properties: funcSymbols, globalEnvironment, isGlobal, isLINQContext, last
-    '                     messages, parent, stackFrame, stackTrace, symbols
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    ' 
-    '         Function: asRVector, AssignSymbol, enumerateFunctions, Evaluate, FindFunction
-    '                   FindFunctionWithNamespaceRestrict, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator, Push
-    '                   ToString
-    ' 
-    '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, redirectError
-    '              redirectWarning, setStackInfo
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Environment
+' 
+'         Properties: funcSymbols, globalEnvironment, isGlobal, isLINQContext, last
+'                     messages, parent, stackFrame, stackTrace, symbols
+' 
+'         Constructor: (+3 Overloads) Sub New
+' 
+'         Function: asRVector, AssignSymbol, enumerateFunctions, Evaluate, FindFunction
+'                   FindFunctionWithNamespaceRestrict, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator, Push
+'                   ToString
+' 
+'         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, redirectError
+'              redirectWarning, setStackInfo
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -193,7 +194,6 @@ Namespace Runtime
             End Set
         End Property
 
-
         Sub New()
             symbols = New Dictionary(Of Symbol)
             funcSymbols = New Dictionary(Of Symbol)
@@ -250,7 +250,13 @@ Namespace Runtime
         End Sub
 
         Protected Sub redirectWarning(obj$, msg$, level As MSG_TYPES)
-            Call AddMessage({msg, $"{stackFrame.Method.ToString}\[{obj}]"})
+            If obj = NameOf(deps.TryHandleNetCore5AssemblyBugs) Then
+                Call Internal.debug _
+                    .CreateMessageInternal({msg, $"{stackFrame.Method.ToString}\[{obj}]"}, Me, level) _
+                    .DoCall(AddressOf globalEnvironment.dotnetCoreWarning.Add)
+            Else
+                Call AddMessage({msg, $"{stackFrame.Method.ToString}\[{obj}]"})
+            End If
         End Sub
 
         Public Sub AddMessage(message As Object, Optional level As MSG_TYPES = MSG_TYPES.WRN)

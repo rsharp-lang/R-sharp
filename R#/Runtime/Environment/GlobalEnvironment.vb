@@ -121,6 +121,8 @@ Namespace Runtime
             End Get
         End Property
 
+        Friend ReadOnly dotnetCoreWarning As New List(Of Message)
+
         Sub New(scriptHost As RInterpreter, options As Options)
             Me.options = options
             Me.packages = New PackageManager(options)
