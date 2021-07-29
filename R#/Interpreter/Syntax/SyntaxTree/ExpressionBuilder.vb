@@ -304,7 +304,7 @@ Namespace Interpreter.SyntaxParser
                         .ToArray
 
                     If Not result.isException AndAlso TypeOf result.expression Is SymbolExpression Then
-                        Call DirectCast(result.expression, SymbolExpression).attributes.AddRange(attrGroups)
+                        Call DirectCast(result.expression, SymbolExpression).AddCustomAttributes(attrGroups)
                     End If
 
                     Return result
