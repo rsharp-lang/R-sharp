@@ -46,6 +46,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -118,7 +119,11 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 ElseIf TypeOf binor.right Is FunctionInvoke Then
                     Dim funcName As Expression = DirectCast(binor.right, FunctionInvoke).funcName
 
-                    Return ArgumentGetters.GetArgumentWithDefault
+                    If TypeOf funcName Is Literal AndAlso DirectCast(funcName, Literal) = "stop" Then
+                        Return ArgumentGetters.GetArgumentWithRequired
+                    Else
+                        Return ArgumentGetters.GetArgumentWithDefault
+                    End If
                 Else
                     Return ArgumentGetters.GetArgumentWithDefault
                 End If

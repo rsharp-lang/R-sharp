@@ -156,7 +156,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         argument = DirectCast(value, BinaryOrExpression).left
                 End Select
 
-                argument.SetConfigName(name:=config)
+                Call argument.SetConfigName(name:=config)
             End If
         End Sub
 

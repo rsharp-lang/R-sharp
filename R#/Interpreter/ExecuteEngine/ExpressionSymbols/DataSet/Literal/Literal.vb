@@ -218,6 +218,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
         End Function
 
+        ''' <summary>
+        ''' string value equals?
+        ''' </summary>
+        ''' <param name="exp"></param>
+        ''' <param name="literal"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overloads Shared Operator =(exp As Literal, literal As String) As Boolean
             Return DirectCast(exp.value, String) = literal
