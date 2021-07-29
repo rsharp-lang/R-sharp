@@ -499,7 +499,7 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
             Dim std_out As String
 
-            If App.IsMicrosoftPlatform Then
+            If Global.System.Environment.OSVersion.Platform = Global.System.PlatformID.Win32NT Then
                 If clr Then
                     Dim ps = App.Shell(executative, arguments, CLR:=clr, debug:=True, stdin:=inputStr.JoinBy(vbLf))
 
@@ -701,6 +701,7 @@ Namespace Runtime.Internal.Invokes
                  $"dataset: {name}"
             }, env)
         End Function
+
         <Extension>
         Private Function dataSearchByPackageDir(env As Environment, name As String, pkgFile As String, ByRef hit As Boolean) As Message
             Dim dataSymbols = $"{pkgFile}/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, String))

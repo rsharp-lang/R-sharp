@@ -294,5 +294,17 @@ Namespace Runtime.Internal.Invokes
         Public Function endsWith(x As String(), suffix As String) As Object
             Return x.SafeQuery.Select(Function(str) str.EndsWith(suffix)).ToArray
         End Function
+
+        ''' <summary>
+        ''' split text to lines
+        ''' </summary>
+        ''' <param name="text"></param>
+        ''' <param name="trim"></param>
+        ''' <param name="escape"></param>
+        ''' <returns></returns>
+        <ExportAPI("textlines")>
+        Public Function textLines(text As String, Optional trim As Boolean = True, Optional escape As Boolean = False) As String()
+            Return text.LineTokens(trim, escape)
+        End Function
     End Module
 End Namespace
