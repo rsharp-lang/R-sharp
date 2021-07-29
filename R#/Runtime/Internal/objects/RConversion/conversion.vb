@@ -340,6 +340,10 @@ Namespace Runtime.Internal.Object.Converts
             ElseIf x.GetType.IsArray AndAlso DirectCast(x, Array).Length = 0 Then
                 Return Nothing
             Else
+                If TypeOf x Is vbObject Then
+                    x = DirectCast(x, vbObject).target
+                End If
+
                 args = base.Rlist(args, env)
 
                 If Program.isException(args) Then

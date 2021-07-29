@@ -692,7 +692,9 @@ RE0:
                 type2 = values.GetType.GetElementType
                 vec2 = values
             Else
-                Return Internal.debug.stop("invalid type match!", env)
+                type2 = values.GetType
+                vec2 = Array.CreateInstance(type2, 1)
+                vec2.SetValue(values, 0)
             End If
 
             If Not type Is type2 Then

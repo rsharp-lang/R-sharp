@@ -211,7 +211,11 @@ Namespace Development.Package
                 .FirstOrDefault
 
             If Not init Is Nothing Then
-                Call init.Invoke(Nothing, {envir})
+                If init.GetParameters.IsNullOrEmpty Then
+                    Call init.Invoke(Nothing, {})
+                Else
+                    Call init.Invoke(Nothing, {envir})
+                End If
             End If
 
             Call BinaryOperatorEngine.ImportsOperators(package, envir)
