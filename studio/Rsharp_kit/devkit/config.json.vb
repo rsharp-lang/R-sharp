@@ -40,14 +40,30 @@ Public Class ConfigJSON
         ArgumentValue.SetArgumentHandler(AddressOf GetArgumentValue)
     End Sub
 
+    Public Shared Function GetConfigJSONFilePath(env As Environment) As String
+        Dim config As String = "./config.json".GetFullPath
+
+        If Not config.FileExists Then
+            Dim fromCommandLineArgument As String = App.CommandLine("--config")
+
+            If Not fromCommandLineArgument.StringEmpty Then
+                config = fromCommandLineArgument
+            End If
+        End If
+
+        Return config
+    End Function
+
     ''' <summary>
     ''' just looking for the ``config.json`` file under the current working directory.
+    ''' or the config.json file path can be specific by the commandline parameter
+    ''' ``--config``
     ''' </summary>
     ''' <returns></returns>
     Public Shared Function LoadConfig(env As Environment) As ConfigJSON
-        Dim config As String = "./config.json".GetFullPath
+        Dim config As String = GetConfigJSONFilePath(env)
 
-        If config.FileLength <= 0 Then
+        If config.FileLength < 0 Then
             Call env.AddMessage($"CommandLine argument file '{config}' is missing...", MSG_TYPES.WRN)
             Return Nothing
         End If
