@@ -1,56 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::1c12c4b2c59f7d0610813d3a328f74b6, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module file
-    ' 
-    '         Function: basename, buffer, close, dataUri, dir_exists
-    '                   dirCopy, dirCreate, dirname, exists, file
-    '                   file_ext, filecopy, fileinfo, fileInfoByFile, filesize
-    '                   getwd, listDirs, listFiles, loadListInternal, NextTempToken
-    '                   normalizeFileName, normalizePath, openGzip, openZip, readBin
-    '                   readLines, readList, readText, Rhome, saveList
-    '                   setwd, tempdir, tempfile, writeLines
-    ' 
-    '         Sub: fileRemove, fileRename
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module file
+' 
+'         Function: basename, buffer, close, dataUri, dir_exists
+'                   dirCopy, dirCreate, dirname, exists, file
+'                   file_ext, filecopy, fileinfo, fileInfoByFile, filesize
+'                   getwd, listDirs, listFiles, loadListInternal, NextTempToken
+'                   normalizeFileName, normalizePath, openGzip, openZip, readBin
+'                   readLines, readList, readText, Rhome, saveList
+'                   setwd, tempdir, tempfile, writeLines
+' 
+'         Sub: fileRemove, fileRename
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports System.IO.Compression
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -319,6 +320,8 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="dir">
         ''' a character vector of full path names; the default corresponds to the working directory, ``getwd()``. 
         ''' Tilde expansion (see path.expand) is performed. Missing values will be ignored.
+        ''' 
+        ''' or zip folder object if this parameter is a file stream r zip file path.
         ''' </param>
         ''' <param name="pattern">
         ''' an optional regular expression. Only file names which match the regular expression will be returned.
@@ -326,24 +329,45 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("list.files")>
         <RApiReturn(GetType(String()))>
-        Public Function listFiles(Optional dir$ = "./",
+        Public Function listFiles(Optional dir As Object = "./",
                                   Optional pattern$() = Nothing,
-                                  Optional recursive As Boolean = False) As Object
+                                  Optional recursive As Boolean = False,
+                                  Optional env As Environment = Nothing) As Object
+
+            If dir Is Nothing Then
+                Return Internal.debug.stop("target file system resource can not be nothing!", env)
+            End If
 
             If pattern.IsNullOrEmpty Then
                 pattern = {"*.*"}
             End If
 
-            If dir.ExtensionSuffix("zip") AndAlso dir.FileLength > 0 Then
-                Using zip As New ZipFolder(dir)
-                    Return Search.DoFileNameGreps(ls - l - r - pattern, zip.ls).ToArray
+            If TypeOf dir Is String AndAlso DirectCast(dir, String).ExtensionSuffix("zip") AndAlso DirectCast(dir, String).FileLength > 0 Then
+                Using zip As New ZipFolder(DirectCast(dir, String))
+                    Return zip.scanZipFiles(pattern)
                 End Using
+            ElseIf TypeOf dir Is Stream Then
+                Dim zip As New ZipFolder(DirectCast(dir, Stream))
+                Return zip.scanZipFiles(pattern)
+            ElseIf TypeOf dir Is ZipFolder Then
+                Return DirectCast(dir, ZipFolder).scanZipFiles(pattern)
             Else
+                Dim dirStr As String = any.ToString(dir)
+
                 If recursive Then
-                    Return (ls - l - r - pattern <= dir).ToArray
+                    Return (ls - l - r - pattern <= dirStr).ToArray
                 Else
-                    Return (ls - l - pattern <= dir).ToArray
+                    Return (ls - l - pattern <= dirStr).ToArray
                 End If
+            End If
+        End Function
+
+        <Extension>
+        Private Function scanZipFiles(zip As ZipFolder, pattern As String()) As String()
+            If pattern(Scan0) = "*.*" Then
+                Return zip.ls
+            Else
+                Return Search.DoFileNameGreps(ls - l - r - pattern, zip.ls).ToArray
             End If
         End Function
 
