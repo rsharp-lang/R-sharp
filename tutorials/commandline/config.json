@@ -2,7 +2,7 @@
     "dir": "/path/to/file",
     "image": {
         "format": "svg",
-        "ppi": 300,
+        "ppi": 500,
         "filename": "test.svg"
     }
 }
