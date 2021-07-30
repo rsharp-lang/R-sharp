@@ -1024,6 +1024,54 @@ RE0:
         End Function
 
         ''' <summary>
+        ''' ‘is.vector’ returns ‘TRUE’ if ‘x’ is a vector of the specified
+        ''' mode having no attributes _other than names_.  It returns 'FALSE’
+        ''' otherwise.
+        ''' </summary>
+        ''' <param name="x">an R object.</param>
+        ''' <param name="mode">
+        ''' character string naming an atomic mode or ‘"list"’ or
+        ''' '"expression"’ or (except for ‘vector’) ‘"any"’.  Currently,
+        ''' 'is.vector()’ allows any type (see ‘typeof’) for ‘mode’, and
+        ''' when mode Is Not '"any"’, ‘is.vector(x, mode)’ is almost the
+        ''' same as 'typeof(x) == mode’.
+        ''' </param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' The atomic modes are ‘"logical"’, ‘"integer"’, ‘"numeric"’
+        ''' (synonym '"double"’), ‘"complex"’, ‘"character"’ and ‘"raw"’.
+        '''
+        ''' If 'mode = "any"’, ‘is.vector’ may return ‘TRUE’ for the atomic
+        ''' modes, 'list’ and ‘expression’.  For any ‘mode’, it will return
+        ''' 'FALSE’ if ‘x’ has any attributes except names.  (This is
+        ''' incompatible with S.)  On the other hand, 'as.vector’ removes
+        ''' _all_ attributes including names For results Of atomic mode (but
+        ''' Not those of mode '"list"’ nor ‘"expression"’).
+        '''
+        ''' Note that factors are _not_ vectors; 'is.vector’ returns ‘FALSE’
+        ''' And 'as.vector’ converts a factor to a character vector for ‘mode
+        ''' = "any"'.
+        ''' </remarks>
+        <ExportAPI("is.vector")>
+        Public Function isRVector(x As Object, Optional mode As Object = "any") As Boolean
+            If x Is Nothing Then
+                Return True
+            End If
+
+            Dim type As Type = x.GetType
+
+            If TypeOf x Is vector Then
+                x = DirectCast(x, vector).data
+            End If
+
+            If x.GetType.IsArray Then
+                Return True
+            End If
+
+            Return False
+        End Function
+
+        ''' <summary>
         ''' ### ‘Not Available’ / Missing Values
         ''' 
         ''' NA is a logical constant of length 1 which contains a missing value indicator. 
