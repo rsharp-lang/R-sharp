@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::37b614aea44b4c86370142e2aac0f973, Library\R.math\math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module math
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asFormula, create_deSolve_DataFrame, Hist, lm, predict
-    '               (+2 Overloads) RK4, sim, ssm, summaryFit
-    ' 
-    ' /********************************************************************************/
+' Module math
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asFormula, create_deSolve_DataFrame, Hist, lm, predict
+'               (+2 Overloads) RK4, sim, ssm, summaryFit
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -82,10 +82,28 @@ Module math
 
     Sub New()
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(ODEsOut), AddressOf create_deSolve_DataFrame)
+        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(DataBinBox(Of Double)()), AddressOf getBinTable)
 
         REnv.Internal.generic.add("summary", GetType(lmCall), AddressOf summaryFit)
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of lmCall)(Function(o) o.ToString)
     End Sub
+
+    Private Function getBinTable(hist As DataBinBox(Of Double)(), args As list, env As Environment) As Rdataframe
+        Dim format As String = args.getValue("format", env, "F2")
+        Dim range As String() = hist _
+            .Select(Function(bin)
+                        Return $"{bin.Raw.Min.ToString(format)} ~ {bin.Raw.Max.ToString(format)}"
+                    End Function) _
+            .ToArray
+        Dim count As Integer() = hist.Select(Function(bin) bin.Count).ToArray
+
+        Return New Rdataframe With {
+            .columns = New Dictionary(Of String, Array) From {
+                {"range", range},
+                {"bin_size", count}
+            }
+        }
+    End Function
 
     Private Function summaryFit(x As lmCall, args As list, env As Environment) As Object
         Throw New NotImplementedException
