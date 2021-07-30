@@ -145,7 +145,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
             Dim argumentType As ArgumentGetters = CommandLineSyntax.IsArgumentGetter(assert:=value)
 
-            If argumentType <> ArgumentGetters.FALSE Then
+            If argumentType <> ArgumentGetters.FALSE AndAlso attributes.ContainsKey("config") Then
                 Dim argument As ArgumentValue
                 Dim config As String = attributes("config").First
 
