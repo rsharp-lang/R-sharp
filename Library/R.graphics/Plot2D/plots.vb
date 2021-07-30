@@ -879,7 +879,10 @@ Module plots
     ''' <returns></returns>
     <ExportAPI("contourPlot")>
     Public Function ContourPlot(<RRawVectorArgument> data As Object,
-                                <RRawVectorArgument> Optional colorSet As Object = "Spectral:c10",
+                                <RRawVectorArgument>
+                                Optional colorSet As Object = "Spectral:c10",
+                                Optional xlim As Double = Double.NaN,
+                                Optional ylim As Double = Double.NaN,
                                 <RListObjectArgument>
                                 Optional args As list = Nothing,
                                 Optional env As Environment = Nothing) As Object
@@ -916,7 +919,9 @@ Module plots
             Return layers _
                 .populates(Of ContourLayer)(env) _
                 .Plot(
-                    colorSet:=RColorPalette.getColorSet(colorSet)
+                    colorSet:=RColorPalette.getColorSet(colorSet),
+                    xlim:=xlim,
+                    ylim:=ylim
                 )
         End If
     End Function

@@ -2,8 +2,8 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\cfm-id\\test\\flavone\\testAll.R\" --attach D:\\cfm-id --debug",
-      "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\tutorials\\commandline"
+      "commandLineArgs": "\"C:\\Users\\lipidsearch\\Documents\\MSI\\mzkit_win32\\Rscript\\Pipeline\\MSI_analysis.R\" --mzPack \"C:\\MSI\\ws_oral_MALDI-TOF_504x147_pixels\\ws_oral_MALDI-TOF_504x147_pixels.mzPack\" --kegg hsa --sampling 150 --tolerance \"da:0.1\" --intocutoff 0.01 --knn 15 --skip-MSIrender --skip-embedding",
+      "workingDirectory": "C:\\MSI\\ws_oral_MALDI-TOF_504x147_pixels"
     }
   }
 }
