@@ -405,7 +405,12 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("commandline")>
         Public Function createCommandLine(<RListObjectArgument> argv As list, Optional env As Environment = Nothing) As String
-            Return ""
+            Return argv.slots _
+                .Values _
+                .Select(Function(a)
+                            Return any.ToString(REnv.single(a)).CLIToken
+                        End Function) _
+                .JoinBy(" ")
         End Function
 
         ''' <summary>
