@@ -398,6 +398,17 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' create commandline string
+        ''' </summary>
+        ''' <param name="argv"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("commandline")>
+        Public Function createCommandLine(<RListObjectArgument> argv As list, Optional env As Environment = Nothing) As String
+            Return ""
+        End Function
+
+        ''' <summary>
         ''' ### Invoke a System Command
         ''' 
         ''' ``system`` invokes the OS command specified by ``command``.
