@@ -378,7 +378,7 @@ Module plots
             .axisStroke = axisStroke,
             .pointSize = ptSize,
             .background = bg,
-            .axisTickFormat = axisFormat
+            .XaxisTickFormat = axisFormat
         }
 
         Return New DendrogramPanelV2(
