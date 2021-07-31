@@ -70,7 +70,12 @@ Partial Module CLI
         Internal.debug.write($"load package registry: {config.lib}")
 
         If [module].StringEmpty Then
-            Return "Missing '/module' argument!".PrintException
+            [module] = args.Tokens(1)
+
+            If Not [module].FileExists Then
+                Call $"missing module file '{[module].GetFullPath}'!".Warning
+                Return -1
+            End If
         End If
 
         Using pkgMgr As New PackageManager(config)
