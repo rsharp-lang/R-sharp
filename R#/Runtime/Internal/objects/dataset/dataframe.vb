@@ -376,7 +376,9 @@ Namespace Runtime.Internal.Object
             Dim type As Type = MeasureRealElementType(c)
             Dim a As Array = Array.CreateInstance(type, index.Length)
 
-            If c.Length = 1 Then
+            If index.Length = 0 Then
+                Return a
+            ElseIf c.Length = 1 Then
                 ' single value
                 Call a.SetValue(c.GetValue(Scan0), Scan0)
             Else
