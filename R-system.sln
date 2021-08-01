@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29728.190
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31521.260
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "R", "R#\R.vbproj", "{0C2EB77C-39F2-460D-A3F8-CE905F867637}"
 EndProject
@@ -162,6 +162,7 @@ Global
 		Library\JsonHelper\JsonHelper.projitems*{6ec3d3f5-f19d-4899-af88-161f6238e6e8}*SharedItemsImports = 4
 		studio\Rstudio.common\Rstudio.common.projitems*{6fc88360-095e-460c-b659-700719070b84}*SharedItemsImports = 4
 		..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{7df565ae-6e7a-4667-ab6d-9908acbeed8b}*SharedItemsImports = 13
+		Library\JsonHelper\JsonHelper.projitems*{8a9e8d65-b600-47ba-be61-a985003b7afd}*SharedItemsImports = 4
 		..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{a60240d1-e78b-4b96-85e3-45256571c2cb}*SharedItemsImports = 4
 		Library\JsonHelper\JsonHelper.projitems*{b2ae1422-d7da-4053-a386-eb2ea9326d68}*SharedItemsImports = 13
 		Library\R_graphic.interop\R_graphic.interop.projitems*{c5c3428c-d64c-4e79-b239-77adc66b1156}*SharedItemsImports = 4
