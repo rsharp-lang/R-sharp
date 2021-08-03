@@ -183,7 +183,15 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     }
 
                     ' get unique types
-                    Dim types As TypeCodes() = .Select(Function(exp) exp.type) _
+                    Dim types As TypeCodes() = .Select(Function(exp)
+                                                           Dim t = exp.type
+
+                                                           If t = TypeCodes.NA OrElse t = TypeCodes.ref Then
+                                                               t = TypeCodes.generic
+                                                           End If
+
+                                                           Return t
+                                                       End Function) _
                                                .Distinct _
                                                .ToArray
                     If types.Length = 1 Then

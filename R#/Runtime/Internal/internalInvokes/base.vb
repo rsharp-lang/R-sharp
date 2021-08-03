@@ -627,7 +627,7 @@ RE0:
                                 vec.SetValue(x, Scan0)
                                 Return env.appendOfVector(vec, values)
                             Else
-                                Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}"}, env)
+                                Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}", $"type of values: {values.GetType.FullName}"}, env)
                             End If
                         Else
                             If values.GetType Is xType Then
@@ -636,11 +636,11 @@ RE0:
                                 array.SetValue(values, 1)
                                 Return New vector With {.data = array, .elementType = RType.GetRSharpType(xType)}
                             Else
-                                Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}"}, env)
+                                Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}", $"type of values: {values.GetType.FullName}"}, env)
                             End If
                         End If
 
-                        Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}"}, env)
+                        Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}", $"type of values: {values.GetType.FullName}"}, env)
                     End If
                 Else
                     collectionCache(xType) = xType _
