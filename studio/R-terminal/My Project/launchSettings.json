@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "D:\\cfm-id\\R\\inputs\\feature_config.R"
+      "commandLineArgs": "D:\\cfm-id\\R\\cfm-id_tools\\training.R"
     }
   }
 }

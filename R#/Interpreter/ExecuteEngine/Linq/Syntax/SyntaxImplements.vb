@@ -136,7 +136,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             ElseIf blocks(Scan0).First.isKeywordAggregate Then
                 Return blocks(Scan0).CreateAggregateQuery(blocks.Skip(1).ToArray, opts)
             Else
-                Return New SyntaxParserResult(New SyntaxErrorException)
+                Return New SyntaxParserResult(New SyntaxErrorException(blocks(Scan0).First.ToString))
             End If
         End Function
 
@@ -253,7 +253,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         <Extension>
         Private Function GetSequence(blocks As Token()(), ByRef offset As Integer, opts As SyntaxBuilderOptions) As SyntaxParserResult
             If Not blocks(Scan0).First.isKeyword("in") Then
-                Return New SyntaxParserResult(New SyntaxErrorException)
+                Return New SyntaxParserResult(New SyntaxErrorException(blocks(Scan0).First.ToString))
             ElseIf blocks(Scan0).Length = 1 Then
                 offset = 2
                 Return blocks(1).ParseExpression(opts)
