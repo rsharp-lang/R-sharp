@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::6d948e6f5c958b208531976b1cddc264, R#\Interpreter\Syntax\SyntaxImplements\IfBranchSyntax.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module IfBranchSyntax
-    ' 
-    '         Function: ElseClosure, ElseIfClosure, IfClosure, (+2 Overloads) IIfExpression
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module IfBranchSyntax
+' 
+'         Function: ElseClosure, ElseIfClosure, IfClosure, (+2 Overloads) IIfExpression
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -110,11 +110,25 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return ifTest
             End If
 
-            Dim closureInternal As SyntaxResult = blocks(2) _
-                .Skip(1) _
-                .DoCall(Function(code)
-                            Return SyntaxImplements.ClosureExpression(code, opts)
-                        End Function)
+            Dim body As Token() = blocks(2)
+            Dim closureInternal As SyntaxResult
+
+            If body(Scan0) = (TokenType.open, "{") AndAlso body.Last = (TokenType.close, "}") Then
+                closureInternal = blocks(2) _
+                    .Skip(1) _
+                    .DoCall(Function(code)
+                                Return SyntaxImplements.ClosureExpression(code, opts)
+                            End Function)
+            Else
+                ' simple body
+                closureInternal = Expression.CreateExpression(body, opts)
+
+                If closureInternal.isException Then
+                    Return closureInternal
+                Else
+                    closureInternal = New ClosureExpression(closureInternal.expression)
+                End If
+            End If
 
             If closureInternal.isException Then
                 Return closureInternal

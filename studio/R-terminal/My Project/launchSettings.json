@@ -2,8 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"X:\\test\\mzkit_MSI\\MSI_analysis.R\" --mzPack ./MSI.mzPack --kegg mmu --sampling 150 --tolerance \"da:0.01\" --intocutoff 0.2 --knn 13 --dbscan_cut 0.35 --skip-MSIrender --postVisual --debug --compounds \"C:\\Users\\lipidsearch\\Documents\\MSI\\mzkit_win32\\Rscript\\data\\compounds.msgpack\" --reactions \"C:\\Users\\lipidsearch\\Documents\\MSI\\mzkit_win32\\Rscript\\data\\reactions.msgpack\" --maps \"C:\\Users\\lipidsearch\\Documents\\MSI\\mzkit_win32\\Rscript\\data\\KEGG_maps.msgpack\"",
-      "workingDirectory": "X:\\项目以外内容\\2021\\研发\\KYYF0006-空间代谢组学\\20210723"
+      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\tutorials\\simple_if.R\" "
     }
   }
 }

@@ -85,7 +85,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Protected ReadOnly program As Program
 
         <DebuggerStepThrough>
-        Sub New(code As Expression())
+        Sub New(ParamArray code As Expression())
             program = New Program(code)
         End Sub
 
