@@ -113,6 +113,10 @@ Namespace Interpreter.SyntaxParser
 
         <Extension>
         Public Function ifElseTriple(tokens As Token()) As (test As Token(), ifelse As List(Of Token()))
+            If tokens.Length <= 2 Then
+                Return Nothing
+            End If
+
             Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.iif)
 
             If blocks = 1 OrElse blocks = 2 Then

@@ -121,7 +121,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                             End Function)
             Else
                 ' simple body
-                closureInternal = Expression.CreateExpression(body, opts)
+                closureInternal = Expression.CreateExpression(body.JoinIterates(blocks.Skip(3).IteratesALL), opts)
 
                 If closureInternal.isException Then
                     Return closureInternal
