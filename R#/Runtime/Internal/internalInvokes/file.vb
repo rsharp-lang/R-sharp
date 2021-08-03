@@ -125,6 +125,55 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' Construct Path to File
+        ''' 
+        ''' Construct the path to a file from components in a
+        ''' platform-independent way.
+        ''' </summary>
+        ''' <param name="x">character vectors.  Long vectors are not supported.</param>
+        ''' <param name="fsep">the path separator to use (assumed to be ASCII).
+        ''' The components are by default separated by ‘/’ (not ‘\’) on
+        ''' Windows.
+        ''' </param>
+        ''' <returns>
+        ''' A character vector of the arguments concatenated term-by-term and
+        ''' separated by 'fsep’ if all arguments have positive length;
+        ''' otherwise, an empty character vector (unlike 'paste’).
+        '''
+        ''' An element Of the result will be marked (see 'Encoding’ as UTF-8
+        ''' If run In a UTF-8 locale (When marked inputs are converted To
+        ''' UTF-8) Or if an component of the result Is marked as UTF-8, Or as
+        ''' Latin-1 in a non-Latin-1 locale.
+        ''' </returns>
+        ''' <remarks>
+        ''' The implementation is designed to be fast (faster than ‘paste’) as
+        ''' this Function is() used extensively In R itself.
+        ''' It can also be used for environment paths such as 'PATH’ and
+        ''' 'R_LIBS’ with ‘fsep = .Platform$path.sep’.
+        ''' Trailing Path separators are invalid For Windows file paths apart
+        ''' from '/’ and ‘d:/’ (although some functions/utilities do accept
+        ''' them), so a trailing '/’ or ‘\’ is removed there.
+        ''' </remarks>
+        <ExportAPI("file.path")>
+        <RApiReturn(GetType(String))>
+        Public Function filepath(<RListObjectArgument>
+                                 x As Object,
+                                 Optional fsep As String = "/",
+                                 Optional env As Environment = Nothing) As Object
+
+            Dim array As Object = base.c(x, env)
+
+            If TypeOf array Is Message Then
+                Return array
+            Else
+                Return DirectCast(array, Array) _
+                    .AsObjectEnumerator _
+                    .Select(AddressOf any.ToString) _
+                    .JoinBy(fsep)
+            End If
+        End Function
+
+        ''' <summary>
         ''' Extract File Information
         ''' 
         ''' Utility function to extract information about files on the user's file systems.
