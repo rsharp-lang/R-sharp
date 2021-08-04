@@ -113,7 +113,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim body As Token() = blocks(2)
             Dim closureInternal As SyntaxResult
 
-            If body(Scan0) = (TokenType.open, "{") AndAlso body.Last = (TokenType.close, "}") Then
+            If (body(Scan0) = (TokenType.open, "{") AndAlso body.Last = (TokenType.close, "}")) OrElse blocks = 6 Then
                 closureInternal = blocks(2) _
                     .Skip(1) _
                     .DoCall(Function(code)
