@@ -214,11 +214,11 @@ Partial Module CLI
         Dim R As New RInterpreter
 
         Call R.Imports({"package_utils", "automation"}, "devkit.dll")
-        Call R.LoadLibrary("JSON")
+        Call R.LoadLibrary("JSON", silent:=True)
         Call R.Set("_", R.Evaluate($"package_utils::parse('{scriptfile}');"))
         Call R.Set("_", R.Evaluate($"automation::config.json(_);"))
 
-        Dim jsonTemplate As String = R.Evaluate($"JSON::json_encode(_);")
+        Dim jsonTemplate As String = R.Evaluate($"JSON::json_encode(_, indent = TRUE);")
 
         Return jsonTemplate.SaveTo(save).CLICode
     End Function

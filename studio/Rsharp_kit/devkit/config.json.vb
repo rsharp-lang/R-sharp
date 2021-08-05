@@ -34,6 +34,7 @@ Public Class ConfigJSON
             Dim config As String = argument!config
             Dim tokens As String() = config.Trim("/"c).Split("/"c, "\"c)
             Dim endPoint As list = template
+            Dim defaultValue As CommandLineArgument = Rscript.GetCommandArgument(arg.Key)
 
             For Each section As String In tokens.Take(tokens.Length - 1)
                 If Not endPoint.hasName(section) Then
@@ -43,7 +44,7 @@ Public Class ConfigJSON
                 endPoint = DirectCast(endPoint(section), list)
             Next
 
-            endPoint.add(tokens.Last, arg.Key)
+            endPoint.add(tokens.Last, If(defaultValue Is Nothing, "NULL", If(defaultValue.isLiteral, defaultValue.defaultValue.Trim(""""c), "NULL")))
         Next
 
         Return New ConfigJSON With {.config = template}

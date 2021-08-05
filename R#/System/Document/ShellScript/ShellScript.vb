@@ -47,6 +47,7 @@
 #End Region
 
 Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.Default
@@ -103,6 +104,13 @@ Namespace Development.CommandLine
                 authors = meta("author").StringSplit("\s*[,;]\s*")
             End If
         End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function GetCommandArgument(name As String) As CommandLineArgument
+            Return arguments _
+                .Where(Function(a) a.name.TextEquals(name)) _
+                .FirstOrDefault
+        End Function
 
         Private Shared Iterator Function loadMetaLines(lines As IEnumerable(Of String)) As IEnumerable(Of String)
             Dim beginRegion As Boolean = False
@@ -376,7 +384,7 @@ Namespace Development.CommandLine
 
             If TypeOf expr.m_value Is ArgumentValue Then
                 ' default is NULL
-                Call AddArgumentValue(expr.m_value, "", attrs)
+                Call AddArgumentValue(expr.m_value, "", True, attrs)
             Else
                 Call AnalysisTree(expr.m_value, attrs)
             End If
@@ -409,7 +417,7 @@ Namespace Development.CommandLine
         ''' <param name="expr"></param>
         ''' <param name="default$"></param>
         ''' <param name="attrs"></param>
-        Private Sub AddArgumentValue(expr As Expression, default$, attrs As ArgumentInfo)
+        Private Sub AddArgumentValue(expr As Expression, default$, isLiteral As Boolean, attrs As ArgumentInfo)
             Dim name As String = DirectCast(expr, ArgumentValue).name.ToString.Trim(""""c)
             Dim info As String = Nothing
 
@@ -426,7 +434,8 @@ Namespace Development.CommandLine
                 .name = name,
                 .description = info,
                 .defaultValue = [default],
-                .type = attrs.GetTypeCode
+                .type = attrs.GetTypeCode,
+                .isLiteral = isLiteral
             }.DoCall(AddressOf arguments.Add)
         End Sub
 
@@ -435,7 +444,7 @@ Namespace Development.CommandLine
             Dim right As Expression = expr.right
 
             If TypeOf left Is ArgumentValue Then
-                Call AddArgumentValue(left, parseDefault(right), attrs)
+                Call AddArgumentValue(left, parseDefault(right), TypeOf right Is Literal, attrs)
             Else
                 Call AnalysisTree(left, attrs)
                 Call AnalysisTree(right, attrs)
