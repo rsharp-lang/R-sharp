@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
+Imports SMRUCC.Rsharp.Development.CommandLine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -16,6 +17,10 @@ Public Class ConfigJSON
 
     Public Function getListConfig() As list
         Return config
+    End Function
+
+    Public Shared Function BuildTemplate(Rscript As ShellScript) As ConfigJSON
+
     End Function
 
     Public Function GetArgumentValue(configKey As String) As Object

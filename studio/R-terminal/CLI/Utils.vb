@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::53db221c1e8cdb938cea6f75b2233e8e, studio\R-terminal\CLI\Utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module CLI
-    ' 
-    '     Function: configREnv, ConfigStartups, InitializeEnvironment, Install, reset
-    ' 
-    ' /********************************************************************************/
+' Module CLI
+' 
+'     Function: configREnv, ConfigStartups, InitializeEnvironment, Install, reset
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -197,6 +198,29 @@ Partial Module CLI
         End Using
 
         Return 0
+    End Function
+
+    ''' <summary>
+    ''' generate config.json for given Rscript
+    ''' </summary>
+    ''' <param name="args"></param>
+    ''' <returns></returns>
+    <ExportAPI("/config.json")>
+    <Description("generate config.json for given Rscript.")>
+    <Usage("/config.json /script <Rscript.R> [/save <config.json, default=./config.json>]")>
+    Public Function configJSON(args As CommandLine) As Integer
+        Dim scriptfile As String = args <= "/script"
+        Dim save As String = args("/save") Or "./config.json"
+        Dim R As New RInterpreter
+
+        Call R.Imports({"package_utils", "automation"}, "devkit.dll")
+        Call R.LoadLibrary("JSON")
+        Call R.Set("_", R.Evaluate($"package_utils::parse('{scriptfile}');"))
+        Call R.Set("_", R.Evaluate($"automation::config.json(_);"))
+
+        Dim jsonTemplate As String = R.Evaluate($"JSON::json_encode(_);")
+
+        Return jsonTemplate.SaveTo(save).CLICode
     End Function
 
 End Module

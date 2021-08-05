@@ -101,6 +101,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
         End Function
 
+        Public Shared Function FromArray(ParamArray array As String()) As VectorLiteral
+            Return New VectorLiteral(array.Select(Function(str) New Literal(str)))
+        End Function
+
         Public Function ToArray() As Expression()
             Return values.ToArray
         End Function
