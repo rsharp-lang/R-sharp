@@ -1081,6 +1081,65 @@ Namespace Runtime.Internal.Invokes
         End Sub
 
         ''' <summary>
+        ''' delete all contents in target directory
+        ''' </summary>
+        ''' <param name="dir"></param>
+        <ExportAPI("erase")>
+        Public Function [erase](dir As String, Optional env As Environment = Nothing) As Object
+            If isSystemDir(dir) Then
+                Return Internal.debug.stop({$"system directory: '{dir}' is not allowed to erase!", "dir: " & dir}, env)
+            End If
+
+            For Each file As String In dir.ListFiles
+                Call file.DeleteFile
+            Next
+            For Each folder As String In dir.ListDirectory(fsOptions.SearchAllSubDirectories)
+                Call Directory.Delete(folder)
+            Next
+
+            Return Nothing
+        End Function
+
+        <ExportAPI("is.sysdir")>
+        Public Function isSystemDir(dir As String) As Boolean
+            If dir.IsPattern("/+") Then
+                Return True
+            Else
+                Select Case dir.ToLower
+                    Case "c:\",
+                         "c:/",
+                         "c:",
+                         "c:\program files",
+                         "c:\program files (x86)",
+                         "c:\windows",
+                         "c:\windows\system32",
+                         "c:\windows\syswow64"
+                        Return True
+                    Case "/bin",
+                         "/boot",
+                         "/dev",
+                         "/etc",
+                         "/home",
+                         "/lib",
+                         "/lib64",
+                         "/media",
+                         "/mnt",
+                         "/opt",
+                         "/root",
+                         "/run",
+                         "/sbin",
+                         "/srv",
+                         "/sys",
+                         "/usr",
+                         "/var"
+                        Return True
+                    Case Else
+                        Return False
+                End Select
+            End If
+        End Function
+
+        ''' <summary>
         ''' read file as data URI string
         ''' </summary>
         ''' <param name="file">the file path</param>
