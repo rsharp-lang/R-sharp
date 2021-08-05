@@ -20,7 +20,10 @@ Public Class ConfigJSON
     End Function
 
     Public Shared Function BuildTemplate(Rscript As ShellScript) As ConfigJSON
+        For Each arg In Rscript.argumentList
+            Dim argument As ArgumentInfo = arg.Value
 
+        Next
     End Function
 
     Public Function GetArgumentValue(configKey As String) As Object
