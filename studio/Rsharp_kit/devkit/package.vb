@@ -110,6 +110,6 @@ Module package
 
     <ExportAPI("parse")>
     Public Function Parse(rscript As String) As ShellScript
-        Return New ShellScript(R.AutoHandleScript(handle:=rscript))
+        Return New ShellScript(R.AutoHandleScript(handle:=rscript)).AnalysisAllCommands
     End Function
 End Module
