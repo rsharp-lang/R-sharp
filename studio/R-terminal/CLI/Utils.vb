@@ -207,10 +207,10 @@ Partial Module CLI
     ''' <returns></returns>
     <ExportAPI("/config.json")>
     <Description("generate config.json for given Rscript.")>
-    <Usage("/config.json /script <Rscript.R> [/save <config.json, default=./config.json>]")>
+    <Usage("/config.json /script <Rscript.R> [/save <config.json, default=stdout>]")>
     Public Function configJSON(args As CommandLine) As Integer
         Dim scriptfile As String = args <= "/script"
-        Dim save As String = args("/save") Or "./config.json"
+        Dim save As String = args("/save") Or "stdout"
         Dim R As New RInterpreter
 
         Call R.Imports({"package_utils", "automation"}, "devkit.dll")
@@ -220,7 +220,15 @@ Partial Module CLI
 
         Dim jsonTemplate As String = R.Evaluate($"JSON::json_encode(_, indent = TRUE);")
 
-        Return jsonTemplate.SaveTo(save).CLICode
+        If save.TextEquals("stdout") Then
+            Call Console.WriteLine(jsonTemplate)
+        Else
+            Return jsonTemplate _
+                .SaveTo(save) _
+                .CLICode
+        End If
+
+        Return 0
     End Function
 
 End Module

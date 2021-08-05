@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "/config.json /script \"F:\\mzkit_win32\\Rscript\\Pipeline\\MSI_analysis.R\" /save \"F:\\mzkit_win32\\Rscript\\Pipeline\\config.json\""
+      "commandLineArgs": "/config.json /script \"F:\\mzkit_win32\\Rscript\\Pipeline\\MSI_analysis.R\" "
     }
   }
 }
