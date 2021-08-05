@@ -20,10 +20,33 @@ Public Class ConfigJSON
     End Function
 
     Public Shared Function BuildTemplate(Rscript As ShellScript) As ConfigJSON
+        Dim template As New list With {
+            .slots = New Dictionary(Of String, Object)
+        }
+
         For Each arg In Rscript.argumentList
             Dim argument As ArgumentInfo = arg.Value
 
+            If Not argument.hasAttribute("config") Then
+                Continue For
+            End If
+
+            Dim config As String = argument!config
+            Dim tokens As String() = config.Trim("/"c).Split("/"c, "\"c)
+            Dim endPoint As list = template
+
+            For Each section As String In tokens.Take(tokens.Length - 1)
+                If Not endPoint.hasName(section) Then
+                    endPoint.add(section, New list With {.slots = New Dictionary(Of String, Object)})
+                End If
+
+                endPoint = DirectCast(endPoint(section), list)
+            Next
+
+            endPoint.add(tokens.Last, arg.Key)
         Next
+
+        Return New ConfigJSON With {.config = template}
     End Function
 
     Public Function GetArgumentValue(configKey As String) As Object
