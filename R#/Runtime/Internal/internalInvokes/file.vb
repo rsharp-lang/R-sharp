@@ -258,7 +258,7 @@ Namespace Runtime.Internal.Invokes
         <RApiReturn(GetType(Boolean()))>
         Public Function filecopy(from$(), to$(), Optional env As Environment = Nothing) As Object
             Dim result As New List(Of Object)
-            Dim isDir As Boolean = from.Length > 1 AndAlso [to].Length = 1
+            Dim isDir As Boolean = (from.Length > 1 AndAlso [to].Length = 1) OrElse (from.Length = 1 AndAlso from(Scan0).DirectoryExists AndAlso [to].Length = 1 AndAlso [to](Scan0).EndsWith("/"c))
 
             If from.Length = 0 Then
                 Return {}
@@ -267,13 +267,17 @@ Namespace Runtime.Internal.Invokes
             If isDir Then
                 Dim dirName$ = [to](Scan0) & "/"
 
-                For Each file As String In from
-                    If file.FileCopy(dirName) Then
-                        result.Add(True)
-                    Else
-                        result.Add(file)
-                    End If
-                Next
+                If from.Length = 1 Then
+                    Call New FileIO.Directory(from(Scan0)).CopyTo(dirName).ToArray
+                Else
+                    For Each file As String In from
+                        If file.FileCopy(dirName) Then
+                            result.Add(True)
+                        Else
+                            result.Add(file)
+                        End If
+                    Next
+                End If
             ElseIf from.Length <> [to].Length Then
                 Return Internal.debug.stop("number of from files is not equals to the number of target file locations!", env)
             Else
@@ -1088,6 +1092,8 @@ Namespace Runtime.Internal.Invokes
         Public Function [erase](dir As String, Optional env As Environment = Nothing) As Object
             If isSystemDir(dir) Then
                 Return Internal.debug.stop({$"system directory: '{dir}' is not allowed to erase!", "dir: " & dir}, env)
+            Else
+                Call env.AddMessage({$"all of the content files in target directory '{dir}' will be deleted.", $"dir: {dir}"}, MSG_TYPES.WRN)
             End If
 
             For Each file As String In dir.ListFiles
