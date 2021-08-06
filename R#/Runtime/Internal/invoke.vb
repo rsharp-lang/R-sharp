@@ -113,6 +113,7 @@ Namespace Runtime.Internal
             Call GetType(dev).DoCall(AddressOf pushEnvir)
             Call GetType(ranking).DoCall(AddressOf pushEnvir)
             Call GetType(TableJoint).DoCall(AddressOf pushEnvir)
+            Call GetType(Rinterop).DoCall(AddressOf pushEnvir)
         End Sub
 
         Private Shared Sub pushEnvir(baseModule As Type)
