@@ -2,8 +2,8 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"X:\\test\\mzkit_MSI\\MSI_analysis.R\" --mzPack ./MSI.mzPack --kegg mmu --sampling 150 --tolerance \"da:0.5\" --intocutoff 0.05 --knn 13 --dbscan_cut 0.25 --skip-embedding0 --skip-MSIrender --postVisual0 --debug0",
-      "workingDirectory": "\\\\192.168.1.254\\backup3\\项目以外内容\\2021\\研发\\KYYF0006-空间代谢组学\\20210723\\analysis_20210805"
+      "commandLineArgs": "\"D:\\CFM-ID\\flavone_cfm-id\\modelling_40eV\\cfmid_model.R\" --debug",
+      "workingDirectory": "D:\\CFM-ID"
     }
   }
 }
