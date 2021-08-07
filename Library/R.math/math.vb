@@ -323,7 +323,7 @@ Module math
                 Call columns.Add(df.getVector(Of Double)(colName))
             Next
 
-            Dim matrix As New GeneralMatrix(columns.ToArray, t:=True)
+            Dim matrix As New NumericMatrix(columns.ToArray, t:=True)
             Dim fit As MLRFit = MLRFit.LinearFitting(matrix, f:=y)
 
             Return New lmCall(formula.var, DirectCast(symbol, String())) With {
