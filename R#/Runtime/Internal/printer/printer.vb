@@ -128,7 +128,7 @@ Namespace Runtime.Internal.ConsolePrinter
             Dim format As String = $"{opts.f64Format}{opts.digits}"
 
             Return Function(d)
-                       Dim val As Double = DirectCast(d, Double)
+                       Dim val As Double = CType(d, Double)
 
                        If val = 0.0 Then
                            ' 20201009
