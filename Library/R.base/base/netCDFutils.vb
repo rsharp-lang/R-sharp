@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::ec8f3b875d55027f08a4442c51d01eab, Library\R.base\base\netCDFutils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module netCDFutils
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: dimensions, getDataVariable, getValue, globalAttributes, openCDF
-    '               printVar, variableNames
-    ' 
-    ' /********************************************************************************/
+' Module netCDFutils
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: dimensions, getDataVariable, getValue, globalAttributes, openCDF
+'               printVar, variableNames
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -53,6 +53,7 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 <Package("netCDF.utils")>
@@ -213,5 +214,28 @@ Module netCDFutils
     <ExportAPI("getValue")>
     Public Function getValue(var As variable) As Object
         Return var.value.genericValue
+    End Function
+
+    ''' <summary>
+    ''' read multiple variable symbols in the given cdf file and then create as dataframe object
+    ''' </summary>
+    ''' <param name="cdf"></param>
+    ''' <param name="symbols">the symbol will be used as the columns in the generated dataframe</param>
+    ''' <returns></returns>
+    ''' 
+    <ExportAPI("dataframe")>
+    Public Function dataframe(cdf As netCDFReader, symbols As String(), rownames As String) As Rdataframe
+        Dim table As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+
+        For Each name As String In symbols
+            table.columns(name) = cdf.getDataVariable(name).genericValue
+        Next
+
+        table.rownames = cdf.getDataVariable(rownames).genericValue _
+            .AsObjectEnumerator _
+            .Select(AddressOf any.ToString) _
+            .ToArray
+
+        Return table
     End Function
 End Module
