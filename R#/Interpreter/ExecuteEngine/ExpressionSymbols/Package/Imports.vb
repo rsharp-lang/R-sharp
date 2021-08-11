@@ -58,6 +58,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
@@ -237,19 +238,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         ''' <param name="env"></param>
         ''' <returns></returns>
         Private Function importsPackages(env As Environment) As Object
-            Dim names As Index(Of String) = Runtime.asVector(Of String)(Me.packages.Evaluate(env)) _
+            Dim names As Index(Of String) = Runtime _
+                .asVector(Of String)(Me.packages.Evaluate(env)) _
                 .AsObjectEnumerator _
                 .Select(Function(o)
-                            Return Scripting.ToString(o, Nothing)
+                            Return any.ToString(o, Nothing)
                         End Function) _
                 .ToArray
-            Dim libDll As Object = GetDllFile(Runtime.getFirst(library.Evaluate(env)), env)
+            Dim dllName As String = any.ToString(Runtime.getFirst(library.Evaluate(env)))
+            Dim libDll As Object = GetDllFile(dllName, env)
 
             If Program.isException(libDll) Then
                 Return libDll
             End If
 
-            Dim filepath As String = Scripting.ToString(libDll)
+            Dim filepath As String = any.ToString(libDll)
 
 load:       Return LoadLibrary(filepath, env, names)
         End Function
