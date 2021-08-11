@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\test\\MSIvisualTest.R\" --debug --attach \"D:\\mzkit\\Rscript\\Library\\mzkit_app\"",
+      "commandLineArgs": "\"E:\\GCModeller\\src\\R-sharp\\Library\\demo\\math\\lpsolve.R\"",
       "workingDirectory": "D:\\CFM-ID"
     }
   }
