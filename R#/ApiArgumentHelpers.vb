@@ -90,7 +90,7 @@ Public Module ApiArgumentHelpers
                                    <CallerMemberName>
                                    Optional api$ = Nothing) As [Variant](Of DoubleRange, Message)
         If value Is Nothing Then
-            Return CType([default], DoubleRange)
+            Return DoubleRange.TryParse([default])
         End If
 
         Select Case value.GetType
@@ -99,7 +99,7 @@ Public Module ApiArgumentHelpers
             Case GetType(DoubleRange)
                 Return DirectCast(value, DoubleRange)
             Case GetType(String)
-                Return CType(DirectCast(value, String), DoubleRange)
+                Return DoubleRange.TryParse(DirectCast(value, String))
             Case Else
                 If value.GetType.IsArray Then
                     Return New vector(DirectCast(value, Array), RType.GetRSharpType(GetType(Double))).rangeFromVector(env, api)
@@ -125,7 +125,7 @@ Public Module ApiArgumentHelpers
             Case TypeCodes.string
 
                 If v.length = 1 Then
-                    Return CType(DirectCast(v.data.GetValue(Scan0), String), DoubleRange)
+                    Return DoubleRange.TryParse(DirectCast(v.data.GetValue(Scan0), String))
                 Else
                     vec = v.data _
                         .AsObjectEnumerator(Of String) _
