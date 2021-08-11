@@ -1,6 +1,8 @@
 ﻿
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.LinearProgramming
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -20,26 +22,50 @@ Module lpSolve
             subjective = DirectCast(subjective(Scan0), VectorLiteral).ToArray
         End If
 
-        Dim allSymbols As String() = objective.GetSymbols.ToArray
-        Dim obj As Double() = objective.GetVector(allSymbols, env).ToArray
+        Dim allSymbols As Index(Of String) = objective.GetSymbols.Indexing
+        Dim obj As Double() = objective _
+            .GetVector(allSymbols, env) _
+            .alignVector(allSymbols)
         Dim sbjMatrix As Double()() = subjective _
             .Select(Function(exp)
-                        Return DirectCast(exp, BinaryExpression).left _
+                        Dim target As Expression
+
+                        If TypeOf exp Is ValueAssignExpression Then
+                            target = DirectCast(exp, ValueAssignExpression).targetSymbols(Scan0)
+                        Else
+                            target = DirectCast(exp, BinaryExpression).left
+                        End If
+
+                        Return target _
                             .GetVector(allSymbols, env) _
-                            .ToArray
+                            .alignVector(allSymbols)
                     End Function) _
             .ToArray
         Dim types As String() = subjective _
-            .Select(Function(exp) DirectCast(exp, BinaryExpression).operator) _
+            .Select(Function(exp)
+                        If TypeOf exp Is ValueAssignExpression Then
+                            Return "="
+                        Else
+                            Return DirectCast(exp, BinaryExpression).operator
+                        End If
+                    End Function) _
             .ToArray
         Dim rightHands As Double() = subjective _
             .Select(Function(exp)
-                        Return CDbl(DirectCast(exp, BinaryExpression).right.Evaluate(env))
+                        Dim value As Expression
+
+                        If TypeOf exp Is ValueAssignExpression Then
+                            value = DirectCast(exp, ValueAssignExpression).value
+                        Else
+                            value = DirectCast(exp, BinaryExpression).right
+                        End If
+
+                        Return CDbl(value.Evaluate(env))
                     End Function) _
             .ToArray
         Dim lpp As New LPP(
             objectiveFunctionType:=direction.Description,
-            variableNames:=allSymbols,
+            variableNames:=allSymbols.Objects,
             objectiveFunctionCoefficients:=obj,
             constraintCoefficients:=sbjMatrix,
             constraintTypes:=types,
@@ -52,8 +78,57 @@ Module lpSolve
     End Function
 
     <Extension>
-    Private Iterator Function GetVector(exp As Expression, allSymbols As String(), env As Environment) As IEnumerable(Of Double)
+    Private Function alignVector(vector As IEnumerable(Of NamedValue(Of Double)), allSymbols As Index(Of String)) As Double()
+        Dim table = vector.ToDictionary(Function(a) a.Name, Function(a) a.Value)
+        Dim vec As Double() = New Double(allSymbols.Count - 1) {}
 
+        For Each i In allSymbols
+            If table.ContainsKey(i.value) Then
+                vec(i) = table(i.value)
+            End If
+        Next
+
+        Return vec
+    End Function
+
+    <Extension>
+    Private Function isSimple(exp As Expression) As Boolean
+        Return TypeOf exp Is Literal OrElse TypeOf exp Is SymbolReference
+    End Function
+
+    <Extension>
+    Private Iterator Function GetVector(exp As Expression, allSymbols As Index(Of String), env As Environment) As IEnumerable(Of NamedValue(Of Double))
+        If TypeOf exp Is BinaryExpression Then
+            Dim bin = DirectCast(exp, BinaryExpression)
+            Dim left = bin.left
+            Dim right = bin.right
+
+            If left.isSimple AndAlso right.isSimple Then
+                Dim symbol As String
+                Dim coef As Double
+
+                If TypeOf left Is Literal Then
+                    coef = left.Evaluate(env)
+                    symbol = DirectCast(right, SymbolReference).symbol
+                Else
+                    coef = right.Evaluate(env)
+                    symbol = DirectCast(left, SymbolReference).symbol
+                End If
+
+                Yield New NamedValue(Of Double)(symbol, coef)
+            Else
+                For Each x In left.GetVector(allSymbols, env)
+                    Yield x
+                Next
+                For Each x In right.GetVector(allSymbols, env)
+                    Yield x
+                Next
+            End If
+        ElseIf TypeOf exp Is SymbolReference Then
+            Yield New NamedValue(Of Double)(DirectCast(exp, SymbolReference).symbol, 1)
+        Else
+            Throw New NotImplementedException
+        End If
     End Function
 
     <Extension>
