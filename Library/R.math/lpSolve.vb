@@ -9,6 +9,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 ''' <summary>
 ''' linear programming solver
@@ -17,7 +18,7 @@ Imports SMRUCC.Rsharp.Runtime
 Module lpSolve
 
     <ExportAPI("lp")>
-    Public Function lp(direction As OptimizationType, objective As Expression, subjective As Expression(), Optional env As Environment = Nothing)
+    Public Function lp(direction As OptimizationType, objective As Expression, subjective As Expression(), Optional env As Environment = Nothing) As Object
         If subjective.Length = 1 AndAlso TypeOf subjective(Scan0) Is VectorLiteral Then
             subjective = DirectCast(subjective(Scan0), VectorLiteral).ToArray
         End If
@@ -73,8 +74,15 @@ Module lpSolve
             objectiveFunctionValue:=0
         )
         Dim solution As LPPSolution = lpp.solve
+        Dim lppResult As New list
 
-        Return solution
+        lppResult.add("solution", allSymbols.Objects.ToDictionary(Function(name) name, Function(name) solution.GetSolution(name)))
+        lppResult.add("objective", solution.ObjectiveFunctionValue)
+        lppResult.add("summary", solution.ToString)
+        lppResult.add("constraint", solution.constraintSensitivityString)
+        lppResult.add("coefficient", solution.coefficientSensitivityString)
+
+        Return lppResult
     End Function
 
     <Extension>
