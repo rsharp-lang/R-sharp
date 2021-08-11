@@ -80,12 +80,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj">
-      <Private>true</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj">
-      <Private>true</Private>
-    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
+    <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
   </ItemGroup>
 
   <Import Project="..\Rstudio.common\Rstudio.common.projitems" Label="Shared" />

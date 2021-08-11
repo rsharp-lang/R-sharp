@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": " \"\\\\192.168.1.254\\backup3\\project\\2021年\\HT20210425119007 武汉金开瑞生物工程有限公司 米雪\\原始数据\\HT20210425119007有机酸\\HT20210425119007\\result\\draw.R\" --debug"
+      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\test\\MSIvisualTest.R\""
     }
   }
 }
