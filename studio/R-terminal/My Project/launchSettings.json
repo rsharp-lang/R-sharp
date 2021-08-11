@@ -2,8 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"E:\\GCModeller\\src\\R-sharp\\Library\\demo\\math\\lpsolve.R\"",
-      "workingDirectory": "D:\\CFM-ID"
+      "commandLineArgs": "\"E:\\GCModeller\\src\\R-sharp\\Library\\demo\\math\\lpsolve.R\""
     }
   }
 }
