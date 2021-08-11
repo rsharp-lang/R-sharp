@@ -5,6 +5,6 @@ const subject_to = ~[
         x1 + 2 * x2 + 3 * x3 = 9,
     3 * x1 + 2 * x2 + 2 * x3 = 15
 ];
-const solution = lp("max", objective, subject_to)$solution;
+const solution = lp("max", objective, subject_to);
 
-str(solution);
+print(solution);

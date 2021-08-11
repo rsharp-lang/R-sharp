@@ -73,7 +73,7 @@ Module lpSolve
             constraintRightHandSides:=rightHands,
             objectiveFunctionValue:=0
         )
-        Dim solution As LPPSolution = lpp.solve
+        Dim solution As LPPSolution = lpp.solve(showProgress:=False)
         Dim lppResult As New list
 
         lppResult.add("solution", allSymbols.Objects.ToDictionary(Function(name) name, Function(name) solution.GetSolution(name)))
