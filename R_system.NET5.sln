@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31410.223
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31512.422
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "devkit-netcore5", "studio\Rsharp_kit\devkit\devkit-netcore5.vbproj", "{470AAB61-E443-46EA-8E9F-8E67B7750E25}"
 EndProject
@@ -105,7 +105,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "R_graphic.interop", "Librar
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "igraph-netcore5", "Library\R.graph\igraph-netcore5.vbproj", "{5B2B4EAA-3D1F-4DD1-830B-70B034BE1D89}"
 EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "network_visualizer-netcore5", "..\runtime\sciBASIC#\gr\network-visualization\Visualizer\network_visualizer-netcore5.vbproj", "{0F8FE287-BE17-4787-8861-8DAD0A7DF5DC}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "networkVisualizer.NET5", "..\runtime\sciBASIC#\gr\network-visualization\Visualizer\networkVisualizer.NET5.vbproj", "{0F8FE287-BE17-4787-8861-8DAD0A7DF5DC}"
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "HMM.NET5", "..\runtime\sciBASIC#\Data_science\DataMining\HMM\HMM.NET5.vbproj", "{38A57DEE-B9BC-4976-BB3C-B8B0D478EECA}"
 EndProject
