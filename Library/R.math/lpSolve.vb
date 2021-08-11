@@ -78,9 +78,29 @@ Module lpSolve
 
         lppResult.add("solution", allSymbols.Objects.ToDictionary(Function(name) name, Function(name) solution.GetSolution(name)))
         lppResult.add("objective", solution.ObjectiveFunctionValue)
-        lppResult.add("summary", solution.ToString)
-        lppResult.add("constraint", solution.constraintSensitivityString)
-        lppResult.add("coefficient", solution.coefficientSensitivityString)
+        lppResult.add("slack", solution.slack _
+                      .Select(Function(x, i) (x, i)) _
+                      .ToDictionary(Function(j) j.i,
+                                    Function(i)
+                                        Dim info As New Dictionary(Of String, Object)
+                                        Dim j As Integer = i.i
+
+                                        info.Add("slack", solution.slack(j))
+
+                                        If solution.slack(j) = 0.0 Then
+                                            info.Add("binding", True)
+                                            info.Add("shadowPrice", solution.shadowPrice(j))
+                                        ElseIf solution.slack(j) > 0 Then
+                                            info.Add("shadowPrice", Double.NaN)
+                                            info.Add("binding", False)
+                                        Else
+                                            info.Add("shadowPrice", Double.NaN)
+                                            info.Add("binding", False)
+                                        End If
+
+                                        Return info
+                                    End Function))
+        lppResult.add("reduced_cost", solution.GetReducedCost)
 
         Return lppResult
     End Function
