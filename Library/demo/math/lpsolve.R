@@ -7,4 +7,7 @@ const subject_to = ~[
 ];
 const lpp = lp("max", objective, subject_to);
 
-str(lpp);
+str(lpp$solution);
+
+print("objective value:");
+print(lpp$objective);
