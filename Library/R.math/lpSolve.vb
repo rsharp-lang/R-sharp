@@ -98,6 +98,7 @@ Module lpSolve
         Dim solution As LPPSolution = lpp.solve(showProgress:=False)
         Dim lppResult As New list
 
+        lppResult.add("feasible", solution.failureMessage.StringEmpty)
         lppResult.add("solution", allSymbols.Objects.ToDictionary(Function(name) name, Function(name) solution.GetSolution(name)))
         lppResult.add("objective", solution.ObjectiveFunctionValue)
         lppResult.add("slack", solution.slack _
