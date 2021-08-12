@@ -1,46 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::1e51fe7a13fc683819d97b614e5204bb, Library\R.graph\Visualize.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Visualize
-    ' 
-    '     Function: colorByTypeGroup, getNodeSizeHandler, renderPlot, setEdgeColors, setNodeColors
-    ' 
-    ' /********************************************************************************/
+' Module Visualize
+' 
+'     Function: colorByTypeGroup, getNodeSizeHandler, renderPlot, setEdgeColors, setNodeColors
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
 Imports System.Drawing.Drawing2D
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.visualize.Network
@@ -52,7 +53,7 @@ Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.MIME.HTML.CSS
+Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -68,6 +69,10 @@ Imports stdNum = System.Math
 ''' </summary>
 <Package("igraph.render")>
 Module Visualize
+
+    Sub New()
+        Call Internal.generic.add("plot", GetType(NetworkGraph), AddressOf plot_network)
+    End Sub
 
     Private Function getNodeSizeHandler(nodeSize As Object, minNodeSize!, env As Environment, ByRef err As Message) As Func(Of Node, Single)
         Select Case nodeSize.GetType
@@ -112,6 +117,20 @@ Module Visualize
         Return Nothing
     End Function
 
+    Public Function plot_network(g As NetworkGraph, args As list, env As Environment) As Object
+        Dim size As String = InteropArgumentHelper.getSize(args!size, env, "1024,768")
+        Dim padding As String = InteropArgumentHelper.getPadding(args!padding, Drawing2D.g.DefaultPadding)
+
+        Return g.renderPlot(
+            canvasSize:=size,
+            padding:=padding,
+            nodeSize:=args!nodeSize,
+            minNodeSize:=args.getValue(Of Single)("minNodeSize", env, 10),
+            driver:=args.getValue(Of Drivers)("driver", env, Drivers.GDI),
+            labelerIterations:=args.getValue("labelerIterations", env, 0)
+        )
+    End Function
+
     ''' <summary>
     ''' Rendering png or svg image from a given network graph model.
     ''' </summary>
@@ -121,8 +140,9 @@ Module Visualize
     ''' get texture brush or color brush descriptor string.
     ''' </param>
     ''' <returns></returns>
-    <ExportAPI("render.Plot")>
+    <ExportAPI("render")>
     <RApiReturn(GetType(GraphicsData))>
+    <Extension>
     Public Function renderPlot(g As NetworkGraph,
                                <RRawVectorArgument>
                                Optional canvasSize As Object = "1024,768",

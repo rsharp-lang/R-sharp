@@ -81,7 +81,7 @@ Public Module grDevices
     ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
-    <ExportAPI("save.graphics")>
+    <ExportAPI("graphics")>
     Public Function saveImage(graphics As Object, Optional file As Object = Nothing, Optional env As Environment = Nothing) As Object
         If graphics Is Nothing Then
             Return Internal.debug.stop("Graphics data is NULL!", env)
