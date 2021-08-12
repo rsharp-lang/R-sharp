@@ -39,7 +39,7 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "xlsx-netcore5", "..\runtime
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "dataframeUtils-netcore5", "..\runtime\sciBASIC#\Data_science\Mathematica\Math\DataFrame\dataframeUtils-netcore5.vbproj", "{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}"
 EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Rlapack-netcore5", "Library\R.math\Rlapack-netcore5.vbproj", "{1B05B25D-1919-47DA-81BF-CF981B241897}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Rlapack.NET5", "Library\R.math\Rlapack.NET5.vbproj", "{1B05B25D-1919-47DA-81BF-CF981B241897}"
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "stats-netcore5", "..\runtime\sciBASIC#\Data_science\Mathematica\Math\Math.Statistics\stats-netcore5.vbproj", "{095761D0-7B1E-41B2-956C-8D2AED4020AC}"
 EndProject
