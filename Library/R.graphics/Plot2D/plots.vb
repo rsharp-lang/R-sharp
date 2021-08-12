@@ -737,6 +737,11 @@ Module plots
         )
     End Function
 
+    <ExportAPI("upset")>
+    Public Function UpSetPlot(upset As list, Optional env As Environment = Nothing) As Object
+
+    End Function
+
     ''' <summary>
     ''' create a new serial for scatter plot
     ''' </summary>

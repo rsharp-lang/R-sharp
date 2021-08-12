@@ -79,7 +79,7 @@
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\text%html\html_netcore5.vbproj" />
     <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
-    <ProjectReference Include="..\R.math\Rlapack-netcore5.vbproj" />
+    <ProjectReference Include="..\R.math\Rlapack.NET5.vbproj" />
   </ItemGroup>
 
   <Import Project="..\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
