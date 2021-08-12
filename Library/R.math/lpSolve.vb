@@ -196,4 +196,13 @@ Module lpSolve
             Next
         End If
     End Function
+
+    <ExportAPI("linprog")>
+    Public Function linprog(f As vector,
+                            A As matrix,
+                            b As vector,
+                            Optional direction As OptimizationType = OptimizationType.MIN,
+                            Optional env As Environment = Nothing) As Object
+        Throw New NotImplementedException
+    End Function
 End Module

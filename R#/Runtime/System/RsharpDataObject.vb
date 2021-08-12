@@ -51,6 +51,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Components
 
+    ''' <summary>
+    ''' the R# data object with specific element data type
+    ''' </summary>
     Public MustInherit Class RsharpDataObject
 
         Protected m_type As RType = RType.any
