@@ -12,13 +12,35 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 ''' <summary>
-''' linear programming solver
+''' Solve Linear/Integer Programs 
 ''' </summary>
 <Package("lpSolve")>
 Module lpSolve
 
+    <ExportAPI("lp.min")>
+    Public Function lpMin(objective As Expression, subjective As Expression(), Optional env As Environment = Nothing) As Object
+        Return lp(objective, subjective, OptimizationType.MIN, env)
+    End Function
+
+    <ExportAPI("lp.max")>
+    Public Function lpMax(objective As Expression, subjective As Expression(), Optional env As Environment = Nothing) As Object
+        Return lp(objective, subjective, OptimizationType.MAX, env)
+    End Function
+
+    ''' <summary>
+    ''' Linear and Integer Programming
+    ''' </summary>
+    ''' <param name="direction">Character string giving direction of optimization: "min" (default) or "max."</param>
+    ''' <param name="objective"></param>
+    ''' <param name="subjective"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("lp")>
-    Public Function lp(direction As OptimizationType, objective As Expression, subjective As Expression(), Optional env As Environment = Nothing) As Object
+    Public Function lp(objective As Expression,
+                       subjective As Expression(),
+                       Optional direction As OptimizationType = OptimizationType.MIN,
+                       Optional env As Environment = Nothing) As Object
+
         If subjective.Length = 1 AndAlso TypeOf subjective(Scan0) Is VectorLiteral Then
             subjective = DirectCast(subjective(Scan0), VectorLiteral).ToArray
         End If
