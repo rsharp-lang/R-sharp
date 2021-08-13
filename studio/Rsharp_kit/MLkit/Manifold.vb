@@ -107,6 +107,9 @@ Module Manifold
     ''' <param name="customMapCutoff">
     ''' cutoff value in range ``[0,1]``
     ''' </param>
+    ''' <param name="KDsearch">
+    ''' knn search via KD-tree?
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("umap")>
@@ -120,6 +123,7 @@ Module Manifold
                                    Optional customNumberOfEpochs As Integer? = Nothing,
                                    Optional customMapCutoff As Double? = Nothing,
                                    Optional debug As Boolean = False,
+                                   Optional KDsearch As Boolean = False,
                                    Optional env As Environment = Nothing) As Object
         Dim labels As String()
         Dim matrix As Double()()
@@ -163,7 +167,8 @@ Module Manifold
             bandwidth:=bandwidth,
             customNumberOfEpochs:=customNumberOfEpochs,
             customMapCutoff:=customMapCutoff,
-            progressReporter:=report
+            progressReporter:=report,
+            kdTreeKNNEngine:=KDsearch
         )
         Dim nEpochs As Integer
 

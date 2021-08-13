@@ -5,24 +5,26 @@ const MNIST_LabelledVectorArray = `${dirname(@script)}/${filename}`
 |> read.mnist.labelledvector(takes = 50000)
 ;
 const tags as string = rownames(MNIST_LabelledVectorArray);
+const kdtree_metric as boolean = TRUE;
 
 rownames(MNIST_LabelledVectorArray) = `X${1:nrow(MNIST_LabelledVectorArray)}`;
 
-bitmap(file = `${dirname(@script)}/MNIST-LabelledVectorArray-20000x100.umap_scatter.png`, size = [6000,4000]) {
+bitmap(file = `${dirname(@script)}/MNIST-LabelledVectorArray-20000x100.umap_scatter${ifelse(kdtree_metric, "_kdtree_KNN", "")}.png`, size = [6000,4000]) {
 	const manifold = umap(MNIST_LabelledVectorArray,
 		dimension         = 2, 
 		numberOfNeighbors = 10,
 		localConnectivity = 1,
 		KnnIter           = 64,
 		bandwidth         = 1,
-		debug             = TRUE
+		debug             = TRUE,
+		KDsearch          = kdtree_metric
 	)
 	;
 	
 	manifold$umap
 	|> as.data.frame
 	|> write.csv( 
-		file      = `${dirname(@script)}/MNIST-LabelledVectorArray-20000x100.umap_scatter.csv`, 
+		file      = `${dirname(@script)}/MNIST-LabelledVectorArray-20000x100.umap_scatter${ifelse(kdtree_metric, "_kdtree_KNN", "")}.csv`, 
 		row.names = tags
 	);
 	
