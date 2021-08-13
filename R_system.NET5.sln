@@ -87,7 +87,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "machine_learning", "machine
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "UMAP.NET5", "..\runtime\sciBASIC#\Data_science\DataMining\UMAP\UMAP.NET5.vbproj", "{4518E446-1260-44D5-A773-380DB934E9FF}"
 EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "hctree-netcore5", "..\runtime\sciBASIC#\Data_science\DataMining\hierarchical-clustering\hierarchical-clustering\hctree-netcore5.vbproj", "{36D377CE-FABA-4FD5-8FAF-3BCB0D6BC3E2}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "hctree.NET5", "..\runtime\sciBASIC#\Data_science\DataMining\hierarchical-clustering\hierarchical-clustering\hctree.NET5.vbproj", "{36D377CE-FABA-4FD5-8FAF-3BCB0D6BC3E2}"
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "btree-netcore5", "..\runtime\sciBASIC#\Data_science\DataMining\BinaryTree\btree-netcore5.vbproj", "{550F1862-315E-4529-93CA-EC8C30168C6C}"
 EndProject
