@@ -42,7 +42,9 @@
 #End Region
 
 Imports System.IO
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
@@ -111,5 +113,35 @@ Module package
     <ExportAPI("parse")>
     Public Function Parse(rscript As String) As ShellScript
         Return New ShellScript(R.AutoHandleScript(handle:=rscript)).AnalysisAllCommands
+    End Function
+
+    ''' <summary>
+    ''' attach and hotload of a package.
+    ''' </summary>
+    ''' <param name="package"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("attach")>
+    Public Function attach(package As String, Optional env As Environment = Nothing) As Object
+        If package.ExtensionSuffix("zip") Then
+            If package.FileExists Then
+                Dim tmpDir As String = TempFileSystem.GetAppSysTempFile("_package", App.PID.ToHexString, package.BaseName)
+                Call UnZip.ImprovedExtractToDirectory(package, tmpDir, Overwrite.Always)
+                Return PackageLoader2.LoadPackage(tmpDir, env.globalEnvironment)
+            ElseIf package.First = "@" Then
+                ' source from github
+                Return github.hotLoad(package.Substring(1))
+            Else
+                Return Internal.debug.stop({$"invalid package source: '{package}'!", $"source: {package}"}, env)
+            End If
+        ElseIf package.DirectoryExists Then
+            ' is dir
+            Return PackageLoader2.Hotload(package, env.globalEnvironment)
+        ElseIf package.First = "@" Then
+            ' source from github
+            Return github.hotLoad(package.Substring(1))
+        Else
+            Return Internal.debug.stop({$"invalid package source: '{package}'!", $"source: {package}"}, env)
+        End If
     End Function
 End Module

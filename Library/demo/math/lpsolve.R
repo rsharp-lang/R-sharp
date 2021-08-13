@@ -7,7 +7,10 @@ const subject_to = ~[
 ];
 const lpp = lp(objective, subject_to, "max");
 
-str(lpp);
+str(lpp$solution);
+
+print("objective value:");
+print(lpp$objective);
 
 print("solve problem 2:");
 
@@ -25,3 +28,4 @@ str(lp(
 	"max"
 
 ));
+
