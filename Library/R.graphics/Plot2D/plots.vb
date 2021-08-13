@@ -352,7 +352,7 @@ Module plots
                 classinfo = New Dictionary(Of String, String)
 
                 For Each key As Object In hash.Keys
-                    classinfo(key.ToString) = Scripting.ToString(hash(key))
+                    classinfo(key.ToString) = any.ToString(hash(key))
                 Next
             End If
 
