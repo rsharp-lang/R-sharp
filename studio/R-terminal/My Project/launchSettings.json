@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--syntax /script  E:\\bing-academic\\R\\zzz.R"
+      "commandLineArgs": "\"E:\\bing-academic\\test\\search.R\" --attach \"E:\\bing-academic\" --debug"
     }
   }
 }
