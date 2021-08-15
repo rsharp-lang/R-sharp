@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\Library\\demo\\clustering\\hclust\\hclust_visual.R\""
+      "commandLineArgs": "\"E:\\bing-academic\\test\\search.R\" --attach \"E:\\bing-academic\" --debug"
     }
   }
 }

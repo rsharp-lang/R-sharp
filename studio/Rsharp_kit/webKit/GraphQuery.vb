@@ -54,16 +54,30 @@ Public Module HtmlGraphQuery
         Return QueryParser.GetQuery(graphquery)
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="document"></param>
+    ''' <param name="graphquery"></param>
+    ''' <param name="raw"></param>
+    ''' <param name="stripHtml">
+    ''' Trim the html document text at first? if this option is
+    ''' enable, then the script and css node element in html 
+    ''' document will be removed before run the graphquery.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("query")>
     Public Function query(document As Object, graphquery As Object,
                           Optional raw As Boolean = False,
+                          Optional stripHtml As Boolean = False,
                           Optional env As Environment = Nothing) As Object
 
         If TypeOf graphquery Is String Then
             graphquery = QueryParser.GetQuery(graphquery)
         End If
         If TypeOf document Is String Then
-            document = HtmlDocument.LoadDocument(document)
+            document = HtmlDocument.LoadDocument(document, strip:=stripHtml)
         End If
 
         Dim data As JsonElement = New Engine().Execute(DirectCast(document, HtmlDocument), graphquery)
