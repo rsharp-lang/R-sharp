@@ -2,7 +2,8 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"E:\\bing-academic\\test\\search.R\" --attach \"E:\\bing-academic\" --debug"
+      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\Pipeline\\MSI_analysis.R\" --mzPack ./Mouse_Urinary_Bladder_260x134pixels.mzPack --kegg \"mmu\" --padding \"padding: 0px 0px 0px 0px\" --sampling 0 --tolerance \"da:0.01\" --intocutoff 0.05 --knn 30  --skip-MSIrender --outputdir ./20210815/ --topN-ions 500 --skip-embedding --attach F:\\mzkit_win32\\Rscript --debug",
+      "workingDirectory": "U:\\项目以外内容\\2021\\研发\\KYYF0006-空间代谢组学\\20210705"
     }
   }
 }
