@@ -2,8 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\test\\testBackground.R\" --attach F:\\mzkit_win32\\Rscript",
-      "workingDirectory": "U:\\项目以外内容\\2021\\研发\\KYYF0006-空间代谢组学\\20210705"
+      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\test\\background\\plotsample.R\""
     }
   }
 }
