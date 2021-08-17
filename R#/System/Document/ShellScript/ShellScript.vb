@@ -146,6 +146,7 @@ Namespace Development.CommandLine
         Public Sub PrintUsage(dev As TextWriter)
             Dim cli As New List(Of String)
             Dim maxName As String = arguments.Select(Function(a) a.name).MaxLengthString
+            Dim valueStr As String
 
             Call dev.WriteLine()
             Call dev.WriteLine($"  '{sourceScript}' - {title}")
@@ -182,7 +183,15 @@ Namespace Development.CommandLine
                     .SplitParagraph(arg.description Or none, 65) _
                     .JoinBy(vbCrLf & New String(" "c, prefix.Length))
 
-                Call dev.WriteLine(prefix & descriptionBlock)
+                If arg.defaultValue.StartsWith("<required") Then
+                    valueStr = ($"<required>")
+                ElseIf arg.isNumeric Then
+                    valueStr = ($"[{arg.type}, default={Trim(arg.defaultValue).Trim(""""c)}]")
+                Else
+                    valueStr = ($"[{arg.type}, default={arg.defaultValue}]")
+                End If
+
+                Call dev.WriteLine(prefix & descriptionBlock & valueStr)
 
                 If descriptionBlock.Contains(vbCr) OrElse descriptionBlock.Contains(vbLf) Then
                     Call dev.WriteLine()
