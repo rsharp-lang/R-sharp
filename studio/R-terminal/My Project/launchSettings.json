@@ -2,7 +2,8 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\test\\background\\plotsample.R\""
+      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\test\\background\\testBackground.R\" --attach F:\\mzkit_win32\\Rscript",
+      "workingDirectory": "F:\\mzkit_win32\\Rscript\\test\\background"
     }
   }
 }
