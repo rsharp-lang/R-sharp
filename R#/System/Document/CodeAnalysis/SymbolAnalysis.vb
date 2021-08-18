@@ -77,7 +77,7 @@ Namespace Development.CodeAnalysis
 
                 Case GetType(SymbolIndexer) : Call GetSymbols(DirectCast(code, SymbolIndexer), context)
                 Case GetType(IfBranch) : Call GetSymbols(DirectCast(code, IfBranch), context)
-
+                Case GetType(UnaryNot) : Call GetSymbols(DirectCast(code, UnaryNot), context)
                 Case GetType(FunctionInvoke) : Call GetSymbols(DirectCast(code, FunctionInvoke), context)
                 Case GetType(DeclareNewFunction) : Call GetSymbols(DirectCast(code, DeclareNewFunction), context)
                 Case GetType(DeclareNewSymbol) : Call GetSymbols(DirectCast(code, DeclareNewSymbol), context)
@@ -86,6 +86,14 @@ Namespace Development.CodeAnalysis
                 Case Else
                     Throw New NotImplementedException(code.GetType.FullName)
             End Select
+        End Sub
+
+        Private Shared Sub GetSymbols(code As UnaryNot, context As Context)
+            If TypeOf code.logical Is SymbolReference Then
+                Call context.Push(code.logical, PropertyAccess.Readable)
+            Else
+                Call GetSymbolReferenceList(code.logical, context)
+            End If
         End Sub
 
         Private Shared Sub GetSymbols(code As IfBranch, context As Context)
