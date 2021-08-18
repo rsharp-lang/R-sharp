@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -74,6 +75,9 @@ Namespace Development.CodeAnalysis
 
                     Call GetSymbols(DirectCast(code, IBinaryExpression), context)
 
+                Case GetType(SymbolIndexer) : Call GetSymbols(DirectCast(code, SymbolIndexer), context)
+                Case GetType(IfBranch) : Call GetSymbols(DirectCast(code, IfBranch), context)
+
                 Case GetType(FunctionInvoke) : Call GetSymbols(DirectCast(code, FunctionInvoke), context)
                 Case GetType(DeclareNewFunction) : Call GetSymbols(DirectCast(code, DeclareNewFunction), context)
                 Case GetType(DeclareNewSymbol) : Call GetSymbols(DirectCast(code, DeclareNewSymbol), context)
@@ -82,6 +86,27 @@ Namespace Development.CodeAnalysis
                 Case Else
                     Throw New NotImplementedException(code.GetType.FullName)
             End Select
+        End Sub
+
+        Private Shared Sub GetSymbols(code As IfBranch, context As Context)
+            Call GetSymbolReferenceList(code.ifTest, context)
+            Call GetSymbolReferenceList(code.trueClosure, context)
+        End Sub
+
+        Private Shared Sub GetSymbols(code As SymbolIndexer, context As Context)
+            If TypeOf code.symbol Is SymbolReference Then
+                Call context.Push(code.symbol, PropertyAccess.Readable)
+            ElseIf TypeOf code.symbol Is Literal Then
+                Call context.Push(DirectCast(code.symbol, Literal).ValueStr, PropertyAccess.Readable)
+            Else
+                Call GetSymbolReferenceList(code.symbol, context)
+            End If
+
+            If TypeOf code.index Is SymbolReference Then
+                Call context.Push(code.index, PropertyAccess.Readable)
+            Else
+                Call GetSymbolReferenceList(code.index, context)
+            End If
         End Sub
 
         Private Shared Sub GetSymbols(code As ClosureExpression, context As Context)
