@@ -2,8 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\biodeep\\biodeep_pipeline\\Biodeep_Rpackage\\gsea\\kegg\\msgPack.R\" --code mmu --debug0",
-      "workingDirectory": "D:\\biodeep\\biodeep_pipeline\\Biodeep_Rpackage\\gsea\\kegg"
+      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\test\\smallXtest\\plot.R\" --debug --attach F:\\mzkit_win32\\Rscript"
     }
   }
 }
