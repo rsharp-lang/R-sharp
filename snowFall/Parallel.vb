@@ -126,6 +126,7 @@ Public Module Parallel
     <ExportAPI("parallel")>
     Public Function parallel(task As Expression,
                              Optional n_threads As Integer = -1,
+                             Optional debug As Boolean = False,
                              <RListObjectArgument>
                              Optional argv As list = Nothing,
                              Optional env As Environment = Nothing) As Object
@@ -205,7 +206,11 @@ Public Module Parallel
                     Yield x
                 Next
             End Function()
-        Dim engine As New ThreadTask(Of SeqValue(Of Object))(taskList, debugMode:=env.globalEnvironment.debugMode)
+        Dim engine As New ThreadTask(Of SeqValue(Of Object))(
+            task:=taskList,
+            debugMode:=debug,
+            verbose:=env.globalEnvironment.debugMode
+        )
         Dim result As Object() = engine _
             .WithDegreeOfParallelism(n_threads) _
             .RunParallel _
