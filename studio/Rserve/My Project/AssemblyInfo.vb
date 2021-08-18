@@ -7,7 +7,7 @@ Imports System.Runtime.InteropServices
 ' associated with an assembly.
 
 ' Review the values of the assembly attributes
-
+#if netcore5=0 then 
 <Assembly: AssemblyTitle("R# web session backend progress")>
 <Assembly: AssemblyDescription("R# web session backend progress")>
 <Assembly: AssemblyCompany("SMRUCC")>
@@ -33,3 +33,4 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyVersion("1.73.*")>
 <Assembly: AssemblyFileVersion("1.121.*")>
+#end if

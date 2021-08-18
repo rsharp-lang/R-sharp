@@ -17,7 +17,7 @@ const http_get as function(url, streamTo, interval = 3, filetype = "html") {
   const cache_file as string = `${http.cache_dir}/${prefix}/${cacheKey}.${filetype}`;
 
   if ((!file.exists(cache_file)) || (file.size(cache_file) <= 0)) {
-    # request data frm the remote server
+    # request data from the remote server
     streamTo(url, cache_file);
     # sleep for a seconds after request resource data
     # from the remote server

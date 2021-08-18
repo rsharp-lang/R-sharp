@@ -87,8 +87,8 @@ Module Html
     End Function
 
     <ExportAPI("parse")>
-    Public Function parse(html As String) As HtmlDocument
-        Return HtmlDocument.LoadDocument(html)
+    Public Function parse(html As String, Optional strip As Boolean = False) As HtmlDocument
+        Return HtmlDocument.LoadDocument(html, strip:=strip)
     End Function
 
     ''' <summary>

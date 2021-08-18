@@ -77,6 +77,12 @@ Namespace Runtime.Interop
             End Get
         End Property
 
+        Public ReadOnly Property name As String
+            Get
+                Return raw.Name
+            End Get
+        End Property
+
         ''' <summary>
         ''' The mapped R# data type
         ''' </summary>
