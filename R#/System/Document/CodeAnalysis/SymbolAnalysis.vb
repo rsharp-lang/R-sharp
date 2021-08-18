@@ -118,6 +118,8 @@ Namespace Development.CodeAnalysis
         End Sub
 
         Private Shared Sub GetSymbols(code As ClosureExpression, context As Context)
+            context = New Context(context, $"closure_{code.GetHashCode.ToHexString}")
+
             For Each line As Expression In code.EnumerateCodeLines
                 Call GetSymbolReferenceList(line, context)
             Next
@@ -137,7 +139,7 @@ Namespace Development.CodeAnalysis
 
         Private Shared Sub GetSymbols(code As DeclareNewSymbol, context As Context)
             For Each name As String In code.names
-                Call context.Push(name, PropertyAccess.Writeable)
+                Call context.Create(name)
             Next
 
             If Not code.value Is Nothing Then
@@ -194,6 +196,15 @@ Namespace Development.CodeAnalysis
                 Call Push(symbol.symbol, access)
             End Sub
 
+            ''' <summary>
+            ''' declare new symbol or function parameters
+            ''' </summary>
+            ''' <param name="symbol"></param>
+            Public Sub Create(symbol As String)
+                ref.Add(New NamedValue(Of PropertyAccess)(symbol, PropertyAccess.Writeable, context.envir))
+                context.Push(symbol)
+            End Sub
+
             Public Sub Push(symbol As String, access As PropertyAccess)
                 Dim context As SymbolAnalysis = Me.context
                 Dim currentAccess As PropertyAccess = context.SymbolAccess(symbol, context)
@@ -206,6 +217,14 @@ Namespace Development.CodeAnalysis
                     End If
                 End If
             End Sub
+
+            Public Overrides Function ToString() As String
+                If context.parent Is Nothing Then
+                    Return context.envir
+                Else
+                    Return $"{context.parent} -> {context.envir}"
+                End If
+            End Function
         End Class
     End Class
 End Namespace
