@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\tutorials\\Rscript\\taskParallel.R\" --debug"
+      "commandLineArgs": "\"D:\\CFM-ID\\flavone_cfm-id\\predict\\RunDefault.R\" --debug"
     }
   }
 }

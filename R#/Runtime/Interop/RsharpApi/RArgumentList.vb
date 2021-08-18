@@ -216,6 +216,10 @@ Namespace Runtime.Interop
             Next
 
             For i As Integer = 0 To declareArguments.Count - 1
+                If i = keyNames.Length Then
+                    Exit For
+                End If
+
                 If declareArguments.ContainsKey(keyNames(i)) AndAlso declareArguments(keyNames(i)).isObjectList Then
                     listIndex = i
                     Exit For
