@@ -121,6 +121,22 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
         Private Shared Function testVectorIndexOf(index As Index(Of Object), testLeft As Object()) As Boolean()
             Dim rawIndexObjects As Object() = index.Objects
+            Dim typeLeft = REnv.MeasureRealElementType(testLeft)
+            Dim typeRight = REnv.MeasureRealElementType(rawIndexObjects)
+
+            If typeLeft Is typeRight Then
+                Select Case typeLeft
+                    Case GetType(String)
+                        Dim left As String() = testLeft.Select(Function(o) CStr(o)).ToArray
+                        Dim indexStr As Index(Of String) = rawIndexObjects.Select(Function(o) CStr(o)).Indexing
+
+                        Return left.Select(Function(str) str Like indexStr).ToArray
+                    Case Else
+                        ' GoTo Generic
+                End Select
+            End If
+
+Generic:
             Dim isComparable As Boolean = rawIndexObjects.All(Function(a) a.GetType.ImplementInterface(GetType(IComparable)))
             Dim findTest As Boolean() = testLeft _
                 .Select(Function(x)
