@@ -2,7 +2,8 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\biodeep\\biodeep_pipeline\\Biodeep_Rpackage\\gsea\\kegg\\msgPack.R\" --code hsa --debug"
+      "commandLineArgs": "\"D:\\biodeep\\biodeep_pipeline\\Biodeep_Rpackage\\gsea\\kegg\\msgPack.R\" --code mmu --debug",
+      "workingDirectory": "D:\\biodeep\\biodeep_pipeline\\Biodeep_Rpackage\\gsea\\kegg"
     }
   }
 }
