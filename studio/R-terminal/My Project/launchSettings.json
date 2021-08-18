@@ -2,8 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "./MSI_analysis.R --mzPack ./Mouse_Urinary_Bladder_260x134pixels.mzPack --outputdir ./20210714_MSI_analysis/ --skip-peakFeatures --skip-embedding --skip-phase2 --skip-MSIrender --padding \"paddng: 0px 0px 0px 0px\" --testVisual --skip-R ",
-      "workingDirectory": "U:\\项目以外内容\\2021\\研发\\KYYF0006-空间代谢组学\\20210705"
+      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\tutorials\\Rscript\\taskParallel.R\""
     }
   }
 }

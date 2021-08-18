@@ -40,10 +40,13 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Parallel
+Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -115,7 +118,37 @@ Public Module Parallel
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("parallel")>
-    Public Function parallel(task As Expression, <RListObjectArgument> Optional argv As list = Nothing, Optional env As Environment = Nothing) As Object
+    Public Function parallel(task As Expression,
+                             <RListObjectArgument>
+                             Optional argv As list = Nothing,
+                             Optional env As Environment = Nothing) As Object
+
+        Dim required = SymbolAnalysis.GetSymbolReferenceList(task) _
+            .Where(Function(v) v.Description = "global") _
+            .Where(Function(v)
+                       Return v.Value = PropertyAccess.Readable OrElse v.Value = PropertyAccess.ReadWrite
+                   End Function) _
+            .ToArray
+        Dim seqSet As New List(Of NamedValue(Of Object()))
+        Dim value As Object
+
+        For Each symbol As NamedValue(Of PropertyAccess) In required
+            If Not argv.hasName(symbol.Name) Then
+                Return Message.SymbolNotFound(env, symbol.Name, TypeCodes.ref)
+            Else
+                value = argv.getByName(symbol.Name)
+            End If
+        Next
+
+        Dim checkSize As Integer() = seqSet _
+            .Select(Function(seq) seq.Value.Length) _
+            .Where(Function(l) l <> 1) _
+            .ToArray
+
+        If checkSize.Distinct.Count <> 1 Then
+            Return Internal.debug.stop("the sequence size should be equals to each other!", env)
+        End If
+
 
     End Function
 End Module

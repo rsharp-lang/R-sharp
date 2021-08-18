@@ -4,7 +4,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
-Namespace Development
+Namespace Development.CodeAnalysis
 
     ''' <summary>
     ''' analysis of the static symbol reference
@@ -15,10 +15,12 @@ Namespace Development
         Dim declareSymbols As New Dictionary(Of String, PropertyAccess)
         Dim parent As SymbolAnalysis
 
-        Sub New()
+        Sub New(Optional name As String = "global")
+            envir = name
         End Sub
 
-        Sub New(parent As SymbolAnalysis)
+        Sub New(parent As SymbolAnalysis, name As String)
+            Me.envir = name
             Me.parent = parent
         End Sub
 
@@ -48,10 +50,10 @@ Namespace Development
             Return envir
         End Function
 
-        Public Shared Function GetSymbolReferenceList(code As Expression) As IEnumerable(Of NamedValue(Of PropertyAccess))
+        Public Shared Function GetSymbolReferenceList(code As Expression, Optional envir As String = "global") As IEnumerable(Of NamedValue(Of PropertyAccess))
             Dim ref As New List(Of NamedValue(Of PropertyAccess))
             Dim context As New Context With {
-                .context = New SymbolAnalysis,
+                .context = New SymbolAnalysis(envir),
                 .ref = ref
             }
 
@@ -61,14 +63,41 @@ Namespace Development
         End Function
 
         Private Shared Sub GetSymbolReferenceList(code As Expression, context As Context)
+            If code Is Nothing OrElse TypeOf code Is Literal Then
+                Return
+            End If
+
             Select Case code.GetType
                 Case GetType(BinaryExpression) : Call GetSymbols(DirectCast(code, BinaryExpression), context)
                 Case GetType(FunctionInvoke) : Call GetSymbols(DirectCast(code, FunctionInvoke), context)
-
+                Case GetType(DeclareNewFunction) : Call GetSymbols(DirectCast(code, DeclareNewFunction), context)
+                Case GetType(DeclareNewSymbol) : Call GetSymbols(DirectCast(code, DeclareNewSymbol), context)
 
                 Case Else
                     Throw New NotImplementedException(code.GetType.FullName)
             End Select
+        End Sub
+
+        Private Shared Sub GetSymbols(code As DeclareNewFunction, context As Context)
+            Call context.Push(code.funcName, PropertyAccess.Writeable)
+
+            context = New Context(context, code.funcName)
+
+            For Each arg In code.parameters
+                Call GetSymbols(arg, context)
+            Next
+
+            context.ref.AddRange(context.context.GetNameEnums)
+        End Sub
+
+        Private Shared Sub GetSymbols(code As DeclareNewSymbol, context As Context)
+            For Each name As String In code.names
+                Call context.Push(name, PropertyAccess.Writeable)
+            Next
+
+            If Not code.value Is Nothing Then
+                Call GetSymbolReferenceList(code.value, context)
+            End If
         End Sub
 
         Private Shared Sub GetSymbols(code As FunctionInvoke, context As Context)
@@ -79,8 +108,10 @@ Namespace Development
             End If
 
             For Each arg As Expression In code.parameters
-                If TypeOf code.funcName Is SymbolReference Then
-                    Call context.Push(code.funcName, PropertyAccess.Readable)
+                If TypeOf arg Is SymbolReference Then
+                    Call context.Push(arg, PropertyAccess.Readable)
+                Else
+                    Call GetSymbolReferenceList(arg, context)
                 End If
             Next
         End Sub
@@ -107,9 +138,9 @@ Namespace Development
             Sub New()
             End Sub
 
-            Sub New(parent As Context)
+            Sub New(parent As Context, name As String)
                 ref = parent.ref
-                context = New SymbolAnalysis(parent.context)
+                context = New SymbolAnalysis(parent.context, name)
             End Sub
 
             Public Sub Push(symbol As SymbolReference, access As PropertyAccess)
