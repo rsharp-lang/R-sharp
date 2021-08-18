@@ -219,6 +219,6 @@ Public Module Parallel
             End If
         Next
 
-        Return result
+        Return REnv.TryCastGenericArray(result, env)
     End Function
 End Module
