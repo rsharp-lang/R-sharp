@@ -269,14 +269,16 @@ Namespace Runtime.Interop
             Dim i As Integer
             Dim arg As InvokeParameter
             Dim normalNames As New List(Of String)
+            Dim argv As RMethodArgument
 
             For i = 0 To params.Length - 1
                 arg = params(i)
 
                 If arg.isSymbolAssign Then
                     If arg.name Like declareNameIndex Then
+                        argv = declareArguments(arg.name)
                         parameterVals(declareNameIndex(arg.name)) = RMethodInfo.getValue(
-                            arg:=declareArguments(arg.name),
+                            arg:=argv,
                             value:=arg.Evaluate(env),
                             trace:=[declare].name,
                             envir:=env,
@@ -287,8 +289,9 @@ Namespace Runtime.Interop
                         listObject.Add(arg)
                     End If
                 Else
+                    argv = [declare].parameters(sequenceIndex)
                     parameterVals(sequenceIndex) = RMethodInfo.getValue(
-                        arg:=[declare].parameters(sequenceIndex),
+                        arg:=argv,
                         value:=arg.Evaluate(env),
                         trace:=[declare].name,
                         envir:=env,
