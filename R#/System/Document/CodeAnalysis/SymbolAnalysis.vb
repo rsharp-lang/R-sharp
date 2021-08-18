@@ -75,6 +75,7 @@ Namespace Development.CodeAnalysis
 
                     Call GetSymbols(DirectCast(code, IBinaryExpression), context)
 
+                Case GetType(ElseBranch) : Call GetSymbols(DirectCast(code, ElseBranch), context)
                 Case GetType(SymbolIndexer) : Call GetSymbols(DirectCast(code, SymbolIndexer), context)
                 Case GetType(IfBranch) : Call GetSymbols(DirectCast(code, IfBranch), context)
                 Case GetType(UnaryNot) : Call GetSymbols(DirectCast(code, UnaryNot), context)
@@ -86,6 +87,10 @@ Namespace Development.CodeAnalysis
                 Case Else
                     Throw New NotImplementedException(code.GetType.FullName)
             End Select
+        End Sub
+
+        Private Shared Sub GetSymbols(code As ElseBranch, context As Context)
+            Call GetSymbols(code.closure, context)
         End Sub
 
         Private Shared Sub GetSymbols(code As UnaryNot, context As Context)
