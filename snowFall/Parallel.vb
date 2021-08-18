@@ -41,6 +41,7 @@
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -131,7 +132,13 @@ Public Module Parallel
                              Optional argv As list = Nothing,
                              Optional env As Environment = Nothing) As Object
 
-        Dim required = SymbolAnalysis.GetSymbolReferenceList(task) _
+        Dim allSymbols = SymbolAnalysis.GetSymbolReferenceList(task).ToArray
+        Dim locals As Index(Of String) = allSymbols _
+            .Where(Function(x) x.Description <> "global") _
+            .Select(Function(x) x.Name) _
+            .Distinct _
+            .Indexing
+        Dim required = allSymbols _
             .Where(Function(v) v.Description = "global") _
             .Where(Function(v)
                        Return v.Value = PropertyAccess.Readable OrElse v.Value = PropertyAccess.ReadWrite
@@ -152,6 +159,8 @@ Public Module Parallel
                     parallelBase.Push(symbol.Name, env.FindSymbol(symbol.Name).value, [readonly]:=True)
                     Continue For
                 ElseIf Internal.invoke.getFunction(symbol.Name) IsNot Nothing Then
+                    Continue For
+                ElseIf symbol.Name Like locals Then
                     Continue For
                 End If
 
