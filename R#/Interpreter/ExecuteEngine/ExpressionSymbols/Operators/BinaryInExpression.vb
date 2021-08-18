@@ -61,6 +61,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
     ''' + 如果右边参数为列表，则是对key进行查找操作
     ''' </summary>
     Public Class BinaryInExpression : Inherits Expression
+        Implements IBinaryExpression
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -74,23 +75,28 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Get
         End Property
 
-        ''' <summary>
-        ''' left
-        ''' </summary>
-        Friend a As Expression
-        ''' <summary>
-        ''' right
-        ''' </summary>
-        Friend b As Expression
+        Public Property left As Expression Implements IBinaryExpression.left
+        Public ReadOnly Property right As Expression Implements IBinaryExpression.right
 
+        Public ReadOnly Property [operator] As String Implements IBinaryExpression.operator
+            Get
+                Return "in"
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="a">left</param>
+        ''' <param name="b">right</param>
         Sub New(a As Expression, b As Expression)
-            Me.a = a
-            Me.b = b
+            Me.left = a
+            Me.right = b
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim sequence As Object = b.Evaluate(envir)
-            Dim testLeft As Object() = getIndex(a.Evaluate(envir))
+            Dim sequence As Object = right.Evaluate(envir)
+            Dim testLeft As Object() = getIndex(left.Evaluate(envir))
 
             If sequence Is Nothing Then
                 Return {}
@@ -160,7 +166,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"({a} %in% index<{b}>)"
+            Return $"({left} %in% index<{right}>)"
         End Function
     End Class
 End Namespace

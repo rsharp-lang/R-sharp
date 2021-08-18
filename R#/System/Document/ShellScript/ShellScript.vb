@@ -355,8 +355,8 @@ Namespace Development.CommandLine
         End Sub
 
         Private Sub analysisTree(expr As BinaryInExpression, attrs As ArgumentInfo)
-            Call AnalysisTree(expr.a, attrs)
-            Call AnalysisTree(expr.b, attrs)
+            Call AnalysisTree(expr.left, attrs)
+            Call AnalysisTree(expr.left, attrs)
         End Sub
 
         Private Sub analysisTree(expr As BinaryExpression, attrs As ArgumentInfo)

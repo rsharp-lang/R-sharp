@@ -92,12 +92,12 @@ Namespace Interpreter.SyntaxParser
                 ' merge symbol into binary expression
                 ' symbol$name in ...
                 Dim bin As BinaryInExpression = DirectCast(b, BinaryInExpression)
-                Dim left As SyntaxResult = createIndexer(a, bin.a, opts)
+                Dim left As SyntaxResult = createIndexer(a, bin.left, opts)
 
                 If left.isException Then
                     Return left
                 Else
-                    bin.a = left.expression
+                    bin.left = left.expression
                 End If
 
                 Return New SyntaxResult(bin)

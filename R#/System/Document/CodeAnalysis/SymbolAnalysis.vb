@@ -68,7 +68,12 @@ Namespace Development.CodeAnalysis
             End If
 
             Select Case code.GetType
-                Case GetType(BinaryExpression) : Call GetSymbols(DirectCast(code, BinaryExpression), context)
+                Case GetType(BinaryExpression),
+                     GetType(BinaryInExpression),
+                     GetType(BinaryOrExpression)
+
+                    Call GetSymbols(DirectCast(code, IBinaryExpression), context)
+
                 Case GetType(FunctionInvoke) : Call GetSymbols(DirectCast(code, FunctionInvoke), context)
                 Case GetType(DeclareNewFunction) : Call GetSymbols(DirectCast(code, DeclareNewFunction), context)
                 Case GetType(DeclareNewSymbol) : Call GetSymbols(DirectCast(code, DeclareNewSymbol), context)
@@ -125,7 +130,7 @@ Namespace Development.CodeAnalysis
             Next
         End Sub
 
-        Private Shared Sub GetSymbols(code As BinaryExpression, context As Context)
+        Private Shared Sub GetSymbols(code As IBinaryExpression, context As Context)
             If TypeOf code.left Is SymbolReference Then
                 Call context.Push(code.left, PropertyAccess.Readable)
             Else
