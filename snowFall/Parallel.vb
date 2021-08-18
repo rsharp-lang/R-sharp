@@ -39,6 +39,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -49,6 +50,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 ''' <summary>
 ''' # Support for Parallel computation in ``R#`` 
@@ -128,20 +130,34 @@ Public Module Parallel
             .Where(Function(v)
                        Return v.Value = PropertyAccess.Readable OrElse v.Value = PropertyAccess.ReadWrite
                    End Function) _
+            .GroupBy(Function(v) v.Name) _
+            .Select(Function(v) v.First) _
             .ToArray
-        Dim seqSet As New List(Of NamedValue(Of Object()))
+        Dim seqSet As New List(Of NamedCollection(Of Object))
         Dim value As Object
+        Dim parallelBase As New Environment(env.globalEnvironment)
 
         For Each symbol As NamedValue(Of PropertyAccess) In required
             If Not argv.hasName(symbol.Name) Then
+                If Not env.FindFunction(symbol.Name) Is Nothing Then
+                    parallelBase.Push(symbol.Name, env.FindFunction(symbol.Name).value, [readonly]:=True)
+                    Continue For
+                ElseIf Not env.FindSymbol(symbol.Name) Is Nothing Then
+                    parallelBase.Push(symbol.Name, env.FindSymbol(symbol.Name).value, [readonly]:=True)
+                    Continue For
+                ElseIf Internal.invoke.getFunction(symbol.Name) IsNot Nothing Then
+                    Continue For
+                End If
+
                 Return Message.SymbolNotFound(env, symbol.Name, TypeCodes.ref)
             Else
                 value = argv.getByName(symbol.Name)
+                seqSet.Add(New NamedCollection(Of Object)(symbol.Name, Rset.getObjectSet(value, env)))
             End If
         Next
 
         Dim checkSize As Integer() = seqSet _
-            .Select(Function(seq) seq.Value.Length) _
+            .Select(Function(seq) seq.Length) _
             .Where(Function(l) l <> 1) _
             .ToArray
 
@@ -149,6 +165,30 @@ Public Module Parallel
             Return Internal.debug.stop("the sequence size should be equals to each other!", env)
         End If
 
+        Dim result As New List(Of Object)
+        Dim parallelEnv As Environment
+        Dim frame As StackFrame
+
+        For i As Integer = 0 To checkSize(Scan0) - 1
+            frame = New StackFrame With {
+                .File = "snowFall",
+                .Line = "n/a",
+                .Method = New Method With {
+                    .Method = "parallel",
+                    .[Module] = "snowFall",
+                    .[Namespace] = "R#/Runtime"
+                }
+            }
+            parallelEnv = New Environment(parallelBase, frame, isInherits:=False)
+
+            For Each x In seqSet
+                If x.Length = 1 Then
+                    parallelEnv.Push(x.name, x.value, [readonly]:=True)
+                Else
+                    parallelEnv.Push(x.name, x(i), [readonly]:=True)
+                End If
+            Next
+        Next
 
     End Function
 End Module
