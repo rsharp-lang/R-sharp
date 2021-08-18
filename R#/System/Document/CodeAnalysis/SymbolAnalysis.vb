@@ -72,10 +72,17 @@ Namespace Development.CodeAnalysis
                 Case GetType(FunctionInvoke) : Call GetSymbols(DirectCast(code, FunctionInvoke), context)
                 Case GetType(DeclareNewFunction) : Call GetSymbols(DirectCast(code, DeclareNewFunction), context)
                 Case GetType(DeclareNewSymbol) : Call GetSymbols(DirectCast(code, DeclareNewSymbol), context)
+                Case GetType(AcceptorClosure), GetType(ClosureExpression) : Call GetSymbols(DirectCast(code, ClosureExpression), context)
 
                 Case Else
                     Throw New NotImplementedException(code.GetType.FullName)
             End Select
+        End Sub
+
+        Private Shared Sub GetSymbols(code As ClosureExpression, context As Context)
+            For Each line As Expression In code.EnumerateCodeLines
+                Call GetSymbolReferenceList(line, context)
+            Next
         End Sub
 
         Private Shared Sub GetSymbols(code As DeclareNewFunction, context As Context)
@@ -103,6 +110,8 @@ Namespace Development.CodeAnalysis
         Private Shared Sub GetSymbols(code As FunctionInvoke, context As Context)
             If TypeOf code.funcName Is SymbolReference Then
                 Call context.Push(code.funcName, PropertyAccess.Readable)
+            ElseIf TypeOf code.funcName Is Literal Then
+                Call context.Push(DirectCast(code.funcName, Literal).ValueStr, PropertyAccess.Readable)
             Else
                 Call GetSymbolReferenceList(code.funcName, context)
             End If

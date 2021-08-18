@@ -280,7 +280,7 @@ Namespace Runtime.Interop
                         argv = declareArguments(arg.name)
 
                         If argv.requireRawExpression AndAlso arg.isAcceptor Then
-                            argVal = arg
+                            argVal = arg.value
                         Else
                             argVal = arg.Evaluate(env)
                         End If
@@ -308,14 +308,14 @@ Namespace Runtime.Interop
                     ' };
                     '
                     If argv.requireRawExpression AndAlso arg.isAcceptor Then
-                        argVal = arg
+                        argVal = arg.value
                     Else
                         argVal = arg.Evaluate(env)
                     End If
 
                     parameterVals(sequenceIndex) = RMethodInfo.getValue(
                         arg:=argv,
-                        value:=arg.Evaluate(env),
+                        value:=argVal,
                         trace:=[declare].name,
                         envir:=env,
                         trygetListParam:=False
