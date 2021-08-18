@@ -42,8 +42,10 @@
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Parallel
+Imports Parallel.ThreadTask
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
@@ -123,6 +125,7 @@ Public Module Parallel
     Public Function parallel(task As Expression,
                              <RListObjectArgument>
                              Optional argv As list = Nothing,
+                             Optional n_threads As Integer = -1,
                              Optional env As Environment = Nothing) As Object
 
         Dim required = SymbolAnalysis.GetSymbolReferenceList(task) _
@@ -165,30 +168,49 @@ Public Module Parallel
             Return Internal.debug.stop("the sequence size should be equals to each other!", env)
         End If
 
-        Dim result As New List(Of Object)
-        Dim parallelEnv As Environment
-        Dim frame As StackFrame
-
-        For i As Integer = 0 To checkSize(Scan0) - 1
-            frame = New StackFrame With {
-                .File = "snowFall",
-                .Line = "n/a",
-                .Method = New Method With {
-                    .Method = "parallel",
-                    .[Module] = "snowFall",
-                    .[Namespace] = "R#/Runtime"
+        Dim taskFactory As Func(Of Integer, SeqValue(Of Environment)) =
+            Function(i) As SeqValue(Of Environment)
+                Dim frame As New StackFrame With {
+                    .File = "snowFall",
+                    .Line = "n/a",
+                    .Method = New Method With {
+                        .Method = $"task_{i + 1}",
+                        .[Module] = "parallel",
+                        .[Namespace] = "R#/Runtime"
+                    }
                 }
-            }
-            parallelEnv = New Environment(parallelBase, frame, isInherits:=False)
+                Dim parallelEnv As New Environment(parallelBase, frame, isInherits:=False)
 
-            For Each x In seqSet
-                If x.Length = 1 Then
-                    parallelEnv.Push(x.name, x.value, [readonly]:=True)
-                Else
-                    parallelEnv.Push(x.name, x(i), [readonly]:=True)
-                End If
-            Next
-        Next
+                For Each x In seqSet
+                    If x.Length = 1 Then
+                        parallelEnv.Push(x.name, x.value, [readonly]:=True)
+                    Else
+                        parallelEnv.Push(x.name, x(i), [readonly]:=True)
+                    End If
+                Next
 
+                Return New SeqValue(Of Environment)(i, parallelEnv)
+            End Function
+        Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) =
+            Iterator Function() As IEnumerable(Of Func(Of SeqValue(Of Object)))
+                For i As Integer = 0 To checkSize(Scan0) - 1
+                    Dim index As Integer = i
+                    Dim x As Func(Of SeqValue(Of Object)) =
+                        Function()
+                            Return New SeqValue(Of Object)(index, task.Evaluate(taskFactory(index)))
+                        End Function
+
+                    Yield x
+                Next
+            End Function()
+        Dim engine As New ThreadTask(Of SeqValue(Of Object))(taskList, debugMode:=env.globalEnvironment.debugMode)
+        Dim result As Object() = engine _
+            .WithDegreeOfParallelism(n_threads) _
+            .RunParallel _
+            .OrderBy(Function(a) a.i) _
+            .Select(Function(a) a.value) _
+            .ToArray
+
+        Return result
     End Function
 End Module
