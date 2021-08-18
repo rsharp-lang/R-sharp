@@ -52,6 +52,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 ''' <summary>
@@ -123,9 +124,9 @@ Public Module Parallel
     ''' <returns></returns>
     <ExportAPI("parallel")>
     Public Function parallel(task As Expression,
+                             Optional n_threads As Integer = -1,
                              <RListObjectArgument>
                              Optional argv As list = Nothing,
-                             Optional n_threads As Integer = -1,
                              Optional env As Environment = Nothing) As Object
 
         Dim required = SymbolAnalysis.GetSymbolReferenceList(task) _
@@ -208,7 +209,7 @@ Public Module Parallel
             .WithDegreeOfParallelism(n_threads) _
             .RunParallel _
             .OrderBy(Function(a) a.i) _
-            .Select(Function(a) a.value) _
+            .Select(Function(a) REnv.single(a.value)) _
             .ToArray
 
         Return result

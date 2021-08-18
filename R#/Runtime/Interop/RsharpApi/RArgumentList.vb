@@ -208,9 +208,25 @@ Namespace Runtime.Interop
                                                       funcName$,
                                                       offset As Integer,
                                                       env As Environment) As Object()
+            Dim listIndex As Integer = -1
+            Dim keyNames As String() = parameterNames.Objects
+
             For Each name As String In normalNames
                 Call declareArguments.Remove(name)
             Next
+
+            For i As Integer = 0 To declareArguments.Count - 1
+                If declareArguments.ContainsKey(keyNames(i)) AndAlso declareArguments(keyNames(i)).isObjectList Then
+                    listIndex = i
+                    Exit For
+                End If
+            Next
+
+            Dim listObject As InvokeParameter() = {}
+
+            If listIndex > -1 Then
+                listObject = parameterVals(listIndex)
+            End If
 
             For Each arg As RMethodArgument In declareArguments.Values
                 If arg.isOptional Then
@@ -219,6 +235,18 @@ Namespace Runtime.Interop
                     ElseIf Not arg.isObjectList Then
                         If TypeOf arg.default Is Expression Then
                             parameterVals(parameterNames(arg.name) + offset) = DirectCast(arg.default, Expression).Evaluate(env)
+                        ElseIf listObject.Any(Function(kvp) kvp.name = arg.name) Then
+                            parameterVals(parameterNames(arg.name) + offset) = listObject _
+                                .Where(Function(kvp) kvp.name = arg.name) _
+                                .First _
+                                .Evaluate(env)
+                            parameterVals(parameterNames(arg.name) + offset) = RMethodInfo.getValue(
+                                arg:=arg,
+                                value:=parameterVals(parameterNames(arg.name) + offset),
+                                trace:=env.stackFrame.ToString,
+                                envir:=env,
+                                trygetListParam:=False
+                            )
                         Else
                             parameterVals(parameterNames(arg.name) + offset) = arg.default
                         End If
