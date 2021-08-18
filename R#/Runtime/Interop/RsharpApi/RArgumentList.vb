@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::85eaed392d4c554344758541522ff90e, R#\Runtime\Interop\RsharpApi\RArgumentList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RArgumentList
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: CreateLeftMarginArguments, CreateObjectListArguments, CreateRightMarginArguments, fillOptionalArguments, objectListArgumentIndex
-    '                   objectListArgumentMargin, TryCastListObjects
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RArgumentList
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: CreateLeftMarginArguments, CreateObjectListArguments, CreateRightMarginArguments, fillOptionalArguments, objectListArgumentIndex
+'                   objectListArgumentMargin, TryCastListObjects
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -270,6 +270,7 @@ Namespace Runtime.Interop
             Dim arg As InvokeParameter
             Dim normalNames As New List(Of String)
             Dim argv As RMethodArgument
+            Dim argVal As Object
 
             For i = 0 To params.Length - 1
                 arg = params(i)
@@ -277,9 +278,16 @@ Namespace Runtime.Interop
                 If arg.isSymbolAssign Then
                     If arg.name Like declareNameIndex Then
                         argv = declareArguments(arg.name)
+
+                        If argv.requireRawExpression AndAlso arg.isAcceptor Then
+                            argVal = arg
+                        Else
+                            argVal = arg.Evaluate(env)
+                        End If
+
                         parameterVals(declareNameIndex(arg.name)) = RMethodInfo.getValue(
                             arg:=argv,
-                            value:=arg.Evaluate(env),
+                            value:=argVal,
                             trace:=[declare].name,
                             envir:=env,
                             trygetListParam:=False
@@ -290,6 +298,21 @@ Namespace Runtime.Interop
                     End If
                 Else
                     argv = [declare].parameters(sequenceIndex)
+
+                    ' make bugs fixed for the required raw expression
+                    ' in parallel api, example as:
+                    '
+                    ' parallel(x = seqVals, z = bbb, n_threads = 2) {
+                    '    print(x);
+                    '    x +5 + z;
+                    ' };
+                    '
+                    If argv.requireRawExpression AndAlso arg.isAcceptor Then
+                        argVal = arg
+                    Else
+                        argVal = arg.Evaluate(env)
+                    End If
+
                     parameterVals(sequenceIndex) = RMethodInfo.getValue(
                         arg:=argv,
                         value:=arg.Evaluate(env),
