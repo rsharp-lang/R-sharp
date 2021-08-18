@@ -47,6 +47,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Parallel
 Imports Parallel.ThreadTask
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -211,6 +212,12 @@ Public Module Parallel
             .OrderBy(Function(a) a.i) _
             .Select(Function(a) REnv.single(a.value)) _
             .ToArray
+
+        For Each i In result
+            If Program.isException(i) Then
+                Return i
+            End If
+        Next
 
         Return result
     End Function
