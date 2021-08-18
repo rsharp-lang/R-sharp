@@ -106,7 +106,7 @@ Namespace Runtime.Interop
 
         Public ReadOnly Property requireRawExpression As Boolean
             Get
-                Return Not type Is Nothing AndAlso type.raw.IsInheritsFrom(GetType(Expression))
+                Return type IsNot Nothing AndAlso type.raw.IsInheritsFrom(GetType(Expression), strict:=False)
             End Get
         End Property
 
