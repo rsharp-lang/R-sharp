@@ -191,7 +191,7 @@ Namespace Development.CommandLine
                     valueStr = ($"[{arg.type}, default={arg.defaultValue}]")
                 End If
 
-                Call dev.WriteLine(prefix & descriptionBlock & valueStr)
+                Call dev.WriteLine(prefix & descriptionBlock) ' & valueStr)
 
                 If descriptionBlock.Contains(vbCr) OrElse descriptionBlock.Contains(vbLf) Then
                     Call dev.WriteLine()
