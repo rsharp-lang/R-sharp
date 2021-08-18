@@ -1,6 +1,6 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -12,8 +12,37 @@ Namespace Development
     Public Class SymbolAnalysis
 
         Dim envir As String
-        Dim declareSymbols As New Index(Of String)
+        Dim declareSymbols As New Dictionary(Of String, PropertyAccess)
         Dim parent As SymbolAnalysis
+
+        Sub New()
+        End Sub
+
+        Sub New(parent As SymbolAnalysis)
+            Me.parent = parent
+        End Sub
+
+        Public Iterator Function GetNameEnums() As IEnumerable(Of NamedValue(Of PropertyAccess))
+            For Each symbolRef In declareSymbols
+                Yield New NamedValue(Of PropertyAccess)(symbolRef.Key, symbolRef.Value, envir)
+            Next
+        End Function
+
+        Public Sub Push(symbolName As String)
+            declareSymbols.Add(symbolName, PropertyAccess.Writeable)
+        End Sub
+
+        Public Function SymbolAccess(symbolName As String, ByRef context As SymbolAnalysis) As PropertyAccess
+            If declareSymbols.ContainsKey(symbolName) Then
+                context = Me
+                Return declareSymbols(symbolName)
+            ElseIf Not parent Is Nothing Then
+                Return parent.SymbolAccess(symbolName, context)
+            Else
+                context = Nothing
+                Return PropertyAccess.NotSure
+            End If
+        End Function
 
         Public Overrides Function ToString() As String
             Return envir
@@ -34,6 +63,7 @@ Namespace Development
         Private Shared Sub GetSymbolReferenceList(code As Expression, context As Context)
             Select Case code.GetType
                 Case GetType(BinaryExpression) : Call GetSymbols(DirectCast(code, BinaryExpression), context)
+                Case GetType(FunctionInvoke) : Call GetSymbols(DirectCast(code, FunctionInvoke), context)
 
 
                 Case Else
@@ -41,15 +71,29 @@ Namespace Development
             End Select
         End Sub
 
+        Private Shared Sub GetSymbols(code As FunctionInvoke, context As Context)
+            If TypeOf code.funcName Is SymbolReference Then
+                Call context.Push(code.funcName, PropertyAccess.Readable)
+            Else
+                Call GetSymbolReferenceList(code.funcName, context)
+            End If
+
+            For Each arg As Expression In code.parameters
+                If TypeOf code.funcName Is SymbolReference Then
+                    Call context.Push(code.funcName, PropertyAccess.Readable)
+                End If
+            Next
+        End Sub
+
         Private Shared Sub GetSymbols(code As BinaryExpression, context As Context)
             If TypeOf code.left Is SymbolReference Then
-
+                Call context.Push(code.left, PropertyAccess.Readable)
             Else
                 Call GetSymbolReferenceList(code.left, context)
             End If
 
             If TypeOf code.right Is SymbolReference Then
-
+                Call context.Push(code.right, PropertyAccess.Readable)
             Else
                 Call GetSymbolReferenceList(code.right, context)
             End If
@@ -60,6 +104,30 @@ Namespace Development
             Public context As SymbolAnalysis
             Public ref As List(Of NamedValue(Of PropertyAccess))
 
+            Sub New()
+            End Sub
+
+            Sub New(parent As Context)
+                ref = parent.ref
+                context = New SymbolAnalysis(parent.context)
+            End Sub
+
+            Public Sub Push(symbol As SymbolReference, access As PropertyAccess)
+                Call Push(symbol.symbol, access)
+            End Sub
+
+            Public Sub Push(symbol As String, access As PropertyAccess)
+                Dim context As SymbolAnalysis = Me.context
+                Dim currentAccess As PropertyAccess = context.SymbolAccess(symbol, context)
+
+                If currentAccess = PropertyAccess.NotSure Then
+                    ref.Add(New NamedValue(Of PropertyAccess)(symbol, access, "global"))
+                Else
+                    If currentAccess <> access AndAlso currentAccess <> PropertyAccess.ReadWrite Then
+                        context.declareSymbols(symbol) = PropertyAccess.ReadWrite
+                    End If
+                End If
+            End Sub
         End Class
     End Class
 End Namespace
