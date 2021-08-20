@@ -78,7 +78,7 @@ Namespace Development.Package.File.Expressions
             If TypeOf x Is BinaryBetweenExpression Then
                 Return DirectCast(x, BinaryBetweenExpression).collectionSet
             ElseIf TypeOf x Is BinaryInExpression Then
-                Return DirectCast(x, BinaryInExpression).a
+                Return DirectCast(x, BinaryInExpression).left
             ElseIf TypeOf x Is BinaryOrExpression Then
                 Return DirectCast(x, BinaryOrExpression).left
             ElseIf TypeOf x Is BinaryExpression Then
@@ -92,7 +92,7 @@ Namespace Development.Package.File.Expressions
             If TypeOf x Is BinaryBetweenExpression Then
                 Return DirectCast(x, BinaryBetweenExpression).range
             ElseIf TypeOf x Is BinaryInExpression Then
-                Return DirectCast(x, BinaryInExpression).b
+                Return DirectCast(x, BinaryInExpression).right
             ElseIf TypeOf x Is BinaryOrExpression Then
                 Return DirectCast(x, BinaryOrExpression).right
             ElseIf TypeOf x Is BinaryExpression Then

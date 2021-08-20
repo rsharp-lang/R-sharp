@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::85eaed392d4c554344758541522ff90e, R#\Runtime\Interop\RsharpApi\RArgumentList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RArgumentList
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: CreateLeftMarginArguments, CreateObjectListArguments, CreateRightMarginArguments, fillOptionalArguments, objectListArgumentIndex
-    '                   objectListArgumentMargin, TryCastListObjects
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RArgumentList
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: CreateLeftMarginArguments, CreateObjectListArguments, CreateRightMarginArguments, fillOptionalArguments, objectListArgumentIndex
+'                   objectListArgumentMargin, TryCastListObjects
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -208,9 +208,29 @@ Namespace Runtime.Interop
                                                       funcName$,
                                                       offset As Integer,
                                                       env As Environment) As Object()
+            Dim listIndex As Integer = -1
+            Dim keyNames As String() = parameterNames.Objects
+
             For Each name As String In normalNames
                 Call declareArguments.Remove(name)
             Next
+
+            For i As Integer = 0 To declareArguments.Count - 1
+                If i = keyNames.Length Then
+                    Exit For
+                End If
+
+                If declareArguments.ContainsKey(keyNames(i)) AndAlso declareArguments(keyNames(i)).isObjectList Then
+                    listIndex = i
+                    Exit For
+                End If
+            Next
+
+            Dim listObject As InvokeParameter() = {}
+
+            If listIndex > -1 Then
+                listObject = parameterVals(listIndex)
+            End If
 
             For Each arg As RMethodArgument In declareArguments.Values
                 If arg.isOptional Then
@@ -219,6 +239,18 @@ Namespace Runtime.Interop
                     ElseIf Not arg.isObjectList Then
                         If TypeOf arg.default Is Expression Then
                             parameterVals(parameterNames(arg.name) + offset) = DirectCast(arg.default, Expression).Evaluate(env)
+                        ElseIf listObject.Any(Function(kvp) kvp.name = arg.name) Then
+                            parameterVals(parameterNames(arg.name) + offset) = listObject _
+                                .Where(Function(kvp) kvp.name = arg.name) _
+                                .First _
+                                .Evaluate(env)
+                            parameterVals(parameterNames(arg.name) + offset) = RMethodInfo.getValue(
+                                arg:=arg,
+                                value:=parameterVals(parameterNames(arg.name) + offset),
+                                trace:=env.stackFrame.ToString,
+                                envir:=env,
+                                trygetListParam:=False
+                            )
                         Else
                             parameterVals(parameterNames(arg.name) + offset) = arg.default
                         End If
@@ -269,15 +301,25 @@ Namespace Runtime.Interop
             Dim i As Integer
             Dim arg As InvokeParameter
             Dim normalNames As New List(Of String)
+            Dim argv As RMethodArgument
+            Dim argVal As Object
 
             For i = 0 To params.Length - 1
                 arg = params(i)
 
                 If arg.isSymbolAssign Then
                     If arg.name Like declareNameIndex Then
+                        argv = declareArguments(arg.name)
+
+                        If argv.requireRawExpression AndAlso arg.isAcceptor Then
+                            argVal = arg.value
+                        Else
+                            argVal = arg.Evaluate(env)
+                        End If
+
                         parameterVals(declareNameIndex(arg.name)) = RMethodInfo.getValue(
-                            arg:=declareArguments(arg.name),
-                            value:=arg.Evaluate(env),
+                            arg:=argv,
+                            value:=argVal,
                             trace:=[declare].name,
                             envir:=env,
                             trygetListParam:=False
@@ -287,9 +329,25 @@ Namespace Runtime.Interop
                         listObject.Add(arg)
                     End If
                 Else
+                    argv = [declare].parameters(sequenceIndex)
+
+                    ' make bugs fixed for the required raw expression
+                    ' in parallel api, example as:
+                    '
+                    ' parallel(x = seqVals, z = bbb, n_threads = 2) {
+                    '    print(x);
+                    '    x +5 + z;
+                    ' };
+                    '
+                    If argv.requireRawExpression AndAlso arg.isAcceptor Then
+                        argVal = arg.value
+                    Else
+                        argVal = arg.Evaluate(env)
+                    End If
+
                     parameterVals(sequenceIndex) = RMethodInfo.getValue(
-                        arg:=[declare].parameters(sequenceIndex),
-                        value:=arg.Evaluate(env),
+                        arg:=argv,
+                        value:=argVal,
                         trace:=[declare].name,
                         envir:=env,
                         trygetListParam:=False

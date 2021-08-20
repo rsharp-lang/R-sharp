@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::7d2dadb9d0cadb5373c8d6760b5564c9, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryOrExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class BinaryOrExpression
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class BinaryOrExpression
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -52,6 +52,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
     Public Class BinaryOrExpression : Inherits Expression
+        Implements IBinaryExpression
 
         Public Overrides ReadOnly Property type As TypeCodes
 
@@ -61,7 +62,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Get
         End Property
 
-        Friend ReadOnly left, right As Expression
+        Public ReadOnly Property left As Expression Implements IBinaryExpression.left
+        Public ReadOnly Property right As Expression Implements IBinaryExpression.right
+
+        Public ReadOnly Property [operator] As String Implements IBinaryExpression.operator
+            Get
+                Return "||"
+            End Get
+        End Property
 
         Sub New(a As Expression, b As Expression)
             left = a

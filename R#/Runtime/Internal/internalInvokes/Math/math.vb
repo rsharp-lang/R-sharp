@@ -385,6 +385,11 @@ Namespace Runtime.Internal.Invokes
             randf.SetSeed(seed)
         End Sub
 
+        <ExportAPI("rnd")>
+        Public Function getRandom() As Double
+            Return randf.seeds.NextDouble
+        End Function
+
         ''' <summary>
         ''' runif generates random deviates.
         ''' </summary>

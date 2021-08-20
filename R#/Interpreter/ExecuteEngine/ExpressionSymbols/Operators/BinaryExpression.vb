@@ -56,7 +56,16 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
+    Public Interface IBinaryExpression
+
+        ReadOnly Property left As Expression
+        ReadOnly Property right As Expression
+        ReadOnly Property [operator] As String
+
+    End Interface
+
     Public Class BinaryExpression : Inherits Expression
+        Implements IBinaryExpression
 
         Public Overrides ReadOnly Property type As TypeCodes
 
@@ -66,10 +75,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Get
         End Property
 
-        Public ReadOnly Property left As Expression
-        Public ReadOnly Property right As Expression
-
-        Public ReadOnly Property [operator] As String
+        Public ReadOnly Property left As Expression Implements IBinaryExpression.left
+        Public ReadOnly Property right As Expression Implements IBinaryExpression.right
+        Public ReadOnly Property [operator] As String Implements IBinaryExpression.operator
 
         Sub New(left As Expression, right As Expression, op$)
             Me.left = left
