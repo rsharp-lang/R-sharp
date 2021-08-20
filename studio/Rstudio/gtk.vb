@@ -93,10 +93,14 @@ Module gtk
     End Function
 
     <ExportAPI("selectFiles")>
+    <RApiReturn(GetType(String))>
     Public Function selectFiles(Optional title$ = Nothing,
                                 <RRawVectorArgument>
                                 Optional filter As Object = "*.*|*.*",
-                                Optional forSave As Boolean = False) As String()
+                                Optional forSave As Boolean = False,
+                                Optional throwCancel As Boolean = True,
+                                Optional env As Environment = Nothing) As Object
+
         Dim filters As String() = REnv.asVector(Of String)(filter)
 
         If forSave Then
@@ -106,6 +110,8 @@ Module gtk
             }
                 If file.ShowDialog = DialogResult.OK Then
                     Return file.FileNames
+                ElseIf throwCancel Then
+                    Return Internal.debug.stop("user cancel!", env)
                 Else
                     Return Nothing
                 End If
@@ -117,6 +123,8 @@ Module gtk
             }
                 If file.ShowDialog = DialogResult.OK Then
                     Return file.FileNames
+                ElseIf throwCancel Then
+                    Return Internal.debug.stop("user cancel!", env)
                 Else
                     Return Nothing
                 End If
