@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"E:\\bing-academic\\test\\search.R\" --attach \"E:\\bing-academic\" --debug"
+      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\test\\smallXtest\\plot.R\" --debug --attach F:\\mzkit_win32\\Rscript"
     }
   }
 }
