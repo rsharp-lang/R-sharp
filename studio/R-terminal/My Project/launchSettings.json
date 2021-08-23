@@ -1,9 +1,9 @@
 {
   "profiles": {
-    "R-netcore5": {
+    "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\test\\smallXtest\\plot.R\" --debug --attach F:\\mzkit_win32\\Rscript"
-      "commandLineArgs": " \"D:\\CFM-ID\\flavone_cfm-id\\predict\\RunDefault.R\" --debug"
+      "commandLineArgs": "\"D:\\CFM-ID\\flavone_cfm-id\\predict\\RunDefault.R\" --debug=none",
+      "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }
 }
