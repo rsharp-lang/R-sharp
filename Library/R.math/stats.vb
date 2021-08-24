@@ -330,6 +330,59 @@ Module stats
     End Function
 
     ''' <summary>
+    ''' ### Sample Quantiles
+    ''' 
+    ''' The generic function quantile produces sample quantiles corresponding 
+    ''' to the given probabilities. The smallest observation corresponds to 
+    ''' a probability of 0 and the largest to a probability of 1.
+    ''' </summary>
+    ''' <param name="x">
+    ''' numeric vector whose sample quantiles are wanted, or an object of a class 
+    ''' for which a method has been defined (see also ‘details’). NA and NaN 
+    ''' values are not allowed in numeric vectors unless na.rm is TRUE.
+    ''' </param>
+    ''' <param name="probs">
+    ''' numeric vector of probabilities with values in [0,1]. (Values up to 2e-14 
+    ''' outside that range are accepted and moved to the nearby endpoint.)
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' A vector of length length(probs) is returned; if names = TRUE, it has a 
+    ''' names attribute.
+    ''' 
+    ''' NA And NaN values in probs are propagated to the result.
+    ''' The Default method works With classed objects sufficiently Like numeric 
+    ''' vectors that sort And (Not needed by types 1 And 3) addition Of elements 
+    ''' And multiplication by a number work correctly. Note that As this Is In a 
+    ''' Namespace, the copy Of sort In base will be used, Not some S4 generic 
+    ''' Of that name. Also note that that Is no check On the 'correctly’, and 
+    ''' so e.g. quantile can be applied to complex vectors which (apart from ties) 
+    ''' will be ordered on their real parts.
+    ''' 
+    ''' There Is a method for the date-time classes (see "POSIXt"). Types 1 And 3 
+    ''' can be used for class "Date" And for ordered factors.
+    ''' </returns>
+    <ExportAPI("quantile")>
+    Public Function quantile(x As Double(),
+                             <RRawVectorArgument(GetType(Double))>
+                             Optional probs As Object = "0,0.25,0.5,0.75,1",
+                             Optional env As Environment = Nothing) As list
+
+        Dim probList As Double() = REnv.asVector(Of Double)(probs)
+        Dim q As QuantileEstimationGK = x.GKQuantile
+        Dim qvals As Double() = probList _
+            .Select(Function(p) q.Query(p)) _
+            .ToArray
+        Dim list As New Dictionary(Of String, Object)
+
+        For i As Integer = 0 To probList.Length - 1
+            list((probList(i) * 100) & "%") = qvals(i)
+        Next
+
+        Return New list With {.slots = list}
+    End Function
+
+    ''' <summary>
     ''' get quantile levels
     ''' </summary>
     ''' <param name="q"></param>
