@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::8224818fe21215525042046d4dab7b89, Library\R.graph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module NetworkModule
-    ' 
-    '     Function: addEdge, addEdges, addNode, addNodes, attributes
-    '               components, computeNetwork, connectedNetwork, DecomposeGraph, degree
-    '               deleteNode, edgeAttributes, emptyNetwork, eval, extractAdjacenciesSubNetwork
-    '               getByGroup, getEdges, getElementByID, getNodes, LoadNetwork
-    '               metaData, nodeAttributes, nodeMass, nodeNames, printGraph
-    '               printNode, SaveNetwork, setAttributes, summaryNodes, trimEdges
-    '               typeGroupOfNodes, V
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module NetworkModule
+' 
+'     Function: addEdge, addEdges, addNode, addNodes, attributes
+'               components, computeNetwork, connectedNetwork, DecomposeGraph, degree
+'               deleteNode, edgeAttributes, emptyNetwork, eval, extractAdjacenciesSubNetwork
+'               getByGroup, getEdges, getElementByID, getNodes, LoadNetwork
+'               metaData, nodeAttributes, nodeMass, nodeNames, printGraph
+'               printNode, SaveNetwork, setAttributes, summaryNodes, trimEdges
+'               typeGroupOfNodes, V
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -576,6 +576,25 @@ Public Module NetworkModule
         Return g.CreateEdge(u, v, weight)
     End Function
 
+    <ExportAPI("weight")>
+    Public Function weight(g As NetworkGraph, u As String, v As String, Optional setWeight As Double = 0, Optional directed As Boolean = False) As Double()
+        Dim edges As Edge()
+
+        If directed Then
+            edges = g.GetEdges(g.GetElementByID(u), g.GetElementByID(v)).SafeQuery.ToArray
+        Else
+            edges = g.GetEdges(g.GetElementByID(u), g.GetElementByID(v)).SafeQuery.AsList + g.GetEdges(g.GetElementByID(v), g.GetElementByID(u))
+        End If
+
+        If setWeight <> 0 Then
+            For Each edge In edges
+                edge.weight = setWeight
+            Next
+        End If
+
+        Return edges.Select(Function(e) e.weight).ToArray
+    End Function
+
     ''' <summary>
     ''' Add edges by a given node label tuple list
     ''' </summary>
@@ -791,6 +810,15 @@ Public Module NetworkModule
         Return g.graphEdges.ToArray
     End Function
 
+    <ExportAPI("has.edge")>
+    Public Function hasEdge(g As NetworkGraph, u As String, v As String, Optional directed As Boolean = False) As Boolean
+        If directed Then
+            Return g.GetEdges(g.GetElementByID(u), g.GetElementByID(v)).Any
+        Else
+            Return g.GetEdges(g.GetElementByID(u), g.GetElementByID(v)).Any OrElse g.GetEdges(g.GetElementByID(v), g.GetElementByID(u)).Any
+        End If
+    End Function
+
     <Extension>
     Private Function nodeAttributes(elements As node(), name$, values As Object, env As Environment) As Object
         If values Is Nothing Then
@@ -925,5 +953,10 @@ Public Module NetworkModule
     <ExportAPI("components")>
     Public Function components(graph As NetworkGraph) As NetworkGraph()
         Return graph.IteratesSubNetworks(Of NetworkGraph)(singleNodeAsGraph:=True)
+    End Function
+
+    <ExportAPI("louvain_cluster")>
+    Public Function LouvainCluster(g As NetworkGraph) As NetworkGraph
+        Return Communities.Analysis(g)
     End Function
 End Module

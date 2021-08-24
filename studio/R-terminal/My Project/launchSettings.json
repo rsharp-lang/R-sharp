@@ -3,6 +3,7 @@
     "R-netcore5": {
       "commandName": "Project",
       "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\test\\smallXtest\\plot.R\" --debug --attach F:\\mzkit_win32\\Rscript"
+      "commandLineArgs": " \"D:\\CFM-ID\\flavone_cfm-id\\predict\\RunDefault.R\" --debug"
     }
   }
 }
