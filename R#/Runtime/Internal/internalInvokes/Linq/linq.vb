@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::92757bb346756b7f441a675e5b70bff7, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module linq
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: all, any, doWhile, first, groupBy
-    '                   groupsSummary, groupSummary, last, orderBy, produceKeyedSequence
-    '                   projectAs, reverse, runFilterPipeline, runWhichFilter, skip
-    '                   split, take, tryKeyBy, unique, where
-    '                   whichMax, whichMin
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module linq
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: all, any, doWhile, first, groupBy
+'                   groupsSummary, groupSummary, last, orderBy, produceKeyedSequence
+'                   projectAs, reverse, runFilterPipeline, runWhichFilter, skip
+'                   split, take, tryKeyBy, unique, where
+'                   whichMax, whichMin
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
+Imports obj = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
@@ -87,6 +88,28 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Next
 
             Return summary
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="mode"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("as.index")>
+        Public Function fastIndexing(x As Array,
+                                     <RRawVectorArgument(GetType(String))>
+                                     Optional mode As Object = "any|character|numeric|integer",
+                                     Optional env As Environment = Nothing) As Object
+            Select Case obj.ToString(REnv.asVector(Of String)(mode).AsObjectEnumerator.DefaultFirst("any")).ToLower
+                Case "any"
+                    Throw New NotImplementedException
+                Case "character"
+                    Return REnv.asVector(Of String)(x).AsObjectEnumerator(Of String).Indexing
+                Case Else
+                    Throw New NotImplementedException
+            End Select
         End Function
 
         <ExportAPI("take")>
@@ -221,7 +244,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     Dim objs As New List(Of Object)
 
                     ' returns the object vector where test result is true
-                    For Each obj In testResult
+                    For Each obj As Object In testResult
                         If TypeOf obj Is Message Then
                             Return obj
                         Else
@@ -238,7 +261,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     Dim booleans As New List(Of Boolean)
 
                     ' returns the logical test vector result
-                    For Each obj In testResult
+                    For Each obj As Object In testResult
                         If TypeOf obj Is Message Then
                             Return obj
                         Else
@@ -260,7 +283,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     .DoCall(Function(seq)
                                 If pipelineFilter Then
                                     Return Iterator Function() As IEnumerable(Of Object)
-                                               For Each obj In seq
+                                               For Each obj As Object In seq
                                                    If TypeOf obj Is Message Then
                                                        Yield obj
                                                        Return
@@ -279,7 +302,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                 Else
                                     Dim booleans As New List(Of Boolean)
 
-                                    For Each obj In seq
+                                    For Each obj As Object In seq
                                         If TypeOf obj Is Message Then
                                             Return obj
                                         Else
