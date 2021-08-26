@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::26a4b5dc08ad7b75909f4c3988c9cbfb, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class BinaryExpression
-    ' 
-    '         Properties: [operator], expressionName, left, right, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, ToString, vectorCast
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class BinaryExpression
+' 
+'         Properties: [operator], expressionName, left, right, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, ToString, vectorCast
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -153,9 +153,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                                 [do]:=Function(x, y) x AndAlso y
                             ).ToArray
                 End Select
-            End If
+            ElseIf [operator] = "&&" AndAlso (tleft?.raw Like RType.logicals OrElse tright?.raw Like RType.logicals) Then
+                Dim xi = Core.asLogical(a)
+                Dim yi = Core.asLogical(b)
 
-            Dim handleResult = BinaryOperatorEngine.getOperator([operator], envir)
+                Return Core _
+                    .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
+                        x:=xi,
+                        y:=yi,
+                        [do]:=Function(x, y) x AndAlso y
+                    ).ToArray
+                End If
+
+                Dim handleResult = BinaryOperatorEngine.getOperator([operator], envir)
 
             If handleResult Like GetType(Message) Then
                 Return handleResult.TryCast(Of Message)
