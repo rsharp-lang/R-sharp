@@ -108,6 +108,10 @@ Namespace Runtime.Internal.Object
                            End Function)
         End Sub
 
+        Public Function [TryCast](Of T)() As T
+            Return DirectCast(target, T)
+        End Function
+
         Private Shared Function getObjMethods(raw As Type) As NamedValue(Of MethodInfo)()
             Dim schema As NamedValue(Of MethodInfo)() = raw _
                .getObjMethods _
