@@ -2,7 +2,7 @@
   "profiles": {
     "启动": {
       "commandName": "Project",
-      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\test\\checkRegion\\checkTest.R\"",
+      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\Pipeline\\MSI_analysis.R\" --help",
       "workingDirectory": "F:\\mzkit_win32\\Rscript\\test\\checkRegion\\",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }

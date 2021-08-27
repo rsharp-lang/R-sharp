@@ -277,6 +277,7 @@ Namespace Development.CommandLine
                 Case GetType(RunCommandLine) : Call analysisTree(DirectCast(expr, RunCommandLine), attrs)
                 Case GetType(UsingClosure) : Call analysisTree(DirectCast(expr, UsingClosure), attrs)
                 Case GetType(ByRefFunctionCall) : Call analysisTree(DirectCast(expr, ByRefFunctionCall), attrs)
+                Case GetType(UnaryNumeric) : Call AnalysisTree(DirectCast(expr, UnaryNumeric).numeric, attrs)
 
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)

@@ -69,7 +69,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         ''' <summary>
         ''' 可能是一个符号，也可以能是一个对象引用
         ''' </summary>
-        Dim numeric As Expression
+        Friend ReadOnly numeric As Expression
 
         Sub New(op As String, number As Expression)
             Me.operator = op
