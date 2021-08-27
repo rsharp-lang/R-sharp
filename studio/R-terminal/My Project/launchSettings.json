@@ -3,7 +3,7 @@
     "启动": {
       "commandName": "Project",
       "commandLineArgs": "\"E:\\bing-academic\\test\\demo\\kbNetwork.R\" --debug",
-      "workingDirectory": "E:\\bing-academic\\test\\demo",
+      "workingDirectory": "D:\\etc",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }
