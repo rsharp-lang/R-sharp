@@ -832,6 +832,21 @@ Public Module NetworkModule
         Return g
     End Function
 
+    <ExportAPI("class")>
+    Public Function nodeClass(g As NetworkGraph, <RByRefValueAssign> Optional classList As String() = Nothing) As String()
+        If classList.IsNullOrEmpty Then
+            Return g.vertex.Select(Function(v) v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE)).ToArray
+        Else
+            Dim nodes = g.vertex.ToArray
+
+            For i As Integer = 0 To nodes.Length - 1
+                nodes(i).data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = classList(i)
+            Next
+
+            Return Nothing
+        End If
+    End Function
+
     ''' <summary>
     ''' get all nodes in the given graph model
     ''' </summary>
