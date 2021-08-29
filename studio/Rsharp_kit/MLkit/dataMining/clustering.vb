@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::6bb261632914d618e4a5f9d8429187be, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module clustering
-    ' 
-    '     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
-    '               dbscan, ensureNotIsDistance, fuzzyCMeans, hclust, hleaf
-    '               hnode, Kmeans, showHclust, ToHClust
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module clustering
+' 
+'     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
+'               dbscan, ensureNotIsDistance, fuzzyCMeans, hclust, hleaf
+'               hnode, Kmeans, showHclust, ToHClust
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.BinaryTree
+Imports Microsoft.VisualBasic.DataMining.Clustering
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
 Imports Microsoft.VisualBasic.DataMining.FuzzyCMeans
 Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
@@ -448,6 +449,26 @@ Module clustering
         node.Distance = New Distance(distance)
 
         Return node
+    End Function
+
+    <ExportAPI("density")>
+    Public Function densityA(data As Rdataframe, Optional k As Integer = 6) As Double()
+        Dim rows As ClusterEntity() = data.forEachRow _
+            .Select(Function(d)
+                        Return New ClusterEntity With {
+                            .uid = d.name,
+                            .entityVector = d.value.Select(Function(x) CDbl(x)).ToArray
+                        }
+                    End Function) _
+            .ToArray
+        Dim idOrder As Index(Of String) = rows.Select(Function(r) r.uid).Indexing
+
+        Return Density.GetDensity(rows, k) _
+            .OrderBy(Function(v)
+                         Return idOrder.IndexOf(v.Name)
+                     End Function) _
+            .Select(Function(v) v.Value) _
+            .ToArray
     End Function
 
     ''' <summary>

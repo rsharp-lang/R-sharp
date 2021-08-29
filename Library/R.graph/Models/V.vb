@@ -49,7 +49,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Public Class V : Implements RNames, RNameIndex
 
-    ReadOnly vertex As Node()
+    Friend ReadOnly vertex As Node()
     ReadOnly dataNames As Index(Of String)
 
     Sub New(g As NetworkGraph)

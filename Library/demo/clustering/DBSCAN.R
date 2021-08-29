@@ -3,7 +3,7 @@ imports "clustering" from "MLkit";
 require(charts);
 
 const filepath as string = ?"--data" || stop("a data table is required for run clustering!");
-let raw = read.csv(filepath)[, ["x","y"]];
+let raw = read.csv(filepath, row.names = 1, check.names = FALSE)[, ["x","y"]];
 
 print("previews of the raw input data:");
 print(head(raw));
@@ -31,6 +31,6 @@ for(id in unique_clusters) {
 }
 
 bitmap(file = `${dirname(filepath)}/${basename(filepath)}_dbscan.png`) {
-	plot(points, padding = "padding: 150px 100px 200px 200px;");
+	plot(points, padding = "padding: 150px 100px 200px 200px;", grid.fill = "white");
 }
 

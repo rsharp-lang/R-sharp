@@ -127,11 +127,23 @@ Public Module NetworkModule
         Return str.ToString
     End Function
 
+    ''' <summary>
+    ''' get graph vertex collection
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <returns></returns>
     <ExportAPI("V")>
+    <RApiReturn(GetType(V))>
     Public Function V(g As NetworkGraph) As Object
         Return New V(g)
     End Function
 
+    ''' <summary>
+    ''' extract sub-network from a given network via a specific network node as centroid. 
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="fromPoint"></param>
+    ''' <returns></returns>
     <ExportAPI("subgraphFromPoint")>
     Public Function extractAdjacenciesSubNetwork(g As NetworkGraph, fromPoint As String) As NetworkGraph
         Dim target As node = g.GetElementByID(fromPoint)
@@ -186,6 +198,18 @@ Public Module NetworkModule
         Return subnet
     End Function
 
+    ''' <summary>
+    ''' create meta data for network tabular model.
+    ''' </summary>
+    ''' <param name="title"></param>
+    ''' <param name="description"></param>
+    ''' <param name="creators"></param>
+    ''' <param name="create_time"></param>
+    ''' <param name="links"></param>
+    ''' <param name="keywords"></param>
+    ''' <param name="meta"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("metadata")>
     Public Function metaData(title As String,
                              Optional description As String = "n/a",
@@ -220,7 +244,11 @@ Public Module NetworkModule
     ''' <returns></returns>
     <ExportAPI("save.network")>
     <RApiReturn(GetType(Boolean))>
-    Public Function SaveNetwork(g As Object, file$, Optional properties As String() = Nothing, Optional meta As MetaData = Nothing, Optional env As Environment = Nothing) As Object
+    Public Function SaveNetwork(g As Object, file$,
+                                Optional properties As String() = Nothing,
+                                Optional meta As MetaData = Nothing,
+                                Optional env As Environment = Nothing) As Object
+
         Dim tables As NetworkTables
 
         If g Is Nothing Then
@@ -388,19 +416,23 @@ Public Module NetworkModule
     End Function
 
     ''' <summary>
-    ''' evaluate node values
+    ''' evaluate node/edge property values
     ''' </summary>
-    ''' <param name="elements"></param>
+    ''' <param name="elements">a node collection or edge collection</param>
     ''' <param name="formula"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("eval")>
-    Public Function eval(elements As Object(), formula As Expression, Optional env As Environment = Nothing) As Object
+    Public Function eval(<RRawVectorArgument> elements As Object, formula As Expression, Optional env As Environment = Nothing) As Object
         Dim result As New Dictionary(Of String, Object)
         Dim var As Symbol
         Dim value As Object
         Dim data As GraphData
         Dim label As String
+
+        If TypeOf elements Is V Then
+            elements = DirectCast(elements, V).vertex
+        End If
 
         Using closure As New Environment(env, env.stackFrame, isInherits:=False)
             For Each v As Object In elements
@@ -442,7 +474,7 @@ Public Module NetworkModule
         }
     End Function
 
-    <ExportAPI("delete.node")>
+    <ExportAPI("delete")>
     Public Function deleteNode(g As NetworkGraph, node As Object, Optional env As Environment = Nothing) As Object
         Dim v As node
 
@@ -511,16 +543,30 @@ Public Module NetworkModule
     ''' <returns></returns>
     <ExportAPI("mass")>
     Public Function nodeMass(g As NetworkGraph,
+                             Optional labelID As String = Nothing,
                              <RByRefValueAssign>
-                             Optional mass As list = Nothing,
-                             Optional env As Environment = Nothing) As list
+                             Optional mass As Object = Nothing,
+                             Optional env As Environment = Nothing) As Object
 
         If Not mass Is Nothing Then
-            For Each key As String In mass.slots.Keys
-                If Not g.GetElementByID(key) Is Nothing Then
-                    g.GetElementByID(key).data.mass = mass.getValue(key, env, 0.0)
-                End If
-            Next
+            If TypeOf mass Is list Then
+                Dim massList As list = DirectCast(mass, list)
+
+                For Each key As String In massList.slots.Keys
+                    If Not g.GetElementByID(key) Is Nothing Then
+                        g.GetElementByID(key).data.mass = massList.getValue(key, env, 0.0)
+                    End If
+                Next
+            ElseIf Not labelID.StringEmpty Then
+                g.GetElementByID(labelID).data.mass = REnv _
+                    .asVector(Of Double)(mass) _
+                    .AsObjectEnumerator(Of Double) _
+                    .DefaultFirst
+
+                Return g.GetElementByID(labelID).data.mass
+            End If
+        ElseIf Not labelID.StringEmpty Then
+            Return g.GetElementByID(labelID).data.mass
         End If
 
         Return New list With {
@@ -784,6 +830,21 @@ Public Module NetworkModule
                         End If
                     End Sub)
         Return g
+    End Function
+
+    <ExportAPI("class")>
+    Public Function nodeClass(g As NetworkGraph, <RByRefValueAssign> Optional classList As String() = Nothing) As String()
+        If classList.IsNullOrEmpty Then
+            Return g.vertex.Select(Function(v) v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE)).ToArray
+        Else
+            Dim nodes = g.vertex.ToArray
+
+            For i As Integer = 0 To nodes.Length - 1
+                nodes(i).data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = classList(i)
+            Next
+
+            Return Nothing
+        End If
     End Function
 
     ''' <summary>

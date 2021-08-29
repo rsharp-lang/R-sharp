@@ -93,6 +93,25 @@ Namespace Runtime.Internal.Invokes
     Public Module base
 
         ''' <summary>
+        ''' ### Factors
+        ''' 
+        ''' The function factor is used to encode a vector as a factor 
+        ''' (the terms ‘category’ and ‘enumerated type’ are also used 
+        ''' for factors).
+        ''' </summary>
+        ''' <param name="x">a vector of data, usually taking a small number of distinct values.</param>
+        ''' <returns></returns>
+        <ExportAPI("factor")>
+        Public Function factor(x As String()) As Integer()
+            Dim uniqIndex As Index(Of String) = x.Distinct.Indexing
+            Dim i As Integer() = x _
+                .Select(Function(factorStr) uniqIndex.IndexOf(factorStr) + 1) _
+                .ToArray
+
+            Return i
+        End Function
+
+        ''' <summary>
         ''' ### Sequence Generation
         ''' 
         ''' Generate regular sequences. seq is a standard generic with a default method. 

@@ -122,6 +122,9 @@ Module plots
         Call REnv.Internal.generic.add("plot", GetType(Cluster), AddressOf plot_hclust)
         Call REnv.Internal.generic.add("plot", GetType(vector), AddressOf plotVector)
         Call REnv.Internal.generic.add("plot", GetType(Double()), AddressOf plotArray)
+        Call REnv.Internal.generic.add("plot", GetType(Single()), AddressOf plotArray)
+        Call REnv.Internal.generic.add("plot", GetType(Integer()), AddressOf plotArray)
+        Call REnv.Internal.generic.add("plot", GetType(Long()), AddressOf plotArray)
         Call REnv.Internal.generic.add("plot", GetType(ContourLayer()), AddressOf plotContourLayers)
 
         Call REnv.Internal.generic.add("plot", GetType(WeightedFit), AddressOf plotLinearYFit)
@@ -179,7 +182,8 @@ Module plots
         Return ContourPlot(contours, colorSet:=args!colorSet, args:=args, env:=env)
     End Function
 
-    Public Function plotArray(x As Double(), args As list, env As Environment) As Object
+    Public Function plotArray(vec As Array, args As list, env As Environment) As Object
+        Dim x As Double() = REnv.asVector(Of Double)(vec)
         Dim y As Double() = args.findNumberVector(size:=x.Length, env)
         Dim ptSize As Single = args.getValue("point_size", env, 15)
         Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
