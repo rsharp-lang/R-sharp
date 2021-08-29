@@ -726,6 +726,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecutableLoop.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\ScriptFolder.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\ExternalCommandLine.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNumeric.vb" />
