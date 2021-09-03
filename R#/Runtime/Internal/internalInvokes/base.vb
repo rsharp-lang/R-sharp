@@ -336,6 +336,17 @@ Namespace Runtime.Internal.Invokes
             Return Repeats(x, times)
         End Function
 
+        ''' <summary>
+        ''' ### Combine R Objects by Rows or Columns
+        ''' 
+        ''' Take a sequence of vector, matrix or data-frame arguments and combine 
+        ''' by columns or rows, respectively. These are generic functions with 
+        ''' methods for other R classes.
+        ''' </summary>
+        ''' <param name="d"></param>
+        ''' <param name="row"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("rbind")>
         <RApiReturn(GetType(dataframe))>
         Public Function rbind(d As dataframe, row As dataframe, env As Environment) As Object
