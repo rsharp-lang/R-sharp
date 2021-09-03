@@ -68,6 +68,10 @@ Namespace Runtime.Internal.Object
         Public Property columns As Dictionary(Of String, Array)
         Public Property rownames As String()
 
+        ''' <summary>
+        ''' get all keys names of <see cref="columns"/> data
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property colnames As String()
             Get
                 Return columns.Keys.ToArray

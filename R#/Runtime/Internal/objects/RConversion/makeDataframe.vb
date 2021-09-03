@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object.Converts
@@ -164,6 +165,26 @@ Namespace Runtime.Internal.Object.Converts
             Else
                 Return data
             End If
+        End Function
+
+        <Extension>
+        Public Iterator Function PopulateDataSet(Of T As {New, INamedValue, DynamicPropertyBase(Of String)})(data As dataframe) As IEnumerable(Of T)
+            Dim allNames As String() = data.colnames
+            Dim vecRow As Dictionary(Of String, String)
+            Dim obj As T
+
+            For Each row In data.forEachRow(colKeys:=allNames)
+                vecRow = New Dictionary(Of String, String)
+
+                For i As Integer = 0 To allNames.Length - 1
+                    vecRow(allNames(i)) = any.ToString(row(i))
+                Next
+
+                obj = New T With {.Key = row.name}
+                obj.Properties = vecRow
+
+                Yield obj
+            Next
         End Function
 
         <Extension>
