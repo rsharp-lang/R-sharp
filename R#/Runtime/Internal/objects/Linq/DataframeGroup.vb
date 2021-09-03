@@ -6,6 +6,12 @@ Namespace Runtime.Internal.Object.Linq
 
     Public Module DataframeGroup
 
+        ''' <summary>
+        ''' group by the string factor values in dataframe column as key
+        ''' </summary>
+        ''' <param name="data"></param>
+        ''' <param name="key"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function groupBy(data As dataframe, key As String) As Dictionary(Of String, dataframe)
             Dim values As vector = REnv _
