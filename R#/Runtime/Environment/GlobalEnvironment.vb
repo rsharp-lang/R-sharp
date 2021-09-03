@@ -182,7 +182,17 @@ Namespace Runtime
             _stdout = New RContentOutput(out, env:=env)
         End Sub
 
-        Public Function LoadLibrary(packageName As String, Optional silent As Boolean = False, Optional ignoreMissingStartupPackages As Boolean = False) As Message
+        ''' <summary>
+        ''' load library module
+        ''' </summary>
+        ''' <param name="packageName">the library package name</param>
+        ''' <param name="silent">suppress of print message?</param>
+        ''' <param name="ignoreMissingStartupPackages">debug used only</param>
+        ''' <returns></returns>
+        Public Function LoadLibrary(packageName As String,
+                                    Optional silent As Boolean = False,
+                                    Optional ignoreMissingStartupPackages As Boolean = False) As Message
+
             Dim exception As Exception = Nothing
             Dim package As RPkg = Nothing
             Dim RzipPackageFolder As String = Nothing
