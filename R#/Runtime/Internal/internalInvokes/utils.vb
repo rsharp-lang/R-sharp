@@ -68,6 +68,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -334,41 +335,10 @@ Namespace Runtime.Internal.Invokes
                                           Function(key)
                                               Return l.slots(key)
                                           End Function)
-}
-                End If
-            ElseIf type Is GetType(dataframe) Then
-                Dim df As dataframe = DirectCast(x, dataframe)
-
-                If df.nrows <= n Then
-                    Return df
-                Else
-                    Dim data As New Dictionary(Of String, Array)
-                    Dim colVal As Array
-                    Dim colSubset As Array
-
-                    For Each col In df.columns
-                        If col.Value.Length = 1 Then
-                            data.Add(col.Key, col.Value)
-                        Else
-                            colVal = col.Value
-                            colSubset = Array.CreateInstance(colVal.GetType.GetElementType, n)
-
-                            For i As Integer = 0 To n - 1
-                                colSubset.SetValue(colVal.GetValue(i), i)
-                            Next
-
-                            data.Add(col.Key, colSubset)
-                        End If
-                    Next
-
-                    Return New dataframe With {
-                        .columns = data,
-                        .rownames = df.rownames _
-                            .SafeQuery _
-                            .Take(n) _
-                            .ToArray
                     }
                 End If
+            ElseIf type Is GetType(dataframe) Then
+                Return DirectCast(x, dataframe).head(n)
             Else
                 Return x
             End If
