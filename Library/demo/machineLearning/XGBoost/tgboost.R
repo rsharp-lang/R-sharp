@@ -7,7 +7,7 @@ const ftrain = read.csv( "./train.csv", row.names = NULL, check.names = FALSE);
 const fval = read.csv( "./test.csv", row.names = NULL, check.names = FALSE);
 const params = list('categorical_features'= ["PRI_jet_num"],
           'early_stopping_rounds'= 10,
-          'maximize'= True,
+          'maximize'= TRUE,
           'eval_metric'= 'auc',
           'loss'= 'logloss',
           'eta'= 0.3,
@@ -28,12 +28,12 @@ str(params);
 
 const model = xgboost(
 	xgb.DMatrix(ftrain[, 1:(ncol(ftrain)-1)], label = ftrain[, ncol(ftrain)]), 
-	xgb.DMatrix(fval[, 1:(ncol(fval)-1)], label = fval[, ncol(fval)]), 
+	xgb.DMatrix(fval[, 1:(ncol(fval)-1)], label = fval[, ncol(fval)], validate_set = TRUE), 
 	params
 );
 
 # testing phase
-const ftest = read.csv( "./test.csv", row.names = NULL, check.names = FALSE);
+const ftest = xgb.DMatrix(read.csv( "./test.csv", row.names = NULL, check.names = FALSE)) ;
 const foutput = "./test_result.csv";
 const foutput2 = "./test_result2.csv";
 

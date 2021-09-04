@@ -1,10 +1,13 @@
 ﻿
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.TagData
+Imports Microsoft.VisualBasic.MachineLearning.XGBoost.DataSet
 Imports Microsoft.VisualBasic.MachineLearning.XGBoost.train
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' Extreme Gradient Boosting
@@ -58,6 +61,46 @@ Public Module xgboost
                             Optional validate_set As Boolean = False,
                             Optional env As Environment = Nothing) As Object
 
+        If label.IsNullOrEmpty Then
+            ' test data set
+            Dim matrix As Single()() = data _
+                .forEachRow _
+                .Select(Function(v)
+                            Return DirectCast(REnv.asVector(Of Single)(v.value), Single())
+                        End Function) _
+                .ToArray
+            Dim test As TestData = matrix.ToTestDataSet
+
+            Return test
+        ElseIf validate_set Then
+            ' validation dataset
+            Dim matrix As DoubleTagged(Of Single())() = data _
+                .forEachRow() _
+                .Select(Function(v, i)
+                            Return New DoubleTagged(Of Single()) With {
+                                .Tag = label(i),
+                                .Value = DirectCast(REnv.asVector(Of Single)(v.value), Single())
+                            }
+                        End Function) _
+                .ToArray
+            Dim train As ValidationData = matrix.ToValidateSet(data.colnames)
+
+            Return train
+        Else
+            ' training dataset
+            Dim matrix As DoubleTagged(Of Single())() = data _
+                .forEachRow() _
+                .Select(Function(v, i)
+                            Return New DoubleTagged(Of Single()) With {
+                                .Tag = label(i),
+                                .Value = DirectCast(REnv.asVector(Of Single)(v.value), Single())
+                            }
+                        End Function) _
+                .ToArray
+            Dim train As TrainData = matrix.ToTrainingSet(data.colnames)
+
+            Return train
+        End If
     End Function
 
 End Module
