@@ -33,12 +33,15 @@ const model = xgboost(
 );
 
 # testing phase
-const ftest = xgb.DMatrix(read.csv( "./test.csv", row.names = NULL, check.names = FALSE)) ;
+const ftest = read.csv( "./test.csv", row.names = NULL, check.names = FALSE);
+const testLabels = ftest[, "Label"];
 const foutput = "./test_result.csv";
 const foutput2 = "./test_result2.csv";
 
+ftest[, "Label"] = NULL;
+
 model
-|> xgboost::predict(ftest)
+|> xgboost::predict(xgb.DMatrix(ftest))
 |> writeLines(con = foutput)
 ;
 
@@ -48,8 +51,11 @@ model
 |> writeLines('./tgb.model');
 
 # load model and predict
-readLines('./tgb.model')
+const result_pred = readLines('./tgb.model')
 |> xgboost::parseTree
-|> xgboost::predict(ftest)
-|> writeLines(con = foutput2)
+|> xgboost::predict(xgb.DMatrix(ftest))
+;
+
+data.frame(predict = result_pred, label = testLabels)
+|> write.csv(file = foutput2, row.names = FALSE)
 ;
