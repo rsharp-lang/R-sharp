@@ -37,18 +37,19 @@ const ftest = xgb.DMatrix(read.csv( "./test.csv", row.names = NULL, check.names 
 const foutput = "./test_result.csv";
 const foutput2 = "./test_result2.csv";
 
-model 
+model
 |> xgboost::predict(ftest)
 |> writeLines(con = foutput)
 ;
 
 # save the model
 model
+|> xgboost::serialize
 |> writeLines('./tgb.model');
 
 # load model and predict
 readLines('./tgb.model')
-|> xgboost::tree
+|> xgboost::parseTree
 |> xgboost::predict(ftest)
 |> writeLines(con = foutput2)
 ;

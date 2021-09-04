@@ -60,12 +60,12 @@ Public Module xgboost
         Return gbm.predict(data.origin_feature)
     End Function
 
-    <ExportAPI>
+    <ExportAPI("serialize")>
     Public Function serialize(model As GBM) As String()
         Return ModelSerializer.save_model(model).ToArray
     End Function
 
-    <ExportAPI("tree")>
+    <ExportAPI("parseTree")>
     Public Function tree(modelLines As String()) As GBM
         Return ModelSerializer.load_model(modelLines)
     End Function
