@@ -27,7 +27,7 @@ print("parameters:");
 str(params);
 
 const model = xgboost(
-	xgb.DMatrix(ftrain[, 1:(ncol(ftrain)-1)], label = ftrain[, ncol(ftrain)]), 
+	xgb.DMatrix(ftrain[, 1:(ncol(ftrain)-1)], label = ftrain[, ncol(ftrain)], categorical_features = ["PRI_jet_num"]), 
 	xgb.DMatrix(fval[, 1:(ncol(fval)-1)], label = fval[, ncol(fval)], validate_set = TRUE), 
 	params
 );

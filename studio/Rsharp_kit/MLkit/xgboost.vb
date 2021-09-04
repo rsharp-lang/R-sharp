@@ -1,6 +1,7 @@
 ﻿
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.TagData
+Imports Microsoft.VisualBasic.DataMining.ComponentModel.Evaluation
 Imports Microsoft.VisualBasic.MachineLearning.XGBoost.DataSet
 Imports Microsoft.VisualBasic.MachineLearning.XGBoost.train
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -28,11 +29,35 @@ Public Module xgboost
                             Optional params As list = Nothing,
                             Optional env As Environment = Nothing) As GBM
 
+        If params.length = 1 AndAlso TypeOf params.slots.First.Value Is list Then
+            params = params.slots.First.Value
+        End If
+
+        Dim early_stopping_round = params.getValue("early_stopping_rounds", env, 10)
+        Dim maximize = params.getValue("maximize", env, True)
+        Dim eval_metric As Metrics = Metric.Parse(params.getValue("eval_metric", env, "auc"))
+        Dim loss = params.getValue("loss", env, "logloss")
+        Dim eta = params.getValue("eta", env, 0.3)
+        Dim num_boost_round = params.getValue("num_boost_round", env, 20)
+        Dim max_depth = params.getValue("max_depth", env, 7)
+        Dim scale_pos_weight = params.getValue("scale_pos_weight", env, 1.0)
+        Dim rowsample = params.getValue("subsample", env, 0.8)
+        Dim colample = params.getValue("colsample", env, 0.8)
+        Dim min_child_weight = params.getValue("min_child_weight", env, 1.0)
+        Dim min_sample_split = params.getValue("min_sample_split", env, 5)
+        Dim lambda = params.getValue("reg_lambda", env, 1.0)
+        Dim gamma = params.getValue("gamma", env, 0.0)
+        Dim num_thread = params.getValue("num_thread", env, -1)
+        Dim model As New GBM
+
+        Call model.fit(data, validates)
+
+        Return model
     End Function
 
     <ExportAPI("predict")>
     Public Function predict(gbm As GBM, data As TestData) As Double()
-
+        Return gbm.predict(data.origin_feature)
     End Function
 
     <ExportAPI("tree")>
@@ -59,6 +84,7 @@ Public Module xgboost
     Public Function DMatrix(data As dataframe,
                             Optional label As Double() = Nothing,
                             Optional validate_set As Boolean = False,
+                            Optional categorical_features As String() = Nothing,
                             Optional env As Environment = Nothing) As Object
 
         If label.IsNullOrEmpty Then
@@ -83,7 +109,7 @@ Public Module xgboost
                             }
                         End Function) _
                 .ToArray
-            Dim train As ValidationData = matrix.ToValidateSet(data.colnames)
+            Dim train As ValidationData = matrix.ToValidateSet()
 
             Return train
         Else
@@ -97,7 +123,8 @@ Public Module xgboost
                             }
                         End Function) _
                 .ToArray
-            Dim train As TrainData = matrix.ToTrainingSet(data.colnames)
+            Dim colnames As String() = data.colnames
+            Dim train As TrainData = matrix.ToTrainingSet(colnames, If(categorical_features, colnames))
 
             Return train
         End If
