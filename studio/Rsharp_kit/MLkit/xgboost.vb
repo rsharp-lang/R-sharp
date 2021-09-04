@@ -1,6 +1,6 @@
 ﻿
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.MachineLearning.XGBoost.util
+Imports Microsoft.VisualBasic.MachineLearning.XGBoost.train
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -16,15 +16,24 @@ Public Module xgboost
     ''' eXtreme Gradient Boosting Training
     ''' </summary>
     ''' <param name="data"></param>
-    ''' <param name="label"></param>
     ''' <param name="params"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("xgboost")>
-    Public Function xgboost(data As Object, label As Object,
+    Public Function xgboost(data As TrainData, Optional validates As ValidationData = Nothing,
                             <RListObjectArgument>
                             Optional params As list = Nothing,
-                            Optional env As Environment = Nothing)
+                            Optional env As Environment = Nothing) As GBM
+
+    End Function
+
+    <ExportAPI("predict")>
+    Public Function predict(gbm As GBM, data As TestData) As Double()
+
+    End Function
+
+    <ExportAPI("tree")>
+    Public Function tree(modelLines As String()) As GBM
 
     End Function
 
@@ -43,7 +52,11 @@ Public Module xgboost
     ''' <param name="label"></param>
     ''' <returns></returns>
     <ExportAPI("xgb.DMatrix")>
-    Public Function DMatrix(data As dataframe, label As String()) As DMatrix
+    <RApiReturn(GetType(TrainData), GetType(TestData), GetType(ValidationData))>
+    Public Function DMatrix(data As dataframe,
+                            Optional label As Double() = Nothing,
+                            Optional validate_set As Boolean = False,
+                            Optional env As Environment = Nothing) As Object
 
     End Function
 
