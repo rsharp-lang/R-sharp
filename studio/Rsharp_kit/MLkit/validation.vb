@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::2418eec4ff496dba1c32e6f604bc30f5, studio\Rsharp_kit\MLkit\validation.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module validation
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: ANN_ROC, AUC, createSampleValidation, PlotROC, prediction
-    '               Tabular
-    ' 
-    ' /********************************************************************************/
+' Module validation
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: ANN_ROC, AUC, createSampleValidation, PlotROC, prediction
+'               Tabular
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -54,6 +54,7 @@ Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
 Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
 Imports Microsoft.VisualBasic.My.JavaScript
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -125,9 +126,15 @@ Module validation
     End Function
 
     <ExportAPI("prediction")>
-    Public Function prediction(predicts As Double(), labels As Boolean()) As ROC
+    Public Function prediction(predicts As Double(), labels As Boolean(), Optional resolution As Integer = 1000) As ROC
+        Dim ROCthreshold As New Sequence(predicts.Min, predicts.Max, resolution)
         Dim result = Evaluation.Validation _
-            .ROC(predicts.Sequence, Function(i, d) labels(i), Function(i, cut) predicts(i) >= cut) _
+            .ROC(Of Integer)(
+                entity:=predicts.Sequence,
+                getValidate:=Function(i, d) labels(i),
+                getPredict:=Function(i, cut) predicts(i) >= cut,
+                threshold:=ROCthreshold
+            ) _
             .OrderBy(Function(t) t.Sensibility) _
             .ToArray
         Dim ROC As New ROC With {
