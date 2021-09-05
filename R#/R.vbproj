@@ -725,6 +725,11 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+  
+
+   <Compile Include="Runtime\Internal\objects\Linq\DataframeGroup.vb" />
+    <Compile Include="Runtime\Internal\objects\Linq\RCType.vb" />
+  
     <Compile Include="Interpreter\ExecutableLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\ScriptFolder.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\ExternalCommandLine.vb" />
