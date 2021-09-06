@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::df729e816129a2b5b52e9a2a092f4630, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
-    '                   getColumn, getDataframeRowRange, listSubset, ToString, vectorSubset
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class SymbolIndexer
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
+'                   getColumn, getDataframeRowRange, listSubset, ToString, vectorSubset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -258,7 +258,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Dim table As IDictionary = DirectCast(obj, IDictionary)
 
                     If indexer.Length = 1 Then
-                        If table.Contains(keys(Scan0)) Then
+                        If keys(Scan0) IsNot Nothing AndAlso table.Contains(keys(Scan0)) Then
                             Return table.Item(keys(Scan0))
                         Else
                             Return Nothing
@@ -266,7 +266,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Else
                         Return Iterator Function() As IEnumerable(Of Object)
                                    For Each key As String In keys
-                                       If table.Contains(key) Then
+                                       If key IsNot Nothing AndAlso table.Contains(key) Then
                                            Yield table.Item(key)
                                        Else
                                            Yield Nothing
@@ -372,7 +372,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 .slots = New Dictionary(Of String, Object)
             }
 
-            For Each id As Object In names.AsObjectEnumerator
+            ' will skip of the key name with value NULL
+            '
+            For Each id As Object In From key As Object
+                                     In names.AsObjectEnumerator
+                                     Where Not key Is Nothing
+
                 If list.Contains(key:=id) Then
                     subset.slots(id) = list(id)
                 Else

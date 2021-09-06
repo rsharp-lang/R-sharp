@@ -116,7 +116,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Function
 
         Private Shared Function testListIndex(sequence As list, testLeft As String()) As Boolean()
-            Return testLeft.Select(Function(a) sequence.slots.ContainsKey(a)).ToArray
+            Return testLeft _
+                .Select(Function(a)
+                            If a Is Nothing Then
+                                Return False
+                            Else
+                                Return sequence.slots.ContainsKey(a)
+                            End If
+                        End Function) _
+                .ToArray
         End Function
 
         Private Shared Function testVectorIndexOf(index As Index(Of Object), testLeft As Object()) As Boolean()
