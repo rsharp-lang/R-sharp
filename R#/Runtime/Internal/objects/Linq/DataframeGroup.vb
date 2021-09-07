@@ -1,10 +1,21 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object.Linq
 
     Public Module DataframeGroup
+
+        <Extension>
+        Public Function orderBy(data As dataframe, key As String, Optional desc As Boolean = False) As dataframe
+            Static env As Environment = GlobalEnvironment.defaultEmpty
+
+            Dim i As Double() = REnv.asVector(Of Double)(data.getColumnVector(key))
+            Dim order As Integer() = ranking.order(i, desc, env)
+
+            Return data.sliceByRow(order, env)
+        End Function
 
         ''' <summary>
         ''' group by the string factor values in dataframe column as key
