@@ -59,6 +59,7 @@ Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports any = Microsoft.VisualBasic.Scripting
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
@@ -307,6 +308,18 @@ load:       Return LoadLibrary(filepath, env, names)
         Public Shared Function GetDllFile(libDll As String, env As Environment) As Object
             If libDll.StringEmpty Then
                 Return Internal.debug.stop("No package module provided!", env)
+            ElseIf libDll.IndexOf("::") > -1 Then
+                ' package::dllfile
+                Dim tupleRef As NamedValue(Of String) = libDll.GetTagValue("::", trim:=True)
+                Dim pkgName As String = tupleRef.Name
+                Dim err As Message = env.globalEnvironment.LoadLibrary(pkgName, silent:=False)
+
+                If Not err Is Nothing Then
+                    Return err
+                Else
+                    Return GetDllFile(libDll:=tupleRef.Value, env:=env)
+                End If
+
             ElseIf Not libDll.FileExists Then
                 Dim location As String = Development.Package.LibDLL.GetDllFile(libDll, env)
 
