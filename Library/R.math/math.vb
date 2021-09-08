@@ -237,6 +237,11 @@ Module math
             .ToArray
     End Function
 
+    <ExportAPI("loess")>
+    Public Function loess(formula As FormulaExpression, data As Object, Optional env As Environment = Nothing) As Object
+
+    End Function
+
     ''' <summary>
     ''' ### Fitting Linear Models
     ''' 
