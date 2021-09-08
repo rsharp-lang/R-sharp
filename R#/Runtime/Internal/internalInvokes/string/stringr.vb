@@ -425,9 +425,16 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("grep")>
-        Public Function grep(<RRawVectorArgument> text As Object, greps As String(), Optional env As Environment = Nothing) As Object
+        Public Function grep(<RRawVectorArgument> text As Object, greps As String(), Optional fixed As Boolean = False, Optional env As Environment = Nothing) As Object
             If text Is Nothing Then
                 Return Nothing
+            ElseIf fixed Then
+                Return Rset _
+                    .getObjectSet(text, env) _
+                    .Select(Function(o)
+                                Return greps.Any(Function(part) VBStr.InStr(o, part) > 0)
+                            End Function) _
+                    .ToArray
             End If
 
             Dim textgrep As TextGrepMethod = TextGrepScriptEngine _
@@ -444,7 +451,7 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return Rset.getObjectSet(text, env) _
                     .Select(Function(o)
-                                Return textgrep(Scripting.ToString(o))
+                                Return textgrep(any.ToString(o))
                             End Function) _
                     .ToArray
             End If
