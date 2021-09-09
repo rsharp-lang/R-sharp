@@ -104,7 +104,7 @@ Namespace Development.Package.File.Expressions
                         Dim logical As Expression = BlockReader.ParseBlock(bin).Parse(desc)
                         unary = New UnaryNot(logical)
                     Case ExpressionTypes.UnaryNumeric
-                        Dim op As String = Encoding.ASCII.GetString(Writer.readZEROBlock(bin))
+                        Dim op As String = Encoding.ASCII.GetString(Writer.readZEROBlock(bin).ToArray)
                         Dim num As Expression = BlockReader.ParseBlock(bin).Parse(desc)
                         unary = New UnaryNumeric(op, num)
                     Case Else
