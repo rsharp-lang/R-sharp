@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\biodeep\\biodeep_pipeline\\lipidsearch\\test\\个性化作图\\run.R\" --data D:\\biodeep\\biodeep_pipeline\\lipidsearch\\test\\个性化作图",
+      "commandLineArgs": "\"D:\\biodeep\\biodeep_pipeline\\lipidsearch\\test\\个性化作图\\run.R\" --data D:\\biodeep\\biodeep_pipeline\\lipidsearch\\test\\个性化作图 --attach D:\\biodeep\\biodeep_pipeline\\lipidsearch\\LipidSearch",
       "workingDirectory": "D:\\biodeep\\biodeep_pipeline\\lipidsearch\\LipidSearch"
     }
   }

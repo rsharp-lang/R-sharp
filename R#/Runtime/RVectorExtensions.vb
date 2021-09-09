@@ -74,6 +74,8 @@ Namespace Runtime
 
                 If type Is GetType(T()) OrElse type.ImplementInterface(GetType(IEnumerable(Of T))) Then
                     Return True
+                ElseIf DirectCast(x, Array).Length = 0 Then
+                    Return False
                 Else
                     Return DirectCast(x, Array).GetValue(Scan0).GetType Is GetType(T)
                 End If

@@ -772,7 +772,11 @@ Namespace Runtime.Internal.Invokes
         ''' into package file.
         ''' </remarks>
         <ExportAPI("system.file")>
-        Public Function systemFile(fileName As String, Optional package$ = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function systemFile(fileName As String,
+                                   Optional package$ = Nothing,
+                                   Optional mustWork As Boolean = False,
+                                   Optional env As Environment = Nothing) As Object
+
             If Not package.StringEmpty Then
                 Dim pkgDir As String
 
@@ -789,6 +793,8 @@ Namespace Runtime.Internal.Invokes
 
                 If fileName.FileExists Then
                     Return fileName.GetFullPath
+                ElseIf mustWork Then
+                    Return Internal.debug.stop("file is not found!", env)
                 Else
                     Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
                     Return Nothing
