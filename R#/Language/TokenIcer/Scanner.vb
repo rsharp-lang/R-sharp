@@ -207,7 +207,15 @@ Namespace Language.TokenIcer
         }
 
         Private Shared Function isLINQKeyword(word As String) As Boolean
-            Return Strings.LCase(word) Like keywords
+            Dim lwd As String = Strings.LCase(word)
+
+            Select Case lwd
+                ' Linq中没有if表达式
+                Case "if"
+                    Return False
+                Case Else
+                    Return Strings.LCase(word) Like keywords
+            End Select
         End Function
 
         Public Shared Function GetRKeywords() As String()

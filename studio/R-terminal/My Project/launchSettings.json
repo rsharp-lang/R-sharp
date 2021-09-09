@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"K:\\QLZ092\\search.R\"",
+      "commandLineArgs": "\"C:\\Users\\Administrator\\Desktop\\aaa.R\"",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }
