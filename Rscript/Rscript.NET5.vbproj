@@ -95,11 +95,6 @@
     <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
-    <ProjectReference Include="..\R#\Rsharp-netcore5.vbproj" />
-  </ItemGroup>
-
   <Import Project="..\studio\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
 
   <Import Project="..\..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems" Label="Shared" />

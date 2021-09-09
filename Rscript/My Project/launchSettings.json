@@ -2,7 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\test\\MSIvisualTest.R\""
+      "commandLineArgs": "--build ",
+      "workingDirectory": "D:\\biodeep\\biodeep_pipeline\\lipidsearch\\LipidSearch"
     }
   }
 }
