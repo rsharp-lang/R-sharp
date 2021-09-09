@@ -65,7 +65,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Get
         End Property
 
-        Dim [operator] As String
+        Friend ReadOnly [operator] As String
         ''' <summary>
         ''' 可能是一个符号，也可以能是一个对象引用
         ''' </summary>

@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"C:\\Users\\Administrator\\Desktop\\aaa.R\"",
+      "commandLineArgs": "--build",
       "workingDirectory": "D:\\biodeep\\biodeep_pipeline\\lipidsearch\\LipidSearch"
     }
   }

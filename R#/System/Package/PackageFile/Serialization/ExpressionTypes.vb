@@ -109,5 +109,7 @@ Namespace Development.Package.File
 
         UnaryNot = 110
         Binary
+
+        UnaryNumeric
     End Enum
 End Namespace

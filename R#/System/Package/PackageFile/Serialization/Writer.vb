@@ -158,7 +158,7 @@ Namespace Development.Package.File
                     Return RCallFunction.GetBuffer(x)
 
                 Case GetType(Require), GetType([Imports]) : Return RImports.GetBuffer(x)
-                Case GetType(UnaryNot) : Return RUnary.GetBuffer(x)
+                Case GetType(UnaryNot), GetType(UnaryNumeric) : Return RUnary.GetBuffer(x)
                 Case GetType(VectorLiteral) : Return RVector.GetBuffer(x)
                 Case GetType(SymbolReference), GetType(NamespaceFunctionSymbolReference) : Return RSymbolRef.GetBuffer(x)
 
