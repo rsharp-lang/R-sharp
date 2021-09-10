@@ -2,6 +2,6 @@ imports "filter" from "graphics";
 
 setwd(@dir);
 
-bitmap(file = "") {
+bitmap(file = "./lena_emboss.png") {
 	readImage("lena.jpg") |> emboss;
 }
