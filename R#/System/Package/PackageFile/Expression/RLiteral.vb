@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::3c043a940a7e118f7fb9203a27617a8d, R#\System\Package\PackageFile\Expression\RLiteral.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RLiteral
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: GetExpression, readLiteral, readRegexp
-    ' 
-    '         Sub: (+3 Overloads) WriteBuffer
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RLiteral
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: GetExpression, readLiteral, readRegexp
+' 
+'         Sub: (+3 Overloads) WriteBuffer
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -95,6 +95,8 @@ Namespace Development.Package.File.Expressions
                     Case Else
                         If x.value Is GetType(Void) Then
                             Call outfile.Write(Encoding.UTF8.GetBytes("NA"))
+                        ElseIf x.value Is Nothing Then
+                            Call outfile.Write("\0")
                         Else
                             Call outfile.Write(Encoding.UTF8.GetBytes(any.ToString(x.value)))
                         End If
@@ -117,15 +119,16 @@ Namespace Development.Package.File.Expressions
                 Case TypeCodes.NA
                     Dim str As String = Encoding.UTF8.GetString(bin.ReadBytes(bin.BaseStream.Length))
 
-                    If str = "NA" Then
-                        Return New Literal With {.m_type = TypeCodes.NA, .value = GetType(Void)}
-                    ElseIf str = "NULL" Then
-                        Return New Literal With {.m_type = TypeCodes.NA, .value = Nothing}
-                    ElseIf str = "" Then
-                        Return New Literal With {.m_type = TypeCodes.string, .value = ""}
-                    Else
-                        Throw New NotImplementedException($"unsure about the literal string: '{str}'")
-                    End If
+                    Select Case str
+                        Case "NA"
+                            Return New Literal With {.m_type = TypeCodes.NA, .value = GetType(Void)}
+                        Case "NULL", "\0"
+                            Return New Literal With {.m_type = TypeCodes.NA, .value = Nothing}
+                        Case ""
+                            Return New Literal With {.m_type = TypeCodes.string, .value = ""}
+                        Case Else
+                            Throw New NotImplementedException($"unsure about the literal string: '{str}'")
+                    End Select
                 Case Else
                     Return New Literal(Encoding.UTF8.GetString(bin.ReadBytes(bin.BaseStream.Length)))
             End Select
