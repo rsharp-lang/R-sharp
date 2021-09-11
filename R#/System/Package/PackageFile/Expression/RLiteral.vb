@@ -96,7 +96,7 @@ Namespace Development.Package.File.Expressions
                         If x.value Is GetType(Void) Then
                             Call outfile.Write(Encoding.UTF8.GetBytes("NA"))
                         ElseIf x.value Is Nothing Then
-                            Call outfile.Write("\0")
+                            Call outfile.Write(Encoding.UTF8.GetBytes("\0"))
                         Else
                             Call outfile.Write(Encoding.UTF8.GetBytes(any.ToString(x.value)))
                         End If

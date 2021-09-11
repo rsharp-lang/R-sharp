@@ -7,6 +7,8 @@
     <AssemblyName>roxygenNet</AssemblyName>
     <Configurations>Debug;Release;Rsharp_app_release</Configurations>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -40,7 +42,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
-    <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
+    <OutputPath>../../../App/</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -48,6 +50,13 @@
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\mime\text%html\html_netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\mime\text%markdown\markdown.NET5.vbproj" />
     <ProjectReference Include="..\..\..\R#\Rsharp-netcore5.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
