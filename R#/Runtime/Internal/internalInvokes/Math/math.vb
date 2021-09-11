@@ -1,48 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::5de7182bade72acae7526ca78fedecb4, R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module math
-    ' 
-    '         Function: abs, cluster1D, diff, exp, log
-    '                   log10, log2, max, mean, median
-    '                   min, pearson, pow, rnorm, round
-    '                   rsd, runif, sample, sample_int, sd
-    '                   sqrt, sum, var
-    ' 
-    '         Sub: set_seed
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module math
+' 
+'         Function: abs, cluster1D, diff, exp, log
+'                   log10, log2, max, mean, median
+'                   min, pearson, pow, rnorm, round
+'                   rsd, runif, sample, sample_int, sd
+'                   sqrt, sum, var
+' 
+'         Sub: set_seed
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -474,9 +474,16 @@ Namespace Runtime.Internal.Invokes
                                x As Object,
                                size As Integer,
                                Optional replace As Boolean = False,
-                               Optional prob As Object = Nothing) As Object
+                               Optional prob As Object = Nothing,
+                               Optional env As Environment = Nothing) As Object
 
-            Dim data As Object() = asVector(Of Object)(x)
+            Dim data As Array = asVector(Of Object)(x)
+
+            If data.Length <= size AndAlso replace = False Then
+                Call env.AddMessage("data size of x is less than sample size, returns the original data vector.")
+                Return data
+            End If
+
             Dim index As Integer() = sample_int(size, size, replace, prob)
             Dim takeSamples As New List(Of Object)
 
