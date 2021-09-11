@@ -51,7 +51,6 @@ Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development.CommandLine
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
@@ -104,7 +103,7 @@ Module package
     ''' <param name="func"></param>
     ''' <returns></returns>
     <ExportAPI("serialize")>
-    Public Function serialize(func As DeclareNewFunction) As Object
+    Public Function serialize(func As Expression) As Object
         Using tmp As New Writer(New MemoryStream)
             Return New MemoryStream(tmp.GetBuffer(func))
         End Using
