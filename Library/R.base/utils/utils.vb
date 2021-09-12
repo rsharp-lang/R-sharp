@@ -233,6 +233,10 @@ Public Module utils
                     If dataframe.columns.ContainsKey(key) Then
                         dataframe.rownames = dataframe.columns(key)
                         dataframe.columns.Remove(key)
+                    ElseIf key = "" Then
+                        ' 20210912
+                        ' unsure for the NULL literal bug in build R package
+                        Return Nothing
                     Else
                         Return Internal.debug.stop({"undefined column was selected as row names!", "given: " & key}, env)
                     End If
