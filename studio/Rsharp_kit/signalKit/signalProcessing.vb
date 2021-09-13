@@ -81,7 +81,7 @@ Module signalProcessing
     End Function
 
     Private Function printSignal(sig As GeneralSignal)
-
+        Throw New NotImplementedException
     End Function
 
     <ExportAPI("findpeaks")>
