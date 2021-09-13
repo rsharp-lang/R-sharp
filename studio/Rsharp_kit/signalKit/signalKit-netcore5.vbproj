@@ -9,29 +9,34 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>roxygenNet-netcore5.xml</DocumentationFile>
+    <DocumentationFile>signalKit.xml</DocumentationFile>
     <DefineConstants>netcore5=1</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DocumentationFile>roxygenNet-netcore5.xml</DocumentationFile>
+    <DocumentationFile>signalKit.xml</DocumentationFile>
     <DefineConstants>netcore5=1</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>roxygenNet-netcore5.xml</DocumentationFile>
+    <DocumentationFile>signalKit.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|AnyCPU'">
-    <DocumentationFile>roxygenNet-netcore5.xml</DocumentationFile>
+    <DocumentationFile>signalKit.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DocumentationFile>roxygenNet-netcore5.xml</DocumentationFile>
+    <DocumentationFile>signalKit.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
-    <DocumentationFile>roxygenNet-netcore5.xml</DocumentationFile>
+    <DocumentationFile>signalKit.xml</DocumentationFile>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
@@ -40,13 +45,14 @@
     <DefineTrace>true</DefineTrace>
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
     <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data\BinaryData\BinaryData\binarydata-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data\BinaryData\DataStorage\datastorage-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data\DataFrame\dataframework-netcore5.vbproj" />
-    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\Math\math-netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\Math\Math.NET5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\Mathematica\SignalProcessing\Signal.IO\signal_io-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\Mathematica\SignalProcessing\SignalProcessing\signalprocessing-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\Mathematica\SignalProcessing\wav\wav\waveFile-netcore5.vbproj" />

@@ -13,34 +13,34 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>roxygenNet.xml</DocumentationFile>
+    <DocumentationFile>Rserve.xml</DocumentationFile>
     <DefineConstants>netcore5=1</DefineConstants>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DocumentationFile>roxygenNet.xml</DocumentationFile>
+    <DocumentationFile>Rserve.xml</DocumentationFile>
     <DefineConstants>netcore5=1</DefineConstants>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>roxygenNet.xml</DocumentationFile>
+    <DocumentationFile>Rserve.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|AnyCPU'">
-    <DocumentationFile>roxygenNet.xml</DocumentationFile>
+    <DocumentationFile>Rserve.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DocumentationFile>roxygenNet.xml</DocumentationFile>
+    <DocumentationFile>Rserve.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
-    <DocumentationFile>roxygenNet.xml</DocumentationFile>
+    <DocumentationFile>Rserve.xml</DocumentationFile>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
