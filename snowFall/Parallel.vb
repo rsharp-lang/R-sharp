@@ -105,7 +105,7 @@ Public Module Parallel
     ''' <returns></returns>
     <ExportAPI("makeCluster")>
     Public Function makeCluster(<RRawVectorArgument> spec As Object, Optional env As Environment = Nothing)
-
+        Throw New NotImplementedException
     End Function
 
     <ExportAPI("worker")>

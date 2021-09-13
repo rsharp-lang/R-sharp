@@ -42,6 +42,6 @@
 Public Class package
 
     Public Function createHtml() As String
-
+        Throw New NotImplementedException
     End Function
 End Class
