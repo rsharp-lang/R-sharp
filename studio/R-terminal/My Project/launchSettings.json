@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\biodeep\\ncbi_keywords\\Rscript\\ncbi_query.R\"",
+      "commandLineArgs": "\"D:\\GCModeller\\src\\workbench\\pkg\\pipeline\\union_bbh.R\" --forward \"F:\\20210909\\myva_cog\\forward.sbhits.csv\" --reverse \"F:\\20210909\\myva_cog\\reverse.sbhits.csv\"",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }
