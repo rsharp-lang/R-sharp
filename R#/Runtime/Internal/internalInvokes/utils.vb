@@ -483,7 +483,8 @@ Namespace Runtime.Internal.Invokes
                                Optional minimized As Boolean = False,
                                Optional invisible As Boolean = True,
                                Optional timeout As Double = 0,
-                               Optional clr As Boolean = False) As String
+                               Optional clr As Boolean = False,
+                               Optional env As Environment = Nothing) As String
 
             Dim tokens As String() = CLIParser.GetTokens(command)
             Dim executative As String = tokens(Scan0)
@@ -494,7 +495,18 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
             Dim std_out As String
 
+            If env.globalEnvironment.debugMode Then
+                Call base.print("get app executative:", env)
+                Call base.print(executative, env)
+                Call base.print("commandline argument is:", env)
+                Call base.print(arguments, env)
+            End If
+
             If Global.System.Environment.OSVersion.Platform = Global.System.PlatformID.Win32NT Then
+                If env.globalEnvironment.debugMode Then
+                    Call base.print($"run on windows {If(clr, ".NET/CLR", "naive")} environment!", env)
+                End If
+
                 If clr Then
                     Dim ps = App.Shell(executative, arguments, CLR:=clr, debug:=True, stdin:=inputStr.JoinBy(vbLf))
 
@@ -512,8 +524,10 @@ Namespace Runtime.Internal.Invokes
                     End If
                 End If
             ElseIf clr Then
+                base.print("run on UNIX mono!", env)
                 std_out = UNIX.Shell("mono", $"{executative.CLIPath} {arguments}", verbose:=show_output_on_console, stdin:=inputStr.JoinBy(vbLf))
             Else
+                base.print("run on UNIX shell!", env)
                 std_out = UNIX.Shell(
                     command:=executative,
                     args:=arguments,

@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -83,10 +84,24 @@ Namespace Development.CodeAnalysis
                 Case GetType(DeclareNewFunction) : Call GetSymbols(DirectCast(code, DeclareNewFunction), context)
                 Case GetType(DeclareNewSymbol) : Call GetSymbols(DirectCast(code, DeclareNewSymbol), context)
                 Case GetType(AcceptorClosure), GetType(ClosureExpression) : Call GetSymbols(DirectCast(code, ClosureExpression), context)
+                Case GetType(ExternalCommandLine) : Call GetSymbols(DirectCast(code, ExternalCommandLine), context)
+                Case GetType(StringInterpolation) : Call GetSymbols(DirectCast(code, StringInterpolation), context)
+                Case GetType(SymbolReference)
+                    Call context.Push(DirectCast(code, SymbolReference), PropertyAccess.Readable)
 
                 Case Else
                     Throw New NotImplementedException(code.GetType.FullName)
             End Select
+        End Sub
+
+        Private Shared Sub GetSymbols(code As StringInterpolation, context As Context)
+            For Each part As Expression In code.stringParts
+                Call GetSymbolReferenceList(part, context)
+            Next
+        End Sub
+
+        Private Shared Sub GetSymbols(code As ExternalCommandLine, context As Context)
+            Call GetSymbolReferenceList(code.cli, context)
         End Sub
 
         Private Shared Sub GetSymbols(code As ElseBranch, context As Context)

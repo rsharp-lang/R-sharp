@@ -46,6 +46,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
@@ -55,6 +56,7 @@ Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -100,9 +102,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             Dim commandlineStr$ = CType(REnv.getFirst(cli.Evaluate(envir)), String) _
                 .LineTokens _
                 .Select(Function(str)
-                            Return str.Trim(ASCII.TAB, " "c, ASCII.CR, ASCII.LF)
+                            Return str.Trim(ASCII.TAB, " "c, ASCII.CR, ASCII.LF).CLIToken
                         End Function) _
                 .JoinBy(" ")
+
+            If envir.globalEnvironment.debugMode Then
+                Call base.print("get the raw commandline string input:", envir)
+                Call base.print(commandlineStr, envir)
+            End If
 
             If commandlineStr.DoCall(AddressOf SyntaxImplements.isInterpolation) Then
                 Call commandlineStr _
@@ -112,7 +119,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                     .DoCall(AddressOf envir.globalEnvironment.messages.Add)
             End If
 
-            Return Internal.Invokes.utils.system(commandlineStr)
+            Return Internal.Invokes.utils.system(commandlineStr, env:=envir)
         End Function
 
         Private Shared Function possibleInterpolationFailure(commandline As String, envir As Environment) As Message
