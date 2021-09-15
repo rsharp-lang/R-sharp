@@ -524,10 +524,16 @@ Namespace Runtime.Internal.Invokes
                     End If
                 End If
             ElseIf clr Then
-                base.print("run on UNIX mono!", env)
+                If env.globalEnvironment.debugMode Then
+                    Call base.print("run on UNIX mono!", env)
+                End If
+
                 std_out = UNIX.Shell("mono", $"{executative.CLIPath} {arguments}", verbose:=show_output_on_console, stdin:=inputStr.JoinBy(vbLf))
             Else
-                base.print("run on UNIX shell!", env)
+                If env.globalEnvironment.debugMode Then
+                    Call base.print("run on UNIX shell!", env)
+                End If
+
                 std_out = UNIX.Shell(
                     command:=executative,
                     args:=arguments,
