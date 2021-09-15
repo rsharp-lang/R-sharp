@@ -48,6 +48,7 @@
 
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.CommandLine.Parsers
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
@@ -101,6 +102,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim commandlineStr$ = CType(REnv.getFirst(cli.Evaluate(envir)), String) _
                 .LineTokens _
+                .Select(Function(line) CLIParser.GetTokens(line)) _
+                .IteratesALL _
                 .Select(Function(str)
                             Return str.Trim(ASCII.TAB, " "c, ASCII.CR, ASCII.LF).CLIToken
                         End Function) _
