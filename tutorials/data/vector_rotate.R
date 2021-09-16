@@ -20,11 +20,11 @@
 # let i=nums.len() as i32;
 # ums.rotate_right(k.rem_euclid(i) as usize)
 
-print(all(rotate_right([1,2,3,4,5,6,7], 3) == [5,6,7,1,2,3,4]));
+# print(all(rotate_right([1,2,3,4,5,6,7], 3) == [5,6,7,1,2,3,4]));
 # 4 5 6 7 8 9 1 2 3
-print(all(rotate_left([1,2,3,4,5,6,7,8,9], 3) == [4, 5, 6, 7, 8, 9, 1, 2, 3]));
+# print(all(rotate_left([1,2,3,4,5,6,7,8,9], 3) == [4,5,6,7,8,9,1,2,3]));
 # 0 15 8 8 2 4 6 11 
-print(all(rotate_left([8, 2, 4, 6, 11, 0 ,15, 8], 5) == [0, 15, 8, 8, 2, 4, 6, 11]));
+# print(all(rotate_left([8,2,4,6,11,0,15,8], 5) == [0,15,8,8,2,4,6,11]));
 
 const x = [1,2,3,4,5,6,7,8,9];
 
