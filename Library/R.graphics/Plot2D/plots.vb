@@ -64,6 +64,7 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Canvas
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.ChartPlots.Plot3D
+Imports Microsoft.VisualBasic.Data.ChartPlots.Plots
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics.Heatmap
 Imports Microsoft.VisualBasic.Data.csv.IO
@@ -871,6 +872,42 @@ Module plots
                 labelAngle:=labelAngle,
                 showStats:=showStats
             )
+        End If
+    End Function
+
+    <ExportAPI("fillPolygon")>
+    Public Function PlotPolygon(<RRawVectorArgument>
+                                polygon As Object,
+                                <RRawVectorArgument>
+                                Optional padding As Object = g.DefaultUltraLargePadding,
+                                Optional grid_fill As Object = "white",
+                                Optional reverse As Boolean = False,
+                                Optional env As Environment = Nothing) As Object
+
+        Dim theme As New Theme With {
+            .gridFill = RColorPalette.getColor(grid_fill, "white"),
+            .padding = InteropArgumentHelper.getPadding(padding, g.DefaultUltraLargePadding)
+        }
+
+        If polygon Is Nothing Then
+            Return Internal.debug.stop("polygon data can not be nothing!", env)
+        ElseIf TypeOf polygon Is list Then
+            Dim names As String() = DirectCast(polygon, list).getNames
+            Dim poly As pipeline = pipeline.TryCreatePipeline(Of GeneralPath)(names.Select(AddressOf DirectCast(polygon, list).getByName).ToArray, env)
+
+            If Not poly.isError Then
+                Return New PolygonPlot2D(poly.populates(Of GeneralPath)(env), theme, names, reverse).Plot
+            End If
+
+            Return poly.getError
+        Else
+            Dim poly As pipeline = pipeline.TryCreatePipeline(Of GeneralPath)(polygon, env)
+
+            If Not poly.isError Then
+                Return New PolygonPlot2D(poly.populates(Of GeneralPath)(env), theme, reverse:=reverse).Plot
+            End If
+
+            Return poly.getError
         End If
     End Function
 

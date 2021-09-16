@@ -275,7 +275,7 @@ Module graphics2D
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("contour_tracing")>
-    Public Function contourTracing(x As Object, y As Object,
+    Public Function contourTracing(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object,
                                    Optional fillDots As Integer = 1,
                                    Optional env As Environment = Nothing) As GeneralPath
 
