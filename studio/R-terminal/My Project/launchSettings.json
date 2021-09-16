@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"F:\\mzkit_win32\\Rscript\\Pipeline\\MSI_analysis.R\" --mzPack ./MSI.mzPack --outputdir ./20210913_400/ --kegg \"mmu\" --sampling 400 --tolerance \"da:0.3\" --intocutoff 0.05 --padding \"padding: 0px 20px 0px 20px\" --debug",
+      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\tutorials\\data\\vector_rotate.R\"",
       "workingDirectory": "F:\\newTest",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
