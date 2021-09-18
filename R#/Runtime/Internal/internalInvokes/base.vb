@@ -63,6 +63,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.Components
@@ -354,44 +355,46 @@ Namespace Runtime.Internal.Invokes
                 Return row
             ElseIf row Is Nothing Then
                 Return d
+            ElseIf d.columns.Count <> row.columns.Count Then
+                Return Internal.debug.stop({
+                    $"mismatch column size between two dataframe!",
+                    $"({d.ncols}) columns: {d.colnames.GetJson}",
+                    $"({row.ncols}) columns: {d.colnames.GetJson}"
+                }, env)
             Else
-                If d.columns.Count <> row.columns.Count Then
-                    Return Internal.debug.stop("mismatch column length!", env)
-                Else
-                    For Each col In row.columns
-                        If Not d.hasName(col.Key) Then
-                            Return Internal.debug.stop({$"names do not match previous names", $"missing: {col.Key}"}, env)
-                        End If
+                For Each col In row.columns
+                    If Not d.hasName(col.Key) Then
+                        Return Internal.debug.stop({$"names do not match previous names", $"missing: {col.Key}"}, env)
+                    End If
+                Next
+
+                Dim colNames = d.columns.Keys.ToArray
+                Dim copy = d.projectByColumn(colNames, fullSize:=True)
+                Dim copy2 = row.projectByColumn(colNames, fullSize:=True)
+                Dim totalRows As Integer = copy.nrows + copy2.nrows
+
+                For Each col As String In colNames
+                    Dim a As Array = copy.columns(col)
+                    Dim b As Array = copy2.columns(col)
+                    Dim vec As Object() = New Object(totalRows - 1) {}
+
+                    For i As Integer = 0 To a.Length - 1
+                        vec(i) = a.GetValue(i)
                     Next
 
-                    Dim colNames = d.columns.Keys.ToArray
-                    Dim copy = d.projectByColumn(colNames, fullSize:=True)
-                    Dim copy2 = row.projectByColumn(colNames, fullSize:=True)
-                    Dim totalRows As Integer = copy.nrows + copy2.nrows
-
-                    For Each col As String In colNames
-                        Dim a As Array = copy.columns(col)
-                        Dim b As Array = copy2.columns(col)
-                        Dim vec As Object() = New Object(totalRows - 1) {}
-
-                        For i As Integer = 0 To a.Length - 1
-                            vec(i) = a.GetValue(i)
-                        Next
-
-                        For i As Integer = 0 To b.Length - 1
-                            vec(i + a.Length) = b.GetValue(i)
-                        Next
-
-                        copy.columns(col) = vec
+                    For i As Integer = 0 To b.Length - 1
+                        vec(i + a.Length) = b.GetValue(i)
                     Next
 
-                    copy.rownames = copy _
-                        .getRowNames _
-                        .JoinIterates(copy2.getRowNames) _
-                        .ToArray
+                    copy.columns(col) = vec
+                Next
 
-                    Return copy
-                End If
+                copy.rownames = copy _
+                    .getRowNames _
+                    .JoinIterates(copy2.getRowNames) _
+                    .ToArray
+
+                Return copy
             End If
         End Function
 
