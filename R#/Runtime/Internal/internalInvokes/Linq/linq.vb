@@ -784,5 +784,19 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Return blocks
             End If
         End Function
+
+        <ExportAPI("rotate_right")>
+        Public Function rotate_right(<RRawVectorArgument> x As Object, i As Integer, Optional env As Environment = Nothing) As Object
+            Dim vec As Object() = REnv.asVector(x, GetType(Object), env)
+            vec.RotateRight(i)
+            Return REnv.TryCastGenericArray(vec, env)
+        End Function
+
+        <ExportAPI("rotate_left")>
+        Public Function rotate_left(<RRawVectorArgument> x As Object, i As Integer, Optional env As Environment = Nothing) As Object
+            Dim vec As Object() = REnv.asVector(x, GetType(Object), env)
+            vec.RotateLeft(i)
+            Return REnv.TryCastGenericArray(vec, env)
+        End Function
     End Module
 End Namespace

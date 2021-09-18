@@ -265,4 +265,23 @@ Module graphics2D
 
         Return result
     End Function
+
+    ''' <summary>
+    ''' Measure object outline via run contour tracing algorithm.
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="y"></param>
+    ''' <param name="fillDots"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("contour_tracing")>
+    Public Function contourTracing(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object,
+                                   Optional fillDots As Integer = 1,
+                                   Optional env As Environment = Nothing) As GeneralPath
+
+        Dim xi As Double() = REnv.asVector(Of Double)(x)
+        Dim yi As Double() = REnv.asVector(Of Double)(y)
+
+        Return ContourLayer.GetOutline(xi, yi, fillDots)
+    End Function
 End Module

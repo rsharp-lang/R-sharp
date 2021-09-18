@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::ca3aa1728aaa11fd481f11f325396842, R#\Runtime\Internal\objects\dataset\vbObject.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class vbObject
-    ' 
-    '         Properties: target, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: CreateInstance, existsName, (+2 Overloads) getByName, getNames, getObjMethods
-    '                   getObjProperties, (+2 Overloads) setByName, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class vbObject
+' 
+'         Properties: target, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: CreateInstance, existsName, (+2 Overloads) getByName, getNames, getObjMethods
+'                   getObjProperties, (+2 Overloads) setByName, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -144,27 +144,7 @@ Namespace Runtime.Internal.Object
         Private Shared Function getObjProperties(raw As Type) As NamedValue(Of PropertyInfo)()
             Dim schema As NamedValue(Of PropertyInfo)() = raw _
                 .getObjProperties _
-                .Select(Iterator Function(p) As IEnumerable(Of NamedValue(Of PropertyInfo))
-                            ' Column
-                            Yield New NamedValue(Of PropertyInfo)(p.Name, p)
-
-                            Dim attrs = p.CustomAttributes.ToArray
-                            Dim name As String
-
-                            For Each a As CustomAttributeData In attrs
-                                If a.AttributeType Is GetType(ColumnAttribute) Then
-                                    name = a.NamedArguments.Where(Function(pa) pa.MemberName = "Name").First.TypedValue.Value
-                                ElseIf a.AttributeType.Name = "ColumnAttribute" Then
-                                    name = a.ConstructorArguments.First.Value
-                                Else
-                                    name = Nothing
-                                End If
-
-                                If Not name Is Nothing AndAlso name <> p.Name Then
-                                    Yield New NamedValue(Of PropertyInfo)(name, p)
-                                End If
-                            Next
-                        End Function) _
+                .Select(AddressOf propertyParserInternal) _
                 .IteratesALL _
                 .ToArray
             Dim duplicateds = schema _
@@ -178,6 +158,33 @@ Namespace Runtime.Internal.Object
             End If
 
             Return schema
+        End Function
+
+        Private Shared Iterator Function propertyParserInternal(p As PropertyInfo) As IEnumerable(Of NamedValue(Of PropertyInfo))
+            Dim attrs = p.CustomAttributes.ToArray
+            Dim name As String
+            Dim nameAttr As CustomAttributeNamedArgument
+            Dim typeAttr As CustomAttributeTypedArgument
+
+            ' Column
+            Yield New NamedValue(Of PropertyInfo)(p.Name, p)
+
+            For Each a As CustomAttributeData In attrs
+                ' try get name
+                If a.AttributeType Is GetType(ColumnAttribute) Then
+                    nameAttr = a.NamedArguments.Where(Function(pa) pa.MemberName = "Name").FirstOrDefault
+                    name = nameAttr.TypedValue.Value
+                ElseIf a.AttributeType.Name = "ColumnAttribute" Then
+                    typeAttr = a.ConstructorArguments.FirstOrDefault
+                    name = typeAttr.Value
+                Else
+                    name = Nothing
+                End If
+
+                If Not name Is Nothing AndAlso name <> p.Name Then
+                    Yield New NamedValue(Of PropertyInfo)(name, p)
+                End If
+            Next
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

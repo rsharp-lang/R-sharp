@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::d0c3130ed77403c73bf48430199d98d6, studio\R-terminal\Program.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Program
-    ' 
-    '     Function: Main, (+2 Overloads) QueryCommandLineArgvs, RunExpression, RunRScriptFile, RunScript
-    ' 
-    '     Sub: attachPackageFile
-    ' 
-    ' /********************************************************************************/
+' Module Program
+' 
+'     Function: Main, (+2 Overloads) QueryCommandLineArgvs, RunExpression, RunRScriptFile, RunScript
+' 
+'     Sub: attachPackageFile
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -199,17 +199,28 @@ Module Program
         End If
 
         If Not attach.StringEmpty Then
-            If attach.FileExists Then
-                Call R.attachPackageFile(zip:=attach)
-            ElseIf attach.DirectoryExists Then
-                Dim err As Message = PackageLoader2.Hotload(attach.GetDirectoryFullPath, R.globalEnvir)
+            ' loading package list
+            ' --attach GCModeller,mzkit,REnv
+            ' --attach GCModeller.zip;mzkit.zip;/root/REnv/
+            Dim packageList As String() = attach.Split(";"c, ","c)
 
-                If Not err Is Nothing Then
-                    Return Rscript.handleResult(err, R.globalEnvir, Nothing)
+            For Each packageRef As String In packageList
+                If packageRef.FileExists Then
+                    Call R.attachPackageFile(zip:=packageRef)
+                ElseIf packageRef.DirectoryExists Then
+                    Dim err As Message = PackageLoader2.Hotload(packageRef.GetDirectoryFullPath, R.globalEnvir)
+
+                    If Not err Is Nothing Then
+                        Return Rscript.handleResult(err, R.globalEnvir, Nothing)
+                    End If
+                Else
+                    Call R.LoadLibrary(
+                        packageName:=packageRef,
+                        silent:=silent,
+                        ignoreMissingStartupPackages:=False
+                    )
                 End If
-            Else
-                Call Console.WriteLine($"[warning] the specific attach package file '{attach.GetFullPath}' is not found!")
-            End If
+            Next
         End If
 
         Dim result As Object = R.Source(filepath)
