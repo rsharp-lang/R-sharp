@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::007e0cae258e186985d07ba5093525c2, R#\Runtime\Internal\objects\dataset\list.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class list
-    ' 
-    '         Properties: data, length, slots
-    ' 
-    '         Constructor: (+6 Overloads) Sub New
-    ' 
-    '         Function: AsGeneric, (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, GetSlots
-    '                   getValue, hasName, namedValues, setByindex, setByIndex
-    '                   (+2 Overloads) setByName, setNames, ToString
-    ' 
-    '         Sub: add
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class list
+' 
+'         Properties: data, length, slots
+' 
+'         Constructor: (+6 Overloads) Sub New
+' 
+'         Function: AsGeneric, (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, GetSlots
+'                   getValue, hasName, namedValues, setByindex, setByIndex
+'                   (+2 Overloads) setByName, setNames, ToString
+' 
+'         Sub: add
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -55,11 +55,12 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Interop.CType
 
 Namespace Runtime.Internal.Object
 
     Public Class list : Inherits RsharpDataObject
-        Implements RNames, RIndex, RNameIndex
+        Implements RNames, RIndex, RNameIndex, ITupleConstructor
 
         Public Property slots As Dictionary(Of String, Object)
 
@@ -219,7 +220,7 @@ Namespace Runtime.Internal.Object
             Return getNames.GetJson
         End Function
 
-        Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
+        Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex, ITupleConstructor.getByIndex
             If i > length Then
                 Return Nothing
             Else
@@ -252,7 +253,7 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <param name="name"></param>
         ''' <returns></returns>
-        Public Function getByName(name As String) As Object Implements RNameIndex.getByName
+        Public Function getByName(name As String) As Object Implements RNameIndex.getByName, ITupleConstructor.getByName
             If slots.ContainsKey(name) Then
                 Return slots(name)
             Else
@@ -350,5 +351,9 @@ Namespace Runtime.Internal.Object
         Public Shared Widening Operator CType(data As Dictionary(Of String, Object)) As list
             Return New list With {.slots = data}
         End Operator
+
+        Public Function checkTuple(names() As String) As Boolean Implements ITupleConstructor.checkTuple
+            Return names.All(AddressOf hasName)
+        End Function
     End Class
 End Namespace
