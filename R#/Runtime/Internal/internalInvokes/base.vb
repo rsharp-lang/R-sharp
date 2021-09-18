@@ -402,53 +402,61 @@ Namespace Runtime.Internal.Invokes
         ''' and combine by columns or rows, respectively. These are 
         ''' generic functions with methods for other R classes.
         ''' </summary>
-        ''' <param name="d"></param>
-        ''' <param name="col"></param>
+        ''' <param name="x">
+        ''' (generalized) vectors Or matrices. These can be given as 
+        ''' named arguments. Other R objects may be coerced as appropriate, 
+        ''' Or S4 methods may be used: see sections 'Details’ and 
+        ''' ‘Value’. (For the "data.frame" method of cbind these can 
+        ''' be further arguments to data.frame such as stringsAsFactors.)
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("cbind")>
-        Public Function cbind(d As dataframe, <RRawVectorArgument> col As Object, env As Environment) As dataframe
-            If col Is Nothing Then
-                Return d
-            End If
+        Public Function cbind(<RListObjectArgument> x As list, env As Environment) As dataframe
+            Dim nameList As String() = x.getNames
+            Dim d As dataframe = x.getByName(nameList(Scan0))
 
             d = New dataframe With {
                 .columns = New Dictionary(Of String, Array)(d.columns),
                 .rownames = d.rownames
             }
 
-            If TypeOf col Is list Then
-                With DirectCast(col, list)
-                    Dim value As Object
+            For Each nameKey As String In nameList.Skip(1)
+                Dim col As Object = x.getByName(nameKey)
 
-                    For Each name As String In .slots.Keys
-                        value = .slots(name)
+                If TypeOf col Is list Then
+                    With DirectCast(col, list)
+                        Dim value As Object
 
-                        If Not value Is Nothing Then
-                            If TypeOf value Is Array Then
-                                d.columns.Add(name, DirectCast(value, Array))
-                            Else
-                                d.columns.Add(name, {value})
+                        For Each name As String In .slots.Keys
+                            value = .slots(name)
+
+                            If Not value Is Nothing Then
+                                If TypeOf value Is Array Then
+                                    d.columns.Add(name, DirectCast(value, Array))
+                                Else
+                                    d.columns.Add(name, {value})
+                                End If
                             End If
-                        End If
-                    Next
-                End With
-            ElseIf TypeOf col Is Array Then
-                d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, Array))
-            ElseIf TypeOf col Is vector Then
-                d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, vector).data)
-            ElseIf TypeOf col Is dataframe Then
-                Dim colnames = d.columns.Keys.ToArray
-                Dim append As dataframe = DirectCast(col, dataframe)
-                Dim oldColNames = append.columns.Keys.ToArray
-                Dim newNames = colnames.JoinIterates(oldColNames).uniqueNames
+                        Next
+                    End With
+                ElseIf TypeOf col Is Array Then
+                    d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, Array))
+                ElseIf TypeOf col Is vector Then
+                    d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, vector).data)
+                ElseIf TypeOf col Is dataframe Then
+                    Dim colnames = d.columns.Keys.ToArray
+                    Dim append As dataframe = DirectCast(col, dataframe)
+                    Dim oldColNames = append.columns.Keys.ToArray
+                    Dim newNames = colnames.JoinIterates(oldColNames).uniqueNames
 
-                For i As Integer = 0 To append.columns.Count - 1
-                    d.columns.Add(newNames(i + colnames.Length), append.columns(oldColNames(i)))
-                Next
-            Else
-                d.columns.Add($"X{d.columns.Count + 2}", {col})
-            End If
+                    For i As Integer = 0 To append.columns.Count - 1
+                        d.columns.Add(newNames(i + colnames.Length), append.columns(oldColNames(i)))
+                    Next
+                Else
+                    d.columns.Add($"X{d.columns.Count + 2}", {col})
+                End If
+            Next
 
             Return d
         End Function
