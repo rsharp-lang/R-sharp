@@ -725,11 +725,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-  
-
-   <Compile Include="Runtime\Internal\objects\Linq\DataframeGroup.vb" />
+    <Compile Include="Runtime\Internal\objects\Linq\DataframeGroup.vb" />
     <Compile Include="Runtime\Internal\objects\Linq\RCType.vb" />
-  
     <Compile Include="Interpreter\ExecutableLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\ScriptFolder.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\ExternalCommandLine.vb" />
@@ -906,6 +903,7 @@
     <Compile Include="Runtime\Internal\objects\RConversion\castRaw.vb" />
     <Compile Include="Runtime\Internal\objects\utils\TableJoint.vb" />
     <Compile Include="Runtime\Internal\objects\utils\TableRow.vb" />
+    <Compile Include="Runtime\Interop\CType\ITupleConstructor.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSymbolLanguageMaskAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RDefaultExpressionAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RApiReturnAttribute.vb" />
@@ -928,7 +926,7 @@
     <Compile Include="Runtime\Serialize\Buffer.vb" />
     <Compile Include="Runtime\System\TryError.vb" />
     <Compile Include="Runtime\System\GetVectorElement.vb" />
-	<Compile Include="Runtime\Internal\objects\base\dataframeBase.vb" />
+    <Compile Include="Runtime\Internal\objects\base\dataframeBase.vb" />
     <Compile Include="System\Document\Printer\ScriptFormatterPrinter.vb" />
     <Compile Include="System\LambdaCompiler.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RReturns.vb" />
