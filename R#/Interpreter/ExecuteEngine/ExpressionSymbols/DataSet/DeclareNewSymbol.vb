@@ -301,6 +301,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         $"value size: {vector.Length}"
                     }, envir)
                 End If
+            ElseIf Not value Is Nothing AndAlso TypeOf value Is dataframe Then
+                Dim data As dataframe = value
+
+                For Each name As String In names
+                    rtvl = envir.Push(name, data.getColumnVector(name), [readonly])
+
+                    If Program.isException(rtvl) Then
+                        Return rtvl
+                    End If
+                Next
             Else
                 ' all set with one value
                 For Each name As String In names
