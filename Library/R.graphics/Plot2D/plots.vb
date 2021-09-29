@@ -278,7 +278,8 @@ Module plots
                     .ToArray,
                 .pointSize = ptSize,
                 .title = args.getValue("title", env, "data"),
-                .shape = shape
+                .shape = shape,
+                .color = args.getValue("color", env, "black").TranslateColor
             }
         Else
             Dim colorSet As Func(Of Integer, String)
@@ -302,7 +303,8 @@ Module plots
                     .ToArray,
                 .pointSize = ptSize,
                 .title = args.getValue("title", env, "x ~ y"),
-                .shape = shape
+                .shape = shape,
+                .color = args.getValue("color", env, "black").TranslateColor
             }
         End If
 

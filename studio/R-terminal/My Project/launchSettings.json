@@ -2,8 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\asm1252v1\\Rscript\\05.FBAModel.R\" --attach D:\\GCModeller\\src\\workbench\\pkg --debug",
-      "workingDirectory": "F:\\MSI_visualTest",
+      "commandLineArgs": " \"D:\\biodeep\\mzkit_win32\\Pipeline\\MSI_analysis.R\" --mzPack \"D:\\biodeep\\mzkit_win32\\test\\centroidMSI\\MSI.mzPack\" --debug",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }
