@@ -64,6 +64,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -245,6 +246,10 @@ Namespace Runtime
             End If
         End Sub
 
+        Public Function WriteLineHandler() As Action(Of String)
+            Return Sub(line) Call base.print(line, Me)
+        End Function
+
         Protected Sub redirectError(obj$, msg$, level As MSG_TYPES)
             Call AddMessage({msg, $"{stackFrame.Method.ToString}\[{obj}]"}, level:=MSG_TYPES.ERR)
         End Sub
@@ -313,7 +318,7 @@ Namespace Runtime
         End Function
 
         Public Function FindFunctionWithNamespaceRestrict(name As String) As Symbol
-            Dim tokens As String() = Strings.Split(name, "::")
+            Dim tokens As String() = strings.Split(name, "::")
             Dim pkgName As String = tokens(Scan0)
             Dim symbolName As String = tokens(1)
             Dim attaches = globalEnvironment.attachedNamespace
