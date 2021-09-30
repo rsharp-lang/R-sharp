@@ -562,5 +562,9 @@ Namespace Interpreter
             Dispose(disposing:=True)
             GC.SuppressFinalize(Me)
         End Sub
+
+        Public Shared Narrowing Operator CType(R As RInterpreter) As Environment
+            Return R.globalEnvir
+        End Operator
     End Class
 End Namespace

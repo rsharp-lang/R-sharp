@@ -96,6 +96,8 @@ Namespace Development.Package.File
         Public ReadOnly Property RExpr As RExprLiteral
         Public ReadOnly Property RClosure As RClosure
         Public ReadOnly Property RReturns As RReturns
+        Public ReadOnly Property RTypeAssert As RTypeOf
+        Public ReadOnly Property RShell As RCommandLine
 
 #Region "keywords"
         Public ReadOnly Property Rfor As RFor
@@ -127,6 +129,8 @@ Namespace Development.Package.File
             Me.RExpr = New RExprLiteral(Me)
             Me.RClosure = New RClosure(Me)
             Me.RReturns = New RReturns(Me)
+            Me.RTypeAssert = New RTypeOf(Me)
+            Me.RShell = New RCommandLine(Me)
         End Sub
 
         Public Function GetBuffer(x As Expression) As Byte()
@@ -141,6 +145,8 @@ Namespace Development.Package.File
 
                 Case GetType(Literal), GetType(Regexp) : Return RLiteral.GetBuffer(x)
                 Case GetType(StringInterpolation) : Return RString.GetBuffer(x)
+                Case GetType(ExternalCommandLine) : Return RShell.GetBuffer(x)
+                Case GetType(ModeOf) : Return RTypeAssert.GetBuffer(x)
                 Case GetType(BinaryOrExpression),
                      GetType(BinaryBetweenExpression),
                      GetType(BinaryInExpression),
