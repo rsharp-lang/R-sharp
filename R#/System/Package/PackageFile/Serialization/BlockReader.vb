@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::0ada7107a69ac7bc340d55fd9270e4e1, R#\System\Package\PackageFile\Serialization\BlockReader.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class BlockReader
-    ' 
-    '         Properties: body, expression, type
-    ' 
-    '         Function: CheckMagic, Parse, ParseBlock, (+2 Overloads) Read, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class BlockReader
+' 
+'         Properties: body, expression, type
+' 
+'         Function: CheckMagic, Parse, ParseBlock, (+2 Overloads) Read, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -98,6 +98,7 @@ Namespace Development.Package.File
                     Case ExpressionTypes.TypeOf : Return New RTypeOf(Nothing).GetExpression(buffer, Me, desc)
 
                     Case ExpressionTypes.VectorLiteral : Return New RVector(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.Shell : Return New RCommandLine(Nothing).GetExpression(buffer, Me, desc)
 
                     Case ExpressionTypes.Require : Return New RRequire(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.SymbolDeclare : Return New RSymbol(Nothing).GetExpression(buffer, Me, desc)

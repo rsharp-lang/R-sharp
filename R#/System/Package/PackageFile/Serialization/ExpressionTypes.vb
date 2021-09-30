@@ -86,6 +86,10 @@ Namespace Development.Package.File
         Constructor = 60
 
         GetArgument = 70
+
+        ''' <summary>
+        ''' shell a commandline string
+        ''' </summary>
         Shell
 
         [While] = 80
