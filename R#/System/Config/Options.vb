@@ -1,55 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::b85c541ed23dfd9faed71e8ab2b4c460, R#\System\Config\Options.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Options
-    ' 
-    '         Properties: [lib], [strict], digits, f64Format, HTTPUserAgent
-    '                     lib_loc, localConfig, log4vb_redirect, maxPrint, MimeType
-    '                     nwarnings, stdout_multipline, verbose
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    ' 
-    '         Function: getAllConfigs, getOption, setOption, ToString
-    ' 
-    '         Sub: (+2 Overloads) Dispose, flush
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Options
+' 
+'         Properties: [lib], [strict], digits, f64Format, HTTPUserAgent
+'                     lib_loc, localConfig, log4vb_redirect, maxPrint, MimeType
+'                     nwarnings, stdout_multipline, verbose
+' 
+'         Constructor: (+2 Overloads) Sub New
+' 
+'         Function: getAllConfigs, getOption, setOption, ToString
+' 
+'         Sub: (+2 Overloads) Dispose, flush
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel
+Imports Microsoft.VisualBasic.My
+Imports Microsoft.VisualBasic.My.FrameworkInternal
 Imports Microsoft.VisualBasic.Net.Protocols.ContentTypes
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Development.Package
@@ -198,6 +200,12 @@ Namespace Development.Configuration
             End Get
         End Property
 
+        Public ReadOnly Property memoryLoad As String
+            Get
+                Return getOption("memory.load", [default]:="light")
+            End Get
+        End Property
+
         ''' <summary>
         ''' file path for save the config file
         ''' </summary>
@@ -290,6 +298,12 @@ Namespace Development.Configuration
 
             If Not env Is Nothing AndAlso opt = "strict" Then
                 env.globalEnvironment.Rscript.strict = value.ParseBoolean
+            ElseIf opt = "memory.load" Then
+                If value = "max" Then
+                    Call FrameworkInternal.ConfigMemory(MemoryLoads.Heavy)
+                Else
+                    Call FrameworkInternal.ConfigMemory(MemoryLoads.Light)
+                End If
             End If
 
             Call flush()
