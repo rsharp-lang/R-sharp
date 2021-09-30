@@ -307,6 +307,6 @@ Module graphics2D
             Return Message.InCompatibleType(GetType(Bitmap), image.GetType, env)
         End If
 
-        Return bitmap.GetBinaryBitmap.Convert2ASCII
+        Return bitmap.GetBinaryBitmap().Convert2ASCII({"+"c, "-"c, "*"c, "."c}.GenerateFontWeights(New Font(FontFace.Consolas, 10)))
     End Function
 End Module
