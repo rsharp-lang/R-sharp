@@ -318,7 +318,7 @@ Namespace Runtime
         End Function
 
         Public Function FindFunctionWithNamespaceRestrict(name As String) As Symbol
-            Dim tokens As String() = strings.Split(name, "::")
+            Dim tokens As String() = Microsoft.VisualBasic.Strings.Split(name, "::")
             Dim pkgName As String = tokens(Scan0)
             Dim symbolName As String = tokens(1)
             Dim attaches = globalEnvironment.attachedNamespace

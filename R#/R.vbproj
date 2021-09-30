@@ -930,6 +930,7 @@
     <Compile Include="System\Document\Printer\ScriptFormatterPrinter.vb" />
     <Compile Include="System\LambdaCompiler.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RReturns.vb" />
+    <Compile Include="System\Package\PackageFile\Expression\RTypeOf.vb" />
     <Compile Include="System\RFileSystem.vb" />
     <Compile Include="System\Document\MetaTextParser.vb" />
     <Compile Include="System\Document\ShellScript\ArgumentInfo.vb" />
