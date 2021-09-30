@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::b0b584795688025193ef106c1af5211f, Library\R.graphics\Plot2D\graphics2D.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module graphics2D
-    ' 
-    '     Function: axisTicks, contourPolygon, DrawCircle, drawLegends, DrawTriangle
-    '               legend, line2D, measureString, offset2D, point2D
-    '               (+2 Overloads) rectangle, scale, size
-    ' 
-    ' /********************************************************************************/
+' Module graphics2D
+' 
+'     Function: axisTicks, contourPolygon, DrawCircle, drawLegends, DrawTriangle
+'               legend, line2D, measureString, offset2D, point2D
+'               (+2 Overloads) rectangle, scale, size
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -47,10 +47,12 @@ Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Axis
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Math2D.MarchingSquares
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Text.ASCIIArt
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Linq
@@ -283,5 +285,28 @@ Module graphics2D
         Dim yi As Double() = REnv.asVector(Of Double)(y)
 
         Return ContourLayer.GetOutline(xi, yi, fillDots)
+    End Function
+
+    ''' <summary>
+    ''' convert bitmap to ascii characters
+    ''' </summary>
+    ''' <param name="image"></param>
+    ''' <returns></returns>
+    <ExportAPI("asciiArt")>
+    <RApiReturn(GetType(String))>
+    Public Function asciiArt(image As Object, Optional env As Environment = Nothing) As Object
+        Dim bitmap As Image
+
+        If image Is Nothing Then
+            Return Internal.debug.stop("the required bitmap data can not be nothing!", env)
+        ElseIf TypeOf image Is Image Then
+            bitmap = DirectCast(image, Image)
+        ElseIf TypeOf image Is Bitmap Then
+            bitmap = CType(DirectCast(image, Bitmap), Image)
+        Else
+            Return Message.InCompatibleType(GetType(Bitmap), image.GetType, env)
+        End If
+
+        Return bitmap.GetBinaryBitmap.Convert2ASCII
     End Function
 End Module

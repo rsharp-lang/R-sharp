@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::f220b9215a2f2d09593b8c4c03f7ade5, R#\Runtime\Internal\internalInvokes\graphics.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module graphics
-    ' 
-    '         Function: bitmap, plot, readImage
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module graphics
+' 
+'         Function: bitmap, plot, readImage
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -145,6 +145,51 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
             End If
+        End Function
+
+        ''' <summary>
+        ''' resize image to a new pixel size
+        ''' </summary>
+        ''' <param name="image"></param>
+        ''' <param name="factor">
+        ''' + a single number will be scale the image lager or smaller
+        ''' + a numeric vector with two element will specific the new size in pixel directly
+        ''' + other situation will throw a new exception
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("resizeImage")>
+        Public Function resizeImage(image As Object, factor As Double(), Optional env As Environment = Nothing) As Object
+            If factor.IsNullOrEmpty Then
+                Return Internal.debug.stop("the required new size factor can not be nothing!", env)
+            ElseIf factor.Length > 2 Then
+                factor = factor.Take(2).ToArray
+            End If
+
+            Dim bitmap As Bitmap
+            Dim newSize As Size
+
+            If image Is Nothing Then
+                Return Internal.debug.stop("the required image data can not be nothing!", env)
+            ElseIf TypeOf image Is Image Then
+                bitmap = CType(DirectCast(image, Image), Bitmap)
+            ElseIf TypeOf image Is Bitmap Then
+                bitmap = DirectCast(image, Bitmap)
+            Else
+                Return Message.InCompatibleType(GetType(Bitmap), image.GetType, env)
+            End If
+
+            If factor.Length = 1 Then
+                Dim scaleI As Double = factor(Scan0)
+                Dim oldSize As Size = bitmap.Size
+
+                newSize = New Size(oldSize.Width * scaleI, oldSize.Height * scaleI)
+            Else
+                newSize = New Size(factor(0), factor(1))
+            End If
+
+            Dim resize As Image = bitmap.Resize(newSize)
+            Return resize
         End Function
     End Module
 End Namespace
