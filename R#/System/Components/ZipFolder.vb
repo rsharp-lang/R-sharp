@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0c4df684ba8d43bb726d22fd34430fa5, R#\System\Components\ZipFolder.vb"
+﻿#Region "Microsoft.VisualBasic::bf3679d459fd1b046e239235c691bca8, R#\System\Components\ZipFolder.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: ls
     ' 
-    '         Constructor: (+1 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     ' 
     '         Function: ToString
     ' 

@@ -1,47 +1,47 @@
-﻿#Region "Microsoft.VisualBasic::aeca39ef0a2b25b4b08228197f3fdcd2, Library\R.graphics\Plot2D\plots.vb"
+﻿#Region "Microsoft.VisualBasic::22261c98bd2018f5cf9222f872b72b9f, Library\R.graphics\Plot2D\plots.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Module plots
-' 
-'     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
-'               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
-'               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotArray, plotContourLayers
-'               plotFormula, plotLinearYFit, plotLmCall, plotODEResult, plotPieChart
-'               plotSerials, plotVector
-' 
-'     Sub: Main
-' 
-' /********************************************************************************/
+    ' Module plots
+    ' 
+    '     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
+    '               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
+    '               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotArray, plotContourLayers
+    '               plotFormula, plotLinearYFit, plotLmCall, plotODEResult, plotPieChart
+    '               PlotPolygon, plotSerials, plotVector, UpSetPlot
+    ' 
+    '     Sub: Main
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

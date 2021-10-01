@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::652bbb76f88e1daa7edd4d669d064a17, R#\System\Package\PackageFile\Serialization\ExpressionTypes.vb"
+﻿#Region "Microsoft.VisualBasic::de2c4da11bbf77026683215265fd83ec, R#\System\Package\PackageFile\Serialization\ExpressionTypes.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,7 @@
     '         Comment, ExpressionLiteral, FormulaDeclare, FunctionByRef, FunctionCall
     '         LambdaDeclare, SequenceLiteral, Shell, Switch, SymbolAssign
     '         SymbolDeclare, SymbolIndex, SymbolMemberAssign, SymbolNamespaceReference, SymbolRegexp
-    '         TryCatch, VectorLiteral
+    '         TryCatch, UnaryNumeric, VectorLiteral
     ' 
     '  
     ' 

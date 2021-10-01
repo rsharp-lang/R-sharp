@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f56c9350882b593fc4a8fe228c8725bc, Library\R_graphic.interop\RColorPalette.vb"
+﻿#Region "Microsoft.VisualBasic::d1e54a5642e165284206e2da2ea286e2, Library\R_graphic.interop\RColorPalette.vb"
 
     ' Author:
     ' 
@@ -167,4 +167,3 @@ Module RColorPalette
         End Select
     End Function
 End Module
-

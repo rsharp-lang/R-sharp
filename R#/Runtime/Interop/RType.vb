@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e205777a88a52fb7820b2e9b98e5beeb, R#\Runtime\Interop\RType.vb"
+﻿#Region "Microsoft.VisualBasic::e3b2f73648157489b2e13db8a2caa238, R#\Runtime\Interop\RType.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,8 @@
     ' 
     '         Properties: any, characters, floats, fullName, getCount
     '                     getItem, haveDynamicsProperty, integers, isArray, isCollection
-    '                     isEnvironment, isGenericListObject, logicals, mode, raw
+    '                     isEnvironment, isGenericListObject, logicals, mode, name
+    '                     raw
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: [GetType], [TypeOf], getNames, GetRawElementType, GetRSharpType

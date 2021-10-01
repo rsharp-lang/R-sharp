@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0b32f9bf12edf5e5c1a44774492e6583, R#\System\Package\PackageFile\Serialization\Writer.vb"
+﻿#Region "Microsoft.VisualBasic::7a6497551cec44ad3a7e9ebed913da16, R#\System\Package\PackageFile\Serialization\Writer.vb"
 
     ' Author:
     ' 
@@ -35,8 +35,8 @@
     ' 
     '         Properties: RBinary, RCallFunction, RClosure, Relse, RExpr
     '                     Rfor, RFunction, Rif, RImports, RLiteral
-    '                     RReturns, RString, RSymbol, RSymbolAssign, RSymbolIndex
-    '                     RSymbolRef, RUnary, RVector
+    '                     RReturns, RShell, RString, RSymbol, RSymbolAssign
+    '                     RSymbolIndex, RSymbolRef, RTypeAssert, RUnary, RVector
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 

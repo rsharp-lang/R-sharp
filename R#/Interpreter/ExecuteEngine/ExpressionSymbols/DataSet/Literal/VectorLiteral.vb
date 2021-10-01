@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4a17ee44851609e4a33e758bdc97616e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\VectorLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::d4147c9d872c2c3e611524b129b43f2e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\VectorLiteral.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,8 @@
     '         Properties: expressionName, length, type
     ' 
     '         Constructor: (+2 Overloads) Sub New
-    '         Function: Evaluate, GetEnumerator, IEnumerable_GetEnumerator, ToArray, ToString
+    '         Function: Evaluate, FromArray, GetEnumerator, IEnumerable_GetEnumerator, ToArray
+    '                   ToString
     ' 
     ' 
     ' /********************************************************************************/

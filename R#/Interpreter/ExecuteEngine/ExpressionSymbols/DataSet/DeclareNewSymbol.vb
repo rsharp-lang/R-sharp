@@ -1,46 +1,49 @@
-﻿#Region "Microsoft.VisualBasic::cd8f5df7ca35ac996ebe4d59a4f00d7d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DeclareNewSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::2e878450fe98a498f20070fda0df7f4a, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DeclareNewSymbol.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class DeclareNewSymbol
-' 
-'         Properties: expressionName, hasInitializeExpression, isTuple, names, stackFrame
-'                     symbolSize, type, unit, value
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: Evaluate, getParameterView, PushNames, PushTuple, ToString
-' 
-' 
-' /********************************************************************************/
+    '     Class DeclareNewSymbol
+    ' 
+    '         Properties: expressionName, hasInitializeExpression, isTuple, names, stackFrame
+    '                     symbolSize, type, unit, value
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: Evaluate, getParameterView, PushNames, PushTuple, ToString
+    ' 
+    '         Sub: AddCustomAttributes
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

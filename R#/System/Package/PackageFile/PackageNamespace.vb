@@ -1,46 +1,46 @@
-﻿#Region "Microsoft.VisualBasic::c4ca1e1681557ded00c48a3007902f66, R#\System\Package\PackageFile\PackageNamespace.vb"
+﻿#Region "Microsoft.VisualBasic::07ec2e0ec3b80159c9463447de016a96, R#\System\Package\PackageFile\PackageNamespace.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class PackageNamespace
-' 
-'         Properties: assembly, checksum, datafiles, dependency, framework
-'                     libPath, meta, packageName, runtime, symbols
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: EnumerateSymbols, FindAssemblyPath, ToString
-' 
-' 
-' /********************************************************************************/
+    '     Class PackageNamespace
+    ' 
+    '         Properties: assembly, checksum, datafiles, dependency, framework
+    '                     libPath, meta, packageName, runtime, symbols
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: EnumerateSymbols, FindAssemblyPath, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

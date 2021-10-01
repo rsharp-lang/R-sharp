@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::94ce193e68dcc6c9421c930177deab3e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb"
+﻿#Region "Microsoft.VisualBasic::3bd26b3fc71b25691596d29b00e384c2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class BinaryInExpression
     ' 
-    '         Properties: expressionName, type
+    '         Properties: [operator], expressionName, left, right, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, findTest, getIndex, testListIndex, testVectorIndexOf

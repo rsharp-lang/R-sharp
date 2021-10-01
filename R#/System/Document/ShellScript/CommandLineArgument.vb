@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2285f0e115e60c7538852d7f4aff5b0d, R#\System\Document\ShellScript\CommandLineArgument.vb"
+﻿#Region "Microsoft.VisualBasic::738af6d73eb6a34e2103ed7b249c4df0, R#\System\Document\ShellScript\CommandLineArgument.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,8 @@
 
     '     Class CommandLineArgument
     ' 
-    '         Properties: defaultValue, description, isNumeric, name, type
+    '         Properties: defaultValue, description, isLiteral, isNumeric, name
+    '                     type
     ' 
     '         Function: ToString
     ' 
