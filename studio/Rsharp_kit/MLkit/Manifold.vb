@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ca80e9efb53fc304cf7100cd71916662, studio\Rsharp_kit\MLkit\Manifold.vb"
+﻿#Region "Microsoft.VisualBasic::054d36035b2e0331c3d399bea4512c28, studio\Rsharp_kit\MLkit\Manifold.vb"
 
     ' Author:
     ' 

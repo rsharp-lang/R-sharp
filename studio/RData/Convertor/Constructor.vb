@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d9526bc2cb6cec4441be7611a258d70c, studio\RData\Convertor\Constructor.vb"
+﻿#Region "Microsoft.VisualBasic::a5de4337296f89b27c47936066822d36, studio\RData\Convertor\Constructor.vb"
 
     ' Author:
     ' 
@@ -47,4 +47,3 @@ Module Constructor
     Public ReadOnly deferred_string_constructor As AltRepConstructor
 
 End Module
-

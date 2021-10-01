@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7e1117335ce6890bb4fe1f3d695d0deb, studio\Rsharp_kit\roxygenNet\rdocumentation\package.vb"
+﻿#Region "Microsoft.VisualBasic::001a0153035dbf9dfdbe5c215e7b8b18, studio\Rsharp_kit\roxygenNet\rdocumentation\package.vb"
 
     ' Author:
     ' 

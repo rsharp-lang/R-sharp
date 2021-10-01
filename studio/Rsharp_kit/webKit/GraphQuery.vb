@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f188cd41cf02158302ee6899f3466022, studio\Rsharp_kit\webKit\GraphQuery.vb"
+﻿#Region "Microsoft.VisualBasic::1007a204f3d0cb90e04ab97c728a7277, studio\Rsharp_kit\webKit\GraphQuery.vb"
 
     ' Author:
     ' 
