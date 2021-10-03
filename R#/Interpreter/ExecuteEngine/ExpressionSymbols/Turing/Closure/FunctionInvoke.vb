@@ -111,6 +111,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Call Me.New(New Literal(funcName), stackFrame, parameters)
         End Sub
 
+        Sub New(copy As FunctionInvoke)
+            Me.funcName = copy.funcName
+            Me.stackFrame = copy.stackFrame
+            Me.namespace = copy.namespace
+            Me.parameters = copy.parameters.ToArray
+        End Sub
+
         ''' <summary>
         ''' Use for create pipeline calls from identifier target
         ''' </summary>

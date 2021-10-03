@@ -97,6 +97,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Get
         End Property
 
+        Sub New(symbol As String, value As Expression)
+            Call Me.New({symbol}, value)
+        End Sub
+
         Sub New(targetSymbols$(), value As Expression)
             Me.targetSymbols = targetSymbols _
                 .Select(Function(name) New Literal(name)) _
