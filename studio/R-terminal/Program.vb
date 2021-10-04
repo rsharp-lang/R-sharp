@@ -167,6 +167,7 @@ Module Program
         Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
         Dim verbose As Boolean = args("--verbose")
         Dim attach As String = args("--attach")
+        Dim workdir As String = args("--WORKDIR")
 
         If args.HavebFlag("--debug") OrElse args.ContainsParameter("--debug") Then
             R.debug = True
@@ -221,6 +222,10 @@ Module Program
                     )
                 End If
             Next
+        End If
+
+        If Not workdir.StringEmpty Then
+            App.CurrentDirectory = workdir.TranslateWorkdir(filepath.GetFullPath)
         End If
 
         Dim result As Object = R.Source(filepath)

@@ -9,6 +9,7 @@
     <Import_RootNamespace>Rstudio.common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Workdir.vb" />
     <Compile Include="$(MSBuildThisFileDirectory)ScriptTask.vb" />
     <Compile Include="$(MSBuildThisFileDirectory)Rscript.vb" />
   </ItemGroup>
