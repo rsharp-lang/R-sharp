@@ -246,6 +246,21 @@ Namespace Runtime
             End If
         End Sub
 
+        Public Function GetAcceptorArguments() As Dictionary(Of String, Object)
+            Dim args = acceptorArguments.ToDictionary
+            Dim base = parent?.GetAcceptorArguments
+
+            If Not base.IsNullOrEmpty Then
+                For Each arg In base
+                    If Not args.ContainsKey(arg.Key) Then
+                        Call args.Add(arg.Key, arg.Value)
+                    End If
+                Next
+            End If
+
+            Return args
+        End Function
+
         Public Function WriteLineHandler() As Action(Of String)
             Return Sub(line) Call base.print(line, Me)
         End Function
