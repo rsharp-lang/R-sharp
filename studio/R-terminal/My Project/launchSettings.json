@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "D:\\biodeep\\mzkit_win32\\test\\MS-imaging\\testIonList.R",
+      "commandLineArgs": "\"E:\\biodeep\\biodeepdb_v3\\Polyfill\\test\\draw.R\"",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }
