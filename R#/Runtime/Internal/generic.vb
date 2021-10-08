@@ -143,7 +143,10 @@ Namespace Runtime.Internal
                 .acceptorArguments
 
             For Each key As String In acceptorArgs.Keys
-                args.add(key, acceptorArgs(key))
+                ' 20211008 do not overrides the original parameters
+                If Not args.hasName(key) Then
+                    Call args.add(key, acceptorArgs(key))
+                End If
             Next
 
             If Not generics.ContainsKey(funcName) Then
