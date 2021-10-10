@@ -62,7 +62,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
               Description:="A folder path that contains the R source files and meta data files of the target R package, 
               a folder that exists in this folder path which is named 'R' is required!")>
     Public Function Compile(args As CommandLine) As Integer
-        Dim src$ = sourceHelper(args("/src")) Or App.CurrentDirectory
+        Dim src$ = sourceHelper(args("/src") Or App.CurrentDirectory)
         Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{src}/DESCRIPTION")
         Dim save$ = args("/save") Or $"{src}/../{meta.Package}_{meta.Version}.zip"
 
