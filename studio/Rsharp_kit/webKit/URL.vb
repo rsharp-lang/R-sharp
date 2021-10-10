@@ -162,14 +162,14 @@ Public Module URL
     ''' send http post request to the target web server.
     ''' </summary>
     ''' <param name="url">the url of target web services</param>
-    ''' <param name="params">post body, should be in key-value pair format.</param>
+    ''' <param name="payload">post body, should be in key-value pair format.</param>
     ''' <param name="headers">http headers</param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("requests.post")>
     <RApiReturn(GetType(WebResponseResult))>
     Public Function post(url As String,
-                         Optional params As list = Nothing,
+                         Optional payload As list = Nothing,
                          Optional headers As list = Nothing,
                          Optional env As Environment = Nothing) As Object
 
@@ -178,9 +178,9 @@ Public Module URL
         Dim args As New List(Of KeyValuePair(Of String, String))
         Dim value As Object
 
-        If Not params Is Nothing Then
-            For Each key As String In params.slots.Keys
-                value = params.slots(key)
+        If Not payload Is Nothing Then
+            For Each key As String In payload.slots.Keys
+                value = payload.slots(key)
 
                 If value Is Nothing Then
                     value = ""

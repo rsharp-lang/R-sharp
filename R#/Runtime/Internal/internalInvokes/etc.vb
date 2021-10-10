@@ -138,6 +138,15 @@ Namespace Runtime.Internal.Invokes
             }
         End Function
 
+        ''' <summary>
+        ''' Get current time in ``xxxxx.xxxx`` unix time stamp format.
+        ''' </summary>
+        ''' <returns></returns>
+        <ExportAPI("unixtimestamp")>
+        Public Function unixtimestamp() As Double
+            Return App.UnixTimeStamp
+        End Function
+
         <ExportAPI("Sys.getlocale")>
         Public Function Sys_getlocale() As list
             Dim invariantCulture = CultureInfo.CurrentCulture
