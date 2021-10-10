@@ -139,7 +139,7 @@ Namespace Development.Configuration
         ''' <returns></returns>
         Public ReadOnly Property digits As Integer
             Get
-                Return getOption("digits", [default]:=7).ParseInteger
+                Return getOption("digits", [default]:=3).ParseInteger
             End Get
         End Property
 
@@ -149,7 +149,7 @@ Namespace Development.Configuration
         ''' <returns></returns>
         Public ReadOnly Property f64Format As String
             Get
-                Return getOption("f64.format", [default]:="F")
+                Return getOption("f64.format", [default]:="G")
             End Get
         End Property
 
