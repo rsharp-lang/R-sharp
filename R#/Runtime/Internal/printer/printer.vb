@@ -387,7 +387,7 @@ printSingleElement:
 
             For Each row As String() In contents.Split(partitionSize:=divSize)
                 If indentPrefix Is Nothing Then
-                    Call output.Write($"[{i = i + divSize}]{vbTab}")
+                    Call output.Write($"[{i = CInt(i + divSize)}]{vbTab}")
                 Else
                     Call output.Write(indentPrefix)
                 End If
