@@ -115,6 +115,11 @@ Namespace Runtime
                    type = TypeCodes.string
         End Function
 
+        <Extension>
+        Public Function IsNumeric(type As TypeCodes) As Boolean
+            Return type = TypeCodes.double OrElse type = TypeCodes.integer
+        End Function
+
         ''' <summary>
         ''' VB.NET type to R type code mapping
         ''' </summary>
