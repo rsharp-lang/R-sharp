@@ -90,6 +90,16 @@ Namespace Interpreter.SyntaxParser
                     End If
 
                     tokenBlocks.RemoveAt(Scan0)
+                ElseIf tokenBlocks = 2 Then
+                    ' UnaryNumeric
+                    Dim unaryOp = tokenBlocks(Scan0)(Scan0).text
+                    Dim operon = Expression.CreateExpression(tokenBlocks(1), opts)
+
+                    If operon.isException Then
+                        Return operon
+                    Else
+                        Return New UnaryNumeric(unaryOp, operon.expression)
+                    End If
                 Else
                     ' insert a ZERO before
                     tokenBlocks.Insert(Scan0, {New Token With {.name = TokenType.numberLiteral, .text = 0}})
