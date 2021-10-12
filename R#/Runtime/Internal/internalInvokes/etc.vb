@@ -147,6 +147,13 @@ Namespace Runtime.Internal.Invokes
             Return App.UnixTimeStamp
         End Function
 
+        ''' <summary>
+        ''' Provides information about a specific culture (called a locale for unmanaged
+        ''' code development). The information includes the names for the culture, the writing
+        ''' system, the calendar used, the sort order of strings, and formatting for dates
+        ''' and numbers.
+        ''' </summary>
+        ''' <returns></returns>
         <ExportAPI("Sys.getlocale")>
         Public Function Sys_getlocale() As list
             Dim invariantCulture = CultureInfo.CurrentCulture
