@@ -198,7 +198,9 @@ Module Manifold
 
     <ExportAPI("as.graph")>
     <RApiReturn(GetType(NetworkGraph))>
-    Public Function asGraph(umap As Umap, <RRawVectorArgument> labels As Object,
+    Public Function asGraph(umap As Umap,
+                            <RRawVectorArgument>
+                            labels As Object,
                             <RRawVectorArgument>
                             Optional groups As Object = Nothing,
                             Optional threshold As Double = 0,
