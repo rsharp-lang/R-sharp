@@ -146,7 +146,7 @@ Module Program
 
             ' query commandline arguments
             ' show commandline help
-            Return Program.QueryCommandLineArgvs(script:=filepath)
+            Return Program.QueryCommandLineArgvs(script:=filepath, dev:=App.StdOut)
         Else
             ' run Rscript file
             Return Program.RunRScriptFile(filepath, args)
