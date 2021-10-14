@@ -77,7 +77,14 @@ Namespace Development
                 .OPTIONS = declares.parameters _
                     .SafeQuery _
                     .Select(Function(arg)
-                                Return New NamedValue(Of String)(arg.name, arg.text)
+                                Dim info As NamedValue = parameters _
+                                    .SafeQuery _
+                                    .Where(Function(p) p.name = arg.name) _
+                                    .FirstOrDefault
+
+                                Return New NamedValue(Of String)(arg.name, arg.text) With {
+                                    .Description = info?.text
+                                }
                             End Function) _
                     .ToArray,
                 .PROLOG = declares.ToString,
