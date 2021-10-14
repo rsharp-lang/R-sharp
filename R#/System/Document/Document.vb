@@ -78,6 +78,7 @@ Namespace Development
                     .SafeQuery _
                     .Select(Function(arg)
                                 Dim info As NamedValue = parameters _
+                                    .SafeQuery _
                                     .Where(Function(p) p.name = arg.name) _
                                     .FirstOrDefault
 
