@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::42c4f2440ec8a077e98031ce9ce9835d, R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module utils
-    ' 
-    '         Function: createCommandLine, data, dataSearchByPackageDir, debugTool, description
-    '                   FindSystemFile, GetInstalledPackages, head, installPackages, keyGroups
-    '                   md5, memorySize, now, readFile, system
-    '                   systemFile, wget, workdir
-    ' 
-    '         Sub: cls, pause, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module utils
+' 
+'         Function: createCommandLine, data, dataSearchByPackageDir, debugTool, description
+'                   FindSystemFile, GetInstalledPackages, head, installPackages, keyGroups
+'                   md5, memorySize, now, readFile, system
+'                   systemFile, wget, workdir
+' 
+'         Sub: cls, pause, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -774,6 +774,15 @@ Namespace Runtime.Internal.Invokes
             Return env.globalEnvironment.Rscript.Invoke(reader, args.ToArray)
         End Function
 
+        <Extension>
+        Private Function createAlternativeName(fileName As String) As String
+            Dim list = fileName.Split("\"c, "/"c)
+            Dim basename = fileName.BaseName
+            Dim alter = $"{list.Take(list.Length - 1).JoinBy("/")}/{basename}"
+
+            Return alter
+        End Function
+
         ''' <summary>
         ''' ### Find Names of R System Files
         ''' 
@@ -799,6 +808,7 @@ Namespace Runtime.Internal.Invokes
 
             If Not package.StringEmpty Then
                 Dim pkgDir As String
+                Dim alternativeName As String = fileName.createAlternativeName
 
                 ' 优先从已经加载的程序包位置进行加载操作
                 If env.globalEnvironment.attachedNamespace.hasNamespace(package) Then
@@ -813,6 +823,9 @@ Namespace Runtime.Internal.Invokes
 
                 If fileName.FileExists Then
                     Return fileName.GetFullPath
+                ElseIf $"{pkgDir}/{alternativeName}".FileExists Then
+                    Call env.AddMessage($"Target file '{fileName}' is missing in R file system. Use alternative file name: '{pkgDir}/{alternativeName}'...")
+                    Return $"{pkgDir}/{alternativeName}"
                 ElseIf mustWork Then
                     Return Internal.debug.stop("file is not found!", env)
                 Else
