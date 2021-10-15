@@ -774,6 +774,15 @@ Namespace Runtime.Internal.Invokes
             Return env.globalEnvironment.Rscript.Invoke(reader, args.ToArray)
         End Function
 
+        <Extension>
+        Private Function createAlternativeName(fileName As String) As String
+            Dim list = fileName.Split("\"c, "/"c)
+            Dim basename = fileName.BaseName
+            Dim alter = $"{list.Take(list.Length - 1).JoinBy("/")}/{basename}"
+
+            Return alter
+        End Function
+
         ''' <summary>
         ''' ### Find Names of R System Files
         ''' 
@@ -799,6 +808,7 @@ Namespace Runtime.Internal.Invokes
 
             If Not package.StringEmpty Then
                 Dim pkgDir As String
+                Dim alternativeName As String = fileName.createAlternativeName
 
                 ' 优先从已经加载的程序包位置进行加载操作
                 If env.globalEnvironment.attachedNamespace.hasNamespace(package) Then
@@ -813,6 +823,9 @@ Namespace Runtime.Internal.Invokes
 
                 If fileName.FileExists Then
                     Return fileName.GetFullPath
+                ElseIf $"{pkgDir}/{alternativeName}".FileExists Then
+                    Call env.AddMessage($"Target file '{fileName}' is missing in R file system. Use alternative file name: '{pkgDir}/{alternativeName}'...")
+                    Return $"{pkgDir}/{alternativeName}"
                 ElseIf mustWork Then
                     Return Internal.debug.stop("file is not found!", env)
                 Else
