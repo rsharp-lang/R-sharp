@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\mzkit\\dist\\Rscript\\lipidmaps\\searchlipids.R\"",
+      "commandLineArgs": "\"D:\\biodeep\\biodeepdb_v3\\spatial\\ms-imaging\\test\\ggplot_msi.R\" --attach \"D:\\biodeep\\biodeepdb_v3\\spatial\\ms-imaging\"",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }

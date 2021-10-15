@@ -47,6 +47,21 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Interop
 
+    ''' <summary>
+    ''' the default string literal value of the parameter 
+    ''' can be parsed end evaluated as R expression 
+    ''' result.
+    ''' </summary>
+    ''' <remarks>
+    ''' for example, there is an optional argument in package api:
+    ''' 
+    ''' &lt;RDefaultExpression> 
+    ''' Optional time As Object = "~now()"
+    ''' 
+    ''' then the default value of the parameter time can be the 
+    ''' evaluated result of the default expression ``now()``.
+    ''' 
+    ''' </remarks>
     Public Class RDefaultExpressionAttribute : Inherits RInteropAttribute
 
         Public Shared Function ParseDefaultExpression(strExp As String) As Expression
