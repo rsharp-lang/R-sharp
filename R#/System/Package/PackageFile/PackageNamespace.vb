@@ -1,52 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::07ec2e0ec3b80159c9463447de016a96, R#\System\Package\PackageFile\PackageNamespace.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class PackageNamespace
-    ' 
-    '         Properties: assembly, checksum, datafiles, dependency, framework
-    '                     libPath, meta, packageName, runtime, symbols
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: EnumerateSymbols, FindAssemblyPath, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class PackageNamespace
+' 
+'         Properties: assembly, checksum, datafiles, dependency, framework
+'                     libPath, meta, packageName, runtime, symbols
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: EnumerateSymbols, FindAssemblyPath, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Microsoft.VisualBasic.Text.Xml.Models
 
 Namespace Development.Package.File
 
@@ -67,7 +68,7 @@ Namespace Development.Package.File
         Public Property assembly As Dictionary(Of String, String)
         Public Property dependency As Dependency()
         Public Property symbols As Dictionary(Of String, String)
-        Public Property datafiles As Dictionary(Of String, String)
+        Public Property datafiles As Dictionary(Of String, NamedValue)
         Public Property runtime As AssemblyInfo
         Public Property framework As AssemblyInfo
 
@@ -93,7 +94,7 @@ Namespace Development.Package.File
             assembly = $"{dir}/manifest/assembly.json".LoadJsonFile(Of Dictionary(Of String, String))
             dependency = $"{dir}/manifest/dependency.json".LoadJsonFile(Of Dependency())
             symbols = $"{dir}/manifest/symbols.json".LoadJsonFile(Of Dictionary(Of String, String))
-            datafiles = $"{dir}/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, String))
+            datafiles = $"{dir}/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, NamedValue))
             runtime = $"{dir}/manifest/runtime.json".LoadJsonFile(Of AssemblyInfo)
             framework = $"{dir}/manifest/framework.json".LoadJsonFile(Of AssemblyInfo)
         End Sub
