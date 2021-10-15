@@ -843,9 +843,15 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="package">
         ''' loading current package if the parameter is nothing
         ''' </param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' a list object that contains the meta data of the 
+        ''' package descirption information.
+        ''' </returns>
         <ExportAPI("description")>
-        Public Function description(Optional package As String = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function description(Optional package As String = Nothing,
+                                    Optional ignoreMissingPkg As Boolean = True,
+                                    Optional env As Environment = Nothing) As Object
+
             Dim globalEnv As GlobalEnvironment = env.globalEnvironment
 
             If package.StringEmpty Then
@@ -853,9 +859,16 @@ Namespace Runtime.Internal.Invokes
             End If
 
             If Not globalEnv.packages.hasLibPackage(package) Then
-                Return Internal.debug.stop({$"the required package '{package}' is not yet installed!", $"package: {package}"}, env)
+                If ignoreMissingPkg Then
+                    env.AddMessage($"the required package '{package}' is not yet installed!")
+                    Return Nothing
+                Else
+                    Return Internal.debug.stop({$"the required package '{package}' is not yet installed!", $"package: {package}"}, env)
+                End If
             Else
-                Return $"{globalEnv.packages.getPackageDir(package)}/index.json".LoadJsonFile(Of DESCRIPTION).toList
+                Return ($"{globalEnv.packages.getPackageDir(package)}/index.json") _
+                    .LoadJsonFile(Of DESCRIPTION) _
+                    .toList
             End If
         End Function
 
@@ -886,6 +899,10 @@ Namespace Runtime.Internal.Invokes
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' get current system time
+        ''' </summary>
+        ''' <returns></returns>
         <ExportAPI("now")>
         Public Function now() As Date
             Return Date.Now
