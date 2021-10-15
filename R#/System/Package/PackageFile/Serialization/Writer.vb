@@ -188,6 +188,9 @@ Namespace Development.Package.File
                     Dim message As String = $"script folder and script annotation symbol is not allowed in the package build action!"
                     Dim ex As New InvalidExpressionException(message)
 
+                    Call ex.PrintException
+                    Call VBDebugger.WaitOutput()
+
                     Throw ex
 
                 Case Else
