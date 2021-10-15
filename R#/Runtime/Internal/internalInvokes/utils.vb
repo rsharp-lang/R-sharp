@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::42c4f2440ec8a077e98031ce9ce9835d, R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module utils
-    ' 
-    '         Function: createCommandLine, data, dataSearchByPackageDir, debugTool, description
-    '                   FindSystemFile, GetInstalledPackages, head, installPackages, keyGroups
-    '                   md5, memorySize, now, readFile, system
-    '                   systemFile, wget, workdir
-    ' 
-    '         Sub: cls, pause, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module utils
+' 
+'         Function: createCommandLine, data, dataSearchByPackageDir, debugTool, description
+'                   FindSystemFile, GetInstalledPackages, head, installPackages, keyGroups
+'                   md5, memorySize, now, readFile, system
+'                   systemFile, wget, workdir
+' 
+'         Sub: cls, pause, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -830,9 +830,15 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="package">
         ''' loading current package if the parameter is nothing
         ''' </param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' a list object that contains the meta data of the 
+        ''' package descirption information.
+        ''' </returns>
         <ExportAPI("description")>
-        Public Function description(Optional package As String = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function description(Optional package As String = Nothing,
+                                    Optional ignoreMissingPkg As Boolean = True,
+                                    Optional env As Environment = Nothing) As Object
+
             Dim globalEnv As GlobalEnvironment = env.globalEnvironment
 
             If package.StringEmpty Then
@@ -840,9 +846,16 @@ Namespace Runtime.Internal.Invokes
             End If
 
             If Not globalEnv.packages.hasLibPackage(package) Then
-                Return Internal.debug.stop({$"the required package '{package}' is not yet installed!", $"package: {package}"}, env)
+                If ignoreMissingPkg Then
+                    env.AddMessage($"the required package '{package}' is not yet installed!")
+                    Return Nothing
+                Else
+                    Return Internal.debug.stop({$"the required package '{package}' is not yet installed!", $"package: {package}"}, env)
+                End If
             Else
-                Return $"{globalEnv.packages.getPackageDir(package)}/index.json".LoadJsonFile(Of DESCRIPTION).toList
+                Return ($"{globalEnv.packages.getPackageDir(package)}/index.json") _
+                    .LoadJsonFile(Of DESCRIPTION) _
+                    .toList
             End If
         End Function
 
@@ -873,6 +886,10 @@ Namespace Runtime.Internal.Invokes
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' get current system time
+        ''' </summary>
+        ''' <returns></returns>
         <ExportAPI("now")>
         Public Function now() As Date
             Return Date.Now
