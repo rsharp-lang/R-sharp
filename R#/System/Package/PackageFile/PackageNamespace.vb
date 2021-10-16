@@ -46,6 +46,7 @@
 
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
 
@@ -120,7 +121,7 @@ Namespace Development.Package.File
         End Function
 
         Public Iterator Function EnumerateSymbols() As IEnumerable(Of NamedValue(Of String))
-            For Each item In symbols
+            For Each item In symbols.SafeQuery
                 Yield New NamedValue(Of String)(item)
             Next
         End Function
