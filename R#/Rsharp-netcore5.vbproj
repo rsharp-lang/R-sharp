@@ -6,7 +6,9 @@
 		<AssemblyName>REnv</AssemblyName>
 		<Authors>xie.guigang@gcmodeller.org</Authors>
 		<Company>SMRUCC</Company>
-		<Version>5.0.1.2389</Version>
+		<Version>5.1.3.5558</Version>
+		<AssemblyVersion>2.33.*</AssemblyVersion>
+		<Deterministic>false</Deterministic>
 		<Copyright>GPL3</Copyright>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/SMRUCC/R-sharp</PackageProjectUrl>
@@ -19,6 +21,8 @@
 		<Configurations>Debug;Release;Rsharp_app_release;LipidSearch;PlantMAT;mzkit;NPSearch</Configurations>
 		<RepositoryType>git</RepositoryType>
 		<AnalysisLevel>preview</AnalysisLevel>
+		<PackageTags>R#,rsharp</PackageTags>
+		<FileVersion>1.5635.*</FileVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -92,7 +96,7 @@
 	  <DefineDebug>false</DefineDebug>
 	  <DefineTrace>true</DefineTrace>
 	  <BaseAddress>4194304</BaseAddress>
-	  <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
+	  <OutputPath>../\App\</OutputPath>
 	  <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
 	</PropertyGroup>
 
