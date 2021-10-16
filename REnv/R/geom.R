@@ -5,6 +5,9 @@ imports "geometry2D" from "graphics";
 #' @param qcut the quantile cutoff threshold for define 
 #'    points as low density points(noise).
 #' 
+#' @return a new dataframe object with data fields:
+#'    x, y, density, and noise boolean flags
+#' 
 const density2DCut as function(data, k = 6, qcut = 0.1) {
     const [x, y]  = data;
     const density = density2D(x, y, k);
