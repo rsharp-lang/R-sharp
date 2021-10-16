@@ -49,6 +49,8 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Development.Package.File
 
@@ -99,6 +101,14 @@ Namespace Development.Package.File
             runtime = $"{dir}/manifest/runtime.json".LoadJsonFile(Of AssemblyInfo)
             framework = $"{dir}/manifest/framework.json".LoadJsonFile(Of AssemblyInfo)
         End Sub
+
+        Public Shared Function Check(dir As String, env As Environment) As Message
+            If Not dir.DirectoryExists Then Return Internal.debug.stop({$"package '{dir.BaseName}' is not installed!", $"package: {dir.BaseName}"}, env)
+            If Not $"{dir}/index.json".FileExists Then Return Internal.debug.stop("missing package index file!", env)
+            If Not $"{dir}/CHECKSUM".FileExists Then Return Internal.debug.stop("no package checksum data!", env)
+
+            Return Nothing
+        End Function
 
         Public Function FindAssemblyPath(assemblyName As String) As String
             If assembly.ContainsKey($"{assemblyName}.dll") Then
