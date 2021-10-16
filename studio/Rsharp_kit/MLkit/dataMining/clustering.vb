@@ -451,6 +451,14 @@ Module clustering
         Return node
     End Function
 
+    ''' <summary>
+    ''' evaluate density of the raw data
+    ''' </summary>
+    ''' <param name="data">
+    ''' dataset with any number of dimensions.
+    ''' </param>
+    ''' <param name="k"></param>
+    ''' <returns></returns>
     <ExportAPI("density")>
     Public Function densityA(data As Rdataframe, Optional k As Integer = 6) As Double()
         Dim rows As ClusterEntity() = data.forEachRow _
