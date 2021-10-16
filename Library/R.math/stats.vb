@@ -363,23 +363,29 @@ Module stats
     ''' can be used for class "Date" And for ordered factors.
     ''' </returns>
     <ExportAPI("quantile")>
+    <RApiReturn(GetType(QuantileEstimationGK), GetType(list))>
     Public Function quantile(x As Double(),
                              <RRawVectorArgument(GetType(Double))>
                              Optional probs As Object = "0,0.25,0.5,0.75,1",
-                             Optional env As Environment = Nothing) As list
+                             Optional env As Environment = Nothing) As Object
 
         Dim probList As Double() = REnv.asVector(Of Double)(probs)
         Dim q As QuantileEstimationGK = x.GKQuantile
-        Dim qvals As Double() = probList _
-            .Select(Function(p) q.Query(p)) _
-            .ToArray
-        Dim list As New Dictionary(Of String, Object)
 
-        For i As Integer = 0 To probList.Length - 1
-            list((probList(i) * 100) & "%") = qvals(i)
-        Next
+        If probList.IsNullOrEmpty Then
+            Return q
+        Else
+            Dim qvals As Double() = probList _
+                .Select(Function(p) q.Query(p)) _
+                .ToArray
+            Dim list As New Dictionary(Of String, Object)
 
-        Return New list With {.slots = list}
+            For i As Integer = 0 To probList.Length - 1
+                list((probList(i) * 100) & "%") = qvals(i)
+            Next
+
+            Return New list With {.slots = list}
+        End If
     End Function
 
     ''' <summary>
