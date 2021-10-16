@@ -258,7 +258,12 @@ Namespace Development.Package.File
 
             ' require(library) at first for mount library directory
             ' and then imports modules from library dll file
-            For Each dependency As Dependency In pkg.dependency.OrderBy(Function(dp) If(dp.library.StringEmpty, 0, 100))
+            For Each dependency As Dependency In pkg.dependency _
+                .SafeQuery _
+                .OrderBy(Function(dp)
+                             Return If(dp.library.StringEmpty, 0, 100)
+                         End Function)
+
                 If dependency.library.StringEmpty Then
                     For Each pkgName As String In dependency.packages
                         Call env.LoadLibrary(pkgName)
