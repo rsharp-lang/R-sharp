@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\biodeep\\biodeepdb_v3\\spatial\\MSI_analysis\\Pipeline\\MSI_analysis.R\" --mzPack \"C:\\Users\\lipidsearch\\Documents\\MSI\\demo\\MSI.mzPack\" --outputdir \"C:\\Users\\lipidsearch\\Documents\\MSI\\demo\\20211016-4\" --kegg \"mmu\" --matrix-dims 800  --skip-embedding --skip-preprocessing  --peak-intocutoff 0.95 --skip-featureDetection",
+      "commandLineArgs": "\"D:\\biodeep\\biodeepdb_v3\\spatial\\MSI_analysis\\Pipeline\\MSI_analysis.R\" --mzPack \"C:\\Users\\lipidsearch\\Documents\\MSI\\demo\\MSI.mzPack\" --outputdir \"C:\\Users\\lipidsearch\\Documents\\MSI\\demo\\demo\" --kegg \"mmu\" --matrix-dims 800  --skip-embedding --skip-preprocessing  --peak-intocutoff 0.95 --skip-featureDetection --skip-peakFeatures --attach D:\\biodeep\\biodeepdb_v3\\spatial\\MSI_analysis",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }
