@@ -4,12 +4,26 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.DataMining.DensityQuery
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Package("geometry2D")>
 Module geometry2D
 
+    ''' <summary>
+    ''' Evaluate the density value of a set of 2d points.
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="y"></param>
+    ''' <param name="k"></param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' a density value vector. the elements in the resulted density 
+    ''' value vector is keeps the same order as the input [x,y] 
+    ''' vector.
+    ''' </returns>
     <ExportAPI("density2D")>
-    Public Function density2D(x As Double(), y As Double(),
+    <RApiReturn(GetType(Double))>
+    Public Function density2D(x As Integer(), y As Integer(),
                               Optional k As Integer = 6,
                               Optional env As Environment = Nothing) As Object
 
