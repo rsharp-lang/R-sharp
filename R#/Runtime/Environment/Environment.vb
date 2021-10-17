@@ -261,7 +261,11 @@ Namespace Runtime
             Return args
         End Function
 
-        Public Function WriteLineHandler() As Action(Of String)
+        ''' <summary>
+        ''' a shortcut wrapper function pointer for <see cref="base.print(Object, Environment)"/> 
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function WriteLineHandler() As Action(Of Object)
             Return Sub(line) Call base.print(line, Me)
         End Function
 
