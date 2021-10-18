@@ -71,3 +71,12 @@ Call R.Add("echo",
 ' at last, invoke R function throught Invoke method
 Call R.Invoke("echo", R!word)
 ```
+
+## Related ``R#`` Package Resource
+
+Packages that developed for the R# programming environment:
+
++ [ggplot](https://github.com/rsharp-lang/ggplot) package is a R environment ggplot2 package liked data visualization package for R# language.  
++ [mzkit](https://github.com/xieguigang/mzkit) is a project developed for R# language for run data analysis of the mass spectrum raw data.
++ [ms-imaging](https://github.com/xieguigang/ms-imaging) is a R# package for rendering the MSImaging based on the libraries from mzkit and ggplot packages.
+
