@@ -2,7 +2,8 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": " \"E:\\mzkit\\dist\\Rscript\\lipidmaps\\searchlipids.R\" --attach E:\\mzkit\\Rscript\\Library\\mzkit_app",
+      "commandLineArgs": "\"D:\\biodeep\\biodeepdb_v3\\spatial\\MSI_analysis\\Pipeline\\MSI_analysis.R\" --mzpack \"X:\\项目以外内容\\2021\\研发\\KYYF0006-空间代谢组学\\20211016_Test_mouse brain\\MSI.mzPack\" --outputdir \"X:\\项目以外内容\\2021\\研发\\KYYF0006-空间代谢组学\\20211016_Test_mouse brain\\20211017-1\" --skip-embedding --skip-preprocessing ",
+      "workingDirectory": "D:\\",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }
