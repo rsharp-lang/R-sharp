@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::74f2d5fbf0c3240122ef9a063397cc07, R#\Runtime\Internal\objects\RConversion\conversion.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module RConversion
-    ' 
-    '         Function: asCharacters, asDataframe, asDate, asDate2, asInteger
-    '                   asList, asLogicals, asNumeric, asObject, asPipeline
-    '                   asRaw, asVector, castArrayOfGeneric, castArrayOfObject, castType
-    '                   handleUnsure, isCharacter, isLogical, tryUnlistArray, unlist
-    '                   unlistOfRList, unlistRecursive
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module RConversion
+' 
+'         Function: asCharacters, asDataframe, asDate, asDate2, asInteger
+'                   asList, asLogicals, asNumeric, asObject, asPipeline
+'                   asRaw, asVector, castArrayOfGeneric, castArrayOfObject, castType
+'                   handleUnsure, isCharacter, isLogical, tryUnlistArray, unlist
+'                   unlistOfRList, unlistRecursive
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -694,6 +694,10 @@ RE0:
         ''' Create or test for objects of type "character".
         ''' </summary>
         ''' <param name="x">object to be coerced or tested.</param>
+        ''' <param name="args">
+        ''' the additional argument values for format values to string, 
+        ''' example as ``format = "F4"``.
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns>
         ''' as.character attempts to coerce its argument to character type; 
@@ -720,13 +724,31 @@ RE0:
         ''' </remarks>
         <ExportAPI("as.character")>
         <RApiReturn(GetType(String))>
-        Public Function asCharacters(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Public Function asCharacters(<RRawVectorArgument> x As Object,
+                                     <RListObjectArgument>
+                                     Optional args As list = Nothing,
+                                     Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return Nothing
             ElseIf x.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return Runtime.CTypeOfList(Of String)(x, env)
+                Return REnv.CTypeOfList(Of String)(x, env)
             Else
-                Return Runtime.asVector(Of String)(x)
+                Dim vec As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(x), env)
+                Dim schema As Type = vec.GetType
+
+                If schema.GetElementType IsNot Nothing AndAlso
+                    schema.GetElementType Is GetType(Double) Then
+
+                    If args.hasName("format") Then
+                        Dim format As String = args.getValue(Of String)("format", env)
+
+                        Return DirectCast(vec, Double()) _
+                            .Select(Function(d) d.ToString(format)) _
+                            .ToArray
+                    End If
+                End If
+
+                Return REnv.asVector(Of String)(vec)
             End If
         End Function
 
