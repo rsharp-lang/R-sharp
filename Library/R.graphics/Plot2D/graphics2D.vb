@@ -69,6 +69,11 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <Package("graphics2D")>
 Module graphics2D
 
+    <ExportAPI("paddingString")>
+    Public Function paddingString(<RRawVectorArgument> padding As Object, Optional env As Environment = Nothing) As String
+        Return InteropArgumentHelper.getPadding(padding, "padding: 0px 0px 0px 0px;")
+    End Function
+
     <ExportAPI("legend")>
     Public Function legend(title$, color As Object, Optional font_style As Object = CSSFont.Win10Normal, Optional shape As LegendStyles = LegendStyles.Circle) As LegendObject
         Return New LegendObject With {
