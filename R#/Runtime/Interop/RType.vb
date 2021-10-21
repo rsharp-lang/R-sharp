@@ -319,6 +319,10 @@ Namespace Runtime.Interop
                 Return True
             ElseIf type.mode <> TypeCodes.generic AndAlso type.mode = baseType.mode Then
                 Return True
+            ElseIf type.raw.IsArray AndAlso Not type.raw.GetElementType Is Nothing Then
+#Disable Warning BC42004 ' 表达式递归调用包含运算符
+                Return GetRSharpType(type.raw.GetElementType) Like baseType
+#Enable Warning BC42004 ' 表达式递归调用包含运算符
             Else
                 Return type.raw.IsInheritsFrom(baseType.raw)
             End If
