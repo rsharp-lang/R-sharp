@@ -72,7 +72,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Sub
 
         Sub New(comment As Token)
-            Me.comment = comment.text
+            Me.comment = comment.Trim("#"c, " "c)
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

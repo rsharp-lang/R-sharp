@@ -162,8 +162,22 @@ Namespace Interpreter
                             If block.All(Function(t) t.name = TokenType.comment) Then
                                 ' is top level code comments
                                 Yield CodeComment.FromBlockComments(block)
+                                Continue For
                             Else
+                                Dim i As Integer = 0
+
+                                For Each line As Token In block
+                                    If line.name = TokenType.comment Then
+                                        Yield New CodeComment(line)
+                                    Else
+                                        Exit For
+                                    End If
+
+                                    i += 1
+                                Next
+
                                 block = block _
+                                    .Skip(i) _
                                     .Where(Function(t) t.name <> TokenType.comment) _
                                     .ToArray
                             End If
