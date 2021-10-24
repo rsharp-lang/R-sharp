@@ -103,6 +103,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Sub
 
         Sub New(comment As Token)
+            ' strip for R# notebook single line comment annotation
+            ' like 
+            '     #region "code block start"
+            '     #end region
+            '
             Call Me.New(Strings.RTrim(Mid(comment.text, 2)))
 
             Dim annotation = CommentAnnotation
@@ -117,7 +122,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Function
 
         Public Shared Function FromBlockComments(block As IEnumerable(Of Token)) As CodeComment
-            Dim lines As String() = block.Select(Function(t) Strings.RTrim(Mid(t.text, 3))).ToArray
+            Dim lines As String() = block _
+                .Select(Function(t)
+                            ' strip for R# notebook markdown code comment block
+                            Return Strings.RTrim(Mid(t.text, 3))
+                        End Function) _
+                .ToArray
             Dim text As String = lines.JoinBy(ASCII.LF)
 
             Return New CodeComment(text)
