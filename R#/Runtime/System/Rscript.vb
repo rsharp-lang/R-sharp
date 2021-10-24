@@ -185,7 +185,7 @@ Namespace Runtime.Components
             Return script _
                 .LineTokens _
                 .Skip(region.Min) _
-                .Take(region.Length) _
+                .Take(region.Length - 1) _
                 .JoinBy(ASCII.LF)
         End Function
     End Class
