@@ -44,6 +44,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language
@@ -218,6 +219,10 @@ Namespace Interpreter.SyntaxParser
 
                     Return SyntaxImplements.DeclareAnonymousFunction(code, opts)
                 End If
+            End If
+
+            If opts.keepsCommentLines AndAlso tokens.All(Function(b) b.name = TokenType.comment) Then
+                Return New SyntaxResult(New CodeComment(tokens.Select(Function(t) t.Trim("#"c, " "c)).JoinBy(vbCrLf)))
             End If
 
             Return New SyntaxResult(New NotImplementedException($"Unsure for parse: '{tokens.Select(Function(t) t.text).JoinBy(" ")}'!"), opts.debug)

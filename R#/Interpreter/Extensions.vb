@@ -140,8 +140,15 @@ Namespace Interpreter
                 Else
                     ' have some bugs about
                     ' handles closure
+                    ' 
                     Dim parts() = block _
-                        .Where(Function(t) Not t.name = TokenType.comment) _
+                        .Where(Function(t)
+                                   If opts.keepsCommentLines Then
+                                       Return True
+                                   Else
+                                       Return Not t.name = TokenType.comment
+                                   End If
+                               End Function) _
                         .SplitByTopLevelDelimiter(TokenType.close,, "}") _
                         .Split(2)
 
