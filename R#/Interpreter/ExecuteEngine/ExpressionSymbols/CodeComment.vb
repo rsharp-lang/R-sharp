@@ -103,7 +103,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Sub
 
         Sub New(comment As Token)
-            Call Me.New(comment.Trim("#"c, " "c))
+            Call Me.New(Strings.RTrim(Mid(comment.text, 2)))
 
             Dim annotation = CommentAnnotation
 
@@ -117,7 +117,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Function
 
         Public Shared Function FromBlockComments(block As IEnumerable(Of Token)) As CodeComment
-            Dim lines As String() = block.Select(Function(t) t.Trim("#"c, " "c)).ToArray
+            Dim lines As String() = block.Select(Function(t) Strings.RTrim(Mid(t.text, 3))).ToArray
             Dim text As String = lines.JoinBy(ASCII.LF)
 
             Return New CodeComment(text)
