@@ -707,8 +707,8 @@ Module plots
         End If
 
         Dim serials As SerialData() = DirectCast(data, SerialData())
-        Dim size As String = InteropArgumentHelper.getSize(args!size, env)
-        Dim padding = InteropArgumentHelper.getPadding(args!padding, [default]:=g.DefaultUltraLargePadding)
+        Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="2100,1600")
+        Dim padding = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 150px 150px 200px 200px;")
         Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
         Dim showLegend As Boolean
         Dim spline As Splines = args.getValue(Of Splines)("interplot", env, Splines.None)
