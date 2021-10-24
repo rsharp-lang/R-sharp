@@ -87,5 +87,9 @@ Namespace Interpreter.ExecuteEngine
                 .SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True) _
                 .ParseExpression(opts)
         End Function
+
+        Public Shared Function ParseLines(rscript As Rscript, Optional keepsCommentLines As Boolean = False) As IEnumerable(Of Expression)
+            Return rscript.GetExpressions(New SyntaxBuilderOptions With {.keepsCommentLines = keepsCommentLines})
+        End Function
     End Class
 End Namespace

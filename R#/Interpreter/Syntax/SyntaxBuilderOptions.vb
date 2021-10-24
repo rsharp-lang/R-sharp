@@ -54,6 +54,10 @@ Namespace Interpreter.SyntaxParser
         Public debug As Boolean = False
         Public source As Rscript
         Public [error] As String
+        ''' <summary>
+        ''' 是否保留下来所有的单行注释信息
+        ''' </summary>
+        Public keepsCommentLines As Boolean = False
 
         Public isBuildVector As Boolean
         Public currentLine As Integer
