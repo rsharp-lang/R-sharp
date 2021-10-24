@@ -51,6 +51,13 @@ Imports Microsoft.VisualBasic.Text
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
+    Public Enum Annotations
+        LineComment
+        BlockComment
+        RegionStart
+        EndRegion
+    End Enum
+
     Public Class CodeComment : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
@@ -65,15 +72,31 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             End Get
         End Property
 
-        Dim comment$
+        Public ReadOnly Property comment As String
+
+        Public ReadOnly Property CommentAnnotation As Annotations
+            Get
+                If comment = "#end region" Then
+                    Return Annotations.EndRegion
+                ElseIf comment.StartsWith("#region """) Then
+                    Return Annotations.RegionStart
+                ElseIf comment.Contains(ASCII.CR) OrElse comment.Contains(ASCII.LF) Then
+                    Return Annotations.BlockComment
+                Else
+                    Return Annotations.LineComment
+                End If
+            End Get
+        End Property
 
         Sub New(comment As String)
+            comment = Strings.Trim(comment)
+
             If comment = "end region" Then
-                Me.comment = "#end region"
+                _comment = "#end region"
             ElseIf comment.StartsWith("region """) Then
-                Me.comment = "#" & comment
+                _comment = "#" & comment
             Else
-                Me.comment = comment
+                _comment = comment
             End If
         End Sub
 
