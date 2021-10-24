@@ -68,8 +68,18 @@ Namespace Interpreter
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         <DebuggerStepThrough>
-        Private Function isTerminator(block As Token()) As Boolean
-            Return block.Length = 1 AndAlso block(Scan0).name Like ignores
+        Private Function isTerminator(block As Token(), keepsComment As Boolean) As Boolean
+            If block.Length <> 1 Then
+                Return False
+            Else
+                Dim token As Token = block(Scan0)
+
+                If keepsComment Then
+                    Return token.name = TokenType.terminator
+                Else
+                    Return token.name Like ignores
+                End If
+            End If
         End Function
 
         ''' <summary>
@@ -133,7 +143,7 @@ Namespace Interpreter
             End If
 
             For Each block As Token() In tokens.SplitByTopLevelDelimiter(TokenType.terminator, err:=err).SafeQuery
-                If block.Length = 0 OrElse block.isTerminator Then
+                If block.Length = 0 OrElse block.isTerminator(opts.keepsCommentLines) Then
                     ' skip code comments
                     ' do nothing
                 ElseIf Not err Is Nothing Then
