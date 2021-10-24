@@ -68,11 +68,17 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         Dim comment$
 
         Sub New(comment As String)
-            Me.comment = comment
+            If comment = "end region" Then
+                Me.comment = "#end region"
+            ElseIf comment.StartsWith("region """) Then
+                Me.comment = "#" & comment
+            Else
+                Me.comment = comment
+            End If
         End Sub
 
         Sub New(comment As Token)
-            Me.comment = comment.Trim("#"c, " "c)
+            Call Me.New(comment.Trim("#"c, " "c))
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
