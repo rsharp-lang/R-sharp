@@ -66,6 +66,11 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{src}/DESCRIPTION")
         Dim save$ = args("/save") Or $"{src}/../{meta.Package}_{meta.Version}.zip"
 
+        ' build .net5 assembly via dotnet msbuild command?
+#If netcore5 = 1 Then
+
+#End If
+
         Using outputfile As FileStream = save.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
             Dim assemblyFilters As Index(Of String) = {
                 "Rscript.exe", "R#.exe", "Rscript.dll", "R#.dll", "REnv.dll"

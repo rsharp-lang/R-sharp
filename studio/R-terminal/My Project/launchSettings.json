@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\mzkit\\Rscript\\Library\\mzkit_app\\pipeline\\MSI.R\" --mzpack \"X:\\project\\2021年\\HT2021081325001 杭州市第一人民医院 王帅\\原始数据\\B_20210908\\20211021-2\\CleanSample.mzPack\" --attach D:\\mzkit\\Rscript\\Library\\mzkit_app ",
+      "commandLineArgs": "\"E:\\GCModeller\\src\\runtime\\Rnotebook\\test\\renderHtml.R\" --attach \"E:\\GCModeller\\src\\runtime\\Rnotebook\"",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }
