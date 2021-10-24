@@ -48,6 +48,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.Scripting.TokenIcer
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
@@ -73,6 +74,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Property
 
         Public ReadOnly Property comment As String
+        Public ReadOnly Property span As CodeSpan
 
         Public ReadOnly Property CommentAnnotation As Annotations
             Get
@@ -102,6 +104,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
         Sub New(comment As Token)
             Call Me.New(comment.Trim("#"c, " "c))
+
+            Dim annotation = CommentAnnotation
+
+            If annotation <> Annotations.LineComment AndAlso annotation <> Annotations.BlockComment Then
+                span = comment.span
+            End If
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

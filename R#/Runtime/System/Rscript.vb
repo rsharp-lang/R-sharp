@@ -1,51 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::c419f90f076548dd6792dc5037ea258b, R#\Runtime\System\Rscript.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Rscript
-    ' 
-    '         Properties: fileName, script, source
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: AutoHandleScript, FromFile, FromText, GetByLineNumber, (+2 Overloads) GetRawText
-    '                   GetSourceDirectory, GetTokens, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Rscript
+' 
+'         Properties: fileName, script, source
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: AutoHandleScript, FromFile, FromText, GetByLineNumber, (+2 Overloads) GetRawText
+'                   GetSourceDirectory, GetTokens, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Runtime.Components
@@ -178,6 +179,14 @@ Namespace Runtime.Components
             Else
                 Return $"<{source.FileName}> " & script.LineTokens.First & "..."
             End If
+        End Function
+
+        Public Function GetByLineRange(region As IntRange) As String
+            Return script _
+                .LineTokens _
+                .Skip(region.Min) _
+                .Take(region.Length) _
+                .JoinBy(ASCII.LF)
         End Function
     End Class
 End Namespace

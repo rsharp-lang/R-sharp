@@ -171,7 +171,12 @@ Namespace Interpreter
                         If opts.keepsCommentLines Then
                             If block.All(Function(t) t.name = TokenType.comment) Then
                                 ' is top level code comments
-                                Yield CodeComment.FromBlockComments(block)
+                                If block.Length = 1 Then
+                                    Yield New CodeComment(block(Scan0))
+                                Else
+                                    Yield CodeComment.FromBlockComments(block)
+                                End If
+
                                 Continue For
                             Else
                                 Dim i As Integer = 0
