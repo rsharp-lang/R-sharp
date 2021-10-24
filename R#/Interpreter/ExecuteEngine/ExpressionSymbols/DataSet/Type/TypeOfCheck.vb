@@ -96,7 +96,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 If TypeOf typeRight Is RType Then
                     Return type Is typeRight
                 ElseIf TypeOf typeRight Is String Then
-                    Dim type2 = envir.globalEnvironment.types.TryGetValue(typeRight.ToString)
+                    Dim type2 = envir.globalEnvironment.GetType(typeRight)
 
                     If type2 Is Nothing Then
                         Return Internal.debug.stop({

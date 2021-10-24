@@ -56,13 +56,16 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module DeclareNewSymbolSyntax
 
+        ReadOnly isKeyword As (TokenType, String) = (TokenType.keyword, "is")
+        ReadOnly isSymbol As (TokenType, String) = (TokenType.identifier, "is")
+
         Public Function ModeOf(keyword$, target As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            If target.Any(Function(a) a = (TokenType.keyword, "is")) Then
+            If target.Any(Function(a) a = isKeyword OrElse a = isSymbol) Then
                 If keyword <> "typeof" Then
                     Return New SyntaxResult(New NotImplementedException("type check is only implement on typeof keyword."), opts.debug)
                 End If
 
-                Dim blockParts = target.Split(Function(a) a = (TokenType.keyword, "is")).ToArray
+                Dim blockParts = target.Split(Function(a) a = isKeyword OrElse a = isSymbol).ToArray
                 Dim ObjTarget As SyntaxResult = Expression.CreateExpression(blockParts(0), opts)
 
                 If ObjTarget.isException Then
@@ -77,12 +80,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     Return New TypeOfCheck(keyword, ObjTarget.expression, checkType.expression)
                 End If
             Else
-                Dim ObjTarget As SyntaxResult = Expression.CreateExpression(target, opts)
+                Dim objTarget As SyntaxResult = Expression.CreateExpression(target, opts)
 
-                If ObjTarget.isException Then
-                    Return ObjTarget
+                If objTarget.isException Then
+                    Return objTarget
                 Else
-                    Return New ModeOf(keyword, ObjTarget.expression)
+                    Return New ModeOf(keyword, objTarget.expression)
                 End If
             End If
         End Function
