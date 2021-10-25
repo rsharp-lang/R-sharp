@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src D:\\GCModeller\\src\\runtime\\Rnotebook"
+      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\tutorials\\io\\binary.R\" --debug"
     }
   }
 }

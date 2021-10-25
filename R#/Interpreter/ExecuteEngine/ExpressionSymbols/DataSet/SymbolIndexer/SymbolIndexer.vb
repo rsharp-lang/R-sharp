@@ -1,50 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::37d6799d53c688f0a9aae90894751d51, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
-    '                   getColumn, getDataframeRowRange, listSubset, ToString, vectorSubset
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class SymbolIndexer
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
+'                   getColumn, getDataframeRowRange, listSubset, ToString, vectorSubset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.IO
 Imports System.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
@@ -59,6 +61,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports stdNum = System.Math
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -398,6 +401,42 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Return DirectCast(asVector(Of Integer)(indexer), Integer()) _
                         .Select(Function(i) group(i - 1)) _
                         .ToArray
+                End If
+            ElseIf TypeOf obj Is Stream Then
+                Dim read As Stream = DirectCast(obj, Stream)
+                Dim offset As Long() = DirectCast(REnv.asVector(Of Long)(indexer), Long())
+
+                If offset _
+                    .SlideWindows(2) _
+                    .Where(Function(d) d.Length = 2) _
+                    .All(Function(d)
+                             Return stdNum.Abs(d.Last - d.First) = 1
+                         End Function) Then
+
+                    Dim buffer As Byte()
+
+                    ' is a asc/desc range
+                    If offset(1) - offset(0) > 0 Then
+                        buffer = New Byte(offset.Last - offset.First) {}
+
+                        ' asc
+                        read.Seek(offset(0) - 1, SeekOrigin.Begin)
+                        read.Read(buffer, Scan0, buffer.Length)
+                    Else
+                        ' desc
+                        Throw New NotImplementedException
+                    End If
+
+                    Return buffer
+                Else
+                    Dim buffer As New List(Of Byte)
+
+                    For Each i As Long In offset
+                        Call read.Seek(i - 1, SeekOrigin.Begin)
+                        Call buffer.Add(CByte(read.ReadByte))
+                    Next
+
+                    Return buffer.ToArray
                 End If
             End If
 
