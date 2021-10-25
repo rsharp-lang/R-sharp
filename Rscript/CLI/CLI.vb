@@ -42,11 +42,13 @@
 Imports System.ComponentModel
 Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Language.UnixBash
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
@@ -68,12 +70,12 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
         ' build .net5 assembly via dotnet msbuild command?
 #If netcore5 = 1 Then
-
+        Call runMSBuild(src)
 #End If
 
         Using outputfile As FileStream = save.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
             Dim assemblyFilters As Index(Of String) = {
-                "Rscript.exe", "R#.exe", "Rscript.dll", "R#.dll", "REnv.dll"
+                "Rscript.exe", "R#.exe", "Rscript.dll", "R#.dll", "REnv.dll", "Microsoft.VisualBasic.Runtime.dll"
             }
             Dim err As Message = meta.Build(src, outputfile, assemblyFilters)
 
@@ -87,6 +89,18 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
             Return 0
         End Using
+    End Function
+
+    Private Function runMSBuild(src As String) As Boolean
+        If MSBuild.version Is Nothing Then
+            Return False
+        End If
+
+        For Each sln As String In ls - l - "*.sln" <= src
+            Call MSBuild.BuildVsSolution(sln, rebuild:=True)
+        Next
+
+        Return True
     End Function
 
     Private Function sourceHelper(src As String) As String
