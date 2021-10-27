@@ -267,6 +267,13 @@ Namespace Runtime.Internal.Object.Converts
             End If
         End Function
 
+        ''' <summary>
+        ''' each slot features in the list should be an array 
+        ''' will be project to the dataframe. 
+        ''' </summary>
+        ''' <param name="firstList"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <Extension>
         Friend Function fromList(firstList As list, env As Environment) As Object
             ' passing parameter by a list
