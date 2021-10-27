@@ -179,8 +179,8 @@ Module Program
         If verbose Then
             R.options(verbose:=True)
         End If
-        If strict Then
-
+        If Not strict Then
+            R.options(strict:=False)
         End If
 
         If Not silent AndAlso R.debug Then
