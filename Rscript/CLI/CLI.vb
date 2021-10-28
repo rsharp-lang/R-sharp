@@ -58,7 +58,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
     <ExportAPI("--build")>
     <Description("build R# package")>
-    <Usage("--build [/src <folder, default=./> /save <Rpackage.zip>]")>
+    <Usage("--build [/src <folder, default=./> --skip-src-build /save <Rpackage.zip>]")>
     <Argument("/src", False, CLITypes.File, PipelineTypes.std_in,
               AcceptTypes:={GetType(String)},
               Description:="A folder path that contains the R source files and meta data files of the target R package, 
@@ -67,10 +67,15 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         Dim src$ = sourceHelper(args("/src") Or App.CurrentDirectory)
         Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{src}/DESCRIPTION")
         Dim save$ = args("/save") Or $"{src}/../{meta.Package}_{meta.Version}.zip"
+        Dim skipSourceBuild As Boolean = args("--skip-src-build")
 
         ' build .net5 assembly via dotnet msbuild command?
 #If netcore5 = 1 Then
-        Call runMSBuild(src)
+        If Not skipSourceBuild Then
+            Call runMSBuild(src)
+        Else
+            Call Console.WriteLine($"Skip MSBuild for .NET 5 runtime...")
+        End If
 #End If
 
         Using outputfile As FileStream = save.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)

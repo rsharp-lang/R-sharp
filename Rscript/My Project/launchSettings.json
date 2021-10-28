@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\tutorials\\io\\binary.R\" --debug"
+      "commandLineArgs": "--build /src D:\\GCModeller\\src\\runtime\\ggplot  /save ./aaa.zip --skip-src-build"
     }
   }
 }
