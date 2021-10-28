@@ -325,7 +325,7 @@ Namespace Runtime.Internal.Object.Converts
             If x Is Nothing Then
                 Return x
             ElseIf TypeOf x Is dataframe Then
-                ' clone
+                ' clone object
                 Dim raw As dataframe = x
                 Dim clone As New dataframe With {
                     .columns = raw.columns _
@@ -348,16 +348,30 @@ Namespace Runtime.Internal.Object.Converts
 
                 If Program.isException(args) Then
                     Return args
+                ElseIf DirectCast(args, list).hasName("features") Then
+                    Return pipeline _
+                        .TryCreatePipeline(Of list)(x, env) _
+                        .populates(Of list)(env) _
+                        .handleListFeatureProjections(
+                            features:=DirectCast(args, list).getValue(Of String())("features", env, Nothing),
+                            env:=env,
+                            rowName:=DirectCast(args, list).getValue(Of String)("row.names", env, Nothing)
+                         )
                 End If
             End If
 RE0:
             Dim type As Type = x.GetType
 
             If type Is GetType(list) Then
+                ' each slot elements in list should be 
+                ' a field in dataframe table
                 Return makeDataframe.fromList(DirectCast(x, list), env)
             ElseIf makeDataframe.is_ableConverts(type) Then
+                ' generic overloads method for .NET object
                 Return makeDataframe.createDataframe(type, x, args, env)
             Else
+                ' generic overloads method for .NET object
+                ' <base type>
                 type = makeDataframe.tryTypeLineage(type)
 
                 If type Is Nothing Then
@@ -372,6 +386,44 @@ RE0:
                     Return makeDataframe.createDataframe(type, x, args, env)
                 End If
             End If
+        End Function
+
+        <Extension>
+        Private Function handleListFeatureProjections(data As IEnumerable(Of list), features As String(), rowName As String, env As Environment) As Object
+            If features.IsNullOrEmpty Then
+                Return Internal.debug.stop("no list feature was selected!", env)
+            ElseIf rowName.StringEmpty Then
+                rowName = Nothing
+            End If
+
+            Dim df As New dataframe With {
+                .rownames = Nothing,
+                .columns = New Dictionary(Of String, Array)
+            }
+            Dim fields As New Dictionary(Of String, List(Of Object))
+            Dim rowNames As New List(Of Object)
+
+            For Each name As String In features
+                fields(name) = New List(Of Object)
+            Next
+
+            For Each row As list In data
+                For Each field In fields
+                    Call field.Value.Add(row.getByName(name:=field.Key))
+                Next
+
+                If Not rowName Is Nothing Then
+                    Call rowNames.Add(row.getByName(rowName))
+                End If
+            Next
+
+            For Each name As String In features
+                Call df.columns.Add(name, fields(name).ToArray)
+            Next
+
+            df.rownames = REnv.asVector(Of String)(rowNames.ToArray)
+
+            Return df
         End Function
 
         Private Function handleUnsure(ByRef x As Object, ByRef type As Type, env As Environment) As Message
