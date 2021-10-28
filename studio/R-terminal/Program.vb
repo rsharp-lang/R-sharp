@@ -169,6 +169,7 @@ Module Program
         Dim verbose As Boolean = args("--verbose")
         Dim attach As String = args("--attach")
         Dim workdir As String = args("--WORKDIR")
+        Dim strict As Boolean = args.ContainsParameter("--strict") And args("--strict")
 
         If args.HavebFlag("--debug") OrElse args.ContainsParameter("--debug") Then
             R.debug = True
@@ -177,6 +178,9 @@ Module Program
 
         If verbose Then
             R.options(verbose:=True)
+        End If
+        If Not strict Then
+            R.options(strict:=False)
         End If
 
         If Not silent AndAlso R.debug Then

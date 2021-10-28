@@ -84,7 +84,7 @@ Namespace Runtime.Internal.ConsolePrinter
 
         Sub New()
             RtoString(GetType(Color)) = Function(c) DirectCast(c, Color).ToHtmlColor.ToLower
-            RtoString(GetType(Byte)) = Function(b) CInt(DirectCast(b, Byte)).ToHexString
+            RtoString(GetType(Byte)) = Function(b) "&H" & CInt(DirectCast(b, Byte)).ToHexString
             RtoString(GetType(vbObject)) = Function(o) DirectCast(o, vbObject).ToString
             RtoString(GetType(pipeline)) = Function(o) DirectCast(o, pipeline).ToString
             RtoString(GetType(RType)) = Function(o) DirectCast(o, RType).ToString
