@@ -349,6 +349,10 @@ Namespace Runtime.Internal.Object.Converts
                 If Program.isException(args) Then
                     Return args
                 ElseIf DirectCast(args, list).hasName("features") Then
+                    If TypeOf x Is list Then
+                        x = DirectCast(x, list).data.ToArray
+                    End If
+
                     Return pipeline _
                         .TryCreatePipeline(Of list)(x, env) _
                         .populates(Of list)(env) _
