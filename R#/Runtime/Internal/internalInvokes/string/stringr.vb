@@ -328,7 +328,14 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' encode byte stream or text content into base64 string
         ''' </summary>
-        ''' <param name="raw">R# object or any supported .NET object</param>
+        ''' <param name="raw">
+        ''' R# object or any supported .NET object:
+        ''' 
+        ''' 1. text content
+        ''' 2. bytes buffer
+        ''' 3. image data
+        ''' 4. any object can be converts to bytes
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("base64")>
