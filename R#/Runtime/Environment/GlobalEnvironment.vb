@@ -63,6 +63,8 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
 
+<Assembly: InternalsVisibleTo("Rnotebook")>
+
 Namespace Runtime
 
     ''' <summary>
@@ -78,7 +80,17 @@ Namespace Runtime
         ''' the R# script host object
         ''' </summary>
         ''' <returns></returns>
-        Public ReadOnly Property Rscript As RInterpreter
+        Public Property Rscript As RInterpreter
+            Get
+                Return m_REngine
+            End Get
+            Friend Set(value As RInterpreter)
+                m_REngine = value
+            End Set
+        End Property
+
+        Dim m_REngine As RInterpreter
+
         Public ReadOnly Property stdout As RContentOutput
         Public ReadOnly Property log4vb_redirect As Boolean = True
         Public ReadOnly Property debugLevel As DebugLevels = DebugLevels.All
@@ -140,11 +152,11 @@ Namespace Runtime
         ''' copy environment
         ''' </summary>
         ''' <param name="globalEnv"></param>
-        Sub New(globalEnv As GlobalEnvironment)
+        Sub New(globalEnv As GlobalEnvironment, Optional REngine As RInterpreter = Nothing)
             Me.options = globalEnv.options
             Me.packages = globalEnv.packages
             Me.global = Me
-            Me.Rscript = globalEnv.Rscript
+            Me.Rscript = If(REngine, globalEnv.Rscript)
             Me.stdout = New RContentOutput(App.StdOut.DefaultValue, env:=OutputEnvironments.Console)
             Me.log4vb_redirect = globalEnv.log4vb_redirect
             Me.symbolLanguages = New SymbolLanguageProcessor(Me)

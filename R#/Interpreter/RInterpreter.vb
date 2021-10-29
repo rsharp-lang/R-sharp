@@ -95,6 +95,10 @@ Namespace Interpreter
         ''' </remarks>
         Public Property debug As Boolean = False
         Public Property silent As Boolean = False
+        ''' <summary>
+        ''' 是否重定向错误消息输出至<see cref="RedirectOutput"/>函数所定义的输出设备之中
+        ''' </summary>
+        ''' <returns></returns>
         Public Property redirectError2stdout As Boolean = False
 
         ''' <summary>
