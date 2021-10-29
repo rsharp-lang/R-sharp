@@ -71,10 +71,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' value of this property is usually comes from <see cref="RTypeExportAttribute"/>
         ''' </summary>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' binary right
+        ''' </remarks>
         Public ReadOnly Property typeName As Expression
 
-        Public Sub New(keyword As String, target As Expression, typeName As Expression)
-            MyBase.New(keyword, target)
+        ''' <summary>
+        ''' typeof target == typeName?
+        ''' </summary>
+        ''' <param name="target"></param>
+        ''' <param name="typeName"></param>
+        ''' <remarks>
+        ''' 关键词总是typeof
+        ''' </remarks>
+        Public Sub New(target As Expression, typeName As Expression)
+            MyBase.New(keyword:="typeof", target)
 
             Me.typeName = typeName
         End Sub

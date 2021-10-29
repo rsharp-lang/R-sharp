@@ -2,7 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src D:\\GCModeller\\src\\runtime\\ggplot  /save ./aaa.zip --skip-src-build"
+      "commandLineArgs": "--build /save ./Rnotebook.zip --skip-src-build",
+      "workingDirectory": "E:\\GCModeller\\src\\runtime\\R\\Rnotebook"
     }
   }
 }

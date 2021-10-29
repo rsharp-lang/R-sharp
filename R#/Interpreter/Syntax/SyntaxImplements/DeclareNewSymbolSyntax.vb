@@ -66,10 +66,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 End If
 
                 Dim blockParts = target.Split(Function(a) a = isKeyword OrElse a = isSymbol).ToArray
-                Dim ObjTarget As SyntaxResult = Expression.CreateExpression(blockParts(0), opts)
+                Dim obj As SyntaxResult = Expression.CreateExpression(blockParts(0), opts)
 
-                If ObjTarget.isException Then
-                    Return ObjTarget
+                If obj.isException Then
+                    Return obj
                 Else
                     Dim checkType As SyntaxResult = Expression.CreateExpression(blockParts(1), opts)
 
@@ -77,7 +77,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                         Return checkType
                     End If
 
-                    Return New TypeOfCheck(keyword, ObjTarget.expression, checkType.expression)
+                    Return New TypeOfCheck(obj.expression, checkType.expression)
                 End If
             Else
                 Dim objTarget As SyntaxResult = Expression.CreateExpression(target, opts)

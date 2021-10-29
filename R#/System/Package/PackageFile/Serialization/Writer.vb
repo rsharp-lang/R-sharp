@@ -152,7 +152,8 @@ Namespace Development.Package.File
                      GetType(BinaryBetweenExpression),
                      GetType(BinaryInExpression),
                      GetType(AppendOperator),
-                     GetType(BinaryExpression)
+                     GetType(BinaryExpression),
+                     GetType(TypeOfCheck)
 
                     Return RBinary.GetBuffer(x)
 

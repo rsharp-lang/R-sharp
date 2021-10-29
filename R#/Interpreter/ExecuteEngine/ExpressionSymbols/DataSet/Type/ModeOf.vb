@@ -52,6 +52,9 @@ Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
+    ''' <summary>
+    ''' get type/get class/get mode
+    ''' </summary>
     Public Class ModeOf : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
