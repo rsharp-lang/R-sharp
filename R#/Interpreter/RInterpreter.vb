@@ -135,14 +135,22 @@ Namespace Interpreter
                 envirConf = New Options(ConfigFile.localConfigs, saveConfig:=False)
             End If
 
-            globalEnvir = New GlobalEnvironment(Me, envirConf)
-            globalEnvir.Push(lastVariableName, Nothing, False, TypeCodes.generic)
-            globalEnvir.Push("PI", stdNum.PI, True, TypeCodes.double)
-            globalEnvir.Push("E", stdNum.E, True, TypeCodes.double)
-            globalEnvir.Push(".GlobalEnv", globalEnvir, True, TypeCodes.generic)
+            Call _construct(New GlobalEnvironment(Me, envirConf))
+        End Sub
+
+        Private Sub _construct(env As GlobalEnvironment)
+            _globalEnvir = env
+            _globalEnvir.Push(lastVariableName, Nothing, False, TypeCodes.generic)
+            _globalEnvir.Push("PI", stdNum.PI, True, TypeCodes.double)
+            _globalEnvir.Push("E", stdNum.E, True, TypeCodes.double)
+            _globalEnvir.Push(".GlobalEnv", globalEnvir, True, TypeCodes.generic)
 
             ' config R# interpreter engine
-            [strict] = envirConf.strict
+            strict = env.options.strict
+        End Sub
+
+        Sub New(env As GlobalEnvironment)
+            Call _construct(env)
         End Sub
 
         Public Function RedirectOutput(out As StreamWriter, env As OutputEnvironments) As RInterpreter

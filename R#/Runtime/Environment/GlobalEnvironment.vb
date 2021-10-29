@@ -136,6 +136,22 @@ Namespace Runtime
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
 
+        ''' <summary>
+        ''' copy environment
+        ''' </summary>
+        ''' <param name="globalEnv"></param>
+        Sub New(globalEnv As GlobalEnvironment)
+            Me.options = globalEnv.options
+            Me.packages = globalEnv.packages
+            Me.global = Me
+            Me.Rscript = globalEnv.Rscript
+            Me.stdout = New RContentOutput(App.StdOut.DefaultValue, env:=OutputEnvironments.Console)
+            Me.log4vb_redirect = globalEnv.log4vb_redirect
+            Me.symbolLanguages = New SymbolLanguageProcessor(Me)
+
+            Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
+        End Sub
+
         Public Shared Function defaultEmpty() As Environment
             Return New RInterpreter().globalEnvir
         End Function
