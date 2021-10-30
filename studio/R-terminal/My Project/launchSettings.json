@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"E:\\GCModeller\\src\\runtime\\R\\Rmsgpack\\test\\demo.R\" --strict=false --debug --attach E:\\GCModeller\\src\\runtime\\R\\Rmsgpack",
+      "commandLineArgs": "\"E:\\GCModeller\\src\\runtime\\R\\Rnotebook\\app\\renderHtml.R\" --notebook E:\\GCModeller\\src\\runtime\\R\\Rnotebook\\app\\hello_world.R --attach E:\\GCModeller\\src\\runtime\\R\\Rnotebook",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }
