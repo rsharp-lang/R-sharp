@@ -1,51 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::3bd26b3fc71b25691596d29b00e384c2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class BinaryInExpression
-    ' 
-    '         Properties: [operator], expressionName, left, right, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, findTest, getIndex, testListIndex, testVectorIndexOf
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class BinaryInExpression
+' 
+'         Properties: [operator], expressionName, left, right, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, findTest, getIndex, testListIndex, testVectorIndexOf
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
@@ -96,7 +98,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim sequence As Object = right.Evaluate(envir)
-            Dim testLeft As Object() = getIndex(left.Evaluate(envir))
+            Dim testLeft As Array = getIndex(left.Evaluate(envir))
 
             If sequence Is Nothing Then
                 Return {}
@@ -109,7 +111,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             If TypeOf sequence Is list AndAlso REnv.MeasureRealElementType(testLeft) Is GetType(String) Then
                 flags = testListIndex(sequence, REnv.TryCastGenericArray(testLeft, env:=envir))
             Else
-                flags = testVectorIndexOf(getIndex(sequence).Indexing, testLeft)
+                flags = testVectorIndexOf(getIndex(sequence).AsObjectEnumerator.Indexing, testLeft)
             End If
 
             Return flags
@@ -127,7 +129,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 .ToArray
         End Function
 
-        Private Shared Function testVectorIndexOf(index As Index(Of Object), testLeft As Object()) As Boolean()
+        Private Shared Function testVectorIndexOf(index As Index(Of Object), testLeft As Array) As Boolean()
             Dim rawIndexObjects As Object() = index.Objects
             Dim typeLeft = REnv.MeasureRealElementType(testLeft)
             Dim typeRight = REnv.MeasureRealElementType(rawIndexObjects)
@@ -135,7 +137,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             If typeLeft Is typeRight Then
                 Select Case typeLeft
                     Case GetType(String)
-                        Dim left As String() = testLeft.Select(Function(o) CStr(o)).ToArray
+                        Dim left As String() = testLeft.AsObjectEnumerator.Select(Function(o) CStr(o)).ToArray
                         Dim indexStr As Index(Of String) = rawIndexObjects.Select(Function(o) CStr(o)).Indexing
 
                         Return left.Select(Function(str) str Like indexStr).ToArray
@@ -147,6 +149,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Generic:
             Dim isComparable As Boolean = rawIndexObjects.All(Function(a) a.GetType.ImplementInterface(GetType(IComparable)))
             Dim findTest As Boolean() = testLeft _
+                .AsObjectEnumerator _
                 .Select(Function(x)
                             Return BinaryInExpression.findTest(x, isComparable, index, rawIndexObjects)
                         End Function) _
@@ -176,7 +179,7 @@ Generic:
             End If
         End Function
 
-        Private Shared Function getIndex(src As Object) As Object()
+        Private Shared Function getIndex(src As Object) As Array
             Dim isList As Boolean = False
             Dim seq = LinqQuery.produceSequenceVector(src, isList)
 
@@ -185,7 +188,7 @@ Generic:
                     .Select(Function(t) t.Value) _
                     .ToArray
             Else
-                Return DirectCast(seq, Object())
+                Return REnv.asVector(Of Object)(seq)
             End If
         End Function
 
