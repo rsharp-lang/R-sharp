@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::4a80b29c46e057daeb3381d09c3b2b7a, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module file
-    ' 
-    '         Function: [erase], basename, buffer, close, dataUri
-    '                   dir_exists, dirCopy, dirCreate, dirname, exists
-    '                   file, file_ext, filecopy, fileinfo, fileInfoByFile
-    '                   filepath, filesize, getwd, isSystemDir, listDirs
-    '                   listFiles, loadListInternal, NextTempToken, normalizeFileName, normalizePath
-    '                   openGzip, openZip, readBin, readLines, readList
-    '                   readText, Rhome, saveList, scanZipFiles, setwd
-    '                   tempdir, tempfile, writeLines
-    ' 
-    '         Sub: fileRemove, fileRename
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module file
+' 
+'         Function: [erase], basename, buffer, close, dataUri
+'                   dir_exists, dirCopy, dirCreate, dirname, exists
+'                   file, file_ext, filecopy, fileinfo, fileInfoByFile
+'                   filepath, filesize, getwd, isSystemDir, listDirs
+'                   listFiles, loadListInternal, NextTempToken, normalizeFileName, normalizePath
+'                   openGzip, openZip, readBin, readLines, readList
+'                   readText, Rhome, saveList, scanZipFiles, setwd
+'                   tempdir, tempfile, writeLines
+' 
+'         Sub: fileRemove, fileRename
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -654,13 +654,32 @@ Namespace Runtime.Internal.Invokes
         ''' For strings With marked encoding "bytes".)
         ''' </remarks>
         <ExportAPI("writeLines")>
-        Public Function writeLines(text As Array,
+        Public Function writeLines(<RRawVectorArgument>
+                                   text As Object,
                                    Optional con As Object = Nothing,
                                    Optional sep$ = vbCrLf,
                                    Optional env As Environment = Nothing) As Object
 
-            Dim textContent As String = text.AsObjectEnumerator.JoinBy(sep)
+            If TypeOf text Is vector Then
+                text = DirectCast(text, vector).data
+            End If
 
+            If TypeOf text Is pipeline Then
+                Return DirectCast(text, pipeline) _
+                    .populates(Of String)(env) _
+                    .handleWriteLargeTextStream(con, sep, env)
+            Else
+                Return DirectCast(text, Array) _
+                    .AsObjectEnumerator _
+                    .JoinBy(sep) _
+                    .handleWriteTextArray(con, env)
+            End If
+
+            Return Nothing
+        End Function
+
+        <Extension>
+        Private Function handleWriteLargeTextStream(text As IEnumerable(Of String), con As Object, sep As String, env As Environment) As Object
             If con Is Nothing OrElse (TypeOf con Is String AndAlso DirectCast(con, String).StringEmpty) Then
                 Dim stdOut As Action(Of String)
 
@@ -670,15 +689,51 @@ Namespace Runtime.Internal.Invokes
                     stdOut = AddressOf env.globalEnvironment.stdout.WriteLine
                 End If
 
-                Call stdOut(textContent)
+                For Each line As String In text
+                    Call stdOut(line)
+                Next
             ElseIf TypeOf con Is String Then
-                Call textContent.SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
+                Call text.SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
             ElseIf TypeOf con Is textBuffer Then
-                DirectCast(con, textBuffer).text = textContent
+                DirectCast(con, textBuffer).text = text.JoinBy(sep)
                 Return con
             ElseIf TypeOf con Is ITextWriter OrElse con.GetType.IsInheritsFrom(GetType(ITextWriter)) Then
-                DirectCast(con, ITextWriter).WriteLine(textContent)
+                Dim dev As ITextWriter = DirectCast(con, ITextWriter)
+
+                For Each line As String In text
+                    Call dev.WriteLine(line)
+                Next
+
                 Return con
+            Else
+                Return Internal.debug.stop(New NotSupportedException($"invalid buffer type: {con.GetType.FullName}!"), env)
+            End If
+
+            Return Nothing
+        End Function
+
+        <Extension>
+        Private Function handleWriteTextArray(text As String, con As Object, env As Environment) As Object
+            If con Is Nothing OrElse (TypeOf con Is String AndAlso DirectCast(con, String).StringEmpty) Then
+                Dim stdOut As Action(Of String)
+
+                If env.globalEnvironment.stdout Is Nothing Then
+                    stdOut = AddressOf Console.WriteLine
+                Else
+                    stdOut = AddressOf env.globalEnvironment.stdout.WriteLine
+                End If
+
+                Call stdOut(text)
+            ElseIf TypeOf con Is String Then
+                Call text.SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
+            ElseIf TypeOf con Is textBuffer Then
+                DirectCast(con, textBuffer).text = text
+                Return con
+            ElseIf TypeOf con Is ITextWriter OrElse con.GetType.IsInheritsFrom(GetType(ITextWriter)) Then
+                DirectCast(con, ITextWriter).WriteLine(text)
+                Return con
+            Else
+                Return Internal.debug.stop(New NotSupportedException($"invalid buffer type: {con.GetType.FullName}!"), env)
             End If
 
             Return Nothing
