@@ -283,6 +283,11 @@ Namespace Runtime
             End If
         End Sub
 
+        ''' <summary>
+        ''' add error/warning message
+        ''' </summary>
+        ''' <param name="message"></param>
+        ''' <param name="level"></param>
         Public Sub AddMessage(message As Object, Optional level As MSG_TYPES = MSG_TYPES.WRN)
             Internal.debug _
                 .CreateMessageInternal(message, Me, level) _
