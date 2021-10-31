@@ -48,7 +48,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes
 
-    Module dev
+    Module devtools
 
         ''' <summary>
         ''' Load R script in directory

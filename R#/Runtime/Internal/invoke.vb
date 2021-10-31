@@ -112,7 +112,7 @@ Namespace Runtime.Internal
             Call GetType(graphics).DoCall(AddressOf pushEnvir)
             Call GetType(applys).DoCall(AddressOf pushEnvir)
             Call GetType(reflections).DoCall(AddressOf pushEnvir)
-            Call GetType(dev).DoCall(AddressOf pushEnvir)
+            Call GetType(devtools).DoCall(AddressOf pushEnvir)
             Call GetType(ranking).DoCall(AddressOf pushEnvir)
             Call GetType(TableJoint).DoCall(AddressOf pushEnvir)
             Call GetType(Rinterop).DoCall(AddressOf pushEnvir)

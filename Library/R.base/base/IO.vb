@@ -45,6 +45,8 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MIME.application.json
+Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -156,12 +158,21 @@ Module RawIO
 
     <Extension>
     Private Iterator Function dumpJSON(text As IEnumerable(Of String), projection As String()) As IEnumerable(Of String())
+        For Each line As String In text
+            Dim json As JsonObject = New JsonParser().OpenJSON(line)
+            Dim vals As String() = projection _
+                .Select(Function(name)
+                            Return json(name).AsString
+                        End Function) _
+                .ToArray
 
+            Yield vals
+        Next
     End Function
 
     <Extension>
     Private Iterator Function dumpXml(text As IEnumerable(Of String), projection As String()) As IEnumerable(Of String())
-
+        Throw New NotImplementedException
     End Function
 End Module
 

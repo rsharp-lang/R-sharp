@@ -588,21 +588,43 @@ Namespace Runtime.Internal.Invokes
         ''' Read some or all text lines from a connection.
         ''' </summary>
         ''' <param name="con">a connection object or a character string.</param>
+        ''' <param name="stream">
+        ''' if this options is config as TRUE, means this function will returns 
+        ''' a lazy load data pipeline. default value of this option is FALSE, which
+        ''' means this function will returns a character vector which contains all 
+        ''' data content lines directly.
+        ''' </param>
         ''' <returns></returns>
         <ExportAPI("readLines")>
-        Public Function readLines(con As Object, Optional encoding As Encodings = Encodings.UTF8) As String()
+        Public Function readLines(con As Object,
+                                  Optional encoding As Encodings = Encodings.UTF8,
+                                  Optional stream As Boolean = False) As Object
+
             If TypeOf con Is Stream Then
                 Dim text As New StreamReader(DirectCast(con, Stream))
-                Dim lines As New List(Of String)
                 Dim line As Value(Of String) = ""
 
-                Do While True
-                    If Not (line = text.ReadLine) Is Nothing Then
-                        lines.Add(line)
-                    End If
-                Loop
+                If stream Then
+                    Return Iterator Function() As IEnumerable(Of String)
+                               Do While True
+                                   If Not (line = text.ReadLine) Is Nothing Then
+                                       Yield CType(line, String)
+                                   End If
+                               Loop
+                           End Function() _
+ _
+                        .DoCall(AddressOf pipeline.CreateFromPopulator)
+                Else
+                    Dim lines As New List(Of String)
 
-                Return lines.ToArray
+                    Do While True
+                        If Not (line = text.ReadLine) Is Nothing Then
+                            Call lines.Add(line)
+                        End If
+                    Loop
+
+                    Return lines.ToArray
+                End If
             Else
                 Return any _
                     .ToString(con) _
