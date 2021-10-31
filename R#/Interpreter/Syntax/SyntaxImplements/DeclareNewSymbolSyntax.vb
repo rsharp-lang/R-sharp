@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::86d02e3b3e1b132a66486e941f434cdd, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewSymbolSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::5776f980eb39e5c774886a7f78ab8344, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewSymbolSyntax.vb"
 
     ' Author:
     ' 

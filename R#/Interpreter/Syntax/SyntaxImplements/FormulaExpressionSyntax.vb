@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b62e619f044c20f044d3e2715099010f, R#\Interpreter\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::6deb41bb6d4f57c0b13c72e6718b5264, R#\Interpreter\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb"
 
     ' Author:
     ' 

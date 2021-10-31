@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a69aa1aaeccb5c8120c29f0256983c12, R#\Runtime\Internal\internalInvokes\etc.vb"
+﻿#Region "Microsoft.VisualBasic::a0a03f13727efa654178b7911d08e797, R#\Runtime\Internal\internalInvokes\etc.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Module etc
     ' 
     '         Function: contributors, getActivators, license, man, platformID
-    '                   RVer, sessionInfo, Sys_getlocale, Sys_info
+    '                   RVer, sessionInfo, Sys_getlocale, Sys_info, unixtimestamp
     ' 
     '         Sub: demo
     ' 

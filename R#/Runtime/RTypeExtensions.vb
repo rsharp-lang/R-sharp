@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5aeab500956bfdadedea465bf4de9627, R#\Runtime\RTypeExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::bdc3851df1f5a01e16e130de7a8c5be5, R#\Runtime\RTypeExtensions.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Module RTypeExtensions
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: [GetType], (+2 Overloads) GetRTypeCode, (+2 Overloads) IsPrimitive
+    '         Function: [GetType], (+2 Overloads) GetRTypeCode, IsNumeric, (+2 Overloads) IsPrimitive
     ' 
     ' 
     ' /********************************************************************************/

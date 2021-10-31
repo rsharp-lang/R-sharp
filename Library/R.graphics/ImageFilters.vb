@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::79fb98802f9c8219d627369222261390, Library\R.graphics\ImageFilters.vb"
+﻿#Region "Microsoft.VisualBasic::961070397d3a2044548c858707de8ae5, Library\R.graphics\ImageFilters.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -105,4 +104,3 @@ Module ImageFilters
     End Function
 
 End Module
-

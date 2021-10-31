@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::97311d5bed38a1be15fa336570bfd457, R#\Interpreter\Syntax\SyntaxBuilderOptions.vb"
+﻿#Region "Microsoft.VisualBasic::be2d4dfd3864ff0044c3e7aae4951e2f, R#\Interpreter\Syntax\SyntaxBuilderOptions.vb"
 
     ' Author:
     ' 

@@ -1,47 +1,48 @@
-﻿#Region "Microsoft.VisualBasic::d78134caa25d1c27cd1c104cb25e5cee, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::dc4bc2bcc992b10e9d5e88f49dd02bdd, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module linq
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: all, any, doWhile, fastIndexing, first
-'                   groupBy, groupsSummary, groupSummary, last, orderBy
-'                   produceKeyedSequence, projectAs, reverse, rotate_left, rotate_right
-'                   runFilterPipeline, runWhichFilter, skip, split, take
-'                   tryKeyBy, unique, where, whichMax, whichMin
-' 
-' 
-' /********************************************************************************/
+    '     Module linq
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: all, any, doWhile, fastIndexing, first
+    '                   groupBy, groupsSummary, groupSummary, last, orderBy
+    '                   produceKeyedSequence, progress, projectAs, reverse, rotate_left
+    '                   rotate_right, runFilterPipeline, runWhichFilter, skip, split
+    '                   take, tryKeyBy, unique, where, whichMax
+    '                   whichMin
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

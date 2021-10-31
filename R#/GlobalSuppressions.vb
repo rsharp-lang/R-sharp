@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fa7532f8dec781f142a864964775fddf, R#\GlobalSuppressions.vb"
+﻿#Region "Microsoft.VisualBasic::0080e67c13446dfe57a660dd14c77054, R#\GlobalSuppressions.vb"
 
     ' Author:
     ' 
@@ -48,4 +48,3 @@ Imports System.Diagnostics.CodeAnalysis
 <Assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification:="<Pending>", Scope:="member", Target:="~M:SMRUCC.Rsharp.Runtime.Internal.Invokes.graphics.bitmap(System.Object,System.Object,Microsoft.VisualBasic.Imaging.ImageFormats,SMRUCC.Rsharp.Runtime.Environment)~System.Object")>
 <Assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification:="<Pending>", Scope:="member", Target:="~M:SMRUCC.Rsharp.Runtime.Internal.Invokes.graphics.readImage(System.Object,SMRUCC.Rsharp.Runtime.Environment)~System.Object")>
 <Assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification:="<Pending>", Scope:="member", Target:="~M:SMRUCC.Rsharp.Runtime.Serialize.bitmapBuffer.getGZip~System.Byte[]")>
-

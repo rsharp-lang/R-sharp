@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8ca34339e04fefafbf73aa0755d62c92, Library\R.math\lpSolve.vb"
+﻿#Region "Microsoft.VisualBasic::ee6474c66a5779db2a8388deedbca18f, Library\R.math\lpSolve.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -249,4 +248,3 @@ Module lpSolve
         Throw New NotImplementedException
     End Function
 End Module
-

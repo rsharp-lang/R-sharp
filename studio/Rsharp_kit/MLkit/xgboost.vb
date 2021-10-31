@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::05144dc742548f8696e63e8b107e53ca, studio\Rsharp_kit\MLkit\xgboost.vb"
+﻿#Region "Microsoft.VisualBasic::7e3b50c56908fd5e28f76a6db6685887, studio\Rsharp_kit\MLkit\xgboost.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.TagData
@@ -177,4 +176,3 @@ Public Module xgboost
     End Function
 
 End Module
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e99407b623e420b9923b3ccf6047a9f8, R#\Runtime\Environment\GlobalEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::2139adb5220851f998bb9e1d39a4f5bd, R#\Runtime\Environment\GlobalEnvironment.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     '                     options, packages, Rscript, scriptDir, stdout
     '                     symbolLanguages, types
     ' 
-    '         Constructor: (+1 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     ' 
     '         Function: [GetType], defaultEmpty, doCall, (+2 Overloads) LoadLibrary, MissingPackage
     '                   SetDebug

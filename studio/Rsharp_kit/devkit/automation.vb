@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7940ba5bc8389ddb27f1283a92ced9b2, studio\Rsharp_kit\devkit\automation.vb"
+﻿#Region "Microsoft.VisualBasic::44ce8fdeb7d3a75b2959e8b59e0a36f6, studio\Rsharp_kit\devkit\automation.vb"
 
     ' Author:
     ' 
@@ -37,11 +37,9 @@
     ' 
     '     Sub: Main
     ' 
-    ' 
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -77,5 +75,3 @@ Module automationUtils
     End Function
 
 End Module
-
-

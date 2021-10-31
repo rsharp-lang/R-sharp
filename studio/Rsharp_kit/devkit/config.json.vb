@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3eb9df6149b05fc4da44ffbd9c3b92cb, studio\Rsharp_kit\devkit\config.json.vb"
+﻿#Region "Microsoft.VisualBasic::6e2d4dc7d62155ee25d8a29b20c829c4, studio\Rsharp_kit\devkit\config.json.vb"
 
     ' Author:
     ' 
@@ -155,4 +155,3 @@ Public Class ConfigJSON
     End Function
 
 End Class
-
