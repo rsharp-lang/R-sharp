@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -81,6 +82,7 @@ Module RawIO
                            source As Object, projection As String(),
                            Optional type As sourceTypes = sourceTypes.JSON,
                            Optional trim As String() = Nothing,
+                           Optional filter As RFunction = Nothing,
                            Optional env As Environment = Nothing) As pipeline
 
         Dim data As IEnumerable(Of String())
@@ -130,10 +132,26 @@ Module RawIO
             End If
         End If
 
+        Dim filterFunc As Func(Of String(), Boolean) = Nothing
+
+        If Not filter Is Nothing Then
+            filterFunc =
+                Function(row)
+
+                End Function
+        End If
+
         Return New String() {
             New RowObject(projection).AsLine
         } _
             .JoinIterates(b:=data _
+                .Where(Function(ls)
+                           If filterFunc Is Nothing Then
+                               Return True
+                           Else
+                               Return filterFunc(ls)
+                           End If
+                       End Function) _
                 .Select(Function(ls)
                             For Each i As Integer In trimIndex
                                 ls(i) = ls(i).TrimNewLine.Trim
@@ -179,4 +197,6 @@ End Module
 Public Enum sourceTypes
     XML
     JSON
+    CSV
+    TSV
 End Enum
