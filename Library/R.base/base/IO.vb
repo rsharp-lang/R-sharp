@@ -139,7 +139,7 @@ Module RawIO
                                 ls(i) = ls(i).TrimNewLine.Trim
                             Next
 
-                            Return New RowObject(ls).AsLine
+                            Return RowObject.ToString(ls)
                         End Function)) _
             .DoCall(AddressOf pipeline.CreateFromPopulator)
     End Function
