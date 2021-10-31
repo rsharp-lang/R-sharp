@@ -598,7 +598,8 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("readLines")>
         Public Function readLines(con As Object,
                                   Optional encoding As Encodings = Encodings.UTF8,
-                                  Optional stream As Boolean = False) As Object
+                                  Optional stream As Boolean = False,
+                                  Optional env As Environment = Nothing) As Object
 
             If TypeOf con Is Stream Then
                 Dim text As New StreamReader(DirectCast(con, Stream))
@@ -626,9 +627,15 @@ Namespace Runtime.Internal.Invokes
                     Return lines.ToArray
                 End If
             Else
-                Return any _
-                    .ToString(con) _
-                    .ReadAllLines(encoding.CodePage)
+                Dim filepath As String = any.ToString(con)
+
+                If Not filepath.FileExists Then
+                    If env.globalEnvironment.options.strict Then
+                        Return Internal.debug.stop($"the given file '{filepath}' is missing!", env)
+                    End If
+                End If
+
+                Return filepath.ReadAllLines(encoding.CodePage)
             End If
         End Function
 
@@ -639,8 +646,20 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="encoding"></param>
         ''' <returns></returns>
         <ExportAPI("readText")>
-        Public Function readText(con As Object, Optional encoding As Encodings = Encodings.UTF8) As String
-            Return readLines(con, encoding).JoinBy(vbLf)
+        <RApiReturn(GetType(String))>
+        Public Function readText(con As Object,
+                                 Optional encoding As Encodings = Encodings.UTF8,
+                                 Optional env As Environment = Nothing) As Object
+
+            Dim linesVal As Object = readLines(con, encoding, stream:=False, env:=env)
+
+            If TypeOf linesVal Is Message Then
+                Return linesVal
+            End If
+
+            Dim text As String = DirectCast(linesVal, String()).JoinBy(vbLf)
+
+            Return text
         End Function
 
         ' writeLines(text, con = stdout(), sep = "\n", useBytes = FALSE)
