@@ -690,8 +690,10 @@ Namespace Runtime.Internal.Invokes
                 Return DirectCast(text, pipeline) _
                     .populates(Of String)(env) _
                     .handleWriteLargeTextStream(con, sep, env)
+            ElseIf TypeOf text Is String Then
+                Return DirectCast(text, String).handleWriteTextArray(con, env)
             Else
-                Return DirectCast(text, Array) _
+                Return REnv.asVector(Of Object)(text) _
                     .AsObjectEnumerator _
                     .JoinBy(sep) _
                     .handleWriteTextArray(con, env)
