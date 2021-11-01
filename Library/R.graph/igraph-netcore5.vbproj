@@ -7,6 +7,8 @@
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;Rsharp_app_release</Configurations>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -52,7 +54,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
+    <OutputPath>..\..\App\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -76,6 +78,13 @@
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\text%html\html_netcore5.vbproj" />
     <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <Import Project="..\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
