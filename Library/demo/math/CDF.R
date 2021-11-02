@@ -6,12 +6,12 @@ x <- seq(-10, 10, by = .1);
 y <- dnorm(x, mean = 2.5, sd = 0.5);
 
 bitmap(file = `${@dir}/dnorm.png`) {
-	plot(x, y);
+	plot(x, y, background = "white", grid.fill = "white", color = "steelblue", point_size = 16);
 }
 
 bitmap(file = `${@dir}/CDF.png`) {
-	ecdf = CDF(x -> dnorm(x, mean = 2.5, sd = 2), [min(x), max(x)]);
+	ecdf = CDF(x -> dnorm(x, mean = 2.5, sd = 2), [min(x), max(x)], resolution = 120);
 	
 	str(ecdf);
-	plot(ecdf$x, ecdf$y);
+	plot(ecdf$x, ecdf$y, grid.fill = "white", color = "steelblue", point_size = 16);
 }

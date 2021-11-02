@@ -313,7 +313,10 @@ Module plots
 
     <Extension>
     Private Function findNumberVector(args As list, size As Integer, env As Environment) As Double()
-        For Each value As Object In args.data
+        For Each value As Object In From obj As Object
+                                    In args.data
+                                    Where Not TypeOf obj Is String
+
             value = REnv.asVector(Of Double)(value)
 
             If TypeOf value Is Double() AndAlso DirectCast(value, Double()).Length = size Then
