@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
@@ -372,6 +373,11 @@ Module stats
         Dim cor As CorrelationMatrix = rows.Correlation(spearman)
 
         Return cor
+    End Function
+
+    <ExportAPI("dnorm")>
+    Public Function dnorm(x As Double(), Optional mean As Double = 0, Optional sd As Double = 1) As Object
+        Return Distributions.pnorm.ProbabilityDensity(x.AsVector, mean, sd).Array
     End Function
 
     ''' <summary>
