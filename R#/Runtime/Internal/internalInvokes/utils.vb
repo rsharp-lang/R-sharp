@@ -550,29 +550,51 @@ Namespace Runtime.Internal.Invokes
             Return New TemporaryEnvironment(newLocation:=dir)
         End Function
 
+        ''' <summary>
+        ''' ## Vectorized hash/hmac functions
+        ''' </summary>
+        ''' <param name="x">
+        ''' character vector, raw vector or connection object.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' Digest types: https://www.openssl.org/docs/man1.1.1/man1/openssl-dgst.html
+        ''' </remarks>
         <ExportAPI("md5")>
-        Public Function md5(<RRawVectorArgument> data As Object, Optional env As Environment = Nothing) As Object
-            If data Is Nothing Then
+        Public Function md5(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
                 Return Nothing
+            ElseIf TypeOf x Is vector Then
+                x = DirectCast(x, vector).data
             End If
 
-            If TypeOf data Is String Then
-                Return DirectCast(data, String).MD5
-            ElseIf TypeOf data Is String() Then
-                Return DirectCast(data, String()) _
+            If TypeOf x Is String Then
+                Return DirectCast(x, String).MD5
+            ElseIf TypeOf x Is String() Then
+                Return DirectCast(x, String()) _
                     .Select(Function(str) str.MD5) _
                     .ToArray
-            ElseIf TypeOf data Is vector Then
-                Return REnv.asVector(Of String)(DirectCast(data, vector).data) _
+            ElseIf TypeOf x Is Double() Then
+                If DirectCast(x, Array).Length = 1 Then
+                    Using buffer As New MemoryStream(BitConverter.GetBytes(DirectCast(x, Double())(Scan0))), md5hash As New Md5HashProvider
+                        Return md5hash.GetMd5Hash(buffer.ToArray)
+                    End Using
+                Else
+                    Return Message.InCompatibleType(GetType(Byte), x.GetType, env)
+                End If
+            ElseIf x.GetType.IsArray Then
+                Return REnv.asVector(Of String)(DirectCast(x, vector).data) _
                     .AsObjectEnumerator(Of String) _
                     .Select(Function(str) str.MD5) _
                     .ToArray
             Else
-                data = RConversion.asRaw(data, ,, env)
-                If Not TypeOf data Is Message Then
-                    Return data
+                x = RConversion.asRaw(x, ,, env)
+
+                If TypeOf x Is Message Then
+                    Return x
                 Else
-                    Using buffer As MemoryStream = DirectCast(data, MemoryStream), md5hash As New Md5HashProvider
+                    Using buffer As MemoryStream = DirectCast(x, MemoryStream), md5hash As New Md5HashProvider
                         Return md5hash.GetMd5Hash(buffer.ToArray)
                     End Using
                 End If

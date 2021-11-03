@@ -59,6 +59,15 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <Package("http", Category:=APICategories.UtilityTools)>
 Public Module URL
 
+    <ExportAPI("urlcomponent")>
+    Public Function urlcomponent(query As list, Optional env As Environment = Nothing) As String
+        Return query.slots _
+            .Select(Function(argv)
+                        Return $"{argv.Key}={urlencode(argv.Value, env)}"
+                    End Function) _
+            .JoinBy("&")
+    End Function
+
     ''' <summary>
     ''' ### URL-encodes string
     ''' 

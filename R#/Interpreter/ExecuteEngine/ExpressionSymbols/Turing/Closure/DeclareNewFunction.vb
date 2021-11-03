@@ -105,6 +105,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Me.funcName = funcName
             Me.parameters = parameters
             Me.body = body
+            Me.body.program.Rscript = Rscript.FromText(funcName)
             Me.stackFrame = stackframe
         End Sub
 

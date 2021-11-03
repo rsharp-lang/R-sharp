@@ -400,7 +400,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="max">lower And upper limits of the distribution. Must be finite.</param>
         ''' <returns></returns>
         <ExportAPI("runif")>
-        Public Function runif(n$, Optional min# = 0, Optional max# = 1) As Double()
+        Public Function runif(Optional n As Integer = 1, Optional min# = 0, Optional max# = 1) As Double()
             Dim rnd As Random = randf.seeds
             Dim [if] As New List(Of Double)
 
