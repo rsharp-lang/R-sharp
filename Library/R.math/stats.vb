@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::5f3adede423b18ae26ae491b9abdaac6, Library\R.math\stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module stats
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asDist, corr, dataframeRow, dist, fisher_test
-    '               getQuantileLevels, matrixDataFrame, prcomp, printMatrix, printTtest
-    '               printTwoSampleTTest, quantile, spline, tabulateMode, ttest
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Module stats
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asDist, corr, dataframeRow, dist, fisher_test
+'               getQuantileLevels, matrixDataFrame, prcomp, printMatrix, printTtest
+'               printTwoSampleTTest, quantile, spline, tabulateMode, ttest
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -55,8 +55,11 @@ Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math
+Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
@@ -65,6 +68,7 @@ Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.FishersExact
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
@@ -122,6 +126,48 @@ Module stats
         Call sb.AppendLine("...")
 
         Return sb.ToString
+    End Function
+
+    ''' <summary>
+    ''' ## Empirical Cumulative Distribution Function
+    ''' 
+    ''' Compute an empirical cumulative distribution function
+    ''' </summary>
+    ''' <param name="FUNC"></param>
+    ''' <returns></returns>
+    <ExportAPI("CDF")>
+    Public Function ECDF(FUNC As Object,
+                         <RRawVectorArgument>
+                         range As Object,
+                         Optional p0 As Double = 0,
+                         Optional resolution As Integer = 50000,
+                         Optional env As Environment = Nothing) As Object
+
+        Dim bounds = SMRUCC.Rsharp.GetDoubleRange(range, env, [default]:="0,0")
+
+        If bounds Like GetType(Message) Then
+            Return bounds.TryCast(Of Message)
+        End If
+
+        Dim lowUp As DoubleRange = bounds
+        Dim result As Object = math.RK4(FUNC, p0, lowUp.Min, lowUp.Max, resolution, env)
+
+        If TypeOf result Is Message Then
+            Return result
+        End If
+
+        Dim output As ODEOutput = DirectCast(result, ODEOutput)
+        Dim x As Double() = output.X.ToArray
+        Dim y As Double() = output.Y.vector
+        Dim cdf As Double = output.sum - p0
+
+        Return New list(RType.GetRSharpType(GetType(Double))) With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"ecdf", cdf},
+                {"x", x},
+                {"y", y}
+            }
+        }
     End Function
 
     ''' <summary>
@@ -327,6 +373,11 @@ Module stats
         Dim cor As CorrelationMatrix = rows.Correlation(spearman)
 
         Return cor
+    End Function
+
+    <ExportAPI("dnorm")>
+    Public Function dnorm(x As Double(), Optional mean As Double = 0, Optional sd As Double = 1) As Object
+        Return Distributions.pnorm.ProbabilityDensity(x.AsVector, mean, sd).Array
     End Function
 
     ''' <summary>
