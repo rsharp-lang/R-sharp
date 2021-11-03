@@ -828,6 +828,12 @@ Namespace Runtime.Internal.Invokes
             Return env.EvaluateFramework(Of String, String)(x, AddressOf VBStr.LCase)
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <ExportAPI("toupper")>
+        Public Function toupper(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of String, String)(x, AddressOf VBStr.UCase)
+        End Function
+
         ''' <summary>
         ''' ``chr`` returns the characters corresponding to the specified ASCII codes.
         ''' </summary>

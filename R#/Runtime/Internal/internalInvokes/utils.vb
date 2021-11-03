@@ -569,7 +569,8 @@ Namespace Runtime.Internal.Invokes
                     .ToArray
             Else
                 data = RConversion.asRaw(data, ,, env)
-                If Not TypeOf data Is Message Then
+
+                If TypeOf data Is Message Then
                     Return data
                 Else
                     Using buffer As MemoryStream = DirectCast(data, MemoryStream), md5hash As New Md5HashProvider
