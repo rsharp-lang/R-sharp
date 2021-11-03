@@ -577,7 +577,7 @@ Namespace Runtime.Internal.Invokes
                     .ToArray
             ElseIf TypeOf x Is Double() Then
                 If DirectCast(x, Array).Length = 1 Then
-                    Using buffer As New MemoryStream(BitConverter.GetBytes(DirectCast(x, Double))), md5hash As New Md5HashProvider
+                    Using buffer As New MemoryStream(BitConverter.GetBytes(DirectCast(x, Double())(Scan0))), md5hash As New Md5HashProvider
                         Return md5hash.GetMd5Hash(buffer.ToArray)
                     End Using
                 Else
