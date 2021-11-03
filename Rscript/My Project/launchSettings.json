@@ -2,8 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /save ./Rnotebook.zip --skip-src-build",
-      "workingDirectory": "E:\\GCModeller\\src\\runtime\\R\\Rnotebook"
+      "commandLineArgs": "\"D:\\biodeep\\biodeepdb_v3\\Flavor\\wikipedia\\Rscript\\web.R\" --debug"
     }
   }
 }

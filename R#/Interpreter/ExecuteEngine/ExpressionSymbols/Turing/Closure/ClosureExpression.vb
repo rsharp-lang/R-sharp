@@ -82,7 +82,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Get
         End Property
 
-        Protected ReadOnly program As Program
+        Protected Friend ReadOnly program As Program
 
         <DebuggerStepThrough>
         Sub New(ParamArray code As Expression())
