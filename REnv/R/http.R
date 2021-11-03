@@ -24,6 +24,10 @@ const http_get as function(url, streamTo, interval = 3, filetype = "html") {
     sleep(interval);
   }
 
+  if (getOption("debug")) {
+	print(`Cached_at: ${cache_file}`);
+  }
+
   cache_file;
 }
 
