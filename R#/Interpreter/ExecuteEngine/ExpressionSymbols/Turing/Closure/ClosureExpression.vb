@@ -101,7 +101,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Function
 
         Public Overrides Function ToString() As String
-            Return program.ToString
+            If program.Rscript Is Nothing Then
+                Return program.ToString
+            Else
+                Return program.Rscript.ToString & ": " & vbCrLf &
+                       program.ToString
+            End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
