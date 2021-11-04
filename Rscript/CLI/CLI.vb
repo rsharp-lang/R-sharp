@@ -96,6 +96,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         End Using
     End Function
 
+#If netcore5 = 1 Then
     Private Function runMSBuild(src As String) As Boolean
         If MSBuild.version Is Nothing Then
             Return False
@@ -107,6 +108,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
         Return True
     End Function
+#End If
 
     Private Function sourceHelper(src As String) As String
         src = Strings.Trim(src)

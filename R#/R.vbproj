@@ -725,6 +725,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Runtime\Internal\internalInvokes\dev\devtools.vb" />
     <Compile Include="Runtime\Internal\objects\Linq\DataframeGroup.vb" />
     <Compile Include="Runtime\Internal\objects\Linq\RCType.vb" />
     <Compile Include="Interpreter\ExecutableLoop.vb" />
@@ -893,7 +894,6 @@
     <Compile Include="Runtime\Environment\ObjectEnvironment.vb" />
     <Compile Include="Runtime\Environment\OutputEnvironments.vb" />
     <Compile Include="Runtime\Environment\RContentOutput.vb" />
-    <Compile Include="Runtime\Internal\internalInvokes\dev\dev.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Linq\orders.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Math\ranking.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Math\varUseMethods.vb" />
