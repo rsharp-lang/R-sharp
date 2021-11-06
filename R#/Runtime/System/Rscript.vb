@@ -184,8 +184,8 @@ Namespace Runtime.Components
         Public Function GetByLineRange(region As IntRange) As String
             Return script _
                 .LineTokens _
-                .Skip(region.Min) _
-                .Take(region.Length - 1) _
+                .Skip(region.Min - 1) _
+                .Take(region.Length) _
                 .JoinBy(ASCII.LF)
         End Function
     End Class
