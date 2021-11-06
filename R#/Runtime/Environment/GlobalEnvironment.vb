@@ -51,6 +51,7 @@
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Configuration
@@ -160,6 +161,8 @@ Namespace Runtime
             Me.stdout = New RContentOutput(App.StdOut.DefaultValue, env:=OutputEnvironments.Console)
             Me.log4vb_redirect = globalEnv.log4vb_redirect
             Me.symbolLanguages = New SymbolLanguageProcessor(Me)
+            Me.hiddenFunctions = New Dictionary(Of Symbol)(globalEnv.funcSymbols.Values)
+            Me.attachedNamespace = globalEnv.attachedNamespace
 
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub

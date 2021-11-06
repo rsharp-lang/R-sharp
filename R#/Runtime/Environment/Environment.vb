@@ -99,6 +99,10 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property funcSymbols As Dictionary(Of Symbol)
+            Get
+                Return hiddenFunctions
+            End Get
+        End Property
 
         ''' <summary>
         ''' 主要是存储警告消息
@@ -135,6 +139,7 @@ Namespace Runtime
         ''' So this parent field should not be readonly
         ''' </summary>
         Protected [global] As GlobalEnvironment
+        Protected hiddenFunctions As Dictionary(Of Symbol)
 
         ''' <summary>
         ''' 当前的环境是否为最顶层的全局环境？
@@ -197,7 +202,7 @@ Namespace Runtime
 
         Sub New()
             symbols = New Dictionary(Of Symbol)
-            funcSymbols = New Dictionary(Of Symbol)
+            hiddenFunctions = New Dictionary(Of Symbol)
             parent = Nothing
             [global] = Nothing
             stackFrame = globalStackFrame
@@ -224,7 +229,7 @@ Namespace Runtime
 
             If isInherits Then
                 symbols = parent.symbols
-                funcSymbols = parent.funcSymbols
+                hiddenFunctions = parent.funcSymbols
             End If
 
             If parent.global.log4vb_redirect Then
