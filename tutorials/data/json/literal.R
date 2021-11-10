@@ -1,4 +1,4 @@
-const obj := {
+obj = {
 	a: [3,4,5,6,7,8],
 	message: {
 		data: "hello world!",
