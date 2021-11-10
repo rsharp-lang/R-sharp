@@ -40,9 +40,12 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
@@ -79,7 +82,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
 
             Dim ex As Exception = Nothing
-            Dim lineBlocks = allTokens.SplitByTopLevelDelimiter(TokenType.terminator, err:=ex).SafeQuery.ToArray
+            Dim lineBlocks = allTokens _
+                .SplitByTopLevelDelimiter(TokenType.terminator, err:=ex) _
+                .SafeQuery _
+                .ToArray
             Dim isJSON As Boolean = False
 
             If Not ex Is Nothing Then
@@ -88,19 +94,66 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             If lineBlocks.Length = 1 Then
                 ' 可能是一行代码
+                ' 也可能是 {a: value}
+                isJSON = lineBlocks(Scan0).isJsonMember
             Else
                 isJSON = False
             End If
 
-            Dim lines As Expression() = Interpreter _
-                .GetExpressions(allTokens, Nothing, Sub(ex, null) [error] = ex, opts) _
-                .ToArray
+            If Not isJSON Then
+                Dim lines As New List(Of Expression)
 
-            If Not [error] Is Nothing Then
-                Return [error]
+                For Each line As Token() In lineBlocks
+                    [error] = Nothing
+                    line _
+                        .HandleExpressionBlock(Sub(exr, null) [error] = exr, opts) _
+                        .DoCall(AddressOf lines.AddRange)
+
+                    If Not [error] Is Nothing Then
+                        Return [error]
+                    End If
+                Next
+
+                Return New SyntaxResult(New ClosureExpression(lines.ToArray))
             Else
-                Return New SyntaxResult(New ClosureExpression(lines))
+                Dim members As New List(Of NamedValue(Of Expression))
+
+                lineBlocks = allTokens _
+                    .SplitByTopLevelDelimiter(TokenType.comma, err:=ex) _
+                    .SafeQuery _
+                    .ToArray
+
+                If Not ex Is Nothing Then
+                    Return New SyntaxResult(ex, opts.debug)
+                End If
+
+                For Each member As Token() In lineBlocks
+
+                Next
+
+                Return New JSONLiteral(members)
             End If
+        End Function
+
+        <Extension>
+        Private Function isJsonMember(line As Token()) As Boolean
+            If Not line.Length >= 3 Then
+                Return False
+            End If
+
+            Dim name As Token = line(Scan0)
+
+            If Not (name.name = TokenType.identifier OrElse name.name = TokenType.stringLiteral) Then
+                Return False
+            End If
+
+            Dim jsonAssign As Token = line(1)
+
+            If Not jsonAssign.name = TokenType.sequence Then
+                Return False
+            End If
+
+            Return True
         End Function
     End Module
 End Namespace

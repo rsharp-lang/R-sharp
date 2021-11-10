@@ -28,6 +28,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
         Public Property members As NamedValue(Of Expression)()
 
+        Sub New(members As IEnumerable(Of NamedValue(Of Expression)))
+            Me.members = members.ToArray
+        End Sub
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim json As New list With {.slots = New Dictionary(Of String, Object)}
             Dim value As Object

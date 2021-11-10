@@ -223,7 +223,9 @@ Namespace Interpreter
                     ' skip code comments
                     ' do nothing
                 Else
-                    Yield block.HandleExpressionBlock(errHandler, opts)
+                    For Each line As Expression In block.HandleExpressionBlock(errHandler, opts)
+                        Yield line
+                    Next
                 End If
 
                 If hasError Then
