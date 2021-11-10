@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"E:\\GCModeller\\src\\runtime\\ggplot\\test\\volcano-3d.R\" --attach \"E:\\GCModeller\\src\\runtime\\ggplot\"",
+      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\tutorials\\data\\json\\literal.R\" --debug",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }

@@ -710,6 +710,8 @@ RE0:
                 Return Runtime.CTypeOfList(Of Double)(x, env)
             ElseIf TypeOf x Is Double() Then
                 Return New vector(x, RType.GetRSharpType(GetType(Double)))
+            ElseIf TypeOf x Is Integer() OrElse TypeOf x Is Long() OrElse TypeOf x Is Single() OrElse TypeOf x Is Short() Then
+                Return New vector(DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray, RType.GetRSharpType(GetType(Double)))
             ElseIf TypeOf x Is vector AndAlso DirectCast(x, vector).elementType Like RType.floats Then
                 Return New vector(x)
             Else
