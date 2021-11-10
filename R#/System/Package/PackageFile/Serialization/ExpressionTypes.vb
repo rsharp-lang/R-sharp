@@ -57,6 +57,7 @@ Namespace Development.Package.File
         VectorLiteral
         SequenceLiteral
         ExpressionLiteral
+        JSONLiteral
 
         StringInterpolation = 10
         FunctionCall
