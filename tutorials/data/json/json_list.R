@@ -1,4 +1,4 @@
-const data := {
+const data = {
 	
 	code: 200,
 	data: {
@@ -10,7 +10,7 @@ const data := {
 
 # as function parameters
 
-func(param := {
+func(param = {
 	code: 200,
 	data: {
 		message: "Hello world!",

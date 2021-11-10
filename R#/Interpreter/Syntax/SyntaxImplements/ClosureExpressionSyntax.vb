@@ -104,6 +104,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Dim lines As New List(Of Expression)
 
                 For Each line As Token() In lineBlocks
+                    If line.Length = 0 OrElse line.isTerminator(opts.keepsCommentLines) Then
+                        ' skip code comments
+                        ' do nothing
+                        Continue For
+                    End If
+
                     [error] = Nothing
                     line _
                         .HandleExpressionBlock(Sub(exr, null) [error] = exr, opts) _
@@ -128,7 +134,28 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 End If
 
                 For Each member As Token() In lineBlocks
+                    If member.Length = 0 OrElse (member.Length = 1 AndAlso member(Scan0).name = TokenType.comma) Then
+                        ' skip code comments
+                        ' do nothing
+                        Continue For
+                    End If
 
+                    If Not member.isJsonMember Then
+                        Return New SyntaxResult(New InvalidExpressionException, opts.debug)
+                    End If
+
+                    Dim name As Token = member(Scan0)
+                    Dim value As Token() = member.Skip(2).ToArray
+                    Dim valExpr = Expression.CreateExpression(value, opts)
+
+                    If valExpr.isException Then
+                        Return valExpr
+                    End If
+
+                    Call New NamedValue(Of Expression) With {
+                        .Name = name.text,
+                        .Value = valExpr.expression
+                    }.DoCall(AddressOf members.Add)
                 Next
 
                 Return New JSONLiteral(members)

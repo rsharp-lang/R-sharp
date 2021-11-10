@@ -68,7 +68,7 @@ Namespace Interpreter
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         <DebuggerStepThrough>
-        Private Function isTerminator(block As Token(), keepsComment As Boolean) As Boolean
+        Friend Function isTerminator(block As Token(), keepsComment As Boolean) As Boolean
             If block.Length <> 1 Then
                 Return False
             Else
