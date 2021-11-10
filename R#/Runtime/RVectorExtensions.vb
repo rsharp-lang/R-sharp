@@ -357,9 +357,24 @@ Namespace Runtime
                                 If Not o.GetType Is typeofT Then
                                     ' 进行一些类型转换
 
-                                    ' if apply the RConversion.CTypeDynamic
-                                    ' then it may decouple object from vbObject container
-                                    o = Conversion.CTypeDynamic(o, typeofT)
+                                    ' handling some special situation
+                                    If GetType(T) Is GetType(Double) Then
+                                        If TypeOf o Is String Then
+                                            Dim str = CStr(o)
+
+                                            If str = "NA" Then
+                                                o = Double.NaN
+                                            ElseIf str = "NULL" Then
+                                                o = 0.0
+                                            Else
+                                                o = Conversion.CTypeDynamic(o, typeofT)
+                                            End If
+                                        End If
+                                    Else
+                                        ' if apply the RConversion.CTypeDynamic
+                                        ' then it may decouple object from vbObject container
+                                        o = Conversion.CTypeDynamic(o, typeofT)
+                                    End If
                                 End If
 
                                 Return DirectCast(o, T)
