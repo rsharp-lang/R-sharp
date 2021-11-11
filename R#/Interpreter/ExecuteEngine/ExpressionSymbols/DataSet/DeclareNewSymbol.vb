@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::2e878450fe98a498f20070fda0df7f4a, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DeclareNewSymbol.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class DeclareNewSymbol
-    ' 
-    '         Properties: expressionName, hasInitializeExpression, isTuple, names, stackFrame
-    '                     symbolSize, type, unit, value
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: Evaluate, getParameterView, PushNames, PushTuple, ToString
-    ' 
-    '         Sub: AddCustomAttributes
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class DeclareNewSymbol
+' 
+'         Properties: expressionName, hasInitializeExpression, isTuple, names, stackFrame
+'                     symbolSize, type, unit, value
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: Evaluate, getParameterView, PushNames, PushTuple, ToString
+' 
+'         Sub: AddCustomAttributes
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -180,52 +180,52 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
             If Program.isException(value) Then
                 Return value
-            Else
-                If type = TypeCodes.boolean AndAlso TypeOf value Is String Then
-                    value = DirectCast(value, String).ParseBoolean
-                End If
-
-                If Not value Is Nothing Then
-                    If (Not value.GetType.IsArray) AndAlso (Not TypeOf value Is vector) Then
-                        If type = TypeCodes.generic Then
-                            type = value.GetType.GetRTypeCode
-                        End If
-
-                        If type = TypeCodes.boolean OrElse type = TypeCodes.double OrElse type = TypeCodes.integer OrElse type = TypeCodes.string Then
-                            value = REnv.TryCastGenericArray({value}, envir)
-                        End If
-                    End If
-
-                    If value.GetType.IsArray Then
-                        If attributes.ContainsKey("unit") Then
-                            value = New vector(value, RType.GetType(type)) With {
-                                .unit = New unit With {.name = unit}
-                            }
-                        End If
-                    End If
-                End If
-
-                Try
-                    Dim err As Message = Nothing
-                    ' add new symbol into the given environment stack
-                    ' and then returns the value result
-                    Call PushNames(names, value, type, is_readonly, envir, err:=err)
-
-                    If Not err Is Nothing Then
-                        value = err
-                    End If
-                Catch ex As Exception
-                    value = Internal.debug.stop({
-                        ex.Message,
-                        "symbols: " & names.JoinBy(","),
-                        "value: " & If(value Is Nothing, GetType(Void), value.GetType).FullName,
-                        "required: " & type.Description,
-                        "is_readonly: " & is_readonly
-                    }, envir)
-                End Try
-
-                Return value
             End If
+
+            If type = TypeCodes.boolean AndAlso TypeOf value Is String Then
+                value = DirectCast(value, String).ParseBoolean
+            End If
+
+            If Not value Is Nothing Then
+                If (Not value.GetType.IsArray) AndAlso (Not TypeOf value Is vector) Then
+                    If type = TypeCodes.generic Then
+                        type = value.GetType.GetRTypeCode
+                    End If
+
+                    If type = TypeCodes.boolean OrElse type = TypeCodes.double OrElse type = TypeCodes.integer OrElse type = TypeCodes.string Then
+                        value = REnv.TryCastGenericArray({value}, envir)
+                    End If
+                End If
+
+                If value.GetType.IsArray Then
+                    If attributes.ContainsKey("unit") Then
+                        value = New vector(value, RType.GetType(type)) With {
+                            .unit = New unit With {.name = unit}
+                        }
+                    End If
+                End If
+            End If
+
+            Try
+                Dim err As Message = Nothing
+                ' add new symbol into the given environment stack
+                ' and then returns the value result
+                Call PushNames(names, value, type, is_readonly, envir, err:=err)
+
+                If Not err Is Nothing Then
+                    value = err
+                End If
+            Catch ex As Exception
+                value = Internal.debug.stop({
+                    ex.Message,
+                    "symbols: " & names.JoinBy(","),
+                    "value: " & If(value Is Nothing, GetType(Void), value.GetType).FullName,
+                    "required: " & type.Description,
+                    "is_readonly: " & is_readonly
+                }, envir)
+            End Try
+
+            Return value
         End Function
 
         ''' <summary>

@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::11d0bf2bf65bd10170a40b15e3e6f69e, R#\Runtime\RVectorExtensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module RVectorExtensions
-    ' 
-    '         Function: [single], (+2 Overloads) asVector, createArray, CTypeOfList, fromArray
-    '                   getFirst, isVector, TryCastGenericArray
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module RVectorExtensions
+' 
+'         Function: [single], (+2 Overloads) asVector, createArray, CTypeOfList, fromArray
+'                   getFirst, isVector, TryCastGenericArray
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -199,7 +199,7 @@ Namespace Runtime
                     Else
                         Return type.createArray(DirectCast(value, Group).group, env)
                     End If
-                ElseIf type Is GetType(void) Then
+                ElseIf type Is GetType(Void) Then
                     Dim one As Object = [single](value)
 
                     If one Is Nothing Then
@@ -349,25 +349,54 @@ Namespace Runtime
                 value = DirectCast(value, Array) _
                     .AsObjectEnumerator _
                     .Select(Function(o)
-                                If Not o.GetType Is typeofT Then
-                                    If o.GetType.IsInheritsFrom(GetType(Array)) Then
-                                        o = DirectCast(o, Array).GetValue(Scan0)
-                                    End If
-                                End If
-                                If Not o.GetType Is typeofT Then
-                                    ' 进行一些类型转换
-
-                                    ' if apply the RConversion.CTypeDynamic
-                                    ' then it may decouple object from vbObject container
-                                    o = Conversion.CTypeDynamic(o, typeofT)
-                                End If
-
-                                Return DirectCast(o, T)
+                                Return typeofT.castSingle(Of T)(o)
                             End Function) _
                     .ToArray
             End If
 
             Return value
+        End Function
+
+        ''' <summary>
+        ''' handling some special type cast situation
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="typeofT"></param>
+        ''' <param name="o"></param>
+        ''' <returns></returns>
+        ''' 
+        <Extension>
+        Private Function castSingle(Of T)(typeofT As Type, o As Object) As T
+            If Not o.GetType Is typeofT Then
+                If o.GetType.IsInheritsFrom(GetType(Array)) Then
+                    o = DirectCast(o, Array).GetValue(Scan0)
+                End If
+            End If
+
+            If Not o.GetType Is typeofT Then
+                ' handling some special situation
+                If GetType(T) Is GetType(Double) Then
+                    If TypeOf o Is String Then
+                        Dim str = CStr(o)
+
+                        If str = "NA" Then
+                            o = Double.NaN
+                        ElseIf str = "NULL" Then
+                            o = 0.0
+                        Else
+                            o = Conversion.CTypeDynamic(o, typeofT)
+                        End If
+                    Else
+                        o = Conversion.CTypeDynamic(o, typeofT)
+                    End If
+                Else
+                    ' if apply the RConversion.CTypeDynamic
+                    ' then it may decouple object from vbObject container
+                    o = Conversion.CTypeDynamic(o, typeofT)
+                End If
+            End If
+
+            Return DirectCast(o, T)
         End Function
     End Module
 End Namespace
