@@ -725,6 +725,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\JSONLiteral.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\dev\devtools.vb" />
     <Compile Include="Runtime\Internal\objects\Linq\DataframeGroup.vb" />
     <Compile Include="Runtime\Internal\objects\Linq\RCType.vb" />
