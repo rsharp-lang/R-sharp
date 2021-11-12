@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"F:\\mzkit_win32\\test\\MSI_test\\summary.R\" --attach \"F:\\mzkit_win32\"",
+      "commandLineArgs": "\"D:\\biodeep\\biodeepdb_v3\\spatial\\MSI_analysis\\test\\MSI_test\\summary.R\" --attach D:\\mzkit\\Rscript\\Library\\mzkit_app",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }
