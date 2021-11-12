@@ -473,7 +473,6 @@ Module plots
         End If
 
         Return data.HistogramPlot(
-            [step]:=[step],
             serialsTitle:=title,
             xLabel:=xlab,
             yLabel:=ylab,
