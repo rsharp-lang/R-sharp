@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\biodeep\\biodeepdb_v3\\spatial\\MSI_analysis\\Pipeline\\MSI_analysis.R\" --mzPack \"X:\\项目以外内容\\2021\\研发\\KYYF0006-空间代谢组学\\20211103_yixian_Centriod\\MSI.mzPack\" --outputdir \"X:\\项目以外内容\\2021\\研发\\KYYF0006-空间代谢组学\\20211103_yixian_Centriod\\20211109-1\" --phenograph-knn 16 --pixel-seeding 4  --skip-preprocessing --skip-featureDetection  --skip-embedding --skip-tissue-morphology --skip-peakFeatures --skip-MSIrendering --attach D:\\biodeep\\biodeepdb_v3\\spatial\\MSI_analysis",
+      "commandLineArgs": "\"F:\\mzkit_win32\\test\\MSI_test\\summary.R\" --attach \"F:\\mzkit_win32\"",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }
