@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"E:\\mzkit\\Rscript\\Library\\MSI_app\\docs\\demo_RGB.R\" --attach \"E:\\mzkit\\Rscript\\Library\\MSI_app\"",
+      "commandLineArgs": "\"E:\\mzkit\\Rscript\\Library\\MSI_app\\test\\TrIQ\\raw_intensity.R\" --attach E:\\GCModeller\\src\\runtime\\ggplot",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }

@@ -139,7 +139,7 @@ Namespace Development.Configuration
         ''' <returns></returns>
         Public ReadOnly Property digits As Integer
             Get
-                Return getOption("digits", [default]:=3).ParseInteger
+                Return getOption("digits", [default]:=6).ParseInteger
             End Get
         End Property
 
