@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::f5d7a83d04e7b60c3697375b71784a64, Library\R.graph\Layouts.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Layouts
-    ' 
-    '     Function: (+2 Overloads) forceDirected, orthogonalLayout, randomLayout, SpringForce
-    ' 
-    ' /********************************************************************************/
+' Module Layouts
+' 
+'     Function: (+2 Overloads) forceDirected, orthogonalLayout, randomLayout, SpringForce
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -50,6 +50,8 @@ Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' Do network layouts
@@ -128,7 +130,7 @@ Module Layouts
                                   <RRawVectorArgument> Optional size As Object = "1000,1000",
                                   Optional iterations As Integer = 200,
                                   <RRawVectorArgument(GetType(String))>
-                                  Optional algorithm$ = "force_directed|group_weighted|edge_weighted",
+                                  Optional algorithm As Object = "force_directed|group_weighted|edge_weighted",
                                   Optional groupAttraction As Double = 5,
                                   Optional groupRepulsive As Double = 5,
                                   Optional weightedFactor As Double = 8,
@@ -143,9 +145,9 @@ Module Layouts
         Dim distStr = InteropArgumentHelper.getSize(dist, env, "30,256")
         Dim physics As Planner
 
-        algorithm = algorithm.Split("|"c).First
+        algorithm = DirectCast(REnv.asVector(Of String)(algorithm), String()).FirstOrDefault.Split("|"c).First
 
-        Select Case algorithm
+        Select Case any.ToString(algorithm)
             Case "force_directed"
                 physics = New Planner(
                     g:=g,

@@ -514,12 +514,12 @@ Public Module NetworkModule
     End Function
 
     <ExportAPI("add.node")>
-    Public Function addNode(g As NetworkGraph, label$,
+    Public Function addNode(g As NetworkGraph, labelId$,
                             <RListObjectArgument>
                             Optional attrs As Object = Nothing,
                             Optional env As Environment = Nothing) As node
 
-        Dim node As node = g.CreateNode(label)
+        Dim node As node = g.CreateNode(labelId)
 
         For Each attr As NamedValue(Of Object) In RListObjectArgumentAttribute.getObjectList(attrs, env)
             Select Case attr.Name
