@@ -42,15 +42,15 @@
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 ''' <summary>
 ''' node attribute data visitor
 ''' </summary>
-Public Class V : Implements RNames, RNameIndex
+Public Class V : Implements RNames, RNameIndex, RIndex
 
     Friend ReadOnly vertex As Node()
 
@@ -64,7 +64,7 @@ Public Class V : Implements RNames, RNameIndex
     ''' the size of the vertex collection in this data visitor model
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property size As Integer
+    Public ReadOnly Property size As Integer Implements RIndex.length
         Get
             Return vertex.Length
         End Get
@@ -135,4 +135,21 @@ Public Class V : Implements RNames, RNameIndex
     End Function
 #End Region
 
+#Region "vertex indexer"
+    Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function getByIndex(i() As Integer) As Array Implements RIndex.getByIndex
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function setByIndex(i As Integer, value As Object, envir As Environment) As Object Implements RIndex.setByIndex
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function setByindex(i() As Integer, value As Array, envir As Environment) As Object Implements RIndex.setByindex
+        Throw New NotImplementedException()
+    End Function
+#End Region
 End Class

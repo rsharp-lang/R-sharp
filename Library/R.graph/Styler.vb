@@ -5,6 +5,7 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -116,7 +117,51 @@ Module Styler
 
         Dim valType As RType = RType.GetRSharpType(val.GetType)
 
+        If valType.mode = TypeCodes.double OrElse valType.mode = TypeCodes.integer Then
+            Dim vec As Double() = REnv.asVector(Of Double)(val)
 
+            If vec.Length = 1 Then
+                Dim w As Single = vec(Scan0)
+
+                If TypeOf g Is E Then
+                    For Each link As Edge In DirectCast(g, E).edges
+                        Call link.SetPenWidth(w)
+                    Next
+                Else
+                    For Each vex As Node In DirectCast(g, V).vertex
+                        vex.data.size = {w}
+                    Next
+                End If
+            ElseIf vec.Length <> DirectCast(g, RIndex).length Then
+                Return Internal.debug.stop($"the size of the data vector is not equals to the size of the target graph element list!", env)
+            Else
+                If TypeOf g Is E Then
+                    For i As Integer = 0 To vec.Length - 1
+                        DirectCast(g, E).edges(i).SetPenWidth(vec(i))
+                    Next
+                Else
+                    For i As Integer = 0 To vec.Length - 1
+                        DirectCast(g, V).vertex(i).data.size = {vec(i)}
+                    Next
+                End If
+            End If
+        ElseIf valType Is RType.list Then
+            If TypeOf g Is E Then
+                For Each attr In DirectCast(val, list).slots
+                    Call DirectCast(g, E)(attr.Key).SetPenWidth(CSng(REnv.single(REnv.asVector(Of Double)(attr.Value))))
+                Next
+            Else
+                For Each attr In DirectCast(val, list).slots
+                    Dim vex As Node = DirectCast(g, V)(attr.Key)
+
+                    If Not vex Is Nothing Then
+                        vex.data.size = REnv.asVector(Of Double)(attr.Value)
+                    End If
+                Next
+            End If
+        End If
+
+        Return g
     End Function
 
     ''' <summary>

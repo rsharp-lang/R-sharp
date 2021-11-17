@@ -46,12 +46,12 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 ''' <summary>
 ''' edge attribute data visistor
 ''' </summary>
-Public Class E : Implements RNames, RNameIndex
+Public Class E : Implements RNames, RNameIndex, RIndex
 
     Friend ReadOnly edges As Edge()
     Friend ReadOnly edgeIndex As Dictionary(Of String, Edge)
 
-    Public ReadOnly Property size As Integer
+    Public ReadOnly Property size As Integer Implements RIndex.length
         Get
             Return edges.Length
         End Get
@@ -95,6 +95,24 @@ Public Class E : Implements RNames, RNameIndex
     End Function
 
     Public Function setByName(names() As String, value As Array, envir As Environment) As Object Implements RNameIndex.setByName
+        Throw New NotImplementedException()
+    End Function
+#End Region
+
+#Region "edge indexer"
+    Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function getByIndex(i() As Integer) As Array Implements RIndex.getByIndex
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function setByIndex(i As Integer, value As Object, envir As Environment) As Object Implements RIndex.setByIndex
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function setByindex(i() As Integer, value As Array, envir As Environment) As Object Implements RIndex.setByindex
         Throw New NotImplementedException()
     End Function
 #End Region
