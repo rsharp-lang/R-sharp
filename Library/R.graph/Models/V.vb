@@ -41,8 +41,10 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -85,7 +87,11 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
     End Property
 
     Sub New(g As NetworkGraph)
-        vertex = g.vertex.ToArray
+        Call Me.New(g.vertex)
+    End Sub
+
+    Sub New(list As IEnumerable(Of Node))
+        vertex = list.ToArray
         dataNames = vertex _
             .Select(Function(v)
                         Return v.data.Properties.Keys
@@ -155,13 +161,34 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
         Throw New NotImplementedException()
     End Function
 
+    Private Function ConfigSymbols(expr As Expression, env As Environment) As Environment
+        Dim symbols = SymbolAnalysis.GetSymbolReferenceList(expr).ToArray
+
+        env = New Environment(env, "RIndexer.EvaluateIndexer")
+
+        For Each name As NamedValue(Of PropertyAccess) In symbols
+            Call env.Push(name.Name, getByName(name.Name), [readonly]:=True)
+        Next
+
+        Return env
+    End Function
+
     Public Function EvaluateIndexer(expr As Expression, env As Environment) As Object Implements RIndexer.EvaluateIndexer
-        Dim i As Object = expr.Evaluate(env)
+        Dim i As Object = expr.Evaluate(ConfigSymbols(expr, env))
 
         If Program.isException(i) Then
             Return i
         Else
-            Return SymbolIndexer.getByIndex(vertex, i, env)
+            Dim subset = SymbolIndexer.getByIndex(vertex, i, env)
+
+            If Program.isException(subset) Then
+                Return subset
+            End If
+
+            Dim nodes As Node() = subset
+            Dim v As New V(nodes)
+
+            Return v
         End If
     End Function
 #End Region

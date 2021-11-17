@@ -211,6 +211,10 @@ Namespace Runtime
             Log4VB.redirectWarning = AddressOf redirectWarning
         End Sub
 
+        Sub New(parent As Environment, stackName As String, Optional isInherits As Boolean = False)
+            Call Me.New(parent, StackFrame.FromUnknownLocation(stackName), isInherits)
+        End Sub
+
         ''' <summary>
         ''' 
         ''' </summary>
