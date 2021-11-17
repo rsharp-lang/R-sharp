@@ -130,7 +130,7 @@ Module Layouts
                                   <RRawVectorArgument> Optional size As Object = "1000,1000",
                                   Optional iterations As Integer = 200,
                                   <RRawVectorArgument(GetType(String))>
-                                  Optional algorithm As Object = "force_directed|group_weighted|edge_weighted",
+                                  Optional algorithm As Object = "force_directed|degree_weighted|group_weighted|edge_weighted",
                                   Optional groupAttraction As Double = 5,
                                   Optional groupRepulsive As Double = 5,
                                   Optional weightedFactor As Double = 8,
@@ -150,6 +150,17 @@ Module Layouts
         Select Case any.ToString(algorithm)
             Case "force_directed"
                 physics = New Planner(
+                    g:=g,
+                    ejectFactor:=ejectFactor,
+                    condenseFactor:=condenseFactor,
+                    maxtx:=maxtx,
+                    maxty:=maxty,
+                    dist_threshold:=distStr,
+                    size:=sizeStr,
+                    avoidRegions:=avoids
+                )
+            Case "degree_weighted"
+                physics = New DegreeWeightedPlanner(
                     g:=g,
                     ejectFactor:=ejectFactor,
                     condenseFactor:=condenseFactor,
