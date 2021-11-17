@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::477888a49a4163d590e8a295afb46672, Library\R.graph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module NetworkModule
-    ' 
-    '     Function: addEdge, addEdges, addNode, addNodes, attributes
-    '               components, computeNetwork, connectedNetwork, DecomposeGraph, degree
-    '               deleteNode, edgeAttributes, emptyNetwork, eval, extractAdjacenciesSubNetwork
-    '               getByGroup, getEdges, getElementByID, getNodes, hasEdge
-    '               LoadNetwork, LouvainCluster, metaData, nodeAttributes, nodeClass
-    '               nodeMass, nodeNames, printGraph, printNode, SaveNetwork
-    '               setAttributes, summaryNodes, trimEdges, typeGroupOfNodes, V
-    '               weight
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module NetworkModule
+' 
+'     Function: addEdge, addEdges, addNode, addNodes, attributes
+'               components, computeNetwork, connectedNetwork, DecomposeGraph, degree
+'               deleteNode, edgeAttributes, emptyNetwork, eval, extractAdjacenciesSubNetwork
+'               getByGroup, getEdges, getElementByID, getNodes, hasEdge
+'               LoadNetwork, LouvainCluster, metaData, nodeAttributes, nodeClass
+'               nodeMass, nodeNames, printGraph, printNode, SaveNetwork
+'               setAttributes, summaryNodes, trimEdges, typeGroupOfNodes, V
+'               weight
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -390,15 +390,21 @@ Public Module NetworkModule
     ''' Calculate node degree in given graph
     ''' </summary>
     ''' <param name="g"></param>
-    ''' <returns></returns>
+    ''' <returns>
+    ''' this function just returns the degree data by default
+    ''' </returns>
     <ExportAPI("degree")>
-    Public Function degree(g As NetworkGraph) As list
+    Public Function degree(g As NetworkGraph, Optional compute As Boolean = False) As list
+        If compute Then
+            Call g.ComputeNodeDegrees
+        End If
+
         Return New list With {
             .slots = g _
-                .ComputeNodeDegrees _
-                .ToDictionary(Function(a) a.Key,
+                .vertex _
+                .ToDictionary(Function(a) a.label,
                               Function(a)
-                                  Return CObj(a.Value)
+                                  Return CObj(Double.Parse(a.data(REFLECTION_ID_MAPPING_DEGREE)))
                               End Function)
         }
     End Function

@@ -52,6 +52,12 @@ Public Class V : Implements RNames, RNameIndex
     Friend ReadOnly vertex As Node()
     ReadOnly dataNames As Index(Of String)
 
+    Public ReadOnly Property size As Integer
+        Get
+            Return vertex.Length
+        End Get
+    End Property
+
     Sub New(g As NetworkGraph)
         vertex = g.vertex.ToArray
         dataNames = vertex.Select(Function(v) v.data.Properties.Keys).IteratesALL.Distinct.ToArray

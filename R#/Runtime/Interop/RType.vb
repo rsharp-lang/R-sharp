@@ -157,6 +157,8 @@ Namespace Runtime.Interop
             GetType(Char), GetType(Char())
         }
 
+        Public Shared ReadOnly Property list As RType = RType.GetRSharpType(GetType(list))
+
         ''' <summary>
         ''' <see cref="Object"/>
         ''' </summary>
