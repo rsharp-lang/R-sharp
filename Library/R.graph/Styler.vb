@@ -23,8 +23,6 @@ Module Styler
                          Optional val As Object = Nothing,
                          Optional env As Environment = Nothing) As Object
 
-        Dim valType As RType = RType.TypeOf(val)
-
         If val Is Nothing Then
             Return New list(RType.GetRSharpType(GetType(Double))) With {
                .slots = v.vertex _
@@ -33,7 +31,11 @@ Module Styler
                                      Return CObj(d.data.size.ElementAtOrDefault(0))
                                  End Function)
             }
-        ElseIf valType.mode = TypeCodes.double OrElse valType.mode = TypeCodes.integer Then
+        End If
+
+        Dim valType As RType = RType.GetRSharpType(val.GetType)
+
+        If valType.mode = TypeCodes.double OrElse valType.mode = TypeCodes.integer Then
             Dim vec As Double() = REnv.asVector(Of Double)(val)
 
             If vec.Length = 1 Then
