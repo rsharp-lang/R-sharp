@@ -243,7 +243,7 @@ Module Visualize
                                     If TypeOf textureBrush Is SolidBrush Then
                                         Call gr.DrawCircle(center, r, textureBrush)
                                     Else
-                                        Dim res = value.LoadImage.ColorReplace(Color.White, Color.Transparent)
+                                        Dim res = value.LoadImage.ColorReplace(Drawing.Color.White, Drawing.Color.Transparent)
                                         Dim size = res.Size
                                         Dim maxR = r * 2.5
                                         Dim scale = stdNum.Max(size.Width, size.Height) / maxR
@@ -371,7 +371,7 @@ Module Visualize
             Return g.graphEdges _
                 .Select(Function(a)
                             If a.data.style Is Nothing Then
-                                Return Color.Black
+                                Return Drawing.Color.Black
                             Else
                                 Return a.data.style.Color
                             End If

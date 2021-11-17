@@ -48,6 +48,9 @@ Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime.Components
 
+    ''' <summary>
+    ''' helper class object for make a safe vector element visiting
+    ''' </summary>
     Public Class GetVectorElement
 
         ReadOnly [single] As Object
