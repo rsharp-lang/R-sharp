@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::b8c8ee423bba2f5ff6b5d14f869581bf, Library\R.graph\Visualize.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Visualize
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: colorByTypeGroup, getNodeSizeHandler, plot_network, renderPlot, setEdgeColors
-    '               setNodeColors
-    ' 
-    ' /********************************************************************************/
+' Module Visualize
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: colorByTypeGroup, getNodeSizeHandler, plot_network, renderPlot, setEdgeColors
+'               setNodeColors
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -109,9 +109,15 @@ Module Visualize
             Case GetType(String)
                 Dim propName As String = nodeSize
 
-                Return Function(n As Node)
-                           Return stdNum.Max(Val(n.data(propName)), minNodeSize)
-                       End Function
+                If propName = "size" Then
+                    Return Function(n As Node)
+                               Return n.data.size.JoinIterates(minNodeSize).Max
+                           End Function
+                Else
+                    Return Function(n As Node)
+                               Return stdNum.Max(Val(n.data(propName)), minNodeSize)
+                           End Function
+                End If
             Case Else
                 err = Internal.debug.stop(New NotImplementedException(nodeSize.GetType.FullName), env)
         End Select
@@ -153,7 +159,7 @@ Module Visualize
                                Optional defaultColor$ = "skyblue",
                                Optional minNodeSize! = 10,
                                Optional minLinkWidth! = 2,
-                               Optional nodeSize As Object = Nothing,
+                               Optional nodeSize As Object = "size",
                                Optional nodeLabel As Object = Nothing,
                                Optional nodeStroke As Object = Stroke.ScatterLineStroke,
                                Optional nodeVisual As Object = Nothing,
