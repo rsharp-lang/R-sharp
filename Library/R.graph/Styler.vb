@@ -73,6 +73,53 @@ Module Styler
     End Sub
 
     ''' <summary>
+    ''' get/set node or edge color style
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="val"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("color")>
+    Public Function color(g As Object,
+                          <RRawVectorArgument>
+                          <RByRefValueAssign>
+                          Optional val As Object = Nothing,
+                          Optional env As Environment = Nothing) As Object
+
+        If val Is Nothing Then
+            If TypeOf g Is E Then
+                Return New list(GetType(Color)) With {
+                    .slots = DirectCast(g, E).edges _
+                        .ToDictionary(Function(e) e.ID,
+                                      Function(e)
+                                          If Not e.data.style Is Nothing Then
+                                              Return CObj(e.data.style.Color)
+                                          Else
+                                              Return CObj(DirectCast(Brushes.Black, SolidBrush).Color)
+                                          End If
+                                      End Function)
+                }
+            Else
+                Return New list(GetType(String)) With {
+                   .slots = DirectCast(g, V).vertex _
+                        .ToDictionary(Function(v) v.label,
+                                      Function(v)
+                                          If v.data.color Is Nothing Then
+                                              Return CObj(DirectCast(Brushes.Black, SolidBrush).Color)
+                                          Else
+                                              Return CObj(DirectCast(v.data.color, SolidBrush).Color)
+                                          End If
+                                      End Function)
+                }
+            End If
+        End If
+
+        Dim valType As RType = RType.GetRSharpType(val.GetType)
+
+
+    End Function
+
+    ''' <summary>
     ''' set or get node size data
     ''' </summary>
     ''' <param name="v"></param>

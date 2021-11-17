@@ -1,54 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::519c5e1b3a5f27aa6ea8e704c3d36f28, Library\R.graphics\ColorBrewer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module ColorBrewerSystem
-    ' 
-    '     Function: Accent, Blues, BrBG, BuGn, BuPu
-    '               Dark2, GnBu, Greens, Greys, Oranges
-    '               OrRd, Paired, Pastel1, Pastel2, PiYG
-    '               PRGn, PuBu, PuBuGn, PuOr, PuRd
-    '               Purples, RdBu, RdGy, RdPu, RdYlBu
-    '               RdYlGn, Reds, Set1, Set2, Set3
-    '               Spectral, YlGn, YlGnBu, YlOrBr, YlOrRd
-    ' 
-    ' /********************************************************************************/
+' Module ColorBrewerSystem
+' 
+'     Function: Accent, Blues, BrBG, BuGn, BuPu
+'               Dark2, GnBu, Greens, Greys, Oranges
+'               OrRd, Paired, Pastel1, Pastel2, PiYG
+'               PRGn, PuBu, PuBuGn, PuOr, PuRd
+'               Purples, RdBu, RdGy, RdPu, RdYlBu
+'               RdYlGn, Reds, Set1, Set2, Set3
+'               Spectral, YlGn, YlGnBu, YlOrBr, YlOrRd
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors.Scaler
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' Color schema name terms that comes from the ColorBrewer system:
@@ -96,6 +99,15 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 ''' </summary>
 <Package("ColorBrewer")>
 Public Module ColorBrewerSystem
+
+    <ExportAPI("TrIQ")>
+    Public Function TrIQ(<RRawVectorArgument>
+                         data As Object,
+                         Optional q As Double = 0.65,
+                         Optional levels As Integer = 30) As Double
+
+        Return DirectCast(REnv.asVector(Of Double)(data), Double()).FindThreshold(q, levels)
+    End Function
 
 #Region "Sequential"
 
