@@ -42,6 +42,7 @@
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
@@ -51,6 +52,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' node attribute data visitor
@@ -122,7 +124,11 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
     ''' <param name="name"></param>
     ''' <returns></returns>
     Public Function getByName(name As String) As Object Implements RNameIndex.getByName
-        Return vertex.Select(Function(v) v.data(name)).ToArray
+        If name = "group" AndAlso Not name Like dataNames Then
+            name = NamesOf.REFLECTION_ID_MAPPING_NODETYPE
+        End If
+
+        Return (From v As Node In vertex Select v.data(name)).ToArray
     End Function
 
     Public Function getByName(names() As String) As Object Implements RNameIndex.getByName
@@ -185,7 +191,7 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
                 Return subset
             End If
 
-            Dim nodes As Node() = subset
+            Dim nodes As Node() = REnv.asVector(Of Node)(subset)
             Dim v As New V(nodes)
 
             Return v
