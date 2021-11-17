@@ -57,7 +57,7 @@ Module Styler
             End If
         ElseIf valType Is RType.list Then
             For Each attr In DirectCast(val, list).slots
-                Dim vex As Node = v.getByName(attr.Key)
+                Dim vex As Node = v(attr.Key)
 
                 If Not vex Is Nothing Then
                     vex.data.size = REnv.asVector(Of Double)(attr.Value)

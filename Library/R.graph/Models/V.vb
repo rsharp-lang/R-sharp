@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::d54c910da316bd202ea533f787552d38, Library\R.graph\Models\V.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Class V
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: (+2 Overloads) getByName, getNames, hasName, (+2 Overloads) setByName, setNames
-    ' 
-    ' /********************************************************************************/
+' Class V
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: (+2 Overloads) getByName, getNames, hasName, (+2 Overloads) setByName, setNames
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -50,18 +50,47 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Public Class V : Implements RNames, RNameIndex
 
     Friend ReadOnly vertex As Node()
-    ReadOnly dataNames As Index(Of String)
 
+    ''' <summary>
+    ''' all data attribute names in each vertex node object
+    ''' </summary>
+    ReadOnly dataNames As Index(Of String)
+    ReadOnly vertexIndex As Dictionary(Of String, Node)
+
+    ''' <summary>
+    ''' the size of the vertex collection in this data visitor model
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property size As Integer
         Get
             Return vertex.Length
         End Get
     End Property
 
+    ''' <summary>
+    ''' get a vertex node via a uniqueId reference. 
+    ''' </summary>
+    ''' <param name="id"></param>
+    ''' <returns></returns>
+    Default Public ReadOnly Property GetVertex(id As String) As Node
+        Get
+            Return vertexIndex.TryGetValue(id)
+        End Get
+    End Property
+
     Sub New(g As NetworkGraph)
         vertex = g.vertex.ToArray
-        dataNames = vertex.Select(Function(v) v.data.Properties.Keys).IteratesALL.Distinct.ToArray
+        dataNames = vertex _
+            .Select(Function(v)
+                        Return v.data.Properties.Keys
+                    End Function) _
+            .IteratesALL _
+            .Distinct _
+            .ToArray
+        vertexIndex = vertex.ToDictionary(Function(v) v.label)
     End Sub
+
+#Region "Node Attribute Data"
 
     Public Function setNames(names() As String, envir As Environment) As Object Implements RNames.setNames
         Throw New NotImplementedException()
@@ -75,6 +104,11 @@ Public Class V : Implements RNames, RNameIndex
         Return dataNames.Objects
     End Function
 
+    ''' <summary>
+    ''' get attribute value via attribute name
+    ''' </summary>
+    ''' <param name="name"></param>
+    ''' <returns></returns>
     Public Function getByName(name As String) As Object Implements RNameIndex.getByName
         Return vertex.Select(Function(v) v.data(name)).ToArray
     End Function
@@ -96,4 +130,6 @@ Public Class V : Implements RNames, RNameIndex
     Public Function setByName(names() As String, value As Array, envir As Environment) As Object Implements RNameIndex.setByName
         Throw New NotImplementedException()
     End Function
+#End Region
+
 End Class
