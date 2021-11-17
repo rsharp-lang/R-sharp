@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::635cf1064400aa16b5e2286c5ba2ce8d, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [date], [dim], [stop], allocate, append
-    '                   appendOfList, appendOfVector, autoDispose, c, cat
-    '                   cbind, colnames, columnVector, doPrintInternal, factor
-    '                   factors, getOption, ifelse, invisible, isEmpty
-    '                   isEmptyArray, isList, isNA, isNull, isRVector
-    '                   length, library, makeNames, names, ncol
-    '                   neg, nrow, objectAddInvoke, options, print
-    '                   rbind, Rdataframe, rep, replace, Rlist
-    '                   rownames, seq, sink, source, str
-    '                   summary, t, uniqueNames, unitOfT, warning
-    '                   year
-    ' 
-    '         Sub: [exit], q, quit, warnings
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [date], [dim], [stop], allocate, append
+'                   appendOfList, appendOfVector, autoDispose, c, cat
+'                   cbind, colnames, columnVector, doPrintInternal, factor
+'                   factors, getOption, ifelse, invisible, isEmpty
+'                   isEmptyArray, isList, isNA, isNull, isRVector
+'                   length, library, makeNames, names, ncol
+'                   neg, nrow, objectAddInvoke, options, print
+'                   rbind, Rdataframe, rep, replace, Rlist
+'                   rownames, seq, sink, source, str
+'                   summary, t, uniqueNames, unitOfT, warning
+'                   year
+' 
+'         Sub: [exit], q, quit, warnings
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -93,6 +93,63 @@ Namespace Runtime.Internal.Invokes
     ''' 在这个模块之中仅包含有最基本的数据操作函数
     ''' </summary>
     Public Module base
+
+        ''' <summary>
+        ''' ## Range of Values
+        ''' 
+        ''' range returns a vector containing the minimum and maximum 
+        ''' of all the given arguments.
+        ''' </summary>
+        ''' <param name="x">
+        ''' any numeric or character objects.
+        ''' </param>
+        ''' <param name="na_rm">
+        ''' logical, indicating if NA's should be omitted.
+        ''' </param>
+        ''' <param name="finite">
+        ''' logical, indicating if all non-finite elements should be 
+        ''' omitted.
+        ''' </param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' range is a generic function: methods can be defined for it 
+        ''' directly or via the Summary group generic. For this to work 
+        ''' properly, the arguments ... should be unnamed, and dispatch 
+        ''' is on the first argument.
+        ''' 
+        ''' If na.rm Is False, NA And NaN values In any Of the arguments 
+        ''' will cause NA values To be returned, otherwise NA values are 
+        ''' ignored.
+        ''' If finite Is True, the minimum And maximum Of all finite 
+        ''' values Is computed, i.e., finite = True includes na.rm = True.
+        ''' 
+        ''' A special situation occurs When there Is no (after omission 
+        ''' Of NAs) nonempty argument left, see min.
+        ''' </remarks>
+        <ExportAPI("range")>
+        Public Function range(<RRawVectorArgument>
+                              x As Object,
+                              Optional na_rm As Boolean = False,
+                              Optional finite As Boolean = False) As Double()
+
+            Dim data As Double() = REnv.asVector(Of Double)(x)
+
+            If na_rm Then
+                data = data.Where(Function(d) Not Double.IsNaN(d)).ToArray
+            End If
+            If finite Then
+                data = data.Where(Function(d) Not d.IsNaNImaginary).ToArray
+            End If
+
+            If data.Length = 0 Then
+                Return {Double.NaN, Double.NaN}
+            Else
+                Dim min As Double = data.Min
+                Dim max As Double = data.Max
+
+                Return {min, max}
+            End If
+        End Function
 
         ''' <summary>
         ''' ### Factors
