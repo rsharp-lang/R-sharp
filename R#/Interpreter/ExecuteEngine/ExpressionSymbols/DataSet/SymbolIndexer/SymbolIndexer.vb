@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::818662c4e03f580e4bedf35a8715e045, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
-    '                   getColumn, getDataframeRowRange, listSubset, ToString, vectorSubset
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class SymbolIndexer
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
+'                   getColumn, getDataframeRowRange, listSubset, ToString, vectorSubset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -125,6 +125,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
                 If Program.isException(indexerRaw) Then
                     Return indexerRaw
+                ElseIf obj.GetType.ImplementInterface(Of RIndexer) AndAlso TypeOf indexerRaw Is Expression Then
+                    Return DirectCast(obj, RIndexer).EvaluateIndexer(indexerRaw, env:=envir)
                 Else
                     indexer = REnv.asVector(Of Object)(indexerRaw)
                 End If
@@ -331,7 +333,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' <param name="indexer"></param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
-        Private Function getByIndex(obj As Object, indexer As Array, envir As Environment) As Object
+        Public Shared Function getByIndex(obj As Object, indexer As Array, envir As Environment) As Object
             If obj.GetType Is GetType(list) Then
                 obj = DirectCast(obj, list).slots
             End If
@@ -343,7 +345,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
         End Function
 
-        Private Function listSubset(list As IDictionary, indexer As Array) As Object
+        Private Shared Function listSubset(list As IDictionary, indexer As Array) As Object
             Dim allKeys = (From x In list.Keys).ToArray
 
             If REnv.isVector(Of String)(indexer) Then
@@ -370,7 +372,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
         End Function
 
-        Private Function doListSubset(list As IDictionary, names As Array) As Object
+        Private Shared Function doListSubset(list As IDictionary, names As Array) As Object
             Dim subset As New list() With {
                 .slots = New Dictionary(Of String, Object)
             }
@@ -391,7 +393,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Return subset
         End Function
 
-        Private Function vectorSubset(obj As Object, indexer As Array, env As Environment) As Object
+        Private Shared Function vectorSubset(obj As Object, indexer As Array, env As Environment) As Object
             If TypeOf obj Is Group Then
                 Dim group = DirectCast(obj, Group)
 

@@ -43,6 +43,9 @@
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -50,7 +53,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 ''' <summary>
 ''' node attribute data visitor
 ''' </summary>
-Public Class V : Implements RNames, RNameIndex, RIndex
+Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
 
     Friend ReadOnly vertex As Node()
 
@@ -150,6 +153,16 @@ Public Class V : Implements RNames, RNameIndex, RIndex
 
     Public Function setByindex(i() As Integer, value As Array, envir As Environment) As Object Implements RIndex.setByindex
         Throw New NotImplementedException()
+    End Function
+
+    Public Function EvaluateIndexer(expr As Expression, env As Environment) As Object Implements RIndexer.EvaluateIndexer
+        Dim i As Object = expr.Evaluate(env)
+
+        If Program.isException(i) Then
+            Return i
+        Else
+            Return SymbolIndexer.getByIndex(vertex, i, env)
+        End If
     End Function
 #End Region
 End Class

@@ -40,13 +40,16 @@
 #End Region
 
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 ''' <summary>
 ''' edge attribute data visistor
 ''' </summary>
-Public Class E : Implements RNames, RNameIndex, RIndex
+Public Class E : Implements RNames, RNameIndex, RIndex, RIndexer
 
     Friend ReadOnly edges As Edge()
     Friend ReadOnly edgeIndex As Dictionary(Of String, Edge)
@@ -100,6 +103,16 @@ Public Class E : Implements RNames, RNameIndex, RIndex
 #End Region
 
 #Region "edge indexer"
+    Public Function EvaluateIndexer(expr As Expression, env As Environment) As Object Implements RIndexer.EvaluateIndexer
+        Dim i As Object = expr.Evaluate(env)
+
+        If Program.isException(i) Then
+            Return i
+        Else
+            Return SymbolIndexer.getByIndex(edges, i, env)
+        End If
+    End Function
+
     Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
         Throw New NotImplementedException()
     End Function
