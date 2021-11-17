@@ -49,9 +49,23 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Public Class E : Implements RNames, RNameIndex
 
     Friend ReadOnly edges As Edge()
+    Friend ReadOnly edgeIndex As Dictionary(Of String, Edge)
+
+    Public ReadOnly Property size As Integer
+        Get
+            Return edges.Length
+        End Get
+    End Property
+
+    Default Public ReadOnly Property GetLink(refId As String) As Edge
+        Get
+            Return edgeIndex.TryGetValue(refId)
+        End Get
+    End Property
 
     Sub New(edges As IEnumerable(Of Edge))
         Me.edges = edges.ToArray
+        Me.edgeIndex = Me.edges.ToDictionary(Function(e) e.ID)
     End Sub
 
 #Region "edge attribute data visistors"
