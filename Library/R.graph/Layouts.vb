@@ -56,7 +56,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 ''' <summary>
 ''' Do network layouts
 ''' </summary>
-<Package("igraph.layouts", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gmail.com")>
+<Package("layouts", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gmail.com")>
 Module Layouts
 
     ''' <summary>

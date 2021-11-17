@@ -69,7 +69,7 @@ Imports stdNum = System.Math
 ''' <summary>
 ''' Rendering png or svg image from a given network graph model.
 ''' </summary>
-<Package("igraph.render")>
+<Package("visualizer")>
 Module Visualize
 
     Sub New()
