@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\GCModeller\\src\\workbench\\pkg\\test\\network\\graph.R\" --attach \"D:\\GCModeller\\src\\workbench\\pkg\"",
+      "commandLineArgs": "\"D:\\GCModeller\\src\\workbench\\pkg\\test\\network\\graph2.R\"",
       "ErrorString": "After parsing a value an unexpected character was encountered: \". Path 'profiles.R-netcore5.commandLineArgs', line 6, position 6."
     }
   }

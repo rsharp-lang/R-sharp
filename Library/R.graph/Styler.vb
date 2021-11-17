@@ -19,6 +19,7 @@ Module Styler
     <RApiReturn(GetType(V))>
     Public Function size(v As V,
                          <RRawVectorArgument>
+                         <RByRefValueAssign>
                          Optional val As Object = Nothing,
                          Optional env As Environment = Nothing) As Object
 
