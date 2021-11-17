@@ -2,6 +2,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
+Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -65,6 +66,15 @@ Module Styler
     End Function
 
     <Extension>
+    Private Sub SetPenColor(e As Edge, c As Color)
+        If e.data.style Is Nothing Then
+            e.data.style = New Pen(New SolidBrush(c), 1)
+        Else
+            e.data.style.Color = c
+        End If
+    End Sub
+
+    <Extension>
     Private Sub SetPenWidth(e As Edge, w As Single)
         If e.data.style Is Nothing Then
             e.data.style = New Pen(Brushes.Black, w)
@@ -117,19 +127,21 @@ Module Styler
 
         Dim valType As RType = RType.GetRSharpType(val.GetType)
 
-        If valType.mode = TypeCodes.double OrElse valType.mode = TypeCodes.integer Then
-            Dim vec As Double() = REnv.asVector(Of Double)(val)
+        If valType.mode = TypeCodes.string Then
+            Dim vec As String() = REnv.asVector(Of String)(val)
 
             If vec.Length = 1 Then
-                Dim w As Single = vec(Scan0)
+                Dim w As Color = vec(Scan0).TranslateColor
 
                 If TypeOf g Is E Then
                     For Each link As Edge In DirectCast(g, E).edges
-                        Call link.SetPenWidth(w)
+                        Call link.SetPenColor(w)
                     Next
                 Else
+                    Dim b As New SolidBrush(w)
+
                     For Each vex As Node In DirectCast(g, V).vertex
-                        vex.data.size = {w}
+                        vex.data.color = b
                     Next
                 End If
             ElseIf vec.Length <> DirectCast(g, RIndex).length Then
@@ -137,25 +149,25 @@ Module Styler
             Else
                 If TypeOf g Is E Then
                     For i As Integer = 0 To vec.Length - 1
-                        DirectCast(g, E).edges(i).SetPenWidth(vec(i))
+                        DirectCast(g, E).edges(i).SetPenColor(vec(i).TranslateColor)
                     Next
                 Else
                     For i As Integer = 0 To vec.Length - 1
-                        DirectCast(g, V).vertex(i).data.size = {vec(i)}
+                        DirectCast(g, V).vertex(i).data.color = vec(i).GetBrush
                     Next
                 End If
             End If
         ElseIf valType Is RType.list Then
             If TypeOf g Is E Then
                 For Each attr In DirectCast(val, list).slots
-                    Call DirectCast(g, E)(attr.Key).SetPenWidth(CSng(REnv.single(REnv.asVector(Of Double)(attr.Value))))
+                    Call DirectCast(g, E)(attr.Key).SetPenColor(CStr(REnv.single(REnv.asVector(Of String)(attr.Value))).TranslateColor)
                 Next
             Else
                 For Each attr In DirectCast(val, list).slots
                     Dim vex As Node = DirectCast(g, V)(attr.Key)
 
                     If Not vex Is Nothing Then
-                        vex.data.size = REnv.asVector(Of Double)(attr.Value)
+                        vex.data.color = CStr(REnv.single(REnv.asVector(Of String)(attr.Value))).GetBrush
                     End If
                 Next
             End If
