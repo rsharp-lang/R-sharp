@@ -11,6 +11,22 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Module Styler
 
     ''' <summary>
+    ''' set or get edge pen width
+    ''' </summary>
+    ''' <param name="e"></param>
+    ''' <param name="val"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("width")>
+    Public Function width(e As E,
+                          <RRawVectorArgument>
+                          <RByRefValueAssign>
+                          Optional val As Object = Nothing,
+                          Optional env As Environment = Nothing) As Object
+
+    End Function
+
+    ''' <summary>
     ''' set or get node size data
     ''' </summary>
     ''' <param name="v"></param>

@@ -140,6 +140,17 @@ Public Module NetworkModule
     End Function
 
     ''' <summary>
+    ''' get graph edge collection.
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <returns></returns>
+    <ExportAPI("E")>
+    <RApiReturn(GetType(E))>
+    Public Function E(g As NetworkGraph) As Object
+        Return New E(g.graphEdges)
+    End Function
+
+    ''' <summary>
     ''' extract sub-network from a given network via a specific network node as centroid. 
     ''' </summary>
     ''' <param name="g"></param>
@@ -629,23 +640,56 @@ Public Module NetworkModule
         Return g.CreateEdge(u, v, weight)
     End Function
 
+    ''' <summary>
+    ''' set edge weight and get edge weights
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="u"></param>
+    ''' <param name="v"></param>
+    ''' <param name="setWeight"></param>
+    ''' <param name="directed"></param>
+    ''' <returns></returns>
     <ExportAPI("weight")>
-    Public Function weight(g As NetworkGraph, u As String, v As String, Optional setWeight As Double = 0, Optional directed As Boolean = False) As Double()
-        Dim edges As Edge()
+    <RApiReturn(GetType(Double))>
+    Public Function weights(g As Object,
+                            Optional u As String = Nothing,
+                            Optional v As String = Nothing,
+                            Optional setWeight As Double = 0,
+                            Optional directed As Boolean = False,
+                            Optional env As Environment = Nothing) As Object
 
-        If directed Then
-            edges = g.GetEdges(g.GetElementByID(u), g.GetElementByID(v)).SafeQuery.ToArray
+        If TypeOf g Is NetworkGraph Then
+            Dim edges As Edge()
+            Dim vu As node = DirectCast(g, NetworkGraph).GetElementByID(u)
+            Dim vv As node = DirectCast(g, NetworkGraph).GetElementByID(v)
+
+            If directed Then
+                edges = DirectCast(g, NetworkGraph).GetEdges(vu, vv).SafeQuery.ToArray
+            Else
+                edges = DirectCast(g, NetworkGraph) _
+                    .GetEdges(vu, vv) _
+                    .SafeQuery _
+                    .AsList + DirectCast(g, NetworkGraph).GetEdges(vv, vu)
+            End If
+
+            If setWeight <> 0 Then
+                For Each edge In edges
+                    edge.weight = setWeight
+                Next
+            End If
+
+            Return (From e As Edge In edges Select e.weight).ToArray
+        ElseIf TypeOf g Is E Then
+            Return New list(RType.GetRSharpType(GetType(Double))) With {
+                .slots = DirectCast(g, E).edges _
+                    .ToDictionary(Function(e) e.ID,
+                                  Function(e)
+                                      Return CObj(e.weight)
+                                  End Function)
+            }
         Else
-            edges = g.GetEdges(g.GetElementByID(u), g.GetElementByID(v)).SafeQuery.AsList + g.GetEdges(g.GetElementByID(v), g.GetElementByID(u))
+            Return Message.InCompatibleType(GetType(NetworkGraph), g.GetType, env)
         End If
-
-        If setWeight <> 0 Then
-            For Each edge In edges
-                edge.weight = setWeight
-            Next
-        End If
-
-        Return edges.Select(Function(e) e.weight).ToArray
     End Function
 
     ''' <summary>

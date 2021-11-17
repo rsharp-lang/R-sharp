@@ -47,6 +47,9 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
+''' <summary>
+''' node attribute data visitor
+''' </summary>
 Public Class V : Implements RNames, RNameIndex
 
     Friend ReadOnly vertex As Node()
