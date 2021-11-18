@@ -925,6 +925,7 @@
     <Compile Include="Runtime\Internal\objects\utils\TableFormatter.vb" />
     <Compile Include="Runtime\Interop\CType\ICType.vb" />
     <Compile Include="Runtime\Serialize\Buffer.vb" />
+    <Compile Include="Runtime\System\Interface\RIndexer.vb" />
     <Compile Include="Runtime\System\TryError.vb" />
     <Compile Include="Runtime\System\GetVectorElement.vb" />
     <Compile Include="Runtime\Internal\objects\base\dataframeBase.vb" />
