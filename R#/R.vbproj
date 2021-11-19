@@ -929,6 +929,7 @@
     <Compile Include="Runtime\System\TryError.vb" />
     <Compile Include="Runtime\System\GetVectorElement.vb" />
     <Compile Include="Runtime\Internal\objects\base\dataframeBase.vb" />
+    <Compile Include="System\Document\CodeAnalysis\SymbolAnalysis.vb" />
     <Compile Include="System\Document\Printer\ScriptFormatterPrinter.vb" />
     <Compile Include="System\LambdaCompiler.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RCommandLine.vb" />
@@ -1106,5 +1107,6 @@
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
