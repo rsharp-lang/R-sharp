@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::5a6d831447a4249e37e44d4957263fb2, Library\R.graphics\Plot2D\graphics2D.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module graphics2D
-    ' 
-    '     Function: asciiArt, axisTicks, contourPolygon, contourTracing, DrawCircle
-    '               drawLegends, DrawTriangle, legend, line2D, measureString
-    '               offset2D, paddingString, point2D, (+2 Overloads) rectangle, scale
-    '               size
-    ' 
-    ' /********************************************************************************/
+' Module graphics2D
+' 
+'     Function: asciiArt, axisTicks, contourPolygon, contourTracing, DrawCircle
+'               drawLegends, DrawTriangle, legend, line2D, measureString
+'               offset2D, paddingString, point2D, (+2 Overloads) rectangle, scale
+'               size
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -51,6 +51,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors.Scaler
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Math2D.MarchingSquares
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Text.ASCIIArt
@@ -240,18 +241,30 @@ Module graphics2D
     ''' <param name="x"></param>
     ''' <param name="colorSet"></param>
     ''' <param name="levels"></param>
+    ''' <param name="TrIQ">
+    ''' set value negative or greater than 1 will be disable the TrIQ scaler
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("scale")>
-    Public Function scale(x As Double(), <RRawVectorArgument> colorSet As Object, Optional levels As Integer = 25) As String()
+    Public Function scale(x As Double(),
+                          <RRawVectorArgument>
+                          colorSet As Object,
+                          Optional levels As Integer = 25,
+                          Optional TrIQ As Double = 0.65) As String()
+
         Dim colors As String() = Designer _
             .GetColors(RColorPalette.getColorSet(colorSet), n:=levels) _
             .Select(Function(c) c.ToHtmlColor) _
             .ToArray
-        Dim valueRange As New DoubleRange(x)
-        Dim levelRange As New DoubleRange({0, levels - 1})
+        Dim valueRange As DoubleRange = If(TrIQ <= 0 OrElse TrIQ >= 1, New DoubleRange(x), x.GetTrIQRange(q:=TrIQ, N:=levels))
+        Dim levelRange As New IntRange(0, levels - 1)
         Dim i As Integer() = x _
             .Select(Function(xi)
-                        Return CInt(valueRange.ScaleMapping(xi, levelRange))
+                        If xi >= valueRange.Max Then
+                            Return levelRange.Max
+                        Else
+                            Return valueRange.ScaleMapping(xi, levelRange)
+                        End If
                     End Function) _
             .ToArray
 
