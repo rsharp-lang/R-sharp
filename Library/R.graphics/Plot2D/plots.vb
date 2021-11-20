@@ -186,7 +186,7 @@ Module plots
     Public Function plotArray(vec As Array, args As list, env As Environment) As Object
         Dim x As Double() = REnv.asVector(Of Double)(vec)
         Dim y As Double() = args.findNumberVector(size:=x.Length, env)
-        Dim ptSize As Single = args.getValue("point_size", env, 15)
+        Dim ptSize As Single = args.getValue({"point_size", "point.size"}, env, 15)
         Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
         Dim reverse As Boolean = args.getValue(Of Boolean)("reverse", env, False)
         Dim drawLine As Boolean = y Is Nothing

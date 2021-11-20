@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::e737fe7041a18ba6103a1df00c339d5e, R#\Runtime\Internal\objects\dataset\list.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class list
-    ' 
-    '         Properties: data, length, slots
-    ' 
-    '         Constructor: (+6 Overloads) Sub New
-    ' 
-    '         Function: AsGeneric, checkTuple, (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames
-    '                   GetSlots, getValue, hasName, namedValues, setByindex
-    '                   setByIndex, (+2 Overloads) setByName, setNames, ToString
-    ' 
-    '         Sub: add
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class list
+' 
+'         Properties: data, length, slots
+' 
+'         Constructor: (+6 Overloads) Sub New
+' 
+'         Function: AsGeneric, checkTuple, (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames
+'                   GetSlots, getValue, hasName, namedValues, setByindex
+'                   setByIndex, (+2 Overloads) setByName, setNames, ToString
+' 
+'         Sub: add
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -191,6 +191,45 @@ Namespace Runtime.Internal.Object
         ''' get value or default
         ''' </summary>
         ''' <typeparam name="T"></typeparam>
+        ''' <param name="synonym"></param>
+        ''' <param name="env"></param>
+        ''' <param name="default">the default value.</param>
+        ''' <returns></returns>
+        Public Function getValue(Of T)(synonym As String(), env As Environment, Optional [default] As T = Nothing) As T
+            Dim value As Object = Nothing
+            Dim hasHit As Boolean = False
+
+            For Each name As String In synonym
+                If slots.ContainsKey(name) Then
+                    value = slots(name)
+                    hasHit = True
+                    Exit For
+                End If
+            Next
+
+            If Not hasHit Then
+                Return [default]
+            Else
+                Return ctypeInternal(Of T)(value, env)
+            End If
+        End Function
+
+        Private Shared Function ctypeInternal(Of T)(value As Object, env As Environment) As T
+            Dim type As Type = GetType(T)
+
+            If Not value Is Nothing AndAlso value.GetType Is GetType(T) Then
+                Return value
+            ElseIf type.IsArray Then
+                Return CObj(asVector(value, type.GetElementType, env))
+            Else
+                Return RCType.CTypeDynamic([single](value), GetType(T), env)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' get value or default
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
         ''' <param name="name"></param>
         ''' <param name="env"></param>
         ''' <param name="default">the default value.</param>
@@ -199,16 +238,7 @@ Namespace Runtime.Internal.Object
             If Not slots.ContainsKey(name) Then
                 Return [default]
             Else
-                Dim value As Object = slots(name)
-                Dim type As Type = GetType(T)
-
-                If Not value Is Nothing AndAlso value.GetType Is GetType(T) Then
-                    Return value
-                ElseIf type.IsArray Then
-                    Return CObj(asVector(value, type.GetElementType, env))
-                Else
-                    Return RCType.CTypeDynamic([single](value), GetType(T), env)
-                End If
+                Return ctypeInternal(Of T)(slots(name), env)
             End If
         End Function
 
