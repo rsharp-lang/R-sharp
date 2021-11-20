@@ -242,26 +242,34 @@ Module graphics2D
     ''' <param name="colorSet"></param>
     ''' <param name="levels"></param>
     ''' <param name="TrIQ">
-    ''' set value negative or greater than 1 will be disable the TrIQ scaler
+    ''' set value negative or greater than 1 will be 
+    ''' disable the TrIQ scaler
     ''' </param>
-    ''' <returns></returns>
+    ''' <returns>
+    ''' A color character vector in html code format
+    ''' </returns>
     <ExportAPI("scale")>
     Public Function scale(x As Double(),
                           <RRawVectorArgument>
                           colorSet As Object,
                           Optional levels As Integer = 25,
-                          Optional TrIQ As Double = 0.65) As String()
+                          Optional TrIQ As Double = 0.65,
+                          Optional zero As String = Nothing) As String()
 
         Dim colors As String() = Designer _
             .GetColors(RColorPalette.getColorSet(colorSet), n:=levels) _
             .Select(Function(c) c.ToHtmlColor) _
             .ToArray
-        Dim valueRange As DoubleRange = If(TrIQ <= 0 OrElse TrIQ >= 1, New DoubleRange(x), x.GetTrIQRange(q:=TrIQ, N:=levels))
+        Dim xfilter As Double() = If(zero.StringEmpty, x, x.Where(Function(xi) xi > 0).ToArray)
+        Dim hasUnmapped As Boolean = Not zero.StringEmpty
+        Dim valueRange As DoubleRange = If(TrIQ <= 0 OrElse TrIQ >= 1, New DoubleRange(xfilter), xfilter.GetTrIQRange(q:=TrIQ, N:=levels))
         Dim levelRange As New IntRange(0, levels - 1)
         Dim i As Integer() = x _
             .Select(Function(xi)
                         If xi >= valueRange.Max Then
                             Return levelRange.Max
+                        ElseIf hasUnmapped AndAlso xi <= 0.0 Then
+                            Return -1
                         Else
                             Return valueRange.ScaleMapping(xi, levelRange)
                         End If
@@ -272,6 +280,8 @@ Module graphics2D
             .Select(Function(index)
                         If valueRange.Length = 0 Then
                             Return colors(0)
+                        ElseIf index < 0 Then
+                            Return zero
                         Else
                             Return colors(index)
                         End If
