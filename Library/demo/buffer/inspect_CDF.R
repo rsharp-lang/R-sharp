@@ -2,16 +2,30 @@ require(netCDF.utils);
 
 options(strict = FALSE);
 options(max.print = 100);
+options(memory.load = "max");
 
-using cdf as open.netCDF("F:\20211123_CDF\P210702366.cdf") {
+using cdf as open.netCDF("F:\20211123_CDF\P210702366.netcdf") {
 	print(cdf |> dimensions);
 	print(cdf |> globalAttributes);
 	print(cdf |> variables);
 	
-	print(cdf |> var("total_intensity"));
-	print(cdf |> attr("total_intensity"));
-	print(cdf |> attr("mass_values"));
-	print(cdf |> attr("intensity_values"));
+	cat("\n\n\n");
 	
-	print(cdf |> var("scan_index") |> getValue());
+	print("-------------------------------------------------------");
+	
+	print("get variable names:");
+	print((cdf |> variables)[, "name"]);
+	
+	cat("\n\n\n");
+	
+	for(name in (cdf |> variables)[, "name"]) {
+		v = cdf |> var(name);
+		
+		print(v);
+		print(cdf |> attr(name));
+		print(v |> getValue());
+		print("---------------------------------------------------");
+		
+		cat("\n\n\n");
+	}
 }
