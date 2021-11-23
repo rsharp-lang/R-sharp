@@ -57,6 +57,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
+''' <summary>
+''' netCDF toolkit
+''' </summary>
 <Package("netCDF.utils")>
 Module netCDFutils
 
@@ -83,6 +86,12 @@ Module netCDFutils
         Return sb.ToString
     End Function
 
+    ''' <summary>
+    ''' open a netCDF data file
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("open.netCDF")>
     <RApiReturn(GetType(netCDFReader))>
     Public Function openCDF(file As Object, Optional env As Environment = Nothing) As Object
