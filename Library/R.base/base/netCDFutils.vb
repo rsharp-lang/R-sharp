@@ -1,47 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::e545c25ad402d4a8559cffeff06c1ddd, Library\R.base\base\netCDFutils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module netCDFutils
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: dataframe, dimensions, getDataVariable, getValue, globalAttributes
-    '               openCDF, printVar, variableNames
-    ' 
-    ' /********************************************************************************/
+' Module netCDFutils
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: dataframe, dimensions, getDataVariable, getValue, globalAttributes
+'               openCDF, printVar, variableNames
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.IO
@@ -126,6 +127,13 @@ Module netCDFutils
         End If
 
         Dim attrs As attribute() = DirectCast(file, netCDFReader).globalAttributes
+        Dim data As Object = attrs.attributeData(list)
+
+        Return data
+    End Function
+
+    <Extension>
+    Private Function attributeData(attrs As attribute(), list As Object) As Object
         Dim name As String() = attrs.Select(Function(a) a.name).ToArray
         Dim value As String() = attrs.Select(Function(a) a.value).ToArray
 
@@ -187,6 +195,32 @@ Module netCDFutils
         }
 
         Return table
+    End Function
+
+    ''' <summary>
+    ''' get attribute data of a cdf variable
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="name"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("attr")>
+    Public Function getAttributes(file As Object, name As String,
+                                  Optional list As Boolean = False,
+                                  Optional env As Environment = Nothing) As Object
+
+        If TypeOf file Is String Then
+            file = netCDFReader.Open(DirectCast(file, String))
+        End If
+        If Not TypeOf file Is netCDFReader Then
+            Return Internal.debug.stop(New NotImplementedException, env)
+        End If
+
+        Dim var As variable = DirectCast(file, netCDFReader).getDataVariableEntry(name)
+        Dim attrs As attribute() = var.attributes
+        Dim data As Object = attrs.attributeData(list)
+
+        Return data
     End Function
 
     <ExportAPI("var")>
