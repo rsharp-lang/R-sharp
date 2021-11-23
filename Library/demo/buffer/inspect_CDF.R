@@ -19,6 +19,9 @@ using cdf as open.netCDF("F:\20211123_CDF\P210702366.netcdf") {
 	cat("\n\n\n");
 	
 	for(name in (cdf |> variables)[, "name"]) {
+		print("load variable...");
+		print(name);
+	
 		v = cdf |> var(name);
 		
 		print(v);
