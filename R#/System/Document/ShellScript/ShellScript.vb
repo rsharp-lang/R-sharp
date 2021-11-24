@@ -442,7 +442,10 @@ Namespace Development.CommandLine
             Call argumentList.Add(name, attrs)
             Call New CommandLineArgument With {
                 .name = name,
-                .description = info,
+                .description = Strings.Trim(info) _
+                    .LineTokens _
+                    .Select(AddressOf Strings.Trim) _
+                    .JoinBy(" "),
                 .defaultValue = [default],
                 .type = attrs.GetTypeCode,
                 .isLiteral = isLiteral
