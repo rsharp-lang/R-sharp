@@ -59,7 +59,26 @@ Namespace Development.Package.File.Expressions
         End Sub
 
         Public Overrides Sub WriteBuffer(ms As MemoryStream, x As Expression)
-            Call WriteBuffer(ms, DirectCast(x, IfBranch))
+            If TypeOf x Is IfBranch Then
+                Call WriteBuffer(ms, DirectCast(x, IfBranch))
+            Else
+                Call WriteBuffer(ms, DirectCast(x, ElseIfBranch))
+            End If
+        End Sub
+
+        Public Overloads Sub WriteBuffer(ms As MemoryStream, x As ElseIfBranch)
+            Using outfile As New BinaryWriter(ms)
+                Call outfile.Write(CInt(ExpressionTypes.ElseIf))
+                Call outfile.Write(0)
+                Call outfile.Write(CByte(x.type))
+
+                Call outfile.Write(context.GetBuffer(x.stackFrame))
+                Call outfile.Write(context.GetBuffer(x.ifTest))
+                Call outfile.Write(context.GetBuffer(x.trueClosure))
+
+                Call outfile.Flush()
+                Call saveSize(outfile)
+            End Using
         End Sub
 
         Public Overloads Sub WriteBuffer(ms As MemoryStream, x As IfBranch)
@@ -83,7 +102,11 @@ Namespace Development.Package.File.Expressions
                 Dim test As Expression = BlockReader.ParseBlock(bin).Parse(desc)
                 Dim trueExpr As DeclareNewFunction = BlockReader.ParseBlock(bin).Parse(desc)
 
-                Return New IfBranch(test, trueExpr, sourceMap)
+                If raw.expression = ExpressionTypes.If Then
+                    Return New IfBranch(test, trueExpr, sourceMap)
+                Else
+                    Return New ElseIfBranch(test, trueExpr.body, stackframe:=sourceMap)
+                End If
             End Using
         End Function
     End Class

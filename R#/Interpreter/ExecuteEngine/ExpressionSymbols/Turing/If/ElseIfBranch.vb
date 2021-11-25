@@ -41,12 +41,19 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
     Public Class ElseIfBranch : Inherits IfBranch
+
+        Public Overrides ReadOnly Property expressionName As ExpressionTypes
+            Get
+                Return ExpressionTypes.ElseIf
+            End Get
+        End Property
 
         Public Sub New(ifTest As Expression, trueClosure As ClosureExpression, stackframe As StackFrame)
             MyBase.New(ifTest, trueClosure, stackframe)

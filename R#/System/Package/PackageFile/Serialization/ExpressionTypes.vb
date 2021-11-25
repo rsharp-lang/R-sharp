@@ -97,6 +97,7 @@ Namespace Development.Package.File
         [For]
         [If]
         [Else]
+        [ElseIf]
         [Break]
         [Continute]
         [IIf]

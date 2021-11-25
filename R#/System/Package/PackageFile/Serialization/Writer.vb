@@ -174,7 +174,7 @@ Namespace Development.Package.File
                 Case GetType(ValueAssignExpression), GetType(MemberValueAssign) : Return RSymbolAssign.GetBuffer(x)
 
                 Case GetType(ForLoop) : Return Rfor.GetBuffer(x)
-                Case GetType(IfBranch) : Return Rif.GetBuffer(x)
+                Case GetType(IfBranch), GetType(ElseIfBranch) : Return Rif.GetBuffer(x)
                 Case GetType(ElseBranch) : Return Relse.GetBuffer(x)
                 Case GetType(ExpressionLiteral) : Return RExpr.GetBuffer(x)
 
