@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"E:\\GCModeller\\src\\R-sharp\\tutorials\\syntaxTest\\ifelse2.R\" --debug"
+      "commandLineArgs": "\"E:\\GCModeller\\src\\R-sharp\\tutorials\\syntaxTest\\ifelse2.R\""
     }
   }
 }

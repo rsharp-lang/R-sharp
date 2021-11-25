@@ -148,8 +148,8 @@ Module Program
 
         Dim result As Object = R.Source(filepath)
 
-        If (Not result Is Nothing) AndAlso result.GetType Is GetType(Message) Then
-            Return DirectCast(result, Message).level
+        If RProgram.isException(result) Then
+            Return Rscript.handleResult(result, R.globalEnvir, Nothing)
         Else
             Return 0
         End If

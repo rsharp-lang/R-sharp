@@ -58,7 +58,17 @@ Module Rscript
 
     Dim echo As Index(Of String) = {"print", "cat", "echo", "q", "quit", "require", "library", "str"}
 
-    Friend Function handleResult(result As Object, globalEnv As GlobalEnvironment, program As RProgram) As Integer
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="result"></param>
+    ''' <param name="globalEnv"></param>
+    ''' <param name="program">
+    ''' function will not echo of the last result value 
+    ''' if this program parameter value is missing
+    ''' </param>
+    ''' <returns></returns>
+    Friend Function handleResult(result As Object, globalEnv As GlobalEnvironment, Optional program As RProgram = Nothing) As Integer
         Dim requirePrintErr As Boolean = False
         Dim code As Integer = 0
 

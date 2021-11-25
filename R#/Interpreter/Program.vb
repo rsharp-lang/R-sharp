@@ -127,6 +127,14 @@ Namespace Interpreter
             End If
         End Function
 
+        ''' <summary>
+        ''' is error <see cref="Message"/> andalso which is in <see cref="MSG_TYPES.ERR"/> level? or any
+        ''' kind of .NET <see cref="Exception"/> value?
+        ''' </summary>
+        ''' <param name="result"></param>
+        ''' <param name="envir"></param>
+        ''' <param name="isDotNETException"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function isException(ByRef result As Object, Optional envir As Environment = Nothing, ByRef Optional isDotNETException As Boolean = False) As Boolean
             If result Is Nothing Then
