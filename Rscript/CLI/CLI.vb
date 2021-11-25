@@ -129,11 +129,12 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
     End Function
 
     <ExportAPI("--check")>
-    <Usage("--check --target <package.zip>")>
+    <Usage("--check --target <package.zip> [--debug]")>
     <Description("Verify a packed R# package is damaged or not or check the R# script problem in a R package source folder.")>
     Public Function Check(args As CommandLine) As Integer
         Dim target As String = args <= "--target"
         Dim tmpCheck As String = TempFileSystem.GetAppSysTempFile("___check/", App.PID, "package_")
+        Dim is_debug As Boolean = args("--debug")
 
         If target.ExtensionSuffix("zip") Then
             ' check zip package
@@ -155,7 +156,11 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
                 Call Console.Write($" --> check {script}...")
 
                 error$ = Nothing
-                exec = RProgram.CreateProgram(Rscript.FromFile(script), [error]:=[error])
+                exec = RProgram.CreateProgram(
+                    Rscript:=Rscript.FromFile(script),
+                    debug:=is_debug,
+                    [error]:=[error]
+                )
 
                 If Not [error].StringEmpty Then
                     hasErr = True
