@@ -62,7 +62,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         Public Function ModeOf(keyword$, target As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             If target.Any(Function(a) a = isKeyword OrElse a = isSymbol) Then
                 If keyword <> "typeof" Then
-                    Return New SyntaxResult(New NotImplementedException("type check is only implement on typeof keyword."), opts.debug)
+                    Return SyntaxResult.CreateError(
+                        err:=New NotImplementedException("type check is only implement on typeof keyword."),
+                        opts:=opts.SetCurrentRange(target)
+                    )
                 End If
 
                 Dim blockParts = target.Split(Function(a) a = isKeyword OrElse a = isSymbol).ToArray
@@ -109,7 +112,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim trace As StackFrame = opts.GetStackTrace(code(1)(Scan0))
 
             If symbolNames Like GetType(SyntaxErrorException) Then
-                Return New SyntaxResult(symbolNames.TryCast(Of SyntaxErrorException), opts.debug)
+                Return SyntaxResult.CreateError(
+                    err:=symbolNames.TryCast(Of SyntaxErrorException),
+                    opts:=opts.SetCurrentRange(code.IteratesALL.ToArray)
+                )
             End If
 
             If code = 2 Then
@@ -145,6 +151,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Return New SyntaxResult(symbol)
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function DeclareNewSymbol(code As List(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
             Return code _
                 .SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True) _
@@ -162,7 +169,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim trace As StackFrame = opts.GetStackTrace(singleToken(Scan0))
 
             If symbolNames Like GetType(SyntaxErrorException) Then
-                Return New SyntaxResult(symbolNames.TryCast(Of SyntaxErrorException), opts.debug)
+                Return SyntaxResult.CreateError(
+                    err:=symbolNames.TryCast(Of SyntaxErrorException),
+                    opts:=opts.SetCurrentRange(singleToken)
+                )
             End If
 
             If singleToken.Length > 1 AndAlso symbolNames.TryCast(Of String()).Length = 1 Then
@@ -198,7 +208,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim symbolNames = getNames(symbol)
 
             If symbolNames Like GetType(SyntaxErrorException) Then
-                Return New SyntaxResult(symbolNames.TryCast(Of SyntaxErrorException), opts.debug)
+                Return SyntaxResult.CreateError(
+                    err:=symbolNames.TryCast(Of SyntaxErrorException),
+                    opts:=opts.SetCurrentRange(symbol)
+                )
             End If
 
             Dim type As TypeCodes

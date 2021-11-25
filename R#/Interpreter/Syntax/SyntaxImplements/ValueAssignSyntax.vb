@@ -54,14 +54,17 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim symbolNames = DeclareNewSymbolSyntax.getNames(tokens(Scan0))
 
             If symbolNames Like GetType(SyntaxErrorException) Then
-                Return New SyntaxResult(symbolNames.TryCast(Of SyntaxErrorException), opts.debug)
+                Return SyntaxResult.CreateError(
+                    err:=symbolNames.TryCast(Of SyntaxErrorException),
+                    opts:=opts.SetCurrentRange(tokens(Scan0))
+                )
             End If
 
-            Dim targetSymbols = symbolNames _
+            Dim targetSymbols As Literal() = symbolNames _
                 .TryCast(Of String()) _
                 .Select(Function(name) New Literal(name)) _
                 .ToArray
-            Dim isByRef = tokens(Scan0)(Scan0).text = "="
+            Dim isByRef As Boolean = tokens(Scan0)(Scan0).text = "="
             Dim value As SyntaxResult = tokens.Skip(2) _
                 .AsList _
                 .ParseExpression(opts)

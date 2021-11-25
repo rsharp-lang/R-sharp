@@ -116,7 +116,7 @@ Namespace Interpreter
 
         <Extension>
         Friend Iterator Function HandleExpressionBlock(block As Token(),
-                                                       errHandler As Action(Of SyntaxResult, Token()),
+                                                       errHandler As Action(Of SyntaxResult),
                                                        opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
             ' have some bugs about
             ' handles closure
@@ -171,7 +171,7 @@ Namespace Interpreter
 
                 If expr.isException Then
                     ' config error message in the options
-                    Call errHandler(expr, block)
+                    Call errHandler(expr)
                     Return
                 Else
                     Yield expr.expression
@@ -190,22 +190,16 @@ Namespace Interpreter
         <Extension>
         Public Iterator Function GetExpressions(tokens As Token(),
                                                 Rscript As Rscript,
-                                                errHandler As Action(Of SyntaxResult, Token()),
+                                                errHandler As Action(Of SyntaxResult),
                                                 opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
 
             Dim err As Exception = Nothing
             Dim hasError As Boolean = False
 
             If errHandler Is Nothing Then
-                errHandler = Sub(syntaxErr, block)
-                                 Call SyntaxErrorHelper(
-                                    opts:=opts,
-                                    syntaxResult:=syntaxErr,
-                                    Rscript:=Rscript,
-                                    tokens:=block
-                                 )
-
+                errHandler = Sub(syntaxErr)
                                  hasError = True
+                                 opts.error = syntaxErr.error.ToString
                              End Sub
             End If
 
@@ -215,7 +209,7 @@ Namespace Interpreter
                 .ToArray
 
             If Not err Is Nothing Then
-                Call errHandler(New SyntaxResult(err, opts.debug), {})
+                Call errHandler(SyntaxResult.CreateError(err, opts.SetCurrentRange(tokens)))
             End If
 
             For Each block As Token() In list
@@ -233,31 +227,5 @@ Namespace Interpreter
                 End If
             Next
         End Function
-
-        <Extension>
-        Friend Sub InternalSyntaxError(Rscript As Rscript, tokens As Token(), syntaxResult As SyntaxResult, opts As SyntaxBuilderOptions)
-            Dim rawText As String = Rscript.GetRawText(tokens)
-            Dim err As Exception = syntaxResult.error
-            Dim message As String = err.ToString
-            Dim errorsPromptLine = New String("~"c, rawText.LineTokens.MaxLengthString.Length)
-
-            message &= vbCrLf & vbCrLf & "Syntax error nearby:"
-            message &= vbCrLf & vbCrLf & rawText
-            message &= vbCrLf & errorsPromptLine
-            message &= vbCrLf & vbCrLf & $"Range from {tokens.First.span.start} at line {tokens.First.span.line}, to {tokens.Last.span.stops} at line {tokens.Last.span.line}."
-
-            If opts.debug Then
-                message &= vbCrLf & vbCrLf & "The parser stack trace:"
-                message &= vbCrLf & vbCrLf & syntaxResult.stackTrace
-                message &= vbCrLf & vbCrLf & "   --=== End of the R# Parser StackTrace ===--"
-                message &= vbCrLf & vbCrLf
-            End If
-
-            If Not opts.debug Then
-                opts.error = message
-            Else
-                Throw New Exception(message)
-            End If
-        End Sub
     End Module
 End Namespace

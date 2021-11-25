@@ -104,7 +104,7 @@ Namespace Interpreter.SyntaxParser
 
                 Return indexer
             Else
-                Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                Return SyntaxResult.CreateError(New SyntaxErrorException, opts)
             End If
 
             Return New SyntaxResult(namespaceRef)

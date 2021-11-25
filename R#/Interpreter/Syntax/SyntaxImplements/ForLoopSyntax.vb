@@ -160,7 +160,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                                 Return ClosureExpressionSyntax.ClosureExpression(code, opts)
                             End Function)
             Else
-                Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                Return SyntaxResult.CreateError(New SyntaxErrorException("invalid token for define a for loop!"), opts.SetCurrentRange(tokens))
             End If
         End Function
     End Module

@@ -130,7 +130,7 @@ Namespace Interpreter.SyntaxParser
 
                 Return New SyntaxResult(bin)
             Else
-                Return New SyntaxResult(New NotImplementedException, opts.debug)
+                Return SyntaxResult.CreateError(New NotImplementedException, opts)
             End If
 
             ' a$b symbol reference

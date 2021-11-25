@@ -294,7 +294,7 @@ Namespace Interpreter.SyntaxParser
                 Dim calls As FunctionInvoke = buf(2).TryCast(Of Expression)
                 Dim [namespace] As Expression = buf(Scan0).TryCast(Of Expression)
 
-                Return New SyntaxResult(New NotImplementedException, opts.debug)
+                Return SyntaxResult.CreateError(New NotImplementedException, opts)
             ElseIf buf = 3 AndAlso tokens(1) Like GetType(String) AndAlso tokens(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols Then
                 Dim target As Expression = tokens(Scan0).TryCast(Of Expression)
                 Dim value As Expression = tokens(2)
@@ -311,7 +311,7 @@ Namespace Interpreter.SyntaxParser
                 Return SyntaxImplements.DeclareLambdaFunction(tokens(Scan0).VA, tokens(2).VA, lineNum, opts)
             End If
 
-            Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+            Return SyntaxResult.CreateError(New SyntaxErrorException, opts)
         End Function
 
         ''' <summary>
@@ -337,8 +337,8 @@ Namespace Interpreter.SyntaxParser
                     For j As Integer = 0 To buf.Count - 1
                         If buf(j) Like GetType(String) AndAlso test(op, buf(j).VB) Then
                             ' j-1 and j+1
-                            Dim a As SyntaxResult = If(j - 1 < 0, New SyntaxResult(New SyntaxErrorException, opts.debug), buf(j - 1).TryCast(Of SyntaxResult))
-                            Dim b As SyntaxResult = If(j + 1 >= buf.Count, New SyntaxResult(New SyntaxErrorException, opts.debug), buf(j + 1).TryCast(Of SyntaxResult))
+                            Dim a As SyntaxResult = If(j - 1 < 0, SyntaxResult.CreateError(New SyntaxErrorException, opts), buf(j - 1).TryCast(Of SyntaxResult))
+                            Dim b As SyntaxResult = If(j + 1 >= buf.Count, SyntaxResult.CreateError(New SyntaxErrorException, opts), buf(j + 1).TryCast(Of SyntaxResult))
 
                             If a.isException Then
                                 Return a

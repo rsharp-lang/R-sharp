@@ -66,6 +66,14 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             expression = expr
         End Sub
 
+        Friend Sub New(result As SyntaxResult)
+            If result.isException Then
+                message = result.error
+            Else
+                expression = New RunTimeValueExpression(result.expression)
+            End If
+        End Sub
+
         Public Overrides Function ToString() As String
             If isError Then
                 Return "Error: " & message.ToString

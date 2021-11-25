@@ -89,7 +89,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim isJSON As Boolean = False
 
             If Not ex Is Nothing Then
-                Return New SyntaxResult(ex, opts.debug)
+                Return SyntaxResult.CreateError(ex, opts.SetCurrentRange(allTokens))
             End If
 
             If lineBlocks.Length = 1 Then
@@ -112,7 +112,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
                     [error] = Nothing
                     line _
-                        .HandleExpressionBlock(Sub(exr, null) [error] = exr, opts) _
+                        .HandleExpressionBlock(Sub(exr) [error] = exr, opts) _
                         .DoCall(AddressOf lines.AddRange)
 
                     If Not [error] Is Nothing Then
@@ -130,7 +130,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     .ToArray
 
                 If Not ex Is Nothing Then
-                    Return New SyntaxResult(ex, opts.debug)
+                    Return SyntaxResult.CreateError(ex, opts.SetCurrentRange(allTokens))
                 End If
 
                 For Each member As Token() In lineBlocks
@@ -141,7 +141,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     End If
 
                     If Not member.isJsonMember Then
-                        Return New SyntaxResult(New InvalidExpressionException, opts.debug)
+                        Return SyntaxResult.CreateError(New InvalidExpressionException, opts.SetCurrentRange(member))
                     End If
 
                     Dim name As Token = member(Scan0)

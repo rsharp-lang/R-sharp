@@ -78,7 +78,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .ToArray
 
             If opts.haveSyntaxErr Then
-                Return New SyntaxResult(New SyntaxErrorException(opts.error), opts.debug)
+                Return SyntaxResult.CreateError(opts.error, opts.SetCurrentRange(firstBody))
             End If
 
             Dim parameterClosure As New AcceptorClosure(firstParameterBody)

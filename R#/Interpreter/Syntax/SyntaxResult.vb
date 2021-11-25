@@ -67,8 +67,36 @@ Namespace Interpreter.SyntaxParser
 
         End Sub
 
+        Friend Shared Function CreateError(opts As SyntaxBuilderOptions,
+                                           err As Exception,
+                                           from As CodeSpan,
+                                           [to] As CodeSpan) As SyntaxError
+
+            Dim syntaxErr As New SyntaxError With {
+                .exception = err,
+                .from = from,
+                .[to] = [to],
+                .file = opts.source.ToString
+            }
+            Dim scriptLines As String() = opts.source.script.LineTokens
+
+            syntaxErr.upstream = scriptLines.Skip(from.line - 3).Take(3).JoinBy(vbCrLf)
+            syntaxErr.downstream = scriptLines.Skip([to].line).Take(3).JoinBy(vbCrLf)
+            syntaxErr.errorBlock = scriptLines.Skip(from.line).Take([to].line - from.line + 1).JoinBy(vbCrLf)
+
+            Return syntaxErr
+        End Function
+
         Public Overrides Function ToString() As String
-            Return MyBase.ToString()
+            Dim rawText As String = Rscript.GetRawText(tokens)
+            Dim err As Exception = SyntaxResult.error
+            Dim message As String = err.ToString
+            Dim errorsPromptLine = New String("~"c, rawText.LineTokens.MaxLengthString.Length)
+
+            message &= vbCrLf & vbCrLf & "Syntax error nearby:"
+            message &= vbCrLf & vbCrLf & rawText
+            message &= vbCrLf & errorsPromptLine
+            message &= vbCrLf & vbCrLf & $"Range from {tokens.First.span.start} at line {tokens.First.span.line}, to {tokens.Last.span.stops} at line {tokens.Last.span.line}."
         End Function
 
     End Class
@@ -100,10 +128,20 @@ Namespace Interpreter.SyntaxParser
             Me.expression = syntax
         End Sub
 
+        Sub New(err As SyntaxError)
+            Me.error = err
+            Me.stackTrace = Environment.StackTrace
+        End Sub
+
         Private Sub New(stackTrace As String, [error] As SyntaxError)
             Me.stackTrace = stackTrace
             Me.error = [error]
         End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function CreateError(err As String, opts As SyntaxBuilderOptions) As SyntaxResult
+            Return CreateError(New SyntaxErrorException(err), opts)
+        End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function CreateError(err As Exception, opts As SyntaxBuilderOptions) As SyntaxResult
@@ -124,17 +162,7 @@ Namespace Interpreter.SyntaxParser
                                            [to] As CodeSpan) As SyntaxResult
 
             Dim stackTrace As String = Environment.StackTrace
-            Dim syntaxErr As New SyntaxError With {
-                .exception = err,
-                .from = from,
-                .[to] = [to],
-                .file = opts.source.ToString
-            }
-            Dim scriptLines As String() = opts.source.script.LineTokens
-
-            syntaxErr.upstream = scriptLines.Skip(from.line - 3).Take(3).JoinBy(vbCrLf)
-            syntaxErr.downstream = scriptLines.Skip([to].line).Take(3).JoinBy(vbCrLf)
-            syntaxErr.errorBlock = scriptLines.Skip(from.line).Take([to].line - from.line + 1).JoinBy(vbCrLf)
+            Dim syntaxErr As SyntaxError = SyntaxError.CreateError(opts, err, from, [to])
 
             Return New SyntaxResult(stackTrace, syntaxErr)
         End Function

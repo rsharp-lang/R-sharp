@@ -66,10 +66,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
                 If [default].isException Then
                     Return [default]
+                Else
+                    Call opts.SetCurrentRange(input(2))
                 End If
 
                 If Not TypeOf [default].expression Is DeclareLambdaFunction Then
-                    Return New SyntaxResult(New Exception("invalid expression type for the default value of the switch expression!"), opts.debug)
+                    Return SyntaxResult.CreateError(New Exception("invalid expression type for the default value of the switch expression!"), opts)
                 Else
                     With DirectCast([default].expression, DeclareLambdaFunction)
                         [default] = New SyntaxResult(.closure)
@@ -85,13 +87,16 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .Take(code(2).Length - 2) _
                 .SplitByTopLevelDelimiter(TokenType.comma)
 
-            For Each opt In From line In options Where line.Length > 1
+            For Each opt As Token() In From line In options Where line.Length > 1
                 Dim optVal = ExpressionBuilder.ParseExpression(New List(Of Token()) From {opt}, opts)
 
                 If optVal.isException Then
                     Return optVal
                 ElseIf Not TypeOf optVal.expression Is ValueAssignExpression Then
-                    Return New SyntaxResult(New Exception("invalid expression for switch options!"), opts.debug)
+                    Return SyntaxResult.CreateError(
+                        err:=New Exception("invalid expression for switch options!"),
+                        opts:=opts.SetCurrentRange(opt)
+                    )
                 Else
                     With DirectCast(optVal.expression, ValueAssignExpression)
                         Dim keyStr As [Variant](Of String(), Exception)
@@ -103,9 +108,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                         End If
 
                         If keyStr Like GetType(Exception) Then
-                            Return New SyntaxResult(keyStr, opts.debug)
+                            Return SyntaxResult.CreateError(keyStr, opts.SetCurrentRange(opt))
                         Else
-                            switch.Add(keyStr.TryCast(Of String())()(0), .value)
+                            Call switch.Add(keyStr.TryCast(Of String())()(0), .value)
                         End If
                     End With
                 End If

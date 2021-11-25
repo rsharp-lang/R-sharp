@@ -434,7 +434,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             Dim val As SyntaxResult = New List(Of Token())(value).ParseExpression(opts)
 
             If val.isException Then
-                Return val
+                Return New SyntaxParserResult(val.error)
             End If
 
             Return New ValueAssign(symbol.text, val.expression)

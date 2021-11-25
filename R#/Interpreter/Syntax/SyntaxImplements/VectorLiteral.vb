@@ -77,7 +77,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                         Case "NA" : value = GetType(Void)
                         Case "Inf" : value = Double.PositiveInfinity
                         Case Else
-                            Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                            Return SyntaxResult.CreateError(
+                                err:=New SyntaxErrorException($"Unknown literal token: {token.ToString}"),
+                                opts:=opts.SetCurrentRange({token})
+                            )
                     End Select
 
                     Return New Literal With {
@@ -85,7 +88,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                         .value = value
                     }
                 Case Else
-                    Return New SyntaxResult(New InvalidExpressionException(token.ToString), opts.debug)
+                    Return SyntaxResult.CreateError(
+                        err:=New InvalidExpressionException(token.ToString),
+                        opts:=opts.SetCurrentRange({token})
+                    )
             End Select
         End Function
 

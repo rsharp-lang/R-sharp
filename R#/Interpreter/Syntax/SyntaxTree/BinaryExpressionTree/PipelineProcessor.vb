@@ -81,7 +81,7 @@ Namespace Interpreter.SyntaxParser
 
                     Return New SyntaxResult(New VectorLiteral(calls))
                 Else
-                    Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                    Return SyntaxResult.CreateError(New SyntaxErrorException, opts)
                 End If
             Else
                 Return New SyntaxResult(pip)

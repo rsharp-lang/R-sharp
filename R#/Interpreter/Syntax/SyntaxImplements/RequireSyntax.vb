@@ -116,7 +116,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                         )
                     End If
                 Else
-                    Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                    Return SyntaxResult.CreateError(
+                        err:=New SyntaxErrorException,
+                        opts:=opts.SetCurrentRange(.ElementAt(Scan0))
+                    )
                 End If
             End With
         End Function

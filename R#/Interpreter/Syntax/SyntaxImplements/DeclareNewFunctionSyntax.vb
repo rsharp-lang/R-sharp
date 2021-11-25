@@ -165,7 +165,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                             ElseIf syntaxParts = 3 Then
                                 Return SyntaxImplements.DeclareNewSymbol(syntaxParts(0), syntaxParts(2), opts, True)
                             Else
-                                Return New SyntaxResult("syntax error on declare function parameters!", opts.debug)
+                                Return SyntaxResult.CreateError("syntax error on declare function parameters!", opts.SetCurrentRange(t))
                             End If
                         End Function)
 
