@@ -67,6 +67,26 @@ Namespace Interpreter.SyntaxParser
 
         End Sub
 
+        Public Overrides Function ToString() As String
+            Dim rawText As String = errorBlock
+            Dim err As Exception = exception
+            Dim message As String = err.ToString
+            Dim nlen As Integer = rawText.LineTokens.MaxLengthString.Length
+            Dim errorsPromptLine = New String("~"c, nlen)
+
+            message &= vbCrLf & vbCrLf & "Syntax error nearby:"
+            message &= vbCrLf & upstream
+            message &= vbCrLf & New String("+"c, nlen)
+            message &= vbCrLf & vbCrLf & rawText
+            message &= vbCrLf & errorsPromptLine
+            message &= vbCrLf & New String("+"c, nlen)
+            message &= vbCrLf & downstream
+            message &= vbCrLf & vbCrLf & $"Range from {from.start} at line {from.line}, to {[to].stops} at line {[to].line}."
+            message &= vbCrLf & "Rscript: " & file
+
+            Return message
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Friend Shared Function CreateError(opts As SyntaxBuilderOptions, err As Exception) As SyntaxError
             Return CreateError(opts, err, opts.fromSpan, opts.toSpan)
@@ -90,18 +110,6 @@ Namespace Interpreter.SyntaxParser
             syntaxErr.errorBlock = scriptLines.Skip(from.line).Take([to].line - from.line + 1).JoinBy(vbCrLf)
 
             Return syntaxErr
-        End Function
-
-        Public Overrides Function ToString() As String
-            Dim rawText As String = Rscript.GetRawText(tokens)
-            Dim err As Exception = SyntaxResult.error
-            Dim message As String = err.ToString
-            Dim errorsPromptLine = New String("~"c, rawText.LineTokens.MaxLengthString.Length)
-
-            message &= vbCrLf & vbCrLf & "Syntax error nearby:"
-            message &= vbCrLf & vbCrLf & rawText
-            message &= vbCrLf & errorsPromptLine
-            message &= vbCrLf & vbCrLf & $"Range from {tokens.First.span.start} at line {tokens.First.span.line}, to {tokens.Last.span.stops} at line {tokens.Last.span.line}."
         End Function
 
     End Class
