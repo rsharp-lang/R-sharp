@@ -317,6 +317,35 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             Return New OutputProjection(fields)
         End Function
 
+        Private Function ParseSymbolDeclare(tokenList As Token(), opts As SyntaxBuilderOptions) As SyntaxParserResult
+            Dim type As String = "any"
+            Dim name As Expression
+
+            ' declare new symbol
+            ' may be a tuple
+            tokenList = tokenList.Skip(1).ToArray
+
+            If tokenList.Length = 1 Then
+                ' just a symbol
+                name = New Literal(tokenList(Scan0))
+            ElseIf tokenList.Length = 3 AndAlso tokenList(1) = (TokenType.keyword, "as") Then
+                ' a symbol with type constraint
+                name = New Literal(tokenList(Scan0))
+                type = tokenList(2).text
+            Else
+                ' a tuple?
+                Dim expVal As SyntaxParserResult = tokenList.ParseExpression(opts)
+
+                If expVal.isError Then
+                    Return expVal
+                Else
+                    name = expVal.expression
+                End If
+            End If
+
+            Return New SymbolDeclare With {.symbol = name, .typeName = type}
+        End Function
+
         <Extension>
         Private Function ParseKeywordExpression(tokenList As Token(), opts As SyntaxBuilderOptions) As SyntaxParserResult
             Dim token0 As Token = tokenList(Scan0)
@@ -326,32 +355,8 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                token0.isKeywordJoin OrElse
                token0.isKeyword("let") Then
 
-                Dim type As String = "any"
-                Dim name As Expression
+                Return ParseSymbolDeclare(tokenList, opts)
 
-                ' declare new symbol
-                ' may be a tuple
-                tokenList = tokenList.Skip(1).ToArray
-
-                If tokenList.Length = 1 Then
-                    ' just a symbol
-                    name = New Literal(tokenList(Scan0))
-                ElseIf tokenList.Length = 3 AndAlso tokenList(1) = (TokenType.keyword, "as") Then
-                    ' a symbol with type constraint
-                    name = New Literal(tokenList(Scan0))
-                    type = tokenList(2).text
-                Else
-                    ' a tuple?
-                    Dim expVal As SyntaxParserResult = tokenList.ParseExpression(opts)
-
-                    If expVal.isError Then
-                        Return expVal
-                    Else
-                        name = expVal.expression
-                    End If
-                End If
-
-                Return New SymbolDeclare With {.symbol = name, .typeName = type}
             ElseIf token0.isKeyword("where") Then
                 Dim bool As SyntaxResult = RExpression.CreateExpression(tokenList.Skip(1), opts)
 
