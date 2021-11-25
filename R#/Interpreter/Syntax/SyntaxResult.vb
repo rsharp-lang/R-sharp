@@ -67,6 +67,11 @@ Namespace Interpreter.SyntaxParser
 
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Friend Shared Function CreateError(opts As SyntaxBuilderOptions, err As Exception) As SyntaxError
+            Return CreateError(opts, err, opts.fromSpan, opts.toSpan)
+        End Function
+
         Friend Shared Function CreateError(opts As SyntaxBuilderOptions,
                                            err As Exception,
                                            from As CodeSpan,

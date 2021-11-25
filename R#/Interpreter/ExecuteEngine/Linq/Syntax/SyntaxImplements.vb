@@ -136,7 +136,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             ElseIf blocks(Scan0).First.isKeywordAggregate Then
                 Return blocks(Scan0).CreateAggregateQuery(blocks.Skip(1).ToArray, opts)
             Else
-                Return New SyntaxParserResult(New SyntaxErrorException(blocks(Scan0).First.ToString))
+                Return New SyntaxParserResult(SyntaxError.CreateError(opts.SetCurrentRange(blocks(Scan0)), New SyntaxErrorException(blocks(Scan0).First.ToString)))
             End If
         End Function
 
@@ -178,7 +178,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 End If
 
                 If blocks(Scan0)(Scan0) <> (TokenType.keyword, "on") Then
-                    Return New SyntaxParserResult(New SyntaxErrorException("missing 'on' equaliant expression!"))
+                    Return New SyntaxParserResult(SyntaxError.CreateError(opts.SetCurrentRange(blocks(Scan0)), New SyntaxErrorException("missing 'on' equaliant expression!")))
                 End If
 
                 Dim binary As SyntaxParserResult = blocks(Scan0).ParseExpression(opts)
@@ -240,7 +240,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 Return symbolExpr
             End If
 
-            Return New SyntaxParserResult(New NotImplementedException)
+            Return New SyntaxParserResult(SyntaxError.CreateError(opts.SetCurrentRange(symbol), New NotImplementedException))
         End Function
 
         <Extension>
@@ -253,7 +253,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         <Extension>
         Private Function GetSequence(blocks As Token()(), ByRef offset As Integer, opts As SyntaxBuilderOptions) As SyntaxParserResult
             If Not blocks(Scan0).First.isKeyword("in") Then
-                Return New SyntaxParserResult(New SyntaxErrorException(blocks(Scan0).First.ToString))
+                Return New SyntaxParserResult(SyntaxError.CreateError(opts.SetCurrentRange(blocks(Scan0)), New SyntaxErrorException(blocks(Scan0).First.ToString)))
             ElseIf blocks(Scan0).Length = 1 Then
                 offset = 2
                 Return blocks(1).ParseExpression(opts)
@@ -264,7 +264,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         End Function
 
         <Extension>
-        Friend Function ParseToken(t As Token) As SyntaxParserResult
+        Friend Function ParseToken(t As Token, opts As SyntaxBuilderOptions) As SyntaxParserResult
             If t.name = TokenType.identifier Then
                 Return New SymbolReference(t.text)
             ElseIf t.name = TokenType.booleanLiteral OrElse
@@ -274,7 +274,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
                 Return New Literal(t)
             Else
-                Return New SyntaxParserResult(New NotImplementedException)
+                Return New SyntaxParserResult(SyntaxError.CreateError(opts.SetCurrentRange({t}), New NotImplementedException))
             End If
         End Function
 
@@ -310,7 +310,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                         fields.Add(New NamedValue(Of Expression)(.GetProjectionName, item.expression))
                     End With
                 Else
-                    Return New SyntaxParserResult(New SyntaxErrorException("invalid expression type!"))
+                    Return New SyntaxParserResult(SyntaxError.CreateError(opts, New SyntaxErrorException($"invalid expression type({item.expression.GetType.FullName})!")))
                 End If
             Next
 
@@ -366,7 +366,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
                 Return New WhereFilter(New RunTimeValueExpression(bool.expression))
             ElseIf token0.isKeyword("in") Then
-                Return RExpression.CreateExpression(tokenList.Skip(1), opts)
+                Return New SyntaxParserResult(RExpression.CreateExpression(tokenList.Skip(1), opts))
             ElseIf token0.isKeyword("on") Then
                 Dim bin = tokenList.Skip(1).ToArray.ParseBinary(opts)
 
@@ -377,7 +377,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 Dim binExpr As BinaryExpression = DirectCast(bin.expression, BinaryExpression)
 
                 If Not binExpr.isEquivalent Then
-                    Return New SyntaxParserResult(New InvalidExpressionException("operator should be equals"))
+                    Return New SyntaxParserResult(SyntaxError.CreateError(opts, New InvalidExpressionException("operator should be equals")))
                 Else
                     Return bin
                 End If
@@ -443,7 +443,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         <Extension>
         Friend Function ParseExpression(tokenList As Token(), opts As SyntaxBuilderOptions) As SyntaxParserResult
             If tokenList.Length = 1 Then
-                Return tokenList(Scan0).ParseToken
+                Return tokenList(Scan0).ParseToken(opts)
             ElseIf tokenList(Scan0).name = TokenType.keyword Then
                 Return tokenList.ParseKeywordExpression(opts)
             ElseIf tokenList.Length > 2 AndAlso tokenList(1) = (TokenType.operator, "=") Then
@@ -483,7 +483,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                         .Select(Function(t) RExpression.CreateExpression(t, opts))
 
                         If expr.isException Then
-                            Return expr
+                            Return New SyntaxParserResult(expr)
                         Else
                             params.Add(expr.expression)
                         End If
@@ -495,7 +495,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
             If tokenList.Length = 2 Then
                 If tokenList(Scan0) <> (TokenType.operator, "-") Then
-                    Return New SyntaxParserResult(New SyntaxErrorException(tokenList.Select(Function(t) t.text).JoinBy(" ")))
+                    Return New SyntaxParserResult(SyntaxError.CreateError(opts.SetCurrentRange(tokenList), New SyntaxErrorException))
                 End If
             ElseIf tokenList.Length = 3 AndAlso tokenList(1) = (TokenType.keyword, "as") Then
                 Dim aliasName As New AliasName(
