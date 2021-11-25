@@ -61,6 +61,7 @@ Namespace Interpreter.SyntaxParser
         Public Property from As CodeSpan
         Public Property [to] As CodeSpan
         Public Property exception As Exception
+        Public Property file As String
 
         Public Sub Print()
 
@@ -105,8 +106,8 @@ Namespace Interpreter.SyntaxParser
         ''' </summary>
         ''' <param name="opts"></param>
         ''' <param name="err"></param>
-        ''' <param name="from"></param>
-        ''' <param name="[to]"></param>
+        ''' <param name="from">The code span of line start where the syntax error occurs</param>
+        ''' <param name="to">the code span of line ends where the syntax error occurs</param>
         ''' <returns></returns>
         Public Shared Function CreateError(opts As SyntaxBuilderOptions,
                                            err As Exception,
@@ -114,7 +115,17 @@ Namespace Interpreter.SyntaxParser
                                            [to] As CodeSpan) As SyntaxResult
 
             Dim stackTrace As String = Environment.StackTrace
-            Dim syntaxErr As New SyntaxError
+            Dim syntaxErr As New SyntaxError With {
+                .exception = err,
+                .from = from,
+                .[to] = [to],
+                .file = opts.source.ToString
+            }
+            Dim scriptLines As String() = opts.source.script.LineTokens
+
+            syntaxErr.upstream = scriptLines.Skip(from.line - 3).Take(3).JoinBy(vbCrLf)
+            syntaxErr.downstream = scriptLines.Skip([to].line).Take(3).JoinBy(vbCrLf)
+            syntaxErr.errorBlock = scriptLines.Skip(from.line).Take([to].line - from.line + 1).JoinBy(vbCrLf)
 
             Return New SyntaxResult(stackTrace, syntaxErr)
         End Function
