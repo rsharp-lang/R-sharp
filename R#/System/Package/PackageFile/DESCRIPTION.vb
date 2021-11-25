@@ -73,6 +73,12 @@ Namespace Development.Package.File
         Public Property License As String
         Public Property meta As Dictionary(Of String, String)
 
+        Public ReadOnly Property isEmpty As Boolean
+            Get
+                Return Package.StringEmpty
+            End Get
+        End Property
+
         Public Overrides Function ToString() As String
             Return $"[{Package}_{Version}] {Title}"
         End Function

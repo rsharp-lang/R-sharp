@@ -71,6 +71,11 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         Dim save$ = args("/save") Or $"{src}/../{meta.Package}_{meta.Version}.zip"
         Dim skipSourceBuild As Boolean = args("--skip-src-build")
 
+        If meta.isEmpty Then
+            Call Console.WriteLine($"Missing 'DESCRIPTION' meta data file at: {src.GetDirectoryFullPath}, check of your commandline input please!")
+            Return 500
+        End If
+
         ' build .net5 assembly via dotnet msbuild command?
 #If netcore5 = 1 Then
         If Not skipSourceBuild Then
