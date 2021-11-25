@@ -234,7 +234,8 @@ Namespace Interpreter
             Next
         End Function
 
-        Private Sub SyntaxErrorHelper(Rscript As Rscript, tokens As Token(), syntaxResult As SyntaxResult, opts As SyntaxBuilderOptions)
+        <Extension>
+        Friend Sub InternalSyntaxError(Rscript As Rscript, tokens As Token(), syntaxResult As SyntaxResult, opts As SyntaxBuilderOptions)
             Dim rawText As String = Rscript.GetRawText(tokens)
             Dim err As Exception = syntaxResult.error
             Dim message As String = err.ToString

@@ -1,49 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::bdb4cdcb98fbd51da350050e3b9a9433, R#\Interpreter\Syntax\SyntaxResult.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class SyntaxResult
-    ' 
-    '         Properties: isException
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: CreateExpression, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class SyntaxResult
+' 
+'         Properties: isException
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: CreateExpression, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.LINQ
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.LINQ.Syntax
@@ -52,6 +53,21 @@ Imports RExpression = SMRUCC.Rsharp.Interpreter.ExecuteEngine.Expression
 
 Namespace Interpreter.SyntaxParser
 
+    Public Class SyntaxError
+
+        Public Property upstream As String
+        Public Property errorBlock As String
+        Public Property downstream As String
+        Public Property from As CodeSpan
+        Public Property [to] As CodeSpan
+        Public Property exception As Exception
+
+        Public Sub Print()
+
+        End Sub
+
+    End Class
+
     ''' <summary>
     ''' The R# expression syntax build result, the result of this 
     ''' model could be an error or resulted expression model 
@@ -59,11 +75,11 @@ Namespace Interpreter.SyntaxParser
     ''' </summary>
     Friend Class SyntaxResult
 
-        Public ReadOnly [error] As Exception
+        Public ReadOnly [error] As SyntaxError
         Public ReadOnly expression As RExpression
 
         ''' <summary>
-        ''' 
+        ''' the .NET stacktrace in R# interpreter
         ''' </summary>
         Public ReadOnly stackTrace As String
 
@@ -79,19 +95,29 @@ Namespace Interpreter.SyntaxParser
             Me.expression = syntax
         End Sub
 
-        Sub New(err As Exception, debug As Boolean)
-            If debug Then
-                Throw err
-            Else
-                Me.stackTrace = Environment.StackTrace
-                Me.error = err
-            End If
+        Private Sub New(stackTrace As String, [error] As SyntaxError)
+            Me.stackTrace = stackTrace
+            Me.error = [error]
         End Sub
 
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Sub New(err$, debug As Boolean)
-            Call Me.New(New SyntaxErrorException(err), debug)
-        End Sub
+        ''' <summary>
+        ''' create a syntax error
+        ''' </summary>
+        ''' <param name="opts"></param>
+        ''' <param name="err"></param>
+        ''' <param name="from"></param>
+        ''' <param name="[to]"></param>
+        ''' <returns></returns>
+        Public Shared Function CreateError(opts As SyntaxBuilderOptions,
+                                           err As Exception,
+                                           from As CodeSpan,
+                                           [to] As CodeSpan) As SyntaxResult
+
+            Dim stackTrace As String = Environment.StackTrace
+            Dim syntaxErr As New SyntaxError
+
+            Return New SyntaxResult(stackTrace, syntaxErr)
+        End Function
 
         Public Overrides Function ToString() As String
             If isException Then
@@ -109,12 +135,6 @@ Namespace Interpreter.SyntaxParser
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Widening Operator CType(syntax As RExpression) As SyntaxResult
             Return New SyntaxResult(syntax)
-        End Operator
-
-        Public Shared Narrowing Operator CType(err As SyntaxResult) As SyntaxParserResult
-            Return New SyntaxParserResult(err.error) With {
-                .expression = New RunTimeValueExpression(err.expression)
-            }
         End Operator
     End Class
 End Namespace

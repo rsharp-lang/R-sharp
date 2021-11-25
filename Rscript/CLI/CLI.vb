@@ -147,11 +147,15 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         Else
             Dim hasErr As Boolean = False
             Dim color As ConsoleColor
+            Dim error$ = Nothing
+            Dim exec As RProgram
 
             ' check R source folder
             For Each script As String In ls - l - r - "*.R" <= $"{target}/R"
-                Dim error$ = Nothing
-                Dim exec As RProgram = RProgram.CreateProgram(Rscript.FromFile(script), [error]:=[error])
+                Call Console.Write($" --> check {script}...")
+
+                error$ = Nothing
+                exec = RProgram.CreateProgram(Rscript.FromFile(script), [error]:=[error])
 
                 If Not [error].StringEmpty Then
                     hasErr = True
@@ -159,13 +163,17 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
                     Console.ForegroundColor = ConsoleColor.Red
 
-                    Call Console.WriteLine("Error in R script:")
+                    Call Console.WriteLine("  [syntax error]!")
+                    Call Console.WriteLine("")
+                    Call Console.WriteLine($"Error in R script({script}):")
                     Call Console.WriteLine([error])
                     Call Console.WriteLine()
-                    Call Console.WriteLine()
                     Call Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+                    Call Console.WriteLine()
 
                     Console.ForegroundColor = color
+                Else
+                    Console.WriteLine("  passed.")
                 End If
             Next
 

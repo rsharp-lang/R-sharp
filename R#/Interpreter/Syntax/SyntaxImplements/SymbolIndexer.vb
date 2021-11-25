@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::50975c51463fbe155777353271b72d8b, R#\Interpreter\Syntax\SyntaxImplements\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module SymbolIndexerSyntax
-    ' 
-    '         Function: (+3 Overloads) SymbolIndexer
-    ' 
-    '         Sub: parseDataframeIndex, parseIndex
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module SymbolIndexerSyntax
+' 
+'         Function: (+3 Overloads) SymbolIndexer
+' 
+'         Sub: parseDataframeIndex, parseIndex
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -65,6 +65,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         Public Function SymbolIndexer(symbol As Expression, tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim indexType As SymbolIndexers
             Dim index As SyntaxResult = Nothing
+
+            If tokens.IsNullOrEmpty AndAlso TypeOf symbol Is SymbolReference AndAlso DirectCast(symbol, SymbolReference).symbol = "$" Then
+                Return New SyntaxResult(New SyntaxErrorException("'$' symbol can not be prefixed!"), opts.debug)
+            End If
 
             If tokens.isStackOf("[", "]") Then
                 ' 脱掉最外侧的[]

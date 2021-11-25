@@ -193,7 +193,7 @@ Namespace Interpreter.SyntaxParser
                             End If
                         End If
                     Else
-                        Throw New NotImplementedException
+                        Return New SyntaxResult(New NotImplementedException, opts.debug)
                     End If
                 ElseIf openSymbol = "{" Then
                     ' 是一个可以产生值的closure
