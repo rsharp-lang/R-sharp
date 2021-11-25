@@ -174,19 +174,30 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
         End Function
 
+        ''' <summary>
+        ''' + else ...
+        ''' + else {...}
+        ''' + else if () ...
+        ''' </summary>
+        ''' <param name="code"></param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
         Public Function ElseClosure(code As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim syntaxResult As SyntaxResult = code _
-                .Skip(1) _
-                .Take(code.Length - 2) _
-                .DoCall(Function(tokens)
-                            Return SyntaxImplements.ClosureExpression(tokens, opts)
-                        End Function)
+            Dim syntaxResult As SyntaxResult = Expression.CreateExpression(code, opts)
             Dim stackframe As StackFrame = opts.GetStackTrace(code(Scan0), name:="else_false")
 
             If syntaxResult.isException Then
                 Return syntaxResult
-            Else
+            ElseIf TypeOf syntaxResult.expression Is IfBranch Then
+                With DirectCast(syntaxResult.expression, IfBranch)
+                    Return New ElseIfBranch(.ifTest, .trueClosure.body, .stackFrame)
+                End With
+            ElseIf TypeOf syntaxResult.expression Is ClosureExpression Then
+                ' else {...}
                 Return New ElseBranch(syntaxResult.expression, stackframe)
+            Else
+                ' else ...
+                Return New ElseBranch(New ClosureExpression(syntaxResult.expression), stackframe)
             End If
         End Function
     End Module

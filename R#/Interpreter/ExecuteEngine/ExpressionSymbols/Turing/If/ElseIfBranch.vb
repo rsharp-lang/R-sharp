@@ -42,6 +42,7 @@
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -52,5 +53,31 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
             stackframe.Method.Method = "elseif_closure"
         End Sub
+
+        Public Overrides Function Evaluate(envir As Environment) As Object
+            If envir.ifPromise = 0 Then
+                Return Internal.debug.stop(New SyntaxErrorException, envir)
+            Else
+                Dim last As IfPromise
+
+                If envir.ifPromise.Last.Result = True Then
+                    last = envir.ifPromise.Pop
+                Else
+                    Dim resultVal As Object = MyBase.Evaluate(envir)
+
+                    If Program.isException(resultVal) Then
+                        Return resultVal
+                    Else
+                        last = New IfPromise(resultVal, False) With {
+                            .assignTo = envir.ifPromise.Last.assignTo
+                        }
+                    End If
+                End If
+
+                Call last.DoValueAssign(envir)
+
+                Return last
+            End If
+        End Function
     End Class
 End Namespace

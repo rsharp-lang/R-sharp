@@ -110,7 +110,7 @@ Namespace Interpreter
 
                 Return {}
             Else
-                Return tokens.GetExpressions(Rscript, Nothing, opts)
+                Return tokens.GetExpressions(Nothing, opts)
             End If
         End Function
 
@@ -183,16 +183,11 @@ Namespace Interpreter
         ''' 将单词化的R脚本文件解析为语句表达式列表
         ''' </summary>
         ''' <param name="tokens">R脚本单词</param>
-        ''' <param name="Rscript"></param>
         ''' <param name="errHandler"></param>
         ''' <param name="opts"></param>
         ''' <returns></returns>
         <Extension>
-        Public Iterator Function GetExpressions(tokens As Token(),
-                                                Rscript As Rscript,
-                                                errHandler As Action(Of SyntaxResult),
-                                                opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
-
+        Public Iterator Function GetExpressions(tokens As Token(), errHandler As Action(Of SyntaxResult), opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
             Dim err As Exception = Nothing
             Dim hasError As Boolean = False
 

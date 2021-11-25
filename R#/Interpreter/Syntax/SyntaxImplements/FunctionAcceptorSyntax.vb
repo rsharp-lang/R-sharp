@@ -69,12 +69,11 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
         <Extension>
         Private Function FunctionAcceptorInvoke(invoke As FunctionInvoke, firstBody As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim Rscript As Rscript = opts.source
             Dim firstParameterBody As Expression() = firstBody _
                 .Skip(1) _
                 .Take(firstBody.Length - 2) _
                 .ToArray _
-                .GetExpressions(Rscript, Nothing, opts) _
+                .GetExpressions(Nothing, opts) _
                 .ToArray
 
             If opts.haveSyntaxErr Then
