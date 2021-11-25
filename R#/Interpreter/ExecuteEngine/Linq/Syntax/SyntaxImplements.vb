@@ -263,6 +263,15 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             End If
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="t"></param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' 发生错误的时候，已经在函数内部自动使用<paramref name="t"/>参数的未知信息来创建语法错误消息
+        ''' </remarks>
         <Extension>
         Friend Function ParseToken(t As Token, opts As SyntaxBuilderOptions) As SyntaxParserResult
             If t.name = TokenType.identifier Then

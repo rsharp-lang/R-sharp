@@ -143,8 +143,8 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 If block.Length = 1 AndAlso block(Scan0).name = TokenType.operator Then
                     Yield block(Scan0).text
                 ElseIf block.Length = 3 AndAlso block(1).name = TokenType.operator Then
-                    Dim symbol As SyntaxParserResult = ParseToken(block(0))
-                    Dim member As SyntaxParserResult = ParseToken(block(2))
+                    Dim symbol As SyntaxParserResult = ParseToken(block(0), opts)
+                    Dim member As SyntaxParserResult = ParseToken(block(2), opts)
 
                     If symbol.isError Then
                         Yield symbol
