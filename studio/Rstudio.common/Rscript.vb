@@ -127,4 +127,9 @@ FINAL:
         ' 如果是赋值表达式的话，也不会在终端上打印结果值
         Return TypeOf program.Last Is ValueAssignExpression OrElse TypeOf program.Last Is DeclareNewSymbol
     End Function
+
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Friend Function FromFile(script As String) As Components.Rscript
+        Return SMRUCC.Rsharp.Runtime.Components.Rscript.FromFile(script)
+    End Function
 End Module
