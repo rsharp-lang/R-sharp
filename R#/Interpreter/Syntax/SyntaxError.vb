@@ -23,10 +23,10 @@ Namespace Interpreter.SyntaxParser
 
             message &= vbCrLf & vbCrLf & "Syntax error nearby:"
             message &= vbCrLf & upstream
-            message &= vbCrLf & New String("+"c, nlen)
-            message &= vbCrLf & vbCrLf & rawText
+            message &= vbCrLf & vbCrLf & "-->>>"
+            message &= vbCrLf & rawText
             message &= vbCrLf & errorsPromptLine
-            message &= vbCrLf & New String("+"c, nlen)
+            message &= vbCrLf & "<<<--" & vbCrLf
             message &= vbCrLf & downstream
             message &= vbCrLf & vbCrLf & $"Range from {from.start} at line {from.line}, to {[to].stops} at line {[to].line}."
             message &= vbCrLf & "Rscript: " & file
@@ -52,9 +52,9 @@ Namespace Interpreter.SyntaxParser
             }
             Dim scriptLines As String() = opts.source.script.LineTokens
 
-            syntaxErr.upstream = scriptLines.Skip(from.line - 3).Take(3).JoinBy(vbCrLf)
+            syntaxErr.upstream = scriptLines.Skip(from.line - 3).Take(2).JoinBy(vbCrLf)
             syntaxErr.downstream = scriptLines.Skip([to].line).Take(3).JoinBy(vbCrLf)
-            syntaxErr.errorBlock = scriptLines.Skip(from.line).Take([to].line - from.line + 1).JoinBy(vbCrLf)
+            syntaxErr.errorBlock = scriptLines.Skip(from.line - 1).Take([to].line - from.line + 1).JoinBy(vbCrLf)
 
             Return syntaxErr
         End Function
