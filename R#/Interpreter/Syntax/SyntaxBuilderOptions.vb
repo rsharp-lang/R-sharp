@@ -1,49 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::be2d4dfd3864ff0044c3e7aae4951e2f, R#\Interpreter\Syntax\SyntaxBuilderOptions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class SyntaxBuilderOptions
-    ' 
-    '         Properties: haveSyntaxErr
-    ' 
-    '         Function: Clone, GetStackTrace, UsingVectorBuilder
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class SyntaxBuilderOptions
+' 
+'         Properties: haveSyntaxErr
+' 
+'         Function: Clone, GetStackTrace, UsingVectorBuilder
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -63,6 +64,8 @@ Namespace Interpreter.SyntaxParser
         Public currentLine As Integer
         Public annotations As New List(Of NamedValue(Of String))
 
+        Dim currentRange As Token()
+
         ''' <summary>
         ''' this property will returns true if the error message string is not empty
         ''' </summary>
@@ -72,6 +75,23 @@ Namespace Interpreter.SyntaxParser
                 Return Not [error].StringEmpty
             End Get
         End Property
+
+        Public ReadOnly Property fromSpan As CodeSpan
+            Get
+                Return currentRange.First.span
+            End Get
+        End Property
+
+        Public ReadOnly Property toSpan As CodeSpan
+            Get
+                Return currentRange.Last.span
+            End Get
+        End Property
+
+        Public Function SetCurrentRange(range As Token()) As SyntaxBuilderOptions
+            currentRange = range
+            Return Me
+        End Function
 
         Public Function Clone() As SyntaxBuilderOptions
             Return New SyntaxBuilderOptions With {

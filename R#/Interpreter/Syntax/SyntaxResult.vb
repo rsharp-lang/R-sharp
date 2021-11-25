@@ -101,6 +101,11 @@ Namespace Interpreter.SyntaxParser
             Me.error = [error]
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function CreateError(err As Exception, opts As SyntaxBuilderOptions) As SyntaxResult
+            Return CreateError(opts, err, opts.fromSpan, opts.toSpan)
+        End Function
+
         ''' <summary>
         ''' create a syntax error
         ''' </summary>

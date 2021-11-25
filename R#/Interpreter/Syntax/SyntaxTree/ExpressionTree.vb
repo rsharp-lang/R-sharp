@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::19d2cd17fca457e41a81b4e0fbe8f9dd, R#\Interpreter\Syntax\SyntaxTree\ExpressionTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ExpressionTree
-    ' 
-    '         Function: CreateTree, ObjectInvoke, ParseExpressionTree, simpleSequence
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ExpressionTree
+' 
+'         Function: CreateTree, ObjectInvoke, ParseExpressionTree, simpleSequence
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,7 +57,14 @@ Namespace Interpreter.SyntaxParser
 
         <Extension>
         Public Function CreateTree(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma)
+            Dim err As Exception = Nothing
+            Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma, err:=err)
+
+            Call opts.SetCurrentRange(tokens)
+
+            If Not err Is Nothing Then
+                Return SyntaxResult.CreateError(err, opts)
+            End If
 
             If blocks = 1 Then
                 Dim expression As SyntaxResult = blocks(Scan0).simpleSequence(opts)
@@ -86,7 +93,7 @@ Namespace Interpreter.SyntaxParser
 
                 Return New VectorLiteral(expressions.ToArray, TypeCodes.generic)
             Else
-                Return New SyntaxResult(New NotImplementedException, opts.debug)
+                Return SyntaxResult.CreateError(New NotImplementedException, opts)
             End If
         End Function
 
@@ -129,6 +136,7 @@ Namespace Interpreter.SyntaxParser
                 Return SyntaxImplements.CommandLineArgument(tokens, opts)
             Else
                 blocks = tokens.SplitByTopLevelDelimiter(TokenType.operator)
+                opts = opts.SetCurrentRange(tokens)
             End If
 
             If blocks > 1 Then
@@ -189,11 +197,11 @@ Namespace Interpreter.SyntaxParser
 
                                 Return splitTokens.ObjectInvoke(opts)
                             Else
-                                Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                                Return SyntaxResult.CreateError(New SyntaxErrorException, opts)
                             End If
                         End If
                     Else
-                        Return New SyntaxResult(New NotImplementedException, opts.debug)
+                        Return SyntaxResult.CreateError(New NotImplementedException, opts)
                     End If
                 ElseIf openSymbol = "{" Then
                     ' 是一个可以产生值的closure
@@ -223,9 +231,13 @@ Namespace Interpreter.SyntaxParser
 
             If opts.keepsCommentLines AndAlso tokens.All(Function(b) b.name = TokenType.comment) Then
                 Return New SyntaxResult(New CodeComment(tokens.Select(Function(t) t.Trim("#"c, " "c)).JoinBy(vbCrLf)))
+            Else
+                opts = opts.SetCurrentRange(tokens)
             End If
 
-            Return New SyntaxResult(New NotImplementedException($"Unsure for parse: '{tokens.Select(Function(t) t.text).JoinBy(" ")}'!"), opts.debug)
+            Dim msg As String = $"Unsure for parse: '{tokens.Select(Function(t) t.text).JoinBy(" ")}'!"
+
+            Return SyntaxResult.CreateError(New NotImplementedException(msg), opts)
         End Function
 
         <Extension>

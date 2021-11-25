@@ -159,7 +159,7 @@ Namespace Interpreter.SyntaxParser
         <Extension>
         Friend Function ParseExpression(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             If code = 0 Then
-                Return New SyntaxResult(New SyntaxErrorException("expressin tokens can not be empty!"), opts.debug)
+                Return SyntaxResult.CreateError(New SyntaxErrorException("expressin tokens can not be empty!"), opts)
             ElseIf code(Scan0).isKeyword Then
                 Dim expression As SyntaxResult = code.keywordExpressionHandler(opts)
 
@@ -193,7 +193,7 @@ Namespace Interpreter.SyntaxParser
                         Case "@dir" : Return New SyntaxResult(New ScriptFolder)
 
                         Case Else
-                            Return New SyntaxResult(New NotImplementedException(item(Scan0).text), opts.debug)
+                            Return SyntaxResult.CreateError(New NotImplementedException(item(Scan0).text), opts.SetCurrentRange(item))
                     End Select
                 Else
                     Dim ifelse = item.ifElseTriple
@@ -267,6 +267,8 @@ Namespace Interpreter.SyntaxParser
                     Dim [to] = seq(2)
                     Dim steps As Token() = Nothing
 
+                    Call opts.SetCurrentRange(code.IteratesALL.ToArray)
+
                     If code > 1 Then
                         If code(1).isKeyword("step") Then
                             steps = code(2)
@@ -274,7 +276,7 @@ Namespace Interpreter.SyntaxParser
                             ' do nothing
                             GoTo Binary
                         Else
-                            Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                            Return SyntaxResult.CreateError(New SyntaxErrorException, opts)
                         End If
                     End If
 
@@ -366,7 +368,15 @@ Binary:
             End If
 
             If TypeOf first.expression Is SymbolReference Then
-                Return first.expression.SymbolIndexer(code(1).Skip(1).Take(code(1).Length - 2).ToArray, opts)
+                Dim tokens As Token() = code(1) _
+                    .Skip(1) _
+                    .Take(code(1).Length - 2) _
+                    .ToArray
+
+                Return first.expression.SymbolIndexer(
+                    tokens:=tokens,
+                    opts:=opts.SetCurrentRange(code.IteratesALL.ToArray)
+                )
             Else
                 Return Nothing
             End If

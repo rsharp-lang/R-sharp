@@ -67,7 +67,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim index As SyntaxResult = Nothing
 
             If tokens.IsNullOrEmpty AndAlso TypeOf symbol Is SymbolReference AndAlso DirectCast(symbol, SymbolReference).symbol = "$" Then
-                Return New SyntaxResult(New SyntaxErrorException("'$' symbol can not be prefixed!"), opts.debug)
+                Return SyntaxResult.CreateError(
+                    opts:=opts,
+                    err:=New SyntaxErrorException("'$' symbol can not be prefixed!"),
+                    from:=opts.fromSpan,
+                    [to]:=opts.toSpan
+                )
             End If
 
             If tokens.isStackOf("[", "]") Then
@@ -110,6 +115,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             If symbol.isException Then
                 Return symbol
+            Else
+                opts = opts.SetCurrentRange(tokens)
             End If
 
             tokens = tokens _
