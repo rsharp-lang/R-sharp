@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::4dcfb888bd96f2820e53098aaef80b9b, studio\Rsharp_kit\MLkit\validation.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module validation
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: ANN_ROC, AUC, createSampleValidation, PlotROC, prediction
-    '               Tabular
-    ' 
-    ' /********************************************************************************/
+' Module validation
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: ANN_ROC, AUC, createSampleValidation, PlotROC, prediction
+'               Tabular
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -49,10 +49,9 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Evaluation
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
-Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
-Imports Microsoft.VisualBasic.My.JavaScript
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime
@@ -159,12 +158,20 @@ Module validation
     End Function
 
     <ExportAPI("ANN.ROC")>
-    Public Function ANN_ROC(ANN As Network, validateSet As TrainingSample(), range As Double(), attribute%, Optional n% = 20) As Evaluation.Validation()
+    Public Function ANN_ROC(ANN As Network,
+                            validateSet As TrainingSample(),
+                            range As Double(),
+                            attribute%,
+                            Optional n% = 20) As Evaluation.Validation()
+
         Return ANN.CreateValidateResult(validateSet).ROC(range, attribute, n)
     End Function
 
     <ExportAPI("as.validation")>
-    Public Function createSampleValidation(trainingSet As NormalizeMatrix, input As Double(), validate As Double(), Optional method As Normalizer.Methods = Normalizer.Methods.NormalScaler) As TrainingSample
+    Public Function createSampleValidation(trainingSet As NormalizeMatrix,
+                                           input As Double(),
+                                           validate As Double(),
+                                           Optional method As Normalizer.Methods = Normalizer.Methods.NormalScaler) As TrainingSample
         Return New TrainingSample With {
             .classify = validate,
             .sample = trainingSet.NormalizeInput(input, method),

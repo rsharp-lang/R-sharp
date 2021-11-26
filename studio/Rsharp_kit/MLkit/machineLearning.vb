@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::5911062289daa53850913333fd4df65e, studio\Rsharp_kit\MLkit\machineLearning.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module machineLearning
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: addSamples, addTrainingSample, ANNpredict, checkModelDataset, configuration
-    '               createANN, CreateANNTrainer, createEmptyMLDataset, createNormalizationMatrix, getRawSamples
-    '               inputSize, loadParallelANN, normalizeData, openDebugger, outputSize
-    '               readANNModel, (+2 Overloads) runANNTraining, setTrainingSet, Softmax, tabular
-    '               writeANNNetwork
-    ' 
-    '     Sub: doFileSave
-    ' 
-    ' /********************************************************************************/
+' Module machineLearning
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: addSamples, addTrainingSample, ANNpredict, checkModelDataset, configuration
+'               createANN, CreateANNTrainer, createEmptyMLDataset, createNormalizationMatrix, getRawSamples
+'               inputSize, loadParallelANN, normalizeData, openDebugger, outputSize
+'               readANNModel, (+2 Overloads) runANNTraining, setTrainingSet, Softmax, tabular
+'               writeANNNetwork
+' 
+'     Sub: doFileSave
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -55,16 +55,17 @@ Imports Microsoft.VisualBasic.DataMining.ComponentModel
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Normalizer
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning
+Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork.StoreProcedure
-Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataSet
+Imports MLDataSet = Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure.DataSet
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -75,10 +76,10 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Module machineLearning
 
     Sub New()
-        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(StoreProcedure.DataSet), AddressOf tabular)
+        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(MLDataSet), AddressOf tabular)
     End Sub
 
-    Public Function tabular(x As StoreProcedure.DataSet, args As list, env As Environment) As Rdataframe
+    Public Function tabular(x As MLDataSet, args As list, env As Environment) As Rdataframe
         Dim markOuput As Boolean = args.getValue(Of Boolean)("mark.output", env)
         Dim table As DataTable() = x.ToTable(markOuput).ToArray
         Dim a As Array
@@ -103,7 +104,7 @@ Module machineLearning
     End Function
 
     <ExportAPI("raw_samples")>
-    Public Function getRawSamples(x As StoreProcedure.DataSet) As Sample()
+    Public Function getRawSamples(x As MLDataSet) As Sample()
         Return x.DataSamples.items
     End Function
 
@@ -116,8 +117,8 @@ Module machineLearning
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("add_samples")>
-    <RApiReturn(GetType(StoreProcedure.DataSet))>
-    Public Function addSamples(x As StoreProcedure.DataSet,
+    <RApiReturn(GetType(MLDataSet))>
+    Public Function addSamples(x As MLDataSet,
                                <RRawVectorArgument>
                                samples As Object,
                                Optional estimateQuantile As Boolean = True,
@@ -129,7 +130,7 @@ Module machineLearning
             Return sampleList.getError
         End If
 
-        Return StoreProcedure.DataSet.JoinSamples(x, sampleList.populates(Of Sample)(env), estimateQuantile)
+        Return MLDataSet.JoinSamples(x, sampleList.populates(Of Sample)(env), estimateQuantile)
     End Function
 
     <ExportAPI("read.ANN_network")>
@@ -155,15 +156,15 @@ Module machineLearning
     <ExportAPI("new.ML_model")>
     Public Function createEmptyMLDataset(file As String) As RDispose
         Return New RDispose(
-            New StoreProcedure.DataSet With {
+            New MLDataSet With {
                 .DataSamples = New SampleList
             },
             Sub(d)
-                doFileSave(DirectCast(d, StoreProcedure.DataSet), file)
+                doFileSave(DirectCast(d, MLDataSet), file)
             End Sub)
     End Function
 
-    Private Sub doFileSave(dataset As StoreProcedure.DataSet, file As String)
+    Private Sub doFileSave(dataset As MLDataSet, file As String)
         dataset.NormalizeMatrix = NormalizeMatrix.CreateFromSamples(
             samples:=dataset.DataSamples.items,
             names:=dataset.width _
@@ -185,27 +186,27 @@ Module machineLearning
     ''' <returns></returns>
     <ExportAPI("add")>
     Public Function addTrainingSample(model As Object, input As Double(), output As Double(), Optional env As Environment = Nothing) As Object
-        Dim dataset As StoreProcedure.DataSet
+        Dim dataset As MLDataSet
 
         If model Is Nothing Then
             Return Nothing
         ElseIf TypeOf model Is RDispose Then
             With DirectCast(model, RDispose)
-                If .type Like GetType(StoreProcedure.DataSet) Then
+                If .type Like GetType(MLDataSet) Then
                     dataset = .Value
                 Else
                     Return Internal.debug.stop({
                         $"invalid model data type: { .type}!",
-                        $"required: {GetType(StoreProcedure.DataSet).FullName}"
+                        $"required: {GetType(MLDataSet).FullName}"
                     }, env)
                 End If
             End With
-        ElseIf TypeOf model Is StoreProcedure.DataSet Then
+        ElseIf TypeOf model Is MLDataSet Then
             dataset = model
         Else
             Return Internal.debug.stop({
                 $"invalid model data type: {model.GetType.FullName}!",
-                $"required: {GetType(StoreProcedure.DataSet).FullName}"
+                $"required: {GetType(MLDataSet).FullName}"
             }, env)
         End If
 
@@ -243,8 +244,8 @@ Module machineLearning
     ''' <returns></returns>
     ''' 
     <ExportAPI("create.normalize")>
-    <RApiReturn(GetType(StoreProcedure.DataSet))>
-    Public Function createNormalizationMatrix(dataset As StoreProcedure.DataSet,
+    <RApiReturn(GetType(MLDataSet))>
+    Public Function createNormalizationMatrix(dataset As MLDataSet,
                                               Optional names As String() = Nothing,
                                               Optional estimateQuantile As Boolean = True,
                                               Optional env As Environment = Nothing) As Object
@@ -277,7 +278,7 @@ Module machineLearning
     ''' <param name="dataset"></param>
     ''' <returns></returns>
     <ExportAPI("check.ML_model")>
-    Public Function checkModelDataset(dataset As StoreProcedure.DataSet) As LogEntry()
+    Public Function checkModelDataset(dataset As MLDataSet) As LogEntry()
         Return Diagnostics.CheckDataSet(dataset).ToArray
     End Function
 
@@ -445,12 +446,12 @@ Module machineLearning
     End Function
 
     <ExportAPI("input.size")>
-    Public Function inputSize(trainSet As StoreProcedure.DataSet) As Integer
+    Public Function inputSize(trainSet As MLDataSet) As Integer
         Return trainSet.Size.Width
     End Function
 
     <ExportAPI("output.size")>
-    Public Function outputSize(trainSet As StoreProcedure.DataSet) As Integer
+    Public Function outputSize(trainSet As MLDataSet) As Integer
         Return trainSet.OutputSize
     End Function
 
@@ -466,7 +467,7 @@ Module machineLearning
     ''' <returns></returns>
     <ExportAPI("set.trainingSet")>
     Public Function setTrainingSet(ann As ANNTrainer,
-                                   trainingSet As StoreProcedure.DataSet,
+                                   trainingSet As MLDataSet,
                                    Optional normalMethod As Methods = Methods.RelativeScaler,
                                    Optional attribute% = -1,
                                    Optional setOutputNames As Boolean = True) As ANNTrainer
@@ -530,7 +531,7 @@ Module machineLearning
     ''' <returns></returns>
     <ExportAPI("training.ANN")>
     <RApiReturn(GetType(StoreProcedure.NeuralNetwork), GetType(Network))>
-    Public Function runANNTraining(trainSet As StoreProcedure.DataSet,
+    Public Function runANNTraining(trainSet As MLDataSet,
                                    <RRawVectorArgument(GetType(Integer))>
                                    Optional hiddenSize As Object = "25,100,30",
                                    Optional learnRate As Double = 0.1,

@@ -726,6 +726,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\JSONLiteral.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxError.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\dev\devtools.vb" />
     <Compile Include="Runtime\Internal\objects\Linq\DataframeGroup.vb" />
     <Compile Include="Runtime\Internal\objects\Linq\RCType.vb" />
