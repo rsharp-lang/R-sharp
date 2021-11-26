@@ -92,6 +92,10 @@ Namespace Runtime
 
         Dim m_REngine As RInterpreter
 
+        ''' <summary>
+        ''' a <see cref="TextWriter"/> wrapper object
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property stdout As RContentOutput
         Public ReadOnly Property log4vb_redirect As Boolean = True
         Public ReadOnly Property debugLevel As DebugLevels = DebugLevels.All
