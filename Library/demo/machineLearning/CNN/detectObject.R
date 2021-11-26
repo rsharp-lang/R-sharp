@@ -1,8 +1,16 @@
 imports "CNN" from "MLkit";
 
-"P:\imagenet-matconvnet-vgg-f.cenin"
-|> CeNiN
-|> detectObject(target = readImage(file = `${@dir}/SampleImage_NASAAtlantisShuttle.jpg`))
-|> head(n = 10)
-|> print()
-;
+const convolutionalNeuralNetwork = CeNiN("P:\imagenet-matconvnet-vgg-f.cenin");
+
+for(imgfile in list.files(@dir, pattern = "*.jpg")) {
+	convolutionalNeuralNetwork
+	|> detectObject(target = readImage(file = imgfile))
+	|> [
+		head(n = 10) |> print(),
+		write.csv(
+			file = `${@dir}/${basename(imgfile)}.csv`, 
+			row.names = FALSE
+		)
+	]
+	;
+}

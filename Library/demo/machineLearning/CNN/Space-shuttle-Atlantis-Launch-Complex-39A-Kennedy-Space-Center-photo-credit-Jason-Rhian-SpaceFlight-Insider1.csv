@@ -1,0 +1,1001 @@
+﻿class,probs
+space shuttle,0.979689
+sturgeon,0.00213839
+"barracouta, snoek",0.00128073
+"projectile, missile",0.0010107
+missile,0.000967962
+"traffic light, traffic signal, stoplight",0.000691111
+totem pole,0.000628707
+snorkel,0.000522232
+gondola,0.000518879
+conch,0.000508525
+"lighter, light, igniter, ignitor",0.000382344
+pole,0.000359204
+"beacon, lighthouse, beacon light, pharos",0.00032255
+water bottle,0.000280115
+plastic bag,0.000267549
+"coho, cohoe, coho salmon, blue jack, silver salmon, Oncorhynchus kisutch",0.000253397
+"horizontal bar, high bar",0.000244538
+pill bottle,0.000240564
+canoe,0.000216544
+isopod,0.000212582
+"paddle, boat paddle",0.000210997
+"goldfish, Carassius auratus",0.000202156
+"bell cote, bell cot",0.000190041
+torch,0.000188782
+running shoe,0.000160713
+knee pad,0.000141386
+"shoe shop, shoe-shop, shoe store",0.000139625
+syringe,0.000132172
+neck brace,0.0001261
+nipple,0.000108373
+"hotdog, hot dog, red hot",0.000105788
+"gar, garfish, garpike, billfish, Lepisosteus osseus",0.000105217
+sunglass,9.90329E-05
+vase,9.82367E-05
+oxygen mask,9.58283E-05
+"solar dish, solar collector, solar furnace",9.46327E-05
+"Dungeness crab, Cancer magister",9.23699E-05
+wing,8.93861E-05
+ski,8.58279E-05
+sandal,8.51258E-05
+"paddlewheel, paddle wheel",8.51255E-05
+"ice cream, icecream",8.46636E-05
+packet,8.36518E-05
+"parallel bars, bars",8.18703E-05
+umbrella,7.99962E-05
+cocktail shaker,7.88642E-05
+Loafer,7.56181E-05
+vending machine,7.44238E-05
+"church, church building",7.25426E-05
+ski mask,7.17508E-05
+"perfume, essence",6.85035E-05
+"spotlight, spot",6.78215E-05
+"candle, taper, wax light",6.59957E-05
+scabbard,6.47966E-05
+beaker,6.41582E-05
+"maillot, tank suit",6.38527E-05
+"chambered nautilus, pearly nautilus, nautilus",6.26971E-05
+"plane, carpenter's plane, woodworking plane",6.12773E-05
+wine bottle,6.06728E-05
+"lakeside, lakeshore",6.01179E-05
+"motor scooter, scooter",5.99105E-05
+"container ship, containership, container vessel",5.63599E-05
+"barrow, garden cart, lawn cart, wheelbarrow",5.61843E-05
+maillot,5.54145E-05
+"quill, quill pen",5.48711E-05
+"iron, smoothing iron",5.14456E-05
+"jean, blue jean, denim",5.04944E-05
+"punching bag, punch bag, punching ball, punchball",4.97279E-05
+"sunscreen, sunblock, sun blocker",4.96141E-05
+cowboy boot,4.83112E-05
+"refrigerator, icebox",4.81035E-05
+guillotine,4.55657E-05
+pelican,4.53346E-05
+"diaper, nappy, napkin",4.45319E-05
+"flagpole, flagstaff",4.40075E-05
+"bucket, pail",4.33427E-05
+castle,4.30644E-05
+"cash machine, cash dispenser, automated teller machine, automatic teller machine, automated teller, automatic teller, ATM",4.30314E-05
+paintbrush,4.28384E-05
+"bakery, bakeshop, bakehouse",4.23633E-05
+comic book,4.23226E-05
+"book jacket, dust cover, dust jacket, dust wrapper",4.19584E-05
+hourglass,4.15765E-05
+"seashore, coast, seacoast, sea-coast",4.12049E-05
+Petri dish,4.08812E-05
+"pay-phone, pay-station",4.04078E-05
+"American lobster, Northern lobster, Maine lobster, Homarus americanus",4.02239E-05
+lotion,3.98176E-05
+"breastplate, aegis, egis",3.8913E-05
+cuirass,3.82281E-05
+"tench, Tinca tinca",3.80029E-05
+mosque,3.79558E-05
+"sunglasses, dark glasses, shades",3.7669E-05
+paper towel,3.70831E-05
+schooner,3.69827E-05
+"microphone, mike",3.68573E-05
+beer bottle,3.67229E-05
+trimaran,3.54962E-05
+"unicycle, monocycle",3.54397E-05
+"tiger shark, Galeocerdo cuvieri",3.53013E-05
+turnstile,3.51644E-05
+"brassiere, bra, bandeau",3.44523E-05
+catamaran,3.4447E-05
+"rubber eraser, rubber, pencil eraser",3.4028E-05
+obelisk,3.39594E-05
+"can opener, tin opener",3.3856E-05
+beer glass,3.35959E-05
+"gas pump, gasoline pump, petrol pump, island dispenser",3.25405E-05
+"sea cucumber, holothurian",3.22902E-05
+"hammerhead, hammerhead shark",3.19132E-05
+sarong,3.15036E-05
+whistle,3.12902E-05
+"drilling platform, offshore rig",3.11082E-05
+"radio telescope, radio reflector",3.08289E-05
+"vacuum, vacuum cleaner",3.03023E-05
+speedboat,3.02963E-05
+"loggerhead, loggerhead turtle, Caretta caretta",3.02009E-05
+alp,2.99009E-05
+"pop bottle, soda bottle",2.94659E-05
+basketball,2.90812E-05
+"violin, fiddle",2.89115E-05
+boathouse,2.87186E-05
+hair spray,2.85615E-05
+"submarine, pigboat, sub, U-boat",2.81917E-05
+"tobacco shop, tobacconist shop, tobacconist",2.79039E-05
+cannon,2.77079E-05
+sleeping bag,2.72012E-05
+burrito,2.69996E-05
+moped,2.68388E-05
+"trailer truck, tractor trailer, trucking rig, rig, articulated lorry, semi",2.63925E-05
+"assault rifle, assault gun",2.563E-05
+"feather boa, boa",2.4539E-05
+"hand blower, blow dryer, blow drier, hair dryer, hair drier",2.44426E-05
+"bathing cap, swimming cap",2.40854E-05
+"axolotl, mud puppy, Ambystoma mexicanum",2.37E-05
+carton,2.33832E-05
+reel,2.32312E-05
+"apiary, bee house",2.28133E-05
+jellyfish,2.24803E-05
+sock,2.24589E-05
+"remote control, remote",2.23075E-05
+"bikini, two-piece",2.16542E-05
+"ice lolly, lolly, lollipop, popsicle",2.15181E-05
+kimono,2.13342E-05
+"electric ray, crampfish, numbfish, torpedo",2.12032E-05
+geyser,2.09012E-05
+street sign,2.03578E-05
+"pedestal, plinth, footstall",2.02359E-05
+"starfish, sea star",1.97591E-05
+"saltshaker, salt shaker",1.8884E-05
+"airship, dirigible",1.87299E-05
+"binoculars, field glasses, opera glasses",1.82705E-05
+"bookshop, bookstore, bookstall",1.76788E-05
+bow,1.67802E-05
+"plunger, plumber's helper",1.6768E-05
+window shade,1.66687E-05
+"sandbar, sand bar",1.65446E-05
+"harmonica, mouth organ, harp, mouth harp",1.65101E-05
+wok,1.61437E-05
+"warplane, military plane",1.6013E-05
+"cinema, movie theater, movie theatre, movie house, picture palace",1.58721E-05
+sombrero,1.57827E-05
+stingray,1.56248E-05
+Band Aid,1.54792E-05
+scuba diver,1.53941E-05
+rotisserie,1.51507E-05
+"cleaver, meat cleaver, chopper",1.51371E-05
+moving van,1.51111E-05
+spatula,1.4791E-05
+rifle,1.45688E-05
+"file, file cabinet, filing cabinet",1.45538E-05
+freight car,1.44046E-05
+"cello, violoncello",1.4199E-05
+"restaurant, eating house, eating place, eatery",1.38173E-05
+"corkscrew, bottle screw",1.38102E-05
+water tower,1.37074E-05
+"shield, buckler",1.33342E-05
+wig,1.33295E-05
+"flute, transverse flute",1.32339E-05
+crutch,1.31065E-05
+table lamp,1.28632E-05
+school bus,1.28488E-05
+"aircraft carrier, carrier, flattop, attack aircraft carrier",1.25941E-05
+spindle,1.25825E-05
+"mailbox, letter box",1.25396E-05
+harp,1.2195E-05
+"bow tie, bow-tie, bowtie",1.1922E-05
+"king crab, Alaska crab, Alaskan king crab, Alaska king crab, Paralithodes camtschatica",1.18562E-05
+"great white shark, white shark, man-eater, man-eating shark, Carcharodon carcharias",1.18027E-05
+gown,1.16614E-05
+"gong, tam-tam",1.15615E-05
+sundial,1.14887E-05
+French loaf,1.12946E-05
+tripod,1.12597E-05
+barber chair,1.12194E-05
+power drill,1.11785E-05
+mountain tent,1.10111E-05
+"medicine chest, medicine cabinet",1.09908E-05
+window screen,1.09194E-05
+eggnog,1.08839E-05
+"rule, ruler",1.08178E-05
+balloon,1.07834E-05
+birdhouse,1.07506E-05
+"cowboy hat, ten-gallon hat",1.03855E-05
+toilet seat,1.03836E-05
+mortar,1.01795E-05
+triumphal arch,1.00869E-05
+"wardrobe, closet, press",9.98245E-06
+modem,9.95905E-06
+"crayfish, crawfish, crawdad, crawdaddy",9.80926E-06
+"cab, hack, taxi, taxicab",9.79128E-06
+parking meter,9.69842E-06
+"loupe, jeweler's loupe",9.5374E-06
+"spiny lobster, langouste, rock lobster, crawfish, crayfish, sea crawfish",9.51007E-06
+"chain saw, chainsaw",9.46003E-06
+iPod,9.29754E-06
+"dock, dockage, docking facility",9.16124E-06
+"letter opener, paper knife, paperknife",9.15303E-06
+snail,9.13135E-06
+hermit crab,8.7396E-06
+water jug,8.73827E-06
+acoustic guitar,8.67816E-06
+orange,8.67372E-06
+West Highland white terrier,8.60721E-06
+"stinkhorn, carrion fungus",8.51127E-06
+"clog, geta, patten, sabot",8.4483E-06
+football helmet,8.29041E-06
+"barrel, cask",8.22875E-06
+"valley, vale",8.10929E-06
+trombone,8.03977E-06
+"web site, website, internet site, site",8.0016E-06
+yawl,7.99688E-06
+Christmas stocking,7.99618E-06
+goblet,7.9704E-06
+mousetrap,7.96953E-06
+palace,7.86999E-06
+mask,7.86767E-06
+"bannister, banister, balustrade, balusters, handrail",7.77733E-06
+suspension bridge,7.7522E-06
+lifeboat,7.75003E-06
+anemone fish,7.74554E-06
+crane,7.64618E-06
+"ice bear, polar bear, Ursus Maritimus, Thalarctos maritimus",7.5803E-06
+"ashcan, trash can, garbage can, wastebin, ash bin, ash-bin, ashbin, dustbin, trash barrel, trash bin",7.5135E-06
+"balance beam, beam",7.4133E-06
+buckle,7.38722E-06
+stretcher,7.22168E-06
+goose,7.04073E-06
+"lumbermill, sawmill",6.93014E-06
+macaw,6.89369E-06
+"ballpoint, ballpoint pen, ballpen, Biro",6.81793E-06
+"carousel, carrousel, merry-go-round, roundabout, whirligig",6.81292E-06
+"lab coat, laboratory coat",6.73431E-06
+"china cabinet, china closet",6.63776E-06
+"sax, saxophone",6.61582E-06
+banana,6.60921E-06
+"gasmask, respirator, gas helmet",6.59013E-06
+"puffer, pufferfish, blowfish, globefish",6.48332E-06
+"disk brake, disc brake",6.45645E-06
+"miniskirt, mini",6.45601E-06
+"bolo tie, bolo, bola tie, bola",6.3839E-06
+holster,6.31947E-06
+airliner,6.27997E-06
+basenji,6.10297E-06
+matchstick,6.10072E-06
+milk can,6.07005E-06
+sliding door,6.04259E-06
+dome,6.02101E-06
+"chime, bell, gong",5.98766E-06
+"ballplayer, baseball player",5.98567E-06
+cassette,5.96157E-06
+"liner, ocean liner",5.92647E-06
+"patas, hussar monkey, Erythrocebus patas",5.91383E-06
+desk,5.88459E-06
+desktop computer,5.86159E-06
+wreck,5.86118E-06
+"frying pan, frypan, skillet",5.77145E-06
+"stupa, tope",5.76945E-06
+hatchet,5.75187E-06
+"swimming trunks, bathing trunks",5.62824E-06
+"bonnet, poke bonnet",5.59637E-06
+sea lion,5.5395E-06
+"revolver, six-gun, six-shooter",5.52185E-06
+maraca,5.51831E-06
+"cellular telephone, cellular phone, cellphone, cell, mobile phone",5.46598E-06
+sea snake,5.44167E-06
+"mailbag, postbag",5.43639E-06
+fountain,5.43007E-06
+safety pin,5.4107E-06
+"lipstick, lip rouge",5.3976E-06
+banjo,5.34214E-06
+oil filter,5.29822E-06
+"bearskin, busby, shako",5.22701E-06
+monastery,5.22519E-06
+"hook, claw",5.07915E-06
+"carpenter's kit, tool kit",5.07247E-06
+"switch, electric switch, electrical switch",5.04152E-06
+"frilled lizard, Chlamydosaurus kingi",5.04113E-06
+throne,5.02932E-06
+chainlink fence,5.00278E-06
+"tabby, tabby cat",4.95771E-06
+"screen, CRT screen",4.79271E-06
+"microwave, microwave oven",4.763E-06
+"dugong, Dugong dugon",4.7169E-06
+ladle,4.57777E-06
+terrapin,4.50804E-06
+bulletproof vest,4.50341E-06
+"loudspeaker, speaker, speaker unit, loudspeaker system, speaker system",4.49495E-06
+cup,4.38797E-06
+"cornet, horn, trumpet, trump",4.38259E-06
+"cockroach, roach",4.3427E-06
+"home theater, home theatre",4.32693E-06
+"tiger, Panthera tigris",4.31469E-06
+leafhopper,4.31396E-06
+"breakwater, groin, groyne, mole, bulwark, seawall, jetty",4.28348E-06
+dumbbell,4.23448E-06
+electric guitar,4.17845E-06
+"electric fan, blower",4.09693E-06
+potter's wheel,4.0888E-06
+"chiton, coat-of-mail shell, sea cradle, polyplacophore",4.08866E-06
+"bicycle-built-for-two, tandem bicycle, tandem",4.05275E-06
+eel,3.99574E-06
+bath towel,3.96635E-06
+"confectionery, confectionary, candy store",3.90745E-06
+"proboscis monkey, Nasalis larvatus",3.9024E-06
+pickelhaube,3.86306E-06
+trilobite,3.8419E-06
+hornbill,3.82982E-06
+"lampshade, lamp shade",3.81898E-06
+drumstick,3.81709E-06
+thimble,3.80114E-06
+"theater curtain, theatre curtain",3.78603E-06
+projector,3.77031E-06
+"cougar, puma, catamount, mountain lion, painter, panther, Felis concolor",3.75233E-06
+ping-pong ball,3.70877E-06
+"megalith, megalithic structure",3.69755E-06
+overskirt,3.65435E-06
+"groom, bridegroom",3.64174E-06
+"American egret, great white heron, Egretta albus",3.62136E-06
+"picket fence, paling",3.61331E-06
+pretzel,3.55887E-06
+"pug, pug-dog",3.54094E-06
+"cliff, drop, drop-off",3.5387E-06
+"Siamese cat, Siamese",3.52428E-06
+stage,3.51336E-06
+"Ibizan hound, Ibizan Podenco",3.42672E-06
+crate,3.42398E-06
+"jackfruit, jak, jack",3.41469E-06
+car mirror,3.37114E-06
+screwdriver,3.35996E-06
+space heater,3.35746E-06
+"ocarina, sweet potato",3.33632E-06
+toyshop,3.3248E-06
+"pitcher, ewer",3.27802E-06
+"television, television system",3.27182E-06
+English setter,3.24861E-06
+"Eskimo dog, husky",3.2478E-06
+"slide rule, slipstick",3.2412E-06
+soap dispenser,3.23766E-06
+wooden spoon,3.23182E-06
+"mountain bike, all-terrain bike, off-roader",3.11036E-06
+rain barrel,3.05258E-06
+"pajama, pyjama, pj's, jammies",3.04769E-06
+"jinrikisha, ricksha, rickshaw",3.02694E-06
+drake,3.02142E-06
+"American alligator, Alligator mississipiensis",2.94963E-06
+Chihuahua,2.93271E-06
+face powder,2.9313E-06
+"toilet tissue, toilet paper, bathroom tissue",2.86908E-06
+pinwheel,2.86893E-06
+bookcase,2.83161E-06
+planetarium,2.81288E-06
+plate rack,2.76776E-06
+"parachute, chute",2.76054E-06
+espresso,2.7465E-06
+stole,2.73874E-06
+"dam, dike, dyke",2.7165E-06
+"bobsled, bobsleigh, bob",2.71618E-06
+"jersey, T-shirt, tee shirt",2.66364E-06
+folding chair,2.65815E-06
+barbershop,2.65002E-06
+hamster,2.64447E-06
+printer,2.64056E-06
+"dial telephone, dial phone",2.62795E-06
+"racket, racquet",2.62353E-06
+"dogsled, dog sled, dog sleigh",2.60934E-06
+butternut squash,2.60462E-06
+pencil sharpener,2.58493E-06
+"hand-held computer, hand-held microcomputer",2.5475E-06
+cheeseburger,2.53063E-06
+"drum, membranophone, tympan",2.4656E-06
+"grey fox, gray fox, Urocyon cinereoargenteus",2.43048E-06
+spoonbill,2.42314E-06
+"chain mail, ring mail, mail, chain armor, chain armour, ring armor, ring armour",2.37397E-06
+Italian greyhound,2.35563E-06
+pier,2.34796E-06
+coral reef,2.33713E-06
+minivan,2.32752E-06
+magnetic compass,2.32745E-06
+consomme,2.32314E-06
+knot,2.32152E-06
+"squirrel monkey, Saimiri sciureus",2.32113E-06
+"dishwasher, dish washer, dishwashing machine",2.32001E-06
+"thresher, thrasher, threshing machine",2.29936E-06
+Egyptian cat,2.25857E-06
+shower cap,2.25701E-06
+"cucumber, cuke",2.24842E-06
+"gibbon, Hylobates lar",2.24111E-06
+"streetcar, tram, tramcar, trolley, trolley car",2.22867E-06
+monitor,2.21463E-06
+weasel,2.21458E-06
+"Norwegian elkhound, elkhound",2.21333E-06
+stove,2.20573E-06
+"stopwatch, stop watch",2.20258E-06
+barometer,2.2002E-06
+corn,2.17677E-06
+"Pembroke, Pembroke Welsh corgi",2.16085E-06
+tiger cat,2.15367E-06
+"patio, terrace",2.14972E-06
+cabbage butterfly,2.13764E-06
+"borzoi, Russian wolfhound",2.1111E-06
+vestment,2.09572E-06
+baseball,2.09146E-06
+red wine,2.07365E-06
+malinois,2.054E-06
+"oscilloscope, scope, cathode-ray oscilloscope, CRO",2.05144E-06
+"binder, ring-binder",2.04759E-06
+"crossword puzzle, crossword",2.02737E-06
+"cicada, cicala",2.02568E-06
+"handkerchief, hankie, hanky, hankey",2.02434E-06
+shovel,2.01643E-06
+soup bowl,2.01474E-06
+"coil, spiral, volute, whorl, helix",2.01279E-06
+volcano,1.97205E-06
+"indri, indris, Indri indri, Indri brevicaudatus",1.95244E-06
+"ear, spike, capitulum",1.95226E-06
+Pomeranian,1.9418E-06
+"pirate, pirate ship",1.91584E-06
+chain,1.89884E-06
+golden retriever,1.88784E-06
+"rock python, rock snake, Python sebae",1.87211E-06
+"panpipe, pandean pipe, syrinx",1.87163E-06
+photocopier,1.86501E-06
+"rock crab, Cancer irroratus",1.85879E-06
+"quilt, comforter, comfort, puff",1.85617E-06
+trench coat,1.85442E-06
+"ringlet, ringlet butterfly",1.84728E-06
+hummingbird,1.84178E-06
+"brass, memorial tablet, plaque",1.83021E-06
+"suit, suit of clothes",1.82177E-06
+"Polaroid camera, Polaroid Land camera",1.79652E-06
+fur coat,1.79424E-06
+bubble,1.77759E-06
+Siberian husky,1.77541E-06
+"bagel, beigel",1.77083E-06
+vault,1.76082E-06
+Labrador retriever,1.74924E-06
+trifle,1.73696E-06
+forklift,1.71894E-06
+"hot pot, hotpot",1.70287E-06
+"dingo, warrigal, warragal, Canis dingo",1.69991E-06
+"sulphur-crested cockatoo, Kakatoe galerita, Cacatua galerita",1.69468E-06
+tractor,1.69051E-06
+"meerkat, mierkat",1.64138E-06
+fiddler crab,1.63171E-06
+whiskey jug,1.62322E-06
+rugby ball,1.60874E-06
+"swab, swob, mop",1.59839E-06
+"promontory, headland, head, foreland",1.58634E-06
+"pineapple, ananas",1.58141E-06
+"slot, one-armed bandit",1.57149E-06
+plate,1.55694E-06
+"tank, army tank, armored combat vehicle, armoured combat vehicle",1.55565E-06
+military uniform,1.55331E-06
+hammer,1.55254E-06
+sweatshirt,1.54997E-06
+"garbage truck, dustcart",1.53591E-06
+"mobile home, manufactured home",1.53461E-06
+"amphibian, amphibious vehicle",1.53215E-06
+padlock,1.52558E-06
+analog clock,1.52232E-06
+golf ball,1.52078E-06
+lemon,1.50953E-06
+"dragonfly, darning needle, devil's darning needle, sewing needle, snake feeder, snake doctor, mosquito hawk, skeeter hawk",1.50213E-06
+velvet,1.49784E-06
+shopping basket,1.47768E-06
+measuring cup,1.47702E-06
+"sulphur butterfly, sulfur butterfly",1.47649E-06
+"koala, koala bear, kangaroo bear, native bear, Phascolarctos cinereus",1.47485E-06
+banded gecko,1.47435E-06
+potpie,1.47388E-06
+macaque,1.46639E-06
+safe,1.45761E-06
+cardoon,1.45434E-06
+"tricycle, trike, velocipede",1.45336E-06
+steel drum,1.45092E-06
+"cairn, cairn terrier",1.44751E-06
+mushroom,1.44145E-06
+"grocery store, grocery, food market, market",1.44034E-06
+barbell,1.4377E-06
+mud turtle,1.43307E-06
+langur,1.42004E-06
+"French horn, horn",1.41816E-06
+"accordion, piano accordion, squeeze box",1.41044E-06
+honeycomb,1.40666E-06
+"leatherback turtle, leatherback, leathery turtle, Dermochelys coriacea",1.40355E-06
+"fire screen, fireguard",1.39833E-06
+slug,1.39366E-06
+fireboat,1.38955E-06
+"sea anemone, anemone",1.38739E-06
+snowmobile,1.3804E-06
+swing,1.37887E-06
+apron,1.37316E-06
+barn,1.36794E-06
+"rock beauty, Holocanthus tricolor",1.34898E-06
+scorpion,1.34586E-06
+Dutch oven,1.34498E-06
+cloak,1.33269E-06
+muzzle,1.33173E-06
+"lesser panda, red panda, panda, bear cat, cat bear, Ailurus fulgens",1.32504E-06
+croquet ball,1.31373E-06
+library,1.30807E-06
+"hoopskirt, crinoline",1.30694E-06
+"lens cap, lens cover",1.29652E-06
+soccer ball,1.29578E-06
+car wheel,1.29311E-06
+"pencil box, pencil case",1.28483E-06
+"maze, labyrinth",1.28451E-06
+radiator,1.27547E-06
+"grey whale, gray whale, devilfish, Eschrichtius gibbosus, Eschrichtius robustus",1.27211E-06
+llama,1.26717E-06
+"Saint Bernard, St Bernard",1.25449E-06
+Windsor tie,1.25124E-06
+"sea slug, nudibranch",1.23902E-06
+"white wolf, Arctic wolf, Canis lupus tundrarum",1.23081E-06
+redbone,1.21356E-06
+"dining table, board",1.21023E-06
+cradle,1.20687E-06
+"recreational vehicle, RV, R.V.",1.19164E-06
+shopping cart,1.17137E-06
+"ladybug, ladybeetle, lady beetle, ladybird, ladybird beetle",1.16981E-06
+"boa constrictor, Constrictor constrictor",1.16596E-06
+guacamole,1.15578E-06
+"oboe, hautboy, hautbois",1.15114E-06
+"orangutan, orang, orangutang, Pongo pygmaeus",1.15026E-06
+broom,1.14397E-06
+"common iguana, iguana, Iguana iguana",1.14296E-06
+"robin, American robin, Turdus migratorius",1.131E-06
+"worm fence, snake fence, snake-rail fence, Virginia fence",1.13013E-06
+jack-o'-lantern,1.12173E-06
+"malamute, malemute, Alaskan malamute",1.12016E-06
+"goldfinch, Carduelis carduelis",1.10116E-06
+"butcher shop, meat market",1.09601E-06
+"hard disc, hard disk, fixed disk",1.08976E-06
+crash helmet,1.08739E-06
+"spider monkey, Ateles geoffroyi",1.07422E-06
+"radio, wireless",1.07352E-06
+"Madagascar cat, ring-tailed lemur, Lemur catta",1.0688E-06
+"scale, weighing machine",1.0666E-06
+"brambling, Fringilla montifringilla",1.0596E-06
+"zucchini, courgette",1.05398E-06
+"hen-of-the-woods, hen of the woods, Polyporus frondosus, Grifola frondosa",1.0396E-06
+minibus,1.0376E-06
+agaric,1.03369E-06
+fountain pen,1.03176E-06
+altar,1.02592E-06
+"laptop, laptop computer",1.02038E-06
+"backpack, back pack, knapsack, packsack, rucksack, haversack",1.01718E-06
+"killer whale, killer, orca, grampus, sea wolf, Orcinus orca",9.96747E-07
+dough,9.90409E-07
+joystick,9.8192E-07
+reflex camera,9.79115E-07
+shoji,9.74094E-07
+"German shepherd, German shepherd dog, German police dog, alsatian",9.72429E-07
+whippet,9.70706E-07
+tray,9.70439E-07
+"seat belt, seatbelt",9.69821E-07
+"washbasin, handbasin, washbowl, lavabo, wash-hand basin",9.64236E-07
+volleyball,9.62135E-07
+steel arch bridge,9.55797E-07
+"rocking chair, rocker",9.46388E-07
+bee,9.42395E-07
+Brittany spaniel,9.38655E-07
+kuvasz,9.3682E-07
+"Saluki, gazelle hound",9.31369E-07
+coffee mug,9.26911E-07
+"lacewing, lacewing fly",9.12565E-07
+fly,9.0213E-07
+"chiffonier, commode",9.02119E-07
+English foxhound,8.98917E-07
+cliff dwelling,8.97833E-07
+"harvester, reaper",8.95223E-07
+"red-breasted merganser, Mergus serrator",8.92721E-07
+"Arabian camel, dromedary, Camelus dromedarius",8.83997E-07
+hamper,8.82208E-07
+bottlecap,8.73068E-07
+tennis ball,8.72431E-07
+Yorkshire terrier,8.71032E-07
+"mouse, computer mouse",8.58224E-07
+combination lock,8.56883E-07
+rapeseed,8.53045E-07
+"wallaby, brush kangaroo",8.39994E-07
+"caldron, cauldron",8.38967E-07
+"three-toed sloth, ai, Bradypus tridactylus",8.34195E-07
+triceratops,8.33118E-07
+chest,8.26516E-07
+pillow,8.16663E-07
+scoreboard,8.13537E-07
+"prayer rug, prayer mat",8.13073E-07
+four-poster,8.08698E-07
+spaghetti squash,8.00124E-07
+"polecat, fitch, foulmart, foumart, Mustela putorius",7.84315E-07
+"tub, vat",7.75418E-07
+head cabbage,7.73868E-07
+eft,7.72813E-07
+Model T,7.59786E-07
+"tailed frog, bell toad, ribbed toad, tailed toad, Ascaphus trui",7.53102E-07
+"Cardigan, Cardigan Welsh corgi",7.49615E-07
+beagle,7.41456E-07
+mortarboard,7.29763E-07
+"wool, woolen, woollen",7.28508E-07
+"titi, titi monkey",7.27942E-07
+schipperke,7.27606E-07
+abaya,7.25694E-07
+"red-backed sandpiper, dunlin, Erolia alpina",7.23522E-07
+centipede,7.23182E-07
+"golfcart, golf cart",7.12073E-07
+coffeepot,7.09164E-07
+"snowplow, snowplough",7.08907E-07
+"Indian cobra, Naja naja",6.96187E-07
+Persian cat,6.89045E-07
+flamingo,6.88123E-07
+earthstar,6.85403E-07
+"horse cart, horse-cart",6.84349E-07
+"fox squirrel, eastern fox squirrel, Sciurus niger",6.66893E-07
+armadillo,6.66179E-07
+"common newt, Triturus vulgaris",6.65199E-07
+black grouse,6.64988E-07
+hay,6.56393E-07
+acorn,6.52789E-07
+hair slide,6.5207E-07
+"howler monkey, howler",6.47516E-07
+park bench,6.46794E-07
+"washer, automatic washer, washing machine",6.44454E-07
+"king penguin, Aptenodytes patagonica",6.42851E-07
+"prairie chicken, prairie grouse, prairie fowl",6.39773E-07
+"organ, pipe organ",6.31066E-07
+miniature pinscher,6.27672E-07
+"house finch, linnet, Carpodacus mexicanus",6.25081E-07
+"red wolf, maned wolf, Canis rufus, Canis niger",6.22464E-07
+"Arctic fox, white fox, Alopex lagopus",6.20798E-07
+"chocolate sauce, chocolate syrup",6.07782E-07
+beaver,6.04708E-07
+"bathtub, bathing tub, bath, tub",6.01706E-07
+"platypus, duckbill, duckbilled platypus, duck-billed platypus, Ornithorhynchus anatinus",6.00811E-07
+"flatworm, platyhelminth",5.99425E-07
+French bulldog,5.96372E-07
+"pick, plectrum, plectron",5.93198E-07
+entertainment center,5.90523E-07
+"jeep, landrover",5.90148E-07
+"kit fox, Vulpes macrotis",5.86257E-07
+"upright, upright piano",5.83278E-07
+poncho,5.79758E-07
+"doormat, welcome mat",5.7885E-07
+lionfish,5.77908E-07
+crane,5.77835E-07
+digital watch,5.70221E-07
+mitten,5.64803E-07
+"basset, basset hound",5.54986E-07
+"leopard, Panthera pardus",5.54982E-07
+"computer keyboard, keypad",5.54733E-07
+bolete,5.51797E-07
+"wallet, billfold, notecase, pocketbook",5.44512E-07
+sorrel,5.44203E-07
+half track,5.43877E-07
+"black and gold garden spider, Argiope aurantia",5.43251E-07
+"lycaenid, lycaenid butterfly",5.42739E-07
+"grand piano, grand",5.41236E-07
+"dalmatian, coach dog, carriage dog",5.39243E-07
+"teddy, teddy bear",5.38145E-07
+cock,5.33876E-07
+"monarch, monarch butterfly, milkweed butterfly, Danaus plexippus",5.29407E-07
+ambulance,5.29273E-07
+"garden spider, Aranea diademata",5.29172E-07
+"wood rabbit, cottontail, cottontail rabbit",5.25202E-07
+marmoset,5.1914E-07
+wall clock,5.16911E-07
+"hog, pig, grunter, squealer, Sus scrofa",5.12576E-07
+Weimaraner,5.10213E-07
+"American Staffordshire terrier, Staffordshire terrier, American pit bull terrier, pit bull terrier",5.04622E-07
+daisy,5.03571E-07
+mosquito net,5.0324E-07
+menu,5.0314E-07
+"pizza, pizza pie",5.02689E-07
+"lawn mower, mower",5.02687E-07
+"Maltese dog, Maltese terrier, Maltese",5.01858E-07
+"black swan, Cygnus atratus",4.96984E-07
+miniature schnauzer,4.87068E-07
+"bullfrog, Rana catesbeiana",4.86612E-07
+Irish wolfhound,4.8356E-07
+Blenheim spaniel,4.80255E-07
+jigsaw puzzle,4.78352E-07
+"limousine, limo",4.75511E-07
+bassoon,4.70804E-07
+"artichoke, globe artichoke",4.68179E-07
+tile roof,4.61675E-07
+"black widow, Latrodectus mactans",4.5892E-07
+groenendael,4.45634E-07
+"black-footed ferret, ferret, Mustela nigripes",4.39699E-07
+"African chameleon, Chamaeleo chamaeleon",4.36621E-07
+tape player,4.33763E-07
+"crib, cot",4.31105E-07
+viaduct,4.27694E-07
+maypole,4.23486E-07
+kelpie,4.20405E-07
+"African grey, African gray, Psittacus erithacus",4.1254E-07
+"studio couch, day bed",4.12174E-07
+"greenhouse, nursery, glasshouse",4.118E-07
+"silky terrier, Sydney silky",4.11318E-07
+coral fungus,4.09701E-07
+bib,4.04635E-07
+"red fox, Vulpes vulpes",4.0253E-07
+shower curtain,4.02176E-07
+"coyote, prairie wolf, brush wolf, Canis latrans",3.9869E-07
+waffle iron,3.89591E-07
+screw,3.88561E-07
+otter,3.86022E-07
+stethoscope,3.83112E-07
+papillon,3.80689E-07
+"guenon, guenon monkey",3.77102E-07
+"night snake, Hypsiglena torquata",3.76466E-07
+"Boston bull, Boston terrier",3.76008E-07
+"American chameleon, anole, Anolis carolinensis",3.75848E-07
+Bedlington terrier,3.67732E-07
+envelope,3.67645E-07
+"prison, prison house",3.67622E-07
+"Samoyed, Samoyede",3.673E-07
+yurt,3.66548E-07
+"thatch, thatched roof",3.61961E-07
+"cocker spaniel, English cocker spaniel, cocker",3.54235E-07
+"notebook, notebook computer",3.54019E-07
+standard schnauzer,3.53733E-07
+"bald eagle, American eagle, Haliaeetus leucocephalus",3.51431E-07
+cauliflower,3.40322E-07
+"bighorn, bighorn sheep, cimarron, Rocky Mountain bighorn, Rocky Mountain sheep, Ovis canadensis",3.40194E-07
+toaster,3.38818E-07
+necklace,3.37939E-07
+Border terrier,3.37785E-07
+admiral,3.37728E-07
+oxcart,3.37666E-07
+"lynx, catamount",3.37396E-07
+mongoose,3.36372E-07
+"beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon",3.36245E-07
+"Staffordshire bullterrier, Staffordshire bull terrier",3.34555E-07
+"vizsla, Hungarian pointer",3.34451E-07
+bassinet,3.33471E-07
+"albatross, mollymawk",3.32902E-07
+"pot, flowerpot",3.30054E-07
+strainer,3.28679E-07
+"racer, race car, racing car",3.25466E-07
+zebra,3.13803E-07
+EntleBucher,3.1289E-07
+"African crocodile, Nile crocodile, Crocodylus niloticus",3.09854E-07
+"passenger car, coach, carriage",3.076E-07
+Norfolk terrier,3.05247E-07
+custard apple,3.05167E-07
+"skunk, polecat, wood pussy",3.04361E-07
+"mantis, mantid",3.04023E-07
+"trolleybus, trolley coach, trackless trolley",3.00435E-07
+carbonara,2.99234E-07
+"European gallinule, Porphyrio porphyrio",2.97374E-07
+"chow, chow chow",2.96086E-07
+"academic gown, academic robe, judge's robe",2.91419E-07
+Great Dane,2.86643E-07
+Mexican hairless,2.8414E-07
+ox,2.81418E-07
+wire-haired fox terrier,2.78502E-07
+miniature poodle,2.76379E-07
+damselfly,2.7592E-07
+mashed potato,2.75099E-07
+Great Pyrenees,2.74572E-07
+"Walker hound, Walker foxhound",2.70912E-07
+brain coral,2.69142E-07
+Rottweiler,2.68779E-07
+espresso maker,2.68336E-07
+"puck, hockey puck",2.67635E-07
+"horned viper, cerastes, sand viper, horned asp, Cerastes cornutus",2.66199E-07
+Lakeland terrier,2.65392E-07
+Welsh springer spaniel,2.64492E-07
+collie,2.63218E-07
+"pool table, billiard table, snooker table",2.60806E-07
+"colobus, colobus monkey",2.5687E-07
+Greater Swiss Mountain dog,2.54967E-07
+cardigan,2.42774E-07
+kite,2.41682E-07
+bluetick,2.35869E-07
+dowitcher,2.35819E-07
+tarantula,2.3364E-07
+"walking stick, walkingstick, stick insect",2.32289E-07
+mixing bowl,2.2887E-07
+"Airedale, Airedale terrier",2.26689E-07
+"barn spider, Araneus cavaticus",2.2523E-07
+"Lhasa, Lhasa apso",2.19369E-07
+boxer,2.1753E-07
+"tree frog, tree-frog",2.16056E-07
+"hip, rose hip, rosehip",2.15946E-07
+mink,2.15399E-07
+"long-horned beetle, longicorn, longicorn beetle",2.14514E-07
+"leaf beetle, chrysomelid",2.13489E-07
+hare,2.12831E-07
+bull mastiff,2.12464E-07
+"Indian elephant, Elephas maximus",2.1076E-07
+"chimpanzee, chimp, Pan troglodytes",2.09741E-07
+"Doberman, Doberman pinscher",2.09034E-07
+"dhole, Cuon alpinus",2.07296E-07
+toucan,2.04825E-07
+alligator lizard,2.0316E-07
+tick,2.02648E-07
+"ant, emmet, pismire",2.01235E-07
+"Scotch terrier, Scottish terrier, Scottie",2.00684E-07
+"sports car, sport car",2.00325E-07
+"tow truck, tow car, wrecker",2.00145E-07
+"spider web, spider's web",2.00016E-07
+"plow, plough",1.99695E-07
+Leonberg,1.99564E-07
+"ostrich, Struthio camelus",1.99561E-07
+electric locomotive,1.95428E-07
+"Pekinese, Pekingese, Peke",1.92265E-07
+"grille, radiator grille",1.9125E-07
+Crock Pot,1.85733E-07
+Shih-Tzu,1.83763E-07
+"gorilla, Gorilla gorilla",1.82821E-07
+"Scottish deerhound, deerhound",1.81695E-07
+"box turtle, box tortoise",1.76115E-07
+bee eater,1.74165E-07
+"snow leopard, ounce, Panthera uncia",1.73743E-07
+"brown bear, bruin, Ursus arctos",1.72873E-07
+"African elephant, Loxodonta africana",1.72462E-07
+"hippopotamus, hippo, river horse, Hippopotamus amphibius",1.70351E-07
+"whiptail, whiptail lizard",1.64873E-07
+rhinoceros beetle,1.64122E-07
+abacus,1.63529E-07
+Irish water spaniel,1.62291E-07
+"limpkin, Aramus pictus",1.60629E-07
+"grasshopper, hopper",1.59737E-07
+"ground beetle, carabid beetle",1.59342E-07
+pomegranate,1.57913E-07
+"fire engine, fire truck",1.57789E-07
+"clumber, clumber spaniel",1.57606E-07
+"marimba, xylophone",1.57394E-07
+"timber wolf, grey wolf, gray wolf, Canis lupus",1.56325E-07
+steam locomotive,1.55959E-07
+"Afghan hound, Afghan",1.55677E-07
+purse,1.53262E-07
+"English springer, English springer spaniel",1.5314E-07
+"spotted salamander, Ambystoma maculatum",1.51251E-07
+soft-coated wheaten terrier,1.49183E-07
+"bullet train, bullet",1.48105E-07
+teapot,1.47755E-07
+water snake,1.47162E-07
+"Dandie Dinmont, Dandie Dinmont terrier",1.45814E-07
+sewing machine,1.45767E-07
+"Sealyham terrier, Sealyham",1.44462E-07
+Chesapeake Bay retriever,1.4342E-07
+Border collie,1.42592E-07
+"little blue heron, Egretta caerulea",1.42385E-07
+"yellow lady's slipper, yellow lady-slipper, Cypripedium calceolus, Cypripedium parviflorum",1.42084E-07
+"affenpinscher, monkey pinscher, monkey dog",1.42081E-07
+strawberry,1.40366E-07
+"nematode, nematode worm, roundworm",1.34497E-07
+"king snake, kingsnake",1.32097E-07
+"Newfoundland, Newfoundland dog",1.31274E-07
+Tibetan mastiff,1.30251E-07
+sea urchin,1.29848E-07
+hen,1.29601E-07
+Rhodesian ridgeback,1.27968E-07
+"buckeye, horse chestnut, conker",1.26942E-07
+"ram, tup",1.26921E-07
+German short-haired pointer,1.2672E-07
+toy poodle,1.26717E-07
+gyromitra,1.25588E-07
+bittern,1.2509E-07
+marmot,1.24197E-07
+keeshond,1.24182E-07
+jay,1.22132E-07
+"Angora, Angora rabbit",1.20951E-07
+toy terrier,1.18979E-07
+"guinea pig, Cavia cobaya",1.18856E-07
+cricket,1.17844E-07
+standard poodle,1.17479E-07
+"impala, Aepyceros melampus",1.15299E-07
+Granny Smith,1.14753E-07
+"meat loaf, meatloaf",1.13003E-07
+bison,1.12844E-07
+"ibex, Capra ibex",1.12431E-07
+cassette player,1.11364E-07
+"harvestman, daddy longlegs, Phalangium opilio",1.11221E-07
+"bloodhound, sleuthhound",1.09217E-07
+Appenzeller,1.08625E-07
+tiger beetle,1.07163E-07
+go-kart,1.06388E-07
+"wolf spider, hunting spider",1.05681E-07
+manhole cover,1.04492E-07
+convertible,1.03749E-07
+tusker,1.03614E-07
+"indigo bunting, indigo finch, indigo bird, Passerina cyanea",1.02274E-07
+ptarmigan,1.01071E-07
+"wild boar, boar, Sus scrofa",1.00216E-07
+warthog,1.00202E-07
+"green lizard, Lacerta viridis",9.98768E-08
+"hyena, hyaena",9.91864E-08
+"diamondback, diamondback rattlesnake, Crotalus adamanteus",9.82633E-08
+"oystercatcher, oyster catcher",9.70689E-08
+CD player,9.47163E-08
+Bernese mountain dog,9.36686E-08
+"porcupine, hedgehog",9.30917E-08
+quail,9.02085E-08
+"Bouvier des Flandres, Bouviers des Flandres",8.97388E-08
+"redshank, Tringa totanus",8.93008E-08
+briard,8.8989E-08
+bustard,8.88967E-08
+green mamba,8.76653E-08
+"ruddy turnstone, Arenaria interpres",8.74524E-08
+komondor,8.58339E-08
+"echidna, spiny anteater, anteater",8.43492E-08
+"hognose snake, puff adder, sand viper",8.39616E-08
+typewriter keyboard,8.29407E-08
+partridge,8.29081E-08
+"ruffed grouse, partridge, Bonasa umbellus",8.11932E-08
+lorikeet,8.09003E-08
+gazelle,8.07879E-08
+"siamang, Hylobates syndactylus, Symphalangus syndactylus",8.02087E-08
+fig,7.98375E-08
+"water ouzel, dipper",7.87106E-08
+stone wall,7.73881E-08
+"piggy bank, penny bank",7.72364E-08
+Kerry blue terrier,7.40953E-08
+digital clock,7.38033E-08
+"giant panda, panda, panda bear, coon bear, Ailuropoda melanoleuca",7.2614E-08
+hartebeest,6.82112E-08
+"water buffalo, water ox, Asiatic buffalo, Bubalus bubalis",6.81294E-08
+broccoli,6.75467E-08
+"Komodo dragon, Komodo lizard, dragon lizard, giant lizard, Varanus komodoensis",6.3126E-08
+magpie,6.26101E-08
+"Old English sheepdog, bobtail",6.26051E-08
+"odometer, hodometer, mileometer, milometer",6.04237E-08
+"pickup, pickup truck",5.88084E-08
+"jaguar, panther, Panthera onca, Felis onca",5.80108E-08
+peacock,5.74951E-08
+"Shetland sheepdog, Shetland sheep dog, Shetland",5.72317E-08
+"junco, snowbird",5.5366E-08
+"Gila monster, Heloderma suspectum",5.49134E-08
+Gordon setter,5.4668E-08
+space bar,5.41651E-08
+coucal,5.36567E-08
+badger,5.35679E-08
+"European fire salamander, Salamandra salamandra",5.27833E-08
+vine snake,5.11234E-08
+baboon,5.06757E-08
+"capuchin, ringtail, Cebus capucinus",5.05202E-08
+agama,5.04628E-08
+giant schnauzer,4.98197E-08
+"lion, king of beasts, Panthera leo",4.95527E-08
+Japanese spaniel,4.95123E-08
+wombat,4.90481E-08
+bulbul,4.56662E-08
+"otterhound, otter hound",4.44325E-08
+bell pepper,4.40358E-08
+"police van, police wagon, paddy wagon, patrol wagon, wagon, black Maria",4.3804E-08
+jacamar,4.23025E-08
+vulture,4.16772E-08
+Brabancon griffon,4.10258E-08
+"Irish setter, red setter",4.00082E-08
+"sidewinder, horned rattlesnake, Crotalus cerastes",3.91297E-08
+"great grey owl, great gray owl, Strix nebulosa",3.89517E-08
+curly-coated retriever,3.81272E-08
+"American black bear, black bear, Ursus americanus, Euarctos americanus",3.76255E-08
+"white stork, Ciconia ciconia",3.71092E-08
+Sussex spaniel,3.68113E-08
+"sloth bear, Melursus ursinus, Ursus ursinus",3.61938E-08
+"ringneck snake, ring-necked snake, ring snake",3.52003E-08
+"American coot, marsh hen, mud hen, water hen, Fulica americana",3.41805E-08
+Australian terrier,3.29442E-08
+chickadee,3.2019E-08
+"Tibetan terrier, chrysanthemum dog",3.12925E-08
+nail,3.12347E-08
+flat-coated retriever,2.95461E-08
+"black stork, Ciconia nigra",2.83051E-08
+acorn squash,2.66872E-08
+"dishrag, dishcloth",2.65252E-08
+"African hunting dog, hyena dog, Cape hunting dog, Lycaon pictus",2.52535E-08
+black-and-tan coonhound,2.41626E-08
+Irish terrier,2.35405E-08
+weevil,2.23417E-08
+"cheetah, chetah, Acinonyx jubatus",2.06058E-08
+Norwich terrier,1.87942E-08
+"garter snake, grass snake",1.72069E-08
+"thunder snake, worm snake, Carphophis amoenus",1.60767E-08
+"green snake, grass snake",1.34961E-08
+dung beetle,6.68866E-09
