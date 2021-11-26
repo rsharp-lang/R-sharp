@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build ../ /save ./aaa.zip",
+      "commandLineArgs": "\"E:\\GCModeller\\src\\R-sharp\\Library\\demo\\machineLearning\\CNN\\detectObject.R\"",
       "workingDirectory": "E:\\metagenomics\\.pkg"
     }
   }
