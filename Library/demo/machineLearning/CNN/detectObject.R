@@ -2,7 +2,12 @@ imports "CNN" from "MLkit";
 
 const convolutionalNeuralNetwork = CeNiN("P:\imagenet-matconvnet-vgg-f.cenin");
 
+sink(file = `${@dir}/run_cnn.txt`);
+
 for(imgfile in list.files(@dir, pattern = "*.jpg")) {
+	cat("\n\n\n");
+	print(basename(imgfile));
+
 	convolutionalNeuralNetwork
 	|> detectObject(target = readImage(file = imgfile))
 	|> [
@@ -13,4 +18,8 @@ for(imgfile in list.files(@dir, pattern = "*.jpg")) {
 		)
 	]
 	;
+	
+	cat("\n\n\n");
 }
+
+sink();
