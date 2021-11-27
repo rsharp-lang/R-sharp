@@ -1,9 +1,11 @@
 ﻿Imports System.Drawing
+Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.MachineLearning.Convolutional
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 <Package("CNN")>
@@ -26,5 +28,24 @@ Module CNN
                 {"probs", probs}
             }
         }
+    End Function
+
+    <ExportAPI("saveModel")>
+    Public Function saveModel(model As CeNiN, file As Object, Optional env As Environment = Nothing) As Object
+        Dim buffer = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env)
+
+        If buffer Like GetType(Message) Then
+            Return buffer.TryCast(Of Message)
+        End If
+
+        Dim result As Boolean = model.Save(buffer)
+
+        Call buffer.TryCast(Of Stream).Flush()
+
+        If TypeOf file Is String Then
+            Call buffer.TryCast(Of Stream).Dispose()
+        End If
+
+        Return result
     End Function
 End Module
