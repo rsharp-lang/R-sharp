@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"E:\\GCModeller\\src\\R-sharp\\Library\\demo\\machineLearning\\CNN\\save.R\"",
+      "commandLineArgs": "\"E:\\GCModeller\\src\\R-sharp\\Library\\demo\\machineLearning\\CNN\\save.R\" --debug",
       "workingDirectory": "E:\\metagenomics\\.pkg"
     }
   }

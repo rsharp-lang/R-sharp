@@ -2,7 +2,7 @@ imports "CNN" from "MLkit";
 
 options(strict = FALSE);
 
-convolutionalNeuralNetwork = CeNiN("P:\imagenet-matconvnet-vgg-f.cenin");
+convolutionalNeuralNetwork = CeNiN("P:\imagenet-matconvnet-vgg-f_new.cenin");
 
 sink(file = `${@dir}/run_cnn.txt`);
 

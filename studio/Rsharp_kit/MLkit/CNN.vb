@@ -62,8 +62,6 @@ Module CNN
 
         Dim result As Boolean = model.Save(buffer)
 
-        Call buffer.TryCast(Of Stream).Flush()
-
         If TypeOf file Is String Then
             Call buffer.TryCast(Of Stream).Dispose()
         End If
