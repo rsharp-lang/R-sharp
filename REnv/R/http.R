@@ -48,7 +48,7 @@ const getImage as function(url, interval = 3) {
         # and then write it to the cache repository
         wget(url, cache_file);
       },
-      interval = 3,
+      interval = interval,
       filetype = "png")
   );
 }
@@ -74,7 +74,7 @@ const getHtml as function(url, interval = 3) {
         content(requests.get(url));
       }
     },
-    interval = 3,
+    interval = interval,
     filetype = "html")
   )
   ;
