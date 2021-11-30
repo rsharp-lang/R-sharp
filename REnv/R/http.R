@@ -11,10 +11,16 @@ imports ["Html", "http"] from "webKit";
 #' 
 const http_get as function(url, streamTo, interval = 3, filetype = "html") {
   const http.cache_dir as string = getOption("http.cache_dir") || stop("You should set of the 'http.cache_dir' option at first!");
+  const http.debug as boolean = getOption("http.debug", default = FALSE);
+
+  if (http.debug) {
+	print(`[request] ${url}`);
+  }
 
   const cacheKey as string   = md5(url);
   const prefix as string     = substr(cacheKey, 1, 2);
   const cache_file as string = `${http.cache_dir}/${prefix}/${cacheKey}.${filetype}`;
+  const hit_cache = list(hit = "yes");
 
   if ((!file.exists(cache_file)) || (file.size(cache_file) <= 0)) {
     # request data from the remote server
@@ -22,10 +28,18 @@ const http_get as function(url, streamTo, interval = 3, filetype = "html") {
     # sleep for a seconds after request resource data
     # from the remote server
     sleep(interval);
+	
+	if (http.debug) {
+		print(`[cache] ${cache_file}`);
+	}
+	
+	hit_cache$hit = "no";
   }
 
-  if (getOption("debug", default = FALSE)) {
-	  print(`Cached_at: ${cache_file}`);
+  if (http.debug) {
+	  if (as.logical(hit_cache$hit)) {
+		print(`[hit_cache] ${cache_file}`);
+	  }
   }
 
   cache_file;
