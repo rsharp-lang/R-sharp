@@ -2048,7 +2048,10 @@ RE0:
         ''' will be ignored, With a warning.
         ''' </remarks>
         <ExportAPI("stop")>
-        Public Function [stop](<RRawVectorArgument> message As Object, Optional envir As Environment = Nothing) As Message
+        Public Function [stop](<RRawVectorArgument>
+                               Optional message As Object = "unexpected error",
+                               Optional envir As Environment = Nothing) As Message
+
             Return debug.stop(message, envir)
         End Function
 
