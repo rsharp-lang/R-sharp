@@ -212,8 +212,31 @@ Namespace Runtime.Internal.Invokes
         ''' seq.int, seq_along And seq_len are primitive.
         ''' </remarks>
         <ExportAPI("seq")>
-        Public Function seq(from As Double, [to] As Double, Optional by As Double = 1) As Double()
-            Return Microsoft.VisualBasic.Math.seq(from, [to], by).ToArray
+        Public Function seq(from As Object, [to] As Object,
+                            Optional by As Object = 1.0,
+                            Optional env As Environment = Nothing) As Object
+
+            Dim t1 As RType = RType.GetRSharpType(from.GetType)
+            Dim t2 As RType = RType.GetRSharpType([to].GetType)
+
+            If t1.mode.IsNumeric AndAlso t2.mode.IsNumeric Then
+                Return Microsoft.VisualBasic.Math _
+                    .seq(CDbl(from), CDbl([to]), CDbl(by)) _
+                    .ToArray
+            ElseIf t1.mode = TypeCodes.string AndAlso t2.mode = TypeCodes.string Then
+                Dim ascFrom As Double = Asc(any.ToString(from).First)
+                Dim ascTo As Double = Asc(any.ToString([to]).First)
+                Dim steps As Double = CDbl(by)
+                Dim ascii As Integer() = Microsoft.VisualBasic.Math _
+                    .seq(ascFrom, ascTo, by) _
+                    .Select(Function(d) CInt(d)) _
+                    .ToArray
+                Dim chrs As Char() = (From i As Integer In ascii Select ChrW(i)).ToArray
+
+                Return chrs
+            Else
+                Return Message.InCompatibleType(GetType(Double), from.GetType, env)
+            End If
         End Function
 
         ''' <summary>
