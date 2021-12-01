@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::ed7ec46c2c937c855d6fd555c37c5896, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssignExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class ValueAssignExpression
-    ' 
-    '         Properties: expressionName, symbolSize, targetSymbols, type, value
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
-    '                   GetSymbol, setByNameIndex, setFromDataFrame, setFromObjectList, setFromVector
-    '                   setVectorElements, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class ValueAssignExpression
+' 
+'         Properties: expressionName, symbolSize, targetSymbols, type, value
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
+'                   GetSymbol, setByNameIndex, setFromDataFrame, setFromObjectList, setFromVector
+'                   setVectorElements, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -397,8 +397,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Select
 
             If target Is Nothing Then
-                If TypeOf symbolName Is Literal AndAlso Not envir.globalEnvironment.Rscript.strict Then
-                    envir.Push(DirectCast(symbolName, Literal).value.ToString, value, [readonly]:=False)
+                If Not envir.globalEnvironment.Rscript.strict Then
+                    Dim name As String
+
+                    If TypeOf symbolName Is Literal Then
+                        name = DirectCast(symbolName, Literal).value.ToString
+                    ElseIf TypeOf symbolName Is SymbolReference Then
+                        name = DirectCast(symbolName, SymbolReference).symbol
+                    Else
+                        Return Message.SymbolNotFound(envir, symbolName.ToString, TypeCodes.generic)
+                    End If
+
+                    Call envir.Push(name, value, [readonly]:=False)
+
                     Return Nothing
                 Else
                     Return Message.SymbolNotFound(envir, symbolName.ToString, TypeCodes.generic)
