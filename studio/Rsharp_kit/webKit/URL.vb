@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::949620530d63769f3e7458350cc1be8f, studio\Rsharp_kit\webKit\URL.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module URL
-    ' 
-    '     Function: [get], content, HttpCookies, post, upload
-    '               urlencode, wget
-    ' 
-    ' /********************************************************************************/
+' Module URL
+' 
+'     Function: [get], content, HttpCookies, post, upload
+'               urlencode, wget
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -123,6 +123,7 @@ Public Module URL
     <ExportAPI("requests.get")>
     Public Function [get](url As String,
                           Optional headers As list = Nothing,
+                          Optional default404 As Object = "(404) Not Found!",
                           Optional env As Environment = Nothing) As WebResponseResult
 
         Dim httpHeaders As Dictionary(Of String, String) = headers?.AsGeneric(Of String)(env)
@@ -136,9 +137,20 @@ Public Module URL
                 .timespan = 0
             }
         Else
-            Return HttpGet _
-                .BuildWebRequest(url, httpHeaders, Nothing, Nothing) _
-                .UrlGet(echo:=verbose)
+            Try
+                Return HttpGet _
+                    .BuildWebRequest(url, httpHeaders, Nothing, Nothing) _
+                    .UrlGet(echo:=verbose)
+            Catch ex As Exception When InStr(ex.Message, "(404) Not Found") > 0
+                Return New WebResponseResult With {
+                    .url = url,
+                    .html = default404,
+                    .timespan = 0,
+                    .headers = ResponseHeaders.Header404NotFound
+                }
+            Catch ex As Exception
+                Throw
+            End Try
         End If
     End Function
 
