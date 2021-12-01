@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::de729b3e9732c9f2cbf10f964aafbfb1, R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class dataframe
-    ' 
-    '         Properties: colnames, columns, ncols, nrows, rownames
-    ' 
-    '         Function: checkColumnNames, CreateDataFrame, forEachRow, GetByRowIndex, getKeyByIndex
-    '                   getNames, getRowIndex, getRowList, getRowNames, (+2 Overloads) getVector
-    '                   hasName, projectByColumn, setNames, sliceByRow, subsetColData
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class dataframe
+' 
+'         Properties: colnames, columns, ncols, nrows, rownames
+' 
+'         Function: checkColumnNames, CreateDataFrame, forEachRow, GetByRowIndex, getKeyByIndex
+'                   getNames, getRowIndex, getRowList, getRowNames, (+2 Overloads) getVector
+'                   hasName, projectByColumn, setNames, sliceByRow, subsetColData
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -126,6 +126,14 @@ Namespace Runtime.Internal.Object
                 Return getColumnVector(getKeyByIndex(index))
             End Get
         End Property
+
+        Sub New()
+        End Sub
+
+        Sub New(clone As dataframe)
+            rownames = clone.colnames
+            columns = New Dictionary(Of String, Array)(clone.columns)
+        End Sub
 
         ''' <summary>
         ''' 将列索引号转换为列名称
@@ -356,12 +364,14 @@ Namespace Runtime.Internal.Object
         ''' <summary>
         ''' 所传递进来的索引编号，应该是以零为底的
         ''' </summary>
-        ''' <param name="index"></param>
+        ''' <param name="index">
+        ''' 以零为底的索引号列表，-1对应的行将会返回空值的行数据
+        ''' </param>
         ''' <returns></returns>
         Public Function GetByRowIndex(index As Integer()) As dataframe
             Dim subsetRowNumbers As String() = index _
                 .Select(Function(i, j)
-                            Return rownames.ElementAtOrDefault(i, j)
+                            Return rownames.ElementAtOrDefault(i, j + 1)
                         End Function) _
                 .ToArray
             Dim subsetData As Dictionary(Of String, Array) = columns _
@@ -376,6 +386,14 @@ Namespace Runtime.Internal.Object
             }
         End Function
 
+        ''' <summary>
+        ''' 索引编号，应该是以零为底的
+        ''' </summary>
+        ''' <param name="c"></param>
+        ''' <param name="index">
+        ''' 索引编号，应该是以零为底的。-1的元素返回空值
+        ''' </param>
+        ''' <returns></returns>
         Private Function subsetColData(c As Array, index As Integer()) As Array
             Dim type As Type = MeasureRealElementType(c)
             Dim a As Array = Array.CreateInstance(type, index.Length)
@@ -387,7 +405,11 @@ Namespace Runtime.Internal.Object
                 Call a.SetValue(c.GetValue(Scan0), Scan0)
             Else
                 For Each i As SeqValue(Of Integer) In index.SeqIterator
-                    Call a.SetValue(c.GetValue(i.value), i)
+                    If i.value = -1 Then
+                        Call a.SetValue(Nothing, i)
+                    Else
+                        Call a.SetValue(c.GetValue(i.value), i)
+                    End If
                 Next
             End If
 

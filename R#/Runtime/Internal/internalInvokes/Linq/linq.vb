@@ -1,48 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::dc4bc2bcc992b10e9d5e88f49dd02bdd, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module linq
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: all, any, doWhile, fastIndexing, first
-    '                   groupBy, groupsSummary, groupSummary, last, orderBy
-    '                   produceKeyedSequence, progress, projectAs, reverse, rotate_left
-    '                   rotate_right, runFilterPipeline, runWhichFilter, skip, split
-    '                   take, tryKeyBy, unique, where, whichMax
-    '                   whichMin
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module linq
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: all, any, doWhile, fastIndexing, first
+'                   groupBy, groupsSummary, groupSummary, last, orderBy
+'                   produceKeyedSequence, progress, projectAs, reverse, rotate_left
+'                   rotate_right, runFilterPipeline, runWhichFilter, skip, split
+'                   take, tryKeyBy, unique, where, whichMax
+'                   whichMin
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 Imports obj = Microsoft.VisualBasic.Scripting
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
@@ -89,6 +90,58 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Next
 
             Return summary
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="left"></param>
+        ''' <param name="right"></param>
+        ''' <param name="by"></param>
+        ''' <returns></returns>
+        <ExportAPI("join")>
+        Public Function join(left As dataframe, right As dataframe,
+                             Optional by_x As String = Nothing,
+                             Optional by_y As String = Nothing,
+                             Optional [by] As String = Nothing,
+                             Optional env As Environment = Nothing) As Object
+
+            If left Is Nothing Then
+                Return right
+            ElseIf right Is Nothing Then
+                Return left
+            End If
+
+            Dim keyX As String()
+            Dim keyY As String()
+
+            If Not by Is Nothing Then
+                keyX = left.getColumnVector(by)
+                keyY = right.getColumnVector(by)
+            ElseIf by_x Is Nothing OrElse by_y Is Nothing Then
+                Return Internal.debug.stop("missing primary key for join two dataframe!", env)
+            Else
+                keyX = left.getColumnVector(by_x)
+                keyY = right.getColumnVector(by_y)
+            End If
+
+            Dim idx As Dictionary(Of String, Integer) = Index(Of String).Indexing(keyY)
+            Dim i As Integer() = keyX _
+                .Select(Function(key) idx.TryGetValue(key, [default]:=-1)) _
+                .ToArray
+
+            right = right.GetByRowIndex(i)
+            left = New dataframe(left)
+
+            For Each colName As String In right.colnames
+                If left.hasName(colName) Then
+                    left.columns.Add($"{colName}.1", right(colName))
+                Else
+                    left.columns.Add(colName, right(colName))
+                End If
+            Next
+
+            Return left
         End Function
 
         ''' <summary>
