@@ -131,7 +131,7 @@ Namespace Runtime.Internal.Object
         End Sub
 
         Sub New(clone As dataframe)
-            rownames = clone.colnames
+            rownames = clone.rownames
             columns = New Dictionary(Of String, Array)(clone.columns)
         End Sub
 
