@@ -99,12 +99,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <param name="right"></param>
         ''' <param name="by"></param>
         ''' <returns></returns>
-        <ExportAPI("join")>
-        Public Function join(left As dataframe, right As dataframe,
-                             Optional by_x As String = Nothing,
-                             Optional by_y As String = Nothing,
-                             Optional [by] As String = Nothing,
-                             Optional env As Environment = Nothing) As Object
+        <ExportAPI("left_join")>
+        Public Function left_join(left As dataframe, right As dataframe,
+                                  Optional by_x As String = Nothing,
+                                  Optional by_y As String = Nothing,
+                                  Optional [by] As String = Nothing,
+                                  Optional env As Environment = Nothing) As Object
 
             If left Is Nothing Then
                 Return right
