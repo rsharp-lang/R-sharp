@@ -46,16 +46,26 @@ Imports Microsoft.VisualBasic.MIME.Html.Document
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 
+''' <summary>
+''' GraphQuery is a query language and execution engine tied 
+''' to any backend service. It is back-end language 
+''' independent.
+''' </summary>
 <Package("graphquery")>
 Public Module HtmlGraphQuery
 
+    ''' <summary>
+    ''' Parse the graphquery script text
+    ''' </summary>
+    ''' <param name="graphquery"></param>
+    ''' <returns></returns>
     <ExportAPI("parseQuery")>
     Public Function parseQuery(graphquery As String) As Query
         Return QueryParser.GetQuery(graphquery)
     End Function
 
     ''' <summary>
-    ''' 
+    ''' run graph query on a document
     ''' </summary>
     ''' <param name="document"></param>
     ''' <param name="graphquery"></param>
