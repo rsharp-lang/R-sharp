@@ -97,7 +97,7 @@ Module ImageFilters
     End Function
 
     <ExportAPI("sharp")>
-    Public Function Sharp(image As Image, Optional ByVal sharpDgree As Single = 0.3, Optional max As Double = 255) As Image
+    Public Function Sharp(image As Image, Optional sharpDgree As Single = 0.3, Optional max As Double = 255) As Image
         Using bitmap As BitmapBuffer = BitmapBuffer.FromImage(image)
             Return bitmap.Sharp(sharpDgree, max).GetImage(flush:=True)
         End Using
