@@ -5,21 +5,23 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports stdNum = System.Math
 
 Namespace Runtime.Internal.ConsolePrinter
 
     Module tablePrinter
 
         <Extension>
-        Public Iterator Function ToContent(table As dataframe, env As GlobalEnvironment) As IEnumerable(Of ConsoleTableBaseData)
-            Dim rowsNames As String() = {"<mode>"}.JoinIterates(table.getRowNames).ToArray
+        Public Iterator Function ToContent(table As dataframe, globalEnv As GlobalEnvironment) As IEnumerable(Of ConsoleTableBaseData)
+            Dim maxPrint% = globalEnv.options.maxPrint
+            Dim nrows As Integer = stdNum.Min(table.nrows, maxPrint)
+            Dim rowsNames As String() = {"<mode>"}.JoinIterates(table.getRowNames.Take(nrows)).ToArray
             Dim maxRowNames As Integer = rowsNames.MaxLengthString.Length
-            Dim maxColumns As Integer = env.getMaxColumns
-            Dim nrows As Integer = table.nrows
+            Dim maxColumns As Integer = globalEnv.getMaxColumns
             Dim columns As NamedCollection(Of String)() = table.colnames _
                 .Select(Function(colname)
                             Dim type As Type = Nothing
-                            Dim arr As String() = printer.getStrings(table(colname), type, env).ToArray
+                            Dim arr As String() = printer.getStrings(table(colname), type, globalEnv).Take(nrows).ToArray
                             Dim typeStr As String = $"<{RType.GetRSharpType(type).ToString}>"
                             Dim max As String = {colname, typeStr} _
                                 .JoinIterates(arr) _
@@ -86,15 +88,30 @@ Namespace Runtime.Internal.ConsolePrinter
             Return data
         End Function
 
+        ReadOnly formatParser As Dictionary(Of String, ConsoleTableBuilderFormat) = Enums(Of ConsoleTableBuilderFormat) _
+            .ToDictionary(Function(f) f.Description.ToLower,
+                          Function(f)
+                              Return f
+                          End Function)
+
         <Extension>
         Public Sub PrintTable(table As dataframe, output As RContentOutput, env As GlobalEnvironment)
+            Dim maxPrint% = env.options.maxPrint
+            Dim reachMax As Boolean = table.nrows >= maxPrint
+            Dim delta As Integer = table.nrows - maxPrint
+            Dim format As ConsoleTableBuilderFormat = formatParser(Strings.LCase(env.options.getOption("table.format", NameOf(ConsoleTableBuilderFormat.Minimal))))
+
             For Each part As ConsoleTableBaseData In table.ToContent(env)
                 Call ConsoleTableBuilder _
                     .From(part) _
-                    .WithFormat(ConsoleTableBuilderFormat.Minimal) _
+                    .WithFormat(format) _
                     .Export _
                     .ToString() _
                     .DoCall(AddressOf output.WriteLine)
+
+                If reachMax Then
+                    Call output.WriteLine($" [ reached 'max' / getOption(""max.print"") -- omitted {delta} rows ]")
+                End If
             Next
         End Sub
     End Module
