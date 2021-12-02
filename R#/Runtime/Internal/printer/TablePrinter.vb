@@ -5,7 +5,6 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.ConsolePrinter
 
@@ -21,7 +20,8 @@ Namespace Runtime.Internal.ConsolePrinter
                 .Select(Function(colname)
                             Dim type As Type = Nothing
                             Dim arr As String() = printer.getStrings(table(colname), type, env).ToArray
-                            Dim max As String = {colname, RType.GetRSharpType(type).ToString} _
+                            Dim typeStr As String = RType.GetRSharpType(type).ToString
+                            Dim max As String = {colname, typeStr} _
                                 .JoinIterates(arr) _
                                 .MaxLengthString
 
@@ -37,7 +37,7 @@ Namespace Runtime.Internal.ConsolePrinter
 
                             Return New NamedCollection(Of String) With {
                                 .name = New String(" "c, max.Length - colname.Length) & colname,
-                                .value = {RType.GetRSharpType(type).ToString} _
+                                .value = {New String(" "c, max.Length - typeStr.Length) & typeStr} _
                                     .JoinIterates(arr) _
                                     .ToArray,
                                 .description = max.Length
