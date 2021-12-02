@@ -12,7 +12,7 @@ Namespace Runtime.Internal.ConsolePrinter
 
         <Extension>
         Public Iterator Function ToContent(table As dataframe, env As GlobalEnvironment) As IEnumerable(Of ConsoleTableBaseData)
-            Dim rowsNames As String() = table.rownames
+            Dim rowsNames As String() = table.getRowNames
             Dim maxRowNames As Integer = rowsNames.MaxLengthString.Length
             Dim maxColumns As Integer = env.getMaxColumns
             Dim nrows As Integer = table.nrows
@@ -23,12 +23,16 @@ Namespace Runtime.Internal.ConsolePrinter
 
                             arr = arr _
                                 .Select(Function(str)
+                                            If str Is Nothing Then
+                                                str = ""
+                                            End If
+
                                             Return New String(" "c, max.Length - str.Length) & str
                                         End Function) _
                                 .ToArray
 
                             Return New NamedCollection(Of String) With {
-                                .name = colname,
+                                .name = New String(" "c, max.Length - colname.Length) & colname,
                                 .value = arr,
                                 .description = max.Length
                             }
@@ -51,6 +55,7 @@ Namespace Runtime.Internal.ConsolePrinter
                     size = maxRowNames
                 Else
                     part.Add(col)
+                    size += Integer.Parse(col.description)
                 End If
             Next
 

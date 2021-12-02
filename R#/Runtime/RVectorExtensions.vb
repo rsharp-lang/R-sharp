@@ -389,6 +389,10 @@ Namespace Runtime
                     Else
                         o = Conversion.CTypeDynamic(o, typeofT)
                     End If
+                ElseIf typeofT Is GetType(String) AndAlso o.GetType Is GetType(Void) Then
+                    Return DirectCast(CObj("NULL"), T)
+                ElseIf typeofT Is GetType(String) AndAlso TypeOf o Is Type AndAlso o Is GetType(Void) Then
+                    Return DirectCast(CObj("NULL"), T)
                 Else
                     ' if apply the RConversion.CTypeDynamic
                     ' then it may decouple object from vbObject container
