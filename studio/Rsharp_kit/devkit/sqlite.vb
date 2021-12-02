@@ -98,9 +98,11 @@ Module sqlite
         Dim table As New dataframe With {
             .columns = New Dictionary(Of String, Array)
         }
+        Dim index As Integer
 
         For i As Integer = 0 To colnames.Length - 1
-            table.columns(colnames(i)) = rows.Select(Function(r) r.ColumnData(i)).ToArray
+            index = i
+            table.columns(colnames(i)) = rows.Select(Function(r) r.ColumnData(index)).ToArray
             table.columns(colnames(i)) = REnv.TryCastGenericArray(table.columns(colnames(i)), env)
         Next
 
