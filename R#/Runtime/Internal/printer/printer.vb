@@ -291,7 +291,7 @@ printSingleElement:
                                       End Function) _
                               .JoinBy(", ")
                        End Function
-            ElseIf elementType.FullName = "System.RuntimeType" Then
+            ElseIf elementType Is GetType(void) OrElse elementType.FullName = "System.RuntimeType" Then
                 Return Function(obj)
                            ' 20210119
                            ' handle NA string at here

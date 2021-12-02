@@ -111,11 +111,11 @@ Namespace Runtime.Internal.ConsolePrinter
                     .Export _
                     .ToString() _
                     .DoCall(AddressOf output.WriteLine)
-
-                If reachMax Then
-                    Call output.WriteLine($" [ reached 'max' / getOption(""max.print"") -- omitted {delta} rows ]")
-                End If
             Next
+
+            If reachMax Then
+                Call output.WriteLine($" [ reached 'max' / getOption(""max.print"") -- omitted {delta} rows ]")
+            End If
         End Sub
     End Module
 End Namespace
