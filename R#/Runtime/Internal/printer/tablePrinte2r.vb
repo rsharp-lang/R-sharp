@@ -8,7 +8,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.ConsolePrinter
 
-    Module tablePrinter
+    Module tablePrinte2r
 
         <Extension>
         Public Iterator Function ToContent(table As dataframe, env As GlobalEnvironment) As IEnumerable(Of ConsoleTableBaseData)
