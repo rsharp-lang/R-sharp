@@ -99,7 +99,10 @@ Namespace Runtime.Internal.ConsolePrinter
             Dim maxPrint% = env.options.maxPrint
             Dim reachMax As Boolean = table.nrows >= maxPrint
             Dim delta As Integer = table.nrows - maxPrint
-            Dim format As ConsoleTableBuilderFormat = formatParser(Strings.LCase(env.options.getOption("table.format", NameOf(ConsoleTableBuilderFormat.Minimal))))
+            Dim format As ConsoleTableBuilderFormat = formatParser.TryGetValue(
+                index:=Strings.LCase(env.options.getOption("table.format", NameOf(ConsoleTableBuilderFormat.Minimal))),
+                [default]:=ConsoleTableBuilderFormat.Minimal
+            )
 
             For Each part As ConsoleTableBaseData In table.ToContent(env)
                 Call ConsoleTableBuilder _
