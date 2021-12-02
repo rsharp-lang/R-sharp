@@ -2175,16 +2175,23 @@ RE0:
         ''' easily added for new classes.
         ''' </summary>
         ''' <param name="x">an object used to select a method.</param>
+        ''' <param name="quote">
+        ''' logical, indicating whether Or Not strings (characters) should be 
+        ''' printed with surrounding quotes.
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("print")>
-        Public Function print(<RRawVectorArgument> x As Object, env As Environment) As Object
+        Public Function print(<RRawVectorArgument> x As Object,
+                              Optional quote As Boolean = True,
+                              Optional env As Environment = Nothing) As Object
+
             Static dummy As New Object
 
             ' keeps pretty print in multiple threading environment
             SyncLock dummy
+
                 ' 这个函数是由用户指定调用的，会忽略掉invisible属性值
-                '
                 If x Is Nothing Then
                     Call env.globalEnvironment.stdout.WriteLine("NULL")
                     ' just returns nothing literal
