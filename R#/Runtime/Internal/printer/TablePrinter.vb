@@ -20,7 +20,7 @@ Namespace Runtime.Internal.ConsolePrinter
                 .Select(Function(colname)
                             Dim type As Type = Nothing
                             Dim arr As String() = printer.getStrings(table(colname), type, env).ToArray
-                            Dim typeStr As String = RType.GetRSharpType(type).ToString
+                            Dim typeStr As String = $"<{RType.GetRSharpType(type).ToString}>"
                             Dim max As String = {colname, typeStr} _
                                 .JoinIterates(arr) _
                                 .MaxLengthString
@@ -59,10 +59,10 @@ Namespace Runtime.Internal.ConsolePrinter
                     part.Clear()
                     part.Add(New NamedCollection(Of String)("", rowsNames))
                     size = maxRowNames
-                Else
-                    part.Add(col)
-                    size += Integer.Parse(col.description)
                 End If
+
+                part.Add(col)
+                size += Integer.Parse(col.description)
             Next
 
             If part.Count > 1 Then

@@ -231,7 +231,7 @@ Namespace Runtime.Interop
         Public Overrides Function ToString() As String
             If mode.IsPrimitive Then
                 Return mode.Description
-            ElseIf raw Is GetType(Void) OrElse raw.FullName = "System.RuntimeType" Then
+            ElseIf raw Is GetType(Void) OrElse raw.FullName = "System.RuntimeType" OrElse raw.FullName = "System.Object" Then
                 Return "any"
             ElseIf isGenericListObject Then
                 Return $"list[{GetRSharpType(raw.GenericTypeArguments(1)).ToString}]"
