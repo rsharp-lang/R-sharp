@@ -90,7 +90,7 @@ Module Rscript
                 ' do nothing 
             ElseIf Not program.isValueAssign AndAlso Not program.isImports Then
                 If Not isInvisible(result) Then
-                    Call base.print(result, globalEnv)
+                    Call base.print(result, , globalEnv)
                 End If
             End If
         End If

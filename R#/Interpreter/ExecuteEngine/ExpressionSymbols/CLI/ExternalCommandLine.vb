@@ -110,8 +110,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                 .JoinBy(" ")
 
             If envir.globalEnvironment.debugMode Then
-                Call base.print("get the raw commandline string input:", envir)
-                Call base.print(commandlineStr, envir)
+                Call base.print("get the raw commandline string input:", , envir)
+                Call base.print(commandlineStr,, envir)
             End If
 
             If commandlineStr.DoCall(AddressOf SyntaxImplements.isInterpolation) Then

@@ -234,7 +234,7 @@ Namespace Interpreter
             Else
                 ' do expression evaluation and then 
                 ' print($expr)
-                Call REnv.print(result, globalEnvir)
+                Call REnv.print(result, , globalEnvir)
             End If
         End Sub
 

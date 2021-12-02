@@ -496,15 +496,15 @@ Namespace Runtime.Internal.Invokes
             Dim std_out As String
 
             If env.globalEnvironment.debugMode Then
-                Call base.print("get app executative:", env)
-                Call base.print(executative, env)
-                Call base.print("commandline argument is:", env)
-                Call base.print(arguments, env)
+                Call base.print("get app executative:", , env)
+                Call base.print(executative,, env)
+                Call base.print("commandline argument is:",, env)
+                Call base.print(arguments,, env)
             End If
 
             If Global.System.Environment.OSVersion.Platform = Global.System.PlatformID.Win32NT Then
                 If env.globalEnvironment.debugMode Then
-                    Call base.print($"run on windows {If(clr, ".NET/CLR", "naive")} environment!", env)
+                    Call base.print($"run on windows {If(clr, ".NET/CLR", "naive")} environment!", , env)
                 End If
 
                 If clr Then
@@ -525,13 +525,13 @@ Namespace Runtime.Internal.Invokes
                 End If
             ElseIf clr Then
                 If env.globalEnvironment.debugMode Then
-                    Call base.print("run on UNIX mono!", env)
+                    Call base.print("run on UNIX mono!", , env)
                 End If
 
                 std_out = UNIX.Shell("mono", $"{executative.CLIPath} {arguments}", verbose:=show_output_on_console, stdin:=inputStr.JoinBy(vbLf))
             Else
                 If env.globalEnvironment.debugMode Then
-                    Call base.print("run on UNIX shell!", env)
+                    Call base.print("run on UNIX shell!",, env)
                 End If
 
                 std_out = UNIX.Shell(

@@ -154,9 +154,9 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <ExportAPI("progress")>
         Public Function progress(<RRawVectorArgument> x As Object, msgFunc As Object, Optional env As Environment = Nothing) As Object
             If msgFunc Is Nothing Then
-                Call base.print("", env)
+                Call base.print("",, env)
             ElseIf TypeOf msgFunc Is String Then
-                Call base.print(msgFunc, env)
+                Call base.print(msgFunc,, env)
             ElseIf msgFunc.GetType.ImplementInterface(Of RFunction) Then
                 Call DirectCast(msgFunc, RFunction).Invoke({x}, env)
             Else

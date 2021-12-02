@@ -73,9 +73,9 @@ Namespace Runtime.Internal.Invokes
                         Call debug.PrintMessageInternal(DirectCast(err, Message), env)
                     End If
                 Catch ex As Exception
-                    Call base.print($"Error while loading script: {script}", env)
+                    Call base.print($"Error while loading script: {script}", , env)
                     Call App.LogException(ex)
-                    Call base.print(ex, env)
+                    Call base.print(ex, , env)
                 End Try
             Next
 

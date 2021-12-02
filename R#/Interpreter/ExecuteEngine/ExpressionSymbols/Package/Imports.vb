@@ -350,7 +350,7 @@ load:       Return LoadLibrary(filepath, env, names)
             Dim globalEnv As GlobalEnvironment = envir.globalEnvironment
 
             If globalEnv.debugMode Then
-                Call base.print(libDll, envir)
+                Call base.print(libDll, , envir)
             End If
 
             packages = PackageLoader.ParsePackages(libDll) _

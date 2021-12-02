@@ -213,8 +213,8 @@ Module Manifold
         If Not groups Is Nothing Then
             labelList = REnv.asVector(Of String)(groups)
 
-            Call base.print("cluster groups that you defined for the nodes:", env)
-            Call base.print(labelList.Distinct.OrderBy(Function(str) str).ToArray, env)
+            Call base.print("cluster groups that you defined for the nodes:", , env)
+            Call base.print(labelList.Distinct.OrderBy(Function(str) str).ToArray, , env)
 
             For i As Integer = 0 To uniqueLabels.Length - 1
                 g.GetElementByID(uniqueLabels(i)).data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = labelList(i)

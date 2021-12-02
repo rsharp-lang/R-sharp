@@ -271,11 +271,11 @@ Namespace Runtime
         End Function
 
         ''' <summary>
-        ''' a shortcut wrapper function pointer for <see cref="base.print(Object, Environment)"/> 
+        ''' a shortcut wrapper function pointer for <see cref="base.print(Object, Boolean, Environment)"/> 
         ''' </summary>
         ''' <returns></returns>
         Public Function WriteLineHandler() As Action(Of Object)
-            Return Sub(line) Call base.print(line, Me)
+            Return Sub(line) Call base.print(line, , Me)
         End Function
 
         Protected Sub redirectError(obj$, msg$, level As MSG_TYPES)
