@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::d9be72bd76e3ab0be0ce43d9195f90be, Library\R.base\utils\buffer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module buffer
-    ' 
-    '     Function: float, getString, numberFramework, toInteger, zlibDecompress
-    ' 
-    ' /********************************************************************************/
+' Module buffer
+' 
+'     Function: float, getString, numberFramework, toInteger, zlibDecompress
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -43,6 +43,7 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net.Http
@@ -196,5 +197,43 @@ Module buffer
                 .ToArray _
                 .DoCall(AddressOf encoding.CodePage.GetString)
         End If
+    End Function
+
+    ReadOnly byteOrder As ByteOrder = ByteOrderHelper.SystemByteOrder
+    ReadOnly utf8 As Encoding = Encodings.ANSI.CodePage
+
+    Private Function normChar(x As Integer) As String
+        If ASCII.IsAsciiChar(x) Then
+            Return Strings.Chr(x)
+        Else
+            Return $"<U+{x.ToHexString.ToLower}>"
+        End If
+    End Function
+
+    <ExportAPI("escapeString")>
+    Public Function escapeString(str As String) As String
+        Dim output As New StringBuilder
+
+        For Each line As String In str.LineTokens
+            Dim chars As Integer() = line _
+                .Select(Function(c)
+                            Dim bits = utf8.GetBytes(c).PadLeft(0, 4)
+
+                            If byteOrder = ByteOrder.LittleEndian Then
+                                Call Array.Reverse(bits)
+                            End If
+
+                            Return BitConverter.ToInt32(bits, Scan0)
+                        End Function) _
+                .ToArray
+            Dim newLine As String = chars _
+                .Select(AddressOf normChar) _
+                .JoinBy("") _
+                .Replace("?", "")
+
+            Call output.AppendLine(newLine)
+        Next
+
+        Return output.ToString
     End Function
 End Module
