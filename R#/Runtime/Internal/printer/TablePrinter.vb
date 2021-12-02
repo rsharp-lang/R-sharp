@@ -86,7 +86,9 @@ Namespace Runtime.Internal.ConsolePrinter
                 Call ConsoleTableBuilder _
                     .From(part) _
                     .WithFormat(ConsoleTableBuilderFormat.Minimal) _
-                    .ExportAndWriteLine()
+                    .Export _
+                    .ToString() _
+                    .DoCall(AddressOf output.WriteLine)
             Next
         End Sub
     End Module
