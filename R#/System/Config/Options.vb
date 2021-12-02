@@ -127,7 +127,7 @@ Namespace Development.Configuration
         ''' <returns></returns>
         Public ReadOnly Property maxPrint As Integer
             Get
-                Return getOption("max.print", [default]:=999).ParseInteger
+                Return getOption("max.print", [default]:=100).ParseInteger
             End Get
         End Property
 
