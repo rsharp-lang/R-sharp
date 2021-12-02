@@ -461,7 +461,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             If sequence.Length = 0 Then
                 Return Nothing
             ElseIf sequence.Length = 1 Then
-                Dim tmp = sequence.GetValue(Scan0)
+                Dim tmp As Object = sequence.GetValue(Scan0)
+
+                If indexer.Length = 1 Then
+                    Dim i As Integer = CInt(indexer.GetValue(Scan0))
+
+                    If i > 1 Then
+                        Return Nothing
+                    ElseIf TypeOf tmp Is list Then
+                        Return tmp
+                    End If
+                End If
+
                 Dim type As RType = RType.GetRSharpType(tmp.GetType)
 
                 If type.raw.ImplementInterface(GetType(RIndex)) Then
