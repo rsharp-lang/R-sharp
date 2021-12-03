@@ -16,6 +16,8 @@
 	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
 	  <PackageIcon>R-sharp.png</PackageIcon>
 	  <PackageIconUrl />
+	  <Description>Reader of R datasets in .rda format</Description>
+	  <PackageReleaseNotes>Reader of R datasets in .rda format</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
