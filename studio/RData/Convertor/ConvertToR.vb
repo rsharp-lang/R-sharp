@@ -9,7 +9,14 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Public Module ConvertToR
 
     ReadOnly elementVectorFlags As Index(Of RObjectType) = {
-        RObjectType.BCODE, RObjectType.CPLX, RObjectType.EXPR, RObjectType.INT, RObjectType.LGL, RObjectType.RAW, RObjectType.REAL, RObjectType.VEC
+        RObjectType.BCODE,
+        RObjectType.CPLX,
+        RObjectType.EXPR,
+        RObjectType.INT,
+        RObjectType.LGL,
+        RObjectType.RAW,
+        RObjectType.REAL,
+        RObjectType.VEC
     }
 
     ''' <summary>
@@ -25,7 +32,11 @@ Public Module ConvertToR
 
             If rdata.info.type Like elementVectorFlags Then
                 Return rdata.CreateRVector
+            Else
+                Throw New NotImplementedException(rdata.info.ToString)
             End If
+        Else
+            Throw New NotImplementedException(rdata.info.ToString)
         End If
     End Function
 
@@ -37,7 +48,7 @@ Public Module ConvertToR
     <Extension>
     Private Function CreateRVector(robj As RObject) As vector
         Dim type As RType = robj.info.GetRType
-        Dim data As Array = RStreamReader.ReadNumbers(robj)
+        Dim data As Array = RStreamReader.ReadVector(robj)
         Dim vec As New vector(data, type)
 
         Return vec

@@ -50,15 +50,20 @@ Module Constructor
     Public ReadOnly compact_intseq_constructor As AltRepConstructor
     Public ReadOnly deferred_string_constructor As AltRepConstructor
 
+    ReadOnly toType As New Dictionary(Of RObjectType, RType) From {
+        {RObjectType.ANY, RType.GetRSharpType(GetType(Object))},
+        {RObjectType.Char, RType.GetRSharpType(GetType(Char))},
+        {RObjectType.REAL, RType.GetRSharpType(GetType(Double))},
+        {RObjectType.LGL, RType.GetRSharpType(GetType(Boolean))}
+    }
+
     <Extension>
     Public Function GetRType(meta As RObjectInfo) As RType
-        Select Case meta.type
-            Case RObjectType.ANY : Return RType.GetRSharpType(GetType(Object))
-            Case RObjectType.Char : Return RType.GetRSharpType(GetType(Char))
-            Case RObjectType.REAL : Return RType.GetRSharpType(GetType(Double))
-            Case Else
-                Throw New NotImplementedException(meta.ToString)
-        End Select
+        If toType.ContainsKey(meta.type) Then
+            Return toType(meta.type)
+        End If
+
+        Throw New NotImplementedException(meta.ToString)
     End Function
 
     <Extension>
