@@ -138,7 +138,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             ElseIf TypeOf x Is vector Then
                 Return DirectCast(x, vector).elementType
             ElseIf TypeOf x Is list Then
-
+                Return RType.GetRSharpType(GetType(list))
             Else
                 Return RType.GetRSharpType(x.GetType)
             End If
