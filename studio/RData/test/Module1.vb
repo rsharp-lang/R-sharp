@@ -47,6 +47,7 @@ Module Module1
     ReadOnly R As New RInterpreter
 
     Sub Main()
+        Call table()
         Call vector()
         Call list()
     End Sub
@@ -73,6 +74,22 @@ Module Module1
             Dim lst = ConvertToR.ToRObject(obj.object)
 
             Call R.Inspect(lst)
+        End Using
+    End Sub
+
+    Sub table()
+        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\test_dataframe.rda".Open
+            Dim obj = Reader.ParseData(file)
+            Dim tbl = ConvertToR.ToRObject(obj.object)
+
+            Call R.Print(tbl)
+        End Using
+
+        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\test_dataframe_v3.rda".Open
+            Dim obj = Reader.ParseData(file)
+            Dim tbl = ConvertToR.ToRObject(obj.object)
+
+            Call R.Print(tbl)
         End Using
     End Sub
 
