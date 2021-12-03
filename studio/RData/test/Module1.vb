@@ -50,9 +50,9 @@ Module Module1
 
     Sub Main()
         Call readmultiple()
-        Call table()
-        Call vector()
-        Call list()
+        ' Call table()
+        ' Call vector()
+        ' Call list()
     End Sub
 
     Sub readmultiple()
@@ -62,6 +62,10 @@ Module Module1
 
             Call R.Print(vec)
         End Using
+
+        Call Console.WriteLine()
+        Call Console.WriteLine()
+        Call Console.WriteLine("-------------------------------------------------------")
     End Sub
 
     Sub vector()

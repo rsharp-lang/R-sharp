@@ -17,7 +17,7 @@ Namespace Convertor
 
         ' Node: VECTOR_SEXPREC
         ' The vector types are RAWSXP, CHARSXP, LGLSXP, INTSXP, REALSXP, CPLXSXP, STRSXP, VECSXP, EXPRSXP And WEAKREFSXP.
-        ReadOnly elementVectorFlags As Index(Of RObjectType) = {
+        Friend ReadOnly elementVectorFlags As Index(Of RObjectType) = {
             RObjectType.CPLX,
             RObjectType.EXPR,
             RObjectType.INT,
@@ -35,8 +35,12 @@ Namespace Convertor
         ''' <param name="rdata"></param>
         ''' <returns></returns>
         Public Function ToRObject(rdata As RObject) As Object
-            Dim pullAll As New Dictionary(Of String, Object)
-            Dim ends As Object = rdata.PullRObject(pullAll)
+            Dim pullAll As New list With {
+                .slots = New Dictionary(Of String, Object)
+            }
+
+            ' Pull all R# object from the RData linked list
+            Call rdata.PullRObject(pullAll.slots)
 
             Return pullAll
         End Function
@@ -52,44 +56,33 @@ Namespace Convertor
             Dim value As RList = rdata.value
             Dim car As RObject = value.CAR
 
-            If value.nodeType = ListNodeType.Vector Then
+            If value.nodeType = ListNodeType.NA Then
+                Return Nothing
+            ElseIf value.nodeType = ListNodeType.Vector Then
                 ' 已经没有数据了，结束递归
-                Return RStreamReader.ReadVector(rdata)
+                If RObjectSignature.IsPairList(rdata) Then
+                    Return rdata.CreatePairList
+                ElseIf RObjectSignature.IsDataFrame(rdata) Then
+                    Return rdata.CreateRTable
+                Else
+                    Return rdata.CreateRVector
+                End If
             Else
                 ' CAR为当前节点的数据
                 ' 获取节点数据，然后继续通过CDR进行链表的递归访问
                 Dim current As Object = PullRObject(car, list)
+                Dim currentName As String = rdata.tag.characters
                 Dim CDR As RObject = value.CDR
+
+                ' pull an object
+                Call list.Add(currentName, current)
 
                 If CDR Is Nothing Then
                     Return current
                 Else
                     ' 产生一个列表
-
+                    Return PullRObject(CDR, list)
                 End If
-            End If
-
-            If Not car.info.type Like elementVectorFlags Then
-                ' is r pair list or dataframe
-                If Not car.attributes Is Nothing AndAlso car.attributes.tag.characters = "row.names" Then
-                    Return car.CreateRTable
-                ElseIf Not car.attributes Is Nothing Then
-                    Dim cdr As RObject = car.attributes.value.CDR
-
-                    If cdr.tag IsNot Nothing AndAlso cdr.tag.characters = "row.names" Then
-                        Return car.CreateRTable
-                    Else
-                        Return car.CreatePairList
-                    End If
-                Else
-                    Return car.CreatePairList
-                End If
-            End If
-
-            If car.info.type Like elementVectorFlags Then
-                Return car.CreateRVector
-            Else
-                Throw New NotImplementedException(car.info.ToString)
             End If
         End Function
 
@@ -128,10 +121,14 @@ Namespace Convertor
 
         <Extension>
         Private Function readColumnNames(robj As RObject) As String()
-            If robj.attributes.tag.characters = "names" Then
-                Return RStreamReader.ReadStrings(robj.attributes.value)
+            Dim attrs As RObject = robj.attributes
+
+            If attrs.tag.characters = "names" Then
+                Return RStreamReader.ReadStrings(attrs.value)
+            ElseIf attrs.tag.referenced_object IsNot Nothing Then
+                Return RStreamReader.ReadStrings(attrs.value)
             Else
-                Return RStreamReader.ReadStrings(robj.attributes.value.CDR)
+                Return RStreamReader.ReadStrings(attrs.value.CDR)
             End If
         End Function
 

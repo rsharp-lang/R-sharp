@@ -27,7 +27,9 @@ Namespace Struct.LinkedList
 
         Public ReadOnly Property nodeType As ListNodeType
             Get
-                If Not data Is Nothing Then
+                If data Is Nothing AndAlso CAR Is Nothing AndAlso CDR Is Nothing Then
+                    Return ListNodeType.NA
+                ElseIf Not data Is Nothing Then
                     Return ListNodeType.Vector
                 Else
                     Return ListNodeType.LinkedList

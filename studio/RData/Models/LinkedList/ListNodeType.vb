@@ -1,9 +1,13 @@
 ﻿Namespace Struct.LinkedList
 
     Public Enum ListNodeType
-
         ''' <summary>
-        ''' 当前节点为最末尾的叶节点
+        ''' contains no data, end of the linked list
+        ''' </summary>
+        NA
+        ''' <summary>
+        ''' contains vector data, end of the linked list.
+        ''' (当前节点为最末尾的叶节点)
         ''' </summary>
         Vector
         ''' <summary>

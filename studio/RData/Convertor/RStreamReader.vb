@@ -46,7 +46,16 @@ Namespace Convertor
 
         Friend Shared Function ReadStrings(robj As Object) As String()
             If TypeOf robj Is RList Then
-                Return ReadStrings(DirectCast(robj, RList).CAR)
+                Dim rlist As RList = DirectCast(robj, RList)
+
+                If rlist.nodeType = ListNodeType.LinkedList Then
+                    Return ReadStrings(rlist.CAR)
+                Else
+                    Return DirectCast(rlist.data, RObject()) _
+                        .Select(AddressOf ReadString) _
+                        .ToArray
+                End If
+
             ElseIf DirectCast(robj, RObject).info.type = RObjectType.LIST Then
                 Return ReadStrings(DirectCast(robj, RObject).value)
             Else
