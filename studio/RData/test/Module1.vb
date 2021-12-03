@@ -47,9 +47,14 @@ Module Module1
     ReadOnly R As New RInterpreter
 
     Sub Main()
+        Call readmultiple()
         Call table()
         Call vector()
         Call list()
+    End Sub
+
+    Sub readmultiple()
+
     End Sub
 
     Sub vector()
