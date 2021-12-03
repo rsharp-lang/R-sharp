@@ -47,7 +47,8 @@ Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Parser
-Imports SMRUCC.Rsharp.RData.Flags
+Imports SMRUCC.Rsharp.RDataSet.Flags
+Imports SMRUCC.Rsharp.RDataSet.Struct
 
 ''' <summary>
 ''' Parser interface for a R file.

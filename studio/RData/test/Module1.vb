@@ -40,8 +40,9 @@
 #End Region
 
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.RData
-Imports SMRUCC.Rsharp.RData.Convertor
+Imports SMRUCC.Rsharp.RDataSet
+Imports SMRUCC.Rsharp.RDataSet.Convertor
+Imports SMRUCC.Rsharp.RDataSet.Struct
 
 Module Module1
 

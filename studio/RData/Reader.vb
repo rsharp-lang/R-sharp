@@ -52,9 +52,12 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Text
-Imports SMRUCC.Rsharp.RData.Convertor
-Imports SMRUCC.Rsharp.RData.Flags
+Imports SMRUCC.Rsharp.RDataSet.Convertor
+Imports SMRUCC.Rsharp.RDataSet.Flags
+Imports SMRUCC.Rsharp.RDataSet.Struct
+Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 Imports gzip = Microsoft.VisualBasic.Net.Http.GZipStreamHandler
+Imports RData = SMRUCC.Rsharp.RDataSet.Struct.RData
 
 Public Delegate Function AltRepConstructor(stat As RObject) As (RObjectInfo, Object)
 
@@ -126,7 +129,7 @@ Public MustInherit Class Reader
         Return New RData With {
             .versions = versions,
             .extra = extra_info,
-            .[object] = obj
+            .[Object] = obj
         }
     End Function
 

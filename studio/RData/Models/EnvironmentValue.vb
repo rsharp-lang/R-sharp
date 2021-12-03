@@ -39,6 +39,8 @@
 
 #End Region
 
+Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
+
 Namespace Struct
 
     ''' <summary>

@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
-Imports SMRUCC.Rsharp.RData.Flags
+Imports SMRUCC.Rsharp.RDataSet.Flags
+Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -51,7 +52,7 @@ Namespace Convertor
             Dim value As RList = rdata.value
             Dim car As RObject = value.CAR
 
-            If value.nodeType = DataType.Vector Then
+            If value.nodeType = ListNodeType.Vector Then
                 ' 已经没有数据了，结束递归
                 Return RStreamReader.ReadVector(rdata)
             Else

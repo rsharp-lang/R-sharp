@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 
 Namespace Convertor
 

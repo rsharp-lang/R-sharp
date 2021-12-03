@@ -39,7 +39,7 @@
 
 #End Region
 
-Imports SMRUCC.Rsharp.RData.Flags
+Imports SMRUCC.Rsharp.RDataSet.Flags
 
 Namespace Struct
 
