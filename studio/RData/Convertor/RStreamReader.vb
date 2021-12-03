@@ -38,6 +38,8 @@ Public Class RStreamReader
     Friend Shared Function ReadStrings(robj As Object) As String()
         If TypeOf robj Is RList Then
             Return ReadStrings(DirectCast(robj, RList).CAR)
+        ElseIf DirectCast(robj, RObject).info.type = RObjectType.LIST Then
+            Return ReadStrings(DirectCast(robj, RObject).value)
         Else
             Dim obj As RObject = DirectCast(robj, RObject)
 

@@ -34,19 +34,21 @@ Public Module ConvertToR
         Dim value As Object = rdata.value
 
         If TypeOf value Is RList Then
-            Dim rlist As RList = DirectCast(value, RList)
+            Dim car As RObject = DirectCast(value, RList).CAR
 
-            If Not rlist.CAR.info.type Like elementVectorFlags Then
-                ' is r pair list
-                Return rlist.CAR.CreatePairList
+            If Not car.info.type Like elementVectorFlags Then
+                ' is r pair list or dataframe
+                If Not car.attributes Is Nothing AndAlso car.attributes.tag.characters = "row.names" Then
+                    Return car.CreateRTable
+                Else
+                    Return car.CreatePairList
+                End If
             End If
 
-            rdata = DirectCast(value, RList).CAR
-
-            If rdata.info.type Like elementVectorFlags Then
-                Return rdata.CreateRVector
+            If car.info.type Like elementVectorFlags Then
+                Return car.CreateRVector
             Else
-                Throw New NotImplementedException(rdata.info.ToString)
+                Throw New NotImplementedException(car.info.ToString)
             End If
         ElseIf rdata.info.type Like elementVectorFlags Then
             Return CreateRVector(rdata)
@@ -90,6 +92,16 @@ Public Module ConvertToR
 
     <Extension>
     Private Function CreateRTable(robj As RObject) As dataframe
+        Dim columns As RObject() = robj.value
+        Dim colnames As String() = RStreamReader.ReadStrings(DirectCast(robj.attributes.value, RList).CDR)
+        Dim table As New dataframe With {
+            .columns = New Dictionary(Of String, Array)
+        }
 
+        For i As Integer = 0 To colnames.Length - 1
+            table.columns(colnames(i)) = RStreamReader.ReadVector(columns(i))
+        Next
+
+        Return table
     End Function
 End Module
