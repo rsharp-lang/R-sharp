@@ -41,6 +41,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Module Constructor
 
@@ -48,6 +49,17 @@ Module Constructor
     Public ReadOnly compact_realseq_constructor As AltRepConstructor
     Public ReadOnly compact_intseq_constructor As AltRepConstructor
     Public ReadOnly deferred_string_constructor As AltRepConstructor
+
+    <Extension>
+    Public Function GetRType(meta As RObjectInfo) As RType
+        Select Case meta.type
+            Case RObjectType.ANY : Return RType.GetRSharpType(GetType(Object))
+            Case RObjectType.Char : Return RType.GetRSharpType(GetType(Char))
+            Case RObjectType.REAL : Return RType.GetRSharpType(GetType(Double))
+            Case Else
+                Throw New NotImplementedException(meta.ToString)
+        End Select
+    End Function
 
     <Extension>
     Public Function DecodeCharacters(r_char As RObject) As String
