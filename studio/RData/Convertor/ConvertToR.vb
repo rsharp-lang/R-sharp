@@ -90,11 +90,19 @@ Namespace Convertor
         Private Function CreatePairList(robj As RObject) As list
             Dim elements As RObject() = robj.value.data
             Dim attrTags As RObject = robj.attributes
-            Dim names As String()
+            Dim names As String() = Nothing
 
-            If Not attrTags Is Nothing AndAlso attrTags.tag.characters = "names" Then
-                names = RStreamReader.ReadStrings(attrTags.value)
-            Else
+            If attrTags IsNot Nothing AndAlso attrTags.tag IsNot Nothing Then
+                Dim tag As RObject = attrTags.tag
+
+                If tag.characters = "names" Then
+                    names = RStreamReader.ReadStrings(attrTags.value)
+                ElseIf tag.referenced_object IsNot Nothing AndAlso tag.referenced_object.characters = "names" Then
+                    names = RStreamReader.ReadStrings(attrTags.value)
+                End If
+            End If
+
+            If names Is Nothing Then
                 names = elements _
                     .Sequence(offSet:=1) _
                     .Select(Function(i) i.ToString) _
@@ -104,7 +112,7 @@ Namespace Convertor
             Dim list As New list
 
             For i As Integer = 0 To names.Length - 1
-                Call list.add(names(i), ConvertToR.PullRObject(elements(i), New Dictionary(Of String, Object)))
+                Call list.add(names(i), ConvertToR.PullRObject(elements(i), Nothing))
             Next
 
             Return list

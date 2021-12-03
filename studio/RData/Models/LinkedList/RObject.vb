@@ -70,6 +70,10 @@ Namespace Struct.LinkedList
         Public Overrides Function ToString() As String
             If info.type = RObjectType.CHAR Then
                 Return characters
+            ElseIf tag IsNot Nothing AndAlso tag.info.type = RObjectType.SYM Then
+                Return tag.characters
+            ElseIf referenced_object IsNot Nothing Then
+                Return referenced_object.characters
             Else
                 Return $"[{info}] {value}"
             End If

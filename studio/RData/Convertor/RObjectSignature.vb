@@ -21,7 +21,7 @@ Namespace Convertor
                     Return False
                 ElseIf attrs.tag.referenced_object.characters <> "names" Then
                     Return False
-                ElseIf attrs.value.CDR.tag.characters = "row.names" Then
+                ElseIf FindRowNames(attrs) Then
                     Return False
                 End If
 
@@ -31,6 +31,21 @@ Namespace Convertor
             End If
 
             Return True
+        End Function
+
+        Private Shared Function FindRowNames(attr As RObject) As Boolean
+            Do While Not attr.value.CDR Is Nothing
+                attr = attr.value.CDR
+
+                If attr.tag Is Nothing Then
+                    Return False
+                End If
+                If attr.tag.characters = "row.names" Then
+                    Return True
+                End If
+            Loop
+
+            Return False
         End Function
 
         Public Shared Function IsDataFrame(robj As RObject) As Boolean
@@ -56,11 +71,14 @@ Namespace Convertor
                 Return False
             End If
 
-            If attrs.tag.info.type <> RObjectType.SYM Then
+            If attrs.tag.info.type <> RObjectType.SYM AndAlso attrs.tag.info.type <> RObjectType.REF Then
                 Return False
             End If
 
-            If attrs.tag.characters <> "levels" Then
+            If attrs.tag.info.type = RObjectType.SYM AndAlso attrs.tag.characters <> "levels" Then
+                Return False
+            End If
+            If attrs.tag.info.type = RObjectType.REF AndAlso attrs.tag.referenced_object.characters <> "levels" Then
                 Return False
             End If
 
