@@ -40,6 +40,12 @@ Public Module ConvertToR
                 ' is r pair list or dataframe
                 If Not car.attributes Is Nothing AndAlso car.attributes.tag.characters = "row.names" Then
                     Return car.CreateRTable
+                ElseIf Not car.attributes Is Nothing AndAlso TypeOf car.attributes.value Is RList Then
+                    If DirectCast(car.attributes.value, RList).CDR.tag.characters = "row.names" Then
+                        Return car.CreateRTable
+                    Else
+                        Return car.CreatePairList
+                    End If
                 Else
                     Return car.CreatePairList
                 End If
@@ -91,9 +97,18 @@ Public Module ConvertToR
     End Function
 
     <Extension>
+    Private Function readColumnNames(robj As RObject) As String()
+        If robj.attributes.tag.characters = "names" Then
+            Return RStreamReader.ReadStrings(robj.attributes.value)
+        Else
+            Return RStreamReader.ReadStrings(DirectCast(robj.attributes.value, RList).CDR)
+        End If
+    End Function
+
+    <Extension>
     Private Function CreateRTable(robj As RObject) As dataframe
         Dim columns As RObject() = robj.value
-        Dim colnames As String() = RStreamReader.ReadStrings(DirectCast(robj.attributes.value, RList).CDR)
+        Dim colnames As String() = robj.readColumnNames
         Dim table As New dataframe With {
             .columns = New Dictionary(Of String, Array)
         }
