@@ -4,6 +4,7 @@ Imports SMRUCC.Rsharp.RDataSet.Flags
 Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Convertor
 
@@ -114,9 +115,21 @@ Namespace Convertor
         Private Function CreateRVector(robj As RObject) As vector
             Dim type As RType = robj.info.GetRType
             Dim data As Array = RStreamReader.ReadVector(robj)
-            Dim vec As New vector(data, type)
+            Dim factor As factor = If(RObjectSignature.HasFactor(robj), robj.attributes.value.CreateFactor, Nothing)
+            Dim vec As New vector(data, type) With {
+                .factor = factor
+            }
 
             Return vec
+        End Function
+
+        <Extension>
+        Private Function CreateFactor(robj As RList) As factor
+            Dim data = robj.CAR
+            Dim levels As String() = RStreamReader.ReadStrings(data)
+            Dim factor As factor = factor.CreateFactor(levels, ordered:=True)
+
+            Return factor
         End Function
 
         <Extension>
@@ -152,13 +165,20 @@ Namespace Convertor
         Private Function CreateRTable(robj As RObject) As dataframe
             Dim columns As RObject() = robj.value.data
             Dim colnames As String() = robj.readColumnNames
+            Dim vector As vector
             Dim table As New dataframe With {
                 .columns = New Dictionary(Of String, Array),
                 .rownames = robj.readRowNames
             }
 
             For i As Integer = 0 To colnames.Length - 1
-                table.columns(colnames(i)) = RStreamReader.ReadVector(columns(i))
+                vector = columns(i).CreateRVector
+
+                If vector.factor Is Nothing Then
+                    table.columns(colnames(i)) = vector.data
+                Else
+                    table.columns(colnames(i)) = factor.asCharacter(REnv.asVector(Of Integer)(vector.data), vector.factor)
+                End If
             Next
 
             Return table

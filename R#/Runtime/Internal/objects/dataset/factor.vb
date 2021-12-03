@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::7fc60397e5c232a70c060270a91dcfe8, R#\Runtime\Internal\objects\dataset\factor.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class factor
-    ' 
-    '         Properties: nlevel
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: asCharacter, asFactor, CreateFactor
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class factor
+' 
+'         Properties: nlevel
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: asCharacter, asFactor, CreateFactor
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -56,7 +56,7 @@ Namespace Runtime.Internal.Object
     ''' </remarks>
     Public Class factor : Inherits RsharpDataObject
 
-        ReadOnly levels As New Dictionary(Of String, Integer)
+        ReadOnly m_levels As New Dictionary(Of String, Integer)
 
         ''' <summary>
         ''' level的数量
@@ -64,7 +64,13 @@ Namespace Runtime.Internal.Object
         ''' <returns></returns>
         Public ReadOnly Property nlevel As Integer
             Get
-                Return levels.Count
+                Return m_levels.Count
+            End Get
+        End Property
+
+        Public ReadOnly Property levels As String()
+            Get
+                Return m_levels.Keys.ToArray
             End Get
         End Property
 
@@ -72,7 +78,11 @@ Namespace Runtime.Internal.Object
             m_type = RType.GetRSharpType(GetType(Integer))
         End Sub
 
-        Public Shared Function CreateFactor(x$(), Optional exclude$() = Nothing, Optional ordered As Boolean = False, Optional nmax% = Nothing) As factor
+        Public Shared Function CreateFactor(x$(),
+                                            Optional exclude$() = Nothing,
+                                            Optional ordered As Boolean = False,
+                                            Optional nmax% = Nothing) As factor
+
             If Not exclude.IsNullOrEmpty Then
                 With exclude.Indexing
                     x = x _
@@ -95,7 +105,7 @@ Namespace Runtime.Internal.Object
             End If
 
             For Each level As String In uniqueIndex
-                Call factor.levels.Add(level, 2 ^ factor.levels.Count)
+                Call factor.m_levels.Add(level, factor.m_levels.Count + 1)
             Next
 
             Return factor
@@ -106,10 +116,10 @@ Namespace Runtime.Internal.Object
                 .Select(Function(str)
                             If str Is Nothing Then
                                 Return 0
-                            ElseIf Not factor.levels.ContainsKey(str) Then
+                            ElseIf Not factor.m_levels.ContainsKey(str) Then
                                 Return 0
                             Else
-                                Return factor.levels(str)
+                                Return factor.m_levels(str)
                             End If
                         End Function) _
                 .ToArray
@@ -119,8 +129,18 @@ Namespace Runtime.Internal.Object
             }
         End Function
 
+        ''' <summary>
+        ''' 将目标等级值转换为原始字符串值
+        ''' </summary>
+        ''' <param name="levels"></param>
+        ''' <param name="factor"></param>
+        ''' <returns></returns>
         Public Shared Function asCharacter(levels As Integer(), factor As factor) As String()
-            Throw New NotImplementedException
+            Dim factors As String() = factor.levels
+            Dim chars As String() = (From i As Integer
+                                     In levels
+                                     Select factors(i - 1)).ToArray
+            Return chars
         End Function
     End Class
 End Namespace

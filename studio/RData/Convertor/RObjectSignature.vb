@@ -38,5 +38,23 @@ Namespace Convertor
             Return True
         End Function
 
+        Public Shared Function HasFactor(robj As RObject) As Boolean
+            Dim attrs As RObject = robj.attributes
+
+            If attrs Is Nothing Then
+                Return False
+            End If
+
+            If attrs.tag.info.type <> Flags.RObjectType.SYM Then
+                Return False
+            End If
+
+            If attrs.tag.characters <> "levels" Then
+                Return False
+            End If
+
+            Return True
+        End Function
+
     End Class
 End Namespace
