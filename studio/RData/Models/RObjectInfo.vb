@@ -52,7 +52,7 @@ Public Class RObjectInfo
     Public reference As Integer
 
     Public Overrides Function ToString() As String
-        Return type.Description
+        Return $"RObjectInfo(type=<{type.ToString}: {CInt(type)}>, object={[object]}, attributes={attributes}, tag={tag}, gp={gp}, reference={reference})"
     End Function
 
 End Class

@@ -200,7 +200,7 @@ Public MustInherit Class Reader
         End If
 
         Dim info_int = parse_int()
-        Dim info = parse_r_object_info(info_int)
+        Dim info As RObjectInfo = parse_r_object_info(info_int)
         Dim tag = Nothing
         Dim attributes As RObject = Nothing
         Dim referenced_object = Nothing
