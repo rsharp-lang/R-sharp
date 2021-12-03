@@ -1,55 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::5905f0ca80dd6c2ee951da46b56da328, studio\RData\Models\RVersions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Class RVersions
-    ' 
-    '     Function: ToString
-    ' 
-    ' /********************************************************************************/
+' Class RVersions
+' 
+'     Function: ToString
+' 
+' /********************************************************************************/
 
 #End Region
 
-''' <summary>
-''' R versions.
-''' </summary>
-Public Class RVersions
+Namespace Struct
 
-    Public format As Integer
-    Public serialized As Integer
-    Public minimum As Integer
+    ''' <summary>
+    ''' R versions.
+    ''' </summary>
+    Public Class RVersions
 
-    Public Overrides Function ToString() As String
-        Return $"RVersions(format={format}, serialized={serialized}, minimum={minimum})"
-    End Function
+        Public format As Integer
+        Public serialized As Integer
+        Public minimum As Integer
 
-End Class
+        Public Overrides Function ToString() As String
+            Return $"RVersions(format={format}, serialized={serialized}, minimum={minimum})"
+        End Function
+
+    End Class
+End Namespace

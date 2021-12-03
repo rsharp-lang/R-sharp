@@ -41,16 +41,19 @@
 
 #End Region
 
-''' <summary>
-''' Extra information.
-'''
-''' Contains the Default encoding (only In version 3).
-''' </summary>
-Public Class RExtraInfo
+Namespace Struct
 
-    Public Property encoding As String = Nothing
+    ''' <summary>
+    ''' Extra information.
+    '''
+    ''' Contains the Default encoding (only In version 3).
+    ''' </summary>
+    Public Class RExtraInfo
 
-    Public Overrides Function ToString() As String
-        Return $"RExtraInfo(encoding='{encoding}')"
-    End Function
-End Class
+        Public Property encoding As String = Nothing
+
+        Public Overrides Function ToString() As String
+            Return $"RExtraInfo(encoding='{encoding}')"
+        End Function
+    End Class
+End Namespace

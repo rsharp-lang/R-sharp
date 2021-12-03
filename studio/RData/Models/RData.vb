@@ -41,19 +41,22 @@
 
 Imports System.IO
 
-''' <summary>
-''' Data contained in a R file.
-''' </summary>
-Public Class RData
+Namespace Struct
 
-    Public versions As RVersions
-    Public extra As RExtraInfo
-    Public [object] As RObject
+    ''' <summary>
+    ''' Data contained in a R file.
+    ''' </summary>
+    Public Class RData
 
-    Public Shared Function ParseFile(rdafile As String, Optional expand_altrep As Boolean = True) As RData
-        Using buffer As Stream = rdafile.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
-            Return Reader.ParseData(buffer, expand_altrep)
-        End Using
-    End Function
+        Public versions As RVersions
+        Public extra As RExtraInfo
+        Public [object] As RObject
 
-End Class
+        Public Shared Function ParseFile(rdafile As String, Optional expand_altrep As Boolean = True) As RData
+            Using buffer As Stream = rdafile.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+                Return Reader.ParseData(buffer, expand_altrep)
+            End Using
+        End Function
+
+    End Class
+End Namespace

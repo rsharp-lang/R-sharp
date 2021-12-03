@@ -41,20 +41,23 @@
 
 Imports SMRUCC.Rsharp.RData.Flags
 
-''' <summary>
-''' Internal attributes of a R object.
-''' </summary>
-Public Class RObjectInfo
+Namespace Struct
 
-    Public type As RObjectType
-    Public [object] As Boolean
-    Public attributes As Boolean
-    Public tag As Boolean
-    Public gp As Integer
-    Public reference As Integer
+    ''' <summary>
+    ''' Internal attributes of a R object.
+    ''' </summary>
+    Public Class RObjectInfo
 
-    Public Overrides Function ToString() As String
-        Return $"RObjectInfo(type=<{type.ToString}: {CInt(type)}>, object={[object]}, attributes={attributes}, tag={tag}, gp={gp}, reference={reference})"
-    End Function
+        Public type As RObjectType
+        Public [object] As Boolean
+        Public attributes As Boolean
+        Public tag As Boolean
+        Public gp As Integer
+        Public reference As Integer
 
-End Class
+        Public Overrides Function ToString() As String
+            Return $"RObjectInfo(type=<{type.ToString}: {CInt(type)}>, object={[object]}, attributes={attributes}, tag={tag}, gp={gp}, reference={reference})"
+        End Function
+
+    End Class
+End Namespace

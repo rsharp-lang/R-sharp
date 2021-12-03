@@ -44,32 +44,35 @@
 Imports SMRUCC.Rsharp.RData.Convertor
 Imports SMRUCC.Rsharp.RData.Flags
 
-''' <summary>
-''' Representation of a R object.
-''' </summary>
-Public Class RObject
+Namespace Struct.LinkedList
 
-    Public Property info As RObjectInfo
-    Public Property value As RList
-    Public Property attributes As RObject
-    Public Property tag As RObject
-    Public Property referenced_object As RObject
+    ''' <summary>
+    ''' Representation of a R object.
+    ''' </summary>
+    Public Class RObject
 
-    Public ReadOnly Property characters As String
-        Get
-            If info.type = RObjectType.SYM Then
-                Return value?.ToString
+        Public Property info As RObjectInfo
+        Public Property value As RList
+        Public Property attributes As RObject
+        Public Property tag As RObject
+        Public Property referenced_object As RObject
+
+        Public ReadOnly Property characters As String
+            Get
+                If info.type = RObjectType.SYM Then
+                    Return value?.ToString
+                Else
+                    Return DecodeCharacters()
+                End If
+            End Get
+        End Property
+
+        Public Overrides Function ToString() As String
+            If info.type = RObjectType.CHAR Then
+                Return characters
             Else
-                Return DecodeCharacters
+                Return $"[{info}] {value}"
             End If
-        End Get
-    End Property
-
-    Public Overrides Function ToString() As String
-        If info.type = RObjectType.CHAR Then
-            Return characters
-        Else
-            Return $"[{info}] {value}"
-        End If
-    End Function
-End Class
+        End Function
+    End Class
+End Namespace
