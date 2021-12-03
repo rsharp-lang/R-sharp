@@ -154,15 +154,10 @@ Namespace Convertor
 
         <Extension>
         Private Function readRowNames(robj As RObject) As String()
-            Dim attrVals As RList = robj.attributes.value
-            Dim cdr As RObject = attrVals.CDR
+            robj = robj.attributes.LinkVisitor("row.names")
 
-            If cdr.tag.characters = "row.names" Then
-                If cdr.value.CAR.info.type <> RObjectType.STR Then
-                    Return Nothing
-                End If
-
-                Return RStreamReader.ReadStrings(cdr.value)
+            If Not robj Is Nothing Then
+                Return RStreamReader.ReadStrings(robj.value)
             Else
                 Return Nothing
             End If

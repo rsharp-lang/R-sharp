@@ -96,5 +96,21 @@ Namespace Convertor
                 Return ""
             End If
         End Function
+
+        <Extension>
+        Public Function LinkVisitor(robj As RObject, key As String) As RObject
+            Do While Not robj.value.CDR Is Nothing
+                robj = robj.value.CDR
+
+                If Not robj.tag Is Nothing AndAlso robj.tag.characters = key Then
+                    Return robj
+                End If
+                If Not robj.tag.referenced_object Is Nothing AndAlso robj.tag.referenced_object.characters = key Then
+                    Return robj
+                End If
+            Loop
+
+            Return Nothing
+        End Function
     End Module
 End Namespace
