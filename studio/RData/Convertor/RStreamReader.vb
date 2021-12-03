@@ -26,6 +26,7 @@ Public Class RStreamReader
     Public Shared Function ReadVector(robj As RObject) As Array
         Select Case robj.info.type
             Case RObjectType.CHAR : Return ReadString(robj).ToArray
+            Case RObjectType.STR : Return ReadStrings(robj)
             Case RObjectType.INT : Return ReadIntegers(robj)
             Case RObjectType.REAL : Return ReadNumbers(robj)
             Case RObjectType.LGL : Return ReadLogicals(robj)
@@ -34,4 +35,19 @@ Public Class RStreamReader
         End Select
     End Function
 
+    Friend Shared Function ReadStrings(robj As Object) As String()
+        If TypeOf robj Is RList Then
+            Return ReadStrings(DirectCast(robj, RList).CAR)
+        Else
+            Dim obj As RObject = DirectCast(robj, RObject)
+
+            If obj.info.type = RObjectType.STR Then
+                Return DirectCast(obj.value, RObject()) _
+                    .Select(AddressOf ReadString) _
+                    .ToArray
+            Else
+                Return {ReadString(obj)}
+            End If
+        End If
+    End Function
 End Class

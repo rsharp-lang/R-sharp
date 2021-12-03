@@ -49,6 +49,8 @@ Public Module ConvertToR
             Else
                 Throw New NotImplementedException(rdata.info.ToString)
             End If
+        ElseIf rdata.info.type Like elementVectorFlags Then
+            Return CreateRVector(rdata)
         Else
             Throw New NotImplementedException(rdata.info.ToString)
         End If
@@ -61,9 +63,21 @@ Public Module ConvertToR
         Dim names As String()
 
         If Not attrTags Is Nothing AndAlso attrTags.tag.characters = "names" Then
-
+            names = RStreamReader.ReadStrings(attrTags.value)
+        Else
+            names = elements _
+                .Sequence(offSet:=1) _
+                .Select(Function(i) i.ToString) _
+                .ToArray
         End If
 
+        Dim list As New list
+
+        For i As Integer = 0 To names.Length - 1
+            Call list.add(names(i), ConvertToR.ToRObject(elements(i)))
+        Next
+
+        Return list
     End Function
 
     <Extension>

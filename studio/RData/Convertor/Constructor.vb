@@ -54,7 +54,8 @@ Module Constructor
         {RObjectType.ANY, RType.GetRSharpType(GetType(Object))},
         {RObjectType.CHAR, RType.GetRSharpType(GetType(Char))},
         {RObjectType.REAL, RType.GetRSharpType(GetType(Double))},
-        {RObjectType.LGL, RType.GetRSharpType(GetType(Boolean))}
+        {RObjectType.LGL, RType.GetRSharpType(GetType(Boolean))},
+        {RObjectType.STR, RType.GetRSharpType(GetType(String))}
     }
 
     <Extension>
