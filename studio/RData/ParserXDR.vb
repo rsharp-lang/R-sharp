@@ -49,29 +49,34 @@ Imports Microsoft.VisualBasic.Data.IO.Xdr
 Public Class ParserXDR : Inherits Reader
 
     ReadOnly data As BinaryDataReader
-    ReadOnly xdr_parser As Unpacker
+    ReadOnly XDRParser As Unpacker
 
     <DebuggerStepThrough>
-    Sub New(data As BinaryDataReader, Optional position As Integer = 0, Optional expand_altrep As Boolean = True)
+    Sub New(data As BinaryDataReader,
+            Optional position As Integer = 0,
+            Optional expand_altrep As Boolean = True)
+
         Call MyBase.New(expand_altrep)
 
         Me.data = data
         Me.data.Position = position
-        Me.xdr_parser = New Unpacker(data)
+        Me.XDRParser = New Unpacker(data)
     End Sub
 
     Public Overrides Function parse_int() As Integer
-        Dim result = xdr_parser.unpack_int()
-        Return result
+        Return XDRParser.UnpackInteger()
     End Function
 
     Public Overrides Function parse_double() As Double
-        Dim result = xdr_parser.unpack_double()
-        Return result
+        Return XDRParser.UnpackDouble()
     End Function
 
+    ''' <summary>
+    ''' Read string raw bytes
+    ''' </summary>
+    ''' <param name="length"></param>
+    ''' <returns></returns>
     Public Overrides Function parse_string(length As Integer) As Byte()
-        Dim result As Byte() = data.ReadBytes(length)
-        Return result
+        Return data.ReadBytes(length)
     End Function
 End Class
