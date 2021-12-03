@@ -47,14 +47,14 @@ Module Module1
 
     Sub Main()
 
-        Call testLogical()
+        ' Call testLogical()
 
         ' Dim output2 = New MemoryStream()
         ' Dim decompressor = New BZip2InputStream("F:\report.rda.tar".Open, True)
         ' decompressor.CopyTo(output2)
 
         ' Call output2.FlushStream("F:\report.rda\report2.rda")
-        Using file = "E:\GCModeller\src\R-sharp\studio\RData\test\x.rda".Open
+        Using file = "D:\biodeep\flavonoid\Rscript\bundle\Flavonoid.rda".Open
             Dim obj = Reader.ParseData(file)
 
             Pause()
