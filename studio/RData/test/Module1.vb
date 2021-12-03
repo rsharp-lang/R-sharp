@@ -50,9 +50,9 @@ Module Module1
 
     Sub Main()
         Call readmultiple()
-        ' Call table()
-        ' Call vector()
-        ' Call list()
+        Call table()
+        Call vector()
+        Call list()
     End Sub
 
     Sub readmultiple()
