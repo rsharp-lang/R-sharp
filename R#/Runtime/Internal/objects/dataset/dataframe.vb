@@ -127,6 +127,7 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        <DebuggerStepThrough>
         Sub New()
         End Sub
 

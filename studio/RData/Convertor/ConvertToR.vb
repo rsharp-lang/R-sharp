@@ -108,11 +108,33 @@ Public Module ConvertToR
     End Function
 
     <Extension>
+    Private Function readRowNames(robj As RObject) As String()
+        Dim attrVals = robj.attributes.value
+
+        If TypeOf attrVals Is RList Then
+            Dim cdr As RObject = DirectCast(attrVals, RList).CDR
+
+            If cdr.tag.characters = "row.names" Then
+                If TypeOf cdr.value Is RList AndAlso DirectCast(cdr.value, RList).CAR.info.type <> RObjectType.STR Then
+                    Return Nothing
+                End If
+
+                Return RStreamReader.ReadStrings(cdr.value)
+            Else
+                Return Nothing
+            End If
+        Else
+            Return Nothing
+        End If
+    End Function
+
+    <Extension>
     Private Function CreateRTable(robj As RObject) As dataframe
         Dim columns As RObject() = robj.value
         Dim colnames As String() = robj.readColumnNames
         Dim table As New dataframe With {
-            .columns = New Dictionary(Of String, Array)
+            .columns = New Dictionary(Of String, Array),
+            .rownames = robj.readRowNames
         }
 
         For i As Integer = 0 To colnames.Length - 1
