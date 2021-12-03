@@ -99,15 +99,23 @@ Namespace Convertor
 
         <Extension>
         Public Function LinkVisitor(robj As RObject, key As String) As RObject
-            Do While Not robj.value.CDR Is Nothing
-                robj = robj.value.CDR
+            Dim tag As RObject
 
-                If Not robj.tag Is Nothing AndAlso robj.tag.characters = key Then
+            Do While Not robj Is Nothing
+                tag = robj.tag
+
+                If tag Is Nothing AndAlso robj.referenced_object Is Nothing Then
+                    Return Nothing
+                End If
+
+                If tag.characters = key Then
                     Return robj
                 End If
-                If Not robj.tag.referenced_object Is Nothing AndAlso robj.tag.referenced_object.characters = key Then
+                If Not tag.referenced_object Is Nothing AndAlso tag.referenced_object.characters = key Then
                     Return robj
                 End If
+
+                robj = robj.value.CDR
             Loop
 
             Return Nothing

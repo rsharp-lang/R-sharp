@@ -16,36 +16,11 @@ Namespace Convertor
                 End If
             End If
 
-            If attrs.tag.info.type <> RObjectType.SYM Then
-                If attrs.tag.info.type <> RObjectType.REF Then
-                    Return False
-                ElseIf attrs.tag.referenced_object.characters <> "names" Then
-                    Return False
-                ElseIf FindRowNames(attrs) Then
-                    Return False
-                End If
-
-                Return True
-            ElseIf attrs.tag.characters <> "names" Then
+            If attrs.LinkVisitor("row.names") IsNot Nothing Then
                 Return False
             End If
 
             Return True
-        End Function
-
-        Private Shared Function FindRowNames(attr As RObject) As Boolean
-            Do While Not attr.value.CDR Is Nothing
-                attr = attr.value.CDR
-
-                If attr.tag Is Nothing Then
-                    Return False
-                End If
-                If attr.tag.characters = "row.names" Then
-                    Return True
-                End If
-            Loop
-
-            Return False
         End Function
 
         Public Shared Function IsDataFrame(robj As RObject) As Boolean

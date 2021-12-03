@@ -157,6 +157,14 @@ Namespace Convertor
             robj = robj.attributes.LinkVisitor("row.names")
 
             If Not robj Is Nothing Then
+                Dim Rlist As RList = robj.value
+
+                If Rlist.nodeType = ListNodeType.LinkedList Then
+                    If Rlist.CAR.info.type = RObjectType.INT Then
+                        Return Nothing
+                    End If
+                End If
+
                 Return RStreamReader.ReadStrings(robj.value)
             Else
                 Return Nothing

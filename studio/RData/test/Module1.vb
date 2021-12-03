@@ -49,7 +49,7 @@ Module Module1
     ReadOnly R As New RInterpreter
 
     Sub Main()
-        Call testRealExample()
+        ' Call testRealExample()
 
         Call readmultiple()
         Call table()
