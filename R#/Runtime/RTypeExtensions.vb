@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::bdc3851df1f5a01e16e130de7a8c5be5, R#\Runtime\RTypeExtensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module RTypeExtensions
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: [GetType], (+2 Overloads) GetRTypeCode, IsNumeric, (+2 Overloads) IsPrimitive
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module RTypeExtensions
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: [GetType], (+2 Overloads) GetRTypeCode, IsNumeric, (+2 Overloads) IsPrimitive
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -68,6 +68,7 @@ Namespace Runtime
             parseTypecode("character") = TypeCodes.string
             parseTypecode("logical") = TypeCodes.boolean
             parseTypecode("numeric") = TypeCodes.double
+            parseTypecode("data.frame") = TypeCodes.dataframe
         End Sub
 
         ''' <summary>
@@ -162,6 +163,7 @@ Namespace Runtime
                 Case TypeCodes.string : Return GetType(String())
                 Case TypeCodes.closure : Return GetType([Delegate])
                 Case TypeCodes.generic : Return GetType(Object)
+                Case TypeCodes.dataframe : Return GetType(dataframe)
                 Case Else
                     Throw New InvalidCastException(type.Description)
             End Select

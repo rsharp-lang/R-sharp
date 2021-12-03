@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::9dd33647ede798c51dd0c7cac168bd2d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Type\TypeOfCheck.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class TypeOfCheck
-    ' 
-    '         Properties: expressionName, type, typeName
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class TypeOfCheck
+' 
+'         Properties: expressionName, type, typeName
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -107,7 +107,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 If TypeOf typeRight Is RType Then
                     Return type Is typeRight
                 ElseIf TypeOf typeRight Is String Then
-                    Dim type2 = envir.globalEnvironment.GetType(typeRight)
+                    Dim type2 As RType = envir.globalEnvironment.GetType(typeRight)
 
                     If type2 Is Nothing Then
                         Return Internal.debug.stop({
@@ -124,5 +124,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return Message.InCompatibleType(GetType(String), typeRight.GetType, envir)
             End If
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"typeof ({target}) is {typeName}"
+        End Function
+
     End Class
 End Namespace
