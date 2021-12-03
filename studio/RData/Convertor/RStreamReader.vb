@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.RData.Flags
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Convertor

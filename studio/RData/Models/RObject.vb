@@ -41,6 +41,9 @@
 
 #End Region
 
+Imports SMRUCC.Rsharp.RData.Convertor
+Imports SMRUCC.Rsharp.RData.Flags
+
 ''' <summary>
 ''' Representation of a R object.
 ''' </summary>

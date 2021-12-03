@@ -41,6 +41,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports SMRUCC.Rsharp.RData.Flags
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Convertor
