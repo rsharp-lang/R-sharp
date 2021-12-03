@@ -20,7 +20,6 @@ Public Module ConvertToR
         RObjectType.LGL,
         RObjectType.RAW,
         RObjectType.REAL,
-        RObjectType.VEC,
         RObjectType.CHAR,
         RObjectType.STR,
         RObjectType.WEAKREF
@@ -37,7 +36,7 @@ Public Module ConvertToR
         If TypeOf value Is RList Then
             Dim rlist As RList = DirectCast(value, RList)
 
-            If rdata.info.type = RObjectType.LIST Then
+            If Not rlist.CAR.info.type Like elementVectorFlags Then
                 ' is r pair list
                 Return rlist.CAR.CreatePairList
             End If

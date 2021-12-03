@@ -39,32 +39,40 @@
 
 #End Region
 
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.RData
 
 Module Module1
 
+    ReadOnly R As New RInterpreter
+
     Sub Main()
+        Call vector()
+        Call list()
+    End Sub
 
-        ' Call testLogical()
-
-        ' Dim output2 = New MemoryStream()
-        ' Dim decompressor = New BZip2InputStream("F:\report.rda.tar".Open, True)
-        ' decompressor.CopyTo(output2)
-
-        ' Call output2.FlushStream("F:\report.rda\report2.rda")
-        Using file = "E:\GCModeller\src\R-sharp\studio\RData\test\test_list.rda".Open
+    Sub vector()
+        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\test_vector.rda".Open
             Dim obj As RData = Reader.ParseData(file)
-            Dim r = ConvertToR.ToRObject(obj.object)
+            Dim vec = ConvertToR.ToRObject(obj.object)
 
-            Pause()
+            Call R.Print(vec)
+        End Using
+
+        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\test_logical.rda".Open
+            Dim obj = Reader.ParseData(file)
+            Dim vec = ConvertToR.ToRObject(obj.object)
+
+            Call R.Print(vec)
         End Using
     End Sub
 
-    Sub testLogical()
-        Using file = "D:\GCModeller\src\R-sharp\studio\test\data\test_logical.rda".Open
-            Dim obj = Reader.ParseData(file)
+    Sub list()
+        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\test_list.rda".Open
+            Dim obj As RData = Reader.ParseData(file)
+            Dim lst = ConvertToR.ToRObject(obj.object)
 
-            Pause()
+            Call R.Inspect(lst)
         End Using
     End Sub
 
