@@ -39,6 +39,8 @@
 
 #End Region
 
+Imports System.IO
+
 ''' <summary>
 ''' Data contained in a R file.
 ''' </summary>
@@ -47,5 +49,11 @@ Public Class RData
     Public versions As RVersions
     Public extra As RExtraInfo
     Public [object] As RObject
+
+    Public Shared Function ParseFile(rdafile As String, Optional expand_altrep As Boolean = True) As RData
+        Using buffer As Stream = rdafile.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+            Return Reader.ParseData(buffer, expand_altrep)
+        End Using
+    End Function
 
 End Class
