@@ -54,7 +54,12 @@ Module Module1
     End Sub
 
     Sub readmultiple()
+        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\multiple_object.rda".Open
+            Dim obj As RData = Reader.ParseData(file)
+            Dim vec = ConvertToR.ToRObject(obj.object)
 
+            Call R.Print(vec)
+        End Using
     End Sub
 
     Sub vector()
