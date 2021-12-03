@@ -5,7 +5,7 @@
     <RootNamespace>RData</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>RData</AssemblyName>
-    <ApplicationIcon>R#.ico</ApplicationIcon>
+  
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;Rsharp_app_release;mzkit</Configurations>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

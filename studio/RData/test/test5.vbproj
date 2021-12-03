@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <RootNamespace>RData</RootNamespace>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>test</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>RData</AssemblyName>
-    <ApplicationIcon>R#.ico</ApplicationIcon>
+    <AssemblyName>test</AssemblyName>
+
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;Rsharp_app_release;mzkit</Configurations>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 	  <AssemblyVersion>2.33.*</AssemblyVersion>
 	  <Deterministic>false</Deterministic>
-	  <StartupObject />
-	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <StartupObject>test.Module1</StartupObject>
+	  <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
 	  <PackageIcon>R-sharp.png</PackageIcon>
 	  <PackageIconUrl />
@@ -23,7 +23,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineConstants>netcore5=1</DefineConstants>
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>test.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -31,14 +31,14 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineConstants>netcore5=1</DefineConstants>
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>test.xml</DocumentationFile>
     <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
     <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>test.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
@@ -47,20 +47,20 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>test.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|AnyCPU'">
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>test.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit|AnyCPU'">
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>test.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
-    <DocumentationFile>RData.xml</DocumentationFile>
-    <OutputPath>../../App/</OutputPath>
+    <DocumentationFile>test.xml</DocumentationFile>
+    <OutputPath>bin\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
@@ -71,7 +71,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit|x64'">
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>test.xml</DocumentationFile>
     <OutputPath>D:\mzkit\Rscript\Library\mzkit_app\assembly\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
