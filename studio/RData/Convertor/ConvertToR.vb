@@ -31,43 +31,36 @@ Public Module ConvertToR
     ''' <param name="rdata"></param>
     ''' <returns></returns>
     Public Function ToRObject(rdata As RObject) As Object
-        Dim value As Object = rdata.value
+        Dim value As RList = rdata.value
+        Dim car As RObject = value.CAR
 
-        If TypeOf value Is RList Then
-            Dim car As RObject = DirectCast(value, RList).CAR
+        If Not car.info.type Like elementVectorFlags Then
+            ' is r pair list or dataframe
+            If Not car.attributes Is Nothing AndAlso car.attributes.tag.characters = "row.names" Then
+                Return car.CreateRTable
+            ElseIf Not car.attributes Is Nothing AndAlso TypeOf car.attributes.value Is RList Then
+                Dim cdr As RObject = car.attributes.value.CDR
 
-            If Not car.info.type Like elementVectorFlags Then
-                ' is r pair list or dataframe
-                If Not car.attributes Is Nothing AndAlso car.attributes.tag.characters = "row.names" Then
+                If cdr.tag IsNot Nothing AndAlso cdr.tag.characters = "row.names" Then
                     Return car.CreateRTable
-                ElseIf Not car.attributes Is Nothing AndAlso TypeOf car.attributes.value Is RList Then
-                    Dim cdr As RObject = DirectCast(car.attributes.value, RList).CDR
-
-                    If cdr.tag IsNot Nothing AndAlso cdr.tag.characters = "row.names" Then
-                        Return car.CreateRTable
-                    Else
-                        Return car.CreatePairList
-                    End If
                 Else
                     Return car.CreatePairList
                 End If
-            End If
-
-            If car.info.type Like elementVectorFlags Then
-                Return car.CreateRVector
             Else
-                Throw New NotImplementedException(car.info.ToString)
+                Return car.CreatePairList
             End If
-        ElseIf rdata.info.type Like elementVectorFlags Then
-            Return CreateRVector(rdata)
+        End If
+
+        If car.info.type Like elementVectorFlags Then
+            Return car.CreateRVector
         Else
-            Throw New NotImplementedException(rdata.info.ToString)
+            Throw New NotImplementedException(car.info.ToString)
         End If
     End Function
 
     <Extension>
     Private Function CreatePairList(robj As RObject) As list
-        Dim elements As RObject() = robj.value
+        Dim elements As RObject() = robj.value.data
         Dim attrTags As RObject = robj.attributes
         Dim names As String()
 
@@ -103,26 +96,21 @@ Public Module ConvertToR
         If robj.attributes.tag.characters = "names" Then
             Return RStreamReader.ReadStrings(robj.attributes.value)
         Else
-            Return RStreamReader.ReadStrings(DirectCast(robj.attributes.value, RList).CDR)
+            Return RStreamReader.ReadStrings(robj.attributes.value.CDR)
         End If
     End Function
 
     <Extension>
     Private Function readRowNames(robj As RObject) As String()
         Dim attrVals = robj.attributes.value
+        Dim cdr As RObject = attrVals.CDR
 
-        If TypeOf attrVals Is RList Then
-            Dim cdr As RObject = DirectCast(attrVals, RList).CDR
-
-            If cdr.tag.characters = "row.names" Then
-                If TypeOf cdr.value Is RList AndAlso DirectCast(cdr.value, RList).CAR.info.type <> RObjectType.STR Then
-                    Return Nothing
-                End If
-
-                Return RStreamReader.ReadStrings(cdr.value)
-            Else
+        If cdr.tag.characters = "row.names" Then
+            If TypeOf cdr.value Is RList AndAlso cdr.value.CAR.info.type <> RObjectType.STR Then
                 Return Nothing
             End If
+
+            Return RStreamReader.ReadStrings(cdr.value)
         Else
             Return Nothing
         End If
@@ -130,7 +118,7 @@ Public Module ConvertToR
 
     <Extension>
     Private Function CreateRTable(robj As RObject) As dataframe
-        Dim columns As RObject() = robj.value
+        Dim columns As RObject() = robj.value.data
         Dim colnames As String() = robj.readColumnNames
         Dim table As New dataframe With {
             .columns = New Dictionary(Of String, Array),

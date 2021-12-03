@@ -41,14 +41,13 @@
 
 #End Region
 
-Imports System.Text
 ''' <summary>
 ''' Representation of a R object.
 ''' </summary>
 Public Class RObject
 
     Public Property info As RObjectInfo
-    Public Property value As Object
+    Public Property value As RList
     Public Property attributes As RObject
     Public Property tag As RObject
     Public Property referenced_object As RObject

@@ -44,7 +44,7 @@ Public Class RStreamReader
             Dim obj As RObject = DirectCast(robj, RObject)
 
             If obj.info.type = RObjectType.STR Then
-                Return DirectCast(obj.value, RObject()) _
+                Return DirectCast(obj.value.data, RObject()) _
                     .Select(AddressOf ReadString) _
                     .ToArray
             Else

@@ -73,7 +73,7 @@ Module Constructor
         If r_char.value Is Nothing Then
             Return ""
         ElseIf r_char.info.type = RObjectType.CHAR Then
-            Dim bytes As Byte() = DirectCast(r_char.value, Byte())
+            Dim bytes As Byte() = DirectCast(r_char.value.data, Byte())
             Dim encoding As Encoding = Encoding.UTF8
 
             If r_char.info.gp And CharFlags.UTF8 Then

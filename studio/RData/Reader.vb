@@ -176,13 +176,13 @@ Public MustInherit Class Reader
     ''' <param name="state"></param>
     ''' <returns></returns>
     Public Function expand_altrep_to_object(info As RObject, state As RObject) As (RObjectInfo, Object)
-        Dim class_sym As RObject = info.value(0)
+        Dim class_sym As RObject = info.value.data(0)
 
         Do While class_sym.info.type = RObjectType.REF
             class_sym = class_sym.referenced_object
         Loop
 
-        Dim altrep_name = class_sym.value.value
+        Dim altrep_name As String = DirectCast(class_sym.value.data, Char())
         Dim constructor = altrep_constructor_dict(altrep_name)
 
         Return constructor(state)
@@ -325,7 +325,7 @@ Public MustInherit Class Reader
                 .info = info,
                 .tag = tag,
                 .attributes = attributes,
-                .value = value,
+                .value = RList.CreateNode(value),
                 .referenced_object = referenced_object
             }
         Else
