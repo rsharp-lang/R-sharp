@@ -31,11 +31,38 @@ Public Module ConvertToR
     ''' <param name="rdata"></param>
     ''' <returns></returns>
     Public Function ToRObject(rdata As RObject) As Object
+        Dim pullAll As New Dictionary(Of String, Object)
+        Dim ends As Object = rdata.PullRObject(pullAll)
+
+        Return pullAll
+    End Function
+
+    ''' <summary>
+    ''' Pull all R# object from the RData linked list
+    ''' </summary>
+    ''' <param name="rdata"></param>
+    ''' <returns></returns>
+    ''' 
+    <Extension>
+    Private Function PullRObject(rdata As RObject, list As Dictionary(Of String, Object)) As Object
         Dim value As RList = rdata.value
         Dim car As RObject = value.CAR
 
         If value.nodeType = DataType.Vector Then
+            ' 已经没有数据了，结束递归
             Return RStreamReader.ReadVector(rdata)
+        Else
+            ' CAR为当前节点的数据
+            ' 获取节点数据，然后继续通过CDR进行链表的递归访问
+            Dim current As Object = PullRObject(car, list)
+            Dim CDR As RObject = value.CDR
+
+            If CDR Is Nothing Then
+                Return current
+            Else
+                ' 产生一个列表
+
+            End If
         End If
 
         If Not car.info.type Like elementVectorFlags Then
@@ -80,7 +107,7 @@ Public Module ConvertToR
         Dim list As New list
 
         For i As Integer = 0 To names.Length - 1
-            Call list.add(names(i), ConvertToR.ToRObject(elements(i)))
+            Call list.add(names(i), ConvertToR.PullRObject(elements(i), New Dictionary(Of String, Object)))
         Next
 
         Return list
