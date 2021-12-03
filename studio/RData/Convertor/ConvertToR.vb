@@ -41,7 +41,9 @@ Public Module ConvertToR
                 If Not car.attributes Is Nothing AndAlso car.attributes.tag.characters = "row.names" Then
                     Return car.CreateRTable
                 ElseIf Not car.attributes Is Nothing AndAlso TypeOf car.attributes.value Is RList Then
-                    If DirectCast(car.attributes.value, RList).CDR.tag.characters = "row.names" Then
+                    Dim cdr As RObject = DirectCast(car.attributes.value, RList).CDR
+
+                    If cdr.tag IsNot Nothing AndAlso cdr.tag.characters = "row.names" Then
                         Return car.CreateRTable
                     Else
                         Return car.CreatePairList

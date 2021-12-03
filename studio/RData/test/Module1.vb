@@ -75,6 +75,13 @@ Module Module1
 
             Call R.Inspect(lst)
         End Using
+
+        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\test_list2.rda".Open
+            Dim obj As RData = Reader.ParseData(file)
+            Dim lst = ConvertToR.ToRObject(obj.object)
+
+            Call R.Inspect(lst)
+        End Using
     End Sub
 
     Sub table()
