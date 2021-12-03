@@ -49,10 +49,21 @@ Module Module1
     ReadOnly R As New RInterpreter
 
     Sub Main()
+        Call testRealExample()
+
         Call readmultiple()
         Call table()
         Call vector()
         Call list()
+    End Sub
+
+    Sub testRealExample()
+        Using file = "E:\biodeep\biodeep_pipeline\biodeepNPSearch\data\Flavonoid.rda".Open
+            Dim obj As RData = Reader.ParseData(file)
+            Dim vec = ConvertToR.ToRObject(obj.object)
+
+            Call R.Inspect(vec)
+        End Using
     End Sub
 
     Sub readmultiple()

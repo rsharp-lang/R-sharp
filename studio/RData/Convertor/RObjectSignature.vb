@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
+﻿Imports SMRUCC.Rsharp.RDataSet.Flags
+Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 
 Namespace Convertor
 
@@ -13,8 +14,14 @@ Namespace Convertor
                 Else
                     Return True
                 End If
-            ElseIf attrs.tag.info.type <> Flags.RObjectType.SYM Then
-                Return False
+            ElseIf attrs.tag.info.type <> RObjectType.SYM Then
+                If attrs.tag.info.type <> RObjectType.REF Then
+                    Return False
+                ElseIf attrs.tag.referenced_object.characters <> "names" Then
+                    Return False
+                End If
+
+                Return True
             ElseIf attrs.tag.characters <> "names" Then
                 Return False
             End If
@@ -45,7 +52,7 @@ Namespace Convertor
                 Return False
             End If
 
-            If attrs.tag.info.type <> Flags.RObjectType.SYM Then
+            If attrs.tag.info.type <> RObjectType.SYM Then
                 Return False
             End If
 
