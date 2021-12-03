@@ -84,21 +84,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             For Each part As Expression In stringParts.Skip(1)
                 [next] = part.Evaluate(envir)
 
+                If Program.isException([next]) Then
+                    Return [next]
+                End If
+
                 With REnv.asVector(Of Object)([next])
                     If .Length = 1 Then
                         [next] = .GetValue(Scan0)
                     End If
                 End With
 
-                If Program.isException([next]) Then
-                    Return [next]
-                Else
-                    current = StringBinaryExpression.DoStringBinary(Of String)(
-                        a:=current,
-                        b:=[next],
-                        op:=Function(x, y) x & y
-                    )
-                End If
+                current = StringBinaryExpression.DoStringBinary(Of String)(
+                    a:=current,
+                    b:=[next],
+                    op:=Function(x, y) x & y
+                )
             Next
 
             Dim currentStrings As String() = DirectCast(REnv.asVector(Of String)(current), String())

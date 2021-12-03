@@ -135,7 +135,7 @@ Namespace Development.CommandLine
         Private Shared Function parseMetaData(meta As String()) As Dictionary(Of String, String)
             Dim text As String() = meta _
                 .Select(Function(line)
-                            Return line.Trim(" "c, "#"c, "'"c, ASCII.CR, ASCII.LF)
+                            Return line.Trim(" "c, "#"c, "'"c, ASCII.CR, ASCII.LF, ASCII.TAB)
                         End Function) _
                 .ToArray
             Dim data As Dictionary(Of String, String) = text.ParseTagData(strict:=False)
