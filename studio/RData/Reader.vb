@@ -198,13 +198,13 @@ Public MustInherit Class Reader
     ''' </summary>
     ''' <param name="reference_list"></param>
     ''' <returns></returns>
-    Public Function parse_R_object(Optional reference_list As List(Of RObject) = Nothing) As RObject
+    Friend Function parse_R_object(Optional reference_list As List(Of RObject) = Nothing) As RObject
         If reference_list Is Nothing Then
             ' Index is 1-based, so we insert a dummy object
             reference_list = New List(Of RObject)
         End If
 
-        Dim info_int = parse_int()
+        Dim info_int As Integer = parse_int()
         Dim info As RObjectInfo = parse_r_object_info(info_int)
         Dim tag = Nothing
         Dim attributes As RObject = Nothing
@@ -237,6 +237,7 @@ Public MustInherit Class Reader
             End If
 
             ' Read CAR and CDR
+            ' RData linked list
             Dim car As RObject = parse_R_object(reference_list)
             Dim cdr As RObject = parse_R_object(reference_list)
 
