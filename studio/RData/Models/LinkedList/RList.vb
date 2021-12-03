@@ -1,4 +1,6 @@
-﻿Namespace Struct.LinkedList
+﻿Imports Microsoft.VisualBasic.Serialization.JSON
+
+Namespace Struct.LinkedList
 
     ''' <summary>
     ''' 在R数据文件之中用于存储数据的链表结构
@@ -32,6 +34,14 @@
                 End If
             End Get
         End Property
+
+        Public Overrides Function ToString() As String
+            If Not CAR Is Nothing Then
+                Return CAR.ToString
+            Else
+                Return data.GetJson
+            End If
+        End Function
 
         Friend Shared Function CreateNode(value As Object) As RList
             If value Is Nothing Then
