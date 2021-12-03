@@ -85,7 +85,7 @@ Public Enum RObjectType
     ''' <summary>
     ''' internal character strings
     ''' </summary>
-    [Char] = 9
+    [CHAR] = 9
     ''' <summary>
     ''' logical vectors
     ''' </summary>

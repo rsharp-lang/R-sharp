@@ -64,7 +64,7 @@ Public Class RObject
     End Property
 
     Public Overrides Function ToString() As String
-        If info.type = RObjectType.Char Then
+        If info.type = RObjectType.CHAR Then
             Return characters
         Else
             Return $"[{info}] {value}"

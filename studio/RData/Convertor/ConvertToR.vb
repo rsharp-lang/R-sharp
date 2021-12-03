@@ -8,15 +8,22 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ''' </summary>
 Public Module ConvertToR
 
+    ' R storage units (nodes)
+    ' Two types: SEXPREC(non-vectors) And VECTOR_SEXPREC(vectors)
+
+    ' Node: VECTOR_SEXPREC
+    ' The vector types are RAWSXP, CHARSXP, LGLSXP, INTSXP, REALSXP, CPLXSXP, STRSXP, VECSXP, EXPRSXP And WEAKREFSXP.
     ReadOnly elementVectorFlags As Index(Of RObjectType) = {
-        RObjectType.BCODE,
         RObjectType.CPLX,
         RObjectType.EXPR,
         RObjectType.INT,
         RObjectType.LGL,
         RObjectType.RAW,
         RObjectType.REAL,
-        RObjectType.VEC
+        RObjectType.VEC,
+        RObjectType.CHAR,
+        RObjectType.STR,
+        RObjectType.WEAKREF
     }
 
     ''' <summary>
@@ -28,6 +35,13 @@ Public Module ConvertToR
         Dim value As Object = rdata.value
 
         If TypeOf value Is RList Then
+            Dim rlist As RList = DirectCast(value, RList)
+
+            If rdata.info.type = RObjectType.LIST Then
+                ' is r pair list
+                Return rlist.CAR.CreatePairList
+            End If
+
             rdata = DirectCast(value, RList).CAR
 
             If rdata.info.type Like elementVectorFlags Then
@@ -42,6 +56,13 @@ Public Module ConvertToR
 
     <Extension>
     Private Function CreatePairList(robj As RObject) As list
+        Dim elements As RObject() = robj.value
+        Dim attrTags As RObject = robj.attributes
+        Dim names As String()
+
+        If Not attrTags Is Nothing AndAlso attrTags.tag.characters = "names" Then
+
+        End If
 
     End Function
 

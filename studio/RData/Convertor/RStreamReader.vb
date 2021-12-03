@@ -25,7 +25,7 @@ Public Class RStreamReader
     ''' <returns></returns>
     Public Shared Function ReadVector(robj As RObject) As Array
         Select Case robj.info.type
-            Case RObjectType.Char : Return ReadString(robj).ToArray
+            Case RObjectType.CHAR : Return ReadString(robj).ToArray
             Case RObjectType.INT : Return ReadIntegers(robj)
             Case RObjectType.REAL : Return ReadNumbers(robj)
             Case RObjectType.LGL : Return ReadLogicals(robj)

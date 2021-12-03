@@ -259,7 +259,7 @@ Public MustInherit Class Reader
                 .frame = frame,
                 .hash_table = hash_table
             }
-        ElseIf info.type = RObjectType.Char Then
+        ElseIf info.type = RObjectType.CHAR Then
             Dim length = parse_int()
 
             If length > 0 Then

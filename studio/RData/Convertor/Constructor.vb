@@ -52,7 +52,7 @@ Module Constructor
 
     ReadOnly toType As New Dictionary(Of RObjectType, RType) From {
         {RObjectType.ANY, RType.GetRSharpType(GetType(Object))},
-        {RObjectType.Char, RType.GetRSharpType(GetType(Char))},
+        {RObjectType.CHAR, RType.GetRSharpType(GetType(Char))},
         {RObjectType.REAL, RType.GetRSharpType(GetType(Double))},
         {RObjectType.LGL, RType.GetRSharpType(GetType(Boolean))}
     }
@@ -70,7 +70,7 @@ Module Constructor
     Public Function DecodeCharacters(r_char As RObject) As String
         If r_char.value Is Nothing Then
             Return ""
-        ElseIf r_char.info.type = RObjectType.Char Then
+        ElseIf r_char.info.type = RObjectType.CHAR Then
             Dim bytes As Byte() = DirectCast(r_char.value, Byte())
             Dim encoding As Encoding = Encoding.UTF8
 
