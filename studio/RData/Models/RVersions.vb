@@ -49,7 +49,7 @@ Public Class RVersions
     Public minimum As Integer
 
     Public Overrides Function ToString() As String
-        Return $"{format}.{serialized}.{minimum}"
+        Return $"RVersions(format={format}, serialized={serialized}, minimum={minimum})"
     End Function
 
 End Class

@@ -235,7 +235,7 @@ Public MustInherit Class Reader
             Dim car As RObject = parse_R_object(reference_list)
             Dim cdr As RObject = parse_R_object(reference_list)
 
-            value = (car, cdr)
+            value = New RList With {.CAR = car, .CDR = cdr}
         ElseIf info.type = RObjectType.ENV Then
             result = New RObject With {
                 .info = info,

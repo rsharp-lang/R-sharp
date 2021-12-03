@@ -55,7 +55,7 @@ Module Module1
 
         ' Call output2.FlushStream("F:\report.rda\report2.rda")
         Using file = "D:\biodeep\flavonoid\Rscript\bundle\Flavonoid.rda".Open
-            Dim obj = Reader.ParseData(file)
+            Dim obj As RData.RData = Reader.ParseData(file)
 
             Pause()
         End Using
