@@ -22,6 +22,16 @@ Public Class RList
     ''' <returns></returns>
     Public Property data As Array
 
+    Public ReadOnly Property nodeType As DataType
+        Get
+            If Not data Is Nothing Then
+                Return DataType.Vector
+            Else
+                Return DataType.LinkedList
+            End If
+        End Get
+    End Property
+
     Friend Shared Function CreateNode(value As Object) As RList
         If value Is Nothing Then
             Return New RList
@@ -51,3 +61,13 @@ Public Class RList
     End Function
 End Class
 
+Public Enum DataType
+    ''' <summary>
+    ''' 当前节点为最末尾的叶节点
+    ''' </summary>
+    Vector
+    ''' <summary>
+    ''' 当前节点为链表的中间连接节点
+    ''' </summary>
+    LinkedList
+End Enum

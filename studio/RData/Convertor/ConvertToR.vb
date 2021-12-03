@@ -34,6 +34,10 @@ Public Module ConvertToR
         Dim value As RList = rdata.value
         Dim car As RObject = value.CAR
 
+        If value.nodeType = DataType.Vector Then
+            Return RStreamReader.ReadVector(rdata)
+        End If
+
         If Not car.info.type Like elementVectorFlags Then
             ' is r pair list or dataframe
             If Not car.attributes Is Nothing AndAlso car.attributes.tag.characters = "row.names" Then

@@ -1,21 +1,26 @@
-﻿Imports REnv = SMRUCC.Rsharp.Runtime
+﻿Imports System.Runtime.CompilerServices
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Public Class RStreamReader
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Shared Function ReadString(robj As RObject) As String
         Return robj.DecodeCharacters
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Shared Function ReadNumbers(robj As RObject) As Double()
-        Return REnv.asVector(Of Double)(robj.value)
+        Return REnv.asVector(Of Double)(robj.value.data)
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Shared Function ReadIntegers(robj As RObject) As Long()
-        Return REnv.asVector(Of Long)(robj.value)
+        Return REnv.asVector(Of Long)(robj.value.data)
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Shared Function ReadLogicals(robj As RObject) As Boolean()
-        Return REnv.asVector(Of Boolean)(robj.value)
+        Return REnv.asVector(Of Boolean)(robj.value.data)
     End Function
 
     ''' <summary>
