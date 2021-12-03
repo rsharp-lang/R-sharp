@@ -69,6 +69,7 @@
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\application%xml\xml-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\text%html\html_netcore5.vbproj" />
     <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
+    <ProjectReference Include="..\..\studio\RData\RData.NET5.vbproj" />
   </ItemGroup>
 
   <ItemGroup>
