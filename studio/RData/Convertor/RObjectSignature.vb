@@ -6,7 +6,7 @@ Namespace Convertor
     Public Class RObjectSignature
 
         Public Shared Function IsPairList(robj As RObject) As Boolean
-            Dim attrs = robj.attributes
+            Dim attrs As RObject = robj.attributes
 
             If attrs Is Nothing Then
                 If robj.info.type Like ConvertToR.elementVectorFlags Then
@@ -14,10 +14,14 @@ Namespace Convertor
                 Else
                     Return True
                 End If
-            ElseIf attrs.tag.info.type <> RObjectType.SYM Then
+            End If
+
+            If attrs.tag.info.type <> RObjectType.SYM Then
                 If attrs.tag.info.type <> RObjectType.REF Then
                     Return False
                 ElseIf attrs.tag.referenced_object.characters <> "names" Then
+                    Return False
+                ElseIf attrs.value.CDR.tag.characters = "row.names" Then
                     Return False
                 End If
 
