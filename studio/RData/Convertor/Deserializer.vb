@@ -1,10 +1,13 @@
 ﻿Imports System.Runtime.CompilerServices
 
-Public Module Deserializer
+Namespace Convertor
 
-    <Extension>
-    Public Function ToObject(Of T As Class)(robj As RObject) As T
+    Public Module Deserializer
 
-    End Function
+        <Extension>
+        Public Function ToObject(Of T As Class)(robj As RObject) As T
 
-End Module
+        End Function
+
+    End Module
+End Namespace
