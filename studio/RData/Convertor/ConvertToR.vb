@@ -4,7 +4,6 @@ Imports SMRUCC.Rsharp.RDataSet.Flags
 Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Convertor
 
@@ -177,7 +176,7 @@ Namespace Convertor
                 If vector.factor Is Nothing Then
                     table.columns(colnames(i)) = vector.data
                 Else
-                    table.columns(colnames(i)) = factor.asCharacter(REnv.asVector(Of Integer)(vector.data), vector.factor)
+                    table.columns(colnames(i)) = factor.asCharacter(vector)
                 End If
             Next
 

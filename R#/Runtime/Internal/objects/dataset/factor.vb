@@ -43,8 +43,10 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object
 
@@ -141,6 +143,14 @@ Namespace Runtime.Internal.Object
                                      In levels
                                      Select factors(i - 1)).ToArray
             Return chars
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function asCharacter(data As vector) As String()
+            Return asCharacter(
+                levels:=REnv.asVector(Of Integer)(data.data),
+                factor:=data.factor
+            )
         End Function
     End Class
 End Namespace
