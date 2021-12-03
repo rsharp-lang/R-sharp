@@ -72,6 +72,7 @@ Public MustInherit Class Reader
 
     Protected ReadOnly expand_altrep As Boolean
 
+    <DebuggerStepThrough>
     Sub New(expand_altrep As Boolean)
         Me.expand_altrep = expand_altrep
     End Sub

@@ -51,6 +51,7 @@ Public Class ParserXDR : Inherits Reader
     ReadOnly data As BinaryDataReader
     ReadOnly xdr_parser As Unpacker
 
+    <DebuggerStepThrough>
     Sub New(data As BinaryDataReader, Optional position As Integer = 0, Optional expand_altrep As Boolean = True)
         Call MyBase.New(expand_altrep)
 
