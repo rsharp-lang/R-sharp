@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <RootNamespace>RData</RootNamespace>
+    <RootNamespace>SMRUCC.Rsharp.RData</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>RData</AssemblyName>
   
@@ -96,6 +96,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\BinaryData\BinaryData\binarydata-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
+    <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
   </ItemGroup>
 
   <ItemGroup>
