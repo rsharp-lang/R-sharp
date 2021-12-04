@@ -22,6 +22,8 @@ Namespace Language
 
             Call keywords.Clear()
             Call keywords.Add(pyKeywords).ToArray
+
+            keepsDelimiter = True
         End Sub
 
     End Class

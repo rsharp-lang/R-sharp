@@ -61,6 +61,7 @@ Namespace Language
         invalid
 
         newLine
+        delimiter
 
         comment
         ''' <summary>

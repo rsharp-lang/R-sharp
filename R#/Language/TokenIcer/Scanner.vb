@@ -76,6 +76,7 @@ Namespace Language.TokenIcer
         Dim lineNumber As Integer = 1
         Dim lastPopoutToken As Token
 
+        Protected keepsDelimiter As Boolean = False
         Protected ReadOnly keywords As New Index(Of String)(Rkeywords.Objects)
 
         Friend Class Escapes
@@ -368,7 +369,11 @@ Namespace Language.TokenIcer
             ElseIf c Like delimiter Then
                 ' token delimiter
                 If buffer > 0 Then
-                    Return populateToken()
+                    If keepsDelimiter Then
+                        Return populateToken(bufferNext:=c)
+                    Else
+                        Return populateToken()
+                    End If
                 Else
                     buffer += c
                     Return populateToken()
@@ -441,7 +446,11 @@ Namespace Language.TokenIcer
             If text.First = "@"c Then
                 Return New Token With {.name = TokenType.annotation, .text = text}
             ElseIf text.Trim(" "c, ASCII.TAB) = "" OrElse text = vbCr OrElse text = vbLf Then
-                Return Nothing
+                If keepsDelimiter Then
+                    Return New Token With {.name = TokenType.delimiter, .text = text}
+                Else
+                    Return Nothing
+                End If
             ElseIf escape.comment AndAlso text.First = "#"c Then
                 Return New Token With {.name = TokenType.comment, .text = text}
             Else
