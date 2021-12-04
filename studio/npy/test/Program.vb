@@ -10,7 +10,7 @@ Module Program
 
     Sub parseHelloWorld()
         Dim hello = "print(""Hello World!"")"
-        Dim scanner As New Scanner(hello)
+        Dim scanner As New PyScanner(hello)
         Dim tokens = scanner.GetTokens.ToArray
 
         Pause()

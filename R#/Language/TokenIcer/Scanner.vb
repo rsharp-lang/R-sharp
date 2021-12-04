@@ -76,6 +76,8 @@ Namespace Language.TokenIcer
         Dim lineNumber As Integer = 1
         Dim lastPopoutToken As Token
 
+        Protected ReadOnly keywords As New Index(Of String)(Rkeywords.Objects)
+
         Friend Class Escapes
 
             Friend comment, [string] As Boolean
@@ -197,7 +199,8 @@ Namespace Language.TokenIcer
         Shared ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c, "!"}
         Shared ReadOnly longOperators As Index(Of String) = {"<=", "<-", "&&", "||", ":>", "::", "<<", "->", "=>", ">=", "==", "!=", "++", "--", "|>"}
         Shared ReadOnly shortOperators As Index(Of Char) = {"$"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
-        Shared ReadOnly keywords As Index(Of String) = {
+
+        Friend Shared ReadOnly Rkeywords As Index(Of String) = {
             "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
             "const", "imports", "require", "library",
             "if", "else", "for", "loop", "while", "repeat", "step", "break", "next",
@@ -209,7 +212,7 @@ Namespace Language.TokenIcer
             "new", "try", "switch"
         }
 
-        Private Shared Function isLINQKeyword(word As String) As Boolean
+        Private Function isLINQKeyword(word As String) As Boolean
             Dim lwd As String = Strings.LCase(word)
 
             Select Case lwd
@@ -217,12 +220,12 @@ Namespace Language.TokenIcer
                 Case "if"
                     Return False
                 Case Else
-                    Return Strings.LCase(word) Like keywords
+                    Return Strings.LCase(word) Like Rkeywords
             End Select
         End Function
 
         Public Shared Function GetRKeywords() As String()
-            Return keywords.Objects
+            Return Rkeywords.Objects
         End Function
 
         Private Function walkChar(c As Char) As Token
@@ -442,14 +445,14 @@ Namespace Language.TokenIcer
             ElseIf escape.comment AndAlso text.First = "#"c Then
                 Return New Token With {.name = TokenType.comment, .text = text}
             Else
-                Return MeasureToken(text)
+                Return MeasureToken(text, keywords, AddressOf isLINQKeyword)
             End If
         End Function
 
-        Public Shared Function MeasureToken(text As String) As Token
+        Public Shared Function MeasureToken(text As String, keywords As Index(Of String), isLinqKeyword As Func(Of String, Boolean)) As Token
             text = text.Trim
 
-            If text Like keywords OrElse isLINQKeyword(text) Then
+            If text Like keywords OrElse isLinqKeyword(text) Then
                 ' 在这里转换为小写是因为
                 ' R关键词都是小写的
                 ' 但是LINQ的关键词是不区分大小写的

@@ -68,7 +68,7 @@ Namespace Language
 
         <Extension>
         Friend Function joinNext(tken As Token, token As String) As JoinToken
-            Dim nextToken As Token = Scanner.MeasureToken(token)
+            Dim nextToken As Token = Scanner.MeasureToken(token, Scanner.Rkeywords, AddressOf isLINQKeyword)
             Dim join As New JoinToken With {
                 .name = tken.name,
                 .text = tken.text,
@@ -77,6 +77,18 @@ Namespace Language
             }
 
             Return join
+        End Function
+
+        Private Function isLINQKeyword(word As String) As Boolean
+            Dim lwd As String = Strings.LCase(word)
+
+            Select Case lwd
+                ' Linq中没有if表达式
+                Case "if"
+                    Return False
+                Case Else
+                    Return Strings.LCase(word) Like Scanner.Rkeywords
+            End Select
         End Function
     End Module
 End Namespace
