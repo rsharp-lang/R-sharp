@@ -381,6 +381,8 @@ Namespace Language.TokenIcer
             Else
                 If buffer = 1 AndAlso buffer(Scan0) Like longOperatorParts Then
                     Return populateToken(bufferNext:=c)
+                ElseIf keepsDelimiter AndAlso buffer = 1 AndAlso buffer(Scan0) Like delimiter Then
+                    Return populateToken(bufferNext:=c)
                 Else
                     buffer += c
                 End If
