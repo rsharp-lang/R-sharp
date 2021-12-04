@@ -49,12 +49,14 @@ Module Module1
     ReadOnly R As New RInterpreter
 
     Sub Main()
-        Call testRealExample()
+        App.CurrentDirectory = "E:\GCModeller\src\R-sharp\studio\test\data\"
 
-        Call readmultiple()
+        'Call testRealExample()
+
+        'Call readmultiple()
         Call table()
-        Call vector()
-        Call list()
+        'Call vector()
+        ' Call list()
     End Sub
 
     Sub testRealExample()
@@ -80,58 +82,152 @@ Module Module1
     End Sub
 
     Sub vector()
-        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\test_vector.rda".Open
+        Using file = "test_vector.rda".Open
             Dim obj As RData = Reader.ParseData(file)
             Dim vec = ConvertToR.ToRObject(obj.object)
 
             Call R.Print(vec)
         End Using
 
-        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\test_logical.rda".Open
+        Using file = "test_logical.rda".Open
             Dim obj = Reader.ParseData(file)
             Dim vec = ConvertToR.ToRObject(obj.object)
 
             Call R.Print(vec)
         End Using
     End Sub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     Sub list()
-        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\test_list.rda".Open
+        Using file = "test_list.rda".Open
             Dim obj As RData = Reader.ParseData(file)
             Dim lst = ConvertToR.ToRObject(obj.object)
 
             Call R.Inspect(lst)
         End Using
 
-        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\test_list2.rda".Open
+        Using file = "test_list2.rda".Open
             Dim obj As RData = Reader.ParseData(file)
             Dim lst = ConvertToR.ToRObject(obj.object)
 
             Call R.Inspect(lst)
         End Using
     End Sub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     Sub table()
-        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\test_dataframe2.rda".Open
+        Using file = "test_dataframe2.rda".Open
             Dim obj = Reader.ParseData(file)
             Dim tbl = ConvertToR.ToRObject(obj.object)
 
             Call R.Print(tbl)
         End Using
 
-        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\test_dataframe_v3.rda".Open
+        Using file = "test_dataframe_v3.rda".Open
             Dim obj = Reader.ParseData(file)
             Dim tbl = ConvertToR.ToRObject(obj.object)
 
             Call R.Print(tbl)
         End Using
 
-        Using file = "E:\GCModeller\src\R-sharp\studio\test\data\test_dataframe.rda".Open
+        Using file = "test_dataframe.rda".Open
             Dim obj = Reader.ParseData(file)
             Dim tbl = ConvertToR.ToRObject(obj.object)
 
             Call R.Print(tbl)
         End Using
     End Sub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 End Module
