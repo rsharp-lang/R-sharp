@@ -449,7 +449,11 @@ Namespace Language.TokenIcer
                 Return New Token With {.name = TokenType.annotation, .text = text}
             ElseIf text.Trim(" "c, ASCII.TAB) = "" OrElse text = vbCr OrElse text = vbLf Then
                 If keepsDelimiter Then
-                    Return New Token With {.name = TokenType.delimiter, .text = text}
+                    If text = vbCr OrElse text = vbLf Then
+                        Return New Token With {.name = TokenType.newLine, .text = text}
+                    Else
+                        Return New Token With {.name = TokenType.delimiter, .text = text}
+                    End If
                 Else
                     Return Nothing
                 End If

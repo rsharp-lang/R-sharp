@@ -14,7 +14,8 @@ def hello():
 
    print(""hello world!"")
    x = message
-
+    
+f = x -> print(x)
 "
         Dim scanner As New PyScanner(func)
         Dim tokens = scanner.GetTokens.ToArray
