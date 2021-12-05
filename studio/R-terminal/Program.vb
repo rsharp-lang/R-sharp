@@ -233,7 +233,13 @@ Module Program
             App.CurrentDirectory = workdir.TranslateWorkdir(filepath.GetFullPath)
         End If
 
-        Dim result As Object = R.Source(filepath)
+        Dim result As Object
+
+        If Not filepath.ExtensionSuffix("R") Then
+            result = R.globalEnvir.hybridsEngine.LoadScript(filepath, R.globalEnvir)
+        Else
+            result = R.Source(filepath)
+        End If
 
         Return Rscript.handleResult(result, R.globalEnvir, Nothing)
     End Function

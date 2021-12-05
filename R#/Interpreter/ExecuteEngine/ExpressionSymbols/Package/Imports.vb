@@ -1,67 +1,66 @@
 ﻿#Region "Microsoft.VisualBasic::6c86183961785431150bc9b66a8aca2c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class [Imports]
-    ' 
-    '         Properties: expressionName, isImportsScript, library, packages, scriptSource
-    '                     type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsExternalScript, importsLibrary
-    '                   importsPackages, isImportsAllPackages, LoadLibrary, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class [Imports]
+' 
+'         Properties: expressionName, isImportsScript, library, packages, scriptSource
+'                     type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsExternalScript, importsLibrary
+'                   importsPackages, isImportsAllPackages, LoadLibrary, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Development.Package
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Development.Package
-Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports any = Microsoft.VisualBasic.Scripting
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
+
+    Public Delegate Function ScriptParser(script As Rscript, debug As Boolean, ByRef err As String) As Program
 
     ''' <summary>
     ''' A syntax from imports new package namespace from the external module assembly. 
@@ -160,6 +159,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             Dim result As Object
             Dim oldScript As Object = env.FindSymbol("!script")?.value
             Dim oldStackFrame As StackFrame = env.stackFrame
+            Dim globalEnv = env.globalEnvironment
 
             ' imports dll/R files
             For Each libFile As String In files
@@ -167,14 +167,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                     ' imports * from lib_dll
                     ' 简写形式
                     result = LoadLibrary(GetDllFile(libFile, env), env, {"*"})
-                ElseIf libFile.ExtensionSuffix("R") Then
+                ElseIf globalEnv.hybridsEngine.CanHandle(libFile) Then
                     ' source外部的R#脚本
                     result = GetExternalScriptFile(libFile, scriptSource, env)
 
                     If Program.isException(result) Then
                         Return result
                     Else
-                        result = importsExternalScript(result, env)
+                        result = globalEnv.hybridsEngine.LoadScript(result, env)
                     End If
 
                     If Program.isException(result) Then
@@ -190,47 +190,6 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             End If
 
             Return Nothing
-        End Function
-
-        Private Function importsExternalScript(result As Object, env As Environment) As Object
-            Dim R As RInterpreter = env.globalEnvironment.Rscript
-            Dim program As Program
-            Dim error$ = Nothing
-
-            ' 20200213 因为source函数是创建了一个新的环境容器
-            ' 所以函数无法被导入到全局环境之中
-            ' 在这里imports关键词操作则是使用全局环境
-            Dim script As MagicScriptSymbol = CreateMagicScriptSymbol(result, R)
-            Dim Rscript As Rscript = Rscript.FromFile(result)
-            Dim stackframe As New StackFrame With {
-                .File = Rscript.fileName,
-                .Line = 0,
-                .Method = New Method With {
-                    .Method = MethodBase.GetCurrentMethod.Name,
-                    .[Module] = "n/a",
-                    .[Namespace] = "SMRUCC/R#"
-                }
-            }
-
-            env.setStackInfo(stackframe)
-
-            If env.FindSymbol("!script") Is Nothing Then
-                env.Push("!script", New vbObject(script), [readonly]:=False)
-            Else
-                env.FindSymbol("!script").SetValue(New vbObject(script), env)
-            End If
-
-            program = Program.CreateProgram(Rscript, R.debug, [error]:=[error])
-
-            If program Is Nothing Then
-                ' there are syntax error in the external script
-                ' for current imports action
-                result = Internal.debug.stop([error].Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB), env)
-            Else
-                result = program.Execute(env)
-            End If
-
-            Return result
         End Function
 
         ''' <summary>

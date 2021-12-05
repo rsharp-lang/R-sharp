@@ -56,23 +56,22 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Development.Configuration
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Configuration
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports stdNum = System.Math
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
 Namespace Interpreter
 
@@ -148,6 +147,10 @@ Namespace Interpreter
             _globalEnvir.Push("PI", stdNum.PI, True, TypeCodes.double)
             _globalEnvir.Push("E", stdNum.E, True, TypeCodes.double)
             _globalEnvir.Push(".GlobalEnv", globalEnvir, True, TypeCodes.generic)
+
+            For Each name As String In env.options.environments.SafeQuery
+                Call env.hybridsEngine.Register(dllpath:=$"{App.HOME}/{name}")
+            Next
 
             ' config R# interpreter engine
             strict = env.options.strict
