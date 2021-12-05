@@ -1,6 +1,7 @@
 ﻿Imports System.Data
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Python.Language
 Imports SMRUCC.Rsharp.Interpreter
@@ -39,8 +40,7 @@ Public Module SyntaxTree
             .script = New List(Of Expression)
         }
         Dim current As TaggedObject = python
-
-        stack.Push(current)
+        Dim released As New Index(Of String)
 
         For Each line As PythonLine In lines
             ' 每一行前面的空格数量作为层级关系
@@ -51,6 +51,14 @@ Public Module SyntaxTree
 
                         tokens = line.tokens.Skip(3).Take(line.tokens.Length - 5).ToArray
                         result = DeclareNewFunctionSyntax.getParameters(tokens, args, opts)
+
+                        If line.levels > current.level Then
+                            stack.Push(current)
+                        ElseIf line.levels = current.level Then
+                            ' 结束了上一个block
+                            stack.Peek.Add(current.ToExpression(released))
+                        End If
+
                         current = New FunctionTag With {
                            .keyword = line(Scan0).text,
                            .level = line.levels,
@@ -101,7 +109,7 @@ Public Module SyntaxTree
                 End If
             ElseIf line.levels <= current.level Then
                 ' 结束当前的对象
-                stack.Peek.Add(current.ToExpression)
+                stack.Peek.Add(current.ToExpression(released))
                 current = stack.Peek
                 result = ParsePythonLine(line, opts)
 
@@ -113,9 +121,20 @@ Public Module SyntaxTree
             End If
         Next
 
-        If python.script = 0 AndAlso current.level >= 0 Then
-            python.Add(current.ToExpression)
+        ' do release of stack
+        If Not current.GetHashCode.ToHexString Like released Then
+            stack.Peek.Add(current.ToExpression(released))
         End If
+
+        Do While True
+            current = stack.Pop
+
+            If stack.Count > 0 Then
+                stack.Peek.Add(current.ToExpression(released))
+            Else
+                Exit Do
+            End If
+        Loop
 
         Return New Program(python.script)
     End Function
@@ -144,7 +163,8 @@ Public Class TaggedObject
         Return $"[{level}] {keyword}: {script.JoinBy("; ")}"
     End Function
 
-    Public Overridable Function ToExpression() As Expression
+    Public Overridable Function ToExpression(release As Index(Of String)) As Expression
+        Call release.Add(Me.GetHashCode.ToHexString)
         Return New ClosureExpression(script.ToArray)
     End Function
 
@@ -156,8 +176,8 @@ Public Class FunctionTag : Inherits TaggedObject
     Public Property arguments As Expression()
     Public Property stackframe As StackFrame
 
-    Public Overrides Function ToExpression() As Expression
-        Return New DeclareNewFunction(funcname, arguments, MyBase.ToExpression, stackframe)
+    Public Overrides Function ToExpression(release As Index(Of String)) As Expression
+        Return New DeclareNewFunction(funcname, arguments, MyBase.ToExpression(release), stackframe)
     End Function
 
 End Class

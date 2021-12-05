@@ -5,9 +5,19 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Module Programa
     Sub Main(args As String())
+
+        Call parseFile()
+
         Call parseFunction()
         Call parseHelloWorld()
 
+    End Sub
+
+    Sub parseFile()
+        Dim text As Rscript = Rscript.FromFile("E:\GCModeller\src\R-sharp\studio\test\hybridTest\base.py")
+        Dim py As Program = text.ParsePyScript
+
+        Pause()
     End Sub
 
     Sub parseFunction()
