@@ -27,6 +27,7 @@ Public Module SyntaxTree
         }
         Dim tokens As Token() = scanner.GetTokens.ToArray
         Dim lines As PythonLine() = tokens _
+            .Where(Function(t) t.name <> TokenType.comment) _
             .Split(Function(t) t.name = TokenType.newLine) _
             .Where(Function(l) l.Length > 0) _
             .Select(Function(t) New PythonLine(t)) _

@@ -12,6 +12,7 @@ def stopRun():
     print(data.frame(ID = ["AA","BB","CC"], live = TRUE))
 
     def throwEx():
-        stop(1111)
+        print(traceback())
+        # stop(1111)
         
     throwEx()
