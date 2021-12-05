@@ -1,9 +1,17 @@
 
 def printHello(msg):
-    x = msg
-    str(x)
-    print(`hello world, result is ${x}!`)
+    xx = msg
+    str(xx)
+    print(`hello world, result is ${xx}!`)
+    xx = "888888"
+    print(xx)
     veryDeep()
     
 def stopRun():
-    stop(1111)
+    
+    print(data.frame(ID = ["AA","BB","CC"], live = TRUE))
+
+    def throwEx():
+        stop(1111)
+        
+    throwEx()
