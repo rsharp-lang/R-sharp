@@ -8,6 +8,11 @@
     <Description>The embedded python script environment based on the R# runtime</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Platforms>AnyCPU;x64</Platforms>
+    <Configurations>Debug;Release;Rsharp_app_release</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
+    <OutputPath>../../App\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
