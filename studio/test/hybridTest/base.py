@@ -1,7 +1,8 @@
 
 def printHello(msg):
-    
-    print(`hello world, result is ${msg}!`)
+    x = msg
+    str(x)
+    print(`hello world, result is ${x}!`)
     veryDeep()
     
 def stopRun():
