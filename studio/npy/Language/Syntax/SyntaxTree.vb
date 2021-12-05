@@ -1,9 +1,12 @@
-﻿Imports System.Runtime.CompilerServices
+﻿Imports System.Data
+Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Python.Language
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language
@@ -27,7 +30,7 @@ Public Module SyntaxTree
             .Where(Function(l) l.tokens.Length > 0) _
             .ToArray
         Dim stack As New Stack(Of TaggedObject)
-        Dim err As SyntaxResult
+        Dim result As SyntaxResult
         Dim current As New TaggedObject With {
             .keyword = "python",
             .level = -1,
@@ -42,28 +45,62 @@ Public Module SyntaxTree
                 Select Case line(Scan0).text
                     Case "def"
                         Dim args As New List(Of DeclareNewSymbol)
-                        tokens = line.tokens.Skip(3).Take(line.tokens.Length - 5).ToArray
-                        err = DeclareNewFunctionSyntax.getParameters(tokens, args, opts)
 
+                        tokens = line.tokens.Skip(3).Take(line.tokens.Length - 5).ToArray
+                        result = DeclareNewFunctionSyntax.getParameters(tokens, args, opts)
                         current = New FunctionTag With {
                            .keyword = line(Scan0).text,
                            .level = line.levels,
                            .script = New List(Of Expression),
                            .funcname = line(1).text,
-                           .arguments = args
+                           .arguments = args,
+                           .stackframe = opts.GetStackTrace(line(1))
                         }
+                    Case "return"
 
-                        stack.Push(current)
+                        tokens = line.tokens.Skip(1).ToArray
+                        result = Expression.CreateExpression(tokens, opts)
+
+                        If result.isException Then
+                            Throw result.error.exception
+                        Else
+                            current.Add(New ReturnValue(result.expression))
+                        End If
+
                     Case Else
                         Throw New NotImplementedException
                 End Select
             ElseIf line.levels > current.level Then
+                If current.keyword.StringEmpty Then
+                    Throw New SyntaxErrorException
+                End If
 
+                result = ParsePythonLine(line, opts)
 
+                If result.isException Then
+                    Throw result.error.exception
+                Else
+                    current.Add(result)
+                End If
+            ElseIf line.levels <= current.level Then
+                ' 结束当前的对象
+                stack.Peek.Add(current.ToExpression)
+                current = stack.Peek
+                result = ParsePythonLine(line, opts)
+
+                If result.isException Then
+                    Throw result.error.exception
+                Else
+                    current.Add(result)
+                End If
             End If
         Next
 
         Return New Program(stack.Pop.script)
+    End Function
+
+    Private Function ParsePythonLine(line As PythonLine, opts As SyntaxBuilderOptions) As SyntaxResult
+        Return Expression.CreateExpression(line.tokens, opts)
     End Function
 
 End Module
@@ -74,8 +111,20 @@ Public Class TaggedObject
     Public Property level As Integer
     Public Property script As List(Of Expression)
 
+    Friend Sub Add(line As SyntaxResult)
+        script.Add(line.expression)
+    End Sub
+
+    Friend Sub Add(line As Expression)
+        script.Add(line)
+    End Sub
+
     Public Overrides Function ToString() As String
         Return $"[{level}] {keyword}: {script.JoinBy("; ")}"
+    End Function
+
+    Public Overridable Function ToExpression() As Expression
+        Return New ClosureExpression(script.ToArray)
     End Function
 
 End Class
@@ -84,6 +133,11 @@ Public Class FunctionTag : Inherits TaggedObject
 
     Public Property funcname As String
     Public Property arguments As Expression()
+    Public Property stackframe As StackFrame
+
+    Public Overrides Function ToExpression() As Expression
+        Return New DeclareNewFunction(funcname, arguments, MyBase.ToExpression, stackframe)
+    End Function
 
 End Class
 

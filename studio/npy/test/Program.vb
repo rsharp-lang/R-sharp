@@ -16,7 +16,9 @@ def hello(x = [1,2,3], zzz = TRUE):
    
    print(x)
    print(""hello world!"")
-   x = message
+   x = zzz
+   
+   return x
     
 f = x -> print(x)
 "
