@@ -26,7 +26,10 @@ Namespace Development.Hybrids
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function LoadScript(scriptfile As String, env As Environment) As Object
-            Return engine(scriptfile.ExtensionSuffix.ToLower).LoadScript(scriptfile, env)
+            Dim key As String = scriptfile.ExtensionSuffix.ToLower
+            Dim loader As ScriptLoader = engine(key)
+
+            Return loader.LoadScript(scriptfile, env)
         End Function
 
         ''' <summary>

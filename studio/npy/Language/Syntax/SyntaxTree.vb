@@ -5,7 +5,9 @@ Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Python.Language
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
@@ -31,11 +33,12 @@ Public Module SyntaxTree
             .ToArray
         Dim stack As New Stack(Of TaggedObject)
         Dim result As SyntaxResult
-        Dim current As New TaggedObject With {
+        Dim python As New TaggedObject With {
             .keyword = "python",
             .level = -1,
             .script = New List(Of Expression)
         }
+        Dim current As TaggedObject = python
 
         stack.Push(current)
 
@@ -56,6 +59,7 @@ Public Module SyntaxTree
                            .arguments = args,
                            .stackframe = opts.GetStackTrace(line(1))
                         }
+
                     Case "return"
 
                         tokens = line.tokens.Skip(1).ToArray
@@ -66,6 +70,19 @@ Public Module SyntaxTree
                         Else
                             current.Add(New ReturnValue(result.expression))
                         End If
+
+                    Case "import"
+
+                        tokens = line.tokens.Skip(1).ToArray
+
+                        Dim names As Expression() = tokens _
+                            .Split(Function(t) t.name = TokenType.comma) _
+                            .Select(Function(block)
+                                        Return Expression.CreateExpression(block, opts).expression
+                                    End Function) _
+                            .ToArray
+
+                        current.Add(New [Imports](Nothing, New VectorLiteral(names), source:=script.source))
 
                     Case Else
                         Throw New NotImplementedException
@@ -96,7 +113,11 @@ Public Module SyntaxTree
             End If
         Next
 
-        Return New Program(stack.Pop.script)
+        If python.script = 0 AndAlso current.level >= 0 Then
+            python.Add(current.ToExpression)
+        End If
+
+        Return New Program(python.script)
     End Function
 
     Private Function ParsePythonLine(line As PythonLine, opts As SyntaxBuilderOptions) As SyntaxResult
