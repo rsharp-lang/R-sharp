@@ -14,7 +14,8 @@ Module Programa
     End Sub
 
     Sub parseFile()
-        Dim text As Rscript = Rscript.FromFile("E:\GCModeller\src\R-sharp\studio\test\hybridTest\base.py")
+        ' Dim text As Rscript = Rscript.FromFile("E:\GCModeller\src\R-sharp\studio\test\hybridTest\base.py")
+        Dim text As Rscript = Rscript.FromFile("E:\GCModeller\src\R-sharp\studio\test\hybridTest\main.py")
         Dim py As Program = text.ParsePyScript
 
         Pause()

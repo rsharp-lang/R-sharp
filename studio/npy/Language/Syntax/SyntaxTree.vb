@@ -122,11 +122,11 @@ Public Module SyntaxTree
         Next
 
         ' do release of stack
-        If Not current.GetHashCode.ToHexString Like released Then
+        If current.level >= 0 AndAlso Not current.GetHashCode.ToHexString Like released Then
             stack.Peek.Add(current.ToExpression(released))
         End If
 
-        Do While True
+        Do While stack.Count > 0
             current = stack.Pop
 
             If stack.Count > 0 Then
