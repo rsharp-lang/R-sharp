@@ -5,5 +5,5 @@ const print2 as function(x) {
 }
 
 const veryDeep as function() {
-	stop(1234);
+	 stopRun();
 }
