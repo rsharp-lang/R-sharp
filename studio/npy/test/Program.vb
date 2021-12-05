@@ -1,7 +1,9 @@
-Imports System
+Imports SMRUCC.Python
 Imports SMRUCC.Python.Language
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Components
 
-Module Program
+Module Programa
     Sub Main(args As String())
         Call parseFunction()
         Call parseHelloWorld()
@@ -19,6 +21,9 @@ f = x -> print(x)
 "
         Dim scanner As New PyScanner(func)
         Dim tokens = scanner.GetTokens.ToArray
+
+        Dim text As Rscript = Rscript.FromText(func)
+        Dim py As Program = text.ParsePyScript
 
         Pause()
     End Sub
