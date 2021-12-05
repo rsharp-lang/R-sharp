@@ -149,7 +149,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
         End Function
 
-        Private Function getParameters(tokens As Token(), ByRef params As List(Of DeclareNewSymbol), opts As SyntaxBuilderOptions) As SyntaxResult
+        Public Function getParameters(tokens As Token(), ByRef params As List(Of DeclareNewSymbol), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim parts As Token()() = tokens.SplitByTopLevelDelimiter(TokenType.comma) _
                 .Where(Function(t) Not t.isComma) _
                 .ToArray

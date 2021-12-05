@@ -12,8 +12,9 @@ Module Programa
 
     Sub parseFunction()
         Dim func = "
-def hello(): 
-
+def hello(x = [1,2,3], zzz = TRUE): 
+   
+   print(x)
    print(""hello world!"")
    x = message
     
