@@ -7,6 +7,7 @@ Imports SMRUCC.Python.Language
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -97,6 +98,27 @@ Public Module SyntaxTree
 
                         current.Add(New [Imports](Nothing, New VectorLiteral(names), source:=script.source))
 
+                    Case "if"
+
+                        tokens = line.tokens.Skip(1).Take(line.tokens.Length - 3).ToArray
+
+                        Dim test As SyntaxResult = Expression.CreateExpression(tokens, opts)
+
+                        If line.levels > current.level Then
+                            stack.Push(current)
+                        ElseIf line.levels = current.level Then
+                            ' 结束了上一个block
+                            stack.Peek.Add(current.ToExpression(released))
+                        End If
+
+                        current = New IfTag With {
+                           .keyword = line(Scan0).text,
+                           .level = line.levels,
+                           .script = New List(Of Expression),
+                           .test = test,
+                           .stackframe = opts.GetStackTrace(line(1))
+                        }
+
                     Case Else
                         Throw New NotImplementedException
                 End Select
@@ -149,6 +171,17 @@ Public Module SyntaxTree
     End Function
 
 End Module
+
+Public Class IfTag : Inherits TaggedObject
+
+    Public Property test As Expression
+    Public Property stackframe As StackFrame
+
+    Public Overrides Function ToExpression(release As Index(Of String)) As Expression
+        Return New IfBranch(test, DirectCast(MyBase.ToExpression(release), ClosureExpression), stackframe)
+    End Function
+
+End Class
 
 Public Class TaggedObject
 

@@ -31,7 +31,7 @@ for x in fruits:
 
     Sub parseFile()
         ' Dim text As Rscript = Rscript.FromFile("E:\GCModeller\src\R-sharp\studio\test\hybridTest\base.py")
-        Dim text As Rscript = Rscript.FromFile("E:\GCModeller\src\R-sharp\studio\test\hybridTest\main.py")
+        Dim text As Rscript = Rscript.FromFile("D:\GCModeller\src\R-sharp\studio\test\hybridTest\ifTest.py")
         Dim py As Program = text.ParsePyScript
 
         Pause()

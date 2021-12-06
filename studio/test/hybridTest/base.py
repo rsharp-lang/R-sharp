@@ -6,7 +6,7 @@ def printHello(msg):
     print(`hello world, result is ${xx}!`)
     xx = "888888"
     print(xx)
-    veryDeep()
+    veryDeep(xx)
     
 def stopRun():
     
