@@ -18,28 +18,14 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
 
-Public Class TaggedObject
+Public Class FunctionTag : Inherits PythonCodeDOM
 
-    Public Property keyword As String
-    Public Property level As Integer
-    Public Property script As List(Of Expression)
+    Public Property funcname As String
+    Public Property arguments As Expression()
+    Public Property stackframe As StackFrame
 
-    Friend Sub Add(line As SyntaxResult)
-        script.Add(line.expression)
-    End Sub
-
-    Friend Sub Add(line As Expression)
-        script.Add(line)
-    End Sub
-
-    Public Overrides Function ToString() As String
-        Return $"[{level}] {keyword}: {script.JoinBy("; ")}"
-    End Function
-
-    Public Overridable Function ToExpression(release As Index(Of String)) As Expression
-        Call release.Add(Me.GetHashCode.ToHexString)
-        Return New ClosureExpression(script.ToArray)
+    Public Overrides Function ToExpression(release As Index(Of String)) As Expression
+        Return New DeclareNewFunction(funcname, arguments, MyBase.ToExpression(release), stackframe)
     End Function
 
 End Class
-

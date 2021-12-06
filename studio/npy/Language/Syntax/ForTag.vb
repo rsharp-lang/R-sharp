@@ -18,13 +18,22 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
 
-Public Class IfTag : Inherits TaggedObject
+Public Class ForTag : Inherits PythonCodeDOM
 
-    Public Property test As Expression
-    Public Property stackframe As StackFrame
+    Public Property vars As Expression()
+    Public Property data As Expression
+    Public Property stackFrame As StackFrame
 
     Public Overrides Function ToExpression(release As Index(Of String)) As Expression
-        Return New IfBranch(test, DirectCast(MyBase.ToExpression(release), ClosureExpression), stackframe)
+        Dim varNames As String() = vars _
+            .Select(Function(v)
+                        Return ValueAssignExpression.GetSymbol(v)
+                    End Function) _
+            .ToArray
+        Dim varSymbols = varNames.Select(Function(s) New DeclareNewSymbol({s}, Nothing, TypeCodes.generic, [readonly]:=False, stackFrame)).ToArray
+        Dim loopBody As New DeclareNewFunction("for_loop", varSymbols, MyBase.ToExpression(release), stackFrame)
+
+        Return New ForLoop(varNames, data, loopBody, False, stackFrame)
     End Function
 
 End Class

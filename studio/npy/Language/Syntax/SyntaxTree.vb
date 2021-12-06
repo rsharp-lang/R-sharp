@@ -34,14 +34,14 @@ Public Module SyntaxTree
             .Select(Function(t) New PythonLine(t)) _
             .Where(Function(l) l.tokens.Length > 0) _
             .ToArray
-        Dim stack As New Stack(Of TaggedObject)
+        Dim stack As New Stack(Of PythonCodeDOM)
         Dim result As SyntaxResult
-        Dim python As New TaggedObject With {
+        Dim python As New PythonCodeDOM With {
             .keyword = "python",
             .level = -1,
             .script = New List(Of Expression)
         }
-        Dim current As TaggedObject = python
+        Dim current As PythonCodeDOM = python
         Dim released As New Index(Of String)
 
         For Each line As PythonLine In lines

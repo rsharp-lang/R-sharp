@@ -18,14 +18,13 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
 
-Public Class FunctionTag : Inherits TaggedObject
+Public Class IfTag : Inherits PythonCodeDOM
 
-    Public Property funcname As String
-    Public Property arguments As Expression()
+    Public Property test As Expression
     Public Property stackframe As StackFrame
 
     Public Overrides Function ToExpression(release As Index(Of String)) As Expression
-        Return New DeclareNewFunction(funcname, arguments, MyBase.ToExpression(release), stackframe)
+        Return New IfBranch(test, DirectCast(MyBase.ToExpression(release), ClosureExpression), stackframe)
     End Function
 
 End Class

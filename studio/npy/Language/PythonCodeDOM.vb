@@ -18,22 +18,28 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
 
-Public Class ForTag : Inherits TaggedObject
+Public Class PythonCodeDOM
 
-    Public Property vars As Expression()
-    Public Property data As Expression
-    Public Property stackFrame As StackFrame
+    Public Property keyword As String
+    Public Property level As Integer
+    Public Property script As List(Of Expression)
 
-    Public Overrides Function ToExpression(release As Index(Of String)) As Expression
-        Dim varNames As String() = vars _
-            .Select(Function(v)
-                        Return ValueAssignExpression.GetSymbol(v)
-                    End Function) _
-            .ToArray
-        Dim varSymbols = varNames.Select(Function(s) New DeclareNewSymbol({s}, Nothing, TypeCodes.generic, [readonly]:=False, stackFrame)).ToArray
-        Dim loopBody As New DeclareNewFunction("for_loop", varSymbols, MyBase.ToExpression(release), stackFrame)
+    Friend Sub Add(line As SyntaxResult)
+        script.Add(line.expression)
+    End Sub
 
-        Return New ForLoop(varNames, data, loopBody, False, stackFrame)
+    Friend Sub Add(line As Expression)
+        script.Add(line)
+    End Sub
+
+    Public Overrides Function ToString() As String
+        Return $"[{level}] {keyword}: {script.JoinBy("; ")}"
+    End Function
+
+    Public Overridable Function ToExpression(release As Index(Of String)) As Expression
+        Call release.Add(Me.GetHashCode.ToHexString)
+        Return New ClosureExpression(script.ToArray)
     End Function
 
 End Class
+
