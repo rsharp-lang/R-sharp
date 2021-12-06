@@ -69,6 +69,10 @@ Public Module SyntaxTree
                            .stackframe = opts.GetStackTrace(line(1))
                         }
 
+                    Case "for"
+
+
+
                     Case "return"
 
                         tokens = line.tokens.Skip(1).ToArray

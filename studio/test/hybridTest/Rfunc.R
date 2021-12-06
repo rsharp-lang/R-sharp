@@ -1,11 +1,11 @@
 imports "base.py";
 
-const print2 as function(x) {
+print2 = function(x) {
 	print(" --> print2");
 	printHello(x * 2);
 }
 
-const veryDeep as function() {
+veryDeep = function() {
 	print(" --> veryDeep");
 	stopRun();
 }

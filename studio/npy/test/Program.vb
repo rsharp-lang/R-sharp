@@ -6,11 +6,27 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module Programa
     Sub Main(args As String())
 
+        Call forLoop()
         Call parseFile()
 
         Call parseFunction()
         Call parseHelloWorld()
 
+    End Sub
+
+    Sub forLoop()
+        Dim forL = "
+fruits = [""apple"", ""banana"", ""cherry""]
+
+for x in fruits:
+  print(x)
+
+"
+
+        Dim text As Rscript = Rscript.AutoHandleScript(forL)
+        Dim py As Program = text.ParsePyScript
+
+        Pause()
     End Sub
 
     Sub parseFile()
