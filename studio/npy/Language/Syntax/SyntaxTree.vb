@@ -72,7 +72,27 @@ Public Module SyntaxTree
 
                     Case "for"
 
+                        tokens = line.tokens.Skip(1).Take(line.tokens.Length - 2).ToArray
 
+                        Dim data = tokens.SplitByTopLevelDelimiter(TokenType.keyword, False, tokenText:="in").ToArray
+                        Dim vars = data(0).SplitByTopLevelDelimiter(TokenType.comma).Select(Function(t) Expression.CreateExpression(t, opts).expression).ToArray
+                        Dim seqs = Expression.CreateExpression(data(2), opts).expression
+
+                        If line.levels > current.level Then
+                            stack.Push(current)
+                        ElseIf line.levels = current.level Then
+                            ' 结束了上一个block
+                            stack.Peek.Add(current.ToExpression(released))
+                        End If
+
+                        current = New ForTag With {
+                            .data = seqs,
+                            .stackFrame = opts.GetStackTrace(line(0)),
+                            .keyword = "for",
+                            .level = line.levels,
+                            .script = New List(Of Expression),
+                            .vars = vars
+                        }
 
                     Case "return"
 
@@ -115,7 +135,7 @@ Public Module SyntaxTree
                            .keyword = line(Scan0).text,
                            .level = line.levels,
                            .script = New List(Of Expression),
-                           .test = test,
+                           .test = test.expression,
                            .stackframe = opts.GetStackTrace(line(1))
                         }
 
@@ -171,6 +191,26 @@ Public Module SyntaxTree
     End Function
 
 End Module
+
+Public Class ForTag : Inherits TaggedObject
+
+    Public Property vars As Expression()
+    Public Property data As Expression
+    Public Property stackFrame As StackFrame
+
+    Public Overrides Function ToExpression(release As Index(Of String)) As Expression
+        Dim varNames As String() = vars _
+            .Select(Function(v)
+                        Return ValueAssignExpression.GetSymbol(v)
+                    End Function) _
+            .ToArray
+        Dim varSymbols = varNames.Select(Function(s) New DeclareNewSymbol({s}, Nothing, TypeCodes.generic, [readonly]:=False, stackFrame)).ToArray
+        Dim loopBody As New DeclareNewFunction("for_loop", varSymbols, MyBase.ToExpression(release), stackFrame)
+
+        Return New ForLoop(varNames, data, loopBody, False, stackFrame)
+    End Function
+
+End Class
 
 Public Class IfTag : Inherits TaggedObject
 
