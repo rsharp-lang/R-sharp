@@ -120,7 +120,7 @@ Public Module SyntaxTree
 
                     Case "if"
 
-                        tokens = line.tokens.Skip(1).Take(line.tokens.Length - 3).ToArray
+                        tokens = line.tokens.Skip(1).Take(line.tokens.Length - 2).ToArray
 
                         Dim test As SyntaxResult = Expression.CreateExpression(tokens, opts)
 
