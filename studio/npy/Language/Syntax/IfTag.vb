@@ -28,3 +28,13 @@ Public Class IfTag : Inherits PythonCodeDOM
     End Function
 
 End Class
+
+Public Class ElseTag : Inherits PythonCodeDOM
+
+    Public Property stackframe As StackFrame
+
+    Public Overrides Function ToExpression(release As Index(Of String)) As Expression
+        Return New ElseBranch(MyBase.ToExpression(release), stackframe)
+    End Function
+
+End Class

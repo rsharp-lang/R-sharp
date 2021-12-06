@@ -139,6 +139,22 @@ Public Module SyntaxTree
                            .stackframe = opts.GetStackTrace(line(1))
                         }
 
+                    Case "else"
+
+                        If line.levels > current.level Then
+                            stack.Push(current)
+                        ElseIf line.levels = current.level Then
+                            ' 结束了上一个block
+                            stack.Peek.Add(current.ToExpression(released))
+                        End If
+
+                        current = New ElseTag With {
+                            .keyword = "else",
+                            .level = line.levels,
+                            .script = New List(Of Expression),
+                            .stackframe = opts.GetStackTrace(line(Scan0))
+                        }
+
                     Case Else
                         Throw New NotImplementedException
                 End Select
