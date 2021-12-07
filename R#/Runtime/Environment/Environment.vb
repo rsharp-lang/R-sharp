@@ -271,7 +271,8 @@ Namespace Runtime
         End Function
 
         ''' <summary>
-        ''' a shortcut wrapper function pointer for <see cref="base.print(Object, Boolean, Environment)"/> 
+        ''' a shortcut wrapper function pointer for 
+        ''' <see cref="base.print(Object, list, Environment)"/> 
         ''' </summary>
         ''' <returns></returns>
         Public Function WriteLineHandler() As Action(Of Object)
