@@ -60,6 +60,11 @@ Imports RSymbol = SMRUCC.Rsharp.Runtime.Components.Symbol
 
 Partial Module base
 
+    ''' <summary>
+    ''' read ``*.rda`` data file which is saved from R environment. 
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
     <ExportAPI("readRData")>
     Public Function parseRData(file As String) As Object
         Using buffer As Stream = file.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
