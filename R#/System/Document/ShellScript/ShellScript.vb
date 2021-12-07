@@ -444,7 +444,9 @@ Namespace Development.CommandLine
                 .name = name,
                 .description = Strings.Trim(info) _
                     .LineTokens _
-                    .Select(AddressOf Strings.Trim) _
+                    .Select(Function(str)
+                                Return str.Trim(" "c, ASCII.TAB)
+                            End Function) _
                     .JoinBy(" "),
                 .defaultValue = [default],
                 .type = attrs.GetTypeCode,
