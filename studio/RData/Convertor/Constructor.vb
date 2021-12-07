@@ -48,7 +48,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Convertor
 
-    Module Constructor
+    Public Module Constructor
 
         Public ReadOnly wrap_constructor As AltRepConstructor
         Public ReadOnly compact_realseq_constructor As AltRepConstructor
@@ -97,6 +97,12 @@ Namespace Convertor
             End If
         End Function
 
+        ''' <summary>
+        ''' 基于访问CDR链表来进行对象查找
+        ''' </summary>
+        ''' <param name="robj"></param>
+        ''' <param name="key"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function LinkVisitor(robj As RObject, key As String) As RObject
             Dim tag As RObject
@@ -119,6 +125,17 @@ Namespace Convertor
             Loop
 
             Return Nothing
+        End Function
+
+        <Extension>
+        Public Function LinkValue(robj As RObject, key As String) As RObject
+            Dim target As RObject = robj.LinkVisitor(key)
+
+            If target Is Nothing Then
+                Return Nothing
+            Else
+                Return target.value.CAR
+            End If
         End Function
     End Module
 End Namespace

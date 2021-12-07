@@ -57,6 +57,22 @@ Namespace Struct.LinkedList
         Public Property tag As RObject
         Public Property referenced_object As RObject
 
+        Public ReadOnly Property symbolName As String
+            Get
+                If Not tag Is Nothing Then
+                    Return If(tag.symbolName.StringEmpty, tag.characters, tag.symbolName)
+                ElseIf Not referenced_object Is Nothing Then
+                    If referenced_object.symbolName.StringEmpty Then
+                        Return referenced_object.characters
+                    Else
+                        Return referenced_object.symbolName
+                    End If
+                Else
+                    Return Nothing
+                End If
+            End Get
+        End Property
+
         Public ReadOnly Property characters As String
             Get
                 If info.type = RObjectType.SYM Then
