@@ -2193,6 +2193,11 @@ RE0:
                               Optional env As Environment = Nothing) As Object
 
             Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+
+            If args Is Nothing Then
+                args = New list With {.slots = New Dictionary(Of String, Object)}
+            End If
+
             Dim quot As Boolean = args.getValue("quot", env, True)
             Dim maxPrint As Integer = args.getValue("max.print", env, globalEnv.options.maxPrint)
 
