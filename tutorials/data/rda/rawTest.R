@@ -4,3 +4,12 @@ imports "package_utils" from "devkit";
 |> package_utils::parseRData.raw() 
 |> package_utils::unpackRData
 ;
+
+print(deserialize(data));
+
+
+print(deserialize(flags));
+
+str(deserialize(list_data));
+
+print(deserialize(printContent));

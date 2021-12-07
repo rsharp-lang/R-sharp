@@ -81,6 +81,10 @@ Namespace Convertor
             Return pullAll
         End Function
 
+        Public Function PullRObject(rdata As RObject) As Object
+            Return PullRObject(rdata, Nothing)
+        End Function
+
         ''' <summary>
         ''' Pull all R# object from the RData linked list
         ''' </summary>

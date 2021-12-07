@@ -53,6 +53,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.RDataSet.Convertor
 Imports SMRUCC.Rsharp.RDataSet.Struct
+Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -162,5 +163,10 @@ Module package
                                   Return CObj(t.Value)
                               End Function)
         }
+    End Function
+
+    <ExportAPI("deserialize")>
+    Public Function deserialize(rdata As RObject) As Object
+        Return ConvertToR.PullRObject(rdata)
     End Function
 End Module
