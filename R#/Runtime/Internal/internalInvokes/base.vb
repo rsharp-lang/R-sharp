@@ -2175,16 +2175,26 @@ RE0:
         ''' easily added for new classes.
         ''' </summary>
         ''' <param name="x">an object used to select a method.</param>
-        ''' <param name="quote">
+        ''' <param name="args">
+        ''' #### quote
         ''' logical, indicating whether Or Not strings (characters) should be 
         ''' printed with surrounding quotes.
+        ''' 
+        ''' #### max.print
+        ''' integer, the max number of elements to print. this parameter value
+        ''' will overrides the max.print options from the options function.
         ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("print")>
         Public Function print(<RRawVectorArgument> x As Object,
-                              Optional quote As Boolean = True,
+                              <RListObjectArgument>
+                              Optional args As list = Nothing,
                               Optional env As Environment = Nothing) As Object
+
+            Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+            Dim quot As Boolean = args.getValue("quot", env, True)
+            Dim maxPrint As Integer = args.getValue("max.print", env, globalEnv.options.maxPrint)
 
             Static dummy As New Object
 
@@ -2193,18 +2203,29 @@ RE0:
 
                 ' 这个函数是由用户指定调用的，会忽略掉invisible属性值
                 If x Is Nothing Then
-                    Call env.globalEnvironment.stdout.WriteLine("NULL")
+                    Call globalEnv.stdout.WriteLine("NULL")
                     ' just returns nothing literal
                     Return Nothing
                 Else
-                    Return doPrintInternal(x, x.GetType, env)
+                    Return New PrinterOptions With {
+                        .maxPrint = maxPrint,
+                        .quot = quot
+                    }.doPrintInternal(x, x.GetType, env)
                 End If
             End SyncLock
         End Function
 
-        Private Function doPrintInternal(x As Object, type As Type, env As Environment) As Object
+        Friend Class PrinterOptions
+
+            Public Property quot As Boolean = True
+            Public Property maxPrint As Integer
+
+        End Class
+
+        <Extension>
+        Private Function doPrintInternal(opts As PrinterOptions, x As Object, type As Type, env As Environment) As Object
             Dim globalEnv As GlobalEnvironment = env.globalEnvironment
-            Dim maxPrint% = globalEnv.options.maxPrint
+            Dim maxPrint As Integer = opts.maxPrint
 
             If type Is GetType(RMethodInfo) Then
                 Call globalEnv _
@@ -2222,7 +2243,7 @@ RE0:
             ElseIf type Is GetType(Message) Then
                 Return x
             Else
-                Call printer.printInternal(x, "", maxPrint, globalEnv)
+                Call printer.printInternal(x, "", maxPrint, quot:=opts.quot, env:=globalEnv)
             End If
 
             Return x

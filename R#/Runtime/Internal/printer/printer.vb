@@ -172,7 +172,7 @@ Namespace Runtime.Internal.ConsolePrinter
             RInternalToString(GetType(T)) = formatter
         End Sub
 
-        Friend Sub printInternal(x As Object, listPrefix$, maxPrint%, env As GlobalEnvironment)
+        Friend Sub printInternal(x As Object, listPrefix$, maxPrint%, quot As Boolean, env As GlobalEnvironment)
             Dim valueType As Type
             Dim output As RContentOutput = env.stdout
 
@@ -208,12 +208,12 @@ Namespace Runtime.Internal.ConsolePrinter
                 End If
 
             ElseIf valueType.ImplementInterface(GetType(IDictionary)) Then
-                Call DirectCast(x, IDictionary).printList(listPrefix, maxPrint, env)
+                Call DirectCast(x, IDictionary).printList(listPrefix, maxPrint, quot, env)
             ElseIf valueType Is GetType(list) Then
                 Call DirectCast(x, list) _
                     .slots _
                     .DoCall(Sub(list)
-                                DirectCast(list, IDictionary).printList(listPrefix, maxPrint, env)
+                                DirectCast(list, IDictionary).printList(listPrefix, maxPrint, quot, env)
                             End Sub)
             ElseIf valueType Is GetType(dataframe) Then
                 Call tablePrinter.PrintTable(DirectCast(x, dataframe), output, env)
@@ -228,7 +228,7 @@ printSingleElement:
         End Sub
 
         <Extension>
-        Private Sub printList(list As IDictionary, listPrefix$, maxPrint%, env As GlobalEnvironment)
+        Private Sub printList(list As IDictionary, listPrefix$, maxPrint%, quot As Boolean, env As GlobalEnvironment)
             Dim output As RContentOutput = env.stdout
 
             For Each objKey As Object In list.Keys
@@ -242,7 +242,7 @@ printSingleElement:
                 End If
 
                 Call output.WriteLine(key)
-                Call printer.printInternal(slotValue, key, maxPrint, env)
+                Call printer.printInternal(slotValue, key, maxPrint, quot, env)
                 Call output.WriteLine()
             Next
         End Sub
@@ -291,7 +291,7 @@ printSingleElement:
                                       End Function) _
                               .JoinBy(", ")
                        End Function
-            ElseIf elementType Is GetType(void) OrElse elementType.FullName = "System.RuntimeType" Then
+            ElseIf elementType Is GetType(Void) OrElse elementType.FullName = "System.RuntimeType" Then
                 Return Function(obj)
                            ' 20210119
                            ' handle NA string at here
