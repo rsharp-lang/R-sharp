@@ -44,7 +44,7 @@ Namespace Convertor
             End Select
         End Function
 
-        Friend Shared Function ReadStrings(robj As Object) As String()
+        Public Shared Function ReadStrings(robj As Object) As String()
             If TypeOf robj Is RList Then
                 Dim rlist As RList = DirectCast(robj, RList)
 

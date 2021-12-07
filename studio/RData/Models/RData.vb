@@ -53,6 +53,12 @@ Namespace Struct
         Public extra As RExtraInfo
         Public [object] As RObject
 
+        ''' <summary>
+        ''' a wrapper function of <see cref="Reader.ParseData"/>.
+        ''' </summary>
+        ''' <param name="rdafile"></param>
+        ''' <param name="expand_altrep"></param>
+        ''' <returns></returns>
         Public Shared Function ParseFile(rdafile As String, Optional expand_altrep As Boolean = True) As RData
             Using buffer As Stream = rdafile.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
                 Return Reader.ParseData(buffer, expand_altrep)

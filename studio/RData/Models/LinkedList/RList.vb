@@ -68,6 +68,10 @@ Namespace Struct.LinkedList
                 }
             ElseIf TypeOf value Is RList Then
                 Return value
+            ElseIf TypeOf value Is String Then
+                Return New RList With {
+                    .data = DirectCast(value, String).ToArray
+                }
             End If
 
             Throw New NotImplementedException(value.GetType.FullName)

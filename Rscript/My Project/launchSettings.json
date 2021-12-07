@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"E:\\GCModeller\\src\\R-sharp\\tutorials\\data\\rda\\readerTest.R\"",
-      "workingDirectory": "E:\\metagenomics\\.pkg"
+      "commandLineArgs": "--build /src ../PlantMAT/ /save ../PlantMAT.zip --skip-src-build",
+      "workingDirectory": "D:\\PlantMAT\\.github"
     }
   }
 }

@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.RDataSet.Flags
+Imports SMRUCC.Rsharp.RDataSet.Struct
 Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -29,6 +30,41 @@ Namespace Convertor
             RObjectType.WEAKREF
         }
 
+        <Extension>
+        Public Function PullRawData(rdata As RData) As Dictionary(Of String, RObject)
+            Dim symbols As New Dictionary(Of String, RObject)
+            Dim obj As RObject = rdata.object
+
+            Do While obj.value.nodeType = ListNodeType.LinkedList
+                Dim value As RList = obj.value
+                Dim car As RObject = value.CAR
+
+                If value.nodeType = ListNodeType.NA Then
+                    Exit Do
+                ElseIf value.nodeType = ListNodeType.Vector Then
+                    Call symbols.Add(obj.symbolName, obj)
+                    Exit Do
+                Else
+                    ' CAR为当前节点的数据
+                    ' 获取节点数据，然后继续通过CDR进行链表的递归访问
+                    Dim currentName As String = obj.symbolName
+                    Dim CDR As RObject = value.CDR
+
+                    ' pull an object
+                    Call symbols.Add(currentName, value.CAR)
+
+                    If CDR Is Nothing Then
+                        Exit Do
+                    Else
+                        ' 向后访问整个链表
+                        obj = CDR
+                    End If
+                End If
+            Loop
+
+            Return symbols
+        End Function
+
         ''' <summary>
         ''' Convert to R# object
         ''' </summary>
@@ -43,6 +79,10 @@ Namespace Convertor
             Call rdata.PullRObject(pullAll.slots)
 
             Return pullAll
+        End Function
+
+        Public Function PullRObject(rdata As RObject) As Object
+            Return PullRObject(rdata, Nothing)
         End Function
 
         ''' <summary>

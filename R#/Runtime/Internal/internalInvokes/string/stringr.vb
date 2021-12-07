@@ -396,7 +396,9 @@ Namespace Runtime.Internal.Invokes
         ''' if this parameter is not nothing, then the output will be convert as text
         ''' </param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function returns a text data or memory stream buffer object.
+        ''' </returns>
         ''' <remarks>
         ''' if the base64 encoded data is text data, that parameter 
         ''' ``asText_encoding`` assign of value ``utf8`` usually. 
