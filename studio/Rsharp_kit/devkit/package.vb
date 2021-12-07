@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::c97a41f4a8370a87ef5f5aec01e1d446, studio\Rsharp_kit\devkit\package.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module package
-    ' 
-    '     Function: attach, loadExpr, Parse, serialize
-    ' 
-    '     Sub: loadPackage
-    ' 
-    ' /********************************************************************************/
+' Module package
+' 
+'     Function: attach, loadExpr, Parse, serialize
+' 
+'     Sub: loadPackage
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -51,8 +51,11 @@ Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development.CommandLine
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.RDataSet.Convertor
+Imports SMRUCC.Rsharp.RDataSet.Struct
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports R = SMRUCC.Rsharp.Runtime.Components.Rscript
@@ -142,5 +145,22 @@ Module package
         Else
             Return Internal.debug.stop({$"invalid package source: '{package}'!", $"source: {package}"}, env)
         End If
+    End Function
+
+    <ExportAPI("parseRData.raw")>
+    Public Function ParseRDataRaw(file As String) As RData
+        Return RData.ParseFile(file)
+    End Function
+
+    <ExportAPI("unpackRData")>
+    Public Function UnpackObjects(rdata As RData) As list
+        Return New list(GetType(RObjectInfo)) With {
+            .slots = rdata _
+                .PullRawData _
+                .ToDictionary(Function(t) t.Key,
+                              Function(t)
+                                  Return CObj(t.Value)
+                              End Function)
+        }
     End Function
 End Module

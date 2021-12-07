@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.RDataSet.Flags
+Imports SMRUCC.Rsharp.RDataSet.Struct
 Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -28,6 +29,11 @@ Namespace Convertor
             RObjectType.STR,
             RObjectType.WEAKREF
         }
+
+        <Extension>
+        Public Function PullRawData(rdata As RData) As Dictionary(Of String, RObject)
+
+        End Function
 
         ''' <summary>
         ''' Convert to R# object
