@@ -1184,6 +1184,19 @@ Namespace Runtime.Internal.Invokes
         End Sub
 
         ''' <summary>
+        ''' Delete files or directories
+        ''' </summary>
+        ''' <remarks>
+        ''' this function is the alias name of the function
+        ''' ``file.remove``.
+        ''' </remarks>
+        ''' <param name="x"></param>
+        <ExportAPI("unlink")>
+        Public Sub unlinks(x As String())
+            Call fileRemove(x)
+        End Sub
+
+        ''' <summary>
         ''' delete all contents in target directory
         ''' </summary>
         ''' <param name="dir"></param>
