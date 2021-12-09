@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Package.File
@@ -486,9 +487,16 @@ Namespace Runtime.Internal.Invokes
                                Optional clr As Boolean = False,
                                Optional env As Environment = Nothing) As String
 
-            Dim tokens As String() = CLIParser.GetTokens(command)
+            Dim tokens As String() = command _
+                .Trim(" "c, ASCII.TAB, ASCII.CR, ASCII.LF) _
+                .LineTokens _
+                .JoinBy(" ") _
+                .DoCall(AddressOf CLIParser.GetTokens)
             Dim executative As String = tokens(Scan0)
-            Dim arguments As String = tokens.Skip(1).Select(Function(str) str.CLIToken).JoinBy(" ")
+            Dim arguments As String = tokens _
+                .Skip(1) _
+                .Select(Function(str) str.CLIToken) _
+                .JoinBy(" ")
             Dim inputStr As String() = REnv.asVector(Of Object)(input) _
                 .AsObjectEnumerator _
                 .Select(AddressOf any.ToString) _
