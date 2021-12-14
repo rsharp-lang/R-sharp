@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src ../PlantMAT/ /save ../PlantMAT.zip --skip-src-build",
+      "commandLineArgs": "--build /src D:\\metagenomics ",
       "workingDirectory": "D:\\PlantMAT\\.github"
     }
   }
