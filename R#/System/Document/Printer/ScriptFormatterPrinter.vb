@@ -111,6 +111,10 @@ Namespace Development
                 Case GetType(FunctionInvoke) : Return Format(DirectCast(expr, FunctionInvoke))
                 Case GetType(ValueAssignExpression) : Return Format(DirectCast(expr, ValueAssignExpression))
                 Case GetType(SymbolIndexer) : Return Format(DirectCast(expr, SymbolIndexer))
+                Case GetType(UnaryNumeric)
+                    With DirectCast(expr, UnaryNumeric)
+                        Return $"{ .operator}{Format(.numeric)}"
+                    End With
                 Case Else
                     Throw New NotImplementedException(expr.ToString)
             End Select
