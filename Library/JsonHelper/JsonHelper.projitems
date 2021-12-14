@@ -9,6 +9,7 @@
     <Import_RootNamespace>JsonHelper</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)jsonlite.vb" />
     <Compile Include="$(MSBuildThisFileDirectory)RJSON.vb" />
   </ItemGroup>
 </Project>

@@ -210,7 +210,7 @@ Public Module URL
                 ElseIf TypeOf value Is Message Then
                     Return value
                 Else
-                    value = stringr.json(value)
+                    value = jsonlite.toJSON(value, env)
 
                     If TypeOf value Is Message Then
                         Return value
