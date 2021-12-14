@@ -396,13 +396,30 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Private Shared Function vectorSubset(obj As Object, indexer As Array, env As Environment) As Object
             If TypeOf obj Is Group Then
                 Dim group = DirectCast(obj, Group)
+                Dim genericIndex = REnv.TryCastGenericArray(indexer, env)
 
-                If indexer.Length = 1 Then
-                    Return group(DirectCast(asVector(Of Integer)(indexer), Integer())(Scan0) - 1)
-                Else
-                    Return DirectCast(asVector(Of Integer)(indexer), Integer()) _
-                        .Select(Function(i) group(i - 1)) _
+                If TypeOf genericIndex Is Boolean() Then
+                    Dim idx As Integer() = DirectCast(genericIndex, Boolean()) _
+                        .Select(Function(f, i) (f, i)) _
+                        .Where(Function(t) t.f = True) _
+                        .Select(Function(t) t.i) _
                         .ToArray
+
+                    If indexer.Length = 1 Then
+                        Return group(idx(Scan0))
+                    Else
+                        Return idx _
+                            .Select(Function(i) group(i)) _
+                            .ToArray
+                    End If
+                Else
+                    If indexer.Length = 1 Then
+                        Return group(DirectCast(asVector(Of Integer)(indexer), Integer())(Scan0) - 1)
+                    Else
+                        Return DirectCast(asVector(Of Integer)(indexer), Integer()) _
+                            .Select(Function(i) group(i - 1)) _
+                            .ToArray
+                    End If
                 End If
             ElseIf TypeOf obj Is Stream Then
                 Dim read As Stream = DirectCast(obj, Stream)
