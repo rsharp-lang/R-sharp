@@ -2232,6 +2232,16 @@ RE0:
             Dim globalEnv As GlobalEnvironment = env.globalEnvironment
             Dim maxPrint As Integer = opts.maxPrint
 
+            If TypeOf x Is invisible Then
+                x = DirectCast(x, invisible).value
+
+                If x Is Nothing Then
+                    Call globalEnv.stdout.WriteLine("NULL")
+                    ' just returns nothing literal
+                    Return Nothing
+                End If
+            End If
+
             If type Is GetType(RMethodInfo) Then
                 Call globalEnv _
                     .packages _
