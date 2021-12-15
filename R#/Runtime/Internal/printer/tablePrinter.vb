@@ -95,8 +95,7 @@ Namespace Runtime.Internal.ConsolePrinter
                           End Function)
 
         <Extension>
-        Public Sub PrintTable(table As dataframe, output As RContentOutput, env As GlobalEnvironment)
-            Dim maxPrint% = env.options.maxPrint
+        Public Sub PrintTable(table As dataframe, maxPrint%, output As RContentOutput, env As GlobalEnvironment)
             Dim reachMax As Boolean = table.nrows >= maxPrint
             Dim delta As Integer = table.nrows - maxPrint
             Dim format As ConsoleTableBuilderFormat = formatParser.TryGetValue(

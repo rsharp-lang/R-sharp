@@ -216,7 +216,7 @@ Namespace Runtime.Internal.ConsolePrinter
                                 DirectCast(list, IDictionary).printList(listPrefix, maxPrint, quot, env)
                             End Sub)
             ElseIf valueType Is GetType(dataframe) Then
-                Call tablePrinter.PrintTable(DirectCast(x, dataframe), output, env)
+                Call tablePrinter.PrintTable(DirectCast(x, dataframe), maxPrint, output, env)
             ElseIf valueType Is GetType(vbObject) Then
                 Call DirectCast(x, vbObject).ToString.DoCall(AddressOf output.WriteLine)
             Else
