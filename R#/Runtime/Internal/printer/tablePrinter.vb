@@ -12,8 +12,7 @@ Namespace Runtime.Internal.ConsolePrinter
     Module tablePrinter
 
         <Extension>
-        Public Iterator Function ToContent(table As dataframe, globalEnv As GlobalEnvironment) As IEnumerable(Of ConsoleTableBaseData)
-            Dim maxPrint% = globalEnv.options.maxPrint
+        Public Iterator Function ToContent(table As dataframe, maxPrint%, globalEnv As GlobalEnvironment) As IEnumerable(Of ConsoleTableBaseData)
             Dim nrows As Integer = stdNum.Min(table.nrows, maxPrint)
             Dim rowsNames As String() = {"<mode>"}.JoinIterates(table.getRowNames.Take(nrows)).ToArray
             Dim maxRowNames As Integer = rowsNames.MaxLengthString.Length
@@ -103,7 +102,7 @@ Namespace Runtime.Internal.ConsolePrinter
                 [default]:=ConsoleTableBuilderFormat.Minimal
             )
 
-            For Each part As ConsoleTableBaseData In table.ToContent(env)
+            For Each part As ConsoleTableBaseData In table.ToContent(maxPrint%, env)
                 Call ConsoleTableBuilder _
                     .From(part) _
                     .WithFormat(format) _
