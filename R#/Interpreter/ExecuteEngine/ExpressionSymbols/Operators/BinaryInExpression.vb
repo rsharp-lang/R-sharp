@@ -53,6 +53,8 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Interop.Operator
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
@@ -104,14 +106,27 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Return {}
             ElseIf RProgram.isException(sequence) Then
                 Return sequence
+            Else
+                testLeft = REnv.TryCastGenericArray(testLeft, env:=envir)
             End If
 
             Dim flags As Boolean()
 
+            ' test string key in list index name?
             If TypeOf sequence Is list AndAlso REnv.MeasureRealElementType(testLeft) Is GetType(String) Then
-                flags = testListIndex(sequence, REnv.TryCastGenericArray(testLeft, env:=envir))
+                flags = testListIndex(sequence, testLeft)
             Else
-                flags = testVectorIndexOf(getIndex(sequence).AsObjectEnumerator.Indexing, testLeft)
+                ' try custom operator at first
+                Dim op = BinaryOperatorEngine.getOperator("in", envir)
+                Dim left As RType = RType.GetRSharpType(testLeft.GetType.GetElementType)
+                Dim right As RType = RType.GetRSharpType(sequence.GetType)
+
+                If Not op Like GetType(Message) AndAlso op.TryCast(Of BinaryIndex).hasOperator(left, right) Then
+                    Return op.TryCast(Of BinaryIndex).Evaluate(testLeft, sequence, envir)
+                Else
+                    ' and then try index hash
+                    flags = testVectorIndexOf(getIndex(sequence).AsObjectEnumerator.Indexing, testLeft)
+                End If
             End If
 
             Return flags
