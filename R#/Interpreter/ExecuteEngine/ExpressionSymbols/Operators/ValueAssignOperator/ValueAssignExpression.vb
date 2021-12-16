@@ -352,7 +352,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                         Call envir.AddMessage($"the index name is more then one element!", MSG_TYPES.WRN)
                     End If
 
-                    Return value
+                    Return Nothing
                 Else
                     Return Internal.debug.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
                 End If
