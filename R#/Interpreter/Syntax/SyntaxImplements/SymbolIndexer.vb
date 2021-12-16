@@ -162,7 +162,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
         <Extension>
         Private Sub parseIndex(tokens As Token(), ByRef index As SyntaxResult, ByRef indexType As SymbolIndexers, opts As SyntaxBuilderOptions)
-            Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma, False)
+            Dim err As Exception = Nothing
+            Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma, False, err:=err)
 
             If blocks > 1 Then
                 ' dataframe indexer
