@@ -61,6 +61,8 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports any = Microsoft.VisualBasic.Scripting
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
+Imports Microsoft.VisualBasic.ComponentModel
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -343,6 +345,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             If Not targetObj.GetType.ImplementInterface(GetType(RNameIndex)) Then
                 If targetObj.GetType Is GetType(dataframe) Then
                     Return dataframeValueAssign.ValueAssign(symbolIndex, indexStr, DirectCast(targetObj, dataframe), value, envir)
+                ElseIf targetObj.GetType.ImplementInterface(Of IDataIndex) Then
+                    Call DirectCast(targetObj, IDataIndex).SetByIndex(indexStr(Scan0), value)
+
+                    If indexStr.Length > 1 Then
+                        Call envir.AddMessage($"the index name is more then one element!", MSG_TYPES.WRN)
+                    End If
+
+                    Return value
                 Else
                     Return Internal.debug.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
                 End If
