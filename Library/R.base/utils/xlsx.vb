@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::3adb40c388a9b826d61fa20ea3c4b8b2, Library\R.base\utils\xlsx.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module xlsx
-    ' 
-    '     Function: createSheet, createWorkbook, getSheetNames, openXlsx, readXlsx
-    '               writeXlsx
-    ' 
-    ' /********************************************************************************/
+' Module xlsx
+' 
+'     Function: createSheet, createWorkbook, getSheetNames, openXlsx, readXlsx
+'               writeXlsx
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -103,6 +103,7 @@ Module xlsx
                              Optional raw As Boolean = False,
                              Optional check_names As Boolean = True,
                              Optional check_modes As Boolean = True,
+                             Optional comment_char As Char = "#"c,
                              Optional env As Environment = Nothing) As Object
         Dim xlsx As msXlsx
         Dim table As csv
@@ -126,7 +127,7 @@ Module xlsx
         If raw Then
             Return table
         Else
-            Return table.rawToDataFrame(row_names, check_names, check_modes, env)
+            Return table.rawToDataFrame(row_names, check_names, check_modes, comment_char, env)
         End If
     End Function
 
