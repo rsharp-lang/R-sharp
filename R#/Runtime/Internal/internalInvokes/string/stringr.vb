@@ -227,7 +227,9 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("bdecode")>
         Public Function fromBstring(bstr As String) As Object
-            Dim result = BencodeDecoder.Decode(bstr).Select(Function(node) node.decodeObject()).ToArray
+            Dim result = BencodeDecoder.Decode(bstr) _
+                .Select(Function(node) node.decodeObject()) _
+                .ToArray
 
             If result.Length = 1 Then
                 Return result(Scan0)
@@ -434,7 +436,12 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("grep")>
-        Public Function grep(<RRawVectorArgument> text As Object, greps As String(), Optional fixed As Boolean = False, Optional env As Environment = Nothing) As Object
+        Public Function grep(<RRawVectorArgument>
+                             text As Object,
+                             greps As String(),
+                             Optional fixed As Boolean = False,
+                             Optional env As Environment = Nothing) As Object
+
             If text Is Nothing Then
                 Return Nothing
             ElseIf fixed Then
@@ -541,7 +548,11 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("match")>
-        Public Function match(regexp As Regex, <RRawVectorArgument> strings As Object, Optional env As Environment = Nothing) As Object
+        Public Function match(regexp As Regex,
+                              <RRawVectorArgument>
+                              strings As Object,
+                              Optional env As Environment = Nothing) As Object
+
             If regexp Is Nothing Then
                 Return Internal.debug.stop("regular expression object can not be null!", env)
             End If
@@ -566,7 +577,11 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("sprintf")>
-        Public Function Csprintf(format As Array, <RListObjectArgument> Optional arguments As Object = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function Csprintf(format As Array,
+                                 <RListObjectArgument>
+                                 Optional arguments As Object = Nothing,
+                                 Optional env As Environment = Nothing) As Object
+
             Dim sprintf As Func(Of String, Object(), String) = AddressOf CLangStringFormatProvider.sprintf
             Dim listValues As Object() = DirectCast(base.Rlist(arguments, env), list).slots.Values.ToArray
             Dim args As Array()
@@ -733,7 +748,9 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="pad">Single padding character (default is a space).</param>
         ''' <returns></returns>
         <ExportAPI("str_pad")>
-        Public Function str_pad([string] As String(), width%, Optional side As str_padSides = str_padSides.left, Optional pad As Char = " "c) As String()
+        Public Function str_pad([string] As String(), width%,
+                                Optional side As str_padSides = str_padSides.left,
+                                Optional pad As Char = " "c) As String()
             Return [string] _
                 .SafeQuery _
                 .Select(Function(s)
@@ -778,7 +795,11 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("tagvalue")>
-        Public Function tagvalue([string] As String(), Optional delimiter$ = " ", Optional trim_value As Boolean = True, Optional env As Environment = Nothing) As Object
+        Public Function tagvalue([string] As String(),
+                                 Optional delimiter$ = " ",
+                                 Optional trim_value As Boolean = True,
+                                 Optional env As Environment = Nothing) As Object
+
             Dim values As NamedValue(Of String)() = [string] _
                 .SafeQuery _
                 .Select(Function(str)
@@ -837,7 +858,8 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' ``chr`` returns the characters corresponding to the specified ASCII codes.
+        ''' ``chr`` returns the characters corresponding to the 
+        ''' specified ASCII codes.
         ''' </summary>
         ''' <param name="ascii">
         ''' vector or list of vectors containing integer ASCII codes
@@ -888,14 +910,20 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' The str_replace() function from the stringr package in R can be used to replace matched patterns in a string.
+        ''' The str_replace() function from the stringr package in R 
+        ''' can be used to replace matched patterns in a string.
         ''' </summary>
         ''' <param name="strings">Character vector</param>
         ''' <param name="pattern">Pattern to look for</param>
-        ''' <param name="replacement">A character vector of replacements</param>
+        ''' <param name="replacement">
+        ''' A character vector of replacements
+        ''' </param>
         ''' <returns></returns>
         <ExportAPI("str_replace")>
-        Public Function str_replace(strings As String(), pattern As String, replacement As String, Optional fixed As Boolean = False) As String()
+        Public Function str_replace(strings As String(),
+                                    pattern As String,
+                                    replacement As String,
+                                    Optional fixed As Boolean = False) As String()
             If fixed Then
                 Return strings _
                     .SafeQuery _
@@ -909,6 +937,28 @@ Namespace Runtime.Internal.Invokes
                             End Function) _
                     .ToArray
             End If
+        End Function
+
+        ''' <summary>
+        ''' generate random string which is all consist 
+        ''' with ascii chars.
+        ''' </summary>
+        ''' <param name="nchar"></param>
+        ''' <param name="count"></param>
+        ''' <returns></returns>
+        <ExportAPI("random_str")>
+        Public Function randomAsciiStr(nchar As Integer,
+                                       Optional count As Integer = 1,
+                                       Optional no_symbols As Boolean = True) As String()
+            Return count _
+                .Sequence _
+                .Select(Function(any)
+                            Return RandomASCIIString(
+                                len:=nchar,
+                                skipSymbols:=no_symbols
+                            )
+                        End Function) _
+                .ToArray
         End Function
     End Module
 End Namespace
