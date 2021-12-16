@@ -155,6 +155,7 @@ Public Module utils
                              Optional check_names As Boolean = True,
                              Optional check_modes As Boolean = True,
                              Optional encoding As Object = "unknown",
+                             Optional comment_char As Char = "#"c,
                              Optional tsv As Boolean = False,
                              Optional env As Environment = Nothing) As Object
 
@@ -176,7 +177,7 @@ Public Module utils
             Using reader As New textStream(DirectCast(file, fileStream), textEncoding)
                 datafile = reader.ReadToEnd _
                     .LineTokens _
-                    .DoCall(Function(lines) FileLoader.Load(lines, False, Nothing)) _
+                    .DoCall(Function(lines) FileLoader.Load(lines, False, Nothing, isTsv:=tsv)) _
                     .DoCall(Function(ls)
                                 Return New File(ls)
                             End Function)
@@ -188,7 +189,7 @@ Public Module utils
         If Not TypeOf datafile Is File Then
             Return Internal.debug.stop(datafile, env)
         Else
-            Return DirectCast(datafile, csv).rawToDataFrame(row_names, check_names, check_modes, env)
+            Return DirectCast(datafile, csv).rawToDataFrame(row_names, check_names, check_modes, comment_char, env)
         End If
     End Function
 

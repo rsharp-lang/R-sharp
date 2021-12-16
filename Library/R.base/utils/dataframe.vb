@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::67153e2ffdbcadd4af7910749ee1ac9b, Library\R.base\utils\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module dataframe
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
-    '               colnames, column, CreateRowObject, dataframeTable, deserialize
-    '               measureColumnVector, openCsv, printRowVector, printTable, project
-    '               rawToDataFrame, readCsvRaw, readDataSet, rows, rowToString
-    '               RowToString, transpose, vector
-    ' 
-    ' /********************************************************************************/
+' Module dataframe
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
+'               colnames, column, CreateRowObject, dataframeTable, deserialize
+'               measureColumnVector, openCsv, printRowVector, printTable, project
+'               rawToDataFrame, readCsvRaw, readDataSet, rows, rowToString
+'               RowToString, transpose, vector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -212,6 +213,27 @@ Module dataframe
         End If
     End Function
 
+    <Extension>
+    Private Function stripCommentRows(raw As csv, comment_char As Char) As csv
+        If comment_char = ASCII.NUL Then
+            Return raw
+        End If
+
+        Dim data As New List(Of RowObject)
+
+        For Each row As RowObject In raw
+            If row.NumbersOfColumn = 1 AndAlso Not row.First.StringEmpty Then
+                If row.First.First = comment_char Then
+                    Continue For
+                End If
+            End If
+
+            Call data.Add(row)
+        Next
+
+        Return New csv(data)
+    End Function
+
     ''' <summary>
     ''' convert the raw csv table object to R dataframe object.
     ''' </summary>
@@ -225,9 +247,10 @@ Module dataframe
                                    Optional row_names As Object = Nothing,
                                    Optional check_names As Boolean = True,
                                    Optional check_modes As Boolean = True,
+                                   Optional comment_char As Char = "#"c,
                                    Optional env As Environment = Nothing) As Object
 
-        Dim cols() = raw.Columns.ToArray
+        Dim cols() = raw.stripCommentRows(comment_char).Columns.ToArray
         Dim colNames As String() = cols.Select(Function(col) col(Scan0)).ToArray
 
         If check_names Then
