@@ -222,7 +222,9 @@ Module dataframe
         Dim data As New List(Of RowObject)
 
         For Each row As RowObject In raw
-            If row.NumbersOfColumn = 1 AndAlso Not row.First.StringEmpty Then
+            If row.NumbersOfColumn = 0 Then
+                Continue For
+            ElseIf Not row.First.StringEmpty Then
                 If row.First.First = comment_char Then
                     Continue For
                 End If
