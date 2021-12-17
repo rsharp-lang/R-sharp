@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::fcdd7ef7e6f9bf3a1c34e5c676bd1937, Library\R.math\math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module math
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asFormula, create_deSolve_DataFrame, getBinTable, Hist, lm
-    '               loess, predict, (+2 Overloads) RK4, sim, ssm
-    '               summaryFit
-    ' 
-    ' /********************************************************************************/
+' Module math
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asFormula, create_deSolve_DataFrame, getBinTable, Hist, lm
+'               loess, predict, (+2 Overloads) RK4, sim, ssm
+'               summaryFit
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.Math.Calculus.ODESolver
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.Distributions.BinBox
+Imports Microsoft.VisualBasic.Math.Information
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -129,6 +130,14 @@ Module math
         data.rownames = dx
 
         Return data
+    End Function
+
+    <ExportAPI("diff_entropy")>
+    Public Function DiffEntropy(x As Double(), y As Double()) As Double
+        Dim v1 = x.SeqIterator.Where(Function(i) i.value > 0).ToDictionary(Function(i) i.i.ToString, Function(i) i.value)
+        Dim v2 = y.SeqIterator.Where(Function(i) i.value > 0).ToDictionary(Function(i) i.i.ToString, Function(i) i.value)
+
+        Return v1.DiffEntropy(v2)
     End Function
 
     <ExportAPI("solve.RK4")>
@@ -483,7 +492,7 @@ Module math
     ''' <param name="x">a numeric data sequence</param>
     ''' <param name="y">another numeric data sequence</param>
     ''' <returns></returns>
-    <ExportAPI("ssm")>
+    <ExportAPI("dot_product")>
     Public Function ssm(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Double
         Dim vx As Double() = DirectCast(REnv.asVector(Of Double)(x), Double())
         Dim vy As Double() = DirectCast(REnv.asVector(Of Double)(y), Double())

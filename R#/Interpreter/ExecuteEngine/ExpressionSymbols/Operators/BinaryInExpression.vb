@@ -118,7 +118,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Else
                 ' try custom operator at first
                 Dim op = BinaryOperatorEngine.getOperator("in", envir)
-                Dim left As RType = RType.GetRSharpType(testLeft.GetType.GetElementType)
+                Dim left As RType = RType.GetRSharpType(testLeft.GetType)
                 Dim right As RType = RType.GetRSharpType(sequence.GetType)
 
                 If Not op Like GetType(Message) AndAlso op.TryCast(Of BinaryIndex).hasOperator(left, right) Then
