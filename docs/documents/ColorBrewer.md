@@ -1,4 +1,4 @@
-﻿# ColorBrewer
+# ColorBrewer
 
 Color schema name terms that comes from the ColorBrewer system:
 
@@ -43,6 +43,7 @@ Color schema name terms that comes from the ColorBrewer system:
  BrBG:c[3,11], RdGy:c[3,11], PuOr:c[3,11]
  ```
 
++ [TrIQ](ColorBrewer/TrIQ.1) 
 + [OrRd](ColorBrewer/OrRd.1) 
 + [PuBu](ColorBrewer/PuBu.1) 
 + [BuPu](ColorBrewer/BuPu.1) 
@@ -69,3 +70,12 @@ Color schema name terms that comes from the ColorBrewer system:
 + [Paired](ColorBrewer/Paired.1) 
 + [Pastel2](ColorBrewer/Pastel2.1) 
 + [Pastel1](ColorBrewer/Pastel1.1) 
++ [Spectral](ColorBrewer/Spectral.1) 
++ [RdYlGn](ColorBrewer/RdYlGn.1) 
++ [RdBu](ColorBrewer/RdBu.1) 
++ [PiYG](ColorBrewer/PiYG.1) 
++ [PRGn](ColorBrewer/PRGn.1) 
++ [RdYlBu](ColorBrewer/RdYlBu.1) 
++ [BrBG](ColorBrewer/BrBG.1) 
++ [RdGy](ColorBrewer/RdGy.1) 
++ [PuOr](ColorBrewer/PuOr.1) 

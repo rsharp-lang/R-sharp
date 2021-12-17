@@ -1,12 +1,13 @@
 .\" man page create by R# package system.
-.TH UTILS 4 2020-12-26 "write.csv" "write.csv"
+.TH UTILS 4 2000-01-01 "write.csv" "write.csv"
 .SH NAME
 write.csv \- Data Output
 .SH SYNOPSIS
-\fIwrite.csv(\fBx\fR as <generic> Object, 
+\fIwrite.csv(\fBx\fR as any, 
 \fBfile\fR as string = \fB<NULL>\fR, 
-\fBrow_names\fR as boolean = TRUE, 
-\fBfileEncoding\fR as <generic> Object = "", 
+\fBrow_names\fR as any = TRUE, 
+\fBfileEncoding\fR as any = "", 
+\fBtsv\fR as boolean = FALSE, 
 [\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP
@@ -21,36 +22,34 @@ Data Output
 \fBx\fB \fR\- 
  the object to be written, preferably a matrix or data frame. 
  If not, it is attempted to coerce x to a data frame.
-
+. 
 .PP
 .PP
 \fBfile\fB \fR\- 
  either a character string naming a file or a connection open 
  for writing. "" indicates output to the console.
-
+. 
 .PP
 .PP
 \fBfileEncoding\fB \fR\- 
  character string: if non-empty declares the encoding to be 
  used on a file (not a connection) so the character data can 
  be re-encoded as they are written.
-
+. 
 .PP
 .PP
-\fBenv\fB \fR\- -
+\fBenv\fB \fR\- -. 
 .PP
 .PP
 \fBrow_names\fB \fR\- 
  either a logical value indicating whether the row names of 
  x are to be written along with x, or a character vector of 
  row names to be written.
-
+. 
 .PP
 .SH SEE ALSO
 utils
 .SH FILES
 .PP
-R.base.dll
+base.dll
 .PP
-.SH COPYRIGHT
-Copyright © SMRUCC 2019

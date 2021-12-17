@@ -1,8 +1,8 @@
 # demo script for build REnv unix man pages.
 
-setwd(!script$dir);
+setwd(@dir);
 
-let REnv = ls("REnv");
+REnv = ls("REnv");
 
 for(category in names(REnv)) {
 	for(ref in REnv[[category]]) {

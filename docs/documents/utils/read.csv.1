@@ -1,13 +1,14 @@
 .\" man page create by R# package system.
-.TH UTILS 4 2020-12-26 "read.csv" "read.csv"
+.TH UTILS 4 2000-01-01 "read.csv" "read.csv"
 .SH NAME
 read.csv \- Data Input
 .SH SYNOPSIS
-\fIread.csv(\fBfile\fR as <generic> Object, 
-\fBrow_names\fR as <generic> Object = \fB<NULL>\fR, 
+\fIread.csv(\fBfile\fR as any, 
+\fBrow_names\fR as any = \fB<NULL>\fR, 
 \fBcheck_names\fR as boolean = TRUE, 
 \fBcheck_modes\fR as boolean = TRUE, 
-\fBencoding\fR as <generic> Object = "unknown", 
+\fBencoding\fR as any = "unknown", 
+\fBcomment_char\fR as string = #, 
 \fBtsv\fR as boolean = FALSE, 
 [\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
@@ -37,7 +38,7 @@ Data Input
  
  file can also be a complete URL. (For the supported URL schemes, 
  see the 'URLs’ section of the help for \fBurl\fR.)
-
+. 
 .PP
 .PP
 \fBencoding\fB \fR\- 
@@ -47,7 +48,7 @@ Data Input
  their native encoding (if one of those two). 
  
  use @\fBP:System.Text.Encoding.Default\fR by default.
-
+. 
 .PP
 .PP
 \fBrow_names\fB \fR\- 
@@ -63,13 +64,11 @@ Data Input
  Using row.names = NULL forces row numbering. Missing Or NULL row.names 
  generate row names that are considered To be 'automatic’ (and not 
  preserved by as.matrix).
-
+. 
 .PP
 .SH SEE ALSO
 utils
 .SH FILES
 .PP
-R.base.dll
+base.dll
 .PP
-.SH COPYRIGHT
-Copyright © SMRUCC 2019

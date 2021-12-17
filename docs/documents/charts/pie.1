@@ -1,0 +1,43 @@
+.\" man page create by R# package system.
+.TH CHARTS 4 2000-01-01 "pie" "pie"
+.SH NAME
+pie \- Pie Charts
+.SH SYNOPSIS
+\fIpie(\fBx\fR as any, 
+\fBschema\fR as any = "Paired:c12", 
+\fBd3\fR as boolean = FALSE, 
+\fBcamera\fR as <generic> Camera = \fB<NULL>\fR, 
+\fBsize\fR as any = "1600,1200", 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Pie Charts
+ 
+ Draw a pie chart.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- a vector Of non-negative numerical quantities. The values In x are displayed As the areas Of pie slices.. 
+.PP
+.PP
+\fBd3\fB \fR\- -. 
+.PP
+.SH DETAILS
+.PP
+Pie charts are a very bad way of displaying information. The eye is good at judging linear measures and 
+ bad at judging relative areas. A bar chart or dot chart is a preferable way of displaying this type of 
+ data.
+ 
+ Cleveland (1985), page 264 “Data that can be shown by pie charts always can be shown by a dot chart. 
+ This means that judgements of position along a common scale can be made instead of the less accurate angle 
+ judgements.” This statement Is based on the empirical investigations of Cleveland And McGill as well 
+ as investigations by perceptual psychologists.
+.PP
+.SH SEE ALSO
+charts
+.SH FILES
+.PP
+graphics.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@gmail.com\fR

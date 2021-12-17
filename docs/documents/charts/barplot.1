@@ -1,9 +1,9 @@
 .\" man page create by R# package system.
 .TH CHARTS 4 2000-01-01 "barplot" "barplot"
 .SH NAME
-barplot \- 
+barplot \- Bar Plots
 .SH SYNOPSIS
-\fIbarplot(\fBdata\fR as <generic> dataframe, 
+\fIbarplot(\fBheight\fR as <generic> dataframe, 
 \fBcategory\fR as string = "item", 
 \fBvalue\fR as string = "value", 
 \fBcolor\fR as string = "color", 
@@ -12,18 +12,78 @@ barplot \-
 \fBtitle\fR as string = "Histogram Plot", 
 \fBxlab\fR as string = "X", 
 \fBylab\fR as string = "Y", 
-\fBbg\fR as <generic> Object = "white", 
-\fBsize\fR as <generic> Object = "1920,1080", 
-\fBpadding\fR as <generic> Object = "padding:100px 100px 100px 100px;", 
+\fBbg\fR as any = "white", 
+\fBsize\fR as any = "1920,1080", 
+\fBpadding\fR as any = "padding:100px 100px 100px 100px;", 
 \fBshow_grid\fR as boolean = TRUE, 
-\fBshow_legend\fR as boolean = TRUE);\fR
+\fBshow_legend\fR as boolean = TRUE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Bar Plots
+ 
+ Creates a bar plot with vertical or horizontal bars.
+.PP
+.SH OPTIONS
+.PP
+\fBheight\fB \fR\- 
+ either a vector or matrix of values describing the bars which make up the plot. 
+ If height is a vector, the plot consists of a sequence of rectangular bars with 
+ heights given by the values in the vector. If height is a matrix and beside is 
+ FALSE then each bar of the plot corresponds to a column of height, with the 
+ values in the column giving the heights of stacked sub-bars making up the bar. 
+ If height is a matrix and beside is TRUE, then the values in each column are 
+ juxtaposed rather than stacked.
+. 
+.PP
+.PP
+\fBcategory$\fB \fR\- -. 
+.PP
+.PP
+\fBvalue$\fB \fR\- -. 
+.PP
+.PP
+\fBcolor$\fB \fR\- -. 
+.PP
+.PP
+\fBmin$\fB \fR\- -. 
+.PP
+.PP
+\fBmax$\fB \fR\- -. 
+.PP
+.PP
+\fBtitle\fB \fR\- overall And sub title for the plot.. 
+.PP
+.PP
+\fBxlab\fB \fR\- a label for the x axis.. 
+.PP
+.PP
+\fBylab\fB \fR\- a label For the y axis.. 
+.PP
+.PP
+\fBbg\fB \fR\- -. 
+.PP
+.PP
+\fBsize\fB \fR\- -. 
+.PP
+.PP
+\fBpadding\fB \fR\- -. 
+.PP
+.PP
+\fBshow_grid\fB \fR\- -. 
+.PP
+.PP
+\fBshow_legend\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+the plot image
+.PP
 .SH SEE ALSO
 charts
 .SH FILES
 .PP
-R.plot.dll
+graphics.dll
 .PP
 .SH AUTHOR
 Written by \fBxie.guigang@gmail.com\fR
-.SH COPYRIGHT
-Copyright © xie.guigang@gcmodeller.org 2019

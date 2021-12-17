@@ -1,0 +1,38 @@
+.\" man page create by R# package system.
+.TH LAYOUTS 4 2000-01-01 "layout.force_directed" "layout.force_directed"
+.SH NAME
+layout.force_directed \- Do force directed layout
+.SH SYNOPSIS
+\fIlayout.force_directed(\fBg\fR as <generic> NetworkGraph, 
+\fBejectFactor\fR as integer = 6, 
+\fBcondenseFactor\fR as integer = 3, 
+\fBmaxtx\fR as integer = 4, 
+\fBmaxty\fR as integer = 3, 
+\fBdist\fR as any = "30,250", 
+\fBsize\fR as any = "1000,1000", 
+\fBiterations\fR as integer = 200, 
+\fBalgorithm\fR as any = ["force_directed","degree_weighted","group_weighted","edge_weighted"], 
+\fBgroupAttraction\fR as double = 5, 
+\fBgroupRepulsive\fR as double = 5, 
+\fBweightedFactor\fR as double = 8, 
+\fBavoids\fR as <generic> RectangleF[] = \fB<NULL>\fR, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Do force directed layout
+.PP
+.SH OPTIONS
+.PP
+\fBg\fB \fR\- A network graph object.. 
+.PP
+.PP
+\fBiterations\fB \fR\- The number of layout iterations.. 
+.PP
+.SH SEE ALSO
+layouts
+.SH FILES
+.PP
+igraph.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@gmail.com\fR

@@ -1,9 +1,9 @@
 .\" man page create by R# package system.
-.TH MATH 2 2020-12-26 "solve.RK4" "solve.RK4"
+.TH MATH 2 2000-01-02 "solve.RK4" "solve.RK4"
 .SH NAME
 solve.RK4 \- solve a given ODE system
 .SH SYNOPSIS
-\fIsolve.RK4(\fBdf\fR as <generic> Object, 
+\fIsolve.RK4(\fBdf\fR as any, 
 \fBy0\fR as double = 0, 
 \fBmin\fR as double = -100, 
 \fBmax\fR as double = 100, 
@@ -15,33 +15,33 @@ solve a given ODE system
 .PP
 .SH OPTIONS
 .PP
-\fBsystem\fB \fR\- a collection of the lambda expression
+\fBsystem\fB \fR\- a collection of the lambda expression. 
 .PP
 .PP
-\fBy0\fB \fR\- a list of the initialize values of the variables
+\fBy0\fB \fR\- a list of the initialize values of the variables. 
 .PP
 .PP
-\fBa\fB \fR\- from
+\fBa\fB \fR\- from. 
 .PP
 .PP
-\fBb\fB \fR\- to
+\fBb\fB \fR\- to. 
 .PP
 .PP
-\fBresolution%\fB \fR\- -
+\fBresolution%\fB \fR\- -. 
 .PP
 .PP
-\fBtick\fB \fR\- handler after each solver iteration in the solver loop
+\fBtick\fB \fR\- handler after each solver iteration in the solver loop. 
 .PP
 .PP
-\fBenv\fB \fR\- -
+\fBenv\fB \fR\- -. 
 .PP
 .SH SEE ALSO
 math
 .SH FILES
 .PP
-R.math.dll
+Rlapack.dll
 .PP
 .SH AUTHOR
 Written by \fBxie.guigang@live.com\fR
 .SH COPYRIGHT
-Copyright © xie.guigang@gcmodeller.org 2020
+GPL3

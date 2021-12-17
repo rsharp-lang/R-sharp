@@ -1,11 +1,11 @@
 .\" man page create by R# package system.
-.TH MATH 2 2020-12-26 "lm" "lm"
+.TH MATH 2 2000-01-02 "lm" "lm"
 .SH NAME
 lm \- Fitting Linear Models
 .SH SYNOPSIS
 \fIlm(\fBformula\fR as <generic> FormulaExpression, 
-\fBdata\fR as <generic> Object, 
-\fBweights\fR as <generic> Object = \fB<NULL>\fR, 
+\fBdata\fR as any, 
+\fBweights\fR as any = \fB<NULL>\fR, 
 [\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP
@@ -17,26 +17,26 @@ Fitting Linear Models
 .PP
 .SH OPTIONS
 .PP
-\fBformula\fB \fR\- a formula expression of the target expression
+\fBformula\fB \fR\- a formula expression of the target expression. 
 .PP
 .PP
-\fBdata\fB \fR\- A dataframe for provides the data source for doing the linear modelling.
+\fBdata\fB \fR\- A dataframe for provides the data source for doing the linear modelling.. 
 .PP
 .PP
 \fBweights\fB \fR\- 
  A numeric vector for provides weight value for the points in the linear modelling processing.
-
+. 
 .PP
 .PP
-\fBenv\fB \fR\- -
+\fBenv\fB \fR\- -. 
 .PP
 .SH SEE ALSO
 math
 .SH FILES
 .PP
-R.math.dll
+Rlapack.dll
 .PP
 .SH AUTHOR
 Written by \fBxie.guigang@live.com\fR
 .SH COPYRIGHT
-Copyright © xie.guigang@gcmodeller.org 2020
+GPL3

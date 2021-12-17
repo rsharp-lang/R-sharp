@@ -1,8 +1,11 @@
-﻿# charts
+# charts
 
 chartting plots for R#
 
-+ [linear.regression](charts/linear.regression.1) do plot of the linear regression result
-+ [barplot](charts/barplot.1) 
++ [pie](charts/pie.1) ### Pie Charts
++ [barplot](charts/barplot.1) ### Bar Plots
++ [upset](charts/upset.1) 
 + [serial](charts/serial.1) create a new serial for scatter plot
-+ [volinPlot](charts/volinPlot.1) 
++ [violin](charts/violin.1) ### Violin plot
++ [fillPolygon](charts/fillPolygon.1) 
++ [contourPlot](charts/contourPlot.1) A contour plot is a graphical technique for representing a 3-dimensional 

@@ -1,9 +1,9 @@
 .\" man page create by R# package system.
-.TH STATS 1 2020-12-26 "prcomp" "prcomp"
+.TH STATS 1 2000-01-02 "prcomp" "prcomp"
 .SH NAME
 prcomp \- Principal Components Analysis
 .SH SYNOPSIS
-\fIprcomp(\fBx\fR as <generic> Object, 
+\fIprcomp(\fBx\fR as any, 
 \fBscale\fR as boolean = FALSE, 
 \fBcenter\fR as boolean = FALSE, 
 [\fB<Environment>\fR]);\fR
@@ -30,14 +30,14 @@ Principal Components Analysis
 \fBx\fB \fR\- 
  a numeric or complex matrix (or data frame) which provides the 
  data for the principal components analysis.
-
+. 
 .PP
 .PP
 \fBcenter\fB \fR\- 
  a logical value indicating whether the variables should be shifted 
  to be zero centered. Alternately, a vector of length equal the 
  number of columns of x can be supplied. The value is passed to scale.
-
+. 
 .PP
 .PP
 \fBscale\fB \fR\- 
@@ -46,7 +46,7 @@ Principal Components Analysis
  FALSE for consistency with S, but in general scaling is advisable. 
  Alternatively, a vector of length equal the number of columns of x 
  can be supplied. The value is passed to scale.
-
+. 
 .PP
 .SH DETAILS
 .PP
@@ -58,7 +58,7 @@ The signs of the columns of the rotation matrix are arbitrary, and
 stats
 .SH FILES
 .PP
-R.math.dll
+Rlapack.dll
 .PP
 .SH COPYRIGHT
-Copyright © xie.guigang@gcmodeller.org 2020
+GPL3

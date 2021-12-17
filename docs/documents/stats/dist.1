@@ -1,9 +1,9 @@
 .\" man page create by R# package system.
-.TH STATS 1 2020-12-26 "dist" "dist"
+.TH STATS 1 2000-01-02 "dist" "dist"
 .SH NAME
 dist \- Distance Matrix Computation
 .SH SYNOPSIS
-\fIdist(\fBx\fR as <generic> Object, 
+\fIdist(\fBx\fR as any, 
 \fBmethod\fR as string = "euclidean", 
 \fBdiag\fR as boolean = FALSE, 
 \fBupper\fR as boolean = FALSE, 
@@ -19,26 +19,26 @@ Distance Matrix Computation
 .PP
 .SH OPTIONS
 .PP
-\fBx\fB \fR\- a numeric matrix, data frame or "dist" object.
+\fBx\fB \fR\- a numeric matrix, data frame or "dist" object.. 
 .PP
 .PP
 \fBmethod\fB \fR\- 
  the distance measure to be used. This must be one of "euclidean", "maximum", 
  "manhattan", "canberra", "binary" or "minkowski". Any unambiguous substring 
  can be given.
-
+. 
 .PP
 .PP
-\fBdiag\fB \fR\- -
+\fBdiag\fB \fR\- -. 
 .PP
 .PP
-\fBupper\fB \fR\- -
+\fBupper\fB \fR\- -. 
 .PP
 .PP
-\fBp%\fB \fR\- -
+\fBp%\fB \fR\- -. 
 .PP
 .PP
-\fBenv\fB \fR\- -
+\fBenv\fB \fR\- -. 
 .PP
 .SH DETAILS
 .PP
@@ -93,7 +93,7 @@ Available distance measures are (written for two vectors x and y):
 stats
 .SH FILES
 .PP
-R.math.dll
+Rlapack.dll
 .PP
 .SH COPYRIGHT
-Copyright © xie.guigang@gcmodeller.org 2020
+GPL3

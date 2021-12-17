@@ -1,18 +1,33 @@
 .\" man page create by R# package system.
-.TH JSON 4 2020-12-26 "write.bson" "write.bson"
+.TH JSON 4 2000-01-01 "write.bson" "write.bson"
 .SH NAME
-write.bson \- 
+write.bson \- save any R object into BSON stream data
 .SH SYNOPSIS
-\fIwrite.bson(\fBobj\fR as <generic> Object, 
-\fBfile\fR as <generic> Object = \fB<NULL>\fR, 
+\fIwrite.bson(\fBobj\fR as any, 
+\fBfile\fR as any = \fB<NULL>\fR, 
 [\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+save any R object into BSON stream data
+.PP
+.SH OPTIONS
+.PP
+\fBobj\fB \fR\- -. 
+.PP
+.PP
+\fBfile\fB \fR\- 
+ the file resource that used for save the BSON data, if this parameter is empty, then
+ a binary data stream that contains the BSON data will be returned.
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
 .SH SEE ALSO
 JSON
 .SH FILES
 .PP
-R.base.dll
+base.dll
 .PP
 .SH AUTHOR
 Written by \fBi@xieguigang.me\fR
-.SH COPYRIGHT
-Copyright © SMRUCC 2019

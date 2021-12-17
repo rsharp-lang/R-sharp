@@ -1,0 +1,53 @@
+.\" man page create by R# package system.
+.TH VISUALIZER 1 2000-01-01 "render" "render"
+.SH NAME
+render \- Rendering png or svg image from a given network graph model.
+.SH SYNOPSIS
+\fIrender(\fBg\fR as <generic> NetworkGraph, 
+\fBcanvasSize\fR as any = "1024,768", 
+\fBpadding\fR as any = "padding:100px 100px 100px 100px;", 
+\fBdefaultColor\fR as string = "skyblue", 
+\fBminNodeSize\fR as double = 10, 
+\fBminLinkWidth\fR as double = 2, 
+\fBnodeSize\fR as any = "size", 
+\fBnodeLabel\fR as any = \fB<NULL>\fR, 
+\fBnodeStroke\fR as any = "stroke: black; stroke-width: 2px; stroke-dash: solid;", 
+\fBnodeVisual\fR as any = \fB<NULL>\fR, 
+\fBhullPolygonGroups\fR as any = \fB<NULL>\fR, 
+\fBlabelFontSize\fR as any = 20, 
+\fBlabelerIterations\fR as integer = 100, 
+\fBlabelColor\fR as any = \fB<NULL>\fR, 
+\fBlabelWordWrapWidth\fR as integer = -1, 
+\fBtexture\fR as any = \fB<NULL>\fR, 
+\fBwidget\fR as any = \fB<NULL>\fR, 
+\fBshowLabelerProgress\fR as boolean = FALSE, 
+\fBshowUntexture\fR as boolean = TRUE, 
+\fBshowLabel\fR as boolean = TRUE, 
+\fBdefaultEdgeColor\fR as string = "lightgray", 
+\fBdefaultEdgeDash\fR as <integer> DashStyle = [Solid], 
+\fBdefaultLabelColor\fR as string = "black", 
+\fBdrawEdgeDirection\fR as boolean = FALSE, 
+\fBdriver\fR as <integer> Drivers = [GDI], 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Rendering png or svg image from a given network graph model.
+.PP
+.SH OPTIONS
+.PP
+\fBg\fB \fR\- -. 
+.PP
+.PP
+\fBcanvasSize\fB \fR\- -. 
+.PP
+.PP
+\fBtexture\fB \fR\- 
+ get texture brush or color brush descriptor string.
+. 
+.PP
+.SH SEE ALSO
+visualizer
+.SH FILES
+.PP
+igraph.dll
+.PP

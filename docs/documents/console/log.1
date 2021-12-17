@@ -1,9 +1,9 @@
 .\" man page create by R# package system.
-.TH CONSOLE 1 2020-12-26 "log" "log"
+.TH CONSOLE 1 2000-01-01 "log" "log"
 .SH NAME
 log \- Writes the specified string value to the standard output stream.
 .SH SYNOPSIS
-\fIlog(\fBmessage\fR as <generic> Object, 
+\fIlog(\fBmessage\fR as any, 
 \fBfore_color\fR as <integer> ConsoleColor = \fB<NULL>\fR, 
 \fBback_color\fR as <integer> ConsoleColor = \fB<NULL>\fR, 
 [\fB<Environment>\fR]);\fR
@@ -13,13 +13,13 @@ Writes the specified string value to the standard output stream.
 .PP
 .SH OPTIONS
 .PP
-\fBmessage\fB \fR\- The message text value to write.
+\fBmessage\fB \fR\- The message text value to write.. 
 .PP
 .PP
-\fBfore_color\fB \fR\- sets the foreground color of the console.
+\fBfore_color\fB \fR\- sets the foreground color of the console.. 
 .PP
 .PP
-\fBback_color\fB \fR\- sets the background color of the console.
+\fBback_color\fB \fR\- sets the background color of the console.. 
 .PP
 .SH VALUE
 .PP
@@ -29,7 +29,5 @@ The message text value
 console
 .SH FILES
 .PP
-R.base.dll
+base.dll
 .PP
-.SH COPYRIGHT
-Copyright © SMRUCC 2019

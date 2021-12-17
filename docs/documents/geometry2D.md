@@ -1,0 +1,5 @@
+# geometry2D
+
+
+
++ [density2D](geometry2D/density2D.1) Evaluate the density value of a set of 2d points.

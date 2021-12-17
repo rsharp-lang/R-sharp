@@ -1,0 +1,78 @@
+.\" man page create by R# package system.
+.TH CHARTS 4 2000-01-01 "violin" "violin"
+.SH NAME
+violin \- Violin plot
+.SH SYNOPSIS
+\fIviolin(\fBdata\fR as <generic> Array, 
+\fBsize\fR as any = "3600,2400", 
+\fBmargin\fR as any = "padding:400px 150px 300px 300px;", 
+\fBbg\fR as string = "white", 
+\fBcolorSet\fR as string = "TSF", 
+\fBylab\fR as string = "y axis", 
+\fBtitle\fR as string = "Volin Plot", 
+\fBlabelAngle\fR as double = -45, 
+\fBshowStats\fR as boolean = TRUE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Violin plot
+ 
+ A violin plot is a compact display of a continuous distribution. It is a blend of boxplot and density: 
+ a violin plot is a mirrored density plot displayed in the same way as a boxplot.
+.PP
+.SH OPTIONS
+.PP
+\fBdata\fB \fR\- 
+ The data To be displayed In this layer. There are three options
+ 
+ If NULL, the Default, the data Is inherited from the plot data As specified In the Call To ggplot().
+ A data.frame, Or other Object, will override the plot data. All objects will be fortified To produce 
+ a data frame. See fortify() For which variables will be created.
+ 
+ A Function will be called With a Single argument, the plot data. The Return value must be a data.frame, 
+ And will be used As the layer data. A Function can be created from a formula (e.g. ~ head(.x, 10)).
+. 
+.PP
+.PP
+\fBsize\fB \fR\- -. 
+.PP
+.PP
+\fBmargin\fB \fR\- -. 
+.PP
+.PP
+\fBbg$\fB \fR\- -. 
+.PP
+.PP
+\fBcolorSet$\fB \fR\- -. 
+.PP
+.PP
+\fBylab$\fB \fR\- -. 
+.PP
+.PP
+\fBtitle$\fB \fR\- -. 
+.PP
+.PP
+\fBlabelAngle\fB \fR\- -. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH DETAILS
+.PP
+Computed variables
+ 
+ + \fBdensity\fR density estimate
+ + \fBscaled\fR density estimate, scaled To maximum Of 1
+ + \fBcount\fR density * number of points - probably useless for violin plots
+ + \fBviolinwidth\fR density scaled For the violin plot, according To area, counts Or To a constant maximum width
+ + \fBn\fR number of points
+ + \fBwidth\fR width of violin bounding box
+.PP
+.SH SEE ALSO
+charts
+.SH FILES
+.PP
+graphics.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@gmail.com\fR

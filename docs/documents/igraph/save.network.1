@@ -1,11 +1,12 @@
 .\" man page create by R# package system.
-.TH IGRAPH 2 2020-12-26 "save.network" "save.network"
+.TH IGRAPH 2 2000-01-01 "save.network" "save.network"
 .SH NAME
 save.network \- save the network graph
 .SH SYNOPSIS
-\fIsave.network(\fBg\fR as <generic> Object, 
+\fIsave.network(\fBg\fR as any, 
 \fBfile\fR as string, 
 \fBproperties\fR as string = \fB<NULL>\fR, 
+\fBmeta\fR as <generic> MetaData = \fB<NULL>\fR, 
 [\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP
@@ -13,21 +14,19 @@ save the network graph
 .PP
 .SH OPTIONS
 .PP
-\fBg\fB \fR\- the network graph object or [nodes, edges] table data.
+\fBg\fB \fR\- the network graph object or [nodes, edges] table data.. 
 .PP
 .PP
-\fBfile\fB \fR\- a folder file path for save the network data.
+\fBfile\fB \fR\- a folder file path for save the network data.. 
 .PP
 .PP
-\fBproperties\fB \fR\- a list of property name for save in node table and edge table.
+\fBproperties\fB \fR\- a list of property name for save in node table and edge table.. 
 .PP
 .SH SEE ALSO
 igraph
 .SH FILES
 .PP
-R.graph.dll
+igraph.dll
 .PP
 .SH AUTHOR
 Written by \fBxie.guigang@gcmodeller.org\fR
-.SH COPYRIGHT
-Copyright © SMRUCC 2019

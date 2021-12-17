@@ -1,0 +1,43 @@
+.\" man page create by R# package system.
+.TH IGRAPH 2 2000-01-01 "pushEdges" "pushEdges"
+.SH NAME
+pushEdges \- Add edges by a given node label tuple list
+.SH SYNOPSIS
+\fIpushEdges(\fBg\fR as <generic> NetworkGraph, 
+\fBdata\fR as any, 
+\fBweight\fR as any = \fB<NULL>\fR, 
+\fBtype\fR as any = \fB<NULL>\fR, 
+\fBignoreElementNotFound\fR as boolean = TRUE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Add edges by a given node label tuple list
+.PP
+.SH OPTIONS
+.PP
+\fBg\fB \fR\- -. 
+.PP
+.PP
+\fBdata\fB \fR\- a given node label tuple list, 
+ this parameter should be a list of edge names, in 
+ format looks like \fBlist(tag = [from, to], ...)\fR.
+. 
+.PP
+.PP
+\fBweight\fB \fR\- 
+ the edge weights vector
+. 
+.PP
+.PP
+\fBtype\fB \fR\- 
+ the edge types vector
+. 
+.PP
+.SH SEE ALSO
+igraph
+.SH FILES
+.PP
+igraph.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@gcmodeller.org\fR
