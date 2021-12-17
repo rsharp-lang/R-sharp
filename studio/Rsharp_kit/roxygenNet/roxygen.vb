@@ -1,53 +1,63 @@
 ﻿#Region "Microsoft.VisualBasic::c471bab4f5a681d959fe82398a9094b6, studio\Rsharp_kit\roxygenNet\roxygen.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module roxygen
-    ' 
-    '     Function: markdown2Html, ParseDocuments, roxygenize
-    ' 
-    ' /********************************************************************************/
+' Module roxygen
+' 
+'     Function: markdown2Html, ParseDocuments, roxygenize
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.IO
+Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.text.markdown
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports pkg = SMRUCC.Rsharp.Development.Package.Package
 
 ''' <summary>
 ''' # In-Line Documentation for R
@@ -121,4 +131,61 @@ Public Module roxygen
     Public Function markdown2Html(markdown As String) As String
         Return New MarkdownHTML().Transform(text:=markdown)
     End Function
+
+    <ExportAPI("unixMan")>
+    Public Sub unixMan(pkg As pkg, output As String, Optional env As Environment = Nothing)
+        Dim xmldocs As AnnotationDocs = env _
+            .globalEnvironment _
+            .packages _
+            .packageDocs
+
+        Call pkg.unixMan(xmldocs, output)
+    End Sub
+
+    <Extension>
+    Private Sub unixMan(pkg As pkg, xmldocs As AnnotationDocs, out$)
+        Dim annoDocs As ProjectType = xmldocs.GetAnnotations(pkg.package)
+        Dim links As New List(Of NamedValue(Of String))
+
+        For Each ref As String In pkg.ls
+            Dim symbol As RMethodInfo = pkg.GetFunction(apiName:=ref)
+            Dim docs As ProjectMember = xmldocs.GetAnnotations(symbol.GetRawDeclares)
+            Dim help As UnixManPage = UnixManPagePrinter.CreateManPage(symbol, docs)
+
+            links += New NamedValue(Of String) With {
+                .Name = ref,
+                .Value = $"{pkg.namespace}/{ref}.1",
+                .Description = docs _
+                    ?.Summary _
+                    ?.LineTokens _
+                     .FirstOrDefault
+            }
+
+            Call UnixManPage _
+                .ToString(help, "man page create by R# package system.") _
+                .SaveTo($"{out}/{pkg.namespace}/{ref}.1", UTF8)
+        Next
+
+        If annoDocs Is Nothing Then
+            annoDocs = New ProjectType(New ProjectNamespace(New Project("n/a")))
+        End If
+
+        Using markdown As StreamWriter = $"{out}/{pkg.namespace}.md".OpenWriter
+            Call markdown.WriteLine("# " & pkg.namespace)
+            Call markdown.WriteLine()
+            Call markdown.WriteLine(annoDocs.Summary)
+
+            If Not annoDocs.Remarks.StringEmpty Then
+                For Each line As String In annoDocs.Remarks.LineTokens
+                    Call markdown.WriteLine("> " & line)
+                Next
+            End If
+
+            Call markdown.WriteLine()
+
+            For Each link As NamedValue(Of String) In links
+                Call markdown.WriteLine($"+ [{link.Name}]({link.Value}) {link.Description}")
+            Next
+        End Using
+    End Sub
 End Module

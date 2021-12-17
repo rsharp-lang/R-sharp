@@ -44,24 +44,18 @@
 
 Imports System.ComponentModel
 Imports System.IO
-Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development
-Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
-Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Runtime.Interop
 Imports RlangScript = SMRUCC.Rsharp.Runtime.Components.Rscript
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
@@ -123,12 +117,15 @@ R# ""$app"" $cli".Replace("{script}", script.FileName)
         Dim out$ = args("--out") Or "./"
         Dim module$ = args("--module")
         Dim env As New RInterpreter
-        Dim xmldocs As AnnotationDocs = env.globalEnvir.packages.packageDocs
         Dim utf8 As Encoding = Encodings.UTF8WithoutBOM.CodePage
+
+        Call env.Imports({"roxygen"}, "roxygenNet.dll")
+
+        ' unixMan(pkg As pkg, output As String, env As Environment)
 
         If [module].FileExists Then
             For Each pkg As Package In PackageLoader.ParsePackages(dll:=[module])
-                Call pkg.unixMan(xmldocs, out)
+                Call env.Invoke("unixMan", pkg, out, env.globalEnvir)
                 Call $"load: {pkg.info.Namespace}".__INFO_ECHO
             Next
         Else
@@ -137,60 +134,13 @@ R# ""$app"" $cli".Replace("{script}", script.FileName)
                 If pkg.isMissing Then
                     Call $"missing package: {pkg.namespace}...".PrintException
                 Else
-                    Call pkg.unixMan(xmldocs, out)
+                    Call env.Invoke("unixMan", pkg, out, env.globalEnvir)
                 End If
             Next
         End If
 
         Return 0
     End Function
-
-    <Extension>
-    Private Sub unixMan(pkg As Package, xmldocs As AnnotationDocs, out$)
-        Dim annoDocs As ProjectType = xmldocs.GetAnnotations(pkg.package)
-        Dim links As New List(Of NamedValue(Of String))
-
-        For Each ref As String In pkg.ls
-            Dim symbol As RMethodInfo = pkg.GetFunction(apiName:=ref)
-            Dim docs As ProjectMember = xmldocs.GetAnnotations(symbol.GetRawDeclares)
-            Dim help As UnixManPage = UnixManPagePrinter.CreateManPage(symbol, docs)
-
-            links += New NamedValue(Of String) With {
-                .Name = ref,
-                .Value = $"{pkg.namespace}/{ref}.1",
-                .Description = docs _
-                    ?.Summary _
-                    ?.LineTokens _
-                     .FirstOrDefault
-            }
-
-            Call UnixManPage _
-                .ToString(help, "man page create by R# package system.") _
-                .SaveTo($"{out}/{pkg.namespace}/{ref}.1", UTF8)
-        Next
-
-        If annoDocs Is Nothing Then
-            annoDocs = New ProjectType(New ProjectNamespace(New Project("n/a")))
-        End If
-
-        Using markdown As StreamWriter = $"{out}/{pkg.namespace}.md".OpenWriter
-            Call markdown.WriteLine("# " & pkg.namespace)
-            Call markdown.WriteLine()
-            Call markdown.WriteLine(annoDocs.Summary)
-
-            If Not annoDocs.Remarks.StringEmpty Then
-                For Each line As String In annoDocs.Remarks.LineTokens
-                    Call markdown.WriteLine("> " & line)
-                Next
-            End If
-
-            Call markdown.WriteLine()
-
-            For Each link As NamedValue(Of String) In links
-                Call markdown.WriteLine($"+ [{link.Name}]({link.Value}) {link.Description}")
-            Next
-        End Using
-    End Sub
 
     <ExportAPI("--info")>
     <Description("Print R# interpreter version information and R# terminal version information.")>
