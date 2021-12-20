@@ -163,11 +163,11 @@ Namespace Runtime.Interop.Operator
             Call addBinary(left, right, "!=", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) <> DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
         End Sub
 
-        Public Function getOperator(symbol As String, env As Environment) As [Variant](Of BinaryIndex, Message)
+        Public Function getOperator(symbol As String, env As Environment, Optional suppress As Boolean = False) As [Variant](Of BinaryIndex, Message)
             If index.ContainsKey(symbol) Then
                 Return index(symbol)
             Else
-                Return Internal.debug.stop({$"missing operator '{symbol}'", $"symbol: {symbol}"}, env)
+                Return Internal.debug.stop({$"missing operator '{symbol}'", $"symbol: {symbol}"}, env, suppress)
             End If
         End Function
 
