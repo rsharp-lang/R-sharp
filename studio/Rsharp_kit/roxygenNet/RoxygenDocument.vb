@@ -107,8 +107,10 @@ Public Class RoxygenDocument
                     Continue For
                 End If
 
+                ' const xxx as function -> name(1)
+                ' xxx = function -> name(0)
                 Yield New NamedValue(Of Document) With {
-                    .Name = name(1),
+                    .Name = If(name(1) = "=", name(0), name(1)),
                     .Value = ParseDocument(newLines)
                 }
             End If
