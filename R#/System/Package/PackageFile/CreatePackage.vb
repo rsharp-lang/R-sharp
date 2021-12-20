@@ -284,31 +284,16 @@ Namespace Development.Package.File
                     Else
                         file.symbols(var.names(Scan0)) = var
                     End If
-                ElseIf TypeOf line Is DeclareNewFunction Then
-                    Dim fun As DeclareNewFunction = line
-                    file.symbols(fun.funcName) = fun
-                ElseIf TypeOf line Is ValueAssignExpression Then
-                    Dim assign As ValueAssignExpression = DirectCast(line, ValueAssignExpression)
+                ElseIf line.IsFunctionDeclare Then
+                    Dim func As DeclareNewFunction = line.MakeFunction
 
-                    If TypeOf assign.value Is DeclareNewFunction Then
-                        Dim func As DeclareNewFunction = assign.value
-                        Dim symbolName As String = ValueAssignExpression.GetSymbol(assign.targetSymbols.First)
-
-                        If assign.targetSymbols.Length > 1 Then
-                            Return New Message With {
-                                .message = {"top level declare new symbol is not allows tuple!"},
-                                .level = MSG_TYPES.ERR
-                            }
-                        Else
-                            func.SetSymbol(symbolName)
-                        End If
-
-                        file.symbols(func.funcName) = func
-                    Else
+                    If func Is Nothing Then
                         Return New Message With {
                             .level = MSG_TYPES.ERR,
                             .message = {$"'{line.GetType.Name}' is not allow in top level script when create a R# package!"}
                         }
+                    Else
+                        file.symbols(func.funcName) = func
                     End If
                 ElseIf TypeOf line Is [Imports] OrElse TypeOf line Is Require Then
                     loading.Add(line)
@@ -321,6 +306,48 @@ Namespace Development.Package.File
             Next
 
             Return Nothing
+        End Function
+
+        <Extension>
+        Public Function MakeFunction(line As Expression) As DeclareNewFunction
+            If TypeOf line Is DeclareNewFunction Then
+                Return line
+            ElseIf TypeOf line Is ValueAssignExpression Then
+                Dim assign As ValueAssignExpression = DirectCast(line, ValueAssignExpression)
+
+                If TypeOf assign.value Is DeclareNewFunction Then
+                    Dim func As DeclareNewFunction = assign.value
+                    Dim symbolName As String = ValueAssignExpression.GetSymbol(assign.targetSymbols.First)
+
+                    If assign.targetSymbols.Length > 1 Then
+                        Return Nothing
+                    Else
+                        func.SetSymbol(symbolName)
+                        Return func
+                    End If
+                Else
+                    Return Nothing
+                End If
+            Else
+                Return Nothing 
+            End If
+        End Function
+
+        <Extension>
+        Public Function IsFunctionDeclare(line As Expression) As Boolean
+            If TypeOf line Is DeclareNewFunction Then
+                Return True
+            ElseIf TypeOf line Is ValueAssignExpression Then
+                Dim assign As ValueAssignExpression = DirectCast(line, ValueAssignExpression)
+
+                If TypeOf assign.value Is DeclareNewFunction Then
+                    Return assign.targetSymbols.Length = 1
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
         End Function
 
         <Extension>
