@@ -238,12 +238,22 @@ Namespace Runtime.Internal.Object.Converts
             Next
 
             If columns.Count > 1 Then
+                Dim rownames As NamedValue(Of Object) = columns.Where(Function(d) d.Name = "row.names").FirstOrDefault
+                Dim nameStr As String() = REnv.asVector(Of String)(rownames.Value)
+
+                If Not nameStr.IsNullOrEmpty Then
+                    columns = columns _
+                        .Where(Function(d) d.Name <> "row.names") _
+                        .AsList
+                End If
+
                 Return New dataframe With {
                     .columns = columns _
                         .ToDictionary(Function(a) a.Name,
                                       Function(a)
                                           Return env.createColumnVector(a.Value)
-                                      End Function)
+                                      End Function),
+                    .rownames = nameStr
                 }.CheckDimension(env)
             ElseIf columns.Count = 1 Then
                 Dim first As NamedValue(Of Object) = columns.First
