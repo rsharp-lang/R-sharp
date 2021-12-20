@@ -592,11 +592,22 @@ Module stats
                           Optional var_equal As Boolean = False,
                           Optional conf_level# = 0.95) As Object
 
+        Dim test As Object
+
         If y Is Nothing Then
-            Return t.Test(REnv.asVector(Of Double)(x), alternative, mu, alpha:=1 - conf_level)
+            test = t.Test(REnv.asVector(Of Double)(x), alternative, mu, alpha:=1 - conf_level)
         Else
-            Return t.Test(REnv.asVector(Of Double)(x), REnv.asVector(Of Double)(y), alternative, mu, alpha:=1 - conf_level, varEqual:=var_equal)
+            test = t.Test(
+                a:=REnv.asVector(Of Double)(x),
+                b:=REnv.asVector(Of Double)(y),
+                alternative:=alternative,
+                mu:=mu,
+                alpha:=1 - conf_level,
+                varEqual:=var_equal
+            )
         End If
+
+        Return test
     End Function
 
     ''' <summary>
