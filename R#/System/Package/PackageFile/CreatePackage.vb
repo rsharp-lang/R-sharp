@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::af244ff304e4901a6f4b5ba6cd794de1, R#\System\Package\PackageFile\CreatePackage.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module CreatePackage
-    ' 
-    '         Function: Build, buildRscript, buildUnixMan, checkIndex, createAssetList
-    '                   filter, getAssemblyList, getDataSymbols, getFileReader, loadingDependency
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module CreatePackage
+' 
+'         Function: Build, buildRscript, buildUnixMan, checkIndex, createAssetList
+'                   filter, getAssemblyList, getDataSymbols, getFileReader, loadingDependency
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -52,6 +52,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Development.Package.File
@@ -100,7 +101,8 @@ Namespace Development.Package.File
 
             If (framework = $"{dir}/net5.0").DirectoryExists Then
                 Return New AssemblyPack With {
-                    .assembly = framework.Value _
+                    .assembly = framework _
+                        .Value _
                         .EnumerateFiles("*.dll") _
                         .filter(assemblyFilters) _
                         .ToArray,
@@ -285,6 +287,29 @@ Namespace Development.Package.File
                 ElseIf TypeOf line Is DeclareNewFunction Then
                     Dim fun As DeclareNewFunction = line
                     file.symbols(fun.funcName) = fun
+                ElseIf TypeOf line Is ValueAssignExpression Then
+                    Dim assign As ValueAssignExpression = DirectCast(line, ValueAssignExpression)
+
+                    If TypeOf assign.value Is DeclareNewFunction Then
+                        Dim func As DeclareNewFunction = assign.value
+                        Dim symbolName As String = ValueAssignExpression.GetSymbol(assign.targetSymbols.First)
+
+                        If assign.targetSymbols.Length > 1 Then
+                            Return New Message With {
+                                .message = {"top level declare new symbol is not allows tuple!"},
+                                .level = MSG_TYPES.ERR
+                            }
+                        Else
+                            func.SetSymbol(symbolName)
+                        End If
+
+                        file.symbols(func.funcName) = func
+                    Else
+                        Return New Message With {
+                            .level = MSG_TYPES.ERR,
+                            .message = {$"'{line.GetType.Name}' is not allow in top level script when create a R# package!"}
+                        }
+                    End If
                 ElseIf TypeOf line Is [Imports] OrElse TypeOf line Is Require Then
                     loading.Add(line)
                 Else

@@ -109,6 +109,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Me.stackFrame = stackframe
         End Sub
 
+        Friend Sub SetSymbol(newName As String)
+            _funcName = newName
+        End Sub
+
         Public Iterator Function getArguments() As IEnumerable(Of NamedValue(Of Expression)) Implements RFunction.getArguments
             For Each arg As DeclareNewSymbol In Me.parameters
                 For Each name As String In arg.names
