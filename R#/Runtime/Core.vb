@@ -194,10 +194,34 @@ Namespace Runtime
 
         Public ReadOnly op_Add As Func(Of Object, Object, Object) = Function(x, y) x + y
         Public ReadOnly op_Minus As Func(Of Object, Object, Object) = Function(x, y) x - y
-        Public ReadOnly op_Multiply As Func(Of Object, Object, Object) = Function(x, y) x * y
-        Public ReadOnly op_Divided As Func(Of Object, Object, Object) = Function(x, y) x / y
-        Public ReadOnly op_Mod As Func(Of Object, Object, Object) = Function(x, y) x Mod y
+        Public ReadOnly op_Multiply As Func(Of Object, Object, Object) = AddressOf safeMultiply
+        Public ReadOnly op_Divided As Func(Of Object, Object, Object) = AddressOf safeDivided
+        Public ReadOnly op_Mod As Func(Of Object, Object, Object) = AddressOf safeModule
         Public ReadOnly op_Power As Func(Of Object, Object, Object) = Function(x, y) CDbl(x) ^ CDbl(y)
+
+        Private Function safeModule(x As Object, y As Object) As Object
+            If x = 0.0 OrElse x = 0 Then
+                Return 0
+            Else
+                Return x Mod y
+            End If
+        End Function
+
+        Private Function safeDivided(x As Object, y As Object) As Object
+            If x = 0.0 OrElse x = 0 Then
+                Return 0
+            Else
+                Return x / y
+            End If
+        End Function
+
+        Private Function safeMultiply(x As Object, y As Object) As Object
+            If x = 0.0 OrElse y = 0.0 OrElse x = 0 OrElse y = 0 Then
+                Return 0
+            Else
+                Return x * y
+            End If
+        End Function
 
         ''' <summary>
         ''' Generic unary operator core for primitive type.
