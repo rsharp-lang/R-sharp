@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src D:\\metagenomics ",
-      "workingDirectory": "D:\\PlantMAT\\.github"
+      "commandLineArgs": "--build /save ./REnv.zip",
+      "workingDirectory": "E:\\GCModeller\\src\\R-sharp\\REnv"
     }
   }
 }

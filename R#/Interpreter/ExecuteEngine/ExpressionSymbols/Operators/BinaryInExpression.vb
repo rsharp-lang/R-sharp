@@ -117,7 +117,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 flags = testListIndex(sequence, testLeft)
             Else
                 ' try custom operator at first
-                Dim op = BinaryOperatorEngine.getOperator("in", envir)
+                Dim op = BinaryOperatorEngine.getOperator("in", envir, suppress:=True)
                 Dim left As RType = RType.GetRSharpType(testLeft.GetType)
                 Dim right As RType = RType.GetRSharpType(sequence.GetType)
 
