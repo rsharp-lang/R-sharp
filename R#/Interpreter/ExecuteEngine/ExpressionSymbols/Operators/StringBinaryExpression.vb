@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::722838dc751aadb05252229316710fa1, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\StringBinaryExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module StringBinaryExpression
-    ' 
-    '         Function: DoStringBinary, getStringArray, StringBinaryOperator, TextEquivalency
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module StringBinaryExpression
+' 
+'         Function: DoStringBinary, getStringArray, StringBinaryOperator, TextEquivalency
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -44,6 +44,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.Text.Patterns
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -100,7 +101,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
             End Select
 
-            Return Internal.debug.stop(New NotImplementedException($"<{a.GetType.FullName}> {[operator]} <{b.GetType.FullName}>"), env)
+            Dim left As String, right As String
+
+            If TypeOf a Is vector Then
+                left = a.ToString
+            Else
+                left = a.GetType.FullName
+            End If
+
+            If TypeOf b Is vector Then
+                right = b.ToString
+            Else
+                right = b.GetType.FullName
+            End If
+
+            Return Internal.debug.stop(New NotImplementedException($"<{left}> {[operator]} <{right}>"), env)
         End Function
 
         Public Function DoStringBinary(Of Out)(a As Object, b As Object, op As Func(Of Object, Object, Object)) As Out()
