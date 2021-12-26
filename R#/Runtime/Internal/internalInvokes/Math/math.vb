@@ -151,6 +151,22 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
         End Function
 
+        <ExportAPI("sin")>
+        Public Function sin(x As Array) As Double()
+            Return REnv.asVector(Of Double)(x) _
+                .AsObjectEnumerator(Of Double) _
+                .Select(Function(d) stdNum.Sin(d)) _
+                .ToArray
+        End Function
+
+        <ExportAPI("cos")>
+        Public Function cos(x As Array) As Double()
+            Return REnv.asVector(Of Double)(x) _
+                .AsObjectEnumerator(Of Double) _
+                .Select(Function(d) stdNum.Cos(d)) _
+                .ToArray
+        End Function
+
         ''' <summary>
         ''' #### Sum of Vector Elements
         ''' 
