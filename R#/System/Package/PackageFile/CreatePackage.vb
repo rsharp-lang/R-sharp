@@ -88,17 +88,35 @@ Namespace Development.Package.File
         ''' </param>
         ''' <returns></returns>
         Private Function getAssemblyList(dir As String, assemblyFilters As Index(Of String)) As AssemblyPack
-            Dim dlls As String() = dir.EnumerateFiles("*.dll").ToArray
             Dim framework As Value(Of String) = ""
 
+            If Not dir.DirectoryExists Then
+                Call Console.WriteLine("There is no .NET assembly was found in source pack.")
+
+                Return New AssemblyPack With {
+                    .assembly = {},
+                    .framework = "n/a",
+                    .directory = dir
+                }
+            End If
+
+#If netcore5 = 0 Then
+            Dim dlls As String() = dir.EnumerateFiles("*.dll").ToArray
+            
             If Not dlls.IsNullOrEmpty Then
                 Return New AssemblyPack With {
                     .assembly = dlls.filter(assemblyFilters),
                     .directory = dir,
                     .framework = ".NET Framework 4.8"
                 }
+            Else
+                Return New AssemblyPack With {
+                    .assembly = {},
+                    .directory = dir,
+                    .framework = ".NET Framework 4.8"
+                }
             End If
-
+#Else
             If (framework = $"{dir}/net5.0").DirectoryExists Then
                 Return New AssemblyPack With {
                     .assembly = framework _
@@ -110,12 +128,15 @@ Namespace Development.Package.File
                     .framework = ".NET Core 5"
                 }
             Else
+                Call Console.WriteLine("There is no .NET Core 5 assembly was found in source pack.")
+
                 Return New AssemblyPack With {
                     .assembly = {},
-                    .framework = "n/a",
+                    .framework = ".NET Core 5",
                     .directory = dir
                 }
             End If
+#End If
         End Function
 
         ''' <summary>
