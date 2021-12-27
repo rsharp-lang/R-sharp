@@ -136,6 +136,11 @@ Namespace Runtime.Internal.Object
             columns = New Dictionary(Of String, Array)(clone.columns)
         End Sub
 
+        Public Function add(key As String, value As Array) As dataframe
+            columns(key) = value
+            Return Me
+        End Function
+
         ''' <summary>
         ''' 将列索引号转换为列名称
         ''' </summary>
