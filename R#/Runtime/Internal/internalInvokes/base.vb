@@ -414,8 +414,11 @@ Namespace Runtime.Internal.Invokes
         ''' integer or double vector.</param>
         ''' <returns></returns>
         <ExportAPI("rep")>
-        Public Function rep(x As Object, times As Integer) As Object
-            Return Repeats(x, times)
+        Public Function rep(x As Object,
+                            times As Integer,
+                            Optional env As Environment = Nothing) As Object
+
+            Return REnv.asVector(Repeats(x, times), If(x Is Nothing, GetType(Object), x.GetType), env)
         End Function
 
         ''' <summary>
