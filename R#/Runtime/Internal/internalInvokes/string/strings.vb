@@ -57,6 +57,15 @@ Namespace Runtime.Internal.Invokes
     ''' </summary>
     Module strings
 
+        <ExportAPI("stack_str")>
+        Public Function GetStackValue(<RRawVectorArgument> str As Object, left$, right$) As String()
+            Return DirectCast(REnv.asVector(Of String)(str), String()) _
+                .Select(Function(s)
+                            Return s.GetStackValue(left, right)
+                        End Function) _
+                .ToArray
+        End Function
+
         ''' <summary>
         ''' Returns a string that contains a specified number of characters starting from
         ''' a specified position in a string.
