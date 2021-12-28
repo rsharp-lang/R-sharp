@@ -346,6 +346,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 If targetObj.GetType Is GetType(dataframe) Then
                     Return dataframeValueAssign.ValueAssign(symbolIndex, indexStr, DirectCast(targetObj, dataframe), value, envir)
                 ElseIf targetObj.GetType.ImplementInterface(Of IDataIndex) Then
+                    ' 优先单个元素值？
+                    If Not value Is Nothing Then
+                        If TypeOf value Is vector AndAlso DirectCast(value, vector).length = 1 Then
+                            value = DirectCast(value, vector).getByIndex(1)
+                        ElseIf value.GetType.IsArray AndAlso DirectCast(value, Array).Length = 1 Then
+                            value = DirectCast(value, Array).GetValue(Scan0)
+                        End If
+                    End If
+
                     Call DirectCast(targetObj, IDataIndex).SetByIndex(indexStr(Scan0), value)
 
                     If indexStr.Length > 1 Then

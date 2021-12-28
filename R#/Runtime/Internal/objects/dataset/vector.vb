@@ -224,7 +224,7 @@ Namespace Runtime.Internal.Object
         End Function
 
         ''' <summary>
-        ''' 
+        ''' 以R语言中的下表的方式访问数组元素，所以这个函数的i参数应该是从1开始的
         ''' </summary>
         ''' <param name="i">
         ''' 这个下标值应该是从1开始的
