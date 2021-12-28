@@ -157,15 +157,17 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Dim result As Object
 
             If target Is Nothing Then
-                Return Internal.debug.stop($"target symbol '{funcName.ToString}' for call is nothing!", envir)
+                ' is system internal callable method
             ElseIf target.GetType Is GetType(Message) Then
                 Return target
             ElseIf Not target.GetType.ImplementInterface(Of RFunction) Then
-                Return Internal.debug.stop({
-                    $"the given symbol is not callable!",
-                    $"target: {funcName.ToString}",
-                    $"schema: {target.GetType.FullName}"
-                }, envir)
+                If Not TypeOf target Is Regex Then
+                    Return Internal.debug.stop({
+                        $"the given symbol is not callable!",
+                        $"target: {funcName.ToString}",
+                        $"schema: {target.GetType.FullName}"
+                    }, envir)
+                End If
             End If
 
             Using env As New Environment(envir, stackFrame, isInherits:=True)
