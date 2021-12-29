@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0EB2F8D7-C1CC-4D43-819F-C1F533AC45A4}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>RData</RootNamespace>
+    <RootNamespace>SMRUCC.Rsharp.RDataSet</RootNamespace>
     <AssemblyName>RData</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
@@ -85,13 +85,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Convertor\Constructor.vb" />
+    <Compile Include="Convertor\ConvertToR.vb" />
+    <Compile Include="Convertor\Deserializer.vb" />
+    <Compile Include="Convertor\RObjectSignature.vb" />
+    <Compile Include="Convertor\RStreamReader.vb" />
     <Compile Include="Enums\CharFlags.vb" />
     <Compile Include="Enums\RdataFormats.vb" />
     <Compile Include="Enums\RObjectType.vb" />
+    <Compile Include="Models\LinkedList\ListNodeType.vb" />
+    <Compile Include="Models\LinkedList\RList.vb" />
+    <Compile Include="Models\LinkedList\RObject.vb" />
     <Compile Include="Models\RExtraInfo.vb" />
     <Compile Include="Models\RData.vb" />
     <Compile Include="Models\RObjectInfo.vb" />
-    <Compile Include="Models\RObject.vb" />
     <Compile Include="Models\EnvironmentValue.vb" />
     <Compile Include="ParserXDR.vb" />
     <Compile Include="Models\RVersions.vb" />
@@ -102,6 +108,7 @@
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -113,6 +120,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Writer.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -142,6 +150,11 @@
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\R#\R.vbproj">
+      <Project>{0c2eb77c-39f2-460d-a3f8-ce905f867637}</Project>
+      <Name>R</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

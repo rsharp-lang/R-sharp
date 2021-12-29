@@ -644,6 +644,10 @@
       <Project>{0c2eb77c-39f2-460d-a3f8-ce905f867637}</Project>
       <Name>R</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\studio\RData\RData.vbproj">
+      <Project>{0eb2f8d7-c1cc-4d43-819f-c1f533ac45a4}</Project>
+      <Name>RData</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\JsonHelper\JsonHelper.projitems" Label="Shared" />
