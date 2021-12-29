@@ -5,12 +5,13 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{459B837F-AFAC-4F24-8C74-9786E449D41D}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <StartupObject>SMRUCC.Python.Program</StartupObject>
+    <OutputType>Library</OutputType>
+    <StartupObject>
+    </StartupObject>
     <RootNamespace>SMRUCC.Python</RootNamespace>
     <AssemblyName>npy</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Console</MyType>
+    <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -850,6 +851,7 @@
     <Compile Include="Language\Syntax\ForTag.vb" />
     <Compile Include="Language\Syntax\FunctionTag.vb" />
     <Compile Include="Language\Syntax\IfTag.vb" />
+    <Compile Include="PythonScriptLoader.vb" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\47-dotnet_Microsoft.VisualBasic.vbproj">
@@ -864,6 +866,5 @@
   <ItemGroup>
     <Folder Include="My Project\" />
   </ItemGroup>
-  <Import Project="..\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
