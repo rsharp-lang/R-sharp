@@ -128,6 +128,27 @@ Public Module NetworkModule
         Return str.ToString
     End Function
 
+    <ExportAPI("graph")>
+    <RApiReturn(GetType(NetworkGraph))>
+    Public Function graph(from As String(), [to] As String(), Optional env As Environment = Nothing) As Object
+        If from.TryCount <> [to].TryCount Then
+            Return Internal.debug.stop($"size of from node({from.TryCount}) must be equals to the to nodes({[to].TryCount})!", env)
+        End If
+
+        Dim g As New NetworkGraph
+        Dim allKeys As String() = from.JoinIterates([to]).Distinct.ToArray
+
+        For Each id As String In allKeys
+            Call g.CreateNode(id)
+        Next
+
+        For i As Integer = 0 To from.Length - 1
+            Call g.CreateEdge(from(i), [to](i))
+        Next
+
+        Return g
+    End Function
+
     ''' <summary>
     ''' get graph vertex collection
     ''' </summary>
@@ -285,7 +306,9 @@ Public Module NetworkModule
     ''' <summary>
     ''' load network graph object from a given file location
     ''' </summary>
-    ''' <param name="directory">a directory which contains two data table: nodes and network edges</param>
+    ''' <param name="directory">a directory which contains two data table: 
+    ''' nodes and network edges
+    ''' </param>
     ''' <param name="defaultNodeSize">default node size in width and height</param>
     ''' <param name="defaultBrush">default brush texture descriptor string</param>
     ''' <returns></returns>
