@@ -172,6 +172,17 @@ Public Module NetworkModule
     End Function
 
     ''' <summary>
+    ''' get node reference id list
+    ''' </summary>
+    ''' <param name="v"></param>
+    ''' <returns></returns>
+    ''' 
+    <ExportAPI("xref")>
+    Public Function xref(v As V) As String()
+        Return v.vertex.Select(Function(vi) vi.label).ToArray
+    End Function
+
+    ''' <summary>
     ''' extract sub-network from a given network via a specific network node as centroid. 
     ''' </summary>
     ''' <param name="g"></param>
