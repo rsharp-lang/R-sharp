@@ -339,20 +339,34 @@ Namespace Runtime.Internal.Invokes
         ''' Missing values In test give missing values In the result.
         ''' </remarks>
         <ExportAPI("ifelse")>
-        Public Function ifelse(test As Boolean(), yes As Array, no As Array, Optional env As Environment = Nothing) As Object
-            Dim getYes As Func(Of Integer, Object) = New GetVectorElement(yes).Getter
-            Dim getNo As Func(Of Integer, Object) = New GetVectorElement(no).Getter
-            Dim result As New List(Of Object)
+        Public Function ifelse(test As Boolean(),
+                               <RRawVectorArgument> yes As Object,
+                               <RRawVectorArgument> no As Object,
+                               Optional env As Environment = Nothing) As Object
 
-            For i As Integer = 0 To test.Length - 1
-                If test(i) Then
-                    result.Add(getYes(i))
-                Else
-                    result.Add(getNo(i))
+            If test.Length = 0 Then
+                Return {}
+            ElseIf test.Length = 1 Then
+                Dim flag As Boolean = test(Scan0)
+
+                If flag Then
+
                 End If
-            Next
+            Else
+                Dim getYes As Func(Of Integer, Object) = New GetVectorElement(yes).Getter
+                Dim getNo As Func(Of Integer, Object) = New GetVectorElement(no).Getter
+                Dim result As New List(Of Object)
 
-            Return REnv.TryCastGenericArray(result, env)
+                For i As Integer = 0 To test.Length - 1
+                    If test(i) Then
+                        result.Add(getYes(i))
+                    Else
+                        result.Add(getNo(i))
+                    End If
+                Next
+
+                Return REnv.TryCastGenericArray(result, env)
+            End If
         End Function
 
         ''' <summary>
