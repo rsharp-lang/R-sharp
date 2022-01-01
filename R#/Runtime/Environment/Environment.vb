@@ -546,6 +546,10 @@ Namespace Runtime
         Public Shared Operator &(parent As Environment, closure As Environment) As Environment
             Dim join As New Environment(closure, closure.stackFrame, isInherits:=False)
 
+            If Not parent.parent Is Nothing Then
+                parent = parent.parent
+            End If
+
             For Each func In parent.funcSymbols
                 If Not join.funcSymbols.ContainsKey(func.Key) Then
                     join.funcSymbols.Add(func.Key, func.Value)

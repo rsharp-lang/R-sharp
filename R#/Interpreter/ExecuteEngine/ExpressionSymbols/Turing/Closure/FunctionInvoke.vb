@@ -333,7 +333,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 ' loop, then returns result will be wrapped as return runtime literal value
                 ' so we needs to break such wrapper at here
                 ' or ctype error will happends
-                Dim result As Object = DirectCast(funcVar, RFunction).Invoke(envir, InvokeParameter.Create(expressions:=parameters))
+                Dim arguments As InvokeParameter() = InvokeParameter.Create(expressions:=parameters)
+                Dim result As Object = DirectCast(funcVar, RFunction).Invoke(envir, arguments)
 
                 If Not result Is Nothing Then
                     If result.GetType Is GetType(ReturnValue) AndAlso DirectCast(result, ReturnValue).IsRuntimeFunctionReturnWrapper Then
