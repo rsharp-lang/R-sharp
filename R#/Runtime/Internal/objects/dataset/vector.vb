@@ -235,7 +235,7 @@ Namespace Runtime.Internal.Object
                 i = data.Length + i
             End If
 
-            If i > data.Length OrElse i < 0 Then
+            If i > data.Length OrElse i <= 0 Then
                 Return Nothing
             Else
                 ' 下标是从1开始的
