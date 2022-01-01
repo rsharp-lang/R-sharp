@@ -305,13 +305,13 @@ Namespace Runtime.Interop
 
                 If arguments.ContainsKey(arg.name) Then
                     If arg.islazyeval Then
-                        Yield arguments(arg.name)
+                        Yield arguments(arg.name).value
                     Else
                         Yield getValue(arg, arguments(arg.name).Evaluate(envir), apiTrace, envir, False)
                     End If
                 ElseIf arguments.ContainsKey(arg.name.Replace("_", ".")) Then
                     If arg.islazyeval Then
-                        Yield arguments(arg.name.Replace("_", "."))
+                        Yield arguments(arg.name.Replace("_", ".")).value
                     Else
                         Yield getValue(arg, arguments(arg.name.Replace("_", ".")).Evaluate(envir), apiTrace, envir, False)
                     End If
@@ -333,7 +333,7 @@ Namespace Runtime.Interop
 
                     If arguments.ContainsKey(nameKey) Then
                         If arg.islazyeval Then
-                            Yield arguments(nameKey)
+                            Yield arguments(nameKey).value
                         Else
                             Yield getValue(arg, arguments(nameKey).Evaluate(envir), apiTrace, envir, False)
                         End If

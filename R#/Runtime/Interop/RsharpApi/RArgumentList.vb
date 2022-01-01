@@ -119,13 +119,15 @@ Namespace Runtime.Interop
             Dim skipListObject As Boolean = False
             Dim normalNames As New List(Of String)
             Dim sequenceIndex As Integer = Scan0
+            Dim x As RMethodArgument
 
             For Each arg As InvokeParameter In params
                 If arg.isSymbolAssign AndAlso arg.name Like parameterNames Then
                     skipListObject = True
+                    x = declareArguments(arg.name)
                     parameterVals(parameterNames(arg.name) + 1) = RMethodInfo.getValue(
-                        arg:=declareArguments(arg.name),
-                        value:=arg.Evaluate(env),
+                        arg:=x,
+                        value:=If(x.islazyeval, arg.value, arg.Evaluate(env)),
                         trace:=[declare].name,
                         envir:=env,
                         trygetListParam:=False
@@ -156,9 +158,10 @@ Namespace Runtime.Interop
 
                             Return New Object() {syntaxError}
                         Else
+                            x = [declare].parameters(sequenceIndex)
                             parameterVals(sequenceIndex) = RMethodInfo.getValue(
-                                arg:=[declare].parameters(sequenceIndex),
-                                value:=arg.Evaluate(env),
+                                arg:=x,
+                                value:=If(x.islazyeval, arg.value, arg.Evaluate(env)),
                                 trace:=[declare].name,
                                 envir:=env,
                                 trygetListParam:=False
