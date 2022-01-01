@@ -350,12 +350,38 @@ Namespace Runtime.Internal.Invokes
                 Dim flag As Boolean = test(Scan0)
 
                 If flag Then
-
+                    If TypeOf yes Is Expression Then
+                        Return DirectCast(yes, Expression).Evaluate(env)
+                    Else
+                        Return yes
+                    End If
+                Else
+                    If TypeOf no Is Expression Then
+                        Return DirectCast(no, Expression).Evaluate(env)
+                    Else
+                        Return no
+                    End If
                 End If
             Else
+                Dim result As New List(Of Object)
+
+                If TypeOf yes Is Expression Then
+                    yes = DirectCast(yes, Expression).Evaluate(env)
+
+                    If Program.isException(yes) Then
+                        Return yes
+                    End If
+                End If
+                If TypeOf no Is Expression Then
+                    no = DirectCast(no, Expression).Evaluate(env)
+
+                    If Program.isException(no) Then
+                        Return no
+                    End If
+                End If
+
                 Dim getYes As Func(Of Integer, Object) = New GetVectorElement(yes).Getter
                 Dim getNo As Func(Of Integer, Object) = New GetVectorElement(no).Getter
-                Dim result As New List(Of Object)
 
                 For i As Integer = 0 To test.Length - 1
                     If test(i) Then
