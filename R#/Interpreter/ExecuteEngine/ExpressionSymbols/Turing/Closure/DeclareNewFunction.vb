@@ -139,7 +139,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Private Function InitializeEnvironment(parent As Environment, params As InvokeParameter(), ByRef runDispose As Boolean) As [Variant](Of Message, Environment)
             Dim var As DeclareNewSymbol
             Dim value As Object
-            Dim arguments As Dictionary(Of String, Object)
+            Dim arguments As Dictionary(Of String, InvokeParameter)
             Dim envir As Environment = Me.envir
 
             If envir Is Nothing Then
@@ -155,21 +155,24 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
             ' function parameter should be evaluate 
             ' from the parent environment.
-            With InvokeParameter.CreateArguments(parent, params, hasObjectList:=True)
-                If .GetUnderlyingType Is GetType(Message) Then
-                    Return .TryCast(Of Message)
-                Else
-                    arguments = .TryCast(Of Dictionary(Of String, Object))
-                    argumentKeys = arguments.Keys.ToArray
-                End If
-            End With
+            'With InvokeParameter.CreateArguments(parent, params, hasObjectList:=True)
+            '    If .GetUnderlyingType Is GetType(Message) Then
+            '        Return .TryCast(Of Message)
+            '    Else
+            '        arguments = .TryCast(Of Dictionary(Of String, Object))
+            '        argumentKeys = arguments.Keys.ToArray
+            '    End If
+            'End With
+
+            arguments = InvokeParameter.CreateArguments(parent, params, hasObjectList:=True)
+            argumentKeys = arguments.Keys.ToArray
 
             ' initialize environment
             For i As Integer = 0 To Me.parameters.Length - 1
                 var = Me.parameters(i)
 
                 If arguments.ContainsKey(var.names(Scan0)) Then
-                    value = arguments(var.names(Scan0))
+                    value = arguments(var.names(Scan0)).Evaluate(envir)
                 ElseIf i >= params.Length Then
                     ' missing, use default value
                     If var.hasInitializeExpression Then
@@ -185,7 +188,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     key = "$" & i
 
                     If arguments.ContainsKey(key) Then
-                        value = arguments(key)
+                        value = arguments(key).Evaluate(envir)
                     ElseIf var.hasInitializeExpression Then
                         value = var.value.Evaluate(envir)
                     ElseIf TypeOf params(i).value Is ValueAssignExpression Then
@@ -197,7 +200,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         Return Internal.debug.stop({$"argument '{var.names.First}' is required, but missing!", $"name: {var.names.First}"}, envir)
                     Else
                         key = argumentKeys(i)
-                        value = arguments(key)
+                        value = arguments(key).Evaluate(envir)
                     End If
                 End If
 

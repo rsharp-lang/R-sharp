@@ -340,8 +340,8 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("ifelse")>
         Public Function ifelse(test As Boolean(),
-                               <RRawVectorArgument> yes As Object,
-                               <RRawVectorArgument> no As Object,
+                               <RRawVectorArgument> <RLazyExpression> yes As Object,
+                               <RRawVectorArgument> <RLazyExpression> no As Object,
                                Optional env As Environment = Nothing) As Object
 
             If test.Length = 0 Then

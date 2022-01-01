@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::3ba9757020aaf163959a2ddc803fe971, R#\Runtime\System\InvokeParameter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class InvokeParameter
-    ' 
-    '         Properties: haveSymbolName, index, isAcceptor, isProbablyVectorNameTuple, isSymbolAssign
-    '                     name, value
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: Create, CreateArguments, CreateLiterals, Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class InvokeParameter
+' 
+'         Properties: haveSymbolName, index, isAcceptor, isProbablyVectorNameTuple, isSymbolAssign
+'                     name, value
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: Create, CreateArguments, CreateLiterals, Evaluate, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -141,7 +141,7 @@ Namespace Runtime.Components
             End Get
         End Property
 
-        Private Sub New()
+        Friend Sub New()
         End Sub
 
         Sub New(name As String, runtimeValue As Object, index As Integer)
@@ -193,9 +193,9 @@ Namespace Runtime.Components
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function CreateArguments(env As Environment,
                                                arguments As IEnumerable(Of InvokeParameter),
-                                               hasObjectList As Boolean) As [Variant](Of Message, Dictionary(Of String, Object))
+                                               hasObjectList As Boolean) As Dictionary(Of String, InvokeParameter)
 
-            Dim argVals As New Dictionary(Of String, Object)
+            Dim argVals As New Dictionary(Of String, InvokeParameter)
             Dim allArgs As InvokeParameter() = arguments.ToArray
             Dim acceptor As AcceptorClosure = Nothing
 
@@ -208,7 +208,7 @@ Namespace Runtime.Components
 
             For Each arg As SeqValue(Of InvokeParameter) In allArgs.SeqIterator(offset:=If(acceptor Is Nothing, 0, 1))
                 Dim keyName As String
-                Dim argVal As Object
+                Dim argVal As InvokeParameter
 
                 If arg.value.haveSymbolName(hasObjectList) Then
                     keyName = arg.value.name
@@ -216,29 +216,29 @@ Namespace Runtime.Components
                     keyName = "$" & arg.i
                 End If
 
-                argVal = arg.value.Evaluate(env)
+                argVal = arg.value ' .Evaluate(env)
 
-                If Program.isException(argVal) Then
-                    Return DirectCast(argVal, Message)
-                Else
-                    If Not argVals.ContainsKey(keyName) Then
-                        Call argVals.Add(keyName, argVal)
-                    End If
+                'If Program.isException(argVal) Then
+                '    Return DirectCast(argVal, Message)
+                'Else
+                If Not argVals.ContainsKey(keyName) Then
+                    Call argVals.Add(keyName, argVal)
+                End If
 
-                    If Not acceptor Is Nothing Then
-                        If arg.value.isSymbolAssign Then
-                            Call env.acceptorArguments.Add(keyName, argVal)
-                        End If
+                If Not acceptor Is Nothing Then
+                    If arg.value.isSymbolAssign Then
+                        Call env.acceptorArguments.Add(keyName, argVal)
                     End If
                 End If
+                ' End If
             Next
 
             If acceptor Is Nothing Then
                 Return argVals
             End If
 
-            Dim newAlignArgs As New Dictionary(Of String, Object) From {
-                {"$0", acceptor.Evaluate(env)}
+            Dim newAlignArgs As New Dictionary(Of String, InvokeParameter) From {
+                {"$0", New InvokeParameter() With {.value = acceptor}}' .Evaluate(env)}
             }
 
             For Each keyName As String In argVals.Keys
