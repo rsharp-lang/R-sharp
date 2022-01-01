@@ -126,6 +126,10 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
     Public Function getByName(name As String) As Object Implements RNameIndex.getByName
         If name = "group" AndAlso Not name Like dataNames Then
             name = NamesOf.REFLECTION_ID_MAPPING_NODETYPE
+        ElseIf name = "label" Then
+            Return (From v As Node
+                    In vertex
+                    Select v.data.label).ToArray
         End If
 
         Return (From v As Node In vertex Select v.data(name)).ToArray
@@ -142,10 +146,30 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
     End Function
 
     Public Function setByName(name As String, value As Object, envir As Environment) As Object Implements RNameIndex.setByName
-        Throw New NotImplementedException()
+        If name = "label" Then
+            Dim labels As String() = REnv.asVector(Of String)(value)
+
+            For i As Integer = 0 To vertex.Length - 1
+                vertex(i).data.label = labels(i)
+            Next
+        ElseIf name = "group" Then
+            Dim groups As String() = REnv.asVector(Of String)(value)
+
+            For i As Integer = 0 To vertex.Length - 1
+                vertex(i).data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = groups(i)
+            Next
+        Else
+            Throw New NotImplementedException()
+        End If
+
+        Return value
     End Function
 
     Public Function setByName(names() As String, value As Array, envir As Environment) As Object Implements RNameIndex.setByName
+        If names.Length = 1 Then
+            Return setByName(names(Scan0), value, envir)
+        End If
+
         Throw New NotImplementedException()
     End Function
 #End Region
