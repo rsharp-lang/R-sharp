@@ -370,6 +370,8 @@ Namespace Runtime.Internal.Invokes
 
                     If Program.isException(yes) Then
                         Return yes
+                    Else
+                        yes = REnv.asVector(Of Object)(yes)
                     End If
                 End If
                 If TypeOf no Is Expression Then
@@ -377,6 +379,8 @@ Namespace Runtime.Internal.Invokes
 
                     If Program.isException(no) Then
                         Return no
+                    Else
+                        no = REnv.asVector(Of Object)(no)
                     End If
                 End If
 
