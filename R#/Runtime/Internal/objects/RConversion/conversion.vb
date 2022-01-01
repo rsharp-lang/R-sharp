@@ -340,40 +340,11 @@ Namespace Runtime.Internal.Object.Converts
             ElseIf x.GetType.IsArray AndAlso DirectCast(x, Array).Length = 0 Then
                 Return Nothing
             ElseIf TypeOf x Is list Then
-                Dim listData = DirectCast(x, list).slots
-                Dim hasNames As Boolean = TypeOf listData.First.Value Is list
-                Dim allNames As String() = Nothing
+                Return DirectCast(x, list).slots.castListToDataframe(env)
 
-                If hasNames Then
-                    allNames = listData _
-                        .Select(Function(d)
-                                    Return DirectCast(d.Value, list).getNames
-                                End Function) _
-                        .IteratesALL _
-                        .Distinct _
-                        .ToArray
-                End If
+            ElseIf TypeOf x Is list() OrElse (TypeOf x Is Object() AndAlso DirectCast(x, Object()).All(Function(xi) TypeOf xi Is list)) Then
+                Return DirectCast(x, Array).AsObjectEnumerator(Of list).castListRowsToDataframe(env)
 
-                Dim table As New dataframe With {
-                    .columns = New Dictionary(Of String, Array),
-                    .rownames = allNames
-                }
-
-                For Each field As String In listData.Keys
-                    Dim raw As Object = listData(field)
-                    Dim v As Array
-
-                    If hasNames Then
-                        v = allNames.Select(Function(d) DirectCast(raw, list)(d)).ToArray
-                        v = REnv.TryCastGenericArray(v, env)
-                    Else
-                        v = REnv.TryCastGenericArray(REnv.asVector(Of Object)(raw), env)
-                    End If
-
-                    Call table.add(field, v)
-                Next
-
-                Return table
             Else
                 If TypeOf x Is vbObject Then
                     x = DirectCast(x, vbObject).target
@@ -425,6 +396,80 @@ RE0:
                     Return makeDataframe.createDataframe(type, x, args, env)
                 End If
             End If
+        End Function
+
+        ''' <summary>
+        ''' cast row list data to a data table object.
+        ''' </summary>
+        ''' <param name="rows">
+        ''' each elements list in this collection data is a row in the generated dataframe object. 
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <Extension>
+        Private Function castListRowsToDataframe(rows As IEnumerable(Of list), env As Environment) As Object
+            Dim matrix As list() = rows.ToArray
+            Dim fieldNames As String() = matrix _
+                .Select(Function(row) row.getNames) _
+                .IteratesALL _
+                .Distinct _
+                .ToArray
+            Dim table As New dataframe With {
+                .columns = New Dictionary(Of String, Array)
+            }
+            Dim v As Array
+
+            For Each name As String In fieldNames
+                v = matrix.Select(Function(r) r(name)).ToArray
+                v = REnv.TryCastGenericArray(v, env)
+
+                Call table.add(name, v)
+            Next
+
+            Return table
+        End Function
+
+        ''' <summary>
+        ''' cast column list to dataframe
+        ''' </summary>
+        ''' <param name="listData"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <Extension>
+        Private Function castListToDataframe(listData As Dictionary(Of String, Object), env As Environment) As Object
+            Dim hasNames As Boolean = TypeOf listData.First.Value Is list
+            Dim allNames As String() = Nothing
+
+            If hasNames Then
+                allNames = listData _
+                    .Select(Function(d)
+                                Return DirectCast(d.Value, list).getNames
+                            End Function) _
+                    .IteratesALL _
+                    .Distinct _
+                    .ToArray
+            End If
+
+            Dim table As New dataframe With {
+                .columns = New Dictionary(Of String, Array),
+                .rownames = allNames
+            }
+
+            For Each field As String In listData.Keys
+                Dim raw As Object = listData(field)
+                Dim v As Array
+
+                If hasNames Then
+                    v = allNames.Select(Function(d) DirectCast(raw, list)(d)).ToArray
+                    v = REnv.TryCastGenericArray(v, env)
+                Else
+                    v = REnv.TryCastGenericArray(REnv.asVector(Of Object)(raw), env)
+                End If
+
+                Call table.add(field, v)
+            Next
+
+            Return table
         End Function
 
         <Extension>
