@@ -543,7 +543,7 @@ Namespace Runtime
             Yield GetEnumerator()
         End Function
 
-        Public Shared Operator &(parent As Environment, closure As Environment) As Environment
+        Public Shared Operator &(closure As Environment, parent As Environment) As Environment
             Dim join As New Environment(closure, closure.stackFrame, isInherits:=False)
 
             Do
