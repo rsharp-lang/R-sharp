@@ -232,6 +232,8 @@ Public Module SyntaxTree
             ' Rscript, translate tuple syntax from
             ' python script as list syntax into rscript
             expr = Implementation.AssignValue(blocks(0), blocks.Skip(2).IteratesALL.ToArray, opts)
+        ElseIf blocks = 1 AndAlso blocks(Scan0).isPythonTuple Then
+            expr = Implementation.TupleParser(blocks(Scan0), opts)
         Else
             expr = blocks.ParseExpression(opts)
         End If

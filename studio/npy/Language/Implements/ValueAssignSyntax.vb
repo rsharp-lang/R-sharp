@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -32,6 +33,7 @@ Namespace Language.Implementation
 
             If valueBlocks > 1 Then
                 ' is tuple value
+                ' a,b = b,a
                 Dim stack As StackFrame = opts.GetStackTrace(target(0), "tuple_assign")
                 Dim tuple As New List(Of Expression)
                 Dim expr As SyntaxResult
@@ -61,6 +63,35 @@ Namespace Language.Implementation
                     Return New ValueAssignExpression(targetSymbols, valueExpr.expression) With {.isByRef = True}
                 End If
             End If
+        End Function
+
+        ''' <summary>
+        ''' (xxx,yyy,zzz)
+        ''' </summary>
+        ''' <param name="value"></param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
+        <Extension>
+        Public Function TupleParser(value As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim valueBlocks = value.Skip(1).Take(value.Length - 2).SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True)
+            Dim stack As StackFrame = opts.GetStackTrace(value(0), "tuple_assign")
+            Dim tuple As New List(Of Expression)
+            Dim expr As SyntaxResult
+            Dim i As i32 = Scan0
+
+            For Each block As Token() In valueBlocks.Where(Function(b) Not b.isComma)
+                expr = block.ParsePythonLine(opts)
+
+                If expr.isException Then
+                    Return expr
+                Else
+                    Call tuple.Add(expr.expression)
+                End If
+            Next
+
+            ' use R# list as python tuple
+            Dim list As New FunctionInvoke("list", stack, tuple.ToArray)
+            Return list
         End Function
     End Module
 End Namespace
