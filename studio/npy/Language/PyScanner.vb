@@ -1,10 +1,6 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
-Imports Microsoft.VisualBasic.Language
-Imports Microsoft.VisualBasic.Text
+﻿Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Text.Parser
-Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
-Imports SMRUCC.Rsharp.Language.TokenIcer.Scanner
 
 Namespace Language
 

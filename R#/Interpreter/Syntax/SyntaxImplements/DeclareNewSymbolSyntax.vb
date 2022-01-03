@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::5776f980eb39e5c774886a7f78ab8344, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewSymbolSyntax.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module DeclareNewSymbolSyntax
-    ' 
-    '         Function: (+4 Overloads) DeclareNewSymbol, getNames, ModeOf
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module DeclareNewSymbolSyntax
+' 
+'         Function: (+4 Overloads) DeclareNewSymbol, getNames, ModeOf
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -239,13 +239,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' <returns></returns>
         Friend Function getNames(code As Token()) As [Variant](Of String(), SyntaxErrorException)
             If code.Length > 1 Then
-                If code(Scan0) = (TokenType.open, "[") AndAlso code.Last = (TokenType.close, "]") Then
+                If code(1) = (TokenType.keyword, "as") Then
+                    ' a as type
+                    Return {code(Scan0).text}
+                Else
                     ' [a,b,c]
                     ' tuple symbol names
-                    Dim symbols = code.Skip(1) _
-                        .Take(code.Length - 2) _
-                        .Where(Function(token) Not token.name = TokenType.comma) _
-                        .ToArray
+                    Dim symbols As Token() = code.getSymbolTokens.ToArray
                     Dim names As New List(Of String)
 
                     For Each symbol In symbols
@@ -258,16 +258,26 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     Next
 
                     Return names.ToArray
-                ElseIf code(1) = (TokenType.keyword, "as") Then
-                    ' a as type
-                    Return {code(Scan0).text}
-                Else
-                    Return New SyntaxErrorException(code.Select(Function(a) a.text).JoinBy(" "))
                 End If
             Else
                 ' single symbol
                 Return {code(Scan0).text}
             End If
+        End Function
+
+        <Extension>
+        Private Function getSymbolTokens(code As Token()) As IEnumerable(Of Token)
+            If code(Scan0) = (TokenType.open, "[") AndAlso code.Last = (TokenType.close, "]") Then
+                ' [a,b,c]
+                ' tuple symbol names
+                code = code.Skip(1) _
+                    .Take(code.Length - 2) _
+                    .ToArray
+            End If
+
+            Return code.Where(Function(token)
+                                  Return Not token.name = TokenType.comma
+                              End Function)
         End Function
     End Module
 End Namespace

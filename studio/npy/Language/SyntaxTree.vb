@@ -4,6 +4,7 @@ Imports System.Data
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Python.Language
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -182,7 +183,7 @@ Public Module SyntaxTree
                     Throw New SyntaxErrorException
                 End If
 
-                result = ParsePythonLine(line, opts)
+                result = ParsePythonLine(line.tokens, opts)
 
                 If result.isException Then
                     Throw result.error.exception
@@ -193,7 +194,7 @@ Public Module SyntaxTree
                 ' 结束当前的对象
                 stack.Peek.Add(current.ToExpression(released))
                 current = stack.Peek
-                result = ParsePythonLine(line, opts)
+                result = ParsePythonLine(line.tokens, opts)
 
                 If result.isException Then
                     Throw result.error.exception
@@ -221,8 +222,26 @@ Public Module SyntaxTree
         Return New Program(python.script)
     End Function
 
-    Private Function ParsePythonLine(line As PythonLine, opts As SyntaxBuilderOptions) As SyntaxResult
-        Return Expression.CreateExpression(line.tokens, opts)
+    <Extension>
+    Friend Function ParsePythonLine(line As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
+        Dim blocks = line.SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True)
+        Dim expr As SyntaxResult
+
+        If blocks >= 3 AndAlso blocks(1).isOperator("=") Then
+            ' python tuple syntax is not support in 
+            ' Rscript, translate tuple syntax from
+            ' python script as list syntax into rscript
+            expr = Implementation.AssignValue(blocks(0), blocks.Skip(2).IteratesALL.ToArray, opts)
+        Else
+            expr = blocks.ParseExpression(opts)
+        End If
+
+        Return expr
+    End Function
+
+    <Extension>
+    Friend Function isCommaSymbol(b As Token()) As Boolean
+        Return b.Length = 1 AndAlso b(Scan0) = (TokenType.comma, ",")
     End Function
 
 End Module
