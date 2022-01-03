@@ -546,20 +546,32 @@ Namespace Runtime
         Public Shared Operator &(parent As Environment, closure As Environment) As Environment
             Dim join As New Environment(closure, closure.stackFrame, isInherits:=False)
 
-            If Not parent.parent Is Nothing Then
-                parent = parent.parent
-            End If
+            Do
+                ' ignored of the initialize stack
+                ' check env after stackframe pop up
+                If TypeOf parent.parent Is GlobalEnvironment Then
+                    Exit Do
+                Else
+                    ' do nothing
+                End If
 
-            For Each func In parent.funcSymbols
-                If Not join.funcSymbols.ContainsKey(func.Key) Then
-                    join.funcSymbols.Add(func.Key, func.Value)
-                End If
-            Next
-            For Each symbol In parent.symbols
-                If Not join.symbols.ContainsKey(symbol.Key) Then
-                    join.symbols.Add(symbol.Key, symbol.Value)
-                End If
-            Next
+                For Each func In parent.funcSymbols
+                    If Not join.funcSymbols.ContainsKey(func.Key) Then
+                        join.funcSymbols.Add(func.Key, func.Value)
+                    End If
+                Next
+                For Each symbol In parent.symbols
+                    If Not join.symbols.ContainsKey(symbol.Key) Then
+                        join.symbols.Add(symbol.Key, symbol.Value)
+                    End If
+                Next
+
+                ' 20220103 try to fix of missing symbols
+                parent = parent.parent
+                ' pop to global environment
+                ' parent of global env is nothing
+                '
+            Loop Until parent Is Nothing
 
             Return join
         End Operator
