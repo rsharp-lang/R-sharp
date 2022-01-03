@@ -907,6 +907,7 @@
     <Compile Include="Runtime\Internal\objects\utils\TableRow.vb" />
     <Compile Include="Runtime\Internal\printer\tablePrinter.vb" />
     <Compile Include="Runtime\Interop\CType\ITupleConstructor.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\RLazyExpressionAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSymbolLanguageMaskAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RDefaultExpressionAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RApiReturnAttribute.vb" />
