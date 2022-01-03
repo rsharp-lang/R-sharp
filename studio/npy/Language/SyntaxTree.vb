@@ -122,7 +122,20 @@ Public Module SyntaxTree
                                     End Function) _
                             .ToArray
 
-                        current.Add(New [Imports](Nothing, New VectorLiteral(names), source:=script.source))
+                        For Each name As Expression In names
+                            If TypeOf name Is Literal Then
+                                Dim modulefile As String = DirectCast(name, Literal).ValueStr
+                                Dim testpath As String = $"{script.GetSourceDirectory}/{modulefile}"
+
+                                If testpath.FileExists Then
+                                    current.Add(New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
+                                Else
+                                    current.Add(New Require(modulefile))
+                                End If
+                            Else
+                                current.Add(New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
+                            End If
+                        Next
 
                     Case "if"
 
