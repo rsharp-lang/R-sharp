@@ -112,7 +112,13 @@ Public Module SyntaxTree
                         Dim names As Expression() = tokens _
                             .Split(Function(t) t.name = TokenType.comma) _
                             .Select(Function(block)
-                                        Return Expression.CreateExpression(block, opts).expression
+                                        Dim expr = Expression.CreateExpression(block, opts).expression
+
+                                        If TypeOf expr Is SymbolReference Then
+                                            expr = New Literal(DirectCast(expr, SymbolReference).symbol)
+                                        End If
+
+                                        Return expr
                                     End Function) _
                             .ToArray
 
