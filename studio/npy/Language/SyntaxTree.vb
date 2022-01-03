@@ -23,7 +23,7 @@ Public Module SyntaxTree
     <Extension>
     Public Function ParsePyScript(script As Rscript, Optional debug As Boolean = False) As Program
         Dim scanner As New PyScanner(script.script)
-        Dim opts As New SyntaxBuilderOptions With {
+        Dim opts As New SyntaxBuilderOptions(AddressOf ParsePythonLine) With {
             .source = script,
             .debug = debug
         }
@@ -76,8 +76,8 @@ Public Module SyntaxTree
                         tokens = line.tokens.Skip(1).Take(line.tokens.Length - 2).ToArray
 
                         Dim data = tokens.SplitByTopLevelDelimiter(TokenType.keyword, False, tokenText:="in").ToArray
-                        Dim vars = data(0).SplitByTopLevelDelimiter(TokenType.comma).Select(Function(t) Expression.CreateExpression(t, opts).expression).ToArray
-                        Dim seqs = Expression.CreateExpression(data(2), opts).expression
+                        Dim vars = data(0).SplitByTopLevelDelimiter(TokenType.comma).Select(Function(t) ParsePythonLine(t, opts).expression).ToArray
+                        Dim seqs = ParsePythonLine(data(2), opts).expression
 
                         If line.levels > current.level Then
                             stack.Push(current)
@@ -98,7 +98,7 @@ Public Module SyntaxTree
                     Case "return"
 
                         tokens = line.tokens.Skip(1).ToArray
-                        result = Expression.CreateExpression(tokens, opts)
+                        result = ParsePythonLine(tokens, opts)
 
                         If result.isException Then
                             Throw result.error.exception
@@ -113,7 +113,7 @@ Public Module SyntaxTree
                         Dim names As Expression() = tokens _
                             .Split(Function(t) t.name = TokenType.comma) _
                             .Select(Function(block)
-                                        Dim expr = Expression.CreateExpression(block, opts).expression
+                                        Dim expr = ParsePythonLine(block, opts).expression
 
                                         If TypeOf expr Is SymbolReference Then
                                             expr = New Literal(DirectCast(expr, SymbolReference).symbol)
@@ -142,7 +142,7 @@ Public Module SyntaxTree
 
                         tokens = line.tokens.Skip(1).Take(line.tokens.Length - 2).ToArray
 
-                        Dim test As SyntaxResult = Expression.CreateExpression(tokens, opts)
+                        Dim test As SyntaxResult = ParsePythonLine(tokens, opts)
 
                         If line.levels > current.level Then
                             stack.Push(current)
@@ -239,9 +239,16 @@ Public Module SyntaxTree
         Return expr
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <Extension>
     Friend Function isCommaSymbol(b As Token()) As Boolean
         Return b.Length = 1 AndAlso b(Scan0) = (TokenType.comma, ",")
+    End Function
+
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    <Extension>
+    Friend Function isPythonTuple(b As Token()) As Boolean
+        Return b.Any(Function(t) t = (TokenType.comma, ",")) AndAlso b.First = (TokenType.open, "(") AndAlso b.Last = (TokenType.close, ")")
     End Function
 
 End Module

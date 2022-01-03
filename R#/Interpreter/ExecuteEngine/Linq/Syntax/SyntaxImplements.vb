@@ -367,7 +367,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 Return ParseSymbolDeclare(tokenList, opts)
 
             ElseIf token0.isKeyword("where") Then
-                Dim bool As SyntaxResult = RExpression.CreateExpression(tokenList.Skip(1), opts)
+                Dim bool As SyntaxResult = opts.ParseExpression(tokenList.Skip(1), opts)
 
                 If bool.isException Then
                     Return New SyntaxParserResult(bool.error)
@@ -375,7 +375,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
                 Return New WhereFilter(New RunTimeValueExpression(bool.expression))
             ElseIf token0.isKeyword("in") Then
-                Return New SyntaxParserResult(RExpression.CreateExpression(tokenList.Skip(1), opts))
+                Return New SyntaxParserResult(opts.ParseExpression(tokenList.Skip(1), opts))
             ElseIf token0.isKeyword("on") Then
                 Dim bin = tokenList.Skip(1).ToArray.ParseBinary(opts)
 
@@ -489,7 +489,9 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                         .Skip(1) _
                         .Take(blocks(1).Length - 2) _
                         .GetParameterTokens _
-                        .Select(Function(t) RExpression.CreateExpression(t, opts))
+                        .Select(Function(t)
+                                    Return opts.ParseExpression(t, opts)
+                                End Function)
 
                         If expr.isException Then
                             Return New SyntaxParserResult(expr)

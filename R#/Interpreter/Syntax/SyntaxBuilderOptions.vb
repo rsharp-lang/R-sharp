@@ -64,6 +64,8 @@ Namespace Interpreter.SyntaxParser
         Public currentLine As Integer
         Public annotations As New List(Of NamedValue(Of String))
 
+        Public ReadOnly ParseExpression As Func(Of IEnumerable(Of Token), SyntaxBuilderOptions, SyntaxResult)
+
         Dim currentRange As Token()
 
         ''' <summary>
@@ -94,7 +96,7 @@ Namespace Interpreter.SyntaxParser
         End Function
 
         Public Function Clone() As SyntaxBuilderOptions
-            Return New SyntaxBuilderOptions With {
+            Return New SyntaxBuilderOptions(ParseExpression) With {
                 .debug = debug,
                 .[error] = [error],
                 .isBuildVector = isBuildVector,
@@ -110,6 +112,10 @@ Namespace Interpreter.SyntaxParser
         End Function
 
         Public Const R_runtime As String = "SMRUCC/R#_runtime"
+
+        Public Sub New(ParseExpression As Func(Of IEnumerable(Of Token), SyntaxBuilderOptions, SyntaxResult))
+            Me.ParseExpression = ParseExpression
+        End Sub
 
         Public Function GetStackTrace(token As Token, Optional name$ = Nothing) As StackFrame
             Return New StackFrame With {

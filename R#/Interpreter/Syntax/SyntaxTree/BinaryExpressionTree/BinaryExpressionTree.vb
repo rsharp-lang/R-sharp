@@ -93,7 +93,7 @@ Namespace Interpreter.SyntaxParser
                 ElseIf tokenBlocks = 2 Then
                     ' UnaryNumeric
                     Dim unaryOp = tokenBlocks(Scan0)(Scan0).text
-                    Dim operon = Expression.CreateExpression(tokenBlocks(1), opts)
+                    Dim operon = opts.ParseExpression(tokenBlocks(1), opts)
 
                     If operon.isException Then
                         Return operon
@@ -109,7 +109,7 @@ Namespace Interpreter.SyntaxParser
             For i As Integer = Scan0 To tokenBlocks.Count - 1
                 If ++index Mod 2 = 0 Then
                     If tokenBlocks(i).isOperator("+", "-") Then
-                        syntaxResult = Expression.CreateExpression(tokenBlocks(i + 1), opts)
+                        syntaxResult = opts.ParseExpression(tokenBlocks(i + 1), opts)
 
                         If syntaxResult.isException Then
                             Return syntaxResult
@@ -125,7 +125,7 @@ Namespace Interpreter.SyntaxParser
                         End If
                     ElseIf tokenBlocks(i).isOperator("!") Then
                         ' not ...
-                        syntaxResult = Expression.CreateExpression(tokenBlocks(i + 1), opts)
+                        syntaxResult = opts.ParseExpression(tokenBlocks(i + 1), opts)
 
                         If syntaxResult.isException Then
                             Return syntaxResult
@@ -137,7 +137,7 @@ Namespace Interpreter.SyntaxParser
                         End If
 
                     Else
-                        syntaxResult = Expression.CreateExpression(tokenBlocks(i), opts)
+                        syntaxResult = opts.ParseExpression(tokenBlocks(i), opts)
 
                         If syntaxResult.isException Then
                             Return syntaxResult
@@ -172,7 +172,7 @@ Namespace Interpreter.SyntaxParser
                             Return buf(Scan0).TryCast(Of SyntaxResult)
                         End If
                     ElseIf unary = (TokenType.operator, "!") Then
-                        Dim value As SyntaxResult = Expression.CreateExpression(tokenBlocks(1), opts)
+                        Dim value As SyntaxResult = opts.ParseExpression(tokenBlocks(1), opts)
 
                         If value.isException Then
                             Return value

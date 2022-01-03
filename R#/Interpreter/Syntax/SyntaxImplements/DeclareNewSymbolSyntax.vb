@@ -69,12 +69,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 End If
 
                 Dim blockParts = target.Split(Function(a) a = isKeyword OrElse a = isSymbol).ToArray
-                Dim obj As SyntaxResult = Expression.CreateExpression(blockParts(0), opts)
+                Dim obj As SyntaxResult = opts.ParseExpression(blockParts(0), opts)
 
                 If obj.isException Then
                     Return obj
                 Else
-                    Dim checkType As SyntaxResult = Expression.CreateExpression(blockParts(1), opts)
+                    Dim checkType As SyntaxResult = opts.ParseExpression(blockParts(1), opts)
 
                     If checkType.isException Then
                         Return checkType
@@ -83,7 +83,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     Return New TypeOfCheck(obj.expression, checkType.expression)
                 End If
             Else
-                Dim objTarget As SyntaxResult = Expression.CreateExpression(target, opts)
+                Dim objTarget As SyntaxResult = opts.ParseExpression(target, opts)
 
                 If objTarget.isException Then
                     Return objTarget
@@ -199,7 +199,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' <param name="funcParameter"></param>
         ''' <returns></returns>
         Public Function DeclareNewSymbol(symbol As Token(), value As Token(), opts As SyntaxBuilderOptions, funcParameter As Boolean) As SyntaxResult
-            Dim valSyntaxTemp As SyntaxResult = Expression.CreateExpression(value, opts)
+            Dim valSyntaxTemp As SyntaxResult = opts.ParseExpression(value, opts)
 
             If valSyntaxTemp.isException Then
                 Return valSyntaxTemp

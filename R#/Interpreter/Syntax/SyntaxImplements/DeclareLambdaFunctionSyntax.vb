@@ -99,7 +99,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Dim closure As SyntaxResult = .Skip(2) _
                                               .IteratesALL _
                                               .DoCall(Function(code)
-                                                          Return Expression.CreateExpression(code, opts)
+                                                          Return opts.ParseExpression(code, opts)
                                                       End Function)
 
                 If parameter.isException Then
