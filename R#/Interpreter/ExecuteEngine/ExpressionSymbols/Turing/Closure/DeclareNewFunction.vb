@@ -147,7 +147,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 envir = parent
             Else
                 runDispose = True
-                envir = New Environment(parent, stackFrame, isInherits:=False) & envir
+                envir = parent & envir
             End If
 
             Dim argumentKeys As String()
