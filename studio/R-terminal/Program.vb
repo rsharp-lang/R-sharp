@@ -236,7 +236,14 @@ Module Program
         Dim result As Object
 
         If Not filepath.ExtensionSuffix("R") Then
-            result = R.globalEnvir.hybridsEngine.LoadScript(filepath, R.globalEnvir)
+            If R.globalEnvir.hybridsEngine.CanHandle(filepath) Then
+                result = R _
+                    .globalEnvir _
+                    .hybridsEngine _
+                    .LoadScript(filepath, R.globalEnvir)
+            Else
+                result = Internal.debug.stop({$"unsupported script file type(*.{filepath.ExtensionSuffix})!"}, R.globalEnvir)
+            End If
         Else
             result = R.Source(filepath)
         End If
