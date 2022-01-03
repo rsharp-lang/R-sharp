@@ -543,8 +543,23 @@ Namespace Runtime
             Yield GetEnumerator()
         End Function
 
+        Private Shared Sub push(join As Environment, parent As Environment)
+            For Each func In parent.funcSymbols
+                If Not join.funcSymbols.ContainsKey(func.Key) Then
+                    join.funcSymbols.Add(func.Key, func.Value)
+                End If
+            Next
+            For Each symbol In parent.symbols
+                If Not join.symbols.ContainsKey(symbol.Key) Then
+                    join.symbols.Add(symbol.Key, symbol.Value)
+                End If
+            Next
+        End Sub
+
         Public Shared Operator &(closure As Environment, parent As Environment) As Environment
             Dim join As New Environment(closure, closure.stackFrame, isInherits:=False)
+
+            Call push(join, closure)
 
             Do
                 ' ignored of the initialize stack
@@ -555,18 +570,8 @@ Namespace Runtime
                     ' do nothing
                 End If
 
-                For Each func In parent.funcSymbols
-                    If Not join.funcSymbols.ContainsKey(func.Key) Then
-                        join.funcSymbols.Add(func.Key, func.Value)
-                    End If
-                Next
-                For Each symbol In parent.symbols
-                    If Not join.symbols.ContainsKey(symbol.Key) Then
-                        join.symbols.Add(symbol.Key, symbol.Value)
-                    End If
-                Next
-
                 ' 20220103 try to fix of missing symbols
+                push(join, parent)
                 parent = parent.parent
                 ' pop to global environment
                 ' parent of global env is nothing
