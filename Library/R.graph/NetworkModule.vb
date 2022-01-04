@@ -160,6 +160,33 @@ Public Module NetworkModule
         Return New V(g)
     End Function
 
+    <ROperator("+")>
+    <RApiReturn(GetType(V))>
+    Public Function addNodeData(v As V,
+                                data As rDataframe,
+                                Optional env As Environment = Nothing) As Object
+
+        Dim rowIndex As Integer() = v.index(data.getRowNames, base:=0)
+        Dim err As Object
+
+        If rowIndex.All(Function(i) i = -1) Then
+            Throw New InvalidProgramException("the row names of the given data table must be the node reference unique id!")
+        End If
+
+        For Each name As String In data.colnames
+            Dim vec As Array = data(name)
+            Dim val As Array = rowIndex.Select(Function(i) vec(i)).ToArray
+
+            err = v.setByName(name, val, env)
+
+            If Program.isException(err) Then
+                Return err
+            End If
+        Next
+
+        Return v
+    End Function
+
     ''' <summary>
     ''' get graph edge collection.
     ''' </summary>

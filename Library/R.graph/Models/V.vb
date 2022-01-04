@@ -66,6 +66,10 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
     ''' </summary>
     ReadOnly dataNames As Index(Of String)
     ReadOnly vertexIndex As Dictionary(Of String, Node)
+    ''' <summary>
+    ''' ordinal order of <see cref="vertex"/>
+    ''' </summary>
+    ReadOnly i As Index(Of String)
 
     ''' <summary>
     ''' the size of the vertex collection in this data visitor model
@@ -102,7 +106,16 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
             .Distinct _
             .ToArray
         vertexIndex = vertex.ToDictionary(Function(v) v.label)
+        i = vertex.Select(Function(v) v.label).Indexing
     End Sub
+
+    Public Function index(vlabs As IEnumerable(Of String), Optional base As Integer = 1) As Integer()
+        Return vlabs _
+            .Select(Function(lab)
+                        Return If(i.IndexOf(lab) < 0, -1, i.IndexOf(lab) + base)
+                    End Function) _
+            .ToArray
+    End Function
 
 #Region "Node Attribute Data"
 
