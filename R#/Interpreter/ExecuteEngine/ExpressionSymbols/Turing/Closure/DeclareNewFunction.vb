@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::b2bb0546b4d7dc7bd90961fa2f490f3c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class DeclareNewFunction
-    ' 
-    '         Properties: [Namespace], body, expressionName, funcName, parameters
-    '                     stackFrame, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, getArguments, getReturns, InitializeEnvironment, (+2 Overloads) Invoke
-    '                   MissingParameters, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class DeclareNewFunction
+' 
+'         Properties: [Namespace], body, expressionName, funcName, parameters
+'                     stackFrame, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, getArguments, getReturns, InitializeEnvironment, (+2 Overloads) Invoke
+'                   MissingParameters, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -136,6 +136,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Return Internal.debug.stop(message, envir)
         End Function
 
+        ''' <summary>
+        ''' set parameters
+        ''' </summary>
+        ''' <param name="parent"></param>
+        ''' <param name="params"></param>
+        ''' <param name="runDispose"></param>
+        ''' <returns></returns>
         Private Function InitializeEnvironment(parent As Environment, params As InvokeParameter(), ByRef runDispose As Boolean) As [Variant](Of Message, Environment)
             Dim var As DeclareNewSymbol
             Dim value As Object
@@ -204,27 +211,31 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     End If
                 End If
 
+                For Each name As String In var.names
+                    Call envir.Delete(name, seekParent:=False)
+                Next
+
                 ' 20191120 对于函数对象而言，由于拥有自己的环境，在构建闭包之后
                 ' 多次调用函数会重复利用之前的环境参数
                 ' 所以在这里只需要判断一下更新值或者插入新的变量
-                If var.names.Any(AddressOf envir.symbols.ContainsKey) Then
-                    ' 只检查自己的环境中的变量
-                    ' 因为函数参数是只属于自己的环境之中的符号
-                    Dim names As Literal() = var.names _
-                        .Select(Function(name) New Literal(name)) _
-                        .ToArray
+                'If var.names.Any(AddressOf envir.symbols.ContainsKey) Then
+                '    ' 只检查自己的环境中的变量
+                '    ' 因为函数参数是只属于自己的环境之中的符号
+                '    Dim names As Literal() = var.names _
+                '        .Select(Function(name) New Literal(name)) _
+                '        .ToArray
 
-                    Call ValueAssignExpression.doValueAssign(envir, names, True, value)
-                Else
-                    Dim err As Message = Nothing
+                '    Call ValueAssignExpression.doValueAssign(envir, names, True, value)
+                'Else
+                Dim err As Message = Nothing
 
-                    ' 不存在，则插入新的
-                    Call DeclareNewSymbol.PushNames(var.names, value, var.type, False, envir, err:=err)
+                ' 不存在，则插入新的
+                Call DeclareNewSymbol.PushNames(var.names, value, var.type, False, envir, err:=err)
 
-                    If Not err Is Nothing Then
-                        Return err
-                    End If
+                If Not err Is Nothing Then
+                    Return err
                 End If
+                ' End If
             Next
 
             Return envir

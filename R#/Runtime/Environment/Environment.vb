@@ -400,14 +400,21 @@ Namespace Runtime
             End If
         End Function
 
-        Public Sub Delete(name As String)
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="seekParent">
+        ''' 是否将任意环境路径中的目标符号引用进行删除？
+        ''' </param>
+        Public Sub Delete(name As String, Optional seekParent As Boolean = False)
             If FindSymbol(name) Is Nothing Then
                 Return
             End If
 
             If symbols.ContainsKey(name) Then
                 Call symbols.Remove(name)
-            ElseIf Not parent Is Nothing Then
+            ElseIf seekParent AndAlso Not parent Is Nothing Then
                 Call parent.Delete(name)
             End If
         End Sub
