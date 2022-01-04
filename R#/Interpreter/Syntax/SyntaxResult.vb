@@ -130,5 +130,13 @@ Namespace Interpreter.SyntaxParser
         Public Shared Widening Operator CType(syntax As RExpression) As SyntaxResult
             Return New SyntaxResult(syntax)
         End Operator
+
+        Public Shared Operator Like(syntax As SyntaxResult, type As Type) As Boolean
+            If syntax Is Nothing OrElse syntax.expression Is Nothing Then
+                Return False
+            End If
+
+            Return syntax.expression.GetType Is type
+        End Operator
     End Class
 End Namespace

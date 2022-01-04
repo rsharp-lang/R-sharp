@@ -59,6 +59,78 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object
 
+    ''' <summary>
+    ''' A data frame, a matrix-like structure whose columns 
+    ''' may be of differing types (numeric, logical, factor 
+    ''' and character and so on).
+    ''' 
+    ''' How the names Of the data frame are created Is complex, 
+    ''' And the rest Of this paragraph Is only the basic 
+    ''' story. If the arguments are all named And simple objects 
+    ''' (Not lists, matrices Of data frames) Then the argument 
+    ''' names give the column names. For an unnamed simple 
+    ''' argument, a deparsed version Of the argument Is used 
+    ''' As the name (With an enclosing I(...) removed). For a 
+    ''' named matrix/list/data frame argument With more than 
+    ''' one named column, the names Of the columns are the name 
+    ''' Of the argument followed by a dot And the column name 
+    ''' inside the argument: If the argument Is unnamed, the 
+    ''' argument's column names are used. For a named or unnamed 
+    ''' matrix/list/data frame argument that contains a single 
+    ''' column, the column name in the result is the column 
+    ''' name in the argument. Finally, the names are adjusted 
+    ''' to be unique and syntactically valid unless 
+    ''' ``check.names = FALSE``.
+    ''' </summary>
+    ''' <remarks>
+    ''' A data frame is a list of variables of the same number of 
+    ''' rows with unique row names, given class "data.frame". If 
+    ''' no variables are included, the row names determine the 
+    ''' number of rows.
+    ''' The column names should be non-empty, And attempts To use 
+    ''' empty names will have unsupported results. Duplicate column 
+    ''' names are allowed, but you need To use check.names = False 
+    ''' For data.frame To generate such a data frame. However, 
+    ''' Not all operations On data frames will preserve duplicated 
+    ''' column names: For example matrix-Like subsetting will 
+    ''' force column names in the result To be unique.
+    ''' data.frame converts each of its arguments to a data frame 
+    ''' by calling as.data.frame(optional = TRUE). As that Is a 
+    ''' generic function, methods can be written to change the 
+    ''' behaviour of arguments according to their classes: R comes 
+    ''' With many such methods. Character variables passed To 
+    ''' data.frame are converted To factor columns unless Protected 
+    ''' by I Or argument stringsAsFactors Is False. If a list Or 
+    ''' data frame Or matrix Is passed To data.frame it Is As If 
+    ''' Each component Or column had been passed As a separate 
+    ''' argument (except For matrices Protected by I).
+    ''' Objects passed To data.frame should have the same number 
+    ''' Of rows, but atomic vectors (see Is.vector), factors And 
+    ''' character vectors Protected by I will be recycled a whole 
+    ''' number Of times If necessary (including As elements Of 
+    ''' list arguments).
+    ''' If row names are Not supplied In the Call To data.frame, 
+    ''' the row names are taken from the first component that has 
+    ''' suitable names, For example a named vector Or a matrix With 
+    ''' rownames Or a data frame. (If that component Is subsequently 
+    ''' recycled, the names are discarded With a warning.) If 
+    ''' row.names was supplied As NULL Or no suitable component was 
+    ''' found the row names are the Integer sequence starting at one 
+    ''' (And such row names are considered To be 'automatic’, and 
+    ''' not preserved by as.matrix).
+    ''' If row names are supplied Of length one And the data frame 
+    ''' has a Single row, the row.names Is taken To specify the 
+    ''' row names And Not a column (by name Or number).
+    ''' Names are removed from vector inputs Not Protected by I.
+    ''' Default.stringsAsFactors Is a utility that takes 
+    ''' getOption("stringsAsFactors") And ensures the result Is 
+    ''' TRUE Or FALSE (Or throws an error if the value Is Not
+    ''' NULL).
+    ''' 
+    ''' > Chambers, J. M. (1992) Data for models. Chapter 3 of 
+    ''' Statistical Models in S eds J. M. Chambers and T. J. 
+    ''' Hastie, Wadsworth &amp; Brooks/Cole.
+    ''' </remarks>
     Public Class dataframe : Implements RNames
 
         ''' <summary>

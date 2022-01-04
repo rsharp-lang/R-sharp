@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::f2fb069594cd3c089004d4dc8a1da3fc, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module BinaryExpressionTree
-    ' 
-    '         Function: joinNegatives, joinRemaining, MeasureCurrentLine, ParseBinaryExpression, processOperators
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module BinaryExpressionTree
+' 
+'         Function: joinNegatives, joinRemaining, MeasureCurrentLine, ParseBinaryExpression, processOperators
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -143,6 +143,32 @@ Namespace Interpreter.SyntaxParser
                             Return syntaxResult
                         Else
                             Call buf.Add(syntaxResult)
+                        End If
+                    End If
+                ElseIf Not tokenBlocks(i).isOperator Then
+                    Dim list = tokenBlocks(i)
+
+                    If list.First = (TokenType.open, "(") AndAlso list.Last = (TokenType.close, ")") Then
+                        If buf.Last.TryCast(Of SyntaxResult) Like GetType(SymbolReference) Then
+                            Dim params As New List(Of Expression)
+                            Dim trace = opts.GetStackTrace(list.First, buf.Last.ToString)
+                            Dim temp As SyntaxResult
+
+                            For Each par As Token() In list _
+                                .Skip(1) _
+                                .Take(list.Length - 2) _
+                                .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True)
+
+                                temp = opts.ParseExpression(par, opts)
+
+                                If temp.isException Then
+                                    Return temp
+                                Else
+                                    params.Add(temp.expression)
+                                End If
+                            Next
+
+                            Call buf.Add(New SyntaxResult(New FunctionInvoke(buf.Pop, trace, params.ToArray)))
                         End If
                     End If
                 Else
