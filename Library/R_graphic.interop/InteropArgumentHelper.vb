@@ -147,50 +147,9 @@ Public Module InteropArgumentHelper
         End If
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function getSize(size As Object, env As Environment, Optional default$ = "2700,2000") As String
-        If size Is Nothing Then
-            Return [default]
-        ElseIf TypeOf size Is vector Then
-            size = DirectCast(size, vector).data
-        End If
-
-        If size.GetType.IsArray Then
-            ' cast object() to integer()/string(), etc
-            size = REnv.TryCastGenericArray(size, env)
-        End If
-
-        Dim sizeType As Type = size.GetType
-
-        Select Case sizeType
-            Case GetType(String)
-                Return size
-            Case GetType(String())
-                Dim strs As String() = DirectCast(size, String())
-
-                If strs.Length = 1 Then
-                    Return strs(Scan0)
-                ElseIf strs(Scan0).IsNumeric AndAlso strs(1).IsNumeric Then
-                    Return $"{strs(Scan0)},{strs(1)}"
-                Else
-                    Return [default]
-                End If
-            Case GetType(Size)
-                With DirectCast(size, Size)
-                    Return $"{ .Width},{ .Height}"
-                End With
-            Case GetType(SizeF)
-                With DirectCast(size, SizeF)
-                    Return $"{ .Width},{ .Height}"
-                End With
-            Case GetType(Integer()), GetType(Long()), GetType(Single()), GetType(Double()), GetType(Short())
-                With DirectCast(size, Array)
-                    Return $"{ .GetValue(0)},{ .GetValue(1)}"
-                End With
-            Case Else
-                Call $"invalid data type for get [width,height]: {sizeType.FullName}".Warning
-
-                Return [default]
-        End Select
+        Return graphicsPipeline.getSize(size, env, [default])
     End Function
 
     Public Function getFontCSS(font As Object, Optional default$ = CSSFont.Win7Large) As String

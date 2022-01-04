@@ -1,0 +1,88 @@
+﻿Imports System.Drawing
+Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports REnv = SMRUCC.Rsharp.Runtime
+
+Namespace Runtime
+
+    Public Module graphicsPipeline
+
+        Private Sub getSize(width As Object, height As Object, env As Environment, ByRef w As Double, ByRef h As Double)
+            If TypeOf width Is Expression Then
+                width = DirectCast(width, Expression).Evaluate(env)
+            End If
+            If TypeOf height Is Expression Then
+                height = DirectCast(height, Expression).Evaluate(env)
+            End If
+
+            w = REnv.single(REnv.asVector(Of Double)(width))
+            h = REnv.single(REnv.asVector(Of Double)(height))
+        End Sub
+
+        <Extension>
+        Public Function getSize(args As Dictionary(Of String, Object), env As Environment, [default] As SizeF) As SizeF
+            Dim w# = 1920
+            Dim h# = 1600
+
+            If {"w", "h"}.All(AddressOf args.ContainsKey) Then
+                Call getSize(args("width"), args("height"), env, w, h)
+            ElseIf {"width", "height"}.All(AddressOf args.ContainsKey) Then
+                Call getSize(args("width"), args("height"), env, w, h)
+            ElseIf args.ContainsKey("size") Then
+                Return getSize(args("size"), env, $"{[default].Width},{[default].Height}").FloatSizeParser
+            Else
+                Throw New MissingPrimaryKeyException
+            End If
+
+            Return New SizeF(w, h)
+        End Function
+
+        Public Function getSize(size As Object, env As Environment, Optional default$ = "2700,2000") As String
+            If size Is Nothing Then
+                Return [default]
+            ElseIf TypeOf size Is vector Then
+                size = DirectCast(size, vector).data
+            End If
+
+            If size.GetType.IsArray Then
+                ' cast object() to integer()/string(), etc
+                size = REnv.TryCastGenericArray(size, env)
+            End If
+
+            Dim sizeType As Type = size.GetType
+
+            Select Case sizeType
+                Case GetType(String)
+                    Return size
+                Case GetType(String())
+                    Dim strs As String() = DirectCast(size, String())
+
+                    If strs.Length = 1 Then
+                        Return strs(Scan0)
+                    ElseIf strs(Scan0).IsNumeric AndAlso strs(1).IsNumeric Then
+                        Return $"{strs(Scan0)},{strs(1)}"
+                    Else
+                        Return [default]
+                    End If
+                Case GetType(Size)
+                    With DirectCast(size, Size)
+                        Return $"{ .Width},{ .Height}"
+                    End With
+                Case GetType(SizeF)
+                    With DirectCast(size, SizeF)
+                        Return $"{ .Width},{ .Height}"
+                    End With
+                Case GetType(Integer()), GetType(Long()), GetType(Single()), GetType(Double()), GetType(Short())
+                    With DirectCast(size, Array)
+                        Return $"{ .GetValue(0)},{ .GetValue(1)}"
+                    End With
+                Case Else
+                    Call $"invalid data type for get [width,height]: {sizeType.FullName}".Warning
+
+                    Return [default]
+            End Select
+        End Function
+    End Module
+End Namespace

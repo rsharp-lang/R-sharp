@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::f52250d104e188f0ad127a7330732f81, Library\R.graphics\grDevices.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module grDevices
-    ' 
-    '     Function: adjustAlpha, colorPopulator, colors, devCur, devOff
-    '               imageAttrs, rgb, saveBitmap, saveImage
-    ' 
-    ' /********************************************************************************/
+' Module grDevices
+' 
+'     Function: adjustAlpha, colorPopulator, colors, devCur, devOff
+'               imageAttrs, rgb, saveBitmap, saveImage
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -46,6 +46,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Driver
@@ -59,6 +60,8 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports any = Microsoft.VisualBasic.Scripting
+Imports bitmapBuffer = SMRUCC.Rsharp.Runtime.Serialize.bitmapBuffer
+Imports debug = SMRUCC.Rsharp.Runtime.Internal.debug
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
@@ -69,6 +72,57 @@ Public Module grDevices
 
     Dim devlist As New Dictionary(Of Integer, IGraphics)
     Dim curDev As IGraphics
+
+    ''' <summary>
+    ''' ## Cairographics-based SVG, PDF and PostScript Graphics Devices
+    ''' 
+    ''' Graphics devices for SVG, PDF and PostScript 
+    ''' graphics files using the cairo graphics API.
+    ''' </summary>
+    ''' <param name="image"></param>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
+    <ExportAPI("svg")>
+    Public Function svg(image As Object, file As Object, Optional env As Environment = Nothing)
+        If image Is Nothing Then
+            Return debug.stop("the source svg image object can not be nothing!", env)
+        End If
+
+        Dim stream As Stream
+        Dim is_file As Boolean = False
+
+        If file Is Nothing Then
+            stream = Console.OpenStandardOutput
+        ElseIf TypeOf file Is String Then
+            stream = DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+            is_file = True
+        ElseIf TypeOf file Is Stream Then
+            stream = file
+        Else
+            Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
+        End If
+
+        If Not TypeOf image Is SVGData Then
+            If image.GetType.IsInheritsFrom(GetType(Plot)) Then
+                Dim size = env.GetAcceptorArguments
+
+                Call DirectCast(image, Plot).Plot().Save(stream)
+            Else
+                Return Message.InCompatibleType(GetType(Plot), file.GetType, env)
+            End If
+        Else
+            Call DirectCast(image, SVGData).Save(stream)
+        End If
+
+        Call stream.Flush()
+
+        If is_file Then
+            Call stream.Close()
+            Call stream.Dispose()
+        End If
+
+        Return True
+    End Function
 
     ''' <summary>
     ''' save the graphics plot object as image file
@@ -100,8 +154,8 @@ Public Module grDevices
                     Call .Save(fs)
                     Call fs.Flush()
                     Return fs
-                ElseIf TypeOf graphics Is ImageData AndAlso TypeOf file Is bitmapBuffer Then
-                    DirectCast(file, bitmapBuffer).bitmap = DirectCast(graphics, ImageData).Image
+                ElseIf TypeOf graphics Is ImageData AndAlso TypeOf file Is BitmapBuffer Then
+                    DirectCast(file, BitmapBuffer).bitmap = DirectCast(graphics, ImageData).Image
                     Return file
                 ElseIf TypeOf graphics Is SVGData AndAlso TypeOf file Is textBuffer Then
                     DirectCast(file, textBuffer).text = DirectCast(graphics, SVGData).GetSVGXml
@@ -127,8 +181,8 @@ Public Module grDevices
             Call DirectCast(graphics, Image).Save(fs, Imaging.ImageFormat.Png)
             Call fs.Flush()
             Return fs
-        ElseIf TypeOf file Is bitmapBuffer Then
-            DirectCast(file, bitmapBuffer).bitmap = graphics
+        ElseIf TypeOf file Is BitmapBuffer Then
+            DirectCast(file, BitmapBuffer).bitmap = graphics
             Return file
         Else
             Return Message.InCompatibleType(GetType(String), file.GetType, env, "invalid file for save bitmap!")
