@@ -168,7 +168,7 @@ Namespace Interpreter.SyntaxParser
                                 End If
                             Next
 
-                            Call buf.Add(New SyntaxResult(New FunctionInvoke(buf.Pop, trace, params.ToArray)))
+                            Call buf.Add(New SyntaxResult(New FunctionInvoke(buf.Pop.TryCast(Of SyntaxResult).expression, trace, params.ToArray)))
                         End If
                     End If
                 Else
