@@ -160,6 +160,13 @@ Public Module NetworkModule
         Return New V(g)
     End Function
 
+    ''' <summary>
+    ''' append node information via operator based on a given dataframe object
+    ''' </summary>
+    ''' <param name="v"></param>
+    ''' <param name="data"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ROperator("+")>
     <RApiReturn(GetType(V))>
     Public Function addNodeData(v As V,
