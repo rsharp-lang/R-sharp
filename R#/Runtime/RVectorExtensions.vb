@@ -381,7 +381,7 @@ Namespace Runtime
 
                         If str = "NA" Then
                             o = Double.NaN
-                        ElseIf str = "NULL" Then
+                        ElseIf str = "NULL" OrElse str = "" Then
                             o = 0.0
                         Else
                             o = Conversion.CTypeDynamic(o, typeofT)
