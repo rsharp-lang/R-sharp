@@ -132,6 +132,15 @@ Module math
         Return data
     End Function
 
+    ''' <summary>
+    ''' measure similarity between two data vector via entropy difference
+    ''' </summary>
+    ''' <param name="x">a numeric vector</param>
+    ''' <param name="y">another numeric vector which should 
+    ''' be in the same size as the <paramref name="x"/> vector.
+    ''' </param>
+    ''' <returns>Unweighted entropy similarity</returns>
+    ''' 
     <ExportAPI("diff_entropy")>
     Public Function DiffEntropy(x As Double(), y As Double()) As Double
         Dim v1 = x.SeqIterator.Where(Function(i) i.value > 0).ToDictionary(Function(i) i.i.ToString, Function(i) i.value)
@@ -247,6 +256,13 @@ Module math
             .ToArray
     End Function
 
+    ''' <summary>
+    ''' loess fit
+    ''' </summary>
+    ''' <param name="formula"></param>
+    ''' <param name="data"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("loess")>
     Public Function loess(formula As FormulaExpression, data As Object, Optional env As Environment = Nothing) As Object
 
