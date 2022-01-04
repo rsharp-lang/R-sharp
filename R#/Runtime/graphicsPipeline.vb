@@ -2,12 +2,38 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime
 
     Public Module graphicsPipeline
+
+        Public Function getDpi(args As Dictionary(Of String, Object), env As Environment, [default] As Integer) As Integer
+            Dim raw As Object
+
+            If args.ContainsKey("dpi") Then
+                raw = args("dpi")
+            ElseIf args.ContainsKey("Dpi") Then
+                raw = args("Dpi")
+            ElseIf args.ContainsKey("DPI") Then
+                raw = args("DPI")
+            ElseIf args.ContainsKey("PPI") Then
+                raw = args("PPI")
+            ElseIf args.ContainsKey("ppi") Then
+                raw = args("ppi")
+            Else
+                Return [default]
+            End If
+
+            If TypeOf raw Is InvokeParameter Then
+                Return REnv.single(REnv.asVector(Of Integer)(eval(raw, env)))
+            Else
+                Return REnv.single(REnv.asVector(Of Integer)(raw))
+            End If
+        End Function
 
         Private Sub getSize(width As Object, height As Object, env As Environment, ByRef w As Double, ByRef h As Double)
             If TypeOf width Is Expression Then
@@ -39,11 +65,23 @@ Namespace Runtime
             Return New SizeF(w, h)
         End Function
 
+        Private Function eval(x As Object, env As Environment) As Object
+            x = DirectCast(x, InvokeParameter).value
+
+            If TypeOf x Is ValueAssignExpression Then
+                x = DirectCast(x, ValueAssignExpression).value
+            End If
+
+            Return DirectCast(x, Expression).Evaluate(env)
+        End Function
+
         Public Function getSize(size As Object, env As Environment, Optional default$ = "2700,2000") As String
             If size Is Nothing Then
                 Return [default]
             ElseIf TypeOf size Is vector Then
                 size = DirectCast(size, vector).data
+            ElseIf TypeOf size Is InvokeParameter Then
+                Return getSize(eval(size, env), env, [default])
             End If
 
             If size.GetType.IsArray Then

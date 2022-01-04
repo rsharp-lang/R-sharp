@@ -104,10 +104,12 @@ Public Module grDevices
 
         If Not TypeOf image Is SVGData Then
             If image.GetType.IsInheritsFrom(GetType(Plot)) Then
-                Dim size = graphicsPipeline.getSize(env.GetAcceptorArguments, env, New SizeF(3300, 2700))
+                Dim args = env.GetAcceptorArguments
+                Dim size = graphicsPipeline.getSize(args, env, New SizeF(3300, 2700))
                 Dim wh As String = $"{size.Width},{size.Height}"
+                Dim dpi As Integer = graphicsPipeline.getDpi(args, env, 300)
 
-                Call DirectCast(image, Plot).Plot(wh,, driver:=Drivers.SVG).Save(stream)
+                Call DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).Save(stream)
             Else
                 Return Message.InCompatibleType(GetType(Plot), file.GetType, env)
             End If
