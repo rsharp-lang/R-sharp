@@ -40,6 +40,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
@@ -52,6 +53,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Linq
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -159,20 +161,20 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
     End Function
 
     Public Function setByName(name As String, value As Object, envir As Environment) As Object Implements RNameIndex.setByName
-        If name = "label" Then
-            Dim labels As String() = REnv.asVector(Of String)(value)
+        Dim data As String() = RCType.safeCharacters(value)
 
+        If name = "label" Then
             For i As Integer = 0 To vertex.Length - 1
-                vertex(i).data.label = labels(i)
+                vertex(i).data.label = data(i)
             Next
         ElseIf name = "group" Then
-            Dim groups As String() = REnv.asVector(Of String)(value)
-
             For i As Integer = 0 To vertex.Length - 1
-                vertex(i).data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = groups(i)
+                vertex(i).data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = data(i)
             Next
         Else
-            Throw New NotImplementedException()
+            For i As Integer = 0 To vertex.Length - 1
+                vertex(i).data(name) = data(i)
+            Next
         End If
 
         Return value
@@ -216,8 +218,13 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
         Return env
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function eval(expr As Expression, env As Environment) As Object
+        Return expr.Evaluate(ConfigSymbols(expr, env))
+    End Function
+
     Public Function EvaluateIndexer(expr As Expression, env As Environment) As Object Implements RIndexer.EvaluateIndexer
-        Dim i As Object = expr.Evaluate(ConfigSymbols(expr, env))
+        Dim i As Object = eval(expr, env)
 
         If Program.isException(i) Then
             Return i

@@ -198,7 +198,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' <param name="index"></param>
         ''' <param name="indexType"></param>
         <Extension>
-        Private Sub parseDataframeIndex(blocks As List(Of Token()), ByRef index As SyntaxResult, ByRef indexType As SymbolIndexers, opts As SyntaxBuilderOptions)
+        Private Sub parseDataframeIndex(blocks As List(Of Token()),
+                                        ByRef index As SyntaxResult,
+                                        ByRef indexType As SymbolIndexers,
+                                        opts As SyntaxBuilderOptions)
             If blocks(0).isComma Then
                 ' x[, a] by columns
                 indexType = SymbolIndexers.dataframeColumns

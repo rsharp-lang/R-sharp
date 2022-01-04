@@ -182,7 +182,9 @@ Public Module NetworkModule
 
         For Each name As String In data.colnames
             Dim vec As Array = data(name)
-            Dim val As Array = rowIndex.Select(Function(i) vec(i)).ToArray
+            Dim val As Array = (From i As Integer
+                                In rowIndex
+                                Select If(i = -1, Nothing, vec(i))).ToArray
 
             err = v.setByName(name, val, env)
 

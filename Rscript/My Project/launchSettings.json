@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\tutorials\\aggregate.R\"",
+      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\tutorials\\data\\dataframe\\indexTest.R\"",
       "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\REnv"
     }
   }

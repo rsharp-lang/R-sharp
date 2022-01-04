@@ -170,6 +170,8 @@ Namespace Interpreter.SyntaxParser
 
                             Call buf.Add(New SyntaxResult(New FunctionInvoke(buf.Pop.TryCast(Of SyntaxResult).expression, trace, params.ToArray)))
                         End If
+                    Else
+                        Return New SyntaxResult(SyntaxError.CreateError(opts, New SyntaxErrorException()))
                     End If
                 Else
                     Call buf.Add(tokenBlocks(i)(Scan0).text)
