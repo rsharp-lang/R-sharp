@@ -11,6 +11,11 @@ Namespace Runtime
 
     Public Module graphicsPipeline
 
+        <Extension>
+        Public Function CheckDpiArgument(args As Dictionary(Of String, Object)) As Boolean
+            Return {"dpi", "Dpi", "DPI", "PPI", "ppi"}.Any(AddressOf args.ContainsKey)
+        End Function
+
         Public Function getDpi(args As Dictionary(Of String, Object), env As Environment, [default] As Integer) As Integer
             Dim raw As Object
 
@@ -46,6 +51,13 @@ Namespace Runtime
             w = REnv.single(REnv.asVector(Of Double)(width))
             h = REnv.single(REnv.asVector(Of Double)(height))
         End Sub
+
+        <Extension>
+        Public Function CheckSizeArgument(args As Dictionary(Of String, Object)) As Boolean
+            Return {"w", "h"}.All(AddressOf args.ContainsKey) OrElse
+                {"width", "height"}.All(AddressOf args.ContainsKey) OrElse
+                args.ContainsKey("size")
+        End Function
 
         <Extension>
         Public Function getSize(args As Dictionary(Of String, Object), env As Environment, [default] As SizeF) As SizeF

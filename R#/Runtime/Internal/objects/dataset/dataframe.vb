@@ -342,7 +342,7 @@ Namespace Runtime.Internal.Object
 
                 Return GetByRowIndex(index)
             Else
-                Throw New NotImplementedException(indexType.FullName)
+                Return Internal.debug.stop(New NotImplementedException(indexType.FullName), env)
             End If
         End Function
 

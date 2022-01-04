@@ -83,7 +83,12 @@ Public Module grDevices
     ''' <param name="file"></param>
     ''' <returns></returns>
     <ExportAPI("svg")>
-    Public Function svg(image As Object, file As Object, Optional env As Environment = Nothing)
+    Public Function svg(image As Object,
+                        file As Object,
+                        <RListObjectArgument>
+                        Optional args As list = Nothing,
+                        Optional env As Environment = Nothing) As Object
+
         If image Is Nothing Then
             Return debug.stop("the source svg image object can not be nothing!", env)
         End If
@@ -104,10 +109,11 @@ Public Module grDevices
 
         If Not TypeOf image Is SVGData Then
             If image.GetType.IsInheritsFrom(GetType(Plot)) Then
-                Dim args = env.GetAcceptorArguments
-                Dim size = graphicsPipeline.getSize(args, env, New SizeF(3300, 2700))
+                Dim arg1 = args.slots
+                Dim arg2 = env.GetAcceptorArguments
+                Dim size = graphicsPipeline.getSize(If(arg1.CheckSizeArgument, arg1, arg2), env, New SizeF(3300, 2700))
                 Dim wh As String = $"{size.Width},{size.Height}"
-                Dim dpi As Integer = graphicsPipeline.getDpi(args, env, 300)
+                Dim dpi As Integer = graphicsPipeline.getDpi(If(arg1.CheckDpiArgument, arg1, arg2), env, 300)
 
                 Call DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).Save(stream)
             Else
