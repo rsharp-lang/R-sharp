@@ -97,7 +97,7 @@ Namespace Interpreter.SyntaxParser
                         .Skip(1) _
                         .IteratesALL _
                         .DoCall(Function(tokens)
-                                    Return Expression.CreateExpression(tokens, opts)
+                                    Return opts.ParseExpression(tokens, opts)
                                 End Function)
 
                     If evaluate.isException Then
@@ -232,7 +232,7 @@ Namespace Interpreter.SyntaxParser
                     Return SyntaxImplements.FunctionInvoke(code.IteratesALL.ToArray, opts)
                 ElseIf code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "!") Then
                     ' not xxxx
-                    Dim valExpression As SyntaxResult = Expression.CreateExpression(code(1), opts)
+                    Dim valExpression As SyntaxResult = opts.ParseExpression(code(1), opts)
 
                     If valExpression.isException Then
                         Return valExpression
@@ -361,7 +361,7 @@ Binary:
         ''' <param name="opts"></param>
         ''' <returns></returns>
         Friend Function parseSymbolIndex(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim first As SyntaxResult = Expression.CreateExpression(code(Scan0), opts)
+            Dim first As SyntaxResult = opts.ParseExpression(code(Scan0), opts)
 
             If first.isException Then
                 Return first
@@ -404,7 +404,7 @@ Binary:
                     .Skip(2) _
                     .IteratesALL _
                     .DoCall(Function(tokens)
-                                Return Expression.CreateExpression(tokens, opts)
+                                Return opts.ParseExpression(tokens, opts)
                             End Function)
 
                 If vals.isException Then
@@ -436,7 +436,7 @@ Binary:
                     End If
                 End With
             Else
-                With Expression.CreateExpression(target, opts)
+                With opts.ParseExpression(target, opts)
                     If .isException Then
                         Return .ByRef
                     Else
@@ -445,7 +445,7 @@ Binary:
                 End With
             End If
 
-            Dim valExpression As SyntaxResult = Expression.CreateExpression(value, opts)
+            Dim valExpression As SyntaxResult = opts.ParseExpression(value, opts)
 
             If valExpression.isException Then
                 Return valExpression
@@ -458,7 +458,7 @@ Binary:
             For Each token As SyntaxResult In target.SplitByTopLevelDelimiter(TokenType.comma) _
                                                     .Where(Function(t) Not t.isComma) _
                                                     .Select(Function(tokens)
-                                                                Return Expression.CreateExpression(tokens, opts)
+                                                                Return opts.ParseExpression(tokens, opts)
                                                             End Function)
                 Yield token
 

@@ -58,7 +58,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .Skip(1) _
                 .IteratesALL _
                 .SplitByTopLevelDelimiter(Language.TokenType.close)
-            test = Expression.CreateExpression(code(Scan0).Skip(1), opts)
+            test = opts.ParseExpression(code(Scan0).Skip(1), opts)
 
             If test.isException Then
                 Return test

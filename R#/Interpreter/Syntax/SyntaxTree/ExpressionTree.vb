@@ -252,7 +252,7 @@ Namespace Interpreter.SyntaxParser
                     opts:=opts
                 )
             Else
-                Dim target As SyntaxResult = Expression.CreateExpression(invokeTarget, opts)
+                Dim target As SyntaxResult = opts.ParseExpression(invokeTarget, opts)
 
                 If target.isException Then
                     Return target

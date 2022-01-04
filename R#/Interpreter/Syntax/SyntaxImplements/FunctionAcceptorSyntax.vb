@@ -57,7 +57,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim funcInvoke As SyntaxResult = code(Scan0) _
                 .JoinIterates(code(1)) _
                 .DoCall(Function(fi)
-                            Return Expression.CreateExpression(fi, opts)
+                            Return opts.ParseExpression(fi, opts)
                         End Function)
 
             If funcInvoke.isException Then
@@ -91,7 +91,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         Public Function FunctionAcceptorInvoke(invoke As Token(), firstBody As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim funcInvoke As SyntaxResult = Expression.CreateExpression(invoke, opts)
+            Dim funcInvoke As SyntaxResult = opts.ParseExpression(invoke, opts)
 
             If funcInvoke.isException Then
                 Return funcInvoke

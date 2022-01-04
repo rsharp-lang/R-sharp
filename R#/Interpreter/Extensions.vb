@@ -167,7 +167,7 @@ Namespace Interpreter
                     End If
                 End If
 
-                Dim expr As SyntaxResult = Expression.CreateExpression(block, opts)
+                Dim expr As SyntaxResult = opts.ParseExpression(block, opts)
 
                 If expr.isException Then
                     ' config error message in the options
