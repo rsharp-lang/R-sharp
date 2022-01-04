@@ -416,7 +416,7 @@ Namespace Interpreter.SyntaxParser
             Dim firstToken As Token = tokens(Scan0)
             Dim op$
 
-            If firstToken.name = TokenType.operator OrElse firstToken = (TokenType.keyword, "like") Then
+            If firstToken.name = TokenType.operator OrElse firstToken = (TokenType.keyword, {"like", "in", "is", "between"}) Then
                 If operators.Length > 0 Then
                     op$ = firstToken.text
 
