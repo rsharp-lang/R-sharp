@@ -40,6 +40,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
@@ -52,6 +53,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Linq
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -66,6 +68,10 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
     ''' </summary>
     ReadOnly dataNames As Index(Of String)
     ReadOnly vertexIndex As Dictionary(Of String, Node)
+    ''' <summary>
+    ''' ordinal order of <see cref="vertex"/>
+    ''' </summary>
+    ReadOnly i As Index(Of String)
 
     ''' <summary>
     ''' the size of the vertex collection in this data visitor model
@@ -102,7 +108,16 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
             .Distinct _
             .ToArray
         vertexIndex = vertex.ToDictionary(Function(v) v.label)
+        i = vertex.Select(Function(v) v.label).Indexing
     End Sub
+
+    Public Function index(vlabs As IEnumerable(Of String), Optional base As Integer = 1) As Integer()
+        Return vlabs _
+            .Select(Function(lab)
+                        Return If(i.IndexOf(lab) < 0, -1, i.IndexOf(lab) + base)
+                    End Function) _
+            .ToArray
+    End Function
 
 #Region "Node Attribute Data"
 
@@ -126,6 +141,10 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
     Public Function getByName(name As String) As Object Implements RNameIndex.getByName
         If name = "group" AndAlso Not name Like dataNames Then
             name = NamesOf.REFLECTION_ID_MAPPING_NODETYPE
+        ElseIf name = "label" Then
+            Return (From v As Node
+                    In vertex
+                    Select v.data.label).ToArray
         End If
 
         Return (From v As Node In vertex Select v.data(name)).ToArray
@@ -142,10 +161,30 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
     End Function
 
     Public Function setByName(name As String, value As Object, envir As Environment) As Object Implements RNameIndex.setByName
-        Throw New NotImplementedException()
+        Dim data As String() = RCType.safeCharacters(value)
+
+        If name = "label" Then
+            For i As Integer = 0 To vertex.Length - 1
+                vertex(i).data.label = data(i)
+            Next
+        ElseIf name = "group" Then
+            For i As Integer = 0 To vertex.Length - 1
+                vertex(i).data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = data(i)
+            Next
+        Else
+            For i As Integer = 0 To vertex.Length - 1
+                vertex(i).data(name) = data(i)
+            Next
+        End If
+
+        Return value
     End Function
 
     Public Function setByName(names() As String, value As Array, envir As Environment) As Object Implements RNameIndex.setByName
+        If names.Length = 1 Then
+            Return setByName(names(Scan0), value, envir)
+        End If
+
         Throw New NotImplementedException()
     End Function
 #End Region
@@ -179,8 +218,13 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
         Return env
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function eval(expr As Expression, env As Environment) As Object
+        Return expr.Evaluate(ConfigSymbols(expr, env))
+    End Function
+
     Public Function EvaluateIndexer(expr As Expression, env As Environment) As Object Implements RIndexer.EvaluateIndexer
-        Dim i As Object = expr.Evaluate(ConfigSymbols(expr, env))
+        Dim i As Object = eval(expr, env)
 
         If Program.isException(i) Then
             Return i

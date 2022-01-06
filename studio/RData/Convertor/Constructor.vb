@@ -84,7 +84,12 @@ Namespace Convertor
                 If r_char.info.gp And CharFlags.UTF8 Then
                     encoding = Encoding.UTF8
                 ElseIf r_char.info.gp And CharFlags.LATIN1 Then
-                    encoding = Encoding.Latin1
+#If netcore5 = 1 Then
+                    encoding = encoding.Latin1
+#Else
+                    encoding = Encoding.GetEncoding("Latin1")
+#End If
+
                 ElseIf r_char.info.gp And CharFlags.ASCII Then
                     encoding = Encoding.ASCII
                 ElseIf r_char.info.gp And CharFlags.BYTES Then

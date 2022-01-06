@@ -59,7 +59,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .SplitByTopLevelDelimiter(TokenType.comma) _
                 .Where(Function(b) Not b.isComma) _
                 .Select(Function(tokens)
-                            Return Expression.CreateExpression(tokens, opts)
+                            Return opts.ParseExpression(tokens, opts)
                         End Function)
 
                 If name.isException Then
@@ -75,11 +75,11 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         Public Function [Imports](code As IEnumerable(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             With code.ToArray
                 If .ElementAt(Scan0).isKeyword("imports") AndAlso .ElementAtOrDefault(2).isKeyword("from") Then
-                    Dim packages = .ElementAt(1).DoCall(Function(tokens) Expression.CreateExpression(tokens, opts))
+                    Dim packages = .ElementAt(1).DoCall(Function(tokens) opts.ParseExpression(tokens, opts))
                     Dim library As SyntaxResult =
                         .ElementAt(3) _
                         .DoCall(Function(tokens)
-                                    Return Expression.CreateExpression(tokens, opts)
+                                    Return opts.ParseExpression(tokens, opts)
                                 End Function)
 
                     If packages.isException Then
@@ -103,7 +103,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     Dim files As SyntaxResult =
                         .ElementAt(1) _
                         .DoCall(Function(tokens)
-                                    Return Expression.CreateExpression(tokens, opts)
+                                    Return opts.ParseExpression(tokens, opts)
                                 End Function)
 
                     If files.isException Then

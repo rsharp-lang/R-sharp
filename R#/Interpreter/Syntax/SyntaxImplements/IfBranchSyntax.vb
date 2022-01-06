@@ -56,13 +56,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         <Extension>
         Public Function IIfExpression(tokens As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim [select] = tokens.Split(Function(t) t.Length = 1 AndAlso t(Scan0) = (TokenType.keyword, "else")).ToArray
-            Dim [else] = Expression.CreateExpression([select](1).IteratesALL, opts)
+            Dim [else] = opts.ParseExpression([select](1).IteratesALL, opts)
             Dim sourceMap = opts.GetStackTrace(tokens(Scan0)(Scan0), "iif")
 
             tokens = [select](Scan0).IteratesALL.SplitByTopLevelDelimiter(TokenType.close, False, ")", Nothing)
 
-            Dim test = Expression.CreateExpression(tokens(Scan0).Skip(2), opts)
-            Dim [if] = Expression.CreateExpression(tokens.Skip(2).IteratesALL, opts)
+            Dim test = opts.ParseExpression(tokens(Scan0).Skip(2), opts)
+            Dim [if] = opts.ParseExpression(tokens.Skip(2).IteratesALL, opts)
 
             If [else].isException Then
                 Return [else]
@@ -81,9 +81,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         Public Function IIfExpression(test As Token(), ifelse As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim ifTest = Expression.CreateExpression(test, opts)
-            Dim trueResult = Expression.CreateExpression(ifelse(Scan0), opts)
-            Dim falseResult = Expression.CreateExpression(ifelse(2), opts)
+            Dim ifTest = opts.ParseExpression(test, opts)
+            Dim trueResult = opts.ParseExpression(ifelse(Scan0), opts)
+            Dim falseResult = opts.ParseExpression(ifelse(2), opts)
             Dim sourceMap = opts.GetStackTrace(test(Scan0), "iif")
 
             If ifTest.isException Then
@@ -104,7 +104,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
         Public Function IfClosure(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.close)
-            Dim ifTest = Expression.CreateExpression(blocks(Scan0).Skip(1), opts)
+            Dim ifTest = opts.ParseExpression(blocks(Scan0).Skip(1), opts)
 
             If ifTest.isException Then
                 Return ifTest
@@ -121,7 +121,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                             End Function)
             Else
                 ' simple body
-                closureInternal = Expression.CreateExpression(body.JoinIterates(blocks.Skip(3).IteratesALL), opts)
+                closureInternal = opts.ParseExpression(body.JoinIterates(blocks.Skip(3).IteratesALL), opts)
 
                 If closureInternal.isException Then
                     Return closureInternal
@@ -183,7 +183,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' <param name="opts"></param>
         ''' <returns></returns>
         Public Function ElseClosure(code As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim syntaxResult As SyntaxResult = Expression.CreateExpression(code, opts)
+            Dim syntaxResult As SyntaxResult = opts.ParseExpression(code, opts)
             Dim stackframe As StackFrame = opts.GetStackTrace(code(Scan0), name:="else_false")
 
             If syntaxResult.isException Then

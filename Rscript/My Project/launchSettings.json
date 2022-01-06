@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /save ./REnv.zip",
-      "workingDirectory": "E:\\GCModeller\\src\\R-sharp\\REnv"
+      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\tutorials\\data\\dataframe\\indexTest.R\"",
+      "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\REnv"
     }
   }
 }

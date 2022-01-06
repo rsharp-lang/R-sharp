@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::81373619d1d5990c685e4c6d89c626f9, R#\Runtime\Internal\objects\RConversion\conversion.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module RConversion
-    ' 
-    '         Function: asCharacters, asDataframe, asDate, asDate2, asInteger
-    '                   asList, asLogicals, asNumeric, asObject, asPipeline
-    '                   asRaw, asVector, castArrayOfGeneric, castArrayOfObject, castType
-    '                   handleListFeatureProjections, handleUnsure, isCharacter, isLogical, tryUnlistArray
-    '                   unlist, unlistOfRList, unlistRecursive
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module RConversion
+' 
+'         Function: asCharacters, asDataframe, asDate, asDate2, asInteger
+'                   asList, asLogicals, asNumeric, asObject, asPipeline
+'                   asRaw, asVector, castArrayOfGeneric, castArrayOfObject, castType
+'                   handleListFeatureProjections, handleUnsure, isCharacter, isLogical, tryUnlistArray
+'                   unlist, unlistOfRList, unlistRecursive
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -339,6 +339,12 @@ Namespace Runtime.Internal.Object.Converts
                 Return clone
             ElseIf x.GetType.IsArray AndAlso DirectCast(x, Array).Length = 0 Then
                 Return Nothing
+            ElseIf TypeOf x Is list Then
+                Return DirectCast(x, list).slots.castListToDataframe(env)
+
+            ElseIf TypeOf x Is list() OrElse (TypeOf x Is Object() AndAlso DirectCast(x, Object()).All(Function(xi) TypeOf xi Is list)) Then
+                Return DirectCast(x, Array).AsObjectEnumerator(Of list).castListRowsToDataframe(env)
+
             Else
                 If TypeOf x Is vbObject Then
                     x = DirectCast(x, vbObject).target
@@ -390,6 +396,80 @@ RE0:
                     Return makeDataframe.createDataframe(type, x, args, env)
                 End If
             End If
+        End Function
+
+        ''' <summary>
+        ''' cast row list data to a data table object.
+        ''' </summary>
+        ''' <param name="rows">
+        ''' each elements list in this collection data is a row in the generated dataframe object. 
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <Extension>
+        Private Function castListRowsToDataframe(rows As IEnumerable(Of list), env As Environment) As Object
+            Dim matrix As list() = rows.ToArray
+            Dim fieldNames As String() = matrix _
+                .Select(Function(row) row.getNames) _
+                .IteratesALL _
+                .Distinct _
+                .ToArray
+            Dim table As New dataframe With {
+                .columns = New Dictionary(Of String, Array)
+            }
+            Dim v As Array
+
+            For Each name As String In fieldNames
+                v = matrix.Select(Function(r) r(name)).ToArray
+                v = REnv.TryCastGenericArray(v, env)
+
+                Call table.add(name, v)
+            Next
+
+            Return table
+        End Function
+
+        ''' <summary>
+        ''' cast column list to dataframe
+        ''' </summary>
+        ''' <param name="listData"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <Extension>
+        Private Function castListToDataframe(listData As Dictionary(Of String, Object), env As Environment) As Object
+            Dim hasNames As Boolean = TypeOf listData.First.Value Is list
+            Dim allNames As String() = Nothing
+
+            If hasNames Then
+                allNames = listData _
+                    .Select(Function(d)
+                                Return DirectCast(d.Value, list).getNames
+                            End Function) _
+                    .IteratesALL _
+                    .Distinct _
+                    .ToArray
+            End If
+
+            Dim table As New dataframe With {
+                .columns = New Dictionary(Of String, Array),
+                .rownames = allNames
+            }
+
+            For Each field As String In listData.Keys
+                Dim raw As Object = listData(field)
+                Dim v As Array
+
+                If hasNames Then
+                    v = allNames.Select(Function(d) DirectCast(raw, list)(d)).ToArray
+                    v = REnv.TryCastGenericArray(v, env)
+                Else
+                    v = REnv.TryCastGenericArray(REnv.asVector(Of Object)(raw), env)
+                End If
+
+                Call table.add(field, v)
+            Next
+
+            Return table
         End Function
 
         <Extension>

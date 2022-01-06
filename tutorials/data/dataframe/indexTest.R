@@ -1,0 +1,1 @@
+DAM[, colnames(DAM)[colnames(DAM) like $"log2.FC.+"]];

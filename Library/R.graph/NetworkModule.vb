@@ -128,6 +128,27 @@ Public Module NetworkModule
         Return str.ToString
     End Function
 
+    <ExportAPI("graph")>
+    <RApiReturn(GetType(NetworkGraph))>
+    Public Function graph(from As String(), [to] As String(), Optional env As Environment = Nothing) As Object
+        If from.TryCount <> [to].TryCount Then
+            Return Internal.debug.stop($"size of from node({from.TryCount}) must be equals to the to nodes({[to].TryCount})!", env)
+        End If
+
+        Dim g As New NetworkGraph
+        Dim allKeys As String() = from.JoinIterates([to]).Distinct.ToArray
+
+        For Each id As String In allKeys
+            Call g.CreateNode(id)
+        Next
+
+        For i As Integer = 0 To from.Length - 1
+            Call g.CreateEdge(from(i), [to](i))
+        Next
+
+        Return g
+    End Function
+
     ''' <summary>
     ''' get graph vertex collection
     ''' </summary>
@@ -140,6 +161,42 @@ Public Module NetworkModule
     End Function
 
     ''' <summary>
+    ''' append node information via operator based on a given dataframe object
+    ''' </summary>
+    ''' <param name="v"></param>
+    ''' <param name="data"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ROperator("+")>
+    <RApiReturn(GetType(V))>
+    Public Function addNodeData(v As V,
+                                data As rDataframe,
+                                Optional env As Environment = Nothing) As Object
+
+        Dim rowIndex As Integer() = v.index(data.getRowNames, base:=0)
+        Dim err As Object
+
+        If rowIndex.All(Function(i) i = -1) Then
+            Throw New InvalidProgramException("the row names of the given data table must be the node reference unique id!")
+        End If
+
+        For Each name As String In data.colnames
+            Dim vec As Array = data(name)
+            Dim val As Array = (From i As Integer
+                                In rowIndex
+                                Select If(i = -1, Nothing, vec(i))).ToArray
+
+            err = v.setByName(name, val, env)
+
+            If Program.isException(err) Then
+                Return err
+            End If
+        Next
+
+        Return v
+    End Function
+
+    ''' <summary>
     ''' get graph edge collection.
     ''' </summary>
     ''' <param name="g"></param>
@@ -148,6 +205,17 @@ Public Module NetworkModule
     <RApiReturn(GetType(E))>
     Public Function E(g As NetworkGraph) As Object
         Return New E(g.graphEdges)
+    End Function
+
+    ''' <summary>
+    ''' get node reference id list
+    ''' </summary>
+    ''' <param name="v"></param>
+    ''' <returns></returns>
+    ''' 
+    <ExportAPI("xref")>
+    Public Function xref(v As V) As String()
+        Return v.vertex.Select(Function(vi) vi.label).ToArray
     End Function
 
     ''' <summary>
@@ -285,7 +353,9 @@ Public Module NetworkModule
     ''' <summary>
     ''' load network graph object from a given file location
     ''' </summary>
-    ''' <param name="directory">a directory which contains two data table: nodes and network edges</param>
+    ''' <param name="directory">a directory which contains two data table: 
+    ''' nodes and network edges
+    ''' </param>
     ''' <param name="defaultNodeSize">default node size in width and height</param>
     ''' <param name="defaultBrush">default brush texture descriptor string</param>
     ''' <returns></returns>

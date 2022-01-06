@@ -103,10 +103,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 name = tokens _
                     .Skip(1) _
                     .DoCall(Function(code)
-                                Return Expression.CreateExpression(code, opts)
+                                Return opts.ParseExpression(code, opts)
                             End Function)
             Else
-                name = Expression.CreateExpression(tokens, opts)
+                name = opts.ParseExpression(tokens, opts)
             End If
 
             If name.isException Then

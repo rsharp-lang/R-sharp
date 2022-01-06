@@ -192,11 +192,9 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="automation.vb" />
-    <Compile Include="config.json.vb" />
+    <Compile Include="workflow\automation.vb" />
+    <Compile Include="workflow\config.json.vb" />
     <Compile Include="devkit.vb" />
-    <Compile Include="documents\docs.vb" />
-    <Compile Include="documents\commentDocs.vb" />
     <Compile Include="documents\devStudio.vb" />
     <Compile Include="github.vb" />
     <Compile Include="sqlite.vb" />
@@ -272,6 +270,10 @@
     <ProjectReference Include="..\..\..\R#\R.vbproj">
       <Project>{0c2eb77c-39f2-460d-a3f8-ce905f867637}</Project>
       <Name>R</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\RData\RData.vbproj">
+      <Project>{0eb2f8d7-c1cc-4d43-819f-c1f533ac45a4}</Project>
+      <Name>RData</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\..\Library\JsonHelper\JsonHelper.projitems" Label="Shared" />

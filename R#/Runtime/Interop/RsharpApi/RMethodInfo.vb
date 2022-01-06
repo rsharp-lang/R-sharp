@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::0d41fb26aacfd57c6e83cf21e77feeb9, R#\Runtime\Interop\RsharpApi\RMethodInfo.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RMethodInfo
-    ' 
-    '         Properties: [namespace], invisible, name, parameters, returns
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: createNormalArguments, CreateParameterArrayFromListArgument, getArguments, GetPackageInfo, GetPrintContent
-    '                   GetRawDeclares, getReturns, getValue, (+2 Overloads) Invoke, missingParameter
-    '                   parseParameters, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RMethodInfo
+' 
+'         Properties: [namespace], invisible, name, parameters, returns
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: createNormalArguments, CreateParameterArrayFromListArgument, getArguments, GetPackageInfo, GetPrintContent
+'                   GetRawDeclares, getReturns, getValue, (+2 Overloads) Invoke, missingParameter
+'                   parseParameters, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -227,7 +227,15 @@ Namespace Runtime.Interop
         End Function
 
         Public Function CreateParameterArrayFromListArgument(envir As Environment, list As Dictionary(Of String, Object)) As Object()
-            Return createNormalArguments(envir, arguments:=list).ToArray
+            Dim parameters As New Dictionary(Of String, InvokeParameter)
+
+            For Each p In list
+                parameters(p.Key) = New InvokeParameter With {
+                    .value = New RuntimeValueLiteral(p.Value)
+                }
+            Next
+
+            Return createNormalArguments(envir, arguments:=parameters).ToArray
         End Function
 
         Public Function Invoke(envir As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
@@ -254,9 +262,9 @@ Namespace Runtime.Interop
                 Else
                     Dim callParams = InvokeParameter.CreateArguments(env, params, hasObjectList:=False)
 
-                    If callParams Like GetType(Message) Then
-                        Return callParams.TryCast(Of Message)
-                    End If
+                    'If callParams Like GetType(Message) Then
+                    '    Return callParams.TryCast(Of Message)
+                    'End If
 
                     For Each value As Object In createNormalArguments(env, callParams)
                         If Program.isException(value) Then
@@ -279,26 +287,34 @@ Namespace Runtime.Interop
         ''' required of replace dot(.) to underline(_)?
         ''' </param>
         ''' <returns></returns>
-        Private Iterator Function createNormalArguments(envir As Environment, arguments As Dictionary(Of String, Object)) As IEnumerable(Of Object)
+        Private Iterator Function createNormalArguments(envir As Environment, arguments As Dictionary(Of String, InvokeParameter)) As IEnumerable(Of Object)
             Dim arg As RMethodArgument
             Dim keys As String() = arguments.Keys.ToArray
             Dim nameKey As String
             Dim apiTrace As String = name
 
-            For Each value As Object In arguments.Values
-                If Not value Is Nothing AndAlso value.GetType Is GetType(Message) Then
-                    Yield value
-                    Return
-                End If
-            Next
+            'For Each value As Object In arguments.Values
+            '    If Not value Is Nothing AndAlso value.GetType Is GetType(Message) Then
+            '        Yield value
+            '        Return
+            '    End If
+            'Next
 
             For i As Integer = 0 To Me.parameters.Length - 1
                 arg = Me.parameters(i)
 
                 If arguments.ContainsKey(arg.name) Then
-                    Yield getValue(arg, arguments(arg.name), apiTrace, envir, False)
+                    If arg.islazyeval Then
+                        Yield arguments(arg.name).value
+                    Else
+                        Yield getValue(arg, arguments(arg.name).Evaluate(envir), apiTrace, envir, False)
+                    End If
                 ElseIf arguments.ContainsKey(arg.name.Replace("_", ".")) Then
-                    Yield getValue(arg, arguments(arg.name.Replace("_", ".")), apiTrace, envir, False)
+                    If arg.islazyeval Then
+                        Yield arguments(arg.name.Replace("_", ".")).value
+                    Else
+                        Yield getValue(arg, arguments(arg.name.Replace("_", ".")).Evaluate(envir), apiTrace, envir, False)
+                    End If
                 ElseIf i >= arguments.Count Then
                     ' default value
                     If arg.type.raw Is GetType(Environment) Then
@@ -316,7 +332,11 @@ Namespace Runtime.Interop
                     nameKey = $"${i}"
 
                     If arguments.ContainsKey(nameKey) Then
-                        Yield getValue(arg, arguments(nameKey), apiTrace, envir, False)
+                        If arg.islazyeval Then
+                            Yield arguments(nameKey).value
+                        Else
+                            Yield getValue(arg, arguments(nameKey).Evaluate(envir), apiTrace, envir, False)
+                        End If
                     Else
                         If arg.isOptional Then
                             If TypeOf arg.default Is Expression Then
@@ -361,15 +381,20 @@ Namespace Runtime.Interop
         ''' offset bugs
         ''' </param>
         ''' <returns></returns>
-        Friend Shared Function getValue(arg As RMethodArgument, value As Object, trace$, ByRef envir As Environment, trygetListParam As Boolean) As Object
-            If arg.type Like GetType(Environment) Then
+        Friend Shared Function getValue(arg As RMethodArgument,
+                                        value As Object,
+                                        trace$,
+                                        ByRef envir As Environment,
+                                        trygetListParam As Boolean) As Object
+
+            If Program.isException(value, envir) Then
+                Return value
+            ElseIf arg.type Like GetType(Environment) Then
                 If value IsNot Nothing AndAlso value.GetType.IsInheritsFrom(GetType(Environment)) Then
                     Return value
                 Else
                     Return envir
                 End If
-            ElseIf Program.isException(value, envir) Then
-                Return value
             ElseIf value Is Nothing Then
                 Return Nothing
             ElseIf value.GetType Is arg.type.raw Then

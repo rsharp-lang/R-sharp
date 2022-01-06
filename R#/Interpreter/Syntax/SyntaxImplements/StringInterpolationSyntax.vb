@@ -66,7 +66,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                         .Skip(1) _
                         .Take(part.Length - 2) _
                         .DoCall(Function(code)
-                                    Return Expression.CreateExpression(code, opts)
+                                    Return opts.ParseExpression(code, opts)
                                 End Function)
 
                     If syntaxTemp.isException Then

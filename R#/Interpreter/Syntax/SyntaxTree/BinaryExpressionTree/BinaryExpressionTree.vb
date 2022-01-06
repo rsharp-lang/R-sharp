@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::f2fb069594cd3c089004d4dc8a1da3fc, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module BinaryExpressionTree
-    ' 
-    '         Function: joinNegatives, joinRemaining, MeasureCurrentLine, ParseBinaryExpression, processOperators
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module BinaryExpressionTree
+' 
+'         Function: joinNegatives, joinRemaining, MeasureCurrentLine, ParseBinaryExpression, processOperators
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -93,7 +93,7 @@ Namespace Interpreter.SyntaxParser
                 ElseIf tokenBlocks = 2 Then
                     ' UnaryNumeric
                     Dim unaryOp = tokenBlocks(Scan0)(Scan0).text
-                    Dim operon = Expression.CreateExpression(tokenBlocks(1), opts)
+                    Dim operon = opts.ParseExpression(tokenBlocks(1), opts)
 
                     If operon.isException Then
                         Return operon
@@ -109,7 +109,7 @@ Namespace Interpreter.SyntaxParser
             For i As Integer = Scan0 To tokenBlocks.Count - 1
                 If ++index Mod 2 = 0 Then
                     If tokenBlocks(i).isOperator("+", "-") Then
-                        syntaxResult = Expression.CreateExpression(tokenBlocks(i + 1), opts)
+                        syntaxResult = opts.ParseExpression(tokenBlocks(i + 1), opts)
 
                         If syntaxResult.isException Then
                             Return syntaxResult
@@ -125,7 +125,7 @@ Namespace Interpreter.SyntaxParser
                         End If
                     ElseIf tokenBlocks(i).isOperator("!") Then
                         ' not ...
-                        syntaxResult = Expression.CreateExpression(tokenBlocks(i + 1), opts)
+                        syntaxResult = opts.ParseExpression(tokenBlocks(i + 1), opts)
 
                         If syntaxResult.isException Then
                             Return syntaxResult
@@ -137,13 +137,41 @@ Namespace Interpreter.SyntaxParser
                         End If
 
                     Else
-                        syntaxResult = Expression.CreateExpression(tokenBlocks(i), opts)
+                        syntaxResult = opts.ParseExpression(tokenBlocks(i), opts)
 
                         If syntaxResult.isException Then
                             Return syntaxResult
                         Else
                             Call buf.Add(syntaxResult)
                         End If
+                    End If
+                ElseIf Not tokenBlocks(i).isOperator Then
+                    Dim list = tokenBlocks(i)
+
+                    If list.First = (TokenType.open, "(") AndAlso list.Last = (TokenType.close, ")") Then
+                        If buf.Last.TryCast(Of SyntaxResult) Like GetType(SymbolReference) Then
+                            Dim params As New List(Of Expression)
+                            Dim trace = opts.GetStackTrace(list.First, buf.Last.ToString)
+                            Dim temp As SyntaxResult
+
+                            For Each par As Token() In list _
+                                .Skip(1) _
+                                .Take(list.Length - 2) _
+                                .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True)
+
+                                temp = opts.ParseExpression(par, opts)
+
+                                If temp.isException Then
+                                    Return temp
+                                Else
+                                    params.Add(temp.expression)
+                                End If
+                            Next
+
+                            Call buf.Add(New SyntaxResult(New FunctionInvoke(buf.Pop.TryCast(Of SyntaxResult).expression, trace, params.ToArray)))
+                        End If
+                    Else
+                        Return New SyntaxResult(SyntaxError.CreateError(opts, New SyntaxErrorException()))
                     End If
                 Else
                     Call buf.Add(tokenBlocks(i)(Scan0).text)
@@ -172,7 +200,7 @@ Namespace Interpreter.SyntaxParser
                             Return buf(Scan0).TryCast(Of SyntaxResult)
                         End If
                     ElseIf unary = (TokenType.operator, "!") Then
-                        Dim value As SyntaxResult = Expression.CreateExpression(tokenBlocks(1), opts)
+                        Dim value As SyntaxResult = opts.ParseExpression(tokenBlocks(1), opts)
 
                         If value.isException Then
                             Return value

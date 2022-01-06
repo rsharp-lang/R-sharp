@@ -43,6 +43,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -84,7 +85,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     .Take(tokens.Length - 2) _
                     .ToArray
 
-                index = opts.UsingVectorBuilder(Function(opt) Expression.CreateExpression(tokens, opt))
+                index = opts.UsingVectorBuilder(Function(opt) opts.ParseExpression(tokens, opt))
 
                 If index.isException Then
                     Return index
@@ -111,7 +112,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' ``a[x]``
         ''' </param>
         Public Function SymbolIndexer(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim symbol As SyntaxResult = {tokens(Scan0)}.DoCall(Function(code) Expression.CreateExpression(code, opts))
+            Dim symbol As SyntaxResult = {tokens(Scan0)}.DoCall(Function(code) opts.ParseExpression(code, opts))
 
             If symbol.isException Then
                 Return symbol
@@ -119,12 +120,26 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 opts = opts.SetCurrentRange(tokens)
             End If
 
-            tokens = tokens _
-                .Skip(2) _
-                .Take(tokens.Length - 3) _
-                .ToArray
+            Dim blocks = tokens.Skip(1).SplitByTopLevelDelimiter(TokenType.close, includeKeyword:=True, tokenText:="]")
+            Dim parsed = symbol.expression.SymbolIndexer(blocks(0).Skip(1).ToArray, opts)
 
-            Return symbol.expression.SymbolIndexer(tokens, opts)
+            If parsed.isException Then
+                Return parsed
+            End If
+
+            If blocks > 2 Then
+                For Each block In blocks.Skip(2).SlideWindows(2)
+                    tokens = block.IteratesALL.ToArray
+                    tokens = tokens.Skip(1).Take(tokens.Length - 2).ToArray
+                    parsed = parsed.expression.SymbolIndexer(tokens, opts)
+
+                    If parsed.isException Then
+                        Return parsed
+                    End If
+                Next
+            End If
+
+            Return parsed
         End Function
 
         ''' <summary>
@@ -138,7 +153,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' <param name="ref"></param>
         ''' <param name="indexer"></param>
         Public Function SymbolIndexer(ref As Token(), indexer As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim symbol As SyntaxResult = Expression.CreateExpression(ref, opts)
+            Dim symbol As SyntaxResult = opts.ParseExpression(ref, opts)
             Dim index As SyntaxResult = Nothing
             Dim indexType As SymbolIndexers
 
@@ -187,7 +202,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     indexType = SymbolIndexers.vectorIndex
                 End If
 
-                index = Expression.CreateExpression(tokens, opts)
+                index = opts.ParseExpression(tokens, opts)
             End If
         End Sub
 
@@ -198,15 +213,18 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' <param name="index"></param>
         ''' <param name="indexType"></param>
         <Extension>
-        Private Sub parseDataframeIndex(blocks As List(Of Token()), ByRef index As SyntaxResult, ByRef indexType As SymbolIndexers, opts As SyntaxBuilderOptions)
+        Private Sub parseDataframeIndex(blocks As List(Of Token()),
+                                        ByRef index As SyntaxResult,
+                                        ByRef indexType As SymbolIndexers,
+                                        opts As SyntaxBuilderOptions)
             If blocks(0).isComma Then
                 ' x[, a] by columns
                 indexType = SymbolIndexers.dataframeColumns
-                index = Expression.CreateExpression(blocks.Skip(1).IteratesALL, opts)
+                index = opts.ParseExpression(blocks.Skip(1).IteratesALL, opts)
             ElseIf blocks = 2 AndAlso blocks(1).isComma Then
                 ' x[a, ] by row
                 indexType = SymbolIndexers.dataframeRows
-                index = Expression.CreateExpression(blocks(Scan0), opts)
+                index = opts.ParseExpression(blocks(Scan0), opts)
             Else
                 Dim elements As New List(Of Expression)
 
@@ -216,7 +234,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 For Each result As SyntaxResult In blocks _
                     .Where(Function(t) Not t.isComma) _
                     .Select(Function(tokens)
-                                Return Expression.CreateExpression(tokens, opts)
+                                Return opts.ParseExpression(tokens, opts)
                             End Function)
 
                     If result.isException Then

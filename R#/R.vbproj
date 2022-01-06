@@ -905,7 +905,9 @@
     <Compile Include="Runtime\Internal\objects\RConversion\castRaw.vb" />
     <Compile Include="Runtime\Internal\objects\utils\TableJoint.vb" />
     <Compile Include="Runtime\Internal\objects\utils\TableRow.vb" />
+    <Compile Include="Runtime\Internal\printer\tablePrinter.vb" />
     <Compile Include="Runtime\Interop\CType\ITupleConstructor.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\RLazyExpressionAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSymbolLanguageMaskAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RDefaultExpressionAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RApiReturnAttribute.vb" />
@@ -932,6 +934,7 @@
     <Compile Include="Runtime\Internal\objects\base\dataframeBase.vb" />
     <Compile Include="System\Document\CodeAnalysis\SymbolAnalysis.vb" />
     <Compile Include="System\Document\Printer\ScriptFormatterPrinter.vb" />
+    <Compile Include="System\HybridsEngine.vb" />
     <Compile Include="System\LambdaCompiler.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RCommandLine.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RReturns.vb" />

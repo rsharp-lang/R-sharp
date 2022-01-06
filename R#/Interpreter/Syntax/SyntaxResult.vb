@@ -127,13 +127,16 @@ Namespace Interpreter.SyntaxParser
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateExpression(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
-            Return RExpression.CreateExpression(tokens, opts)
-        End Function
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Widening Operator CType(syntax As RExpression) As SyntaxResult
             Return New SyntaxResult(syntax)
+        End Operator
+
+        Public Shared Operator Like(syntax As SyntaxResult, type As Type) As Boolean
+            If syntax Is Nothing OrElse syntax.expression Is Nothing Then
+                Return False
+            End If
+
+            Return syntax.expression.GetType Is type
         End Operator
     End Class
 End Namespace

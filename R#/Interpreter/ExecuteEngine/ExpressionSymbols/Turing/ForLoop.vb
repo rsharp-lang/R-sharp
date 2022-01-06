@@ -174,7 +174,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                     Return err
                 End If
 
-                Return body.Invoke(closure, {})
+                Return body.body.Evaluate(closure)
             End Using
         End Function
 

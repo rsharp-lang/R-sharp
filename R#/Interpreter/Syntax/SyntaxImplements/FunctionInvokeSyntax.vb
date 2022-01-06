@@ -118,7 +118,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                                 Return SyntaxImplements.ValueAssign(parts, opts)
                             Else
                                 ' is a value expression
-                                Return Expression.CreateExpression(param, opts)
+                                Return opts.ParseExpression(param, opts)
                             End If
                         End Function)
 

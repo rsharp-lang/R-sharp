@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::37c9c7495ad4fea313af7c2ce5f603c4, R#\Runtime\Internal\objects\names.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module names
-    ' 
-    '         Function: checkChar, getColNames, getNames, getRowNames, makeNames
-    '                   setColNames, setNames, setRowNames, uniqueNames
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module names
+' 
+'         Function: checkChar, getColNames, getNames, getRowNames, makeNames
+'                   setColNames, setNames, setRowNames, uniqueNames
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object
 
@@ -124,32 +125,16 @@ RE0:
                 Case GetType(vector)
                     Return DirectCast([object], vector).getNames
                 Case Else
-                    If type.IsArray Then
-                        Dim objVec As Array = Runtime.asVector(Of Object)([object])
+                    If type.ImplementInterface(Of IReflector) Then
+                        Return DirectCast([object], IReflector).getNames
+                    ElseIf type.IsArray Then
+                        Dim objVec As Array = REnv.asVector(Of Object)([object])
+                        Dim names As String() = getArrayNames(objVec)
 
-                        If objVec _
-                            .AsObjectEnumerator _
-                            .All(Function(o)
-                                     Return o.GetType Is GetType(Group)
-                                 End Function) Then
-
-                            Return objVec.AsObjectEnumerator _
-                                .Select(Function(g)
-                                            Return Scripting.ToString(DirectCast(g, Group).key, "NULL")
-                                        End Function) _
-                                .ToArray
-                        ElseIf objVec _
-                            .AsObjectEnumerator _
-                            .All(Function(o)
-                                     Return o.GetType.ImplementInterface(GetType(INamedValue))
-                                 End Function) Then
-
-                            Return objVec.AsObjectEnumerator _
-                                .Select(Function(o)
-                                            Return DirectCast(o, INamedValue).Key
-                                        End Function) _
-                                .ToArray
+                        If Not names Is Nothing Then
+                            Return names
                         End If
+
                     ElseIf type.ImplementInterface(GetType(IDictionary)) Then
                         Dim keys As vector = DirectCast([object], IDictionary) _
                             .Keys _
@@ -162,6 +147,35 @@ RE0:
 
                     Return Internal.debug.stop({"unsupported!", "func: names", "type: " & type.FullName}, envir)
             End Select
+        End Function
+
+        <Extension>
+        Private Function getArrayNames(objvec As Array) As String()
+            If objvec _
+                .AsObjectEnumerator _
+                .All(Function(o)
+                         Return o.GetType Is GetType(Group)
+                     End Function) Then
+
+                Return objvec.AsObjectEnumerator _
+                    .Select(Function(g)
+                                Return Scripting.ToString(DirectCast(g, Group).key, "NULL")
+                            End Function) _
+                    .ToArray
+            ElseIf objvec _
+                .AsObjectEnumerator _
+                .All(Function(o)
+                         Return o.GetType.ImplementInterface(GetType(INamedValue))
+                     End Function) Then
+
+                Return objvec.AsObjectEnumerator _
+                    .Select(Function(o)
+                                Return DirectCast(o, INamedValue).Key
+                            End Function) _
+                    .ToArray
+            End If
+
+            Return Nothing
         End Function
 
         ''' <summary>

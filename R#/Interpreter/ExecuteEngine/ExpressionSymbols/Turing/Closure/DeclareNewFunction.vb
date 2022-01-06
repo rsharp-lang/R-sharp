@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::b2bb0546b4d7dc7bd90961fa2f490f3c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class DeclareNewFunction
-    ' 
-    '         Properties: [Namespace], body, expressionName, funcName, parameters
-    '                     stackFrame, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, getArguments, getReturns, InitializeEnvironment, (+2 Overloads) Invoke
-    '                   MissingParameters, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class DeclareNewFunction
+' 
+'         Properties: [Namespace], body, expressionName, funcName, parameters
+'                     stackFrame, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, getArguments, getReturns, InitializeEnvironment, (+2 Overloads) Invoke
+'                   MissingParameters, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -136,10 +136,17 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Return Internal.debug.stop(message, envir)
         End Function
 
+        ''' <summary>
+        ''' set parameters
+        ''' </summary>
+        ''' <param name="parent"></param>
+        ''' <param name="params"></param>
+        ''' <param name="runDispose"></param>
+        ''' <returns></returns>
         Private Function InitializeEnvironment(parent As Environment, params As InvokeParameter(), ByRef runDispose As Boolean) As [Variant](Of Message, Environment)
             Dim var As DeclareNewSymbol
             Dim value As Object
-            Dim arguments As Dictionary(Of String, Object)
+            Dim arguments As Dictionary(Of String, InvokeParameter)
             Dim envir As Environment = Me.envir
 
             If envir Is Nothing Then
@@ -147,7 +154,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 envir = parent
             Else
                 runDispose = True
-                envir = New Environment(parent, stackFrame, isInherits:=False) & envir
+                envir = parent & envir
             End If
 
             Dim argumentKeys As String()
@@ -155,21 +162,24 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
             ' function parameter should be evaluate 
             ' from the parent environment.
-            With InvokeParameter.CreateArguments(parent, params, hasObjectList:=True)
-                If .GetUnderlyingType Is GetType(Message) Then
-                    Return .TryCast(Of Message)
-                Else
-                    arguments = .TryCast(Of Dictionary(Of String, Object))
-                    argumentKeys = arguments.Keys.ToArray
-                End If
-            End With
+            'With InvokeParameter.CreateArguments(parent, params, hasObjectList:=True)
+            '    If .GetUnderlyingType Is GetType(Message) Then
+            '        Return .TryCast(Of Message)
+            '    Else
+            '        arguments = .TryCast(Of Dictionary(Of String, Object))
+            '        argumentKeys = arguments.Keys.ToArray
+            '    End If
+            'End With
+
+            arguments = InvokeParameter.CreateArguments(parent, params, hasObjectList:=True)
+            argumentKeys = arguments.Keys.ToArray
 
             ' initialize environment
             For i As Integer = 0 To Me.parameters.Length - 1
                 var = Me.parameters(i)
 
                 If arguments.ContainsKey(var.names(Scan0)) Then
-                    value = arguments(var.names(Scan0))
+                    value = arguments(var.names(Scan0)).Evaluate(envir)
                 ElseIf i >= params.Length Then
                     ' missing, use default value
                     If var.hasInitializeExpression Then
@@ -185,7 +195,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     key = "$" & i
 
                     If arguments.ContainsKey(key) Then
-                        value = arguments(key)
+                        value = arguments(key).Evaluate(envir)
                     ElseIf var.hasInitializeExpression Then
                         value = var.value.Evaluate(envir)
                     ElseIf TypeOf params(i).value Is ValueAssignExpression Then
@@ -197,31 +207,35 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         Return Internal.debug.stop({$"argument '{var.names.First}' is required, but missing!", $"name: {var.names.First}"}, envir)
                     Else
                         key = argumentKeys(i)
-                        value = arguments(key)
+                        value = arguments(key).Evaluate(envir)
                     End If
                 End If
+
+                For Each name As String In var.names
+                    Call envir.Delete(name, seekParent:=False)
+                Next
 
                 ' 20191120 对于函数对象而言，由于拥有自己的环境，在构建闭包之后
                 ' 多次调用函数会重复利用之前的环境参数
                 ' 所以在这里只需要判断一下更新值或者插入新的变量
-                If var.names.Any(AddressOf envir.symbols.ContainsKey) Then
-                    ' 只检查自己的环境中的变量
-                    ' 因为函数参数是只属于自己的环境之中的符号
-                    Dim names As Literal() = var.names _
-                        .Select(Function(name) New Literal(name)) _
-                        .ToArray
+                'If var.names.Any(AddressOf envir.symbols.ContainsKey) Then
+                '    ' 只检查自己的环境中的变量
+                '    ' 因为函数参数是只属于自己的环境之中的符号
+                '    Dim names As Literal() = var.names _
+                '        .Select(Function(name) New Literal(name)) _
+                '        .ToArray
 
-                    Call ValueAssignExpression.doValueAssign(envir, names, True, value)
-                Else
-                    Dim err As Message = Nothing
+                '    Call ValueAssignExpression.doValueAssign(envir, names, True, value)
+                'Else
+                Dim err As Message = Nothing
 
-                    ' 不存在，则插入新的
-                    Call DeclareNewSymbol.PushNames(var.names, value, var.type, False, envir, err:=err)
+                ' 不存在，则插入新的
+                Call DeclareNewSymbol.PushNames(var.names, value, var.type, False, envir, err:=err)
 
-                    If Not err Is Nothing Then
-                        Return err
-                    End If
+                If Not err Is Nothing Then
+                    Return err
                 End If
+                ' End If
             Next
 
             Return envir

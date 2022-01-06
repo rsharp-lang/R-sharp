@@ -53,6 +53,7 @@ Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -149,7 +150,13 @@ Namespace Interpreter
             _globalEnvir.Push(".GlobalEnv", globalEnvir, True, TypeCodes.generic)
 
             For Each name As String In env.options.environments.SafeQuery
-                Call env.hybridsEngine.Register(dllpath:=$"{App.HOME}/{name}")
+                Dim dllfile As String = $"{App.HOME}/{name}"
+
+                If dllfile.FileExists Then
+                    Call env.hybridsEngine.Register(dllpath:=dllfile)
+                Else
+                    Call env.AddMessage($"ignore missing script engine module: {dllfile}...", MSG_TYPES.WRN)
+                End If
             Next
 
             ' config R# interpreter engine

@@ -90,7 +90,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .Skip(2) _
                 .IteratesALL _
                 .DoCall(Function(code)
-                            Return Expression.CreateExpression(code, opts)
+                            Return opts.ParseExpression(code, opts)
                         End Function)
 
             If sequence.isException Then

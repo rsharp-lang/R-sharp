@@ -1,48 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::ae7ba56df138758a5e428bdaa81f35eb, R#\Runtime\Internal\internalInvokes\string\stringr.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module stringr
-    ' 
-    '         Function: [objToString], base64Decode, base64Str, bencode, charAt
-    '                   chr, Csprintf, decodeObject, findToStringWithFormat, fromBstring
-    '                   grep, html, json, loadXml, match
-    '                   nchar, paste, rawBufferBase64, regexp, splitSingleStrAuto
-    '                   sprintfSingle, str_empty, str_pad, (+2 Overloads) str_replace, strPad_internal
-    '                   strsplit, substr, tagvalue, tolower, urldecode
-    '                   xml
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module stringr
+' 
+'         Function: [objToString], base64Decode, base64Str, bencode, charAt
+'                   chr, Csprintf, decodeObject, findToStringWithFormat, fromBstring
+'                   grep, html, json, loadXml, match
+'                   nchar, paste, rawBufferBase64, regexp, splitSingleStrAuto
+'                   sprintfSingle, str_empty, str_pad, (+2 Overloads) str_replace, strPad_internal
+'                   strsplit, substr, tagvalue, tolower, urldecode
+'                   xml
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.Trinity
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
@@ -855,6 +856,33 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("toupper")>
         Public Function toupper(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
             Return env.EvaluateFramework(Of String, String)(x, AddressOf VBStr.UCase)
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="data"></param>
+        ''' <param name="comma"></param>
+        ''' <param name="andalso"></param>
+        ''' <param name="etc"></param>
+        ''' <param name="joinSpace"></param>
+        ''' <param name="enUS"></param>
+        ''' <returns>
+        ''' if the input data list contains no elements or it is 
+        ''' nothing, then this function will returns nothing
+        ''' </returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <ExportAPI("concatenate")>
+        Public Function concatenate(<RRawVectorArgument>
+                                    data As Object,
+                                    Optional comma$ = ",",
+                                    Optional andalso$ = "and",
+                                    Optional etc$ = "etc",
+                                    Optional joinSpace As Boolean = True,
+                                    Optional enUS As Boolean = False) As String
+
+            Return DirectCast(REnv.asVector(Of String)(data), String()) _
+                .Concatenate(comma, [andalso], etc, joinSpace, enUS)
         End Function
 
         ''' <summary>

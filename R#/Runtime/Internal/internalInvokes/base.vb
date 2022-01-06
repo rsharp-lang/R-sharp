@@ -339,20 +339,64 @@ Namespace Runtime.Internal.Invokes
         ''' Missing values In test give missing values In the result.
         ''' </remarks>
         <ExportAPI("ifelse")>
-        Public Function ifelse(test As Boolean(), yes As Array, no As Array, Optional env As Environment = Nothing) As Object
-            Dim getYes As Func(Of Integer, Object) = New GetVectorElement(yes).Getter
-            Dim getNo As Func(Of Integer, Object) = New GetVectorElement(no).Getter
-            Dim result As New List(Of Object)
+        Public Function ifelse(test As Boolean(),
+                               <RRawVectorArgument> <RLazyExpression> yes As Object,
+                               <RRawVectorArgument> <RLazyExpression> no As Object,
+                               Optional env As Environment = Nothing) As Object
 
-            For i As Integer = 0 To test.Length - 1
-                If test(i) Then
-                    result.Add(getYes(i))
+            If test.Length = 0 Then
+                Return {}
+            ElseIf test.Length = 1 Then
+                Dim flag As Boolean = test(Scan0)
+
+                If flag Then
+                    If TypeOf yes Is Expression Then
+                        Return DirectCast(yes, Expression).Evaluate(env)
+                    Else
+                        Return yes
+                    End If
                 Else
-                    result.Add(getNo(i))
+                    If TypeOf no Is Expression Then
+                        Return DirectCast(no, Expression).Evaluate(env)
+                    Else
+                        Return no
+                    End If
                 End If
-            Next
+            Else
+                Dim result As New List(Of Object)
 
-            Return REnv.TryCastGenericArray(result, env)
+                If TypeOf yes Is Expression Then
+                    yes = DirectCast(yes, Expression).Evaluate(env)
+
+                    If Program.isException(yes) Then
+                        Return yes
+                    Else
+                        yes = REnv.asVector(Of Object)(yes)
+                    End If
+                End If
+                If TypeOf no Is Expression Then
+                    no = DirectCast(no, Expression).Evaluate(env)
+
+                    If Program.isException(no) Then
+                        Return no
+                    Else
+                        no = REnv.asVector(Of Object)(no)
+                    End If
+                End If
+
+                Dim getYes As Func(Of Integer, Object) = New GetVectorElement(yes).Getter
+                Dim getNo As Func(Of Integer, Object) = New GetVectorElement(no).Getter
+
+                For i As Integer = 0 To test.Length - 1
+                    If test(i) Then
+                        result.Add(getYes(i))
+                    Else
+                        result.Add(getNo(i))
+                    End If
+                Next
+
+                Return REnv.TryCastGenericArray(result, env)
+            End If
         End Function
 
         ''' <summary>
@@ -414,8 +458,11 @@ Namespace Runtime.Internal.Invokes
         ''' integer or double vector.</param>
         ''' <returns></returns>
         <ExportAPI("rep")>
-        Public Function rep(x As Object, times As Integer) As Object
-            Return Repeats(x, times)
+        Public Function rep(x As Object,
+                            times As Integer,
+                            Optional env As Environment = Nothing) As Object
+
+            Return REnv.asVector(Repeats(x, times), If(x Is Nothing, GetType(Object), x.GetType), env)
         End Function
 
         ''' <summary>

@@ -6,12 +6,33 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module Programa
     Sub Main(args As String())
 
+        Call tupleTest()
         Call forLoop()
         Call parseFile()
 
         Call parseFunction()
         Call parseHelloWorld()
 
+    End Sub
+
+    Sub tupleTest()
+        Dim tuple = "
+a = 1
+b = 2
+
+print([a, b])
+
+b, a = a, b
+
+print([a, b])
+
+str((a, b))
+"
+
+        Dim text As Rscript = Rscript.AutoHandleScript(tuple)
+        Dim py As Program = text.ParsePyScript
+
+        Pause()
     End Sub
 
     Sub forLoop()

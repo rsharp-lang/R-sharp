@@ -63,6 +63,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 Imports obj = Microsoft.VisualBasic.Scripting
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Linq
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
@@ -229,13 +230,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         ''' <summary>
-        ''' Returns distinct elements from a sequence by using a specified System.Collections.Generic.IEqualityComparer`1
-        ''' to compare values.
+        ''' Returns distinct elements from a sequence by using a specified 
+        ''' IEqualityComparer to compare values.
         ''' </summary>
         ''' <param name="items">The sequence to remove duplicate elements from.</param>
-        ''' <param name="getKey">An System.Collections.Generic.IEqualityComparer`1 to compare values.</param>
+        ''' <param name="getKey">An IEqualityComparer to compare values.</param>
         ''' <param name="envir"></param>
-        ''' <returns>An System.Collections.Generic.IEnumerable`1 that contains distinct elements from
+        ''' <returns>An IEnumerable that contains distinct elements from
         ''' the source sequence.</returns>
         <ExportAPI("unique")>
         Private Function unique(<RRawVectorArgument>
@@ -597,7 +598,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         ''' <summary>
-        ''' 
+        ''' group vector/list by a given evaluator or group a dataframe rows
+        ''' by the cell values of a specific column.
         ''' </summary>
         ''' <param name="sequence"></param>
         ''' <param name="getKey"></param>
@@ -608,6 +610,20 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                  sequence As Object,
                                  Optional getKey As Object = Nothing,
                                  Optional env As Environment = Nothing) As Object
+
+            If TypeOf sequence Is dataframe Then
+                Dim table As dataframe = DirectCast(sequence, dataframe)
+                Dim colName As String = DirectCast(REnv.asVector(Of String)(getKey), String()).GetValue(Scan0)
+
+                Return New list(GetType(dataframe)) With {
+                    .slots = table _
+                        .groupBy(colName) _
+                        .ToDictionary(Function(d) d.Key,
+                                      Function(d)
+                                          Return CObj(d.Value)
+                                      End Function)
+                }
+            End If
 
             Dim measure = tryKeyBy(getKey, env)
 
@@ -839,7 +855,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                              End If
 
                              Dim sng As Object = REnv.single(out)
-                             Dim flag As Object = RCType.CTypeDynamic(sng, GetType(Boolean), env)
+                             Dim flag As Object = Converts.RCType.CTypeDynamic(sng, GetType(Boolean), env)
 
                              Return DirectCast(flag, Boolean)
                          End Function

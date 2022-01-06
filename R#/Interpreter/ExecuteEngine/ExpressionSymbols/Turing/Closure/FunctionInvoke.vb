@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::edd46c4e5fe5d9d0a8804cb7722e009e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class FunctionInvoke
-    ' 
-    '         Properties: [namespace], expressionName, funcName, parameters, stackFrame
-    '                     type
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: allIsValueAssign, doInvokeFuncVar, EnumerateInvokedParameters, Evaluate, (+2 Overloads) GetFunctionVar
-    '                   getFuncVar, HandleResult, invokeRInternal, runOptions, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class FunctionInvoke
+' 
+'         Properties: [namespace], expressionName, funcName, parameters, stackFrame
+'                     type
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: allIsValueAssign, doInvokeFuncVar, EnumerateInvokedParameters, Evaluate, (+2 Overloads) GetFunctionVar
+'                   getFuncVar, HandleResult, invokeRInternal, runOptions, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -50,6 +50,7 @@ Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Package.File
@@ -155,8 +156,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Dim target As Object = getFuncVar(funcName, [namespace], envir)
             Dim result As Object
 
-            If Not target Is Nothing AndAlso target.GetType Is GetType(Message) Then
+            If target Is Nothing Then
+                ' is system internal callable method
+            ElseIf target.GetType Is GetType(Message) Then
                 Return target
+            ElseIf Not target.GetType.ImplementInterface(Of RFunction) Then
+                If Not TypeOf target Is Regex Then
+                    Return Internal.debug.stop({
+                        $"the given symbol is not callable!",
+                        $"target: {funcName.ToString}",
+                        $"schema: {target.GetType.FullName}"
+                    }, envir)
+                End If
             End If
 
             Using env As New Environment(envir, stackFrame, isInherits:=True)
@@ -322,7 +333,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 ' loop, then returns result will be wrapped as return runtime literal value
                 ' so we needs to break such wrapper at here
                 ' or ctype error will happends
-                Dim result As Object = DirectCast(funcVar, RFunction).Invoke(envir, InvokeParameter.Create(expressions:=parameters))
+                Dim arguments As InvokeParameter() = InvokeParameter.Create(expressions:=parameters)
+                Dim result As Object = DirectCast(funcVar, RFunction).Invoke(envir, arguments)
 
                 If Not result Is Nothing Then
                     If result.GetType Is GetType(ReturnValue) AndAlso DirectCast(result, ReturnValue).IsRuntimeFunctionReturnWrapper Then

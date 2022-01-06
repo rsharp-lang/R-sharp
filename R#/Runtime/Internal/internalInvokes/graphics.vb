@@ -42,6 +42,7 @@
 
 Imports System.Drawing
 Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
@@ -52,11 +53,15 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
+<Assembly: InternalsVisibleTo("ggplot")>
+
 Namespace Runtime.Internal.Invokes
 
     Module graphics
 
         ''' <summary>
+        ''' ## Generic X-Y Plotting
+        ''' 
         ''' Generic function for plotting of R objects. 
         ''' </summary>
         ''' <param name="[object]"></param>
