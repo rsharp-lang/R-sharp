@@ -43,9 +43,13 @@ Namespace Runtime
         Private Sub getSize(width As Object, height As Object, env As Environment, ByRef w As Double, ByRef h As Double)
             If TypeOf width Is Expression Then
                 width = DirectCast(width, Expression).Evaluate(env)
+            ElseIf TypeOf width Is InvokeParameter Then
+                width = eval(width, env)
             End If
             If TypeOf height Is Expression Then
                 height = DirectCast(height, Expression).Evaluate(env)
+            ElseIf TypeOf height Is InvokeParameter Then
+                height = eval(height, env)
             End If
 
             w = REnv.single(REnv.asVector(Of Double)(width))
