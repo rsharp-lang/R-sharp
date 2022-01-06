@@ -106,6 +106,36 @@ Public Module SyntaxTree
                             current.Add(New ReturnValue(result.expression))
                         End If
 
+                    Case "from"
+
+                        Dim package As Token = line.tokens(1)
+
+                        If line.tokens(2) = (TokenType.keyword, "import") Then
+                            ' from ... import ...
+                            tokens = line.tokens.Skip(3).ToArray
+
+                            Dim pkgName = ParsePythonLine({package}, opts)
+                            Dim list = tokens _
+                                .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True) _
+                                .Select(Function(t)
+                                            Dim expr = ParsePythonLine(t, opts).expression
+
+                                            If TypeOf expr Is SymbolReference Then
+                                                expr = New Literal(DirectCast(expr, SymbolReference).symbol)
+                                            End If
+
+                                            Return expr
+                                        End Function) _
+                                .ToArray
+                            Dim vec As New List(Of Expression)
+                            Dim libname As New Literal(ValueAssignExpression.GetSymbol(pkgName.expression))
+                            Dim importPkgs As New [Imports](New VectorLiteral(vec), libname, source:=script.source)
+
+                            Call current.Add(importPkgs)
+                        Else
+                            Throw New NotImplementedException
+                        End If
+
                     Case "import"
 
                         tokens = line.tokens.Skip(1).ToArray
