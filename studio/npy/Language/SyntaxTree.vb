@@ -117,6 +117,9 @@ Public Module SyntaxTree
                             Dim pkgName = ParsePythonLine({package}, opts)
                             Dim list = tokens _
                                 .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True) _
+                                .Where(Function(r)
+                                           Return Not (r.Length = 1 AndAlso r(Scan0).name = TokenType.comma)
+                                       End Function) _
                                 .Select(Function(t)
                                             Dim expr = ParsePythonLine(t, opts).expression
 
@@ -127,9 +130,8 @@ Public Module SyntaxTree
                                             Return expr
                                         End Function) _
                                 .ToArray
-                            Dim vec As New List(Of Expression)
                             Dim libname As New Literal(ValueAssignExpression.GetSymbol(pkgName.expression))
-                            Dim importPkgs As New [Imports](New VectorLiteral(vec), libname, source:=script.source)
+                            Dim importPkgs As New [Imports](New VectorLiteral(list), libname, source:=script.source)
 
                             Call current.Add(importPkgs)
                         Else
