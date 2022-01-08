@@ -153,11 +153,8 @@ Partial Module base
                 Dim var As RSymbol = envir.FindSymbol(obj.Name)
 
                 If var Is Nothing Then
-                    var = New RSymbol With {
-                        .name = obj.Name,
-                        .[readonly] = False
-                    }
-                    envir.symbols.Add(obj.Name, var)
+                    envir.Push(obj.Name, Nothing, [readonly]:=False)
+                    var = envir.FindSymbol(obj.Name)
                 End If
 
                 Call var.SetValue(obj.Value, envir)
