@@ -103,6 +103,11 @@ Public Module SyntaxTree
 
                         If result.isException Then
                             Throw result.error.exception
+                        ElseIf line.levels <= current.level Then
+                            ' 结束当前的对象
+                            stack.Peek.Add(current.ToExpression(released))
+                            current = stack.Peek
+                            current.Add(New ReturnValue(result.expression))
                         Else
                             current.Add(New ReturnValue(result.expression))
                         End If
@@ -224,8 +229,18 @@ Public Module SyntaxTree
                     current.Add(result)
                 End If
             ElseIf line.levels <= current.level Then
-                ' 结束当前的对象
-                stack.Peek.Add(current.ToExpression(released))
+                If stack.Peek Is current Then
+                    stack.Pop()
+                End If
+
+                If stack.Count = 1 Then
+                    ' 结束当前的对象
+                    stack.Peek.Add(current.ToExpression(released))
+                Else
+                    ' 结束当前的对象
+                    stack.Pop.Add(current.ToExpression(released))
+                End If
+
                 current = stack.Peek
                 result = ParsePythonLine(line.tokens, opts)
 
