@@ -61,6 +61,10 @@ Namespace Runtime.Components
     Public Class Symbol : Implements INamedValue, Value(Of Object).IValueOf
 
         Public Property name As String Implements IKeyedEntity(Of String).Key
+        ''' <summary>
+        ''' which runtime stack that this variable symbol is created?
+        ''' </summary>
+        ''' <returns></returns>
         Public Property stacktrace As StackFrame()
 
         Dim m_val As Object
