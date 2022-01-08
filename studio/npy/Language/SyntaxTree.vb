@@ -74,6 +74,7 @@ Public Module SyntaxTree
                     Case "for"
 
                         tokens = line.tokens.Skip(1).Take(line.tokens.Length - 2).ToArray
+                        tokens = tokens.Skip(1).Take(tokens.Length - 2).ToArray
 
                         Dim data = tokens.SplitByTopLevelDelimiter(TokenType.keyword, False, tokenText:="in").ToArray
                         Dim vars = data(0).SplitByTopLevelDelimiter(TokenType.comma).Select(Function(t) ParsePythonLine(t, opts).expression).ToArray
