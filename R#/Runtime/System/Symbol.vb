@@ -45,6 +45,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
@@ -60,6 +61,7 @@ Namespace Runtime.Components
     Public Class Symbol : Implements INamedValue, Value(Of Object).IValueOf
 
         Public Property name As String Implements IKeyedEntity(Of String).Key
+        Public Property stacktrace As StackFrame()
 
         Dim m_val As Object
 
