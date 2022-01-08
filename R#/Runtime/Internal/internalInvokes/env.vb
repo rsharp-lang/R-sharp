@@ -207,7 +207,7 @@ Namespace Runtime.Internal.Invokes
             If name.StringEmpty Then
                 ' list all of the objects in current 
                 ' R# runtime environment
-                Return env.symbols.Keys.ToArray
+                Return env.GetSymbolsNames.ToArray
             ElseIf opt.Name.StringEmpty Then
                 Return opt.listOptionItems(name, env)
             End If
@@ -279,7 +279,7 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("objects")>
         Private Function objects(env As Environment) As String()
-            Return env.symbols.Keys.ToArray
+            Return env.GetSymbolsNames.ToArray
         End Function
 
         ''' <summary>

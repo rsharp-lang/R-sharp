@@ -65,8 +65,9 @@ Namespace Interpreter.ExecuteEngine.LINQ
         End Property
 
         Public ReadOnly Property symbolNames As String()
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
-                Return environment.symbols.Keys.ToArray
+                Return environment.GetSymbolsNames.ToArray
             End Get
         End Property
 
