@@ -86,13 +86,18 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property stackFrame As StackFrame
+
+        ''' <summary>
+        ''' <see cref="debug.getEnvironmentStack"/>
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property stackTrace As StackFrame()
             Get
                 Return debug.getEnvironmentStack(Me)
             End Get
         End Property
 
-        Public ReadOnly Property symbols As Dictionary(Of Symbol)
+        Private ReadOnly symbols As Dictionary(Of Symbol)
 
         ''' <summary>
         ''' 导入的函数列表
@@ -268,6 +273,10 @@ Namespace Runtime
             End If
 
             Return args
+        End Function
+
+        Public Function GetSymbolsNames() As IEnumerable(Of String)
+            Return symbols.Keys
         End Function
 
         ''' <summary>
@@ -467,7 +476,8 @@ Namespace Runtime
             End If
 
             With New Symbol(mode) With {
-                .name = name
+                .name = name,
+                .stacktrace = Me.stackTrace
             }
                 Call .SetValue(value, Me)
 

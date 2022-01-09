@@ -73,7 +73,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     Dim value As Object
 
                     Select Case token.text
-                        Case "NULL" : value = Nothing
+                        Case "NULL", "None" : value = Nothing
                         Case "NA" : value = GetType(Void)
                         Case "Inf" : value = Double.PositiveInfinity
                         Case Else

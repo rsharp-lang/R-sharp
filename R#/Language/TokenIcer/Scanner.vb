@@ -78,6 +78,7 @@ Namespace Language.TokenIcer
 
         Protected keepsDelimiter As Boolean = False
         Protected ReadOnly keywords As New Index(Of String)(Rkeywords.Objects)
+        Protected ReadOnly nullLiteral As New Index(Of String)(RNullLiteral)
 
         Friend Class Escapes
 
@@ -460,11 +461,16 @@ Namespace Language.TokenIcer
             ElseIf escape.comment AndAlso text.First = "#"c Then
                 Return New Token With {.name = TokenType.comment, .text = text}
             Else
-                Return MeasureToken(text, keywords, AddressOf isLINQKeyword)
+                Return MeasureToken(text, keywords, nullLiteral, AddressOf isLINQKeyword)
             End If
         End Function
 
-        Public Shared Function MeasureToken(text As String, keywords As Index(Of String), isLinqKeyword As Func(Of String, Boolean)) As Token
+        Friend Shared ReadOnly RNullLiteral As String() = {"NULL", "NA", "Inf"}
+
+        Public Shared Function MeasureToken(text As String,
+                                            keywords As Index(Of String),
+                                            nullLiteral As Index(Of String),
+                                            isLinqKeyword As Func(Of String, Boolean)) As Token
             text = text.Trim
 
             If text Like keywords OrElse isLinqKeyword(text) Then
@@ -485,9 +491,7 @@ Namespace Language.TokenIcer
                     Return New Token With {.name = TokenType.operator, .text = text}
                 Case ":"
                     Return New Token With {.name = TokenType.sequence, .text = text}
-                Case "NULL", "NA", "Inf"
-                    Return New Token With {.name = TokenType.missingLiteral, .text = text}
-                Case "true", "false", "yes", "no", "TRUE", "FALSE" ' , "T", "F"
+                Case "true", "false", "yes", "no", "TRUE", "FALSE", "True", "False" ' , "T", "F"
                     ' 20200216 在R语言之中，T和F这两个符号是默认值为TRUE或者FALSE的变量
                     ' 当对T或者F进行赋值之后，原来所拥有的逻辑值将会被新的值替代
                     ' 所以在这里取消掉T以及F对逻辑值的常量表示
@@ -503,7 +507,9 @@ Namespace Language.TokenIcer
                 Case "_", "."
                     Return New Token With {.name = TokenType.identifier, .text = text}
                 Case Else
-                    If text.IsPattern("\d+") Then
+                    If text Like nullLiteral Then
+                        Return New Token With {.name = TokenType.missingLiteral, .text = text}
+                    ElseIf text.IsPattern("\d+") Then
                         Return New Token With {.name = TokenType.integerLiteral, .text = text}
                     ElseIf Double.TryParse(text, Nothing) Then
                         Return New Token With {.name = TokenType.numberLiteral, .text = text}

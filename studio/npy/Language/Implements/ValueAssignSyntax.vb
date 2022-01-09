@@ -20,6 +20,18 @@ Namespace Language.Implementation
             Dim symbolNames = DeclareNewSymbolSyntax.getNames(target)
 
             If symbolNames Like GetType(SyntaxErrorException) Then
+                Dim targetExpr = opts.ParseExpression(target, opts)
+
+                If Not targetExpr.isException AndAlso TypeOf targetExpr.expression Is SymbolIndexer Then
+                    Dim valueData = opts.ParseExpression(value, opts)
+
+                    If valueData.isException Then
+                        Return valueData
+                    Else
+                        Return New ValueAssignExpression({targetExpr.expression}, valueData.expression)
+                    End If
+                End If
+
                 Return SyntaxResult.CreateError(
                     err:=symbolNames.TryCast(Of SyntaxErrorException),
                     opts:=opts.SetCurrentRange(target)

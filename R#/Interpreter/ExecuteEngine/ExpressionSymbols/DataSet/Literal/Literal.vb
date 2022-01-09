@@ -191,9 +191,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Public Overrides Function Evaluate(envir As Environment) As Object
             If type = TypeCodes.string AndAlso (Not envir Is Nothing) AndAlso envir.isLINQContext Then
                 Dim valStr As String = ValueStr
+                Dim check As Symbol = envir.FindSymbol(valStr)
 
-                If envir.symbols.ContainsKey(valStr) Then
-                    Return envir.symbols(valStr).value
+                If Not check Is Nothing Then
+                    Return check.value
                 Else
                     Return value
                 End If

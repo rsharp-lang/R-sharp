@@ -18,6 +18,8 @@ Namespace Language
 
             Call keywords.Clear()
             Call keywords.Add(pyKeywords).ToArray
+            Call nullLiteral.Clear()
+            Call nullLiteral.Add("None")
 
             keepsDelimiter = True
         End Sub
