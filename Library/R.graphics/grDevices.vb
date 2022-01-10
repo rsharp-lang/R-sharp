@@ -368,9 +368,15 @@ break:
     ''' get color set
     ''' </summary>
     ''' <param name="term">the color set name</param>
-    ''' <param name="n">number of colors from the given color set</param>
-    ''' <param name="character">function returns a color object sequence 
-    ''' or html color code string vector if this parameter value is set to ``TRUE``
+    ''' <param name="n">
+    ''' number of colors from the given color set(apply cubic 
+    ''' spline for the color sequence), negative value or 
+    ''' ZERO means no cubic spline on the color sequence.
+    ''' </param>
+    ''' <param name="character">
+    ''' function returns a color object sequence 
+    ''' or html color code string vector if this parameter 
+    ''' value is set to ``TRUE``
     ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
