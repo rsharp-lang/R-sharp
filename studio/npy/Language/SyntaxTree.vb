@@ -1,7 +1,6 @@
 ﻿#If netcore5 = 1 Then
 Imports System.Data
 #End If
-Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -18,201 +17,219 @@ Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports Rscript = SMRUCC.Rsharp.Runtime.Components.Rscript
 
-Public Module SyntaxTree
+Public Class SyntaxTree
 
-    <Extension>
-    Public Function ParsePyScript(script As Rscript, Optional debug As Boolean = False) As Program
-        Dim scanner As New PyScanner(script.script)
-        Dim opts As New SyntaxBuilderOptions(AddressOf ParsePythonLine) With {
+    ReadOnly script As Rscript
+    ReadOnly debug As Boolean = False
+    ReadOnly scanner As PyScanner
+    ReadOnly opts As SyntaxBuilderOptions
+    ReadOnly released As New Index(Of String)
+    ReadOnly stack As New Stack(Of PythonCodeDOM)
+    ReadOnly python As New PythonCodeDOM With {
+        .keyword = "python",
+        .level = -1,
+        .script = New List(Of Expression)
+    }
+
+    ''' <summary>
+    ''' current python code dom node
+    ''' </summary>
+    Dim current As PythonCodeDOM
+
+    Sub New(script As Rscript, Optional debug As Boolean = False)
+        Me.debug = debug
+        Me.script = script
+        Me.scanner = New PyScanner(script.script)
+        Me.opts = New SyntaxBuilderOptions(AddressOf ParsePythonLine) With {
             .source = script,
             .debug = debug
         }
-        Dim tokens As Token() = scanner.GetTokens.ToArray
-        Dim lines As PythonLine() = tokens _
+    End Sub
+
+    Private Iterator Function getLines(tokens As IEnumerable(Of Token)) As IEnumerable(Of PythonLine)
+        For Each line As PythonLine In tokens _
             .Where(Function(t) t.name <> TokenType.comment) _
             .Split(Function(t) t.name = TokenType.newLine) _
             .Where(Function(l) l.Length > 0) _
             .Select(Function(t) New PythonLine(t)) _
-            .Where(Function(l) l.tokens.Length > 0) _
-            .ToArray
-        Dim stack As New Stack(Of PythonCodeDOM)
-        Dim result As SyntaxResult
-        Dim python As New PythonCodeDOM With {
-            .keyword = "python",
-            .level = -1,
-            .script = New List(Of Expression)
-        }
-        Dim current As PythonCodeDOM = python
-        Dim released As New Index(Of String)
+            .Where(Function(l) l.tokens.Length > 0)
 
-        For Each line As PythonLine In lines
+            Yield line
+        Next
+    End Function
+
+    ''' <summary>
+    ''' try push <see cref="current"/> python code dom node into stack
+    ''' </summary>
+    ''' <param name="line"></param>
+    Private Sub pushBlock(line As PythonLine, [next] As PythonCodeDOM)
+        If line.levels > current.level Then
+            stack.Push(current)
+        ElseIf line.levels = current.level Then
+            ' 结束了上一个block
+            stack.Peek.Add(current.ToExpression(released))
+        End If
+
+        current = [next]
+    End Sub
+
+    Private Sub startFunctionDefine(line As PythonLine)
+        Dim args As New List(Of DeclareNewSymbol)
+        Dim tokens As Token() = line.tokens.Skip(3).Take(line.tokens.Length - 5).ToArray
+        Dim result = DeclareNewFunctionSyntax.getParameters(tokens, args, opts)
+
+        Call pushBlock(line, [next]:=New FunctionTag With {
+           .keyword = line(Scan0).text,
+           .level = line.levels,
+           .script = New List(Of Expression),
+           .funcname = line(1).text,
+           .arguments = args,
+           .stackframe = opts.GetStackTrace(line(1))
+        })
+    End Sub
+
+    Private Sub startForLoopDefine(line As PythonLine)
+        Dim tokens As Token() = line.tokens.Skip(1).Take(line.tokens.Length - 2).ToArray
+
+        If tokens(Scan0) = (TokenType.open, "(") AndAlso tokens.Last = (TokenType.close, ")") Then
+            tokens = tokens _
+                .Skip(1) _
+                .Take(tokens.Length - 2) _
+                .ToArray
+        End If
+
+        Dim data = tokens.SplitByTopLevelDelimiter(TokenType.keyword, False, tokenText:="in").ToArray
+        Dim vars = data(0).SplitByTopLevelDelimiter(TokenType.comma).Select(Function(t) ParsePythonLine(t, opts).expression).ToArray
+        Dim seqs = ParsePythonLine(data(2), opts).expression
+
+        Call pushBlock(line, [next]:=New ForTag With {
+            .data = seqs,
+            .stackFrame = opts.GetStackTrace(line(0)),
+            .keyword = "for",
+            .level = line.levels,
+            .script = New List(Of Expression),
+            .vars = vars
+        })
+    End Sub
+
+    Private Sub addValueReturn(line As PythonLine)
+        Dim tokens = line.tokens.Skip(1).ToArray
+        Dim result = ParsePythonLine(tokens, opts)
+
+        If result.isException Then
+            Throw result.error.exception
+        ElseIf line.levels <= current.level Then
+            ' 结束当前的对象
+            stack.Peek.Add(current.ToExpression(released))
+            current = stack.Peek
+            current.Add(New ReturnValue(result.expression))
+        Else
+            current.Add(New ReturnValue(result.expression))
+        End If
+    End Sub
+
+    Private Sub addPkgImport(line As PythonLine)
+        Dim package As Token = line.tokens(1)
+
+        If line.tokens(2) = (TokenType.keyword, "import") Then
+            ' from ... import ...
+            Dim tokens = line.tokens.Skip(3).ToArray
+
+            Dim pkgName = ParsePythonLine({package}, opts)
+            Dim list = tokens _
+                .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True) _
+                .Where(Function(r)
+                           Return Not (r.Length = 1 AndAlso r(Scan0).name = TokenType.comma)
+                       End Function) _
+                .Select(Function(t)
+                            Dim expr = ParsePythonLine(t, opts).expression
+
+                            If TypeOf expr Is SymbolReference Then
+                                expr = New Literal(DirectCast(expr, SymbolReference).symbol)
+                            End If
+
+                            Return expr
+                        End Function) _
+                .ToArray
+            Dim libname As New Literal(ValueAssignExpression.GetSymbol(pkgName.expression))
+            Dim importPkgs As New [Imports](New VectorLiteral(list), libname, source:=script.source)
+
+            Call current.Add(importPkgs)
+        Else
+            Throw New NotImplementedException
+        End If
+    End Sub
+
+    Private Sub addPkgLoad(line As PythonLine)
+        Dim tokens As Token() = line.tokens.Skip(1).ToArray
+        Dim names As Expression() = tokens _
+            .Split(Function(t) t.name = TokenType.comma) _
+            .Select(Function(block)
+                        Dim expr = ParsePythonLine(block, opts).expression
+
+                        If TypeOf expr Is SymbolReference Then
+                            expr = New Literal(DirectCast(expr, SymbolReference).symbol)
+                        End If
+
+                        Return expr
+                    End Function) _
+            .ToArray
+
+        For Each name As Expression In names
+            If TypeOf name Is Literal Then
+                Dim modulefile As String = DirectCast(name, Literal).ValueStr
+                Dim testpath As String = $"{script.GetSourceDirectory}/{modulefile}"
+
+                If testpath.FileExists Then
+                    current.Add(New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
+                Else
+                    current.Add(New Require(modulefile))
+                End If
+            Else
+                current.Add(New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
+            End If
+        Next
+    End Sub
+
+    Private Sub startIfDefine(line As PythonLine)
+        Dim tokens = line.tokens.Skip(1).Take(line.tokens.Length - 2).ToArray
+        Dim test As SyntaxResult = ParsePythonLine(tokens, opts)
+
+        Call pushBlock(line, [next]:=New IfTag With {
+           .keyword = line(Scan0).text,
+           .level = line.levels,
+           .script = New List(Of Expression),
+           .test = test.expression,
+           .stackframe = opts.GetStackTrace(line(1))
+        })
+    End Sub
+
+    Private Sub startElseDefine(line As PythonLine)
+        Call pushBlock(line, [next]:=New ElseTag With {
+            .keyword = "else",
+            .level = line.levels,
+            .script = New List(Of Expression),
+            .stackframe = opts.GetStackTrace(line(Scan0))
+        })
+    End Sub
+
+    Public Function ParsePyScript() As Program
+        Dim result As SyntaxResult
+        Dim tokens As Token()
+
+        current = python
+
+        For Each line As PythonLine In getLines(scanner.GetTokens)
             ' 每一行前面的空格数量作为层级关系
             If line(Scan0).name = TokenType.keyword Then
                 Select Case line(Scan0).text
-                    Case "def"
-                        Dim args As New List(Of DeclareNewSymbol)
-
-                        tokens = line.tokens.Skip(3).Take(line.tokens.Length - 5).ToArray
-                        result = DeclareNewFunctionSyntax.getParameters(tokens, args, opts)
-
-                        If line.levels > current.level Then
-                            stack.Push(current)
-                        ElseIf line.levels = current.level Then
-                            ' 结束了上一个block
-                            stack.Peek.Add(current.ToExpression(released))
-                        End If
-
-                        current = New FunctionTag With {
-                           .keyword = line(Scan0).text,
-                           .level = line.levels,
-                           .script = New List(Of Expression),
-                           .funcname = line(1).text,
-                           .arguments = args,
-                           .stackframe = opts.GetStackTrace(line(1))
-                        }
-
-                    Case "for"
-
-                        tokens = line.tokens.Skip(1).Take(line.tokens.Length - 2).ToArray
-                        tokens = tokens.Skip(1).Take(tokens.Length - 2).ToArray
-
-                        Dim data = tokens.SplitByTopLevelDelimiter(TokenType.keyword, False, tokenText:="in").ToArray
-                        Dim vars = data(0).SplitByTopLevelDelimiter(TokenType.comma).Select(Function(t) ParsePythonLine(t, opts).expression).ToArray
-                        Dim seqs = ParsePythonLine(data(2), opts).expression
-
-                        If line.levels > current.level Then
-                            stack.Push(current)
-                        ElseIf line.levels = current.level Then
-                            ' 结束了上一个block
-                            stack.Peek.Add(current.ToExpression(released))
-                        End If
-
-                        current = New ForTag With {
-                            .data = seqs,
-                            .stackFrame = opts.GetStackTrace(line(0)),
-                            .keyword = "for",
-                            .level = line.levels,
-                            .script = New List(Of Expression),
-                            .vars = vars
-                        }
-
-                    Case "return"
-
-                        tokens = line.tokens.Skip(1).ToArray
-                        result = ParsePythonLine(tokens, opts)
-
-                        If result.isException Then
-                            Throw result.error.exception
-                        ElseIf line.levels <= current.level Then
-                            ' 结束当前的对象
-                            stack.Peek.Add(current.ToExpression(released))
-                            current = stack.Peek
-                            current.Add(New ReturnValue(result.expression))
-                        Else
-                            current.Add(New ReturnValue(result.expression))
-                        End If
-
-                    Case "from"
-
-                        Dim package As Token = line.tokens(1)
-
-                        If line.tokens(2) = (TokenType.keyword, "import") Then
-                            ' from ... import ...
-                            tokens = line.tokens.Skip(3).ToArray
-
-                            Dim pkgName = ParsePythonLine({package}, opts)
-                            Dim list = tokens _
-                                .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True) _
-                                .Where(Function(r)
-                                           Return Not (r.Length = 1 AndAlso r(Scan0).name = TokenType.comma)
-                                       End Function) _
-                                .Select(Function(t)
-                                            Dim expr = ParsePythonLine(t, opts).expression
-
-                                            If TypeOf expr Is SymbolReference Then
-                                                expr = New Literal(DirectCast(expr, SymbolReference).symbol)
-                                            End If
-
-                                            Return expr
-                                        End Function) _
-                                .ToArray
-                            Dim libname As New Literal(ValueAssignExpression.GetSymbol(pkgName.expression))
-                            Dim importPkgs As New [Imports](New VectorLiteral(list), libname, source:=script.source)
-
-                            Call current.Add(importPkgs)
-                        Else
-                            Throw New NotImplementedException
-                        End If
-
-                    Case "import"
-
-                        tokens = line.tokens.Skip(1).ToArray
-
-                        Dim names As Expression() = tokens _
-                            .Split(Function(t) t.name = TokenType.comma) _
-                            .Select(Function(block)
-                                        Dim expr = ParsePythonLine(block, opts).expression
-
-                                        If TypeOf expr Is SymbolReference Then
-                                            expr = New Literal(DirectCast(expr, SymbolReference).symbol)
-                                        End If
-
-                                        Return expr
-                                    End Function) _
-                            .ToArray
-
-                        For Each name As Expression In names
-                            If TypeOf name Is Literal Then
-                                Dim modulefile As String = DirectCast(name, Literal).ValueStr
-                                Dim testpath As String = $"{script.GetSourceDirectory}/{modulefile}"
-
-                                If testpath.FileExists Then
-                                    current.Add(New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
-                                Else
-                                    current.Add(New Require(modulefile))
-                                End If
-                            Else
-                                current.Add(New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
-                            End If
-                        Next
-
-                    Case "if"
-
-                        tokens = line.tokens.Skip(1).Take(line.tokens.Length - 2).ToArray
-
-                        Dim test As SyntaxResult = ParsePythonLine(tokens, opts)
-
-                        If line.levels > current.level Then
-                            stack.Push(current)
-                        ElseIf line.levels = current.level Then
-                            ' 结束了上一个block
-                            stack.Peek.Add(current.ToExpression(released))
-                        End If
-
-                        current = New IfTag With {
-                           .keyword = line(Scan0).text,
-                           .level = line.levels,
-                           .script = New List(Of Expression),
-                           .test = test.expression,
-                           .stackframe = opts.GetStackTrace(line(1))
-                        }
-
-                    Case "else"
-
-                        If line.levels > current.level Then
-                            stack.Push(current)
-                        ElseIf line.levels = current.level Then
-                            ' 结束了上一个block
-                            stack.Peek.Add(current.ToExpression(released))
-                        End If
-
-                        current = New ElseTag With {
-                            .keyword = "else",
-                            .level = line.levels,
-                            .script = New List(Of Expression),
-                            .stackframe = opts.GetStackTrace(line(Scan0))
-                        }
-
+                    Case "def" : Call startFunctionDefine(line)
+                    Case "for" : Call startForLoopDefine(line)
+                    Case "return" : Call addValueReturn(line)
+                    Case "from" : Call addPkgImport(line)
+                    Case "import" : Call addPkgLoad(line)
+                    Case "if" : Call startIfDefine(line)
+                    Case "else" : Call startElseDefine(line)
                     Case Else
                         Throw New NotImplementedException
                 End Select
@@ -270,37 +287,6 @@ Public Module SyntaxTree
         Return New Program(python.script)
     End Function
 
-    <Extension>
-    Friend Function ParsePythonLine(line As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
-        Dim blocks = line.SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True)
-        Dim expr As SyntaxResult
-
-        If blocks >= 3 AndAlso blocks(1).isOperator("=") Then
-            ' python tuple syntax is not support in 
-            ' Rscript, translate tuple syntax from
-            ' python script as list syntax into rscript
-            expr = Implementation.AssignValue(blocks(0), blocks.Skip(2).IteratesALL.ToArray, opts)
-        ElseIf blocks = 1 AndAlso blocks(Scan0).isPythonTuple Then
-            expr = Implementation.TupleParser(blocks(Scan0), opts)
-        Else
-            expr = blocks.ParseExpression(opts)
-        End If
-
-        Return expr
-    End Function
-
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    <Extension>
-    Friend Function isCommaSymbol(b As Token()) As Boolean
-        Return b.Length = 1 AndAlso b(Scan0) = (TokenType.comma, ",")
-    End Function
-
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    <Extension>
-    Friend Function isPythonTuple(b As Token()) As Boolean
-        Return b.Any(Function(t) t = (TokenType.comma, ",")) AndAlso b.First = (TokenType.open, "(") AndAlso b.Last = (TokenType.close, ")")
-    End Function
-
-End Module
+End Class
 
 
