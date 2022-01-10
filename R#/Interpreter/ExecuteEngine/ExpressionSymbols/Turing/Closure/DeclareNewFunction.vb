@@ -249,7 +249,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             If env Like GetType(Message) Then
                 Return env.TryCast(Of Message)
             Else
-                envir = env.TryCast(Of Environment)
+                ' unsure for the symbol conflicts
+                envir = New Environment(env.TryCast(Of Environment), stackFrame, isInherits:=False)
             End If
 
             If runDispose Then
