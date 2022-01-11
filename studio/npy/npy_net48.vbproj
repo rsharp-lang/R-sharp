@@ -844,6 +844,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Language\InternalParser.vb" />
     <Compile Include="Language\PyScanner.vb" />
     <Compile Include="Language\PythonCodeDOM.vb" />
     <Compile Include="Language\PythonLine.vb" />
@@ -852,6 +853,8 @@
     <Compile Include="Language\Syntax\FunctionTag.vb" />
     <Compile Include="Language\Syntax\IfTag.vb" />
     <Compile Include="PythonScriptLoader.vb" />
+    <Compile Include="E:\GCModeller\src\R-sharp\studio\npy\Language\Implements\ValueAssignSyntax.vb" />
+    <Compile Include="E:\GCModeller\src\R-sharp\studio\npy\Language\Implements\FunctionInvokeSyntax.vb" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\47-dotnet_Microsoft.VisualBasic.vbproj">
