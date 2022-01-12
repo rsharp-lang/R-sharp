@@ -233,6 +233,22 @@ Public Class SyntaxTree
                     Case Else
                         Throw New NotImplementedException
                 End Select
+            ElseIf line(-1).name = TokenType.sequence Then
+
+                ' 20220112 acceptor syntax
+                '
+                ' func(...):
+                '    line1
+                '    line2
+                tokens = line.tokens.Take(line.length - 2).ToArray
+                result = ParsePythonLine(tokens, opts)
+
+                If result.isException Then
+                    Throw result.error.exception
+                ElseIf Not result Like GetType(FunctionInvoke) Then
+                    Throw New InvalidExpressionException
+                End If
+
             ElseIf line.levels > current.level Then
                 If current.keyword.StringEmpty Then
                     Throw New SyntaxErrorException
