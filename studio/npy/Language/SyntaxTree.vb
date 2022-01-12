@@ -213,6 +213,29 @@ Public Class SyntaxTree
         })
     End Sub
 
+    Private Sub startAcceptorDefine(line As PythonLine)
+        ' 20220112 acceptor syntax
+        '
+        ' func(...):
+        '    line1
+        '    line2
+        Dim tokens = line.tokens.Take(line.length - 2).ToArray
+        Dim result = ParsePythonLine(tokens, opts)
+
+        If result.isException Then
+            Throw result.error.exception
+        ElseIf Not result Like GetType(FunctionInvoke) Then
+            Throw New InvalidExpressionException
+        End If
+
+        Call pushBlock(line, [next]:=New AcceptorTag With {
+            .keyword = "calls",
+            .level = line.levels,
+            .script = New List(Of Expression),
+            .target = DirectCast(result.expression, FunctionInvoke)
+        })
+    End Sub
+
     Public Function ParsePyScript() As Program
         Dim result As SyntaxResult
 
@@ -233,20 +256,7 @@ Public Class SyntaxTree
                         Throw New NotImplementedException
                 End Select
             ElseIf line(-1).name = TokenType.sequence Then
-
-                ' 20220112 acceptor syntax
-                '
-                ' func(...):
-                '    line1
-                '    line2
-                tokens = line.tokens.Take(line.length - 2).ToArray
-                result = ParsePythonLine(tokens, opts)
-
-                If result.isException Then
-                    Throw result.error.exception
-                ElseIf Not result Like GetType(FunctionInvoke) Then
-                    Throw New InvalidExpressionException
-                End If
+                Call startAcceptorDefine(line)
 
             ElseIf line.levels > current.level Then
                 If current.keyword.StringEmpty Then

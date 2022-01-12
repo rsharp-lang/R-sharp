@@ -78,9 +78,14 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             If opts.haveSyntaxErr Then
                 Return SyntaxResult.CreateError(opts.error, opts.SetCurrentRange(firstBody))
+            Else
+                Return invoke.CreateInvoke(firstParameterBody, opts)
             End If
+        End Function
 
-            Dim parameterClosure As New AcceptorClosure(firstParameterBody)
+        <Extension>
+        Public Function CreateInvoke(invoke As FunctionInvoke, program As IEnumerable(Of Expression), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim parameterClosure As New AcceptorClosure(program.ToArray)
             Dim args As New List(Of Expression)
 
             args.Add(parameterClosure)
