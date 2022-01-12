@@ -42,8 +42,10 @@
 #End Region
 
 Imports System.IO
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
@@ -54,6 +56,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Development.Package.File
 
@@ -254,7 +257,27 @@ Namespace Development.Package.File
 
             Call Console.WriteLine("       ==> roxygen::roxygenize")
 
+            ' run documentation for rscript in R folder
             Dim err As Message = REngine.Invoke("roxygen::roxygenize", {package_dir})
+            Dim out As String
+
+            ' run documentation for dll modules which is marked as r package
+            ' unixMan(pkg As pkg, output As String, env As Environment)
+            For Each dll As String In ls - l - r - "*.dll" <= $"{package_dir}/assembly"
+                Dim assembly As Assembly = deps.LoadAssemblyOrCache(dll)
+                Dim attr = assembly.GetCustomAttributes(Of RPackageModuleAttribute)
+
+                If attr Is Nothing OrElse Not attr.Any Then
+                    Continue For
+                End If
+
+                For Each pkg As Package In PackageLoader.ParsePackages(dll:=dll)
+                    out = $"{package_dir}/man/{dll.BaseName}/{pkg.namespace}"
+
+                    Call Console.WriteLine($"         -> load: {pkg.info.Namespace}")
+                    Call REngine.Invoke("unixMan", pkg, out, REngine.globalEnvir)
+                Next
+            Next
 
             If Not err Is Nothing Then
                 Return err
@@ -350,7 +373,7 @@ Namespace Development.Package.File
                     Return Nothing
                 End If
             Else
-                Return Nothing 
+                Return Nothing
             End If
         End Function
 

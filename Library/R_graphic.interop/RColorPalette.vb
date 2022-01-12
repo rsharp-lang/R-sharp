@@ -1,47 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::d1e54a5642e165284206e2da2ea286e2, Library\R_graphic.interop\RColorPalette.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module RColorPalette
-    ' 
-    '     Function: getColor, getColors, getColorSequence, getColorSet, GetRawColor
-    ' 
-    ' /********************************************************************************/
+' Module RColorPalette
+' 
+'     Function: getColor, getColors, getColorSequence, getColorSet, GetRawColor
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Module RColorPalette
@@ -97,9 +99,51 @@ Module RColorPalette
         End If
     End Function
 
+    <Extension>
+    Public Function CreateColorMaps(uniqClass As String(),
+                                    colorSet As String(),
+                                    Optional [default] As String = "black") As Dictionary(Of String, Color)
+
+        If colorSet.All(Function(d) d.IndexOf("="c) > -1) Then
+            ' a=b[] color mapping
+            Dim allMaps = colorSet _
+                .Select(Function(d) d.GetTagValue("=")) _
+                .ToDictionary(Function(d) d.Name,
+                              Function(d)
+                                  Return d.Value
+                              End Function)
+            Dim defaultColor As Color = [default].TranslateColor
+
+            Return uniqClass _
+                .ToDictionary(Function(tag)
+                                  Return tag
+                              End Function,
+                              Function(tag)
+                                  Return If(allMaps.ContainsKey(tag), allMaps(tag).TranslateColor, defaultColor)
+                              End Function)
+        Else
+            Return colorSet _
+                .Take(uniqClass.Length) _
+                .SeqIterator _
+                .ToDictionary(Function(i) uniqClass(i),
+                              Function(i)
+                                  Return i.value.TranslateColor
+                              End Function)
+        End If
+    End Function
+
+    ''' <summary>
+    ''' create color mapping
+    ''' </summary>
+    ''' <param name="colorSet"></param>
+    ''' <param name="levels"></param>
+    ''' <param name="default"></param>
+    ''' <returns></returns>
     Public Function getColors(colorSet As Object, levels As Integer, Optional default$ = "Set1:c8") As String()
         If colorSet Is Nothing Then
             Return getColorSequence([default], levels)
+        ElseIf TypeOf colorSet Is list Then
+            colorSet = DirectCast(colorSet, list).slots
         End If
 
         If TypeOf colorSet Is vector Then
@@ -108,7 +152,15 @@ Module RColorPalette
 
         Dim type As Type = colorSet.GetType
 
-        If type.IsArray Then
+        If type Is GetType(Dictionary(Of String, Object)) Then
+            ' a=b[] mapping
+            Return DirectCast(colorSet, Dictionary(Of String, Object)) _
+                .Select(Function(map)
+                            Return $"""{map.Key}""={RColorPalette.getColor(map.Value)}"
+                        End Function) _
+                .ToArray
+
+        ElseIf type.IsArray Then
             If type.GetElementType Is GetType(String) Then
                 Dim array As String() = DirectCast(colorSet, String())
 
