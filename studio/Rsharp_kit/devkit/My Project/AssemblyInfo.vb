@@ -34,6 +34,4 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Assembly: AssemblyVersion("1.13.*")>
 <Assembly: AssemblyFileVersion("1.10.*")>
-
-<Assembly: RPackageModule>
 #end if
