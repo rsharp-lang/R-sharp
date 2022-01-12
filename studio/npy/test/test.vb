@@ -6,7 +6,19 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module test
 
     Sub Main()
+        Call testAcceptor()
         Call testFor()
+    End Sub
+
+    Sub testAcceptor()
+        Call inspectSyntax(
+            <python>
+
+                bitmap(file = "123.png", size = [500,2000]):
+                     
+                    plot(x, y)
+
+            </python>)
     End Sub
 
     Sub testFor()
@@ -34,6 +46,10 @@ for x in fruits:
 
 ")
 
+    End Sub
+
+    Sub inspectSyntax(python As XElement)
+        Call inspectSyntax(python.Value)
     End Sub
 
     Sub inspectSyntax(python As String)

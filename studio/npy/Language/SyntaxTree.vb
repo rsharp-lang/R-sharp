@@ -219,7 +219,7 @@ Public Class SyntaxTree
         ' func(...):
         '    line1
         '    line2
-        Dim tokens = line.tokens.Take(line.length - 2).ToArray
+        Dim tokens = line.tokens.Take(line.length - 1).ToArray
         Dim result = ParsePythonLine(tokens, opts)
 
         If result.isException Then
