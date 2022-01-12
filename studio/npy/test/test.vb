@@ -6,6 +6,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module test
 
     Sub Main()
+        Call testFunc()
         Call testError()
         Call testAcceptor()
         Call testFor()
@@ -22,6 +23,30 @@ Module test
         For Each line As Expression In py
             Call Console.WriteLine(line)
         Next
+    End Sub
+
+    Sub testFunc()
+        inspectSyntax(
+            <python>
+
+                def run(a, b, c):
+                 
+                   func1()
+                   func2()
+             
+
+                   bitmap(file = xxx):
+                      plot(func3())
+
+
+                   t = func()
+                   return t
+
+
+            # invoke
+            run(1,1,1)
+
+            </python>)
     End Sub
 
     Sub testError()
