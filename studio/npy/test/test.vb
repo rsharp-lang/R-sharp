@@ -11,6 +11,19 @@ Module test
         Call testFor()
     End Sub
 
+    Sub inspectSyntax(python As XElement)
+        Call inspectSyntax(python.Value)
+    End Sub
+
+    Sub inspectSyntax(python As String)
+        Dim text As Rscript = Rscript.AutoHandleScript(python)
+        Dim py As Program = text.ParsePyScript
+
+        For Each line As Expression In py
+            Call Console.WriteLine(line)
+        Next
+    End Sub
+
     Sub testError()
         Call inspectSyntax(<python>
 
@@ -54,18 +67,5 @@ for x in fruits:
 
 ")
 
-    End Sub
-
-    Sub inspectSyntax(python As XElement)
-        Call inspectSyntax(python.Value)
-    End Sub
-
-    Sub inspectSyntax(python As String)
-        Dim text As Rscript = Rscript.AutoHandleScript(python)
-        Dim py As Program = text.ParsePyScript
-
-        For Each line As Expression In py
-            Call Console.WriteLine(line)
-        Next
     End Sub
 End Module

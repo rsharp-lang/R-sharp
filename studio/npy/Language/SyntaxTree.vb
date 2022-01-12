@@ -237,7 +237,7 @@ Public Class SyntaxTree
         If result.isException Then
             Throw result.error.exception
         Else
-            Call addLine(line.levels, result.expression)
+            Call addLine(line.levels, New FunctionInvoke("stop", opts.GetStackTrace(line(Scan0)), result.expression))
         End If
     End Sub
 
