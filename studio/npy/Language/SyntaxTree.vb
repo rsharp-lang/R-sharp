@@ -215,7 +215,6 @@ Public Class SyntaxTree
 
     Public Function ParsePyScript() As Program
         Dim result As SyntaxResult
-        Dim tokens As Token()
 
         current = python
 
