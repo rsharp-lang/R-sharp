@@ -204,13 +204,7 @@ Module plots
     Private Function modelWithClass(x As Double(), y As Double(), ptSize As Single, classList As String(), args As list, reverse As Boolean, shape As LegendStyles, env As Environment) As Object
         Dim uniqClass As String() = classList.Distinct.ToArray
         Dim colorSet As String() = RColorPalette.getColors(args!colorSet, uniqClass.Length, "Clusters")
-        Dim colors As Dictionary(Of String, Color) = colorSet _
-            .Take(uniqClass.Length) _
-            .SeqIterator _
-            .ToDictionary(Function(i) uniqClass(i),
-                          Function(i)
-                              Return i.value.TranslateColor
-                          End Function)
+        Dim colors As Dictionary(Of String, Color) = uniqClass.CreateColorMaps(colorSet)
         Dim classSerials As New Dictionary(Of String, List(Of PointData))
 
         If classList.Length <> x.Length Then
