@@ -265,15 +265,16 @@ Namespace Development.Package.File
             ' unixMan(pkg As pkg, output As String, env As Environment)
             For Each dll As String In ls - l - r - "*.dll" <= $"{package_dir}/assembly"
                 Dim assembly As Assembly = deps.LoadAssemblyOrCache(dll)
+                Dim attr = assembly.GetCustomAttributes(Of RPackageModuleAttribute)
 
-                If assembly.GetCustomAttributes(Of RPackageModuleAttribute) Is Nothing Then
+                If attr Is Nothing OrElse Not attr.Any Then
                     Continue For
                 End If
 
                 For Each pkg As Package In PackageLoader.ParsePackages(dll:=dll)
-                    out = $"{package_dir}/man/{pkg.namespace}"
+                    out = $"{package_dir}/man/{dll.BaseName}/{pkg.namespace}"
 
-                    Call Console.WriteLine($"             load: {pkg.info.Namespace}")
+                    Call Console.WriteLine($"         -> load: {pkg.info.Namespace}")
                     Call REngine.Invoke("unixMan", pkg, out, REngine.globalEnvir)
                 Next
             Next
