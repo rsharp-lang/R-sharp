@@ -6,6 +6,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module test
 
     Sub Main()
+        Call blanktest()
         Call testFunc()
         Call testError()
         Call testAcceptor()
@@ -23,6 +24,19 @@ Module test
         For Each line As Expression In py
             Call Console.WriteLine(line)
         Next
+    End Sub
+
+    Sub blanktest()
+        Call inspectSyntax(<python>
+
+                               def a():
+
+                                    return 5
+
+
+                               b() + a()
+
+                           </python>)
     End Sub
 
     Sub testFunc()

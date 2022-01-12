@@ -23,7 +23,6 @@ Public Class SyntaxTree
     ReadOnly debug As Boolean = False
     ReadOnly scanner As PyScanner
     ReadOnly opts As SyntaxBuilderOptions
-    ReadOnly released As New Index(Of String)
     ReadOnly stack As New Stack(Of PythonCodeDOM)
     ReadOnly python As New PythonCodeDOM With {
         .keyword = "python",
@@ -47,14 +46,18 @@ Public Class SyntaxTree
     End Sub
 
     Private Iterator Function getLines(tokens As IEnumerable(Of Token)) As IEnumerable(Of PythonLine)
-        For Each line As PythonLine In tokens _
+        Dim lines = tokens _
             .Where(Function(t) t.name <> TokenType.comment) _
             .Split(Function(t) t.name = TokenType.newLine) _
             .Where(Function(l) l.Length > 0) _
-            .Select(Function(t) New PythonLine(t)) _
-            .Where(Function(l) l.tokens.Length > 0)
+            .ToArray
 
-            Yield line
+        For Each lineTokens As Token() In lines
+            Dim line As New PythonLine(lineTokens)
+
+            If line.length > 0 Then
+                Yield line
+            End If
         Next
     End Function
 
@@ -67,7 +70,7 @@ Public Class SyntaxTree
             stack.Push(current)
         ElseIf line.levels = current.level Then
             ' 结束了上一个block
-            stack.Peek.Add(current.ToExpression(released))
+            stack.Peek.Add(current.ToExpression())
         End If
 
         current = [next]
@@ -249,16 +252,14 @@ Public Class SyntaxTree
                 current.Add(expr)
             End If
         ElseIf lineLevels <= current.level Then
-            If stack.Peek Is current Then
-                stack.Pop()
-            End If
-
             If stack.Count = 1 Then
                 ' 结束当前的对象
-                stack.Peek.Add(current.ToExpression(released))
-            Else
+                stack.Peek.Add(current.ToExpression())
+            ElseIf stack.Peek Is current Then
                 ' 结束当前的对象
-                stack.Pop.Add(current.ToExpression(released))
+                stack.Pop.Add(current.ToExpression())
+            Else
+                stack.Peek.Add(current.ToExpression())
             End If
 
             current = stack.Peek
@@ -298,16 +299,11 @@ Public Class SyntaxTree
             End If
         Next
 
-        ' do release of stack
-        If current.level >= 0 AndAlso Not current.GetHashCode.ToHexString Like released Then
-            stack.Peek.Add(current.ToExpression(released))
-        End If
-
         Do While stack.Count > 0
             current = stack.Pop
 
             If stack.Count > 0 Then
-                stack.Peek.Add(current.ToExpression(released))
+                stack.Peek.Add(current.ToExpression())
             Else
                 Exit Do
             End If

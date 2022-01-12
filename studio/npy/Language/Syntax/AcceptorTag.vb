@@ -7,7 +7,7 @@ Public Class AcceptorTag : Inherits PythonCodeDOM
 
     Public Property target As FunctionInvoke
 
-    Public Overrides Function ToExpression(release As Index(Of String)) As Expression
+    Public Overrides Function ToExpression() As Expression
         Return target.CreateInvoke(script, Nothing).expression
     End Function
 
