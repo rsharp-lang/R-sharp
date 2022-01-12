@@ -118,13 +118,8 @@ Public Class SyntaxTree
 
         If result.isException Then
             Throw result.error.exception
-        ElseIf line.levels <= current.level Then
-            ' 结束当前的对象
-            stack.Peek.Add(current.ToExpression(released))
-            current = stack.Peek
-            current.Add(New ReturnValue(result.expression))
         Else
-            current.Add(New ReturnValue(result.expression))
+            addLine(line.levels, result.expression)
         End If
     End Sub
 
@@ -154,7 +149,7 @@ Public Class SyntaxTree
             Dim libname As New Literal(ValueAssignExpression.GetSymbol(pkgName.expression))
             Dim importPkgs As New [Imports](New VectorLiteral(list), libname, source:=script.source)
 
-            Call current.Add(importPkgs)
+            Call addLine(line.levels, importPkgs)
         Else
             Throw New NotImplementedException
         End If
@@ -181,12 +176,12 @@ Public Class SyntaxTree
                 Dim testpath As String = $"{script.GetSourceDirectory}/{modulefile}"
 
                 If testpath.FileExists Then
-                    current.Add(New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
+                    addLine(line.levels, New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
                 Else
-                    current.Add(New Require(modulefile))
+                    addLine(line.levels, New Require(modulefile))
                 End If
             Else
-                current.Add(New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
+                addLine(line.levels, New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
             End If
         Next
     End Sub
@@ -236,9 +231,42 @@ Public Class SyntaxTree
         })
     End Sub
 
-    Public Function ParsePyScript() As Program
-        Dim result As SyntaxResult
+    Public Sub createError(line As PythonLine)
+        Dim result = ParsePythonLine(line.tokens.Skip(1), opts)
 
+        If result.isException Then
+            Throw result.error.exception
+        Else
+            Call addLine(line.levels, result.expression)
+        End If
+    End Sub
+
+    Private Sub addLine(lineLevels As Integer, expr As Expression)
+        If lineLevels > current.level Then
+            If current.keyword.StringEmpty Then
+                Throw New SyntaxErrorException
+            Else
+                current.Add(expr)
+            End If
+        ElseIf lineLevels <= current.level Then
+            If stack.Peek Is current Then
+                stack.Pop()
+            End If
+
+            If stack.Count = 1 Then
+                ' 结束当前的对象
+                stack.Peek.Add(current.ToExpression(released))
+            Else
+                ' 结束当前的对象
+                stack.Pop.Add(current.ToExpression(released))
+            End If
+
+            current = stack.Peek
+            current.Add(expr)
+        End If
+    End Sub
+
+    Public Function ParsePyScript() As Program
         current = python
 
         For Each line As PythonLine In getLines(scanner.GetTokens)
@@ -252,44 +280,20 @@ Public Class SyntaxTree
                     Case "import" : Call addPkgLoad(line)
                     Case "if" : Call startIfDefine(line)
                     Case "else" : Call startElseDefine(line)
+                    Case "raise" : Call createError(line)
+
                     Case Else
                         Throw New NotImplementedException
                 End Select
             ElseIf line(-1).name = TokenType.sequence Then
                 Call startAcceptorDefine(line)
-
-            ElseIf line.levels > current.level Then
-                If current.keyword.StringEmpty Then
-                    Throw New SyntaxErrorException
-                End If
-
-                result = ParsePythonLine(line.tokens, opts)
+            Else
+                Dim result = ParsePythonLine(line.tokens, opts)
 
                 If result.isException Then
                     Throw result.error.exception
                 Else
-                    current.Add(result)
-                End If
-            ElseIf line.levels <= current.level Then
-                If stack.Peek Is current Then
-                    stack.Pop()
-                End If
-
-                If stack.Count = 1 Then
-                    ' 结束当前的对象
-                    stack.Peek.Add(current.ToExpression(released))
-                Else
-                    ' 结束当前的对象
-                    stack.Pop.Add(current.ToExpression(released))
-                End If
-
-                current = stack.Peek
-                result = ParsePythonLine(line.tokens, opts)
-
-                If result.isException Then
-                    Throw result.error.exception
-                Else
-                    current.Add(result)
+                    Call addLine(line.levels, result.expression)
                 End If
             End If
         Next

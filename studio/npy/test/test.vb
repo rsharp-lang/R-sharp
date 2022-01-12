@@ -6,8 +6,16 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module test
 
     Sub Main()
+        Call testError()
         Call testAcceptor()
         Call testFor()
+    End Sub
+
+    Sub testError()
+        Call inspectSyntax(<python>
+
+                               raise "unexpected error!"
+                           </python>)
     End Sub
 
     Sub testAcceptor()
