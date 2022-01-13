@@ -289,7 +289,7 @@ Namespace Runtime.Internal.Invokes
                 .AllCombinations _
                 .Where(Function(c) c.Length = m) _
                 .ToArray
-            Dim type As RType = RType.GetRSharpType(x(0))
+            Dim type As RType = RType.GetRSharpType(x(0).GetType)
 
             If type.mode = TypeCodes.boolean OrElse
                 type.mode = TypeCodes.double OrElse
