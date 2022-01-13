@@ -24,14 +24,14 @@ Public Class ForTag : Inherits PythonCodeDOM
     Public Property data As Expression
     Public Property stackFrame As StackFrame
 
-    Public Overrides Function ToExpression(release As Index(Of String)) As Expression
+    Public Overrides Function ToExpression() As Expression
         Dim varNames As String() = vars _
             .Select(Function(v)
                         Return ValueAssignExpression.GetSymbol(v)
                     End Function) _
             .ToArray
         Dim varSymbols = varNames.Select(Function(s) New DeclareNewSymbol({s}, Nothing, TypeCodes.generic, [readonly]:=False, stackFrame)).ToArray
-        Dim loopBody As New DeclareNewFunction("for_loop", varSymbols, MyBase.ToExpression(release), stackFrame)
+        Dim loopBody As New DeclareNewFunction("for_loop", varSymbols, MyBase.ToExpression(), stackFrame)
 
         Return New ForLoop(varNames, data, loopBody, False, stackFrame)
     End Function

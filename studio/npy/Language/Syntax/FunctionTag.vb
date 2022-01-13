@@ -24,8 +24,8 @@ Public Class FunctionTag : Inherits PythonCodeDOM
     Public Property arguments As Expression()
     Public Property stackframe As StackFrame
 
-    Public Overrides Function ToExpression(release As Index(Of String)) As Expression
-        Return New DeclareNewFunction(funcname, arguments, MyBase.ToExpression(release), stackframe)
+    Public Overrides Function ToExpression() As Expression
+        Return New DeclareNewFunction(funcname, arguments, MyBase.ToExpression(), stackframe)
     End Function
 
 End Class

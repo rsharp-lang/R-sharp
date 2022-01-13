@@ -23,8 +23,8 @@ Public Class IfTag : Inherits PythonCodeDOM
     Public Property test As Expression
     Public Property stackframe As StackFrame
 
-    Public Overrides Function ToExpression(release As Index(Of String)) As Expression
-        Return New IfBranch(test, DirectCast(MyBase.ToExpression(release), ClosureExpression), stackframe)
+    Public Overrides Function ToExpression() As Expression
+        Return New IfBranch(test, DirectCast(MyBase.ToExpression(), ClosureExpression), stackframe)
     End Function
 
 End Class
@@ -33,8 +33,8 @@ Public Class ElseTag : Inherits PythonCodeDOM
 
     Public Property stackframe As StackFrame
 
-    Public Overrides Function ToExpression(release As Index(Of String)) As Expression
-        Return New ElseBranch(MyBase.ToExpression(release), stackframe)
+    Public Overrides Function ToExpression() As Expression
+        Return New ElseBranch(MyBase.ToExpression(), stackframe)
     End Function
 
 End Class

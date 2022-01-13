@@ -6,7 +6,79 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module test
 
     Sub Main()
+        Call blanktest()
+        Call testFunc()
+        Call testError()
+        Call testAcceptor()
         Call testFor()
+    End Sub
+
+    Sub inspectSyntax(python As XElement)
+        Call inspectSyntax(python.Value)
+    End Sub
+
+    Sub inspectSyntax(python As String)
+        Dim text As Rscript = Rscript.AutoHandleScript(python)
+        Dim py As Program = text.ParsePyScript
+
+        For Each line As Expression In py
+            Call Console.WriteLine(line)
+        Next
+    End Sub
+
+    Sub blanktest()
+        Call inspectSyntax(<python>
+
+                               def a():
+
+                                    return 5
+
+
+                               b() + a()
+
+                           </python>)
+    End Sub
+
+    Sub testFunc()
+        inspectSyntax(
+            <python>
+
+                def run(a, b, c):
+                 
+                   func1()
+                   func2()
+             
+
+                   bitmap(file = xxx):
+                      plot(func3())
+
+
+                   t = func()
+                   return t
+
+
+            # invoke
+            run(1,1,1)
+
+            </python>)
+    End Sub
+
+    Sub testError()
+        Call inspectSyntax(<python>
+
+                               raise "unexpected error!"
+                           </python>)
+    End Sub
+
+    Sub testAcceptor()
+        Call inspectSyntax(
+            <python>
+
+                bitmap(file = "123.png", size = [500,2000]):
+                     
+                    plot(x, y)
+
+            </python>)
     End Sub
 
     Sub testFor()
@@ -34,14 +106,5 @@ for x in fruits:
 
 ")
 
-    End Sub
-
-    Sub inspectSyntax(python As String)
-        Dim text As Rscript = Rscript.AutoHandleScript(python)
-        Dim py As Program = text.ParsePyScript
-
-        For Each line As Expression In py
-            Call Console.WriteLine(line)
-        Next
     End Sub
 End Module
