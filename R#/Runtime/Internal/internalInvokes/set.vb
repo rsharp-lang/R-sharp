@@ -42,6 +42,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataStructures
@@ -320,6 +321,16 @@ Namespace Runtime.Internal.Invokes
                                       End Function)
                 }
             End If
+        End Function
+
+        <ExportAPI("jaccard")>
+        Public Function jaccard(x As Array, y As Array) As Double
+            Dim set1 As New DataStructures.Set(x.AsObjectEnumerator)
+            Dim set2 As New DataStructures.Set(y.AsObjectEnumerator)
+            Dim intersect As Integer = (set1 And set2).Length
+            Dim union As Integer = (set1 Or set2).Length
+
+            Return intersect / union
         End Function
     End Module
 End Namespace
