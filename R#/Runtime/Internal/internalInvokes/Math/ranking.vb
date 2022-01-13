@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::a11cb6969da2d2ef519f473d9688dba7, R#\Runtime\Internal\internalInvokes\Math\ranking.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ranking
-    ' 
-    '         Function: order, orderNumbers, orderStrings, rank
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ranking
+' 
+'         Function: order, orderNumbers, orderStrings, rank
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -44,11 +44,11 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.Correlations.Ranking
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports stdNum = System.Math
 
 Namespace Runtime.Internal.Invokes
 
@@ -160,51 +160,21 @@ Namespace Runtime.Internal.Invokes
             End If
 
             If TypeOf generic Is String() Then
-                Return DirectCast(generic, String()).orderStrings(decreasing)
+                Return DirectCast(generic, String()).orderNumbers(decreasing)
             Else
                 Return DirectCast(REnv.asVector(Of Double)(generic), Double()).orderNumbers(decreasing)
             End If
         End Function
 
         <Extension>
-        Private Function orderNumbers(x As Double(), decreasing As Boolean) As Integer()
-            Dim rank As Integer() = x.OrdinalRankingOrder(desc:=decreasing)
-            Dim ii As New List(Of Integer)
-            Dim di As Integer
-
-            For i As Integer = 1 To rank.Length
-                di = i
-                ii.Add(which(rank.Select(Function(xi) xi = di)).First + 1)
-            Next
-
-            Return ii.ToArray
-        End Function
-
-        <Extension>
-        Private Function orderStrings(x As String(), decreasing As Boolean) As Integer()
-            Dim nums As New List(Of Double())
-            Dim max As Integer = stdNum.Min(5, x.MaxLengthString.Length)
-            Dim chars As Char()() = x.Select(Function(s) s.ToArray).ToArray
-
-            For i As Integer = 0 To max - 1
-                Dim idx As Integer = i
-                Dim uniq As Index(Of Char) = (From str In chars Where str.Length > idx Select str(idx)) _
-                    .Distinct _
-                    .OrderBy(Function(c) c) _
-                    .ToArray
-                Dim size As Integer = uniq.Count
-                Dim v = (From str In chars Select (size - If(str.Length > idx, uniq.IndexOf(str(idx)), 0)) / size).ToArray
-
-                nums.Add(v)
-            Next
-
-            Dim dbls As Double() = x _
-                .Select(Function(any, i)
-                            Return Aggregate nth As Double() In nums Into Average(nth(i))
+        Private Function orderNumbers(Of T As IComparable(Of T))(x As T(), decreasing As Boolean) As Integer()
+            Return RankOrder(Of T).Input(x) _
+                .DoCall(Function(v)
+                            Return RankOrder(Of T).Ranking(v, desc:=decreasing)
                         End Function) _
+                .OrderBy(Function(d) d.i) _
+                .Select(Function(d) CInt(d.rank)) _
                 .ToArray
-
-            Return dbls.orderNumbers(Not decreasing)
         End Function
     End Module
 End Namespace
