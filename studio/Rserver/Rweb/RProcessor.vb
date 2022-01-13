@@ -215,7 +215,7 @@ Public Class RProcessor
             Call App.Shell(Rslave.Path, arguments, CLR:=True, debug:=True).Run()
         Else
 #If netcore5 = 1 Then
-            Call UNIX.Shell("dotnet", $"{Rslave.Path.CLIPath} {arguments}", verbose:=True)
+            Call UNIX.Shell("dotnet", $"{Rslave.Path.ChangeSuffix("dll").CLIPath} {arguments}", verbose:=True)
 #Else
             Call UNIX.Shell("mono", $"{Rslave.Path.CLIPath} {arguments}", verbose:=True)
 #End If
