@@ -229,5 +229,34 @@ Namespace Runtime.Internal.Invokes
 
             Return flags.ToArray
         End Function
+
+        ''' <summary>
+        ''' Generate All Combinations of n Elements, Taken m at a Time
+        ''' 
+        ''' Generate all combinations of the elements of x taken 
+        ''' m at a time. If x is a positive integer, returns all 
+        ''' combinations of the elements of seq(x) taken m at a 
+        ''' time. If argument FUN is not NULL, applies a function 
+        ''' given by the argument to each point. If simplify is 
+        ''' FALSE, returns a list; otherwise returns an array, typically 
+        ''' a matrix. ... are passed unchanged to the FUN function, 
+        ''' if specified.
+        ''' </summary>
+        ''' <remarks>Factors x are accepted.</remarks>
+        ''' <param name="x">
+        ''' vector source For combinations, Or Integer n For x &lt;- seq_len(n).
+        ''' </param>
+        ''' <param name="m">
+        ''' number of elements to choose.
+        ''' </param>
+        ''' <returns>
+        ''' A list or array, see the simplify argument above. In the 
+        ''' latter case, the identity dim(combn(n, m)) == c(m, choose(n, m)) 
+        ''' holds.
+        ''' </returns>
+        <ExportAPI("combn")>
+        Public Function combn(x As Array, m As Integer) As Object
+
+        End Function
     End Module
 End Namespace
