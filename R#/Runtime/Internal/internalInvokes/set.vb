@@ -1,51 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::4e45a7b0b02b88ecea689d4eab94f3ad, R#\Runtime\Internal\internalInvokes\set.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module [set]
-    ' 
-    '         Function: createLoop, duplicated, getObjectSet, indexOf, intersect
-    '                   union
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module [set]
+' 
+'         Function: createLoop, duplicated, getObjectSet, indexOf, intersect
+'                   union
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataStructures
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -110,7 +112,10 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="y">vectors (of the same mode) containing a sequence of items (conceptually) with no duplicated values.</param>
         ''' <returns></returns>
         <ExportAPI("intersect")>
-        Public Function intersect(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object, Optional env As Environment = Nothing) As Object
+        Public Function intersect(<RRawVectorArgument> x As Object,
+                                  <RRawVectorArgument> y As Object,
+                                  Optional env As Environment = Nothing) As Object
+
             Dim index_a As New Index(Of Object)(getObjectSet(x, env))
             Dim inter As Object() = index_a _
                 .Intersect(collection:=getObjectSet(y, env)) _
@@ -127,7 +132,10 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="y">vectors (of the same mode) containing a sequence of items (conceptually) with no duplicated values.</param>
         ''' <returns></returns>
         <ExportAPI("union")>
-        Public Function union(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object, Optional env As Environment = Nothing) As Object
+        Public Function union(<RRawVectorArgument> x As Object,
+                              <RRawVectorArgument> y As Object,
+                              Optional env As Environment = Nothing) As Object
+
             Dim join As Object() = getObjectSet(x, env) _
                 .JoinIterates(getObjectSet(y, env)) _
                 .Distinct _
@@ -136,7 +144,11 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("index.of")>
-        Public Function indexOf(<RRawVectorArgument> x As Object, Optional getKey As Object = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function indexOf(<RRawVectorArgument>
+                                x As Object,
+                                Optional getKey As Object = Nothing,
+                                Optional env As Environment = Nothing) As Object
+
             If x Is Nothing Then
                 Return Nothing
             ElseIf x.GetType Is GetType(vector) Then
@@ -255,8 +267,59 @@ Namespace Runtime.Internal.Invokes
         ''' holds.
         ''' </returns>
         <ExportAPI("combn")>
-        Public Function combn(x As Array, m As Integer) As Object
+        Public Function combn(x As Array, m As Integer, Optional env As Environment = Nothing) As Object
+            If x Is Nothing OrElse x.Length = 0 Then
+                Return Nothing
+            End If
 
+            If x.Length = 1 Then
+                Dim size As Object = x.GetValue(Scan0)
+
+                If RType.GetRSharpType(size.GetType).mode = TypeCodes.integer Then
+                    x = DirectCast(REnv.asVector(Of Integer)(size), Integer())(Scan0) _
+                        .SeqIterator(offset:=1) _
+                        .ToArray
+                End If
+            Else
+                x = REnv.TryCastGenericArray(x, env)
+            End If
+
+            Dim all = x.AsObjectEnumerator(Of Object) _
+                .ToArray _
+                .AllCombinations _
+                .Where(Function(c) c.Length = m) _
+                .ToArray
+            Dim type As RType = RType.GetRSharpType(x(0))
+
+            If type.mode = TypeCodes.boolean OrElse
+                type.mode = TypeCodes.double OrElse
+                type.mode = TypeCodes.integer OrElse
+                type.mode = TypeCodes.string Then
+
+                ' dataframe with column size is m
+                ' contains n combination rows
+                Dim combines As New dataframe With {
+                    .columns = New Dictionary(Of String, Array)
+                }
+
+#Disable Warning
+                For i As Integer = 0 To m - 1
+                    Call combines.add($"v{i + 1}", all.Select(Function(r) r(i)).ToArray)
+                Next
+#Enable Warning
+
+                Return combines
+            Else
+                ' list data
+                Return New list With {
+                    .slots = all _
+                        .SeqIterator(offset:=1) _
+                        .ToDictionary(Function(d) d.i.ToString,
+                                      Function(d)
+                                          Return CObj(d.value)
+                                      End Function)
+                }
+            End If
         End Function
     End Module
 End Namespace
