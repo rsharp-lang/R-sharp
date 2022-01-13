@@ -229,5 +229,9 @@ Namespace Runtime.Internal.Invokes
 
             Return flags.ToArray
         End Function
+
+        Public Function combination(x As Array)
+
+        End Function
     End Module
 End Namespace
