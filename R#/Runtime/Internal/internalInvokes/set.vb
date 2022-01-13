@@ -286,9 +286,9 @@ Namespace Runtime.Internal.Invokes
 
             Dim all = x.AsObjectEnumerator(Of Object) _
                 .ToArray _
-                .AllCombinations _
-                .Where(Function(c) c.Length = m) _
+                .AllCombinations(m) _
                 .ToArray
+
             Dim type As RType = RType.GetRSharpType(x(0).GetType)
 
             If type.mode = TypeCodes.boolean OrElse
