@@ -485,6 +485,14 @@ Namespace Interpreter
             Dim program As Program = Program.CreateProgram(Rscript, debug:=debug, [error]:=[error])
             Dim result As Object
 
+            If debug Then
+#Disable Warning
+                Call Console.WriteLine(vbNewLine)
+                Call Console.WriteLine(program.ToString)
+                Call Console.WriteLine(vbNewLine)
+#Enable Warning
+            End If
+
             globalEnvir = InitializeEnvironment(Rscript.fileName, arguments)
 
             If Not [error].StringEmpty Then
