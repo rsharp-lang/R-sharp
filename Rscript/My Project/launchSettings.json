@@ -2,8 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src D:\\biodeep\\biodeepdb_v3\\spatial\\MSI_analysis --skip-src-build ",
-      "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\REnv"
+      "commandLineArgs": "--slave /exec \"D:\\GCModeller-Cloud\\webR\\wwwroot/KeggMap.R\" /args \"eyJpZCI6WyJtYXAwNDYyNSJdfQ==\" /request-id \"web_request__0549g\" /PORT \"3838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE --debug"
     }
   }
 }
