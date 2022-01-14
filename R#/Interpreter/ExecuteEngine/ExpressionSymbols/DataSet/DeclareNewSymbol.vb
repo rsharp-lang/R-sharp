@@ -52,6 +52,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Runtime
@@ -272,6 +273,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                                           envir As Environment) As Object
             Dim rtvl As Object
 
+            If TypeOf value Is IfPromise Then
+                value = DirectCast(value, IfPromise).Value
+            End If
+
             If Not value Is Nothing AndAlso TypeOf value Is vector Then
                 value = DirectCast(value, vector).data
             End If
@@ -305,10 +310,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     }, envir)
                 End If
             ElseIf Not value Is Nothing AndAlso TypeOf value Is dataframe Then
-                Dim data As dataframe = value
+                Dim data As dataframe = DirectCast(value, dataframe)
 
                 For Each name As String In names
                     rtvl = envir.Push(name, data.getColumnVector(name), [readonly])
+
+                    If Program.isException(rtvl) Then
+                        Return rtvl
+                    End If
+                Next
+            ElseIf TypeOf value Is list Then
+                Dim list As list = DirectCast(value, list)
+
+                For Each name As String In names
+                    rtvl = envir.Push(name, list.getByName(name), [readonly])
 
                     If Program.isException(rtvl) Then
                         Return rtvl
