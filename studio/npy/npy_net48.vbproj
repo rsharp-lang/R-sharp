@@ -849,6 +849,7 @@
     <Compile Include="Language\PythonCodeDOM.vb" />
     <Compile Include="Language\PythonLine.vb" />
     <Compile Include="Language\SyntaxTree.vb" />
+    <Compile Include="Language\Syntax\AcceptorTag.vb" />
     <Compile Include="Language\Syntax\ForTag.vb" />
     <Compile Include="Language\Syntax\FunctionTag.vb" />
     <Compile Include="Language\Syntax\IfTag.vb" />
