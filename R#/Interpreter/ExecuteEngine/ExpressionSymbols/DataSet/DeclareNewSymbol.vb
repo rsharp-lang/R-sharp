@@ -52,6 +52,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Runtime
@@ -271,6 +272,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                                           [readonly] As Boolean,
                                           envir As Environment) As Object
             Dim rtvl As Object
+
+            If TypeOf value Is IfPromise Then
+                value = DirectCast(value, IfPromise).Value
+            End If
 
             If Not value Is Nothing AndAlso TypeOf value Is vector Then
                 value = DirectCast(value, vector).data
