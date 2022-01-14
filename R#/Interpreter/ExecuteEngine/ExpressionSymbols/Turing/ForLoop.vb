@@ -136,7 +136,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 End If
             Next
 
-            Return result.ToArray
+            Return REnv.TryCastGenericArray(result.ToArray, envir)
         End Function
 
         Public Overrides Function ToString() As String
