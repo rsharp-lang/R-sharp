@@ -134,8 +134,16 @@ Partial Module CLI
                 timeoutMS:=timeout
             )
         Else
+            If isDebugMode Then
+                Call Console.WriteLine($"found script at location: {script.GetFullPath}")
+            End If
+
             ' add variable values into environment for debug used
             For Each arg In arguments
+                If isDebugMode Then
+                    Call Console.WriteLine($"[init] {arg.Key} => {arg.Value.GetJson}")
+                End If
+
                 Call App.JoinVariable(arg.Key, arg.Value.JoinBy("; "))
             Next
         End If
@@ -166,6 +174,10 @@ Partial Module CLI
                 timeoutMS:=timeout
             )
         ElseIf Not entry.StringEmpty Then
+            If isDebugMode Then
+                Call Console.WriteLine($"[call] {entry}")
+            End If
+
             result = R.Invoke(entry, parameters)
         End If
 
@@ -204,6 +216,10 @@ Partial Module CLI
         ElseIf TypeOf result Is list Then
             Throw New NotImplementedException(result.GetType.FullName)
         ElseIf TypeOf result Is Message Then
+            If env.globalEnvironment.Rscript.debug Then
+                Call Rscript.handleResult(result, env.globalEnvironment)
+            End If
+
             buffer.data = New messageBuffer(DirectCast(result, Message))
         ElseIf TypeOf result Is BufferObject Then
             buffer.data = DirectCast(result, BufferObject)
