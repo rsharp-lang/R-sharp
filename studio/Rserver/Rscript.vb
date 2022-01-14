@@ -1,47 +1,3 @@
-﻿#Region "Microsoft.VisualBasic::d5a6a1641d8693bb3199036962b927fd, studio\Rserver\Rscript.vb"
-
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    ' /********************************************************************************/
-
-    ' Summaries:
-
-    '     Class Rscript
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Check, Compile, FromEnvironment, GetCheckCommandLine, GetCompileCommandLine
-    '                   GetparallelModeCommandLine, GetslaveModeCommandLine, parallelMode, slaveMode
-    ' 
-    ' 
-    ' /********************************************************************************/
-
-#End Region
-
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine
@@ -49,21 +5,21 @@ Imports Microsoft.VisualBasic.CommandLine.InteropService
 Imports Microsoft.VisualBasic.ApplicationServices
 
 ' Microsoft VisualBasic CommandLine Code AutoGenerator
-' assembly: ..\App\Rscript.exe
+' assembly: ..\net5.0\Rscript.dll
 
 ' 
 '  // 
-'  // R# scripting host
 '  // 
-'  // VERSION:   1.99.7833.40504
-'  // ASSEMBLY:  Rscript, Version=1.99.7833.40504, Culture=neutral, PublicKeyToken=null
-'  // COPYRIGHT: Copyright (c) SMRUCC genomics  2020
-'  // GUID:      16d477b1-e7fb-41eb-9b61-7ea75c5d2939
-'  // BUILT:     6/11/2021 10:05:36 AM
+'  // 
+'  // VERSION:   1.0.0.0
+'  // ASSEMBLY:  Rscript, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+'  // COPYRIGHT: 
+'  // GUID:      
+'  // BUILT:     1/1/2000 12:00:00 AM
 '  // 
 ' 
 ' 
-'  < RscriptCommandLine.CLI >
+'  < Rsharp.NetCore5.CLI >
 ' 
 ' 
 ' SYNOPSIS
@@ -72,7 +28,8 @@ Imports Microsoft.VisualBasic.ApplicationServices
 ' All of the command that available in this program has been list below:
 ' 
 '  --build:        build R# package
-'  --check:        Verify a packed R# package is damaged or not?
+'  --check:        Verify a packed R# package is damaged or not or check the R# script problem in a
+'                  R package source folder.
 '  --parallel:     Create a new parallel thread process for running a new parallel task.
 '  --slave:        Create a R# cluster node for run background or parallel task. This IPC command will
 '                  run a R# script file that specified by the ``/exec`` argument, and then post back
@@ -85,11 +42,11 @@ Imports Microsoft.VisualBasic.ApplicationServices
 '    2. Using command "Rscript /CLI.dev [---echo]" for CLI pipeline development.
 '    3. Using command "Rscript /i" for enter interactive console mode.
 
-Namespace CLI
+Namespace RscriptCommandLine
 
 
     ''' <summary>
-    ''' RscriptCommandLine.CLI
+    ''' Rsharp.NetCore5.CLI
     ''' </summary>
     '''
     Public Class Rscript : Inherits InteropService
@@ -112,7 +69,7 @@ Namespace CLI
 
         ''' <summary>
         ''' ```bash
-        ''' --build [/src &lt;folder, default=./&gt; /save &lt;Rpackage.zip&gt;]
+        ''' --build [/src &lt;folder, default=./&gt; --skip-src-build /save &lt;Rpackage.zip&gt;]
         ''' ```
         ''' build R# package
         ''' </summary>
@@ -120,12 +77,12 @@ Namespace CLI
         ''' <param name="src"> A folder path that contains the R source files and meta data files of the target R package, 
         '''               a folder that exists in this folder path which is named &apos;R&apos; is required!
         ''' </param>
-        Public Function Compile(Optional src As String = "./", Optional save As String = "") As Integer
-            Dim cli = GetCompileCommandLine(src:=src, save:=save, internal_pipelineMode:=True)
+        Public Function Compile(Optional src As String = "./", Optional save As String = "", Optional skip_src_build As Boolean = False) As Integer
+            Dim cli = GetCompileCommandLine(src:=src, save:=save, skip_src_build:=skip_src_build, internal_pipelineMode:=True)
             Dim proc As IIORedirectAbstract = RunDotNetApp(cli)
             Return proc.Run()
         End Function
-        Public Function GetCompileCommandLine(Optional src As String = "./", Optional save As String = "", Optional internal_pipelineMode As Boolean = True) As String
+        Public Function GetCompileCommandLine(Optional src As String = "./", Optional save As String = "", Optional skip_src_build As Boolean = False, Optional internal_pipelineMode As Boolean = True) As String
             Dim CLI As New StringBuilder("--build")
             Call CLI.Append(" ")
             If Not src.StringEmpty Then
@@ -133,6 +90,9 @@ Namespace CLI
             End If
             If Not save.StringEmpty Then
                 Call CLI.Append("/save " & """" & save & """ ")
+            End If
+            If skip_src_build Then
+                Call CLI.Append("--skip-src-build ")
             End If
             Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
@@ -142,21 +102,24 @@ Namespace CLI
 
         ''' <summary>
         ''' ```bash
-        ''' --check --target &lt;package.zip&gt;
+        ''' --check --target &lt;package.zip&gt; [--debug]
         ''' ```
-        ''' Verify a packed R# package is damaged or not?
+        ''' Verify a packed R# package is damaged or not or check the R# script problem in a R package source folder.
         ''' </summary>
         '''
 
-        Public Function Check(target As String) As Integer
-            Dim cli = GetCheckCommandLine(target:=target, internal_pipelineMode:=True)
+        Public Function Check(target As String, Optional debug As Boolean = False) As Integer
+            Dim cli = GetCheckCommandLine(target:=target, debug:=debug, internal_pipelineMode:=True)
             Dim proc As IIORedirectAbstract = RunDotNetApp(cli)
             Return proc.Run()
         End Function
-        Public Function GetCheckCommandLine(target As String, Optional internal_pipelineMode As Boolean = True) As String
+        Public Function GetCheckCommandLine(target As String, Optional debug As Boolean = False, Optional internal_pipelineMode As Boolean = True) As String
             Dim CLI As New StringBuilder("--check")
             Call CLI.Append(" ")
             Call CLI.Append("--target " & """" & target & """ ")
+            If debug Then
+                Call CLI.Append("--debug ")
+            End If
             Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
@@ -192,7 +155,7 @@ Namespace CLI
 
         ''' <summary>
         ''' ```bash
-        ''' --slave /exec &lt;script.R&gt; /args &lt;json_base64&gt; /request-id &lt;request_id&gt; /PORT=&lt;port_number&gt; [--debug /timeout=&lt;timeout in ms, default=1000&gt; /retry=&lt;retry_times, default=5&gt; /MASTER=&lt;ip, default=localhost&gt; /entry=&lt;function_name, default=NULL&gt;]
+        ''' --slave /exec &lt;script.R&gt; /args &lt;json_base64&gt; /request-id &lt;request_id&gt; /PORT=&lt;port_number&gt; [--debug /timeout=&lt;timeout in ms, default=1000&gt; /retry=&lt;retry_times, default=5&gt; /MASTER=&lt;ip, default=localhost&gt; --startups &lt;packageNames, default=&quot;&quot;&gt; /entry=&lt;function_name, default=NULL&gt;]
         ''' ```
         ''' Create a R# cluster node for run background or parallel task. This IPC command will run a R# script file that specified by the ``/exec`` argument, and then post back the result data json to the specific master listener.
         ''' </summary>
@@ -211,6 +174,8 @@ Namespace CLI
         ''' </param>
         ''' <param name="retry"> How many times that this cluster node should retry to send callback data if the TCP request timeout.
         ''' </param>
+        ''' <param name="startups"> A list of package names for load during the current slave process startup.
+        ''' </param>
         Public Function slaveMode(exec As String,
                                      args As String,
                                      request_id As String,
@@ -218,6 +183,7 @@ Namespace CLI
                                      Optional timeout As String = "1000",
                                      Optional retry As String = "5",
                                      Optional master As String = "localhost",
+                                     Optional startups As String = "",
                                      Optional entry As String = "NULL",
                                      Optional debug As Boolean = False) As Integer
             Dim cli = GetslaveModeCommandLine(exec:=exec,
@@ -227,6 +193,7 @@ Namespace CLI
                                          timeout:=timeout,
                                          retry:=retry,
                                          master:=master,
+                                         startups:=startups,
                                          entry:=entry,
                                          debug:=debug, internal_pipelineMode:=True)
             Dim proc As IIORedirectAbstract = RunDotNetApp(cli)
@@ -239,6 +206,7 @@ Namespace CLI
                                      Optional timeout As String = "1000",
                                      Optional retry As String = "5",
                                      Optional master As String = "localhost",
+                                     Optional startups As String = "",
                                      Optional entry As String = "NULL",
                                      Optional debug As Boolean = False, Optional internal_pipelineMode As Boolean = True) As String
             Dim CLI As New StringBuilder("--slave")
@@ -256,6 +224,9 @@ Namespace CLI
             If Not master.StringEmpty Then
                 Call CLI.Append("/master " & """" & master & """ ")
             End If
+            If Not startups.StringEmpty Then
+                Call CLI.Append("--startups " & """" & startups & """ ")
+            End If
             If Not entry.StringEmpty Then
                 Call CLI.Append("/entry " & """" & entry & """ ")
             End If
@@ -269,3 +240,6 @@ Namespace CLI
         End Function
     End Class
 End Namespace
+
+
+

@@ -63,12 +63,21 @@ Public Class RProcessor
     Dim showError As Boolean
     Dim requestPostback As New Dictionary(Of String, BufferObject)
     Dim localRServer As Rweb
+    ''' <summary>
+    ''' package list for load while on slave process startup
+    ''' </summary>
+    Dim startups As String
 
     Sub New(Rserver As Rweb, RwebDir As String, show_error As Boolean)
         Me.Rweb = RwebDir
         Me.showError = show_error
         Me.localRServer = Rserver
     End Sub
+
+    Public Function WithStartups(ParamArray packages As String()) As RProcessor
+        startups = packages.JoinBy(",")
+        Return Me
+    End Function
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Sub SaveResponse(requestId As String, buffer As Buffer)

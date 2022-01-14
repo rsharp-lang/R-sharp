@@ -45,6 +45,8 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language.Default
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development
@@ -77,7 +79,7 @@ Partial Module CLI
     End Function
 
     <ExportAPI("--slave")>
-    <Usage("--slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [--debug /timeout=<timeout in ms, default=1000> /retry=<retry_times, default=5> /MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]")>
+    <Usage("--slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [--debug /timeout=<timeout in ms, default=1000> /retry=<retry_times, default=5> /MASTER=<ip, default=localhost> --startups <packageNames, default=""""> /entry=<function_name, default=NULL>]")>
     <Description("Create a R# cluster node for run background or parallel task. This IPC command will run a R# script file that specified by the ``/exec`` argument, and then post back the result data json to the specific master listener.")>
     <Argument("/exec", False, CLITypes.File, AcceptTypes:={GetType(String)}, Extensions:="*.R", Description:="a specific R# script for run")>
     <Argument("/args", False, CLITypes.Base64, PipelineTypes.std_in,
@@ -98,6 +100,9 @@ Partial Module CLI
     <Argument("/retry", False, CLITypes.Integer,
               AcceptTypes:={GetType(Integer)},
               Description:="How many times that this cluster node should retry to send callback data if the TCP request timeout.")>
+    <Argument("--startups", False, CLITypes.String,
+              AcceptTypes:={GetType(String())},
+              Description:="A list of package names for load during the current slave process startup.")>
     Public Function slaveMode(args As CommandLine) As Integer
         Dim script As String = args <= "/exec"
         Dim arguments As Dictionary(Of String, String()) = args("/args") _
@@ -110,6 +115,11 @@ Partial Module CLI
         Dim retryTimes As Integer = args("/retry") Or 5
         Dim timeout As Double = args("/timeout") Or 1000
         Dim isDebugMode As Boolean = args("--debug")
+        Dim startups As String() = args("--startups") _
+            .Split(",") _
+            .SafeQuery _
+            .Where(Function(str) Not str.StringEmpty) _
+            .ToArray
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Dim result As Object = Nothing
         Dim upstream As New IPEndPoint(master, port)
@@ -163,7 +173,10 @@ Partial Module CLI
             Call Console.WriteLine("[init] load startup packages")
         End If
 
-        For Each pkgName As String In R.configFile.GetStartupLoadingPackages
+        For Each pkgName As String In R.configFile _
+            .GetStartupLoadingPackages _
+            .JoinIterates(startups)
+
             Call R.LoadLibrary(packageName:=pkgName)
         Next
 
