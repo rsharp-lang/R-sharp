@@ -42,7 +42,7 @@
 
 Imports Microsoft.VisualBasic.CommandLine.InteropService
 Imports Parallel
-Imports Rserver.CLI
+Imports Rserver.RscriptCommandLine
 
 Namespace Protocol
 

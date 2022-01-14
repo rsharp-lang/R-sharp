@@ -116,7 +116,7 @@ Partial Module CLI
         Dim timeout As Double = args("/timeout") Or 1000
         Dim isDebugMode As Boolean = args("--debug")
         Dim startups As String() = args("--startups") _
-            .Split(",") _
+            .Split("[,;]\s*", regexp:=True) _
             .SafeQuery _
             .Where(Function(str) Not str.StringEmpty) _
             .ToArray

@@ -205,7 +205,7 @@ Public Class RProcessor
         Dim port As Integer = localRServer.TcpPort
         Dim master As String = "localhost"
         Dim entry As String = "run"
-        Dim Rslave = CLI.Rscript.FromEnvironment(directory:=App.HOME)
+        Dim Rslave = RscriptCommandLine.Rscript.FromEnvironment(directory:=App.HOME)
 
         Call args.GetJson.__DEBUG_ECHO
 
@@ -217,7 +217,8 @@ Public Class RProcessor
             PORT:=port,
             master:=master,
             entry:=entry,
-            internal_pipelineMode:=False
+            internal_pipelineMode:=False,
+            startups:=startups
         )
 
         If App.IsMicrosoftPlatform Then
