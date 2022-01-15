@@ -80,10 +80,16 @@ Public Class Rweb : Inherits HttpServer
         End Get
     End Property
 
-    Public Sub New(Rweb$, port As Integer, tcp As Integer, show_error As Boolean, Optional threads As Integer = -1)
+    Public Sub New(Rweb$,
+                   port As Integer,
+                   tcp As Integer,
+                   show_error As Boolean,
+                   Optional threads As Integer = -1,
+                   Optional debug As Boolean = False)
+
         MyBase.New(port, threads)
 
-        Me.Processor = New RProcessor(Me, Rweb, show_error)
+        Me.Processor = New RProcessor(Me, Rweb, show_error, debug)
         Me.socket = New TcpServicesSocket(tcp) With {
             .ResponseHandler = AddressOf callback
         }

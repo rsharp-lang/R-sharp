@@ -67,11 +67,13 @@ Public Class RProcessor
     ''' package list for load while on slave process startup
     ''' </summary>
     Dim startups As String
+    Dim debug As Boolean
 
-    Sub New(Rserver As Rweb, RwebDir As String, show_error As Boolean)
+    Sub New(Rserver As Rweb, RwebDir As String, show_error As Boolean, debug As Boolean)
         Me.Rweb = RwebDir
         Me.showError = show_error
         Me.localRServer = Rserver
+        Me.debug = debug
     End Sub
 
     Public Function WithStartups(ParamArray packages As String()) As RProcessor
@@ -185,6 +187,14 @@ Public Class RProcessor
             Call response.Write(bytes)
         ElseIf TypeOf result Is textBuffer Then
             Dim bytes As Byte() = result.Serialize
+
+            If debug Then
+#Disable Warning
+                Call Console.WriteLine(vbNewLine)
+                Call Console.WriteLine(DirectCast(result, textBuffer).text)
+                Call Console.WriteLine(vbNewLine)
+#Enable Warning
+            End If
 
             Call response.WriteHttp("html/text", bytes.Length)
             Call response.Write(bytes)

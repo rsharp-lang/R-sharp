@@ -141,7 +141,8 @@ Partial Module CLI
                 master:=upstream,
                 request_id:=request_id,
                 retryTimes:=retryTimes,
-                timeoutMS:=timeout
+                timeoutMS:=timeout,
+                isDebugMode:=isDebugMode
             )
         Else
             If isDebugMode Then
@@ -196,7 +197,8 @@ Partial Module CLI
                 master:=upstream,
                 request_id:=request_id,
                 retryTimes:=retryTimes,
-                timeoutMS:=timeout
+                timeoutMS:=timeout,
+                isDebugMode:=isDebugMode
             )
         ElseIf Not entry.StringEmpty Then
             If isDebugMode Then
@@ -217,7 +219,8 @@ Partial Module CLI
             master:=upstream,
             request_id:=request_id,
             retryTimes:=retryTimes,
-            timeoutMS:=timeout
+            timeoutMS:=timeout,
+            isDebugMode:=isDebugMode
         )
     End Function
 
@@ -227,7 +230,8 @@ Partial Module CLI
                                 master As IPEndPoint,
                                 request_id As String,
                                 retryTimes As Integer,
-                                timeoutMS As Double) As Integer
+                                timeoutMS As Double,
+                                isDebugMode As Boolean) As Integer
 
         Dim buffer As New Buffer
 
@@ -255,6 +259,14 @@ Partial Module CLI
             buffer.data = DirectCast(result, BufferObject)
         Else
             Throw New NotImplementedException(result.GetType.FullName)
+        End If
+
+        If isDebugMode AndAlso TypeOf buffer.data Is textBuffer Then
+#Disable Warning
+            Call Console.WriteLine(vbNewLine)
+            Call Console.WriteLine(DirectCast(buffer.data, textBuffer).text)
+            Call Console.WriteLine(vbNewLine)
+#Enable Warning
         End If
 
         Dim packageData As Byte() = New IPCBuffer(request_id, buffer).Serialize
