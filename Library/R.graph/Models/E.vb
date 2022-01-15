@@ -114,11 +114,11 @@ Public Class E : Implements RNames, RNameIndex, RIndex, RIndexer
     End Function
 
     Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
-        Throw New NotImplementedException()
+        Return edges.ElementAtOrDefault(i - 1)
     End Function
 
     Public Function getByIndex(i() As Integer) As Array Implements RIndex.getByIndex
-        Throw New NotImplementedException()
+        Return i.Select(AddressOf getByIndex).ToArray
     End Function
 
     Public Function setByIndex(i As Integer, value As Object, envir As Environment) As Object Implements RIndex.setByIndex

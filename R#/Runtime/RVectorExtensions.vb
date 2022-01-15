@@ -45,6 +45,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
@@ -294,8 +295,19 @@ Namespace Runtime
                 valueType = value.GetType
             End If
 
-            If GetType(T) Is GetType(Object) AndAlso value.GetType.IsArray Then
-                Return DirectCast(value, Array)
+            If GetType(T) Is GetType(Object) Then
+                If value.GetType.IsArray Then
+                    Return DirectCast(value, Array)
+                ElseIf value.GetType.ImplementInterface(Of RIndex) Then
+                    Dim index As RIndex = DirectCast(value, RIndex)
+                    Dim list As New List(Of Object)
+
+                    For i As Integer = 1 To index.length
+                        Call list.Add(index.getByIndex(i))
+                    Next
+
+                    Return list.ToArray
+                End If
             End If
 
             If TypeOf value Is String AndAlso Not GetType(T) Is GetType(Char) Then

@@ -191,11 +191,11 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
 
 #Region "vertex indexer"
     Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
-        Throw New NotImplementedException()
+        Return vertex.ElementAtOrDefault(i - 1)
     End Function
 
     Public Function getByIndex(i() As Integer) As Array Implements RIndex.getByIndex
-        Throw New NotImplementedException()
+        Return i.Select(AddressOf getByIndex).ToArray
     End Function
 
     Public Function setByIndex(i As Integer, value As Object, envir As Environment) As Object Implements RIndex.setByIndex
