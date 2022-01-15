@@ -191,7 +191,11 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
 
 #Region "vertex indexer"
     Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
-        Return vertex.ElementAtOrDefault(i - 1)
+        If i > vertex.Length Then
+            Return Nothing
+        Else
+            Return New vbObject(vertex(i - 1))
+        End If
     End Function
 
     Public Function getByIndex(i() As Integer) As Array Implements RIndex.getByIndex

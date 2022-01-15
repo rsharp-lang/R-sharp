@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--slave /exec \"D:\\GCModeller-Cloud\\webR\\wwwroot/KeggMap.R\" /args \"eyJpZCI6WyJtYXAwNDYyNSJdfQ==\" /request-id \"web_request__0549g\" /PORT \"3838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE --debug"
+      "commandLineArgs": "--slave /exec \"D:\\GCModeller-Cloud\\webR\\wwwroot\\KeggGraph.R\" /args \"eyJpZCI6WyJtYXAwMDAyMCJdfQ==\" /request-id \"web_request__03217\" /PORT \"3838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" --startups \"GCModeller\" /entry \"run\" /@set --internal_pipeline=FALSE --debug"
     }
   }
 }

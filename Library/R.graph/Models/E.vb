@@ -45,6 +45,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 ''' <summary>
 ''' edge attribute data visistor
@@ -114,7 +115,11 @@ Public Class E : Implements RNames, RNameIndex, RIndex, RIndexer
     End Function
 
     Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
-        Return edges.ElementAtOrDefault(i - 1)
+        If i > edges.Length Then
+            Return Nothing
+        Else
+            Return New vbObject(edges(i - 1))
+        End If
     End Function
 
     Public Function getByIndex(i() As Integer) As Array Implements RIndex.getByIndex
