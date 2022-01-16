@@ -64,10 +64,10 @@ Public Class SyntaxTree
     ''' <param name="line"></param>
     Private Sub pushBlock(line As PythonLine, [next] As PythonCodeDOM)
         If line.levels > current.level Then
-            stack.Push(current)
+            Call stack.Push(current)
         ElseIf line.levels = current.level Then
             ' 结束了上一个block
-            stack.Peek.Add(current.ToExpression())
+            Call stack.Peek.Add(current.ToExpression())
         End If
 
         current = [next]
@@ -99,7 +99,12 @@ Public Class SyntaxTree
         End If
 
         Dim data = tokens.SplitByTopLevelDelimiter(TokenType.keyword, False, tokenText:="in").ToArray
-        Dim vars = data(0).SplitByTopLevelDelimiter(TokenType.comma).Select(Function(t) ParsePythonLine(t, opts).expression).ToArray
+        Dim vars = data(0) _
+            .SplitByTopLevelDelimiter(TokenType.comma) _
+            .Select(Function(t)
+                        Return ParsePythonLine(t, opts).expression
+                    End Function) _
+            .ToArray
         Dim seqs = ParsePythonLine(data(2), opts).expression
 
         Call pushBlock(line, [next]:=New ForTag With {
@@ -126,33 +131,32 @@ Public Class SyntaxTree
     Private Sub addPkgImport(line As PythonLine)
         Dim package As Token = line.tokens(1)
 
-        If line.tokens(2) = (TokenType.keyword, "import") Then
-            ' from ... import ...
-            Dim tokens = line.tokens.Skip(3).ToArray
-
-            Dim pkgName = ParsePythonLine({package}, opts)
-            Dim list = tokens _
-                .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True) _
-                .Where(Function(r)
-                           Return Not (r.Length = 1 AndAlso r(Scan0).name = TokenType.comma)
-                       End Function) _
-                .Select(Function(t)
-                            Dim expr = ParsePythonLine(t, opts).expression
-
-                            If TypeOf expr Is SymbolReference Then
-                                expr = New Literal(DirectCast(expr, SymbolReference).symbol)
-                            End If
-
-                            Return expr
-                        End Function) _
-                .ToArray
-            Dim libname As New Literal(ValueAssignExpression.GetSymbol(pkgName.expression))
-            Dim importPkgs As New [Imports](New VectorLiteral(list), libname, source:=script.source)
-
-            Call addLine(line.levels, importPkgs)
-        Else
+        If line.tokens(2) <> (TokenType.keyword, "import") Then
             Throw New NotImplementedException
         End If
+
+        ' from ... import ...
+        Dim tokens = line.tokens.Skip(3).ToArray
+        Dim pkgName = ParsePythonLine({package}, opts)
+        Dim list As Expression() = tokens _
+            .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True) _
+            .Where(Function(r)
+                       Return Not (r.Length = 1 AndAlso r(Scan0).name = TokenType.comma)
+                   End Function) _
+            .Select(Function(t)
+                        Dim expr = ParsePythonLine(t, opts).expression
+
+                        If TypeOf expr Is SymbolReference Then
+                            expr = New Literal(DirectCast(expr, SymbolReference).symbol)
+                        End If
+
+                        Return expr
+                    End Function) _
+            .ToArray
+        Dim libname As New Literal(ValueAssignExpression.GetSymbol(pkgName.expression))
+        Dim importPkgs As New [Imports](New VectorLiteral(list), libname, source:=script.source)
+
+        Call addLine(line.levels, importPkgs)
     End Sub
 
     Private Sub addPkgLoad(line As PythonLine)
@@ -160,7 +164,7 @@ Public Class SyntaxTree
         Dim names As Expression() = tokens _
             .Split(Function(t) t.name = TokenType.comma) _
             .Select(Function(block)
-                        Dim expr = ParsePythonLine(block, opts).expression
+                        Dim expr As Expression = ParsePythonLine(block, opts).expression
 
                         If TypeOf expr Is SymbolReference Then
                             expr = New Literal(DirectCast(expr, SymbolReference).symbol)
@@ -176,26 +180,29 @@ Public Class SyntaxTree
                 Dim testpath As String = $"{script.GetSourceDirectory}/{modulefile}"
 
                 If testpath.FileExists Then
-                    addLine(line.levels, New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
+                    Call addLine(line.levels, New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
                 Else
-                    addLine(line.levels, New Require(modulefile))
+                    Call addLine(line.levels, New Require(modulefile))
                 End If
             Else
-                addLine(line.levels, New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
+                Call addLine(line.levels, New [Imports](Nothing, New VectorLiteral({name}), source:=script.source))
             End If
         Next
     End Sub
 
     Private Sub startIfDefine(line As PythonLine)
-        Dim tokens = line.tokens.Skip(1).Take(line.tokens.Length - 2).ToArray
+        Dim tokens As Token() = line.tokens _
+            .Skip(1) _
+            .Take(line.tokens.Length - 2) _
+            .ToArray
         Dim test As SyntaxResult = ParsePythonLine(tokens, opts)
 
         Call pushBlock(line, [next]:=New IfTag With {
-           .keyword = line(Scan0).text,
-           .level = line.levels,
-           .script = New List(Of Expression),
-           .test = test.expression,
-           .stackframe = opts.GetStackTrace(line(1))
+            .keyword = line(Scan0).text,
+            .level = line.levels,
+            .script = New List(Of Expression),
+            .test = test.expression,
+            .stackframe = opts.GetStackTrace(line(1))
         })
     End Sub
 
@@ -246,17 +253,17 @@ Public Class SyntaxTree
             If current.keyword.StringEmpty Then
                 Throw New SyntaxErrorException
             Else
-                current.Add(expr)
+                Call current.Add(expr)
             End If
         ElseIf lineLevels <= current.level Then
             If stack.Count = 1 Then
                 ' 结束当前的对象
-                stack.Peek.Add(current.ToExpression())
+                Call stack.Peek.Add(current.ToExpression())
             ElseIf stack.Peek Is current Then
                 ' 结束当前的对象
-                stack.Pop.Add(current.ToExpression())
+                Call stack.Pop.Add(current.ToExpression())
             Else
-                stack.Peek.Add(current.ToExpression())
+                Call stack.Peek.Add(current.ToExpression())
             End If
 
             current = stack.Peek
@@ -300,7 +307,7 @@ Public Class SyntaxTree
             current = stack.Pop
 
             If stack.Count > 0 Then
-                stack.Peek.Add(current.ToExpression())
+                Call stack.Peek.Add(current.ToExpression())
             Else
                 Exit Do
             End If
