@@ -122,7 +122,7 @@ Public Class SyntaxTree
         If result.isException Then
             Throw result.error.exception
         Else
-            addLine(line.levels, result.expression)
+            Call addLine(line.levels, New ReturnValue(result.expression))
         End If
     End Sub
 

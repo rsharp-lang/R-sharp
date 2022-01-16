@@ -24,6 +24,8 @@ Module test
         For Each line As Expression In py
             Call Console.WriteLine(line)
         Next
+
+        Pause()
     End Sub
 
     Sub blanktest()
@@ -31,7 +33,13 @@ Module test
 
                                def a():
 
-                                    return 5
+                                    i = 1
+
+                                    for x in 1:100:
+                                         i = i + 1
+
+
+                                    return 5 + i
 
 
                                b() + a()
