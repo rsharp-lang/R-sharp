@@ -237,9 +237,14 @@ Namespace Language.TokenIcer
 
             If escape.comment Then
                 If c = ASCII.CR OrElse c = ASCII.LF Then
+                    Dim commentText As New String(buffer.PopAllChars)
+
+                    ' 20220116 makes bugs fixed for python indent 
+                    buffer += c
+
                     Return New Token With {
                         .name = TokenType.comment,
-                        .text = New String(buffer.PopAllChars)
+                        .text = commentText
                     }
                 Else
                     buffer += c

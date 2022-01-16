@@ -46,7 +46,8 @@ Public Class SyntaxTree
     End Sub
 
     Private Function getLines(tokens As IEnumerable(Of Token)) As IEnumerable(Of PythonLine)
-        Dim lineTokens = tokens _
+        Dim allTokens As Token() = tokens.ToArray
+        Dim lineTokens = allTokens _
             .Where(Function(t) t.name <> TokenType.comment) _
             .Split(Function(t) t.name = TokenType.newLine) _
             .Where(Function(l) l.Length > 0) _
@@ -244,7 +245,13 @@ Public Class SyntaxTree
         If result.isException Then
             Throw result.error.exception
         Else
-            Call addLine(line.levels, New FunctionInvoke("stop", opts.GetStackTrace(line(Scan0)), result.expression))
+            Dim [stop] As New FunctionInvoke(
+                funcName:="stop",
+                stackFrame:=opts.GetStackTrace(line(Scan0)),
+                result.expression
+            )
+
+            Call addLine(line.levels, [stop])
         End If
     End Sub
 
@@ -261,7 +268,8 @@ Public Class SyntaxTree
                 Call stack.Peek.Add(current.ToExpression())
             ElseIf stack.Peek Is current Then
                 ' 结束当前的对象
-                Call stack.Pop.Add(current.ToExpression())
+                Call stack.Pop()
+                Call stack.Peek.Add(current.ToExpression())
             Else
                 Call stack.Peek.Add(current.ToExpression())
             End If

@@ -10,8 +10,10 @@ Module test
 
     Sub Main()
         ' Call indentTest()
-        Call blanktest()
         Call testFunc()
+
+        Call blanktest()
+
         Call testError()
         Call testAcceptor()
         Call testFor()
@@ -28,6 +30,12 @@ Module test
         For Each line As Expression In py
             Call Console.WriteLine(line)
         Next
+
+        Call Console.WriteLine()
+        Call Console.WriteLine()
+        Call Console.WriteLine()
+        Call Console.WriteLine()
+        Call Console.WriteLine()
 
         Pause()
     End Sub
@@ -84,7 +92,7 @@ Module test
 
 
 
-
+                               raise "stop()"
 
 
 
@@ -93,6 +101,10 @@ Module test
                            </python>)
 
         Call inspectSyntax("
+                               def b():
+
+
+                                 return 999
 
                                def a():
 

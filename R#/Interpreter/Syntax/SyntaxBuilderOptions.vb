@@ -117,6 +117,7 @@ Namespace Interpreter.SyntaxParser
             Me.ParseExpression = ParseExpression
         End Sub
 
+        <DebuggerStepThrough>
         Public Function GetStackTrace(token As Token, Optional name$ = Nothing) As StackFrame
             Return New StackFrame With {
                 .File = source.fileName,
