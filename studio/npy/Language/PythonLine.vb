@@ -44,7 +44,7 @@ Public Class PythonLine
     End Sub
 
     Public Overrides Function ToString() As String
-        Return tokens.Select(Function(t) t.text).JoinBy(" ")
+        Return $"[{levels}]" & vbTab & ": " & tokens.Select(Function(t) t.text).JoinBy(" ")
     End Function
 
 End Class

@@ -1,11 +1,15 @@
-﻿Imports SMRUCC.Python
+﻿Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Python
+Imports SMRUCC.Python.Language
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Language
+Imports Rscript = SMRUCC.Rsharp.Runtime.Components.Rscript
 
 Module test
 
     Sub Main()
+        ' Call indentTest()
         Call blanktest()
         Call testFunc()
         Call testError()
@@ -28,8 +32,67 @@ Module test
         Pause()
     End Sub
 
+    Sub indentTest()
+        Dim python = ("
+      i = 5
+ 
+  
+   
+    
+     
+      
+       
+        
+      j = 6
+")
+
+        Dim text As Rscript = Rscript.AutoHandleScript(python)
+        Dim scanner As New PyScanner(text.script)
+        Dim tokens = scanner.GetTokens.ToArray
+        Dim lines = tokens.Split(Function(t) t.name = TokenType.newLine).Where(Function(l) l.Length > 0).ToArray
+
+        Call inspectSyntax(python)
+    End Sub
+
     Sub blanktest()
+
         Call inspectSyntax(<python>
+
+                               def a():
+
+                                    i = 1
+
+                                    for x in 1:100:
+                                         i = i + 1
+
+
+                                         if 8 > None :
+                                              raise "!"
+
+
+                                         raise bbb()
+
+
+
+
+
+
+
+                                    return 5 + i
+
+
+
+
+
+
+
+
+
+                               b() + a()
+
+                           </python>)
+
+        Call inspectSyntax("
 
                                def a():
 
@@ -44,7 +107,7 @@ Module test
 
                                b() + a()
 
-                           </python>)
+                           ")
     End Sub
 
     Sub testFunc()

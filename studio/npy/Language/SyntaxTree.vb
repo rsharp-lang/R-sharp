@@ -45,20 +45,17 @@ Public Class SyntaxTree
         }
     End Sub
 
-    Private Iterator Function getLines(tokens As IEnumerable(Of Token)) As IEnumerable(Of PythonLine)
-        Dim lines = tokens _
+    Private Function getLines(tokens As IEnumerable(Of Token)) As IEnumerable(Of PythonLine)
+        Dim lineTokens = tokens _
             .Where(Function(t) t.name <> TokenType.comment) _
             .Split(Function(t) t.name = TokenType.newLine) _
             .Where(Function(l) l.Length > 0) _
             .ToArray
+        Dim lines = lineTokens _
+            .Select(Function(t) New PythonLine(t)) _
+            .ToArray
 
-        For Each lineTokens As Token() In lines
-            Dim line As New PythonLine(lineTokens)
-
-            If line.length > 0 Then
-                Yield line
-            End If
-        Next
+        Return From line As PythonLine In lines Where line.length > 0
     End Function
 
     ''' <summary>
