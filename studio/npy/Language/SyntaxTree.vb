@@ -273,6 +273,8 @@ Public Class SyntaxTree
                 Call stack.Peek.Add(current.ToExpression())
             Else
                 Call stack.Peek.Add(current.ToExpression())
+                current = stack.Pop()
+                stack.Peek.Add(current.ToExpression)
             End If
 
             current = stack.Peek
@@ -316,7 +318,7 @@ Public Class SyntaxTree
             stack.Push(current)
         End If
 
-        Do While stack.Count > 0
+        Do While stack.Count > 0 AndAlso Not current Is python
             current = stack.Pop
 
             If stack.Count > 0 Then
