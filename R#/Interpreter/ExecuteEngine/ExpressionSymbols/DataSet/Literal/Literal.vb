@@ -114,6 +114,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End Get
         End Property
 
+        ''' <summary>
+        ''' any.tostring of <see cref="value"/>
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property ValueStr As String
             Get
                 If value Is Nothing Then

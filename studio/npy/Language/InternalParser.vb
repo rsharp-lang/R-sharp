@@ -9,6 +9,7 @@ Imports SMRUCC.Python.Language
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -57,7 +58,11 @@ Public Module InternalParser
                             Dim firstArg As Expression = chain
 
                             chain = pipNext.expression
-                            chain.parameters = {firstArg}.JoinIterates(chain.parameters).ToArray
+                            chain = New FunctionInvoke(
+                                funcVar:=chain.funcName.removeExtension,
+                                stackFrame:=chain.stackFrame,
+                                {firstArg}.JoinIterates(chain.parameters).ToArray
+                            )
                         Else
                             Throw New NotImplementedException
                         End If
@@ -71,6 +76,17 @@ Public Module InternalParser
         End If
 
         Return expr
+    End Function
+
+    <Extension>
+    Private Function removeExtension(funcName As Expression) As Expression
+        If TypeOf funcName Is SymbolReference Then
+            funcName = New SymbolReference(DirectCast(funcName, SymbolReference).symbol.Trim("."c))
+        ElseIf TypeOf funcName Is Literal Then
+            funcName = New Literal(DirectCast(funcName, Literal).ValueStr.Trim("."c))
+        End If
+
+        Return funcName
     End Function
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
