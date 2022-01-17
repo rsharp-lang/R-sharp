@@ -42,7 +42,7 @@ Module test
     End Sub
 
     Sub extensionTest()
-        Call inspectSyntax("kinetics('(Vmax * S) / (Km + S)', Vmax = 10, S = 's', Km = 2).kinetics_lambda().eval_lambda(s = 5)")
+        Call inspectSyntax("test = kinetics('(Vmax * S) / (Km + S)', Vmax = 10, S = 's', Km = 2).kinetics_lambda().eval_lambda(s = 5)")
     End Sub
 
     Sub indentTest()

@@ -65,9 +65,7 @@ Namespace Language.Implementation
 
                 Return New ValueAssignExpression(targetSymbols, list) With {.isByRef = True}
             Else
-                Dim valueExpr As SyntaxResult = {value} _
-                    .AsList _
-                    .ParseExpression(opts)
+                Dim valueExpr As SyntaxResult = opts.ParseExpression(value, opts)
 
                 If valueExpr.isException Then
                     Return valueExpr
