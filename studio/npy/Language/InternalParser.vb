@@ -48,7 +48,7 @@ Public Module InternalParser
                     Dim chain As FunctionInvoke = opts.ParseExpression(blocks.Take(2).IteratesALL, opts).expression
                     Dim pipNext As SyntaxResult
 
-                    For Each block In blocks.Skip(2).SlideWindows(2)
+                    For Each block In blocks.Skip(2).SlideWindows(2, offset:=2)
                         pipNext = opts.ParseExpression(block.IteratesALL, opts)
 
                         If pipNext.isException Then
