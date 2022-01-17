@@ -259,6 +259,12 @@ Namespace Interpreter.SyntaxParser
                     Else
                         Return New UnaryNumeric("-", number.expression)
                     End If
+                ElseIf code(Scan0).First.name = TokenType.identifier AndAlso
+                    code(Scan0)(1).name = TokenType.open AndAlso
+                    code(1).Length = 1 AndAlso
+                    code(1)(Scan0).name = TokenType.close Then
+
+                    Return FunctionInvokeSyntax.FunctionInvoke(code.IteratesALL.ToArray, opts)
                 End If
             ElseIf code = 3 Then
                 If code.isSequenceSyntax Then

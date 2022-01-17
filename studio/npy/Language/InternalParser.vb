@@ -1,11 +1,14 @@
 ﻿#If netcore5 = 1 Then
 #End If
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Python.Language
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -31,6 +34,39 @@ Public Module InternalParser
         ElseIf blocks = 1 AndAlso blocks(Scan0).isPythonTuple Then
             expr = Implementation.TupleParser(blocks(Scan0), opts)
         Else
+            If blocks = 1 Then
+                blocks = blocks(Scan0).SplitByTopLevelDelimiter(
+                    delimiter:=TokenType.close,
+                    includeKeyword:=True,
+                    tokenText:=")"
+                )
+
+                If blocks > 2 AndAlso
+                    blocks(Scan0).First.name = TokenType.identifier AndAlso
+                    blocks(Scan0)(1).name = TokenType.open Then
+
+                    Dim chain As FunctionInvoke = opts.ParseExpression(blocks.Take(2).IteratesALL, opts).expression
+                    Dim pipNext As SyntaxResult
+
+                    For Each block In blocks.Skip(2).SlideWindows(2)
+                        pipNext = opts.ParseExpression(block.IteratesALL, opts)
+
+                        If pipNext.isException Then
+                            Return pipNext
+                        ElseIf TypeOf pipNext.expression Is FunctionInvoke Then
+                            Dim firstArg As Expression = chain
+
+                            chain = pipNext.expression
+                            chain.parameters = {firstArg}.JoinIterates(chain.parameters).ToArray
+                        Else
+                            Throw New NotImplementedException
+                        End If
+                    Next
+
+                    Return chain
+                End If
+            End If
+
             expr = blocks.ParseExpression(opts)
         End If
 

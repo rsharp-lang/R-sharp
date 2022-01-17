@@ -35,6 +35,7 @@ Public Class SyntaxTree
     ''' </summary>
     Dim current As PythonCodeDOM
 
+    <DebuggerStepThrough>
     Sub New(script As Rscript, Optional debug As Boolean = False)
         Me.debug = debug
         Me.script = script
