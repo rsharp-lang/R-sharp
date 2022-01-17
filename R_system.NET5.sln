@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31729.503
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "devkit-netcore5", "studio\Rsharp_kit\devkit\devkit-netcore5.vbproj", "{470AAB61-E443-46EA-8E9F-8E67B7750E25}"
 EndProject
@@ -4850,8 +4850,8 @@ Global
 		{8DF35A35-EA66-4A46-95A2-AFBA87333E92}.Biostack|x86.Build.0 = Debug|Any CPU
 		{8DF35A35-EA66-4A46-95A2-AFBA87333E92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8DF35A35-EA66-4A46-95A2-AFBA87333E92}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8DF35A35-EA66-4A46-95A2-AFBA87333E92}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{8DF35A35-EA66-4A46-95A2-AFBA87333E92}.Debug|x64.Build.0 = Debug|Any CPU
+		{8DF35A35-EA66-4A46-95A2-AFBA87333E92}.Debug|x64.ActiveCfg = Debug|x64
+		{8DF35A35-EA66-4A46-95A2-AFBA87333E92}.Debug|x64.Build.0 = Debug|x64
 		{8DF35A35-EA66-4A46-95A2-AFBA87333E92}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{8DF35A35-EA66-4A46-95A2-AFBA87333E92}.Debug|x86.Build.0 = Debug|Any CPU
 		{8DF35A35-EA66-4A46-95A2-AFBA87333E92}.Docker|Any CPU.ActiveCfg = Debug|Any CPU
