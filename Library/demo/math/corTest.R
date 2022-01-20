@@ -1,4 +1,6 @@
-data(attitude);
+require(REnv);
+
+data("attitude");
 
 cortest_psy <- corr.test(attitude[1:3], attitude[4:6], method = "pearson");
 cortest_psy_sdj <- corr.test(attitude[1:3], attitude[4:6], method = "pearson", adjust = "fdr");
