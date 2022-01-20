@@ -329,7 +329,7 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return fileNames _
                     .Select(Function(path)
-                                If path.DirectoryExists Then
+                                If path.DirectoryExists OrElse path.EndsWith("/"c) OrElse path.EndsWith("\"c) Then
                                     Return path.GetDirectoryFullPath
                                 Else
                                     Return path.GetFullPath

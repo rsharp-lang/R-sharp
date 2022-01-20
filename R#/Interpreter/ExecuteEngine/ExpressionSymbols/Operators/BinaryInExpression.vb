@@ -52,6 +52,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Interop.Operator
@@ -113,8 +114,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Dim flags As Boolean()
 
             ' test string key in list index name?
-            If TypeOf sequence Is list AndAlso REnv.MeasureRealElementType(testLeft) Is GetType(String) Then
-                flags = testListIndex(sequence, testLeft)
+            If sequence.GetType.ImplementInterface(Of RNames) AndAlso REnv.MeasureRealElementType(testLeft) Is GetType(String) Then
+                flags = testListIndex(DirectCast(sequence, RNames), testLeft)
             Else
                 ' try custom operator at first
                 Dim op = BinaryOperatorEngine.getOperator("in", envir, suppress:=True)
@@ -132,13 +133,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Return flags
         End Function
 
-        Private Shared Function testListIndex(sequence As list, testLeft As String()) As Boolean()
+        Private Shared Function testListIndex(sequence As RNames, testLeft As String()) As Boolean()
             Return testLeft _
                 .Select(Function(a)
                             If a Is Nothing Then
                                 Return False
                             Else
-                                Return sequence.slots.ContainsKey(a)
+                                Return sequence.hasName(a)
                             End If
                         End Function) _
                 .ToArray

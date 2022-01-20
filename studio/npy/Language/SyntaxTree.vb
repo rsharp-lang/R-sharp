@@ -314,7 +314,7 @@ Public Class SyntaxTree
             End If
         Next
 
-        If Not current Is stack.Peek Then
+        If stack.Count > 0 AndAlso Not current Is stack.Peek Then
             stack.Push(current)
         End If
 
