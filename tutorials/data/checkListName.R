@@ -15,7 +15,7 @@ d = data.frame(aaa = [2,42,3,4,666], check = TRUE);
 print(d);
 
 if ("aaa" in d) {
-	print("aaaaaaaaaaa");
+	print("has aaaaaaaaaaa");
 }
 
 if ("xxxxx" in d) {
