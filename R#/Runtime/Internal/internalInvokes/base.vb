@@ -787,6 +787,21 @@ Namespace Runtime.Internal.Invokes
                 Return x
             End If
 
+            If x.GetType.IsArray Then
+                x = REnv.TryCastGenericArray(x, env)
+            Else
+                If RType.GetRSharpType(x.GetType).mode.IsPrimitive(includeComplexList:=False) Then
+                    x = REnv.TryCastGenericArray({x}, env)
+                End If
+            End If
+            If values.GetType.IsArray Then
+                values = REnv.TryCastGenericArray(values, env)
+            Else
+                If RType.GetRSharpType(values.GetType).mode.IsPrimitive(includeComplexList:=False) Then
+                    values = REnv.TryCastGenericArray({values}, env)
+                End If
+            End If
+
             If TypeOf x Is list Then
                 Return DirectCast(x, list).appendOfList(values, env)
             ElseIf TypeOf x Is vector OrElse x.GetType.IsArray Then
