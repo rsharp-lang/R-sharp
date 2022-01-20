@@ -9,3 +9,17 @@ if ("ccc" in l) {
 } else {
 	print("no ccc");
 }
+
+d = data.frame(aaa = [2,42,3,4,666], check = TRUE);
+
+print(d);
+
+if ("aaa" in d) {
+	print("aaaaaaaaaaa");
+}
+
+if ("xxxxx" in d) {
+	print("wrong!");
+} else {
+	print("no xxxxx");
+}
