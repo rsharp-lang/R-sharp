@@ -2,7 +2,9 @@
 Imports SMRUCC.Language.CodeDom
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language
@@ -132,6 +134,30 @@ Namespace Language
                         Case "function" : Call startFunctionDefine(line)
                         Case "for" : Call startForLoopDefine(line)
                         Case "end" : Call endCurrent()
+                        Case "using"
+
+                            Dim pkgNames = line.tokens _
+                                .Skip(1) _
+                                .SplitByTopLevelDelimiter(TokenType.comma) _
+                                .Where(Function(t)
+                                           Return Not (t.Length = 1 AndAlso t(0).name = TokenType.comma)
+                                       End Function) _
+                                .Select(Function(t) opts.ParseExpression(t, opts)) _
+                                .ToArray
+                            Dim require As New Require(pkgNames.Select(Function(name) name.expression))
+
+                            Call current.Add(require)
+
+                        Case "import"
+
+                            Dim nameRef = opts.ParseExpression(line.tokens.Skip(1), opts)
+                            Dim nameStr As SymbolReference = nameRef.expression
+                            Dim names As String() = nameStr.symbol.Split("."c)
+                            Dim moduleName As String = names(0)
+                            Dim pkgName As String = names(1)
+                            Dim import As New [Imports](pkgName, moduleName)
+
+                            Call current.Add(import)
 
                         Case Else
                             Throw New NotImplementedException(line.ToString)

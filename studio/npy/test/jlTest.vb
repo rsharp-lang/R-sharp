@@ -11,6 +11,10 @@ Module jlTest
 
     Sub functionTest()
         Call inspectSyntax("
+using Compat,ggplot
+
+import kegg_kit.repository
+
 ## slow pi series ##
 
 function pisum()

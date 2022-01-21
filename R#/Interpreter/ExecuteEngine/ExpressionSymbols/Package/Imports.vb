@@ -131,6 +131,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             Me.scriptSource = source
         End Sub
 
+        ''' <summary>
+        ''' imports package from library
+        ''' </summary>
+        ''' <param name="package"></param>
+        ''' <param name="library"></param>
         Sub New(package As String, library As String)
             Me.packages = New Literal(package)
             Me.library = New Literal(library)
