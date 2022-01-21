@@ -23,6 +23,8 @@
 		<AnalysisLevel>preview</AnalysisLevel>
 		<PackageTags>R#,rsharp</PackageTags>
 		<FileVersion>1.5635.*</FileVersion>
+		<OutputType>Exe</OutputType>
+		<StartupObject>test.interpreterTest</StartupObject>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
