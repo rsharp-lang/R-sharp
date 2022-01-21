@@ -178,6 +178,7 @@ bitmap(file = `./network.png`) %do% {
 
     Sub expressionTest2()
         Dim p = R.Parse("sum += 1.0/(k*k)")
+        Dim p2 = R.Parse("x$sum += 1.0/(k*k)")
 
         Pause()
     End Sub

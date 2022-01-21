@@ -157,8 +157,6 @@ Namespace Interpreter.SyntaxParser
             End Select
         End Function
 
-        ReadOnly iterateAssign As Index(Of String) = {"+=", "-=", "*=", "/="}
-
         <Extension>
         Friend Function ParseExpression(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             If code = 0 Then
