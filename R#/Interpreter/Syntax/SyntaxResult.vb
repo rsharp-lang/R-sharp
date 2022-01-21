@@ -47,8 +47,9 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.LINQ
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports RExpression = SMRUCC.Rsharp.Interpreter.ExecuteEngine.Expression
+
+<Assembly: InternalsVisibleTo("SMRUCC.Language.CodeDom")>
 
 Namespace Interpreter.SyntaxParser
 
