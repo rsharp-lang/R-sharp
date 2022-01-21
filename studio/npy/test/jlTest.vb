@@ -1,4 +1,4 @@
-﻿Imports njl
+﻿Imports njl.Language
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components

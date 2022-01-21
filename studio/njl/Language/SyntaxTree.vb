@@ -50,8 +50,25 @@ Namespace Language
             Return From line As TokenLine In lines Where line.length > 0
         End Function
 
-        Public Function ParseJlScript() As Program
+        Private Sub startFunctionDefine(line As TokenLine)
 
+        End Sub
+
+        Public Function ParseJlScript() As Program
+            For Each line As TokenLine In getLines(scanner.GetTokens)
+                If line(Scan0).name = TokenType.keyword Then
+                    Select Case line(Scan0).text
+                        Case "function" : Call startFunctionDefine(line)
+
+                        Case Else
+                            Throw New NotImplementedException(line.ToString)
+                    End Select
+                Else
+
+                End If
+            Next
+
+            Return New Program(julia.script)
         End Function
     End Class
 End Namespace

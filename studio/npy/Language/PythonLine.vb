@@ -7,16 +7,6 @@ Public Class PythonLine : Inherits TokenLine
 
     Public ReadOnly Property levels As Integer
 
-    Default Public ReadOnly Property Token(i As Integer) As Token
-        Get
-            If i < 0 Then
-                i = tokens.Length + i
-            End If
-
-            Return tokens(i)
-        End Get
-    End Property
-
     Sub New(tokens As Token())
         Call MyBase.New(tokens)
 

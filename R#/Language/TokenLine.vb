@@ -16,6 +16,16 @@ Namespace Language
             End Get
         End Property
 
+        Default Public ReadOnly Property getToken(i As Integer) As Token
+            Get
+                If i < 0 Then
+                    i = tokens.Length + i
+                End If
+
+                Return tokens(i)
+            End Get
+        End Property
+
         Sub New(tokens As IEnumerable(Of Token))
             Me.tokens = tokens
         End Sub
