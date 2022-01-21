@@ -70,6 +70,36 @@ Namespace Language
             Call stack.Push(current)
         End Sub
 
+        Private Sub startForLoopDefine(line As TokenLine)
+            Dim tokens As Token() = line.tokens.Skip(1).Take(line.tokens.Length - 1).ToArray
+
+            If tokens(Scan0) = (TokenType.open, "(") AndAlso tokens.Last = (TokenType.close, ")") Then
+                tokens = tokens _
+                    .Skip(1) _
+                    .Take(tokens.Length - 2) _
+                    .ToArray
+            End If
+
+            Dim data = tokens.SplitByTopLevelDelimiter(TokenType.operator, False, tokenText:="=").ToArray
+            Dim vars = data(0) _
+                .SplitByTopLevelDelimiter(TokenType.comma) _
+                .Select(Function(t)
+                            Return ParseJuliaLine(t, opts).expression
+                        End Function) _
+                .ToArray
+            Dim seqs = ParseJuliaLine(data(2), opts).expression
+
+            current = New ForTag With {
+                .data = seqs,
+                .stackFrame = opts.GetStackTrace(line(0)),
+                .keyword = "for",
+                .script = New List(Of Expression),
+                .vars = vars
+            }
+
+            stack.Push(current)
+        End Sub
+
         Public Function ParseJlScript() As Program
             current = julia
 
@@ -77,6 +107,7 @@ Namespace Language
                 If line(Scan0).name = TokenType.keyword Then
                     Select Case line(Scan0).text
                         Case "function" : Call startFunctionDefine(line)
+                        Case "for" : Call startForLoopDefine(line)
 
                         Case Else
                             Throw New NotImplementedException(line.ToString)
