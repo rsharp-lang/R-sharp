@@ -159,6 +159,13 @@ Namespace Language
 
                             Call current.Add(import)
 
+                        Case "include"
+
+                            Dim script = opts.ParseExpression(line.tokens.Skip(1), opts)
+                            Dim import As New [Imports](Nothing, script.expression, opts.source.source)
+
+                            Call current.Add(import)
+
                         Case Else
                             Throw New NotImplementedException(line.ToString)
                     End Select

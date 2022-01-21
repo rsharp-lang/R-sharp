@@ -15,6 +15,8 @@ using Compat,ggplot
 
 import kegg_kit.repository
 
+include('../perfutil.jl')
+
 ## slow pi series ##
 
 function pisum()
