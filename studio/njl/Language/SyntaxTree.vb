@@ -45,7 +45,7 @@ Namespace Language
                 .Where(Function(l) l.Length > 0) _
                 .ToArray
             Dim lines = lineTokens _
-                .Select(Function(t) New TokenLine(t)) _
+                .Select(Function(t) New TokenLine(t).StripDelimiterTokens()) _
                 .ToArray
 
             Return From line As TokenLine In lines Where line.length > 0

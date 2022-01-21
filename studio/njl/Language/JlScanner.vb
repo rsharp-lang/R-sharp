@@ -24,7 +24,7 @@ Namespace Language
             Call nullLiteral.Clear()
             Call nullLiteral.Add("None")
 
-            keepsDelimiter = False
+            keepsDelimiter = True
         End Sub
     End Class
 End Namespace
