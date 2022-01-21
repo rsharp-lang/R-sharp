@@ -10,3 +10,5 @@ function pisum()
     end
     sum
 end
+
+print(pisum())

@@ -24,6 +24,8 @@ function pisum()
     sum
 end
 
+print(pisum())
+
 ")
     End Sub
 

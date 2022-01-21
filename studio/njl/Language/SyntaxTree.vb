@@ -101,11 +101,23 @@ Namespace Language
         End Sub
 
         Public Sub endCurrent()
+            Dim popOut As Boolean = False
+
+            If stack.Peek Is current AndAlso Not current Is julia Then
+                popOut = True
+                stack.Pop()
+            End If
+
             stack.Peek.Add(current.ToExpression)
-            current = stack.Pop
+
+            If Not popOut Then
+                current = stack.Pop
+            Else
+                current = stack.Peek
+            End If
 
             If stack.Count = 1 AndAlso stack.Peek Is julia Then
-                julia.Add(current.ToExpression)
+                ' julia.Add(current.ToExpression)
                 current = julia
             End If
         End Sub
