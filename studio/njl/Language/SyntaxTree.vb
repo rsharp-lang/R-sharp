@@ -100,14 +100,26 @@ Namespace Language
             stack.Push(current)
         End Sub
 
+        Public Sub endCurrent()
+            stack.Peek.Add(current.ToExpression)
+            current = stack.Pop
+
+            If stack.Count = 1 AndAlso stack.Peek Is julia Then
+                julia.Add(current.ToExpression)
+                current = julia
+            End If
+        End Sub
+
         Public Function ParseJlScript() As Program
             current = julia
+            stack.Push(julia)
 
             For Each line As TokenLine In getLines(scanner.GetTokens)
                 If line(Scan0).name = TokenType.keyword Then
                     Select Case line(Scan0).text
                         Case "function" : Call startFunctionDefine(line)
                         Case "for" : Call startForLoopDefine(line)
+                        Case "end" : Call endCurrent()
 
                         Case Else
                             Throw New NotImplementedException(line.ToString)
