@@ -15,6 +15,8 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "test", "studio\npy\test\tes
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "njl", "studio\njl\njl.vbproj", "{B8A899C2-F787-44DB-B70A-0EB528C1DD66}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "IronCodeDom", "studio\IronCodeDom\IronCodeDom.vbproj", "{59D58644-0451-4DFE-A1F2-95FBDE67342A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -173,6 +175,34 @@ Global
 		{B8A899C2-F787-44DB-B70A-0EB528C1DD66}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
 		{B8A899C2-F787-44DB-B70A-0EB528C1DD66}.Rsharp_app_release|x64.ActiveCfg = Release|Any CPU
 		{B8A899C2-F787-44DB-B70A-0EB528C1DD66}.Rsharp_app_release|x64.Build.0 = Release|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.Debug|x64.Build.0 = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.LipidSearch|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.LipidSearch|Any CPU.Build.0 = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.LipidSearch|x64.ActiveCfg = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.LipidSearch|x64.Build.0 = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.mzkit|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.mzkit|Any CPU.Build.0 = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.mzkit|x64.ActiveCfg = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.mzkit|x64.Build.0 = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.NPSearch|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.NPSearch|Any CPU.Build.0 = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.NPSearch|x64.ActiveCfg = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.NPSearch|x64.Build.0 = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.PlantMAT|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.PlantMAT|Any CPU.Build.0 = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.PlantMAT|x64.ActiveCfg = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.PlantMAT|x64.Build.0 = Debug|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.Release|x64.ActiveCfg = Release|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.Release|x64.Build.0 = Release|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.Rsharp_app_release|Any CPU.ActiveCfg = Release|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.Rsharp_app_release|x64.ActiveCfg = Release|Any CPU
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A}.Rsharp_app_release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -180,6 +210,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3CBAFD97-3E30-4859-89F7-9992621DB91F} = {14FC6CA3-ED45-4CF2-9B34-22016B56747E}
 		{64F55A1F-6B79-4557-A4E0-2401BB7CBB75} = {14FC6CA3-ED45-4CF2-9B34-22016B56747E}
+		{59D58644-0451-4DFE-A1F2-95FBDE67342A} = {14FC6CA3-ED45-4CF2-9B34-22016B56747E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37E43A00-D6D2-49FA-BBAF-918D1741B3B5}

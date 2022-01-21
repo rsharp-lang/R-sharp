@@ -17,7 +17,6 @@ Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
-
 Public Class FunctionTag : Inherits PythonCodeDOM
 
     Public Property funcName As String
