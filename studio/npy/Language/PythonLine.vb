@@ -3,7 +3,6 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
-
 Public Class PythonLine : Inherits TokenLine
 
     Public ReadOnly Property levels As Integer
