@@ -46,6 +46,8 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Interpreter
 
+<Assembly: InternalsVisibleTo("njl")>
+
 Namespace Runtime
 
     <HideModuleName>

@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\..\..\R#\Rsharp-netcore5.vbproj" />
+    <ProjectReference Include="..\..\njl\njl.vbproj" />
     <ProjectReference Include="..\npy.vbproj" />
   </ItemGroup>
 
