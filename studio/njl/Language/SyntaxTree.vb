@@ -102,6 +102,23 @@ Namespace Language
             stack.Push(current)
         End Sub
 
+        Private Sub startAcceptorDefine(line As TokenLine)
+            Dim expr = opts.ParseExpression(line.tokens.Take(line.length - 1), opts)
+
+            If expr.isException Then
+                Throw New InvalidProgramException
+            End If
+
+            current = New AcceptorTag With {
+                .keyword = "call",
+                .script = New List(Of Expression),
+                .target = expr.expression,
+                .level = 0
+            }
+
+            stack.Push(current)
+        End Sub
+
         Public Sub endCurrent()
             Dim popOut As Boolean = False
 
@@ -169,6 +186,8 @@ Namespace Language
                         Case Else
                             Throw New NotImplementedException(line.ToString)
                     End Select
+                ElseIf line(-1) = (TokenType.sequence, ":") Then
+                    Call startAcceptorDefine(line)
                 Else
                     Dim expr = opts.ParseExpression(line.tokens, opts)
 
