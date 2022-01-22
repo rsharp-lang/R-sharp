@@ -106,7 +106,7 @@ Namespace Interpreter
             ' The program code loop
             For Each expression As Expression In execQueue
                 benchmark = App.NanoTime
-                timestamp = benchmark
+                timestamp = App.UnixTimeStamp
                 refreshMemory = False
                 last = ExecuteCodeLine(expression, env, breakLoop, showExpression)
                 benchmark = App.NanoTime - benchmark
