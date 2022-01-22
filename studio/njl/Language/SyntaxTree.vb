@@ -1,10 +1,12 @@
 ﻿Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Language.CodeDom
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language
@@ -173,8 +175,33 @@ Namespace Language
             Call current.Add(import)
         End Sub
 
+        ''' <summary>
+        ''' begin ... end
+        ''' </summary>
+        ''' <param name="line"></param>
         Private Sub startClosureDefine(line As TokenLine)
+            current = New ClosureTag With {
+                .keyword = "begin",
+                .script = New List(Of Expression),
+                .level = 0
+            }
 
+            stack.Push(current)
+        End Sub
+
+        ''' <summary>
+        ''' x = begin ... end
+        ''' </summary>
+        ''' <param name="target"></param>
+        Private Sub startClosureDefine(target As Expression())
+            current = New ClosureTag With {
+                .keyword = "begin",
+                .assignTarget = target,
+                .level = 0,
+                .script = New List(Of Expression)
+            }
+
+            stack.Push(current)
         End Sub
 
         Public Function ParseJlScript() As Program
@@ -203,6 +230,13 @@ Namespace Language
 
                     If expr.isException Then
                         Throw New InvalidProgramException
+                    ElseIf expr.expression.expressionName = ExpressionTypes.SymbolAssign Then
+                        Dim assign As ValueAssignExpression = DirectCast(expr.expression, ValueAssignExpression)
+
+                        If TypeOf assign.value Is SymbolReference AndAlso DirectCast(assign.value, SymbolReference).symbol = "begin" Then
+                            Call startClosureDefine(assign.targetSymbols)
+                            Continue For
+                        End If
                     End If
 
                     Call current.Add(expr)
