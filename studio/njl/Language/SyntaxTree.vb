@@ -60,7 +60,7 @@ Namespace Language
 
         Private Sub startFunctionDefine(line As TokenLine)
             Dim args As New List(Of DeclareNewSymbol)
-            Dim tokens As Token() = line.tokens.Skip(3).Take(line.tokens.Length - 5).ToArray
+            Dim tokens As Token() = line.tokens.Skip(3).Take(line.tokens.Length - 4).ToArray
             Dim result = DeclareNewFunctionSyntax.getParameters(tokens, args, opts)
 
             current = New FunctionTag With {
