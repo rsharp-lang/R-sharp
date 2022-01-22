@@ -79,6 +79,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Friend ReadOnly params As DeclareNewSymbol
         Friend ReadOnly closure As ClosureExpression
 
+        ''' <summary>
+        ''' using params do closure
+        ''' </summary>
+        ''' <param name="params">using x as value</param>
+        ''' <param name="closure"></param>
+        ''' <param name="stackframe"></param>
         Sub New(params As DeclareNewSymbol, closure As ClosureExpression, stackframe As StackFrame)
             Me.params = params
             Me.closure = closure

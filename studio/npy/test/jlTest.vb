@@ -6,12 +6,29 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module jlTest
 
     Sub Main()
+        Call fileIoTest()
         ' Call ifTest()
         Call demoTest2()
         Call simpleFunctionTest()
         Call closureTest()
         Call functionTest()
     End Sub
+
+    Sub fileIoTest()
+        Call inspectSyntax(<Julia>
+
+                               setwd(@dir)
+
+open("myfile.txt", "w") do io
+    write(io, "Hello world!")
+end
+
+str(open(f->read(f, String), "myfile.txt"))
+
+
+                           </Julia>)
+    End Sub
+
 
     Sub ifTest()
         Call inspectSyntax("
@@ -90,6 +107,10 @@ end
 print(pisum())
 
 ")
+    End Sub
+
+    Sub inspectSyntax(julia As XElement)
+        Call inspectSyntax(julia.Value)
     End Sub
 
     Sub inspectSyntax(julia As String)

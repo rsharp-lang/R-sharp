@@ -222,6 +222,27 @@ Namespace Language
             stack.Push(current)
         End Sub
 
+        Private Sub startUsingDefine(line As TokenLine)
+            Dim arg = line(-1)
+            Dim auto = line.tokens.Take(line.length - 2).ToArray
+            Dim autoExpr = opts.ParseExpression(auto, opts)
+
+            If autoExpr.isException Then
+                Throw New NotImplementedException
+            End If
+
+            current = New UsingTag With {
+                .auto = autoExpr.expression,
+                .keyword = "using",
+                .level = 0,
+                .script = New List(Of Expression),
+                .symbol = arg.text,
+                .sourceMap = opts.GetStackTrace(line(Scan0))
+            }
+
+            stack.Push(current)
+        End Sub
+
         Public Function ParseJlScript() As Program
             current = julia
             stack.Push(julia)
@@ -246,6 +267,12 @@ Namespace Language
                     End Select
                 ElseIf line(-1) = (TokenType.sequence, ":") Then
                     Call startAcceptorDefine(line)
+                ElseIf line.length > 2 AndAlso line(-1).name = TokenType.identifier AndAlso line(-2) = (TokenType.keyword, "do") Then
+                    ' xxx do x
+                    ' using x as xxx {
+                    '    ...
+                    ' }
+                    Call startUsingDefine(line)
                 Else
                     Dim expr = opts.ParseExpression(line.tokens, opts)
 
