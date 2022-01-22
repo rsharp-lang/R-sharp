@@ -22,7 +22,7 @@ Namespace Language
             Call keywords.Clear()
             Call keywords.Add(jlKeywords).ToArray
             Call nullLiteral.Clear()
-            Call nullLiteral.Add("None")
+            Call nullLiteral.Add("nothing")
 
             keepsDelimiter = True
         End Sub

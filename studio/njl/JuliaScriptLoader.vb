@@ -18,6 +18,7 @@ Public Class JuliaScriptLoader : Inherits ScriptLoader
 
     Shared Sub New()
         Call Internal.invoke.pushEnvir(GetType(njl.math))
+        Call Internal.invoke.pushEnvir(GetType(njl.io))
     End Sub
 
     Public Overrides Function LoadScript(scriptfile As String, env As Environment) As Object
