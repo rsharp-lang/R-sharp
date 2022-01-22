@@ -24,6 +24,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
             End Get
         End Property
 
+        ''' <summary>
+        ''' target expression for run profiler
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property target As Expression
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Throw New NotImplementedException()
         End Function
