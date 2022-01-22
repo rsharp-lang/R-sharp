@@ -149,6 +149,11 @@ Namespace Runtime.Components
             Me.value = New ValueAssignExpression({name}, New RuntimeValueLiteral(runtimeValue))
         End Sub
 
+        Sub New(runtimeValue As Object, Optional index As Integer = Scan0)
+            Me.index = index
+            Me.value = New RuntimeValueLiteral(runtimeValue)
+        End Sub
+
         ''' <summary>
         ''' get value part
         ''' </summary>

@@ -2,7 +2,9 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -21,7 +23,7 @@ Public Module io
     <ExportAPI("open")>
     Public Function open(f As Object,
                          Optional filename As String = Nothing,
-                         Optional mode As String = "w",
+                         Optional mode As String = "r",
                          Optional env As Environment = Nothing) As Object
 
         If TypeOf f Is String Then
@@ -34,7 +36,13 @@ Public Module io
         ElseIf mode = "a" Then
             Return New StreamWriter(filename.Open(FileMode.OpenOrCreate, doClear:=False, [readOnly]:=False))
         Else
-            Return New StreamReader(filename.Open(FileMode.Open, doClear:=False, [readOnly]:=True))
+            Dim r As New StreamReader(filename.Open(FileMode.Open, doClear:=False, [readOnly]:=True))
+
+            If TypeOf f Is DeclareLambdaFunction Then
+                Return DirectCast(f, DeclareLambdaFunction).Invoke(env, {New InvokeParameter(r, Scan0)})
+            Else
+                Return r
+            End If
         End If
     End Function
 
