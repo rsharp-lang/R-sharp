@@ -52,6 +52,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -113,10 +114,10 @@ Namespace Interpreter
 
                 If Not env.profiler Is Nothing Then
                     Call runRefreshMemory()
-                    Call env.profiler.Add(New ProfileRecord With {
+                    Call env.profiler.Add(New ProfileRecord(expression) With {
                         .elapse_time = benchmark,
                         .memory_delta = memoryDelta,
-                        .stackframe = env.stackFrame,
+                        .stackframe = New StackFrame(env.stackFrame),
                         .tag = timestamp,
                         .memory_size = memSize2
                     })

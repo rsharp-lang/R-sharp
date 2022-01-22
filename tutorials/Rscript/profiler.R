@@ -16,15 +16,18 @@ return y*sqrt(1+r ^ 2);
 
 @profile {
 	run = function() {
-		for(i in 1: 5) {
+		for(i in 1: 50) {
 			print(hypot(i, 3));
-		}	
-		
-		rep(1, times = 10000);
+			rep(1, times = 1000000);
+			gc();
+		}			
+
+		NULL;
 	}
 
-	run();
 	gc();
+	
+	print(run());
 }
 
 print(" ~~done!");

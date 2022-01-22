@@ -73,6 +73,7 @@ Namespace Runtime.Internal.Invokes
             frames.columns("namespace") = data.profiles.Select(Function(f) f.stackframe.Method.Namespace).ToArray
             frames.columns("module") = data.profiles.Select(Function(f) f.stackframe.Method.Module).ToArray
             frames.columns("function") = data.profiles.Select(Function(f) f.stackframe.Method.Method).ToArray
+            frames.columns("expression") = data.profiles.Select(Function(f) f.expression).ToArray
             frames.columns("file") = data.profiles.Select(Function(f) f.stackframe.File).ToArray
             frames.columns("line") = data.profiles.Select(Function(f) f.stackframe.Line).ToArray
 

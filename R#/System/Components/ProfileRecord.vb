@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ValueTypes
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
 Namespace Development.Components
 
@@ -15,6 +16,22 @@ Namespace Development.Components
         Public Property memory_delta As Double
         Public Property memory_size As Double
         Public Property stackframe As StackFrame
+        Public Property expression As String
+
+        Sub New(expr As Expression)
+            Dim lines As String() = expr.ToString.LineTokens
+            Dim line As String = lines(Scan0)
+
+            If lines.Length > 1 Then
+                line = line & "..."
+            End If
+
+            If line.Length > 64 Then
+                line = Mid(line, 1, 61) & "..."
+            End If
+
+            expression = line
+        End Sub
 
         Public Overrides Function ToString() As String
             Return $"[{tag.FromUnixTimeStamp.ToString}] elapse_time {TimeSpan.FromTicks(elapse_time).FormatTime}, memory delta {memory_delta.ToString("F2")}MB, memory usage {memory_size.ToString("F2")}MB at {stackframe}"
