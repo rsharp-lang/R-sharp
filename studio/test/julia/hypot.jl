@@ -14,3 +14,5 @@ function hypot(x,y)
 
 
   print(hypot(2,3))
+
+  print(hypot(0,0))
