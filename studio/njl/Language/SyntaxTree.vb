@@ -141,6 +141,42 @@ Namespace Language
             End If
         End Sub
 
+        Private Sub requirePackages(line As TokenLine)
+            Dim pkgNames = line.tokens _
+                                .Skip(1) _
+                                .SplitByTopLevelDelimiter(TokenType.comma) _
+                                .Where(Function(t)
+                                           Return Not (t.Length = 1 AndAlso t(0).name = TokenType.comma)
+                                       End Function) _
+                                .Select(Function(t) opts.ParseExpression(t, opts)) _
+                                .ToArray
+            Dim require As New Require(pkgNames.Select(Function(name) name.expression))
+
+            Call current.Add(require)
+        End Sub
+
+        Private Sub importModule(line As TokenLine)
+            Dim nameRef = opts.ParseExpression(line.tokens.Skip(1), opts)
+            Dim nameStr As SymbolReference = nameRef.expression
+            Dim names As String() = nameStr.symbol.Split("."c)
+            Dim moduleName As String = names(0)
+            Dim pkgName As String = names(1)
+            Dim import As New [Imports](pkgName, moduleName)
+
+            Call current.Add(import)
+        End Sub
+
+        Private Sub includeFile(line As TokenLine)
+            Dim script = opts.ParseExpression(line.tokens.Skip(1), opts)
+            Dim import As New [Imports](Nothing, script.expression, opts.source.source)
+
+            Call current.Add(import)
+        End Sub
+
+        Private Sub startClosureDefine(line As TokenLine)
+
+        End Sub
+
         Public Function ParseJlScript() As Program
             current = julia
             stack.Push(julia)
@@ -151,37 +187,11 @@ Namespace Language
                         Case "function" : Call startFunctionDefine(line)
                         Case "for" : Call startForLoopDefine(line)
                         Case "end" : Call endCurrent()
-                        Case "using"
+                        Case "using" : Call requirePackages(line)
+                        Case "import" : Call importModule(line)
+                        Case "include" : Call includeFile(line)
+                        Case "begin" : Call startClosureDefine(line)
 
-                            Dim pkgNames = line.tokens _
-                                .Skip(1) _
-                                .SplitByTopLevelDelimiter(TokenType.comma) _
-                                .Where(Function(t)
-                                           Return Not (t.Length = 1 AndAlso t(0).name = TokenType.comma)
-                                       End Function) _
-                                .Select(Function(t) opts.ParseExpression(t, opts)) _
-                                .ToArray
-                            Dim require As New Require(pkgNames.Select(Function(name) name.expression))
-
-                            Call current.Add(require)
-
-                        Case "import"
-
-                            Dim nameRef = opts.ParseExpression(line.tokens.Skip(1), opts)
-                            Dim nameStr As SymbolReference = nameRef.expression
-                            Dim names As String() = nameStr.symbol.Split("."c)
-                            Dim moduleName As String = names(0)
-                            Dim pkgName As String = names(1)
-                            Dim import As New [Imports](pkgName, moduleName)
-
-                            Call current.Add(import)
-
-                        Case "include"
-
-                            Dim script = opts.ParseExpression(line.tokens.Skip(1), opts)
-                            Dim import As New [Imports](Nothing, script.expression, opts.source.source)
-
-                            Call current.Add(import)
 
                         Case Else
                             Throw New NotImplementedException(line.ToString)

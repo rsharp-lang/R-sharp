@@ -6,7 +6,20 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module jlTest
 
     Sub Main()
+        Call closureTest()
         Call functionTest()
+    End Sub
+
+    Sub closureTest()
+        Call inspectSyntax("
+z = begin
+        x = 1
+        y = 2
+        x + y
+    end
+
+print(z)
+")
     End Sub
 
     Sub functionTest()
