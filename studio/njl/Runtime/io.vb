@@ -105,4 +105,25 @@ Public Module io
                 Throw New NotImplementedException(type)
         End Select
     End Function
+
+    ''' <summary>
+    ''' Close an I/O stream. Performs a flush first.
+    ''' </summary>
+    ''' <param name="resource"></param>
+    <ExportAPI("close")>
+    Public Sub close(resource As IDisposable)
+        Call flush(resource)
+        Call resource.Dispose()
+    End Sub
+
+    ''' <summary>
+    ''' Commit all currently buffered writes to the given stream.
+    ''' </summary>
+    ''' <param name="resource"></param>
+    <ExportAPI("flush")>
+    Public Sub flush(resource As Object)
+        If TypeOf resource Is Stream Then
+            Call DirectCast(resource, Stream).Flush()
+        End If
+    End Sub
 End Module
