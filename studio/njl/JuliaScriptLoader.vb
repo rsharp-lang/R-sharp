@@ -16,6 +16,10 @@ Public Class JuliaScriptLoader : Inherits ScriptLoader
         End Get
     End Property
 
+    Shared Sub New()
+        Call Internal.invoke.pushEnvir(GetType(njl.math))
+    End Sub
+
     Public Overrides Function LoadScript(scriptfile As String, env As Environment) As Object
         Dim R As RInterpreter = env.globalEnvironment.Rscript
         Dim program As Program

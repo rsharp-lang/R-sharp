@@ -204,6 +204,24 @@ Namespace Language
             stack.Push(current)
         End Sub
 
+        Private Sub startIfDefine(line As TokenLine)
+            Dim test = opts.ParseExpression(line.tokens.Skip(1), opts)
+
+            If test.isException Then
+                Throw New NotImplementedException
+            End If
+
+            current = New IfTag With {
+                .keyword = "if",
+                .level = 0,
+                .script = New List(Of Expression),
+                .stackframe = opts.GetStackTrace(line(Scan0)),
+                .test = test.expression
+            }
+
+            stack.Push(current)
+        End Sub
+
         Public Function ParseJlScript() As Program
             current = julia
             stack.Push(julia)
@@ -218,7 +236,10 @@ Namespace Language
                         Case "import" : Call importModule(line)
                         Case "include" : Call includeFile(line)
                         Case "begin" : Call startClosureDefine(line)
+                        Case "if" : Call startIfDefine(line)
+                        Case "return"
 
+                            Call current.Add(New ReturnValue(opts.ParseExpression(line.tokens.Skip(1), opts).expression))
 
                         Case Else
                             Throw New NotImplementedException(line.ToString)
