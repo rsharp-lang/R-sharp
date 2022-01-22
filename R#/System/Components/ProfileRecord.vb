@@ -20,7 +20,7 @@ Namespace Development.Components
 
         Sub New(expr As Expression)
             Dim lines As String() = expr.ToString.LineTokens
-            Dim line As String = lines(Scan0)
+            Dim line As String = lines(Scan0).StringReplace("[""]+", "'")
 
             If lines.Length > 1 Then
                 line = line & "..."

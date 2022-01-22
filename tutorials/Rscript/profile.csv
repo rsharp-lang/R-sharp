@@ -1,406 +1,406 @@
 ,time,ticks,elapse_time,memory_delta,memory_size,namespace,module,function,expression,file,line
-1,#2022-01-23 02:34:13#,181,00:00:00.0000181,0,61.6094,SMRUCC/R#_runtime,n/a,@profile,""run"" <- declare function '$run<$anonymous_07973>'() {...,profiler.R,19
-2,#2022-01-23 02:34:13#,131676,00:00:00.0131676,-60.2266,1.38281,SMRUCC/R#_runtime,n/a,@profile,Call ""gc""(),profiler.R,19
-3,#2022-01-23 02:34:13#,78410,00:00:00.0078410,11.7695,13.1523,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-4,#2022-01-23 02:34:13#,222693,00:00:00.0222693,6.55859,19.7109,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-5,#2022-01-23 02:34:13#,9394,00:00:00.0009394,0.0390625,19.75,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&y == 0)) then {...,profiler.R,3
-6,#2022-01-23 02:34:13#,14144,00:00:00.0014144,0.03125,19.7812,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,""r"" <- (&x / &y),profiler.R,3
-7,#2022-01-23 02:34:13#,9909,00:00:00.0009909,0.03125,19.8125,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,return (&y * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,3
-8,#2022-01-23 02:34:13#,518796,00:00:00.0518796,0.03125,19.8125,SMRUCC/R#,forloop,for_loop_[1],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-9,#2022-01-23 02:34:13#,962747,00:00:00.0962747,24.0859,43.8984,SMRUCC/R#,forloop,for_loop_[1],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-10,#2022-01-23 02:34:13#,65078,00:00:00.0065078,-42.6875,1.21094,SMRUCC/R#,forloop,for_loop_[1],Call ""gc""(),profiler.R,21
-11,#2022-01-23 02:34:13#,3132,00:00:00.0003132,4.64844,5.85938,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-12,#2022-01-23 02:34:13#,9037,00:00:00.0009037,2.04297,7.90234,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-13,#2022-01-23 02:34:13#,5554,00:00:00.0005554,0.0898438,7.99219,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&y == 0)) then {...,profiler.R,3
-14,#2022-01-23 02:34:13#,758,00:00:00.0000758,0.0507812,8.04297,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,""r"" <- (&x / &y),profiler.R,3
-15,#2022-01-23 02:34:13#,1581,00:00:00.0001581,0.0742188,8.11719,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,return (&y * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,3
-16,#2022-01-23 02:34:13#,139823,00:00:00.0139823,0.0742188,8.11719,SMRUCC/R#,forloop,for_loop_[2],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-17,#2022-01-23 02:34:13#,972648,00:00:00.0972648,27.418,35.5352,SMRUCC/R#,forloop,for_loop_[2],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-18,#2022-01-23 02:34:13#,56902,00:00:00.0056902,-34.3242,1.21094,SMRUCC/R#,forloop,for_loop_[2],Call ""gc""(),profiler.R,21
-19,#2022-01-23 02:34:13#,2501,00:00:00.0002501,3.375,4.58594,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-20,#2022-01-23 02:34:13#,11557,00:00:00.0011557,3.08594,7.67188,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-21,#2022-01-23 02:34:13#,4450,00:00:00.0004450,0.09375,7.76562,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&y == 0)) then {...,profiler.R,3
-22,#2022-01-23 02:34:13#,695,00:00:00.0000695,0.0546875,7.82031,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,""r"" <- (&x / &y),profiler.R,3
-23,#2022-01-23 02:34:13#,1516,00:00:00.0001516,0.0585938,7.87891,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,return (&y * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,3
-24,#2022-01-23 02:34:13#,132038,00:00:00.0132038,0.0585938,7.87891,SMRUCC/R#,forloop,for_loop_[3],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-25,#2022-01-23 02:34:13#,978690,00:00:00.0978690,30.4961,38.375,SMRUCC/R#,forloop,for_loop_[3],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-26,#2022-01-23 02:34:14#,65267,00:00:00.0065267,-33.0234,5.35156,SMRUCC/R#,forloop,for_loop_[3],Call ""gc""(),profiler.R,21
-27,#2022-01-23 02:34:14#,3668,00:00:00.0003668,4.12109,9.47266,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-28,#2022-01-23 02:34:14#,542,00:00:00.0000542,2.125,11.5977,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-29,#2022-01-23 02:34:14#,2258,00:00:00.0002258,0.238281,11.8359,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-30,#2022-01-23 02:34:14#,54852,00:00:00.0054852,0.238281,11.8359,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-31,#2022-01-23 02:34:14#,64560,00:00:00.0064560,0.238281,11.8359,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-32,#2022-01-23 02:34:14#,107620,00:00:00.0107620,0.238281,11.8359,SMRUCC/R#,forloop,for_loop_[4],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-33,#2022-01-23 02:34:14#,980318,00:00:00.0980318,26.8711,38.707,SMRUCC/R#,forloop,for_loop_[4],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-34,#2022-01-23 02:34:14#,61956,00:00:00.0061956,-37.4336,1.27344,SMRUCC/R#,forloop,for_loop_[4],Call ""gc""(),profiler.R,21
-35,#2022-01-23 02:34:14#,3547,00:00:00.0003547,3.78906,5.0625,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-36,#2022-01-23 02:34:14#,513,00:00:00.0000513,3.16016,8.22266,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-37,#2022-01-23 02:34:14#,1658,00:00:00.0001658,0.226562,8.44922,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-38,#2022-01-23 02:34:14#,45043,00:00:00.0045043,0.226562,8.44922,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-39,#2022-01-23 02:34:14#,57094,00:00:00.0057094,0.226562,8.44922,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-40,#2022-01-23 02:34:14#,90151,00:00:00.0090151,0.226562,8.44922,SMRUCC/R#,forloop,for_loop_[5],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-41,#2022-01-23 02:34:14#,976543,00:00:00.0976543,27.0625,35.5117,SMRUCC/R#,forloop,for_loop_[5],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-42,#2022-01-23 02:34:14#,67756,00:00:00.0067756,-34.1602,1.35156,SMRUCC/R#,forloop,for_loop_[5],Call ""gc""(),profiler.R,21
-43,#2022-01-23 02:34:14#,2555,00:00:00.0002555,7.28906,8.64062,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-44,#2022-01-23 02:34:14#,584,00:00:00.0000584,2.25,10.8906,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-45,#2022-01-23 02:34:14#,2453,00:00:00.0002453,0.484375,11.375,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-46,#2022-01-23 02:34:14#,49188,00:00:00.0049188,0.484375,11.375,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-47,#2022-01-23 02:34:14#,58436,00:00:00.0058436,0.484375,11.375,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-48,#2022-01-23 02:34:14#,93148,00:00:00.0093148,0.484375,11.375,SMRUCC/R#,forloop,for_loop_[6],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-49,#2022-01-23 02:34:14#,1078275,00:00:00.1078275,34.3867,45.7617,SMRUCC/R#,forloop,for_loop_[6],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-50,#2022-01-23 02:34:14#,65863,00:00:00.0065863,-44.6016,1.16016,SMRUCC/R#,forloop,for_loop_[6],Call ""gc""(),profiler.R,21
-51,#2022-01-23 02:34:14#,3615,00:00:00.0003615,7.30078,8.46094,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-52,#2022-01-23 02:34:14#,514,00:00:00.0000514,2.95312,11.4141,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-53,#2022-01-23 02:34:14#,1528,00:00:00.0001528,0.625,12.0391,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-54,#2022-01-23 02:34:14#,45371,00:00:00.0045371,0.625,12.0391,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-55,#2022-01-23 02:34:14#,55133,00:00:00.0055133,0.625,12.0391,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-56,#2022-01-23 02:34:14#,89996,00:00:00.0089996,0.625,12.0391,SMRUCC/R#,forloop,for_loop_[7],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-57,#2022-01-23 02:34:14#,990541,00:00:00.0990541,27.8047,39.8438,SMRUCC/R#,forloop,for_loop_[7],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-58,#2022-01-23 02:34:14#,61119,00:00:00.0061119,-38.6797,1.16406,SMRUCC/R#,forloop,for_loop_[7],Call ""gc""(),profiler.R,21
-59,#2022-01-23 02:34:14#,2561,00:00:00.0002561,5.46875,6.63281,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-60,#2022-01-23 02:34:14#,464,00:00:00.0000464,3.63672,10.2695,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-61,#2022-01-23 02:34:14#,1306,00:00:00.0001306,0.707031,10.9766,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-62,#2022-01-23 02:34:14#,49541,00:00:00.0049541,0.707031,10.9766,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-63,#2022-01-23 02:34:14#,58671,00:00:00.0058671,0.707031,10.9766,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-64,#2022-01-23 02:34:14#,91642,00:00:00.0091642,0.707031,10.9766,SMRUCC/R#,forloop,for_loop_[8],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-65,#2022-01-23 02:34:14#,930858,00:00:00.0930858,24.4414,35.418,SMRUCC/R#,forloop,for_loop_[8],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-66,#2022-01-23 02:34:14#,74654,00:00:00.0074654,-34.2695,1.14844,SMRUCC/R#,forloop,for_loop_[8],Call ""gc""(),profiler.R,21
-67,#2022-01-23 02:34:14#,86223,00:00:00.0086223,35.4648,36.6133,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-68,#2022-01-23 02:34:14#,504,00:00:00.0000504,4.98438,41.5977,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-69,#2022-01-23 02:34:14#,1391,00:00:00.0001391,0.652344,42.25,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-70,#2022-01-23 02:34:14#,45781,00:00:00.0045781,0.652344,42.25,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-71,#2022-01-23 02:34:14#,57191,00:00:00.0057191,0.652344,42.25,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-72,#2022-01-23 02:34:14#,176286,00:00:00.0176286,0.652344,42.25,SMRUCC/R#,forloop,for_loop_[9],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-73,#2022-01-23 02:34:14#,1075899,00:00:00.1075899,-0.953125,41.2969,SMRUCC/R#,forloop,for_loop_[9],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-74,#2022-01-23 02:34:14#,62202,00:00:00.0062202,-40.1914,1.10547,SMRUCC/R#,forloop,for_loop_[9],Call ""gc""(),profiler.R,21
-75,#2022-01-23 02:34:14#,3293,00:00:00.0003293,3.12109,4.22656,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-76,#2022-01-23 02:34:14#,536,00:00:00.0000536,3.46484,7.69141,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-77,#2022-01-23 02:34:14#,1812,00:00:00.0001812,0.0664062,7.75781,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-78,#2022-01-23 02:34:14#,45253,00:00:00.0045253,0.0664062,7.75781,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-79,#2022-01-23 02:34:14#,57588,00:00:00.0057588,0.0664062,7.75781,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-80,#2022-01-23 02:34:14#,88660,00:00:00.0088660,0.0664062,7.75781,SMRUCC/R#,forloop,for_loop_[10],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-81,#2022-01-23 02:34:14#,992482,00:00:00.0992482,27.418,35.1758,SMRUCC/R#,forloop,for_loop_[10],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-82,#2022-01-23 02:34:14#,55635,00:00:00.0055635,-34.082,1.09375,SMRUCC/R#,forloop,for_loop_[10],Call ""gc""(),profiler.R,21
-83,#2022-01-23 02:34:14#,2739,00:00:00.0002739,6.26562,7.35938,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-84,#2022-01-23 02:34:14#,511,00:00:00.0000511,3.16016,10.5195,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-85,#2022-01-23 02:34:14#,1669,00:00:00.0001669,0.554688,11.0742,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-86,#2022-01-23 02:34:14#,48482,00:00:00.0048482,0.554688,11.0742,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-87,#2022-01-23 02:34:14#,57533,00:00:00.0057533,0.554688,11.0742,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-88,#2022-01-23 02:34:14#,90580,00:00:00.0090580,0.554688,11.0742,SMRUCC/R#,forloop,for_loop_[11],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-89,#2022-01-23 02:34:14#,958505,00:00:00.0958505,27.9062,38.9805,SMRUCC/R#,forloop,for_loop_[11],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-90,#2022-01-23 02:34:15#,58382,00:00:00.0058382,-37.8867,1.09375,SMRUCC/R#,forloop,for_loop_[11],Call ""gc""(),profiler.R,21
-91,#2022-01-23 02:34:15#,2665,00:00:00.0002665,3.04688,4.14062,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-92,#2022-01-23 02:34:15#,691,00:00:00.0000691,3.41016,7.55078,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-93,#2022-01-23 02:34:15#,1150,00:00:00.0001150,0.0742188,7.625,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-94,#2022-01-23 02:34:15#,42257,00:00:00.0042257,0.0742188,7.625,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-95,#2022-01-23 02:34:15#,54806,00:00:00.0054806,0.0742188,7.625,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-96,#2022-01-23 02:34:15#,86859,00:00:00.0086859,0.0742188,7.625,SMRUCC/R#,forloop,for_loop_[12],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-97,#2022-01-23 02:34:15#,965475,00:00:00.0965475,27.4922,35.1172,SMRUCC/R#,forloop,for_loop_[12],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-98,#2022-01-23 02:34:15#,66231,00:00:00.0066231,-34.0273,1.08984,SMRUCC/R#,forloop,for_loop_[12],Call ""gc""(),profiler.R,21
-99,#2022-01-23 02:34:15#,2741,00:00:00.0002741,4.94531,6.03516,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-100,#2022-01-23 02:34:15#,536,00:00:00.0000536,4.01172,10.0469,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-101,#2022-01-23 02:34:15#,1127,00:00:00.0001127,0.425781,10.4727,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-102,#2022-01-23 02:34:15#,44458,00:00:00.0044458,0.425781,10.4727,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-103,#2022-01-23 02:34:15#,54315,00:00:00.0054315,0.425781,10.4727,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-104,#2022-01-23 02:34:15#,85010,00:00:00.0085010,0.425781,10.4727,SMRUCC/R#,forloop,for_loop_[13],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-105,#2022-01-23 02:34:15#,984177,00:00:00.0984177,27.7383,38.2109,SMRUCC/R#,forloop,for_loop_[13],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-106,#2022-01-23 02:34:15#,58320,00:00:00.0058320,-37.1094,1.10156,SMRUCC/R#,forloop,for_loop_[13],Call ""gc""(),profiler.R,21
-107,#2022-01-23 02:34:15#,2443,00:00:00.0002443,2.87891,3.98047,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-108,#2022-01-23 02:34:15#,515,00:00:00.0000515,3.65234,7.63281,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-109,#2022-01-23 02:34:15#,2086,00:00:00.0002086,0.0742188,7.70703,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-110,#2022-01-23 02:34:15#,44611,00:00:00.0044611,0.0742188,7.70703,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-111,#2022-01-23 02:34:15#,57457,00:00:00.0057457,0.0742188,7.70703,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-112,#2022-01-23 02:34:15#,87464,00:00:00.0087464,0.0742188,7.70703,SMRUCC/R#,forloop,for_loop_[14],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-113,#2022-01-23 02:34:15#,920690,00:00:00.0920690,23.668,31.375,SMRUCC/R#,forloop,for_loop_[14],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-114,#2022-01-23 02:34:15#,65090,00:00:00.0065090,-30.1094,1.26562,SMRUCC/R#,forloop,for_loop_[14],Call ""gc""(),profiler.R,21
-115,#2022-01-23 02:34:15#,87601,00:00:00.0087601,34.6836,35.9492,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-116,#2022-01-23 02:34:15#,570,00:00:00.0000570,3.45312,39.4023,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-117,#2022-01-23 02:34:15#,1132,00:00:00.0001132,0.0742188,39.4766,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-118,#2022-01-23 02:34:15#,42876,00:00:00.0042876,0.0742188,39.4766,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-119,#2022-01-23 02:34:15#,55452,00:00:00.0055452,0.0742188,39.4766,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-120,#2022-01-23 02:34:15#,172699,00:00:00.0172699,0.0742188,39.4766,SMRUCC/R#,forloop,for_loop_[15],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-121,#2022-01-23 02:34:15#,1089322,00:00:00.1089322,-4.52734,34.9492,SMRUCC/R#,forloop,for_loop_[15],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-122,#2022-01-23 02:34:15#,56666,00:00:00.0056666,-33.8555,1.09375,SMRUCC/R#,forloop,for_loop_[15],Call ""gc""(),profiler.R,21
-123,#2022-01-23 02:34:15#,2856,00:00:00.0002856,2.75391,3.84766,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-124,#2022-01-23 02:34:15#,515,00:00:00.0000515,3.53516,7.38281,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-125,#2022-01-23 02:34:15#,1160,00:00:00.0001160,0.0742188,7.45703,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-126,#2022-01-23 02:34:15#,43913,00:00:00.0043913,0.0742188,7.45703,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-127,#2022-01-23 02:34:15#,56032,00:00:00.0056032,0.0742188,7.45703,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-128,#2022-01-23 02:34:15#,86526,00:00:00.0086526,0.0742188,7.45703,SMRUCC/R#,forloop,for_loop_[16],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-129,#2022-01-23 02:34:15#,954122,00:00:00.0954122,27.1523,34.6094,SMRUCC/R#,forloop,for_loop_[16],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-130,#2022-01-23 02:34:15#,66222,00:00:00.0066222,-33.5195,1.08984,SMRUCC/R#,forloop,for_loop_[16],Call ""gc""(),profiler.R,21
-131,#2022-01-23 02:34:15#,2522,00:00:00.0002522,2.75781,3.84766,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-132,#2022-01-23 02:34:15#,505,00:00:00.0000505,3.55078,7.39844,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-133,#2022-01-23 02:34:15#,1228,00:00:00.0001228,0.09375,7.49219,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-134,#2022-01-23 02:34:15#,42392,00:00:00.0042392,0.09375,7.49219,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-135,#2022-01-23 02:34:15#,54607,00:00:00.0054607,0.09375,7.49219,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-136,#2022-01-23 02:34:15#,85264,00:00:00.0085264,0.09375,7.49219,SMRUCC/R#,forloop,for_loop_[17],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-137,#2022-01-23 02:34:15#,967667,00:00:00.0967667,26.957,34.4492,SMRUCC/R#,forloop,for_loop_[17],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-138,#2022-01-23 02:34:15#,54710,00:00:00.0054710,-33.3594,1.08984,SMRUCC/R#,forloop,for_loop_[17],Call ""gc""(),profiler.R,21
-139,#2022-01-23 02:34:15#,2517,00:00:00.0002517,6.36328,7.45312,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-140,#2022-01-23 02:34:15#,966,00:00:00.0000966,3.06641,10.5195,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-141,#2022-01-23 02:34:15#,2269,00:00:00.0002269,0.640625,11.1602,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-142,#2022-01-23 02:34:15#,58255,00:00:00.0058255,0.640625,11.1602,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-143,#2022-01-23 02:34:15#,67962,00:00:00.0067962,0.640625,11.1602,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-144,#2022-01-23 02:34:15#,100373,00:00:00.0100373,0.640625,11.1602,SMRUCC/R#,forloop,for_loop_[18],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-145,#2022-01-23 02:34:15#,975751,00:00:00.0975751,29.6797,40.8398,SMRUCC/R#,forloop,for_loop_[18],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-146,#2022-01-23 02:34:15#,62154,00:00:00.0062154,-39.7461,1.09375,SMRUCC/R#,forloop,for_loop_[18],Call ""gc""(),profiler.R,21
-147,#2022-01-23 02:34:15#,2523,00:00:00.0002523,3.10547,4.19922,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-148,#2022-01-23 02:34:15#,521,00:00:00.0000521,3.37109,7.57031,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-149,#2022-01-23 02:34:15#,1294,00:00:00.0001294,0.0664062,7.63672,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-150,#2022-01-23 02:34:15#,42836,00:00:00.0042836,0.0664062,7.63672,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-151,#2022-01-23 02:34:15#,55484,00:00:00.0055484,0.0664062,7.63672,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-152,#2022-01-23 02:34:15#,86449,00:00:00.0086449,0.0664062,7.63672,SMRUCC/R#,forloop,for_loop_[19],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-153,#2022-01-23 02:34:15#,979761,00:00:00.0979761,27.457,35.0938,SMRUCC/R#,forloop,for_loop_[19],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-154,#2022-01-23 02:34:15#,55178,00:00:00.0055178,-34,1.09375,SMRUCC/R#,forloop,for_loop_[19],Call ""gc""(),profiler.R,21
-155,#2022-01-23 02:34:15#,2579,00:00:00.0002579,2.69141,3.78516,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-156,#2022-01-23 02:34:15#,518,00:00:00.0000518,3.34375,7.12891,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-157,#2022-01-23 02:34:15#,1173,00:00:00.0001173,0.0742188,7.20312,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-158,#2022-01-23 02:34:15#,43750,00:00:00.0043750,0.0742188,7.20312,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-159,#2022-01-23 02:34:15#,55942,00:00:00.0055942,0.0742188,7.20312,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-160,#2022-01-23 02:34:15#,85778,00:00:00.0085778,0.0742188,7.20312,SMRUCC/R#,forloop,for_loop_[20],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-161,#2022-01-23 02:34:15#,978818,00:00:00.0978818,27.5234,34.7266,SMRUCC/R#,forloop,for_loop_[20],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-162,#2022-01-23 02:34:16#,54994,00:00:00.0054994,-33.6328,1.09375,SMRUCC/R#,forloop,for_loop_[20],Call ""gc""(),profiler.R,21
-163,#2022-01-23 02:34:16#,2367,00:00:00.0002367,2.77344,3.86719,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-164,#2022-01-23 02:34:16#,623,00:00:00.0000623,3.3125,7.17969,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-165,#2022-01-23 02:34:16#,1114,00:00:00.0001114,0.0742188,7.25391,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-166,#2022-01-23 02:34:16#,42140,00:00:00.0042140,0.0742188,7.25391,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-167,#2022-01-23 02:34:16#,53835,00:00:00.0053835,0.0742188,7.25391,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-168,#2022-01-23 02:34:16#,83836,00:00:00.0083836,0.0742188,7.25391,SMRUCC/R#,forloop,for_loop_[21],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-169,#2022-01-23 02:34:16#,991927,00:00:00.0991927,27.582,34.8359,SMRUCC/R#,forloop,for_loop_[21],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-170,#2022-01-23 02:34:16#,64972,00:00:00.0064972,-33.7461,1.08984,SMRUCC/R#,forloop,for_loop_[21],Call ""gc""(),profiler.R,21
-171,#2022-01-23 02:34:16#,2379,00:00:00.0002379,2.77344,3.86328,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-172,#2022-01-23 02:34:16#,520,00:00:00.0000520,3.3125,7.17578,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-173,#2022-01-23 02:34:16#,1161,00:00:00.0001161,0.0742188,7.25,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-174,#2022-01-23 02:34:16#,43302,00:00:00.0043302,0.0742188,7.25,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-175,#2022-01-23 02:34:16#,55664,00:00:00.0055664,0.0742188,7.25,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-176,#2022-01-23 02:34:16#,85360,00:00:00.0085360,0.0742188,7.25,SMRUCC/R#,forloop,for_loop_[22],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-177,#2022-01-23 02:34:16#,972521,00:00:00.0972521,27.3047,34.5547,SMRUCC/R#,forloop,for_loop_[22],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-178,#2022-01-23 02:34:16#,54892,00:00:00.0054892,-33.4609,1.09375,SMRUCC/R#,forloop,for_loop_[22],Call ""gc""(),profiler.R,21
-179,#2022-01-23 02:34:16#,2473,00:00:00.0002473,2.69922,3.79297,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-180,#2022-01-23 02:34:16#,502,00:00:00.0000502,3.35156,7.14453,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-181,#2022-01-23 02:34:16#,1167,00:00:00.0001167,0.0742188,7.21875,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-182,#2022-01-23 02:34:16#,43617,00:00:00.0043617,0.0742188,7.21875,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-183,#2022-01-23 02:34:16#,55520,00:00:00.0055520,0.0742188,7.21875,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-184,#2022-01-23 02:34:16#,85872,00:00:00.0085872,0.0742188,7.21875,SMRUCC/R#,forloop,for_loop_[23],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-185,#2022-01-23 02:34:16#,952438,00:00:00.0952438,23.6406,30.8594,SMRUCC/R#,forloop,for_loop_[23],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-186,#2022-01-23 02:34:16#,63227,00:00:00.0063227,-29.7578,1.10156,SMRUCC/R#,forloop,for_loop_[23],Call ""gc""(),profiler.R,21
-187,#2022-01-23 02:34:16#,84768,00:00:00.0084768,34.6562,35.7578,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-188,#2022-01-23 02:34:16#,1059,00:00:00.0001059,3.34766,39.1055,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-189,#2022-01-23 02:34:16#,1164,00:00:00.0001164,0.0742188,39.1797,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-190,#2022-01-23 02:34:16#,44534,00:00:00.0044534,0.0742188,39.1797,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-191,#2022-01-23 02:34:16#,56634,00:00:00.0056634,0.0742188,39.1797,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-192,#2022-01-23 02:34:16#,170330,00:00:00.0170330,0.0742188,39.1797,SMRUCC/R#,forloop,for_loop_[24],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-193,#2022-01-23 02:34:16#,1158997,00:00:00.1158997,-4.45703,34.7227,SMRUCC/R#,forloop,for_loop_[24],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-194,#2022-01-23 02:34:16#,58034,00:00:00.0058034,-33.6328,1.08984,SMRUCC/R#,forloop,for_loop_[24],Call ""gc""(),profiler.R,21
-195,#2022-01-23 02:34:16#,2425,00:00:00.0002425,2.69922,3.78906,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-196,#2022-01-23 02:34:16#,496,00:00:00.0000496,3.35547,7.14453,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-197,#2022-01-23 02:34:16#,1123,00:00:00.0001123,0.0703125,7.21484,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-198,#2022-01-23 02:34:16#,42336,00:00:00.0042336,0.0703125,7.21484,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-199,#2022-01-23 02:34:16#,53878,00:00:00.0053878,0.0703125,7.21484,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-200,#2022-01-23 02:34:16#,83512,00:00:00.0083512,0.0703125,7.21484,SMRUCC/R#,forloop,for_loop_[25],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-201,#2022-01-23 02:34:16#,965706,00:00:00.0965706,28.2539,35.4688,SMRUCC/R#,forloop,for_loop_[25],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-202,#2022-01-23 02:34:16#,57353,00:00:00.0057353,-34.3711,1.09766,SMRUCC/R#,forloop,for_loop_[25],Call ""gc""(),profiler.R,21
-203,#2022-01-23 02:34:16#,2515,00:00:00.0002515,2.69531,3.79297,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-204,#2022-01-23 02:34:16#,509,00:00:00.0000509,3.34375,7.13672,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-205,#2022-01-23 02:34:16#,1116,00:00:00.0001116,0.0703125,7.20703,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-206,#2022-01-23 02:34:16#,42607,00:00:00.0042607,0.0703125,7.20703,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-207,#2022-01-23 02:34:16#,54340,00:00:00.0054340,0.0703125,7.20703,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-208,#2022-01-23 02:34:16#,83572,00:00:00.0083572,0.0703125,7.20703,SMRUCC/R#,forloop,for_loop_[26],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-209,#2022-01-23 02:34:16#,956549,00:00:00.0956549,27.5117,34.7188,SMRUCC/R#,forloop,for_loop_[26],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-210,#2022-01-23 02:34:16#,64377,00:00:00.0064377,-33.6289,1.08984,SMRUCC/R#,forloop,for_loop_[26],Call ""gc""(),profiler.R,21
-211,#2022-01-23 02:34:16#,2518,00:00:00.0002518,2.72656,3.81641,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-212,#2022-01-23 02:34:16#,487,00:00:00.0000487,3.33984,7.15625,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-213,#2022-01-23 02:34:16#,1883,00:00:00.0001883,0.0703125,7.22656,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-214,#2022-01-23 02:34:16#,51012,00:00:00.0051012,0.0703125,7.22656,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-215,#2022-01-23 02:34:16#,62496,00:00:00.0062496,0.0703125,7.22656,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-216,#2022-01-23 02:34:16#,92268,00:00:00.0092268,0.0703125,7.22656,SMRUCC/R#,forloop,for_loop_[27],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-217,#2022-01-23 02:34:16#,961506,00:00:00.0961506,27.0195,34.2461,SMRUCC/R#,forloop,for_loop_[27],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-218,#2022-01-23 02:34:16#,54681,00:00:00.0054681,-33.1523,1.09375,SMRUCC/R#,forloop,for_loop_[27],Call ""gc""(),profiler.R,21
-219,#2022-01-23 02:34:16#,2474,00:00:00.0002474,2.72656,3.82031,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-220,#2022-01-23 02:34:16#,496,00:00:00.0000496,3.33984,7.16016,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-221,#2022-01-23 02:34:16#,1102,00:00:00.0001102,0.0703125,7.23047,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-222,#2022-01-23 02:34:16#,42907,00:00:00.0042907,0.0703125,7.23047,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-223,#2022-01-23 02:34:16#,54418,00:00:00.0054418,0.0703125,7.23047,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-224,#2022-01-23 02:34:16#,84206,00:00:00.0084206,0.0703125,7.23047,SMRUCC/R#,forloop,for_loop_[28],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-225,#2022-01-23 02:34:16#,957616,00:00:00.0957616,27.418,34.6484,SMRUCC/R#,forloop,for_loop_[28],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-226,#2022-01-23 02:34:17#,59689,00:00:00.0059689,-33.5586,1.08984,SMRUCC/R#,forloop,for_loop_[28],Call ""gc""(),profiler.R,21
-227,#2022-01-23 02:34:17#,2440,00:00:00.0002440,2.72266,3.8125,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-228,#2022-01-23 02:34:17#,501,00:00:00.0000501,3.33984,7.15234,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-229,#2022-01-23 02:34:17#,1156,00:00:00.0001156,0.0703125,7.22266,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-230,#2022-01-23 02:34:17#,41974,00:00:00.0041974,0.0703125,7.22266,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-231,#2022-01-23 02:34:17#,53438,00:00:00.0053438,0.0703125,7.22266,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-232,#2022-01-23 02:34:17#,83682,00:00:00.0083682,0.0703125,7.22266,SMRUCC/R#,forloop,for_loop_[29],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-233,#2022-01-23 02:34:17#,974603,00:00:00.0974603,27.457,34.6797,SMRUCC/R#,forloop,for_loop_[29],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-234,#2022-01-23 02:34:17#,59479,00:00:00.0059479,-33.5859,1.09375,SMRUCC/R#,forloop,for_loop_[29],Call ""gc""(),profiler.R,21
-235,#2022-01-23 02:34:17#,2496,00:00:00.0002496,2.71875,3.8125,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-236,#2022-01-23 02:34:17#,571,00:00:00.0000571,3.33594,7.14844,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-237,#2022-01-23 02:34:17#,1175,00:00:00.0001175,0.0703125,7.21875,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-238,#2022-01-23 02:34:17#,51008,00:00:00.0051008,0.0703125,7.21875,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-239,#2022-01-23 02:34:17#,62910,00:00:00.0062910,0.0703125,7.21875,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-240,#2022-01-23 02:34:17#,96416,00:00:00.0096416,0.0703125,7.21875,SMRUCC/R#,forloop,for_loop_[30],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-241,#2022-01-23 02:34:17#,975417,00:00:00.0975417,27.4609,34.6797,SMRUCC/R#,forloop,for_loop_[30],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-242,#2022-01-23 02:34:17#,54722,00:00:00.0054722,-33.5898,1.08984,SMRUCC/R#,forloop,for_loop_[30],Call ""gc""(),profiler.R,21
-243,#2022-01-23 02:34:17#,2425,00:00:00.0002425,2.72266,3.8125,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-244,#2022-01-23 02:34:17#,509,00:00:00.0000509,3.33984,7.15234,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-245,#2022-01-23 02:34:17#,1144,00:00:00.0001144,0.0703125,7.22266,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-246,#2022-01-23 02:34:17#,43023,00:00:00.0043023,0.0703125,7.22266,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-247,#2022-01-23 02:34:17#,55030,00:00:00.0055030,0.0703125,7.22266,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-248,#2022-01-23 02:34:17#,86757,00:00:00.0086757,0.0703125,7.22266,SMRUCC/R#,forloop,for_loop_[31],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-249,#2022-01-23 02:34:17#,972644,00:00:00.0972644,27.1562,34.3789,SMRUCC/R#,forloop,for_loop_[31],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-250,#2022-01-23 02:34:17#,56858,00:00:00.0056858,-33.2891,1.08984,SMRUCC/R#,forloop,for_loop_[31],Call ""gc""(),profiler.R,21
-251,#2022-01-23 02:34:17#,2477,00:00:00.0002477,2.72266,3.8125,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-252,#2022-01-23 02:34:17#,482,00:00:00.0000482,3.33594,7.14844,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-253,#2022-01-23 02:34:17#,1086,00:00:00.0001086,0.0703125,7.21875,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-254,#2022-01-23 02:34:17#,41945,00:00:00.0041945,0.0703125,7.21875,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-255,#2022-01-23 02:34:17#,53446,00:00:00.0053446,0.0703125,7.21875,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-256,#2022-01-23 02:34:17#,83868,00:00:00.0083868,0.0703125,7.21875,SMRUCC/R#,forloop,for_loop_[32],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-257,#2022-01-23 02:34:17#,969014,00:00:00.0969014,28.3906,35.6094,SMRUCC/R#,forloop,for_loop_[32],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-258,#2022-01-23 02:34:17#,70945,00:00:00.0070945,-33.8906,1.71875,SMRUCC/R#,forloop,for_loop_[32],Call ""gc""(),profiler.R,21
-259,#2022-01-23 02:34:17#,3071,00:00:00.0003071,5.875,7.59375,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-260,#2022-01-23 02:34:17#,559,00:00:00.0000559,2.65625,10.25,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-261,#2022-01-23 02:34:17#,1113,00:00:00.0001113,0.339844,10.5898,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-262,#2022-01-23 02:34:17#,47014,00:00:00.0047014,0.339844,10.5898,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-263,#2022-01-23 02:34:17#,55800,00:00:00.0055800,0.339844,10.5898,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-264,#2022-01-23 02:34:17#,89344,00:00:00.0089344,0.339844,10.5898,SMRUCC/R#,forloop,for_loop_[33],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-265,#2022-01-23 02:34:17#,994371,00:00:00.0994371,31.0898,41.6797,SMRUCC/R#,forloop,for_loop_[33],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-266,#2022-01-23 02:34:17#,69929,00:00:00.0069929,-40.4883,1.19141,SMRUCC/R#,forloop,for_loop_[33],Call ""gc""(),profiler.R,21
-267,#2022-01-23 02:34:17#,82876,00:00:00.0082876,35.0703,36.2617,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-268,#2022-01-23 02:34:17#,484,00:00:00.0000484,2.88672,39.1484,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-269,#2022-01-23 02:34:17#,1142,00:00:00.0001142,0.0625,39.2109,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-270,#2022-01-23 02:34:17#,44393,00:00:00.0044393,0.0625,39.2109,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-271,#2022-01-23 02:34:17#,55572,00:00:00.0055572,0.0625,39.2109,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-272,#2022-01-23 02:34:17#,168663,00:00:00.0168663,0.0625,39.2109,SMRUCC/R#,forloop,for_loop_[34],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-273,#2022-01-23 02:34:17#,1017513,00:00:00.1017513,-3.98047,35.2305,SMRUCC/R#,forloop,for_loop_[34],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-274,#2022-01-23 02:34:17#,55763,00:00:00.0055763,-34.1406,1.08984,SMRUCC/R#,forloop,for_loop_[34],Call ""gc""(),profiler.R,21
-275,#2022-01-23 02:34:17#,2097,00:00:00.0002097,2.53906,3.62891,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-276,#2022-01-23 02:34:17#,422,00:00:00.0000422,2.92188,6.55078,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-277,#2022-01-23 02:34:17#,1111,00:00:00.0001111,0.0703125,6.62109,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-278,#2022-01-23 02:34:17#,42327,00:00:00.0042327,0.0703125,6.62109,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-279,#2022-01-23 02:34:17#,53963,00:00:00.0053963,0.0703125,6.62109,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-280,#2022-01-23 02:34:17#,82847,00:00:00.0082847,0.0703125,6.62109,SMRUCC/R#,forloop,for_loop_[35],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-281,#2022-01-23 02:34:17#,1004726,00:00:00.1004726,27.3242,33.9453,SMRUCC/R#,forloop,for_loop_[35],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-282,#2022-01-23 02:34:17#,53885,00:00:00.0053885,-32.8555,1.08984,SMRUCC/R#,forloop,for_loop_[35],Call ""gc""(),profiler.R,21
-283,#2022-01-23 02:34:17#,2098,00:00:00.0002098,2.53906,3.62891,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-284,#2022-01-23 02:34:17#,414,00:00:00.0000414,2.86328,6.49219,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-285,#2022-01-23 02:34:17#,1187,00:00:00.0001187,0.0703125,6.5625,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-286,#2022-01-23 02:34:17#,43905,00:00:00.0043905,0.0703125,6.5625,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-287,#2022-01-23 02:34:17#,54248,00:00:00.0054248,0.0703125,6.5625,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-288,#2022-01-23 02:34:17#,83068,00:00:00.0083068,0.0703125,6.5625,SMRUCC/R#,forloop,for_loop_[36],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-289,#2022-01-23 02:34:17#,975565,00:00:00.0975565,27.3438,33.9062,SMRUCC/R#,forloop,for_loop_[36],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-290,#2022-01-23 02:34:17#,54029,00:00:00.0054029,-32.8203,1.08594,SMRUCC/R#,forloop,for_loop_[36],Call ""gc""(),profiler.R,21
-291,#2022-01-23 02:34:17#,2039,00:00:00.0002039,2.60938,3.69531,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-292,#2022-01-23 02:34:17#,428,00:00:00.0000428,2.79297,6.48828,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-293,#2022-01-23 02:34:17#,1105,00:00:00.0001105,0.0703125,6.55859,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-294,#2022-01-23 02:34:17#,42607,00:00:00.0042607,0.0703125,6.55859,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-295,#2022-01-23 02:34:17#,52865,00:00:00.0052865,0.0703125,6.55859,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-296,#2022-01-23 02:34:17#,82926,00:00:00.0082926,0.0703125,6.55859,SMRUCC/R#,forloop,for_loop_[37],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-297,#2022-01-23 02:34:17#,919056,00:00:00.0919056,23.5039,30.0625,SMRUCC/R#,forloop,for_loop_[37],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-298,#2022-01-23 02:34:18#,71846,00:00:00.0071846,-28.9766,1.08594,SMRUCC/R#,forloop,for_loop_[37],Call ""gc""(),profiler.R,21
-299,#2022-01-23 02:34:18#,82241,00:00:00.0082241,34.5117,35.5977,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-300,#2022-01-23 02:34:18#,463,00:00:00.0000463,2.82812,38.4258,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-301,#2022-01-23 02:34:18#,1133,00:00:00.0001133,0.0703125,38.4961,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-302,#2022-01-23 02:34:18#,43498,00:00:00.0043498,0.0703125,38.4961,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-303,#2022-01-23 02:34:18#,54459,00:00:00.0054459,0.0703125,38.4961,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-304,#2022-01-23 02:34:18#,166013,00:00:00.0166013,0.0703125,38.4961,SMRUCC/R#,forloop,for_loop_[38],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-305,#2022-01-23 02:34:18#,1041465,00:00:00.1041465,-4.66016,33.8359,SMRUCC/R#,forloop,for_loop_[38],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-306,#2022-01-23 02:34:18#,55878,00:00:00.0055878,-32.7461,1.08984,SMRUCC/R#,forloop,for_loop_[38],Call ""gc""(),profiler.R,21
-307,#2022-01-23 02:34:18#,2089,00:00:00.0002089,2.54688,3.63672,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-308,#2022-01-23 02:34:18#,406,00:00:00.0000406,2.82812,6.46484,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-309,#2022-01-23 02:34:18#,1106,00:00:00.0001106,0.0703125,6.53516,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-310,#2022-01-23 02:34:18#,44226,00:00:00.0044226,0.0703125,6.53516,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-311,#2022-01-23 02:34:18#,55219,00:00:00.0055219,0.0703125,6.53516,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-312,#2022-01-23 02:34:18#,84854,00:00:00.0084854,0.0703125,6.53516,SMRUCC/R#,forloop,for_loop_[39],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-313,#2022-01-23 02:34:18#,976104,00:00:00.0976104,27.2148,33.75,SMRUCC/R#,forloop,for_loop_[39],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-314,#2022-01-23 02:34:18#,55003,00:00:00.0055003,-32.6641,1.08594,SMRUCC/R#,forloop,for_loop_[39],Call ""gc""(),profiler.R,21
-315,#2022-01-23 02:34:18#,2029,00:00:00.0002029,2.64062,3.72656,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-316,#2022-01-23 02:34:18#,420,00:00:00.0000420,2.78125,6.50781,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-317,#2022-01-23 02:34:18#,1191,00:00:00.0001191,0.0703125,6.57812,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-318,#2022-01-23 02:34:18#,45574,00:00:00.0045574,0.0703125,6.57812,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-319,#2022-01-23 02:34:18#,56778,00:00:00.0056778,0.0703125,6.57812,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-320,#2022-01-23 02:34:18#,85068,00:00:00.0085068,0.0703125,6.57812,SMRUCC/R#,forloop,for_loop_[40],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-321,#2022-01-23 02:34:18#,918779,00:00:00.0918779,23.5273,30.1055,SMRUCC/R#,forloop,for_loop_[40],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-322,#2022-01-23 02:34:18#,61925,00:00:00.0061925,-29.0156,1.08984,SMRUCC/R#,forloop,for_loop_[40],Call ""gc""(),profiler.R,21
-323,#2022-01-23 02:34:18#,82935,00:00:00.0082935,34.5156,35.6055,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-324,#2022-01-23 02:34:18#,450,00:00:00.0000450,2.875,38.4805,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-325,#2022-01-23 02:34:18#,1132,00:00:00.0001132,0.0703125,38.5508,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-326,#2022-01-23 02:34:18#,43082,00:00:00.0043082,0.0703125,38.5508,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-327,#2022-01-23 02:34:18#,54305,00:00:00.0054305,0.0703125,38.5508,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-328,#2022-01-23 02:34:18#,166543,00:00:00.0166543,0.0703125,38.5508,SMRUCC/R#,forloop,for_loop_[41],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-329,#2022-01-23 02:34:18#,1131270,00:00:00.1131270,-4.54297,34.0078,SMRUCC/R#,forloop,for_loop_[41],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-330,#2022-01-23 02:34:18#,56073,00:00:00.0056073,-32.918,1.08984,SMRUCC/R#,forloop,for_loop_[41],Call ""gc""(),profiler.R,21
-331,#2022-01-23 02:34:18#,2099,00:00:00.0002099,2.54688,3.63672,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-332,#2022-01-23 02:34:18#,757,00:00:00.0000757,2.88281,6.51953,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-333,#2022-01-23 02:34:18#,1105,00:00:00.0001105,0.0703125,6.58984,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-334,#2022-01-23 02:34:18#,42786,00:00:00.0042786,0.0703125,6.58984,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-335,#2022-01-23 02:34:18#,53166,00:00:00.0053166,0.0703125,6.58984,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-336,#2022-01-23 02:34:18#,82849,00:00:00.0082849,0.0703125,6.58984,SMRUCC/R#,forloop,for_loop_[42],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-337,#2022-01-23 02:34:18#,954537,00:00:00.0954537,27.4062,33.9961,SMRUCC/R#,forloop,for_loop_[42],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-338,#2022-01-23 02:34:18#,63629,00:00:00.0063629,-32.9141,1.08203,SMRUCC/R#,forloop,for_loop_[42],Call ""gc""(),profiler.R,21
-339,#2022-01-23 02:34:18#,2073,00:00:00.0002073,2.53906,3.62109,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-340,#2022-01-23 02:34:18#,412,00:00:00.0000412,2.82812,6.44922,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-341,#2022-01-23 02:34:18#,1097,00:00:00.0001097,0.0703125,6.51953,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-342,#2022-01-23 02:34:18#,43618,00:00:00.0043618,0.0703125,6.51953,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-343,#2022-01-23 02:34:18#,54182,00:00:00.0054182,0.0703125,6.51953,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-344,#2022-01-23 02:34:18#,82732,00:00:00.0082732,0.0703125,6.51953,SMRUCC/R#,forloop,for_loop_[43],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-345,#2022-01-23 02:34:18#,986887,00:00:00.0986887,27.2422,33.7617,SMRUCC/R#,forloop,for_loop_[43],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-346,#2022-01-23 02:34:18#,54107,00:00:00.0054107,-32.6758,1.08594,SMRUCC/R#,forloop,for_loop_[43],Call ""gc""(),profiler.R,21
-347,#2022-01-23 02:34:18#,2076,00:00:00.0002076,2.53906,3.625,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-348,#2022-01-23 02:34:18#,420,00:00:00.0000420,2.82422,6.44922,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-349,#2022-01-23 02:34:18#,1687,00:00:00.0001687,0.0703125,6.51953,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-350,#2022-01-23 02:34:18#,42930,00:00:00.0042930,0.0703125,6.51953,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-351,#2022-01-23 02:34:18#,53659,00:00:00.0053659,0.0703125,6.51953,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-352,#2022-01-23 02:34:18#,83203,00:00:00.0083203,0.0703125,6.51953,SMRUCC/R#,forloop,for_loop_[44],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-353,#2022-01-23 02:34:18#,989191,00:00:00.0989191,27.9531,34.4727,SMRUCC/R#,forloop,for_loop_[44],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-354,#2022-01-23 02:34:18#,57467,00:00:00.0057467,-33.3828,1.08984,SMRUCC/R#,forloop,for_loop_[44],Call ""gc""(),profiler.R,21
-355,#2022-01-23 02:34:18#,2107,00:00:00.0002107,2.53906,3.62891,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-356,#2022-01-23 02:34:18#,414,00:00:00.0000414,2.82422,6.45312,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-357,#2022-01-23 02:34:18#,1102,00:00:00.0001102,0.0703125,6.52344,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-358,#2022-01-23 02:34:18#,41945,00:00:00.0041945,0.0703125,6.52344,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-359,#2022-01-23 02:34:18#,52641,00:00:00.0052641,0.0703125,6.52344,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-360,#2022-01-23 02:34:18#,81590,00:00:00.0081590,0.0703125,6.52344,SMRUCC/R#,forloop,for_loop_[45],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-361,#2022-01-23 02:34:18#,913373,00:00:00.0913373,23.5039,30.0273,SMRUCC/R#,forloop,for_loop_[45],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-362,#2022-01-23 02:34:19#,62370,00:00:00.0062370,-28.9336,1.09375,SMRUCC/R#,forloop,for_loop_[45],Call ""gc""(),profiler.R,21
-363,#2022-01-23 02:34:19#,81474,00:00:00.0081474,34.4961,35.5898,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-364,#2022-01-23 02:34:19#,429,00:00:00.0000429,2.82031,38.4102,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-365,#2022-01-23 02:34:19#,1150,00:00:00.0001150,0.0703125,38.4805,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-366,#2022-01-23 02:34:19#,42892,00:00:00.0042892,0.0703125,38.4805,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-367,#2022-01-23 02:34:19#,54092,00:00:00.0054092,0.0703125,38.4805,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-368,#2022-01-23 02:34:19#,164816,00:00:00.0164816,0.0703125,38.4805,SMRUCC/R#,forloop,for_loop_[46],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-369,#2022-01-23 02:34:19#,1181917,00:00:00.1181917,-4.51172,33.9688,SMRUCC/R#,forloop,for_loop_[46],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-370,#2022-01-23 02:34:19#,56212,00:00:00.0056212,-32.8789,1.08984,SMRUCC/R#,forloop,for_loop_[46],Call ""gc""(),profiler.R,21
-371,#2022-01-23 02:34:19#,2088,00:00:00.0002088,2.53906,3.62891,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-372,#2022-01-23 02:34:19#,690,00:00:00.0000690,2.82422,6.45312,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-373,#2022-01-23 02:34:19#,1085,00:00:00.0001085,0.0703125,6.52344,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-374,#2022-01-23 02:34:19#,44095,00:00:00.0044095,0.0703125,6.52344,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-375,#2022-01-23 02:34:19#,54978,00:00:00.0054978,0.0703125,6.52344,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-376,#2022-01-23 02:34:19#,85208,00:00:00.0085208,0.0703125,6.52344,SMRUCC/R#,forloop,for_loop_[47],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-377,#2022-01-23 02:34:19#,964985,00:00:00.0964985,27.4414,33.9648,SMRUCC/R#,forloop,for_loop_[47],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-378,#2022-01-23 02:34:19#,63561,00:00:00.0063561,-32.8789,1.08594,SMRUCC/R#,forloop,for_loop_[47],Call ""gc""(),profiler.R,21
-379,#2022-01-23 02:34:19#,2069,00:00:00.0002069,2.51953,3.60547,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-380,#2022-01-23 02:34:19#,421,00:00:00.0000421,2.82031,6.42578,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-381,#2022-01-23 02:34:19#,1153,00:00:00.0001153,0.0703125,6.49609,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-382,#2022-01-23 02:34:19#,43152,00:00:00.0043152,0.0703125,6.49609,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-383,#2022-01-23 02:34:19#,53395,00:00:00.0053395,0.0703125,6.49609,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-384,#2022-01-23 02:34:19#,82247,00:00:00.0082247,0.0703125,6.49609,SMRUCC/R#,forloop,for_loop_[48],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-385,#2022-01-23 02:34:19#,968197,00:00:00.0968197,27.2617,33.7578,SMRUCC/R#,forloop,for_loop_[48],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-386,#2022-01-23 02:34:19#,55022,00:00:00.0055022,-32.668,1.08984,SMRUCC/R#,forloop,for_loop_[48],Call ""gc""(),profiler.R,21
-387,#2022-01-23 02:34:19#,2690,00:00:00.0002690,2.51953,3.60938,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-388,#2022-01-23 02:34:19#,424,00:00:00.0000424,2.82422,6.43359,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-389,#2022-01-23 02:34:19#,1097,00:00:00.0001097,0.0664062,6.5,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-390,#2022-01-23 02:34:19#,42956,00:00:00.0042956,0.0664062,6.5,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-391,#2022-01-23 02:34:19#,53229,00:00:00.0053229,0.0664062,6.5,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-392,#2022-01-23 02:34:19#,82521,00:00:00.0082521,0.0664062,6.5,SMRUCC/R#,forloop,for_loop_[49],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-393,#2022-01-23 02:34:19#,955447,00:00:00.0955447,27.3359,33.8359,SMRUCC/R#,forloop,for_loop_[49],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-394,#2022-01-23 02:34:19#,54275,00:00:00.0054275,-32.75,1.08594,SMRUCC/R#,forloop,for_loop_[49],Call ""gc""(),profiler.R,21
-395,#2022-01-23 02:34:19#,2088,00:00:00.0002088,2.51562,3.60156,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,"[&x, &y] <- Call ""abs""([&x, &y])",profiler.R,3
-396,#2022-01-23 02:34:19#,404,00:00:00.0000404,2.81641,6.41797,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x),profiler.R,6
-397,#2022-01-23 02:34:19#,1102,00:00:00.0001102,0.0664062,6.48438,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call ""sqrt""((1 + (&r ^ 2)))),profiler.R,6
-398,#2022-01-23 02:34:19#,42714,00:00:00.0042714,0.0664062,6.48438,SMRUCC/R#_runtime,n/a,if_closure,""r"" <- (&y / &x);...,profiler.R,6
-399,#2022-01-23 02:34:19#,53065,00:00:00.0053065,0.0664062,6.48438,SMRUCC/R#,declare_function,hypot<$anonymous_07972>,if ((&x > &y)) then {...,profiler.R,3
-400,#2022-01-23 02:34:19#,82277,00:00:00.0082277,0.0664062,6.48438,SMRUCC/R#,forloop,for_loop_[50],"Call ""print""(Call ""hypot""(&i, 3))",profiler.R,21
-401,#2022-01-23 02:34:19#,970662,00:00:00.0970662,27.375,33.8594,SMRUCC/R#,forloop,for_loop_[50],"Call ""rep""(1, ""times"" <- 1000000)",profiler.R,21
-402,#2022-01-23 02:34:19#,54888,00:00:00.0054888,-32.7695,1.08984,SMRUCC/R#,forloop,for_loop_[50],Call ""gc""(),profiler.R,21
-403,#2022-01-23 02:34:13#,60273244,00:00:06.0273244,-32.7695,1.08984,SMRUCC/R#,declare_function,run<$anonymous_07973>,for (let [""i""] in 1:50 step 1) %do% {...,profiler.R,20
-404,#2022-01-23 02:34:19#,43,00:00:00.0000043,3.54688,4.63672,SMRUCC/R#,declare_function,run<$anonymous_07973>,NULL,profiler.R,20
-405,#2022-01-23 02:34:13#,60337844,00:00:06.0337844,3.54688,4.63672,SMRUCC/R#_runtime,n/a,@profile,Call ""print""(Call ""run""()),profiler.R,19
+1,#2022-01-23 02:38:09#,173,00:00:00.0000173,0,61.668,SMRUCC/R#_runtime,n/a,@profile,'run' <- declare function '$run<$anonymous_0066b>'() {...,profiler.R,19
+2,#2022-01-23 02:38:09#,143907,00:00:00.0143907,-60.2695,1.39844,SMRUCC/R#_runtime,n/a,@profile,Call 'gc'(),profiler.R,19
+3,#2022-01-23 02:38:09#,80671,00:00:00.0080671,11.6719,13.0703,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+4,#2022-01-23 02:38:09#,238816,00:00:00.0238816,6.6875,19.7578,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+5,#2022-01-23 02:38:09#,8670,00:00:00.0008670,0.0390625,19.7969,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&y == 0)) then {...,profiler.R,3
+6,#2022-01-23 02:38:09#,13536,00:00:00.0013536,0.0273438,19.8242,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,'r' <- (&x / &y),profiler.R,3
+7,#2022-01-23 02:38:09#,9880,00:00:00.0009880,0.03125,19.8555,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,return (&y * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,3
+8,#2022-01-23 02:38:09#,546734,00:00:00.0546734,0.03125,19.8555,SMRUCC/R#,forloop,for_loop_[1],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+9,#2022-01-23 02:38:10#,1018629,00:00:00.1018629,24.3047,44.1602,SMRUCC/R#,forloop,for_loop_[1],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+10,#2022-01-23 02:38:10#,70299,00:00:00.0070299,-42.9297,1.23047,SMRUCC/R#,forloop,for_loop_[1],Call 'gc'(),profiler.R,21
+11,#2022-01-23 02:38:10#,2890,00:00:00.0002890,4.75391,5.98438,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+12,#2022-01-23 02:38:10#,9660,00:00:00.0009660,2.1875,8.17188,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+13,#2022-01-23 02:38:10#,4898,00:00:00.0004898,0.0820312,8.25391,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&y == 0)) then {...,profiler.R,3
+14,#2022-01-23 02:38:10#,660,00:00:00.0000660,0.0507812,8.30469,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,'r' <- (&x / &y),profiler.R,3
+15,#2022-01-23 02:38:10#,1595,00:00:00.0001595,0.0703125,8.375,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,return (&y * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,3
+16,#2022-01-23 02:38:10#,140577,00:00:00.0140577,0.0703125,8.375,SMRUCC/R#,forloop,for_loop_[2],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+17,#2022-01-23 02:38:10#,1096158,00:00:00.1096158,30.2305,38.6055,SMRUCC/R#,forloop,for_loop_[2],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+18,#2022-01-23 02:38:10#,68464,00:00:00.0068464,-32.8398,5.76562,SMRUCC/R#,forloop,for_loop_[2],Call 'gc'(),profiler.R,21
+19,#2022-01-23 02:38:10#,2807,00:00:00.0002807,3.85156,9.61719,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+20,#2022-01-23 02:38:10#,8671,00:00:00.0008671,1.85547,11.4727,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+21,#2022-01-23 02:38:10#,5056,00:00:00.0005056,0.277344,11.75,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&y == 0)) then {...,profiler.R,3
+22,#2022-01-23 02:38:10#,735,00:00:00.0000735,0.324219,12.0742,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,'r' <- (&x / &y),profiler.R,3
+23,#2022-01-23 02:38:10#,2510,00:00:00.0002510,0.363281,12.4375,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,return (&y * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,3
+24,#2022-01-23 02:38:10#,142163,00:00:00.0142163,0.363281,12.4375,SMRUCC/R#,forloop,for_loop_[3],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+25,#2022-01-23 02:38:10#,1020474,00:00:00.1020474,28.5664,41.0039,SMRUCC/R#,forloop,for_loop_[3],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+26,#2022-01-23 02:38:10#,107974,00:00:00.0107974,-35.457,5.54688,SMRUCC/R#,forloop,for_loop_[3],Call 'gc'(),profiler.R,21
+27,#2022-01-23 02:38:10#,99868,00:00:00.0099868,39.4258,44.9727,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+28,#2022-01-23 02:38:10#,736,00:00:00.0000736,2.69141,47.6641,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+29,#2022-01-23 02:38:10#,2518,00:00:00.0002518,0.335938,48,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+30,#2022-01-23 02:38:10#,59968,00:00:00.0059968,0.335938,48,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+31,#2022-01-23 02:38:10#,74273,00:00:00.0074273,0.335938,48,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+32,#2022-01-23 02:38:10#,212760,00:00:00.0212760,0.335938,48,SMRUCC/R#,forloop,for_loop_[4],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+33,#2022-01-23 02:38:10#,1147151,00:00:00.1147151,-4.81641,43.1836,SMRUCC/R#,forloop,for_loop_[4],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+34,#2022-01-23 02:38:10#,64190,00:00:00.0064190,-41.875,1.30859,SMRUCC/R#,forloop,for_loop_[4],Call 'gc'(),profiler.R,21
+35,#2022-01-23 02:38:10#,2736,00:00:00.0002736,3.66016,4.96875,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+36,#2022-01-23 02:38:10#,454,00:00:00.0000454,3.19531,8.16406,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+37,#2022-01-23 02:38:10#,1615,00:00:00.0001615,0.0859375,8.25,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+38,#2022-01-23 02:38:10#,46199,00:00:00.0046199,0.0859375,8.25,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+39,#2022-01-23 02:38:10#,58779,00:00:00.0058779,0.0859375,8.25,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+40,#2022-01-23 02:38:10#,91711,00:00:00.0091711,0.0859375,8.25,SMRUCC/R#,forloop,for_loop_[5],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+41,#2022-01-23 02:38:10#,1001627,00:00:00.1001627,30.6797,38.9297,SMRUCC/R#,forloop,for_loop_[5],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+42,#2022-01-23 02:38:10#,66287,00:00:00.0066287,-33.043,5.88672,SMRUCC/R#,forloop,for_loop_[5],Call 'gc'(),profiler.R,21
+43,#2022-01-23 02:38:10#,2832,00:00:00.0002832,3.67578,9.5625,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+44,#2022-01-23 02:38:10#,513,00:00:00.0000513,2.33203,11.8945,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+45,#2022-01-23 02:38:10#,1542,00:00:00.0001542,0.324219,12.2188,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+46,#2022-01-23 02:38:10#,46094,00:00:00.0046094,0.324219,12.2188,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+47,#2022-01-23 02:38:10#,54696,00:00:00.0054696,0.324219,12.2188,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+48,#2022-01-23 02:38:10#,86960,00:00:00.0086960,0.324219,12.2188,SMRUCC/R#,forloop,for_loop_[6],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+49,#2022-01-23 02:38:10#,1167431,00:00:00.1167431,28.5352,40.7539,SMRUCC/R#,forloop,for_loop_[6],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+50,#2022-01-23 02:38:10#,64956,00:00:00.0064956,-39.4727,1.28125,SMRUCC/R#,forloop,for_loop_[6],Call 'gc'(),profiler.R,21
+51,#2022-01-23 02:38:10#,2818,00:00:00.0002818,4.76562,6.04688,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+52,#2022-01-23 02:38:10#,452,00:00:00.0000452,3.91797,9.96484,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+53,#2022-01-23 02:38:10#,1423,00:00:00.0001423,0.71875,10.6836,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+54,#2022-01-23 02:38:10#,45298,00:00:00.0045298,0.71875,10.6836,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+55,#2022-01-23 02:38:10#,55491,00:00:00.0055491,0.71875,10.6836,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+56,#2022-01-23 02:38:10#,88351,00:00:00.0088351,0.71875,10.6836,SMRUCC/R#,forloop,for_loop_[7],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+57,#2022-01-23 02:38:10#,1048656,00:00:00.1048656,28.3281,39.0117,SMRUCC/R#,forloop,for_loop_[7],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+58,#2022-01-23 02:38:10#,78674,00:00:00.0078674,-37.6406,1.37109,SMRUCC/R#,forloop,for_loop_[7],Call 'gc'(),profiler.R,21
+59,#2022-01-23 02:38:10#,3185,00:00:00.0003185,6.24219,7.61328,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+60,#2022-01-23 02:38:10#,484,00:00:00.0000484,3.29297,10.9062,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+61,#2022-01-23 02:38:10#,1678,00:00:00.0001678,0.574219,11.4805,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+62,#2022-01-23 02:38:10#,47332,00:00:00.0047332,0.574219,11.4805,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+63,#2022-01-23 02:38:10#,56540,00:00:00.0056540,0.574219,11.4805,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+64,#2022-01-23 02:38:10#,91072,00:00:00.0091072,0.574219,11.4805,SMRUCC/R#,forloop,for_loop_[8],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+65,#2022-01-23 02:38:10#,1197510,00:00:00.1197510,29.457,40.9375,SMRUCC/R#,forloop,for_loop_[8],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+66,#2022-01-23 02:38:11#,63303,00:00:00.0063303,-39.8164,1.12109,SMRUCC/R#,forloop,for_loop_[8],Call 'gc'(),profiler.R,21
+67,#2022-01-23 02:38:11#,4751,00:00:00.0004751,3.19531,4.31641,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+68,#2022-01-23 02:38:11#,575,00:00:00.0000575,5.44922,9.76562,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+69,#2022-01-23 02:38:11#,1275,00:00:00.0001275,0.664062,10.4297,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+70,#2022-01-23 02:38:11#,49198,00:00:00.0049198,0.664062,10.4297,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+71,#2022-01-23 02:38:11#,61955,00:00:00.0061955,0.664062,10.4297,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+72,#2022-01-23 02:38:11#,98321,00:00:00.0098321,0.664062,10.4297,SMRUCC/R#,forloop,for_loop_[9],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+73,#2022-01-23 02:38:11#,1002919,00:00:00.1002919,27.9375,38.3672,SMRUCC/R#,forloop,for_loop_[9],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+74,#2022-01-23 02:38:11#,63717,00:00:00.0063717,-37.2422,1.125,SMRUCC/R#,forloop,for_loop_[9],Call 'gc'(),profiler.R,21
+75,#2022-01-23 02:38:11#,3313,00:00:00.0003313,6.30078,7.42578,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+76,#2022-01-23 02:38:11#,530,00:00:00.0000530,2.67969,10.1055,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+77,#2022-01-23 02:38:11#,1600,00:00:00.0001600,0.101562,10.207,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+78,#2022-01-23 02:38:11#,49064,00:00:00.0049064,0.101562,10.207,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+79,#2022-01-23 02:38:11#,58516,00:00:00.0058516,0.101562,10.207,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+80,#2022-01-23 02:38:11#,93076,00:00:00.0093076,0.101562,10.207,SMRUCC/R#,forloop,for_loop_[10],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+81,#2022-01-23 02:38:11#,1001086,00:00:00.1001086,27.3125,37.5195,SMRUCC/R#,forloop,for_loop_[10],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+82,#2022-01-23 02:38:11#,63277,00:00:00.0063277,-36.3945,1.125,SMRUCC/R#,forloop,for_loop_[10],Call 'gc'(),profiler.R,21
+83,#2022-01-23 02:38:11#,2548,00:00:00.0002548,3.10547,4.23047,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+84,#2022-01-23 02:38:11#,573,00:00:00.0000573,5.57812,9.80859,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+85,#2022-01-23 02:38:11#,1828,00:00:00.0001828,0.542969,10.3516,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+86,#2022-01-23 02:38:11#,56485,00:00:00.0056485,0.542969,10.3516,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+87,#2022-01-23 02:38:11#,69178,00:00:00.0069178,0.542969,10.3516,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+88,#2022-01-23 02:38:11#,102787,00:00:00.0102787,0.542969,10.3516,SMRUCC/R#,forloop,for_loop_[11],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+89,#2022-01-23 02:38:11#,1004589,00:00:00.1004589,27.7344,38.0859,SMRUCC/R#,forloop,for_loop_[11],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+90,#2022-01-23 02:38:11#,68519,00:00:00.0068519,-36.9727,1.11328,SMRUCC/R#,forloop,for_loop_[11],Call 'gc'(),profiler.R,21
+91,#2022-01-23 02:38:11#,3027,00:00:00.0003027,5.15625,6.26953,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+92,#2022-01-23 02:38:11#,669,00:00:00.0000669,2.73047,9,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+93,#2022-01-23 02:38:11#,2045,00:00:00.0002045,0.0664062,9.06641,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+94,#2022-01-23 02:38:11#,56430,00:00:00.0056430,0.0664062,9.06641,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+95,#2022-01-23 02:38:11#,70205,00:00:00.0070205,0.0664062,9.06641,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+96,#2022-01-23 02:38:11#,108765,00:00:00.0108765,0.0664062,9.06641,SMRUCC/R#,forloop,for_loop_[12],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+97,#2022-01-23 02:38:11#,1024443,00:00:00.1024443,26.9648,36.0312,SMRUCC/R#,forloop,for_loop_[12],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+98,#2022-01-23 02:38:11#,57202,00:00:00.0057202,-34.9102,1.12109,SMRUCC/R#,forloop,for_loop_[12],Call 'gc'(),profiler.R,21
+99,#2022-01-23 02:38:11#,2655,00:00:00.0002655,2.99219,4.11328,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+100,#2022-01-23 02:38:11#,527,00:00:00.0000527,3.35938,7.47266,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+101,#2022-01-23 02:38:11#,1254,00:00:00.0001254,0.0664062,7.53906,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+102,#2022-01-23 02:38:11#,44917,00:00:00.0044917,0.0664062,7.53906,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+103,#2022-01-23 02:38:11#,58184,00:00:00.0058184,0.0664062,7.53906,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+104,#2022-01-23 02:38:11#,95684,00:00:00.0095684,0.0664062,7.53906,SMRUCC/R#,forloop,for_loop_[13],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+105,#2022-01-23 02:38:11#,1085635,00:00:00.1085635,27.4688,35.0078,SMRUCC/R#,forloop,for_loop_[13],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+106,#2022-01-23 02:38:11#,56550,00:00:00.0056550,-33.8906,1.11719,SMRUCC/R#,forloop,for_loop_[13],Call 'gc'(),profiler.R,21
+107,#2022-01-23 02:38:11#,3325,00:00:00.0003325,2.85547,3.97266,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+108,#2022-01-23 02:38:11#,503,00:00:00.0000503,3.44141,7.41406,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+109,#2022-01-23 02:38:11#,1541,00:00:00.0001541,0.0703125,7.48438,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+110,#2022-01-23 02:38:11#,45427,00:00:00.0045427,0.0703125,7.48438,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+111,#2022-01-23 02:38:11#,58228,00:00:00.0058228,0.0703125,7.48438,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+112,#2022-01-23 02:38:11#,90619,00:00:00.0090619,0.0703125,7.48438,SMRUCC/R#,forloop,for_loop_[14],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+113,#2022-01-23 02:38:11#,948822,00:00:00.0948822,23.6562,31.1406,SMRUCC/R#,forloop,for_loop_[14],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+114,#2022-01-23 02:38:11#,70811,00:00:00.0070811,-30.0195,1.12109,SMRUCC/R#,forloop,for_loop_[14],Call 'gc'(),profiler.R,21
+115,#2022-01-23 02:38:11#,98939,00:00:00.0098939,34.8242,35.9453,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+116,#2022-01-23 02:38:11#,536,00:00:00.0000536,3.4375,39.3828,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+117,#2022-01-23 02:38:11#,1290,00:00:00.0001290,0.0703125,39.4531,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+118,#2022-01-23 02:38:11#,46331,00:00:00.0046331,0.0703125,39.4531,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+119,#2022-01-23 02:38:11#,59917,00:00:00.0059917,0.0703125,39.4531,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+120,#2022-01-23 02:38:11#,197108,00:00:00.0197108,0.0703125,39.4531,SMRUCC/R#,forloop,for_loop_[15],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+121,#2022-01-23 02:38:11#,1048793,00:00:00.1048793,-4.39062,35.0625,SMRUCC/R#,forloop,for_loop_[15],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+122,#2022-01-23 02:38:11#,61928,00:00:00.0061928,-33.9414,1.12109,SMRUCC/R#,forloop,for_loop_[15],Call 'gc'(),profiler.R,21
+123,#2022-01-23 02:38:11#,2573,00:00:00.0002573,2.85938,3.98047,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+124,#2022-01-23 02:38:11#,548,00:00:00.0000548,6.05859,10.0391,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+125,#2022-01-23 02:38:11#,1254,00:00:00.0001254,0.632812,10.6719,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+126,#2022-01-23 02:38:11#,47129,00:00:00.0047129,0.632812,10.6719,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+127,#2022-01-23 02:38:11#,60381,00:00:00.0060381,0.632812,10.6719,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+128,#2022-01-23 02:38:11#,93500,00:00:00.0093500,0.632812,10.6719,SMRUCC/R#,forloop,for_loop_[16],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+129,#2022-01-23 02:38:11#,1042411,00:00:00.1042411,28.9453,39.6172,SMRUCC/R#,forloop,for_loop_[16],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+130,#2022-01-23 02:38:12#,74527,00:00:00.0074527,-38.5,1.11719,SMRUCC/R#,forloop,for_loop_[16],Call 'gc'(),profiler.R,21
+131,#2022-01-23 02:38:12#,2788,00:00:00.0002788,6.59375,7.71094,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+132,#2022-01-23 02:38:12#,582,00:00:00.0000582,2.44531,10.1562,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+133,#2022-01-23 02:38:12#,1805,00:00:00.0001805,0.453125,10.6094,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+134,#2022-01-23 02:38:12#,52081,00:00:00.0052081,0.453125,10.6094,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+135,#2022-01-23 02:38:12#,61064,00:00:00.0061064,0.453125,10.6094,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+136,#2022-01-23 02:38:12#,99769,00:00:00.0099769,0.453125,10.6094,SMRUCC/R#,forloop,for_loop_[17],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+137,#2022-01-23 02:38:12#,1022171,00:00:00.1022171,28.7266,39.3359,SMRUCC/R#,forloop,for_loop_[17],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+138,#2022-01-23 02:38:12#,66023,00:00:00.0066023,-38.2227,1.11328,SMRUCC/R#,forloop,for_loop_[17],Call 'gc'(),profiler.R,21
+139,#2022-01-23 02:38:12#,2686,00:00:00.0002686,3.18359,4.29688,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+140,#2022-01-23 02:38:12#,529,00:00:00.0000529,3.25781,7.55469,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+141,#2022-01-23 02:38:12#,1249,00:00:00.0001249,0.0703125,7.625,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+142,#2022-01-23 02:38:12#,44551,00:00:00.0044551,0.0703125,7.625,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+143,#2022-01-23 02:38:12#,57706,00:00:00.0057706,0.0703125,7.625,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+144,#2022-01-23 02:38:12#,89723,00:00:00.0089723,0.0703125,7.625,SMRUCC/R#,forloop,for_loop_[18],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+145,#2022-01-23 02:38:12#,1018993,00:00:00.1018993,27.3125,34.9375,SMRUCC/R#,forloop,for_loop_[18],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+146,#2022-01-23 02:38:12#,57381,00:00:00.0057381,-33.8242,1.11328,SMRUCC/R#,forloop,for_loop_[18],Call 'gc'(),profiler.R,21
+147,#2022-01-23 02:38:12#,2466,00:00:00.0002466,2.86719,3.98047,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+148,#2022-01-23 02:38:12#,486,00:00:00.0000486,3.30469,7.28516,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+149,#2022-01-23 02:38:12#,1182,00:00:00.0001182,0.0703125,7.35547,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+150,#2022-01-23 02:38:12#,45413,00:00:00.0045413,0.0703125,7.35547,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+151,#2022-01-23 02:38:12#,57284,00:00:00.0057284,0.0703125,7.35547,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+152,#2022-01-23 02:38:12#,88528,00:00:00.0088528,0.0703125,7.35547,SMRUCC/R#,forloop,for_loop_[19],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+153,#2022-01-23 02:38:12#,1010659,00:00:00.1010659,23.668,31.0234,SMRUCC/R#,forloop,for_loop_[19],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+154,#2022-01-23 02:38:12#,64389,00:00:00.0064389,-29.9102,1.11328,SMRUCC/R#,forloop,for_loop_[19],Call 'gc'(),profiler.R,21
+155,#2022-01-23 02:38:12#,90429,00:00:00.0090429,34.832,35.9453,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+156,#2022-01-23 02:38:12#,1039,00:00:00.0001039,3.33984,39.2852,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+157,#2022-01-23 02:38:12#,1225,00:00:00.0001225,0.0703125,39.3555,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+158,#2022-01-23 02:38:12#,48542,00:00:00.0048542,0.0703125,39.3555,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+159,#2022-01-23 02:38:12#,60722,00:00:00.0060722,0.0703125,39.3555,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+160,#2022-01-23 02:38:12#,181709,00:00:00.0181709,0.0703125,39.3555,SMRUCC/R#,forloop,for_loop_[20],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+161,#2022-01-23 02:38:12#,1003699,00:00:00.1003699,-4.33984,35.0156,SMRUCC/R#,forloop,for_loop_[20],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+162,#2022-01-23 02:38:12#,85261,00:00:00.0085261,-33.9023,1.11328,SMRUCC/R#,forloop,for_loop_[20],Call 'gc'(),profiler.R,21
+163,#2022-01-23 02:38:12#,3601,00:00:00.0003601,2.80469,3.91797,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+164,#2022-01-23 02:38:12#,760,00:00:00.0000760,3.34375,7.26172,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+165,#2022-01-23 02:38:12#,1706,00:00:00.0001706,0.0703125,7.33203,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+166,#2022-01-23 02:38:12#,58153,00:00:00.0058153,0.0703125,7.33203,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+167,#2022-01-23 02:38:12#,74575,00:00:00.0074575,0.0703125,7.33203,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+168,#2022-01-23 02:38:12#,116124,00:00:00.0116124,0.0703125,7.33203,SMRUCC/R#,forloop,for_loop_[21],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+169,#2022-01-23 02:38:12#,1006813,00:00:00.1006813,27.3281,34.6602,SMRUCC/R#,forloop,for_loop_[21],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+170,#2022-01-23 02:38:12#,60353,00:00:00.0060353,-33.5391,1.12109,SMRUCC/R#,forloop,for_loop_[21],Call 'gc'(),profiler.R,21
+171,#2022-01-23 02:38:12#,2602,00:00:00.0002602,2.80469,3.92578,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+172,#2022-01-23 02:38:12#,737,00:00:00.0000737,3.33594,7.26172,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+173,#2022-01-23 02:38:12#,1193,00:00:00.0001193,0.0703125,7.33203,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+174,#2022-01-23 02:38:12#,44727,00:00:00.0044727,0.0703125,7.33203,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+175,#2022-01-23 02:38:12#,56548,00:00:00.0056548,0.0703125,7.33203,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+176,#2022-01-23 02:38:12#,87442,00:00:00.0087442,0.0703125,7.33203,SMRUCC/R#,forloop,for_loop_[22],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+177,#2022-01-23 02:38:12#,1056236,00:00:00.1056236,27.4062,34.7383,SMRUCC/R#,forloop,for_loop_[22],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+178,#2022-01-23 02:38:12#,75527,00:00:00.0075527,-33.6172,1.12109,SMRUCC/R#,forloop,for_loop_[22],Call 'gc'(),profiler.R,21
+179,#2022-01-23 02:38:12#,2550,00:00:00.0002550,2.80078,3.92188,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+180,#2022-01-23 02:38:12#,569,00:00:00.0000569,3.33984,7.26172,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+181,#2022-01-23 02:38:12#,1251,00:00:00.0001251,0.0703125,7.33203,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+182,#2022-01-23 02:38:12#,48549,00:00:00.0048549,0.0703125,7.33203,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+183,#2022-01-23 02:38:12#,60540,00:00:00.0060540,0.0703125,7.33203,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+184,#2022-01-23 02:38:12#,92661,00:00:00.0092661,0.0703125,7.33203,SMRUCC/R#,forloop,for_loop_[23],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+185,#2022-01-23 02:38:12#,1134840,00:00:00.1134840,28.1484,35.4805,SMRUCC/R#,forloop,for_loop_[23],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+186,#2022-01-23 02:38:12#,57662,00:00:00.0057662,-34.3711,1.10938,SMRUCC/R#,forloop,for_loop_[23],Call 'gc'(),profiler.R,21
+187,#2022-01-23 02:38:12#,2495,00:00:00.0002495,2.80078,3.91016,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+188,#2022-01-23 02:38:12#,515,00:00:00.0000515,3.33984,7.25,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+189,#2022-01-23 02:38:12#,1715,00:00:00.0001715,0.0703125,7.32031,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+190,#2022-01-23 02:38:12#,46228,00:00:00.0046228,0.0703125,7.32031,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+191,#2022-01-23 02:38:12#,57973,00:00:00.0057973,0.0703125,7.32031,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+192,#2022-01-23 02:38:12#,92113,00:00:00.0092113,0.0703125,7.32031,SMRUCC/R#,forloop,for_loop_[24],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+193,#2022-01-23 02:38:12#,1009892,00:00:00.1009892,27.4961,34.8164,SMRUCC/R#,forloop,for_loop_[24],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+194,#2022-01-23 02:38:13#,68938,00:00:00.0068938,-33.707,1.10938,SMRUCC/R#,forloop,for_loop_[24],Call 'gc'(),profiler.R,21
+195,#2022-01-23 02:38:13#,3685,00:00:00.0003685,2.80469,3.91406,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+196,#2022-01-23 02:38:13#,682,00:00:00.0000682,3.33984,7.25391,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+197,#2022-01-23 02:38:13#,1632,00:00:00.0001632,0.0664062,7.32031,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+198,#2022-01-23 02:38:13#,55286,00:00:00.0055286,0.0664062,7.32031,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+199,#2022-01-23 02:38:13#,71835,00:00:00.0071835,0.0664062,7.32031,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+200,#2022-01-23 02:38:13#,113771,00:00:00.0113771,0.0664062,7.32031,SMRUCC/R#,forloop,for_loop_[25],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+201,#2022-01-23 02:38:13#,1012710,00:00:00.1012710,27.4961,34.8164,SMRUCC/R#,forloop,for_loop_[25],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+202,#2022-01-23 02:38:13#,57394,00:00:00.0057394,-33.707,1.10938,SMRUCC/R#,forloop,for_loop_[25],Call 'gc'(),profiler.R,21
+203,#2022-01-23 02:38:13#,2465,00:00:00.0002465,2.80469,3.91406,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+204,#2022-01-23 02:38:13#,509,00:00:00.0000509,3.33594,7.25,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+205,#2022-01-23 02:38:13#,1227,00:00:00.0001227,0.0664062,7.31641,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+206,#2022-01-23 02:38:13#,44635,00:00:00.0044635,0.0664062,7.31641,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+207,#2022-01-23 02:38:13#,56658,00:00:00.0056658,0.0664062,7.31641,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+208,#2022-01-23 02:38:13#,90929,00:00:00.0090929,0.0664062,7.31641,SMRUCC/R#,forloop,for_loop_[26],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+209,#2022-01-23 02:38:13#,1137571,00:00:00.1137571,27.582,34.8984,SMRUCC/R#,forloop,for_loop_[26],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+210,#2022-01-23 02:38:13#,73098,00:00:00.0073098,-33.7852,1.11328,SMRUCC/R#,forloop,for_loop_[26],Call 'gc'(),profiler.R,21
+211,#2022-01-23 02:38:13#,2466,00:00:00.0002466,2.80469,3.91797,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+212,#2022-01-23 02:38:13#,498,00:00:00.0000498,3.33984,7.25781,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+213,#2022-01-23 02:38:13#,1204,00:00:00.0001204,0.0703125,7.32812,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+214,#2022-01-23 02:38:13#,51348,00:00:00.0051348,0.0703125,7.32812,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+215,#2022-01-23 02:38:13#,63468,00:00:00.0063468,0.0703125,7.32812,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+216,#2022-01-23 02:38:13#,94231,00:00:00.0094231,0.0703125,7.32812,SMRUCC/R#,forloop,for_loop_[27],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+217,#2022-01-23 02:38:13#,1008770,00:00:00.1008770,27.0117,34.3398,SMRUCC/R#,forloop,for_loop_[27],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+218,#2022-01-23 02:38:13#,58636,00:00:00.0058636,-33.2188,1.12109,SMRUCC/R#,forloop,for_loop_[27],Call 'gc'(),profiler.R,21
+219,#2022-01-23 02:38:13#,2778,00:00:00.0002778,2.80469,3.92578,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+220,#2022-01-23 02:38:13#,502,00:00:00.0000502,3.33594,7.26172,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+221,#2022-01-23 02:38:13#,1213,00:00:00.0001213,0.0703125,7.33203,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+222,#2022-01-23 02:38:13#,45063,00:00:00.0045063,0.0703125,7.33203,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+223,#2022-01-23 02:38:13#,56546,00:00:00.0056546,0.0703125,7.33203,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+224,#2022-01-23 02:38:13#,88510,00:00:00.0088510,0.0703125,7.33203,SMRUCC/R#,forloop,for_loop_[28],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+225,#2022-01-23 02:38:13#,1093576,00:00:00.1093576,27.3203,34.6523,SMRUCC/R#,forloop,for_loop_[28],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+226,#2022-01-23 02:38:13#,76432,00:00:00.0076432,-33.5312,1.12109,SMRUCC/R#,forloop,for_loop_[28],Call 'gc'(),profiler.R,21
+227,#2022-01-23 02:38:13#,2501,00:00:00.0002501,2.80469,3.92578,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+228,#2022-01-23 02:38:13#,497,00:00:00.0000497,3.33984,7.26562,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+229,#2022-01-23 02:38:13#,1212,00:00:00.0001212,0.0703125,7.33594,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+230,#2022-01-23 02:38:13#,47279,00:00:00.0047279,0.0703125,7.33594,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+231,#2022-01-23 02:38:13#,59466,00:00:00.0059466,0.0703125,7.33594,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+232,#2022-01-23 02:38:13#,92707,00:00:00.0092707,0.0703125,7.33594,SMRUCC/R#,forloop,for_loop_[29],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+233,#2022-01-23 02:38:13#,1131701,00:00:00.1131701,23.6484,30.9844,SMRUCC/R#,forloop,for_loop_[29],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+234,#2022-01-23 02:38:13#,65322,00:00:00.0065322,-29.8633,1.12109,SMRUCC/R#,forloop,for_loop_[29],Call 'gc'(),profiler.R,21
+235,#2022-01-23 02:38:13#,93283,00:00:00.0093283,34.7773,35.8984,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+236,#2022-01-23 02:38:13#,526,00:00:00.0000526,3.35938,39.2578,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+237,#2022-01-23 02:38:13#,1297,00:00:00.0001297,0.0703125,39.3281,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+238,#2022-01-23 02:38:13#,45559,00:00:00.0045559,0.0703125,39.3281,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+239,#2022-01-23 02:38:13#,57842,00:00:00.0057842,0.0703125,39.3281,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+240,#2022-01-23 02:38:13#,181046,00:00:00.0181046,0.0703125,39.3281,SMRUCC/R#,forloop,for_loop_[30],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+241,#2022-01-23 02:38:13#,941735,00:00:00.0941735,8.21875,47.5469,SMRUCC/R#,forloop,for_loop_[30],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+242,#2022-01-23 02:38:13#,62604,00:00:00.0062604,-46.4258,1.12109,SMRUCC/R#,forloop,for_loop_[30],Call 'gc'(),profiler.R,21
+243,#2022-01-23 02:38:13#,2802,00:00:00.0002802,2.93359,4.05469,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+244,#2022-01-23 02:38:13#,531,00:00:00.0000531,6.8125,10.8672,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+245,#2022-01-23 02:38:13#,1300,00:00:00.0001300,0.445312,11.3125,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+246,#2022-01-23 02:38:13#,46928,00:00:00.0046928,0.445312,11.3125,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+247,#2022-01-23 02:38:13#,60744,00:00:00.0060744,0.445312,11.3125,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+248,#2022-01-23 02:38:13#,91984,00:00:00.0091984,0.445312,11.3125,SMRUCC/R#,forloop,for_loop_[31],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+249,#2022-01-23 02:38:13#,1131342,00:00:00.1131342,32.2539,43.5664,SMRUCC/R#,forloop,for_loop_[31],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+250,#2022-01-23 02:38:13#,84090,00:00:00.0084090,-42.1406,1.42578,SMRUCC/R#,forloop,for_loop_[31],Call 'gc'(),profiler.R,21
+251,#2022-01-23 02:38:13#,3211,00:00:00.0003211,6.40625,7.83203,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+252,#2022-01-23 02:38:13#,554,00:00:00.0000554,2.24219,10.0742,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+253,#2022-01-23 02:38:13#,1245,00:00:00.0001245,0.332031,10.4062,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+254,#2022-01-23 02:38:13#,45916,00:00:00.0045916,0.332031,10.4062,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+255,#2022-01-23 02:38:13#,54215,00:00:00.0054215,0.332031,10.4062,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+256,#2022-01-23 02:38:13#,89707,00:00:00.0089707,0.332031,10.4062,SMRUCC/R#,forloop,for_loop_[32],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+257,#2022-01-23 02:38:13#,1080382,00:00:00.1080382,25.9258,36.332,SMRUCC/R#,forloop,for_loop_[32],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+258,#2022-01-23 02:38:14#,73778,00:00:00.0073778,-35.0859,1.24609,SMRUCC/R#,forloop,for_loop_[32],Call 'gc'(),profiler.R,21
+259,#2022-01-23 02:38:14#,106234,00:00:00.0106234,35.1445,36.3906,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+260,#2022-01-23 02:38:14#,604,00:00:00.0000604,2.60938,39,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+261,#2022-01-23 02:38:14#,1653,00:00:00.0001653,0.0703125,39.0703,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+262,#2022-01-23 02:38:14#,55233,00:00:00.0055233,0.0703125,39.0703,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+263,#2022-01-23 02:38:14#,68809,00:00:00.0068809,0.0703125,39.0703,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+264,#2022-01-23 02:38:14#,212080,00:00:00.0212080,0.0703125,39.0703,SMRUCC/R#,forloop,for_loop_[33],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+265,#2022-01-23 02:38:14#,929199,00:00:00.0929199,8.78906,47.8594,SMRUCC/R#,forloop,for_loop_[33],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+266,#2022-01-23 02:38:14#,84672,00:00:00.0084672,-46.7383,1.12109,SMRUCC/R#,forloop,for_loop_[33],Call 'gc'(),profiler.R,21
+267,#2022-01-23 02:38:14#,4264,00:00:00.0004264,2.72656,3.84766,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+268,#2022-01-23 02:38:14#,440,00:00:00.0000440,2.85156,6.69922,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+269,#2022-01-23 02:38:14#,1617,00:00:00.0001617,0.0703125,6.76953,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+270,#2022-01-23 02:38:14#,45400,00:00:00.0045400,0.0703125,6.76953,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+271,#2022-01-23 02:38:14#,56242,00:00:00.0056242,0.0703125,6.76953,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+272,#2022-01-23 02:38:14#,91405,00:00:00.0091405,0.0703125,6.76953,SMRUCC/R#,forloop,for_loop_[34],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+273,#2022-01-23 02:38:14#,1141186,00:00:00.1141186,27.2617,34.0312,SMRUCC/R#,forloop,for_loop_[34],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+274,#2022-01-23 02:38:14#,65155,00:00:00.0065155,-32.918,1.11328,SMRUCC/R#,forloop,for_loop_[34],Call 'gc'(),profiler.R,21
+275,#2022-01-23 02:38:14#,2116,00:00:00.0002116,2.60156,3.71484,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+276,#2022-01-23 02:38:14#,456,00:00:00.0000456,2.94141,6.65625,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+277,#2022-01-23 02:38:14#,1237,00:00:00.0001237,0.0703125,6.72656,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+278,#2022-01-23 02:38:14#,44812,00:00:00.0044812,0.0703125,6.72656,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+279,#2022-01-23 02:38:14#,59120,00:00:00.0059120,0.0703125,6.72656,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+280,#2022-01-23 02:38:14#,91035,00:00:00.0091035,0.0703125,6.72656,SMRUCC/R#,forloop,for_loop_[35],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+281,#2022-01-23 02:38:14#,1058128,00:00:00.1058128,26.9805,33.707,SMRUCC/R#,forloop,for_loop_[35],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+282,#2022-01-23 02:38:14#,74919,00:00:00.0074919,-32.5898,1.11719,SMRUCC/R#,forloop,for_loop_[35],Call 'gc'(),profiler.R,21
+283,#2022-01-23 02:38:14#,3114,00:00:00.0003114,2.60547,3.72266,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+284,#2022-01-23 02:38:14#,557,00:00:00.0000557,2.89844,6.62109,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+285,#2022-01-23 02:38:14#,1231,00:00:00.0001231,0.0703125,6.69141,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+286,#2022-01-23 02:38:14#,49215,00:00:00.0049215,0.0703125,6.69141,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+287,#2022-01-23 02:38:14#,63773,00:00:00.0063773,0.0703125,6.69141,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+288,#2022-01-23 02:38:14#,102002,00:00:00.0102002,0.0703125,6.69141,SMRUCC/R#,forloop,for_loop_[36],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+289,#2022-01-23 02:38:14#,1043809,00:00:00.1043809,27.4414,34.1328,SMRUCC/R#,forloop,for_loop_[36],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+290,#2022-01-23 02:38:14#,83920,00:00:00.0083920,-33.0234,1.10938,SMRUCC/R#,forloop,for_loop_[36],Call 'gc'(),profiler.R,21
+291,#2022-01-23 02:38:14#,2125,00:00:00.0002125,2.67969,3.78906,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+292,#2022-01-23 02:38:14#,563,00:00:00.0000563,2.8125,6.60156,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+293,#2022-01-23 02:38:14#,1250,00:00:00.0001250,0.0703125,6.67188,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+294,#2022-01-23 02:38:14#,45170,00:00:00.0045170,0.0703125,6.67188,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+295,#2022-01-23 02:38:14#,55953,00:00:00.0055953,0.0703125,6.67188,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+296,#2022-01-23 02:38:14#,86011,00:00:00.0086011,0.0703125,6.67188,SMRUCC/R#,forloop,for_loop_[37],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+297,#2022-01-23 02:38:14#,1068776,00:00:00.1068776,27.2188,33.8906,SMRUCC/R#,forloop,for_loop_[37],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+298,#2022-01-23 02:38:14#,55551,00:00:00.0055551,-32.7734,1.11719,SMRUCC/R#,forloop,for_loop_[37],Call 'gc'(),profiler.R,21
+299,#2022-01-23 02:38:14#,2440,00:00:00.0002440,2.59766,3.71484,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+300,#2022-01-23 02:38:14#,435,00:00:00.0000435,2.84766,6.5625,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+301,#2022-01-23 02:38:14#,1232,00:00:00.0001232,0.0703125,6.63281,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+302,#2022-01-23 02:38:14#,50073,00:00:00.0050073,0.0703125,6.63281,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+303,#2022-01-23 02:38:14#,60724,00:00:00.0060724,0.0703125,6.63281,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+304,#2022-01-23 02:38:14#,90725,00:00:00.0090725,0.0703125,6.63281,SMRUCC/R#,forloop,for_loop_[38],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+305,#2022-01-23 02:38:14#,1016803,00:00:00.1016803,26.8633,33.4961,SMRUCC/R#,forloop,for_loop_[38],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+306,#2022-01-23 02:38:14#,61334,00:00:00.0061334,-32.3789,1.11719,SMRUCC/R#,forloop,for_loop_[38],Call 'gc'(),profiler.R,21
+307,#2022-01-23 02:38:14#,2135,00:00:00.0002135,2.59766,3.71484,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+308,#2022-01-23 02:38:14#,426,00:00:00.0000426,2.84375,6.55859,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+309,#2022-01-23 02:38:14#,1216,00:00:00.0001216,0.0703125,6.62891,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+310,#2022-01-23 02:38:14#,44696,00:00:00.0044696,0.0703125,6.62891,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+311,#2022-01-23 02:38:14#,55345,00:00:00.0055345,0.0703125,6.62891,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+312,#2022-01-23 02:38:14#,85620,00:00:00.0085620,0.0703125,6.62891,SMRUCC/R#,forloop,for_loop_[39],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+313,#2022-01-23 02:38:14#,992016,00:00:00.0992016,23.4805,30.1094,SMRUCC/R#,forloop,for_loop_[39],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+314,#2022-01-23 02:38:14#,62314,00:00:00.0062314,-28.9922,1.11719,SMRUCC/R#,forloop,for_loop_[39],Call 'gc'(),profiler.R,21
+315,#2022-01-23 02:38:14#,97329,00:00:00.0097329,34.5664,35.6836,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+316,#2022-01-23 02:38:15#,454,00:00:00.0000454,2.84766,38.5312,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+317,#2022-01-23 02:38:15#,1274,00:00:00.0001274,0.0703125,38.6016,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+318,#2022-01-23 02:38:15#,48265,00:00:00.0048265,0.0703125,38.6016,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+319,#2022-01-23 02:38:14#,59045,00:00:00.0059045,0.0703125,38.6016,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+320,#2022-01-23 02:38:14#,185393,00:00:00.0185393,0.0703125,38.6016,SMRUCC/R#,forloop,for_loop_[40],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+321,#2022-01-23 02:38:15#,1121799,00:00:00.1121799,-4.53906,34.0625,SMRUCC/R#,forloop,for_loop_[40],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+322,#2022-01-23 02:38:15#,57861,00:00:00.0057861,-32.9453,1.11719,SMRUCC/R#,forloop,for_loop_[40],Call 'gc'(),profiler.R,21
+323,#2022-01-23 02:38:15#,2459,00:00:00.0002459,2.59766,3.71484,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+324,#2022-01-23 02:38:15#,441,00:00:00.0000441,2.89453,6.60938,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+325,#2022-01-23 02:38:15#,1398,00:00:00.0001398,0.0703125,6.67969,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+326,#2022-01-23 02:38:15#,45803,00:00:00.0045803,0.0703125,6.67969,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+327,#2022-01-23 02:38:15#,56718,00:00:00.0056718,0.0703125,6.67969,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+328,#2022-01-23 02:38:15#,90613,00:00:00.0090613,0.0703125,6.67969,SMRUCC/R#,forloop,for_loop_[41],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+329,#2022-01-23 02:38:15#,1024798,00:00:00.1024798,27.0547,33.7344,SMRUCC/R#,forloop,for_loop_[41],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+330,#2022-01-23 02:38:15#,65516,00:00:00.0065516,-32.6211,1.11328,SMRUCC/R#,forloop,for_loop_[41],Call 'gc'(),profiler.R,21
+331,#2022-01-23 02:38:15#,2897,00:00:00.0002897,2.5625,3.67578,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+332,#2022-01-23 02:38:15#,442,00:00:00.0000442,2.83984,6.51562,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+333,#2022-01-23 02:38:15#,1204,00:00:00.0001204,0.0703125,6.58594,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+334,#2022-01-23 02:38:15#,44236,00:00:00.0044236,0.0703125,6.58594,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+335,#2022-01-23 02:38:15#,54958,00:00:00.0054958,0.0703125,6.58594,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+336,#2022-01-23 02:38:15#,85771,00:00:00.0085771,0.0703125,6.58594,SMRUCC/R#,forloop,for_loop_[42],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+337,#2022-01-23 02:38:15#,1005332,00:00:00.1005332,28.0312,34.6172,SMRUCC/R#,forloop,for_loop_[42],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+338,#2022-01-23 02:38:15#,59693,00:00:00.0059693,-33.5117,1.10547,SMRUCC/R#,forloop,for_loop_[42],Call 'gc'(),profiler.R,21
+339,#2022-01-23 02:38:15#,2383,00:00:00.0002383,2.5625,3.66797,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+340,#2022-01-23 02:38:15#,460,00:00:00.0000460,2.88672,6.55469,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+341,#2022-01-23 02:38:15#,1247,00:00:00.0001247,0.0703125,6.625,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+342,#2022-01-23 02:38:15#,45300,00:00:00.0045300,0.0703125,6.625,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+343,#2022-01-23 02:38:15#,57163,00:00:00.0057163,0.0703125,6.625,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+344,#2022-01-23 02:38:15#,90122,00:00:00.0090122,0.0703125,6.625,SMRUCC/R#,forloop,for_loop_[43],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+345,#2022-01-23 02:38:15#,1056869,00:00:00.1056869,27.2656,33.8906,SMRUCC/R#,forloop,for_loop_[43],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+346,#2022-01-23 02:38:15#,55761,00:00:00.0055761,-32.7852,1.10547,SMRUCC/R#,forloop,for_loop_[43],Call 'gc'(),profiler.R,21
+347,#2022-01-23 02:38:15#,2097,00:00:00.0002097,2.5625,3.66797,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+348,#2022-01-23 02:38:15#,431,00:00:00.0000431,2.89453,6.5625,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+349,#2022-01-23 02:38:15#,1333,00:00:00.0001333,0.0703125,6.63281,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+350,#2022-01-23 02:38:15#,49774,00:00:00.0049774,0.0703125,6.63281,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+351,#2022-01-23 02:38:15#,60574,00:00:00.0060574,0.0703125,6.63281,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+352,#2022-01-23 02:38:15#,90077,00:00:00.0090077,0.0703125,6.63281,SMRUCC/R#,forloop,for_loop_[44],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+353,#2022-01-23 02:38:15#,1109789,00:00:00.1109789,23.4844,30.1172,SMRUCC/R#,forloop,for_loop_[44],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+354,#2022-01-23 02:38:15#,62916,00:00:00.0062916,-29.0078,1.10938,SMRUCC/R#,forloop,for_loop_[44],Call 'gc'(),profiler.R,21
+355,#2022-01-23 02:38:15#,89186,00:00:00.0089186,34.5273,35.6367,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+356,#2022-01-23 02:38:15#,467,00:00:00.0000467,2.84375,38.4805,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+357,#2022-01-23 02:38:15#,1221,00:00:00.0001221,0.0703125,38.5508,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+358,#2022-01-23 02:38:15#,48107,00:00:00.0048107,0.0703125,38.5508,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+359,#2022-01-23 02:38:15#,58852,00:00:00.0058852,0.0703125,38.5508,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+360,#2022-01-23 02:38:15#,177173,00:00:00.0177173,0.0703125,38.5508,SMRUCC/R#,forloop,for_loop_[45],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+361,#2022-01-23 02:38:15#,939063,00:00:00.0939063,8.19531,46.7461,SMRUCC/R#,forloop,for_loop_[45],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+362,#2022-01-23 02:38:15#,62363,00:00:00.0062363,-45.6367,1.10938,SMRUCC/R#,forloop,for_loop_[45],Call 'gc'(),profiler.R,21
+363,#2022-01-23 02:38:15#,3482,00:00:00.0003482,2.6875,3.79688,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+364,#2022-01-23 02:38:15#,589,00:00:00.0000589,2.83203,6.62891,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+365,#2022-01-23 02:38:15#,1744,00:00:00.0001744,0.0742188,6.70312,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+366,#2022-01-23 02:38:15#,57153,00:00:00.0057153,0.0742188,6.70312,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+367,#2022-01-23 02:38:15#,71432,00:00:00.0071432,0.0742188,6.70312,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+368,#2022-01-23 02:38:15#,109515,00:00:00.0109515,0.0742188,6.70312,SMRUCC/R#,forloop,for_loop_[46],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+369,#2022-01-23 02:38:15#,1003644,00:00:00.1003644,27.3516,34.0547,SMRUCC/R#,forloop,for_loop_[46],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+370,#2022-01-23 02:38:15#,64487,00:00:00.0064487,-32.9492,1.10547,SMRUCC/R#,forloop,for_loop_[46],Call 'gc'(),profiler.R,21
+371,#2022-01-23 02:38:15#,3157,00:00:00.0003157,2.5625,3.66797,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+372,#2022-01-23 02:38:15#,425,00:00:00.0000425,2.83984,6.50781,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+373,#2022-01-23 02:38:15#,1210,00:00:00.0001210,0.0742188,6.58203,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+374,#2022-01-23 02:38:15#,46122,00:00:00.0046122,0.0742188,6.58203,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+375,#2022-01-23 02:38:15#,56749,00:00:00.0056749,0.0742188,6.58203,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+376,#2022-01-23 02:38:15#,91488,00:00:00.0091488,0.0742188,6.58203,SMRUCC/R#,forloop,for_loop_[47],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+377,#2022-01-23 02:38:15#,1117703,00:00:00.1117703,27.3047,33.8867,SMRUCC/R#,forloop,for_loop_[47],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+378,#2022-01-23 02:38:15#,55478,00:00:00.0055478,-32.7773,1.10938,SMRUCC/R#,forloop,for_loop_[47],Call 'gc'(),profiler.R,21
+379,#2022-01-23 02:38:16#,2133,00:00:00.0002133,2.5625,3.67188,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+380,#2022-01-23 02:38:16#,429,00:00:00.0000429,2.84375,6.51562,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+381,#2022-01-23 02:38:16#,1243,00:00:00.0001243,0.0703125,6.58594,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+382,#2022-01-23 02:38:16#,47135,00:00:00.0047135,0.0703125,6.58594,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+383,#2022-01-23 02:38:16#,57619,00:00:00.0057619,0.0703125,6.58594,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+384,#2022-01-23 02:38:16#,87749,00:00:00.0087749,0.0703125,6.58594,SMRUCC/R#,forloop,for_loop_[48],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+385,#2022-01-23 02:38:16#,1165327,00:00:00.1165327,26.9883,33.5742,SMRUCC/R#,forloop,for_loop_[48],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+386,#2022-01-23 02:38:16#,55054,00:00:00.0055054,-32.4648,1.10938,SMRUCC/R#,forloop,for_loop_[48],Call 'gc'(),profiler.R,21
+387,#2022-01-23 02:38:16#,2439,00:00:00.0002439,2.5625,3.67188,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+388,#2022-01-23 02:38:16#,462,00:00:00.0000462,2.83984,6.51172,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+389,#2022-01-23 02:38:16#,1765,00:00:00.0001765,0.0664062,6.57812,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+390,#2022-01-23 02:38:16#,57294,00:00:00.0057294,0.0664062,6.57812,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+391,#2022-01-23 02:38:16#,68640,00:00:00.0068640,0.0664062,6.57812,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+392,#2022-01-23 02:38:16#,102713,00:00:00.0102713,0.0664062,6.57812,SMRUCC/R#,forloop,for_loop_[49],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+393,#2022-01-23 02:38:16#,1078619,00:00:00.1078619,27.3555,33.9336,SMRUCC/R#,forloop,for_loop_[49],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+394,#2022-01-23 02:38:16#,56868,00:00:00.0056868,-32.8281,1.10547,SMRUCC/R#,forloop,for_loop_[49],Call 'gc'(),profiler.R,21
+395,#2022-01-23 02:38:16#,2091,00:00:00.0002091,2.55859,3.66406,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,"[&x, &y] <- Call 'abs'([&x, &y])",profiler.R,3
+396,#2022-01-23 02:38:16#,442,00:00:00.0000442,2.83984,6.50391,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x),profiler.R,6
+397,#2022-01-23 02:38:16#,1178,00:00:00.0001178,0.0664062,6.57031,SMRUCC/R#_runtime,n/a,if_closure,return (&x * Call 'sqrt'((1 + (&r ^ 2)))),profiler.R,6
+398,#2022-01-23 02:38:16#,43894,00:00:00.0043894,0.0664062,6.57031,SMRUCC/R#_runtime,n/a,if_closure,'r' <- (&y / &x);...,profiler.R,6
+399,#2022-01-23 02:38:16#,54881,00:00:00.0054881,0.0664062,6.57031,SMRUCC/R#,declare_function,hypot<$anonymous_0066a>,if ((&x > &y)) then {...,profiler.R,3
+400,#2022-01-23 02:38:16#,84380,00:00:00.0084380,0.0664062,6.57031,SMRUCC/R#,forloop,for_loop_[50],"Call 'print'(Call 'hypot'(&i, 3))",profiler.R,21
+401,#2022-01-23 02:38:16#,1229693,00:00:00.1229693,27.0898,33.6602,SMRUCC/R#,forloop,for_loop_[50],"Call 'rep'(1, 'times' <- 1000000)",profiler.R,21
+402,#2022-01-23 02:38:16#,59957,00:00:00.0059957,-32.5547,1.10547,SMRUCC/R#,forloop,for_loop_[50],Call 'gc'(),profiler.R,21
+403,#2022-01-23 02:38:09#,64688528,00:00:06.4688528,-32.5547,1.10547,SMRUCC/R#,declare_function,run<$anonymous_0066b>,for (let ['i'] in 1:50 step 1) %do% {...,profiler.R,20
+404,#2022-01-23 02:38:16#,58,00:00:00.0000058,3.75,4.85547,SMRUCC/R#,declare_function,run<$anonymous_0066b>,NULL,profiler.R,20
+405,#2022-01-23 02:38:09#,64770809,00:00:06.4770809,3.75,4.85547,SMRUCC/R#_runtime,n/a,@profile,Call 'print'(Call 'run'()),profiler.R,19
