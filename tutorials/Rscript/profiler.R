@@ -42,7 +42,7 @@ profile[, "index"] = 1:nrow(profile);
 
 # data visualize
 bitmap(file = `${@dir}/memory_delta.png`) {
-    ggplot(profile, padding = "padding: 200px 600px 200px 200px;", width = 2600, height = 1600) 
+    ggplot(profile, padding = "padding: 200px 800px 250px 250px;", width = 4000, height = 2400) 
     + geom_line( aes(x = "index", y = "memory_delta"), width = 8)
 	+ xlab("time(ticks)")
 	+ ylab("memory_delta(MB)")
