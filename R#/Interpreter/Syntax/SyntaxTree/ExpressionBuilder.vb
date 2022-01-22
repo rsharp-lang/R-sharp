@@ -201,6 +201,7 @@ Namespace Interpreter.SyntaxParser
                     End Select
                 ElseIf item(Scan0) = (TokenType.annotation, "@profile") Then
                     Dim expr As SyntaxResult
+                    Dim tag As Token = item(Scan0)
 
                     item = item.Skip(1).ToArray
                     expr = opts.ParseExpression(item, opts)
@@ -208,7 +209,7 @@ Namespace Interpreter.SyntaxParser
                     If expr.isException Then
                         Return expr
                     Else
-                        expr = New Profiler(expr.expression)
+                        expr = New Profiler(expr.expression, opts.GetStackTrace(tag))
                         Return expr
                     End If
                 Else

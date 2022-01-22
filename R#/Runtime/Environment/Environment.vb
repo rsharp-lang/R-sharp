@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::0ab18f64e5279bda25fb85b2d879a38d, R#\Runtime\Environment\Environment.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Environment
-    ' 
-    '         Properties: funcSymbols, globalEnvironment, isGlobal, isLINQContext, last
-    '                     messages, parent, stackFrame, stackTrace, symbols
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    ' 
-    '         Function: asRVector, AssignSymbol, enumerateFunctions, Evaluate, FindFunction
-    '                   FindFunctionWithNamespaceRestrict, FindSymbol, GetAcceptorArguments, GetEnumerator, IEnumerable_GetEnumerator
-    '                   Push, ToString, WriteLineHandler
-    ' 
-    '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, redirectError
-    '              redirectWarning, setStackInfo
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Environment
+' 
+'         Properties: funcSymbols, globalEnvironment, isGlobal, isLINQContext, last
+'                     messages, parent, stackFrame, stackTrace, symbols
+' 
+'         Constructor: (+3 Overloads) Sub New
+' 
+'         Function: asRVector, AssignSymbol, enumerateFunctions, Evaluate, FindFunction
+'                   FindFunctionWithNamespaceRestrict, FindSymbol, GetAcceptorArguments, GetEnumerator, IEnumerable_GetEnumerator
+'                   Push, ToString, WriteLineHandler
+' 
+'         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, redirectError
+'              redirectWarning, setStackInfo
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
@@ -137,6 +138,7 @@ Namespace Runtime
 
         Friend ReadOnly ifPromise As New List(Of IfPromise)
         Friend ReadOnly acceptorArguments As New Dictionary(Of String, Object)
+        Friend ReadOnly profiler As List(Of ProfileRecord)
 
         ''' <summary>
         ''' In the constructor function of <see cref="Runtime.GlobalEnvironment"/>, 
@@ -211,6 +213,7 @@ Namespace Runtime
             parent = Nothing
             [global] = Nothing
             stackFrame = globalStackFrame
+            profiler = Nothing
 
             Log4VB.redirectError = AddressOf redirectError
             Log4VB.redirectWarning = AddressOf redirectWarning
@@ -229,12 +232,21 @@ Namespace Runtime
         ''' If is inherits mode, then all of the modification in sub-environment will affects the <paramref name="parent"/> environment.
         ''' Otherwise, the modification in sub-environment will do nothing to the <paramref name="parent"/> environment.
         ''' </param>
-        Sub New(parent As Environment, stackFrame As StackFrame, isInherits As Boolean)
+        Sub New(parent As Environment,
+                stackFrame As StackFrame,
+                isInherits As Boolean,
+                Optional openProfiler As Boolean = False)
+
             Call Me.New()
 
             Me.parent = parent
             Me.stackFrame = stackFrame
             Me.global = parent.globalEnvironment
+            Me.profiler = parent.profiler
+
+            If openProfiler Then
+                Me.profiler = New List(Of ProfileRecord)
+            End If
 
             If isInherits Then
                 symbols = parent.symbols
@@ -253,6 +265,7 @@ Namespace Runtime
             Me.parent = globalEnv
             Me.global = globalEnv
             Me.stackFrame = globalStackFrame
+            Me.profiler = globalEnv.profiler
 
             If globalEnv.log4vb_redirect Then
                 Log4VB.redirectError = AddressOf redirectError

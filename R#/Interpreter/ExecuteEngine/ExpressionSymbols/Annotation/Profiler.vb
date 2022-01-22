@@ -1,7 +1,9 @@
 ﻿
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
 
@@ -11,6 +13,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
     ''' 开始进行性能计数
     ''' </summary>
     Public Class Profiler : Inherits Expression
+        Implements IRuntimeTrace
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -29,9 +32,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property target As Expression
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
-        Sub New(evaluate As Expression)
+        Sub New(evaluate As Expression, sourceMap As StackFrame)
             target = evaluate
+            stackFrame = sourceMap
         End Sub
 
         Public Overrides Function ToString() As String
@@ -39,7 +44,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
+            Dim openProfiler As New Environment(
+                parent:=envir,
+                stackFrame:=stackFrame,
+                isInherits:=False,
+                openProfiler:=True
+            )
+            Dim result As Object = target.Evaluate(openProfiler)
+
+            Return result
         End Function
     End Class
 End Namespace
