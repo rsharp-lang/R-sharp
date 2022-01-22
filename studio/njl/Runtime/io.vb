@@ -97,7 +97,7 @@ Public Module io
     ''' <param name="type"></param>
     ''' <returns></returns>
     <ExportAPI("read")>
-    Public Function read(file As StreamReader, Optional type As String = "String") As Object
+    Public Function read(file As StreamReader, <RSymbolTextArgument> Optional type As String = "String") As Object
         Select Case LCase(type)
             Case "string"
                 Return file.ReadToEnd
