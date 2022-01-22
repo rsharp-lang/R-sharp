@@ -6,8 +6,13 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module jlTest
 
     Sub Main()
+        Call simpleFunctionTest()
         Call closureTest()
         Call functionTest()
+    End Sub
+
+    Sub simpleFunctionTest()
+        Call inspectSyntax("f(x, y) = x + y")
     End Sub
 
     Sub closureTest()

@@ -140,6 +140,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End If
         End Sub
 
+        Sub New(symbol As String, stackFrame As StackFrame,
+                Optional value As Expression = Nothing,
+                Optional type As TypeCodes = TypeCodes.generic,
+                Optional [readonly] As Boolean = False)
+
+            Call Me.New({symbol}, value, type, [readonly], stackFrame)
+        End Sub
+
         Protected Friend Overrides Sub AddCustomAttributes(attrs As IEnumerable(Of NamedValue(Of String())))
             Call MyBase.AddCustomAttributes(attrs)
 
