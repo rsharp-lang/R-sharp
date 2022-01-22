@@ -1,3 +1,5 @@
+require(ggplot);
+
 hypot = function(x, y) {
 [x, y] = abs([x, y]);
 
@@ -35,3 +37,15 @@ profile = profiler.fetch() |> as.data.frame();
 print(profile, max.print = 13);
 
 write.csv(profile, file = `${@dir}/profile.csv`, row.name = TRUE);
+
+profile[, "index"] = 1:nrow(profile);
+
+# data visualize
+bitmap(file = `${@dir}/memory_delta.png`) {
+    ggplot(profile, padding = "padding: 200px 600px 200px 200px;", width = 2600, height = 1600) 
+    + geom_line( aes(x = "index", y = "memory_delta"), width = 8)
+	+ xlab("time(ticks)")
+	+ ylab("memory_delta(MB)")
+	+ ggtitle("Memory Delta Size")
+    ;
+}
