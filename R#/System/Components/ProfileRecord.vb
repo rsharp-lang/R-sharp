@@ -15,4 +15,12 @@ Namespace Development.Components
         Public Property stackframe As StackFrame
 
     End Class
+
+    Public Class ProfilerFrames
+
+        Public Property timestamp As Double
+        Public Property traceback As StackFrame
+        Public Property profiles As ProfileRecord()
+
+    End Class
 End Namespace

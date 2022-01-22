@@ -1,5 +1,6 @@
 ﻿
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -51,6 +52,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
                 openProfiler:=True
             )
             Dim result As Object = target.Evaluate(openProfiler)
+            Dim frames As New ProfilerFrames With {
+                .profiles = openProfiler.profiler.PopAll,
+                .timestamp = App.UnixTimeStamp,
+                .traceback = stackFrame
+            }
+
+            Call envir.globalEnvironment.profiler2.Push(frames)
 
             Return result
         End Function

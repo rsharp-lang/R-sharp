@@ -55,6 +55,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Hybrids
 Imports SMRUCC.Rsharp.Development.Package
@@ -79,6 +80,7 @@ Namespace Runtime
         Public ReadOnly Property packages As PackageManager
         Public ReadOnly Property attachedNamespace As New SymbolNamespaceSolver
         Public ReadOnly Property hybridsEngine As New HybridsEngine
+        Public ReadOnly Property profiler2 As New Stack(Of ProfilerFrames)
 
         ''' <summary>
         ''' the R# script host object
