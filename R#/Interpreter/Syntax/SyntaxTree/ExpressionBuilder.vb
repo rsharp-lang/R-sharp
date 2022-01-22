@@ -192,10 +192,25 @@ Namespace Interpreter.SyntaxParser
                         Case "@home" : Return New SyntaxResult(New HomeSymbol)
                         Case "@host" : Return New SyntaxResult(New HostSymbol)
                         Case "@dir" : Return New SyntaxResult(New ScriptFolder)
+                        Case "@profile"
+
+                            Throw New NotImplementedException
 
                         Case Else
                             Return SyntaxResult.CreateError(New NotImplementedException(item(Scan0).text), opts.SetCurrentRange(item))
                     End Select
+                ElseIf item(Scan0) = (TokenType.annotation, "@profile") Then
+                    Dim expr As SyntaxResult
+
+                    item = item.Skip(1).ToArray
+                    expr = opts.ParseExpression(item, opts)
+
+                    If expr.isException Then
+                        Return expr
+                    Else
+                        expr = New Profiler(expr.expression)
+                        Return expr
+                    End If
                 Else
                     Dim ifelse = item.ifElseTriple
 

@@ -28,7 +28,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
         ''' target expression for run profiler
         ''' </summary>
         ''' <returns></returns>
-        Public Property target As Expression
+        Public ReadOnly Property target As Expression
+
+        Sub New(evaluate As Expression)
+            target = evaluate
+        End Sub
+
+        Public Overrides Function ToString() As String
+            Return $"@profile -> ( {target.ToString} )"
+        End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Throw New NotImplementedException()
