@@ -15,9 +15,17 @@ return y*sqrt(1+r ^ 2);
 }
 
 @profile {
-	for(i in 1: 5) {
-		print(hypot(i, 3));
+	run = function() {
+		for(i in 1: 5) {
+			print(hypot(i, 3));
+		}	
 	}
+
+	run();
 }
 
 print(" ~~done!");
+
+profile = profiler.fetch() |> as.data.frame();
+
+print(profile);
