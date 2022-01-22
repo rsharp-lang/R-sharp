@@ -19,13 +19,16 @@ return y*sqrt(1+r ^ 2);
 		for(i in 1: 5) {
 			print(hypot(i, 3));
 		}	
+		
+		rep(1, times = 10000);
 	}
 
 	run();
+	gc();
 }
 
 print(" ~~done!");
-
 profile = profiler.fetch() |> as.data.frame();
+print(profile, max.print = 13);
 
-print(profile);
+write.csv(profile, file = `${@dir}/profile.csv`, row.name = TRUE);

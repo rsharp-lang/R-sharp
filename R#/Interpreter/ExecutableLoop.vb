@@ -117,7 +117,8 @@ Namespace Interpreter
                         .elapse_time = benchmark,
                         .memory_delta = memoryDelta,
                         .stackframe = env.stackFrame,
-                        .tag = timestamp
+                        .tag = timestamp,
+                        .memory_size = memSize2
                     })
                 End If
 

@@ -58,12 +58,18 @@ Namespace Runtime.Internal.Invokes
 
         Private Function profilerFrames(data As ProfilerFrames, args As list, env As Environment) As dataframe
             Dim frames As New dataframe With {
-                .columns = New Dictionary(Of String, Array)
+                .columns = New Dictionary(Of String, Array),
+                .rownames = Enumerable _
+                    .Range(1, data.size) _
+                    .Select(Function(i) i.ToString) _
+                    .ToArray
             }
 
             frames.columns("time") = data.profiles.Select(Function(f) f.tag.FromUnixTimeStamp).ToArray
+            frames.columns("ticks") = data.profiles.Select(Function(f) f.elapse_time).ToArray
             frames.columns("elapse_time") = data.profiles.Select(Function(f) TimeSpan.FromTicks(f.elapse_time)).ToArray
             frames.columns("memory_delta") = data.profiles.Select(Function(f) f.memory_delta).ToArray
+            frames.columns("memory_size") = data.profiles.Select(Function(f) f.memory_size).ToArray
             frames.columns("namespace") = data.profiles.Select(Function(f) f.stackframe.Method.Namespace).ToArray
             frames.columns("module") = data.profiles.Select(Function(f) f.stackframe.Method.Module).ToArray
             frames.columns("function") = data.profiles.Select(Function(f) f.stackframe.Method.Method).ToArray
@@ -121,5 +127,46 @@ Namespace Runtime.Internal.Invokes
                 Return Nothing
             End If
         End Function
+
+        ''' <summary>
+        ''' ## Garbage Collection
+        ''' 
+        ''' A call of gc causes a garbage collection to take place. 
+        ''' gcinfo sets a flag so that automatic collection is 
+        ''' either silent (verbose = FALSE) or prints memory usage 
+        ''' statistics (verbose = TRUE).
+        ''' </summary>
+        ''' <remarks>
+        ''' A call of gc causes a garbage collection to take place. 
+        ''' This will also take place automatically without user 
+        ''' intervention, and the primary purpose of calling gc is 
+        ''' for the report on memory usage. For an accurate report 
+        ''' full = TRUE should be used.
+        ''' It can be useful To Call gc after a large Object has 
+        ''' been removed, As this may prompt R To Return memory To 
+        ''' the operating system.
+        ''' R allocates space For vectors In multiples Of 8 bytes: 
+        ''' hence the report Of "Vcells", a relic Of an earlier 
+        ''' allocator (that used a vector heap).
+        ''' When gcinfo(TRUE) Is in force, messages are sent to the 
+        ''' message connection at each garbage collection of the 
+        ''' form:
+        ''' 
+        ''' ```
+        '''     Garbage collection 12 = 10+0+2 (level 0) ...
+        '''     6.4 Mbytes of cons cells used (58%)
+        '''     2.0 Mbytes of vectors used (32%)
+        ''' ```
+        ''' 
+        ''' Here the last two lines give the current memory usage 
+        ''' rounded up To the Next 0.1Mb And As a percentage Of the 
+        ''' current trigger value. The first line gives a breakdown 
+        ''' Of the number Of garbage collections at various levels 
+        ''' (For an explanation see the 'R Internals’ manual).
+        ''' </remarks>
+        <ExportAPI("gc")>
+        Public Sub gc()
+            Call App.FlushMemory()
+        End Sub
     End Module
 End Namespace

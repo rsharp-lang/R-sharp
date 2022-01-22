@@ -116,7 +116,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Dim newFunc As DeclareNewFunction = DirectCast(value, DeclareNewFunction)
 
                 If newFunc.funcName.StartsWith("<$anonymous_") Then
-                    Call newFunc.SetSymbol($"{targetSymbols(Scan0)}*{newFunc.funcName}")
+                    newFunc.SetSymbol($"{targetSymbols(Scan0).ToString.Trim(""""c)}{newFunc.funcName}")
+                    newFunc.stackFrame.Method.Method = newFunc.funcName
                 End If
             End If
         End Sub
