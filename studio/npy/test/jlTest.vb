@@ -12,7 +12,12 @@ Module jlTest
     End Sub
 
     Sub simpleFunctionTest()
-        Call inspectSyntax("f(x, y) = x + y")
+        Call inspectSyntax("
+
+f(x, y) = x + y
+
+print(f(2,3))
+")
     End Sub
 
     Sub closureTest()
