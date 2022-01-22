@@ -107,6 +107,7 @@ Namespace Interpreter
             For Each expression As Expression In execQueue
                 benchmark = App.NanoTime
                 timestamp = benchmark
+                refreshMemory = False
                 last = ExecuteCodeLine(expression, env, breakLoop, showExpression)
                 benchmark = App.NanoTime - benchmark
 
@@ -132,8 +133,6 @@ Namespace Interpreter
                 If breakLoop Then
                     Call configException(env, last, expression)
                     Exit For
-                Else
-                    refreshMemory = False
                 End If
             Next
 
