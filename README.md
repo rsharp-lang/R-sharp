@@ -21,6 +21,9 @@ The ``R#`` language is not designed for the general data analysis purpose, but i
 + [``Rscript``](./Rscript) The R# scripting host
 + [``R-terminal``](./studio/R-terminal) The R# shell program  
 + [``Rsharp_kit``](./studio/Rsharp_kit) The R-sharp toolkit
++ [``njl``](./studio/njl) The Julia language liked scripting engine
++ [``npy``](./studio/npy) The Python language liked scripting engine
++ [``RData``](./studio/RData) The R language data ``*.rda/*.rds`` file reader
 
 #### Demo R# code
 
@@ -70,6 +73,43 @@ Call R.Add("echo",
 
 ' at last, invoke R function throught Invoke method
 Call R.Invoke("echo", R!word)
+```
+
+## Language Hybrids Programming Feature
+
+The ``R#`` system is not only supports of the R liked language, it also includes a python language scripting and Julia language scripting engine which is running upon the ``R#`` runtime.
+
+Reference of the python script or julia script in ``R#`` language just like imports other ``R#`` script:
+
+```r
+# imports an external R# script
+imports "./script.R";
+# imports an external python script in R#
+imports "./script.py";
+# imports an external julia script in R#
+imports "./script.jl";
+```
+
+And also you can imports R script in python or julia scripting:
+
+```py
+# example of import R#/julia script in python
+
+# imports an external R# script in python
+import "./script.R"
+# imports an external julia script in python
+import "./script.jl"
+```
+
+imports python and ``R#`` script in julia scripting is also keeps easy:
+
+```julia
+# example of imports R#/python script in julia
+
+# imports an external R# script in julia
+include("./script.R")
+# imports an external python script in julia
+include("./script.py")
 ```
 
 ## Related ``R#`` Package Resource
