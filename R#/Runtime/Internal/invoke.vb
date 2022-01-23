@@ -119,7 +119,7 @@ Namespace Runtime.Internal
             Call GetType(dataframeBase).DoCall(AddressOf pushEnvir)
         End Sub
 
-        Private Shared Sub pushEnvir(baseModule As Type)
+        Friend Shared Sub pushEnvir(baseModule As Type)
             Try
                 Call ImportsPackage _
                     .GetAllApi(baseModule, includesInternal:=True) _

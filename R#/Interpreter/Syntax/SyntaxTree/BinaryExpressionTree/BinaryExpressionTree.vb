@@ -323,9 +323,16 @@ Namespace Interpreter.SyntaxParser
                 Dim [namespace] As Expression = buf(Scan0).TryCast(Of Expression)
 
                 Return SyntaxResult.CreateError(New NotImplementedException, opts)
-            ElseIf buf = 3 AndAlso tokens(1) Like GetType(String) AndAlso tokens(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols Then
+            ElseIf buf = 3 AndAlso
+                (tokens(1) Like GetType(String)) AndAlso
+                (tokens(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols OrElse tokens(1).TryCast(Of String) Like iterateAssign) Then
+
                 Dim target As Expression = tokens(Scan0).TryCast(Of Expression)
                 Dim value As Expression = tokens(2)
+
+                If tokens(1).TryCast(Of String) Like iterateAssign Then
+                    value = New BinaryExpression(target, value, tokens(1).TryCast(Of String).First)
+                End If
 
                 ' set value by name
                 If TypeOf tokens(Scan0).TryCast(Of Expression) Is BinaryExpression Then

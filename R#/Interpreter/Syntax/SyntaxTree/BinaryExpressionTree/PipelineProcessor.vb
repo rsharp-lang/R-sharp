@@ -59,6 +59,10 @@ Namespace Interpreter.SyntaxParser
             MyBase.New(If(altStyle, "|>", ":>"))
         End Sub
 
+        Protected Overrides Function view() As String
+            Return "pipeTo -> next()"
+        End Function
+
         Protected Overrides Function expression(a As [Variant](Of SyntaxResult, String), b As [Variant](Of SyntaxResult, String), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim pip As Expression
 

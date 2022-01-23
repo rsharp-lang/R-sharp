@@ -10,7 +10,7 @@ Namespace Language
             "baremodule", "begin", "break", "catch", "const",
             "continue", "do", "else", "elseif", "end", "export",
             "false", "finally", "for", "function", "global",
-            "if", "import", "let", "local", "macro", "module",
+            "if", "import", "include", "let", "local", "macro", "module",
             "quote", "return", "struct", "true", "try", "using",
             "while"
         }
@@ -22,9 +22,9 @@ Namespace Language
             Call keywords.Clear()
             Call keywords.Add(jlKeywords).ToArray
             Call nullLiteral.Clear()
-            Call nullLiteral.Add("None")
+            Call nullLiteral.Add("nothing")
 
-            keepsDelimiter = False
+            keepsDelimiter = True
         End Sub
     End Class
 End Namespace

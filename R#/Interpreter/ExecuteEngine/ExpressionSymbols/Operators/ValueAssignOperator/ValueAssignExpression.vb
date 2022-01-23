@@ -63,6 +63,7 @@ Imports any = Microsoft.VisualBasic.Scripting
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -104,16 +105,28 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Sub
 
         Sub New(targetSymbols$(), value As Expression)
-            Me.targetSymbols = targetSymbols _
-                .Select(Function(name) New Literal(name)) _
-                .ToArray
-            Me.value = value
+            Call Me.New(getSymbols(targetSymbols), value)
         End Sub
 
         Sub New(target As Expression(), value As Expression)
             Me.targetSymbols = target
             Me.value = value
+
+            If targetSymbols.Length = 1 AndAlso TypeOf value Is DeclareNewFunction Then
+                Dim newFunc As DeclareNewFunction = DirectCast(value, DeclareNewFunction)
+
+                If newFunc.funcName.StartsWith("<$anonymous_") Then
+                    newFunc.SetSymbol($"{targetSymbols(Scan0).ToString.Trim(""""c)}{newFunc.funcName}")
+                    newFunc.stackFrame.Method.Method = newFunc.funcName
+                End If
+            End If
         End Sub
+
+        Private Shared Function getSymbols(targetSymbols$()) As Expression()
+            Return targetSymbols _
+                .Select(Function(name) New Literal(name)) _
+                .ToArray
+        End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object

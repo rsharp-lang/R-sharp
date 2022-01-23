@@ -59,6 +59,11 @@ Namespace Interpreter.SyntaxParser
         End Sub
 
         Protected MustOverride Function expression(a As [Variant](Of SyntaxResult, String), b As [Variant](Of SyntaxResult, String), opts As SyntaxBuilderOptions) As SyntaxResult
+        Protected MustOverride Function view() As String
+
+        Public Overrides Function ToString() As String
+            Return view()
+        End Function
 
         Public Function JoinBinaryExpression(queue As SyntaxQueue, oplist As List(Of String), opts As SyntaxBuilderOptions) As SyntaxResult
             If queue.buf = 1 Then

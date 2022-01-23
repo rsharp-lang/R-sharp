@@ -1,8 +1,11 @@
-﻿Imports Microsoft.VisualBasic.Language
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 
+<Assembly: InternalsVisibleTo("njl")>
+<Assembly: InternalsVisibleTo("npy")>
 
 Public Class PythonCodeDOM
 

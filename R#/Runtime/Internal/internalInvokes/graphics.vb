@@ -93,6 +93,8 @@ Namespace Runtime.Internal.Invokes
         Public Function bitmap(image As Object,
                                Optional file As Object = Nothing,
                                Optional format As ImageFormats = ImageFormats.Png,
+                               <RListObjectArgument>
+                               Optional args As list = Nothing,
                                Optional env As Environment = Nothing) As Object
 
             If image Is Nothing Then

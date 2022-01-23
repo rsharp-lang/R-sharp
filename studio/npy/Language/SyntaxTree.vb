@@ -4,6 +4,7 @@ Imports System.Data
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Language.CodeDom
 Imports SMRUCC.Python.Language
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -84,7 +85,7 @@ Public Class SyntaxTree
            .keyword = line(Scan0).text,
            .level = line.levels,
            .script = New List(Of Expression),
-           .funcname = line(1).text,
+           .funcName = line(1).text,
            .arguments = args,
            .stackframe = opts.GetStackTrace(line(1))
         })

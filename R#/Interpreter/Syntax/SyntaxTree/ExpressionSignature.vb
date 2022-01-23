@@ -62,6 +62,7 @@ Namespace Interpreter.SyntaxParser
     <Extension>
     Module ExpressionSignature
 
+        Friend ReadOnly iterateAssign As Index(Of String) = {"+=", "-=", "*=", "/="}
         Friend ReadOnly valueAssignOperatorSymbols As Index(Of String) = {"<-", "="}
         Friend ReadOnly lambdaOperator As Index(Of String) = {"->", "=>"}
         Friend ReadOnly literalTypes As Index(Of TokenType) = {
