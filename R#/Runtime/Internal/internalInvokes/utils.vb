@@ -937,5 +937,10 @@ Namespace Runtime.Internal.Invokes
         Public Function now() As Date
             Return Date.Now
         End Function
+
+        <ExportAPI("timespan")>
+        Public Function createTimespan(ticks As Integer) As TimeSpan
+            Return TimeSpan.FromTicks(ticks)
+        End Function
     End Module
 End Namespace
