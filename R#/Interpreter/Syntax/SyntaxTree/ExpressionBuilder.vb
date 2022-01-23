@@ -306,6 +306,20 @@ Namespace Interpreter.SyntaxParser
                     End If
 
                     Return SyntaxImplements.SequenceLiteral(from, [to], steps, opts)
+                ElseIf code(1).Length = 1 AndAlso code(1)(Scan0).name = TokenType.operator Then
+                    Dim op As String = code(1)(Scan0).text
+                    Dim left As SyntaxResult = opts.ParseExpression(code(0), opts)
+                    Dim right As SyntaxResult = opts.ParseExpression(code(2), opts)
+
+                    If left.isException Then
+                        Return left
+                    ElseIf right.isException Then
+                        Return right
+                    End If
+
+                    Dim bin As New BinaryExpression(left.expression, right.expression, op)
+
+                    Return New SyntaxResult(bin)
                 End If
             ElseIf code(Scan0).Length Mod 4 = 0 Then
                 Dim firstBlock As Token() = code(Scan0)

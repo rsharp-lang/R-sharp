@@ -69,6 +69,8 @@ Public Module InternalParser
                     Next
 
                     Return chain
+                Else
+                    blocks = New List(Of Token()) From {blocks.IteratesALL.ToArray}
                 End If
             End If
 
