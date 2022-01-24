@@ -213,13 +213,19 @@ Namespace Development.Configuration
             End Get
         End Property
 
+        Public ReadOnly Property julia As String
+            Get
+                Return getOption("julia.engine", [default]:="njl.dll")
+            End Get
+        End Property
+
         ''' <summary>
         ''' get default script environments
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property environments As String()
             Get
-                Return getOption("environments", [default]:={python}.GetJson).LoadJSON(Of String())
+                Return getOption("environments", [default]:={python, julia}.GetJson).LoadJSON(Of String())
             End Get
         End Property
 

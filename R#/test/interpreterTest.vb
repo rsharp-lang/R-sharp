@@ -176,7 +176,17 @@ bitmap(file = `./network.png`) %do% {
         Pause()
     End Sub
 
+    Sub expressionTest2()
+        Dim p = R.Parse("sum += 1.0/(k*k)")
+        Dim p2 = R.Parse("x$sum += 1.0/(k*k)")
+
+        Pause()
+    End Sub
+
     Sub Main()
+
+        Call expressionTest2()
+
         Call pipelineBulder()
         Call negativeValTest()
 

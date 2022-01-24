@@ -376,6 +376,46 @@ Module stats
         Return cor
     End Function
 
+    ''' <summary>
+    ''' Find the correlations, sample sizes, and probability 
+    ''' values between elements of a matrix or data.frame.
+    ''' 
+    ''' Although the cor function finds the correlations for 
+    ''' a matrix, it does not report probability values. cor.test 
+    ''' does, but for only one pair of variables at a time. 
+    ''' corr.test uses cor to find the correlations for either 
+    ''' complete or pairwise data and reports the sample sizes 
+    ''' and probability values as well. For symmetric matrices, 
+    ''' raw probabilites are reported below the diagonal and 
+    ''' correlations adjusted for multiple comparisons above the 
+    ''' diagonal. In the case of different x and ys, the default 
+    ''' is to adjust the probabilities for multiple tests. Both 
+    ''' corr.test and corr.p return raw and adjusted confidence 
+    ''' intervals for each correlation.
+    ''' </summary>
+    ''' <param name="x">A matrix or dataframe</param>
+    ''' <param name="y">
+    ''' A second matrix or dataframe with the same number of rows as x
+    ''' </param>
+    ''' <param name="use">
+    ''' use="pairwise" is the default value and will do pairwise 
+    ''' deletion of cases. use="complete" will select just complete 
+    ''' cases.</param>
+    ''' <param name="method">
+    ''' method="pearson" is the default value. The alternatives to 
+    ''' be passed to cor are "spearman" and "kendall". These last 
+    ''' two are much slower, particularly for big data sets.
+    ''' </param>
+    ''' <returns></returns>
+    ''' 
+    <ExportAPI("corr.test")>
+    Public Function corrTest(x As Rdataframe,
+                             Optional y As Rdataframe = Nothing,
+                             Optional use As String = "pairwise",
+                             Optional method As String = "pearson")
+
+    End Function
+
     <ExportAPI("dnorm")>
     Public Function dnorm(x As Double(), Optional mean As Double = 0, Optional sd As Double = 1) As Object
         Return Distributions.pnorm.ProbabilityDensity(x.AsVector, mean, sd).Array

@@ -17,15 +17,14 @@ Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
-
 Public Class FunctionTag : Inherits PythonCodeDOM
 
-    Public Property funcname As String
+    Public Property funcName As String
     Public Property arguments As Expression()
     Public Property stackframe As StackFrame
 
     Public Overrides Function ToExpression() As Expression
-        Return New DeclareNewFunction(funcname, arguments, MyBase.ToExpression(), stackframe)
+        Return New DeclareNewFunction(funcName, arguments, MyBase.ToExpression(), stackframe)
     End Function
 
 End Class

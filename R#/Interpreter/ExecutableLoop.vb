@@ -1,58 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::be8dda9356ca66999dbd4a22d31815a7, R#\Interpreter\ExecutableLoop.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Enum DebugLevels
-    ' 
-    '         Memory, None, Stack
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    '     Class ExecutableLoop
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    ' 
-    '         Function: Execute, ExecuteCodeLine, isBreakSignal
-    ' 
-    '         Sub: configException, printDebug, printMemoryProfile
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Enum DebugLevels
+' 
+'         Memory, None, Stack
+' 
+'  
+' 
+' 
+' 
+'     Class ExecutableLoop
+' 
+'         Constructor: (+2 Overloads) Sub New
+' 
+'         Function: Execute, ExecuteCodeLine, isBreakSignal
+' 
+'         Sub: configException, printDebug, printMemoryProfile
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -79,6 +81,7 @@ Namespace Interpreter
         Shared memSize As Double
         Shared memSize2 As Double
         Shared memoryDelta As Double
+        Shared refreshMemory As Boolean = False
 
         Shared Sub New()
             memSize = Rsharp.WorkingSet64 / 1024 / 1024
@@ -98,12 +101,34 @@ Namespace Interpreter
             Dim debug As Boolean = env.globalEnvironment.debugMode
             Dim showMemory As Boolean = debug AndAlso (env.globalEnvironment.debugLevel = DebugLevels.All OrElse env.globalEnvironment.debugLevel = DebugLevels.Memory)
             Dim showExpression As Boolean = debug AndAlso (env.globalEnvironment.debugLevel = DebugLevels.All OrElse env.globalEnvironment.debugLevel = DebugLevels.Stack)
+            Dim benchmark As Long
+            Dim timestamp As Long
 
             ' The program code loop
             For Each expression As Expression In execQueue
+                benchmark = App.NanoTime
+                timestamp = App.UnixTimeStamp
+                refreshMemory = False
                 last = ExecuteCodeLine(expression, env, breakLoop, showExpression)
+                benchmark = App.NanoTime - benchmark
+
+                If Not env.profiler Is Nothing Then
+                    Call runRefreshMemory()
+                    Call env.profiler.Add(New ProfileRecord(expression) With {
+                        .elapse_time = benchmark,
+                        .memory_delta = memoryDelta,
+                        .stackframe = New StackFrame(env.stackFrame),
+                        .tag = timestamp,
+                        .memory_size = memSize2
+                    })
+                End If
+
+                If showExpression Then
+                    Call printDebug($"[elapse_time] {TimeSpan.FromTicks(benchmark).FormatTime}", ConsoleColor.Green)
+                End If
 
                 If showMemory Then
+                    Call runRefreshMemory()
                     Call printMemoryProfile()
                 End If
 
@@ -116,15 +141,21 @@ Namespace Interpreter
             Return last
         End Function
 
+        Private Shared Sub runRefreshMemory()
+            If Not refreshMemory Then
+                SyncLock Rsharp
+                    memSize2 = Rsharp.WorkingSet64 / 1024 / 1024
+                    memoryDelta = memSize2 - memSize
+                    memSize = memSize2
+
+                    Call Rsharp.Refresh()
+                End SyncLock
+
+                refreshMemory = True
+            End If
+        End Sub
+
         Private Shared Sub printMemoryProfile()
-            SyncLock Rsharp
-                memSize2 = Rsharp.WorkingSet64 / 1024 / 1024
-                memoryDelta = memSize2 - memSize
-                memSize = memSize2
-
-                Call Rsharp.Refresh()
-            End SyncLock
-
             If memoryDelta > 0 Then
                 Call printDebug($"[app_memory] {memSize2.ToString("F2")} MB, delta {memoryDelta.ToString("F2")} MB", ConsoleColor.Red)
             Else
@@ -163,18 +194,12 @@ Namespace Interpreter
                                                Optional ByRef breakLoop As Boolean = False,
                                                Optional showExpression As Boolean = False) As Object
             Dim last As Object
-            Dim benchmark As Long = App.NanoTime
 
             If showExpression Then
                 Call printDebug(expression.ToString)
             End If
 
             last = expression.Evaluate(envir)
-            benchmark = App.NanoTime - benchmark
-
-            If showExpression Then
-                Call printDebug($"[elapse_time] {TimeSpan.FromTicks(benchmark).FormatTime}", ConsoleColor.Green)
-            End If
 
             ' next keyword will break current closure 
             ' and then goto execute next iteration loop

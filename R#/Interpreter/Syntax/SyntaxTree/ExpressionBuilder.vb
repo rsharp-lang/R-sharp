@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::e143e740957590c109c1d482c5a3eaba, R#\Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ExpressionBuilder
-    ' 
-    '         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression, parseInvoke
-    '                   parseSymbolIndex
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ExpressionBuilder
+' 
+'         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression, parseInvoke
+'                   parseSymbolIndex
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -191,10 +192,26 @@ Namespace Interpreter.SyntaxParser
                         Case "@home" : Return New SyntaxResult(New HomeSymbol)
                         Case "@host" : Return New SyntaxResult(New HostSymbol)
                         Case "@dir" : Return New SyntaxResult(New ScriptFolder)
+                        Case "@profile"
+
+                            Throw New NotImplementedException
 
                         Case Else
                             Return SyntaxResult.CreateError(New NotImplementedException(item(Scan0).text), opts.SetCurrentRange(item))
                     End Select
+                ElseIf item(Scan0) = (TokenType.annotation, "@profile") Then
+                    Dim expr As SyntaxResult
+                    Dim tag As Token = item(Scan0)
+
+                    item = item.Skip(1).ToArray
+                    expr = opts.ParseExpression(item, opts)
+
+                    If expr.isException Then
+                        Return expr
+                    Else
+                        expr = New Profiler(expr.expression, opts.GetStackTrace(tag))
+                        Return expr
+                    End If
                 Else
                     Dim ifelse = item.ifElseTriple
 
@@ -215,6 +232,8 @@ Namespace Interpreter.SyntaxParser
 
                     If opText = "=" OrElse opText = "<-" Then
                         Return SyntaxImplements.ValueAssign(code, opts)
+                    ElseIf opText Like iterateAssign Then
+                        Return SyntaxImplements.ValueIterateAssign(code(Scan0), opText, code.Skip(2).IteratesALL.ToArray, opts)
                     ElseIf opText = "~" Then
                         Return SyntaxImplements.FormulaExpressionSyntax.RunParse(code, opts)
                     End If
@@ -287,6 +306,20 @@ Namespace Interpreter.SyntaxParser
                     End If
 
                     Return SyntaxImplements.SequenceLiteral(from, [to], steps, opts)
+                ElseIf code(1).Length = 1 AndAlso code(1)(Scan0).name = TokenType.operator Then
+                    Dim op As String = code(1)(Scan0).text
+                    Dim left As SyntaxResult = opts.ParseExpression(code(0), opts)
+                    Dim right As SyntaxResult = opts.ParseExpression(code(2), opts)
+
+                    If left.isException Then
+                        Return left
+                    ElseIf right.isException Then
+                        Return right
+                    End If
+
+                    Dim bin As New BinaryExpression(left.expression, right.expression, op)
+
+                    Return New SyntaxResult(bin)
                 End If
             ElseIf code(Scan0).Length Mod 4 = 0 Then
                 Dim firstBlock As Token() = code(Scan0)

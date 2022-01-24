@@ -102,7 +102,7 @@ Namespace Runtime
         End Function
 
         ''' <summary>
-        ''' It is R# primitive type?
+        ''' It is R# primitive type? (bool, double, int, string, list?)
         ''' </summary>
         ''' <param name="type"></param>
         ''' <returns></returns>

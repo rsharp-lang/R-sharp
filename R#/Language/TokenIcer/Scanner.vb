@@ -199,7 +199,14 @@ Namespace Language.TokenIcer
         ''' + ==
         ''' </summary>
         Shared ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c, "!"}
-        Shared ReadOnly longOperators As Index(Of String) = {"<=", "<-", "&&", "||", ":>", "::", "<<", "->", "=>", ">=", "==", "!=", "++", "--", "|>"}
+        Shared ReadOnly longOperators As Index(Of String) = {
+            "<=", ">=", "==", "!=",
+            "&&", "||",
+            "<-", "<<", "->", "=>",
+            "++", "--",
+            "+=", "-=", "*=", "/=",
+            "|>", ":>", "::"
+        }
         Shared ReadOnly shortOperators As Index(Of Char) = {"$"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
 
         Friend Shared ReadOnly Rkeywords As Index(Of String) = {

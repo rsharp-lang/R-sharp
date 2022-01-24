@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Package.File
@@ -743,8 +744,12 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <Extension>
-        Private Function dataSearchByPackageDir(env As Environment, name As String, pkgFile As String, ByRef hit As Boolean) As Message
-            Dim dataSymbols = $"{pkgFile}/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, String))
+        Private Function dataSearchByPackageDir(env As Environment,
+                                                name As String,
+                                                pkgFile As String,
+                                                ByRef hit As Boolean) As Message
+
+            Dim dataSymbols = $"{pkgFile}/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, NamedValue))
             Dim reader As String
             Dim load As Object
 
@@ -753,8 +758,8 @@ Namespace Runtime.Internal.Invokes
             If dataSymbols.IsNullOrEmpty OrElse Not dataSymbols.ContainsKey(name) Then
                 Return Nothing
             Else
-                reader = dataSymbols(name)
-                pkgFile = $"{pkgFile}/data/{name}"
+                reader = dataSymbols(name).text
+                pkgFile = $"{pkgFile}/data/{dataSymbols(name).name}"
                 load = env.readFile(reader, pkgFile)
             End If
 
@@ -931,6 +936,11 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("now")>
         Public Function now() As Date
             Return Date.Now
+        End Function
+
+        <ExportAPI("timespan")>
+        Public Function createTimespan(ticks As Integer) As TimeSpan
+            Return TimeSpan.FromTicks(ticks)
         End Function
     End Module
 End Namespace

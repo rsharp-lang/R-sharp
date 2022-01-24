@@ -53,6 +53,10 @@ Namespace Interpreter.SyntaxParser
             MyBase.New("<<")
         End Sub
 
+        Protected Overrides Function view() As String
+            Return "vector << element"
+        End Function
+
         Protected Overrides Function expression(a As [Variant](Of SyntaxResult, String), b As [Variant](Of SyntaxResult, String), opts As SyntaxBuilderOptions) As SyntaxResult
             If a.VA.isException Then
                 Return a
