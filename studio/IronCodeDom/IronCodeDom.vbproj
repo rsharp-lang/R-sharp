@@ -8,6 +8,31 @@
     <Configurations>Debug;Release;Rsharp_app_release</Configurations>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>SMRUCC.Language.CodeDom.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>SMRUCC.Language.CodeDom.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|AnyCPU'">
+    <DocumentationFile>SMRUCC.Language.CodeDom.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DocumentationFile>SMRUCC.Language.CodeDom.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DocumentationFile>SMRUCC.Language.CodeDom.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
+    <DocumentationFile>SMRUCC.Language.CodeDom.xml</DocumentationFile>
+    <OutputPath>../../App\</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
