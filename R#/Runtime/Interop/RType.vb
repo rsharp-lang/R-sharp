@@ -133,6 +133,12 @@ Namespace Runtime.Interop
         Public ReadOnly Property getCount As PropertyInfo
         Public ReadOnly Property getItem As PropertyInfo
 
+        ''' <summary>
+        ''' include single element and array element, example as:
+        ''' 
+        ''' integer, integer()
+        ''' </summary>
+        ''' <returns></returns>
         Friend Shared ReadOnly Property integers As Index(Of Type) = {
             GetType(Integer), GetType(Integer()),
             GetType(Long), GetType(Long()),
@@ -147,6 +153,10 @@ Namespace Runtime.Interop
             GetType(Double), GetType(Double())
         }
 
+        ''' <summary>
+        ''' boolean and boolean()
+        ''' </summary>
+        ''' <returns></returns>
         Friend Shared ReadOnly Property logicals As Index(Of Type) = {
             GetType(Boolean),
             GetType(Boolean())

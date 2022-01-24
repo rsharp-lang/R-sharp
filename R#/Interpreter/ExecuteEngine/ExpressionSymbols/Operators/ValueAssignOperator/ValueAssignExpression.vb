@@ -311,6 +311,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
         Private Shared Function setByNameIndex(symbolName As Expression, envir As Environment, value As Object) As Message
             Dim symbolIndex As SymbolIndexer = DirectCast(symbolName, SymbolIndexer)
+            ' evaluate data object and then check for errors
             Dim targetObj As Object = symbolIndex.symbol.Evaluate(envir)
             Dim index As Object = symbolIndex.index.Evaluate(envir)
 
@@ -326,8 +327,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Return targetObj
             End If
 
+            If TypeOf index Is vector Then
+                index = DirectCast(index, vector).data
+            End If
+
             If symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like RType.integers Then
+                ' integer index
                 Return setVectorElements(targetObj, DirectCast(Runtime.asVector(Of Integer)(index), Integer()), value, envir)
+                ' logical index
             ElseIf symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like RType.logicals Then
                 Dim flags As Boolean() = DirectCast(Runtime.asVector(Of Boolean)(index), Boolean())
                 Dim indexVals As Integer() = flags _
@@ -339,6 +346,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Return setVectorElements(targetObj, indexVals, value, envir)
             End If
 
+            ' character name index
             Dim indexStr As String() = DirectCast(Runtime.asVector(Of String)(index), String())
             Dim result As Object
 
@@ -363,8 +371,6 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
                     Return Nothing
                 Else
-                    Call envir.WriteLineHandler()(indexStr)
-
                     Return Internal.debug.stop({
                         $"Target symbol can not be indexed by name!",
                         $"SymbolName: {symbolIndex.symbol}",
