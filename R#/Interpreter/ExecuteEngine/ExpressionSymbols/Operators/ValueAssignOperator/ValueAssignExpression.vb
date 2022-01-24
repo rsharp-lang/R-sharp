@@ -363,6 +363,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
                     Return Nothing
                 Else
+                    Call envir.WriteLineHandler()(indexStr)
+
                     Return Internal.debug.stop({
                         $"Target symbol can not be indexed by name!",
                         $"SymbolName: {symbolIndex.symbol}",
