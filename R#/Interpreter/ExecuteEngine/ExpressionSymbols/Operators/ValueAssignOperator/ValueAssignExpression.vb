@@ -363,7 +363,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
                     Return Nothing
                 Else
-                    Return Internal.debug.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
+                    Return Internal.debug.stop({
+                        $"Target symbol can not be indexed by name!",
+                        $"SymbolName: {symbolIndex.symbol}",
+                        $"type: {targetObj.GetType.FullName}"
+                    }, envir)
                 End If
             End If
 
