@@ -320,7 +320,15 @@ Namespace Interpreter.SyntaxParser
                     Dim bin As Expression
 
                     If op = "$" Then
-                        bin = New SymbolIndexer(left.expression, byName:=right.expression)
+                        Dim refName As Expression
+
+                        If TypeOf right.expression Is SymbolReference Then
+                            refName = New Literal(DirectCast(right.expression, SymbolReference).symbol)
+                        Else
+                            refName = right.expression
+                        End If
+
+                        bin = New SymbolIndexer(left.expression, byName:=refName)
                     Else
                         bin = New BinaryExpression(left.expression, right.expression, op)
                     End If
