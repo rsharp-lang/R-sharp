@@ -317,7 +317,13 @@ Namespace Interpreter.SyntaxParser
                         Return right
                     End If
 
-                    Dim bin As New BinaryExpression(left.expression, right.expression, op)
+                    Dim bin As Expression
+
+                    If op = "$" Then
+                        bin = New SymbolIndexer(left.expression, byName:=right.expression)
+                    Else
+                        bin = New BinaryExpression(left.expression, right.expression, op)
+                    End If
 
                     Return New SyntaxResult(bin)
                 End If
