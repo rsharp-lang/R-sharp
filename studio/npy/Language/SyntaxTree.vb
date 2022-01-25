@@ -71,6 +71,14 @@ Public Class SyntaxTree
         ElseIf line.levels = current.level Then
             ' 结束了上一个block
             Call stack.Peek.Add(current.ToExpression())
+        Else
+            stack.Peek.Add(current.ToExpression)
+
+            ' line.levels < current.level
+            Do While stack.Peek.level >= [next].level
+                current = stack.Pop
+                stack.Peek.Add(current.ToExpression)
+            Loop
         End If
 
         current = [next]
@@ -92,7 +100,10 @@ Public Class SyntaxTree
     End Sub
 
     Private Sub startForLoopDefine(line As PythonLine)
-        Dim tokens As Token() = line.tokens.Skip(1).Take(line.tokens.Length - 2).ToArray
+        Dim tokens As Token() = line.tokens _
+            .Skip(1) _
+            .Take(line.tokens.Length - 2) _
+            .ToArray
 
         If tokens(Scan0) = (TokenType.open, "(") AndAlso tokens.Last = (TokenType.close, ")") Then
             tokens = tokens _
