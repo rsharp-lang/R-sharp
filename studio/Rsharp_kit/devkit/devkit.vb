@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::1c73fdf57f2018287ac46574f44e8f79, studio\Rsharp_kit\devkit\devkit.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module devkit
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: AssemblyInfo, decodeSourceMap, encodeSourceMap, gitLog, showIL
-    '               svnLog
-    ' 
-    ' /********************************************************************************/
+' Module devkit
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: AssemblyInfo, decodeSourceMap, encodeSourceMap, gitLog, showIL
+'               svnLog
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -51,7 +51,9 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.Versi
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>
@@ -113,5 +115,30 @@ Module devkit
     <ExportAPI("sourceMap_encode")>
     Public Function encodeSourceMap(symbols As StackFrame(), file$) As sourceMap
         Return symbols.encode(file)
+    End Function
+
+    <ExportAPI("inspect")>
+    Public Function inspect(script As String, Optional env As Environment = Nothing) As Object
+        Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+        Dim program As Program
+        Dim [error] As String = Nothing
+
+        If Not script.ExtensionSuffix("R") Then
+            If globalEnv.hybridsEngine.CanHandle(script) Then
+                globalEnv _
+                    .hybridsEngine _
+                    .LoadScript(filepath, R.globalEnvir)
+            Else
+                Return Internal.debug.stop({$"unsupported script file type(*.{script.ExtensionSuffix})!"}, globalEnv)
+            End If
+        Else
+            program = Program.CreateProgram(
+                Rscript:=Rscript.AutoHandleScript(script),
+                debug:=globalEnv.debugMode,
+                [error]:=[error]
+            )
+        End If
+
+        Return [error]
     End Function
 End Module

@@ -2,6 +2,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
@@ -63,6 +64,7 @@ Namespace Development.Hybrids
 
         Public MustOverride ReadOnly Property SuffixName As String
 
+        Public MustOverride Function ParseScript(scriptfile As String, env As Environment) As [Variant](Of Message, Program)
         Public MustOverride Function LoadScript(scriptfile As String, env As Environment) As Object
 
     End Class
@@ -77,9 +79,6 @@ Namespace Development.Hybrids
 
         Public Overrides Function LoadScript(scriptfile As String, env As Environment) As Object
             Dim R As RInterpreter = env.globalEnvironment.Rscript
-            Dim program As Program
-            Dim error$ = Nothing
-
             ' 20200213 因为source函数是创建了一个新的环境容器
             ' 所以函数无法被导入到全局环境之中
             ' 在这里imports关键词操作则是使用全局环境
@@ -103,14 +102,27 @@ Namespace Development.Hybrids
                 env.FindSymbol("!script").SetValue(New vbObject(script), env)
             End If
 
-            program = Program.CreateProgram(Rscript, R.debug, [error]:=[error])
+            Dim parsed = ParseScript(scriptfile, env)
+
+            If parsed Like GetType(Message) Then
+                Return parsed.TryCast(Of Message)
+            Else
+                Return parsed.TryCast(Of Program).Execute(env)
+            End If
+        End Function
+
+        Public Overrides Function ParseScript(scriptfile As String, env As Environment) As [Variant](Of Message, Program)
+            Dim Rscript As Rscript = Rscript.FromFile(scriptfile)
+            Dim R As RInterpreter = env.globalEnvironment.Rscript
+            Dim error$ = Nothing
+            Dim program As Program = Program.CreateProgram(Rscript, R.debug, [error]:=[error])
 
             If program Is Nothing Then
                 ' there are syntax error in the external script
                 ' for current imports action
                 Return Internal.debug.stop([error].Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB), env)
             Else
-                Return program.Execute(env)
+                Return program
             End If
         End Function
     End Class
