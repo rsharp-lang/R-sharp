@@ -33,6 +33,13 @@ Namespace Development.Hybrids
             Return loader.LoadScript(scriptfile, env)
         End Function
 
+        Public Function ParseScript(scriptfile As String, env As Environment) As Object
+            Dim key As String = scriptfile.ExtensionSuffix.ToLower
+            Dim loader As ScriptLoader = engine(key)
+
+            Return loader.ParseScript(scriptfile, env)
+        End Function
+
         ''' <summary>
         ''' 
         ''' </summary>

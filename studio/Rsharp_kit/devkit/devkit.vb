@@ -120,25 +120,20 @@ Module devkit
     <ExportAPI("inspect")>
     Public Function inspect(script As String, Optional env As Environment = Nothing) As Object
         Dim globalEnv As GlobalEnvironment = env.globalEnvironment
-        Dim program As Program
-        Dim [error] As String = Nothing
 
-        If Not script.ExtensionSuffix("R") Then
-            If globalEnv.hybridsEngine.CanHandle(script) Then
-                globalEnv _
-                    .hybridsEngine _
-                    .LoadScript(filepath, R.globalEnvir)
+        If globalEnv.hybridsEngine.CanHandle(script) Then
+            Dim parsed = globalEnv _
+                .hybridsEngine _
+                .ParseScript(script, globalEnv)
+
+            If parsed Like GetType(Message) Then
+                Return parsed
             Else
-                Return Internal.debug.stop({$"unsupported script file type(*.{script.ExtensionSuffix})!"}, globalEnv)
+                Call Console.WriteLine(parsed.ToString)
+                Return Nothing
             End If
         Else
-            program = Program.CreateProgram(
-                Rscript:=Rscript.AutoHandleScript(script),
-                debug:=globalEnv.debugMode,
-                [error]:=[error]
-            )
+            Return Internal.debug.stop({$"unsupported script file type(*.{script.ExtensionSuffix})!"}, globalEnv)
         End If
-
-        Return [error]
     End Function
 End Module
