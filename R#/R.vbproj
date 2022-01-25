@@ -725,8 +725,10 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\Profiler.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\JSONLiteral.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxError.vb" />
+    <Compile Include="Language\TokenLine.vb" />
     <Compile Include="Runtime\graphicsPipeline.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\dev\devtools.vb" />
     <Compile Include="Runtime\Internal\objects\Linq\DataframeGroup.vb" />
@@ -933,6 +935,7 @@
     <Compile Include="Runtime\System\TryError.vb" />
     <Compile Include="Runtime\System\GetVectorElement.vb" />
     <Compile Include="Runtime\Internal\objects\base\dataframeBase.vb" />
+    <Compile Include="System\Components\ProfileRecord.vb" />
     <Compile Include="System\Document\CodeAnalysis\SymbolAnalysis.vb" />
     <Compile Include="System\Document\Printer\ScriptFormatterPrinter.vb" />
     <Compile Include="System\HybridsEngine.vb" />
