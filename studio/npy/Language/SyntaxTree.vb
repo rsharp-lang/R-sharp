@@ -86,16 +86,19 @@ Public Class SyntaxTree
 
     Private Sub startFunctionDefine(line As PythonLine)
         Dim args As New List(Of DeclareNewSymbol)
-        Dim tokens As Token() = line.tokens.Skip(3).Take(line.tokens.Length - 5).ToArray
+        Dim tokens As Token() = line.tokens _
+            .Skip(3) _
+            .Take(line.tokens.Length - 5) _
+            .ToArray
         Dim result = DeclareNewFunctionSyntax.getParameters(tokens, args, opts)
 
         Call pushBlock(line, [next]:=New FunctionTag With {
-           .keyword = line(Scan0).text,
-           .level = line.levels,
-           .script = New List(Of Expression),
-           .funcName = line(1).text,
-           .arguments = args,
-           .stackframe = opts.GetStackTrace(line(1))
+            .keyword = line(Scan0).text,
+            .level = line.levels,
+            .script = New List(Of Expression),
+            .funcName = line(1).text,
+            .arguments = args,
+            .stackframe = opts.GetStackTrace(line(1))
         })
     End Sub
 
