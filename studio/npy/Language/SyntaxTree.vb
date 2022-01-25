@@ -69,6 +69,10 @@ Public Class SyntaxTree
         If line.levels > current.level Then
             Call stack.Push(current)
         ElseIf line.levels = current.level Then
+            If stack.Peek Is current Then
+                stack.Pop()
+            End If
+
             ' 结束了上一个block
             Call stack.Peek.Add(current.ToExpression())
         Else
