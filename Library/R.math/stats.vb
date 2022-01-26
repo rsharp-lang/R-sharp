@@ -66,6 +66,7 @@ Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.FishersExact
+Imports Microsoft.VisualBasic.Math.Statistics.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -477,6 +478,11 @@ Module stats
 
             Return New list With {.slots = list}
         End If
+    End Function
+
+    <ExportAPI("median")>
+    Public Function median(x As Double()) As Double
+        Return x.Median
     End Function
 
     ''' <summary>

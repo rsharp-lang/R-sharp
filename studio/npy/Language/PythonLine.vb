@@ -1,4 +1,7 @@
-﻿Imports System.Data
+﻿#If netcore5 = 1 Then
+Imports System.Data
+#End If
+
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer

@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{459B837F-AFAC-4F24-8C74-9786E449D41D}</ProjectGuid>
+    <ProjectGuid>{2B482D9B-31B9-4185-A73E-6B0E8534808C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <StartupObject>
     </StartupObject>
-    <RootNamespace>SMRUCC.Python</RootNamespace>
-    <AssemblyName>npy</AssemblyName>
+    <RootNamespace>SMRUCC.Language.CodeDom</RootNamespace>
+    <AssemblyName>SMRUCC.Language.CodeDom</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -844,13 +844,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Language\InternalParser.vb" />
-    <Compile Include="Language\PyScanner.vb" />
-    <Compile Include="Language\PythonLine.vb" />
-    <Compile Include="Language\SyntaxTree.vb" />
-    <Compile Include="PythonScriptLoader.vb" />
-    <Compile Include="Language\Implements\ValueAssignSyntax.vb" />
-    <Compile Include="Language\Implements\FunctionInvokeSyntax.vb" />
+    <Folder Include="My Project\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\47-dotnet_Microsoft.VisualBasic.vbproj">
@@ -861,13 +855,15 @@
       <Project>{0c2eb77c-39f2-460d-a3f8-ce905f867637}</Project>
       <Name>R</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IronCodeDom\IronCodeDom_net48.vbproj">
-      <Project>{2b482d9b-31b9-4185-a73e-6b0e8534808c}</Project>
-      <Name>IronCodeDom_net48</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="My Project\" />
+    <Compile Include="PythonCodeDOM.vb" />
+    <Compile Include="BlockTags\ClosureTag.vb" />
+    <Compile Include="BlockTags\ForTag.vb" />
+    <Compile Include="BlockTags\FunctionTag.vb" />
+    <Compile Include="BlockTags\IfTag.vb" />
+    <Compile Include="BlockTags\UsingTag.vb" />
+    <Compile Include="BlockTags\AcceptorTag.vb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

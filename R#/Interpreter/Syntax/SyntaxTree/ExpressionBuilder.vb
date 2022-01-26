@@ -317,7 +317,21 @@ Namespace Interpreter.SyntaxParser
                         Return right
                     End If
 
-                    Dim bin As New BinaryExpression(left.expression, right.expression, op)
+                    Dim bin As Expression
+
+                    If op = "$" Then
+                        Dim refName As Expression
+
+                        If TypeOf right.expression Is SymbolReference Then
+                            refName = New Literal(DirectCast(right.expression, SymbolReference).symbol)
+                        Else
+                            refName = right.expression
+                        End If
+
+                        bin = New SymbolIndexer(left.expression, byName:=refName)
+                    Else
+                        bin = BinaryExpressionTree.CreateBinary(left.expression, right.expression, op, opts)
+                    End If
 
                     Return New SyntaxResult(bin)
                 End If

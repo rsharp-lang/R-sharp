@@ -107,7 +107,7 @@ Namespace Interpreter.SyntaxParser
             Return True
         End Function
 
-        Private Function buildPipeline(a As Expression, b As Expression, opts As SyntaxBuilderOptions) As Expression
+        Public Shared Function buildPipeline(a As Expression, b As Expression, opts As SyntaxBuilderOptions) As Expression
             Dim pip As FunctionInvoke
 
             If TypeOf a Is VectorLiteral Then

@@ -42,6 +42,7 @@
 
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -76,7 +77,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             If valueExpr.isException Then
                 Return valueExpr
             Else
-                Dim expr As New BinaryExpression(New SymbolReference(targetSymbols(Scan0).ValueStr), valueExpr.expression, op)
+                Dim expr As Expression = BinaryExpressionTree.CreateBinary(
+                    a:=New SymbolReference(targetSymbols(Scan0).ValueStr),
+                    b:=valueExpr.expression,
+                    opToken:=op,
+                    opts:=opts
+                )
                 Dim assign As New ValueAssignExpression(targetSymbols, expr) With {
                     .isByRef = True
                 }

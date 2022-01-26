@@ -279,6 +279,9 @@ Namespace Development.CommandLine
                 Case GetType(ByRefFunctionCall) : Call analysisTree(DirectCast(expr, ByRefFunctionCall), attrs)
                 Case GetType(UnaryNumeric) : Call AnalysisTree(DirectCast(expr, UnaryNumeric).numeric, attrs)
 
+                Case GetType(ArgumentValue)
+                    ' do nothing 
+
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)
             End Select

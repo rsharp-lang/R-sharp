@@ -69,8 +69,20 @@ Public Class SyntaxTree
         If line.levels > current.level Then
             Call stack.Push(current)
         ElseIf line.levels = current.level Then
+            If stack.Peek Is current Then
+                stack.Pop()
+            End If
+
             ' 结束了上一个block
             Call stack.Peek.Add(current.ToExpression())
+        Else
+            stack.Peek.Add(current.ToExpression)
+
+            ' line.levels < current.level
+            Do While stack.Peek.level >= [next].level
+                current = stack.Pop
+                stack.Peek.Add(current.ToExpression)
+            Loop
         End If
 
         current = [next]
@@ -78,21 +90,27 @@ Public Class SyntaxTree
 
     Private Sub startFunctionDefine(line As PythonLine)
         Dim args As New List(Of DeclareNewSymbol)
-        Dim tokens As Token() = line.tokens.Skip(3).Take(line.tokens.Length - 5).ToArray
+        Dim tokens As Token() = line.tokens _
+            .Skip(3) _
+            .Take(line.tokens.Length - 5) _
+            .ToArray
         Dim result = DeclareNewFunctionSyntax.getParameters(tokens, args, opts)
 
         Call pushBlock(line, [next]:=New FunctionTag With {
-           .keyword = line(Scan0).text,
-           .level = line.levels,
-           .script = New List(Of Expression),
-           .funcName = line(1).text,
-           .arguments = args,
-           .stackframe = opts.GetStackTrace(line(1))
+            .keyword = line(Scan0).text,
+            .level = line.levels,
+            .script = New List(Of Expression),
+            .funcName = line(1).text,
+            .arguments = args,
+            .stackframe = opts.GetStackTrace(line(1))
         })
     End Sub
 
     Private Sub startForLoopDefine(line As PythonLine)
-        Dim tokens As Token() = line.tokens.Skip(1).Take(line.tokens.Length - 2).ToArray
+        Dim tokens As Token() = line.tokens _
+            .Skip(1) _
+            .Take(line.tokens.Length - 2) _
+            .ToArray
 
         If tokens(Scan0) = (TokenType.open, "(") AndAlso tokens.Last = (TokenType.close, ")") Then
             tokens = tokens _

@@ -1,5 +1,6 @@
 ﻿Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development.Hybrids
 Imports SMRUCC.Rsharp.Interpreter
@@ -17,9 +18,6 @@ Public Class PythonScriptLoader : Inherits ScriptLoader
 
     Public Overrides Function LoadScript(scriptfile As String, env As Environment) As Object
         Dim R As RInterpreter = env.globalEnvironment.Rscript
-        Dim program As Program
-        Dim error$ = Nothing
-
         ' 20200213 因为source函数是创建了一个新的环境容器
         ' 所以函数无法被导入到全局环境之中
         ' 在这里imports关键词操作则是使用全局环境
@@ -43,14 +41,21 @@ Public Class PythonScriptLoader : Inherits ScriptLoader
             env.FindSymbol("!script").SetValue(New vbObject(script), env)
         End If
 
-        program = Rscript.ParsePyScript(R.debug)
+        Dim program As Program = ParseScript(scriptfile, env)
 
         If program Is Nothing Then
             ' there are syntax error in the external script
             ' for current imports action
-            Return Internal.debug.stop([error].Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB), env)
+            Return Internal.debug.stop("".Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB), env)
         Else
             Return program.Execute(env)
         End If
+    End Function
+
+    Public Overrides Function ParseScript(scriptfile As String, env As Environment) As [Variant](Of Message, Program)
+        Dim Rscript As Rscript = Rscript.FromFile(scriptfile)
+        Dim program As Program = Rscript.ParsePyScript(debug:=env.globalEnvironment.debugMode)
+
+        Return program
     End Function
 End Class

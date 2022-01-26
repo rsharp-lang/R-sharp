@@ -114,6 +114,7 @@ Namespace Interpreter.SyntaxParser
                         If syntaxResult.isException Then
                             Return syntaxResult
                         Else
+                            ' +/-
                             syntaxResult = New BinaryExpression(
                                 left:=New Literal(0),
                                 right:=syntaxResult.expression,
@@ -331,7 +332,7 @@ Namespace Interpreter.SyntaxParser
                 Dim value As Expression = tokens(2)
 
                 If tokens(1).TryCast(Of String) Like iterateAssign Then
-                    value = New BinaryExpression(target, value, tokens(1).TryCast(Of String).First)
+                    value = BinaryExpressionTree.CreateBinary(target, value, tokens(1).TryCast(Of String).First, opts)
                 End If
 
                 ' set value by name
@@ -381,18 +382,8 @@ Namespace Interpreter.SyntaxParser
                                 Return b
                             End If
 
-                            Dim be As Expression
                             Dim opToken As String = buf(j).VB
-
-                            If opToken = "in" Then
-                                be = New BinaryInExpression(a.expression, b.expression)
-                            ElseIf opToken = "between" Then
-                                be = New BinaryBetweenExpression(a.expression, b.expression)
-                            ElseIf opToken = "||" Then
-                                be = New BinaryOrExpression(a.expression, b.expression)
-                            Else
-                                be = New BinaryExpression(a.expression, b.expression, buf(j).VB)
-                            End If
+                            Dim be As Expression = CreateBinary(a.expression, b.expression, opToken, opts)
 
                             Call buf.RemoveRange(j - 1, 3)
                             Call buf.Insert(j - 1, New SyntaxResult(be))
@@ -404,6 +395,20 @@ Namespace Interpreter.SyntaxParser
             Next
 
             Return Nothing
+        End Function
+
+        Friend Function CreateBinary(a As Expression, b As Expression, opToken As String, opts As SyntaxBuilderOptions) As Expression
+            If opToken = "in" Then
+                Return New BinaryInExpression(a, b)
+            ElseIf opToken = "between" Then
+                Return New BinaryBetweenExpression(a, b)
+            ElseIf opToken = "||" Then
+                Return New BinaryOrExpression(a, b)
+            ElseIf opToken = "|>" OrElse opToken = ":>" Then
+                Return PipelineProcessor.buildPipeline(a, b, opts)
+            Else
+                Return New BinaryExpression(a, b, opToken)
+            End If
         End Function
     End Module
 End Namespace
