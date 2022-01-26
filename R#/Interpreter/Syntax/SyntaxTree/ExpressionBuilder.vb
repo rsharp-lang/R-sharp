@@ -330,7 +330,7 @@ Namespace Interpreter.SyntaxParser
 
                         bin = New SymbolIndexer(left.expression, byName:=refName)
                     Else
-                        bin = New BinaryExpression(left.expression, right.expression, op)
+                        bin = BinaryExpressionTree.CreateBinary(left.expression, right.expression, op)
                     End If
 
                     Return New SyntaxResult(bin)
