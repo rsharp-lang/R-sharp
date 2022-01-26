@@ -44,14 +44,14 @@ Public Class PipelineFunction : Inherits Expression
         If TypeOf callFunc Is Message Then
             ' method not found?
             If pipeNextInvoke Then
-                Dim nameStr As String = DirectCast(Me.callFunc.funcName, Literal).ValueStr
-                Dim objMethod = nameStr.GetTagValue(".")
-                Dim obj As String = objMethod.Name
-                Dim method As String = objMethod.Value
-
+                result = doPipNextInvoke(DirectCast(Me.callFunc.funcName, Literal).ValueStr, envir)
+                Return FunctionInvoke.HandleResult(result, envir)
             Else
                 Return callFunc
             End If
+        ElseIf TypeOf callFunc Is String AndAlso Not Internal.invoke.isRInternal(callFunc) Then
+            result = doPipNextInvoke(callFunc, envir)
+            Return FunctionInvoke.HandleResult(result, envir)
         Else
             target = callFunc
         End If
@@ -70,6 +70,12 @@ Public Class PipelineFunction : Inherits Expression
 
             Return FunctionInvoke.HandleResult(result, envir)
         End Using
+    End Function
+
+    Private Function doPipNextInvoke(nameStr As String, env As Environment) As Object
+        Dim objMethod = nameStr.GetTagValue(".")
+        Dim obj As String = objMethod.Name
+        Dim method As String = objMethod.Value
     End Function
 
     Public Overrides Function ToString() As String
