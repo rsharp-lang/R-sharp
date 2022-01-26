@@ -858,15 +858,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PythonCodeDOM.vb" />
-	
-	  <Compile Include="BlockTags\ClosureTag.vb"/>
-  <Compile Include="BlockTags\ForTag.vb"/>
-  <Compile Include="BlockTags\FunctionTag.vb"/>
-  <Compile Include="BlockTags\IfTag.vb"/>
-  <Compile Include="BlockTags\UsingTag.vb"/>
-  <Compile Include="BlockTags\AcceptorTag.vb"/>
-	
-	
+    <Compile Include="BlockTags\ClosureTag.vb" />
+    <Compile Include="BlockTags\ForTag.vb" />
+    <Compile Include="BlockTags\FunctionTag.vb" />
+    <Compile Include="BlockTags\IfTag.vb" />
+    <Compile Include="BlockTags\UsingTag.vb" />
+    <Compile Include="BlockTags\AcceptorTag.vb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
