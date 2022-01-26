@@ -11,6 +11,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
+Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports Rscript = SMRUCC.Rsharp.Runtime.Components.Rscript
@@ -69,6 +70,15 @@ Public Module InternalParser
                     Next
 
                     Return chain
+                ElseIf blocks = 2 Then
+                    ' identifier(xxx)
+                    Dim func = FunctionInvokeSyntax.FunctionInvoke(blocks.IteratesALL.ToArray, opts)
+
+                    If func.isException Then
+                        Return func
+                    Else
+                        Return New PipelineFunction(func.expression)
+                    End If
                 Else
                     blocks = New List(Of Token()) From {blocks.IteratesALL.ToArray}
                 End If
