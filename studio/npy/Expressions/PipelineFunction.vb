@@ -1,4 +1,5 @@
 ﻿Imports System.Text.RegularExpressions
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -76,6 +77,10 @@ Public Class PipelineFunction : Inherits Expression
         Dim objMethod = nameStr.GetTagValue(".")
         Dim obj As String = objMethod.Name
         Dim method As String = objMethod.Value
+        Dim params = New Expression() {New SymbolReference(obj)}.JoinIterates(callFunc.parameters).ToArray
+        Dim newInvoke As New FunctionInvoke(method, callFunc.stackFrame, params)
+
+        Return newInvoke.Evaluate(env)
     End Function
 
     Public Overrides Function ToString() As String
