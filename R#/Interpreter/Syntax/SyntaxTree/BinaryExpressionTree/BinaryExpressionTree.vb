@@ -332,7 +332,7 @@ Namespace Interpreter.SyntaxParser
                 Dim value As Expression = tokens(2)
 
                 If tokens(1).TryCast(Of String) Like iterateAssign Then
-                    value = BinaryExpressionTree.CreateBinary(target, value, tokens(1).TryCast(Of String).First)
+                    value = BinaryExpressionTree.CreateBinary(target, value, tokens(1).TryCast(Of String).First, opts)
                 End If
 
                 ' set value by name
@@ -383,7 +383,7 @@ Namespace Interpreter.SyntaxParser
                             End If
 
                             Dim opToken As String = buf(j).VB
-                            Dim be As Expression = CreateBinary(a.expression, b.expression, opToken)
+                            Dim be As Expression = CreateBinary(a.expression, b.expression, opToken, opts)
 
                             Call buf.RemoveRange(j - 1, 3)
                             Call buf.Insert(j - 1, New SyntaxResult(be))
@@ -397,13 +397,15 @@ Namespace Interpreter.SyntaxParser
             Return Nothing
         End Function
 
-        Public Function CreateBinary(a As Expression, b As Expression, opToken As String) As Expression
+        Friend Function CreateBinary(a As Expression, b As Expression, opToken As String, opts As SyntaxBuilderOptions) As Expression
             If opToken = "in" Then
                 Return New BinaryInExpression(a, b)
             ElseIf opToken = "between" Then
                 Return New BinaryBetweenExpression(a, b)
             ElseIf opToken = "||" Then
                 Return New BinaryOrExpression(a, b)
+            ElseIf opToken = "|>" OrElse opToken = ":>" Then
+                Return PipelineProcessor.buildPipeline(a, b, opts)
             Else
                 Return New BinaryExpression(a, b, opToken)
             End If

@@ -77,7 +77,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             If valueExpr.isException Then
                 Return valueExpr
             Else
-                Dim expr As Expression = BinaryExpressionTree.CreateBinary(New SymbolReference(targetSymbols(Scan0).ValueStr), valueExpr.expression, op)
+                Dim expr As Expression = BinaryExpressionTree.CreateBinary(
+                    a:=New SymbolReference(targetSymbols(Scan0).ValueStr),
+                    b:=valueExpr.expression,
+                    opToken:=op,
+                    opts:=opts
+                )
                 Dim assign As New ValueAssignExpression(targetSymbols, expr) With {
                     .isByRef = True
                 }

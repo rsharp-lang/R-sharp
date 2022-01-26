@@ -116,7 +116,7 @@ Namespace Interpreter.SyntaxParser
                 Else
                     ' 20201216
                     ' replace left value
-                    bin = BinaryExpressionTree.CreateBinary(left.expression, bin.right, bin.operator)
+                    bin = BinaryExpressionTree.CreateBinary(left.expression, bin.right, bin.operator, opts)
                 End If
 
                 Return New SyntaxResult(bin)
