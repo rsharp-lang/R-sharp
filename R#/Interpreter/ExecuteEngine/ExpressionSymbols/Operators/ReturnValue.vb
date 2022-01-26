@@ -78,6 +78,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Property
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Sub New(value As Expression)
             Me.value = value
         End Sub
