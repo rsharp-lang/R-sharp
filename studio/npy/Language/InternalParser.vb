@@ -77,7 +77,13 @@ Public Module InternalParser
                     If func.isException Then
                         Return func
                     Else
-                        Return New PipelineFunction(func.expression)
+                        Dim callFunc As FunctionInvoke = DirectCast(func.expression, FunctionInvoke)
+
+                        If TypeOf callFunc.funcName Is Literal AndAlso DirectCast(callFunc.funcName, Literal).ValueStr.IndexOf("."c) > 0 Then
+                            Return New SyntaxResult(New PipelineFunction(func.expression))
+                        Else
+                            Return func
+                        End If
                     End If
                 Else
                     blocks = New List(Of Token()) From {blocks.IteratesALL.ToArray}
