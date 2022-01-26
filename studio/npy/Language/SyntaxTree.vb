@@ -67,7 +67,11 @@ Public Class SyntaxTree
     ''' <param name="line"></param>
     Private Sub pushBlock(line As PythonLine, [next] As PythonCodeDOM)
         If line.levels > current.level Then
-            Call stack.Push(current)
+            If current Is python OrElse current Is stack.Peek Then
+                ' do nothing
+            Else
+                Call stack.Push(current)
+            End If
         ElseIf line.levels = current.level Then
             If stack.Peek Is current Then
                 stack.Pop()
@@ -283,6 +287,10 @@ Public Class SyntaxTree
                 Call current.Add(expr)
             End If
         ElseIf lineLevels <= current.level Then
+            If stack.Count = 0 Then
+                stack.Push(python)
+            End If
+
             If stack.Count = 1 Then
                 ' 结束当前的对象
                 Call stack.Peek.Add(current.ToExpression())
