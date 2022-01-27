@@ -75,6 +75,10 @@ Call R.Add("echo",
 Call R.Invoke("echo", R!word)
 ```
 
+## Graphics Library
+
+
+
 ## Language Hybrids Programming Feature
 
 The ``R#`` system is not only supports of the R liked language, it also includes a python language scripting and Julia language scripting engine which is running upon the ``R#`` runtime.
