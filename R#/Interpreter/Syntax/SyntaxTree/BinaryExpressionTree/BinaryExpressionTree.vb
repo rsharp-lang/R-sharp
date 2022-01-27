@@ -126,17 +126,31 @@ Namespace Interpreter.SyntaxParser
                         End If
                     ElseIf tokenBlocks(i).isOperator("!") Then
                         ' not ...
-                        syntaxResult = opts.ParseExpression(tokenBlocks(i + 1), opts)
+                        Dim pull As New List(Of Token)
+                        Dim delta As Integer = 0
+
+                        For j As Integer = i + 1 To tokenBlocks.Count - 1
+                            If tokenBlocks(j).isOperator("$", "::") Then
+                                pull.AddRange(tokenBlocks(j))
+                            ElseIf Not tokenBlocks(j).isOperator Then
+                                pull.AddRange(tokenBlocks(j))
+                            Else
+                                Exit For
+                            End If
+
+                            delta += 1
+                        Next
+
+                        syntaxResult = opts.ParseExpression(pull, opts)
 
                         If syntaxResult.isException Then
                             Return syntaxResult
                         Else
                             syntaxResult = New UnaryNot(syntaxResult.expression)
-                            i += 1
+                            i += delta
 
                             Call buf.Add(syntaxResult)
                         End If
-
                     Else
                         syntaxResult = opts.ParseExpression(tokenBlocks(i), opts)
 
