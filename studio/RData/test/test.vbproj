@@ -136,6 +136,10 @@
       <Project>{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}</Project>
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\R#\R.vbproj">
+      <Project>{0c2eb77c-39f2-460d-a3f8-ce905f867637}</Project>
+      <Name>R</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RData.vbproj">
       <Project>{0eb2f8d7-c1cc-4d43-819f-c1f533ac45a4}</Project>
       <Name>RData</Name>

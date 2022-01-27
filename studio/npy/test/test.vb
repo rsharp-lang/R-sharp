@@ -9,6 +9,7 @@ Imports Rscript = SMRUCC.Rsharp.Runtime.Components.Rscript
 Module test
 
     Sub Main()
+        Call objectFunc()
         Call extensionTest()
         ' Call indentTest()
         Call testFunc()
@@ -39,6 +40,11 @@ Module test
         Call Console.WriteLine()
 
         Pause()
+    End Sub
+
+    Sub objectFunc()
+        ' Call inspectSyntax("2+x(5)")
+        Call inspectSyntax("obj.run()")
     End Sub
 
     Sub extensionTest()

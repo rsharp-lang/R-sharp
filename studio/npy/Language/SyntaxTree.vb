@@ -66,8 +66,16 @@ Public Class SyntaxTree
     ''' </summary>
     ''' <param name="line"></param>
     Private Sub pushBlock(line As PythonLine, [next] As PythonCodeDOM)
+        If stack.Count = 0 Then
+            stack.Push(python)
+        End If
+
         If line.levels > current.level Then
-            Call stack.Push(current)
+            If current Is python OrElse current Is stack.Peek Then
+                ' do nothing
+            Else
+                Call stack.Push(current)
+            End If
         ElseIf line.levels = current.level Then
             If stack.Peek Is current Then
                 stack.Pop()
@@ -276,6 +284,15 @@ Public Class SyntaxTree
     End Sub
 
     Private Sub addLine(lineLevels As Integer, expr As Expression)
+        If current.script > 0 AndAlso TypeOf expr Is FunctionInvoke AndAlso DirectCast(DirectCast(expr, FunctionInvoke).funcName, Literal).ValueStr.StartsWith(".") Then
+            Dim invoke As FunctionInvoke = DirectCast(expr, FunctionInvoke)
+            invoke.parameters = {current.script.Last}.JoinIterates(invoke.parameters).ToArray
+            DirectCast(invoke.funcName, Literal).value = DirectCast(invoke.funcName, Literal).ValueStr.TrimStart("."c)
+            current.script.RemoveLast
+            current.script.Add(invoke)
+            Return
+        End If
+
         If lineLevels > current.level Then
             If current.keyword.StringEmpty Then
                 Throw New SyntaxErrorException
@@ -283,6 +300,10 @@ Public Class SyntaxTree
                 Call current.Add(expr)
             End If
         ElseIf lineLevels <= current.level Then
+            If stack.Count = 0 Then
+                stack.Push(python)
+            End If
+
             If stack.Count = 1 Then
                 ' 结束当前的对象
                 Call stack.Peek.Add(current.ToExpression())
