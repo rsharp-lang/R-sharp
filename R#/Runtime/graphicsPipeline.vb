@@ -82,7 +82,9 @@ Namespace Runtime
         End Function
 
         Private Function eval(x As Object, env As Environment) As Object
-            x = DirectCast(x, InvokeParameter).value
+            If TypeOf x Is InvokeParameter Then
+                x = DirectCast(x, InvokeParameter).value
+            End If
 
             If TypeOf x Is ValueAssignExpression Then
                 x = DirectCast(x, ValueAssignExpression).value
@@ -96,7 +98,7 @@ Namespace Runtime
                 Return [default]
             ElseIf TypeOf size Is vector Then
                 size = DirectCast(size, vector).data
-            ElseIf TypeOf size Is InvokeParameter Then
+            ElseIf TypeOf size Is InvokeParameter OrElse TypeOf size Is Expression Then
                 Return getSize(eval(size, env), env, [default])
             End If
 
