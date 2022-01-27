@@ -9,7 +9,7 @@ bitmap(file = "./scatter.png") {
 	plot(x, y,
 		 padding      = "padding:200px 400px 200px 250px;",
 		 class        = cluster,
-		 title        = "UMAP 2D",
+		 title        = "UMAP 2D Scatter",
 		 x.lab        = "dimension 1",
 		 y.lab        = "dimension 2",
 		 legend.block = 13,
