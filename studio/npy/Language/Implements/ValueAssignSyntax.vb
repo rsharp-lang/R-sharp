@@ -22,13 +22,23 @@ Namespace Language.Implementation
             If symbolNames Like GetType(SyntaxErrorException) Then
                 Dim targetExpr = opts.ParseExpression(target, opts)
 
-                If Not targetExpr.isException AndAlso TypeOf targetExpr.expression Is SymbolIndexer Then
+                If Not targetExpr.isException Then
                     Dim valueData = opts.ParseExpression(value, opts)
 
                     If valueData.isException Then
                         Return valueData
-                    Else
+                    End If
+
+                    If TypeOf targetExpr.expression Is SymbolIndexer Then
                         Return New ValueAssignExpression({targetExpr.expression}, valueData.expression)
+                    ElseIf TypeOf targetExpr.expression Is FunctionInvoke Then
+                        Return New ByRefFunctionCall(
+                            invoke:=targetExpr.expression,
+                            value:=valueData.expression,
+                            stackFrame:=DirectCast(targetExpr.expression, FunctionInvoke).stackFrame
+                        )
+                    Else
+
                     End If
                 End If
 

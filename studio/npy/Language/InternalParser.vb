@@ -29,6 +29,9 @@ Public Module InternalParser
         Dim expr As SyntaxResult
 
         If blocks >= 3 AndAlso blocks(1).isOperator("=") Then
+            ' 0 1 2
+            ' a = b
+
             ' python tuple syntax is not support in 
             ' Rscript, translate tuple syntax from
             ' python script as list syntax into rscript
