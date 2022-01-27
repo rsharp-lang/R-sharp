@@ -134,6 +134,11 @@ Namespace Runtime.Internal
             End Try
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function isRInternal(name As String) As Boolean
+            Return name = "options" OrElse index.ContainsKey(name)
+        End Function
+
         Friend Shared Function getFunction(name As String) As RMethodInfo
             If index.ContainsKey(name) Then
                 Return index(name)

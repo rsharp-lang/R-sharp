@@ -152,34 +152,75 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             GetType(DeclareLambdaFunction)
         }
 
+        ''' <summary>
+        ''' call R#/python/julia function
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim target As Object = getFuncVar(funcName, [namespace], envir)
             Dim result As Object
+            Dim checked As Boolean = False
+            Dim callFunc As Object = CheckInvoke(envir, checked)
+            Dim target As Object
 
-            If target Is Nothing Then
-                ' is system internal callable method
-            ElseIf target.GetType Is GetType(Message) Then
-                Return target
-            ElseIf Not target.GetType.ImplementInterface(Of RFunction) Then
-                If Not TypeOf target Is Regex Then
-                    Return Internal.debug.stop({
-                        $"the given symbol is not callable!",
-                        $"target: {funcName.ToString}",
-                        $"schema: {target.GetType.FullName}"
-                    }, envir)
-                End If
+            If TypeOf callFunc Is Message Then
+                Return callFunc
+            ElseIf TypeOf callFunc Is String Then
+                target = Nothing
+            Else
+                target = callFunc
             End If
 
             Using env As New Environment(envir, stackFrame, isInherits:=True)
                 If TypeOf target Is Regex Then
                     ' regexp match
                     result = Regexp.Matches(target, parameters(Scan0), env)
+                ElseIf target Is Nothing AndAlso TypeOf funcName Is Literal Then
+                    ' 可能是一个系统的内置函数
+                    result = invokeRInternal(DirectCast(funcName, Literal).ValueStr, envir)
                 Else
                     result = doInvokeFuncVar(target, env)
                 End If
 
                 Return HandleResult(result, envir)
             End Using
+        End Function
+
+        Public Function CheckInvoke(envir As Environment, ByRef passed As Boolean) As Object
+            Dim target As Object = getFuncVar(funcName, [namespace], envir)
+
+            passed = False
+
+            If target Is Nothing Then
+                ' is system internal callable method
+                If TypeOf funcName Is Literal Then
+                    ' string/r internal function
+                    Return DirectCast(funcName, Literal).ValueStr
+                Else
+                    ' message
+                    Return Message.InCompatibleType(GetType(String), funcName.GetType, envir)
+                End If
+            ElseIf target.GetType Is GetType(Message) Then
+                ' message
+                Return target
+            ElseIf Not target.GetType.ImplementInterface(Of RFunction) Then
+                If Not TypeOf target Is Regex Then
+                    ' message
+                    Return Internal.debug.stop({
+                        $"the given symbol is not callable!",
+                        $"target: {funcName.ToString}",
+                        $"schema: {target.GetType.FullName}"
+                    }, envir)
+                Else
+                    passed = True
+                    ' regex
+                    Return target
+                End If
+            Else
+                passed = True
+                ' rfunction
+                Return target
+            End If
         End Function
 
         ''' <summary>
@@ -320,12 +361,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Return GetFunctionVar(funcName, env, [namespace])
         End Function
 
-        Private Function doInvokeFuncVar(funcVar As RFunction, envir As Environment) As Object
-            If funcVar Is Nothing AndAlso TypeOf funcName Is Literal Then
-                Dim funcStr = DirectCast(funcName, Literal).ValueStr
-                ' 可能是一个系统的内置函数
-                Return invokeRInternal(funcStr, envir)
-            ElseIf funcVar.GetType Like runtimeFuncs Then
+        ''' <summary>
+        ''' invoke runtime function or .NET methodinfo
+        ''' </summary>
+        ''' <param name="funcVar"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        Friend Function doInvokeFuncVar(funcVar As RFunction, envir As Environment) As Object
+            If funcVar.GetType Like runtimeFuncs Then
                 ' invoke method create from R# script
                 ' end of user function invoke
                 ' for break the internal function closure loop
@@ -354,7 +397,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End If
         End Function
 
-        Private Function invokeRInternal(funcName$, envir As Environment) As Object
+        Friend Function invokeRInternal(funcName$, envir As Environment) As Object
             If funcName = "options" AndAlso Not parameters.DoCall(AddressOf allIsValueAssign) Then
                 Return runOptions(envir)
             Else
