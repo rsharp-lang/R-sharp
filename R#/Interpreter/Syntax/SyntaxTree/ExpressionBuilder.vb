@@ -212,6 +212,8 @@ Namespace Interpreter.SyntaxParser
                         expr = New Profiler(expr.expression, opts.GetStackTrace(tag))
                         Return expr
                     End If
+                ElseIf item.Length = 1 AndAlso item(Scan0).name = TokenType.stringInterpolation Then
+                    Return SyntaxImplements.StringInterpolation(item(Scan0), opts)
                 Else
                     Dim ifelse = item.ifElseTriple
 
