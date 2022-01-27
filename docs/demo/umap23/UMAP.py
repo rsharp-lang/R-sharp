@@ -6,7 +6,7 @@ setwd(@dir)
 MNIST_LabelledVectorArray = "../../../Library/demo/machineLearning/umap/MNIST-LabelledVectorArray-60000x100.msgpack"
 MNIST_LabelledVectorArray = MNIST_LabelledVectorArray.read.mnist.labelledvector(takes = 10000)
 
-tags                                = rownames(MNIST_LabelledVectorArray)
+tags                                = `class_${rownames(MNIST_LabelledVectorArray)}`
 rownames(MNIST_LabelledVectorArray) = `X${1:nrow(MNIST_LabelledVectorArray)}`
 
 print("previews of the number tags:")
@@ -38,3 +38,4 @@ print(umap2, max.print = 6)
 
 # save data matrix
 write.csv(umap2, file = umap2_file)
+
