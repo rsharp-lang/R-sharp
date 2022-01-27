@@ -73,7 +73,14 @@ Public Module InternalParser
                     Next
 
                     Return chain
-                ElseIf blocks = 2 Then
+                ElseIf blocks = 2 AndAlso blocks(Scan0) _
+                    .TakeWhile(Function(t)
+                                   ' deal with the expression liked
+                                   ' 1:nrow(x)
+                                   Return t <> (TokenType.open, "(")
+                               End Function) _
+                    .Count = 1 Then
+
                     ' identifier(xxx)
                     Dim func = FunctionInvokeSyntax.FunctionInvoke(blocks.IteratesALL.ToArray, opts)
 
