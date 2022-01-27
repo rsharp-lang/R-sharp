@@ -22,6 +22,9 @@ manifold        = umap(MNIST_LabelledVectorArray, dimension = 3, debug = True)
 umap3           = as.data.frame(manifold$umap)
 rownames(umap3) = tags
 
+print("previews of the umap 3d data:")
+print(umap3, max.print = 6)
+
 # save data matrix
 write.csv(umap3, file = umap3_file)
 
@@ -29,6 +32,9 @@ write.csv(umap3, file = umap3_file)
 manifold        = umap(umap3, dimension = 2, debug = True)
 umap2           = as.data.frame(manifold$umap)
 rownames(umap2) = tags
+
+print("previews of the umap 2d data:")
+print(umap2, max.print = 6)
 
 # save data matrix
 write.csv(umap2, file = umap2_file)
