@@ -227,12 +227,11 @@ Namespace Runtime.Internal.Invokes
         ''' usable if nmax Is supplied.
         ''' </remarks>
         <ExportAPI("duplicated")>
-        Public Function duplicated(<RRawVectorArgument> x As Object) As Object
-            Dim vec As Object() = REnv.asVector(Of Object)(x)
+        Public Function duplicated(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
             Dim checked As New Index(Of Object)
             Dim flags As New List(Of Boolean)
 
-            For Each item As Object In vec
+            For Each item As Object In getObjectSet(x, env)
                 Call flags.Add(item Like checked)
 
                 If Not flags.Last Then
