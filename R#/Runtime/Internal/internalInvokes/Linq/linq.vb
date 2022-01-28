@@ -243,6 +243,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                 Optional getKey As RFunction = Nothing,
                                 Optional envir As Environment = Nothing) As Object
 
+            If TypeOf items Is String() Then
+                Return DirectCast(items, String()).Distinct.ToArray
+            End If
+
             If Not getKey Is Nothing Then
                 Return Rset.getObjectSet(items, envir) _
                    .GroupBy(Function(o)
