@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Html
 Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -74,6 +75,14 @@ Module graphics2D
     <ExportAPI("paddingString")>
     Public Function paddingString(<RRawVectorArgument> padding As Object, Optional env As Environment = Nothing) As String
         Return InteropArgumentHelper.getPadding(padding, "padding: 0px 0px 0px 0px;")
+    End Function
+
+    <ExportAPI("paddingVector")>
+    Public Function paddingVector(<RRawVectorArgument> margin As Object, Optional env As Environment = Nothing) As Double()
+        Dim padding As Padding = Padding.TryParse(InteropArgumentHelper.getPadding(margin, "padding: 0px 0px 0px 0px;"))
+        Dim v As Double() = New Double() {padding.Top, padding.Right, padding.Bottom, padding.Left}
+
+        Return v
     End Function
 
     <ExportAPI("legend")>
@@ -155,6 +164,14 @@ Module graphics2D
         Else
             Return New Point(x, y)
         End If
+    End Function
+
+    <ExportAPI("sizeVector")>
+    Public Function sizeVector(<RRawVectorArgument> size As Object, Optional env As Environment = Nothing) As Double()
+        Dim sizeVal = InteropArgumentHelper.getSize(size, env, [default]:="0,0")
+        Dim sz As Size = sizeVal.SizeParser
+
+        Return New Double() {sz.Width, sz.Height}
     End Function
 
     <ExportAPI("size")>
