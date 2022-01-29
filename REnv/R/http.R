@@ -9,7 +9,7 @@ imports ["Html", "http"] from "webKit";
 #' @details using of the http get function required of set options of
 #'     ``http.cache_dir`` at first!
 #'
-http_get = function(url, streamTo, interval = 3, filetype = "html") {
+const http_get = function(url, streamTo, interval = 3, filetype = "html") {
   const http.cache_dir as string = getOption("http.cache_dir") || stop("You should set of the 'http.cache_dir' option at first!");
   const http.debug as boolean = getOption("http.debug", default = FALSE);
 
@@ -52,7 +52,7 @@ http_get = function(url, streamTo, interval = 3, filetype = "html") {
 #' @details using of the http get function required of set options of
 #'     ``http.cache_dir`` at first!
 #'
-const getImage as function(url, interval = 3) {
+const getImage = function(url, interval = 3) {
   readImage(
     http_get(
       url = url,
@@ -76,7 +76,7 @@ const getImage as function(url, interval = 3) {
 #' @details using of the http get function required of set options of
 #'     ``http.cache_dir`` at first!
 #'
-getHtml = function(url, interval = 3) {
+const getHtml = function(url, interval = 3) {
   # finally read data from cache
   readText(http_get(
     url = url,
