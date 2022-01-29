@@ -2,6 +2,7 @@ imports "clustering" from "MLkit";
 
 require(graphics2D);
 
+options(strict = FALSE);
 setwd(@dir);
 
 multishapes = read.csv("./multishapes.csv");

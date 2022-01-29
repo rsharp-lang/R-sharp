@@ -579,7 +579,7 @@ Module clustering
                                 Return New DataSet With {
                                     .ID = $"[{p.X},{p.Y}]",
                                     .Properties = New Dictionary(Of String, Double) From {
-                                        {"x", p.X}, {"y", p.Y}
+                                        {"x", CDbl(p.X)}, {"y", CDbl(p.Y)}
                                     }
                                 }
                             End Function) _
@@ -592,7 +592,7 @@ Module clustering
                             Return New DataSet With {
                                 .ID = $"[{p.X},{p.Y}]",
                                 .Properties = New Dictionary(Of String, Double) From {
-                                    {"x", p.X}, {"y", p.Y}
+                                    {"x", CDbl(p.X)}, {"y", CDbl(p.Y)}
                                 }
                             }
                         End Function) _
@@ -618,21 +618,23 @@ Module clustering
 
                         Return Aggregate x As KdNodeHeapItem(Of DataSet)
                                In knn
+                               Order By x.distance
+                               Take 3
                                Let d = x.distance
                                Into Average(d)
                     End Function) _
             .ToArray
-        Dim meps As Double = averageDist.Median
+        Dim meps As Double = averageDist.Average
 
         Call println($"get average point distance from {sampleSize} sample data:")
         Call println(averageDist)
 
-        Call println("use median distance as eps threshold for dbscan:")
+        Call println("use mean distance as eps threshold for dbscan:")
         Call println(meps)
 
         Dim dbscan As dbscanResult = clustering.dbscan(
             data:=pixels,
-            eps:=meps / 2,
+            eps:=meps * 1.125,
             env:=env
         )
         Dim classinfo As Dictionary(Of String, String) = dbscan.cluster _
@@ -762,7 +764,10 @@ Module clustering
 
         Select Case method
             Case dbScanMethods.dist
-                x = x.Euclidean.PopulateRowObjects(Of DataSet).ToArray
+                x = x _
+                    .Euclidean _
+                    .PopulateRowObjects(Of DataSet) _
+                    .ToArray
                 dist = Function(a, b) a(b.ID)
             Case dbScanMethods.raw
                 Dim all As String() = x.PropertyNames
