@@ -69,6 +69,7 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Point2D = System.Drawing.Point
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
+Imports Microsoft.VisualBasic.Math.Statistics.Linq
 
 ''' <summary>
 ''' R# data clustering tools
@@ -608,8 +609,9 @@ Module clustering
                         Return Aggregate x In knn Let d = x.distance Into Average(d)
                     End Function) _
             .ToArray
+        Dim meps As Double = averageDist.Median
 
-        Dim dbscan As dbscanResult = clustering.dbscan(pixels, eps:=averageDist.Average * 1.25)
+        Dim dbscan As dbscanResult = clustering.dbscan(pixels, eps:=meps * 1.25)
 
         Return dbscan
     End Function
