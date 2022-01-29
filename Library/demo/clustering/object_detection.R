@@ -17,6 +17,7 @@ bitmap(file = "./object_detection.png") {
 	plot(multishapes[, "x"], multishapes[, "y"], 
 		class     = `object_${objects}`, 
 		grid.fill = "white",
-		padding = "padding: 125px 300px 200px 200px;"
+		padding   = "padding: 125px 300px 200px 200px;",
+		colorSet  = "paper"
 	);
 }
