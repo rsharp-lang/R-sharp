@@ -56,7 +56,6 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Parser
-Imports SMRUCC.Rsharp.Interpreter
 
 <Assembly: InternalsVisibleTo("npy")>
 
@@ -112,7 +111,7 @@ Namespace Language.TokenIcer
             End If
         End Sub
 
-        Public Iterator Function GetTokens() As IEnumerable(Of Token)
+        Public Overridable Iterator Function GetTokens() As IEnumerable(Of Token)
             Dim token As New Value(Of Token)
             Dim start As Integer = 0
 

@@ -45,6 +45,7 @@ Module test
     End Sub
 
     Sub namespaceFunc()
+        Call inspectSyntax("as.data.frame(list)")
         Call inspectSyntax("write.csv(x, file = './save.csv', row.names = True, file.name.2 = 'abc')")
         Call inspectSyntax("graphics2D::pointVector(x, y).dbscan_objects()")
     End Sub
