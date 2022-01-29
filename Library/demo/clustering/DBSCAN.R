@@ -3,12 +3,14 @@ imports "clustering" from "MLkit";
 require(charts);
 
 const filepath as string = ?"--data" || stop("a data table is required for run clustering!");
-let raw = read.csv(filepath, row.names = 1, check.names = FALSE)[, ["x","y"]];
+const eps as double = ?"--eps" || 0.3;
+
+let raw = read.csv(filepath, row.names = NULL, check.names = FALSE)[, ["x","y"]];
 
 print("previews of the raw input data:");
 print(head(raw));
 
-let result = as.object(dbscan(raw, 0.5))$cluster;
+let result = as.object(dbscan(raw, eps))$cluster;
 
 str(summary(result));
 
@@ -27,10 +29,15 @@ for(id in unique_clusters) {
 	let x = as.numeric(partition[, "x"]);
 	let y = as.numeric(partition[, "y"]);
 	
-	points = c(points, serial(x,y, name = id, color = colorSet(), ptSize = 30, alpha = 200));
+	points = c(points, serial(x,y, name = id, color = colorSet(), ptSize = 30, alpha = 230));
 }
 
 bitmap(file = `${dirname(filepath)}/${basename(filepath)}_dbscan.png`) {
-	plot(points, padding = "padding: 150px 100px 200px 200px;", grid.fill = "white");
+	plot(points, 
+		size = [1920,1440], 
+		padding = "padding: 125px 200px 200px 200px;", 
+		grid.fill = "white",
+		shape = "circle"
+	);
 }
 
