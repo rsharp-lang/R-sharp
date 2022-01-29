@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::11e3704dc9de7783278ccd4140100556, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module clustering
-    ' 
-    '     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
-    '               dbscan, densityA, ensureNotIsDistance, fuzzyCMeans, hclust
-    '               hleaf, hnode, Kmeans, showHclust, ToHClust
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module clustering
+' 
+'     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
+'               dbscan, densityA, ensureNotIsDistance, fuzzyCMeans, hclust
+'               hleaf, hnode, Kmeans, showHclust, ToHClust
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Drawing
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -66,6 +67,8 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Distance = Microsoft.VisualBasic.DataMining.HierarchicalClustering.Hierarchy.Distance
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports Point2D = System.Drawing.Point
+Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
 
 ''' <summary>
 ''' R# data clustering tools
@@ -544,6 +547,112 @@ Module clustering
     End Function
 
     ''' <summary>
+    ''' find objects from a given set of 2d points
+    ''' </summary>
+    ''' <param name="points"></param>
+    ''' <param name="sampleSize">
+    ''' sample size for auto check best distance 
+    ''' threshold value for the object detection.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("dbscan_objects")>
+    Public Function dbscan_objects(<RRawVectorArgument>
+                                   points As Object,
+                                   Optional sampleSize As Integer = 25,
+                                   Optional env As Environment = Nothing) As Object
+
+        Dim ptList As pipeline = pipeline.TryCreatePipeline(Of PointF)(points, env, suppress:=True)
+        Dim pixels As DataSet()
+
+        If ptList.isError Then
+            ptList = pipeline.TryCreatePipeline(Of Point2D)(points, env)
+
+            If ptList.isError Then
+                Return ptList.getError
+            Else
+                pixels = ptList _
+                    .populates(Of Point2D)(env) _
+                    .Select(Function(p)
+                                Return New DataSet With {
+                                    .ID = $"[{p.X},{p.Y}]",
+                                    .Properties = New Dictionary(Of String, Double) From {
+                                        {"x", p.X}, {"y", p.Y}
+                                    }
+                                }
+                            End Function) _
+                    .ToArray
+            End If
+        Else
+            pixels = ptList _
+                .populates(Of PointF)(env) _
+                .Select(Function(p)
+                            Return New DataSet With {
+                                .ID = $"[{p.X},{p.Y}]",
+                                .Properties = New Dictionary(Of String, Double) From {
+                                    {"x", p.X}, {"y", p.Y}
+                                }
+                            }
+                        End Function) _
+                .ToArray
+        End If
+
+        Dim kd As New KdTree(Of DataSet)(pixels, New point2DReader())
+        Dim averageDist = Enumerable _
+            .Range(0, sampleSize) _
+            .Select(Function(any)
+                        Dim knn = kd _
+                            .nearest(kd.GetPointSample(1).First, 10) _
+                            .ToArray
+
+                        Return Aggregate x In knn Let d = x.distance Into Average(d)
+                    End Function) _
+            .ToArray
+
+        Dim dbscan As dbscanResult = clustering.dbscan(pixels, eps:=averageDist.Average * 1.25)
+
+        Return dbscan
+    End Function
+
+    Private Class point2DReader : Inherits KdNodeAccessor(Of DataSet)
+
+        ReadOnly dims As String() = {"x", "y"}
+
+        Public Overrides Sub setByDimensin(x As DataSet, dimName As String, value As Double)
+            x(dimName) = value
+        End Sub
+
+        Public Overrides Function GetDimensions() As String()
+            Return dims
+        End Function
+
+        Public Overrides Function metric(a As DataSet, b As DataSet) As Double
+            Dim v1 As Double() = a(dims)
+            Dim v2 As Double() = b(dims)
+
+            Return v1.EuclideanDistance(v2)
+        End Function
+
+        Public Overrides Function getByDimension(x As DataSet, dimName As String) As Double
+            Return x(dimName)
+        End Function
+
+        Public Overrides Function nodeIs(a As DataSet, b As DataSet) As Boolean
+            Return a Is b
+        End Function
+
+        Public Overrides Function activate() As DataSet
+            Return New DataSet With {
+                .ID = App.NextTempName,
+                .Properties = New Dictionary(Of String, Double) From {
+                    {"x", 0.0},
+                    {"y", 0.0}
+                }
+            }
+        End Function
+    End Class
+
+    ''' <summary>
     ''' ### DBSCAN density reachability and connectivity clustering
     ''' 
     ''' Generates a density based clustering of arbitrary shape as 
@@ -590,6 +699,8 @@ Module clustering
 
         If data Is Nothing Then
             Return Nothing
+        ElseIf TypeOf data Is DataSet() Then
+            x = DirectCast(data, DataSet())
         ElseIf TypeOf data Is Rdataframe Then
             With DirectCast(data, Rdataframe)
                 Dim rownames As String() = .getRowNames

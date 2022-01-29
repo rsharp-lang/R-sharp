@@ -156,6 +156,17 @@ Module graphics2D
         Return New RectangleF(location, size)
     End Function
 
+    <ExportAPI("pointVector")>
+    Public Function pointsVector(x As String()) As PointF()
+        Return (From t As String
+                In x.SafeQuery
+                Let p As Double() = t _
+                    .Split(","c) _
+                    .Select(AddressOf Val) _
+                    .ToArray
+                Select New PointF(p(0), p(1))).ToArray
+    End Function
+
     <ExportAPI("point")>
     <RApiReturn(GetType(Point), GetType(PointF))>
     Public Function point2D(x As Double, y As Double, Optional float As Boolean = True) As Object
