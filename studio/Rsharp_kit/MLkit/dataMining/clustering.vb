@@ -610,8 +610,11 @@ Module clustering
                     End Function) _
             .ToArray
         Dim meps As Double = averageDist.Median
-
-        Dim dbscan As dbscanResult = clustering.dbscan(pixels, eps:=meps * 1.25)
+        Dim dbscan As dbscanResult = clustering.dbscan(
+            data:=pixels,
+            eps:=meps * 1.25,
+            env:=env
+        )
 
         Return dbscan
     End Function
