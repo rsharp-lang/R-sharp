@@ -619,7 +619,7 @@ Module clustering
                         Return Aggregate x As KdNodeHeapItem(Of DataSet)
                                In knn
                                Order By x.distance
-                               Take 3
+                               Take 20
                                Let d = x.distance
                                Into Average(d)
                     End Function) _
