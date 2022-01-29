@@ -565,6 +565,7 @@ Module clustering
 
         Dim ptList As pipeline = pipeline.TryCreatePipeline(Of PointF)(points, env, suppress:=True)
         Dim pixels As DataSet()
+        Dim println = env.WriteLineHandler
 
         If ptList.isError Then
             ptList = pipeline.TryCreatePipeline(Of Point2D)(points, env)
@@ -622,6 +623,13 @@ Module clustering
                     End Function) _
             .ToArray
         Dim meps As Double = averageDist.Median
+
+        Call println($"get average point distance from {sampleSize} sample data:")
+        Call println(averageDist)
+
+        Call println("use median distance as eps threshold for dbscan:")
+        Call println(meps)
+
         Dim dbscan As dbscanResult = clustering.dbscan(
             data:=pixels,
             eps:=meps,
