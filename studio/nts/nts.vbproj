@@ -29,6 +29,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
     <DocumentationFile>nts.xml</DocumentationFile>
+    <OutputPath>../../App\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
