@@ -598,6 +598,14 @@ Module clustering
                 .ToArray
         End If
 
+        Dim uniqueId As String() = pixels _
+            .Select(Function(d) d.ID) _
+            .uniqueNames
+
+        For i As Integer = 0 To uniqueId.Length - 1
+            pixels(i).ID = uniqueId(i)
+        Next
+
         Dim kd As New KdTree(Of DataSet)(pixels, New point2DReader())
         Dim averageDist = Enumerable _
             .Range(0, sampleSize) _
@@ -607,17 +615,27 @@ Module clustering
                             .nearest(kd.GetPointSample(1).First, 60) _
                             .ToArray
 
-                        Return Aggregate x In knn Let d = x.distance Into Average(d)
+                        Return Aggregate x As KdNodeHeapItem(Of DataSet)
+                               In knn
+                               Let d = x.distance
+                               Into Average(d)
                     End Function) _
             .ToArray
         Dim meps As Double = averageDist.Median
         Dim dbscan As dbscanResult = clustering.dbscan(
             data:=pixels,
-            eps:=meps * 0.65,
+            eps:=meps,
             env:=env
         )
+        Dim classinfo As Dictionary(Of String, String) = dbscan.cluster _
+            .ToDictionary(Function(d) d.ID,
+                          Function(d)
+                              Return d.Cluster
+                          End Function)
 
-        Return dbscan.cluster.Select(Function(d) d.Cluster).ToArray
+        Return (From d As DataSet
+                In pixels
+                Select classinfo(d.ID)).ToArray
     End Function
 
     Private Class point2DReader : Inherits KdNodeAccessor(Of DataSet)
@@ -688,7 +706,9 @@ Module clustering
     ''' <param name="countmode">
     ''' NULL or vector of point numbers at which to report progress.
     ''' </param>
-    ''' <returns></returns>
+    ''' <returns>
+    ''' the result data is not keeps the same order as the data input!
+    ''' </returns>
     <ExportAPI("dbscan")>
     Public Function dbscan(<RRawVectorArgument> data As Object,
                            eps As Double,
