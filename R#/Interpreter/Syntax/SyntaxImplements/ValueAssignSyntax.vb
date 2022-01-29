@@ -52,7 +52,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
     Module ValueAssignSyntax
 
         Public Function ValueIterateAssign(target As Token(), op As String, value As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim symbolNames = DeclareNewSymbolSyntax.getNames(target)
+            Dim symbolNames = DeclareNewSymbolSyntax.getNames(target, opts)
 
             If symbolNames Like GetType(SyntaxErrorException) Then
                 Return SyntaxResult.CreateError(
@@ -92,7 +92,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         Public Function ValueAssign(tokens As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim symbolNames = DeclareNewSymbolSyntax.getNames(tokens(Scan0))
+            Dim symbolNames = DeclareNewSymbolSyntax.getNames(tokens(Scan0), opts)
 
             If symbolNames Like GetType(SyntaxErrorException) Then
                 Return SyntaxResult.CreateError(

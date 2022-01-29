@@ -92,6 +92,16 @@ Namespace Interpreter.SyntaxParser
             End Get
         End Property
 
+        ''' <summary>
+        ''' operator of <see cref="pipelineSymbols"/> is ``.``?
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property isPythonPipelineSymbol As Boolean
+            Get
+                Return pipelineSymbols.Any(Function(t) t = ".")
+            End Get
+        End Property
+
         Public Function SetCurrentRange(range As Token()) As SyntaxBuilderOptions
             currentRange = range
             Return Me
