@@ -61,6 +61,9 @@ Namespace Language
         invalid
 
         newLine
+        ''' <summary>
+        ''' &lt;whitespace> and &lt;TAB> as delimiter
+        ''' </summary>
         delimiter
 
         comment

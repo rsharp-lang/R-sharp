@@ -1,50 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::32b68a96ec263685bdd8f450d4513dc0, R#\Language\TokenIcer\StringInterpolation.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class StringInterpolation
-    ' 
-    '         Properties: isEscapeSplash
-    ' 
-    '         Function: GetTokens, ParseTokens, walkChar
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class StringInterpolation
+' 
+'         Properties: isEscapeSplash
+' 
+'         Function: GetTokens, ParseTokens, walkChar
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.Text.Parser
 Imports Microsoft.VisualBasic.Language
 Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 
 Namespace Language.TokenIcer
 
@@ -58,12 +59,17 @@ Namespace Language.TokenIcer
         Dim code As CharPtr
         Dim buffer As New List(Of Char)
         Dim escape As Scanner.Escapes
+        Dim opts As SyntaxBuilderOptions
 
         Public ReadOnly Property isEscapeSplash As Boolean
             Get
                 Return buffer > 0 AndAlso buffer.Last = "\"c
             End Get
         End Property
+
+        Sub New(opts As SyntaxBuilderOptions)
+            Me.opts = opts
+        End Sub
 
         Public Iterator Function GetTokens([string] As String) As IEnumerable(Of Token)
             Dim token As New Value(Of Token)
@@ -80,7 +86,7 @@ Namespace Language.TokenIcer
 
                     ' 当前的字符为 { 栈起始符号
                     ' 继续解析token直到遇到最顶层的 栈结束符号 }
-                    tokenicer = New Scanner(code)
+                    tokenicer = opts.NewScanner(code)
 
                     For Each t As Token In tokenicer.GetTokens
                         If t.name = TokenType.open AndAlso t.text = "{" Then
@@ -126,8 +132,8 @@ Namespace Language.TokenIcer
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Overloads Shared Function ParseTokens(expression As String) As Token()
-            Return New StringInterpolation().GetTokens(expression).ToArray
+        Public Overloads Shared Function ParseTokens(expression As String, opts As SyntaxBuilderOptions) As Token()
+            Return New StringInterpolation(opts).GetTokens(expression).ToArray
         End Function
     End Class
 End Namespace

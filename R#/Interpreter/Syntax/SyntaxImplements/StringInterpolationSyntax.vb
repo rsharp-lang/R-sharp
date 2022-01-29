@@ -53,7 +53,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
     Module StringInterpolationSyntax
 
         Public Function StringInterpolation(token As Token, opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim tokens As Token() = TokenIcer.StringInterpolation.ParseTokens(token.text)
+            Dim tokens As Token() = TokenIcer.StringInterpolation.ParseTokens(token.text, opts)
             Dim block As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.stringLiteral)
             Dim parts As New List(Of Expression)
             Dim syntaxTemp As SyntaxResult
@@ -65,6 +65,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     syntaxTemp = part _
                         .Skip(1) _
                         .Take(part.Length - 2) _
+                        .Where(Function(t) t.name <> TokenType.delimiter) _
                         .DoCall(Function(code)
                                     Return opts.ParseExpression(code, opts)
                                 End Function)

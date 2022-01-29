@@ -58,7 +58,7 @@ Namespace Interpreter.SyntaxParser
     ''' model could be an error or resulted expression model 
     ''' object. 
     ''' </summary>
-    Friend Class SyntaxResult
+    Public Class SyntaxResult
 
         Public ReadOnly [error] As SyntaxError
         Public ReadOnly expression As RExpression
