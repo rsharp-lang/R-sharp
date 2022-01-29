@@ -219,13 +219,19 @@ Namespace Development.Configuration
             End Get
         End Property
 
+        Public ReadOnly Property typescript As String
+            Get
+                Return getOption("typescript.engine", [default]:="nts.dll")
+            End Get
+        End Property
+
         ''' <summary>
         ''' get default script environments
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property environments As String()
             Get
-                Return getOption("environments", [default]:={python, julia}.GetJson).LoadJSON(Of String())
+                Return getOption("environments", [default]:={python, julia, typescript}.GetJson).LoadJSON(Of String())
             End Get
         End Property
 
