@@ -389,6 +389,14 @@ Namespace Runtime.Interop
         ''' </param>
         ''' <returns></returns>
         Friend Shared Function CreateObjectListArguments([declare] As RMethodInfo, env As Environment, params As InvokeParameter()) As IEnumerable(Of Object)
+            If params.Length > 0 AndAlso params(Scan0).isAcceptor Then
+                For Each par As InvokeParameter In params.Skip(1)
+                    If par.isSymbolAssign Then
+                        env.acceptorArguments(par.name) = par.value
+                    End If
+                Next
+            End If
+
             If [declare].listObjectMargin = ListObjectArgumentMargin.left Then
                 Return CreateLeftMarginArguments([declare], params, env)
             Else

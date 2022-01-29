@@ -201,7 +201,14 @@ Module plots
         End If
     End Function
 
-    Private Function modelWithClass(x As Double(), y As Double(), ptSize As Single, classList As String(), args As list, reverse As Boolean, shape As LegendStyles, env As Environment) As Object
+    Private Function modelWithClass(x As Double(), y As Double(),
+                                    ptSize As Single,
+                                    classList As String(),
+                                    args As list,
+                                    reverse As Boolean,
+                                    shape As LegendStyles,
+                                    env As Environment) As Object
+
         Dim uniqClass As String() = classList.Distinct.ToArray
         Dim colorSet As String() = RColorPalette.getColors(args!colorSet, uniqClass.Length, "Clusters")
         Dim colors As Dictionary(Of String, Color) = uniqClass.CreateColorMaps(colorSet)

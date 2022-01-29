@@ -115,7 +115,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                             $"type name: {typeRight}"
                         }, envir)
                     Else
-                        Return type Is type2
+                        Return type Is type2 OrElse (type2.mode.IsPrimitive(includeComplexList:=False) AndAlso DirectCast(type, RType).mode = type2.mode)
                     End If
                 Else
                     Return Message.InCompatibleType(GetType(String), typeRight.GetType, envir)

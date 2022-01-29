@@ -227,12 +227,11 @@ Namespace Runtime.Internal.Invokes
         ''' usable if nmax Is supplied.
         ''' </remarks>
         <ExportAPI("duplicated")>
-        Public Function duplicated(<RRawVectorArgument> x As Object) As Object
-            Dim vec As Object() = REnv.asVector(Of Object)(x)
+        Public Function duplicated(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
             Dim checked As New Index(Of Object)
             Dim flags As New List(Of Boolean)
 
-            For Each item As Object In vec
+            For Each item As Object In getObjectSet(x, env)
                 Call flags.Add(item Like checked)
 
                 If Not flags.Last Then
@@ -324,13 +323,27 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("jaccard")>
-        Public Function jaccard(x As Array, y As Array) As Double
-            Dim set1 As New DataStructures.Set(x.AsObjectEnumerator)
-            Dim set2 As New DataStructures.Set(y.AsObjectEnumerator)
-            Dim intersect As Integer = (set1 And set2).Length
-            Dim union As Integer = (set1 Or set2).Length
+        Public Function jaccard(x As Array, y As Array, Optional env As Environment = Nothing) As Double
+            x = REnv.TryCastGenericArray(x, env)
+            y = REnv.TryCastGenericArray(y, env)
 
-            Return intersect / union
+            If TypeOf x Is String() AndAlso TypeOf y Is String() Then
+                Dim union = DirectCast(x, String()).JoinIterates(DirectCast(y, String())).Distinct.ToArray
+                Dim ix = DirectCast(x, String()).Indexing
+                Dim iy = DirectCast(y, String()).Indexing
+                Dim intersect As String() = union _
+                    .Where(Function(s) s Like ix AndAlso s Like iy) _
+                    .ToArray
+
+                Return intersect.Length / union.Length
+            Else
+                Dim set1 As New DataStructures.Set(x.AsObjectEnumerator)
+                Dim set2 As New DataStructures.Set(y.AsObjectEnumerator)
+                Dim intersect As Integer = (set1 And set2).Length
+                Dim union As Integer = (set1 Or set2).Length
+
+                Return intersect / union
+            End If
         End Function
     End Module
 End Namespace

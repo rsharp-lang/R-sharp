@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
+Imports anything = Microsoft.VisualBasic.Scripting
 
 <Assembly: InternalsVisibleTo("Rnotebook")>
 
@@ -208,7 +209,7 @@ Namespace Runtime
                 Return DirectCast([typeof], RType)
             End If
 
-            Dim className As String = Scripting.ToString([typeof], "any")
+            Dim className As String = anything.ToString([typeof], "any")
             Dim type As RType = _types.TryGetValue(className)
 
             If type Is Nothing Then

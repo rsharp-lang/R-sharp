@@ -69,7 +69,7 @@ Namespace Interpreter.SyntaxParser
 
             Select Case keyword
                 Case "let", "const"
-                    If code > 4 AndAlso code(2).isKeyword("as") AndAlso code(3).isKeyword("function") Then
+                    If code > 4 AndAlso (code(2).isKeyword("as") OrElse code(2).isOperator("=")) AndAlso code(3).isKeyword("function") Then
                         ' let <name> as function(...) {}
                         ' 申明一个函数
                         ' let <name> = function(...) {}
@@ -212,6 +212,8 @@ Namespace Interpreter.SyntaxParser
                         expr = New Profiler(expr.expression, opts.GetStackTrace(tag))
                         Return expr
                     End If
+                ElseIf item.Length = 1 AndAlso item(Scan0).name = TokenType.stringInterpolation Then
+                    Return SyntaxImplements.StringInterpolation(item(Scan0), opts)
                 Else
                     Dim ifelse = item.ifElseTriple
 

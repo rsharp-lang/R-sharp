@@ -199,6 +199,12 @@ Module RColorPalette
     Public Function getColor(color As Object, Optional default$ = "black") As String
         If color Is Nothing Then
             Return [default]
+        ElseIf TypeOf color Is vector Then
+            color = DirectCast(color, vector).data
+        End If
+
+        If color.GetType.IsArray AndAlso DirectCast(color, Array).Length = 1 Then
+            color = DirectCast(color, Array).GetValue(Scan0)
         End If
 
         Select Case color.GetType

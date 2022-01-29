@@ -8,7 +8,7 @@ imports "geometry2D" from "graphics";
 #' @return a new dataframe object with data fields:
 #'    x, y, density, and noise boolean flags
 #'
-density2DCut = function(data, k = 6, qcut = 0.1, f = 10) {
+const density2DCut = function(data, k = 6, qcut = 0.1, f = 10) {
     const [x, y]  = data;
     const density = density2D(as.integer(x * f), as.integer(y * f), k);
     const q       = quantile(density, probs = NULL);

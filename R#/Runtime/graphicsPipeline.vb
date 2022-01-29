@@ -69,7 +69,7 @@ Namespace Runtime
             Dim h# = 1600
 
             If {"w", "h"}.All(AddressOf args.ContainsKey) Then
-                Call getSize(args("width"), args("height"), env, w, h)
+                Call getSize(args("w"), args("h"), env, w, h)
             ElseIf {"width", "height"}.All(AddressOf args.ContainsKey) Then
                 Call getSize(args("width"), args("height"), env, w, h)
             ElseIf args.ContainsKey("size") Then
@@ -82,7 +82,9 @@ Namespace Runtime
         End Function
 
         Private Function eval(x As Object, env As Environment) As Object
-            x = DirectCast(x, InvokeParameter).value
+            If TypeOf x Is InvokeParameter Then
+                x = DirectCast(x, InvokeParameter).value
+            End If
 
             If TypeOf x Is ValueAssignExpression Then
                 x = DirectCast(x, ValueAssignExpression).value
@@ -96,8 +98,14 @@ Namespace Runtime
                 Return [default]
             ElseIf TypeOf size Is vector Then
                 size = DirectCast(size, vector).data
-            ElseIf TypeOf size Is InvokeParameter Then
+            ElseIf TypeOf size Is InvokeParameter OrElse TypeOf size Is Expression Then
                 Return getSize(eval(size, env), env, [default])
+            ElseIf TypeOf size Is list Then
+                Return getSize(
+                    size:=getSize(DirectCast(size, list).slots, env, [default].SizeParser),
+                    env:=env,
+                    [default]:=[default]
+                )
             End If
 
             If size.GetType.IsArray Then

@@ -243,6 +243,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                 Optional getKey As RFunction = Nothing,
                                 Optional envir As Environment = Nothing) As Object
 
+            If TypeOf items Is String() Then
+                Return DirectCast(items, String()).Distinct.ToArray
+            End If
+
             If Not getKey Is Nothing Then
                 Return Rset.getObjectSet(items, envir) _
                    .GroupBy(Function(o)
@@ -698,6 +702,120 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Else
                 Return debug.stop(Message.InCompatibleType(GetType(RFunction), getKey.GetType, env), env)
             End If
+        End Function
+
+        ''' <summary>
+        ''' ### Sorting or Ordering Vectors
+        ''' 
+        ''' Sort (or order) a vector or factor (partially) into ascending 
+        ''' or descending order. For ordering along more than one variable, 
+        ''' e.g., for sorting data frames, see order.
+        ''' </summary>
+        ''' <param name="x">
+        ''' For sort an R object with a class Or a numeric, complex, 
+        ''' character Or logical vector. For sort.int, a numeric, complex, 
+        ''' character Or logical vector, Or a factor.
+        ''' </param>
+        ''' <param name="decreasing">
+        ''' logical. Should the sort be increasing or decreasing? For the 
+        ''' "radix" method, this can be a vector of length equal to the 
+        ''' number of arguments in .... For the other methods, it must be 
+        ''' length one. Not available for partial sorting.
+        ''' </param>
+        ''' <param name="na_last">
+        ''' for controlling the treatment of NAs. If TRUE, missing values 
+        ''' in the data are put last; if FALSE, they are put first; if NA, 
+        ''' they are removed.
+        ''' </param>
+        ''' <remarks>
+        ''' sort is a generic function for which methods can be written, and 
+        ''' sort.int is the internal method which is compatible with S if 
+        ''' only the first three arguments are used.
+        ''' The Default sort method makes use Of order For classed objects, 
+        ''' which In turn makes use Of the generic Function xtfrm (And can be 
+        ''' slow unless a xtfrm method has been defined Or Is.numeric(x) Is 
+        ''' True).
+        ''' Complex values are sorted first by the real part, Then the imaginary 
+        ''' part.
+        ''' The "auto" method selects "radix" for short (less than 2^31 elements) 
+        ''' numeric vectors, integer vectors, logical vectors And factors; 
+        ''' otherwise, "shell".
+        ''' Except for method "radix", the sort order for character vectors will 
+        ''' depend on the collating sequence of the locale in use: see Comparison. 
+        ''' The sort order For factors Is the order Of their levels (which Is 
+        ''' particularly appropriate For ordered factors).
+        ''' If partial Is Not NULL, it Is taken to contain indices of elements of 
+        ''' the result which are to be placed in their correct positions in the 
+        ''' sorted array by partial sorting. For each of the result values in 
+        ''' a specified position, any values smaller than that one are guaranteed 
+        ''' to have a smaller index in the sorted array And any values which 
+        ''' are greater are guaranteed to have a bigger index in the sorted array. 
+        ''' (This Is included for efficiency, And many of the options are Not 
+        ''' available for partial sorting. It Is only substantially more efficient 
+        ''' if partial has a handful of elements, And a full sort Is done (a 
+        ''' Quicksort if possible) if there are more than 10.) Names are discarded 
+        ''' for partial sorting.
+        ''' Method "shell" uses Shellsort (an O(n^{4/3}) variant from Sedgewick 
+        ''' (1986)). If x has names a stable modification Is used, so ties are Not 
+        ''' reordered. (This only matters if names are present.)
+        ''' Method "quick" uses Singleton (1969)'s implementation of Hoare's 
+        ''' Quicksort method and is only available when x is numeric (double or 
+        ''' integer) and partial is NULL. (For other types of x Shellsort is used, 
+        ''' silently.) It is normally somewhat faster than Shellsort (perhaps 50% 
+        ''' faster on vectors of length a million and twice as fast at a billion)
+        ''' but has poor performance in the rare worst case. (Peto's modification 
+        ''' using a pseudo-random midpoint is used to make the worst case rarer.) 
+        ''' This is not a stable sort, and ties may be reordered.
+        ''' Method "radix" relies on simple hashing to scale time linearly with 
+        ''' the input size, i.e., its asymptotic time complexity Is O(n). The specific 
+        ''' variant And its implementation originated from the data.table package 
+        ''' And are due to Matt Dowle And Arun Srinivasan. For small inputs (&lt; 200), 
+        ''' the implementation uses an insertion sort (O(n^2)) that operates in-place 
+        ''' to avoid the allocation overhead of the radix sort. For integer vectors 
+        ''' of range less than 100,000, it switches to a simpler And faster linear 
+        ''' time counting sort. In all cases, the sort Is stable; the order of ties 
+        ''' Is preserved. It Is the default method for integer vectors And factors.
+        ''' The "radix" method generally outperforms the other methods, especially 
+        ''' for character vectors And small integers. Compared to quick sort, it Is 
+        ''' slightly faster for vectors with large integer Or real values (but unlike 
+        ''' quick sort, radix Is stable And supports all na.last options). The 
+        ''' implementation Is orders of magnitude faster than shell sort for character 
+        ''' vectors, in part thanks to clever use of the internal CHARSXP table.
+        ''' However, there are some caveats with the radix sort
+        ''' If x Is a character vector, all elements must share the same encoding. 
+        ''' Only UTF-8 (including ASCII) And Latin-1 encodings are supported. Collation 
+        ''' always follows the "C" locale.
+        ''' Long vectors(with more than 2^32 elements) And complex vectors are Not 
+        ''' supported yet.
+        ''' </remarks>
+        ''' <returns>
+        ''' For sort, the result depends on the S3 method which is dispatched. If 
+        ''' x does not have a class sort.int is used and it description applies. 
+        ''' For classed objects which do not have a specific method the default method 
+        ''' will be used and is equivalent to x[order(x, ...)]: this depends on the 
+        ''' class having a suitable method for [ (and also that order will work, 
+        ''' which requires a xtfrm method).
+        ''' For sort.int the value Is the sorted vector unless index.return Is true, 
+        ''' when the result Is a list with components named x And ix containing the 
+        ''' sorted numbers And the ordering index vector. In the latter case, if 
+        ''' method == "quick" ties may be reversed in the ordering (unlike sort.list) 
+        ''' as quicksort Is Not stable. For method == "radix", index.return Is 
+        ''' supported for all na.last modes. The other methods only support index.return 
+        ''' when na.last Is NA. The index vector refers To element numbers after removal 
+        ''' Of NAs: see order If you want the original element numbers.
+        ''' All attributes are removed from the Return value (see Becker et al, 1988, 
+        ''' p.146) except names, which are sorted. (If Partial Is specified even the 
+        ''' names are removed.) Note that this means that the returned value has no 
+        ''' Class, except For factors And ordered factors (which are treated specially 
+        ''' And whose result Is transformed back To the original Class).
+        ''' </returns>
+        <ExportAPI("sort")>
+        Public Function sort(<RRawVectorArgument>
+                             x As Object,
+                             Optional decreasing As Boolean = False,
+                             Optional na_last As Boolean = False) As Object
+
+            Return orderBy(x, desc:=decreasing)
         End Function
 
         ''' <summary>
