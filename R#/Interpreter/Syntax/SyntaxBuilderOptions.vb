@@ -64,6 +64,8 @@ Namespace Interpreter.SyntaxParser
         Public currentLine As Integer
         Public annotations As New List(Of NamedValue(Of String))
 
+        Public pipelineSymbols As String() = {"|>", ":>"}
+
         Public ReadOnly ParseExpression As Func(Of IEnumerable(Of Token), SyntaxBuilderOptions, SyntaxResult)
 
         Dim currentRange As Token()

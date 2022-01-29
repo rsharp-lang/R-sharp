@@ -43,7 +43,8 @@ Public Class SyntaxTree
         Me.scanner = New PyScanner(script.script)
         Me.opts = New SyntaxBuilderOptions(AddressOf ParsePythonLine) With {
             .source = script,
-            .debug = debug
+            .debug = debug,
+            .pipelineSymbols = {"."}
         }
     End Sub
 

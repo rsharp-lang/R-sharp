@@ -79,6 +79,7 @@ Namespace Language.TokenIcer
         Protected keepsDelimiter As Boolean = False
         Protected ReadOnly keywords As New Index(Of String)(Rkeywords.Objects)
         Protected ReadOnly nullLiteral As New Index(Of String)(RNullLiteral)
+        Protected ReadOnly shortOperators As New Index(Of Char)(RshortOperators)
 
         Friend Class Escapes
 
@@ -207,7 +208,7 @@ Namespace Language.TokenIcer
             "+=", "-=", "*=", "/=",
             "|>", ":>", "::"
         }
-        Shared ReadOnly shortOperators As Index(Of Char) = {"$"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
+        Shared ReadOnly RshortOperators As Char() = {"$"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
 
         Friend Shared ReadOnly Rkeywords As Index(Of String) = {
             "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
