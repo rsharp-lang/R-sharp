@@ -157,14 +157,28 @@ Module graphics2D
     End Function
 
     <ExportAPI("pointVector")>
-    Public Function pointsVector(x As String()) As PointF()
-        Return (From t As String
-                In x.SafeQuery
-                Let p As Double() = t _
-                    .Split(","c) _
-                    .Select(AddressOf Val) _
-                    .ToArray
-                Select New PointF(p(0), p(1))).ToArray
+    Public Function pointsVector(x As Array,
+                                 Optional y As Array = Nothing,
+                                 Optional env As Environment = Nothing) As PointF()
+
+        If y Is Nothing OrElse y.Length = 0 Then
+            Return (From t As String
+                    In DirectCast(REnv.asVector(Of String)(x), String())
+                    Let p As Double() = t _
+                        .Split(","c) _
+                        .Select(AddressOf Val) _
+                        .ToArray
+                    Select New PointF(p(0), p(1))).ToArray
+        Else
+            Dim px As Double() = REnv.asVector(Of Double)(x)
+            Dim py As Double() = REnv.asVector(Of Double)(y)
+
+            Return px _
+                .Select(Function(xi, i)
+                            Return New PointF(xi, py(i))
+                        End Function) _
+                .ToArray
+        End If
     End Function
 
     <ExportAPI("point")>
