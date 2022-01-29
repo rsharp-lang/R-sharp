@@ -693,7 +693,8 @@ Module clustering
                            Optional countmode As Object = Nothing,
                            Optional filterNoise As Boolean = False,
                            Optional reorder_class As Boolean = False,
-                           Optional densityCut As Double = -1) As dbscanResult
+                           Optional densityCut As Double = -1,
+                           Optional env As Environment = Nothing) As dbscanResult
 
         Dim x As DataSet()
 
@@ -739,7 +740,10 @@ Module clustering
         End Select
 
         Dim isseed As Integer() = Nothing
-        Dim result = New DbscanAlgorithm(Of DataSet)(dist).ComputeClusterDBSCAN(
+        Dim result = New DbscanAlgorithm(Of DataSet)(
+            metricFunc:=dist,
+            println:=env.WriteLineHandler
+        ).ComputeClusterDBSCAN(
             allPoints:=x,
             epsilon:=eps,
             minPts:=minPts,
