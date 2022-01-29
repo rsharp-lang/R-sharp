@@ -560,7 +560,7 @@ Module clustering
     <ExportAPI("dbscan_objects")>
     Public Function dbscan_objects(<RRawVectorArgument>
                                    points As Object,
-                                   Optional sampleSize As Integer = 25,
+                                   Optional sampleSize As Integer = 50,
                                    Optional env As Environment = Nothing) As Object
 
         Dim ptList As pipeline = pipeline.TryCreatePipeline(Of PointF)(points, env, suppress:=True)
@@ -601,9 +601,10 @@ Module clustering
         Dim kd As New KdTree(Of DataSet)(pixels, New point2DReader())
         Dim averageDist = Enumerable _
             .Range(0, sampleSize) _
+            .AsParallel _
             .Select(Function(any)
                         Dim knn = kd _
-                            .nearest(kd.GetPointSample(1).First, 10) _
+                            .nearest(kd.GetPointSample(1).First, 60) _
                             .ToArray
 
                         Return Aggregate x In knn Let d = x.distance Into Average(d)
@@ -612,11 +613,11 @@ Module clustering
         Dim meps As Double = averageDist.Median
         Dim dbscan As dbscanResult = clustering.dbscan(
             data:=pixels,
-            eps:=meps * 1.25,
+            eps:=meps * 0.65,
             env:=env
         )
 
-        Return dbscan
+        Return dbscan.cluster.Select(Function(d) d.Cluster).ToArray
     End Function
 
     Private Class point2DReader : Inherits KdNodeAccessor(Of DataSet)
