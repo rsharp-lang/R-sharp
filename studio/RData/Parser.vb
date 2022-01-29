@@ -55,7 +55,7 @@ Imports SMRUCC.Rsharp.RDataSet.Struct
 ''' </summary>
 Module Parser
 
-    ReadOnly magic_dict As New Dictionary(Of FileTypes, Byte()) From {
+    Friend ReadOnly magic_dict As New Dictionary(Of FileTypes, Byte()) From {
         {FileTypes.bzip2, bytes("\x42\x5a\x68")},
         {FileTypes.gzip, bytes("\x1f\x8b")},
         {FileTypes.xz, bytes("\xFD7zXZ\x00")},
@@ -63,7 +63,7 @@ Module Parser
         {FileTypes.rdata_binary_v3, bytes("RDX3\n")}
     }
 
-    ReadOnly format_dict As New Dictionary(Of RdataFormats, Byte()) From {
+    Friend ReadOnly format_dict As New Dictionary(Of RdataFormats, Byte()) From {
         {RdataFormats.XDR, bytes("X\n")},
         {RdataFormats.ASCII, bytes("A\n")},
         {RdataFormats.binary, bytes("B\n")}
