@@ -17,4 +17,4 @@ objects = `object_${graphics2D::pointVector(x, y).dbscan_objects()}`
 margin  = "padding: 125px 300px 200px 200px;"
 plt     = plot(x, y, class = objects, grid.fill = "white", padding = margin)
 
-bitmap(plt, file = "./object_detection.png")
+bitmap(plt, file = "./object_detection_py.png")
