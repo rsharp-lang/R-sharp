@@ -632,7 +632,7 @@ Module clustering
 
         Dim dbscan As dbscanResult = clustering.dbscan(
             data:=pixels,
-            eps:=meps,
+            eps:=meps / 2,
             env:=env
         )
         Dim classinfo As Dictionary(Of String, String) = dbscan.cluster _
@@ -766,7 +766,10 @@ Module clustering
                 dist = Function(a, b) a(b.ID)
             Case dbScanMethods.raw
                 Dim all As String() = x.PropertyNames
-                dist = Function(a, b) a.Vector.EuclideanDistance(b.Vector)
+
+                dist = Function(a, b)
+                           Return a(all).EuclideanDistance(b(all))
+                       End Function
             Case dbScanMethods.hybrid
                 Throw New NotImplementedException
             Case Else
