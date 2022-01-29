@@ -21,8 +21,6 @@ const write_vector = function(vector, method) {
           resolve();
         }
       });
-    }).catch(function(err) {
-      console.log(err);
     });
   }
 };
