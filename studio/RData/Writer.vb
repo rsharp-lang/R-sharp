@@ -2,6 +2,7 @@
 Imports System.Text
 Imports Microsoft.VisualBasic.Data.IO
 Imports SMRUCC.Rsharp.RDataSet.Flags
+Imports SMRUCC.Rsharp.RDataSet.Struct
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Public Class Writer
@@ -18,14 +19,10 @@ Public Class Writer
     End Sub
 
     Public Sub WriteSymbols(symbols As list)
-        Dim info_int As Integer = createInfoInt()
+        Dim info_int As Integer = New RObjectInfo().EncodeInfoInt32
 
         Call Xdr.EncodeInt32(info_int, Me.file)
     End Sub
-
-    Public Shared Function createInfoInt() As Integer
-
-    End Function
 
     ''' <summary>
     ''' save R# symbols into RData to a specific file stream buffer.

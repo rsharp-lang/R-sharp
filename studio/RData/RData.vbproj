@@ -161,6 +161,7 @@
     <Compile Include="Convertor\Deserializer.vb" />
     <Compile Include="Convertor\RObjectSignature.vb" />
     <Compile Include="Convertor\RStreamReader.vb" />
+    <Compile Include="Encoder\ByteEncoder.vb" />
     <Compile Include="Enums\CharFlags.vb" />
     <Compile Include="Enums\RdataFormats.vb" />
     <Compile Include="Enums\RObjectType.vb" />
