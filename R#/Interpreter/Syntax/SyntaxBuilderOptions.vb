@@ -45,12 +45,16 @@
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
+Imports Microsoft.VisualBasic.Text.Parser
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.SyntaxParser
 
-    Friend Class SyntaxBuilderOptions
+    Public Delegate Function GetLanguageScanner(buffer As CharPtr) As Scanner
+    Public Delegate Function ParseExpression(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
+
+    Public Class SyntaxBuilderOptions
 
         Public debug As Boolean = False
         Public source As Rscript
@@ -64,7 +68,10 @@ Namespace Interpreter.SyntaxParser
         Public currentLine As Integer
         Public annotations As New List(Of NamedValue(Of String))
 
-        Public ReadOnly ParseExpression As Func(Of IEnumerable(Of Token), SyntaxBuilderOptions, SyntaxResult)
+        Public pipelineSymbols As String() = {"|>", ":>"}
+
+        Public ReadOnly ParseExpression As ParseExpression
+        Public ReadOnly NewScanner As GetLanguageScanner
 
         Dim currentRange As Token()
 
@@ -90,13 +97,23 @@ Namespace Interpreter.SyntaxParser
             End Get
         End Property
 
+        ''' <summary>
+        ''' operator of <see cref="pipelineSymbols"/> is ``.``?
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property isPythonPipelineSymbol As Boolean
+            Get
+                Return pipelineSymbols.Any(Function(t) t = ".")
+            End Get
+        End Property
+
         Public Function SetCurrentRange(range As Token()) As SyntaxBuilderOptions
             currentRange = range
             Return Me
         End Function
 
         Public Function Clone() As SyntaxBuilderOptions
-            Return New SyntaxBuilderOptions(ParseExpression) With {
+            Return New SyntaxBuilderOptions(ParseExpression, NewScanner) With {
                 .debug = debug,
                 .[error] = [error],
                 .isBuildVector = isBuildVector,
@@ -113,7 +130,8 @@ Namespace Interpreter.SyntaxParser
 
         Public Const R_runtime As String = "SMRUCC/R#_runtime"
 
-        Public Sub New(ParseExpression As Func(Of IEnumerable(Of Token), SyntaxBuilderOptions, SyntaxResult))
+        Public Sub New(ParseExpression As ParseExpression, Scanner As GetLanguageScanner)
+            Me.NewScanner = Scanner
             Me.ParseExpression = ParseExpression
         End Sub
 

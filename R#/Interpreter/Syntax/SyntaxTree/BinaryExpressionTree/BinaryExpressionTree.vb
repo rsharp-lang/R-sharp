@@ -235,9 +235,8 @@ Namespace Interpreter.SyntaxParser
             Dim processors As GenericSymbolOperatorProcessor() = {
                 New NameMemberReferenceProcessor(),
                 New NamespaceReferenceProcessor(),
-                New PipelineProcessor(True),     ' pipeline操作符是优先度最高的
-                New PipelineProcessor(False),
-                New VectorAppendProcessor()  ' append操作符
+                New PipelineProcessor(opts.pipelineSymbols), ' pipeline操作符是优先度最高的                
+                New VectorAppendProcessor()                  ' append操作符
             }
 
             If Not syntaxResult = tokenBlocks.joinNegatives(buf, oplist, opts) Is Nothing Then

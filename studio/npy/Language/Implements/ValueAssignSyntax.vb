@@ -17,7 +17,7 @@ Namespace Language.Implementation
 
         Public Function AssignValue(target As Token(), value As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim valueBlocks = value.SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True)
-            Dim symbolNames = DeclareNewSymbolSyntax.getNames(target)
+            Dim symbolNames = DeclareNewSymbolSyntax.getNames(target, opts)
 
             If symbolNames Like GetType(SyntaxErrorException) Then
                 Dim targetExpr = opts.ParseExpression(target, opts)

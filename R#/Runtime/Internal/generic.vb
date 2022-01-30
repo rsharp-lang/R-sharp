@@ -137,10 +137,7 @@ Namespace Runtime.Internal
                 type = x.GetType
             End If
 
-            Dim acceptorArgs As Dictionary(Of String, Object) = env _
-                .parent _
-                .parent _
-                .acceptorArguments
+            Dim acceptorArgs As Dictionary(Of String, Object) = env.GetAcceptorArguments
 
             For Each key As String In acceptorArgs.Keys
                 ' 20211008 do not overrides the original parameters

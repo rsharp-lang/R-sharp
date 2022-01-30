@@ -98,6 +98,17 @@ Public Module InternalParser
                 Else
                     blocks = New List(Of Token()) From {blocks.IteratesALL.ToArray}
                 End If
+            ElseIf blocks.Last.isFunctionInvoke AndAlso blocks.Take(blocks.Count - 1).All(Function(t) t.isOperator(".") OrElse t.isIdentifier) Then
+                ' fix for R function call liked: write.csv(xxx)
+                Dim prefix As String = blocks.Take(blocks.Count - 2).Select(Function(d) d.First.text).JoinBy("")
+                Dim invoke = FunctionInvokeSyntax.FunctionInvoke(blocks.Last, opts)
+                Dim calls As FunctionInvoke = invoke.expression
+                Dim name = DirectCast(calls.funcName, Literal).ValueStr
+                Dim fullName As String = $"{prefix}.{name}"
+
+                calls = New FunctionInvoke(fullName, calls.stackFrame, calls.parameters)
+
+                Return New SyntaxResult(New PipelineFunction(calls))
             End If
 
             expr = blocks.ParseExpression(opts)

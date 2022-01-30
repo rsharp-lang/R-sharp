@@ -106,7 +106,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             ' 0   1    2   3    4 5
             ' let var [as type [= ...]]
-            Dim symbolNames = getNames(code(1))
+            Dim symbolNames = getNames(code(1), opts)
             Dim type As TypeCodes
             Dim value As Expression = Nothing
             Dim trace As StackFrame = opts.GetStackTrace(code(1)(Scan0))
@@ -164,7 +164,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' <param name="singleToken"></param>
         ''' <returns></returns>
         Public Function DeclareNewSymbol(singleToken As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim symbolNames = getNames(singleToken)
+            Dim symbolNames = getNames(singleToken, opts)
             Dim type As TypeCodes
             Dim trace As StackFrame = opts.GetStackTrace(singleToken(Scan0))
 
@@ -205,7 +205,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return valSyntaxTemp
             End If
 
-            Dim symbolNames = getNames(symbol)
+            Dim symbolNames = getNames(symbol, opts)
 
             If symbolNames Like GetType(SyntaxErrorException) Then
                 Return SyntaxResult.CreateError(
@@ -237,7 +237,39 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' </summary>
         ''' <param name="code"></param>
         ''' <returns></returns>
-        Friend Function getNames(code As Token()) As [Variant](Of String(), SyntaxErrorException)
+        Friend Function getNames(code As Token(), opts As SyntaxBuilderOptions) As [Variant](Of String(), SyntaxErrorException)
+            If opts.isPythonPipelineSymbol Then
+                ' join a.b tokens
+                Dim list As New List(Of Token)(code)
+
+                For i As Integer = 0 To list.Count - 1
+                    If i >= list.Count Then
+                        Exit For
+                    End If
+
+                    If list(i) = (TokenType.operator, ".") Then
+                        If i = 0 Then
+                            ' .x is valid in R#
+                            Dim x As String = $".{list(i + 1).text}"
+                            list(i + 1).text = x
+                            list.RemoveAt(i)
+                        Else
+                            ' join a.b
+                            Dim a = list(i - 1).text
+                            Dim b = list(i + 1).text
+                            Dim symbol As New Token(TokenType.identifier, $"{a}.{b}")
+
+                            list.RemoveRange(i - 1, 3)
+                            list.Insert(i - 1, symbol)
+                        End If
+
+                        i -= 1
+                    End If
+                Next
+
+                code = list.ToArray
+            End If
+
             If code.Length > 1 Then
                 If code(1) = (TokenType.keyword, "as") Then
                     ' a as type

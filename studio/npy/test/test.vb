@@ -9,6 +9,8 @@ Imports Rscript = SMRUCC.Rsharp.Runtime.Components.Rscript
 Module test
 
     Sub Main()
+        Call namespaceFunc()
+
         Call objectFunc()
         Call extensionTest()
         ' Call indentTest()
@@ -40,6 +42,13 @@ Module test
         Call Console.WriteLine()
 
         Pause()
+    End Sub
+
+    Sub namespaceFunc()
+        Call inspectSyntax("objects = `object_${graphics2D::pointVector(x, y).dbscan_objects()}`")
+        Call inspectSyntax("as.data.frame(list)")
+        Call inspectSyntax("write.csv(x, file = './save.csv', row.names = True, file.name.2 = 'abc')")
+        Call inspectSyntax("graphics2D::pointVector(x, y).dbscan_objects()")
     End Sub
 
     Sub objectFunc()

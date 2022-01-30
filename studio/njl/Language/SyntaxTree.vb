@@ -38,7 +38,7 @@ Namespace Language
             Me.debug = debug
             Me.script = script
             Me.scanner = New JlScanner(script.script)
-            Me.opts = New SyntaxBuilderOptions(AddressOf ParseJuliaLine) With {
+            Me.opts = New SyntaxBuilderOptions(AddressOf ParseJuliaLine, Function(c) New JlScanner(c)) With {
                 .source = script,
                 .debug = debug
             }
