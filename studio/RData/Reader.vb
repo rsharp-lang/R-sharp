@@ -169,7 +169,9 @@ Public MustInherit Class Reader
             encoding = parse_string(encoding_len).decode(Encodings.ASCII)
         End If
 
-        Dim extract_info = New RExtraInfo With {.encoding = encoding}
+        Dim extract_info As New RExtraInfo With {
+            .encoding = encoding
+        }
 
         Return extract_info
     End Function
