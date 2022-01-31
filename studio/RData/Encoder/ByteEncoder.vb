@@ -8,6 +8,10 @@ Module ByteEncoder
     Public Function EncodeInfoInt32(robjinfo As RObjectInfo) As Integer
         Dim bits As New BitSet(0)
 
+        ' 0-8 bits (1 byte)
+        ' is data type
+        bits.SetBits(CByte(robjinfo.type), 0)
+
         If is_special_r_object_type(robjinfo.type) Then
             bits(8) = robjinfo.object
             bits(9) = robjinfo.attributes

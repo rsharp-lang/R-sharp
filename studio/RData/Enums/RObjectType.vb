@@ -47,7 +47,7 @@ Namespace Flags
     ''' <summary>
     ''' Type of a R object.
     ''' </summary>
-    Public Enum RObjectType
+    Public Enum RObjectType As Byte
         ''' <summary>
         ''' NULL
         ''' </summary>
