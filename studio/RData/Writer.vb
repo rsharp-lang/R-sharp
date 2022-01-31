@@ -45,14 +45,16 @@ Public Class Writer
     End Function
 
     Private Sub writeVersion()
-        Call Xdr.EncodeInt32(3, Me.file) ' format 
-        Call Xdr.EncodeInt32(5, Me.file) ' r_serialized 
-        Call Xdr.EncodeInt32(233, Me.file) ' minimum 
+        ' {RVersions(format=3, serialized=262147, minimum=197888)}
+        '
+        Call Xdr.EncodeInt32(3, Me.file)      ' format 
+        Call Xdr.EncodeInt32(262147, Me.file) ' r_serialized 
+        Call Xdr.EncodeInt32(197888, Me.file) ' minimum 
     End Sub
 
     Private Sub writeExtractInfo()
         Dim encoding As Encoding = file.Encoding
-        Dim name As String = ""
+        Dim name As String = encoding.HeaderName.ToUpper
         Dim nameBytes As Byte() = Encoding.ASCII.GetBytes(name)
 
         Call Xdr.EncodeInt32(nameBytes.Length, Me.file)
