@@ -162,7 +162,7 @@ Namespace Development.CommandLine
                 If arg.defaultValue.StartsWith("<required") Then
                     cli.Add($"{arg.name} <{arg.type}>")
                 ElseIf arg.isNumeric Then
-                    cli.Add($"[{arg.name} <{arg.type}, default={Trim(arg.defaultValue).Trim(""""c)}>]")
+                    cli.Add($"[{arg.name} <{arg.type}, default={Strings.Trim(arg.defaultValue).Trim(""""c)}>]")
                 Else
                     cli.Add($"[{arg.name} <{arg.type}, default={arg.defaultValue}>]")
                 End If
@@ -186,7 +186,7 @@ Namespace Development.CommandLine
                 If arg.defaultValue.StartsWith("<required") Then
                     valueStr = ($"<required>")
                 ElseIf arg.isNumeric Then
-                    valueStr = ($"[{arg.type}, default={Trim(arg.defaultValue).Trim(""""c)}]")
+                    valueStr = ($"[{arg.type}, default={Strings.Trim(arg.defaultValue).Trim(""""c)}]")
                 Else
                     valueStr = ($"[{arg.type}, default={arg.defaultValue}]")
                 End If
