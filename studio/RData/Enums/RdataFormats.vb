@@ -47,13 +47,22 @@ Imports System.ComponentModel
 Namespace Flags
 
     ''' <summary>
-    ''' Format of a R file.
+    ''' encoding format of a R file.
     ''' </summary>
     Public Enum RdataFormats
         Unknown = 0
 
+        ''' <summary>
+        ''' XDR encode
+        ''' </summary>
         <Description("XDR")> XDR
+        ''' <summary>
+        ''' ASCII encode
+        ''' </summary>
         <Description("ASCII")> ASCII
+        ''' <summary>
+        ''' binary encode
+        ''' </summary>
         <Description("binary")> binary
     End Enum
 End Namespace
