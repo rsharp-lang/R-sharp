@@ -58,23 +58,45 @@ Public Class Writer
         Call vector.DoEach(Sub(f) ByteEncoder.logicalScalar(f, file))
     End Sub
 
-    Public Sub WriteSymbols(symbols As list)
+    Public Sub writeSymbols(symbols As list)
         Dim info_int As Integer = RObjectInfo.LISTSXP.EncodeInfoInt32
 
         For Each key As String In symbols.getNames
             Call Xdr.EncodeInt32(info_int, file)
             Call ByteEncoder.EncodeSymbol(key, file)
-            Call Write(any:=symbols.getByName(key))
+            Call write(any:=symbols.getByName(key))
         Next
     End Sub
 
-    Public Sub Write(any As Object)
+    Public Sub dataFrame(df As dataframe)
+        Dim length As Integer = df.nrows
+        Dim bits As Integer = RObjectInfo.primitiveType(RObjectType.VEC, is_object:=True, has_attributes:=True, has_tag:=False).EncodeInfoInt32
+
+        Call Xdr.EncodeInt32(bits, file)
+        Call Xdr.EncodeInt32(df.ncols, file)
+
+        For Each colname As String In df.colnames
+            Call write(df(colname))
+        Next
+
+        Dim attributes As New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"names", df.colnames},
+                {"class", {"data.frame"}},
+                {"row.names", {NA_INT, -1 * df.nrows}}
+            }
+        }
+
+        Call writeSymbols(attributes)
+    End Sub
+
+    Public Sub write(any As Object)
         If any Is Nothing Then
             Call stringVector({})
         ElseIf TypeOf any Is list Then
-            Call WriteSymbols(any)
+            Call writeSymbols(any)
         ElseIf TypeOf any Is dataframe Then
-            Throw New NotImplementedException
+            Call dataFrame(any)
         Else
             Dim vec As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(any), env)
             Dim baseType As Type = vec.GetType.GetElementType
@@ -107,7 +129,7 @@ Public Class Writer
             env = GlobalEnvironment.defaultEmpty
         End If
 
-        Call New Writer(file, env).WriteSymbols(symbols)
+        Call New Writer(file, env).writeSymbols(symbols)
     End Sub
 
     Public Shared Function Open(file As Stream, Optional env As Environment = Nothing) As Writer

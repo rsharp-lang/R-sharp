@@ -120,7 +120,7 @@ Namespace Flags
         ''' </summary>
         ANY = 18
         ''' <summary>
-        ''' list (generic vector)
+        ''' VECSXP, list (generic vector)
         ''' </summary>
         VEC = 19
         ''' <summary>

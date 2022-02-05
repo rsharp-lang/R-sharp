@@ -54,7 +54,7 @@ Imports SMRUCC.Rsharp.RDataSet.Struct
 ''' </summary>
 Module Parser
 
-    Public ReadOnly NA_INT As Double = -1 * Math.Pow(2, 31)
+    Public ReadOnly NA_INT As Integer = -1 * Math.Pow(2, 31)
     Public Const NA_STRING As Integer = -1
 
     ''' <summary>
