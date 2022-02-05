@@ -79,6 +79,18 @@ Module Module1
             '    {"xxx", {"qqq", "www", "eee", "rr", "r"}}
             '}})
 
+            Dim innerList = New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"aaa_x", New list With {
+                        .slots = New Dictionary(Of String, Object) From {
+                            {"bbx", 333}
+                        }
+                    }}
+                }
+            }
+
+            list.add("Test_inner", innerList)
+
             Call Writer.Save(list, save)
         End Using
 
