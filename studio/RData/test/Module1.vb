@@ -67,7 +67,7 @@ Module Module1
         Dim list As list
 
         Using file = "test_list2.rda".Open
-            Dim obj = Reader.ParseData(file)
+            Dim obj = Reader.ParseData(file, debug:=True)
             list = ConvertToR.ToRObject(obj.object)
 
             Call R.Inspect(list)
@@ -78,7 +78,7 @@ Module Module1
         End Using
 
         Using read = "test_write.rda".Open
-            Dim obj = Reader.ParseData(read)
+            Dim obj = Reader.ParseData(read, debug:=True)
 
             list = ConvertToR.ToRObject(obj.object)
 

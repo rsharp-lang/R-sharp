@@ -54,9 +54,10 @@ Public Class ParserXDR : Inherits Reader
     <DebuggerStepThrough>
     Sub New(data As BinaryDataReader,
             Optional position As Integer = 0,
-            Optional expand_altrep As Boolean = True)
+            Optional expand_altrep As Boolean = True,
+            Optional debug As Boolean = False)
 
-        Call MyBase.New(expand_altrep)
+        Call MyBase.New(expand_altrep, debug)
 
         Me.data = data
         Me.data.Position = position
