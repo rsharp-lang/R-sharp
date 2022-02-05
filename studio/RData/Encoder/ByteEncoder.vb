@@ -47,4 +47,20 @@ Module ByteEncoder
             Call file.Write(bytes)
         End If
     End Sub
+
+    Public Sub realScalar(real As Double, file As IByteWriter)
+        If real.IsNaNImaginary Then
+            real = NA_REAL
+        End If
+
+        Call Xdr.EncodeDouble(real, file)
+    End Sub
+
+    Public Sub intScalar(int As Long, file As IByteWriter)
+        Call Xdr.EncodeInt64(int, file)
+    End Sub
+
+    Public Sub logicalScalar(bool As Boolean, file As IByteWriter)
+        Call Xdr.EncodeInt32(If(bool = True, 1, 0), file)
+    End Sub
 End Module
