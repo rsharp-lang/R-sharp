@@ -77,6 +77,9 @@ Module Module1
             Call Writer.Save(list, save)
         End Using
 
+        Call Console.WriteLine(vbNewLine)
+
+
         Using read = "test_write.rda".Open
             Dim obj = Reader.ParseData(read, debug:=True)
 

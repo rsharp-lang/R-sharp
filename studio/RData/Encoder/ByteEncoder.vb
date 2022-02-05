@@ -26,6 +26,8 @@ Module ByteEncoder
             bits = bits Or ObjectBitMask.HAS_TAG_BIT_MASK
         End If
 
+        Call Console.WriteLine($"[{bits}] => {robjinfo.ToString}")
+
         Return bits
     End Function
 
