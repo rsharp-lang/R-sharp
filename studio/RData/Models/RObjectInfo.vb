@@ -55,18 +55,57 @@ Namespace Struct
         Public gp As Integer
         Public reference As Integer
 
+        Public Shared ReadOnly Property STRSXP As RObjectInfo
+            Get
+                Return primitiveType(RObjectType.STR)
+            End Get
+        End Property
+
+        Public Shared ReadOnly Property REALSXP As RObjectInfo
+            Get
+                Return primitiveType(RObjectType.REAL)
+            End Get
+        End Property
+
+        Public Shared ReadOnly Property INTSXP As RObjectInfo
+            Get
+                Return primitiveType(RObjectType.INT)
+            End Get
+        End Property
+
+        Public Shared ReadOnly Property LGLSXP As RObjectInfo
+            Get
+                Return primitiveType(RObjectType.LGL)
+            End Get
+        End Property
+
+        Public Shared ReadOnly Property LISTSXP As RObjectInfo
+            Get
+                Return primitiveType(RObjectType.LIST, has_tag:=True)
+            End Get
+        End Property
+
+        Public Shared ReadOnly Property SYMSXP As RObjectInfo
+            Get
+                Return primitiveType(RObjectType.SYM)
+            End Get
+        End Property
+
         Public Overrides Function ToString() As String
             Return $"RObjectInfo(type=<{type.ToString}: {CInt(type)}>, object={[object]}, attributes={attributes}, tag={tag}, gp={gp}, reference={reference})"
         End Function
 
-        Public Shared Function PrimitiveType(baseType As RObjectType) As RObjectInfo
+        Public Shared Function primitiveType(baseType As RObjectType,
+                                             Optional has_tag As Boolean = False,
+                                             Optional is_object As Boolean = False,
+                                             Optional has_attributes As Boolean = False) As RObjectInfo
             Return New RObjectInfo With {
                 .type = baseType,
-                .attributes = False,
+                .attributes = has_attributes,
                 .gp = 0,
-                .[object] = False,
+                .[object] = is_object,
                 .reference = 0,
-                .tag = False
+                .tag = has_tag
             }
         End Function
 

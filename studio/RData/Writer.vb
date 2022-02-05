@@ -18,12 +18,8 @@ Public Class Writer
         Call writeExtractInfo()
     End Sub
 
-    Public Sub WriteValue(value As Object, length As Integer)
-
-    End Sub
-
     Public Sub stringVector(vector As String())
-        Dim bits As Integer = RObjectInfo.PrimitiveType(RObjectType.STR).EncodeInfoInt32
+        Dim bits As Integer = RObjectInfo.STRSXP.EncodeInfoInt32
         Dim len As Integer = vector.Length
 
         Call Xdr.EncodeInt32(bits, file)
@@ -31,8 +27,37 @@ Public Class Writer
         Call vector.DoEach(Sub(str) ByteEncoder.stringScalar(str, file))
     End Sub
 
+    Public Sub realVector(vector As Double())
+        Dim bits As Integer = RObjectInfo.REALSXP.EncodeInfoInt32
+        Dim len As Integer = vector.Length
+
+        Call Xdr.EncodeInt32(bits, file)
+        Call Xdr.EncodeInt32(len, file)
+        Call vector.DoEach(Sub(d) ByteEncoder.realScalar(d, file))
+    End Sub
+
+    Public Sub intVector(vector As Integer())
+        Dim bits As Integer = RObjectInfo.INTSXP.EncodeInfoInt32
+        Dim len As Integer = vector.Length
+
+        Call Xdr.EncodeInt32(bits, file)
+        Call Xdr.EncodeInt32(len, file)
+        Call vector.DoEach(Sub(i) ByteEncoder.intScalar(i, file))
+    End Sub
+
+    Public Sub logicalVector(vector As Boolean())
+        Dim bits As Integer = RObjectInfo.LGLSXP.EncodeInfoInt32
+        Dim len As Integer = vector.Length
+
+        Call Xdr.EncodeInt32(bits, file)
+        Call Xdr.EncodeInt32(len, file)
+        Call vector.DoEach(Sub(f) ByteEncoder.logicalScalar(f, file))
+    End Sub
+
     Public Sub WriteSymbols(symbols As list)
-        Dim info_int As Integer = New RObjectInfo().EncodeInfoInt32
+        Dim info_int As Integer = RObjectInfo.LISTSXP.EncodeInfoInt32
+
+
 
         Call Xdr.EncodeInt32(info_int, Me.file)
     End Sub

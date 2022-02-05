@@ -1,9 +1,9 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.Data.IO
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.RDataSet.Flags
 Imports SMRUCC.Rsharp.RDataSet.Struct
-Imports Microsoft.VisualBasic.Text
 
 Module ByteEncoder
 
@@ -28,6 +28,11 @@ Module ByteEncoder
 
         Return bits
     End Function
+
+    Public Sub EncodeSymbol(name As String, file As IByteWriter)
+        Call Xdr.EncodeInt32(RObjectInfo.SYMSXP.EncodeInfoInt32, file)
+        Call stringScalar(name, file)
+    End Sub
 
     Public Sub stringScalar(str As String, file As IByteWriter)
         Dim type As Integer = RObjectType.CHAR Or (CharFlags.UTF8 << 12)
