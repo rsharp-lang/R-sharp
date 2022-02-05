@@ -17,7 +17,7 @@ Public Class Writer
         Me.file = file
         Me.env = env
 
-        Call file.Write(Parser.magic_dict(FileTypes.rdata_binary_v2))
+        Call file.Write(Parser.magic_dict(FileTypes.rdata_binary_v3))
         Call file.Write(Parser.format_dict(RdataFormats.XDR))
         Call writeVersion()
         Call writeExtractInfo()
@@ -91,7 +91,7 @@ Public Class Writer
             .slots = New Dictionary(Of String, Object) From {
                 {"names", df.colnames},
                 {"class", {"data.frame"}},
-                {"row.names", {NA_INT, -1 * df.nrows}}
+                {"row.names", NA_INT.Replicate(df.nrows).ToArray}
             }
         }
 

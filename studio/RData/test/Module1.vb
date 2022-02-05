@@ -74,6 +74,11 @@ Module Module1
         End Using
 
         Using save = "test_write.rda".Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+            'list.add("save_table", New dataframe With {.columns = New Dictionary(Of String, Array) From {
+            '    {"col1", {3, 4, 5, 5, 5}},
+            '    {"xxx", {"qqq", "www", "eee", "rr", "r"}}
+            '}})
+
             Call Writer.Save(list, save)
         End Using
 
