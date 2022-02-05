@@ -18,6 +18,19 @@ Public Class Writer
         Call writeExtractInfo()
     End Sub
 
+    Public Sub WriteValue(value As Object, length As Integer)
+
+    End Sub
+
+    Public Sub stringVector(vector As String())
+        Dim bits As Integer = RObjectInfo.PrimitiveType(RObjectType.STR).EncodeInfoInt32
+        Dim len As Integer = vector.Length
+
+        Call Xdr.EncodeInt32(bits, file)
+        Call Xdr.EncodeInt32(len, file)
+        Call vector.DoEach(Sub(str) ByteEncoder.stringScalar(str, file))
+    End Sub
+
     Public Sub WriteSymbols(symbols As list)
         Dim info_int As Integer = New RObjectInfo().EncodeInfoInt32
 

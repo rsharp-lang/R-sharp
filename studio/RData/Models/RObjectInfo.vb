@@ -59,5 +59,16 @@ Namespace Struct
             Return $"RObjectInfo(type=<{type.ToString}: {CInt(type)}>, object={[object]}, attributes={attributes}, tag={tag}, gp={gp}, reference={reference})"
         End Function
 
+        Public Shared Function PrimitiveType(baseType As RObjectType) As RObjectInfo
+            Return New RObjectInfo With {
+                .type = baseType,
+                .attributes = False,
+                .gp = 0,
+                .[object] = False,
+                .reference = 0,
+                .tag = False
+            }
+        End Function
+
     End Class
 End Namespace

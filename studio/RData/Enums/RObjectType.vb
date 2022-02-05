@@ -85,7 +85,7 @@ Namespace Flags
         ''' </summary>
         BUILTIN = 8
         ''' <summary>
-        ''' internal character strings, "scalar" string type (internal only)
+        ''' internal character strings, "scalar" string type (internal only, CHARSXP)
         ''' </summary>
         [CHAR] = 9
         ''' <summary>
@@ -105,7 +105,7 @@ Namespace Flags
         ''' </summary>
         CPLX = 15
         ''' <summary>
-        ''' character vectors
+        ''' character vectors(STRSXP)
         ''' </summary>
         STR = 16
         ''' <summary>
