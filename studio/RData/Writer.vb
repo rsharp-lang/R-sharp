@@ -12,6 +12,7 @@ Public Class Writer
     ReadOnly file As BinaryDataWriter
     ReadOnly env As Environment
 
+    <DebuggerStepThrough>
     Private Sub New(file As BinaryDataWriter, env As Environment)
         Me.file = file
         Me.env = env
@@ -125,19 +126,11 @@ Public Class Writer
     End Sub
 
     Public Shared Sub Save(symbols As list, file As BinaryDataWriter, Optional env As Environment = Nothing)
-        If env Is Nothing Then
-            env = GlobalEnvironment.defaultEmpty
-        End If
-
-        Call New Writer(file, env).writeSymbols(symbols)
+        Call New Writer(file, env Or GlobalEnvironment.defaultEmpty).writeSymbols(symbols)
     End Sub
 
     Public Shared Function Open(file As Stream, Optional env As Environment = Nothing) As Writer
-        If env Is Nothing Then
-            env = GlobalEnvironment.defaultEmpty
-        End If
-
-        Return New Writer(New BinaryDataWriter(file), env)
+        Return New Writer(New BinaryDataWriter(file), env Or GlobalEnvironment.defaultEmpty)
     End Function
 
     Private Sub writeVersion()

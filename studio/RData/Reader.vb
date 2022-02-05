@@ -80,6 +80,7 @@ Public MustInherit Class Reader
 
     <DebuggerStepThrough>
     Sub New(expand_altrep As Boolean, Optional debug As Boolean = False)
+        Me.debug = debug
         Me.expand_altrep = expand_altrep
     End Sub
 
@@ -217,6 +218,10 @@ Public MustInherit Class Reader
         Dim add_reference = False
         Dim result As RObject = Nothing
         Dim value As Object
+
+        If debug Then
+            Call Console.WriteLine($"[{info_int}] => {info.ToString}")
+        End If
 
         Static typeList1 As New Index(Of RObjectType) From {RObjectType.LIST, RObjectType.LANG}
         Static objType3 As New Index(Of RObjectType) From {RObjectType.STR, RObjectType.VEC, RObjectType.EXPR}
