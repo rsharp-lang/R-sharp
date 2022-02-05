@@ -17,7 +17,7 @@ Public Class Writer
         Me.file = file
         Me.env = env
 
-        Call file.Write(Parser.magic_dict(FileTypes.rdata_binary_v3))
+        Call file.Write(Parser.magic_dict(FileTypes.rdata_binary_v2))
         Call file.Write(Parser.format_dict(RdataFormats.XDR))
         Call writeVersion()
         Call writeExtractInfo()
@@ -63,15 +63,22 @@ Public Class Writer
         Dim info_int As Integer = RObjectInfo.LISTSXP.EncodeInfoInt32
 
         For Each key As String In symbols.getNames
-            Call Xdr.EncodeInt32(info_int, file)
-            Call ByteEncoder.EncodeSymbol(key, file)
-            Call write(any:=symbols.getByName(key))
+            Call Xdr.EncodeInt32(info_int, file)     ' LISTSXP
+            Call ByteEncoder.EncodeSymbol(key, file) ' symbol name
+            Call write(any:=symbols.getByName(key))  ' data
         Next
+
+        Call Xdr.EncodeInt32(RObjectInfo.NILVALUESXP.EncodeInfoInt32, file)
     End Sub
 
     Public Sub dataFrame(df As dataframe)
         Dim length As Integer = df.nrows
-        Dim bits As Integer = RObjectInfo.primitiveType(RObjectType.VEC, is_object:=True, has_attributes:=True, has_tag:=False).EncodeInfoInt32
+        Dim bits As Integer = RObjectInfo.primitiveType(
+            baseType:=RObjectType.VEC,
+            is_object:=True,
+            has_attributes:=True,
+            has_tag:=False
+        ).EncodeInfoInt32()
 
         Call Xdr.EncodeInt32(bits, file)
         Call Xdr.EncodeInt32(df.ncols, file)
@@ -136,9 +143,9 @@ Public Class Writer
     Private Sub writeVersion()
         ' {RVersions(format=3, serialized=262147, minimum=197888)}
         '
-        Call Xdr.EncodeInt32(3, Me.file)      ' format 
-        Call Xdr.EncodeInt32(262147, Me.file) ' r_serialized 
-        Call Xdr.EncodeInt32(197888, Me.file) ' minimum 
+        Call Xdr.EncodeInt32(3, Me.file) ' format 
+        Call Xdr.EncodeInt32(2, Me.file) ' r_serialized 
+        Call Xdr.EncodeInt32(0, Me.file) ' minimum 
     End Sub
 
     Private Sub writeExtractInfo()

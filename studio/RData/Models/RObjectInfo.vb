@@ -91,6 +91,12 @@ Namespace Struct
             End Get
         End Property
 
+        Public Shared ReadOnly Property NILVALUESXP As RObjectInfo
+            Get
+                Return primitiveType(RObjectType.NILVALUE)
+            End Get
+        End Property
+
         Public Overrides Function ToString() As String
             Return $"RObjectInfo(type=<{type.ToString}: {CInt(type)}>, object={[object]}, attributes={attributes}, tag={tag}, gp={gp}, reference={reference})"
         End Function
