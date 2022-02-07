@@ -1,7 +1,12 @@
-[dot]::forward;
+dot = list(forward = 5, reverse = 99);
 
-            forward = [dot]::forward;
-            reverse = [dot]::reverse;
+
+print([dot]::forward);
+
+             forward = [dot]::forward;
+             reverse = [dot]::reverse;
 			
 			
 dotcut = [dot]::forward + [dot]::reverse;
+
+print(dotcut);

@@ -727,6 +727,7 @@
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\Profiler.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\JSONLiteral.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DotNetObject.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxError.vb" />
     <Compile Include="Language\TokenLine.vb" />
     <Compile Include="Runtime\graphicsPipeline.vb" />
