@@ -7,6 +7,6 @@ print([dot]::forward);
              reverse = [dot]::reverse;
 			
 			
-dotcut = [dot]::forward + [dot]::reverse;
+dotcut = forward + reverse;
 
 print(dotcut);
