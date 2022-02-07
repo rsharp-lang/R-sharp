@@ -54,6 +54,14 @@ Imports SMRUCC.Rsharp.RDataSet.Struct
 ''' </summary>
 Module Parser
 
+    Public ReadOnly NA_INT As Integer = -1 * Math.Pow(2, 31)
+    Public Const NA_STRING As Integer = -1
+
+    ''' <summary>
+    ''' This is a special R constant value
+    ''' </summary>
+    Public Const NA_REAL As Long = &H7FF00000000007A2
+
     Friend ReadOnly magic_dict As New Dictionary(Of FileTypes, Byte()) From {
         {FileTypes.bzip2, bytes("\x42\x5a\x68")},
         {FileTypes.gzip, bytes("\x1f\x8b")},

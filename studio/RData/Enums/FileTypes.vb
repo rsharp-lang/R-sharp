@@ -52,10 +52,25 @@ Namespace Flags
     Public Enum FileTypes
         Unknown = 0
 
+        ''' <summary>
+        ''' bzip2 compression
+        ''' </summary>
         <Description("bz2")> bzip2
+        ''' <summary>
+        ''' gzip compression
+        ''' </summary>
         <Description("gzip")> gzip
+        ''' <summary>
+        ''' xz compression
+        ''' </summary>
         <Description("xz")> xz
+        ''' <summary>
+        ''' rdata version 2 (binary)
+        ''' </summary>
         <Description("rdata version 2 (binary)")> rdata_binary_v2
+        ''' <summary>
+        ''' rdata version 3 (binary)
+        ''' </summary>
         <Description("rdata version 3 (binary)")> rdata_binary_v3
     End Enum
 End Namespace

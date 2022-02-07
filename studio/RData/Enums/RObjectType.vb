@@ -47,9 +47,9 @@ Namespace Flags
     ''' <summary>
     ''' Type of a R object.
     ''' </summary>
-    Public Enum RObjectType
+    Public Enum RObjectType As Byte
         ''' <summary>
-        ''' NULL
+        ''' NULL, nil = NULL
         ''' </summary>
         NIL = 0
         ''' <summary>
@@ -57,7 +57,7 @@ Namespace Flags
         ''' </summary>
         SYM = 1
         ''' <summary>
-        ''' pairlists
+        ''' pairlists, lists of dotted pairs
         ''' </summary>
         LIST = 2
         ''' <summary>
@@ -69,11 +69,11 @@ Namespace Flags
         ''' </summary>
         ENV = 4
         ''' <summary>
-        ''' promises
+        ''' promises, promises: [un]evaluated closure arguments
         ''' </summary>
         PROM = 5
         ''' <summary>
-        ''' language objects
+        ''' language objects, language constructs (special lists)
         ''' </summary>
         LANG = 6
         ''' <summary>
@@ -81,11 +81,11 @@ Namespace Flags
         ''' </summary>
         SPECIAL = 7
         ''' <summary>
-        ''' builtin functions
+        ''' builtin functions, builtin non-special forms 
         ''' </summary>
         BUILTIN = 8
         ''' <summary>
-        ''' internal character strings
+        ''' internal character strings, "scalar" string type (internal only, CHARSXP)
         ''' </summary>
         [CHAR] = 9
         ''' <summary>
@@ -105,7 +105,7 @@ Namespace Flags
         ''' </summary>
         CPLX = 15
         ''' <summary>
-        ''' character vectors
+        ''' character vectors(STRSXP)
         ''' </summary>
         STR = 16
         ''' <summary>
@@ -114,10 +114,13 @@ Namespace Flags
         DOT = 17
         ''' <summary>
         ''' make “any” args work
+        ''' 
+        ''' Used in specifying types for symbol
+        ''' registration To mean anything Is okay
         ''' </summary>
         ANY = 18
         ''' <summary>
-        ''' list (generic vector)
+        ''' VECSXP, list (generic vector)
         ''' </summary>
         VEC = 19
         ''' <summary>
@@ -137,13 +140,18 @@ Namespace Flags
         ''' </summary>
         WEAKREF = 23
         ''' <summary>
-        ''' raw vector
+        ''' raw bytes vector
         ''' </summary>
         RAW = 24
         ''' <summary>
         ''' S4 classes Not Of simple type
         ''' </summary>
         S4 = 25
+
+        ''' <summary>
+        ''' Closure or Builtin or Special
+        ''' </summary>
+        FUNSXP = 99
 
         ''' <summary>
         ''' Alternative representations

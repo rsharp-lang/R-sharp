@@ -3,14 +3,19 @@ Imports System.Text
 Imports Microsoft.VisualBasic.Data.IO
 Imports SMRUCC.Rsharp.RDataSet.Flags
 Imports SMRUCC.Rsharp.RDataSet.Struct
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Public Class Writer
 
     ReadOnly file As BinaryDataWriter
+    ReadOnly env As Environment
 
-    Private Sub New(file As BinaryDataWriter)
+    <DebuggerStepThrough>
+    Private Sub New(file As BinaryDataWriter, env As Environment)
         Me.file = file
+        Me.env = env
 
         Call file.Write(Parser.magic_dict(FileTypes.rdata_binary_v3))
         Call file.Write(Parser.format_dict(RdataFormats.XDR))
@@ -18,10 +23,101 @@ Public Class Writer
         Call writeExtractInfo()
     End Sub
 
-    Public Sub WriteSymbols(symbols As list)
-        Dim info_int As Integer = New RObjectInfo().EncodeInfoInt32
+    Public Sub stringVector(vector As String())
+        Dim bits As Integer = RObjectInfo.STRSXP.EncodeInfoInt32
+        Dim len As Integer = vector.Length
 
-        Call Xdr.EncodeInt32(info_int, Me.file)
+        Call Xdr.EncodeInt32(bits, file)
+        Call Xdr.EncodeInt32(len, file)
+        Call vector.DoEach(Sub(str) ByteEncoder.stringScalar(str, file))
+    End Sub
+
+    Public Sub realVector(vector As Double())
+        Dim bits As Integer = RObjectInfo.REALSXP.EncodeInfoInt32
+        Dim len As Integer = vector.Length
+
+        Call Xdr.EncodeInt32(bits, file)
+        Call Xdr.EncodeInt32(len, file)
+        Call vector.DoEach(Sub(d) ByteEncoder.realScalar(d, file))
+    End Sub
+
+    Public Sub intVector(vector As Integer())
+        Dim bits As Integer = RObjectInfo.INTSXP.EncodeInfoInt32
+        Dim len As Integer = vector.Length
+
+        Call Xdr.EncodeInt32(bits, file)
+        Call Xdr.EncodeInt32(len, file)
+        Call vector.DoEach(Sub(i) ByteEncoder.intScalar(i, file))
+    End Sub
+
+    Public Sub logicalVector(vector As Boolean())
+        Dim bits As Integer = RObjectInfo.LGLSXP.EncodeInfoInt32
+        Dim len As Integer = vector.Length
+
+        Call Xdr.EncodeInt32(bits, file)
+        Call Xdr.EncodeInt32(len, file)
+        Call vector.DoEach(Sub(f) ByteEncoder.logicalScalar(f, file))
+    End Sub
+
+    Public Sub writeSymbols(symbols As list)
+        Dim info_int As Integer = RObjectInfo.LISTSXP.EncodeInfoInt32
+
+        For Each key As String In symbols.getNames
+            Call Xdr.EncodeInt32(info_int, file)     ' LISTSXP
+            Call ByteEncoder.EncodeSymbol(key, file) ' symbol name
+            Call write(any:=symbols.getByName(key))  ' data
+        Next
+
+        Call Xdr.EncodeInt32(RObjectInfo.NILVALUESXP.EncodeInfoInt32, file)
+    End Sub
+
+    Public Sub dataFrame(df As dataframe)
+        Dim length As Integer = df.nrows
+        Dim bits As Integer = RObjectInfo.primitiveType(
+            baseType:=RObjectType.VEC,
+            is_object:=True,
+            has_attributes:=True,
+            has_tag:=False
+        ).EncodeInfoInt32()
+
+        Call Xdr.EncodeInt32(bits, file)
+        Call Xdr.EncodeInt32(df.ncols, file)
+
+        For Each colname As String In df.colnames
+            Call write(df(colname))
+        Next
+
+        Dim attributes As New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"names", df.colnames},
+                {"class", {"data.frame"}},
+                {"row.names", NA_INT.Replicate(df.nrows).ToArray}
+            }
+        }
+
+        Call writeSymbols(attributes)
+    End Sub
+
+    Public Sub write(any As Object)
+        If any Is Nothing Then
+            Call stringVector({})
+        ElseIf TypeOf any Is list Then
+            Call writeSymbols(any)
+        ElseIf TypeOf any Is dataframe Then
+            Call dataFrame(any)
+        Else
+            Dim vec As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(any), env)
+            Dim baseType As Type = vec.GetType.GetElementType
+
+            Select Case baseType
+                Case GetType(String) : Call stringVector(vec)
+                Case GetType(Integer) : Call intVector(vec)
+                Case GetType(Double) : Call realVector(vec)
+                Case GetType(Boolean) : Call logicalVector(vec)
+                Case Else
+                    Throw New NotImplementedException(baseType.FullName)
+            End Select
+        End If
     End Sub
 
     ''' <summary>
@@ -36,23 +132,25 @@ Public Class Writer
         End Using
     End Sub
 
-    Public Shared Sub Save(symbols As list, file As BinaryDataWriter)
-        Call New Writer(file).WriteSymbols(symbols)
+    Public Shared Sub Save(symbols As list, file As BinaryDataWriter, Optional env As Environment = Nothing)
+        Call New Writer(file, env Or GlobalEnvironment.defaultEmpty).writeSymbols(symbols)
     End Sub
 
-    Public Shared Function Open(file As Stream) As Writer
-        Return New Writer(New BinaryDataWriter(file))
+    Public Shared Function Open(file As Stream, Optional env As Environment = Nothing) As Writer
+        Return New Writer(New BinaryDataWriter(file), env Or GlobalEnvironment.defaultEmpty)
     End Function
 
     Private Sub writeVersion()
+        ' {RVersions(format=3, serialized=262147, minimum=197888)}
+        '
         Call Xdr.EncodeInt32(3, Me.file) ' format 
-        Call Xdr.EncodeInt32(5, Me.file) ' r_serialized 
-        Call Xdr.EncodeInt32(233, Me.file) ' minimum 
+        Call Xdr.EncodeInt32(2, Me.file) ' r_serialized 
+        Call Xdr.EncodeInt32(0, Me.file) ' minimum 
     End Sub
 
     Private Sub writeExtractInfo()
         Dim encoding As Encoding = file.Encoding
-        Dim name As String = ""
+        Dim name As String = encoding.HeaderName.ToUpper
         Dim nameBytes As Byte() = Encoding.ASCII.GetBytes(name)
 
         Call Xdr.EncodeInt32(nameBytes.Length, Me.file)

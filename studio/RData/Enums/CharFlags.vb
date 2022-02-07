@@ -47,9 +47,19 @@ Namespace Flags
     Public Enum CharFlags
         HAS_HASH = 1
         BYTES = 1 << 1
+        ''' <summary>
+        ''' const LATIN1_MASK  = (1&lt;&lt;2);
+        ''' </summary>
         LATIN1 = 1 << 2
+        ''' <summary>
+        ''' const UTF8_MASK    = (1&lt;&lt;3);
+        ''' </summary>
         UTF8 = 1 << 3
         CACHED = 1 << 5
+
+        ''' <summary>
+        ''' const ASCII_MASK   = (1&lt;&lt;6);
+        ''' </summary>
         ASCII = 1 << 6
     End Enum
 End Namespace

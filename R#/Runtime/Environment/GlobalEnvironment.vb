@@ -67,6 +67,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
 Imports anything = Microsoft.VisualBasic.Scripting
+Imports Microsoft.VisualBasic.Language.Default
 
 <Assembly: InternalsVisibleTo("Rnotebook")>
 
@@ -177,8 +178,9 @@ Namespace Runtime
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
 
-        Public Shared Function defaultEmpty() As Environment
-            Return New RInterpreter().globalEnvir
+        <DebuggerStepThrough>
+        Public Shared Function defaultEmpty() As [Default](Of Environment)
+            Return DirectCast(New RInterpreter().globalEnvir, Environment)
         End Function
 
         ''' <summary>

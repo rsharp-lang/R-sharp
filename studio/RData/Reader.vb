@@ -76,9 +76,11 @@ Public MustInherit Class Reader
     }
 
     Protected ReadOnly expand_altrep As Boolean
+    Protected ReadOnly debug As Boolean = False
 
     <DebuggerStepThrough>
-    Sub New(expand_altrep As Boolean)
+    Sub New(expand_altrep As Boolean, Optional debug As Boolean = False)
+        Me.debug = debug
         Me.expand_altrep = expand_altrep
     End Sub
 
@@ -216,6 +218,10 @@ Public MustInherit Class Reader
         Dim add_reference = False
         Dim result As RObject = Nothing
         Dim value As Object
+
+        If debug Then
+            Call Console.WriteLine($"[{info_int}] => {info.ToString}")
+        End If
 
         Static typeList1 As New Index(Of RObjectType) From {RObjectType.LIST, RObjectType.LANG}
         Static objType3 As New Index(Of RObjectType) From {RObjectType.STR, RObjectType.VEC, RObjectType.EXPR}
@@ -366,11 +372,14 @@ Public MustInherit Class Reader
     ''' </summary>
     ''' <param name="bin"></param>
     ''' <returns></returns>
-    Public Shared Function ParseRDataBinary(bin As BinaryDataReader, Optional expand_altrep As Boolean = True) As RData
+    Public Shared Function ParseRDataBinary(bin As BinaryDataReader,
+                                            Optional expand_altrep As Boolean = True,
+                                            Optional debug As Boolean = False) As RData
+
         Dim format_type As RdataFormats = rdata_format(bin)
 
         If format_type = RdataFormats.XDR Then
-            Return New ParserXDR(bin, bin.Position, expand_altrep).parse_all
+            Return New ParserXDR(bin, bin.Position, expand_altrep, debug:=debug).parse_all
         Else
             Throw New NotImplementedException(format_type.Description)
         End If
@@ -383,13 +392,16 @@ Public MustInherit Class Reader
     ''' Data extracted of a R file.
     ''' </param>
     ''' <returns>Data contained in the file (versions and object).</returns>
-    Public Shared Function ParseData(bin As Stream, Optional expand_altrep As Boolean = True) As RData
+    Public Shared Function ParseData(bin As Stream,
+                                     Optional expand_altrep As Boolean = True,
+                                     Optional debug As Boolean = False) As RData
+
         Dim reader As New BinaryDataReader(bin)
         Dim filetype As FileTypes = file_type(reader)
 
         Select Case filetype
             Case FileTypes.rdata_binary_v2, FileTypes.rdata_binary_v3
-                Return ParseRDataBinary(reader, expand_altrep)
+                Return ParseRDataBinary(reader, expand_altrep, debug)
             Case FileTypes.gzip
                 Using ms As New MemoryStream
                     Dim nbytes As Integer = reader.Length - reader.Position
@@ -400,7 +412,9 @@ Public MustInherit Class Reader
 
                     Using newData As MemoryStream = gzip.UnGzipStream(ms)
                         Call newData.Seek(Scan0, SeekOrigin.Begin)
-                        Return ParseData(newData, expand_altrep)
+
+                        ' parse plain data
+                        Return ParseData(newData, expand_altrep, debug)
                     End Using
                 End Using
             Case Else
