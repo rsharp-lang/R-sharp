@@ -129,7 +129,7 @@ Public Class ContentParser : Inherits RDocParser
     ''' </summary>
     ''' <returns></returns>
     Public Function GetCurrentContent() As Doc
-
+        Throw New NotImplementedException
     End Function
 End Class
 

@@ -35,7 +35,7 @@ Public Class RDoc : Implements INamedValue
     End Function
 
     Public Function GetMarkdownDoc() As String
-
+        Throw New NotImplementedException
     End Function
 End Class
 
@@ -65,11 +65,11 @@ Public Class Doc
     End Property
 
     Public Function GetMarkdown() As String
-
+        Throw New NotImplementedException
     End Function
 
     Public Function GetHtml() As String
-
+        Throw New NotImplementedException
     End Function
 
     Public Overrides Function ToString() As String
