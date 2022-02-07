@@ -103,7 +103,7 @@ Namespace Development.Package.File
                     Case ExpressionTypes.Require : Return New RRequire(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.SymbolDeclare : Return New RSymbol(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.Return : Return New RReturns(Nothing).GetExpression(buffer, Me, desc)
-                    Case ExpressionTypes.SymbolIndex : Return New RSymbolIndex(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.SymbolIndex, ExpressionTypes.DotNetMemberReference : Return New RSymbolIndex(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.SymbolReference, ExpressionTypes.SymbolNamespaceReference
                         Return New RSymbolReference(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.SymbolAssign, ExpressionTypes.SymbolMemberAssign

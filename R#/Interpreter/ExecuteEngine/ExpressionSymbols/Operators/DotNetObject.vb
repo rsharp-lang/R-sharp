@@ -18,7 +18,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
         Public Overrides ReadOnly Property expressionName As ExpressionTypes
             Get
-                Return ExpressionTypes.SymbolIndex
+                Return ExpressionTypes.DotNetMemberReference
             End Get
         End Property
 
