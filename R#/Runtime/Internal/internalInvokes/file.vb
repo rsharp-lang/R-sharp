@@ -295,6 +295,22 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' Get file extension name
+        ''' </summary>
+        ''' <param name="path">the file path string</param>
+        ''' <returns>
+        ''' returns a file extension suffix name in lower case, if there is 
+        ''' no extension name or path string is empty, then empty string 
+        ''' value will be returned.
+        ''' </returns>
+        <ExportAPI("file.ext")>
+        Public Function fileExt(<RRawVectorArgument> path As Object) As String()
+            Return (From filepath As String
+                    In DirectCast(REnv.asVector(Of String)(path), String())
+                    Select ExtensionSuffix(filepath)).ToArray
+        End Function
+
+        ''' <summary>
         ''' copy file contents in one dir to another dir
         ''' </summary>
         ''' <param name="from"></param>
