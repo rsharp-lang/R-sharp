@@ -4,18 +4,21 @@ i = order(into2, decreasing = TRUE);
 
 print(i);
 
-i = length(into2) - i + 1;
+# i = length(into2) - i + 1;
 
 cat("\n\n");
 
-print(i);
+# print(i);
 
 cat("\n\n\n\n");
 
 into2 = round(into2 / max(into2) * 100, 2);
 
+print("before:");
+
 print(into2);
 
 cat("===================================\n");
 
+print("after:");
 print(into2[i]);
