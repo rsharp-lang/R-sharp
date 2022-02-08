@@ -109,6 +109,14 @@ Public Module InternalParser
                 calls = New FunctionInvoke(fullName, calls.stackFrame, calls.parameters)
 
                 Return New SyntaxResult(New PipelineFunction(calls))
+            ElseIf blocks >= 3 Then
+
+                For i As Integer = 1 To blocks.Count - 1
+                    If blocks(i).Length = 1 AndAlso blocks(i)(Scan0) = (TokenType.operator, ".") Then
+
+                    End If
+                Next
+
             End If
 
             expr = blocks.ParseExpression(opts)
