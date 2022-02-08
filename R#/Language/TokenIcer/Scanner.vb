@@ -376,6 +376,11 @@ Namespace Language.TokenIcer
                         'Else
                         '    Throw New SyntaxErrorException
                     End If
+                ElseIf c = "."c AndAlso (peekNext = "0"c OrElse (peekNext >= "1"c AndAlso peekNext <= "9")) Then
+                    ' 20220208
+                    ' makes bugs fixed for python/julia/typescript language parser
+                    buffer += "."c
+                    Return Nothing
                 End If
 
                 Return New Token With {.name = TokenType.operator, .text = c}
