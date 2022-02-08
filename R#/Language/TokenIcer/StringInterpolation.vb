@@ -86,7 +86,7 @@ Namespace Language.TokenIcer
 
                     ' 当前的字符为 { 栈起始符号
                     ' 继续解析token直到遇到最顶层的 栈结束符号 }
-                    tokenicer = opts.NewScanner(code)
+                    tokenicer = opts.NewScanner(code, True)
 
                     For Each t As Token In tokenicer.GetTokens
                         If t.name = TokenType.open AndAlso t.text = "{" Then

@@ -90,7 +90,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Shared Function ParseLines(rscript As Rscript, Optional keepsCommentLines As Boolean = False) As IEnumerable(Of Expression)
-            Return New SyntaxBuilderOptions(AddressOf CreateExpression, Function(c) New Scanner(c)) With {
+            Return New SyntaxBuilderOptions(AddressOf CreateExpression, Function(c, s) New Scanner(c, s)) With {
                 .keepsCommentLines = keepsCommentLines,
                 .source = rscript
             } _

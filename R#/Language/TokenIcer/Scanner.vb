@@ -74,6 +74,8 @@ Namespace Language.TokenIcer
         ''' </summary>
         Dim lineNumber As Integer = 1
         Dim lastPopoutToken As Token
+        Dim tokenStringMode As Boolean
+        Dim isStringInterpolateClose As Boolean = False
 
         Protected keepsDelimiter As Boolean = False
         Protected ReadOnly keywords As New Index(Of String)(Rkeywords.Objects)
@@ -103,12 +105,14 @@ Namespace Language.TokenIcer
         End Property
 
         <DebuggerStepThrough>
-        Sub New(source As [Variant](Of String, CharPtr))
+        Sub New(source As [Variant](Of String, CharPtr), Optional tokenStringMode As Boolean = False)
             If source Like GetType(String) Then
                 Me.code = source.TryCast(Of String).SolveStream
             Else
                 Me.code = source.TryCast(Of CharPtr)
             End If
+
+            Me.tokenStringMode = tokenStringMode
         End Sub
 
         Public Overridable Iterator Function GetTokens() As IEnumerable(Of Token)
@@ -141,6 +145,10 @@ Namespace Language.TokenIcer
                     If TypeOf token.Value Is JoinToken Then
                         Yield finalizeToken(CType(token, JoinToken).next, start)
                     End If
+                End If
+
+                If tokenStringMode AndAlso isStringInterpolateClose Then
+                    Exit Do
                 End If
             Loop
 
@@ -177,6 +185,8 @@ Namespace Language.TokenIcer
 
                 escape.string = False
             End If
+
+            isStringInterpolateClose = token.name = TokenType.close AndAlso token.text = "}"
 
             Return token
         End Function

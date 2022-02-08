@@ -16,8 +16,8 @@ Namespace Language
         }
 
         <DebuggerStepThrough>
-        Sub New(source As [Variant](Of String, CharPtr))
-            Call MyBase.New(source)
+        Sub New(source As [Variant](Of String, CharPtr), Optional tokenStringMode As Boolean = False)
+            Call MyBase.New(source, tokenStringMode)
 
             Call keywords.Clear()
             Call keywords.Add(jlKeywords).ToArray
