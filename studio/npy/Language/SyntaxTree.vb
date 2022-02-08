@@ -162,7 +162,7 @@ Public Class SyntaxTree
         Dim package As Token = line.tokens(1)
 
         If line.tokens(2) <> (TokenType.keyword, "import") Then
-            Throw New NotImplementedException
+            Throw New NotImplementedException("invalid package import statement: " & line.ToString)
         End If
 
         ' from ... import ...
