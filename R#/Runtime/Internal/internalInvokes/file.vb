@@ -1282,5 +1282,19 @@ Namespace Runtime.Internal.Invokes
         Public Function dataUri(file As String) As String
             Return New DataURI(file).ToString
         End Function
+
+        ''' <summary>
+        ''' create a in-memory byte stream object
+        ''' </summary>
+        ''' <param name="byts"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("bytes")>
+        Public Function bytes(<RRawVectorArgument> byts As Object, Optional env As Environment = Nothing) As MemoryStream
+            Dim stream As Byte() = REnv.asVector(Of Byte)(byts)
+            Dim ms As New MemoryStream(stream)
+
+            Return ms
+        End Function
     End Module
 End Namespace
