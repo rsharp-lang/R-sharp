@@ -524,11 +524,20 @@ Binary:
         End Function
 
         Private Iterator Function getTupleSymbols(target As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As IEnumerable(Of SyntaxResult)
-            For Each token As SyntaxResult In target.SplitByTopLevelDelimiter(TokenType.comma) _
-                                                    .Where(Function(t) Not t.isComma) _
-                                                    .Select(Function(tokens)
-                                                                Return opts.ParseExpression(tokens, opts)
-                                                            End Function)
+            Dim err As Exception = Nothing
+            Dim tokenBlocks = target.SplitByTopLevelDelimiter(TokenType.comma, err:=err)
+
+            If Not err Is Nothing Then
+                Yield SyntaxResult.CreateError(err, opts)
+                Return
+            End If
+
+            For Each token As SyntaxResult In tokenBlocks _
+                .Where(Function(t) Not t.isComma) _
+                .Select(Function(tokens)
+                            Return opts.ParseExpression(tokens, opts)
+                        End Function)
+
                 Yield token
 
                 If token.isException Then
