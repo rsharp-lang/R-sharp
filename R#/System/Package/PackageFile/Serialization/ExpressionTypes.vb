@@ -77,6 +77,8 @@ Namespace Development.Package.File
         SymbolRegexp
         SymbolMemberAssign
 
+        DotNetMemberReference
+
         ''' <summary>
         ''' A linq query epxression in R# scripting 
         ''' </summary>
@@ -115,6 +117,8 @@ Namespace Development.Package.File
 
         UnaryNot = 110
         Binary
+
+
 
         UnaryNumeric
     End Enum

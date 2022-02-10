@@ -1,0 +1,1 @@
+ms2 = ms2_peaks(mzpack, precursorMz = target_mz).rt_slice(rtmin = target$rtmin, rtmax = target$rtmax)

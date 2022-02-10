@@ -185,7 +185,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("parse")>
         <RApiReturn(GetType(Expression))>
         Public Function parse(text As String, Optional env As Environment = Nothing) As Object
-            Dim opts As New SyntaxBuilderOptions(AddressOf Expression.CreateExpression, Function(c) New Scanner(c)) With {
+            Dim opts As New SyntaxBuilderOptions(AddressOf Expression.CreateExpression, Function(c, s) New Scanner(c, s)) With {
                 .source = Rscript.AutoHandleScript(text)
             }
             Dim result As Expression() = opts.source _

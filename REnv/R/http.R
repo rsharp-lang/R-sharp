@@ -21,8 +21,19 @@ const http_get = function(url, streamTo, interval = 3, filetype = "html") {
   const prefix as string     = substr(cacheKey, 1, 2);
   const cache_file as string = `${http.cache_dir}/${prefix}/${cacheKey}.${filetype}`;
   const hit_cache = list(hit = "yes");
+  
+  test_cache = (!file.exists(cache_file)) || (file.size(cache_file) <= 0);
 
-  if ((!file.exists(cache_file)) || (file.size(cache_file) <= 0)) {
+  if (length(test_cache) == 0) {
+	warning(print(`invalid cache key for [${url}]!`));
+	
+	print(prefix);
+	print(cacheKey);
+	
+	test_cache = FALSE;
+  }
+
+  if (test_cache) {
     # request data from the remote server
     streamTo(url, cache_file);
     # sleep for a seconds after request resource data

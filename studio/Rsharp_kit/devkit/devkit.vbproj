@@ -192,6 +192,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="documents\RFileHeader.vb" />
     <Compile Include="workflow\automation.vb" />
     <Compile Include="workflow\config.json.vb" />
     <Compile Include="devkit.vb" />

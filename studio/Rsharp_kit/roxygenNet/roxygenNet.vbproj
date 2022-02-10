@@ -163,6 +163,9 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Rd\DocParser.vb" />
+    <Compile Include="docs.vb" />
+    <Compile Include="Rd\RDoc.vb" />
     <Compile Include="rdocumentation.vb" />
     <Compile Include="rdocumentation\package.vb" />
     <Compile Include="rdocumentation\function.vb" />

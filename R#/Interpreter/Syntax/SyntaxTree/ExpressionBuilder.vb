@@ -310,6 +310,20 @@ Namespace Interpreter.SyntaxParser
                     Return SyntaxImplements.SequenceLiteral(from, [to], steps, opts)
                 ElseIf code(1).Length = 1 AndAlso code(1)(Scan0).name = TokenType.operator Then
                     Dim op As String = code(1)(Scan0).text
+
+                    If op = "::" AndAlso code(0).First = (TokenType.open, "[") AndAlso code(0).Last = (TokenType.close, "]") Then
+                        Dim obj = code(0).Skip(1).Take(code(0).Length - 2).DoCall(Function(t) opts.ParseExpression(t, opts))
+                        Dim target = opts.ParseExpression(code(2), opts)
+
+                        If obj.isException Then
+                            Return obj
+                        ElseIf target.isException Then
+                            Return target
+                        Else
+                            Return New SyntaxResult(New DotNetObject(obj.expression, target.expression))
+                        End If
+                    End If
+
                     Dim left As SyntaxResult = opts.ParseExpression(code(0), opts)
                     Dim right As SyntaxResult = opts.ParseExpression(code(2), opts)
 

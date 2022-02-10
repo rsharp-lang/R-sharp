@@ -41,7 +41,7 @@ Public Class SyntaxTree
         Me.debug = debug
         Me.script = script
         Me.scanner = New PyScanner(script.script)
-        Me.opts = New SyntaxBuilderOptions(AddressOf ParsePythonLine, Function(c) New PyScanner(c)) With {
+        Me.opts = New SyntaxBuilderOptions(AddressOf ParsePythonLine, Function(c, s) New PyScanner(c, s)) With {
             .source = script,
             .debug = debug,
             .pipelineSymbols = {"."}
@@ -162,7 +162,7 @@ Public Class SyntaxTree
         Dim package As Token = line.tokens(1)
 
         If line.tokens(2) <> (TokenType.keyword, "import") Then
-            Throw New NotImplementedException
+            Throw New NotImplementedException("invalid package import statement: " & line.ToString)
         End If
 
         ' from ... import ...

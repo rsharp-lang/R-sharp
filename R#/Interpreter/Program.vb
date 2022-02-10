@@ -113,7 +113,7 @@ Namespace Interpreter
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function CreateProgram(Rscript As Rscript, Optional debug As Boolean = False, Optional ByRef error$ = Nothing) As Program
-            Dim opts As New SyntaxBuilderOptions(AddressOf Expression.CreateExpression, Function(c) New Scanner(c)) With {
+            Dim opts As New SyntaxBuilderOptions(AddressOf Expression.CreateExpression, Function(c, s) New Scanner(c, s)) With {
                 .debug = debug,
                 .source = Rscript
             }

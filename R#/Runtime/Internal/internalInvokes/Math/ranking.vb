@@ -172,8 +172,7 @@ Namespace Runtime.Internal.Invokes
                 .DoCall(Function(v)
                             Return RankOrder(Of T).Ranking(v, desc:=decreasing)
                         End Function) _
-                .OrderBy(Function(d) d.i) _
-                .Select(Function(d) CInt(d.rank)) _
+                .Select(Function(d) d.i + 1) _
                 .ToArray
         End Function
     End Module
