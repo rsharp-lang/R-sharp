@@ -147,6 +147,17 @@ Public Module InteropArgumentHelper
         End If
     End Function
 
+    ''' <summary>
+    ''' parse data tuple for graphics element size 
+    ''' </summary>
+    ''' <param name="size">
+    ''' supports a numeric vector, string, list element with tuple fields: width/height or w/h
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <param name="default"></param>
+    ''' <returns>
+    ''' a string with value format: width,height
+    ''' </returns>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function getSize(size As Object, env As Environment, Optional default$ = "2700,2000") As String
         Return graphicsPipeline.getSize(size, env, [default])
