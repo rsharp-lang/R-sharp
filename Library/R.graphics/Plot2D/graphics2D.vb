@@ -332,8 +332,8 @@ Module graphics2D
     End Function
 
     <ExportAPI("contour")>
-    Public Function contourPolygon(data As MeasureData()) As ContourLayer()
-        Dim contours As GeneralPath() = ContourLayer.GetContours(data).ToArray
+    Public Function contourPolygon(data As MeasureData(), Optional interpolateFill As Boolean = True) As ContourLayer()
+        Dim contours As GeneralPath() = ContourLayer.GetContours(data, interpolateFill:=interpolateFill).ToArray
         Dim result = contours.Select(Function(c) c.GetContour).ToArray
 
         Return result
