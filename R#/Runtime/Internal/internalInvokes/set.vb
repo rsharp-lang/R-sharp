@@ -41,6 +41,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
@@ -322,8 +323,27 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' The Jaccard Index, also known as the Jaccard similarity coefficient, 
+        ''' is a statistic used in understanding the similarities between sample 
+        ''' sets. The measurement emphasizes similarity between finite sample 
+        ''' sets, and is formally defined as the size of the intersection divided
+        ''' by the size of the union of the sample sets.
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="y"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("jaccard")>
         Public Function jaccard(x As Array, y As Array, Optional env As Environment = Nothing) As Double
+            If x Is Nothing OrElse x.Length = 0 Then
+                Call env.AddMessage("vector set x is nothing, no intersection elements for count!", MSG_TYPES.WRN)
+                Return 0
+            ElseIf y Is Nothing OrElse y.Length = 0 Then
+                Call env.AddMessage("vector set y is nothing, no intersection elements for count!", MSG_TYPES.WRN)
+                Return 0
+            End If
+
             x = REnv.TryCastGenericArray(x, env)
             y = REnv.TryCastGenericArray(y, env)
 
