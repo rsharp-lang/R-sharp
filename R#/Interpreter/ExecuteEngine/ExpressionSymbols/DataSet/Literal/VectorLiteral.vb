@@ -50,6 +50,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -88,11 +89,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim vector As Array = values _
-                .Select(Function(exp)
-                            Return Runtime.[single](exp.Evaluate(envir))
-                        End Function) _
-                .ToArray
+            Dim vector As Array = Array.CreateInstance(GetType(Object), values.Length)
+            Dim val As Object
+            Dim expr As Expression
+
+            For i As Integer = 0 To values.Length - 1
+                expr = values(i)
+                val = REnv.single(expr.Evaluate(envir))
+
+                If Program.isException(val) Then
+                    Return val
+                Else
+                    vector(i) = val
+                End If
+            Next
+
             Dim type As Type = MeasureRealElementType(vector)
 
             If Not type Is GetType(Void) AndAlso Not type Is GetType(Object) Then

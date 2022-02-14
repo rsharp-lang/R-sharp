@@ -128,6 +128,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 If TypeOf item Is BreakLoop Then
                     Exit For
                 ElseIf Program.isException(item) Then
+                    ' is error message
                     Return item
                 ElseIf TypeOf item Is ReturnValue Then
                     Return item
@@ -158,6 +159,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
             Return result
         End Function
 
+        ''' <summary>
+        ''' run a single loop
+        ''' </summary>
+        ''' <param name="value"></param>
+        ''' <param name="stackframe"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Function RunLoop(value As Object, stackframe As StackFrame, env As Environment) As Object
             Dim err As Message = Nothing
 
