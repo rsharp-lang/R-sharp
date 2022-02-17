@@ -153,7 +153,11 @@ Namespace Interpreter
                 Dim dllfile As String = $"{App.HOME}/{name}"
 
                 If dllfile.FileExists Then
-                    Call env.hybridsEngine.Register(dllpath:=dllfile)
+                    Try
+                        Call env.hybridsEngine.Register(dllpath:=dllfile)
+                    Catch ex As Exception
+                        Call env.AddMessage({$"can not load assembly: {dllfile}!", ex.ToString}, MSG_TYPES.WRN)
+                    End Try
                 Else
                     Call env.AddMessage($"ignore missing script engine module: {dllfile}...", MSG_TYPES.WRN)
                 End If
