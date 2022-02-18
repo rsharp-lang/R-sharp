@@ -143,6 +143,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="file">a string specifying the path to the saved image</param>
         ''' <returns>the image in a matrix or array form</returns>
         <ExportAPI("readImage")>
+        <RApiReturn(GetType(Image))>
         Public Function readImage(file As Object, Optional env As Environment = Nothing) As Object
             If file Is Nothing Then
                 Return Nothing

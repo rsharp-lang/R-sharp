@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::961070397d3a2044548c858707de8ae5, Library\R.graphics\ImageFilters.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module ImageFilters
-    ' 
-    '     Function: Diffusion, Emboss, Pencil, Sharp, Soften
-    '               WoodCarving
-    ' 
-    ' /********************************************************************************/
+' Module ImageFilters
+' 
+'     Function: Diffusion, Emboss, Pencil, Sharp, Soften
+'               WoodCarving
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -101,6 +101,17 @@ Module ImageFilters
         Using bitmap As BitmapBuffer = BitmapBuffer.FromImage(image)
             Return bitmap.Sharp(sharpDgree, max).GetImage(flush:=True)
         End Using
+    End Function
+
+    <ExportAPI("gauss_blur")>
+    Public Function gaussBlurEffect(image As Image, Optional levels As Integer = 100) As Image
+        Dim bitmap As New Bitmap(image)
+
+        For i As Integer = 0 To levels
+            bitmap = GaussBlur.GaussBlur(bitmap)
+        Next
+
+        Return bitmap
     End Function
 
 End Module
