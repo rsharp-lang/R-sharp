@@ -22,7 +22,7 @@ Namespace My.Resources
     '''<summary>
     '''  A strongly-typed resource class, for looking up localized strings, etc.
     '''</summary>
-    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0"),  _
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0"),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
      Global.Microsoft.VisualBasic.HideModuleNameAttribute()>  _
@@ -58,6 +58,35 @@ Namespace My.Resources
             Set
                 resourceCulture = value
             End Set
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to ncolors= 128
+        '''# r g b
+        '''0.000000 0.028620 0.465106
+        '''0.000000 0.085859 0.391319
+        '''0.000000 0.143099 0.317532
+        '''0.000000 0.200338 0.243745
+        '''0.000000 0.257578 0.169958
+        '''0.000000 0.314817 0.096171
+        '''0.000000 0.372057 0.022384
+        '''0.000000 0.319160 0.152299
+        '''0.000000 0.265986 0.282725
+        '''0.000000 0.239400 0.347938
+        '''0.000000 0.159640 0.543576
+        '''0.000000 0.133053 0.608789
+        '''0.000000 0.053293 0.804427
+        '''0.000000 0.026706 0.869640
+        '''0.000000 0.110508 1.000000
+        '''0.000000 0.165887 1.000000
+        '''0.000000 0.332023 1.000000
+        '''0.000000 0.442780 1.000000
+        '''0.000 [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property MPL_gist_ncar() As String
+            Get
+                Return ResourceManager.GetString("MPL_gist_ncar", resourceCulture)
+            End Get
         End Property
     End Module
 End Namespace
