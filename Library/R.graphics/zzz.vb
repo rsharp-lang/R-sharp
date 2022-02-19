@@ -68,6 +68,6 @@ Public Class zzz
     End Function
 
     Private Shared Sub registerColorSet()
-        Call Designer.Register("MPL_gist_ncar", loadColors(My.Resources.ResourceManager.GetString("MPL_gist_ncar")))
+        Call Designer.Register("MPL_gist_ncar", loadColors(My.Resources.MPL_gist_ncar))
     End Sub
 End Class
