@@ -82,6 +82,60 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <ExportAPI("wmf")>
+        Public Function wmf(image As Object,
+                            Optional file As Object = Nothing,
+                            <RListObjectArgument>
+                            Optional args As list = Nothing,
+                            Optional env As Environment = Nothing) As Object
+
+            If image Is Nothing Then
+                Return debug.stop("the source bitmap image can not be nothing!", env)
+            Else
+                Return fileStreamWriter(
+                    env:=env,
+                    file:=file,
+                    write:=Sub(stream)
+                               If image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
+                                   Call DirectCast(image, SaveGdiBitmap).Save(stream, Nothing)
+                               Else
+                                   Call DirectCast(image, Image).Save(stream, Nothing)
+                               End If
+                           End Sub)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' open stream for file write
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="write"></param>
+        Public Function fileStreamWriter(env As Environment, file As Object, write As Action(Of Stream)) As Object
+            Dim stream As Stream
+            Dim is_file As Boolean = False
+
+            If file Is Nothing Then
+                stream = Console.OpenStandardOutput
+            ElseIf TypeOf file Is String Then
+                stream = DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+                is_file = True
+            ElseIf TypeOf file Is Stream Then
+                stream = file
+            Else
+                Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
+            End If
+
+            Call write(stream)
+            Call stream.Flush()
+
+            If is_file Then
+                Call stream.Close()
+                Call stream.Dispose()
+            End If
+
+            Return True
+        End Function
+
         ''' <summary>
         ''' save image data as bitmap image file
         ''' </summary>
@@ -99,36 +153,18 @@ Namespace Runtime.Internal.Invokes
 
             If image Is Nothing Then
                 Return debug.stop("the source bitmap image can not be nothing!", env)
-            End If
-
-            Dim stream As Stream
-            Dim is_file As Boolean = False
-
-            If file Is Nothing Then
-                stream = Console.OpenStandardOutput
-            ElseIf TypeOf file Is String Then
-                stream = DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
-                is_file = True
-            ElseIf TypeOf file Is Stream Then
-                stream = file
             Else
-                Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
+                Return fileStreamWriter(
+                    env:=env,
+                    file:=file,
+                    write:=Sub(stream)
+                               If image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
+                                   Call DirectCast(image, SaveGdiBitmap).Save(stream, format.GetFormat)
+                               Else
+                                   Call DirectCast(image, Image).Save(stream, format.GetFormat)
+                               End If
+                           End Sub)
             End If
-
-            If image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
-                Call DirectCast(image, SaveGdiBitmap).Save(stream, format.GetFormat)
-            Else
-                Call DirectCast(image, Image).Save(stream, format.GetFormat)
-            End If
-
-            Call stream.Flush()
-
-            If is_file Then
-                Call stream.Close()
-                Call stream.Dispose()
-            End If
-
-            Return True
         End Function
 
         ''' <summary>

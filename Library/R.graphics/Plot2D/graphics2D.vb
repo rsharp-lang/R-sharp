@@ -69,6 +69,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Canvas = Microsoft.VisualBasic.Imaging.Graphics2D
 Imports REnv = SMRUCC.Rsharp.Runtime
 
+''' <summary>
+''' 2D graphics
+''' </summary>
 <Package("graphics2D")>
 Module graphics2D
 
@@ -80,13 +83,29 @@ Module graphics2D
     <ExportAPI("paddingVector")>
     Public Function paddingVector(<RRawVectorArgument> margin As Object, Optional env As Environment = Nothing) As Double()
         Dim padding As Padding = Padding.TryParse(InteropArgumentHelper.getPadding(margin, "padding: 0px 0px 0px 0px;"))
-        Dim v As Double() = New Double() {padding.Top, padding.Right, padding.Bottom, padding.Left}
+        Dim v As Double() = New Double() {
+            padding.Top,
+            padding.Right,
+            padding.Bottom,
+            padding.Left
+        }
 
         Return v
     End Function
 
+    ''' <summary>
+    ''' create a legend element
+    ''' </summary>
+    ''' <param name="title$"></param>
+    ''' <param name="color"></param>
+    ''' <param name="font_style"></param>
+    ''' <param name="shape"></param>
+    ''' <returns></returns>
     <ExportAPI("legend")>
-    Public Function legend(title$, color As Object, Optional font_style As Object = CSSFont.Win10Normal, Optional shape As LegendStyles = LegendStyles.Circle) As LegendObject
+    Public Function legend(title$, color As Object,
+                           Optional font_style As Object = CSSFont.Win10Normal,
+                           Optional shape As LegendStyles = LegendStyles.Circle) As LegendObject
+
         Return New LegendObject With {
             .color = RColorPalette.getColor(color),
             .fontstyle = InteropArgumentHelper.getFontCSS(font_style),

@@ -937,6 +937,7 @@
     <Compile Include="Runtime\System\TryError.vb" />
     <Compile Include="Runtime\System\GetVectorElement.vb" />
     <Compile Include="Runtime\Internal\objects\base\dataframeBase.vb" />
+    <Compile Include="System\Components\WmfWriter.vb" />
     <Compile Include="System\Components\ProfileRecord.vb" />
     <Compile Include="System\Document\CodeAnalysis\SymbolAnalysis.vb" />
     <Compile Include="System\Document\Printer\ScriptFormatterPrinter.vb" />
