@@ -267,6 +267,8 @@ RE0:
             Return result
         End Function
 
+        <DebuggerStepThrough>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
             Return name
         End Function

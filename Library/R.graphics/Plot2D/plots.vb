@@ -701,7 +701,8 @@ Module plots
             size:=InteropArgumentHelper.getSize(args!size, env).SizeParser,
             title:=math.ToString,
             padding:=InteropArgumentHelper.getPadding(args!padding),
-            gridFill:=RColorPalette.getColor(args("grid.fill"), "rgb(250,250,250)")
+            gridFill:=RColorPalette.getColor(args("grid.fill"), "rgb(250,250,250)"),
+            driver:=driver
         )
     End Function
 
