@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7b6548d3bdc21f6806853cb1e69252b1, R#\Runtime\Interop\RsharpOperator\BinaryOperatorEngine.vb"
+﻿#Region "Microsoft.VisualBasic::8a8375dcb94b1c66afd17b3f521bfe8c, R#\Runtime\Interop\RsharpOperator\BinaryOperatorEngine.vb"
 
     ' Author:
     ' 

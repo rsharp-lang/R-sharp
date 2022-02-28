@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7694a309cbd72722b1cbd2826965e2dd, studio\Rstudio.common\Workdir.vb"
+﻿#Region "Microsoft.VisualBasic::ffd1b7eeed55cf9b9e34fb953af90641, studio\Rstudio.common\Workdir.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,6 @@
 
 #End Region
 
-
 Imports System.Runtime.CompilerServices
 
 ''' <summary>
@@ -65,4 +64,3 @@ Module Workdir
     End Function
 
 End Module
-

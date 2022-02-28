@@ -1,4 +1,79 @@
-﻿Imports Microsoft.VisualBasic.Emit.Marshal
+﻿#Region "Microsoft.VisualBasic::1389eba31349aed21836ff4d5d305044, studio\Rsharp_kit\roxygenNet\Rd\DocParser.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    ' Class DocParser
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    ' 
+    '     Function: CreateDoc, ParseDoc
+    ' 
+    '     Sub: walkChar
+    '     Class Escapes
+    ' 
+    ' 
+    ' 
+    ' 
+    ' 
+    ' Class RDocParser
+    ' 
+    ' 
+    ' 
+    ' Class ContentParser
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    ' 
+    '     Function: GetCurrentContent
+    ' 
+    '     Sub: walkChar
+    ' 
+    ' Class PlainTextParser
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    ' 
+    '     Function: GetCurrentText
+    ' 
+    '     Sub: walkChar
+    ' 
+    ' Class RcodeParser
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    '     Sub: walkChar
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework

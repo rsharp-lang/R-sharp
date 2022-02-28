@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3d45de0c994ccbb8445841d836b2f301, R#\System\Package\PackageFile\Expression\RIf.vb"
+﻿#Region "Microsoft.VisualBasic::2fd53c8cb3abf4c348bbb8c6381c8885, R#\System\Package\PackageFile\Expression\RIf.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     ' 
     '         Function: GetExpression
     ' 
-    '         Sub: (+2 Overloads) WriteBuffer
+    '         Sub: (+3 Overloads) WriteBuffer
     ' 
     ' 
     ' /********************************************************************************/

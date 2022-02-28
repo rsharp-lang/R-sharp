@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2343bc2ed43468a6f96d8ed68623f408, Library\R.graphics\Plot2D\geometry2D.vb"
+﻿#Region "Microsoft.VisualBasic::318f9838769e43ed624a02a3dce839ee, Library\R.graphics\Plot2D\geometry2D.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -90,4 +89,3 @@ Module geometry2D
     End Function
 
 End Module
-

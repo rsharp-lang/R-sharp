@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::810e6edc88d117efe203f844819b2d9e, studio\RData\ParserXDR.vb"
+﻿#Region "Microsoft.VisualBasic::cdad396281c9283c4b0e30ee0374243c, studio\RData\ParserXDR.vb"
 
     ' Author:
     ' 

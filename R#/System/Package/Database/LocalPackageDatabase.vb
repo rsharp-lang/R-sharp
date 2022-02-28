@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a725eff54664684cc19ca733eb653ad6, R#\System\Package\Database\LocalPackageDatabase.vb"
+﻿#Region "Microsoft.VisualBasic::26ab89b5eb6baea4dc70db97ff116135, R#\System\Package\Database\LocalPackageDatabase.vb"
 
     ' Author:
     ' 
@@ -33,9 +33,8 @@
 
     '     Class LocalPackageDatabase
     ' 
-    '         Properties: assemblies, localDb, numOfpackages, packages, system
+    '         Properties: assemblies, numOfpackages, packages, system
     ' 
-    '         Constructor: (+1 Overloads) Sub New
     '         Function: Build, EmptyRepository, FindPackage, GenericEnumerator, GetEnumerator
     '                   hasLibFile, hasLibPackage, Load
     ' 

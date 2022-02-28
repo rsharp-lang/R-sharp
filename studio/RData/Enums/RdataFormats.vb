@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7674894ef25190a68c1f34674338953a, studio\RData\Enums\RdataFormats.vb"
+﻿#Region "Microsoft.VisualBasic::946740d77948c2ed1b00f1f60f43a6cf, studio\RData\Enums\RdataFormats.vb"
 
     ' Author:
     ' 
@@ -31,10 +31,11 @@
 
     ' Summaries:
 
-    ' Enum RdataFormats
+    '     Enum RdataFormats
     ' 
     ' 
     '  
+    ' 
     ' 
     ' 
     ' 

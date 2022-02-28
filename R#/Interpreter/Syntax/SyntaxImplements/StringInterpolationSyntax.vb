@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::54369e07b2e977167baa1daef8d048dd, R#\Interpreter\Syntax\SyntaxImplements\StringInterpolationSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::07c9252c248e2d6654e256c7e7778c69, R#\Interpreter\Syntax\SyntaxImplements\StringInterpolationSyntax.vb"
 
     ' Author:
     ' 

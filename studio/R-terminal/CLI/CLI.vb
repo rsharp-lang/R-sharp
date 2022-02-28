@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a6d48927a8d578580bfc115bc03f813d, studio\R-terminal\CLI\CLI.vb"
+﻿#Region "Microsoft.VisualBasic::8bf743ee7d3f9beebff81959544eca77, studio\R-terminal\CLI\CLI.vb"
 
     ' Author:
     ' 
@@ -35,8 +35,6 @@
     ' 
     '     Function: BashRun, Info, man, SyntaxText, unixman
     '               Version
-    ' 
-    '     Sub: unixMan
     ' 
     ' /********************************************************************************/
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d05c97dfdbc5e59a1156baf576117fc6, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\VectorAppendProcessor.vb"
+﻿#Region "Microsoft.VisualBasic::39d121e29e4fca465ba1de21e96628cf, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\VectorAppendProcessor.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Class VectorAppendProcessor
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: expression
+    '         Function: expression, view
     ' 
     ' 
     ' /********************************************************************************/

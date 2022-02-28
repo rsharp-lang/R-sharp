@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::acd7b9715fd359eba16b421e66abac11, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NamespaceReference.vb"
+﻿#Region "Microsoft.VisualBasic::63f3fc040eef593c7dc21f4be1f9bf9d, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NamespaceReference.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Class NamespaceReferenceProcessor
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: expression
+    '         Function: expression, view
     ' 
     ' 
     ' /********************************************************************************/

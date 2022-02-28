@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c9bfb0155d19766ed8f31041dd5b3438, R#\Language\TokenType.vb"
+﻿#Region "Microsoft.VisualBasic::00118d078c2697c3155f4d05fddcda68, R#\Language\TokenType.vb"
 
     ' Author:
     ' 
@@ -34,10 +34,10 @@
     '     Enum TokenType
     ' 
     '         [operator], annotation, booleanLiteral, cliShellInvoke, close
-    '         comma, comment, identifier, iif, integerLiteral
-    '         invalid, keyword, missingLiteral, newLine, numberLiteral
-    '         open, regexp, sequence, stringInterpolation, stringLiteral
-    '         terminator
+    '         comma, comment, delimiter, identifier, iif
+    '         integerLiteral, invalid, keyword, missingLiteral, newLine
+    '         numberLiteral, open, regexp, sequence, stringInterpolation
+    '         stringLiteral, terminator
     ' 
     '  
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2d158c378e62036cdd29423ebeafe799, R#\Interpreter\ExecuteEngine\Linq\Syntax\SyntaxImplements.vb"
+﻿#Region "Microsoft.VisualBasic::719a96491c546427134de85fcda80f0d, R#\Interpreter\ExecuteEngine\Linq\Syntax\SyntaxImplements.vb"
 
     ' Author:
     ' 
@@ -35,8 +35,8 @@
     ' 
     '         Function: CreateAggregateQuery, CreateProjectionQuery, GetParameters, GetParameterTokens, GetProjection
     '                   GetSequence, GetVector, IsClosure, IsNumeric, JoinOperators
-    '                   ParseExpression, ParseKeywordExpression, ParseToken, ParseValueAssign, PopulateExpressions
-    '                   PopulateQueryExpression
+    '                   ParseExpression, ParseKeywordExpression, ParseSymbolDeclare, ParseToken, ParseValueAssign
+    '                   PopulateExpressions, PopulateQueryExpression
     ' 
     ' 
     ' /********************************************************************************/

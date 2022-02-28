@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c97e09697eab4267bfa182285d7b994f, Library\R_graphic.interop\gdi.vb"
+﻿#Region "Microsoft.VisualBasic::159b38a5ef90e11b46e4d84e396c2d4f, Library\R_graphic.interop\gdi.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module gdi
     ' 
-    '     Function: getBrush, getSolidbrush
+    '     Function: getBrush, getSolidBrush
     ' 
     ' /********************************************************************************/
 

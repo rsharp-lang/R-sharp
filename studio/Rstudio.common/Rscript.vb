@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5587c32bd3b94d4e2a57af14d81cbcf4, studio\Rstudio.common\Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::27fa90743520914a1c81373ac5cfcad8, studio\Rstudio.common\Rscript.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module Rscript
     ' 
-    '     Function: handleResult, isImports, isInvisible, isValueAssign
+    '     Function: FromFile, handleResult, isImports, isInvisible, isValueAssign
     ' 
     ' /********************************************************************************/
 

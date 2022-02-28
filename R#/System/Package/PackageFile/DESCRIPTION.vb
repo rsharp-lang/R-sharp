@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7c5a974c605cc513c713dca0a5b5e13f, R#\System\Package\PackageFile\DESCRIPTION.vb"
+﻿#Region "Microsoft.VisualBasic::874732cd62355513930b3ef6e3e90cc7, R#\System\Package\PackageFile\DESCRIPTION.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,9 @@
 
     '     Class DESCRIPTION
     ' 
-    '         Properties: [Date], Author, Description, License, Maintainer
-    '                     meta, Package, Title, Type, Version
+    '         Properties: [Date], Author, Description, isEmpty, License
+    '                     Maintainer, meta, Package, Title, Type
+    '                     Version
     ' 
     '         Function: Parse, toList, ToString
     ' 

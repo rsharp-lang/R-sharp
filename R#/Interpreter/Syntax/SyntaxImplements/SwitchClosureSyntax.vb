@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8ecd9727018b1ad8338e79781a1aa0df, R#\Interpreter\Syntax\SyntaxImplements\SwitchClosureSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::74314e245056f8e8d9dcab4a956d1f1d, R#\Interpreter\Syntax\SyntaxImplements\SwitchClosureSyntax.vb"
 
     ' Author:
     ' 

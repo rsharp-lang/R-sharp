@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b8591dda9f3a03a93c2d41c13f8cf778, studio\RData\Enums\FileTypes.vb"
+﻿#Region "Microsoft.VisualBasic::a8c0fc9c850ae61d613f8c8c2d5478da, studio\RData\Enums\FileTypes.vb"
 
     ' Author:
     ' 
@@ -31,10 +31,11 @@
 
     ' Summaries:
 
-    ' Enum FileTypes
+    '     Enum FileTypes
     ' 
     ' 
     '  
+    ' 
     ' 
     ' 
     ' 

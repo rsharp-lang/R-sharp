@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d7eafad187a1f281c2e47c3f71f7f023, R#\Runtime\Internal\internalInvokes\string\strings.vb"
+﻿#Region "Microsoft.VisualBasic::9a832485a9307c06fa5e1bc5e38ec60d, R#\Runtime\Internal\internalInvokes\string\strings.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,8 @@
 
     '     Module strings
     ' 
-    '         Function: AscW, endsWith, InStr, LCase, Mid
-    '                   startsWith, textLines, Trim, UCase
+    '         Function: AscW, endsWith, GetStackValue, InStr, LCase
+    '                   Mid, startsWith, textLines, Trim, UCase
     ' 
     ' 
     ' /********************************************************************************/

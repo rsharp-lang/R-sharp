@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5fd0b61a5993a49b7013efac1aa5add4, R#\Runtime\Internal\invoke.vb"
+﻿#Region "Microsoft.VisualBasic::00b6ace6317bbaab8679ccfe17ae8530, R#\Runtime\Internal\invoke.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,8 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: [stop], getFunction, invalidParameter, invokeInternals, missingParameter
+    '         Function: [stop], getFunction, invalidParameter, invokeInternals, isRInternal
+    '                   missingParameter
     ' 
     '         Sub: pushEnvir
     ' 

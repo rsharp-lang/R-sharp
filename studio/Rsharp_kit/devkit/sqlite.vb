@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8a6640120c49a836ba3bbb64eab7a1ed, studio\Rsharp_kit\devkit\sqlite.vb"
+﻿#Region "Microsoft.VisualBasic::c60d03841f3cfc8fe7cd58d731e01471, studio\Rsharp_kit\devkit\sqlite.vb"
 
     ' Author:
     ' 

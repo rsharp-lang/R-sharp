@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::52fcffab2f70b1946010e614a46d874d, R#\System\Document\ShellScript\ShellScript.vb"
+﻿#Region "Microsoft.VisualBasic::376c340638c90e1efbe5504b8c33f439, R#\System\Document\ShellScript\ShellScript.vb"
 
     ' Author:
     ' 

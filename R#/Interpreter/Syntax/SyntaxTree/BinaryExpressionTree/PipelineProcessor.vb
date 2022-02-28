@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d12b8b4245d15c96b427742a0b6d21cf, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\PipelineProcessor.vb"
+﻿#Region "Microsoft.VisualBasic::c27da06c46f2d3414cbf08a8aa333ad0, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\PipelineProcessor.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Class PipelineProcessor
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: buildPipeline, expression, isFunctionTuple
+    '         Function: buildPipeline, expression, isFunctionTuple, view
     ' 
     ' 
     ' /********************************************************************************/

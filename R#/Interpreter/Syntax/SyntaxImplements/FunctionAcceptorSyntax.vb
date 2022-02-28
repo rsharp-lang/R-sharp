@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9248ca698aafc0b3d41cf2a54ce6fadb, R#\Interpreter\Syntax\SyntaxImplements\FunctionAcceptorSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::2392394a4ba9310bf16a24c40ed160f6, R#\Interpreter\Syntax\SyntaxImplements\FunctionAcceptorSyntax.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module FunctionAcceptorSyntax
     ' 
-    '         Function: (+3 Overloads) FunctionAcceptorInvoke
+    '         Function: CreateInvoke, (+3 Overloads) FunctionAcceptorInvoke
     ' 
     ' 
     ' /********************************************************************************/
