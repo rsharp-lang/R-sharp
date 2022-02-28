@@ -1,5 +1,8 @@
-﻿Imports Microsoft.VisualBasic.Imaging.Driver
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Driver
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Module imageDriverHandler
 
@@ -20,5 +23,14 @@ Module imageDriverHandler
         Next
 
         Return Drivers.Default
+    End Function
+
+    <Extension>
+    Public Function GetDevice(args As list) As IGraphics
+        If args.hasName("grDevices") Then
+            Return args!grDevices
+        Else
+            Return Nothing
+        End If
     End Function
 End Module

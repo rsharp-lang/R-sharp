@@ -63,7 +63,8 @@ Namespace Runtime.Internal.Invokes
 
         ReadOnly devlist As New List(Of IGraphics)
 
-        Friend curDev As IGraphics
+        Friend curDev As IGraphics = Nothing
+
         Friend Sub openNew(dev As IGraphics)
             curDev = dev
             devlist.Add(dev)
@@ -136,6 +137,10 @@ Namespace Runtime.Internal.Invokes
             If Program.isException(argumentsVal) Then
                 Return argumentsVal
             Else
+                If Not curDev Is Nothing Then
+                    DirectCast(argumentsVal, list).add("grDevices", curDev)
+                End If
+
                 Return DirectCast(argumentsVal, list).invokeGeneric([object], env)
             End If
         End Function
