@@ -47,7 +47,9 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Net.Http
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -58,6 +60,62 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Namespace Runtime.Internal.Invokes
 
     Module graphics
+
+        ReadOnly devlist As New List(Of IGraphics)
+
+        Friend curDev As IGraphics
+        Friend Sub openNew(dev As IGraphics)
+            curDev = dev
+            devlist.Add(dev)
+        End Sub
+
+        ''' <summary>
+        ''' returns the number and name of the new active device 
+        ''' (after the specified device has been shut down).
+        ''' </summary>
+        ''' <param name="which">An integer specifying a device number.</param>
+        ''' <returns></returns>
+        <ExportAPI("dev.off")>
+        Public Function devOff(Optional which% = -1, Optional env As Environment = Nothing) As Object
+            Dim dev As IGraphics
+
+            If which < 1 Then
+                dev = devlist.LastOrDefault
+
+                If dev Is Nothing Then
+                    Return Internal.debug.stop("Error in dev.off() : cannot shut down device 1 (the null device)", env)
+                Else
+                    devlist.Pop()
+                End If
+            Else
+                dev = devlist.ElementAtOrDefault(which - 1)
+
+                If dev Is Nothing Then
+                    Return Internal.debug.stop($"Error in dev.off() : cannot shut down device {which} (the null device)", env)
+                Else
+                    devlist.RemoveAt(which)
+                End If
+            End If
+
+            Call dev.Flush()
+            Call dev.Dispose()
+
+            Return which
+        End Function
+
+        ''' <summary>
+        ''' returns a length-one named integer vector giving the number and name of the 
+        ''' active device, or 1, the null device, if none is active.
+        ''' </summary>
+        ''' <returns></returns>
+        <ExportAPI("dev.cur")>
+        Public Function devCur() As Integer
+            If curDev Is Nothing Then
+                Return -1
+            Else
+                Return curDev.GetHashCode
+            End If
+        End Function
 
         ''' <summary>
         ''' ## Generic X-Y Plotting
@@ -91,14 +149,24 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("wmf")>
-        Public Function wmf(image As Object,
+        Public Function wmf(Optional image As Object = Nothing,
                             Optional file As Object = Nothing,
                             <RListObjectArgument>
                             Optional args As list = Nothing,
                             Optional env As Environment = Nothing) As Object
 
             If image Is Nothing Then
-                Return debug.stop("the source bitmap image can not be nothing!", env)
+                ' just open a new device
+                Dim size As Size = graphicsPipeline.getSize(args!size, env, "2700,2000").SizeParser
+                Dim buffer = GetFileStream(file, FileAccess.Write, env)
+
+                If buffer Like GetType(Message) Then
+                    Return buffer.TryCast(Of Message)
+                Else
+                    Call openNew(New Wmf(size, buffer.TryCast(Of Stream)))
+                End If
+
+                Return Nothing
             ElseIf Not image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
                 Return Message.InCompatibleType(GetType(SaveGdiBitmap), image.GetType, env)
             Else

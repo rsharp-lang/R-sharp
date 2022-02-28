@@ -70,9 +70,6 @@ Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 <Package("grDevices", Category:=APICategories.UtilityTools)>
 Public Module grDevices
 
-    Dim devlist As New Dictionary(Of Integer, IGraphics)
-    Dim curDev As IGraphics
-
     ''' <summary>
     ''' ## Cairographics-based SVG, PDF and PostScript Graphics Devices
     ''' 
@@ -217,31 +214,6 @@ Public Module grDevices
         End Select
 
         Return image
-    End Function
-
-    ''' <summary>
-    ''' returns the number and name of the new active device 
-    ''' (after the specified device has been shut down).
-    ''' </summary>
-    ''' <param name="which">An integer specifying a device number.</param>
-    ''' <returns></returns>
-    <ExportAPI("dev.off")>
-    Public Function devOff(Optional which% = -1) As Integer
-        Throw New NotImplementedException
-    End Function
-
-    ''' <summary>
-    ''' returns a length-one named integer vector giving the number and name of the 
-    ''' active device, or 1, the null device, if none is active.
-    ''' </summary>
-    ''' <returns></returns>
-    <ExportAPI("dev.cur")>
-    Public Function devCur() As Integer
-        If curDev Is Nothing Then
-            Return -1
-        Else
-            Return curDev.GetHashCode
-        End If
     End Function
 
     ''' <summary>
