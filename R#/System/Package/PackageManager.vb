@@ -420,6 +420,10 @@ Namespace Development.Package
             Next
         End Function
 
+        ''' <summary>
+        ''' 从<see cref="LocalPackageDatabase.assemblies"/>中枚举出所有的<see cref="PackageLoaderEntry"/>
+        ''' </summary>
+        ''' <returns></returns>
         Public Iterator Function GetEnumerator() As IEnumerator Implements Enumeration(Of Package).GetEnumerator
             Yield GenericEnumerator()
         End Function

@@ -323,10 +323,20 @@ Public Class SyntaxTree
         End If
     End Sub
 
+    ReadOnly reserved As Index(Of String) = {
+        "if", "for", "def", "class"
+    }
+
     Public Function ParsePyScript() As Program
         current = python
 
         For Each line As PythonLine In getLines(scanner.GetTokens)
+            If line.length > 1 AndAlso line(Scan0).name = TokenType.keyword AndAlso line(1).name = TokenType.operator Then
+                If Not line(Scan0).text Like reserved Then
+                    line(Scan0).name = TokenType.identifier
+                End If
+            End If
+
             ' 每一行前面的空格数量作为层级关系
             If line(Scan0).name = TokenType.keyword Then
                 Select Case line(Scan0).text

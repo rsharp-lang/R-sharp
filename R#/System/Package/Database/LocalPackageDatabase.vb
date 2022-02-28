@@ -49,7 +49,6 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text.Xml.Models
-Imports SMRUCC.Rsharp.Development.Configuration
 
 Namespace Development.Package
 
@@ -129,16 +128,6 @@ Namespace Development.Package
                          Return pkg.namespace = pkgName
                      End Function)
         End Function
-
-        ''' <summary>
-        ''' current xml database file path
-        ''' </summary>
-        ''' <returns></returns>
-        Public Shared ReadOnly Property localDb As String
-
-        Shared Sub New()
-            localDb = $"{ConfigFile.GCModellerSettings}/packages.xml"
-        End Sub
 
         Public Shared Function EmptyRepository() As LocalPackageDatabase
             Return New LocalPackageDatabase With {

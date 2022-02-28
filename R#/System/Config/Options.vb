@@ -86,7 +86,9 @@ Namespace Development.Configuration
         ''' <returns></returns>
         Public ReadOnly Property [lib] As String
             Get
-                Return getOption(NameOf([lib]), [default]:=LocalPackageDatabase.localDb)
+                ' 程序包元数据库文件一般默认是
+                ' 与配置文件在一个文件夹之中
+                Return getOption(NameOf([lib]), [default]:=localConfig.ParentPath & "/packages.xml")
             End Get
         End Property
 

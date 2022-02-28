@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::597ea35be5762af9943f3d31abcc6ce0, R#\Runtime\Internal\internalInvokes\applys.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module applys
-    ' 
-    '         Function: apply, checkInternal, (+2 Overloads) keyNameAuto, lapply, parSapply
-    '                   sapply
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module applys
+' 
+'         Function: apply, checkInternal, (+2 Overloads) keyNameAuto, lapply, parSapply
+'                   sapply
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -238,6 +238,8 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Dim check = checkInternal(X, FUN, envir)
+            Dim nameVec As String() = Nothing
+            Dim arrayVec As Array
 
             If Not TypeOf check Is Boolean Then
                 Return check
@@ -275,7 +277,8 @@ Namespace Runtime.Internal.Invokes
                     type = a.GetType.GetElementType
                 End If
 
-                Return New RObj.vector(names, DirectCast(a, Array), RType.GetRSharpType(type), envir)
+                nameVec = names.ToArray
+                arrayVec = DirectCast(a, Array)
             Else
                 Dim seq As New List(Of Object)
                 Dim value As Object
@@ -303,7 +306,15 @@ Namespace Runtime.Internal.Invokes
                     type = a.GetType.GetElementType
                 End If
 
-                Return New RObj.vector(DirectCast(a, Array), RType.GetRSharpType(type))
+                arrayVec = DirectCast(a, Array)
+            End If
+
+            arrayVec = REnv.TryCastGenericArray(arrayVec, envir)
+
+            If nameVec.IsNullOrEmpty Then
+                Return New RObj.vector(arrayVec, RType.GetRSharpType(arrayVec.GetType.GetElementType))
+            Else
+                Return New RObj.vector(nameVec, arrayVec, RType.GetRSharpType(arrayVec.GetType.GetElementType), envir)
             End If
         End Function
 

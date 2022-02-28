@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::7717f0a55cae5a32c1772cb87e54e6e1, studio\R-terminal\CLI\Utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module CLI
-    ' 
-    '     Function: configJSON, configREnv, ConfigStartups, InitializeEnvironment, Install
-    '               reset
-    ' 
-    ' /********************************************************************************/
+' Module CLI
+' 
+'     Function: configJSON, configREnv, ConfigStartups, InitializeEnvironment, Install
+'               reset
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -65,10 +65,11 @@ Partial Module CLI
     <Group(SystemConfig)>
     Public Function Install(args As CommandLine) As Integer
         Dim module$ = args <= "/module"
-        Dim config As New Options(ConfigFile.localConfigs, saveConfig:=False)
+        Dim localConfigs As String = getConfig(args)
+        Dim config As New Options(localConfigs, saveConfig:=False)
 
         Internal.debug.verbose = args("--verbose")
-        Internal.debug.write($"load config file: {ConfigFile.localConfigs}")
+        Internal.debug.write($"load config file: {localConfigs}")
         Internal.debug.write($"load package registry: {config.lib}")
 
         If [module].StringEmpty Then
@@ -114,7 +115,8 @@ Partial Module CLI
     Public Function ConfigStartups(args As CommandLine) As Integer
         Dim adds As String = args("--add")
         Dim remove As String = args("--remove")
-        Dim config As ConfigFile = ConfigFile.Load(ConfigFile.localConfigs)
+        Dim localConfigs As String = getConfig(args)
+        Dim config As ConfigFile = ConfigFile.Load(localConfigs)
 
         If config.startups Is Nothing Then
             config.startups = New StartupConfigs
@@ -144,18 +146,24 @@ Partial Module CLI
 
         Return config _
             .GetXml _
-            .SaveTo(ConfigFile.localConfigs) _
+            .SaveTo(localConfigs) _
             .CLICode
+    End Function
+
+    Private Function getConfig(args As CommandLine) As String
+        Dim engineConfig As String = (args("--R_LIBS_USER") Or System.Environment.GetEnvironmentVariable("R_LIBS_USER"))
+        Return If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
     End Function
 
     <ExportAPI("--setup")>
     <Description("Initialize the R# runtime environment.")>
     <Group(SystemConfig)>
     Public Function InitializeEnvironment(args As CommandLine) As Integer
-        Dim config As New Options(ConfigFile.localConfigs, saveConfig:=False)
+        Dim localConfigs As String = getConfig(args)
+        Dim config As New Options(localConfigs, saveConfig:=False)
 
         Internal.debug.verbose = args("--verbose")
-        Internal.debug.write($"load config file: {ConfigFile.localConfigs}")
+        Internal.debug.write($"load config file: {localConfigs}")
         Internal.debug.write($"load package registry: {config.lib}")
 
         App.CurrentDirectory = App.HOME
@@ -182,7 +190,13 @@ Partial Module CLI
     <Description("Reset the R# envronment, configuration and package list to default empty.")>
     <Group(SystemConfig)>
     Public Function reset(args As CommandLine) As Integer
-        Using config As New Options(ConfigFile.EmptyConfigs, saveConfig:=True), pkgMgr As PackageManager = PackageManager.getEmpty(config)
+        Dim localConfigs As String = getConfig(args)
+
+        Using config As New Options(ConfigFile.EmptyConfigs, saveConfig:=True) With {
+            .localConfig = localConfigs
+        },
+            pkgMgr As PackageManager = PackageManager.getEmpty(config)
+
             Return 0
         End Using
     End Function

@@ -219,6 +219,10 @@ Namespace Runtime
             Log4VB.redirectWarning = AddressOf redirectWarning
         End Sub
 
+        ''' <param name="isInherits">
+        ''' If is inherits mode, then all of the modification in sub-environment will affects the <paramref name="parent"/> environment.
+        ''' Otherwise, the modification in sub-environment will do nothing to the <paramref name="parent"/> environment.
+        ''' </param>
         Sub New(parent As Environment, stackName As String, Optional isInherits As Boolean = False)
             Call Me.New(parent, StackFrame.FromUnknownLocation(stackName), isInherits)
         End Sub
