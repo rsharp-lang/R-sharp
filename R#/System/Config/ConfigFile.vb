@@ -75,11 +75,12 @@ Namespace Development.Configuration
         ''' </summary>
         ''' <returns></returns>
         Public Shared ReadOnly Property localConfigs As String
+
         ''' <summary>
-        ''' the directory path for save common config file of the GCModeller products. 
+        ''' the directory path for save common config file 
+        ''' of the GCModeller products. 
         ''' </summary>
-        ''' <returns></returns>
-        Public Shared ReadOnly Property GCModellerSettings As String
+        Shared ReadOnly GCModellerSettings As String
 
         Shared Sub New()
             If App.IsMicrosoftPlatform Then
