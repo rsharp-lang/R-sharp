@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::c69100c1eb53e9e1846205ed5a918569, studio\Rstudio\gtk.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module gtk
-    ' 
-    '     Function: Dialog, selectFiles, selectFolder
-    ' 
-    ' /********************************************************************************/
+' Module gtk
+' 
+'     Function: Dialog, selectFiles, selectFolder
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -92,12 +92,22 @@ Module gtk
         End Using
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="title"></param>
+    ''' <param name="filter"></param>
+    ''' <param name="forSave"></param>
+    ''' <param name="throwCancel"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("selectFiles")>
     <RApiReturn(GetType(String))>
     Public Function selectFiles(Optional title$ = Nothing,
                                 <RRawVectorArgument>
-                                Optional filter As Object = "*.*|*.*",
+                                Optional filter As Object = "any file(*.*)|*.*",
                                 Optional forSave As Boolean = False,
+                                Optional multiple As Boolean = True,
                                 Optional throwCancel As Boolean = True,
                                 Optional env As Environment = Nothing) As Object
 
@@ -109,7 +119,7 @@ Module gtk
                 .Filter = filters.JoinBy("|")
             }
                 If file.ShowDialog = DialogResult.OK Then
-                    Return file.FileNames
+                    Return file.FileName
                 ElseIf throwCancel Then
                     Return Internal.debug.stop("user cancel!", env)
                 Else
@@ -119,7 +129,8 @@ Module gtk
         Else
             Using file As New OpenFileDialog With {
                 .Title = title,
-                .Filter = filters.JoinBy("|")
+                .Filter = filters.JoinBy("|"),
+                .Multiselect = multiple
             }
                 If file.ShowDialog = DialogResult.OK Then
                     Return file.FileNames
