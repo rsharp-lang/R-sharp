@@ -65,7 +65,7 @@ Module gdi
         End Select
     End Function
 
-    Public Function getSolidbrush(color As Object, Optional default$ = "black") As SolidBrush
+    Public Function getSolidBrush(color As Object, Optional default$ = "black") As SolidBrush
         If color Is Nothing Then
             Return New SolidBrush(default$.TranslateColor)
         End If

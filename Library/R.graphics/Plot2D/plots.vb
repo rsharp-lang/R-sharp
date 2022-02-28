@@ -695,6 +695,7 @@ Module plots
         Dim fx As Func(Of Double, Double) = math.CreateLambda(Of Double, Double)(env)
         Dim x As Double() = REnv.asVector(Of Double)(args!x)
         Dim points As PointF() = x.Select(Function(xi) New PointF(xi, fx(xi))).ToArray
+        Dim driver As Drivers = imageDriverHandler.getDriver(env)
 
         Return points.Plot(
             size:=InteropArgumentHelper.getSize(args!size, env).SizeParser,
