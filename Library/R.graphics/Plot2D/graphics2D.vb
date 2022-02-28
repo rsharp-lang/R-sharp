@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::a66507dd8e4dfe5d4d9ffbfbf9e69ca0, Library\R.graphics\Plot2D\graphics2D.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module graphics2D
-    ' 
-    '     Function: asciiArt, axisTicks, contourPolygon, contourTracing, DrawCircle
-    '               drawLegends, DrawTriangle, legend, line2D, measureString
-    '               offset2D, paddingString, paddingVector, point2D, pointsVector
-    '               (+2 Overloads) rectangle, scale, size, sizeVector
-    ' 
-    ' /********************************************************************************/
+' Module graphics2D
+' 
+'     Function: asciiArt, axisTicks, contourPolygon, contourTracing, DrawCircle
+'               drawLegends, DrawTriangle, legend, line2D, measureString
+'               offset2D, paddingString, paddingVector, point2D, pointsVector
+'               (+2 Overloads) rectangle, scale, size, sizeVector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -75,6 +75,26 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <Package("graphics2D")>
 Module graphics2D
 
+    Sub New()
+        Call Internal.generic.add("plot", GetType(ColorMapLegend), AddressOf plotColorMap)
+    End Sub
+
+    Private Function plotColorMap(legend As ColorMapLegend, args As list, env As Environment) As Object
+        Dim driver As Drivers = imageDriverHandler.getDriver(env)
+        Dim size As String = InteropArgumentHelper.getSize(args!size, env)
+        Dim margin As String = InteropArgumentHelper.getPadding(args!padding)
+
+        Return g.GraphicsPlots(
+            size.SizeParser,
+            Padding.TryParse(margin),
+            "transparent",
+            driver:=driver,
+            dpi:="300,300",
+            plotAPI:=Sub(ByRef g, region)
+                         Call legend.Draw(g, region.PlotRegion)
+                     End Sub)
+    End Function
+
     <ExportAPI("paddingString")>
     Public Function paddingString(<RRawVectorArgument> padding As Object, Optional env As Environment = Nothing) As String
         Return InteropArgumentHelper.getPadding(padding, "padding: 0px 0px 0px 0px;")
@@ -91,6 +111,34 @@ Module graphics2D
         }
 
         Return v
+    End Function
+
+    <ExportAPI("colorMap.legend")>
+    Public Function colorMapLegend(<RRawVectorArgument>
+                                   colors As Object, ticks As Double(),
+                                   Optional title As String = "Color Map",
+                                   Optional mapLevels As Integer = 60,
+                                   Optional format As String = "G3",
+                                   Optional tickAxisStroke As Object = Stroke.AxisStroke,
+                                   Optional tickFont As Object = CSSFont.PlotLabelNormal,
+                                   Optional titleFont As Object = CSSFont.PlotSmallTitle,
+                                   Optional unmapColor As Object = Nothing,
+                                   Optional env As Environment = Nothing) As ColorMapLegend
+
+        Dim colorName = RColorPalette.getColorSet(colors)
+
+        Return New ColorMapLegend(colorName, mapLevels) With {
+            .format = format,
+            .legendOffsetLeft = 0,
+            .noblank = False,
+            .ruleOffset = 5,
+            .tickAxisStroke = Stroke.TryParse(tickAxisStroke).GDIObject,
+            .tickFont = CSSFont.TryParse(tickFont).GDIObject(300),
+            .ticks = ticks,
+            .title = title,
+            .titleFont = CSSFont.TryParse(titleFont).GDIObject(300),
+            .unmapColor = RColorPalette.getColor(unmapColor, [default]:=Nothing)
+        }
     End Function
 
     ''' <summary>
