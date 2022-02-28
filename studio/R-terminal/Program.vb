@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::577db8b75ee00950d784c43c0b9a39cf, studio\R-terminal\Program.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Program
-    ' 
-    '     Function: Main, (+2 Overloads) QueryCommandLineArgvs, RunExpression, RunRScriptFile, RunScript
-    ' 
-    '     Sub: attachPackageFile
-    ' 
-    ' /********************************************************************************/
+' Module Program
+' 
+'     Function: Main, (+2 Overloads) QueryCommandLineArgvs, RunExpression, RunRScriptFile, RunScript
+' 
+'     Sub: attachPackageFile
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -163,13 +163,20 @@ Module Program
     ''' <param name="args"></param>
     ''' <returns></returns>
     Private Function RunRScriptFile(filepath$, args As CommandLine) As Integer
-        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+        Dim engineConfig As String = (args("--R_LIBS_USER") Or System.Environment.GetEnvironmentVariable("R_LIBS_USER"))
+        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(
+            configs:=If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
+        )
         Dim silent As Boolean = args("--silent")
-        Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
         Dim verbose As Boolean = args("--verbose")
-        Dim attach As String = args("--attach")
         Dim workdir As String = args("--WORKDIR")
         Dim strict As Boolean = args.ContainsParameter("--strict") And args("--strict")
+        Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
+
+        ' 显示的指定在VisualStudio中进行调试的程序包zip文件路径或者文件夹路径
+        Dim attach As String = args("--attach")
+        ' 设定一个库文件夹路径，里面包含有很多个程序包zip文件
+        Dim pkg_attach As String = args("--pkg_attach") Or System.Environment.GetEnvironmentVariable("pkg_attach")
 
         If args.HavebFlag("--debug") OrElse args.ContainsParameter("--debug") Then
             R.debug = True
@@ -226,6 +233,11 @@ Module Program
                         ignoreMissingStartupPackages:=False
                     )
                 End If
+            Next
+        End If
+        If Not pkg_attach.StringEmpty AndAlso pkg_attach.DirectoryExists Then
+            For Each packageFile As String In pkg_attach.ListFiles("*.zip")
+                Call R.attachPackageFile(zip:=packageFile)
             Next
         End If
 
