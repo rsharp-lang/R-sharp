@@ -217,12 +217,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-  
- <Compile Include= "Context\ContextAnalysis.vb" />
-<Compile Include="Context\RunParallel.vb" />
-<Compile Include="Context\Serialization.vb" />
-  
-  
+    <Compile Include="Context\RPC\MasterContext.vb" />
+    <Compile Include="Context\RPC\Protocols.vb" />
+    <Compile Include="Context\RPC\RemoteEnvironment.vb" />
+    <Compile Include="Context\ContextAnalysis.vb" />
+    <Compile Include="Context\RunParallel.vb" />
+    <Compile Include="Context\Serialization.vb" />
     <Compile Include="Protocol\workerList.vb" />
     <Compile Include="Protocol\HostProtocol.vb" />
     <Compile Include="Parallel.vb" />
