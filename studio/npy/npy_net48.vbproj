@@ -844,7 +844,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-  <Compile Include="Expressions\PipelineFunction.vb" />
+    <Compile Include="Expressions\PipelineFunction.vb" />
     <Compile Include="Language\InternalParser.vb" />
     <Compile Include="Language\PyScanner.vb" />
     <Compile Include="Language\PythonLine.vb" />
