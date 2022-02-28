@@ -236,7 +236,10 @@ Module Program
             Next
         End If
         If Not pkg_attach.StringEmpty AndAlso pkg_attach.DirectoryExists Then
+            Call Console.WriteLine($"load required packages from alternative repository: '{pkg_attach.GetDirectoryFullPath}'...")
+
             For Each packageFile As String In pkg_attach.ListFiles("*.zip")
+                Call Console.WriteLine($" ...{packageFile.FileName}")
                 Call R.attachPackageFile(zip:=packageFile)
             Next
         End If
