@@ -82,6 +82,14 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' windows metafile device
+        ''' </summary>
+        ''' <param name="image"></param>
+        ''' <param name="file"></param>
+        ''' <param name="args"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("wmf")>
         Public Function wmf(image As Object,
                             Optional file As Object = Nothing,
