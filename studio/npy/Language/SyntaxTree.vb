@@ -327,6 +327,10 @@ Public Class SyntaxTree
         current = python
 
         For Each line As PythonLine In getLines(scanner.GetTokens)
+            If line(Scan0).name = TokenType.keyword AndAlso line(1).name = TokenType.operator Then
+                line(Scan0).name = TokenType.identifier
+            End If
+
             ' 每一行前面的空格数量作为层级关系
             If line(Scan0).name = TokenType.keyword Then
                 Select Case line(Scan0).text
