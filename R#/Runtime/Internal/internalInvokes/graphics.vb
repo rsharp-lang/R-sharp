@@ -91,16 +91,14 @@ Namespace Runtime.Internal.Invokes
 
             If image Is Nothing Then
                 Return debug.stop("the source bitmap image can not be nothing!", env)
+            ElseIf Not image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
+                Return Message.InCompatibleType(GetType(SaveGdiBitmap), image.GetType, env)
             Else
                 Return fileStreamWriter(
                     env:=env,
                     file:=file,
                     write:=Sub(stream)
-                               If image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
-                                   Call DirectCast(image, SaveGdiBitmap).Save(stream, Nothing)
-                               Else
-                                   Call DirectCast(image, Image).Save(stream, Nothing)
-                               End If
+                               Call DirectCast(image, SaveGdiBitmap).Save(stream, Nothing)
                            End Sub)
             End If
         End Function
