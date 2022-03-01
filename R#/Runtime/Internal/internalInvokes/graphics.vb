@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Assembly: InternalsVisibleTo("ggplot")>
+<Assembly: InternalsVisibleTo("graphics")>
 
 Namespace Runtime.Internal.Invokes
 
@@ -104,8 +105,8 @@ Namespace Runtime.Internal.Invokes
 
             Call dev.g.Flush()
 
-            If TypeOf dev.g Is Graphics2D Then
-                Call DirectCast(dev.g, Graphics2D).Save(dev.file, ImageFormat.Png)
+            If dev.g.GetType.ImplementInterface(Of SaveGdiBitmap) Then
+                Call DirectCast(dev.g, SaveGdiBitmap).Save(dev.file, Nothing)
             End If
 
             Call dev.file.Flush()
@@ -199,8 +200,6 @@ Namespace Runtime.Internal.Invokes
             Return Nothing
         End Function
 
-
-
         ''' <summary>
         ''' ## Generic X-Y Plotting
         ''' 
@@ -286,11 +285,12 @@ Namespace Runtime.Internal.Invokes
                 ' just open a new device
                 Dim size As Size = graphicsPipeline.getSize(args!size, env, "2700,2000").SizeParser
                 Dim buffer = GetFileStream(file, FileAccess.Write, env)
+                Dim fill As Color = graphicsPipeline.GetRawColor(args!color, [default]:=NameOf(Color.Transparent))
 
                 If buffer Like GetType(Message) Then
                     Return buffer.TryCast(Of Message)
                 Else
-                    Call openNew(size.CreateGDIDevice(filled:=Color.Transparent), buffer.TryCast(Of Stream))
+                    Call openNew(size.CreateGDIDevice(filled:=fill), buffer.TryCast(Of Stream))
                 End If
 
                 Return Nothing

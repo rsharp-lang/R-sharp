@@ -54,6 +54,7 @@ Imports Microsoft.VisualBasic.Imaging.PDF
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
@@ -73,15 +74,34 @@ Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 Public Module grDevices
 
     <ExportAPI("pdf")>
-    Public Function pdf(image As Object, file As Object,
-                        <RListObjectArgument>
-                        Optional args As list = Nothing,
-                        Optional env As Environment = Nothing) As Object
+    Public Function pdfDevice(Optional image As Object = Nothing,
+                              Optional file As Object = Nothing,
+                              <RListObjectArgument>
+                              Optional args As list = Nothing,
+                              Optional env As Environment = Nothing) As Object
 
-        Return env.FileStreamWriter(
-            file, Sub(stream)
-                      Call DirectCast(image, PdfImage).Save(stream)
-                  End Sub)
+        If image Is Nothing Then
+            ' just open a new device
+            Dim size As Size = graphicsPipeline.getSize(args!size, env, "2700,2000").SizeParser
+            Dim buffer = GetFileStream(file, FileAccess.Write, env)
+            Dim fill As Color = graphicsPipeline.GetRawColor(args!fill, [default]:="white")
+
+            If buffer Like GetType(Message) Then
+                Return buffer.TryCast(Of Message)
+            Else
+                Dim pdfImage = PDF.Driver.OpenDevice(size)
+
+                Call pdfImage.FillRectangle(New SolidBrush(fill), New Rectangle(New Point, size))
+                Call Internal.Invokes.graphics.openNew(pdfImage, buffer.TryCast(Of Stream))
+            End If
+
+            Return Nothing
+        Else
+            Return env.FileStreamWriter(
+                file, Sub(stream)
+                          Call DirectCast(image, PdfImage).Save(stream)
+                      End Sub)
+        End If
     End Function
 
     ''' <summary>
