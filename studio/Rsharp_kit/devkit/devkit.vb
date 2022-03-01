@@ -116,6 +116,12 @@ Module devkit
         Return symbols.encode(file)
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="script">the file path of the target script</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("inspect")>
     Public Function inspect(script As String, Optional env As Environment = Nothing) As Object
         Dim globalEnv As GlobalEnvironment = env.globalEnvironment
