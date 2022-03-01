@@ -44,6 +44,7 @@
 #End Region
 
 Imports System.Drawing
+Imports System.Drawing.Imaging
 Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -64,13 +65,13 @@ Namespace Runtime.Internal.Invokes
 
     Module graphics
 
-        ReadOnly devlist As New List(Of IGraphics)
+        ReadOnly devlist As New List(Of (g As IGraphics, file As Stream))
 
-        Friend curDev As IGraphics = Nothing
+        Friend curDev As (g As IGraphics, file As Stream) = Nothing
 
-        Friend Sub openNew(dev As IGraphics)
-            curDev = dev
-            devlist.Add(dev)
+        Friend Sub openNew(dev As IGraphics, buffer As Stream)
+            curDev = (dev, buffer)
+            devlist.Add(curDev)
         End Sub
 
         ''' <summary>
@@ -81,12 +82,12 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("dev.off")>
         Public Function devOff(Optional which% = -1, Optional env As Environment = Nothing) As Object
-            Dim dev As IGraphics
+            Dim dev As (g As IGraphics, file As Stream)
 
             If which < 1 Then
                 dev = devlist.LastOrDefault
 
-                If dev Is Nothing Then
+                If dev.g Is Nothing Then
                     Return Internal.debug.stop("Error in dev.off() : cannot shut down device 1 (the null device)", env)
                 Else
                     devlist.Pop()
@@ -94,15 +95,20 @@ Namespace Runtime.Internal.Invokes
             Else
                 dev = devlist.ElementAtOrDefault(which - 1)
 
-                If dev Is Nothing Then
+                If dev.g Is Nothing Then
                     Return Internal.debug.stop($"Error in dev.off() : cannot shut down device {which} (the null device)", env)
                 Else
                     devlist.RemoveAt(which)
                 End If
             End If
 
-            Call dev.Flush()
-            Call dev.Dispose()
+            Call dev.g.Flush()
+
+            If TypeOf dev.g Is Graphics2D Then
+                Call DirectCast(dev.g, Graphics2D).Save(dev.file, ImageFormat.Png)
+            End If
+
+            Call dev.file.Flush()
 
             Return which
         End Function
@@ -114,12 +120,44 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("dev.cur")>
         Public Function devCur() As Integer
-            If curDev Is Nothing Then
+            If curDev.g Is Nothing Then
                 Return -1
             Else
                 Return curDev.GetHashCode
             End If
         End Function
+
+        ''' <summary>
+        ''' draw a raster image on a specific position
+        ''' </summary>
+        ''' <param name="image"></param>
+        ''' <param name="x"></param>
+        ''' <param name="y"></param>
+        ''' <param name="size"></param>
+        ''' <param name="env"></param>
+        <ExportAPI("rasterImage")>
+        Public Function rasterImage(image As Image,
+                                    x As Single,
+                                    y As Single,
+                                    <RRawVectorArgument>
+                                    Optional size As Object = Nothing,
+                                    Optional env As Environment = Nothing) As Object
+
+            If curDev.g Is Nothing Then
+                Return Internal.debug.stop("no graphics device!", env)
+            ElseIf size Is Nothing Then
+                Call curDev.g.DrawImageUnscaled(image, x, y)
+            Else
+                Dim sizeVec = graphicsPipeline.getSize(size, env, image.Size.Expression).SizeParser
+                Dim layout As New Rectangle(x, y, sizeVec.Width, sizeVec.Height)
+
+                Call curDev.g.DrawImage(image, layout)
+            End If
+
+            Return Nothing
+        End Function
+
+
 
         ''' <summary>
         ''' ## Generic X-Y Plotting
@@ -140,7 +178,7 @@ Namespace Runtime.Internal.Invokes
             If Program.isException(argumentsVal) Then
                 Return argumentsVal
             Else
-                If Not curDev Is Nothing Then
+                If Not curDev.g Is Nothing Then
                     DirectCast(argumentsVal, list).add("grDevices", curDev)
                 End If
 
@@ -171,7 +209,7 @@ Namespace Runtime.Internal.Invokes
                 If buffer Like GetType(Message) Then
                     Return buffer.TryCast(Of Message)
                 Else
-                    Call openNew(New Wmf(size, buffer.TryCast(Of Stream)))
+                    Call openNew(New Wmf(size, buffer.TryCast(Of Stream)), buffer.TryCast(Of Stream))
                 End If
 
                 Return Nothing
@@ -195,7 +233,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("bitmap")>
-        Public Function bitmap(image As Object,
+        Public Function bitmap(Optional image As Object = Nothing,
                                Optional file As Object = Nothing,
                                Optional format As ImageFormats = ImageFormats.Png,
                                <RListObjectArgument>
@@ -203,7 +241,17 @@ Namespace Runtime.Internal.Invokes
                                Optional env As Environment = Nothing) As Object
 
             If image Is Nothing Then
-                Return debug.stop("the source bitmap image can not be nothing!", env)
+                ' just open a new device
+                Dim size As Size = graphicsPipeline.getSize(args!size, env, "2700,2000").SizeParser
+                Dim buffer = GetFileStream(file, FileAccess.Write, env)
+
+                If buffer Like GetType(Message) Then
+                    Return buffer.TryCast(Of Message)
+                Else
+                    Call openNew(size.CreateGDIDevice(filled:=Color.Transparent), buffer.TryCast(Of Stream))
+                End If
+
+                Return Nothing
             Else
                 Return FileStreamWriter(
                     env:=env,
