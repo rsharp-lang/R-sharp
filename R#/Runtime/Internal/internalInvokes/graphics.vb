@@ -128,6 +128,48 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ## Add Text to a Plot
+        ''' 
+        ''' text draws the strings given in the vector labels at 
+        ''' the coordinates given by x and y. y may be missing 
+        ''' since xy.coords(x, y) is used for construction of the 
+        ''' coordinates.
+        ''' </summary>
+        ''' <param name="x">numeric vectors of coordinates where 
+        ''' the text labels should be written. If the length of 
+        ''' x and y differs, the shorter one is recycled.
+        ''' </param>
+        ''' <param name="y">numeric vectors of coordinates where 
+        ''' the text labels should be written. If the length of 
+        ''' x and y differs, the shorter one is recycled.
+        ''' </param>
+        ''' <param name="labels"></param>
+        ''' <returns></returns>
+        <ExportAPI("text")>
+        Public Function drawText(x As Double, y As Double, labels As String,
+                                 Optional col As Object = "black",
+                                 Optional font As Font = Nothing,
+                                 Optional env As Environment = Nothing) As Object
+
+            If font Is Nothing Then
+                font = New Font(FontFace.MicrosoftYaHei, 12, FontStyle.Regular)
+            End If
+
+            If curDev.g Is Nothing Then
+                Return Internal.debug.stop("no graphics device!", env)
+            ElseIf labels.StringEmpty Then
+                Return Nothing
+            Else
+                Dim color As New SolidBrush(graphicsPipeline.GetRawColor(col))
+                Dim pos As New PointF(x, y)
+
+                Call curDev.g.DrawString(labels, font, color, pos)
+            End If
+
+            Return Nothing
+        End Function
+
+        ''' <summary>
         ''' draw a raster image on a specific position
         ''' </summary>
         ''' <param name="image"></param>

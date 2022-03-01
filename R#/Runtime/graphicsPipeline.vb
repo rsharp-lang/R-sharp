@@ -1,49 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::20c5c69d7a5e4ec0c01f917607ebd275, R#\Runtime\graphicsPipeline.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module graphicsPipeline
-    ' 
-    '         Function: CheckDpiArgument, CheckSizeArgument, eval, getDpi, (+2 Overloads) getSize
-    ' 
-    '         Sub: getSize
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module graphicsPipeline
+' 
+'         Function: CheckDpiArgument, CheckSizeArgument, eval, getDpi, (+2 Overloads) getSize
+' 
+'         Sub: getSize
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -54,6 +55,35 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Namespace Runtime
 
     Public Module graphicsPipeline
+
+        ''' <summary>
+        ''' 因为html颜色不支持透明度，所以这个函数是为了解决透明度丢失的问题而编写的
+        ''' </summary>
+        ''' <param name="color"></param>
+        ''' <param name="default$"></param>
+        ''' <returns></returns>
+        Public Function GetRawColor(color As Object, Optional default$ = "black") As Color
+            If color Is Nothing Then
+                Return [default].TranslateColor
+            End If
+
+            Select Case color.GetType
+                Case GetType(String)
+                    Return DirectCast(color, String).TranslateColor
+                Case GetType(String())
+                    Return DirectCast(DirectCast(color, String()).GetValue(Scan0), String).TranslateColor
+                Case GetType(Color)
+                    Return DirectCast(color, Color)
+                Case GetType(Integer), GetType(Long), GetType(Short)
+                    Return color.ToString.TranslateColor
+                Case GetType(Integer()), GetType(Long()), GetType(Short())
+                    Return DirectCast(color, Array).GetValue(Scan0).ToString.TranslateColor
+                Case GetType(SolidBrush)
+                    Return DirectCast(color, SolidBrush).Color
+                Case Else
+                    Return [default].TranslateColor
+            End Select
+        End Function
 
         <Extension>
         Public Function CheckDpiArgument(args As Dictionary(Of String, Object)) As Boolean
