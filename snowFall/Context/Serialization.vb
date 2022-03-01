@@ -47,6 +47,6 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Public Module Serialization
 
     Public Function GetBytes(symbol As Symbol) As Byte()
-
+        Throw New NotImplementedException
     End Function
 End Module
