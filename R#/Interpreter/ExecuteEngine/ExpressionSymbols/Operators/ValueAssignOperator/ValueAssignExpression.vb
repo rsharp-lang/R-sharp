@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::e2459e34f855977e7fe4cdee3817f391, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssignExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class ValueAssignExpression
-    ' 
-    '         Properties: expressionName, symbolSize, targetSymbols, type, value
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
-    '                   GetSymbol, getSymbols, setByNameIndex, setFromDataFrame, setFromObjectList
-    '                   setFromVector, setVectorElements, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class ValueAssignExpression
+' 
+'         Properties: expressionName, symbolSize, targetSymbols, type, value
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
+'                   GetSymbol, getSymbols, setByNameIndex, setFromDataFrame, setFromObjectList
+'                   setFromVector, setVectorElements, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -240,6 +240,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' 使用左边的变量符号的名称从右边的列表之中按名称取出值，不存在的名字则赋值为空值
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <param name="targetSymbols"></param>
+        ''' <param name="isByRef"></param>
+        ''' <param name="value"></param>
+        ''' <returns></returns>
         Private Shared Function setFromObjectList(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object) As Message
             Dim list As list = DirectCast(value, list)
             Dim message As New Value(Of Message)
@@ -248,27 +256,22 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 ' 设置tuple的值的时候
                 ' list必须要有相同的元素数量
                 Return Internal.debug.stop("Number of list element is not identical to the tuple elements...", envir)
-            ElseIf list.length = targetSymbols.Length Then
-                Dim name$
-
+            Else
                 ' one by one
-                For i As Integer = 0 To list.length - 1
-                    name = GetSymbol(targetSymbols(i))
+                For Each symbol As Expression In targetSymbols
+                    Dim name As String = GetSymbol(symbol)
 
                     If list.slots.ContainsKey(name) Then
                         value = list.slots(name)
                     Else
-                        ' R中的元素下标都是从1开始的
-                        value = list.slots($"{i + 1}")
+                        value = Nothing
+                        Call envir.AddMessage({$"target symbol '{name}' is not exists in tuple!"}, MSG_TYPES.WRN)
                     End If
 
-                    If Not (message = assignSymbol(envir, targetSymbols(i), isByRef, value)) Is Nothing Then
+                    If Not (message = assignSymbol(envir, symbol, isByRef, value)) Is Nothing Then
                         Return message.Value
                     End If
                 Next
-            Else
-                ' 数量不对
-                Return Internal.debug.stop(New InvalidCastException, envir)
             End If
 
             Return Nothing
