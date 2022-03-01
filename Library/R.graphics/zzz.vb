@@ -42,8 +42,8 @@
 #End Region
 
 Imports System.Drawing
-Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports PdfImage = Microsoft.VisualBasic.Imaging.PDF
 
 Public Class zzz
 
@@ -71,7 +71,7 @@ Public Class zzz
     End Function
 
     Private Shared Sub RegisterDriver()
-        Call PDF.Driver.Init()
+        Call PDFimage.Driver.Init()
         Call Designer.Register("MPL_gist_ncar", loadColors(My.Resources.MPL_gist_ncar))
     End Sub
 End Class

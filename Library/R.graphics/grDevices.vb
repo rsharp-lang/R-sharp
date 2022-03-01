@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::ddbb12b9b173bea0906453274cbc5a53, Library\R.graphics\grDevices.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module grDevices
-    ' 
-    '     Function: adjustAlpha, colorPopulator, colors, imageAttrs, rgb
-    '               saveBitmap, saveImage, svg
-    ' 
-    ' /********************************************************************************/
+' Module grDevices
+' 
+'     Function: adjustAlpha, colorPopulator, colors, imageAttrs, rgb
+'               saveBitmap, saveImage, svg
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -50,9 +50,11 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Driver
+Imports Microsoft.VisualBasic.Imaging.PDF
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -69,6 +71,18 @@ Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 ''' </summary>
 <Package("grDevices", Category:=APICategories.UtilityTools)>
 Public Module grDevices
+
+    <ExportAPI("pdf")>
+    Public Function pdf(image As Object, file As Object,
+                        <RListObjectArgument>
+                        Optional args As list = Nothing,
+                        Optional env As Environment = Nothing) As Object
+
+        Return env.FileStreamWriter(
+            file, Sub(stream)
+                      Call DirectCast(image, PdfImage).Save(stream)
+                  End Sub)
+    End Function
 
     ''' <summary>
     ''' ## Cairographics-based SVG, PDF and PostScript Graphics Devices
@@ -160,8 +174,8 @@ Public Module grDevices
                     Call .Save(fs)
                     Call fs.Flush()
                     Return fs
-                ElseIf TypeOf graphics Is ImageData AndAlso TypeOf file Is BitmapBuffer Then
-                    DirectCast(file, BitmapBuffer).bitmap = DirectCast(graphics, ImageData).Image
+                ElseIf TypeOf graphics Is ImageData AndAlso TypeOf file Is bitmapBuffer Then
+                    DirectCast(file, bitmapBuffer).bitmap = DirectCast(graphics, ImageData).Image
                     Return file
                 ElseIf TypeOf graphics Is SVGData AndAlso TypeOf file Is textBuffer Then
                     DirectCast(file, textBuffer).text = DirectCast(graphics, SVGData).GetSVGXml
@@ -187,8 +201,8 @@ Public Module grDevices
             Call DirectCast(graphics, Image).Save(fs, Imaging.ImageFormat.Png)
             Call fs.Flush()
             Return fs
-        ElseIf TypeOf file Is BitmapBuffer Then
-            DirectCast(file, BitmapBuffer).bitmap = graphics
+        ElseIf TypeOf file Is bitmapBuffer Then
+            DirectCast(file, bitmapBuffer).bitmap = graphics
             Return file
         Else
             Return Message.InCompatibleType(GetType(String), file.GetType, env, "invalid file for save bitmap!")

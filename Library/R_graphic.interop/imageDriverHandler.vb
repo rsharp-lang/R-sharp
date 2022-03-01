@@ -1,45 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::b16d018bd72335d429675e79e9bb0aca, Library\R_graphic.interop\imageDriverHandler.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module imageDriverHandler
-    ' 
-    '     Function: GetDevice, getDriver
-    ' 
-    ' /********************************************************************************/
+' Module imageDriverHandler
+' 
+'     Function: GetDevice, getDriver
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports SMRUCC.Rsharp.Runtime
@@ -47,15 +48,18 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Module imageDriverHandler
 
+    ReadOnly grDevices As Index(Of String) = {"grDevices", "graphics"}
+
     Public Function getDriver(env As Environment) As Drivers
         Dim frames = env.stackTrace
 
         For Each stack In frames
-            If stack.Method.Namespace = "graphics" Then
+            If stack.Method.Namespace Like grDevices Then
                 Select Case LCase(stack.Method.Method)
                     Case "wmf" : Return Drivers.WMF
                     Case "bitmap" : Return Drivers.GDI
                     Case "svg" : Return Drivers.SVG
+                    Case "pdf" : Return Drivers.PDF
                     Case Else
                         ' do nothing, and then test
                         ' next frame data

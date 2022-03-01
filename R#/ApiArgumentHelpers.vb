@@ -151,6 +151,39 @@ Public Module ApiArgumentHelpers
         End If
     End Function
 
+    ''' <summary>
+    ''' open stream for file write
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="write"></param>
+    ''' 
+    <Extension>
+    Public Function FileStreamWriter(env As Environment, file As Object, write As Action(Of Stream)) As Object
+        Dim stream As Stream
+        Dim is_file As Boolean = False
+
+        If file Is Nothing Then
+            stream = Console.OpenStandardOutput
+        ElseIf TypeOf file Is String Then
+            stream = DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+            is_file = True
+        ElseIf TypeOf file Is Stream Then
+            stream = file
+        Else
+            Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
+        End If
+
+        Call write(stream)
+        Call stream.Flush()
+
+        If is_file Then
+            Call stream.Close()
+            Call stream.Dispose()
+        End If
+
+        Return True
+    End Function
+
     Public Function GetFileStream(file As Object, mode As FileAccess, env As Environment) As [Variant](Of Stream, Message)
         If TypeOf file Is vector Then
             file = DirectCast(file, vector).data

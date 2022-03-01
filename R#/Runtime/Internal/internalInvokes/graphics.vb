@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::76ae8a8b09aaf67bf5dbb02ecbf51906, R#\Runtime\Internal\internalInvokes\graphics.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module graphics
-    ' 
-    '         Function: bitmap, devCur, devOff, fileStreamWriter, isBase64StringOrFile
-    '                   plot, readImage, resizeImage, wmf
-    ' 
-    '         Sub: openNew
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module graphics
+' 
+'         Function: bitmap, devCur, devOff, fileStreamWriter, isBase64StringOrFile
+'                   plot, readImage, resizeImage, wmf
+' 
+'         Sub: openNew
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -178,44 +178,13 @@ Namespace Runtime.Internal.Invokes
             ElseIf Not image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
                 Return Message.InCompatibleType(GetType(SaveGdiBitmap), image.GetType, env)
             Else
-                Return fileStreamWriter(
+                Return FileStreamWriter(
                     env:=env,
                     file:=file,
                     write:=Sub(stream)
                                Call DirectCast(image, SaveGdiBitmap).Save(stream, Nothing)
                            End Sub)
             End If
-        End Function
-
-        ''' <summary>
-        ''' open stream for file write
-        ''' </summary>
-        ''' <param name="file"></param>
-        ''' <param name="write"></param>
-        Public Function fileStreamWriter(env As Environment, file As Object, write As Action(Of Stream)) As Object
-            Dim stream As Stream
-            Dim is_file As Boolean = False
-
-            If file Is Nothing Then
-                stream = Console.OpenStandardOutput
-            ElseIf TypeOf file Is String Then
-                stream = DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
-                is_file = True
-            ElseIf TypeOf file Is Stream Then
-                stream = file
-            Else
-                Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
-            End If
-
-            Call write(stream)
-            Call stream.Flush()
-
-            If is_file Then
-                Call stream.Close()
-                Call stream.Dispose()
-            End If
-
-            Return True
         End Function
 
         ''' <summary>
@@ -236,7 +205,7 @@ Namespace Runtime.Internal.Invokes
             If image Is Nothing Then
                 Return debug.stop("the source bitmap image can not be nothing!", env)
             Else
-                Return fileStreamWriter(
+                Return FileStreamWriter(
                     env:=env,
                     file:=file,
                     write:=Sub(stream)
