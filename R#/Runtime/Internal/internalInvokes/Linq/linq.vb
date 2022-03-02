@@ -626,6 +626,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                           Return CObj(d.Value)
                                       End Function)
                 }
+            ElseIf TypeOf sequence Is Group Then
+                sequence = DirectCast(sequence, Group).group
             End If
 
             Dim measure = tryKeyBy(getKey, env)
