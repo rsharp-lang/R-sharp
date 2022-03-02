@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::6ea6cd1fbcd3d089086944c6fd017f06, R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module math
-    ' 
-    '         Function: abs, cluster1D, cos, diff, exp
-    '                   getRandom, log, log10, log2, max
-    '                   mean, median, min, pearson, pow
-    '                   rnorm, round, rsd, runif, sample
-    '                   sample_int, sd, sin, sqrt, sum
-    '                   var
-    ' 
-    '         Sub: set_seed
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module math
+' 
+'         Function: abs, cluster1D, cos, diff, exp
+'                   getRandom, log, log10, log2, max
+'                   mean, median, min, pearson, pow
+'                   rnorm, round, rsd, runif, sample
+'                   sample_int, sd, sin, sqrt, sum
+'                   var
+' 
+'         Sub: set_seed
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -53,6 +53,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.Statistics.Linq
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
@@ -544,12 +545,23 @@ Namespace Runtime.Internal.Invokes
         ''' grouping data input by given numeric tolerance
         ''' </summary>
         ''' <param name="sequence"></param>
-        ''' <param name="eval"></param>
-        ''' <param name="offset"></param>
+        ''' <param name="eval">
+        ''' this parameter should be a lambda function which 
+        ''' evaluate a numeric value for each elements in 
+        ''' the given sequence data.
+        ''' </param>
+        ''' <param name="offset">
+        ''' the max tolerance error of the cluster data
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("cluster_1D")>
-        Public Function cluster1D(<RRawVectorArgument> sequence As Object, eval As Object, Optional offset As Double = 0, Optional env As Environment = Nothing) As Object
+        Public Function cluster1D(<RRawVectorArgument>
+                                  sequence As Object,
+                                  eval As Object,
+                                  Optional offset As Double = 0,
+                                  Optional env As Environment = Nothing) As Object
+
             Dim data As pipeline = pipeline.TryCreatePipeline(Of Object)(sequence, env)
             Dim evalFUNC As Evaluate(Of Object)
 
@@ -561,9 +573,23 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop("the evaluation delegate function can not be nothing, i'm unsure about how to evaluate the data object as numeric value...", env)
             ElseIf TypeOf eval Is Func(Of Object, Double) Then
                 evalFUNC = New Evaluate(Of Object)(AddressOf DirectCast(eval, Func(Of Object, Double)).Invoke)
+            Else
+                Return Internal.debug.stop("unsupport type for call as evaluator function!", env)
             End If
 
-            Throw New NotImplementedException
+            Dim groups = data _
+                .populates(Of Object)(env) _
+                .GroupBy(AddressOf evalFUNC.Invoke, Function(a, b) stdNum.Abs(a - b) <= offset) _
+                .ToArray
+
+            Return groups _
+                .Select(Function(a)
+                            Return New Group With {
+                                .key = a.name,
+                                .group = a.value
+                            }
+                        End Function) _
+                .ToArray
         End Function
 
         ''' <summary>
