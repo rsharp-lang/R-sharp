@@ -64,7 +64,7 @@ Namespace Language
             Call keywords.Add(pyKeywords).ToArray
             Call nullLiteral.Clear()
             Call nullLiteral.Add("None")
-            Call shortOperators.Add("."c)
+            ' Call shortOperators.Add("."c)
 
             keepsDelimiter = True
         End Sub
