@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::1c5aabc6218687dda3570f5364564570, Library\R.base\utils\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module utils
-    ' 
-    '     Function: DataFrameRows, ensureRowNames, MeasureGenericType, printRawTable, read_csv
-    '               saveGeneric, setRowNames, write_csv
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module utils
+' 
+'     Function: DataFrameRows, ensureRowNames, MeasureGenericType, printRawTable, read_csv
+'               saveGeneric, setRowNames, write_csv
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
@@ -320,7 +321,21 @@ Public Module utils
         Dim encoding As Encodings = TextEncodings.GetEncodings(Rsharp.GetEncoding(fileEncoding))
 
         If type Is GetType(Rdataframe) Then
-            Return DirectCast(x, Rdataframe).DataFrameRows(row_names, env).Save(path:=file, encoding:=encoding, silent:=True, tsv:=tsv)
+            x = DirectCast(x, Rdataframe).CheckDimension(env)
+
+            If TypeOf x Is Message Then
+                Return x
+            End If
+
+            Return DirectCast(x, Rdataframe) _
+                .DataFrameRows(row_names, env) _
+                .Save(
+                    path:=file,
+                    encoding:=encoding,
+                    silent:=True,
+                    tsv:=tsv
+                )
+
         ElseIf type Is GetType(File) Then
             Return DirectCast(x, File).Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf type Is GetType(IO.DataFrame) Then

@@ -140,6 +140,16 @@ Namespace Runtime.Internal.Object.Converts
             Return dataframe
         End Function
 
+        ''' <summary>
+        ''' check column dimension is matched to rows or not?
+        ''' (arguments imply differing number of rows)
+        ''' </summary>
+        ''' <param name="data"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' returns the input data frame if no error, 
+        ''' otherwise returns the error message.
+        ''' </returns>
         <Extension>
         Public Function CheckDimension(data As dataframe, env As Environment) As Object
             If data.columns.IsNullOrEmpty OrElse data.columns.Count = 1 Then

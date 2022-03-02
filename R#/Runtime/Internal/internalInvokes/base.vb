@@ -2182,6 +2182,12 @@ RE0:
             Dim strs As String
 
             If vec.Length = 1 AndAlso TypeOf vec(Scan0) Is dataframe Then
+                values = DirectCast(vec(Scan0), dataframe).CheckDimension(env)
+
+                If TypeOf values Is Message Then
+                    Return values
+                End If
+
                 sep = sprintf(sep)
                 strs = TableFormatter _
                     .GetTable(DirectCast(vec(Scan0), dataframe), env.globalEnvironment, printContent:=False, True) _
