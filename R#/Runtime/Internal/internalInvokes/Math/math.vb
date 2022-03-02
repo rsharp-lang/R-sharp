@@ -53,6 +53,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.Statistics.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -573,6 +574,8 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop("the evaluation delegate function can not be nothing, i'm unsure about how to evaluate the data object as numeric value...", env)
             ElseIf TypeOf eval Is Func(Of Object, Double) Then
                 evalFUNC = New Evaluate(Of Object)(AddressOf DirectCast(eval, Func(Of Object, Double)).Invoke)
+            ElseIf TypeOf eval Is DeclareLambdaFunction Then
+                evalFUNC = AddressOf DirectCast(eval, DeclareLambdaFunction).CreateLambda(Of Object, Double)(env).Invoke
             Else
                 Return Internal.debug.stop("unsupport type for call as evaluator function!", env)
             End If

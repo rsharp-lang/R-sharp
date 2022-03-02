@@ -1251,6 +1251,23 @@ RE0:
         End Function
 
         ''' <summary>
+        ''' ### Coerce to a Data Frame
+        ''' 
+        ''' Functions to check if an object is a data frame, or coerce it 
+        ''' if possible.
+        ''' </summary>
+        ''' <param name="x">any R object.</param>
+        ''' <returns>
+        ''' is.data.frame returns TRUE if its argument is a data frame 
+        ''' (that is, has "data.frame" amongst its classes) and FALSE 
+        ''' otherwise.
+        ''' </returns>
+        <ExportAPI("is.data.frame")>
+        Public Function isDataframe(x As Object) As Boolean
+            Return TypeOf x Is dataframe
+        End Function
+
+        ''' <summary>
         ''' ### Lists – Generic and Dotted Pairs
         ''' 
         ''' Functions to construct, coerce and check for both kinds of R lists.
