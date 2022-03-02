@@ -367,6 +367,7 @@ Namespace Language.TokenIcer
                     If lastPopoutToken Is Nothing OrElse
                         lastPopoutToken.name = TokenType.open OrElse
                         lastPopoutToken.name = TokenType.operator OrElse
+                        lastPopoutToken.name = TokenType.comma OrElse
                         lastPopoutToken.name = TokenType.terminator Then
 
                         If buffer > 0 Then
