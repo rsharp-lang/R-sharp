@@ -149,7 +149,7 @@ Namespace Runtime
             ElseIf args.ContainsKey("size") Then
                 Return getSize(args("size"), env, $"{[default].Width},{[default].Height}").FloatSizeParser
             Else
-                Throw New MissingPrimaryKeyException
+                Return [default]
             End If
 
             Return New SizeF(w, h)
