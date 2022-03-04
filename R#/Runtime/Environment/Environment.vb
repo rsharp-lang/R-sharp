@@ -292,6 +292,10 @@ Namespace Runtime
             Return args
         End Function
 
+        ''' <summary>
+        ''' get all variable symbol names(function symbol is not included)
+        ''' </summary>
+        ''' <returns></returns>
         Public Function GetSymbolsNames() As IEnumerable(Of String)
             Return symbols.Keys
         End Function
