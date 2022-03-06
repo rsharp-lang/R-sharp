@@ -72,6 +72,6 @@ Public Class zzz
 
     Private Shared Sub RegisterDriver()
         Call PDFimage.Driver.Init()
-        Call Designer.Register("MPL_gist_ncar", loadColors(My.Resources.MPL_gist_ncar))
+        ' Call Designer.Register("MPL_gist_ncar", loadColors(My.Resources.MPL_gist_ncar))
     End Sub
 End Class
