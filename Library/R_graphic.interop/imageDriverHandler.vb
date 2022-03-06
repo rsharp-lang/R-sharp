@@ -50,6 +50,7 @@ Module imageDriverHandler
 
     ReadOnly grDevices As Index(Of String) = {"grDevices", "graphics"}
 
+    <Extension>
     Public Function getDriver(env As Environment) As Drivers
         Dim frames = env.stackTrace
 

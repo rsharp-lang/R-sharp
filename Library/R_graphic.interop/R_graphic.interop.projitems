@@ -10,8 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)gdi.vb" />
-    <Compile Include="$(MSBuildThisFileDirectory)InteropArgumentHelper.vb" />
     <Compile Include="$(MSBuildThisFileDirectory)imageDriverHandler.vb" />
+    <Compile Include="$(MSBuildThisFileDirectory)InteropArgumentHelper.vb" />
     <Compile Include="$(MSBuildThisFileDirectory)RColorPalette.vb" />
   </ItemGroup>
 </Project>
