@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::8a0f9a1702e5b5c572f82f29f9bfbf0a, R#\Interpreter\Syntax\SyntaxTree\ExpressionTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ExpressionTree
-    ' 
-    '         Function: CreateTree, ObjectInvoke, ParseExpressionTree, simpleSequence
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ExpressionTree
+' 
+'         Function: CreateTree, ObjectInvoke, ParseExpressionTree, simpleSequence
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -46,6 +46,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -111,6 +112,35 @@ Namespace Interpreter.SyntaxParser
         End Function
 
         <Extension>
+        Public Function isDotNetMemberReference(code As List(Of Token())) As Boolean
+            If code <> 3 Then
+                Return False
+            ElseIf code(0).First <> (TokenType.open, "[") OrElse code(0).Last <> (TokenType.close, "]") Then
+                Return False
+            ElseIf code(1).Length <> 1 OrElse code(1)(Scan0) <> (TokenType.operator, "::") Then
+                Return False
+            ElseIf code(2).Length <> 1 OrElse Not (code(2)(0).name = TokenType.identifier OrElse code(2)(0).name = TokenType.keyword) Then
+                Return False
+            Else
+                Return True
+            End If
+        End Function
+
+        <Extension>
+        Public Function ParseDotNetmember(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim obj = code(0).Skip(1).Take(code(0).Length - 2).DoCall(Function(t) opts.ParseExpression(t, opts))
+            Dim target = opts.ParseExpression(code(2), opts)
+
+            If obj.isException Then
+                Return obj
+            ElseIf target.isException Then
+                Return target
+            Else
+                Return New SyntaxResult(New DotNetObject(obj.expression, target.expression))
+            End If
+        End Function
+
+        <Extension>
         Private Function ParseExpressionTree(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim blocks As List(Of Token())
 
@@ -137,6 +167,10 @@ Namespace Interpreter.SyntaxParser
             Else
                 blocks = tokens.SplitByTopLevelDelimiter(TokenType.operator)
                 opts = opts.SetCurrentRange(tokens)
+            End If
+
+            If blocks = 3 AndAlso blocks.isDotNetMemberReference Then
+                Return blocks.ParseDotNetmember(opts)
             End If
 
             If blocks > 1 Then

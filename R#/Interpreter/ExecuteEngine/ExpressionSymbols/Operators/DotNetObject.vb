@@ -53,6 +53,9 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
+    ''' <summary>
+    ''' [x]::property, this syntax only works for the class property
+    ''' </summary>
     Public Class DotNetObject : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes

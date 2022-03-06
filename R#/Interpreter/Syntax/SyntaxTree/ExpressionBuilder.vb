@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::00597bfe5339984c741c6445946a17bb, R#\Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ExpressionBuilder
-    ' 
-    '         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression, parseInvoke
-    '                   parseSymbolIndex
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ExpressionBuilder
+' 
+'         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression, parseInvoke
+'                   parseSymbolIndex
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -311,17 +311,8 @@ Namespace Interpreter.SyntaxParser
                 ElseIf code(1).Length = 1 AndAlso code(1)(Scan0).name = TokenType.operator Then
                     Dim op As String = code(1)(Scan0).text
 
-                    If op = "::" AndAlso code(0).First = (TokenType.open, "[") AndAlso code(0).Last = (TokenType.close, "]") Then
-                        Dim obj = code(0).Skip(1).Take(code(0).Length - 2).DoCall(Function(t) opts.ParseExpression(t, opts))
-                        Dim target = opts.ParseExpression(code(2), opts)
-
-                        If obj.isException Then
-                            Return obj
-                        ElseIf target.isException Then
-                            Return target
-                        Else
-                            Return New SyntaxResult(New DotNetObject(obj.expression, target.expression))
-                        End If
+                    If op = "::" AndAlso code.isDotNetMemberReference Then
+                        Return code.ParseDotNetmember(opts)
                     End If
 
                     Dim left As SyntaxResult = opts.ParseExpression(code(0), opts)
