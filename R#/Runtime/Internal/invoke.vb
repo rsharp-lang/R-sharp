@@ -59,6 +59,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Assembly: InternalsVisibleTo("snowFall")>
+<Assembly: InternalsVisibleTo("R#")>
 
 Namespace Runtime.Internal
 
