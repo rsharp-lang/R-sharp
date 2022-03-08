@@ -177,6 +177,22 @@ Namespace Interpreter
             Return Me
         End Function
 
+        ''' <summary>
+        ''' open the data file as stream from a given 
+        ''' package with a specific resource reference 
+        ''' name.
+        ''' </summary>
+        ''' <param name="dataName"></param>
+        ''' <param name="package"></param>
+        ''' <returns></returns>
+        Public Function getDataStream(dataName As String, package As String) As Stream
+
+
+            ' for missing data package just
+            ' returns nothing
+            Return Nothing
+        End Function
+
         Public Function options(Optional names As String() = Nothing,
                                 Optional verbose As Boolean? = Nothing,
                                 Optional strict As Boolean? = Nothing) As Object
