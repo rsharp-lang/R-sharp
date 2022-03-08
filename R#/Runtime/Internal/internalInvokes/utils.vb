@@ -805,7 +805,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <Extension>
-        Private Function createAlternativeName(fileName As String) As String
+        Friend Function createAlternativeName(fileName As String) As String
             Dim list = fileName.Split("\"c, "/"c)
             Dim basename = fileName.BaseName
             Dim alter = $"{list.Take(list.Length - 1).JoinBy("/")}/{basename}"
