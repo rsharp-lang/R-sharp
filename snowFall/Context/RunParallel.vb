@@ -49,6 +49,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports snowFall.Context.RPC
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
+Imports Rscript = Rserver.RscriptCommandLine.Rscript
 
 ''' <summary>
 ''' context_analysis -> symbols -> serialization -> parallel_slave
@@ -59,8 +60,10 @@ Public Class RunParallel
     Public Property master As MasterContext
     Public Property seqSet As NamedCollection(Of Object)()
     Public Property size As Integer
+    Public Property worker As Rscript
 
     Private Sub New()
+        worker = Rscript.FromEnvironment(App.HOME)
     End Sub
 
     ''' <summary>
@@ -69,7 +72,7 @@ Public Class RunParallel
     ''' <param name="index"></param>
     ''' <returns></returns>
     Public Function taskFactory(index As Integer) As Object
-
+        Dim task As String = worker.GetparallelModeCommandLine(master.port, [delegate]:="Parallel::slave")
     End Function
 
     Public Shared Function Initialize(task As Expression, argv As list, env As Environment) As RunParallel

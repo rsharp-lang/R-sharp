@@ -69,7 +69,11 @@ Namespace Context.RPC
     <Protocol(GetType(Protocols))>
     Public Class MasterContext
 
-        ReadOnly port As Integer
+        ''' <summary>
+        ''' the listen port of the master node
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property port As Integer
 
         ''' <summary>
         ''' the R# context environment

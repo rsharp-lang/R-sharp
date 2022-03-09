@@ -114,6 +114,11 @@ Public Module Parallel
         }
     End Function
 
+    <ExportAPI("slave")>
+    Public Function runSlaveNode(port As Integer) As Object
+
+    End Function
+
     ''' <summary>
     ''' run parallel of R# expression
     ''' </summary>

@@ -98,7 +98,7 @@ Namespace Runtime
             End Get
         End Property
 
-        Private ReadOnly symbols As Dictionary(Of Symbol)
+        Protected ReadOnly symbols As Dictionary(Of Symbol)
 
         ''' <summary>
         ''' 导入的函数列表
