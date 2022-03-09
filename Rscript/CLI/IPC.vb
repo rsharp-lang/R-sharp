@@ -78,10 +78,15 @@ Partial Module CLI
         End Try
     End Function
 
+    ''' <summary>
+    ''' R web server run a slave task
+    ''' </summary>
+    ''' <param name="args"></param>
+    ''' <returns></returns>
     <ExportAPI("--slave")>
     <Usage("--slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [--debug /timeout=<timeout in ms, default=1000> /retry=<retry_times, default=5> /MASTER=<ip, default=localhost> --startups <packageNames, default=""""> /entry=<function_name, default=NULL>]")>
     <Description("Create a R# cluster node for run background or parallel task. This IPC command will run a R# script file that specified by the ``/exec`` argument, and then post back the result data json to the specific master listener.")>
-    <Argument("/exec", False, CLITypes.File, AcceptTypes:={GetType(String)}, Extensions:="*.R", Description:="a specific R# script for run")>
+    <Argument("/exec", False, CLITypes.File, AcceptTypes:={GetType(String)}, Extensions:="*.R", Description:="a specific R# script for run as background task.")>
     <Argument("/args", False, CLITypes.Base64, PipelineTypes.std_in,
               AcceptTypes:={GetType(Dictionary(Of String, String))},
               Extensions:="*.json",
