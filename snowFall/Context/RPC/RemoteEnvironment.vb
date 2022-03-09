@@ -48,8 +48,15 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Namespace Context.RPC
 
     ''' <summary>
-    ''' a slow accessed R# runtime environment based on the tcp networking
+    ''' a slow accessed R# runtime environment based on 
+    ''' the tcp networking.
     ''' </summary>
+    ''' <remarks>
+    ''' this is the remote environment which is running 
+    ''' on the slave node, slave parallel code access the
+    ''' data on the master node via the <see cref="FindSymbol"/>
+    ''' method in this executation environment model.
+    ''' </remarks>
     Public Class RemoteEnvironment : Inherits Environment
 
         ReadOnly master As IPEndPoint

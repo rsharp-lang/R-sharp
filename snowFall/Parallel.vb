@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::1d3d61a2952460b32e91daf6fb2ae58d, snowFall\Parallel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Parallel
-    ' 
-    '     Function: detectCores, makeCluster, parallel, snowFall, worker
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Module Parallel
+' 
+'     Function: detectCores, makeCluster, parallel, snowFall, worker
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -55,6 +55,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports snowFall.Context.RPC
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
@@ -133,53 +134,7 @@ Public Module Parallel
                              Optional argv As list = Nothing,
                              Optional env As Environment = Nothing) As Object
 
-        Dim allSymbols = SymbolAnalysis.GetSymbolReferenceList(task).ToArray
-        Dim locals As Index(Of String) = allSymbols _
-            .Where(Function(x) x.Description <> "global") _
-            .Select(Function(x) x.Name) _
-            .Distinct _
-            .Indexing
-        Dim required = allSymbols _
-            .Where(Function(v) v.Description = "global") _
-            .Where(Function(v)
-                       Return v.Value = PropertyAccess.Readable OrElse v.Value = PropertyAccess.ReadWrite
-                   End Function) _
-            .GroupBy(Function(v) v.Name) _
-            .Select(Function(v) v.First) _
-            .ToArray
-        Dim seqSet As New List(Of NamedCollection(Of Object))
-        Dim value As Object
-        Dim parallelBase As New Environment(env.globalEnvironment)
-
-        For Each symbol As NamedValue(Of PropertyAccess) In required
-            If Not argv.hasName(symbol.Name) Then
-                If Not env.FindFunction(symbol.Name) Is Nothing Then
-                    parallelBase.Push(symbol.Name, env.FindFunction(symbol.Name).value, [readonly]:=True)
-                    Continue For
-                ElseIf Not env.FindSymbol(symbol.Name) Is Nothing Then
-                    parallelBase.Push(symbol.Name, env.FindSymbol(symbol.Name).value, [readonly]:=True)
-                    Continue For
-                ElseIf Internal.invoke.getFunction(symbol.Name) IsNot Nothing Then
-                    Continue For
-                ElseIf symbol.Name Like locals Then
-                    Continue For
-                End If
-
-                Return Message.SymbolNotFound(env, symbol.Name, TypeCodes.ref)
-            Else
-                value = argv.getByName(symbol.Name)
-                seqSet.Add(New NamedCollection(Of Object)(symbol.Name, Rset.getObjectSet(value, env)))
-            End If
-        Next
-
-        Dim checkSize As Integer() = seqSet _
-            .Select(Function(seq) seq.Length) _
-            .Where(Function(l) l <> 1) _
-            .ToArray
-
-        If checkSize.Distinct.Count <> 1 Then
-            Return Internal.debug.stop("the sequence size should be equals to each other!", env)
-        End If
+        Dim run As RunParallel = RunParallel.Initialize(task, argv, env)
 
         Dim taskFactory As Func(Of Integer, SeqValue(Of Environment)) =
             Function(i) As SeqValue(Of Environment)

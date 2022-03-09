@@ -74,6 +74,10 @@ Namespace Context.RPC
         ''' <summary>
         ''' the R# context environment
         ''' </summary>
+        ''' <remarks>
+        ''' the master environment is readonly to 
+        ''' the slave parallel node.
+        ''' </remarks>
         ReadOnly env As Environment
         ReadOnly socket As TcpServicesSocket
 
@@ -88,9 +92,13 @@ Namespace Context.RPC
         ''' <param name="port"></param>
         Sub New(env As Environment, Optional port As Integer = -1, Optional verbose As Boolean = False)
             Me.port = If(port <= 0, IPCSocket.GetFirstAvailablePort, port)
-            Me.env = env
+            Me.env = New Environment(env, "snowfall-parallel@master", isInherits:=False)
             Me.socket = New TcpServicesSocket(port, debug:=verbose OrElse port > 0)
             Me.socket.ResponseHandler = AddressOf New ProtocolHandler(Me).HandleRequest
+        End Sub
+
+        Public Sub push(name As String, value As Object)
+            Call env.Push(name, value, [readonly]:=True)
         End Sub
 
         <Protocol(Protocols.GetSymbol)>

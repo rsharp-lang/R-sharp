@@ -5,7 +5,7 @@ const bbb     = [2,2,2,22,2,1,9999];
 const g as  double = 2.888888;
 
 const y = parallel(x = seqVals, z = bbb, n_threads = 2) {
-	sleep(1 + rnd() * 5);
+	sleep(1 + rnd() * 10);
 	print(x);
 	(x + 5 + z) ^ g;
 };
