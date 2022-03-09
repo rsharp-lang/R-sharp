@@ -40,24 +40,19 @@
 
 #End Region
 
-Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Parallel
 Imports Parallel.ThreadTask
-Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports snowFall.Context.RPC
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 ''' <summary>
 ''' # Support for Parallel computation in ``R#`` 
@@ -135,42 +130,7 @@ Public Module Parallel
                              Optional env As Environment = Nothing) As Object
 
         Dim run As RunParallel = RunParallel.Initialize(task, argv, env)
-
-        Dim taskFactory As Func(Of Integer, SeqValue(Of Environment)) =
-            Function(i) As SeqValue(Of Environment)
-                Dim frame As New StackFrame With {
-                    .File = "snowFall",
-                    .Line = "n/a",
-                    .Method = New Method With {
-                        .Method = $"task_{i + 1}",
-                        .[Module] = "parallel",
-                        .[Namespace] = "R#/Runtime"
-                    }
-                }
-                Dim parallelEnv As New Environment(parallelBase, frame, isInherits:=False)
-
-                For Each x In seqSet
-                    If x.Length = 1 Then
-                        parallelEnv.Push(x.name, x.value, [readonly]:=True)
-                    Else
-                        parallelEnv.Push(x.name, x(i), [readonly]:=True)
-                    End If
-                Next
-
-                Return New SeqValue(Of Environment)(i, parallelEnv)
-            End Function
-        Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) =
-            Iterator Function() As IEnumerable(Of Func(Of SeqValue(Of Object)))
-                For i As Integer = 0 To checkSize(Scan0) - 1
-                    Dim index As Integer = i
-                    Dim x As Func(Of SeqValue(Of Object)) =
-                        Function()
-                            Return New SeqValue(Of Object)(index, task.Evaluate(taskFactory(index)))
-                        End Function
-
-                    Yield x
-                Next
-            End Function()
+        Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) = run.produceTask
         Dim engine As New ThreadTask(Of SeqValue(Of Object))(
             task:=taskList,
             debugMode:=debug,
@@ -190,5 +150,18 @@ Public Module Parallel
         Next
 
         Return REnv.TryCastGenericArray(result, env)
+    End Function
+
+    <Extension>
+    Private Iterator Function produceTask(run As RunParallel) As IEnumerable(Of Func(Of SeqValue(Of Object)))
+        For i As Integer = 0 To run.size - 1
+            Dim index As Integer = i
+            Dim x As Func(Of SeqValue(Of Object)) =
+                Function()
+                    Return New SeqValue(Of Object)(index, run.taskFactory(index))
+                End Function
+
+            Yield x
+        Next
     End Function
 End Module

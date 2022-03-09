@@ -58,11 +58,17 @@ Public Class RunParallel
     Public Property [error] As Message
     Public Property master As MasterContext
     Public Property seqSet As NamedCollection(Of Object)()
+    Public Property size As Integer
 
     Private Sub New()
     End Sub
 
-    Public Function taskFactory(i As Integer) As Func(Of Object)
+    ''' <summary>
+    ''' run task on the remote slave node from this function
+    ''' </summary>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    Public Function taskFactory(index As Integer) As Object
 
     End Function
 
@@ -116,7 +122,8 @@ Public Class RunParallel
         Else
             Return New RunParallel With {
                 .master = parallelBase,
-                .seqSet = seqSet.ToArray
+                .seqSet = seqSet.ToArray,
+                .size = checkSize(Scan0)
             }
         End If
     End Function
