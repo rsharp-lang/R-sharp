@@ -39,6 +39,8 @@
 
 #End Region
 
+Imports System.Runtime.InteropServices
+Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
@@ -48,8 +50,8 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports snowFall.Context.RPC
-Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 Imports Rscript = Rserver.RscriptCommandLine.Rscript
+Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 ''' <summary>
 ''' context_analysis -> symbols -> serialization -> parallel_slave
@@ -73,7 +75,18 @@ Public Class RunParallel
     ''' <returns></returns>
     Public Function taskFactory(index As Integer) As Object
         Dim task As String = worker.GetparallelModeCommandLine(master.port, [delegate]:="Parallel::slave")
+        Dim process As RunSlavePipeline = worker.CreateSlave(task)
+        Dim result As Object = Nothing
+
+        Call process.Run()
+        Call getResult(uuid:=index, result)
+
+        Return result
     End Function
+
+    Private Sub getResult(uuid As Integer, <Out> ByRef result As Object)
+
+    End Sub
 
     Public Shared Function Initialize(task As Expression, argv As list, env As Environment) As RunParallel
         Dim allSymbols = SymbolAnalysis.GetSymbolReferenceList(task).ToArray
