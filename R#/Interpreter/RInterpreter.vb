@@ -76,6 +76,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports stdNum = System.Math
+Imports Strings = Microsoft.VisualBasic.Strings
 
 Namespace Interpreter
 
@@ -372,7 +373,7 @@ Namespace Interpreter
         Public Function Invoke(funcName$, ParamArray args As Object()) As Object
             Dim find As Object
 
-            If InStr(funcName, "::") > 0 Then
+            If Strings.InStr(funcName, "::") > 0 Then
                 Dim nsRef As NamedValue(Of String) = funcName.GetTagValue("::")
 
                 find = FunctionInvoke.GetFunctionVar(
@@ -445,7 +446,7 @@ Namespace Interpreter
         Private Function InitializeEnvironment(source$, arguments As NamedValue(Of Object)()) As Environment
             Dim env As Environment
 
-            If source Is Nothing OrElse InStr(source, "<in_memory_") = 1 Then
+            If source Is Nothing OrElse Strings.InStr(source, "<in_memory_") = 1 Then
                 env = globalEnvir
             Else
                 env = New StackFrame With {
@@ -648,8 +649,8 @@ Namespace Interpreter
 
         Public Sub Dispose() Implements IDisposable.Dispose
             ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
-            Dispose(disposing:=True)
-            gc.SuppressFinalize(Me)
+            Call Dispose(disposing:=True)
+            Call System.GC.SuppressFinalize(Me)
         End Sub
 
         Public Shared Narrowing Operator CType(R As RInterpreter) As Environment
