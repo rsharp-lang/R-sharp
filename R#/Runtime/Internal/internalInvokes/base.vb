@@ -1263,7 +1263,7 @@ RE0:
         ''' otherwise.
         ''' </returns>
         <ExportAPI("is.data.frame")>
-        Public Function isDataframe(x As Object) As Boolean
+        Public Function isDataframe(<RRawVectorArgument> x As Object) As Boolean
             Return TypeOf x Is dataframe
         End Function
 
@@ -1281,7 +1281,7 @@ RE0:
         ''' if the argument is a pairlist or NULL (see below).
         ''' </returns>
         <ExportAPI("is.list")>
-        Public Function isList(x As Object) As Boolean
+        Public Function isList(<RRawVectorArgument> x As Object) As Boolean
             Return TypeOf x Is list
         End Function
 
@@ -1315,7 +1315,7 @@ RE0:
         ''' = "any"'.
         ''' </remarks>
         <ExportAPI("is.vector")>
-        Public Function isRVector(x As Object, Optional mode As Object = "any") As Boolean
+        Public Function isRVector(<RRawVectorArgument> x As Object, Optional mode As Object = "any") As Boolean
             If x Is Nothing Then
                 Return True
             End If
@@ -1327,7 +1327,13 @@ RE0:
             End If
 
             If x.GetType.IsArray Then
-                Return True
+                If mode Is Nothing OrElse mode = "any" Then
+                    Return True
+                Else
+                    ' unsure for the type test
+                    ' just returns true at here
+                    Return True
+                End If
             End If
 
             Return False

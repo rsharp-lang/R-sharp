@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::b0127ade54343a9dbfda1d973e223d55, R#\Interpreter\RInterpreter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RInterpreter
-    ' 
-    '         Properties: configFile, debug, globalEnvir, redirectError2stdout, Rsharp
-    '                     silent, strict, warnings
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    ' 
-    '         Function: [Imports], [Set], (+2 Overloads) Evaluate, FromEnvironmentConfiguration, InitializeEnvironment
-    '                   (+3 Overloads) Invoke, (+2 Overloads) LoadLibrary, options, Parse, RedirectOutput
-    '                   Run, RunInternal, Source
-    ' 
-    '         Sub: _construct, (+3 Overloads) Add, (+2 Overloads) Dispose, Inspect, (+2 Overloads) Print
-    '              PrintMemory
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RInterpreter
+' 
+'         Properties: configFile, debug, globalEnvir, redirectError2stdout, Rsharp
+'                     silent, strict, warnings
+' 
+'         Constructor: (+2 Overloads) Sub New
+' 
+'         Function: [Imports], [Set], (+2 Overloads) Evaluate, FromEnvironmentConfiguration, InitializeEnvironment
+'                   (+3 Overloads) Invoke, (+2 Overloads) LoadLibrary, options, Parse, RedirectOutput
+'                   Run, RunInternal, Source
+' 
+'         Sub: _construct, (+3 Overloads) Add, (+2 Overloads) Dispose, Inspect, (+2 Overloads) Print
+'              PrintMemory
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
@@ -70,10 +71,12 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports stdNum = System.Math
+Imports Strings = Microsoft.VisualBasic.Strings
 
 Namespace Interpreter
 
@@ -175,6 +178,40 @@ Namespace Interpreter
         Public Function RedirectOutput(out As StreamWriter, env As OutputEnvironments) As RInterpreter
             Call globalEnvir.RedirectOutput(out, env)
             Return Me
+        End Function
+
+        ''' <summary>
+        ''' open the data file as stream from a given 
+        ''' package with a specific resource reference 
+        ''' name.
+        ''' </summary>
+        ''' <param name="dataName"></param>
+        ''' <param name="package"></param>
+        ''' <returns></returns>
+        Public Function getDataStream(dataName As String, package As String) As Stream
+            Dim pkgDir As String
+            Dim alternativeName As String = dataName.createAlternativeName
+
+            ' 优先从已经加载的程序包位置进行加载操作
+            If globalEnvir.attachedNamespace.hasNamespace(package) Then
+                pkgDir = globalEnvir.attachedNamespace(package).libpath
+            ElseIf Not RFileSystem.PackageInstalled(package, globalEnvir) Then
+                Return Nothing
+            Else
+                pkgDir = $"{RFileSystem.GetPackageDir(globalEnvir)}/{package}"
+            End If
+
+            dataName = $"{pkgDir}/{dataName}".GetFullPath
+
+            If dataName.FileExists Then
+                Return dataName.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+            ElseIf $"{pkgDir}/{alternativeName}".FileExists Then
+                Return $"{pkgDir}/{alternativeName}".Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+            End If
+
+            ' for missing data package just
+            ' returns nothing
+            Return Nothing
         End Function
 
         Public Function options(Optional names As String() = Nothing,
@@ -336,7 +373,7 @@ Namespace Interpreter
         Public Function Invoke(funcName$, ParamArray args As Object()) As Object
             Dim find As Object
 
-            If InStr(funcName, "::") > 0 Then
+            If Strings.InStr(funcName, "::") > 0 Then
                 Dim nsRef As NamedValue(Of String) = funcName.GetTagValue("::")
 
                 find = FunctionInvoke.GetFunctionVar(
@@ -409,7 +446,7 @@ Namespace Interpreter
         Private Function InitializeEnvironment(source$, arguments As NamedValue(Of Object)()) As Environment
             Dim env As Environment
 
-            If source Is Nothing OrElse InStr(source, "<in_memory_") = 1 Then
+            If source Is Nothing OrElse Strings.InStr(source, "<in_memory_") = 1 Then
                 env = globalEnvir
             Else
                 env = New StackFrame With {
@@ -612,8 +649,8 @@ Namespace Interpreter
 
         Public Sub Dispose() Implements IDisposable.Dispose
             ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
-            Dispose(disposing:=True)
-            GC.SuppressFinalize(Me)
+            Call Dispose(disposing:=True)
+            Call System.GC.SuppressFinalize(Me)
         End Sub
 
         Public Shared Narrowing Operator CType(R As RInterpreter) As Environment
