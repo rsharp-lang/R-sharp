@@ -520,6 +520,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImageFilters.vb" />
     <Compile Include="zzz.vb" />
     <Compile Include="ColorBrewer.vb" />
     <Compile Include="Plot2D\graphics2D.vb" />
