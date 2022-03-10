@@ -51,7 +51,9 @@ Imports Microsoft.VisualBasic.Serialization
 Namespace Context.RPC
 
     Public Enum Protocols
+        Initialize
         GetSymbol
+        PushResult
     End Enum
 
     Public Class GetSymbol : Inherits RawStream

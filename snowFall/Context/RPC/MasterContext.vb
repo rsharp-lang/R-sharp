@@ -78,6 +78,7 @@ Namespace Context.RPC
         ''' </remarks>
         ReadOnly env As Environment
         ReadOnly socket As TcpServicesSocket
+        ReadOnly result As New Dictionary(Of String, Object)
 
         Public Shared ReadOnly Property Protocol As Long = New ProtocolAttribute(GetType(Protocols)).EntryPoint
 
@@ -98,6 +99,22 @@ Namespace Context.RPC
         Public Sub push(name As String, value As Object)
             Call env.Push(name, value, [readonly]:=True)
         End Sub
+
+        Public Function pop(uuid As Integer) As Object
+            SyncLock result
+                Return result.TryGetValue(uuid.ToString)
+            End SyncLock
+        End Function
+
+        <Protocol(Protocols.PushResult)>
+        Public Function PostResult(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
+            Dim value As Object
+            Dim uuid As Integer
+
+            SyncLock result
+                result(uuid.ToString) = value
+            End SyncLock
+        End Function
 
         <Protocol(Protocols.GetSymbol)>
         Public Function GetSymbol(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe

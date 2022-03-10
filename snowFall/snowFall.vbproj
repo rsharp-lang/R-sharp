@@ -236,6 +236,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context\RPC\BootstrapSocket.vb" />
     <Compile Include="Context\RPC\MasterContext.vb" />
     <Compile Include="Context\RPC\Protocols.vb" />
     <Compile Include="Context\RPC\RemoteEnvironment.vb" />
