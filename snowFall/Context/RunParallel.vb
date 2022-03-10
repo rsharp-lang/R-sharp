@@ -39,12 +39,14 @@
 
 #End Region
 
+Imports System.IO
 Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -62,7 +64,7 @@ Public Class RunParallel
     Public Property master As MasterContext
     Public Property seqSet As NamedCollection(Of Object)()
     Public Property size As Integer
-    Public Property worker As Rscript
+    Public ReadOnly Property worker As Rscript
     Public Property task As Byte()
 
     Private Sub New()
@@ -107,13 +109,20 @@ Public Class RunParallel
             End If
         Next
 
+        Dim taskPayload As New MemoryStream
+
+        Call New Writer(taskPayload).Write(task)
+        Call taskPayload.Flush()
+        Call taskPayload.Seek(Scan0, SeekOrigin.Begin)
+
         If checkSize.Distinct.Count <> 1 Then
             Return Internal.debug.stop("the sequence size should be equals to each other!", env)
         Else
             Return New RunParallel With {
                 .master = parallelBase,
                 .seqSet = seqSet,
-                .size = checkSize(Scan0)
+                .size = checkSize(Scan0),
+                .task = taskPayload.ToArray
             }
         End If
     End Function

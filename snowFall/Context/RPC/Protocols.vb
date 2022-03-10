@@ -46,6 +46,7 @@
 
 
 Imports System.IO
+Imports System.Text
 Imports Microsoft.VisualBasic.Serialization
 
 Namespace Context.RPC
@@ -65,11 +66,14 @@ Namespace Context.RPC
         End Sub
 
         Sub New(payload As Byte())
-
+            uuid = BitConverter.ToInt32(payload, Scan0)
+            name = Encoding.UTF8.GetString(payload, 4, payload.Length - 4)
         End Sub
 
         Public Overrides Sub Serialize(buffer As Stream)
-            Throw New NotImplementedException()
+            Call buffer.Write(BitConverter.GetBytes(uuid), Scan0, 4)
+            Call buffer.Write(name, Encoding.UTF8)
+            Call buffer.Flush()
         End Sub
     End Class
 End Namespace

@@ -200,11 +200,13 @@ Namespace Development.Package.File
         End Function
 
         ''' <summary>
-        ''' 
+        ''' 将任意R#表达式序列化为字节流
         ''' </summary>
-        ''' <param name="x"></param>
+        ''' <param name="x">
+        ''' 任意一个R#表达式
+        ''' </param>
         ''' <returns>
-        ''' 函数返回表达式的长度
+        ''' 函数返回表达式的md5哈希值
         ''' </returns>
         Public Function Write(x As Expression) As String
             Dim buffer As Byte() = GetBuffer(x)
