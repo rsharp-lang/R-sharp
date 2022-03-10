@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::5b0777e7d97e1e7bfe742912fa7b4eb5, Library\R.graphics\ImageFilters.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module ImageFilters
-    ' 
-    '     Function: Diffusion, Emboss, gaussBlurEffect, Pencil, Sharp
-    '               Soften, WoodCarving
-    ' 
-    ' /********************************************************************************/
+' Module ImageFilters
+' 
+'     Function: Diffusion, Emboss, gaussBlurEffect, Pencil, Sharp
+'               Soften, WoodCarving
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
+Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.Filters
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
@@ -104,8 +105,25 @@ Module ImageFilters
     End Function
 
     <ExportAPI("gauss_blur")>
-    Public Function gaussBlurEffect(image As Image, Optional levels As Integer = 100) As Image
-        Dim bitmap As New Bitmap(image)
+    <RApiReturn(GetType(Image))>
+    Public Function gaussBlurEffect(image As Object,
+                                    Optional levels As Integer = 100,
+                                    Optional env As Environment = Nothing) As Object
+
+        If image Is Nothing Then
+            Return Nothing
+        End If
+
+        If TypeOf image Is ImageData Then
+            image = DirectCast(image, ImageData).Image
+        End If
+        If TypeOf image Is Image OrElse TypeOf image Is Bitmap Then
+            image = CType(image, Image)
+        Else
+            Return Internal.debug.stop({$"required of the gdi+ image data! (given {image.GetType.FullName})"}, env)
+        End If
+
+        Dim bitmap As New Bitmap(DirectCast(image, Image))
 
         For i As Integer = 0 To levels
             bitmap = GaussBlur.GaussBlur(bitmap)
