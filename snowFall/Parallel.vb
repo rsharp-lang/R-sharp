@@ -116,7 +116,7 @@ Public Module Parallel
 
     <ExportAPI("slave")>
     Public Function runSlaveNode(port As Integer) As Object
-
+        Throw New NotImplementedException
     End Function
 
     ''' <summary>
