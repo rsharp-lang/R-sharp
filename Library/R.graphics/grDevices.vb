@@ -80,9 +80,10 @@ Public Module grDevices
                               Optional args As list = Nothing,
                               Optional env As Environment = Nothing) As Object
 
+        Dim size As Size = graphicsPipeline.getSize(args!size, env, "2700,2000").SizeParser
+
         If image Is Nothing Then
             ' just open a new device
-            Dim size As Size = graphicsPipeline.getSize(args!size, env, "2700,2000").SizeParser
             Dim buffer = GetFileStream(file, FileAccess.Write, env)
             Dim fill As Color = graphicsPipeline.GetRawColor(args!fill, [default]:="white")
 
@@ -99,7 +100,11 @@ Public Module grDevices
         Else
             Return env.FileStreamWriter(
                 file, Sub(stream)
-                          Call DirectCast(image, PdfImage).Save(stream)
+                          If TypeOf image Is Plot Then
+                              Call DirectCast(image, Plot).Plot(size, , Drivers.PDF).Save(stream)
+                          Else
+                              Call DirectCast(image, PdfImage).Save(stream)
+                          End If
                       End Sub)
         End If
     End Function
