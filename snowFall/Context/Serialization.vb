@@ -40,6 +40,7 @@
 #End Region
 
 Imports System.IO
+Imports Microsoft.VisualBasic.Data.IO
 Imports SMRUCC.Rsharp.Runtime.Components
 
 ''' <summary>
@@ -47,20 +48,51 @@ Imports SMRUCC.Rsharp.Runtime.Components
 ''' </summary>
 Public Module Serialization
 
+    ''' <summary>
+    ''' serialize R# object to byte buffer
+    ''' </summary>
+    ''' <param name="R"></param>
+    ''' <returns></returns>
     Public Function GetBuffer(R As Object) As Byte()
 
     End Function
 
+    ''' <summary>
+    ''' parse R# object from byte buffer
+    ''' </summary>
+    ''' <param name="buffer"></param>
+    ''' <returns></returns>
     Public Function ParseBuffer(buffer As Byte()) As Object
 
     End Function
 
+    ''' <summary>
+    ''' serialize R# symbol to byte buffer
+    ''' </summary>
+    ''' <param name="symbol"></param>
+    ''' <returns></returns>
     Public Function GetBytes(symbol As Symbol) As Byte()
+        Using buffer As New MemoryStream, writer As New BinaryDataWriter(buffer)
+            Call writer.Write(symbol.name, BinaryStringFormat.ZeroTerminated)
+            Call writer.Write(symbol.readonly)
+            Call writer.Write(symbol.constraint)
 
+            Dim stackTrace As Byte()
+            Dim value As Byte() = GetBuffer(symbol.value)
+
+            Call writer.Write(stackTrace.Length)
+            Call writer.Write(stackTrace)
+            Call writer.Write(value.Length)
+            Call writer.Write(value)
+            Call writer.Flush()
+            Call writer.Seek(Scan0, SeekOrigin.Begin)
+
+            Return buffer.ToArray
+        End Using
     End Function
 
     ''' <summary>
-    ''' 
+    ''' parse R# symbol from a byte buffer
     ''' </summary>
     ''' <param name="buffer"></param>
     ''' <returns>
@@ -69,6 +101,10 @@ Public Module Serialization
     ''' master node. decode at slave node.
     ''' </returns>
     Public Function GetValue(buffer As Stream) As Symbol
-        Throw New NotImplementedException
+        Using reader As New BinaryDataReader(buffer)
+
+
+
+        End Using
     End Function
 End Module
