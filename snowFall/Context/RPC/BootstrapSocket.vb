@@ -21,6 +21,8 @@ Namespace Context.RPC
         ReadOnly uuid As Integer
         ReadOnly masterPort As Integer
 
+        Dim [stop] As Boolean = False
+
         Sub New(uuid As Integer, master As Integer, closure As Byte())
             Me.masterPort = master
             Me.uuid = uuid
@@ -31,9 +33,15 @@ Namespace Context.RPC
         End Sub
 
         Public Function Run(process As RunSlavePipeline) As RunSlavePipeline
-            Dim wait = folk(process)
+            Dim wait As Action = folk(process)
 
-            Call socket.Run()
+            Call New Thread(AddressOf socket.Run).Start()
+
+            Do While Not [stop]
+                Call Thread.Sleep(1)
+            Loop
+
+            Call socket.Dispose()
             Call wait()
 
             Return process
@@ -51,6 +59,12 @@ Namespace Context.RPC
                            Call Thread.Sleep(1)
                        Loop
                    End Sub
+        End Function
+
+        <Protocol(Protocols.Stop)>
+        Public Function stopSocket(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
+            Me.stop = True
+            Return New DataPipe("OK")
         End Function
 
         <Protocol(Protocols.Initialize)>

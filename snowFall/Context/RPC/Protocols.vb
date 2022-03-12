@@ -55,6 +55,7 @@ Namespace Context.RPC
         Initialize
         GetSymbol
         PushResult
+        [Stop]
     End Enum
 
     Public Class GetSymbol : Inherits RawStream
