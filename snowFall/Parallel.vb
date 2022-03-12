@@ -44,14 +44,20 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Net
+Imports Microsoft.VisualBasic.Net.Tcp
+Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Parallel
 Imports Parallel.ThreadTask
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports snowFall.Context
+Imports snowFall.Context.RPC
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -115,8 +121,41 @@ Public Module Parallel
     End Function
 
     <ExportAPI("slave")>
-    Public Function runSlaveNode(port As Integer) As Object
+    Public Function runSlaveNode(port As Integer, Optional env As Environment = Nothing) As Object
+        Dim req As New RequestStream(MasterContext.Protocol, RPC.Protocols.Initialize)
+        Dim resp = New TcpRequest(port).SendMessage(req)
+        Dim uuid As Integer = BitConverter.ToInt32(resp.ChunkBuffer, Scan0)
+        Dim masterPort As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 4)
+        Dim size As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 8)
+        Dim buffer As Byte() = New Byte(size - 1) {}
+        Dim closure As Expression = Nothing
+        Dim root As New RemoteEnvironment(
+            uuid:=uuid,
+            master:=IPEndPoint.CreateLocal(masterPort),
+            parent:=env
+        )
+        Dim fake As New DESCRIPTION With {
+            .Author = "xieguigang",
+            .[Date] = Now.ToString,
+            .Maintainer = .Author,
+            .License = "MIT",
+            .Package = NameOf(runSlaveNode),
+            .Title = .Package,
+            .Type = "runtime",
+            .Version = App.Version,
+            .Description = .Package
+        }
 
+        Call Array.ConstrainedCopy(resp.ChunkBuffer, 12, buffer, Scan0, size)
+        Call BlockReader.ParseBlock(buffer).Parse(fake, expr:=closure)
+        Call New TcpRequest(port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
+
+        buffer = Serialization.GetBuffer(closure.Evaluate(root))
+        req = New RequestStream(MasterContext.Protocol, RPC.Protocols.PushResult, buffer)
+
+        Call New TcpRequest(masterPort).SendMessage(req)
+
+        Return 0
     End Function
 
     ''' <summary>

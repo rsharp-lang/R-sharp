@@ -51,7 +51,7 @@ Imports Microsoft.VisualBasic.Serialization
 
 Namespace Context.RPC
 
-    Public Enum Protocols
+    Public Enum Protocols As Long
         Initialize
         GetSymbol
         PushResult

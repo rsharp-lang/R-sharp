@@ -47,6 +47,14 @@ Imports SMRUCC.Rsharp.Runtime.Components
 ''' </summary>
 Public Module Serialization
 
+    Public Function GetBuffer(R As Object) As Byte()
+
+    End Function
+
+    Public Function ParseBuffer(buffer As Byte()) As Object
+
+    End Function
+
     Public Function GetBytes(symbol As Symbol) As Byte()
         Throw New NotImplementedException
     End Function
