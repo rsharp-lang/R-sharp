@@ -108,12 +108,15 @@ Namespace Context.RPC
 
         <Protocol(Protocols.PushResult)>
         Public Function PostResult(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
-            Dim value As Object
-            Dim uuid As Integer
+            Dim payload As New ResultPayload(request.ChunkBuffer)
+            Dim value As Object = payload.value
+            Dim uuid As Integer = payload.uuid
 
             SyncLock result
                 result(uuid.ToString) = value
             End SyncLock
+
+            Return New DataPipe("OK")
         End Function
 
         <Protocol(Protocols.GetSymbol)>

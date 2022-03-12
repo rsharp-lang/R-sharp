@@ -56,7 +56,7 @@ Public Module Serialization
     End Function
 
     Public Function GetBytes(symbol As Symbol) As Byte()
-        Throw New NotImplementedException
+
     End Function
 
     ''' <summary>
