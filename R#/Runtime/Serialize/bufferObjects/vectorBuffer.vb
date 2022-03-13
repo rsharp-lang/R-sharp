@@ -58,6 +58,9 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Serialize
 
+    ''' <summary>
+    ''' serialize handler for ``R#`` vector
+    ''' </summary>
     Public Class vectorBuffer : Inherits BufferObject
 
         ''' <summary>

@@ -66,6 +66,9 @@ Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Runtime.Serialize
 
+    ''' <summary>
+    ''' the error message
+    ''' </summary>
     Public Class messageBuffer : Inherits BufferObject
 
         Public Property message As String()

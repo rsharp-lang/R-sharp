@@ -56,7 +56,6 @@ Imports Microsoft.VisualBasic.My.FrameworkInternal
 Imports Microsoft.VisualBasic.Net.Protocols.ContentTypes
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
-Imports SMRUCC.Rsharp.Development.Package
 Imports REnvironment = SMRUCC.Rsharp.Runtime.Environment
 
 Namespace Development.Configuration

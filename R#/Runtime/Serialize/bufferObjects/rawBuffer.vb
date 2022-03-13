@@ -48,6 +48,9 @@ Imports System.IO
 
 Namespace Runtime.Serialize
 
+    ''' <summary>
+    ''' a vector of raw bytes
+    ''' </summary>
     Public Class rawBuffer : Inherits BufferObject
 
         Public Property buffer As MemoryStream

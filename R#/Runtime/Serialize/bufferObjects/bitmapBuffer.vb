@@ -52,6 +52,9 @@ Imports Microsoft.VisualBasic.Net.Http
 
 Namespace Runtime.Serialize
 
+    ''' <summary>
+    ''' handler for gdi+ image data.
+    ''' </summary>
     Public Class bitmapBuffer : Inherits BufferObject
 
         Public Property bitmap As Image

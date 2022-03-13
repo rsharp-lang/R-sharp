@@ -48,6 +48,9 @@ Imports Microsoft.VisualBasic.Text
 
 Namespace Runtime.Serialize
 
+    ''' <summary>
+    ''' utf8 text data
+    ''' </summary>
     Public Class textBuffer : Inherits BufferObject
 
         Public Property text As String
