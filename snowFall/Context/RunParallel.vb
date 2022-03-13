@@ -78,10 +78,10 @@ Public Class RunParallel
     ''' <param name="index"></param>
     ''' <returns></returns>
     Public Function taskFactory(index As Integer) As Object
-        Dim task As String = worker.GetparallelModeCommandLine(master.port, [delegate]:="Parallel::slave")
-        Dim process As RunSlavePipeline = worker.CreateSlave(task)
         Dim result As Object = Nothing
         Dim bootstrap As New BootstrapSocket(index, master.port, Me.task, debugPort)
+        Dim task As String = worker.GetparallelModeCommandLine(bootstrap.port, [delegate]:="Parallel::slave")
+        Dim process As RunSlavePipeline = worker.CreateSlave(task)
 
         Call bootstrap.Run(process)
         Call getResult(uuid:=index, result)
