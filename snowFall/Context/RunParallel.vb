@@ -66,6 +66,7 @@ Public Class RunParallel
     Public Property size As Integer
     Public ReadOnly Property worker As R
     Public Property task As Byte()
+    Public Property debugPort As Integer = -1
 
     Private Sub New()
         worker = R.FromEnvironment(App.HOME)
@@ -80,7 +81,7 @@ Public Class RunParallel
         Dim task As String = worker.GetparallelModeCommandLine(master.port, [delegate]:="Parallel::slave")
         Dim process As RunSlavePipeline = worker.CreateSlave(task)
         Dim result As Object = Nothing
-        Dim bootstrap As New BootstrapSocket(index, master.port, Me.task)
+        Dim bootstrap As New BootstrapSocket(index, master.port, Me.task, debugPort)
 
         Call bootstrap.Run(process)
         Call getResult(uuid:=index, result)
@@ -95,7 +96,8 @@ Public Class RunParallel
     Public Shared Function Initialize(task As Expression, argv As list, env As Environment) As RunParallel
         Dim parallelBase As New MasterContext(
             env:=env,
-            verbose:=argv.getValue("debug", env, [default]:=False)
+            verbose:=argv.getValue("debug", env, [default]:=False),
+            port:=argv.getValue("master", env, -1)
         )
         Dim seqSet As NamedCollection(Of Object)() = readSymbolSet(task, parallelBase, argv, env).ToArray
         Dim checkSize As Integer() = seqSet _
@@ -122,7 +124,8 @@ Public Class RunParallel
                 .master = parallelBase,
                 .seqSet = seqSet,
                 .size = checkSize(Scan0),
-                .task = taskPayload.ToArray
+                .task = taskPayload.ToArray,
+                .debugPort = argv.getValue("bootstrap", env, -1)
             }
         End If
     End Function

@@ -25,12 +25,12 @@ Namespace Context.RPC
 
         Dim [stop] As Boolean = False
 
-        Sub New(uuid As Integer, master As Integer, closure As Byte())
+        Sub New(uuid As Integer, master As Integer, closure As Byte(), Optional debugPort As Integer = -1)
             Me.masterPort = master
             Me.uuid = uuid
             Me.closure = closure
 
-            socket = New TcpServicesSocket(IPCSocket.GetFirstAvailablePort)
+            socket = New TcpServicesSocket(If(debugPort > 0, debugPort, IPCSocket.GetFirstAvailablePort))
             socket.ResponseHandler = AddressOf New ProtocolHandler(Me).HandleRequest
         End Sub
 
