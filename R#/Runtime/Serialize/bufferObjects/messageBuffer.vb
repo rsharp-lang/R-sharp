@@ -201,5 +201,9 @@ Namespace Runtime.Serialize
 
             buffer.Flush()
         End Sub
+
+        Public Overrides Function getValue() As Object
+            Return GetErrorMessage()
+        End Function
     End Class
 End Namespace

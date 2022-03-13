@@ -74,7 +74,13 @@ Public Module Serialization
     ''' <param name="buffer"></param>
     ''' <returns></returns>
     Public Function ParseBuffer(buffer As Byte()) As Object
+        Using file As New MemoryStream(buffer)
+            Dim buf As Buffer = Serialize.Buffer.ParseBuffer(file)
+            Dim payload = buf.data
+            Dim result As Object = payload.getValue
 
+            Return result
+        End Using
     End Function
 
     ''' <summary>

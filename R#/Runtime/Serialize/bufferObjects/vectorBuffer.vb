@@ -84,7 +84,7 @@ Namespace Runtime.Serialize
             End Get
         End Property
 
-        Public Function GetVector() As vector
+        Public Function getVector() As vector
             Dim rtype As RType = RType.GetRSharpType(underlyingType)
             Dim unit As New unit With {.name = Me.unit}
             Dim vec As New vector(names, vector, rtype, unit)
@@ -195,5 +195,9 @@ Namespace Runtime.Serialize
 
             buffer.Flush()
         End Sub
+
+        Public Overrides Function getValue() As Object
+            Return getVector()
+        End Function
     End Class
 End Namespace

@@ -925,6 +925,7 @@
     <Compile Include="Runtime\Serialize\bufferObjects\bitmapBuffer.vb" />
     <Compile Include="Runtime\Serialize\BufferObjects.vb" />
     <Compile Include="Runtime\Serialize\BufferObject.vb" />
+    <Compile Include="Runtime\Serialize\bufferObjects\dataframeBuffer.vb" />
     <Compile Include="Runtime\Serialize\bufferObjects\rawBuffer.vb" />
     <Compile Include="Runtime\Serialize\bufferObjects\textBuffer.vb" />
     <Compile Include="Runtime\Serialize\bufferObjects\messageBuffer.vb" />

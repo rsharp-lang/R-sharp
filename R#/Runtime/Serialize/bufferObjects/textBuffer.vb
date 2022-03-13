@@ -76,5 +76,9 @@ Namespace Runtime.Serialize
 
             Erase data
         End Sub
+
+        Public Overrides Function getValue() As Object
+            Return text
+        End Function
     End Class
 End Namespace

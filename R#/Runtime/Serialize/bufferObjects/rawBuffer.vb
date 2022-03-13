@@ -73,5 +73,9 @@ Namespace Runtime.Serialize
 
             Erase tmp
         End Sub
+
+        Public Overrides Function getValue() As Object
+            Return buffer
+        End Function
     End Class
 End Namespace
