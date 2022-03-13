@@ -1,4 +1,5 @@
-﻿Imports System.Threading
+﻿Imports System.Runtime.CompilerServices
+Imports System.Threading
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.Net.Protocols.Reflection
 Imports Microsoft.VisualBasic.Net.Tcp
@@ -11,6 +12,7 @@ Namespace Context.RPC
     Public Class BootstrapSocket
 
         Public ReadOnly Property port As Integer
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return socket.LocalPort
             End Get
