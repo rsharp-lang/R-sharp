@@ -47,7 +47,7 @@ Namespace Context.RPC
             status2 = text
 
             If is_debug Then
-                Call Console.WriteLine(status2)
+                Call Console.WriteLine(ToString)
             End If
         End Sub
 
