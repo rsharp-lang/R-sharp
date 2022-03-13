@@ -48,6 +48,10 @@ Imports SMRUCC.Rsharp.Runtime.Components
 ''' </summary>
 Public Module Serialization
 
+    Sub New()
+        Call Global.Parallel.RegisterDiagnoseBuffer()
+    End Sub
+
     ''' <summary>
     ''' serialize R# object to byte buffer
     ''' </summary>
