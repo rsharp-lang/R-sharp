@@ -130,7 +130,7 @@ Namespace Context.RPC
             Dim data As Byte()
 
             If Not target Is Nothing Then
-                data = Serialization.GetBytes(target)
+                data = Serialization.GetBytes(target, env:=env)
             Else
                 data = {}
             End If

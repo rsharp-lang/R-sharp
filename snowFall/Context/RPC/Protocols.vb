@@ -92,7 +92,7 @@ Namespace Context.RPC
         End Sub
 
         Public Overrides Sub Serialize(buffer As Stream)
-            Dim data As Byte() = Serialization.GetBytes(value)
+            Dim data As Byte() = Serialization.GetBytes(value, Nothing)
 
             Call buffer.Write(BitConverter.GetBytes(uuid), Scan0, 4)
             Call buffer.Write(data, Scan0, data.Length)

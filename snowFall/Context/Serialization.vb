@@ -43,7 +43,9 @@ Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Data.IO.MessagePack
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Serialize
 
 ''' <summary>
 ''' R# data object serializer
@@ -59,8 +61,11 @@ Public Module Serialization
     ''' </summary>
     ''' <param name="R"></param>
     ''' <returns></returns>
-    Public Function GetBuffer(R As Object) As Byte()
+    Public Function GetBuffer(R As Object, env As Environment) As Byte()
+        Dim buffer As Buffer = BufferHandler.getBuffer(R, env)
+        Dim payload As Byte() = buffer.Serialize
 
+        Return payload
     End Function
 
     ''' <summary>
@@ -77,14 +82,14 @@ Public Module Serialization
     ''' </summary>
     ''' <param name="symbol"></param>
     ''' <returns></returns>
-    Public Function GetBytes(symbol As Symbol) As Byte()
+    Public Function GetBytes(symbol As Symbol, env As Environment) As Byte()
         Using buffer As New MemoryStream, writer As New BinaryDataWriter(buffer)
             Call writer.Write(symbol.name, BinaryStringFormat.ZeroTerminated)
             Call writer.Write(symbol.readonly)
             Call writer.Write(symbol.constraint)
 
             Dim stackTrace As Byte() = MsgPackSerializer.SerializeObject(symbol.stacktrace)
-            Dim value As Byte() = GetBuffer(symbol.value)
+            Dim value As Byte() = GetBuffer(symbol.value, env)
 
             Call writer.Write(stackTrace.Length)
             Call writer.Write(stackTrace)

@@ -311,5 +311,6 @@
       <Name>Rserver</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\studio\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

@@ -52,7 +52,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports snowFall.Context.RPC
-Imports Rscript = Rserver.RscriptCommandLine.Rscript
+Imports R = Rserver.RscriptCommandLine.Rscript
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 ''' <summary>
@@ -64,11 +64,11 @@ Public Class RunParallel
     Public Property master As MasterContext
     Public Property seqSet As NamedCollection(Of Object)()
     Public Property size As Integer
-    Public ReadOnly Property worker As Rscript
+    Public ReadOnly Property worker As R
     Public Property task As Byte()
 
     Private Sub New()
-        worker = Rscript.FromEnvironment(App.HOME)
+        worker = R.FromEnvironment(App.HOME)
     End Sub
 
     ''' <summary>
