@@ -40,7 +40,9 @@
 #End Region
 
 Imports System.IO
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Data.IO
+Imports Microsoft.VisualBasic.Data.IO.MessagePack
 Imports SMRUCC.Rsharp.Runtime.Components
 
 ''' <summary>
@@ -81,7 +83,7 @@ Public Module Serialization
             Call writer.Write(symbol.readonly)
             Call writer.Write(symbol.constraint)
 
-            Dim stackTrace As Byte()
+            Dim stackTrace As Byte() = MsgPackSerializer.SerializeObject(symbol.stacktrace)
             Dim value As Byte() = GetBuffer(symbol.value)
 
             Call writer.Write(stackTrace.Length)
@@ -106,9 +108,19 @@ Public Module Serialization
     ''' </returns>
     Public Function GetValue(buffer As Stream) As Symbol
         Using reader As New BinaryDataReader(buffer)
+            Dim name As String = reader.ReadString(BinaryStringFormat.ZeroTerminated)
+            Dim is_readonly As Boolean = reader.ReadBoolean
+            Dim type As TypeCodes = reader.ReadByte
+            Dim n As Integer = reader.ReadInt32
+            Dim stackBuf As Byte() = reader.ReadBytes(n)
+            Dim n2 As Integer = reader.ReadInt32
+            Dim valueBuf As Byte() = reader.ReadBytes(n2)
+            Dim stackframes As StackFrame() = MsgPackSerializer.Deserialize(Of StackFrame())(stackBuf)
+            Dim value As Object = ParseBuffer(valueBuf)
 
-
-
+            Return New Symbol(name, value, type, is_readonly) With {
+                .stacktrace = stackframes
+            }
         End Using
     End Function
 End Module
