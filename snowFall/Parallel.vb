@@ -72,7 +72,7 @@ Public Module Parallel
     ''' <param name="port"></param>
     ''' <returns></returns>
     <ExportAPI("snowFall")>
-    Public Function snowFall(port As Integer) As Object
+    Public Function snowFall(port As Integer, Optional env As Environment = Nothing) As Object
         Return New TaskBuilder(port).Run
     End Function
 

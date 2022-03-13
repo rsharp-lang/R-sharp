@@ -74,7 +74,7 @@ Partial Module CLI
                 .DoCall(Sub(pkg)
                             Call REngine.globalEnvir.ImportsStatic(pkg.package)
                         End Sub)
-            Call REngine.Invoke(reference.Description, {masterPort})
+            Call REngine.Invoke(reference.Description, {masterPort, REngine.globalEnvir})
         Else
             Return 500
         End If
