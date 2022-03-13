@@ -40,6 +40,7 @@
 
 #End Region
 
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -129,6 +130,7 @@ Public Module Parallel
         Dim size As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 8)
         Dim buffer As Byte() = New Byte(size - 1) {}
         Dim closure As Expression = Nothing
+        Dim result As ResultPayload = Nothing
         Dim root As New RemoteEnvironment(
             uuid:=uuid,
             master:=IPEndPoint.CreateLocal(masterPort),
@@ -147,10 +149,15 @@ Public Module Parallel
         }
 
         Call Array.ConstrainedCopy(resp.ChunkBuffer, 12, buffer, Scan0, size)
-        Call BlockReader.ParseBlock(buffer).Parse(fake, expr:=closure)
+
+        Using file As New MemoryStream(buffer), reader As New BinaryReader(file)
+            Call BlockReader.Read(reader).Parse(fake, expr:=closure)
+        End Using
+
         Call New TcpRequest(port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
 
-        req = New RequestStream(MasterContext.Protocol, RPC.Protocols.PushResult, New ResultPayload With {.uuid = uuid, .value = closure.Evaluate(root)})
+        result = New ResultPayload With {.uuid = uuid, .value = closure.Evaluate(root)}
+        req = New RequestStream(MasterContext.Protocol, RPC.Protocols.PushResult, result)
 
         Call New TcpRequest(masterPort).SendMessage(req)
 

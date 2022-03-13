@@ -69,8 +69,10 @@ Namespace Context.RPC
         Private Function folk(process As RunSlavePipeline) As Action
             Dim thread As New Thread(
                 Sub()
-                    Call Thread.Sleep(500)
-                    Call process.Run()
+                    If Not is_debug Then
+                        Call Thread.Sleep(500)
+                        Call process.Run()
+                    End If
                 End Sub)
 
             If is_debug Then

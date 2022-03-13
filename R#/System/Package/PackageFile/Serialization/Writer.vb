@@ -213,6 +213,7 @@ Namespace Development.Package.File
             Dim md5 As New Md5HashProvider
 
             Call Me.buffer.Write(buffer)
+            Call Me.buffer.Flush()
 
             Return md5.GetMd5Hash(buffer)
         End Function
