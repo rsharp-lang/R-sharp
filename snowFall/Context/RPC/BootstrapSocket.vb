@@ -73,6 +73,10 @@ Namespace Context.RPC
                     Call process.Run()
                 End Sub)
 
+            If is_debug Then
+                Call Console.WriteLine($" -> [{process}]")
+            End If
+
             Call setStatus("folk and wait slave node initializing")
             Call thread.Start()
 
