@@ -42,6 +42,7 @@
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports System.Threading
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
@@ -179,13 +180,16 @@ Public Module Parallel
                              Optional argv As list = Nothing,
                              Optional env As Environment = Nothing) As Object
 
-        Dim run As RunParallel = RunParallel.Initialize(task, argv, env)
-        Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) = run.produceTask
+        Dim host As RunParallel = RunParallel.Initialize(task, argv, env)
+        Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) = host.produceTask
         Dim engine As New ThreadTask(Of SeqValue(Of Object))(
             task:=taskList,
             debugMode:=debug,
             verbose:=env.globalEnvironment.debugMode
         )
+
+        Call New Thread(AddressOf host.master.Run).Start()
+
         Dim result As Object() = engine _
             .WithDegreeOfParallelism(n_threads) _
             .RunParallel _
@@ -195,9 +199,12 @@ Public Module Parallel
 
         For Each i In result
             If Program.isException(i) Then
+                Call host.master.Dispose()
                 Return i
             End If
         Next
+
+        Call host.master.Dispose()
 
         Return REnv.TryCastGenericArray(result, env)
     End Function

@@ -63,7 +63,7 @@ Namespace Context.RPC
     ''' </summary>
     ''' 
     <Protocol(GetType(Protocols))>
-    Public Class MasterContext
+    Public Class MasterContext : Implements IDisposable
 
         ''' <summary>
         ''' the listen port of the master node
@@ -82,6 +82,8 @@ Namespace Context.RPC
         ReadOnly socket As TcpServicesSocket
         ReadOnly result As New Dictionary(Of String, Object)
 
+        Dim disposedValue As Boolean
+
         Public Shared ReadOnly Property Protocol As Long = New ProtocolAttribute(GetType(Protocols)).EntryPoint
 
         ''' <summary>
@@ -96,6 +98,10 @@ Namespace Context.RPC
             Me.env = New Environment(env, "snowfall-parallel@master", isInherits:=False)
             Me.socket = New TcpServicesSocket(port, debug:=verbose OrElse port > 0)
             Me.socket.ResponseHandler = AddressOf New ProtocolHandler(Me).HandleRequest
+        End Sub
+
+        Public Sub Run()
+            Call socket.Run()
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -142,5 +148,30 @@ Namespace Context.RPC
             Return $"localhost::{port}"
         End Function
 
+        Protected Overridable Sub Dispose(disposing As Boolean)
+            If Not disposedValue Then
+                If disposing Then
+                    ' TODO: dispose managed state (managed objects)
+                    Call socket.Dispose()
+                End If
+
+                ' TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                ' TODO: set large fields to null
+                disposedValue = True
+            End If
+        End Sub
+
+        ' ' TODO: override finalizer only if 'Dispose(disposing As Boolean)' has code to free unmanaged resources
+        ' Protected Overrides Sub Finalize()
+        '     ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+        '     Dispose(disposing:=False)
+        '     MyBase.Finalize()
+        ' End Sub
+
+        Public Sub Dispose() Implements IDisposable.Dispose
+            ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+            Dispose(disposing:=True)
+            GC.SuppressFinalize(Me)
+        End Sub
     End Class
 End Namespace
