@@ -1,58 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::5876ee021f0b61159c1157e6ffd279bc, snowFall\Context\RPC\MasterContext.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class MasterContext
-    ' 
-    '         Properties: Protocol
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: GetSymbol, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class MasterContext
+' 
+'         Properties: Protocol
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: GetSymbol, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports Parallel
-Imports SMRUCC.Rsharp.Runtime
+Imports System.Runtime.CompilerServices
 Imports System.Text
-#If netcore5 = 1 Then
-Imports Microsoft.VisualBasic.ComponentModel.Collection
-#End If
 Imports Microsoft.VisualBasic.Net.Protocols.Reflection
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
+Imports Parallel
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+
+#If netcore5 = 1 Then
+Imports Microsoft.VisualBasic.ComponentModel.Collection
+#End If
 
 Namespace Context.RPC
 
@@ -96,10 +98,12 @@ Namespace Context.RPC
             Me.socket.ResponseHandler = AddressOf New ProtocolHandler(Me).HandleRequest
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub push(name As String, value As Object)
             Call env.Push(name, value, [readonly]:=True)
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function pop(uuid As Integer) As Object
             SyncLock result
                 Return result.TryGetValue(uuid.ToString)
