@@ -62,7 +62,7 @@ Public Class RunParallel
 
     Public Property [error] As Message
     Public Property master As MasterContext
-    Public Property seqSet As NamedCollection(Of Object)()
+    Public Property seqSet As Dictionary(Of String, Array)
     Public Property size As Integer
     Public ReadOnly Property worker As R
     Public Property task As Byte()
@@ -71,6 +71,14 @@ Public Class RunParallel
     Private Sub New()
         worker = R.FromEnvironment(App.HOME)
     End Sub
+
+    Public Function getSymbol(symbol As GetSymbol) As (hit As Boolean, val As Object)
+        If Not seqSet.ContainsKey(symbol.name) Then
+            Return Nothing
+        Else
+            Return (True, seqSet(symbol.name)(symbol.uuid))
+        End If
+    End Function
 
     ''' <summary>
     ''' run task on the remote slave node from this function
@@ -122,7 +130,11 @@ Public Class RunParallel
         Else
             Return New RunParallel With {
                 .master = parallelBase,
-                .seqSet = seqSet,
+                .seqSet = seqSet _
+                    .ToDictionary(Function(i) i.name,
+                                  Function(i)
+                                      Return DirectCast(i.value, Array)
+                                  End Function),
                 .size = checkSize(Scan0),
                 .task = taskPayload.ToArray,
                 .debugPort = argv.getValue("bootstrap", env, -1)

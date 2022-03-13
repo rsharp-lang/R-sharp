@@ -188,7 +188,7 @@ Public Module Parallel
             verbose:=env.globalEnvironment.debugMode
         )
 
-        Call New Thread(AddressOf host.master.Run).Start()
+        Call New Thread(Sub() host.master.Run(AddressOf host.getSymbol)).Start()
 
         Dim result As Object() = engine _
             .WithDegreeOfParallelism(n_threads) _

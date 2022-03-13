@@ -44,13 +44,15 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports System.Text
 Imports Microsoft.VisualBasic.Net.Protocols.Reflection
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
 Imports Parallel
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 #If netcore5 = 1 Then
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -82,6 +84,7 @@ Namespace Context.RPC
         ReadOnly socket As TcpServicesSocket
         ReadOnly result As New Dictionary(Of String, Object)
 
+        Dim getLoopSymbol As Func(Of GetSymbol, (hit As Boolean, val As Object))
         Dim disposedValue As Boolean
 
         Public Shared ReadOnly Property Protocol As Long = New ProtocolAttribute(GetType(Protocols)).EntryPoint
@@ -100,8 +103,9 @@ Namespace Context.RPC
             Me.socket.ResponseHandler = AddressOf New ProtocolHandler(Me).HandleRequest
         End Sub
 
-        Public Sub Run()
-            Call socket.Run()
+        Public Sub Run(getLoopSymbol As Func(Of GetSymbol, (hit As Boolean, val As Object)))
+            Me.getLoopSymbol = getLoopSymbol
+            Me.socket.Run()
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -131,14 +135,32 @@ Namespace Context.RPC
 
         <Protocol(Protocols.GetSymbol)>
         Public Function GetSymbol(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
-            Dim name As String = request.GetString(Encoding.ASCII)
+            Dim payload As New GetSymbol(request.ChunkBuffer)
+            Dim name As String = payload.name
             Dim target As Symbol = env.FindSymbol(name)
             Dim data As Byte()
 
             If Not target Is Nothing Then
+                'Dim vec As Object = target.ToVector.GetValue(payload.uuid)
+
+                'vec = REnv.TryCastGenericArray({vec}, env)
+                'target = New Symbol(name, vec, target.constraint, target.readonly) With {
+                '    .stacktrace = target.stacktrace
+                '}
                 data = Serialization.GetBytes(target, env:=env)
             Else
-                data = {}
+                Dim [loop] = getLoopSymbol(payload)
+
+                If [loop].hit Then
+                    Dim vec As New vector({[loop].val}, RType.GetRSharpType([loop].val.GetType))
+
+                    target = New Symbol(name, vec, TypeCodes.generic, [readonly]:=True) With {
+                        .stacktrace = env.stackTrace
+                    }
+                    data = Serialization.GetBytes(target, env:=env)
+                Else
+                    data = {}
+                End If
             End If
 
             Return New DataPipe(data)
