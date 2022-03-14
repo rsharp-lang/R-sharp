@@ -1138,6 +1138,18 @@ Public Module NetworkModule
         End If
     End Function
 
+    <ExportAPI("extract.sub_graph")>
+    Public Function extractSubGraph(g As NetworkGraph, node_group As String, Optional minVertices As Integer = 3) As NetworkGraph
+        Dim nodeSet = (From v As node
+                       In g.vertex
+                       Where v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = node_group
+                       Select v).ToArray
+        Dim edgeSet = g.getEdgeSet(nodeSet)
+        Dim component As NetworkGraph = edgeSet.DecomposeGraph(minVertices:=minVertices)
+
+        Return component
+    End Function
+
     ''' <summary>
     ''' get subnetwork components directly by test node disconnections
     ''' </summary>
