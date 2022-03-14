@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::0242db8f5365091aca5158491934111e, Library\R.graph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module NetworkModule
-    ' 
-    '     Function: addEdge, addEdges, addNode, addNodeData, addNodes
-    '               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
-    '               degree, deleteNode, E, edgeAttributes, emptyNetwork
-    '               eval, extractAdjacenciesSubNetwork, getByGroup, getEdges, getElementByID
-    '               getNodes, graph, hasEdge, LoadNetwork, LouvainCluster
-    '               metaData, nodeAttributes, nodeClass, nodeMass, nodeNames
-    '               printGraph, printNode, SaveNetwork, setAttributes, summaryNodes
-    '               trimEdges, typeGroupOfNodes, V, weights, xref
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module NetworkModule
+' 
+'     Function: addEdge, addEdges, addNode, addNodeData, addNodes
+'               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
+'               degree, deleteNode, E, edgeAttributes, emptyNetwork
+'               eval, extractAdjacenciesSubNetwork, getByGroup, getEdges, getElementByID
+'               getNodes, graph, hasEdge, LoadNetwork, LouvainCluster
+'               metaData, nodeAttributes, nodeClass, nodeMass, nodeNames
+'               printGraph, printNode, SaveNetwork, setAttributes, summaryNodes
+'               trimEdges, typeGroupOfNodes, V, weights, xref
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -1121,10 +1121,21 @@ Public Module NetworkModule
     ''' <param name="minVertices">The minimum number of vertices a component should contain in 
     ''' order to place it in the result list. Eg. supply 2 here to ignore isolate vertices.
     ''' </param>
+    ''' <param name="by_group">
+    ''' split of the graph data by node type.
+    ''' </param>
     ''' <returns>A list of graph objects.</returns>
     <ExportAPI("decompose")>
-    Public Function DecomposeGraph(graph As NetworkGraph, Optional weakMode As Boolean = True, Optional minVertices As Integer = 5) As NetworkGraph()
-        Return graph.DecomposeGraph(weakMode, minVertices).ToArray
+    Public Function DecomposeGraph(graph As NetworkGraph,
+                                   Optional weakMode As Boolean = True,
+                                   Optional by_group As Boolean = False,
+                                   Optional minVertices As Integer = 5) As NetworkGraph()
+
+        If by_group Then
+            Return graph.DecomposeGraphByGroup(minVertices:=minVertices).ToArray
+        Else
+            Return graph.DecomposeGraph(weakMode, minVertices).ToArray
+        End If
     End Function
 
     ''' <summary>
