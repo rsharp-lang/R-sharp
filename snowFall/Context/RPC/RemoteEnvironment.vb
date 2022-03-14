@@ -97,18 +97,19 @@ Namespace Context.RPC
             Dim msg As New GetSymbol With {.name = name, .uuid = uuid}
             Dim req As New RequestStream(MasterContext.Protocol, Protocols.GetSymbol, msg)
             Dim resp = New TcpRequest(master).SendMessage(req)
-            Dim buffer As New MemoryStream(resp.ChunkBuffer)
 
-            If resp.Protocol = 404 Then
-                ' symbol not found
-                Return Nothing
-            Else
-                ' deserialize
-                Dim value As Symbol = Serialization.GetValue(buffer)
-                ' and then push/cache to local environment
-                Call symbols.Add(name, value)
-                Return value
-            End If
+            Using buffer As New MemoryStream(resp.ChunkBuffer)
+                If buffer.Length = 0 OrElse resp.Protocol = 404 Then
+                    ' symbol not found
+                    Return Nothing
+                Else
+                    ' deserialize
+                    Dim value As Symbol = Serialization.GetValue(buffer)
+                    ' and then push/cache to local environment
+                    Call symbols.Add(name, value)
+                    Return value
+                End If
+            End Using
         End Function
 
     End Class

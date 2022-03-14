@@ -39,18 +39,20 @@
 
 #End Region
 
+Imports System.IO
 Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports snowFall.Context.RPC
-Imports Rscript = Rserver.RscriptCommandLine.Rscript
+Imports R = Rserver.RscriptCommandLine.Rscript
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 ''' <summary>
@@ -60,13 +62,23 @@ Public Class RunParallel
 
     Public Property [error] As Message
     Public Property master As MasterContext
-    Public Property seqSet As NamedCollection(Of Object)()
+    Public Property seqSet As Dictionary(Of String, Array)
     Public Property size As Integer
-    Public Property worker As Rscript
+    Public ReadOnly Property worker As R
+    Public Property task As Byte()
+    Public Property debugPort As Integer = -1
 
     Private Sub New()
-        worker = Rscript.FromEnvironment(App.HOME)
+        worker = R.FromEnvironment(App.HOME)
     End Sub
+
+    Public Function getSymbol(symbol As GetSymbol) As (hit As Boolean, val As Object)
+        If Not seqSet.ContainsKey(symbol.name) Then
+            Return Nothing
+        Else
+            Return (True, seqSet(symbol.name)(symbol.uuid))
+        End If
+    End Function
 
     ''' <summary>
     ''' run task on the remote slave node from this function
@@ -74,22 +86,69 @@ Public Class RunParallel
     ''' <param name="index"></param>
     ''' <returns></returns>
     Public Function taskFactory(index As Integer) As Object
-        Dim task As String = worker.GetparallelModeCommandLine(master.port, [delegate]:="Parallel::slave")
-        Dim process As RunSlavePipeline = worker.CreateSlave(task)
         Dim result As Object = Nothing
+        Dim bootstrap As New BootstrapSocket(index, master.port, Me.task, debugPort)
+        Dim task As String = worker.GetparallelModeCommandLine(bootstrap.port, [delegate]:="Parallel::slave")
+        Dim process As RunSlavePipeline = worker.CreateSlave(task)
 
-        Call process.Run()
+        Call bootstrap.Run(process)
         Call getResult(uuid:=index, result)
 
         Return result
     End Function
 
     Private Sub getResult(uuid As Integer, <Out> ByRef result As Object)
-
+        result = master.pop(uuid)
     End Sub
 
     Public Shared Function Initialize(task As Expression, argv As list, env As Environment) As RunParallel
+        Dim parallelBase As New MasterContext(
+            env:=env,
+            verbose:=argv.getValue("debug", env, [default]:=False),
+            port:=argv.getValue("master", env, -1)
+        )
+        Dim seqSet As NamedCollection(Of Object)() = readSymbolSet(task, parallelBase, argv, env).ToArray
+        Dim checkSize As Integer() = seqSet _
+            .Select(Function(seq) seq.Length) _
+            .Where(Function(l) l <> 1) _
+            .ToArray
+
+        For Each var In seqSet
+            If var.name.StringEmpty AndAlso var.value.Length = 1 AndAlso TypeOf var(Scan0) Is Message Then
+                Return DirectCast(var(Scan0), Message)
+            End If
+        Next
+
+        Dim taskPayload As New MemoryStream
+
+        Call New Writer(taskPayload).Write(task)
+        Call taskPayload.Flush()
+        Call taskPayload.Seek(Scan0, SeekOrigin.Begin)
+
+        If checkSize.Distinct.Count <> 1 Then
+            Return Internal.debug.stop("the sequence size should be equals to each other!", env)
+        Else
+            Return New RunParallel With {
+                .master = parallelBase,
+                .seqSet = seqSet _
+                    .ToDictionary(Function(i) i.name,
+                                  Function(i)
+                                      Return DirectCast(i.value, Array)
+                                  End Function),
+                .size = checkSize(Scan0),
+                .task = taskPayload.ToArray,
+                .debugPort = argv.getValue("bootstrap", env, -1)
+            }
+        End If
+    End Function
+
+    Private Shared Iterator Function readSymbolSet(task As Expression,
+                                                   parallelBase As MasterContext,
+                                                   argv As list,
+                                                   env As Environment) As IEnumerable(Of NamedCollection(Of Object))
+
         Dim allSymbols = SymbolAnalysis.GetSymbolReferenceList(task).ToArray
+        Dim value As Object
         Dim locals As Index(Of String) = allSymbols _
             .Where(Function(x) x.Description <> "global") _
             .Select(Function(x) x.Name) _
@@ -103,9 +162,7 @@ Public Class RunParallel
             .GroupBy(Function(v) v.Name) _
             .Select(Function(v) v.First) _
             .ToArray
-        Dim seqSet As New List(Of NamedCollection(Of Object))
-        Dim value As Object
-        Dim parallelBase As New MasterContext(env, verbose:=argv.getValue("debug", env, [default]:=False))
+        Dim seq As IEnumerable(Of Object)
 
         For Each symbol As NamedValue(Of PropertyAccess) In required
             If Not argv.hasName(symbol.Name) Then
@@ -121,27 +178,14 @@ Public Class RunParallel
                     Continue For
                 End If
 
-                Return Message.SymbolNotFound(env, symbol.Name, TypeCodes.ref)
+                Yield New NamedCollection(Of Object)(Nothing, {Message.SymbolNotFound(env, symbol.Name, TypeCodes.ref)})
             Else
                 value = argv.getByName(symbol.Name)
-                seqSet.Add(New NamedCollection(Of Object)(symbol.Name, Rset.getObjectSet(value, env)))
+                seq = Rset.getObjectSet(value, env)
+
+                Yield New NamedCollection(Of Object)(symbol.Name, seq)
             End If
         Next
-
-        Dim checkSize As Integer() = seqSet _
-            .Select(Function(seq) seq.Length) _
-            .Where(Function(l) l <> 1) _
-            .ToArray
-
-        If checkSize.Distinct.Count <> 1 Then
-            Return Internal.debug.stop("the sequence size should be equals to each other!", env)
-        Else
-            Return New RunParallel With {
-                .master = parallelBase,
-                .seqSet = seqSet.ToArray,
-                .size = checkSize(Scan0)
-            }
-        End If
     End Function
 
     Public Shared Widening Operator CType(err As Message) As RunParallel

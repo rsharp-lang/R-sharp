@@ -40,19 +40,76 @@
 #End Region
 
 Imports System.IO
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.Data.IO
+Imports Microsoft.VisualBasic.Data.IO.MessagePack
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Serialize
 
 ''' <summary>
 ''' R# data object serializer
 ''' </summary>
 Public Module Serialization
 
-    Public Function GetBytes(symbol As Symbol) As Byte()
-        Throw New NotImplementedException
+    Sub New()
+        Call Global.Parallel.RegisterDiagnoseBuffer()
+    End Sub
+
+    ''' <summary>
+    ''' serialize R# object to byte buffer
+    ''' </summary>
+    ''' <param name="R"></param>
+    ''' <returns></returns>
+    Public Function GetBuffer(R As Object, env As Environment) As Byte()
+        Dim buffer As Buffer = BufferHandler.getBuffer(R, env)
+        Dim payload As Byte() = buffer.Serialize
+
+        Return payload
     End Function
 
     ''' <summary>
-    ''' 
+    ''' parse R# object from byte buffer
+    ''' </summary>
+    ''' <param name="buffer"></param>
+    ''' <returns></returns>
+    Public Function ParseBuffer(buffer As Byte()) As Object
+        Using file As New MemoryStream(buffer)
+            Dim buf As Buffer = Serialize.Buffer.ParseBuffer(file)
+            Dim payload = buf.data
+            Dim result As Object = payload.getValue
+
+            Return result
+        End Using
+    End Function
+
+    ''' <summary>
+    ''' serialize R# symbol to byte buffer
+    ''' </summary>
+    ''' <param name="symbol"></param>
+    ''' <returns></returns>
+    Public Function GetBytes(symbol As Symbol, env As Environment) As Byte()
+        Using buffer As New MemoryStream, writer As New BinaryDataWriter(buffer)
+            Call writer.Write(symbol.name, BinaryStringFormat.ZeroTerminated)
+            Call writer.Write(symbol.readonly)
+            Call writer.Write(symbol.constraint)
+
+            Dim stackTrace As Byte() = MsgPackSerializer.SerializeObject(symbol.stacktrace)
+            Dim value As Byte() = GetBuffer(symbol.value, env)
+
+            Call writer.Write(stackTrace.Length)
+            Call writer.Write(stackTrace)
+            Call writer.Write(value.Length)
+            Call writer.Write(value)
+            Call writer.Flush()
+            Call writer.Seek(Scan0, SeekOrigin.Begin)
+
+            Return buffer.ToArray
+        End Using
+    End Function
+
+    ''' <summary>
+    ''' parse R# symbol from a byte buffer
     ''' </summary>
     ''' <param name="buffer"></param>
     ''' <returns>
@@ -61,6 +118,20 @@ Public Module Serialization
     ''' master node. decode at slave node.
     ''' </returns>
     Public Function GetValue(buffer As Stream) As Symbol
-        Throw New NotImplementedException
+        Using reader As New BinaryDataReader(buffer)
+            Dim name As String = reader.ReadString(BinaryStringFormat.ZeroTerminated)
+            Dim is_readonly As Boolean = reader.ReadBoolean
+            Dim type As TypeCodes = reader.ReadByte
+            Dim n As Integer = reader.ReadInt32
+            Dim stackBuf As Byte() = reader.ReadBytes(n)
+            Dim n2 As Integer = reader.ReadInt32
+            Dim valueBuf As Byte() = reader.ReadBytes(n2)
+            Dim stackframes As StackFrame() = MsgPackSerializer.Deserialize(Of StackFrame())(stackBuf)
+            Dim value As Object = ParseBuffer(valueBuf)
+
+            Return New Symbol(name, value, type, is_readonly) With {
+                .stacktrace = stackframes
+            }
+        End Using
     End Function
 End Module

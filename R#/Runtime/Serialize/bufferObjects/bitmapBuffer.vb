@@ -52,8 +52,15 @@ Imports Microsoft.VisualBasic.Net.Http
 
 Namespace Runtime.Serialize
 
+    ''' <summary>
+    ''' handler for gdi+ image data.
+    ''' </summary>
     Public Class bitmapBuffer : Inherits BufferObject
 
+        ''' <summary>
+        ''' the gdi+ raster image
+        ''' </summary>
+        ''' <returns></returns>
         Public Property bitmap As Image
 
         Public Overrides ReadOnly Property code As BufferObjects
@@ -99,6 +106,10 @@ Namespace Runtime.Serialize
 
                 Return buffer.GZipStream.ToArray
             End Using
+        End Function
+
+        Public Overrides Function getValue() As Object
+            Return bitmap
         End Function
     End Class
 End Namespace

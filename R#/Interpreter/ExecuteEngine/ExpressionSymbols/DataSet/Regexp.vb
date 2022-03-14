@@ -53,6 +53,9 @@ Imports r = System.Text.RegularExpressions.Regex
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
+    ''' <summary>
+    ''' a regular expression literal syntax
+    ''' </summary>
     Public Class Regexp : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes

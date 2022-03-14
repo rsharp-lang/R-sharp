@@ -48,6 +48,9 @@ Imports System.IO
 
 Namespace Runtime.Serialize
 
+    ''' <summary>
+    ''' a vector of raw bytes
+    ''' </summary>
     Public Class rawBuffer : Inherits BufferObject
 
         Public Property buffer As MemoryStream
@@ -70,5 +73,9 @@ Namespace Runtime.Serialize
 
             Erase tmp
         End Sub
+
+        Public Overrides Function getValue() As Object
+            Return buffer
+        End Function
     End Class
 End Namespace

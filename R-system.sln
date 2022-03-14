@@ -178,6 +178,7 @@ Global
 		..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{7df565ae-6e7a-4667-ab6d-9908acbeed8b}*SharedItemsImports = 13
 		Library\JsonHelper\JsonHelper.projitems*{8a9e8d65-b600-47ba-be61-a985003b7afd}*SharedItemsImports = 4
 		..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{a60240d1-e78b-4b96-85e3-45256571c2cb}*SharedItemsImports = 4
+		studio\Rstudio.common\Rstudio.common.projitems*{ac523ae1-b6b9-49bd-8f0a-49ebe02dcb65}*SharedItemsImports = 4
 		Library\JsonHelper\JsonHelper.projitems*{b2ae1422-d7da-4053-a386-eb2ea9326d68}*SharedItemsImports = 13
 		Library\R_graphic.interop\R_graphic.interop.projitems*{c5c3428c-d64c-4e79-b239-77adc66b1156}*SharedItemsImports = 4
 	EndGlobalSection

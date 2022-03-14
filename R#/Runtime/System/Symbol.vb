@@ -189,9 +189,13 @@ Namespace Runtime.Components
             Me.m_val = value
         End Sub
 
-        Sub New(name As String, value As Object)
-            Call Me.New(TypeCodes.generic)
+        Sub New(name As String, value As Object,
+                Optional constraint As TypeCodes = TypeCodes.generic,
+                Optional [readonly] As Boolean = False)
 
+            Call Me.New(constraint)
+
+            Me.readonly = [readonly]
             Me.name = name
             Me.m_val = value
         End Sub

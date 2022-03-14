@@ -236,6 +236,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context\RPC\BootstrapSocket.vb" />
     <Compile Include="Context\RPC\MasterContext.vb" />
     <Compile Include="Context\RPC\Protocols.vb" />
     <Compile Include="Context\RPC\RemoteEnvironment.vb" />
@@ -285,6 +286,14 @@
       <Project>{085171ca-6a65-494c-9b4a-477d35bcbc90}</Project>
       <Name>Parallel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\runtime\sciBASIC#\Data\BinaryData\BinaryData\BinaryData.vbproj">
+      <Project>{487D7C92-D05A-4908-BF81-E6BABA0BF592}</Project>
+      <Name>BinaryData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\runtime\sciBASIC#\Data\BinaryData\msgpack\MessagePack.vbproj">
+      <Project>{c473d2d3-65b3-0220-32a8-1e0687d9ae6b}</Project>
+      <Name>MessagePack</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\47-dotnet_Microsoft.VisualBasic.vbproj">
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
@@ -302,5 +311,6 @@
       <Name>Rserver</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\studio\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

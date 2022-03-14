@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::6d00adebee542103d0e080834185190a, R#\Runtime\Interop\RsharpApi\RMethodInfo.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RMethodInfo
-    ' 
-    '         Properties: [namespace], invisible, name, parameters, returns
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: createNormalArguments, CreateParameterArrayFromListArgument, getArguments, GetPackageInfo, GetPrintContent
-    '                   GetRawDeclares, getReturns, getValue, (+2 Overloads) Invoke, missingParameter
-    '                   parseParameters, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RMethodInfo
+' 
+'         Properties: [namespace], invisible, name, parameters, returns
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: createNormalArguments, CreateParameterArrayFromListArgument, getArguments, GetPackageInfo, GetPrintContent
+'                   GetRawDeclares, getReturns, getValue, (+2 Overloads) Invoke, missingParameter
+'                   parseParameters, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -197,7 +197,8 @@ Namespace Runtime.Interop
                 End If
             Next
 
-            Dim showExpression As Boolean = env.globalEnvironment.debugMode AndAlso (env.globalEnvironment.debugLevel = DebugLevels.All OrElse env.globalEnvironment.debugLevel = DebugLevels.Stack)
+            Dim showExpression As Boolean = env.globalEnvironment.debugMode AndAlso
+                (env.globalEnvironment.debugLevel = DebugLevels.All OrElse env.globalEnvironment.debugLevel = DebugLevels.Stack)
 
             If showExpression Then
                 Call ExecutableLoop.printDebug($"[exec] {GetPackageInfo.namespace}::{name}", ConsoleColor.Cyan)
@@ -209,6 +210,10 @@ Namespace Runtime.Interop
                 Try
                     result = api.Invoke(parameters)
                 Catch ex As Exception
+                    If Not ex.InnerException Is Nothing Then
+                        ex = ex.InnerException
+                    End If
+
                     Return Internal.debug.stop(ex, env)
                 End Try
             End If

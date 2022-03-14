@@ -46,12 +46,16 @@
 
 
 Imports System.IO
+Imports System.Text
 Imports Microsoft.VisualBasic.Serialization
 
 Namespace Context.RPC
 
-    Public Enum Protocols
+    Public Enum Protocols As Long
+        Initialize
         GetSymbol
+        PushResult
+        [Stop]
     End Enum
 
     Public Class GetSymbol : Inherits RawStream
@@ -63,11 +67,36 @@ Namespace Context.RPC
         End Sub
 
         Sub New(payload As Byte())
-
+            uuid = BitConverter.ToInt32(payload, Scan0)
+            name = Encoding.UTF8.GetString(payload, 4, payload.Length - 4)
         End Sub
 
         Public Overrides Sub Serialize(buffer As Stream)
-            Throw New NotImplementedException()
+            Call buffer.Write(BitConverter.GetBytes(uuid), Scan0, 4)
+            Call buffer.Write(name, Encoding.UTF8)
+            Call buffer.Flush()
+        End Sub
+    End Class
+
+    Public Class ResultPayload : Inherits RawStream
+
+        Public Property uuid As Integer
+        Public Property value As Object
+
+        Sub New()
+        End Sub
+
+        Sub New(payload As Byte())
+            uuid = BitConverter.ToInt32(payload, Scan0)
+            value = Serialization.ParseBuffer(payload.Skip(4).ToArray)
+        End Sub
+
+        Public Overrides Sub Serialize(buffer As Stream)
+            Dim data As Byte() = Serialization.GetBuffer(value, Nothing)
+
+            Call buffer.Write(BitConverter.GetBytes(uuid), Scan0, 4)
+            Call buffer.Write(data, Scan0, data.Length)
+            Call buffer.Flush()
         End Sub
     End Class
 End Namespace

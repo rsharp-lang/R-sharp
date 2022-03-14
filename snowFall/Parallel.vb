@@ -40,18 +40,26 @@
 
 #End Region
 
+Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports System.Threading
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Net
+Imports Microsoft.VisualBasic.Net.Tcp
+Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Parallel
 Imports Parallel.ThreadTask
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports snowFall.Context
+Imports snowFall.Context.RPC
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -66,7 +74,7 @@ Public Module Parallel
     ''' <param name="port"></param>
     ''' <returns></returns>
     <ExportAPI("snowFall")>
-    Public Function snowFall(port As Integer) As Object
+    Public Function snowFall(port As Integer, Optional env As Environment = Nothing) As Object
         Return New TaskBuilder(port).Run
     End Function
 
@@ -115,8 +123,46 @@ Public Module Parallel
     End Function
 
     <ExportAPI("slave")>
-    Public Function runSlaveNode(port As Integer) As Object
-        Throw New NotImplementedException
+    Public Function runSlaveNode(port As Integer, Optional env As Environment = Nothing) As Object
+        Dim req As New RequestStream(MasterContext.Protocol, RPC.Protocols.Initialize)
+        Dim resp = New TcpRequest(port).SendMessage(req)
+        Dim uuid As Integer = BitConverter.ToInt32(resp.ChunkBuffer, Scan0)
+        Dim masterPort As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 4)
+        Dim size As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 8)
+        Dim buffer As Byte() = New Byte(size - 1) {}
+        Dim closure As Expression = Nothing
+        Dim result As ResultPayload = Nothing
+        Dim root As New RemoteEnvironment(
+            uuid:=uuid,
+            master:=IPEndPoint.CreateLocal(masterPort),
+            parent:=env
+        )
+        Dim fake As New DESCRIPTION With {
+            .Author = "xieguigang",
+            .[Date] = Now.ToString,
+            .Maintainer = .Author,
+            .License = "MIT",
+            .Package = NameOf(runSlaveNode),
+            .Title = .Package,
+            .Type = "runtime",
+            .Version = App.Version,
+            .Description = .Package
+        }
+
+        Call Array.ConstrainedCopy(resp.ChunkBuffer, 12, buffer, Scan0, size)
+
+        Using file As New MemoryStream(buffer), reader As New BinaryReader(file)
+            Call BlockReader.Read(reader).Parse(fake, expr:=closure)
+        End Using
+
+        Call New TcpRequest(port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
+
+        result = New ResultPayload With {.uuid = uuid, .value = closure.Evaluate(root)}
+        req = New RequestStream(MasterContext.Protocol, RPC.Protocols.PushResult, result)
+
+        Call New TcpRequest(masterPort).SendMessage(req)
+
+        Return 0
     End Function
 
     ''' <summary>
@@ -134,13 +180,16 @@ Public Module Parallel
                              Optional argv As list = Nothing,
                              Optional env As Environment = Nothing) As Object
 
-        Dim run As RunParallel = RunParallel.Initialize(task, argv, env)
-        Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) = run.produceTask
+        Dim host As RunParallel = RunParallel.Initialize(task, argv, env)
+        Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) = host.produceTask
         Dim engine As New ThreadTask(Of SeqValue(Of Object))(
             task:=taskList,
             debugMode:=debug,
             verbose:=env.globalEnvironment.debugMode
         )
+
+        Call New Thread(Sub() host.master.Run(AddressOf host.getSymbol)).Start()
+
         Dim result As Object() = engine _
             .WithDegreeOfParallelism(n_threads) _
             .RunParallel _
@@ -150,9 +199,12 @@ Public Module Parallel
 
         For Each i In result
             If Program.isException(i) Then
+                Call host.master.Dispose()
                 Return i
             End If
         Next
+
+        Call host.master.Dispose()
 
         Return REnv.TryCastGenericArray(result, env)
     End Function
