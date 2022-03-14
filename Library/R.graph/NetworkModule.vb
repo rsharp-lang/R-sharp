@@ -1137,8 +1137,17 @@ Public Module NetworkModule
         Return graph.IteratesSubNetworks(Of NetworkGraph)(singleNodeAsGraph:=True)
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="eps">
+    ''' tolerance value for check member is in 
+    ''' a stable cluster community?
+    ''' </param>
+    ''' <returns></returns>
     <ExportAPI("louvain_cluster")>
-    Public Function LouvainCluster(g As NetworkGraph) As NetworkGraph
-        Return Communities.Analysis(g)
+    Public Function LouvainCluster(g As NetworkGraph, Optional eps As Double = 0.00001) As NetworkGraph
+        Return Communities.Analysis(g, eps:=eps)
     End Function
 End Module
