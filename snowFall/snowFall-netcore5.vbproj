@@ -142,4 +142,6 @@
     <ProjectReference Include="..\studio\Rserver\Rserver.NET5.vbproj" />
   </ItemGroup>
 
+  <Import Project="..\studio\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
+
 </Project>
