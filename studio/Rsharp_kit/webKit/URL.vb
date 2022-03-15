@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::80f00232c8e30b7e61cd73d3649a8b9b, studio\Rsharp_kit\webKit\URL.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module URL
-    ' 
-    '     Function: [get], content, HttpCookies, post, upload
-    '               urlcomponent, urlencode, wget
-    ' 
-    ' /********************************************************************************/
+' Module URL
+' 
+'     Function: [get], content, HttpCookies, post, upload
+'               urlcomponent, urlencode, wget
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,11 +61,27 @@ Public Module URL
 
     <ExportAPI("urlcomponent")>
     Public Function urlcomponent(query As list, Optional env As Environment = Nothing) As String
-        Return query.slots _
-            .Select(Function(argv)
-                        Return $"{argv.Key}={urlencode(argv.Value, env)}"
-                    End Function) _
-            .JoinBy("&")
+        If query Is Nothing Then
+            Return ""
+        Else
+            Return query.slots _
+                .Select(Function(argv)
+                            Dim str = urlencode(argv.Value, env)
+
+                            If TypeOf str Is String() Then
+                                If DirectCast(str, String()).Length = 1 Then
+                                    Return $"{argv.Key}={DirectCast(str, String())(Scan0)}"
+                                Else
+                                    Return DirectCast(str, String()) _
+                                        .Select(Function(val) $"{argv.Key}={val}") _
+                                        .JoinBy("&")
+                                End If
+                            Else
+                                Return $"{argv.Key}={str}"
+                            End If
+                        End Function) _
+                .JoinBy("&")
+        End If
     End Function
 
     ''' <summary>
@@ -100,12 +116,19 @@ Public Module URL
     Public Function urlencode(<RRawVectorArgument> data As Object, Optional env As Environment = Nothing) As Object
         If data Is Nothing Then
             Return Nothing
-        ElseIf TypeOf data Is String Then
-            Return DirectCast(data, String).UrlEncode
-        ElseIf TypeOf data Is String() Then
-            Return DirectCast(data, String()).Select(Function(str) str.UrlEncode).ToArray
         ElseIf TypeOf data Is vector Then
-            Return DirectCast(data, vector).data.AsObjectEnumerator(Of String).Select(Function(str) str.UrlEncode).ToArray
+            data = DirectCast(data, vector).data
+        End If
+
+        If TypeOf data Is String Then
+            Return DirectCast(data, String).UrlEncode
+        ElseIf data.GetType.IsArray Then
+            Dim vec As String() = REnv.asVector(Of String)(data)
+            Dim tokens = vec _
+                .Select(Function(str) str.UrlEncode) _
+                .ToArray
+
+            Return tokens
         ElseIf TypeOf data Is list Then
             Return DirectCast(data, list).AsGeneric(Of String)(env).BuildUrlData(escaping:=True, stripNull:=False)
         Else
