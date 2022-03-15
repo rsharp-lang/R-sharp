@@ -59,6 +59,22 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <Package("http", Category:=APICategories.UtilityTools)>
 Public Module URL
 
+    Private Function encodeTokenPart(argv As KeyValuePair(Of String, Object), env As Environment) As String
+        Dim str = urlencode(argv.Value, env)
+
+        If TypeOf str Is String() Then
+            If DirectCast(str, String()).Length = 1 Then
+                Return $"{argv.Key}={DirectCast(str, String())(Scan0)}"
+            Else
+                Return DirectCast(str, String()) _
+                    .Select(Function(val) $"{argv.Key}={val}") _
+                    .JoinBy("&")
+            End If
+        Else
+            Return $"{argv.Key}={str}"
+        End If
+    End Function
+
     <ExportAPI("urlcomponent")>
     Public Function urlcomponent(query As list, Optional env As Environment = Nothing) As String
         If query Is Nothing Then
@@ -66,19 +82,7 @@ Public Module URL
         Else
             Return query.slots _
                 .Select(Function(argv)
-                            Dim str = urlencode(argv.Value, env)
-
-                            If TypeOf str Is String() Then
-                                If DirectCast(str, String()).Length = 1 Then
-                                    Return $"{argv.Key}={DirectCast(str, String())(Scan0)}"
-                                Else
-                                    Return DirectCast(str, String()) _
-                                        .Select(Function(val) $"{argv.Key}={val}") _
-                                        .JoinBy("&")
-                                End If
-                            Else
-                                Return $"{argv.Key}={str}"
-                            End If
+                            Return encodeTokenPart(argv, env)
                         End Function) _
                 .JoinBy("&")
         End If
