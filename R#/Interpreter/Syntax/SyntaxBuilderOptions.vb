@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3e39d71ca3dbbe89d0c8760696201320, R#\Interpreter\Syntax\SyntaxBuilderOptions.vb"
+﻿#Region "Microsoft.VisualBasic::3e39d71ca3dbbe89d0c8760696201320, R-sharp\R#\Interpreter\Syntax\SyntaxBuilderOptions.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 107
+    '    Code Lines: 78
+    ' Comment Lines: 11
+    '   Blank Lines: 18
+    '     File Size: 3.88 KB
+
 
     '     Delegate Function
     ' 

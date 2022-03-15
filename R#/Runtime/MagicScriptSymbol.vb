@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cdbc604d81a063d3776320521a0f96b9, R#\Runtime\MagicScriptSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::cdbc604d81a063d3776320521a0f96b9, R-sharp\R#\Runtime\MagicScriptSymbol.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 67
+    '    Code Lines: 48
+    ' Comment Lines: 12
+    '   Blank Lines: 7
+    '     File Size: 2.52 KB
+
 
     '     Class MagicScriptSymbol
     ' 

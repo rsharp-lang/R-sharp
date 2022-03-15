@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::39a90a2319ad1651185b18079160db06, R#\Interpreter\Syntax\SyntaxImplements\ValueAssignSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::39a90a2319ad1651185b18079160db06, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\ValueAssignSyntax.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 80
+    '    Code Lines: 69
+    ' Comment Lines: 0
+    '   Blank Lines: 11
+    '     File Size: 3.31 KB
+
 
     '     Module ValueAssignSyntax
     ' 

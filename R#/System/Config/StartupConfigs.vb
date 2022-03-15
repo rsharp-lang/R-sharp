@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8ece6745dd9109991fc5b1b36ca08c6d, R#\System\Config\StartupConfigs.vb"
+﻿#Region "Microsoft.VisualBasic::8ece6745dd9109991fc5b1b36ca08c6d, R-sharp\R#\System\Config\StartupConfigs.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 12
+    '    Code Lines: 8
+    ' Comment Lines: 0
+    '   Blank Lines: 4
+    '     File Size: 318.00 B
+
 
     '     Class StartupConfigs
     ' 

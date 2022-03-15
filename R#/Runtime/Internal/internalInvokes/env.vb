@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4b35e9381944aab069793d97bb793632, R#\Runtime\Internal\internalInvokes\env.vb"
+﻿#Region "Microsoft.VisualBasic::4b35e9381944aab069793d97bb793632, R-sharp\R#\Runtime\Internal\internalInvokes\env.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 477
+    '    Code Lines: 248
+    ' Comment Lines: 184
+    '   Blank Lines: 45
+    '     File Size: 21.75 KB
+
 
     '     Module env
     ' 

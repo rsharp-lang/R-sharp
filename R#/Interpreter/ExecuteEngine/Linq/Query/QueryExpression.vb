@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d7ddf3c917b125d13c1efca794682335, R#\Interpreter\ExecuteEngine\Linq\Query\QueryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::d7ddf3c917b125d13c1efca794682335, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Query\QueryExpression.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 53
+    '    Code Lines: 29
+    ' Comment Lines: 16
+    '   Blank Lines: 8
+    '     File Size: 1.93 KB
+
 
     '     Class QueryExpression
     ' 

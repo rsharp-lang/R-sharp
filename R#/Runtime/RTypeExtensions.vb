@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b2b92d619b269ee2610e0c70971b5436, R#\Runtime\RTypeExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::b2b92d619b269ee2610e0c70971b5436, R-sharp\R#\Runtime\RTypeExtensions.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 129
+    '    Code Lines: 88
+    ' Comment Lines: 30
+    '   Blank Lines: 11
+    '     File Size: 5.52 KB
+
 
     '     Module RTypeExtensions
     ' 

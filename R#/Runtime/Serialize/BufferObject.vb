@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9f5c555612e73b856cec924d18488009, R#\Runtime\Serialize\BufferObject.vb"
+﻿#Region "Microsoft.VisualBasic::53d9ff377e60a08dd7ce4de14811740c, R-sharp\R#\Runtime\Serialize\BufferObject.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 20
+    '    Code Lines: 14
+    ' Comment Lines: 0
+    '   Blank Lines: 6
+    '     File Size: 658.00 B
+
 
     '     Class BufferObject
     ' 

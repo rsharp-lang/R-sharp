@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::096da283cbe17b0abc28651c58d77cda, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ClosureExpression.vb"
+﻿#Region "Microsoft.VisualBasic::096da283cbe17b0abc28651c58d77cda, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ClosureExpression.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 79
+    '    Code Lines: 63
+    ' Comment Lines: 3
+    '   Blank Lines: 13
+    '     File Size: 2.71 KB
+
 
     '     Class ClosureExpression
     ' 

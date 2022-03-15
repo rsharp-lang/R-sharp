@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2f12b82445861a61ce82fbf3a0307312, R#\Runtime\Serialize\bufferObjects\bitmapBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::fe532dbd6c612b08816745198a0f04b7, R-sharp\R#\Runtime\Serialize\bufferObjects\bitmapBuffer.vb"
 
     ' Author:
     ' 
@@ -31,13 +31,23 @@
 
     ' Summaries:
 
+
+    ' Code Statistics:
+
+    '   Total Lines: 67
+    '    Code Lines: 46
+    ' Comment Lines: 7
+    '   Blank Lines: 14
+    '     File Size: 1.80 KB
+
+
     '     Class bitmapBuffer
     ' 
     '         Properties: bitmap, code
     ' 
     '         Constructor: (+3 Overloads) Sub New
     ' 
-    '         Function: getGZip
+    '         Function: getGZip, getValue
     ' 
     '         Sub: loadAuto, Serialize
     ' 

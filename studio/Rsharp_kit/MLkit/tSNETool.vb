@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::796dbab445d68f9ba179700da9aa029d, studio\Rsharp_kit\MLkit\tSNETool.vb"
+﻿#Region "Microsoft.VisualBasic::796dbab445d68f9ba179700da9aa029d, R-sharp\studio\Rsharp_kit\MLkit\tSNETool.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 121
+    '    Code Lines: 90
+    ' Comment Lines: 7
+    '   Blank Lines: 24
+    '     File Size: 4.03 KB
+
 
     ' Module tSNETool
     ' 

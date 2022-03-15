@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d521a84e9e411ce47709a4c4772f3c2a, R#\Runtime\System\RsharpDataObject.vb"
+﻿#Region "Microsoft.VisualBasic::d521a84e9e411ce47709a4c4772f3c2a, R-sharp\R#\Runtime\System\RsharpDataObject.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 31
+    '    Code Lines: 23
+    ' Comment Lines: 3
+    '   Blank Lines: 5
+    '     File Size: 866.00 B
+
 
     '     Class RsharpDataObject
     ' 

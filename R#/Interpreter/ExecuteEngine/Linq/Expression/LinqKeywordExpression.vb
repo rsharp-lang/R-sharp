@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6ba3c263287c576d1ec98e7319e96aee, R#\Interpreter\ExecuteEngine\Linq\Expression\LinqKeywordExpression.vb"
+﻿#Region "Microsoft.VisualBasic::6ba3c263287c576d1ec98e7319e96aee, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\LinqKeywordExpression.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 20
+    '    Code Lines: 12
+    ' Comment Lines: 3
+    '   Blank Lines: 5
+    '     File Size: 566.00 B
+
 
     '     Class LinqKeywordExpression
     ' 

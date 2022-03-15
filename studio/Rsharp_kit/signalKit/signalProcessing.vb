@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c698125c62da70177bc52c8ef82cd8e7, studio\Rsharp_kit\signalKit\signalProcessing.vb"
+﻿#Region "Microsoft.VisualBasic::c698125c62da70177bc52c8ef82cd8e7, R-sharp\studio\Rsharp_kit\signalKit\signalProcessing.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 147
+    '    Code Lines: 114
+    ' Comment Lines: 12
+    '   Blank Lines: 21
+    '     File Size: 6.24 KB
+
 
     ' Module signalProcessing
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6669c4b88fe6e9df6c104a12a887755c, R#\System\Document\Printer\ScriptFormatterPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::6669c4b88fe6e9df6c104a12a887755c, R-sharp\R#\System\Document\Printer\ScriptFormatterPrinter.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 81
+    '    Code Lines: 69
+    ' Comment Lines: 0
+    '   Blank Lines: 12
+    '     File Size: 3.66 KB
+
 
     '     Module ScriptFormatterPrinter
     ' 

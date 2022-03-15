@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4091480ae5717ed9dd10017f16258602, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DataFrameProjection.vb"
+﻿#Region "Microsoft.VisualBasic::4091480ae5717ed9dd10017f16258602, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DataFrameProjection.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 51
+    '    Code Lines: 35
+    ' Comment Lines: 5
+    '   Blank Lines: 11
+    '     File Size: 1.78 KB
+
 
     '     Class DataFrameProjection
     ' 

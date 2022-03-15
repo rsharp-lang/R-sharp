@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::abafff1c3b930d7f57bfa833a0306512, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\GenericSymbolOperatorProcessor.vb"
+﻿#Region "Microsoft.VisualBasic::abafff1c3b930d7f57bfa833a0306512, R-sharp\R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\GenericSymbolOperatorProcessor.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 75
+    '    Code Lines: 55
+    ' Comment Lines: 2
+    '   Blank Lines: 18
+    '     File Size: 2.57 KB
+
 
     '     Class GenericSymbolOperatorProcessor
     ' 

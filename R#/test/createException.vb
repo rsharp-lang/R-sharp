@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::afa2113c6ca9f14af87fcae9f5442d68, R#\Test\createException.vb"
+﻿#Region "Microsoft.VisualBasic::afa2113c6ca9f14af87fcae9f5442d68, R-sharp\R#\Test\createException.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 16
+    '    Code Lines: 12
+    ' Comment Lines: 0
+    '   Blank Lines: 4
+    '     File Size: 420.00 B
+
 
     ' Module createException
     ' 

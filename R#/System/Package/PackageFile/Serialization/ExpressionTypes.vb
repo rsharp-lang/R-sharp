@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3a626c0bb0c7d584a51a142f9a0d1223, R#\System\Package\PackageFile\Serialization\ExpressionTypes.vb"
+﻿#Region "Microsoft.VisualBasic::3a626c0bb0c7d584a51a142f9a0d1223, R-sharp\R#\System\Package\PackageFile\Serialization\ExpressionTypes.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 73
+    '    Code Lines: 51
+    ' Comment Lines: 6
+    '   Blank Lines: 16
+    '     File Size: 1.35 KB
+
 
     '     Enum ExpressionTypes
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3e544487949e16a7f5c1b5662a02ac83, R#\Test\configTest.vb"
+﻿#Region "Microsoft.VisualBasic::3e544487949e16a7f5c1b5662a02ac83, R-sharp\R#\Test\configTest.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 20
+    '    Code Lines: 14
+    ' Comment Lines: 0
+    '   Blank Lines: 6
+    '     File Size: 417.00 B
+
 
     ' Module configTest
     ' 

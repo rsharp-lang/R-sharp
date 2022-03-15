@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::94a8474865f9d561d4478817117b18a5, R#\Interpreter\ExecuteEngine\Linq\Expression\Options\PipelineKeyword.vb"
+﻿#Region "Microsoft.VisualBasic::94a8474865f9d561d4478817117b18a5, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\Options\PipelineKeyword.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 44
+    '    Code Lines: 22
+    ' Comment Lines: 14
+    '   Blank Lines: 8
+    '     File Size: 1.93 KB
+
 
     '     Class PipelineKeyword
     ' 

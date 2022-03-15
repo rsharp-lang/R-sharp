@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e35f2fecb6522519037a47215bc3cd8c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Suppress.vb"
+﻿#Region "Microsoft.VisualBasic::e35f2fecb6522519037a47215bc3cd8c, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Suppress.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 36
+    '    Code Lines: 29
+    ' Comment Lines: 0
+    '   Blank Lines: 7
+    '     File Size: 1.24 KB
+
 
     '     Class Suppress
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::260763df5936849c29d756edd1654d10, R#\Runtime\Internal\printer\enumPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::260763df5936849c29d756edd1654d10, R-sharp\R#\Runtime\Internal\printer\enumPrinter.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 50
+    '    Code Lines: 32
+    ' Comment Lines: 8
+    '   Blank Lines: 10
+    '     File Size: 1.80 KB
+
 
     '     Module enumPrinter
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bbdd522c3de0d9731ad2697bbae3119d, R#\Runtime\Interop\RInteropAttributes\RSuppressPrintAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::bbdd522c3de0d9731ad2697bbae3119d, R-sharp\R#\Runtime\Interop\RInteropAttributes\RSuppressPrintAttribute.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 99
+    '    Code Lines: 18
+    ' Comment Lines: 75
+    '   Blank Lines: 6
+    '     File Size: 10.04 KB
+
 
     '     Class RSuppressPrintAttribute
     ' 

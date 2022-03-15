@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b9bb01c0e38bfe6ff28a4fdee1b861db, R#\System\Package\PackageFile\FileSystem\PatternMatch.vb"
+﻿#Region "Microsoft.VisualBasic::b9bb01c0e38bfe6ff28a4fdee1b861db, R-sharp\R#\System\Package\PackageFile\FileSystem\PatternMatch.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 18
+    '    Code Lines: 13
+    ' Comment Lines: 0
+    '   Blank Lines: 5
+    '     File Size: 499.00 B
+
 
     '     Class PatternMatch
     ' 

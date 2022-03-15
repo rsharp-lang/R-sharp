@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::88b169e14701869441db81339946a2de, studio\npy\Language\InternalParser.vb"
+﻿#Region "Microsoft.VisualBasic::e52b82f181baeca430e31050a8ec4705, R-sharp\studio\npy\Language\InternalParser.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 150
+    '    Code Lines: 116
+    ' Comment Lines: 9
+    '   Blank Lines: 25
+    '     File Size: 6.71 KB
+
 
     ' Module InternalParser
     ' 
@@ -189,4 +199,3 @@ Public Module InternalParser
         Return b.Any(Function(t) t = (TokenType.comma, ",")) AndAlso b.First = (TokenType.open, "(") AndAlso b.Last = (TokenType.close, ")")
     End Function
 End Module
-

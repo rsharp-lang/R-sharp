@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::738af6d73eb6a34e2103ed7b249c4df0, R#\System\Document\ShellScript\CommandLineArgument.vb"
+﻿#Region "Microsoft.VisualBasic::738af6d73eb6a34e2103ed7b249c4df0, R-sharp\R#\System\Document\ShellScript\CommandLineArgument.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 24
+    '    Code Lines: 19
+    ' Comment Lines: 0
+    '   Blank Lines: 5
+    '     File Size: 700.00 B
+
 
     '     Class CommandLineArgument
     ' 

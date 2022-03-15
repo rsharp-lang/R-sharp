@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3cd1f651b1d63e574dec353c7d630870, R#\System\Package\PackageFile\Expression\RTypeOf.vb"
+﻿#Region "Microsoft.VisualBasic::3cd1f651b1d63e574dec353c7d630870, R-sharp\R#\System\Package\PackageFile\Expression\RTypeOf.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 46
+    '    Code Lines: 37
+    ' Comment Lines: 0
+    '   Blank Lines: 9
+    '     File Size: 1.71 KB
+
 
     '     Class RTypeOf
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7c23c129b76bb716d5f17c9f157d1334, R#\Test\debuggerTest.vb"
+﻿#Region "Microsoft.VisualBasic::7c23c129b76bb716d5f17c9f157d1334, R-sharp\R#\Test\debuggerTest.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 13
+    '    Code Lines: 9
+    ' Comment Lines: 0
+    '   Blank Lines: 4
+    '     File Size: 285.00 B
+
 
     ' Module debuggerTest
     ' 

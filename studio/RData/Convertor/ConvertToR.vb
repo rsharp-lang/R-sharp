@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::755f4d0d0342c2a194962965d5e42e1b, studio\RData\Convertor\ConvertToR.vb"
+﻿#Region "Microsoft.VisualBasic::755f4d0d0342c2a194962965d5e42e1b, R-sharp\studio\RData\Convertor\ConvertToR.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 237
+    '    Code Lines: 170
+    ' Comment Lines: 28
+    '   Blank Lines: 39
+    '     File Size: 8.65 KB
+
 
     '     Module ConvertToR
     ' 

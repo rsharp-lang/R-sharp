@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c1e9ba3e294f0eee5a1566ff0bfefc9b, Library\JsonHelper\RJSON.vb"
+﻿#Region "Microsoft.VisualBasic::c1e9ba3e294f0eee5a1566ff0bfefc9b, R-sharp\Library\JsonHelper\RJSON.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 89
+    '    Code Lines: 60
+    ' Comment Lines: 15
+    '   Blank Lines: 14
+    '     File Size: 3.17 KB
+
 
     ' Module RJSON
     ' 

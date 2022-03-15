@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a484434d6dc41465c1c155d8fbe3ce4d, R#\Runtime\Internal\objects\RConversion\castRaw.vb"
+﻿#Region "Microsoft.VisualBasic::a484434d6dc41465c1c155d8fbe3ce4d, R-sharp\R#\Runtime\Internal\objects\RConversion\castRaw.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 107
+    '    Code Lines: 83
+    ' Comment Lines: 8
+    '   Blank Lines: 16
+    '     File Size: 4.26 KB
+
 
     '     Module castRaw
     ' 

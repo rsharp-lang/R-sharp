@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c214ce6d9d38680b3dbd3ceb2ec615b2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\ScriptSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::c214ce6d9d38680b3dbd3ceb2ec615b2, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\ScriptSymbol.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 46
+    '    Code Lines: 34
+    ' Comment Lines: 3
+    '   Blank Lines: 9
+    '     File Size: 1.50 KB
+
 
     '     Class ScriptSymbol
     ' 

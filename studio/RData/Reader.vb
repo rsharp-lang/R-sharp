@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::44a52301f51a4524d384a8adaff6a166, studio\RData\Reader.vb"
+﻿#Region "Microsoft.VisualBasic::44a52301f51a4524d384a8adaff6a166, R-sharp\studio\RData\Reader.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 376
+    '    Code Lines: 257
+    ' Comment Lines: 64
+    '   Blank Lines: 55
+    '     File Size: 13.52 KB
+
 
     ' Delegate Function
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e668bccedf472990fa195ad18b6a3a93, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ContinuteFor.vb"
+﻿#Region "Microsoft.VisualBasic::e668bccedf472990fa195ad18b6a3a93, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ContinuteFor.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 28
+    '    Code Lines: 19
+    ' Comment Lines: 3
+    '   Blank Lines: 6
+    '     File Size: 805.00 B
+
 
     '     Class ContinuteFor
     ' 

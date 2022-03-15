@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::17a37ee8276396e63eff0d7b6faf0cab, R#\Runtime\Interop\RsharpOperator\BinaryOperator.vb"
+﻿#Region "Microsoft.VisualBasic::17a37ee8276396e63eff0d7b6faf0cab, R-sharp\R#\Runtime\Interop\RsharpOperator\BinaryOperator.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 110
+    '    Code Lines: 69
+    ' Comment Lines: 27
+    '   Blank Lines: 14
+    '     File Size: 4.09 KB
+
 
     '     Class BinaryOperator
     ' 

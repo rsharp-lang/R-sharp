@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dd0c93135b041bd92f11a2ddc670ea66, R#\System\Document\MetaTextParser.vb"
+﻿#Region "Microsoft.VisualBasic::51267cffd620fe075ca4caa9bcf13411, R-sharp\R#\System\Document\MetaTextParser.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 57
+    '    Code Lines: 46
+    ' Comment Lines: 3
+    '   Blank Lines: 8
+    '     File Size: 2.16 KB
+
 
     '     Module MetaTextParser
     ' 

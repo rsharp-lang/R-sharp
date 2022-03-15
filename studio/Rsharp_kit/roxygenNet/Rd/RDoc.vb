@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a153b13fa223d5f933941a2ab5b8d791, studio\Rsharp_kit\roxygenNet\Rd\RDoc.vb"
+﻿#Region "Microsoft.VisualBasic::a153b13fa223d5f933941a2ab5b8d791, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\RDoc.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 111
+    '    Code Lines: 71
+    ' Comment Lines: 8
+    '   Blank Lines: 32
+    '     File Size: 2.76 KB
+
 
     ' Class RDoc
     ' 

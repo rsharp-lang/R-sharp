@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cdc426d3629c6406ab6cedc4479eb38d, Library\R.base\save\rawSerializer.vb"
+﻿#Region "Microsoft.VisualBasic::cdc426d3629c6406ab6cedc4479eb38d, R-sharp\Library\R.base\save\rawSerializer.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 133
+    '    Code Lines: 107
+    ' Comment Lines: 8
+    '   Blank Lines: 18
+    '     File Size: 5.93 KB
+
 
     ' Module rawSerializer
     ' 

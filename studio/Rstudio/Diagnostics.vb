@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::27461b9a529df88e9463d241ab45967e, studio\Rstudio\Diagnostics.vb"
+﻿#Region "Microsoft.VisualBasic::27461b9a529df88e9463d241ab45967e, R-sharp\studio\Rstudio\Diagnostics.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 217
+    '    Code Lines: 74
+    ' Comment Lines: 126
+    '   Blank Lines: 17
+    '     File Size: 10.23 KB
+
 
     ' Module Diagnostics
     ' 

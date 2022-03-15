@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ffd1b7eeed55cf9b9e34fb953af90641, studio\Rstudio.common\Workdir.vb"
+﻿#Region "Microsoft.VisualBasic::ffd1b7eeed55cf9b9e34fb953af90641, R-sharp\studio\Rstudio.common\Workdir.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 25
+    '    Code Lines: 10
+    ' Comment Lines: 11
+    '   Blank Lines: 4
+    '     File Size: 622.00 B
+
 
     ' Module Workdir
     ' 

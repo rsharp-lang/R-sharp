@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bccd0888402e26470440e7d3829b7fc5, R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\Literal.vb"
+﻿#Region "Microsoft.VisualBasic::bccd0888402e26470440e7d3829b7fc5, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\Literal.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 46
+    '    Code Lines: 38
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 1.48 KB
+
 
     '     Class Literal
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c1f297005e015d23afc46f31f575057, Library\R.base\utils\stringr.vb"
+﻿#Region "Microsoft.VisualBasic::6c1f297005e015d23afc46f31f575057, R-sharp\Library\R.base\utils\stringr.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 145
+    '    Code Lines: 84
+    ' Comment Lines: 41
+    '   Blank Lines: 20
+    '     File Size: 5.30 KB
+
 
     ' Module stringr
     ' 

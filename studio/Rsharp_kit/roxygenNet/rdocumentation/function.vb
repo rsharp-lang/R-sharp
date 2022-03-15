@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b115b5aabe647393025174e229b959a5, studio\Rsharp_kit\roxygenNet\rdocumentation\function.vb"
+﻿#Region "Microsoft.VisualBasic::b115b5aabe647393025174e229b959a5, R-sharp\studio\Rsharp_kit\roxygenNet\rdocumentation\function.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 278
+    '    Code Lines: 238
+    ' Comment Lines: 0
+    '   Blank Lines: 40
+    '     File Size: 13.74 KB
+
 
     ' Class [function]
     ' 

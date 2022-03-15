@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::961881f766c9d97994f280b37fdbd26f, R#\Runtime\Environment\RContentOutput.vb"
+﻿#Region "Microsoft.VisualBasic::961881f766c9d97994f280b37fdbd26f, R-sharp\R#\Runtime\Environment\RContentOutput.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 183
+    '    Code Lines: 136
+    ' Comment Lines: 14
+    '   Blank Lines: 33
+    '     File Size: 5.86 KB
+
 
     '     Class RContentOutput
     ' 

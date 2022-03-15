@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d78aeec57b29437354b3b9bb55500241, studio\njl\Language\InternalParser.vb"
+﻿#Region "Microsoft.VisualBasic::d78aeec57b29437354b3b9bb55500241, R-sharp\studio\njl\Language\InternalParser.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 68
+    '    Code Lines: 42
+    ' Comment Lines: 17
+    '   Blank Lines: 9
+    '     File Size: 3.20 KB
+
 
     '     Module InternalParser
     ' 

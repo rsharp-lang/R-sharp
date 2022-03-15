@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::25ad35ff48a3ff0ac38094a59d91b185, Library\R.base\save\save.vb"
+﻿#Region "Microsoft.VisualBasic::25ad35ff48a3ff0ac38094a59d91b185, R-sharp\Library\R.base\save\save.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 289
+    '    Code Lines: 125
+    ' Comment Lines: 133
+    '   Blank Lines: 31
+    '     File Size: 13.93 KB
+
 
     ' Module base
     ' 

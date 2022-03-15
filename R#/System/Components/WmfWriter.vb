@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c99f2f905ecc6d1c6870cdd73e66881, R#\System\Components\WmfWriter.vb"
+﻿#Region "Microsoft.VisualBasic::6c99f2f905ecc6d1c6870cdd73e66881, R-sharp\R#\System\Components\WmfWriter.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 13
+    '    Code Lines: 10
+    ' Comment Lines: 0
+    '   Blank Lines: 3
+    '     File Size: 408.00 B
+
 
     '     Class WmfWriter
     ' 

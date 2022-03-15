@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::39d121e29e4fca465ba1de21e96628cf, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\VectorAppendProcessor.vb"
+﻿#Region "Microsoft.VisualBasic::39d121e29e4fca465ba1de21e96628cf, R-sharp\R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\VectorAppendProcessor.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 27
+    '    Code Lines: 22
+    ' Comment Lines: 0
+    '   Blank Lines: 5
+    '     File Size: 976.00 B
+
 
     '     Class VectorAppendProcessor
     ' 

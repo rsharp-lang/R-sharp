@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ca8af559a7a194449b87656ebd9576f9, R#\Runtime\Internal\internalInvokes\etc.vb"
+﻿#Region "Microsoft.VisualBasic::ca8af559a7a194449b87656ebd9576f9, R-sharp\R#\Runtime\Internal\internalInvokes\etc.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 265
+    '    Code Lines: 146
+    ' Comment Lines: 97
+    '   Blank Lines: 22
+    '     File Size: 11.15 KB
+
 
     '     Module etc
     ' 

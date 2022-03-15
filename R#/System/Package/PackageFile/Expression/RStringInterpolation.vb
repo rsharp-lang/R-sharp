@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2d46714d91dd5cc2f8d3495d18d14b9a, R#\System\Package\PackageFile\Expression\RStringInterpolation.vb"
+﻿#Region "Microsoft.VisualBasic::2d46714d91dd5cc2f8d3495d18d14b9a, R-sharp\R#\System\Package\PackageFile\Expression\RStringInterpolation.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 48
+    '    Code Lines: 37
+    ' Comment Lines: 0
+    '   Blank Lines: 11
+    '     File Size: 1.80 KB
+
 
     '     Class RStringInterpolation
     ' 

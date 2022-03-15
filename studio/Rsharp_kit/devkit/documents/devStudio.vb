@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::33397db63283f8ad6b6dd07c6d9bc4fc, studio\Rsharp_kit\devkit\documents\devStudio.vb"
+﻿#Region "Microsoft.VisualBasic::13759454525ba10066a143c102012004, R-sharp\studio\Rsharp_kit\devkit\documents\devStudio.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 95
+    '    Code Lines: 68
+    ' Comment Lines: 6
+    '   Blank Lines: 21
+    '     File Size: 4.12 KB
+
 
     ' Module devStudio
     ' 

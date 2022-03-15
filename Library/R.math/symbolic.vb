@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a09eedd9eb7700a5fcfcd4091ee074fb, Library\R.math\symbolic.vb"
+﻿#Region "Microsoft.VisualBasic::7316cd064ed6a5548c13dce82e532642, R-sharp\Library\R.math\symbolic.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 48
+    '    Code Lines: 33
+    ' Comment Lines: 9
+    '   Blank Lines: 6
+    '     File Size: 1.77 KB
+
 
     ' Module symbolic
     ' 

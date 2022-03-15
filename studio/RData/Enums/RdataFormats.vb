@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::946740d77948c2ed1b00f1f60f43a6cf, studio\RData\Enums\RdataFormats.vb"
+﻿#Region "Microsoft.VisualBasic::946740d77948c2ed1b00f1f60f43a6cf, R-sharp\studio\RData\Enums\RdataFormats.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 24
+    '    Code Lines: 9
+    ' Comment Lines: 12
+    '   Blank Lines: 3
+    '     File Size: 539.00 B
+
 
     '     Enum RdataFormats
     ' 

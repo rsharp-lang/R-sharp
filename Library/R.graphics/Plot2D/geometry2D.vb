@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::318f9838769e43ed624a02a3dce839ee, Library\R.graphics\Plot2D\geometry2D.vb"
+﻿#Region "Microsoft.VisualBasic::318f9838769e43ed624a02a3dce839ee, R-sharp\Library\R.graphics\Plot2D\geometry2D.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 50
+    '    Code Lines: 32
+    ' Comment Lines: 12
+    '   Blank Lines: 6
+    '     File Size: 1.90 KB
+
 
     ' Module geometry2D
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ac8473c94692164f8b9a40fbff74c4f3, Library\R.math\models\corMat.vb"
+﻿#Region "Microsoft.VisualBasic::221818530371931c51360f094aa6be47, R-sharp\Library\R.math\models\corMat.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+    ' Code Statistics:
+
+    '   Total Lines: 15
+    '    Code Lines: 7
+    ' Comment Lines: 3
+    '   Blank Lines: 5
+    '     File Size: 278.00 B
+
+
     ' Class corMat
     ' 
     '     Properties: cor, pvalue
@@ -40,7 +50,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.Math.DataFrame
 
@@ -57,4 +66,3 @@ Public Class corMat
     End Sub
 
 End Class
-

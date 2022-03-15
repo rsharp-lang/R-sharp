@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1d69d624d6421dc8c542fd2d2a8d0cd9, Library\R.base\base.vb"
+﻿#Region "Microsoft.VisualBasic::1d69d624d6421dc8c542fd2d2a8d0cd9, R-sharp\Library\R.base\base.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 31
+    '    Code Lines: 12
+    ' Comment Lines: 17
+    '   Blank Lines: 2
+    '     File Size: 1.23 KB
+
 
     ' Module base
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c5f565d0fcf38a2a05e36014fc82d606, R#\Interpreter\ExecuteEngine\Linq\Query\AggregateExpression.vb"
+﻿#Region "Microsoft.VisualBasic::c5f565d0fcf38a2a05e36014fc82d606, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Query\AggregateExpression.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 22
+    '    Code Lines: 15
+    ' Comment Lines: 3
+    '   Blank Lines: 4
+    '     File Size: 705.00 B
+
 
     '     Class AggregateExpression
     ' 

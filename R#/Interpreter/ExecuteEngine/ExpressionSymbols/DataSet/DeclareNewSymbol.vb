@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f3f2857cb7513ec1fff8b3b38ef104a1, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DeclareNewSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::f3f2857cb7513ec1fff8b3b38ef104a1, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DeclareNewSymbol.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 332
+    '    Code Lines: 251
+    ' Comment Lines: 27
+    '   Blank Lines: 54
+    '     File Size: 12.48 KB
+
 
     '     Class DeclareNewSymbol
     ' 

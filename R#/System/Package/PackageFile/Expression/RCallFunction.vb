@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::48e14f3c55418caea52fdd979d738c7e, R#\System\Package\PackageFile\Expression\RCallFunction.vb"
+﻿#Region "Microsoft.VisualBasic::48e14f3c55418caea52fdd979d738c7e, R-sharp\R#\System\Package\PackageFile\Expression\RCallFunction.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 187
+    '    Code Lines: 156
+    ' Comment Lines: 0
+    '   Blank Lines: 31
+    '     File Size: 8.82 KB
+
 
     '     Class RCallFunction
     ' 

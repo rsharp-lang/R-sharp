@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2b31efebc491f5629aa835e586e0da06, R#\Test\tokenlicerTest.vb"
+﻿#Region "Microsoft.VisualBasic::2b31efebc491f5629aa835e586e0da06, R-sharp\R#\Test\tokenlicerTest.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 193
+    '    Code Lines: 129
+    ' Comment Lines: 4
+    '   Blank Lines: 60
+    '     File Size: 4.71 KB
+
 
     ' Module tokenlicerTest
     ' 

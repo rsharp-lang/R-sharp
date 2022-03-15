@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d6a468f225e1da483ea411eab6ea99aa, R#\Runtime\Internal\internalInvokes\Math\ranking.vb"
+﻿#Region "Microsoft.VisualBasic::d6a468f225e1da483ea411eab6ea99aa, R-sharp\R#\Runtime\Internal\internalInvokes\Math\ranking.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 137
+    '    Code Lines: 41
+    ' Comment Lines: 88
+    '   Blank Lines: 8
+    '     File Size: 7.18 KB
+
 
     '     Module ranking
     ' 

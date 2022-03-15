@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9a832485a9307c06fa5e1bc5e38ec60d, R#\Runtime\Internal\internalInvokes\string\strings.vb"
+﻿#Region "Microsoft.VisualBasic::9a832485a9307c06fa5e1bc5e38ec60d, R-sharp\R#\Runtime\Internal\internalInvokes\string\strings.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 288
+    '    Code Lines: 150
+    ' Comment Lines: 115
+    '   Blank Lines: 23
+    '     File Size: 13.32 KB
+
 
     '     Module strings
     ' 

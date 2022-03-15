@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::19a4c2bd7f409d5a1c246371174b4b0c, studio\RData\Parser.vb"
+﻿#Region "Microsoft.VisualBasic::19a4c2bd7f409d5a1c246371174b4b0c, R-sharp\studio\RData\Parser.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 161
+    '    Code Lines: 110
+    ' Comment Lines: 28
+    '   Blank Lines: 23
+    '     File Size: 5.26 KB
+
 
     ' Module Parser
     ' 

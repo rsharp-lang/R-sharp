@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9b1e10d4deb0408291cabdc4ebb1a088, Library\R.graph\Visualize.vb"
+﻿#Region "Microsoft.VisualBasic::9b1e10d4deb0408291cabdc4ebb1a088, R-sharp\Library\R.graph\Visualize.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 411
+    '    Code Lines: 344
+    ' Comment Lines: 19
+    '   Blank Lines: 48
+    '     File Size: 18.77 KB
+
 
     ' Module Visualize
     ' 

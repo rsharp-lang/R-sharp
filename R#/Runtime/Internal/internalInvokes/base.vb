@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2c3f3deecd7c91e4c3b0b8aa100ac31e, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::6b0eb9a6dcab55bef74aeb91c0fd7677, R-sharp\R#\Runtime\Internal\internalInvokes\base.vb"
 
     ' Author:
     ' 
@@ -31,21 +31,31 @@
 
     ' Summaries:
 
+
+    ' Code Statistics:
+
+    '   Total Lines: 2443
+    '    Code Lines: 1111
+    ' Comment Lines: 1126
+    '   Blank Lines: 206
+    '     File Size: 115.74 KB
+
+
     '     Module base
     ' 
     '         Function: [date], [dim], [stop], allocate, append
     '                   appendOfList, appendOfVector, autoDispose, c, cat
     '                   cbind, colnames, columnVector, doPrintInternal, factor
-    '                   factors, getOption, ifelse, invisible, isEmpty
-    '                   isEmptyArray, isList, isNA, isNull, isRVector
-    '                   length, library, makeNames, names, ncol
-    '                   neg, nrow, objectAddInvoke, options, print
-    '                   range, rbind, Rdataframe, rep, replace
-    '                   Rlist, rownames, seq, sink, source
-    '                   str, summary, t, uniqueNames, unitOfT
-    '                   warning, year
+    '                   factors, getOption, ifelse, invisible, isDataframe
+    '                   isEmpty, isEmptyArray, isList, isNA, isNull
+    '                   isRVector, length, library, makeNames, names
+    '                   ncol, neg, nrow, objectAddInvoke, options
+    '                   print, range, rbind, Rdataframe, rep
+    '                   replace, Rlist, rownames, seq, sink
+    '                   source, str, summary, t, uniqueNames
+    '                   unitOfT, warning, year
     ' 
-    '         Sub: [exit], q, quit, warnings
+    '         Sub: warnings
     '         Class PrinterOptions
     ' 
     '             Properties: maxPrint, quot

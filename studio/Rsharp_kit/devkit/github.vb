@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::be17fb6e78bcd9e7ef7b1444bcdcc8ce, studio\Rsharp_kit\devkit\github.vb"
+﻿#Region "Microsoft.VisualBasic::be17fb6e78bcd9e7ef7b1444bcdcc8ce, R-sharp\studio\Rsharp_kit\devkit\github.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 22
+    '    Code Lines: 11
+    ' Comment Lines: 6
+    '   Blank Lines: 5
+    '     File Size: 635.00 B
+
 
     ' Module github
     ' 

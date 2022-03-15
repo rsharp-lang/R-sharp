@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4d32d705fa8c23de87f1630ffe5c4d61, R#\Runtime\Internal\objects\utils\TableJoint.vb"
+﻿#Region "Microsoft.VisualBasic::2d481421daa8b3eff300a2c2fd37e49e, R-sharp\R#\Runtime\Internal\objects\utils\TableJoint.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 52
+    '    Code Lines: 44
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 2.35 KB
+
 
     '     Module TableJoint
     ' 

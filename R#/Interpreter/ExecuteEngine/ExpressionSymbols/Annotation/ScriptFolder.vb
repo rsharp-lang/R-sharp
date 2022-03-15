@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::585912f25b0a7ed9bc8da6c5298268b5, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\ScriptFolder.vb"
+﻿#Region "Microsoft.VisualBasic::585912f25b0a7ed9bc8da6c5298268b5, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\ScriptFolder.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 38
+    '    Code Lines: 28
+    ' Comment Lines: 3
+    '   Blank Lines: 7
+    '     File Size: 1.14 KB
+
 
     '     Class ScriptFolder
     ' 

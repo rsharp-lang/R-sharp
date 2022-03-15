@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d49c1fec0c427d5244f831f54e5bf6e8, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNumeric.vb"
+﻿#Region "Microsoft.VisualBasic::d49c1fec0c427d5244f831f54e5bf6e8, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNumeric.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 59
+    '    Code Lines: 45
+    ' Comment Lines: 3
+    '   Blank Lines: 11
+    '     File Size: 2.04 KB
+
 
     '     Class UnaryNumeric
     ' 

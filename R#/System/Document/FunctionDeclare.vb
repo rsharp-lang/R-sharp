@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::74a78471a8a54619b7ee66fc227c0dc4, R#\System\Document\FunctionDeclare.vb"
+﻿#Region "Microsoft.VisualBasic::d905ebb3a8361d55f59a984269215120, R-sharp\R#\System\Document\FunctionDeclare.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 44
+    '    Code Lines: 36
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 1.50 KB
+
 
     '     Class FunctionDeclare
     ' 

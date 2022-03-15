@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::887e596ec30ac5e4416a98bfe43b7f76, studio\Rsharp_kit\roxygenNet\RoxygenDocument.vb"
+﻿#Region "Microsoft.VisualBasic::887e596ec30ac5e4416a98bfe43b7f76, R-sharp\studio\Rsharp_kit\roxygenNet\RoxygenDocument.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 137
+    '    Code Lines: 115
+    ' Comment Lines: 2
+    '   Blank Lines: 20
+    '     File Size: 5.32 KB
+
 
     ' Class RoxygenDocument
     ' 

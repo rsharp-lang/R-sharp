@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8da5ff83e4ad1c1ea1057b4e55902366, studio\npy\Expressions\PipelineFunction.vb"
+﻿#Region "Microsoft.VisualBasic::e8cd0f31089b3d614ffde0423ee29d7d, R-sharp\studio\npy\Expressions\PipelineFunction.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 89
+    '    Code Lines: 69
+    ' Comment Lines: 7
+    '   Blank Lines: 13
+    '     File Size: 3.36 KB
+
 
     ' Class PipelineFunction
     ' 
@@ -131,4 +141,3 @@ Public Class PipelineFunction : Inherits Expression
         Return callFunc.ToString
     End Function
 End Class
-

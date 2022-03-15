@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c1485771d5bcc380c04668904258373, Library\R_graphic.interop\InteropArgumentHelper.vb"
+﻿#Region "Microsoft.VisualBasic::6c1485771d5bcc380c04668904258373, R-sharp\Library\R_graphic.interop\InteropArgumentHelper.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 169
+    '    Code Lines: 131
+    ' Comment Lines: 20
+    '   Blank Lines: 18
+    '     File Size: 6.14 KB
+
 
     ' Module InteropArgumentHelper
     ' 

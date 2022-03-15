@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dd1f6c07ed584dde65a50410f8203d8e, Library\R.graphics\Plot2D\plots.vb"
+﻿#Region "Microsoft.VisualBasic::dd1f6c07ed584dde65a50410f8203d8e, R-sharp\Library\R.graphics\Plot2D\plots.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 937
+    '    Code Lines: 721
+    ' Comment Lines: 122
+    '   Blank Lines: 94
+    '     File Size: 42.80 KB
+
 
     ' Module plots
     ' 

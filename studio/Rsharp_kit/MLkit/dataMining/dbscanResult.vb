@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::da23cbf6529b8e28487f3f6edb8651f7, studio\Rsharp_kit\MLkit\dataMining\dbscanResult.vb"
+﻿#Region "Microsoft.VisualBasic::da23cbf6529b8e28487f3f6edb8651f7, R-sharp\studio\Rsharp_kit\MLkit\dataMining\dbscanResult.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 14
+    '    Code Lines: 12
+    ' Comment Lines: 0
+    '   Blank Lines: 2
+    '     File Size: 324.00 B
+
 
     ' Class dbscanResult
     ' 

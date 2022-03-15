@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::492f6f417f1840e8655b767b1ffdaf5c, studio\Rserver\Rweb\RProcessor.vb"
+﻿#Region "Microsoft.VisualBasic::492f6f417f1840e8655b767b1ffdaf5c, R-sharp\studio\Rserver\Rweb\RProcessor.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 203
+    '    Code Lines: 161
+    ' Comment Lines: 12
+    '   Blank Lines: 30
+    '     File Size: 7.92 KB
+
 
     ' Class RProcessor
     ' 

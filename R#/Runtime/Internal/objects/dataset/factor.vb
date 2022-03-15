@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::832846094ab84115f2ae438f8da686c0, R#\Runtime\Internal\objects\dataset\factor.vb"
+﻿#Region "Microsoft.VisualBasic::832846094ab84115f2ae438f8da686c0, R-sharp\R#\Runtime\Internal\objects\dataset\factor.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 111
+    '    Code Lines: 78
+    ' Comment Lines: 16
+    '   Blank Lines: 17
+    '     File Size: 3.79 KB
+
 
     '     Class factor
     ' 

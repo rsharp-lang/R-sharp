@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8ae2db3a995e56501ac84cbc3aa1b021, Library\R.math\math.vb"
+﻿#Region "Microsoft.VisualBasic::8ae2db3a995e56501ac84cbc3aa1b021, R-sharp\Library\R.math\math.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 515
+    '    Code Lines: 345
+    ' Comment Lines: 101
+    '   Blank Lines: 69
+    '     File Size: 20.72 KB
+
 
     ' Module math
     ' 

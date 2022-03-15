@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::16b12d3e368012907ed2b1ab312ca5a4, R#\System\Package\PackageFile\Expression\RLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::16b12d3e368012907ed2b1ab312ca5a4, R-sharp\R#\System\Package\PackageFile\Expression\RLiteral.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 103
+    '    Code Lines: 89
+    ' Comment Lines: 0
+    '   Blank Lines: 14
+    '     File Size: 4.74 KB
+
 
     '     Class RLiteral
     ' 

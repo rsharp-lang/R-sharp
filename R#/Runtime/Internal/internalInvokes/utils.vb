@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::28815e34dcfbb618a68431037fdf7d43, R#\Runtime\Internal\internalInvokes\utils.vb"
+﻿#Region "Microsoft.VisualBasic::9877df8028875cb8477e67894474497d, R-sharp\R#\Runtime\Internal\internalInvokes\utils.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 899
+    '    Code Lines: 506
+    ' Comment Lines: 311
+    '   Blank Lines: 82
+    '     File Size: 42.69 KB
+
 
     '     Module utils
     ' 
@@ -262,7 +272,7 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="sec"></param>
         <ExportAPI("sleep")>
-        Public Sub sleep(sec As Integer)
+        Public Sub sleep(sec As Double)
             Call Thread.Sleep(sec * 1000)
         End Sub
 

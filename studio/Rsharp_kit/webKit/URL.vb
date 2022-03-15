@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::80f00232c8e30b7e61cd73d3649a8b9b, studio\Rsharp_kit\webKit\URL.vb"
+﻿#Region "Microsoft.VisualBasic::9488acf6fedf9e6ca5a38283f7028d7e, R-sharp\studio\Rsharp_kit\webKit\URL.vb"
 
     ' Author:
     ' 
@@ -31,10 +31,20 @@
 
     ' Summaries:
 
+
+    ' Code Statistics:
+
+    '   Total Lines: 282
+    '    Code Lines: 183
+    ' Comment Lines: 70
+    '   Blank Lines: 29
+    '     File Size: 11.08 KB
+
+
     ' Module URL
     ' 
-    '     Function: [get], content, HttpCookies, post, upload
-    '               urlcomponent, urlencode, wget
+    '     Function: [get], content, encodeTokenPart, HttpCookies, post
+    '               upload, urlcomponent, urlencode, wget
     ' 
     ' /********************************************************************************/
 
@@ -59,13 +69,33 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <Package("http", Category:=APICategories.UtilityTools)>
 Public Module URL
 
+    Private Function encodeTokenPart(argv As KeyValuePair(Of String, Object), env As Environment) As String
+        Dim str = urlencode(argv.Value, env)
+
+        If TypeOf str Is String() Then
+            If DirectCast(str, String()).Length = 1 Then
+                Return $"{argv.Key}={DirectCast(str, String())(Scan0)}"
+            Else
+                Return DirectCast(str, String()) _
+                    .Select(Function(val) $"{argv.Key}={val}") _
+                    .JoinBy("&")
+            End If
+        Else
+            Return $"{argv.Key}={str}"
+        End If
+    End Function
+
     <ExportAPI("urlcomponent")>
     Public Function urlcomponent(query As list, Optional env As Environment = Nothing) As String
-        Return query.slots _
-            .Select(Function(argv)
-                        Return $"{argv.Key}={urlencode(argv.Value, env)}"
-                    End Function) _
-            .JoinBy("&")
+        If query Is Nothing Then
+            Return ""
+        Else
+            Return query.slots _
+                .Select(Function(argv)
+                            Return encodeTokenPart(argv, env)
+                        End Function) _
+                .JoinBy("&")
+        End If
     End Function
 
     ''' <summary>
@@ -100,12 +130,19 @@ Public Module URL
     Public Function urlencode(<RRawVectorArgument> data As Object, Optional env As Environment = Nothing) As Object
         If data Is Nothing Then
             Return Nothing
-        ElseIf TypeOf data Is String Then
-            Return DirectCast(data, String).UrlEncode
-        ElseIf TypeOf data Is String() Then
-            Return DirectCast(data, String()).Select(Function(str) str.UrlEncode).ToArray
         ElseIf TypeOf data Is vector Then
-            Return DirectCast(data, vector).data.AsObjectEnumerator(Of String).Select(Function(str) str.UrlEncode).ToArray
+            data = DirectCast(data, vector).data
+        End If
+
+        If TypeOf data Is String Then
+            Return DirectCast(data, String).UrlEncode
+        ElseIf data.GetType.IsArray Then
+            Dim vec As String() = REnv.asVector(Of String)(data)
+            Dim tokens = vec _
+                .Select(Function(str) str.UrlEncode) _
+                .ToArray
+
+            Return tokens
         ElseIf TypeOf data Is list Then
             Return DirectCast(data, list).AsGeneric(Of String)(env).BuildUrlData(escaping:=True, stripNull:=False)
         Else

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::44ce8fdeb7d3a75b2959e8b59e0a36f6, studio\Rsharp_kit\devkit\workflow\automation.vb"
+﻿#Region "Microsoft.VisualBasic::44ce8fdeb7d3a75b2959e8b59e0a36f6, R-sharp\studio\Rsharp_kit\devkit\workflow\automation.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 34
+    '    Code Lines: 21
+    ' Comment Lines: 8
+    '   Blank Lines: 5
+    '     File Size: 1.11 KB
+
 
     ' Module automationUtils
     ' 
