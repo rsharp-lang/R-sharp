@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2e1e4f3bfc010791f5c5ee140f7f53fc, studio\npy\Language\SyntaxTree.vb"
+﻿#Region "Microsoft.VisualBasic::915ee3a89c3c790a471667709dbe2a38, R-sharp\studio\npy\Language\SyntaxTree.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+     Code Statistics:
+
+        Total Lines:   385
+        Code Lines:    312
+        Comment Lines: 19
+        Blank Lines:   54
+        File Size:     14.31 KB
+
+
     ' Class SyntaxTree
     ' 
     '     Constructor: (+1 Overloads) Sub New
@@ -40,7 +50,6 @@
     '     Sub: addLine, addPkgImport, addPkgLoad, addValueReturn, createError
     '          pushBlock, startAcceptorDefine, startElseDefine, startForLoopDefine, startFunctionDefine
     '          startIfDefine
-    ' 
     ' 
     ' /********************************************************************************/
 
@@ -431,6 +440,3 @@ Public Class SyntaxTree
     End Function
 
 End Class
-
-
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::27b750bc015b0ca54a332385352177fe, R#\Runtime\Interop\RInteropAttributes\ROperatorAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::27b750bc015b0ca54a332385352177fe, R-sharp\R#\Runtime\Interop\RInteropAttributes\ROperatorAttribute.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   21
+        Code Lines:    12
+        Comment Lines: 4
+        Blank Lines:   5
+        File Size:     576.00 B
+
 
     '     Class ROperatorAttribute
     ' 

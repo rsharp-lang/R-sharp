@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::56d3d45f0178ba64207bd374a24b4749, studio\njl\JuliaScriptLoader.vb"
+﻿#Region "Microsoft.VisualBasic::04e60021c18149c072004f59ec382796, R-sharp\studio\njl\JuliaScriptLoader.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   67
+        Code Lines:    52
+        Comment Lines: 5
+        Blank Lines:   10
+        File Size:     2.56 KB
+
 
     ' Class JuliaScriptLoader
     ' 
@@ -109,4 +119,3 @@ Public Class JuliaScriptLoader : Inherits ScriptLoader
         Return program
     End Function
 End Class
-

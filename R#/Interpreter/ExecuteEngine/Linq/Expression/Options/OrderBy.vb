@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d57bbb7d783cc32be3beccb91cc1b571, R#\Interpreter\ExecuteEngine\Linq\Expression\Options\OrderBy.vb"
+﻿#Region "Microsoft.VisualBasic::d57bbb7d783cc32be3beccb91cc1b571, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\Options\OrderBy.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   93
+        Code Lines:    76
+        Comment Lines: 0
+        Blank Lines:   17
+        File Size:     3.55 KB
+
 
     '     Class OrderBy
     ' 

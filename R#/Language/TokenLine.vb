@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d2fcb9a4f2e546adee8f38f52e9e2712, R#\Language\TokenLine.vb"
+﻿#Region "Microsoft.VisualBasic::d2fcb9a4f2e546adee8f38f52e9e2712, R-sharp\R#\Language\TokenLine.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   47
+        Code Lines:    33
+        Comment Lines: 4
+        Blank Lines:   10
+        File Size:     1.29 KB
+
 
     '     Class TokenLine
     ' 

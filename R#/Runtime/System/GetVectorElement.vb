@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0e12f14d2af42d09cc3eee31e22634a2, R#\Runtime\System\GetVectorElement.vb"
+﻿#Region "Microsoft.VisualBasic::0e12f14d2af42d09cc3eee31e22634a2, R-sharp\R#\Runtime\System\GetVectorElement.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   68
+        Code Lines:    54
+        Comment Lines: 4
+        Blank Lines:   10
+        File Size:     2.27 KB
+
 
     '     Class GetVectorElement
     ' 

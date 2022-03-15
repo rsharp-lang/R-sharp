@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c4ffec0c225eddba161e038122b8e088, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb"
+﻿#Region "Microsoft.VisualBasic::c4ffec0c225eddba161e038122b8e088, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   72
+        Code Lines:    53
+        Comment Lines: 7
+        Blank Lines:   12
+        File Size:     2.51 KB
+
 
     '     Class SymbolReference
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8522eab734045c8a5c9503a6777240a9, R#\System\Package\PackageFile\Expression\RFor.vb"
+﻿#Region "Microsoft.VisualBasic::8522eab734045c8a5c9503a6777240a9, R-sharp\R#\System\Package\PackageFile\Expression\RFor.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   66
+        Code Lines:    52
+        Comment Lines: 0
+        Blank Lines:   14
+        File Size:     2.68 KB
+
 
     '     Class RFor
     ' 

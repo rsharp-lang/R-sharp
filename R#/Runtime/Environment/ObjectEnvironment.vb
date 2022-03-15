@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::84189afb8f053cf892c0a007a9c5ab8f, R#\Runtime\Environment\ObjectEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::84189afb8f053cf892c0a007a9c5ab8f, R-sharp\R#\Runtime\Environment\ObjectEnvironment.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   52
+        Code Lines:    22
+        Comment Lines: 23
+        Blank Lines:   7
+        File Size:     1.60 KB
+
 
     '     Class ObjectEnvironment
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::144f16df7afede2a9dc5b082615f8a83, R#\Interpreter\ExecuteEngine\Linq\Expression\Options\TakeItems.vb"
+﻿#Region "Microsoft.VisualBasic::144f16df7afede2a9dc5b082615f8a83, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\Options\TakeItems.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   45
+        Code Lines:    33
+        Comment Lines: 3
+        Blank Lines:   9
+        File Size:     1.41 KB
+
 
     '     Class TakeItems
     ' 

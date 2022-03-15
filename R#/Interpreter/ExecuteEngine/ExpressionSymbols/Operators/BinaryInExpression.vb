@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3142407d4affe424a53b3dabadbe6462, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb"
+﻿#Region "Microsoft.VisualBasic::3142407d4affe424a53b3dabadbe6462, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   169
+        Code Lines:    129
+        Comment Lines: 15
+        Blank Lines:   25
+        File Size:     6.90 KB
+
 
     '     Class BinaryInExpression
     ' 

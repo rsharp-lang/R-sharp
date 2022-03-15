@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3930026d4419b5e392b116b35b3ea9b8, R#\Interpreter\ExecuteEngine\Linq\DataSet\QuerySource.vb"
+﻿#Region "Microsoft.VisualBasic::3930026d4419b5e392b116b35b3ea9b8, R-sharp\R#\Interpreter\ExecuteEngine\Linq\DataSet\QuerySource.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   79
+        Code Lines:    59
+        Comment Lines: 4
+        Blank Lines:   16
+        File Size:     3.04 KB
+
 
     '     Class QuerySource
     ' 

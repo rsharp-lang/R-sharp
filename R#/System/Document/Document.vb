@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2ddbfcbaf2ce23db8cd13fefccacda2a, R#\System\Document\Document.vb"
+﻿#Region "Microsoft.VisualBasic::b29d250cc226cb621c9c98db32098584, R-sharp\R#\System\Document\Document.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   63
+        Code Lines:    55
+        Comment Lines: 0
+        Blank Lines:   8
+        File Size:     2.32 KB
+
 
     '     Class Document
     ' 

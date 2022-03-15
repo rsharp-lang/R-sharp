@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f6e20b3bff4ffcad0d4c57f667f45d2c, Library\R.graph\Layouts.vb"
+﻿#Region "Microsoft.VisualBasic::f6e20b3bff4ffcad0d4c57f667f45d2c, R-sharp\Library\R.graph\Layouts.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   259
+        Code Lines:    200
+        Comment Lines: 34
+        Blank Lines:   25
+        File Size:     11.14 KB
+
 
     ' Module Layouts
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c327d9e67f9862bb681ea4a31babf0d2, R#\Runtime\Interop\RInteropAttributes\RSymbolTextArgumentAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::c327d9e67f9862bb681ea4a31babf0d2, R-sharp\R#\Runtime\Interop\RInteropAttributes\RSymbolTextArgumentAttribute.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   37
+        Code Lines:    24
+        Comment Lines: 8
+        Blank Lines:   5
+        File Size:     1.62 KB
+
 
     '     Class RSymbolTextArgumentAttribute
     ' 

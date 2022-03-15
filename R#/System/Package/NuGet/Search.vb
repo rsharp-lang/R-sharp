@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ffc84075e8842b4052b8e62e7d5de9f9, R#\System\Package\NuGet\Search.vb"
+﻿#Region "Microsoft.VisualBasic::ffc84075e8842b4052b8e62e7d5de9f9, R-sharp\R#\System\Package\NuGet\Search.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   44
+        Code Lines:    34
+        Comment Lines: 0
+        Blank Lines:   10
+        File Size:     1.34 KB
+
 
     '     Class Search
     ' 

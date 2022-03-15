@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::58979482038d712f626906feb8b019b2, studio\Rstudio.common\ScriptTask.vb"
+﻿#Region "Microsoft.VisualBasic::93b55eb266d713a58c7e757bb9673baa, R-sharp\studio\Rstudio.common\ScriptTask.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   65
+        Code Lines:    52
+        Comment Lines: 0
+        Blank Lines:   13
+        File Size:     2.21 KB
+
 
     ' Module ScriptTask
     ' 

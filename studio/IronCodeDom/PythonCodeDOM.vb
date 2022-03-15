@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0279722e25b8a4bafbcb7cecada136b7, studio\IronCodeDom\PythonCodeDOM.vb"
+﻿#Region "Microsoft.VisualBasic::ac0cf4b1f1c4635a100c72e9629917fe, R-sharp\studio\IronCodeDom\PythonCodeDOM.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+     Code Statistics:
+
+        Total Lines:   32
+        Code Lines:    24
+        Comment Lines: 0
+        Blank Lines:   8
+        File Size:     949.00 B
+
+
     ' Class PythonCodeDOM
     ' 
     '     Properties: keyword, level, script
@@ -38,7 +48,6 @@
     '     Function: ToExpression, ToString
     ' 
     '     Sub: (+2 Overloads) Add
-    ' 
     ' 
     ' /********************************************************************************/
 
@@ -76,5 +85,3 @@ Public Class PythonCodeDOM
     End Function
 
 End Class
-
-

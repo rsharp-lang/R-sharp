@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::94a0ef5790ce59d32ca31224421f1987, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\RepeatClosure.vb"
+﻿#Region "Microsoft.VisualBasic::94a0ef5790ce59d32ca31224421f1987, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\RepeatClosure.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   52
+        Code Lines:    39
+        Comment Lines: 0
+        Blank Lines:   13
+        File Size:     1.64 KB
+
 
     '     Class RepeatClosure
     ' 

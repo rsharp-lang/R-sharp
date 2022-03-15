@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::afc444f4c1562c1d4c3cd1ea7370acac, Library\R.graph\Utils\Attributes\NodeAttributes.vb"
+﻿#Region "Microsoft.VisualBasic::ea1cb7ddb84f0061d4e65e011b829197, R-sharp\Library\R.graph\Utils\Attributes\NodeAttributes.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   99
+        Code Lines:    87
+        Comment Lines: 0
+        Blank Lines:   12
+        File Size:     3.72 KB
+
 
     ' Module NodeAttributes
     ' 

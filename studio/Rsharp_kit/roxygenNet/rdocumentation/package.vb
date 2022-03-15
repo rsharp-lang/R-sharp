@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::001a0153035dbf9dfdbe5c215e7b8b18, studio\Rsharp_kit\roxygenNet\rdocumentation\package.vb"
+﻿#Region "Microsoft.VisualBasic::001a0153035dbf9dfdbe5c215e7b8b18, R-sharp\studio\Rsharp_kit\roxygenNet\rdocumentation\package.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   6
+        Code Lines:    5
+        Comment Lines: 0
+        Blank Lines:   1
+        File Size:     138.00 B
+
 
     ' Class package
     ' 

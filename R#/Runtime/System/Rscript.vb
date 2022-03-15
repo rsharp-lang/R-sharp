@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::edb9c218eea493c720a8721e96c57573, R#\Runtime\System\Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::edb9c218eea493c720a8721e96c57573, R-sharp\R#\Runtime\System\Rscript.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   146
+        Code Lines:    87
+        Comment Lines: 40
+        Blank Lines:   19
+        File Size:     4.93 KB
+
 
     '     Class Rscript
     ' 

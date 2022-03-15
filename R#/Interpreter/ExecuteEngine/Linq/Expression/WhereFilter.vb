@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3ebcf42a4adc88a949dc5cbb182d25d0, R#\Interpreter\ExecuteEngine\Linq\Expression\WhereFilter.vb"
+﻿#Region "Microsoft.VisualBasic::3ebcf42a4adc88a949dc5cbb182d25d0, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\WhereFilter.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   28
+        Code Lines:    19
+        Comment Lines: 3
+        Blank Lines:   6
+        File Size:     766.00 B
+
 
     '     Class WhereFilter
     ' 

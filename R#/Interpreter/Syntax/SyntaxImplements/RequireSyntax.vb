@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c656f111ff53610e241f012794493d07, R#\Interpreter\Syntax\SyntaxImplements\RequireSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::c656f111ff53610e241f012794493d07, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\RequireSyntax.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   85
+        Code Lines:    73
+        Comment Lines: 2
+        Blank Lines:   10
+        File Size:     3.60 KB
+
 
     '     Module RequireSyntax
     ' 

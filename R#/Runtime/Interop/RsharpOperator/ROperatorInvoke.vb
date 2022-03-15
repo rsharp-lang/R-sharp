@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c95ee30912b0d343bafa27c63624efcf, R#\Runtime\Interop\RsharpOperator\ROperatorInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::c95ee30912b0d343bafa27c63624efcf, R-sharp\R#\Runtime\Interop\RsharpOperator\ROperatorInvoke.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   57
+        Code Lines:    45
+        Comment Lines: 1
+        Blank Lines:   11
+        File Size:     1.85 KB
+
 
     '     Class ROperatorInvoke
     ' 

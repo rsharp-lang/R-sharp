@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9547aa68edabd31cdd3fe2a03f7fea87, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ReturnValue.vb"
+﻿#Region "Microsoft.VisualBasic::9547aa68edabd31cdd3fe2a03f7fea87, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ReturnValue.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   50
+        Code Lines:    41
+        Comment Lines: 0
+        Blank Lines:   9
+        File Size:     1.61 KB
+
 
     '     Class ReturnValue
     ' 

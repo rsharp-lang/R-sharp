@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::24872365f3103fa6d141f9cd1dcdbef4, studio\Rsharp_kit\webKit\GraphQuery.vb"
+﻿#Region "Microsoft.VisualBasic::24872365f3103fa6d141f9cd1dcdbef4, R-sharp\studio\Rsharp_kit\webKit\GraphQuery.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   60
+        Code Lines:    31
+        Comment Lines: 23
+        Blank Lines:   6
+        File Size:     2.15 KB
+
 
     ' Module HtmlGraphQuery
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::683c51f28c40268375e666b79927f1c9, R#\Runtime\Interop\RType.vb"
+﻿#Region "Microsoft.VisualBasic::683c51f28c40268375e666b79927f1c9, R-sharp\R#\Runtime\Interop\RType.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   301
+        Code Lines:    195
+        Comment Lines: 75
+        Blank Lines:   31
+        File Size:     11.68 KB
+
 
     '     Class RType
     ' 

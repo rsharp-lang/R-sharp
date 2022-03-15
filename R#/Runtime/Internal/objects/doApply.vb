@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9c28e113c2c5957cdc5f491da980e205, R#\Runtime\Internal\objects\doApply.vb"
+﻿#Region "Microsoft.VisualBasic::9c28e113c2c5957cdc5f491da980e205, R-sharp\R#\Runtime\Internal\objects\doApply.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   19
+        Code Lines:    14
+        Comment Lines: 0
+        Blank Lines:   5
+        File Size:     431.00 B
+
 
     '     Enum margins
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a38eac76292e1a46cadd2730ff85b1f7, R#\Runtime\System\Interface\RNames.vb"
+﻿#Region "Microsoft.VisualBasic::a38eac76292e1a46cadd2730ff85b1f7, R-sharp\R#\Runtime\System\Interface\RNames.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   36
+        Code Lines:    22
+        Comment Lines: 3
+        Blank Lines:   11
+        File Size:     1.23 KB
+
 
     '     Interface IReflector
     ' 

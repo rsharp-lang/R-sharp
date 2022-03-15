@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8588970bbe4e932b7f95d54aa39f3362, R#\Runtime\Interop\CType\ICType.vb"
+﻿#Region "Microsoft.VisualBasic::8588970bbe4e932b7f95d54aa39f3362, R-sharp\R#\Runtime\Interop\CType\ICType.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   18
+        Code Lines:    6
+        Comment Lines: 7
+        Blank Lines:   5
+        File Size:     426.00 B
+
 
     '     Interface ICTypeList
     ' 

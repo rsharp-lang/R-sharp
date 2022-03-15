@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::31f0eadc9c6ce67f15fc23be83327a45, studio\Rserver\Rweb\Rweb.vb"
+﻿#Region "Microsoft.VisualBasic::31f0eadc9c6ce67f15fc23be83327a45, R-sharp\studio\Rserver\Rweb\Rweb.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   105
+        Code Lines:    82
+        Comment Lines: 4
+        Blank Lines:   19
+        File Size:     3.68 KB
+
 
     ' Class Rweb
     ' 

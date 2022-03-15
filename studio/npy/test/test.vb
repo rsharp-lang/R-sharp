@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::518d919f68db49deb01beca9187ecf1e, studio\npy\test\test.vb"
+﻿#Region "Microsoft.VisualBasic::24d99a47d38e81373aa513b7a21bba98, R-sharp\studio\npy\test\test.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   213
+        Code Lines:    125
+        Comment Lines: 2
+        Blank Lines:   86
+        File Size:     4.56 KB
+
 
     ' Module test
     ' 
@@ -254,4 +264,3 @@ for x in fruits:
 
     End Sub
 End Module
-

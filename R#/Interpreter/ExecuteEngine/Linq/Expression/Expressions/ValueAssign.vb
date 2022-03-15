@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7793e7119ebf2a9f7d9bba1fd5485ab0, R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\ValueAssign.vb"
+﻿#Region "Microsoft.VisualBasic::7793e7119ebf2a9f7d9bba1fd5485ab0, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\ValueAssign.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   25
+        Code Lines:    19
+        Comment Lines: 0
+        Blank Lines:   6
+        File Size:     733.00 B
+
 
     '     Class ValueAssign
     ' 

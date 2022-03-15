@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::28c92b7077988fdadd3864dabe0c002e, R#\Runtime\Internal\objects\dataset\vbObject.vb"
+﻿#Region "Microsoft.VisualBasic::28c92b7077988fdadd3864dabe0c002e, R-sharp\R#\Runtime\Internal\objects\dataset\vbObject.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   264
+        Code Lines:    192
+        Comment Lines: 40
+        Blank Lines:   32
+        File Size:     11.14 KB
+
 
     '     Class vbObject
     ' 

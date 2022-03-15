@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6729ae2130f97c1b7d9a105dc44eb4eb, R#\Runtime\Internal\internalInvokes\applys.vb"
+﻿#Region "Microsoft.VisualBasic::6729ae2130f97c1b7d9a105dc44eb4eb, R-sharp\R#\Runtime\Internal\internalInvokes\applys.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   422
+        Code Lines:    276
+        Comment Lines: 88
+        Blank Lines:   58
+        File Size:     18.06 KB
+
 
     '     Module applys
     ' 

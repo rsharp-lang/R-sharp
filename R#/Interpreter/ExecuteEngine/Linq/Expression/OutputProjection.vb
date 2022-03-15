@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b8135a6ed2e8107b504bdaef51fe7d65, R#\Interpreter\ExecuteEngine\Linq\Expression\OutputProjection.vb"
+﻿#Region "Microsoft.VisualBasic::b8135a6ed2e8107b504bdaef51fe7d65, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\OutputProjection.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   41
+        Code Lines:    25
+        Comment Lines: 7
+        Blank Lines:   9
+        File Size:     1.33 KB
+
 
     '     Class OutputProjection
     ' 

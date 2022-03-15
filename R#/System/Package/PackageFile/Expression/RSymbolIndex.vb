@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::854b43a79ab8617fccdfa5cec1fe35b1, R#\System\Package\PackageFile\Expression\RSymbolIndex.vb"
+﻿#Region "Microsoft.VisualBasic::854b43a79ab8617fccdfa5cec1fe35b1, R-sharp\R#\System\Package\PackageFile\Expression\RSymbolIndex.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   68
+        Code Lines:    55
+        Comment Lines: 0
+        Blank Lines:   13
+        File Size:     2.83 KB
+
 
     '     Class RSymbolIndex
     ' 

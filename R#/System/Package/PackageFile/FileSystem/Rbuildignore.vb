@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7c8e52ecd6069e769f1b43a2f8a74a43, R#\System\Package\PackageFile\FileSystem\Rbuildignore.vb"
+﻿#Region "Microsoft.VisualBasic::7c8e52ecd6069e769f1b43a2f8a74a43, R-sharp\R#\System\Package\PackageFile\FileSystem\Rbuildignore.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   60
+        Code Lines:    32
+        Comment Lines: 18
+        Blank Lines:   10
+        File Size:     1.92 KB
+
 
     '     Class Rbuildignore
     ' 

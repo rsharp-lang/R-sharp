@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::81663512c5e039a3893f630242460edc, R#\Runtime\Environment\OutputEnvironments.vb"
+﻿#Region "Microsoft.VisualBasic::81663512c5e039a3893f630242460edc, R-sharp\R#\Runtime\Environment\OutputEnvironments.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   8
+        Code Lines:    7
+        Comment Lines: 0
+        Blank Lines:   1
+        File Size:     129.00 B
+
 
     '     Enum OutputEnvironments
     ' 

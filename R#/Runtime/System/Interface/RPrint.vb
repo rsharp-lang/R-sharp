@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3f0623dce1282229ccf83d3daeab5f49, R#\Runtime\System\Interface\RPrint.vb"
+﻿#Region "Microsoft.VisualBasic::3f0623dce1282229ccf83d3daeab5f49, R-sharp\R#\Runtime\System\Interface\RPrint.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   7
+        Code Lines:    5
+        Comment Lines: 0
+        Blank Lines:   2
+        File Size:     151.00 B
+
 
     '     Interface RPrint
     ' 

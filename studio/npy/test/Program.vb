@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::109fef9d64127bb2277f43171584f1bd, studio\npy\test\Program.vb"
+﻿#Region "Microsoft.VisualBasic::f5993b7945db82fa1027071023d16398, R-sharp\studio\npy\test\Program.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   91
+        Code Lines:    62
+        Comment Lines: 1
+        Blank Lines:   28
+        File Size:     1.84 KB
+
 
     ' Module Programa
     ' 
@@ -131,4 +141,3 @@ f = x -> print(x)
     End Sub
 
 End Module
-

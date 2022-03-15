@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f3613b86f8d391faa821a48d746699cd, studio\njl\Runtime\io.vb"
+﻿#Region "Microsoft.VisualBasic::458203d4c70a915fa7d0062afe619fb4, R-sharp\studio\njl\Runtime\io.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+     Code Statistics:
+
+        Total Lines:   128
+        Code Lines:    81
+        Comment Lines: 35
+        Blank Lines:   12
+        File Size:     4.57 KB
+
+
     ' Module io
     ' 
     '     Function: open, read, write
@@ -40,7 +50,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -170,4 +179,3 @@ Public Module io
         End If
     End Sub
 End Module
-

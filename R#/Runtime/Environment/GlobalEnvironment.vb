@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0884a5a465bb81c9899a424fcdb4c108, R#\Runtime\Environment\GlobalEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::0884a5a465bb81c9899a424fcdb4c108, R-sharp\R#\Runtime\Environment\GlobalEnvironment.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   278
+        Code Lines:    183
+        Comment Lines: 53
+        Blank Lines:   42
+        File Size:     11.28 KB
+
 
     '     Class GlobalEnvironment
     ' 

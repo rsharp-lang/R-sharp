@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b086dd64c92052b122106ff860b278ce, R#\Runtime\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::b086dd64c92052b122106ff860b278ce, R-sharp\R#\Runtime\Extensions.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   150
+        Code Lines:    99
+        Comment Lines: 30
+        Blank Lines:   21
+        File Size:     5.60 KB
+
 
     '     Module Extensions
     ' 

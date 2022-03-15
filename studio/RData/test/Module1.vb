@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dabf2b53501f95b6469004f951222940, studio\RData\test\Module1.vb"
+﻿#Region "Microsoft.VisualBasic::dabf2b53501f95b6469004f951222940, R-sharp\studio\RData\test\Module1.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   240
+        Code Lines:    99
+        Comment Lines: 9
+        Blank Lines:   132
+        File Size:     4.40 KB
+
 
     ' Module Module1
     ' 

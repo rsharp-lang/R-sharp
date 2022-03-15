@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2a710c885b1bbbbfe3d9dbaa9a354820, studio\RData\Models\EnvironmentValue.vb"
+﻿#Region "Microsoft.VisualBasic::2a710c885b1bbbbfe3d9dbaa9a354820, R-sharp\studio\RData\Models\EnvironmentValue.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   16
+        Code Lines:    9
+        Comment Lines: 3
+        Blank Lines:   4
+        File Size:     354.00 B
+
 
     '     Class EnvironmentValue
     ' 

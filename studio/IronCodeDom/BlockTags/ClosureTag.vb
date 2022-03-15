@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f5cc63403fcdc1eb4da2edb635af7221, studio\IronCodeDom\BlockTags\ClosureTag.vb"
+﻿#Region "Microsoft.VisualBasic::a4eb7d784b71dda554081c8cfc57f31c, R-sharp\studio\IronCodeDom\BlockTags\ClosureTag.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+     Code Statistics:
+
+        Total Lines:   19
+        Code Lines:    14
+        Comment Lines: 0
+        Blank Lines:   5
+        File Size:     625.00 B
+
+
     ' Class ClosureTag
     ' 
     '     Properties: assignTarget
@@ -60,4 +70,3 @@ Public Class ClosureTag : Inherits PythonCodeDOM
     End Function
 
 End Class
-

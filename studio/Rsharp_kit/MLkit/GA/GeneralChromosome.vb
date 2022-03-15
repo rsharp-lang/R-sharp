@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a91cc7c722a375782a5ad13217a78e28, studio\Rsharp_kit\MLkit\GA\GeneralChromosome.vb"
+﻿#Region "Microsoft.VisualBasic::a91cc7c722a375782a5ad13217a78e28, R-sharp\studio\Rsharp_kit\MLkit\GA\GeneralChromosome.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   50
+        Code Lines:    41
+        Comment Lines: 0
+        Blank Lines:   9
+        File Size:     2.11 KB
+
 
     ' Class GeneralChromosome
     ' 

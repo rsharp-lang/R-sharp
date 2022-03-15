@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f02f55aaa713be9a1e73ffc6ddcdb8b5, R#\Runtime\Internal\objects\invisible.vb"
+﻿#Region "Microsoft.VisualBasic::f02f55aaa713be9a1e73ffc6ddcdb8b5, R-sharp\R#\Runtime\Internal\objects\invisible.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   17
+        Code Lines:    8
+        Comment Lines: 5
+        Blank Lines:   4
+        File Size:     434.00 B
+
 
     '     Class invisible
     ' 

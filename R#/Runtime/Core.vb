@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::70d7a3e28279f8726b780f542f41c6dd, R#\Runtime\Core.vb"
+﻿#Region "Microsoft.VisualBasic::70d7a3e28279f8726b780f542f41c6dd, R-sharp\R#\Runtime\Core.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   346
+        Code Lines:    229
+        Comment Lines: 62
+        Blank Lines:   55
+        File Size:     14.23 KB
+
 
     '     Module Core
     ' 

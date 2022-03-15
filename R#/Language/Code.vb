@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c019eff45cf5711d5665c9ed40d6214d, R#\Language\Code.vb"
+﻿#Region "Microsoft.VisualBasic::c019eff45cf5711d5665c9ed40d6214d, R-sharp\R#\Language\Code.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   52
+        Code Lines:    38
+        Comment Lines: 6
+        Blank Lines:   8
+        File Size:     1.79 KB
+
 
     '     Module Code
     ' 

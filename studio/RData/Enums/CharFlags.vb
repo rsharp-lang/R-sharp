@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c1e25437fa0e642f45d1240e823a6c8, studio\RData\Enums\CharFlags.vb"
+﻿#Region "Microsoft.VisualBasic::6c1e25437fa0e642f45d1240e823a6c8, R-sharp\studio\RData\Enums\CharFlags.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   21
+        Code Lines:    10
+        Comment Lines: 9
+        Blank Lines:   2
+        File Size:     503.00 B
+
 
     '     Enum CharFlags
     ' 

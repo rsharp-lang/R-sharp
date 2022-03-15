@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::70fd6a80eab1da523091a0862d3f75d4, R#\Runtime\Internal\objects\dataset\S4Object.vb"
+﻿#Region "Microsoft.VisualBasic::70fd6a80eab1da523091a0862d3f75d4, R-sharp\R#\Runtime\Internal\objects\dataset\S4Object.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   6
+        Code Lines:    4
+        Comment Lines: 0
+        Blank Lines:   2
+        File Size:     94.00 B
+
 
     '     Class S4Object
     ' 

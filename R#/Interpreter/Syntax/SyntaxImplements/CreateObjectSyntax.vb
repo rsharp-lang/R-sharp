@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0df5659d49677c6c6ba83c0f0fdc6672, R#\Interpreter\Syntax\SyntaxImplements\CreateObjectSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::0df5659d49677c6c6ba83c0f0fdc6672, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\CreateObjectSyntax.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   47
+        Code Lines:    39
+        Comment Lines: 0
+        Blank Lines:   8
+        File Size:     1.87 KB
+
 
     '     Module CreateObjectSyntax
     ' 

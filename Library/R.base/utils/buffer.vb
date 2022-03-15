@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::40db15dccc125e5fd09f30d22d630b66, Library\R.base\utils\buffer.vb"
+﻿#Region "Microsoft.VisualBasic::40db15dccc125e5fd09f30d22d630b66, R-sharp\Library\R.base\utils\buffer.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   198
+        Code Lines:    143
+        Comment Lines: 31
+        Blank Lines:   24
+        File Size:     7.44 KB
+
 
     ' Module buffer
     ' 

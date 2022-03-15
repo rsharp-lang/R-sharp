@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ef2e65e507737b6d273c9716c8931fbf, R#\Runtime\Interop\RDispose.vb"
+﻿#Region "Microsoft.VisualBasic::ef2e65e507737b6d273c9716c8931fbf, R-sharp\R#\Runtime\Interop\RDispose.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   69
+        Code Lines:    33
+        Comment Lines: 24
+        Blank Lines:   12
+        File Size:     2.39 KB
+
 
     '     Class RDispose
     ' 

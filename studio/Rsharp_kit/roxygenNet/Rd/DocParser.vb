@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1389eba31349aed21836ff4d5d305044, studio\Rsharp_kit\roxygenNet\Rd\DocParser.vb"
+﻿#Region "Microsoft.VisualBasic::1389eba31349aed21836ff4d5d305044, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\DocParser.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   211
+        Code Lines:    145
+        Comment Lines: 31
+        Blank Lines:   35
+        File Size:     6.78 KB
+
 
     ' Class DocParser
     ' 

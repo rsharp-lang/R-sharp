@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f52102053a84c9e8ff7eba03c757e636, studio\npy\test\jlTest.vb"
+﻿#Region "Microsoft.VisualBasic::2338fac927620995260c0dd45ba40368, R-sharp\studio\npy\test\jlTest.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   132
+        Code Lines:    98
+        Comment Lines: 1
+        Blank Lines:   33
+        File Size:     2.26 KB
+
 
     ' Module jlTest
     ' 
@@ -172,4 +182,3 @@ print(pisum())
         Pause()
     End Sub
 End Module
-

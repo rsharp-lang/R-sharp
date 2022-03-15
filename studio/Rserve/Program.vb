@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6b82bce2af8969f1655cd5c191d6c19e, studio\Rserve\Program.vb"
+﻿#Region "Microsoft.VisualBasic::6b82bce2af8969f1655cd5c191d6c19e, R-sharp\studio\Rserve\Program.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   47
+        Code Lines:    35
+        Comment Lines: 5
+        Blank Lines:   7
+        File Size:     1.95 KB
+
 
     ' Module Program
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ce56ff69e049607a49162e2cd880f988, Library\R.graph\Models\E.vb"
+﻿#Region "Microsoft.VisualBasic::ce56ff69e049607a49162e2cd880f988, R-sharp\Library\R.graph\Models\E.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   97
+        Code Lines:    74
+        Comment Lines: 3
+        Blank Lines:   20
+        File Size:     3.46 KB
+
 
     ' Class E
     ' 

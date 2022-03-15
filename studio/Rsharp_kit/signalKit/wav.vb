@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::80bbacda3188e2e71dbacd6ce0b7af02, studio\Rsharp_kit\signalKit\wav.vb"
+﻿#Region "Microsoft.VisualBasic::80bbacda3188e2e71dbacd6ce0b7af02, R-sharp\studio\Rsharp_kit\signalKit\wav.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   83
+        Code Lines:    64
+        Comment Lines: 7
+        Blank Lines:   12
+        File Size:     3.49 KB
+
 
     ' Module wavToolkit
     ' 

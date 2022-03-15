@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ee95beb2491711199fe1818828a43100, studio\RData\Models\RObjectInfo.vb"
+﻿#Region "Microsoft.VisualBasic::ee95beb2491711199fe1818828a43100, R-sharp\studio\RData\Models\RObjectInfo.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   78
+        Code Lines:    62
+        Comment Lines: 3
+        Blank Lines:   13
+        File Size:     2.58 KB
+
 
     '     Class RObjectInfo
     ' 

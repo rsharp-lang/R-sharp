@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cdad396281c9283c4b0e30ee0374243c, studio\RData\ParserXDR.vb"
+﻿#Region "Microsoft.VisualBasic::cdad396281c9283c4b0e30ee0374243c, R-sharp\studio\RData\ParserXDR.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   41
+        Code Lines:    25
+        Comment Lines: 8
+        Blank Lines:   8
+        File Size:     1.20 KB
+
 
     ' Class ParserXDR
     ' 

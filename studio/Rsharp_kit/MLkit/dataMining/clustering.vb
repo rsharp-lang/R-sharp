@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::917be932abfc73c8f8e4c26229b23f5f, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
+﻿#Region "Microsoft.VisualBasic::917be932abfc73c8f8e4c26229b23f5f, R-sharp\studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   781
+        Code Lines:    530
+        Comment Lines: 165
+        Blank Lines:   86
+        File Size:     33.16 KB
+
 
     ' Module clustering
     ' 

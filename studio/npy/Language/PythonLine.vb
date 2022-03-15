@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9d990eacf30d22e43ba1c3e34f23439b, studio\npy\Language\PythonLine.vb"
+﻿#Region "Microsoft.VisualBasic::d01444ef2a92d3039732c3dfac268142, R-sharp\studio\npy\Language\PythonLine.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   28
+        Code Lines:    21
+        Comment Lines: 0
+        Blank Lines:   7
+        File Size:     770.00 B
+
 
     ' Class PythonLine
     ' 
@@ -70,4 +80,3 @@ Public Class PythonLine : Inherits TokenLine
     End Function
 
 End Class
-

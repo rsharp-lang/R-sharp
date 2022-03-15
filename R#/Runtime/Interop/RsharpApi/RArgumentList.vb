@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::139f2aabd6d722ddb8539e3c122624a3, R#\Runtime\Interop\RsharpApi\RArgumentList.vb"
+﻿#Region "Microsoft.VisualBasic::139f2aabd6d722ddb8539e3c122624a3, R-sharp\R#\Runtime\Interop\RsharpApi\RArgumentList.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   363
+        Code Lines:    253
+        Comment Lines: 65
+        Blank Lines:   45
+        File Size:     15.88 KB
+
 
     '     Class RArgumentList
     ' 

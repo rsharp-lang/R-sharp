@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bf3679d459fd1b046e239235c691bca8, R#\System\Components\ZipFolder.vb"
+﻿#Region "Microsoft.VisualBasic::bf3679d459fd1b046e239235c691bca8, R-sharp\R#\System\Components\ZipFolder.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   100
+        Code Lines:    58
+        Comment Lines: 25
+        Blank Lines:   17
+        File Size:     3.51 KB
+
 
     '     Class ZipFolder
     ' 

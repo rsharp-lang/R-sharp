@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0f8a9d3987ab94d81ccb8709476f7d80, R#\System\Package\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::0f8a9d3987ab94d81ccb8709476f7d80, R-sharp\R#\System\Package\zzz.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   56
+        Code Lines:    33
+        Comment Lines: 15
+        Blank Lines:   8
+        File Size:     1.97 KB
+
 
     '     Module zzz
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::af2c6655070dbfe238afd6fb92ff6e53, studio\Rsharp_kit\webKit\Html.vb"
+﻿#Region "Microsoft.VisualBasic::af2c6655070dbfe238afd6fb92ff6e53, R-sharp\studio\Rsharp_kit\webKit\Html.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   104
+        Code Lines:    73
+        Comment Lines: 15
+        Blank Lines:   16
+        File Size:     3.73 KB
+
 
     ' Module Html
     ' 

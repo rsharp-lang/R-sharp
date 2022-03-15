@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6a880bb86061c81dedd322735fb6c2a1, R#\Interpreter\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::6a880bb86061c81dedd322735fb6c2a1, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   34
+        Code Lines:    27
+        Comment Lines: 0
+        Blank Lines:   7
+        File Size:     1.50 KB
+
 
     '     Module FormulaExpressionSyntax
     ' 

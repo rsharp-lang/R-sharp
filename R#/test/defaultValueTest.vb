@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e8f98689b924093360ea2894db149d66, R#\Test\defaultValueTest.vb"
+﻿#Region "Microsoft.VisualBasic::e8f98689b924093360ea2894db149d66, R-sharp\R#\Test\defaultValueTest.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   44
+        Code Lines:    31
+        Comment Lines: 0
+        Blank Lines:   13
+        File Size:     1.22 KB
+
 
     ' Module defaultValueTest
     ' 

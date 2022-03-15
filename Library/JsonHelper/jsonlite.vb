@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bf7abfa831bd43091bfa01db6551844a, Library\JsonHelper\jsonlite.vb"
+﻿#Region "Microsoft.VisualBasic::c50dc25fdd4dabde9390602685a37c95, R-sharp\Library\JsonHelper\jsonlite.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   58
+        Code Lines:    48
+        Comment Lines: 0
+        Blank Lines:   10
+        File Size:     1.88 KB
+
 
     ' Module jsonlite
     ' 
@@ -97,4 +107,3 @@ Module jsonlite
         Return jsonStr
     End Function
 End Module
-

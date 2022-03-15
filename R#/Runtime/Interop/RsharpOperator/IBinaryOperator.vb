@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::58efe913d568c450f0b9b5c7e0453867, R#\Runtime\Interop\RsharpOperator\IBinaryOperator.vb"
+﻿#Region "Microsoft.VisualBasic::58efe913d568c450f0b9b5c7e0453867, R-sharp\R#\Runtime\Interop\RsharpOperator\IBinaryOperator.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   12
+        Code Lines:    3
+        Comment Lines: 7
+        Blank Lines:   2
+        File Size:     380.00 B
+
 
     '     Delegate Function
     ' 

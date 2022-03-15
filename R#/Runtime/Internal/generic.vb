@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2e8f2a6d6f46602c1c7b83a8f7d0901b, R#\Runtime\Internal\generic.vb"
+﻿#Region "Microsoft.VisualBasic::2e8f2a6d6f46602c1c7b83a8f7d0901b, R-sharp\R#\Runtime\Internal\generic.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   150
+        Code Lines:    101
+        Comment Lines: 26
+        Blank Lines:   23
+        File Size:     6.07 KB
+
 
     '     Delegate Function
     ' 

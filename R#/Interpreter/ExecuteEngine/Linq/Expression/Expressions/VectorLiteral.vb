@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a9910b13625b7787d1c9bdc1d1924059, R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\VectorLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::a9910b13625b7787d1c9bdc1d1924059, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\VectorLiteral.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   21
+        Code Lines:    16
+        Comment Lines: 0
+        Blank Lines:   5
+        File Size:     613.00 B
+
 
     '     Class VectorLiteral
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d360f51947d2a545eab9305197d61710, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb"
+﻿#Region "Microsoft.VisualBasic::d360f51947d2a545eab9305197d61710, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   237
+        Code Lines:    164
+        Comment Lines: 40
+        Blank Lines:   33
+        File Size:     9.50 KB
+
 
     '     Class DeclareLambdaFunction
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1670f7977d8b99f0e879d21e369dbba5, Library\R.graph\Models\V.vb"
+﻿#Region "Microsoft.VisualBasic::1670f7977d8b99f0e879d21e369dbba5, R-sharp\Library\R.graph\Models\V.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   207
+        Code Lines:    150
+        Comment Lines: 23
+        Blank Lines:   34
+        File Size:     7.30 KB
+
 
     ' Class V
     ' 

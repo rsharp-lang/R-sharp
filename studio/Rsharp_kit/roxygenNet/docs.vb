@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::36256052f83b283c062431cd7829f47a, studio\Rsharp_kit\roxygenNet\docs.vb"
+﻿#Region "Microsoft.VisualBasic::36256052f83b283c062431cd7829f47a, R-sharp\studio\Rsharp_kit\roxygenNet\docs.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   223
+        Code Lines:    174
+        Comment Lines: 13
+        Blank Lines:   36
+        File Size:     8.47 KB
+
 
     ' Module docs
     ' 

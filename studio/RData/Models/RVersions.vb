@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::59b37ed32670c37bd936f19dd3476204, studio\RData\Models\RVersions.vb"
+﻿#Region "Microsoft.VisualBasic::59b37ed32670c37bd936f19dd3476204, R-sharp\studio\RData\Models\RVersions.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   17
+        Code Lines:    10
+        Comment Lines: 3
+        Blank Lines:   4
+        File Size:     421.00 B
+
 
     '     Class RVersions
     ' 

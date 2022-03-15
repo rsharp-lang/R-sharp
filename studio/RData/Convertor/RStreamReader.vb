@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e370d28263fe2b4ca9c7e82971dfef1b, studio\RData\Convertor\RStreamReader.vb"
+﻿#Region "Microsoft.VisualBasic::e370d28263fe2b4ca9c7e82971dfef1b, R-sharp\studio\RData\Convertor\RStreamReader.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   74
+        Code Lines:    58
+        Comment Lines: 5
+        Blank Lines:   11
+        File Size:     2.96 KB
+
 
     '     Class RStreamReader
     ' 

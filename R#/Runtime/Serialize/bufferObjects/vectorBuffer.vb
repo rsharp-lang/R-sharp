@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::39ae1f046a1edd2f40619f2505154ea7, R#\Runtime\Serialize\bufferObjects\vectorBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::a9631708f352473c8d634a0c9d6881b9, R-sharp\R#\Runtime\Serialize\bufferObjects\vectorBuffer.vb"
 
     ' Author:
     ' 
@@ -31,12 +31,22 @@
 
     ' Summaries:
 
+
+     Code Statistics:
+
+        Total Lines:   156
+        Code Lines:    116
+        Comment Lines: 7
+        Blank Lines:   33
+        File Size:     5.60 KB
+
+
     '     Class vectorBuffer
     ' 
     '         Properties: code, names, type, underlyingType, unit
     '                     vector
     ' 
-    '         Function: (+2 Overloads) CreateBuffer, GetVector
+    '         Function: (+2 Overloads) CreateBuffer, getValue, getVector
     ' 
     '         Sub: Serialize
     ' 

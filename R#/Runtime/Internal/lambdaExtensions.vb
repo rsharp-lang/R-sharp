@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c551a531fe3cfcb46fa3b52179d1303e, R#\Runtime\Internal\lambdaExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::c551a531fe3cfcb46fa3b52179d1303e, R-sharp\R#\Runtime\Internal\lambdaExtensions.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   33
+        Code Lines:    22
+        Comment Lines: 6
+        Blank Lines:   5
+        File Size:     1.24 KB
+
 
     '     Module lambdaExtensions
     ' 

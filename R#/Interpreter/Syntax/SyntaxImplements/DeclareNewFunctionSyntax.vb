@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5906365909ad16adc28241d16e0a475a, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::5906365909ad16adc28241d16e0a475a, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   140
+        Code Lines:    106
+        Comment Lines: 16
+        Blank Lines:   18
+        File Size:     6.03 KB
+
 
     '     Module DeclareNewFunctionSyntax
     ' 

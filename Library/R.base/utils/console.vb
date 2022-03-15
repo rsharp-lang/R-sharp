@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2b248aea5b05b781891c514d1978a148, Library\R.base\utils\console.vb"
+﻿#Region "Microsoft.VisualBasic::2b248aea5b05b781891c514d1978a148, R-sharp\Library\R.base\utils\console.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   125
+        Code Lines:    81
+        Comment Lines: 25
+        Blank Lines:   19
+        File Size:     4.35 KB
+
 
     ' Module console
     ' 

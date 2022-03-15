@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a1a3cbada2760de1172c84e53d657340, R#\Runtime\Environment\SymbolLanguageProcessor.vb"
+﻿#Region "Microsoft.VisualBasic::a1a3cbada2760de1172c84e53d657340, R-sharp\R#\Runtime\Environment\SymbolLanguageProcessor.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   82
+        Code Lines:    65
+        Comment Lines: 0
+        Blank Lines:   17
+        File Size:     2.91 KB
+
 
     '     Class SymbolLanguageProcessor
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c95ce4d8bdb74b6f2e03e5072b9fc524, studio\RData\Models\RExtraInfo.vb"
+﻿#Region "Microsoft.VisualBasic::c95ce4d8bdb74b6f2e03e5072b9fc524, R-sharp\studio\RData\Models\RExtraInfo.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   16
+        Code Lines:    8
+        Comment Lines: 5
+        Blank Lines:   3
+        File Size:     406.00 B
+
 
     '     Class RExtraInfo
     ' 

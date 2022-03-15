@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::77df31e27a3bbee384d6d665db44f37c, R#\System\Document\Printer\HtmlMarkdownPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::77df31e27a3bbee384d6d665db44f37c, R-sharp\R#\System\Document\Printer\HtmlMarkdownPrinter.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   77
+        Code Lines:    59
+        Comment Lines: 0
+        Blank Lines:   18
+        File Size:     2.98 KB
+
 
     '     Module HtmlMarkdownPrinter
     ' 

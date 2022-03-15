@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3da1bd8890e7b162e2621f858f4b50c0, R#\Runtime\Internal\internalInvokes\set.vb"
+﻿#Region "Microsoft.VisualBasic::3da1bd8890e7b162e2621f858f4b50c0, R-sharp\R#\Runtime\Internal\internalInvokes\set.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   326
+        Code Lines:    176
+        Comment Lines: 116
+        Blank Lines:   34
+        File Size:     15.29 KB
+
 
     '     Module [set]
     ' 

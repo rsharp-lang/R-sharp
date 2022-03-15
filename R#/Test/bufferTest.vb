@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::73c2b3ea19f63b5900d5561a46bdede1, R#\Test\bufferTest.vb"
+﻿#Region "Microsoft.VisualBasic::73c2b3ea19f63b5900d5561a46bdede1, R-sharp\R#\Test\bufferTest.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   40
+        Code Lines:    25
+        Comment Lines: 0
+        Blank Lines:   15
+        File Size:     1.15 KB
+
 
     ' Module bufferTest
     ' 

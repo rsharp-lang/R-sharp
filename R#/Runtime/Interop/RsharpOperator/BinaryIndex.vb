@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::be7e9ba102a796872243d5ca94819174, R#\Runtime\Interop\RsharpOperator\BinaryIndex.vb"
+﻿#Region "Microsoft.VisualBasic::be7e9ba102a796872243d5ca94819174, R-sharp\R#\Runtime\Interop\RsharpOperator\BinaryIndex.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   185
+        Code Lines:    128
+        Comment Lines: 31
+        Blank Lines:   26
+        File Size:     7.34 KB
+
 
     '     Class BinaryIndex
     ' 

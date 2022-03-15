@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b788b71b2303c3e89da40fbf4508d0a4, R#\Interpreter\ExecuteEngine\Linq\Syntax\SyntaxParserResult.vb"
+﻿#Region "Microsoft.VisualBasic::b788b71b2303c3e89da40fbf4508d0a4, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Syntax\SyntaxParserResult.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   44
+        Code Lines:    35
+        Comment Lines: 0
+        Blank Lines:   9
+        File Size:     1.25 KB
+
 
     '     Class SyntaxParserResult
     ' 

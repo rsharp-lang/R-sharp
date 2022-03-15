@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e3bb777d742edf089ea983da02d169c2, R#\Runtime\Interop\RInteropAttributes\RPlotStyleCSSAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::e3bb777d742edf089ea983da02d169c2, R-sharp\R#\Runtime\Interop\RInteropAttributes\RPlotStyleCSSAttribute.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   27
+        Code Lines:    12
+        Comment Lines: 12
+        Blank Lines:   3
+        File Size:     997.00 B
+
 
     '     Class RPlotStyleCSSAttribute
     ' 

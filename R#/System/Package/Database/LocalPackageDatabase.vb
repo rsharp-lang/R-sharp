@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::26ab89b5eb6baea4dc70db97ff116135, R#\System\Package\Database\LocalPackageDatabase.vb"
+﻿#Region "Microsoft.VisualBasic::26ab89b5eb6baea4dc70db97ff116135, R-sharp\R#\System\Package\Database\LocalPackageDatabase.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   125
+        Code Lines:    88
+        Comment Lines: 21
+        Blank Lines:   16
+        File Size:     4.82 KB
+
 
     '     Class LocalPackageDatabase
     ' 

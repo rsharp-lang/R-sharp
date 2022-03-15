@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::874732cd62355513930b3ef6e3e90cc7, R#\System\Package\PackageFile\DESCRIPTION.vb"
+﻿#Region "Microsoft.VisualBasic::874732cd62355513930b3ef6e3e90cc7, R-sharp\R#\System\Package\PackageFile\DESCRIPTION.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   91
+        Code Lines:    72
+        Comment Lines: 8
+        Blank Lines:   11
+        File Size:     3.49 KB
+
 
     '     Class DESCRIPTION
     ' 

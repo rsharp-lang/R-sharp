@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7b2700d1642fd5d30f105c0b9df65c16, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexers.vb"
+﻿#Region "Microsoft.VisualBasic::7b2700d1642fd5d30f105c0b9df65c16, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexers.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   29
+        Code Lines:    9
+        Comment Lines: 19
+        Blank Lines:   1
+        File Size:     681.00 B
+
 
     '     Enum SymbolIndexers
     ' 

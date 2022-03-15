@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a9040d885a2c1f12ee6d09ec1c690228, studio\RData\Models\LinkedList\RList.vb"
+﻿#Region "Microsoft.VisualBasic::a9040d885a2c1f12ee6d09ec1c690228, R-sharp\studio\RData\Models\LinkedList\RList.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   80
+        Code Lines:    55
+        Comment Lines: 15
+        Blank Lines:   10
+        File Size:     2.58 KB
+
 
     '     Class RList
     ' 

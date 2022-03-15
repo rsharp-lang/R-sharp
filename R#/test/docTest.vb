@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::92079b242cdf57892a1b1da582aee259, R#\Test\docTest.vb"
+﻿#Region "Microsoft.VisualBasic::92079b242cdf57892a1b1da582aee259, R-sharp\R#\Test\docTest.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   22
+        Code Lines:    15
+        Comment Lines: 2
+        Blank Lines:   5
+        File Size:     531.00 B
+
 
     ' Module docTest
     ' 

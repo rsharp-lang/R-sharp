@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::96f76407da4dd036acb9ca70f46471ee, studio\nts\TypeScriptLoader.vb"
+﻿#Region "Microsoft.VisualBasic::587472520bc63dd17c561d406449a96b, R-sharp\studio\nts\TypeScriptLoader.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   22
+        Code Lines:    16
+        Comment Lines: 0
+        Blank Lines:   6
+        File Size:     650.00 B
+
 
     ' Class TypeScriptLoader
     ' 
@@ -63,4 +73,3 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
 
     End Function
 End Class
-

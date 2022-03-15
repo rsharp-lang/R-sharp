@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5f5f429e8e3eda1aeda591a98bbe7263, Library\R.base\base\netCDFutils.vb"
+﻿#Region "Microsoft.VisualBasic::5f5f429e8e3eda1aeda591a98bbe7263, R-sharp\Library\R.base\base\netCDFutils.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   241
+        Code Lines:    179
+        Comment Lines: 28
+        Blank Lines:   34
+        File Size:     9.63 KB
+
 
     ' Module netCDFutils
     ' 

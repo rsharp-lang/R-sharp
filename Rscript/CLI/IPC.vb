@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::46fc716e4c483060f0ea29d1a8e750ce, Rscript\CLI\IPC.vb"
+﻿#Region "Microsoft.VisualBasic::3aaadd545063539b38bd39ecd1c478f3, R-sharp\Rscript\CLI\IPC.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   234
+        Code Lines:    197
+        Comment Lines: 7
+        Blank Lines:   30
+        File Size:     10.16 KB
+
 
     ' Module CLI
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a8c0fc9c850ae61d613f8c8c2d5478da, studio\RData\Enums\FileTypes.vb"
+﻿#Region "Microsoft.VisualBasic::a8c0fc9c850ae61d613f8c8c2d5478da, R-sharp\studio\RData\Enums\FileTypes.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   32
+        Code Lines:    11
+        Comment Lines: 18
+        Blank Lines:   3
+        File Size:     849.00 B
+
 
     '     Enum FileTypes
     ' 

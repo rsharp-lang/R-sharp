@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ea46a67acc133f59a6243008e933ee61, Library\R.graphics\ColorBrewer.vb"
+﻿#Region "Microsoft.VisualBasic::ea46a67acc133f59a6243008e933ee61, R-sharp\Library\R.graphics\ColorBrewer.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   213
+        Code Lines:    128
+        Comment Lines: 44
+        Blank Lines:   41
+        File Size:     7.19 KB
+
 
     ' Module ColorBrewerSystem
     ' 

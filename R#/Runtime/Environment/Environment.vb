@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6e1e57973a776ffee381723894bd921f, R#\Runtime\Environment\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::81ffab154e34c8a075010761e77c9504, R-sharp\R#\Runtime\Environment\Environment.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   612
+        Code Lines:    367
+        Comment Lines: 159
+        Blank Lines:   86
+        File Size:     23.77 KB
+
 
     '     Class Environment
     ' 

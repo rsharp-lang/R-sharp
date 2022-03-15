@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8bdf6bab9130abed11583db7f700513f, R#\Runtime\Internal\printer\htmlPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::8bdf6bab9130abed11583db7f700513f, R-sharp\R#\Runtime\Internal\printer\htmlPrinter.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   33
+        Code Lines:    21
+        Comment Lines: 5
+        Blank Lines:   7
+        File Size:     1.15 KB
+
 
     '     Module htmlPrinter
     ' 

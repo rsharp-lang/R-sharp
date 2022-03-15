@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0e127738a8575e5c37c3eb5d12c50830, studio\npy\Language\Implements\FunctionInvokeSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::0e127738a8575e5c37c3eb5d12c50830, R-sharp\studio\npy\Language\Implements\FunctionInvokeSyntax.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   6
+        Code Lines:    4
+        Comment Lines: 0
+        Blank Lines:   2
+        File Size:     101.00 B
+
 
     '     Module FunctionInvokeSyntax
     ' 

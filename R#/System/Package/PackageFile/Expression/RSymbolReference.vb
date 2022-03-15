@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bb2e1716bfd6803397c939d7a6ebe458, R#\System\Package\PackageFile\Expression\RSymbolReference.vb"
+﻿#Region "Microsoft.VisualBasic::bb2e1716bfd6803397c939d7a6ebe458, R-sharp\R#\System\Package\PackageFile\Expression\RSymbolReference.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   86
+        Code Lines:    71
+        Comment Lines: 0
+        Blank Lines:   15
+        File Size:     3.76 KB
+
 
     '     Class RSymbolReference
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::00118d078c2697c3155f4d05fddcda68, R#\Language\TokenType.vb"
+﻿#Region "Microsoft.VisualBasic::00118d078c2697c3155f4d05fddcda68, R-sharp\R#\Language\TokenType.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   70
+        Code Lines:    26
+        Comment Lines: 36
+        Blank Lines:   8
+        File Size:     1.61 KB
+
 
     '     Enum TokenType
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::69e8634518000b6ecd8fb654397ca872, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\HostSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::69e8634518000b6ecd8fb654397ca872, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\HostSymbol.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   29
+        Code Lines:    19
+        Comment Lines: 5
+        Blank Lines:   5
+        File Size:     865.00 B
+
 
     '     Class HostSymbol
     ' 

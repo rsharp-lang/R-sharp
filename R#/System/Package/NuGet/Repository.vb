@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6131d1eadd3ed15b0e729e403cd685eb, R#\System\Package\NuGet\Repository.vb"
+﻿#Region "Microsoft.VisualBasic::6131d1eadd3ed15b0e729e403cd685eb, R-sharp\R#\System\Package\NuGet\Repository.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   50
+        Code Lines:    21
+        Comment Lines: 20
+        Blank Lines:   9
+        File Size:     1.92 KB
+
 
     '     Class Repository
     ' 

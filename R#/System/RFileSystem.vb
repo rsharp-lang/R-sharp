@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7762080ad9092aac799a3eda53d79d98, R#\System\RFileSystem.vb"
+﻿#Region "Microsoft.VisualBasic::7762080ad9092aac799a3eda53d79d98, R-sharp\R#\System\RFileSystem.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   27
+        Code Lines:    20
+        Comment Lines: 0
+        Blank Lines:   7
+        File Size:     893.00 B
+
 
     '     Class RFileSystem
     ' 

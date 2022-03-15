@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8a8375dcb94b1c66afd17b3f521bfe8c, R#\Runtime\Interop\RsharpOperator\BinaryOperatorEngine.vb"
+﻿#Region "Microsoft.VisualBasic::8a8375dcb94b1c66afd17b3f521bfe8c, R-sharp\R#\Runtime\Interop\RsharpOperator\BinaryOperatorEngine.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   175
+        Code Lines:    130
+        Comment Lines: 22
+        Blank Lines:   23
+        File Size:     14.22 KB
+
 
     '     Module BinaryOperatorEngine
     ' 

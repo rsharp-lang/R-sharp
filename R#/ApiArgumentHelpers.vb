@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8aaacdfc81100da63617b5117b4900f7, R#\ApiArgumentHelpers.vb"
+﻿#Region "Microsoft.VisualBasic::8f2399d320c5ca60c40e14d106edf646, R-sharp\R#\ApiArgumentHelpers.vb"
 
     ' Author:
     ' 
@@ -31,9 +31,19 @@
 
     ' Summaries:
 
+
+     Code Statistics:
+
+        Total Lines:   170
+        Code Lines:    143
+        Comment Lines: 6
+        Blank Lines:   21
+        File Size:     6.63 KB
+
+
     ' Module ApiArgumentHelpers
     ' 
-    '     Function: GetDoubleRange, GetFileStream, GetNamedValueTuple, rangeFromVector
+    '     Function: FileStreamWriter, GetDoubleRange, GetFileStream, GetNamedValueTuple, rangeFromVector
     ' 
     ' /********************************************************************************/
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7260cf33ba7998b60f94ae95db1a85f3, Library\R.base\save\RData.vb"
+﻿#Region "Microsoft.VisualBasic::7260cf33ba7998b60f94ae95db1a85f3, R-sharp\Library\R.base\save\RData.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   10
+        Code Lines:    4
+        Comment Lines: 6
+        Blank Lines:   0
+        File Size:     185.00 B
+
 
     ' Enum RData
     ' 

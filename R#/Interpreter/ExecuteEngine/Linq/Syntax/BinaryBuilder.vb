@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::32df4ef4b1d525bc8fab82d17019e3ef, R#\Interpreter\ExecuteEngine\Linq\Syntax\BinaryBuilder.vb"
+﻿#Region "Microsoft.VisualBasic::32df4ef4b1d525bc8fab82d17019e3ef, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Syntax\BinaryBuilder.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   118
+        Code Lines:    103
+        Comment Lines: 0
+        Blank Lines:   15
+        File Size:     4.94 KB
+
 
     '     Module BinaryBuilder
     ' 

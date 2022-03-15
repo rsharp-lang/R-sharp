@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::96c98b48693502b594081d5b9ed5094c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IIfExpression.vb"
+﻿#Region "Microsoft.VisualBasic::96c98b48693502b594081d5b9ed5094c, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IIfExpression.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   56
+        Code Lines:    43
+        Comment Lines: 3
+        Blank Lines:   10
+        File Size:     1.96 KB
+
 
     '     Class IIfExpression
     ' 

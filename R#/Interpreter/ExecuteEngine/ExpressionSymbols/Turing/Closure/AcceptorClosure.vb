@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b1e655ebf182a8e883f82d968ce3fe6b, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\AcceptorClosure.vb"
+﻿#Region "Microsoft.VisualBasic::f09ab4e83f01a0bed6e60d4018bb745d, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\AcceptorClosure.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   48
+        Code Lines:    40
+        Comment Lines: 0
+        Blank Lines:   8
+        File Size:     1.83 KB
+
 
     '     Class AcceptorClosure
     ' 

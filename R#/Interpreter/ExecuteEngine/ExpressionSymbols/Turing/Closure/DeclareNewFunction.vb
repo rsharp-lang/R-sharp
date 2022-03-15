@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9bfe95a9cab65796834b47a662ad3c1c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
+﻿#Region "Microsoft.VisualBasic::9bfe95a9cab65796834b47a662ad3c1c, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   299
+        Code Lines:    197
+        Comment Lines: 58
+        Blank Lines:   44
+        File Size:     12.46 KB
+
 
     '     Class DeclareNewFunction
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6f2bbeab2a96f368b48d12da78f4c265, R#\Runtime\Internal\objects\dataset\complex.vb"
+﻿#Region "Microsoft.VisualBasic::6f2bbeab2a96f368b48d12da78f4c265, R-sharp\R#\Runtime\Internal\objects\dataset\complex.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   12
+        Code Lines:    6
+        Comment Lines: 3
+        Blank Lines:   3
+        File Size:     231.00 B
+
 
     '     Class complex
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::63492ebab5bd400e2b97e06e2e7ae4b8, R#\Runtime\Internal\printer\tablePrinter.vb"
+﻿#Region "Microsoft.VisualBasic::63492ebab5bd400e2b97e06e2e7ae4b8, R-sharp\R#\Runtime\Internal\printer\tablePrinter.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   119
+        Code Lines:    99
+        Comment Lines: 1
+        Blank Lines:   19
+        File Size:     5.38 KB
+
 
     '     Module tablePrinter
     ' 

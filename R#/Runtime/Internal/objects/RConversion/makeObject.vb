@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2b7ef65303067392a281ef0785e9c35b, R#\Runtime\Internal\objects\RConversion\makeObject.vb"
+﻿#Region "Microsoft.VisualBasic::2b7ef65303067392a281ef0785e9c35b, R-sharp\R#\Runtime\Internal\objects\RConversion\makeObject.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   43
+        Code Lines:    34
+        Comment Lines: 1
+        Blank Lines:   8
+        File Size:     1.61 KB
+
 
     '     Module makeObject
     ' 

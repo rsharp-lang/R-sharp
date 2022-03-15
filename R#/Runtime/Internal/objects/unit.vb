@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ab25c42a9a5042dbfc8ae58032519cd9, R#\Runtime\Internal\objects\unit.vb"
+﻿#Region "Microsoft.VisualBasic::ab25c42a9a5042dbfc8ae58032519cd9, R-sharp\R#\Runtime\Internal\objects\unit.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   18
+        Code Lines:    13
+        Comment Lines: 0
+        Blank Lines:   5
+        File Size:     353.00 B
+
 
     '     Class unit
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5d8652976d32bce574f696a960034b23, R#\Interpreter\ExecuteEngine\ExecuteBreaks.vb"
+﻿#Region "Microsoft.VisualBasic::5d8652976d32bce574f696a960034b23, R-sharp\R#\Interpreter\ExecuteEngine\ExecuteBreaks.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   20
+        Code Lines:    7
+        Comment Lines: 12
+        Blank Lines:   1
+        File Size:     536.00 B
+
 
     '     Enum ExecuteBreaks
     ' 

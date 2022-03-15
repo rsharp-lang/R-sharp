@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3ca9113e326da47ac0ff24d0326b9325, studio\Rsharp_kit\MLkit\validation.vb"
+﻿#Region "Microsoft.VisualBasic::3ca9113e326da47ac0ff24d0326b9325, R-sharp\studio\Rsharp_kit\MLkit\validation.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   138
+        Code Lines:    123
+        Comment Lines: 0
+        Blank Lines:   15
+        File Size:     6.73 KB
+
 
     ' Module validation
     ' 

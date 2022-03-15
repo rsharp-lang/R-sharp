@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9367845717c5bf329232b3f147f8f914, studio\Rsharp_kit\MLkit\CNN.vb"
+﻿#Region "Microsoft.VisualBasic::a9bff2c6c1fbb09fb7035b756237c991, R-sharp\studio\Rsharp_kit\MLkit\CNN.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   71
+        Code Lines:    40
+        Comment Lines: 22
+        Blank Lines:   9
+        File Size:     2.44 KB
+
 
     ' Module CNN
     ' 
@@ -110,4 +120,3 @@ Module CNN
         Return result
     End Function
 End Module
-

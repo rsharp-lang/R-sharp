@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0235b13fa84acafe93b558832d2ac0a3, R#\Runtime\Interop\RReturn.vb"
+﻿#Region "Microsoft.VisualBasic::0235b13fa84acafe93b558832d2ac0a3, R-sharp\R#\Runtime\Interop\RReturn.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   60
+        Code Lines:    42
+        Comment Lines: 7
+        Blank Lines:   11
+        File Size:     1.94 KB
+
 
     '     Class RReturn
     ' 

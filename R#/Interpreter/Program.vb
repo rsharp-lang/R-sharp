@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::534584a612144817add76499776f711b, R#\Interpreter\Program.vb"
+﻿#Region "Microsoft.VisualBasic::534584a612144817add76499776f711b, R-sharp\R#\Interpreter\Program.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   131
+        Code Lines:    98
+        Comment Lines: 11
+        Blank Lines:   22
+        File Size:     5.11 KB
+
 
     '     Class Program
     ' 

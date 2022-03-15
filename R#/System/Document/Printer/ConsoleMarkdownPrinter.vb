@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::948a74fe6e6895acb31bd56262260000, R#\System\Document\Printer\ConsoleMarkdownPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::948a74fe6e6895acb31bd56262260000, R-sharp\R#\System\Document\Printer\ConsoleMarkdownPrinter.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   116
+        Code Lines:    89
+        Comment Lines: 0
+        Blank Lines:   27
+        File Size:     4.17 KB
+
 
     '     Module ConsoleMarkdownPrinter
     ' 

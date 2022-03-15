@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aba4aff1b2f87b4868d5bc5ee183c2a8, studio\IronCodeDom\BlockTags\UsingTag.vb"
+﻿#Region "Microsoft.VisualBasic::edb06eaf583e1d7cf7d005d8269811de, R-sharp\studio\IronCodeDom\BlockTags\UsingTag.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+     Code Statistics:
+
+        Total Lines:   18
+        Code Lines:    13
+        Comment Lines: 0
+        Blank Lines:   5
+        File Size:     650.00 B
+
+
     ' Class UsingTag
     ' 
     '     Properties: auto, sourceMap, symbol
@@ -59,4 +69,3 @@ Public Class UsingTag : Inherits PythonCodeDOM
     End Function
 
 End Class
-

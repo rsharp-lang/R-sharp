@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b64c7c3a14741fc33fbf8711daf347bf, R#\System\Package\PackageFile\Expression\RElse.vb"
+﻿#Region "Microsoft.VisualBasic::b64c7c3a14741fc33fbf8711daf347bf, R-sharp\R#\System\Package\PackageFile\Expression\RElse.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   42
+        Code Lines:    33
+        Comment Lines: 0
+        Blank Lines:   9
+        File Size:     1.66 KB
+
 
     '     Class RElse
     ' 

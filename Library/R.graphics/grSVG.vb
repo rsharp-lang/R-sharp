@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ce8f1e71ef68375de4304b5e94416d2f, Library\R.graphics\grSVG.vb"
+﻿#Region "Microsoft.VisualBasic::ce8f1e71ef68375de4304b5e94416d2f, R-sharp\Library\R.graphics\grSVG.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   47
+        Code Lines:    33
+        Comment Lines: 7
+        Blank Lines:   7
+        File Size:     1.83 KB
+
 
     ' Module grSVG
     ' 

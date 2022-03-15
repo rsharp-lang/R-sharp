@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::df4f74de5a43f32c7986c7d413d7391b, R#\Interpreter\Syntax\SyntaxImplements\LinqExpressionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::df4f74de5a43f32c7986c7d413d7391b, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\LinqExpressionSyntax.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   41
+        Code Lines:    30
+        Comment Lines: 6
+        Blank Lines:   5
+        File Size:     1.65 KB
+
 
     '     Module LinqExpressionSyntax
     ' 

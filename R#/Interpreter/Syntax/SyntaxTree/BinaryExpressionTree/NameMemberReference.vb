@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e2104f389899b671acb69f096ddc4106, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NameMemberReference.vb"
+﻿#Region "Microsoft.VisualBasic::e2104f389899b671acb69f096ddc4106, R-sharp\R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NameMemberReference.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   102
+        Code Lines:    78
+        Comment Lines: 9
+        Blank Lines:   15
+        File Size:     4.38 KB
+
 
     '     Class NameMemberReferenceProcessor
     ' 

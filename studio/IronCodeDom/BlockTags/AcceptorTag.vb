@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::323a7c71ade0b294e118e061b9eb1c18, studio\IronCodeDom\BlockTags\AcceptorTag.vb"
+﻿#Region "Microsoft.VisualBasic::be3a71f44d4cfc1d98be6d01d1069534, R-sharp\studio\IronCodeDom\BlockTags\AcceptorTag.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+     Code Statistics:
+
+        Total Lines:   14
+        Code Lines:    10
+        Comment Lines: 0
+        Blank Lines:   4
+        File Size:     502.00 B
+
+
     ' Class AcceptorTag
     ' 
     '     Properties: target
@@ -55,4 +65,3 @@ Public Class AcceptorTag : Inherits PythonCodeDOM
     End Function
 
 End Class
-

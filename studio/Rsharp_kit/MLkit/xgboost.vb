@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7e3b50c56908fd5e28f76a6db6685887, studio\Rsharp_kit\MLkit\xgboost.vb"
+﻿#Region "Microsoft.VisualBasic::dbf5cad8c30cb1fca6427395c26f8d63, R-sharp\studio\Rsharp_kit\MLkit\xgboost.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   137
+        Code Lines:    95
+        Comment Lines: 27
+        Blank Lines:   15
+        File Size:     5.65 KB
+
 
     ' Module xgboost
     ' 

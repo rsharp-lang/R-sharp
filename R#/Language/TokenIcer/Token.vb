@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2574cf7e175ca0df7d572cb45a94f780, R#\Language\TokenIcer\Token.vb"
+﻿#Region "Microsoft.VisualBasic::2574cf7e175ca0df7d572cb45a94f780, R-sharp\R#\Language\TokenIcer\Token.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   65
+        Code Lines:    44
+        Comment Lines: 11
+        Blank Lines:   10
+        File Size:     2.20 KB
+
 
     '     Class Token
     ' 

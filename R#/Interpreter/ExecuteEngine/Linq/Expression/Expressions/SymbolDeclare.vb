@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2bff541a1e19f02a99dade06504d5ebd, R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\SymbolDeclare.vb"
+﻿#Region "Microsoft.VisualBasic::2bff541a1e19f02a99dade06504d5ebd, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\SymbolDeclare.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   94
+        Code Lines:    69
+        Comment Lines: 12
+        Blank Lines:   13
+        File Size:     3.72 KB
+
 
     '     Class SymbolDeclare
     ' 

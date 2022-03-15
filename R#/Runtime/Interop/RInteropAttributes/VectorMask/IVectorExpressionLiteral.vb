@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c954b07afdbbbc9fabd5c607c87752bc, R#\Runtime\Interop\RInteropAttributes\VectorMask\IVectorExpressionLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::c954b07afdbbbc9fabd5c607c87752bc, R-sharp\R#\Runtime\Interop\RInteropAttributes\VectorMask\IVectorExpressionLiteral.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   8
+        Code Lines:    5
+        Comment Lines: 0
+        Blank Lines:   3
+        File Size:     177.00 B
+
 
     '     Interface IVectorExpressionLiteral
     ' 

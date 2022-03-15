@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::edeeb96bdd471bfafa826b0b80ae7bdd, R#\System\Document\AnnotationDocs.vb"
+﻿#Region "Microsoft.VisualBasic::edeeb96bdd471bfafa826b0b80ae7bdd, R-sharp\R#\System\Document\AnnotationDocs.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   93
+        Code Lines:    57
+        Comment Lines: 21
+        Blank Lines:   15
+        File Size:     3.46 KB
+
 
     '     Class AnnotationDocs
     ' 

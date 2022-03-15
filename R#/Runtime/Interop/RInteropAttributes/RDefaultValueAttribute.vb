@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3fd5164868c1c23aed8781ddfd4f0f91, R#\Runtime\Interop\RInteropAttributes\RDefaultValueAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::3fd5164868c1c23aed8781ddfd4f0f91, R-sharp\R#\Runtime\Interop\RInteropAttributes\RDefaultValueAttribute.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   43
+        Code Lines:    26
+        Comment Lines: 9
+        Blank Lines:   8
+        File Size:     1.64 KB
+
 
     '     Class RDefaultValueAttribute
     ' 

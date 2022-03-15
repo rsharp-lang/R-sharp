@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::772d58ed26b9256b98aa4ceb92725874, R#\Test\operatorTest.vb"
+﻿#Region "Microsoft.VisualBasic::772d58ed26b9256b98aa4ceb92725874, R-sharp\R#\Test\operatorTest.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   25
+        Code Lines:    17
+        Comment Lines: 0
+        Blank Lines:   8
+        File Size:     594.00 B
+
 
     ' Module operatorTest
     ' 

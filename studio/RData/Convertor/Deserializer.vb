@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f6f938eb5efe2f5d9b0c3d5c3bf040c1, studio\RData\Convertor\Deserializer.vb"
+﻿#Region "Microsoft.VisualBasic::f6f938eb5efe2f5d9b0c3d5c3bf040c1, R-sharp\studio\RData\Convertor\Deserializer.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   14
+        Code Lines:    9
+        Comment Lines: 0
+        Blank Lines:   5
+        File Size:     297.00 B
+
 
     '     Module Deserializer
     ' 

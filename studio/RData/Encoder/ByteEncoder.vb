@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8cf359870f3e4f9cdcb4836e3f43b017, studio\RData\Encoder\ByteEncoder.vb"
+﻿#Region "Microsoft.VisualBasic::388b1cf86832c2143e7d9147a984bfae, R-sharp\studio\RData\Encoder\ByteEncoder.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   73
+        Code Lines:    53
+        Comment Lines: 5
+        Blank Lines:   15
+        File Size:     2.24 KB
+
 
     ' Module ByteEncoder
     ' 
@@ -114,4 +124,3 @@ Module ByteEncoder
         Call Xdr.EncodeInt32(If(bool = True, 1, 0), file)
     End Sub
 End Module
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9e54747f003f7fa702dd9e441b7903e1, R#\System\Package\PackageFile\Expression\RSymbolAssign.vb"
+﻿#Region "Microsoft.VisualBasic::442009ebe4b0b47e4ea32f371f73fc8c, R-sharp\R#\System\Package\PackageFile\Expression\RSymbolAssign.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   99
+        Code Lines:    77
+        Comment Lines: 2
+        Blank Lines:   20
+        File Size:     4.06 KB
+
 
     '     Class RSymbolAssign
     ' 

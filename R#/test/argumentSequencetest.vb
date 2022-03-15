@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5b3870cf17d49df2992308aa743c9f9d, R#\Test\argumentSequencetest.vb"
+﻿#Region "Microsoft.VisualBasic::5b3870cf17d49df2992308aa743c9f9d, R-sharp\R#\Test\argumentSequencetest.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   24
+        Code Lines:    17
+        Comment Lines: 1
+        Blank Lines:   6
+        File Size:     673.00 B
+
 
     ' Module argumentSequencetest
     ' 

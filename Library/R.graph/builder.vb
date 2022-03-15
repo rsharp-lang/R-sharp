@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b95c1b49b78a1230917d0fc25ef3fd0b, Library\R.graph\builder.vb"
+﻿#Region "Microsoft.VisualBasic::b95c1b49b78a1230917d0fc25ef3fd0b, R-sharp\Library\R.graph\builder.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   29
+        Code Lines:    18
+        Comment Lines: 8
+        Blank Lines:   3
+        File Size:     1.19 KB
+
 
     ' Module builder
     ' 

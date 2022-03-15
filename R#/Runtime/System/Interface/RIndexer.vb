@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4ab46eb7fa900e8c89b6ada7fe749567, R#\Runtime\System\Interface\RIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::4ab46eb7fa900e8c89b6ada7fe749567, R-sharp\R#\Runtime\System\Interface\RIndexer.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   10
+        Code Lines:    6
+        Comment Lines: 0
+        Blank Lines:   4
+        File Size:     244.00 B
+
 
     '     Interface RIndexer
     ' 

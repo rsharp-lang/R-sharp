@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::de28ab954973a2255562ce0d03e7d4ba, studio\Rsharp_kit\devkit\documents\RFileHeader.vb"
+﻿#Region "Microsoft.VisualBasic::9e5de220b6c646a782d98f3e9d79990c, R-sharp\studio\Rsharp_kit\devkit\documents\RFileHeader.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   43
+        Code Lines:    31
+        Comment Lines: 5
+        Blank Lines:   7
+        File Size:     1.52 KB
+
 
     ' Module RFileHeader
     ' 
@@ -82,4 +92,3 @@ Module RFileHeader
         Return header.ToString
     End Function
 End Module
-

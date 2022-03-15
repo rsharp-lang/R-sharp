@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f4af0acf1a06c220e65a34c5a2279a8f, R#\Interpreter\Syntax\SyntaxError.vb"
+﻿#Region "Microsoft.VisualBasic::329551963b7b9d9c7c97833fe81bd842, R-sharp\R#\Interpreter\Syntax\SyntaxError.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+     Code Statistics:
+
+        Total Lines:   62
+        Code Lines:    50
+        Comment Lines: 0
+        Blank Lines:   12
+        File Size:     2.59 KB
+
+
     '     Class SyntaxError
     ' 
     '         Properties: [to], downstream, errorBlock, exception, file
@@ -42,7 +52,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Scripting.TokenIcer

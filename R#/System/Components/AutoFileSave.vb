@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b178d1a01404fc975279cae995d5e393, R#\System\Components\AutoFileSave.vb"
+﻿#Region "Microsoft.VisualBasic::b178d1a01404fc975279cae995d5e393, R-sharp\R#\System\Components\AutoFileSave.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   55
+        Code Lines:    30
+        Comment Lines: 14
+        Blank Lines:   11
+        File Size:     2.09 KB
+
 
     '     Class AutoFileSave
     ' 

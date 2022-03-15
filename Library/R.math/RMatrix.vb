@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::60aa5f3023c6bff7277f619f09d94777, Library\R.math\RMatrix.vb"
+﻿#Region "Microsoft.VisualBasic::2dca05321d45fc33e874747c7a76e99d, R-sharp\Library\R.math\RMatrix.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   45
+        Code Lines:    28
+        Comment Lines: 10
+        Blank Lines:   7
+        File Size:     1.39 KB
+
 
     ' Module RMatrix
     ' 
@@ -84,4 +94,3 @@ Module RMatrix
         End If
     End Function
 End Module
-

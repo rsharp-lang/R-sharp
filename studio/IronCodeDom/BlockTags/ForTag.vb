@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7361b1eac3689e12778a0bd07d82f85e, studio\IronCodeDom\BlockTags\ForTag.vb"
+﻿#Region "Microsoft.VisualBasic::7361b1eac3689e12778a0bd07d82f85e, R-sharp\studio\IronCodeDom\BlockTags\ForTag.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   29
+        Code Lines:    23
+        Comment Lines: 0
+        Blank Lines:   6
+        File Size:     1.27 KB
+
 
     ' Class ForTag
     ' 

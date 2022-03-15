@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::61f23d031dbc765c36a57d86df0fbf8e, snowFall\Protocol\workerList.vb"
+﻿#Region "Microsoft.VisualBasic::61f23d031dbc765c36a57d86df0fbf8e, R-sharp\snowFall\Protocol\workerList.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   7
+        Code Lines:    5
+        Comment Lines: 0
+        Blank Lines:   2
+        File Size:     150.00 B
+
 
     ' Class workerList
     ' 

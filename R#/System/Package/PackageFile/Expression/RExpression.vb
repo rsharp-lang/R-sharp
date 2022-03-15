@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f1ebc617f330dd167762cfd32c50911a, R#\System\Package\PackageFile\Expression\RExpression.vb"
+﻿#Region "Microsoft.VisualBasic::f1ebc617f330dd167762cfd32c50911a, R-sharp\R#\System\Package\PackageFile\Expression\RExpression.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   48
+        Code Lines:    25
+        Comment Lines: 15
+        Blank Lines:   8
+        File Size:     1.75 KB
+
 
     '     Class RExpression
     ' 

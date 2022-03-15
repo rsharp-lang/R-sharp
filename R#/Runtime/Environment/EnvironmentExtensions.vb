@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::74937f4da12a3001037688f37638a5ee, R#\Runtime\Environment\EnvironmentExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::74937f4da12a3001037688f37638a5ee, R-sharp\R#\Runtime\Environment\EnvironmentExtensions.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   54
+        Code Lines:    46
+        Comment Lines: 0
+        Blank Lines:   8
+        File Size:     2.12 KB
+
 
     '     Module EnvironmentExtensions
     ' 

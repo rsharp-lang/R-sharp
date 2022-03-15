@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e5e85795734a0cfc25f2290518a0cceb, R#\Runtime\Interop\RInteropAttributes\RSymbolLanguageMaskAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::e5e85795734a0cfc25f2290518a0cceb, R-sharp\R#\Runtime\Interop\RInteropAttributes\RSymbolLanguageMaskAttribute.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   46
+        Code Lines:    22
+        Comment Lines: 12
+        Blank Lines:   12
+        File Size:     1.57 KB
+
 
     '     Class RSymbolLanguageMaskAttribute
     ' 

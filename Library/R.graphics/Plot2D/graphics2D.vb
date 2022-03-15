@@ -1,44 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::a66507dd8e4dfe5d4d9ffbfbf9e69ca0, Library\R.graphics\Plot2D\graphics2D.vb"
+﻿#Region "Microsoft.VisualBasic::71d91beeeaf5a99d700a02a64df096bf, R-sharp\Library\R.graphics\Plot2D\graphics2D.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Module graphics2D
-' 
-'     Function: asciiArt, axisTicks, contourPolygon, contourTracing, DrawCircle
-'               drawLegends, DrawTriangle, legend, line2D, measureString
-'               offset2D, paddingString, paddingVector, point2D, pointsVector
-'               (+2 Overloads) rectangle, scale, size, sizeVector
-' 
-' /********************************************************************************/
+
+     Code Statistics:
+
+        Total Lines:   411
+        Code Lines:    325
+        Comment Lines: 37
+        Blank Lines:   49
+        File Size:     17.74 KB
+
+
+    ' Module graphics2D
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    '     Function: asciiArt, axisTicks, colorMapLegend, contourPolygon, contourTracing
+    '               DrawCircle, drawLegends, DrawTriangle, legend, line2D
+    '               measureString, offset2D, paddingString, paddingVector, plotColorMap
+    '               point2D, pointsVector, (+2 Overloads) rectangle, scale, size
+    '               sizeVector
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

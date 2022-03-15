@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2ffdb7dad6f172cf68b5d78ac8a36955, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\BreakLoop.vb"
+﻿#Region "Microsoft.VisualBasic::2ffdb7dad6f172cf68b5d78ac8a36955, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\BreakLoop.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   25
+        Code Lines:    19
+        Comment Lines: 0
+        Blank Lines:   6
+        File Size:     746.00 B
+
 
     '     Class BreakLoop
     ' 

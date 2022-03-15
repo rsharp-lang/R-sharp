@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::61806c92aa4e7be8fbd00f58a305eafa, studio\npy\Language\PyScanner.vb"
+﻿#Region "Microsoft.VisualBasic::4b2b3b80cded19bc7837f1879b5b20b9, R-sharp\studio\npy\Language\PyScanner.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   47
+        Code Lines:    33
+        Comment Lines: 4
+        Blank Lines:   10
+        File Size:     1.70 KB
+
 
     '     Class PyScanner
     ' 

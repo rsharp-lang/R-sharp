@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6aa3c8bb2ef6b7170dda353905c46df0, R#\Language\TokenIcer\JoinToken.vb"
+﻿#Region "Microsoft.VisualBasic::6aa3c8bb2ef6b7170dda353905c46df0, R-sharp\R#\Language\TokenIcer\JoinToken.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+     Code Statistics:
+
+        Total Lines:   8
+        Code Lines:    5
+        Comment Lines: 0
+        Blank Lines:   3
+        File Size:     150.00 B
+
 
     '     Class JoinToken
     ' 
