@@ -262,7 +262,7 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="sec"></param>
         <ExportAPI("sleep")>
-        Public Sub sleep(sec As Integer)
+        Public Sub sleep(sec As Double)
             Call Thread.Sleep(sec * 1000)
         End Sub
 
