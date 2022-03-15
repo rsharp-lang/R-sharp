@@ -75,6 +75,10 @@ Module devkit
         Return Assembly.UnsafeLoadFrom(dllfile.GetFullPath).FromAssembly
     End Function
 
+    Public Function writeCodeBanner(file As String) As codestatics
+
+    End Function
+
     <ExportAPI("svn.log")>
     Public Function svnLog(file As String) As log()
         Return log.ParseSvnLogText(svn.getLogText(file)).ToArray
