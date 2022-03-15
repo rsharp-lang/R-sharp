@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   168
-        Code Lines:    134
-        Comment Lines: 15
-        Blank Lines:   19
-        File Size:     6.69 KB
+    '   Total Lines: 168
+    '    Code Lines: 134
+    ' Comment Lines: 15
+    '   Blank Lines: 19
+    '     File Size: 6.69 KB
 
 
     ' Module RColorPalette

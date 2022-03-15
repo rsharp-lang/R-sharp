@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   211
-        Code Lines:    145
-        Comment Lines: 31
-        Blank Lines:   35
-        File Size:     6.78 KB
+    '   Total Lines: 211
+    '    Code Lines: 145
+    ' Comment Lines: 31
+    '   Blank Lines: 35
+    '     File Size: 6.78 KB
 
 
     ' Class DocParser

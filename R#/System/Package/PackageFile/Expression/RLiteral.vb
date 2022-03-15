@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   103
-        Code Lines:    89
-        Comment Lines: 0
-        Blank Lines:   14
-        File Size:     4.74 KB
+    '   Total Lines: 103
+    '    Code Lines: 89
+    ' Comment Lines: 0
+    '   Blank Lines: 14
+    '     File Size: 4.74 KB
 
 
     '     Class RLiteral

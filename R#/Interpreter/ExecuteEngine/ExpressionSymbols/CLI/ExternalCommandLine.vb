@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   92
-        Code Lines:    72
-        Comment Lines: 7
-        Blank Lines:   13
-        File Size:     3.51 KB
+    '   Total Lines: 92
+    '    Code Lines: 72
+    ' Comment Lines: 7
+    '   Blank Lines: 13
+    '     File Size: 3.51 KB
 
 
     '     Class ExternalCommandLine

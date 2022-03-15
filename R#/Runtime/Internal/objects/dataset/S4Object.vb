@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   6
-        Code Lines:    4
-        Comment Lines: 0
-        Blank Lines:   2
-        File Size:     94.00 B
+    '   Total Lines: 6
+    '    Code Lines: 4
+    ' Comment Lines: 0
+    '   Blank Lines: 2
+    '     File Size: 94.00 B
 
 
     '     Class S4Object

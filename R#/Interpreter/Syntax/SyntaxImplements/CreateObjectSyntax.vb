@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   47
-        Code Lines:    39
-        Comment Lines: 0
-        Blank Lines:   8
-        File Size:     1.87 KB
+    '   Total Lines: 47
+    '    Code Lines: 39
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 1.87 KB
 
 
     '     Module CreateObjectSyntax

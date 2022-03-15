@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   137
-        Code Lines:    109
-        Comment Lines: 7
-        Blank Lines:   21
-        File Size:     5.41 KB
+    '   Total Lines: 137
+    '    Code Lines: 109
+    ' Comment Lines: 7
+    '   Blank Lines: 21
+    '     File Size: 5.41 KB
 
 
     '     Class PipelineProcessor

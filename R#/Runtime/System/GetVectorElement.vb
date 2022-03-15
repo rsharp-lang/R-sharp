@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   68
-        Code Lines:    54
-        Comment Lines: 4
-        Blank Lines:   10
-        File Size:     2.27 KB
+    '   Total Lines: 68
+    '    Code Lines: 54
+    ' Comment Lines: 4
+    '   Blank Lines: 10
+    '     File Size: 2.27 KB
 
 
     '     Class GetVectorElement

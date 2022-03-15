@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   73
-        Code Lines:    53
-        Comment Lines: 5
-        Blank Lines:   15
-        File Size:     2.24 KB
+    '   Total Lines: 73
+    '    Code Lines: 53
+    ' Comment Lines: 5
+    '   Blank Lines: 15
+    '     File Size: 2.24 KB
 
 
     ' Module ByteEncoder

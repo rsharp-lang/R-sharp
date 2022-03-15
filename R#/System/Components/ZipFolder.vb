@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   100
-        Code Lines:    58
-        Comment Lines: 25
-        Blank Lines:   17
-        File Size:     3.51 KB
+    '   Total Lines: 100
+    '    Code Lines: 58
+    ' Comment Lines: 25
+    '   Blank Lines: 17
+    '     File Size: 3.51 KB
 
 
     '     Class ZipFolder

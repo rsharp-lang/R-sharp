@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   73
-        Code Lines:    51
-        Comment Lines: 6
-        Blank Lines:   16
-        File Size:     1.35 KB
+    '   Total Lines: 73
+    '    Code Lines: 51
+    ' Comment Lines: 6
+    '   Blank Lines: 16
+    '     File Size: 1.35 KB
 
 
     '     Enum ExpressionTypes

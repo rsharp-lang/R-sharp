@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   114
-        Code Lines:    88
-        Comment Lines: 0
-        Blank Lines:   26
-        File Size:     3.78 KB
+    '   Total Lines: 114
+    '    Code Lines: 88
+    ' Comment Lines: 0
+    '   Blank Lines: 26
+    '     File Size: 3.78 KB
 
 
     '     Class BootstrapSocket

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   203
-        Code Lines:    161
-        Comment Lines: 12
-        Blank Lines:   30
-        File Size:     7.92 KB
+    '   Total Lines: 203
+    '    Code Lines: 161
+    ' Comment Lines: 12
+    '   Blank Lines: 30
+    '     File Size: 7.92 KB
 
 
     ' Class RProcessor

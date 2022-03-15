@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   95
-        Code Lines:    66
-        Comment Lines: 7
-        Blank Lines:   22
-        File Size:     2.90 KB
+    '   Total Lines: 95
+    '    Code Lines: 66
+    ' Comment Lines: 7
+    '   Blank Lines: 22
+    '     File Size: 2.90 KB
 
 
     ' Module interoptest

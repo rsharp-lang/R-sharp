@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   125
-        Code Lines:    94
-        Comment Lines: 6
-        Blank Lines:   25
-        File Size:     6.11 KB
+    '   Total Lines: 125
+    '    Code Lines: 94
+    ' Comment Lines: 6
+    '   Blank Lines: 25
+    '     File Size: 6.11 KB
 
 
     '     Class BlockReader

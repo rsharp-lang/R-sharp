@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   419
-        Code Lines:    283
-        Comment Lines: 95
-        Blank Lines:   41
-        File Size:     17.75 KB
+    '   Total Lines: 419
+    '    Code Lines: 283
+    ' Comment Lines: 95
+    '   Blank Lines: 41
+    '     File Size: 17.75 KB
 
 
     ' Module grDevices

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   86
-        Code Lines:    65
-        Comment Lines: 9
-        Blank Lines:   12
-        File Size:     3.46 KB
+    '   Total Lines: 86
+    '    Code Lines: 65
+    ' Comment Lines: 9
+    '   Blank Lines: 12
+    '     File Size: 3.46 KB
 
 
     '     Class RListObjectArgumentAttribute

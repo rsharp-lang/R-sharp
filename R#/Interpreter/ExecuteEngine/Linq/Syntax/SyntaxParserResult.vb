@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   44
-        Code Lines:    35
-        Comment Lines: 0
-        Blank Lines:   9
-        File Size:     1.25 KB
+    '   Total Lines: 44
+    '    Code Lines: 35
+    ' Comment Lines: 0
+    '   Blank Lines: 9
+    '     File Size: 1.25 KB
 
 
     '     Class SyntaxParserResult

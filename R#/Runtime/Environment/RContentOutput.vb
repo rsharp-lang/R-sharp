@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   183
-        Code Lines:    136
-        Comment Lines: 14
-        Blank Lines:   33
-        File Size:     5.86 KB
+    '   Total Lines: 183
+    '    Code Lines: 136
+    ' Comment Lines: 14
+    '   Blank Lines: 33
+    '     File Size: 5.86 KB
 
 
     '     Class RContentOutput

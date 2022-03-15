@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   14
-        Code Lines:    10
-        Comment Lines: 0
-        Blank Lines:   4
-        File Size:     502.00 B
+    '   Total Lines: 14
+    '    Code Lines: 10
+    ' Comment Lines: 0
+    '   Blank Lines: 4
+    '     File Size: 502.00 B
 
 
     ' Class AcceptorTag

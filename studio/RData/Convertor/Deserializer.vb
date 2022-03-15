@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   14
-        Code Lines:    9
-        Comment Lines: 0
-        Blank Lines:   5
-        File Size:     297.00 B
+    '   Total Lines: 14
+    '    Code Lines: 9
+    ' Comment Lines: 0
+    '   Blank Lines: 5
+    '     File Size: 297.00 B
 
 
     '     Module Deserializer

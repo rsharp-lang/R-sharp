@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   208
-        Code Lines:    172
-        Comment Lines: 11
-        Blank Lines:   25
-        File Size:     8.78 KB
+    '   Total Lines: 208
+    '    Code Lines: 172
+    ' Comment Lines: 11
+    '   Blank Lines: 25
+    '     File Size: 8.78 KB
 
 
     ' Module lpSolve

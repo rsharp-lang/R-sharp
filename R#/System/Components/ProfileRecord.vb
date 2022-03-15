@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   59
-        Code Lines:    40
-        Comment Lines: 4
-        Blank Lines:   15
-        File Size:     1.96 KB
+    '   Total Lines: 59
+    '    Code Lines: 40
+    ' Comment Lines: 4
+    '   Blank Lines: 15
+    '     File Size: 1.96 KB
 
 
     '     Class ProfileRecord

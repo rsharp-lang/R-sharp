@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   45
-        Code Lines:    28
-        Comment Lines: 10
-        Blank Lines:   7
-        File Size:     1.39 KB
+    '   Total Lines: 45
+    '    Code Lines: 28
+    ' Comment Lines: 10
+    '   Blank Lines: 7
+    '     File Size: 1.39 KB
 
 
     ' Module RMatrix

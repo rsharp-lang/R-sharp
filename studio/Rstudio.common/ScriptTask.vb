@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   65
-        Code Lines:    52
-        Comment Lines: 0
-        Blank Lines:   13
-        File Size:     2.21 KB
+    '   Total Lines: 65
+    '    Code Lines: 52
+    ' Comment Lines: 0
+    '   Blank Lines: 13
+    '     File Size: 2.21 KB
 
 
     ' Module ScriptTask

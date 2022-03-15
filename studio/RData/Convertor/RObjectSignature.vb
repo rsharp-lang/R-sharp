@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   64
-        Code Lines:    48
-        Comment Lines: 0
-        Blank Lines:   16
-        File Size:     2.00 KB
+    '   Total Lines: 64
+    '    Code Lines: 48
+    ' Comment Lines: 0
+    '   Blank Lines: 16
+    '     File Size: 2.00 KB
 
 
     '     Class RObjectSignature

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   31
-        Code Lines:    23
-        Comment Lines: 0
-        Blank Lines:   8
-        File Size:     828.00 B
+    '   Total Lines: 31
+    '    Code Lines: 23
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 828.00 B
 
 
     '     Class MethodInvoke

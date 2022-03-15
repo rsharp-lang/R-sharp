@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   273
-        Code Lines:    195
-        Comment Lines: 37
-        Blank Lines:   41
-        File Size:     10.78 KB
+    '   Total Lines: 273
+    '    Code Lines: 195
+    ' Comment Lines: 37
+    '   Blank Lines: 41
+    '     File Size: 10.78 KB
 
 
     '     Module DeclareNewSymbolSyntax

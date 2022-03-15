@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   185
-        Code Lines:    128
-        Comment Lines: 31
-        Blank Lines:   26
-        File Size:     7.34 KB
+    '   Total Lines: 185
+    '    Code Lines: 128
+    ' Comment Lines: 31
+    '   Blank Lines: 26
+    '     File Size: 7.34 KB
 
 
     '     Class BinaryIndex

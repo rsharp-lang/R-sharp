@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   193
-        Code Lines:    129
-        Comment Lines: 4
-        Blank Lines:   60
-        File Size:     4.71 KB
+    '   Total Lines: 193
+    '    Code Lines: 129
+    ' Comment Lines: 4
+    '   Blank Lines: 60
+    '     File Size: 4.71 KB
 
 
     ' Module tokenlicerTest

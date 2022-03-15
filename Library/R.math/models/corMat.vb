@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   15
-        Code Lines:    7
-        Comment Lines: 3
-        Blank Lines:   5
-        File Size:     278.00 B
+    '   Total Lines: 15
+    '    Code Lines: 7
+    ' Comment Lines: 3
+    '   Blank Lines: 5
+    '     File Size: 278.00 B
 
 
     ' Class corMat

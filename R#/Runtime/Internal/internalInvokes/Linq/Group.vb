@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   110
-        Code Lines:    83
-        Comment Lines: 8
-        Blank Lines:   19
-        File Size:     3.83 KB
+    '   Total Lines: 110
+    '    Code Lines: 83
+    ' Comment Lines: 8
+    '   Blank Lines: 19
+    '     File Size: 3.83 KB
 
 
     '     Structure Group

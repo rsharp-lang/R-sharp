@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   18
-        Code Lines:    6
-        Comment Lines: 7
-        Blank Lines:   5
-        File Size:     426.00 B
+    '   Total Lines: 18
+    '    Code Lines: 6
+    ' Comment Lines: 7
+    '   Blank Lines: 5
+    '     File Size: 426.00 B
 
 
     '     Interface ICTypeList

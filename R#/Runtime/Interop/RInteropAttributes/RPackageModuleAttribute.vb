@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   9
-        Code Lines:    5
-        Comment Lines: 3
-        Blank Lines:   1
-        File Size:     310.00 B
+    '   Total Lines: 9
+    '    Code Lines: 5
+    ' Comment Lines: 3
+    '   Blank Lines: 1
+    '     File Size: 310.00 B
 
 
     '     Class RPackageModuleAttribute

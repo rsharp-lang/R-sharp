@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   313
-        Code Lines:    226
-        Comment Lines: 41
-        Blank Lines:   46
-        File Size:     12.56 KB
+    '   Total Lines: 313
+    '    Code Lines: 226
+    ' Comment Lines: 41
+    '   Blank Lines: 46
+    '     File Size: 12.56 KB
 
 
     '     Delegate Function

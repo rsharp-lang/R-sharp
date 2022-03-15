@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   84
-        Code Lines:    67
-        Comment Lines: 3
-        Blank Lines:   14
-        File Size:     3.41 KB
+    '   Total Lines: 84
+    '    Code Lines: 67
+    ' Comment Lines: 3
+    '   Blank Lines: 14
+    '     File Size: 3.41 KB
 
 
     '     Class NamespaceReferenceProcessor

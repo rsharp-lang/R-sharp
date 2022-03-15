@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   73
-        Code Lines:    57
-        Comment Lines: 3
-        Blank Lines:   13
-        File Size:     2.76 KB
+    '   Total Lines: 73
+    '    Code Lines: 57
+    ' Comment Lines: 3
+    '   Blank Lines: 13
+    '     File Size: 2.76 KB
 
 
     ' Module Dijkstra

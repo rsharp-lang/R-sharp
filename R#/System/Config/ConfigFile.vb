@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   88
-        Code Lines:    61
-        Comment Lines: 14
-        Blank Lines:   13
-        File Size:     3.24 KB
+    '   Total Lines: 88
+    '    Code Lines: 61
+    ' Comment Lines: 14
+    '   Blank Lines: 13
+    '     File Size: 3.24 KB
 
 
     '     Class ConfigFile

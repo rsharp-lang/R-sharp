@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   43
-        Code Lines:    38
-        Comment Lines: 0
-        Blank Lines:   5
-        File Size:     1.47 KB
+    '   Total Lines: 43
+    '    Code Lines: 38
+    ' Comment Lines: 0
+    '   Blank Lines: 5
+    '     File Size: 1.47 KB
 
 
     ' Module gdi

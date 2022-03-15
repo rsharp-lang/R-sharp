@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   125
-        Code Lines:    88
-        Comment Lines: 21
-        Blank Lines:   16
-        File Size:     4.82 KB
+    '   Total Lines: 125
+    '    Code Lines: 88
+    ' Comment Lines: 21
+    '   Blank Lines: 16
+    '     File Size: 4.82 KB
 
 
     '     Class LocalPackageDatabase

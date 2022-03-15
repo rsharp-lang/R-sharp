@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   58
-        Code Lines:    48
-        Comment Lines: 0
-        Blank Lines:   10
-        File Size:     1.88 KB
+    '   Total Lines: 58
+    '    Code Lines: 48
+    ' Comment Lines: 0
+    '   Blank Lines: 10
+    '     File Size: 1.88 KB
 
 
     ' Module jsonlite

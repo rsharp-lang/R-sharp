@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   154
-        Code Lines:    92
-        Comment Lines: 37
-        Blank Lines:   25
-        File Size:     5.93 KB
+    '   Total Lines: 154
+    '    Code Lines: 92
+    ' Comment Lines: 37
+    '   Blank Lines: 25
+    '     File Size: 5.93 KB
 
 
     '     Class MasterContext

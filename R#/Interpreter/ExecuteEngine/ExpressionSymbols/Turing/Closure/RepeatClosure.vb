@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   52
-        Code Lines:    39
-        Comment Lines: 0
-        Blank Lines:   13
-        File Size:     1.64 KB
+    '   Total Lines: 52
+    '    Code Lines: 39
+    ' Comment Lines: 0
+    '   Blank Lines: 13
+    '     File Size: 1.64 KB
 
 
     '     Class RepeatClosure

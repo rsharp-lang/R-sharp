@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   394
-        Code Lines:    277
-        Comment Lines: 71
-        Blank Lines:   46
-        File Size:     14.12 KB
+    '   Total Lines: 394
+    '    Code Lines: 277
+    ' Comment Lines: 71
+    '   Blank Lines: 46
+    '     File Size: 14.12 KB
 
 
     '     Module ExpressionSignature

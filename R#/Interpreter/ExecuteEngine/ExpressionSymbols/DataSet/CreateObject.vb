@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   88
-        Code Lines:    70
-        Comment Lines: 4
-        Blank Lines:   14
-        File Size:     3.33 KB
+    '   Total Lines: 88
+    '    Code Lines: 70
+    ' Comment Lines: 4
+    '   Blank Lines: 14
+    '     File Size: 3.33 KB
 
 
     '     Class CreateObject

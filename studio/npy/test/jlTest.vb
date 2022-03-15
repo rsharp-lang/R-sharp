@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   132
-        Code Lines:    98
-        Comment Lines: 1
-        Blank Lines:   33
-        File Size:     2.26 KB
+    '   Total Lines: 132
+    '    Code Lines: 98
+    ' Comment Lines: 1
+    '   Blank Lines: 33
+    '     File Size: 2.26 KB
 
 
     ' Module jlTest

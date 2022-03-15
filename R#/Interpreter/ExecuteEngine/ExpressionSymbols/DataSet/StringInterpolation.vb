@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   71
-        Code Lines:    52
-        Comment Lines: 5
-        Blank Lines:   14
-        File Size:     2.49 KB
+    '   Total Lines: 71
+    '    Code Lines: 52
+    ' Comment Lines: 5
+    '   Blank Lines: 14
+    '     File Size: 2.49 KB
 
 
     '     Class StringInterpolation

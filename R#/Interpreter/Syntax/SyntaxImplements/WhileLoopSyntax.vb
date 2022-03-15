@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   36
-        Code Lines:    29
-        Comment Lines: 0
-        Blank Lines:   7
-        File Size:     1.44 KB
+    '   Total Lines: 36
+    '    Code Lines: 29
+    ' Comment Lines: 0
+    '   Blank Lines: 7
+    '     File Size: 1.44 KB
 
 
     '     Module WhileLoopSyntax

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   89
-        Code Lines:    67
-        Comment Lines: 4
-        Blank Lines:   18
-        File Size:     3.55 KB
+    '   Total Lines: 89
+    '    Code Lines: 67
+    ' Comment Lines: 4
+    '   Blank Lines: 18
+    '     File Size: 3.55 KB
 
 
     '     Class SymbolNamespaceSolver

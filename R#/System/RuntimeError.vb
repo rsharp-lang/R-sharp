@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   46
-        Code Lines:    34
-        Comment Lines: 3
-        Blank Lines:   9
-        File Size:     1.43 KB
+    '   Total Lines: 46
+    '    Code Lines: 34
+    ' Comment Lines: 3
+    '   Blank Lines: 9
+    '     File Size: 1.43 KB
 
 
     '     Class RuntimeError

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   403
-        Code Lines:    249
-        Comment Lines: 108
-        Blank Lines:   46
-        File Size:     16.41 KB
+    '   Total Lines: 403
+    '    Code Lines: 249
+    ' Comment Lines: 108
+    '   Blank Lines: 46
+    '     File Size: 16.41 KB
 
 
     '     Class FunctionInvoke

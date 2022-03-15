@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   41
-        Code Lines:    33
-        Comment Lines: 2
-        Blank Lines:   6
-        File Size:     1.33 KB
+    '   Total Lines: 41
+    '    Code Lines: 33
+    ' Comment Lines: 2
+    '   Blank Lines: 6
+    '     File Size: 1.33 KB
 
 
     ' Module imageDriverHandler

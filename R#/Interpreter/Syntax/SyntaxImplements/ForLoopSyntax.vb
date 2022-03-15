@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   125
-        Code Lines:    105
-        Comment Lines: 2
-        Blank Lines:   18
-        File Size:     4.90 KB
+    '   Total Lines: 125
+    '    Code Lines: 105
+    ' Comment Lines: 2
+    '   Blank Lines: 18
+    '     File Size: 4.90 KB
 
 
     '     Module ForLoopSyntax

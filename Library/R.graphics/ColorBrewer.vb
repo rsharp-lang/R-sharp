@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   213
-        Code Lines:    128
-        Comment Lines: 44
-        Blank Lines:   41
-        File Size:     7.19 KB
+    '   Total Lines: 213
+    '    Code Lines: 128
+    ' Comment Lines: 44
+    '   Blank Lines: 41
+    '     File Size: 7.19 KB
 
 
     ' Module ColorBrewerSystem

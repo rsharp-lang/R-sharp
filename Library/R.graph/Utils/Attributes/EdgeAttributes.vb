@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   73
-        Code Lines:    61
-        Comment Lines: 0
-        Blank Lines:   12
-        File Size:     2.62 KB
+    '   Total Lines: 73
+    '    Code Lines: 61
+    ' Comment Lines: 0
+    '   Blank Lines: 12
+    '     File Size: 2.62 KB
 
 
     ' Module EdgeAttributes

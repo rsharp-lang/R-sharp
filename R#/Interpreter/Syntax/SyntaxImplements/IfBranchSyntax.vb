@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   162
-        Code Lines:    126
-        Comment Lines: 12
-        Blank Lines:   24
-        File Size:     6.81 KB
+    '   Total Lines: 162
+    '    Code Lines: 126
+    ' Comment Lines: 12
+    '   Blank Lines: 24
+    '     File Size: 6.81 KB
 
 
     '     Module IfBranchSyntax

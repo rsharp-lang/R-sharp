@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   104
-        Code Lines:    75
-        Comment Lines: 21
-        Blank Lines:   8
-        File Size:     3.99 KB
+    '   Total Lines: 104
+    '    Code Lines: 75
+    ' Comment Lines: 21
+    '   Blank Lines: 8
+    '     File Size: 3.99 KB
 
 
     ' Module gtk

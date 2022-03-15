@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   150
-        Code Lines:    98
-        Comment Lines: 31
-        Blank Lines:   21
-        File Size:     6.02 KB
+    '   Total Lines: 150
+    '    Code Lines: 98
+    ' Comment Lines: 31
+    '   Blank Lines: 21
+    '     File Size: 6.02 KB
 
 
     ' Module roxygen

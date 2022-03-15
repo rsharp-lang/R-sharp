@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   781
-        Code Lines:    530
-        Comment Lines: 165
-        Blank Lines:   86
-        File Size:     33.16 KB
+    '   Total Lines: 781
+    '    Code Lines: 530
+    ' Comment Lines: 165
+    '   Blank Lines: 86
+    '     File Size: 33.16 KB
 
 
     ' Module clustering

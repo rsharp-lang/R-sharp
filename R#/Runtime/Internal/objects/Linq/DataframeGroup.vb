@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   83
-        Code Lines:    62
-        Comment Lines: 6
-        Blank Lines:   15
-        File Size:     3.00 KB
+    '   Total Lines: 83
+    '    Code Lines: 62
+    ' Comment Lines: 6
+    '   Blank Lines: 15
+    '     File Size: 3.00 KB
 
 
     '     Module DataframeGroup

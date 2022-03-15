@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   208
-        Code Lines:    136
-        Comment Lines: 41
-        Blank Lines:   31
-        File Size:     7.90 KB
+    '   Total Lines: 208
+    '    Code Lines: 136
+    ' Comment Lines: 41
+    '   Blank Lines: 31
+    '     File Size: 7.90 KB
 
 
     '     Module SymbolIndexerSyntax

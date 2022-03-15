@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   242
-        Code Lines:    127
-        Comment Lines: 94
-        Blank Lines:   21
-        File Size:     11.97 KB
+    '   Total Lines: 242
+    '    Code Lines: 127
+    ' Comment Lines: 94
+    '   Blank Lines: 21
+    '     File Size: 11.97 KB
 
 
     '     Class Rscript

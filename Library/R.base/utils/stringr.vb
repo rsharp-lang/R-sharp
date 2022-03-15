@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   145
-        Code Lines:    84
-        Comment Lines: 41
-        Blank Lines:   20
-        File Size:     5.30 KB
+    '   Total Lines: 145
+    '    Code Lines: 84
+    ' Comment Lines: 41
+    '   Blank Lines: 20
+    '     File Size: 5.30 KB
 
 
     ' Module stringr

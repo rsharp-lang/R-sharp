@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   175
-        Code Lines:    130
-        Comment Lines: 22
-        Blank Lines:   23
-        File Size:     14.22 KB
+    '   Total Lines: 175
+    '    Code Lines: 130
+    ' Comment Lines: 22
+    '   Blank Lines: 23
+    '     File Size: 14.22 KB
 
 
     '     Module BinaryOperatorEngine

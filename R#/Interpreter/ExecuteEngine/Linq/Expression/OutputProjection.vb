@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   41
-        Code Lines:    25
-        Comment Lines: 7
-        Blank Lines:   9
-        File Size:     1.33 KB
+    '   Total Lines: 41
+    '    Code Lines: 25
+    ' Comment Lines: 7
+    '   Blank Lines: 9
+    '     File Size: 1.33 KB
 
 
     '     Class OutputProjection

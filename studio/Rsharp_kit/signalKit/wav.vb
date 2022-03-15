@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   83
-        Code Lines:    64
-        Comment Lines: 7
-        Blank Lines:   12
-        File Size:     3.49 KB
+    '   Total Lines: 83
+    '    Code Lines: 64
+    ' Comment Lines: 7
+    '   Blank Lines: 12
+    '     File Size: 3.49 KB
 
 
     ' Module wavToolkit

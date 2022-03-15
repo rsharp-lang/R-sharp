@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   133
-        Code Lines:    107
-        Comment Lines: 8
-        Blank Lines:   18
-        File Size:     5.93 KB
+    '   Total Lines: 133
+    '    Code Lines: 107
+    ' Comment Lines: 8
+    '   Blank Lines: 18
+    '     File Size: 5.93 KB
 
 
     ' Module rawSerializer

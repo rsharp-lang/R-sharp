@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   22
-        Code Lines:    15
-        Comment Lines: 3
-        Blank Lines:   4
-        File Size:     705.00 B
+    '   Total Lines: 22
+    '    Code Lines: 15
+    ' Comment Lines: 3
+    '   Blank Lines: 4
+    '     File Size: 705.00 B
 
 
     '     Class AggregateExpression

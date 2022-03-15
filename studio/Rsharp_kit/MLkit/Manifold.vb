@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   184
-        Code Lines:    142
-        Comment Lines: 17
-        Blank Lines:   25
-        File Size:     7.32 KB
+    '   Total Lines: 184
+    '    Code Lines: 142
+    ' Comment Lines: 17
+    '   Blank Lines: 25
+    '     File Size: 7.32 KB
 
 
     ' Module Manifold

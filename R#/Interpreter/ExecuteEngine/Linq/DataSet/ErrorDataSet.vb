@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   16
-        Code Lines:    8
-        Comment Lines: 4
-        Blank Lines:   4
-        File Size:     432.00 B
+    '   Total Lines: 16
+    '    Code Lines: 8
+    ' Comment Lines: 4
+    '   Blank Lines: 4
+    '     File Size: 432.00 B
 
 
     '     Class ErrorDataSet

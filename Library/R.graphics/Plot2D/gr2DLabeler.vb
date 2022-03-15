@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   98
-        Code Lines:    72
-        Comment Lines: 17
-        Blank Lines:   9
-        File Size:     3.95 KB
+    '   Total Lines: 98
+    '    Code Lines: 72
+    ' Comment Lines: 17
+    '   Blank Lines: 9
+    '     File Size: 3.95 KB
 
 
     ' Module gr2DLabeler

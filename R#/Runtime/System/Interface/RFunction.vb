@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   59
-        Code Lines:    20
-        Comment Lines: 27
-        Blank Lines:   12
-        File Size:     2.04 KB
+    '   Total Lines: 59
+    '    Code Lines: 20
+    ' Comment Lines: 27
+    '   Blank Lines: 12
+    '     File Size: 2.04 KB
 
 
     '     Interface RFunction

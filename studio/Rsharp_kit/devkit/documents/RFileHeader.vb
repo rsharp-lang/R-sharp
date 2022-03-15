@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   43
-        Code Lines:    31
-        Comment Lines: 5
-        Blank Lines:   7
-        File Size:     1.52 KB
+    '   Total Lines: 43
+    '    Code Lines: 31
+    ' Comment Lines: 5
+    '   Blank Lines: 7
+    '     File Size: 1.52 KB
 
 
     ' Module RFileHeader

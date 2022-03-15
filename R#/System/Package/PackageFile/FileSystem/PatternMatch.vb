@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   18
-        Code Lines:    13
-        Comment Lines: 0
-        Blank Lines:   5
-        File Size:     499.00 B
+    '   Total Lines: 18
+    '    Code Lines: 13
+    ' Comment Lines: 0
+    '   Blank Lines: 5
+    '     File Size: 499.00 B
 
 
     '     Class PatternMatch

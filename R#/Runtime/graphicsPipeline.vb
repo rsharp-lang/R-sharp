@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   180
-        Code Lines:    150
-        Comment Lines: 7
-        Blank Lines:   23
-        File Size:     7.61 KB
+    '   Total Lines: 180
+    '    Code Lines: 150
+    ' Comment Lines: 7
+    '   Blank Lines: 23
+    '     File Size: 7.61 KB
 
 
     '     Module graphicsPipeline

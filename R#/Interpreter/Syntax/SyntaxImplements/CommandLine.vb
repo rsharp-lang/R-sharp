@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   111
-        Code Lines:    82
-        Comment Lines: 12
-        Blank Lines:   17
-        File Size:     4.30 KB
+    '   Total Lines: 111
+    '    Code Lines: 82
+    ' Comment Lines: 12
+    '   Blank Lines: 17
+    '     File Size: 4.30 KB
 
 
     '     Module CommandLineSyntax

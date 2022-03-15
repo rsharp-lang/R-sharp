@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   38
-        Code Lines:    30
-        Comment Lines: 5
-        Blank Lines:   3
-        File Size:     1.63 KB
+    '   Total Lines: 38
+    '    Code Lines: 30
+    ' Comment Lines: 5
+    '   Blank Lines: 3
+    '     File Size: 1.63 KB
 
 
     '     Structure DefaultVectorParser

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   107
-        Code Lines:    85
-        Comment Lines: 6
-        Blank Lines:   16
-        File Size:     4.41 KB
+    '   Total Lines: 107
+    '    Code Lines: 85
+    ' Comment Lines: 6
+    '   Blank Lines: 16
+    '     File Size: 4.41 KB
 
 
     '     Class BinaryBetweenExpression

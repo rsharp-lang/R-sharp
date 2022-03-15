@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   41
-        Code Lines:    30
-        Comment Lines: 6
-        Blank Lines:   5
-        File Size:     1.65 KB
+    '   Total Lines: 41
+    '    Code Lines: 30
+    ' Comment Lines: 6
+    '   Blank Lines: 5
+    '     File Size: 1.65 KB
 
 
     '     Module LinqExpressionSyntax

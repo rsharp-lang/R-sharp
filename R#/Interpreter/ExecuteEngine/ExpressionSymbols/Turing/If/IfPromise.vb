@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   32
-        Code Lines:    24
-        Comment Lines: 2
-        Blank Lines:   6
-        File Size:     1.09 KB
+    '   Total Lines: 32
+    '    Code Lines: 24
+    ' Comment Lines: 2
+    '   Blank Lines: 6
+    '     File Size: 1.09 KB
 
 
     '     Class IfPromise

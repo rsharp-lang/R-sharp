@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   93
-        Code Lines:    77
-        Comment Lines: 0
-        Blank Lines:   16
-        File Size:     3.54 KB
+    '   Total Lines: 93
+    '    Code Lines: 77
+    ' Comment Lines: 0
+    '   Blank Lines: 16
+    '     File Size: 3.54 KB
 
 
     ' Module ImageFilters

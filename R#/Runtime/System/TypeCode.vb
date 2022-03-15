@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   58
-        Code Lines:    17
-        Comment Lines: 36
-        Blank Lines:   5
-        File Size:     1.54 KB
+    '   Total Lines: 58
+    '    Code Lines: 17
+    ' Comment Lines: 36
+    '   Blank Lines: 5
+    '     File Size: 1.54 KB
 
 
     '     Enum TypeCodes

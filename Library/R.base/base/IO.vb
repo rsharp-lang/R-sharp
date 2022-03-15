@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   161
-        Code Lines:    125
-        Comment Lines: 20
-        Blank Lines:   16
-        File Size:     6.53 KB
+    '   Total Lines: 161
+    '    Code Lines: 125
+    ' Comment Lines: 20
+    '   Blank Lines: 16
+    '     File Size: 6.53 KB
 
 
     ' Module RawIO

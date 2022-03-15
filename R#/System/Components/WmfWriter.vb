@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   13
-        Code Lines:    10
-        Comment Lines: 0
-        Blank Lines:   3
-        File Size:     408.00 B
+    '   Total Lines: 13
+    '    Code Lines: 10
+    ' Comment Lines: 0
+    '   Blank Lines: 3
+    '     File Size: 408.00 B
 
 
     '     Class WmfWriter

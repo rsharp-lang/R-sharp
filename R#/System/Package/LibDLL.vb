@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   93
-        Code Lines:    73
-        Comment Lines: 8
-        Blank Lines:   12
-        File Size:     3.62 KB
+    '   Total Lines: 93
+    '    Code Lines: 73
+    ' Comment Lines: 8
+    '   Blank Lines: 12
+    '     File Size: 3.62 KB
 
 
     '     Class LibDLL

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   134
-        Code Lines:    34
-        Comment Lines: 96
-        Blank Lines:   4
-        File Size:     3.36 KB
+    '   Total Lines: 134
+    '    Code Lines: 34
+    ' Comment Lines: 96
+    '   Blank Lines: 4
+    '     File Size: 3.36 KB
 
 
     '     Enum RObjectType

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   95
-        Code Lines:    68
-        Comment Lines: 6
-        Blank Lines:   21
-        File Size:     4.12 KB
+    '   Total Lines: 95
+    '    Code Lines: 68
+    ' Comment Lines: 6
+    '   Blank Lines: 21
+    '     File Size: 4.12 KB
 
 
     ' Module devStudio

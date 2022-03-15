@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   69
-        Code Lines:    56
-        Comment Lines: 0
-        Blank Lines:   13
-        File Size:     2.26 KB
+    '   Total Lines: 69
+    '    Code Lines: 56
+    ' Comment Lines: 0
+    '   Blank Lines: 13
+    '     File Size: 2.26 KB
 
 
     '     Class WhileLoop

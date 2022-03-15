@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   114
-        Code Lines:    77
-        Comment Lines: 12
-        Blank Lines:   25
-        File Size:     3.96 KB
+    '   Total Lines: 114
+    '    Code Lines: 77
+    ' Comment Lines: 12
+    '   Blank Lines: 25
+    '     File Size: 3.96 KB
 
 
     ' Class ConfigJSON

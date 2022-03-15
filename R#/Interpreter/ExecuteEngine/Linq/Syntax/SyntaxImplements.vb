@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   516
-        Code Lines:    392
-        Comment Lines: 44
-        Blank Lines:   80
-        File Size:     22.32 KB
+    '   Total Lines: 516
+    '    Code Lines: 392
+    ' Comment Lines: 44
+    '   Blank Lines: 80
+    '     File Size: 22.32 KB
 
 
     '     Module SyntaxImplements

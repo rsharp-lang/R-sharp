@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   75
-        Code Lines:    55
-        Comment Lines: 2
-        Blank Lines:   18
-        File Size:     2.57 KB
+    '   Total Lines: 75
+    '    Code Lines: 55
+    ' Comment Lines: 2
+    '   Blank Lines: 18
+    '     File Size: 2.57 KB
 
 
     '     Class GenericSymbolOperatorProcessor

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   47
-        Code Lines:    36
-        Comment Lines: 3
-        Blank Lines:   8
-        File Size:     1.32 KB
+    '   Total Lines: 47
+    '    Code Lines: 36
+    ' Comment Lines: 3
+    '   Blank Lines: 8
+    '     File Size: 1.32 KB
 
 
     '     Class RuntimeValueLiteral

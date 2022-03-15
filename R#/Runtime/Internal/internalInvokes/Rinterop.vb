@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   62
-        Code Lines:    18
-        Comment Lines: 39
-        Blank Lines:   5
-        File Size:     2.74 KB
+    '   Total Lines: 62
+    '    Code Lines: 18
+    ' Comment Lines: 39
+    '   Blank Lines: 5
+    '     File Size: 2.74 KB
 
 
     '     Module Rinterop

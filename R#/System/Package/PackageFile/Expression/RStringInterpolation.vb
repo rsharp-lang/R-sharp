@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   48
-        Code Lines:    37
-        Comment Lines: 0
-        Blank Lines:   11
-        File Size:     1.80 KB
+    '   Total Lines: 48
+    '    Code Lines: 37
+    ' Comment Lines: 0
+    '   Blank Lines: 11
+    '     File Size: 1.80 KB
 
 
     '     Class RStringInterpolation

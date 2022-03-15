@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   68
-        Code Lines:    53
-        Comment Lines: 3
-        Blank Lines:   12
-        File Size:     2.26 KB
+    '   Total Lines: 68
+    '    Code Lines: 53
+    ' Comment Lines: 3
+    '   Blank Lines: 12
+    '     File Size: 2.26 KB
 
 
     '     Class Regexp

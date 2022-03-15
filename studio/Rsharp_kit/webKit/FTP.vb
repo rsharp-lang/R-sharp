@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   126
-        Code Lines:    84
-        Comment Lines: 21
-        Blank Lines:   21
-        File Size:     4.58 KB
+    '   Total Lines: 126
+    '    Code Lines: 84
+    ' Comment Lines: 21
+    '   Blank Lines: 21
+    '     File Size: 4.58 KB
 
 
     ' Module FTP

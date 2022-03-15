@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   81
-        Code Lines:    69
-        Comment Lines: 0
-        Blank Lines:   12
-        File Size:     3.66 KB
+    '   Total Lines: 81
+    '    Code Lines: 69
+    ' Comment Lines: 0
+    '   Blank Lines: 12
+    '     File Size: 3.66 KB
 
 
     '     Module ScriptFormatterPrinter

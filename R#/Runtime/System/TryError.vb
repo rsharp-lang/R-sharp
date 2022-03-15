@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   33
-        Code Lines:    24
-        Comment Lines: 3
-        Blank Lines:   6
-        File Size:     1.00 KB
+    '   Total Lines: 33
+    '    Code Lines: 24
+    ' Comment Lines: 3
+    '   Blank Lines: 6
+    '     File Size: 1.00 KB
 
 
     '     Class TryError

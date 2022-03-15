@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   22
-        Code Lines:    16
-        Comment Lines: 0
-        Blank Lines:   6
-        File Size:     650.00 B
+    '   Total Lines: 22
+    '    Code Lines: 16
+    ' Comment Lines: 0
+    '   Blank Lines: 6
+    '     File Size: 650.00 B
 
 
     ' Class TypeScriptLoader

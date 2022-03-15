@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   67
-        Code Lines:    46
-        Comment Lines: 15
-        Blank Lines:   6
-        File Size:     2.44 KB
+    '   Total Lines: 67
+    '    Code Lines: 46
+    ' Comment Lines: 15
+    '   Blank Lines: 6
+    '     File Size: 2.44 KB
 
 
     ' Module gr3D

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   70
-        Code Lines:    55
-        Comment Lines: 3
-        Blank Lines:   12
-        File Size:     2.72 KB
+    '   Total Lines: 70
+    '    Code Lines: 55
+    ' Comment Lines: 3
+    '   Blank Lines: 12
+    '     File Size: 2.72 KB
 
 
     '     Class DotNetObject

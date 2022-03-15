@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   299
-        Code Lines:    197
-        Comment Lines: 58
-        Blank Lines:   44
-        File Size:     12.46 KB
+    '   Total Lines: 299
+    '    Code Lines: 197
+    ' Comment Lines: 58
+    '   Blank Lines: 44
+    '     File Size: 12.46 KB
 
 
     '     Class DeclareNewFunction

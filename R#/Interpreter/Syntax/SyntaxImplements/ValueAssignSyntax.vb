@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   80
-        Code Lines:    69
-        Comment Lines: 0
-        Blank Lines:   11
-        File Size:     3.31 KB
+    '   Total Lines: 80
+    '    Code Lines: 69
+    ' Comment Lines: 0
+    '   Blank Lines: 11
+    '     File Size: 3.31 KB
 
 
     '     Module ValueAssignSyntax

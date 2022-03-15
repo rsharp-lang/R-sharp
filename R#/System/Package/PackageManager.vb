@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   381
-        Code Lines:    194
-        Comment Lines: 126
-        Blank Lines:   61
-        File Size:     18.72 KB
+    '   Total Lines: 381
+    '    Code Lines: 194
+    ' Comment Lines: 126
+    '   Blank Lines: 61
+    '     File Size: 18.72 KB
 
 
     '     Class PackageManager

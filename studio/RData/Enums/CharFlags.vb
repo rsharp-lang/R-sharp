@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   21
-        Code Lines:    10
-        Comment Lines: 9
-        Blank Lines:   2
-        File Size:     503.00 B
+    '   Total Lines: 21
+    '    Code Lines: 10
+    ' Comment Lines: 9
+    '   Blank Lines: 2
+    '     File Size: 503.00 B
 
 
     '     Enum CharFlags

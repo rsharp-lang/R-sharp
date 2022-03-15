@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   73
-        Code Lines:    43
-        Comment Lines: 20
-        Blank Lines:   10
-        File Size:     2.64 KB
+    '   Total Lines: 73
+    '    Code Lines: 43
+    ' Comment Lines: 20
+    '   Blank Lines: 10
+    '     File Size: 2.64 KB
 
 
     '     Class RemoteEnvironment

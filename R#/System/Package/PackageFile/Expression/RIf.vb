@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   67
-        Code Lines:    55
-        Comment Lines: 0
-        Blank Lines:   12
-        File Size:     2.79 KB
+    '   Total Lines: 67
+    '    Code Lines: 55
+    ' Comment Lines: 0
+    '   Blank Lines: 12
+    '     File Size: 2.79 KB
 
 
     '     Class RIf

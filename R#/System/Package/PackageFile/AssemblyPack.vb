@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   37
-        Code Lines:    24
-        Comment Lines: 7
-        Blank Lines:   6
-        File Size:     1.30 KB
+    '   Total Lines: 37
+    '    Code Lines: 24
+    ' Comment Lines: 7
+    '   Blank Lines: 6
+    '     File Size: 1.30 KB
 
 
     '     Class AssemblyPack

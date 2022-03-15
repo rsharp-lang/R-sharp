@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   44
-        Code Lines:    36
-        Comment Lines: 0
-        Blank Lines:   8
-        File Size:     1.50 KB
+    '   Total Lines: 44
+    '    Code Lines: 36
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 1.50 KB
 
 
     '     Class FunctionDeclare

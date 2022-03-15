@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   237
-        Code Lines:    164
-        Comment Lines: 40
-        Blank Lines:   33
-        File Size:     9.50 KB
+    '   Total Lines: 237
+    '    Code Lines: 164
+    ' Comment Lines: 40
+    '   Blank Lines: 33
+    '     File Size: 9.50 KB
 
 
     '     Class DeclareLambdaFunction

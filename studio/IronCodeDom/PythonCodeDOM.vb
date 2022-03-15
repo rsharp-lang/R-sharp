@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   32
-        Code Lines:    24
-        Comment Lines: 0
-        Blank Lines:   8
-        File Size:     949.00 B
+    '   Total Lines: 32
+    '    Code Lines: 24
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 949.00 B
 
 
     ' Class PythonCodeDOM

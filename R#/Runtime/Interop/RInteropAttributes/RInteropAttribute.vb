@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   67
-        Code Lines:    39
-        Comment Lines: 12
-        Blank Lines:   16
-        File Size:     2.41 KB
+    '   Total Lines: 67
+    '    Code Lines: 39
+    ' Comment Lines: 12
+    '   Blank Lines: 16
+    '     File Size: 2.41 KB
 
 
     '     Class RInteropAttribute

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   62
-        Code Lines:    44
-        Comment Lines: 6
-        Blank Lines:   12
-        File Size:     1.96 KB
+    '   Total Lines: 62
+    '    Code Lines: 44
+    ' Comment Lines: 6
+    '   Blank Lines: 12
+    '     File Size: 1.96 KB
 
 
     '     Class JSONLiteral

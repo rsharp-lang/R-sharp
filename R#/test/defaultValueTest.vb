@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   44
-        Code Lines:    31
-        Comment Lines: 0
-        Blank Lines:   13
-        File Size:     1.22 KB
+    '   Total Lines: 44
+    '    Code Lines: 31
+    ' Comment Lines: 0
+    '   Blank Lines: 13
+    '     File Size: 1.22 KB
 
 
     ' Module defaultValueTest

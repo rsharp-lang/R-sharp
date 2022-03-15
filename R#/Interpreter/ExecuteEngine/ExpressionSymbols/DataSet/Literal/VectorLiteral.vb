@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   92
-        Code Lines:    69
-        Comment Lines: 5
-        Blank Lines:   18
-        File Size:     3.13 KB
+    '   Total Lines: 92
+    '    Code Lines: 69
+    ' Comment Lines: 5
+    '   Blank Lines: 18
+    '     File Size: 3.13 KB
 
 
     '     Class VectorLiteral

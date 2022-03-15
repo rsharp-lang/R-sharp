@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   99
-        Code Lines:    87
-        Comment Lines: 0
-        Blank Lines:   12
-        File Size:     3.72 KB
+    '   Total Lines: 99
+    '    Code Lines: 87
+    ' Comment Lines: 0
+    '   Blank Lines: 12
+    '     File Size: 3.72 KB
 
 
     ' Module NodeAttributes

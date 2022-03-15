@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   43
-        Code Lines:    26
-        Comment Lines: 9
-        Blank Lines:   8
-        File Size:     1.64 KB
+    '   Total Lines: 43
+    '    Code Lines: 26
+    ' Comment Lines: 9
+    '   Blank Lines: 8
+    '     File Size: 1.64 KB
 
 
     '     Class RDefaultValueAttribute

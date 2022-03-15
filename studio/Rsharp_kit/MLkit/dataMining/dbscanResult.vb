@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   14
-        Code Lines:    12
-        Comment Lines: 0
-        Blank Lines:   2
-        File Size:     324.00 B
+    '   Total Lines: 14
+    '    Code Lines: 12
+    ' Comment Lines: 0
+    '   Blank Lines: 2
+    '     File Size: 324.00 B
 
 
     ' Class dbscanResult

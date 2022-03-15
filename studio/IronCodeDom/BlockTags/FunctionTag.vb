@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   19
-        Code Lines:    14
-        Comment Lines: 0
-        Blank Lines:   5
-        File Size:     718.00 B
+    '   Total Lines: 19
+    '    Code Lines: 14
+    ' Comment Lines: 0
+    '   Blank Lines: 5
+    '     File Size: 718.00 B
 
 
     ' Class FunctionTag

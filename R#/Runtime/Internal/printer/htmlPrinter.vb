@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   33
-        Code Lines:    21
-        Comment Lines: 5
-        Blank Lines:   7
-        File Size:     1.15 KB
+    '   Total Lines: 33
+    '    Code Lines: 21
+    ' Comment Lines: 5
+    '   Blank Lines: 7
+    '     File Size: 1.15 KB
 
 
     '     Module htmlPrinter

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   118
-        Code Lines:    103
-        Comment Lines: 0
-        Blank Lines:   15
-        File Size:     4.94 KB
+    '   Total Lines: 118
+    '    Code Lines: 103
+    ' Comment Lines: 0
+    '   Blank Lines: 15
+    '     File Size: 4.94 KB
 
 
     '     Module BinaryBuilder

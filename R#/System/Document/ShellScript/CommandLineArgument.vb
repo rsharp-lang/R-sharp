@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   24
-        Code Lines:    19
-        Comment Lines: 0
-        Blank Lines:   5
-        File Size:     700.00 B
+    '   Total Lines: 24
+    '    Code Lines: 19
+    ' Comment Lines: 0
+    '   Blank Lines: 5
+    '     File Size: 700.00 B
 
 
     '     Class CommandLineArgument

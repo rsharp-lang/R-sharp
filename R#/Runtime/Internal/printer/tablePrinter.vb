@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   119
-        Code Lines:    99
-        Comment Lines: 1
-        Blank Lines:   19
-        File Size:     5.38 KB
+    '   Total Lines: 119
+    '    Code Lines: 99
+    ' Comment Lines: 1
+    '   Blank Lines: 19
+    '     File Size: 5.38 KB
 
 
     '     Module tablePrinter

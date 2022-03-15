@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   105
-        Code Lines:    86
-        Comment Lines: 0
-        Blank Lines:   19
-        File Size:     3.61 KB
+    '   Total Lines: 105
+    '    Code Lines: 86
+    ' Comment Lines: 0
+    '   Blank Lines: 19
+    '     File Size: 3.61 KB
 
 
     ' Class lmCall

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   462
-        Code Lines:    365
-        Comment Lines: 13
-        Blank Lines:   84
-        File Size:     20.04 KB
+    '   Total Lines: 462
+    '    Code Lines: 365
+    ' Comment Lines: 13
+    '   Blank Lines: 84
+    '     File Size: 20.04 KB
 
 
     '     Class ShellScript

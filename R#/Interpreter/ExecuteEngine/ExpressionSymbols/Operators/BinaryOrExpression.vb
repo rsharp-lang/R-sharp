@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   76
-        Code Lines:    58
-        Comment Lines: 5
-        Blank Lines:   13
-        File Size:     2.61 KB
+    '   Total Lines: 76
+    '    Code Lines: 58
+    ' Comment Lines: 5
+    '   Blank Lines: 13
+    '     File Size: 2.61 KB
 
 
     '     Class BinaryOrExpression

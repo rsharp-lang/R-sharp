@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   608
-        Code Lines:    379
-        Comment Lines: 134
-        Blank Lines:   95
-        File Size:     24.86 KB
+    '   Total Lines: 608
+    '    Code Lines: 379
+    ' Comment Lines: 134
+    '   Blank Lines: 95
+    '     File Size: 24.86 KB
 
 
     '     Class RInterpreter

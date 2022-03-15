@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   8
-        Code Lines:    4
-        Comment Lines: 3
-        Blank Lines:   1
-        File Size:     195.00 B
+    '   Total Lines: 8
+    '    Code Lines: 4
+    ' Comment Lines: 3
+    '   Blank Lines: 1
+    '     File Size: 195.00 B
 
 
     '     Module NamespaceDoc

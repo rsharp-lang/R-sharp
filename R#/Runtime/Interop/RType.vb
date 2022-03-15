@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   301
-        Code Lines:    195
-        Comment Lines: 75
-        Blank Lines:   31
-        File Size:     11.68 KB
+    '   Total Lines: 301
+    '    Code Lines: 195
+    ' Comment Lines: 75
+    '   Blank Lines: 31
+    '     File Size: 11.68 KB
 
 
     '     Class RType

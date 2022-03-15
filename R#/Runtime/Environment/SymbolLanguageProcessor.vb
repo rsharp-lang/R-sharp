@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   82
-        Code Lines:    65
-        Comment Lines: 0
-        Blank Lines:   17
-        File Size:     2.91 KB
+    '   Total Lines: 82
+    '    Code Lines: 65
+    ' Comment Lines: 0
+    '   Blank Lines: 17
+    '     File Size: 2.91 KB
 
 
     '     Class SymbolLanguageProcessor

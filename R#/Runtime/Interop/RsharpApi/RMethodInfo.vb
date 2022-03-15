@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   408
-        Code Lines:    274
-        Comment Lines: 86
-        Blank Lines:   48
-        File Size:     16.55 KB
+    '   Total Lines: 408
+    '    Code Lines: 274
+    ' Comment Lines: 86
+    '   Blank Lines: 48
+    '     File Size: 16.55 KB
 
 
     '     Class RMethodInfo

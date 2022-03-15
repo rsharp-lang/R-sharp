@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   144
-        Code Lines:    99
-        Comment Lines: 16
-        Blank Lines:   29
-        File Size:     5.27 KB
+    '   Total Lines: 144
+    '    Code Lines: 99
+    ' Comment Lines: 16
+    '   Blank Lines: 29
+    '     File Size: 5.27 KB
 
 
     '     Module ClosureExpressionSyntax

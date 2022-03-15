@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   13
-        Code Lines:    9
-        Comment Lines: 0
-        Blank Lines:   4
-        File Size:     285.00 B
+    '   Total Lines: 13
+    '    Code Lines: 9
+    ' Comment Lines: 0
+    '   Blank Lines: 4
+    '     File Size: 285.00 B
 
 
     ' Module debuggerTest

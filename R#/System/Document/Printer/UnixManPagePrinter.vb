@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   89
-        Code Lines:    78
-        Comment Lines: 0
-        Blank Lines:   11
-        File Size:     3.68 KB
+    '   Total Lines: 89
+    '    Code Lines: 78
+    ' Comment Lines: 0
+    '   Blank Lines: 11
+    '     File Size: 3.68 KB
 
 
     '     Module UnixManPagePrinter

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   1126
-        Code Lines:    740
-        Comment Lines: 244
-        Blank Lines:   142
-        File Size:     43.64 KB
+    '   Total Lines: 1126
+    '    Code Lines: 740
+    ' Comment Lines: 244
+    '   Blank Lines: 142
+    '     File Size: 43.64 KB
 
 
     ' Module NetworkModule

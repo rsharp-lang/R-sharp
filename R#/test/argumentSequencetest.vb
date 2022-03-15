@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   24
-        Code Lines:    17
-        Comment Lines: 1
-        Blank Lines:   6
-        File Size:     673.00 B
+    '   Total Lines: 24
+    '    Code Lines: 17
+    ' Comment Lines: 1
+    '   Blank Lines: 6
+    '     File Size: 673.00 B
 
 
     ' Module argumentSequencetest

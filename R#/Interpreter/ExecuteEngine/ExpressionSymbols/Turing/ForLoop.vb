@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   162
-        Code Lines:    106
-        Comment Lines: 30
-        Blank Lines:   26
-        File Size:     5.97 KB
+    '   Total Lines: 162
+    '    Code Lines: 106
+    ' Comment Lines: 30
+    '   Blank Lines: 26
+    '     File Size: 5.97 KB
 
 
     '     Class ForLoop

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   50
-        Code Lines:    32
-        Comment Lines: 12
-        Blank Lines:   6
-        File Size:     1.90 KB
+    '   Total Lines: 50
+    '    Code Lines: 32
+    ' Comment Lines: 12
+    '   Blank Lines: 6
+    '     File Size: 1.90 KB
 
 
     ' Module geometry2D

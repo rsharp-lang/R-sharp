@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   27
-        Code Lines:    25
-        Comment Lines: 0
-        Blank Lines:   2
-        File Size:     1.10 KB
+    '   Total Lines: 27
+    '    Code Lines: 25
+    ' Comment Lines: 0
+    '   Blank Lines: 2
+    '     File Size: 1.10 KB
 
 
     ' Module HDF5utils

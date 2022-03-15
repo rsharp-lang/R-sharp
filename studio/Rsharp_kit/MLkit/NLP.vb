@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   26
-        Code Lines:    18
-        Comment Lines: 3
-        Blank Lines:   5
-        File Size:     836.00 B
+    '   Total Lines: 26
+    '    Code Lines: 18
+    ' Comment Lines: 3
+    '   Blank Lines: 5
+    '     File Size: 836.00 B
 
 
     ' Module NLP

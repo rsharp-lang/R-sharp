@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   163
-        Code Lines:    125
-        Comment Lines: 10
-        Blank Lines:   28
-        File Size:     5.75 KB
+    '   Total Lines: 163
+    '    Code Lines: 125
+    ' Comment Lines: 10
+    '   Blank Lines: 28
+    '     File Size: 5.75 KB
 
 
     ' Module hiddenMarkov

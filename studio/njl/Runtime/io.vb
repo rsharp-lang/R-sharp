@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   128
-        Code Lines:    81
-        Comment Lines: 35
-        Blank Lines:   12
-        File Size:     4.57 KB
+    '   Total Lines: 128
+    '    Code Lines: 81
+    ' Comment Lines: 35
+    '   Blank Lines: 12
+    '     File Size: 4.57 KB
 
 
     ' Module io

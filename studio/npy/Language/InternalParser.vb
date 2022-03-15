@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   150
-        Code Lines:    116
-        Comment Lines: 9
-        Blank Lines:   25
-        File Size:     6.71 KB
+    '   Total Lines: 150
+    '    Code Lines: 116
+    ' Comment Lines: 9
+    '   Blank Lines: 25
+    '     File Size: 6.71 KB
 
 
     ' Module InternalParser

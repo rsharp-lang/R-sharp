@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   46
-        Code Lines:    22
-        Comment Lines: 12
-        Blank Lines:   12
-        File Size:     1.57 KB
+    '   Total Lines: 46
+    '    Code Lines: 22
+    ' Comment Lines: 12
+    '   Blank Lines: 12
+    '     File Size: 1.57 KB
 
 
     '     Class RSymbolLanguageMaskAttribute

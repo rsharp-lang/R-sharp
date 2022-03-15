@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   33
-        Code Lines:    25
-        Comment Lines: 0
-        Blank Lines:   8
-        File Size:     1.09 KB
+    '   Total Lines: 33
+    '    Code Lines: 25
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 1.09 KB
 
 
     '     Class NamespaceEnvironment

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   99
-        Code Lines:    18
-        Comment Lines: 75
-        Blank Lines:   6
-        File Size:     10.04 KB
+    '   Total Lines: 99
+    '    Code Lines: 18
+    ' Comment Lines: 75
+    '   Blank Lines: 6
+    '     File Size: 10.04 KB
 
 
     '     Class RSuppressPrintAttribute

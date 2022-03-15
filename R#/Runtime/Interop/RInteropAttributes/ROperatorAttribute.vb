@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   21
-        Code Lines:    12
-        Comment Lines: 4
-        Blank Lines:   5
-        File Size:     576.00 B
+    '   Total Lines: 21
+    '    Code Lines: 12
+    ' Comment Lines: 4
+    '   Blank Lines: 5
+    '     File Size: 576.00 B
 
 
     '     Class ROperatorAttribute

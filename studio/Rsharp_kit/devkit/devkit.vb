@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   101
-        Code Lines:    63
-        Comment Lines: 26
-        Blank Lines:   12
-        File Size:     3.75 KB
+    '   Total Lines: 101
+    '    Code Lines: 63
+    ' Comment Lines: 26
+    '   Blank Lines: 12
+    '     File Size: 3.75 KB
 
 
     ' Module devkit

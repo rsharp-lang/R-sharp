@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   27
-        Code Lines:    12
-        Comment Lines: 12
-        Blank Lines:   3
-        File Size:     997.00 B
+    '   Total Lines: 27
+    '    Code Lines: 12
+    ' Comment Lines: 12
+    '   Blank Lines: 3
+    '     File Size: 997.00 B
 
 
     '     Class RPlotStyleCSSAttribute

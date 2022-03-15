@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   182
-        Code Lines:    121
-        Comment Lines: 40
-        Blank Lines:   21
-        File Size:     6.83 KB
+    '   Total Lines: 182
+    '    Code Lines: 121
+    ' Comment Lines: 40
+    '   Blank Lines: 21
+    '     File Size: 6.83 KB
 
 
     ' Module Parallel

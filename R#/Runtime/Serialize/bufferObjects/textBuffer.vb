@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   39
-        Code Lines:    26
-        Comment Lines: 3
-        Blank Lines:   10
-        File Size:     966.00 B
+    '   Total Lines: 39
+    '    Code Lines: 26
+    ' Comment Lines: 3
+    '   Blank Lines: 10
+    '     File Size: 966.00 B
 
 
     '     Class textBuffer

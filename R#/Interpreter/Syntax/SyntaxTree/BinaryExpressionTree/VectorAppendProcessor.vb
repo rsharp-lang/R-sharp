@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   27
-        Code Lines:    22
-        Comment Lines: 0
-        Blank Lines:   5
-        File Size:     976.00 B
+    '   Total Lines: 27
+    '    Code Lines: 22
+    ' Comment Lines: 0
+    '   Blank Lines: 5
+    '     File Size: 976.00 B
 
 
     '     Class VectorAppendProcessor

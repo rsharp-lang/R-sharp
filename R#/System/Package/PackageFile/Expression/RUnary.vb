@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   72
-        Code Lines:    59
-        Comment Lines: 0
-        Blank Lines:   13
-        File Size:     2.85 KB
+    '   Total Lines: 72
+    '    Code Lines: 59
+    ' Comment Lines: 0
+    '   Blank Lines: 13
+    '     File Size: 2.85 KB
 
 
     '     Class RUnary

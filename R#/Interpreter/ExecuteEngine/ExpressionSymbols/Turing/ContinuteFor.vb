@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   28
-        Code Lines:    19
-        Comment Lines: 3
-        Blank Lines:   6
-        File Size:     805.00 B
+    '   Total Lines: 28
+    '    Code Lines: 19
+    ' Comment Lines: 3
+    '   Blank Lines: 6
+    '     File Size: 805.00 B
 
 
     '     Class ContinuteFor

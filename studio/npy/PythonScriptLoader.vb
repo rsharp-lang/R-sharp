@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   61
-        Code Lines:    47
-        Comment Lines: 5
-        Blank Lines:   9
-        File Size:     2.40 KB
+    '   Total Lines: 61
+    '    Code Lines: 47
+    ' Comment Lines: 5
+    '   Blank Lines: 9
+    '     File Size: 2.40 KB
 
 
     ' Class PythonScriptLoader

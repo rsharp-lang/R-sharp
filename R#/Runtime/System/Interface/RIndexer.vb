@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   10
-        Code Lines:    6
-        Comment Lines: 0
-        Blank Lines:   4
-        File Size:     244.00 B
+    '   Total Lines: 10
+    '    Code Lines: 6
+    ' Comment Lines: 0
+    '   Blank Lines: 4
+    '     File Size: 244.00 B
 
 
     '     Interface RIndexer

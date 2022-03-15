@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   94
-        Code Lines:    63
-        Comment Lines: 20
-        Blank Lines:   11
-        File Size:     3.80 KB
+    '   Total Lines: 94
+    '    Code Lines: 63
+    ' Comment Lines: 20
+    '   Blank Lines: 11
+    '     File Size: 3.80 KB
 
 
     ' Module GAToolkit

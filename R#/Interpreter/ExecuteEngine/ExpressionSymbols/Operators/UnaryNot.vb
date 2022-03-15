@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   51
-        Code Lines:    40
-        Comment Lines: 0
-        Blank Lines:   11
-        File Size:     1.55 KB
+    '   Total Lines: 51
+    '    Code Lines: 40
+    ' Comment Lines: 0
+    '   Blank Lines: 11
+    '     File Size: 1.55 KB
 
 
     '     Class UnaryNot

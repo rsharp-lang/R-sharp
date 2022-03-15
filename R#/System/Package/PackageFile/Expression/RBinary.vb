@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   102
-        Code Lines:    90
-        Comment Lines: 0
-        Blank Lines:   12
-        File Size:     4.47 KB
+    '   Total Lines: 102
+    '    Code Lines: 90
+    ' Comment Lines: 0
+    '   Blank Lines: 12
+    '     File Size: 4.47 KB
 
 
     '     Class RBinary

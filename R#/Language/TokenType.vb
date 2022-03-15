@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   70
-        Code Lines:    26
-        Comment Lines: 36
-        Blank Lines:   8
-        File Size:     1.61 KB
+    '   Total Lines: 70
+    '    Code Lines: 26
+    ' Comment Lines: 36
+    '   Blank Lines: 8
+    '     File Size: 1.61 KB
 
 
     '     Enum TokenType

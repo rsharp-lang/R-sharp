@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   134
-        Code Lines:    105
-        Comment Lines: 12
-        Blank Lines:   17
-        File Size:     5.48 KB
+    '   Total Lines: 134
+    '    Code Lines: 105
+    ' Comment Lines: 12
+    '   Blank Lines: 17
+    '     File Size: 5.48 KB
 
 
     '     Module FunctionInvokeSyntax

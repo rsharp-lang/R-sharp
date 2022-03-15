@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   20
-        Code Lines:    12
-        Comment Lines: 3
-        Blank Lines:   5
-        File Size:     531.00 B
+    '   Total Lines: 20
+    '    Code Lines: 12
+    ' Comment Lines: 3
+    '   Blank Lines: 5
+    '     File Size: 531.00 B
 
 
     '     Enum BufferObjects

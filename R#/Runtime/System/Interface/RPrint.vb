@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   7
-        Code Lines:    5
-        Comment Lines: 0
-        Blank Lines:   2
-        File Size:     151.00 B
+    '   Total Lines: 7
+    '    Code Lines: 5
+    ' Comment Lines: 0
+    '   Blank Lines: 2
+    '     File Size: 151.00 B
 
 
     '     Interface RPrint

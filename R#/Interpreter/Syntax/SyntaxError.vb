@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   62
-        Code Lines:    50
-        Comment Lines: 0
-        Blank Lines:   12
-        File Size:     2.59 KB
+    '   Total Lines: 62
+    '    Code Lines: 50
+    ' Comment Lines: 0
+    '   Blank Lines: 12
+    '     File Size: 2.59 KB
 
 
     '     Class SyntaxError

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   57
-        Code Lines:    41
-        Comment Lines: 1
-        Blank Lines:   15
-        File Size:     1.84 KB
+    '   Total Lines: 57
+    '    Code Lines: 41
+    ' Comment Lines: 1
+    '   Blank Lines: 15
+    '     File Size: 1.84 KB
 
 
     ' Class RSession

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   31
-        Code Lines:    23
-        Comment Lines: 3
-        Blank Lines:   5
-        File Size:     866.00 B
+    '   Total Lines: 31
+    '    Code Lines: 23
+    ' Comment Lines: 3
+    '   Blank Lines: 5
+    '     File Size: 866.00 B
 
 
     '     Class RsharpDataObject

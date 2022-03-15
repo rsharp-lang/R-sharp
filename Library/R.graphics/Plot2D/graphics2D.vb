@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   411
-        Code Lines:    325
-        Comment Lines: 37
-        Blank Lines:   49
-        File Size:     17.74 KB
+    '   Total Lines: 411
+    '    Code Lines: 325
+    ' Comment Lines: 37
+    '   Blank Lines: 49
+    '     File Size: 17.74 KB
 
 
     ' Module graphics2D

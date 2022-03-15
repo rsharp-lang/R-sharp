@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   40
-        Code Lines:    25
-        Comment Lines: 0
-        Blank Lines:   15
-        File Size:     1.15 KB
+    '   Total Lines: 40
+    '    Code Lines: 25
+    ' Comment Lines: 0
+    '   Blank Lines: 15
+    '     File Size: 1.15 KB
 
 
     ' Module bufferTest

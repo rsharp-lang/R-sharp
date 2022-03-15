@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   49
-        Code Lines:    21
-        Comment Lines: 21
-        Blank Lines:   7
-        File Size:     1.98 KB
+    '   Total Lines: 49
+    '    Code Lines: 21
+    ' Comment Lines: 21
+    '   Blank Lines: 7
+    '     File Size: 1.98 KB
 
 
     '     Class RRawVectorArgumentAttribute

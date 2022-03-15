@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   116
-        Code Lines:    89
-        Comment Lines: 0
-        Blank Lines:   27
-        File Size:     4.17 KB
+    '   Total Lines: 116
+    '    Code Lines: 89
+    ' Comment Lines: 0
+    '   Blank Lines: 27
+    '     File Size: 4.17 KB
 
 
     '     Module ConsoleMarkdownPrinter

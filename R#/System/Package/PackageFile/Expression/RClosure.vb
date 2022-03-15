@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   61
-        Code Lines:    46
-        Comment Lines: 3
-        Blank Lines:   12
-        File Size:     2.32 KB
+    '   Total Lines: 61
+    '    Code Lines: 46
+    ' Comment Lines: 3
+    '   Blank Lines: 12
+    '     File Size: 2.32 KB
 
 
     '     Class RClosure

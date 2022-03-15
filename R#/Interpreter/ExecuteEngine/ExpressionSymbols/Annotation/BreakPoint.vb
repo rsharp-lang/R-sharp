@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   29
-        Code Lines:    20
-        Comment Lines: 3
-        Blank Lines:   6
-        File Size:     862.00 B
+    '   Total Lines: 29
+    '    Code Lines: 20
+    ' Comment Lines: 3
+    '   Blank Lines: 6
+    '     File Size: 862.00 B
 
 
     '     Class BreakPoint

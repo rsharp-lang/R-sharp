@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   201
-        Code Lines:    162
-        Comment Lines: 0
-        Blank Lines:   39
-        File Size:     8.61 KB
+    '   Total Lines: 201
+    '    Code Lines: 162
+    ' Comment Lines: 0
+    '   Blank Lines: 39
+    '     File Size: 8.61 KB
 
 
     '     Class RFunction

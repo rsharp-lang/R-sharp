@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   241
-        Code Lines:    179
-        Comment Lines: 28
-        Blank Lines:   34
-        File Size:     9.63 KB
+    '   Total Lines: 241
+    '    Code Lines: 179
+    ' Comment Lines: 28
+    '   Blank Lines: 34
+    '     File Size: 9.63 KB
 
 
     ' Module netCDFutils

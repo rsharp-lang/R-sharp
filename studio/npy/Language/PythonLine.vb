@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   28
-        Code Lines:    21
-        Comment Lines: 0
-        Blank Lines:   7
-        File Size:     770.00 B
+    '   Total Lines: 28
+    '    Code Lines: 21
+    ' Comment Lines: 0
+    '   Blank Lines: 7
+    '     File Size: 770.00 B
 
 
     ' Class PythonLine

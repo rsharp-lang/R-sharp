@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   89
-        Code Lines:    60
-        Comment Lines: 15
-        Blank Lines:   14
-        File Size:     3.17 KB
+    '   Total Lines: 89
+    '    Code Lines: 60
+    ' Comment Lines: 15
+    '   Blank Lines: 14
+    '     File Size: 3.17 KB
 
 
     ' Module RJSON

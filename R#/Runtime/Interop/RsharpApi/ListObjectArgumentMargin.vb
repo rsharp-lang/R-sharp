@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   26
-        Code Lines:    8
-        Comment Lines: 17
-        Blank Lines:   1
-        File Size:     817.00 B
+    '   Total Lines: 26
+    '    Code Lines: 8
+    ' Comment Lines: 17
+    '   Blank Lines: 1
+    '     File Size: 817.00 B
 
 
     '     Enum ListObjectArgumentMargin

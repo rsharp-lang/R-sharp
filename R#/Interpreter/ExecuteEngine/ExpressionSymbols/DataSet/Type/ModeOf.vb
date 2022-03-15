@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   105
-        Code Lines:    75
-        Comment Lines: 18
-        Blank Lines:   12
-        File Size:     3.84 KB
+    '   Total Lines: 105
+    '    Code Lines: 75
+    ' Comment Lines: 18
+    '   Blank Lines: 12
+    '     File Size: 3.84 KB
 
 
     '     Class ModeOf

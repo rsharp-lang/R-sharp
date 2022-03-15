@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   110
-        Code Lines:    69
-        Comment Lines: 27
-        Blank Lines:   14
-        File Size:     4.09 KB
+    '   Total Lines: 110
+    '    Code Lines: 69
+    ' Comment Lines: 27
+    '   Blank Lines: 14
+    '     File Size: 4.09 KB
 
 
     '     Class BinaryOperator

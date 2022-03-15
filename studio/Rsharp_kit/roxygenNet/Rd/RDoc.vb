@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   111
-        Code Lines:    71
-        Comment Lines: 8
-        Blank Lines:   32
-        File Size:     2.76 KB
+    '   Total Lines: 111
+    '    Code Lines: 71
+    ' Comment Lines: 8
+    '   Blank Lines: 32
+    '     File Size: 2.76 KB
 
 
     ' Class RDoc

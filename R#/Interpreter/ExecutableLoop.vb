@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   221
-        Code Lines:    146
-        Comment Lines: 42
-        Blank Lines:   33
-        File Size:     8.74 KB
+    '   Total Lines: 221
+    '    Code Lines: 146
+    ' Comment Lines: 42
+    '   Blank Lines: 33
+    '     File Size: 8.74 KB
 
 
     '     Enum DebugLevels

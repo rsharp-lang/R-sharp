@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   71
-        Code Lines:    56
-        Comment Lines: 3
-        Blank Lines:   12
-        File Size:     2.91 KB
+    '   Total Lines: 71
+    '    Code Lines: 56
+    ' Comment Lines: 3
+    '   Blank Lines: 12
+    '     File Size: 2.91 KB
 
 
     ' Module sqlite

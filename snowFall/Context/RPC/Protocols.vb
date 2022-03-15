@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   55
-        Code Lines:    42
-        Comment Lines: 0
-        Blank Lines:   13
-        File Size:     1.55 KB
+    '   Total Lines: 55
+    '    Code Lines: 42
+    ' Comment Lines: 0
+    '   Blank Lines: 13
+    '     File Size: 1.55 KB
 
 
     '     Enum Protocols

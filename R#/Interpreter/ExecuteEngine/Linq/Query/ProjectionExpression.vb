@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   139
-        Code Lines:    98
-        Comment Lines: 12
-        Blank Lines:   29
-        File Size:     4.62 KB
+    '   Total Lines: 139
+    '    Code Lines: 98
+    ' Comment Lines: 12
+    '   Blank Lines: 29
+    '     File Size: 4.62 KB
 
 
     '     Class ProjectionExpression

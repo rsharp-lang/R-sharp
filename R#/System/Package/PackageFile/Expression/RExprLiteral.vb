@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   39
-        Code Lines:    30
-        Comment Lines: 0
-        Blank Lines:   9
-        File Size:     1.56 KB
+    '   Total Lines: 39
+    '    Code Lines: 30
+    ' Comment Lines: 0
+    '   Blank Lines: 9
+    '     File Size: 1.56 KB
 
 
     '     Class RExprLiteral

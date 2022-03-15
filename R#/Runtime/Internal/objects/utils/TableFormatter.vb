@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   122
-        Code Lines:    94
-        Comment Lines: 7
-        Blank Lines:   21
-        File Size:     4.88 KB
+    '   Total Lines: 122
+    '    Code Lines: 94
+    ' Comment Lines: 7
+    '   Blank Lines: 21
+    '     File Size: 4.88 KB
 
 
     '     Class TableFormatter

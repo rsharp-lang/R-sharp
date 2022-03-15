@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   48
-        Code Lines:    40
-        Comment Lines: 0
-        Blank Lines:   8
-        File Size:     1.83 KB
+    '   Total Lines: 48
+    '    Code Lines: 40
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 1.83 KB
 
 
     '     Class AcceptorClosure

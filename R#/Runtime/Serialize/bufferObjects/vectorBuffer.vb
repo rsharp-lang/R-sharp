@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   156
-        Code Lines:    116
-        Comment Lines: 7
-        Blank Lines:   33
-        File Size:     5.60 KB
+    '   Total Lines: 156
+    '    Code Lines: 116
+    ' Comment Lines: 7
+    '   Blank Lines: 33
+    '     File Size: 5.60 KB
 
 
     '     Class vectorBuffer

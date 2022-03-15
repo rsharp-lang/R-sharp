@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   122
-        Code Lines:    96
-        Comment Lines: 4
-        Blank Lines:   22
-        File Size:     4.60 KB
+    '   Total Lines: 122
+    '    Code Lines: 96
+    ' Comment Lines: 4
+    '   Blank Lines: 22
+    '     File Size: 4.60 KB
 
 
     '     Class LinqQuery

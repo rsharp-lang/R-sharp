@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   297
-        Code Lines:    231
-        Comment Lines: 16
-        Blank Lines:   50
-        File Size:     11.46 KB
+    '   Total Lines: 297
+    '    Code Lines: 231
+    ' Comment Lines: 16
+    '   Blank Lines: 50
+    '     File Size: 11.46 KB
 
 
     '     Class SyntaxTree

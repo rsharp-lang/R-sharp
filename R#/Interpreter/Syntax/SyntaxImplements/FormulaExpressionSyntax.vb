@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   34
-        Code Lines:    27
-        Comment Lines: 0
-        Blank Lines:   7
-        File Size:     1.50 KB
+    '   Total Lines: 34
+    '    Code Lines: 27
+    ' Comment Lines: 0
+    '   Blank Lines: 7
+    '     File Size: 1.50 KB
 
 
     '     Module FormulaExpressionSyntax

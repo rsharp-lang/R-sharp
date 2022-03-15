@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   736
-        Code Lines:    543
-        Comment Lines: 83
-        Blank Lines:   110
-        File Size:     28.96 KB
+    '   Total Lines: 736
+    '    Code Lines: 543
+    ' Comment Lines: 83
+    '   Blank Lines: 110
+    '     File Size: 28.96 KB
 
 
     ' Module SVMkit

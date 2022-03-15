@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   67
-        Code Lines:    46
-        Comment Lines: 7
-        Blank Lines:   14
-        File Size:     1.80 KB
+    '   Total Lines: 67
+    '    Code Lines: 46
+    ' Comment Lines: 7
+    '   Blank Lines: 14
+    '     File Size: 1.80 KB
 
 
     '     Class bitmapBuffer

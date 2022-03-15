@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   25
-        Code Lines:    10
-        Comment Lines: 11
-        Blank Lines:   4
-        File Size:     622.00 B
+    '   Total Lines: 25
+    '    Code Lines: 10
+    ' Comment Lines: 11
+    '   Blank Lines: 4
+    '     File Size: 622.00 B
 
 
     ' Module Workdir

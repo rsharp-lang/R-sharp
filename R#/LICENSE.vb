@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   41
-        Code Lines:    14
-        Comment Lines: 23
-        Blank Lines:   4
-        File Size:     1.42 KB
+    '   Total Lines: 41
+    '    Code Lines: 14
+    ' Comment Lines: 23
+    '   Blank Lines: 4
+    '     File Size: 1.42 KB
 
 
     ' Module LICENSE

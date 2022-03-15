@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   93
-        Code Lines:    57
-        Comment Lines: 21
-        Blank Lines:   15
-        File Size:     3.46 KB
+    '   Total Lines: 93
+    '    Code Lines: 57
+    ' Comment Lines: 21
+    '   Blank Lines: 15
+    '     File Size: 3.46 KB
 
 
     '     Class AnnotationDocs

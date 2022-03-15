@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   497
-        Code Lines:    390
-        Comment Lines: 40
-        Blank Lines:   67
-        File Size:     22.91 KB
+    '   Total Lines: 497
+    '    Code Lines: 390
+    ' Comment Lines: 40
+    '   Blank Lines: 67
+    '     File Size: 22.91 KB
 
 
     '     Module ExpressionBuilder

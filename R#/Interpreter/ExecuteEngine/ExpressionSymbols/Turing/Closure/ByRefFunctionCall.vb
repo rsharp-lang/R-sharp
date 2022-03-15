@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   100
-        Code Lines:    74
-        Comment Lines: 6
-        Blank Lines:   20
-        File Size:     3.87 KB
+    '   Total Lines: 100
+    '    Code Lines: 74
+    ' Comment Lines: 6
+    '   Blank Lines: 20
+    '     File Size: 3.87 KB
 
 
     '     Class ByRefFunctionCall

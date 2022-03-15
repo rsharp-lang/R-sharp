@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   213
-        Code Lines:    151
-        Comment Lines: 22
-        Blank Lines:   40
-        File Size:     8.04 KB
+    '   Total Lines: 213
+    '    Code Lines: 151
+    ' Comment Lines: 22
+    '   Blank Lines: 40
+    '     File Size: 8.04 KB
 
 
     '     Module reflector

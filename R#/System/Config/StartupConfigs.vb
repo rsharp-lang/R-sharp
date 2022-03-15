@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   12
-        Code Lines:    8
-        Comment Lines: 0
-        Blank Lines:   4
-        File Size:     318.00 B
+    '   Total Lines: 12
+    '    Code Lines: 8
+    ' Comment Lines: 0
+    '   Blank Lines: 4
+    '     File Size: 318.00 B
 
 
     '     Class StartupConfigs

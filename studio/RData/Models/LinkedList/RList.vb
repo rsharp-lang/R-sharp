@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   80
-        Code Lines:    55
-        Comment Lines: 15
-        Blank Lines:   10
-        File Size:     2.58 KB
+    '   Total Lines: 80
+    '    Code Lines: 55
+    ' Comment Lines: 15
+    '   Blank Lines: 10
+    '     File Size: 2.58 KB
 
 
     '     Class RList

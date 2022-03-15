@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   12
-        Code Lines:    6
-        Comment Lines: 3
-        Blank Lines:   3
-        File Size:     231.00 B
+    '   Total Lines: 12
+    '    Code Lines: 6
+    ' Comment Lines: 3
+    '   Blank Lines: 3
+    '     File Size: 231.00 B
 
 
     '     Class complex

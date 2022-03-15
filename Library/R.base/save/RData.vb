@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   10
-        Code Lines:    4
-        Comment Lines: 6
-        Blank Lines:   0
-        File Size:     185.00 B
+    '   Total Lines: 10
+    '    Code Lines: 4
+    ' Comment Lines: 6
+    '   Blank Lines: 0
+    '     File Size: 185.00 B
 
 
     ' Enum RData

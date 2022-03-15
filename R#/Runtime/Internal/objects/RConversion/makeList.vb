@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   47
-        Code Lines:    38
-        Comment Lines: 0
-        Blank Lines:   9
-        File Size:     1.67 KB
+    '   Total Lines: 47
+    '    Code Lines: 38
+    ' Comment Lines: 0
+    '   Blank Lines: 9
+    '     File Size: 1.67 KB
 
 
     '     Module makeList

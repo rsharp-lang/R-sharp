@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   278
-        Code Lines:    183
-        Comment Lines: 53
-        Blank Lines:   42
-        File Size:     11.28 KB
+    '   Total Lines: 278
+    '    Code Lines: 183
+    ' Comment Lines: 53
+    '   Blank Lines: 42
+    '     File Size: 11.28 KB
 
 
     '     Class GlobalEnvironment

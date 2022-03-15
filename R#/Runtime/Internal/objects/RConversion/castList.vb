@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   145
-        Code Lines:    116
-        Comment Lines: 5
-        Blank Lines:   24
-        File Size:     5.80 KB
+    '   Total Lines: 145
+    '    Code Lines: 116
+    ' Comment Lines: 5
+    '   Blank Lines: 24
+    '     File Size: 5.80 KB
 
 
     '     Module castList

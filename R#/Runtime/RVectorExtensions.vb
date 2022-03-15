@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   375
-        Code Lines:    260
-        Comment Lines: 70
-        Blank Lines:   45
-        File Size:     14.56 KB
+    '   Total Lines: 375
+    '    Code Lines: 260
+    ' Comment Lines: 70
+    '   Blank Lines: 45
+    '     File Size: 14.56 KB
 
 
     '     Module RVectorExtensions

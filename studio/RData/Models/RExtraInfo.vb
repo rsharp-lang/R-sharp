@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   16
-        Code Lines:    8
-        Comment Lines: 5
-        Blank Lines:   3
-        File Size:     406.00 B
+    '   Total Lines: 16
+    '    Code Lines: 8
+    ' Comment Lines: 5
+    '   Blank Lines: 3
+    '     File Size: 406.00 B
 
 
     '     Class RExtraInfo

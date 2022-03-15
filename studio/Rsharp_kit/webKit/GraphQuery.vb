@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   60
-        Code Lines:    31
-        Comment Lines: 23
-        Blank Lines:   6
-        File Size:     2.15 KB
+    '   Total Lines: 60
+    '    Code Lines: 31
+    ' Comment Lines: 23
+    '   Blank Lines: 6
+    '     File Size: 2.15 KB
 
 
     ' Module HtmlGraphQuery

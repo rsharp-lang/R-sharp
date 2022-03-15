@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   98
-        Code Lines:    79
-        Comment Lines: 2
-        Blank Lines:   17
-        File Size:     3.97 KB
+    '   Total Lines: 98
+    '    Code Lines: 79
+    ' Comment Lines: 2
+    '   Blank Lines: 17
+    '     File Size: 3.97 KB
 
 
     '     Module StringBinaryExpression

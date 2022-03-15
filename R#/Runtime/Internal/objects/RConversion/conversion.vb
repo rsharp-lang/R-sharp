@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   990
-        Code Lines:    597
-        Comment Lines: 285
-        Blank Lines:   108
-        File Size:     44.50 KB
+    '   Total Lines: 990
+    '    Code Lines: 597
+    ' Comment Lines: 285
+    '   Blank Lines: 108
+    '     File Size: 44.50 KB
 
 
     '     Module RConversion

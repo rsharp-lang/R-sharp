@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   56
-        Code Lines:    33
-        Comment Lines: 15
-        Blank Lines:   8
-        File Size:     1.97 KB
+    '   Total Lines: 56
+    '    Code Lines: 33
+    ' Comment Lines: 15
+    '   Blank Lines: 8
+    '     File Size: 1.97 KB
 
 
     '     Module zzz

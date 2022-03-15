@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   71
-        Code Lines:    40
-        Comment Lines: 22
-        Blank Lines:   9
-        File Size:     2.44 KB
+    '   Total Lines: 71
+    '    Code Lines: 40
+    ' Comment Lines: 22
+    '   Blank Lines: 9
+    '     File Size: 2.44 KB
 
 
     ' Module CNN

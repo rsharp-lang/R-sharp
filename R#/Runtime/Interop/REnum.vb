@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   111
-        Code Lines:    83
-        Comment Lines: 7
-        Blank Lines:   21
-        File Size:     3.77 KB
+    '   Total Lines: 111
+    '    Code Lines: 83
+    ' Comment Lines: 7
+    '   Blank Lines: 21
+    '     File Size: 3.77 KB
 
 
     '     Class REnum

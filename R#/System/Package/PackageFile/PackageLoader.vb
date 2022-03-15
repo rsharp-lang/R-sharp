@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   276
-        Code Lines:    196
-        Comment Lines: 35
-        Blank Lines:   45
-        File Size:     10.13 KB
+    '   Total Lines: 276
+    '    Code Lines: 196
+    ' Comment Lines: 35
+    '   Blank Lines: 45
+    '     File Size: 10.13 KB
 
 
     '     Module PackageLoader2

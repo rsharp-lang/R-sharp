@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   16
-        Code Lines:    12
-        Comment Lines: 0
-        Blank Lines:   4
-        File Size:     420.00 B
+    '   Total Lines: 16
+    '    Code Lines: 12
+    ' Comment Lines: 0
+    '   Blank Lines: 4
+    '     File Size: 420.00 B
 
 
     ' Module createException

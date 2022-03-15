@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   80
-        Code Lines:    68
-        Comment Lines: 0
-        Blank Lines:   12
-        File Size:     3.79 KB
+    '   Total Lines: 80
+    '    Code Lines: 68
+    ' Comment Lines: 0
+    '   Blank Lines: 12
+    '     File Size: 3.79 KB
 
 
     '     Module SwitchClosureSyntax

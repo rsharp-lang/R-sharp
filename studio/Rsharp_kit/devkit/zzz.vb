@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   7
-        Code Lines:    4
-        Comment Lines: 0
-        Blank Lines:   3
-        File Size:     100.00 B
+    '   Total Lines: 7
+    '    Code Lines: 4
+    ' Comment Lines: 0
+    '   Blank Lines: 3
+    '     File Size: 100.00 B
 
 
     ' Class zzz

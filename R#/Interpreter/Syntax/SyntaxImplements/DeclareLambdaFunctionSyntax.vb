@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   90
-        Code Lines:    76
-        Comment Lines: 7
-        Blank Lines:   7
-        File Size:     3.90 KB
+    '   Total Lines: 90
+    '    Code Lines: 76
+    ' Comment Lines: 7
+    '   Blank Lines: 7
+    '     File Size: 3.90 KB
 
 
     '     Module DeclareLambdaFunctionSyntax

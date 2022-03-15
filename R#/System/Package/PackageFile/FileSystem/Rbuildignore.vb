@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   60
-        Code Lines:    32
-        Comment Lines: 18
-        Blank Lines:   10
-        File Size:     1.92 KB
+    '   Total Lines: 60
+    '    Code Lines: 32
+    ' Comment Lines: 18
+    '   Blank Lines: 10
+    '     File Size: 1.92 KB
 
 
     '     Class Rbuildignore

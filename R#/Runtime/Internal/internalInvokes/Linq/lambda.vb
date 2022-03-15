@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   65
-        Code Lines:    53
-        Comment Lines: 2
-        Blank Lines:   10
-        File Size:     2.95 KB
+    '   Total Lines: 65
+    '    Code Lines: 53
+    ' Comment Lines: 2
+    '   Blank Lines: 10
+    '     File Size: 2.95 KB
 
 
     '     Module lambda

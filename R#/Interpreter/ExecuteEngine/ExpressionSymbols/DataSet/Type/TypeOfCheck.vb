@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   88
-        Code Lines:    55
-        Comment Lines: 18
-        Blank Lines:   15
-        File Size:     3.15 KB
+    '   Total Lines: 88
+    '    Code Lines: 55
+    ' Comment Lines: 18
+    '   Blank Lines: 15
+    '     File Size: 3.15 KB
 
 
     '     Class TypeOfCheck

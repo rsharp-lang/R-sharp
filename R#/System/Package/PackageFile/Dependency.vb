@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   63
-        Code Lines:    48
-        Comment Lines: 4
-        Blank Lines:   11
-        File Size:     2.35 KB
+    '   Total Lines: 63
+    '    Code Lines: 48
+    ' Comment Lines: 4
+    '   Blank Lines: 11
+    '     File Size: 2.35 KB
 
 
     '     Class Dependency

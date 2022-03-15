@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   482
-        Code Lines:    363
-        Comment Lines: 39
-        Blank Lines:   80
-        File Size:     20.77 KB
+    '   Total Lines: 482
+    '    Code Lines: 363
+    ' Comment Lines: 39
+    '   Blank Lines: 80
+    '     File Size: 20.77 KB
 
 
     '     Class ValueAssignExpression

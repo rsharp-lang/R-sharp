@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   48
-        Code Lines:    25
-        Comment Lines: 15
-        Blank Lines:   8
-        File Size:     1.75 KB
+    '   Total Lines: 48
+    '    Code Lines: 25
+    ' Comment Lines: 15
+    '   Blank Lines: 8
+    '     File Size: 1.75 KB
 
 
     '     Class RExpression

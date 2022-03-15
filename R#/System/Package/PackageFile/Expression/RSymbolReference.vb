@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   86
-        Code Lines:    71
-        Comment Lines: 0
-        Blank Lines:   15
-        File Size:     3.76 KB
+    '   Total Lines: 86
+    '    Code Lines: 71
+    ' Comment Lines: 0
+    '   Blank Lines: 15
+    '     File Size: 3.76 KB
 
 
     '     Class RSymbolReference

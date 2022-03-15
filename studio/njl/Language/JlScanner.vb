@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   30
-        Code Lines:    24
-        Comment Lines: 0
-        Blank Lines:   6
-        File Size:     1.06 KB
+    '   Total Lines: 30
+    '    Code Lines: 24
+    ' Comment Lines: 0
+    '   Blank Lines: 6
+    '     File Size: 1.06 KB
 
 
     '     Class JlScanner

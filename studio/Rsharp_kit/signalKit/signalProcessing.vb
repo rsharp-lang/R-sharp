@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   147
-        Code Lines:    114
-        Comment Lines: 12
-        Blank Lines:   21
-        File Size:     6.24 KB
+    '   Total Lines: 147
+    '    Code Lines: 114
+    ' Comment Lines: 12
+    '   Blank Lines: 21
+    '     File Size: 6.24 KB
 
 
     ' Module signalProcessing

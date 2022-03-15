@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   35
-        Code Lines:    16
-        Comment Lines: 15
-        Blank Lines:   4
-        File Size:     1.17 KB
+    '   Total Lines: 35
+    '    Code Lines: 16
+    ' Comment Lines: 15
+    '   Blank Lines: 4
+    '     File Size: 1.17 KB
 
 
     '     Class RDefaultExpressionAttribute

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   57
-        Code Lines:    45
-        Comment Lines: 1
-        Blank Lines:   11
-        File Size:     1.85 KB
+    '   Total Lines: 57
+    '    Code Lines: 45
+    ' Comment Lines: 1
+    '   Blank Lines: 11
+    '     File Size: 1.85 KB
 
 
     '     Class ROperatorInvoke

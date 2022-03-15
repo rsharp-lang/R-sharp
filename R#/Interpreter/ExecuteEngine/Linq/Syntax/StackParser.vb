@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   182
-        Code Lines:    145
-        Comment Lines: 10
-        Blank Lines:   27
-        File Size:     7.13 KB
+    '   Total Lines: 182
+    '    Code Lines: 145
+    ' Comment Lines: 10
+    '   Blank Lines: 27
+    '     File Size: 7.13 KB
 
 
     '     Module StackParser

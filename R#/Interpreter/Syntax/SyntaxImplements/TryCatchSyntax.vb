@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   40
-        Code Lines:    29
-        Comment Lines: 2
-        Blank Lines:   9
-        File Size:     1.45 KB
+    '   Total Lines: 40
+    '    Code Lines: 29
+    ' Comment Lines: 2
+    '   Blank Lines: 9
+    '     File Size: 1.45 KB
 
 
     '     Module TryCatchSyntax

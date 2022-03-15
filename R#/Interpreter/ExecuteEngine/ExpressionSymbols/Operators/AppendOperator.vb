@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   78
-        Code Lines:    57
-        Comment Lines: 9
-        Blank Lines:   12
-        File Size:     2.60 KB
+    '   Total Lines: 78
+    '    Code Lines: 57
+    ' Comment Lines: 9
+    '   Blank Lines: 12
+    '     File Size: 2.60 KB
 
 
     '     Class AppendOperator

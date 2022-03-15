@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   60
-        Code Lines:    42
-        Comment Lines: 7
-        Blank Lines:   11
-        File Size:     1.94 KB
+    '   Total Lines: 60
+    '    Code Lines: 42
+    ' Comment Lines: 7
+    '   Blank Lines: 11
+    '     File Size: 1.94 KB
 
 
     '     Class RReturn

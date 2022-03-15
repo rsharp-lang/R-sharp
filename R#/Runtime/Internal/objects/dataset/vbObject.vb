@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   264
-        Code Lines:    192
-        Comment Lines: 40
-        Blank Lines:   32
-        File Size:     11.14 KB
+    '   Total Lines: 264
+    '    Code Lines: 192
+    ' Comment Lines: 40
+    '   Blank Lines: 32
+    '     File Size: 11.14 KB
 
 
     '     Class vbObject

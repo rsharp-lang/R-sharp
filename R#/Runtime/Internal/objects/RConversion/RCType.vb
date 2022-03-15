@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   124
-        Code Lines:    94
-        Comment Lines: 12
-        Blank Lines:   18
-        File Size:     5.29 KB
+    '   Total Lines: 124
+    '    Code Lines: 94
+    ' Comment Lines: 12
+    '   Blank Lines: 18
+    '     File Size: 5.29 KB
 
 
     '     Class RCType

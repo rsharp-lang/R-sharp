@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   29
-        Code Lines:    9
-        Comment Lines: 19
-        Blank Lines:   1
-        File Size:     681.00 B
+    '   Total Lines: 29
+    '    Code Lines: 9
+    ' Comment Lines: 19
+    '   Blank Lines: 1
+    '     File Size: 681.00 B
 
 
     '     Enum SymbolIndexers

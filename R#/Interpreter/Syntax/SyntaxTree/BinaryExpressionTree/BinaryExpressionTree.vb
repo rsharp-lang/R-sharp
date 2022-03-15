@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   385
-        Code Lines:    296
-        Comment Lines: 28
-        Blank Lines:   61
-        File Size:     17.32 KB
+    '   Total Lines: 385
+    '    Code Lines: 296
+    ' Comment Lines: 28
+    '   Blank Lines: 61
+    '     File Size: 17.32 KB
 
 
     '     Module BinaryExpressionTree

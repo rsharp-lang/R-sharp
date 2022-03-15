@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   52
-        Code Lines:    22
-        Comment Lines: 23
-        Blank Lines:   7
-        File Size:     1.60 KB
+    '   Total Lines: 52
+    '    Code Lines: 22
+    ' Comment Lines: 23
+    '   Blank Lines: 7
+    '     File Size: 1.60 KB
 
 
     '     Class ObjectEnvironment

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   18
-        Code Lines:    7
-        Comment Lines: 10
-        Blank Lines:   1
-        File Size:     498.00 B
+    '   Total Lines: 18
+    '    Code Lines: 7
+    ' Comment Lines: 10
+    '   Blank Lines: 1
+    '     File Size: 498.00 B
 
 
     '     Enum ListNodeType

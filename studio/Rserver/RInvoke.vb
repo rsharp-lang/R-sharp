@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   14
-        Code Lines:    8
-        Comment Lines: 3
-        Blank Lines:   3
-        File Size:     433.00 B
+    '   Total Lines: 14
+    '    Code Lines: 8
+    ' Comment Lines: 3
+    '   Blank Lines: 3
+    '     File Size: 433.00 B
 
 
     ' Class RInvoke

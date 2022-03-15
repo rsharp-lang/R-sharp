@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   140
-        Code Lines:    106
-        Comment Lines: 16
-        Blank Lines:   18
-        File Size:     6.03 KB
+    '   Total Lines: 140
+    '    Code Lines: 106
+    ' Comment Lines: 16
+    '   Blank Lines: 18
+    '     File Size: 6.03 KB
 
 
     '     Module DeclareNewFunctionSyntax

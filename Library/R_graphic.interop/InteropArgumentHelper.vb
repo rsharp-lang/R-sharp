@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   169
-        Code Lines:    131
-        Comment Lines: 20
-        Blank Lines:   18
-        File Size:     6.14 KB
+    '   Total Lines: 169
+    '    Code Lines: 131
+    ' Comment Lines: 20
+    '   Blank Lines: 18
+    '     File Size: 6.14 KB
 
 
     ' Module InteropArgumentHelper

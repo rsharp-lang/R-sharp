@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   47
-        Code Lines:    33
-        Comment Lines: 7
-        Blank Lines:   7
-        File Size:     1.83 KB
+    '   Total Lines: 47
+    '    Code Lines: 33
+    ' Comment Lines: 7
+    '   Blank Lines: 7
+    '     File Size: 1.83 KB
 
 
     ' Module grSVG

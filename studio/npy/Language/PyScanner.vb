@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   47
-        Code Lines:    33
-        Comment Lines: 4
-        Blank Lines:   10
-        File Size:     1.70 KB
+    '   Total Lines: 47
+    '    Code Lines: 33
+    ' Comment Lines: 4
+    '   Blank Lines: 10
+    '     File Size: 1.70 KB
 
 
     '     Class PyScanner

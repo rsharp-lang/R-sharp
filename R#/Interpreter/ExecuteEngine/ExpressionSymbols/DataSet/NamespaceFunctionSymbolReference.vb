@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   120
-        Code Lines:    84
-        Comment Lines: 15
-        Blank Lines:   21
-        File Size:     4.82 KB
+    '   Total Lines: 120
+    '    Code Lines: 84
+    ' Comment Lines: 15
+    '   Blank Lines: 21
+    '     File Size: 4.82 KB
 
 
     '     Class NamespaceFunctionSymbolReference

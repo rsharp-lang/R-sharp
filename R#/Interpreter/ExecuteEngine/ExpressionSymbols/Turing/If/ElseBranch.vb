@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   79
-        Code Lines:    64
-        Comment Lines: 0
-        Blank Lines:   15
-        File Size:     2.53 KB
+    '   Total Lines: 79
+    '    Code Lines: 64
+    ' Comment Lines: 0
+    '   Blank Lines: 15
+    '     File Size: 2.53 KB
 
 
     '     Class ElseBranch

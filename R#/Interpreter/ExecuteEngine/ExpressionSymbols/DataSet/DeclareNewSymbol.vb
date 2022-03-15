@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   332
-        Code Lines:    251
-        Comment Lines: 27
-        Blank Lines:   54
-        File Size:     12.48 KB
+    '   Total Lines: 332
+    '    Code Lines: 251
+    ' Comment Lines: 27
+    '   Blank Lines: 54
+    '     File Size: 12.48 KB
 
 
     '     Class DeclareNewSymbol

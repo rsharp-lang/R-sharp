@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   90
-        Code Lines:    72
-        Comment Lines: 5
-        Blank Lines:   13
-        File Size:     3.63 KB
+    '   Total Lines: 90
+    '    Code Lines: 72
+    ' Comment Lines: 5
+    '   Blank Lines: 13
+    '     File Size: 3.63 KB
 
 
     '     Module Splitter

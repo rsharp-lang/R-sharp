@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   69
-        Code Lines:    33
-        Comment Lines: 24
-        Blank Lines:   12
-        File Size:     2.39 KB
+    '   Total Lines: 69
+    '    Code Lines: 33
+    ' Comment Lines: 24
+    '   Blank Lines: 12
+    '     File Size: 2.39 KB
 
 
     '     Class RDispose

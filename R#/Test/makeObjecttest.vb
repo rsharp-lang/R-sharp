@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   39
-        Code Lines:    31
-        Comment Lines: 0
-        Blank Lines:   8
-        File Size:     1.16 KB
+    '   Total Lines: 39
+    '    Code Lines: 31
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 1.16 KB
 
 
     ' Module makeObjecttest

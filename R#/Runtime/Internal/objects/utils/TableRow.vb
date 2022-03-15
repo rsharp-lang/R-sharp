@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   46
-        Code Lines:    34
-        Comment Lines: 6
-        Blank Lines:   6
-        File Size:     1.52 KB
+    '   Total Lines: 46
+    '    Code Lines: 34
+    ' Comment Lines: 6
+    '   Blank Lines: 6
+    '     File Size: 1.52 KB
 
 
     '     Class TableRow

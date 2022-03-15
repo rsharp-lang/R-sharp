@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::159ecf33a07bc8a90a3135fbe989f0e9, R-sharp\studio\Rstudio.common\BufferHandler.vb"
+﻿#Region "Microsoft.VisualBasic::1cffd3a4f979f83ecf9aa864333052d6, R-sharp\studio\Rstudio.common\BufferHandler.vb"
 
     ' Author:
     ' 
@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   41
-        Code Lines:    35
-        Comment Lines: 0
-        Blank Lines:   6
-        File Size:     1.65 KB
+    '   Total Lines: 41
+    '    Code Lines: 35
+    ' Comment Lines: 0
+    '   Blank Lines: 6
+    '     File Size: 1.64 KB
 
 
     ' Module BufferHandler
@@ -90,4 +90,3 @@ Module BufferHandler
         Return buffer
     End Function
 End Module
-

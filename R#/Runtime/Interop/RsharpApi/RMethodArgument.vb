@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   161
-        Code Lines:    87
-        Comment Lines: 60
-        Blank Lines:   14
-        File Size:     6.55 KB
+    '   Total Lines: 161
+    '    Code Lines: 87
+    ' Comment Lines: 60
+    '   Blank Lines: 14
+    '     File Size: 6.55 KB
 
 
     '     Class RMethodArgument

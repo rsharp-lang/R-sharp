@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   52
-        Code Lines:    44
-        Comment Lines: 0
-        Blank Lines:   8
-        File Size:     2.35 KB
+    '   Total Lines: 52
+    '    Code Lines: 44
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 2.35 KB
 
 
     '     Module TableJoint

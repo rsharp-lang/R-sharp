@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   40
-        Code Lines:    31
-        Comment Lines: 0
-        Blank Lines:   9
-        File Size:     1.48 KB
+    '   Total Lines: 40
+    '    Code Lines: 31
+    ' Comment Lines: 0
+    '   Blank Lines: 9
+    '     File Size: 1.48 KB
 
 
     '     Class RCommandLine

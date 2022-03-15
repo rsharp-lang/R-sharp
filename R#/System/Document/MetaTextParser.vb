@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   57
-        Code Lines:    46
-        Comment Lines: 3
-        Blank Lines:   8
-        File Size:     2.16 KB
+    '   Total Lines: 57
+    '    Code Lines: 46
+    ' Comment Lines: 3
+    '   Blank Lines: 8
+    '     File Size: 2.16 KB
 
 
     '     Module MetaTextParser

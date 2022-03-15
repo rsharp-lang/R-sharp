@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   65
-        Code Lines:    46
-        Comment Lines: 9
-        Blank Lines:   10
-        File Size:     2.19 KB
+    '   Total Lines: 65
+    '    Code Lines: 46
+    ' Comment Lines: 9
+    '   Blank Lines: 10
+    '     File Size: 2.19 KB
 
 
     '     Class Profiler

@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   50
-        Code Lines:    41
-        Comment Lines: 0
-        Blank Lines:   9
-        File Size:     2.11 KB
+    '   Total Lines: 50
+    '    Code Lines: 41
+    ' Comment Lines: 0
+    '   Blank Lines: 9
+    '     File Size: 2.11 KB
 
 
     ' Class GeneralChromosome

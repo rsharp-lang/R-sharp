@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   52
-        Code Lines:    41
-        Comment Lines: 1
-        Blank Lines:   10
-        File Size:     2.36 KB
+    '   Total Lines: 52
+    '    Code Lines: 41
+    ' Comment Lines: 1
+    '   Blank Lines: 10
+    '     File Size: 2.36 KB
 
 
     '     Module LambdaCompiler

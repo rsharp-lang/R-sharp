@@ -32,13 +32,13 @@
     ' Summaries:
 
 
-     Code Statistics:
+    ' Code Statistics:
 
-        Total Lines:   29
-        Code Lines:    19
-        Comment Lines: 5
-        Blank Lines:   5
-        File Size:     865.00 B
+    '   Total Lines: 29
+    '    Code Lines: 19
+    ' Comment Lines: 5
+    '   Blank Lines: 5
+    '     File Size: 865.00 B
 
 
     '     Class HostSymbol
