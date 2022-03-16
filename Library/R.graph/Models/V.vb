@@ -98,8 +98,8 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
         End Get
     End Property
 
-    Sub New(g As NetworkGraph)
-        Call Me.New(g.vertex)
+    Sub New(g As NetworkGraph, Optional allConnected As Boolean = False)
+        Call Me.New(If(allConnected, g.connectedNodes, g.vertex))
     End Sub
 
     Sub New(list As IEnumerable(Of Node))

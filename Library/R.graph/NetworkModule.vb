@@ -156,8 +156,8 @@ Public Module NetworkModule
     ''' <returns></returns>
     <ExportAPI("V")>
     <RApiReturn(GetType(V))>
-    Public Function V(g As NetworkGraph) As Object
-        Return New V(g)
+    Public Function V(g As NetworkGraph, Optional allConnected As Boolean = False) As Object
+        Return New V(g, allConnected)
     End Function
 
     ''' <summary>
@@ -1042,6 +1042,7 @@ Public Module NetworkModule
     ''' <param name="g"></param>
     ''' <returns></returns>
     <ExportAPI("edges")>
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function getEdges(g As NetworkGraph) As Edge()
         Return g.graphEdges.ToArray
     End Function
@@ -1165,15 +1166,19 @@ Public Module NetworkModule
     End Function
 
     ''' <summary>
-    ''' Decompose a graph into components, Creates a separate graph for each component of a graph.
+    ''' Decompose a graph into components, Creates a separate graph 
+    ''' for each component of a graph.
     ''' </summary>
     ''' <param name="graph">The original graph.</param>
     ''' <param name="weakMode">
-    ''' Character constant giving the type of the components, wither weak for weakly connected 
-    ''' components or strong for strongly connected components.
+    ''' Character constant giving the type of the components, 
+    ''' wither weak for weakly connected components or strong 
+    ''' for strongly connected components.
     ''' </param>
-    ''' <param name="minVertices">The minimum number of vertices a component should contain in 
-    ''' order to place it in the result list. Eg. supply 2 here to ignore isolate vertices.
+    ''' <param name="minVertices">
+    ''' The minimum number of vertices a component should contain in 
+    ''' order to place it in the result list. Eg. supply 2 here to 
+    ''' ignore isolate vertices.
     ''' </param>
     ''' <param name="by_group">
     ''' split of the graph data by node type.
@@ -1184,21 +1189,32 @@ Public Module NetworkModule
                                    Optional weakMode As Boolean = True,
                                    Optional by_group As Boolean = False,
                                    Optional minVertices As Integer = 5) As NetworkGraph()
-
         If by_group Then
-            Return graph.DecomposeGraphByGroup(minVertices:=minVertices).ToArray
+            Return graph _
+                .DecomposeGraphByGroup(minVertices:=minVertices) _
+                .ToArray
         Else
-            Return graph.DecomposeGraph(weakMode, minVertices).ToArray
+            Return graph _
+                .DecomposeGraph(weakMode, minVertices) _
+                .ToArray
         End If
     End Function
 
+    ''' <summary>
+    ''' extract sub graph component by a specific 
+    ''' given node group tag data.
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="node_group"></param>
+    ''' <param name="minVertices"></param>
+    ''' <returns></returns>
     <ExportAPI("extract.sub_graph")>
     Public Function extractSubGraph(g As NetworkGraph, node_group As String, Optional minVertices As Integer = 3) As NetworkGraph
         Dim nodeSet = (From v As node
                        In g.vertex
                        Where v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = node_group
                        Select v).ToArray
-        Dim edgeSet = g.getEdgeSet(nodeSet)
+        Dim edgeSet As Edge() = g.getEdgeSet(nodeSet)
         Dim component As NetworkGraph = edgeSet.DecomposeGraph(minVertices:=minVertices)
 
         Return component
@@ -1210,6 +1226,7 @@ Public Module NetworkModule
     ''' <param name="graph"></param>
     ''' <returns></returns>
     <ExportAPI("components")>
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function components(graph As NetworkGraph) As NetworkGraph()
         Return graph.IteratesSubNetworks(Of NetworkGraph)(singleNodeAsGraph:=True)
     End Function
@@ -1224,6 +1241,7 @@ Public Module NetworkModule
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("louvain_cluster")>
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function LouvainCluster(g As NetworkGraph, Optional eps As Double = 0.00001) As NetworkGraph
         Return Communities.Analysis(g, eps:=eps)
     End Function
