@@ -953,12 +953,66 @@ Public Module NetworkModule
         Return g
     End Function
 
+    <Extension>
+    Private Function getClass(vlist As IEnumerable(Of node)) As String()
+        Return vlist _
+            .Select(Function(v)
+                        Return v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE)
+                    End Function) _
+            .ToArray
+    End Function
+
+    ''' <summary>
+    ''' get/set node class type
+    ''' </summary>
+    ''' <param name="g">
+    ''' the network graph model, vertex array or vertex V collection.
+    ''' </param>
+    ''' <param name="classList"></param>
+    ''' <returns></returns>
     <ExportAPI("class")>
-    Public Function nodeClass(g As NetworkGraph, <RByRefValueAssign> Optional classList As String() = Nothing) As String()
+    <RApiReturn(GetType(String))>
+    Public Function nodeClass(<RRawVectorArgument> g As Object,
+                              <RByRefValueAssign>
+                              Optional classList As String() = Nothing,
+                              Optional env As Environment = Nothing) As Object
+
         If classList.IsNullOrEmpty Then
-            Return g.vertex.Select(Function(v) v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE)).ToArray
+            If TypeOf g Is NetworkGraph Then
+                Return DirectCast(g, NetworkGraph).vertex.getClass
+            ElseIf TypeOf g Is V Then
+                Return DirectCast(g, V).vertex.getClass
+            Else
+                Dim vlist As pipeline = pipeline.TryCreatePipeline(Of node)(g, env)
+
+                If vlist.isError Then
+                    Return vlist.getError
+                Else
+                    Return vlist.populates(Of node)(env).getClass
+                End If
+            End If
         Else
-            Dim nodes = g.vertex.ToArray
+            Dim nodes As node()
+
+            If TypeOf g Is NetworkGraph Then
+                nodes = DirectCast(g, NetworkGraph).vertex.ToArray
+            ElseIf TypeOf g Is V Then
+                nodes = DirectCast(g, V).vertex
+            Else
+                Dim vlist As pipeline = pipeline.TryCreatePipeline(Of node)(g, env)
+
+                If vlist.isError Then
+                    Return vlist.getError
+                Else
+                    nodes = vlist _
+                        .populates(Of node)(env) _
+                        .ToArray
+                End If
+            End If
+
+            If classList.Length > 1 AndAlso classList.Length <> nodes.Length Then
+                Return Internal.debug.stop("the size of the class id and the node collection must be equals!", env)
+            End If
 
             For i As Integer = 0 To nodes.Length - 1
                 nodes(i).data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = classList(i)
