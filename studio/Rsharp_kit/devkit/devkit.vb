@@ -76,6 +76,7 @@ Module devkit
     Sub New()
         Internal.ConsolePrinter.AttachConsoleFormatter(Of ILInstruction)(Function(a) DirectCast(a, ILInstruction).GetCode)
         Internal.ConsolePrinter.AttachConsoleFormatter(Of Project)(AddressOf printProject)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of LicenseInfo)(Function(a) a.ToString)
     End Sub
 
     Private Function printProject(vbproj As Project) As String

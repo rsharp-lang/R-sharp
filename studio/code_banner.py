@@ -15,15 +15,32 @@ print(banner)
 # only apply of the banner to the project source file?
 projects = list.files(proj_folder, pattern = "*.vbproj", recursive = True)
 
+totalLines = []
+commentLines = []
+blankLines = []
+size = []
+lineOfCodes = []
+files = []
+projList = []
+
 print(`get ${length(projects)} target source projects!`)
 print(projects)
 
-def process_project(vbproj):
+def process_project(vbproj, refer):
     print(vbproj)
 
     for file in sourceFiles(vbproj):
         print(file)
+
         stat = write.code_banner(file, banner, rootDir = proj_folder)
+
+        totalLines = append(totalLines, [stat]::totalLines)
+        commentLines =append(commentLines, [stat]::commentLines)
+        blankLines = append(blankLines, [stat]::blankLines)
+        size = append(size, [stat]::size)
+        lineOfCodes = append(lineOfCodes, [stat]::lineOfCodes)
+        files = append(files, file)
+        projList = append(projList, refer)
 
 for refer in projects:
     vbproj = read.vbproj(file = refer)
@@ -34,5 +51,10 @@ for refer in projects:
         print(`processing vbproj: ${refer}`)
 
         # run project processing...
-        process_project(vbproj)
+        process_project(vbproj, refer)
     
+stat = data.frame(projList, files, totalLines, commentLines, blankLines, size, lineOfCodes)
+
+print(stat, max.print = 13)
+
+write.csv(stat, file = `${proj_folder}/projects.csv`, row.names = False)
