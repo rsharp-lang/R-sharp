@@ -1,3 +1,4 @@
+from posixpath import dirname
 from Rstudio import gtk
 from devkit import VisualStudio
 
@@ -28,6 +29,7 @@ print(projects)
 
 def walkFiles(vbproj, refer):
     v = list()
+    root = dirname(refer)
 
     for file in sourceFiles(vbproj):
         print(file)
@@ -39,8 +41,8 @@ def walkFiles(vbproj, refer):
         v$blankLines   = append(v$blankLines, [stat]::blankLines)
         v$size         = append(v$size, [stat]::size)
         v$lineOfCodes  = append(v$lineOfCodes, [stat]::lineOfCodes)
-        v$files        = append(v$files, file)
-        v$projList     = append(v$projList, refer)
+        v$files        = append(v$files, getRelativePath(file, root))
+        v$projList     = append(v$projList, getRelativePath(refer, proj_folder))
 
     print("-----------------------------")
 
@@ -80,7 +82,7 @@ for refer in projects:
         size         = append(size, sum(v$size))
         lineOfCodes  = append(lineOfCodes, sum(v$lineOfCodes))
         files        = append(files, "<project>")
-        projList     = append(projList, refer)
+        projList     = append(projList, getRelativePath(refer, proj_folder))
     
     print("~done!")
 
