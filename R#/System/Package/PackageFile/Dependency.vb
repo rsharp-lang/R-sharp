@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::01698843fea33a161c589d531153694c, R-sharp\R#\System\Package\PackageFile\Dependency.vb"
+﻿#Region "Microsoft.VisualBasic::3d7121b4f5962a61fb84e16dda63492d, R-sharp\R#\System\Package\PackageFile\Dependency.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 48
     ' Comment Lines: 4
     '   Blank Lines: 11
-    '     File Size: 2.35 KB
+    '     File Size: 2.41 KB
 
 
     '     Class Dependency

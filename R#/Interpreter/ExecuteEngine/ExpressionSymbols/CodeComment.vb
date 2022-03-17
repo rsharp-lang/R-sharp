@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1f1b4a6077ca90adba624132c76e9d80, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\CodeComment.vb"
+﻿#Region "Microsoft.VisualBasic::5ef37b2f7ec68913a82dd524d40b0741, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\CodeComment.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 73
     ' Comment Lines: 6
     '   Blank Lines: 16
-    '     File Size: 3.10 KB
+    '     File Size: 3.19 KB
 
 
     '     Enum Annotations

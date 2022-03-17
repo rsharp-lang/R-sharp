@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4f2d29a7c10eb6ba7a4ea015676e614f, R-sharp\studio\Rsharp_kit\MLkit\hiddenMarkov.vb"
+﻿#Region "Microsoft.VisualBasic::123a08e893fc3fedf6bfc14b82b28278, R-sharp\studio\Rsharp_kit\MLkit\hiddenMarkov.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 125
     ' Comment Lines: 10
     '   Blank Lines: 28
-    '     File Size: 5.75 KB
+    '     File Size: 5.92 KB
 
 
     ' Module hiddenMarkov

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::83f0a1efb99e823925b3af5a262a2255, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Regexp.vb"
+﻿#Region "Microsoft.VisualBasic::c0e26f44f450af6adc33625de14a4cc9, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Regexp.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 53
     ' Comment Lines: 3
     '   Blank Lines: 12
-    '     File Size: 2.26 KB
+    '     File Size: 2.33 KB
 
 
     '     Class Regexp

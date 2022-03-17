@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4f49a451ea6d5b151aac30a80830ef89, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\BinaryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::f1f8e66770f37d1aa9a29a114fb52cc7, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\BinaryExpression.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 64
     ' Comment Lines: 3
     '   Blank Lines: 15
-    '     File Size: 2.50 KB
+    '     File Size: 2.58 KB
 
 
     '     Class BinaryExpression

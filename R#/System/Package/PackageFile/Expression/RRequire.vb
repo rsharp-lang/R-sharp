@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5a42302e348414085e848cd23356d9eb, R-sharp\R#\System\Package\PackageFile\Expression\RRequire.vb"
+﻿#Region "Microsoft.VisualBasic::64b33f8a6fd995a0e847d437a785e9db, R-sharp\R#\System\Package\PackageFile\Expression\RRequire.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 37
     ' Comment Lines: 5
     '   Blank Lines: 10
-    '     File Size: 2.07 KB
+    '     File Size: 2.12 KB
 
 
     '     Class RRequire

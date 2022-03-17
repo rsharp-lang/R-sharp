@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b972ceef0afb8e358a4b284c611a92ea, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb"
+﻿#Region "Microsoft.VisualBasic::421484c14bd68d6af5cea2ec21609464, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 66
     ' Comment Lines: 9
     '   Blank Lines: 17
-    '     File Size: 3.35 KB
+    '     File Size: 3.44 KB
 
 
     '     Class Require

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9b49fe036ef42a0468bdfc8def7d4d3d, R-sharp\Library\R.graph\Utils\Attributes\EdgeAttributes.vb"
+﻿#Region "Microsoft.VisualBasic::f1b75fac423f0a004d355e6a7db16bfd, R-sharp\Library\R.graph\Utils\Attributes\EdgeAttributes.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 61
     ' Comment Lines: 0
     '   Blank Lines: 12
-    '     File Size: 2.62 KB
+    '     File Size: 2.69 KB
 
 
     ' Module EdgeAttributes

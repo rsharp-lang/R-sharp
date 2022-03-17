@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d1b312162813ea389742f660e277d324, R-sharp\R#\Runtime\Internal\objects\RConversion\RCType.vb"
+﻿#Region "Microsoft.VisualBasic::d6a23d600f7dcd1248b755fba40b4261, R-sharp\R#\Runtime\Internal\objects\RConversion\RCType.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 94
     ' Comment Lines: 12
     '   Blank Lines: 18
-    '     File Size: 5.29 KB
+    '     File Size: 5.41 KB
 
 
     '     Class RCType

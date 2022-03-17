@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bfd30ef85bd623c9fab8b2b2224951df, R-sharp\R#\System\LambdaCompiler.vb"
+﻿#Region "Microsoft.VisualBasic::180e6152389a6722d4376ae0bf439787, R-sharp\R#\System\LambdaCompiler.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 41
     ' Comment Lines: 1
     '   Blank Lines: 10
-    '     File Size: 2.36 KB
+    '     File Size: 2.41 KB
 
 
     '     Module LambdaCompiler

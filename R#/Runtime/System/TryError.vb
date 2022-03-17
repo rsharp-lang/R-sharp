@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a4d6c74c03302f247977c4f83440e9da, R-sharp\R#\Runtime\System\TryError.vb"
+﻿#Region "Microsoft.VisualBasic::08425c7bc9fec3f8e5b84b40280edc07, R-sharp\R#\Runtime\System\TryError.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 24
     ' Comment Lines: 3
     '   Blank Lines: 6
-    '     File Size: 1.00 KB
+    '     File Size: 1.03 KB
 
 
     '     Class TryError

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dd5d34993559fc47339205b912694358, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\Group.vb"
+﻿#Region "Microsoft.VisualBasic::0100fd72c912323ab8d649b0aae781bb, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\Group.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 83
     ' Comment Lines: 8
     '   Blank Lines: 19
-    '     File Size: 3.83 KB
+    '     File Size: 3.94 KB
 
 
     '     Structure Group

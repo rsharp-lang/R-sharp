@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9995d2ec4d5022a0cba83bdfaea01cf1, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb"
+﻿#Region "Microsoft.VisualBasic::8d2880dbcdfaba2b64557f73ec49b1c2, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 57
     ' Comment Lines: 9
     '   Blank Lines: 12
-    '     File Size: 2.60 KB
+    '     File Size: 2.67 KB
 
 
     '     Class AppendOperator

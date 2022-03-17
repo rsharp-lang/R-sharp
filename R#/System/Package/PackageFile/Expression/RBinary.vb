@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::88b6deb8a6ebd87c94916158680026fe, R-sharp\R#\System\Package\PackageFile\Expression\RBinary.vb"
+﻿#Region "Microsoft.VisualBasic::cc46a211dced49f21d6368933b075a01, R-sharp\R#\System\Package\PackageFile\Expression\RBinary.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 90
     ' Comment Lines: 0
     '   Blank Lines: 12
-    '     File Size: 4.47 KB
+    '     File Size: 4.57 KB
 
 
     '     Class RBinary

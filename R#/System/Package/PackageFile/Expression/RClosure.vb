@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7c01d570d05f28977c3e565a5acc909d, R-sharp\R#\System\Package\PackageFile\Expression\RClosure.vb"
+﻿#Region "Microsoft.VisualBasic::41a210a96d64f1185219e688938acd17, R-sharp\R#\System\Package\PackageFile\Expression\RClosure.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 46
     ' Comment Lines: 3
     '   Blank Lines: 12
-    '     File Size: 2.32 KB
+    '     File Size: 2.38 KB
 
 
     '     Class RClosure

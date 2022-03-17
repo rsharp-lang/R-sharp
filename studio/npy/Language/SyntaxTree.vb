@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::915ee3a89c3c790a471667709dbe2a38, R-sharp\studio\npy\Language\SyntaxTree.vb"
+﻿#Region "Microsoft.VisualBasic::c440ab64e1842cc1a7b2c931f6c95721, R-sharp\studio\npy\Language\SyntaxTree.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 385
-    '    Code Lines: 312
+    '   Total Lines: 388
+    '    Code Lines: 314
     ' Comment Lines: 19
-    '   Blank Lines: 54
-    '     File Size: 14.31 KB
+    '   Blank Lines: 55
+    '     File Size: 14.40 KB
 
 
     ' Class SyntaxTree

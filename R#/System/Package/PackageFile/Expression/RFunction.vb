@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0af320a6cc4082f3bc32d6111bbcd7ac, R-sharp\R#\System\Package\PackageFile\Expression\RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::bc09d4d52bfc715317bfc5e2fa39afc8, R-sharp\R#\System\Package\PackageFile\Expression\RFunction.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 162
     ' Comment Lines: 0
     '   Blank Lines: 39
-    '     File Size: 8.61 KB
+    '     File Size: 8.81 KB
 
 
     '     Class RFunction
