@@ -115,7 +115,7 @@ Module devkit
         End If
 
         Dim stat As CodeStatics = Nothing
-        Call LicenseMgr.Insert(file.ReadAllText, banner, rootDir, stat)
+        Call LicenseMgr.Insert(file, banner, rootDir, stat)
         Return stat
     End Function
 
