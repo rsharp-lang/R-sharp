@@ -110,8 +110,8 @@ Namespace Runtime.Internal.Invokes
         ''' returns pathname as is.
         ''' </remarks>
         <ExportAPI("getRelativePath")>
-        Public Function getRelativePath(pathname As String, <RDefaultExpression> Optional relativeTo As Object = "~getwd()") As String
-            Return RelativePath(relativeTo, pathname)
+        Public Function getRelativePath(pathname As String(), <RDefaultExpression> Optional relativeTo As Object = "~getwd()") As String()
+            Return pathname.SafeQuery.Select(Function(path) RelativePath(relativeTo, path)).ToArray
         End Function
 
         ''' <summary>
