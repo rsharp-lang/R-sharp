@@ -163,7 +163,13 @@ Namespace Interpreter.SyntaxParser
                             Call buf.Add(syntaxResult)
                         End If
                     Else
-                        syntaxResult = opts.ParseExpression(tokenBlocks(i), opts)
+                        Dim t = tokenBlocks(i)
+
+                        If t.Length = 1 AndAlso t(Scan0).name = TokenType.keyword Then
+                            t(Scan0).name = TokenType.identifier
+                        End If
+
+                        syntaxResult = opts.ParseExpression(t, opts)
 
                         If syntaxResult.isException Then
                             Return syntaxResult

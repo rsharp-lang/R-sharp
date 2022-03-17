@@ -410,7 +410,7 @@ Public Class SyntaxTree
                     Case "raise" : Call createError(line)
 
                     Case Else
-                        Throw New NotImplementedException
+                        Throw New NotImplementedException(line(Scan0).ToString)
                 End Select
             ElseIf line(-1).name = TokenType.sequence Then
                 Call startAcceptorDefine(line)
