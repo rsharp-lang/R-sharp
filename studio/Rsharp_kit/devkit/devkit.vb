@@ -75,7 +75,12 @@ Module devkit
 
     Sub New()
         Internal.ConsolePrinter.AttachConsoleFormatter(Of ILInstruction)(Function(a) DirectCast(a, ILInstruction).GetCode)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of Project)(AddressOf printProject)
     End Sub
+
+    Private Function printProject(vbproj As Project) As String
+        Return vbproj.ToString
+    End Function
 
     ''' <summary>
     ''' Get .NET library module assembly information data.

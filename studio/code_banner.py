@@ -19,7 +19,7 @@ print(`get ${length(projects)} target source projects!`)
 print(projects)
 
 def process_project(vbproj):
-    print(toString(vbproj))
+    print(vbproj)
 
     for file in sourceFiles(vbproj):
         print(file)
@@ -31,5 +31,8 @@ for refer in projects:
     if is.null(vbproj):
         print(`skip of the .NET Sdk project: ${refer}...`)
     else        
+        print(`processing vbproj: ${refer}`)
+
+        # run project processing...
         process_project(vbproj)
     
