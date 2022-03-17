@@ -1,4 +1,3 @@
-from posixpath import dirname
 from Rstudio import gtk
 from devkit import VisualStudio
 
