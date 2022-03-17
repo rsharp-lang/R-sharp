@@ -130,6 +130,7 @@ Namespace Runtime.Internal
             Call GetType(Rinterop).DoCall(AddressOf pushEnvir)
             Call GetType(dataframeBase).DoCall(AddressOf pushEnvir)
             Call GetType(bitView).DoCall(AddressOf pushEnvir)
+            Call GetType(humanReadableFormatter).DoCall(AddressOf pushEnvir)
         End Sub
 
         Friend Shared Sub pushEnvir(baseModule As Type)

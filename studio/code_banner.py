@@ -85,7 +85,8 @@ for refer in projects:
     
     print("~done!")
 
-stat = data.frame(proj = projList, files, totalLines, commentLines, blankLines, size, lineOfCodes)
+stat = data.frame(proj = projList, files, totalLines, commentLines, blankLines, lineOfCodes, "size(bytes)" = size)
+stat[, "size"] = byte_size(stat[, "size(bytes)"])
 save = `${proj_folder}/proj_stats.csv`
 
 print(stat, max.print = 13)
