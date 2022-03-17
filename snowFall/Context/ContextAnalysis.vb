@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::80a15519a93cf8550a5b370e32900d47, R-sharp\snowFall\Context\ContextAnalysis.vb"
+﻿#Region "Microsoft.VisualBasic::80a15519a93cf8550a5b370e32900d47, snowFall\Context\ContextAnalysis.vb"
 
     ' Author:
     ' 

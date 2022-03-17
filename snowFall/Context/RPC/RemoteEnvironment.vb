@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d9e1df1a6b29f173ad86ff27ad1dbc43, R-sharp\snowFall\Context\RPC\RemoteEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::d9e1df1a6b29f173ad86ff27ad1dbc43, snowFall\Context\RPC\RemoteEnvironment.vb"
 
     ' Author:
     ' 

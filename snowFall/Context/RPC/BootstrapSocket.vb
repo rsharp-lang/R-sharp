@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4b85258dbcdac85ae981b231bf440010, R-sharp\snowFall\Context\RPC\BootstrapSocket.vb"
+﻿#Region "Microsoft.VisualBasic::4b85258dbcdac85ae981b231bf440010, snowFall\Context\RPC\BootstrapSocket.vb"
 
     ' Author:
     ' 
