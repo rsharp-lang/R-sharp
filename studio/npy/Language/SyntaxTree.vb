@@ -372,7 +372,10 @@ Public Class SyntaxTree
             Else
                 Call stack.Peek.Add(current.ToExpression())
                 current = stack.Pop()
+                current.Add(expr)
                 stack.Peek.Add(current.ToExpression)
+
+                Return
             End If
 
             current = stack.Peek

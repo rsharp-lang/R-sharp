@@ -42,6 +42,8 @@ def walkFiles(vbproj, refer):
         v$files        = append(v$files, file)
         v$projList     = append(v$projList, refer)
 
+    print("-----------------------------")
+
     return v
 
 def process_project(vbproj, refer):
@@ -80,6 +82,8 @@ for refer in projects:
         files        = append(files, "<project>")
         projList     = append(projList, refer)
     
+    print("~done!")
+
 stat = data.frame(proj = projList, files, totalLines, commentLines, blankLines, size, lineOfCodes)
 save = `${proj_folder}/proj_stats.csv`
 
