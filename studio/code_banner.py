@@ -26,21 +26,45 @@ projList = []
 print(`get ${length(projects)} target source projects!`)
 print(projects)
 
-def process_project(vbproj, refer):
-    print(vbproj)
+def walkFiles(vbproj, refer):
+    v = list()
 
     for file in sourceFiles(vbproj):
         print(file)
 
         stat = write.code_banner(file, banner, rootDir = proj_folder)
 
-        totalLines = append(totalLines, [stat]::totalLines)
-        commentLines =append(commentLines, [stat]::commentLines)
-        blankLines = append(blankLines, [stat]::blankLines)
-        size = append(size, [stat]::size)
-        lineOfCodes = append(lineOfCodes, [stat]::lineOfCodes)
-        files = append(files, file)
-        projList = append(projList, refer)
+        v$totalLines = append(v$totalLines, [stat]::totalLines)
+        v$commentLines = append(v$commentLines, [stat]::commentLines)
+        v$blankLines = append(v$blankLines, [stat]::blankLines)
+        v$size = append(v$size, [stat]::size)
+        v$lineOfCodes = append(v$lineOfCodes, [stat]::lineOfCodes)
+        v$files = append(v$files, file)
+        v$projList = append(v$projList, refer)
+
+    return v
+
+def process_project(vbproj, refer):
+
+    print(vbproj)
+
+    v = walkFiles(vbproj, refer) 
+
+    totalLines = append(totalLines, v$totalLines)
+    commentLines = append(commentLines, v$commentLines)
+    blankLines = append(blankLines, v$blankLines)
+    size = append(size, v$size)
+    lineOfCodes = append(lineOfCodes, v$lineOfCodes)
+    files = append(files, v$files)
+    projList = append(projList, v$projList)
+
+    totalLines = append(totalLines, sum(v$totalLines))
+    commentLines = append(commentLines, sum(v$commentLines))
+    blankLines = append(blankLines, sum(v$blankLines))
+    size = append(size, sum(v$size))
+    lineOfCodes = append(lineOfCodes, sum(v$lineOfCodes))
+    files = append(files, "<project>")
+    projList = append(projList, refer)
 
 for refer in projects:
     vbproj = read.vbproj(file = refer)
@@ -53,8 +77,9 @@ for refer in projects:
         # run project processing...
         process_project(vbproj, refer)
     
-stat = data.frame(projList, files, totalLines, commentLines, blankLines, size, lineOfCodes)
+stat = data.frame(proj = projList, files, totalLines, commentLines, blankLines, size, lineOfCodes)
+save = `${proj_folder}/proj_stats.csv`
 
 print(stat, max.print = 13)
 
-write.csv(stat, file = `${proj_folder}/projects.csv`, row.names = False)
+write.csv(stat, file = save, row.names = False)
