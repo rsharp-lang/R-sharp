@@ -1,62 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::c106f808c154aac22ae64d9f2473f714, R-sharp\R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1249
-    '    Code Lines: 674
-    ' Comment Lines: 461
-    '   Blank Lines: 114
-    '     File Size: 56.71 KB
+' Summaries:
 
 
-    '     Module file
-    ' 
-    '         Function: [erase], basename, buffer, bytes, close
-    '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
-    '                   exists, file, file_ext, filecopy, fileExt
-    '                   fileinfo, fileInfoByFile, filepath, filesize, getwd
-    '                   handleWriteLargeTextStream, handleWriteTextArray, isSystemDir, listDirs, listFiles
-    '                   loadListInternal, NextTempToken, normalizeFileName, normalizePath, openGzip
-    '                   openZip, readBin, readLines, readList, readText
-    '                   Rhome, saveList, scanZipFiles, setwd, tempdir
-    '                   tempfile, writeLines
-    ' 
-    '         Sub: fileRemove, fileRename, unlinks
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1249
+'    Code Lines: 674
+' Comment Lines: 461
+'   Blank Lines: 114
+'     File Size: 56.71 KB
+
+
+'     Module file
+' 
+'         Function: [erase], basename, buffer, bytes, close
+'                   dataUri, dir_exists, dirCopy, dirCreate, dirname
+'                   exists, file, file_ext, filecopy, fileExt
+'                   fileinfo, fileInfoByFile, filepath, filesize, getwd
+'                   handleWriteLargeTextStream, handleWriteTextArray, isSystemDir, listDirs, listFiles
+'                   loadListInternal, NextTempToken, normalizeFileName, normalizePath, openGzip
+'                   openZip, readBin, readLines, readList, readText
+'                   Rhome, saveList, scanZipFiles, setwd, tempdir
+'                   tempfile, writeLines
+' 
+'         Sub: fileRemove, fileRename, unlinks
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -97,6 +97,22 @@ Namespace Runtime.Internal.Invokes
     ''' These functions provide a low-level interface to the computer's file system.
     ''' </summary>
     Public Module file
+
+        ''' <summary>
+        ''' Gets the relative pathname relative to a directory.
+        ''' </summary>
+        ''' <param name="pathname">A character String Of the pathname To be converted into an relative pathname.</param>
+        ''' <param name="relativeTo">A character string of the reference pathname.</param>
+        ''' <returns>Returns a character string of the relative pathname.</returns>
+        ''' <remarks>
+        ''' In case the two paths are on different file systems, 
+        ''' for instance, C:/foo/bar/ and D:/foo/, the method 
+        ''' returns pathname as is.
+        ''' </remarks>
+        <ExportAPI("getRelativePath")>
+        Public Function getRelativePath(pathname As String, <RDefaultExpression> Optional relativeTo As Object = "~getwd()") As String
+            Return RelativePath(relativeTo, pathname)
+        End Function
 
         ''' <summary>
         ''' ## Extract File Information
@@ -640,7 +656,7 @@ Namespace Runtime.Internal.Invokes
                                    End If
                                Loop
                            End Function() _
- _
+                                          _
                         .DoCall(AddressOf pipeline.CreateFromPopulator)
                 Else
                     Dim lines As New List(Of String)
