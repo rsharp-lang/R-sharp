@@ -82,11 +82,24 @@ Module gtk
         Return MessageBox.Show(message, title Or env.parent.stackFrame.File.AsDefault, buttons, icon)
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="default"></param>
+    ''' <param name="desc"></param>
+    ''' <param name="newFolder"></param>
+    ''' <param name="root"></param>
+    ''' <param name="throwCancel"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("selectFolder")>
+    <RApiReturn(GetType(String))>
     Public Function selectFolder(Optional default$ = "",
                                  Optional desc As String = Nothing,
                                  Optional newFolder As Boolean = False,
-                                 Optional root As SpecialFolder = SpecialFolder.MyDocuments) As String
+                                 Optional root As SpecialFolder = SpecialFolder.MyDocuments,
+                                 Optional throwCancel As Boolean = True,
+                                 Optional env As Environment = Nothing) As Object
 
         Using folder As New FolderBrowserDialog With {
             .ShowNewFolderButton = newFolder,
@@ -96,6 +109,8 @@ Module gtk
         }
             If folder.ShowDialog = DialogResult.OK Then
                 Return folder.SelectedPath
+            ElseIf throwCancel Then
+                Return Internal.debug.stop("user cancel!", env)
             Else
                 Return Nothing
             End If
