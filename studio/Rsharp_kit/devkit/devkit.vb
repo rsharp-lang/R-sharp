@@ -86,7 +86,12 @@ Module devkit
         Return Assembly.UnsafeLoadFrom(dllfile.GetFullPath).FromAssembly
     End Function
 
-    <ExportAPI("writeCodeBanner")>
+    <ExportAPI("read.banner")>
+    Public Function readBannerData(file As String) As LicenseInfo
+        Return file.LoadXml(Of LicenseInfo)
+    End Function
+
+    <ExportAPI("write.code_banner")>
     Public Function writeCodeBanner(file As String, banner As LicenseInfo, Optional rootDir As String = Nothing) As CodeStatics
         If rootDir.StringEmpty Then
             rootDir = file.ParentPath
