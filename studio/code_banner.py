@@ -19,8 +19,11 @@ print(`get ${length(projects)} target source projects!`)
 print(projects)
 
 def process_project(vbproj):
-    print(vbproj)
+    print(toString(vbproj))
 
+    for file in sourceFiles(vbproj):
+        print(file)
+        stat = write.code_banner(file, banner, rootDir = proj_folder)
 
 for refer in projects:
     vbproj = read.vbproj(file = refer)

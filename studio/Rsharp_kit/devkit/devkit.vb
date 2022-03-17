@@ -87,6 +87,13 @@ Module devkit
         Return Assembly.UnsafeLoadFrom(dllfile.GetFullPath).FromAssembly
     End Function
 
+    <ExportAPI("sourceFiles")>
+    Public Function getSourceFiles(vbproj As Project) As String()
+        Return vbproj _
+            .EnumerateSourceFiles(skipAssmInfo:=True, fullName:=True) _
+            .ToArray
+    End Function
+
     <ExportAPI("read.vbproj")>
     Public Function readVbProject(file As String) As Project
         Try
