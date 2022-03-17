@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.CodeSign
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.IL
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.SourceMap
+Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.vbproj
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.VersionControl
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -84,6 +85,15 @@ Module devkit
     <ExportAPI("AssemblyInfo")>
     Public Function AssemblyInfo(dllfile As String) As AssemblyInfo
         Return Assembly.UnsafeLoadFrom(dllfile.GetFullPath).FromAssembly
+    End Function
+
+    <ExportAPI("read.vbproj")>
+    Public Function readVbProject(file As String) As Project
+        Try
+            Return Project.Load(file)
+        Catch ex As Exception
+            Return Nothing
+        End Try
     End Function
 
     <ExportAPI("read.banner")>

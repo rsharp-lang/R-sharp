@@ -97,7 +97,7 @@ Module gtk
     Public Function selectFolder(Optional default$ = "",
                                  Optional desc As String = Nothing,
                                  Optional newFolder As Boolean = False,
-                                 Optional root As SpecialFolder = SpecialFolder.MyDocuments,
+                                 Optional root As SpecialFolder = SpecialFolder.MyComputer,
                                  Optional throwCancel As Boolean = True,
                                  Optional env As Environment = Nothing) As Object
 
