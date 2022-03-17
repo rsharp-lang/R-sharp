@@ -20,8 +20,15 @@ commentLines = []
 blankLines   = []
 size         = []
 lineOfCodes  = []
-files        = []
-projList     = []
+
+class    = []
+method   = []
+operator = []
+function = []
+property = []
+
+files    = []
+projList = []
 
 print(`get ${length(projects)} target source projects!`)
 print(projects)
@@ -40,8 +47,15 @@ def walkFiles(vbproj, refer):
         v$blankLines   = append(v$blankLines, [stat]::blankLines)
         v$size         = append(v$size, [stat]::size)
         v$lineOfCodes  = append(v$lineOfCodes, [stat]::lineOfCodes)
-        v$files        = append(v$files, getRelativePath(file, root))
-        v$projList     = append(v$projList, getRelativePath(refer, proj_folder))
+
+        v$class    = append(v$class, [stat]::class)
+        v$method   = append(v$method, [stat]::method)
+        v$operator = append(v$operator, [stat]::operator)
+        v$function = append(v$function, [stat]::function)
+        v$property = append(v$property, [stat]::properties)
+
+        v$files    = append(v$files, getRelativePath(file, root))
+        v$projList = append(v$projList, getRelativePath(refer, proj_folder))
 
     print("-----------------------------")
 
@@ -58,8 +72,15 @@ def process_project(vbproj, refer):
     blankLines   = append(blankLines, v$blankLines)
     size         = append(size, v$size)
     lineOfCodes  = append(lineOfCodes, v$lineOfCodes)
-    files        = append(files, v$files)
-    projList     = append(projList, v$projList)
+
+    class    = append(class, v$class)
+    method   = append(method, v$method)
+    operator = append(operator, v$operator)
+    function = append(function, v$function)
+    property = append(property, v$property)
+
+    files    = append(files, v$files)
+    projList = append(projList, v$projList)
 
     return v
 
@@ -80,12 +101,20 @@ for refer in projects:
         blankLines   = append(blankLines, sum(v$blankLines))
         size         = append(size, sum(v$size))
         lineOfCodes  = append(lineOfCodes, sum(v$lineOfCodes))
+        
+        class    = append(class, sum(v$class))
+        method   = append(method, sum(v$method))
+        operator = append(operator, sum(v$operator))
+        function = append(function, sum(v$function))
+        property = append(property, sum(v$property))
+
         files        = append(files, "<project>")
         projList     = append(projList, getRelativePath(refer, proj_folder))
     
     print("~done!")
 
-stat = data.frame(proj = projList, files, totalLines, commentLines, blankLines, lineOfCodes, "size(bytes)" = size)
+stat = data.frame(proj = projList, files, totalLines, commentLines, blankLines, lineOfCodes, class, property, method, function, operator, "size(bytes)" = size)
+stat = rbind(stat, [proj_folder, "<root>", sum(totalLines), sum(commentLines), sum(blankLines), sum(lineOfCodes), sum(class), sum(property), sum(method), sum(function), sum(operator), sum(size)])
 stat[, "size"] = byte_size(stat[, "size(bytes)"])
 save = `${proj_folder}/proj_stats.csv`
 
