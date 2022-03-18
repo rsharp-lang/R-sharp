@@ -64,6 +64,7 @@ Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors.Scaler
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Math2D.MarchingSquares
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Text.ASCIIArt
@@ -368,8 +369,43 @@ Module graphics2D
     Public Function rasterHeatmap(<RRawVectorArgument>
                                   heatmap As Object,
                                   Optional region As Rectangle = Nothing,
+                                  <RRawVectorArgument>
+                                  Optional dimSize As Object = Nothing,
                                   Optional env As Environment = Nothing) As Object
 
+        Dim dev As graphicsDevice = curDev
+        Dim canvas As Size = InteropArgumentHelper.getSize(dev!size, env).SizeParser
+        Dim pixels As pipeline = pipeline.TryCreatePipeline(Of Pixel)(heatmap, env)
+        Dim dimensionStr As String = InteropArgumentHelper.getSize(dimSize, env, Nothing)
+        Dim dimension As Size
+
+        If pixels.isError Then
+            Return pixels.getError
+        End If
+        If region.IsEmpty Then
+            region = New Rectangle(New Point, canvas)
+        End If
+
+        Dim allPixels As Pixel() = pixels.populates(Of Pixel)(env).ToArray
+
+        If dimensionStr.StringEmpty Then
+            dimension = New Size With {
+                .Width = allPixels.Select(Function(p) p.X).Max,
+                .Height = allPixels.Select(Function(p) p.Y).Max
+            }
+        Else
+            dimension = dimensionStr.SizeParser
+        End If
+
+        ' create base
+        Dim bitmap As Bitmap = New PixelRender("jet", 25).RenderRasterImage(allPixels, dimension)
+
+        ' rendering onto current graphics device
+        Using scaler As New RasterScaler(bitmap)
+            Call scaler.ScaleTo(dev.g, region)
+        End Using
+
+        Return Nothing
     End Function
 
     <ExportAPI("draw.triangle")>
