@@ -103,7 +103,11 @@ Public Module grDevices
                 Dim pdfImage = PDF.Driver.OpenDevice(size)
 
                 Call pdfImage.FillRectangle(New SolidBrush(fill), New Rectangle(New Point, size))
-                Call Internal.Invokes.graphics.openNew(pdfImage, buffer.TryCast(Of Stream))
+                Call Internal.Invokes.graphics.openNew(
+                    dev:=pdfImage,
+                    buffer:=buffer.TryCast(Of Stream),
+                    args:=args
+                )
             End If
 
             Return Nothing

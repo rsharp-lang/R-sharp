@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C5C3428C-D64C-4E79-B239-77ADC66B1156}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>R.graphics</RootNamespace>
+    <RootNamespace>R_graphics</RootNamespace>
     <AssemblyName>graphics</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
@@ -533,6 +533,7 @@
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>

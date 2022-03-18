@@ -74,14 +74,29 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes
 
+    Public Structure graphicsDevice
+
+        Dim g As IGraphics
+        Dim file As Stream
+        Dim args As list
+
+    End Structure
+
     Module graphics
 
-        ReadOnly devlist As New List(Of (g As IGraphics, file As Stream))
+        ReadOnly devlist As New List(Of graphicsDevice)
 
-        Friend curDev As (g As IGraphics, file As Stream) = Nothing
+        ''' <summary>
+        ''' the current actived graphics device
+        ''' </summary>
+        Friend curDev As graphicsDevice = Nothing
 
-        Friend Sub openNew(dev As IGraphics, buffer As Stream)
-            curDev = (dev, buffer)
+        Friend Sub openNew(dev As IGraphics, buffer As Stream, args As list)
+            curDev = New graphicsDevice With {
+                .g = dev,
+                .file = buffer,
+                .args = args
+            }
             devlist.Add(curDev)
         End Sub
 
@@ -93,7 +108,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("dev.off")>
         Public Function devOff(Optional which% = -1, Optional env As Environment = Nothing) As Object
-            Dim dev As (g As IGraphics, file As Stream)
+            Dim dev As graphicsDevice
 
             If which < 1 Then
                 dev = devlist.LastOrDefault
@@ -260,7 +275,11 @@ Namespace Runtime.Internal.Invokes
                 If buffer Like GetType(Message) Then
                     Return buffer.TryCast(Of Message)
                 Else
-                    Call openNew(New Wmf(size, buffer.TryCast(Of Stream)), buffer.TryCast(Of Stream))
+                    Call openNew(
+                        dev:=New Wmf(size, buffer.TryCast(Of Stream)),
+                        buffer:=buffer.TryCast(Of Stream),
+                        args:=args
+                    )
                 End If
 
                 Return Nothing
@@ -300,7 +319,11 @@ Namespace Runtime.Internal.Invokes
                 If buffer Like GetType(Message) Then
                     Return buffer.TryCast(Of Message)
                 Else
-                    Call openNew(size.CreateGDIDevice(filled:=fill), buffer.TryCast(Of Stream))
+                    Call openNew(
+                        dev:=size.CreateGDIDevice(filled:=fill),
+                        buffer:=buffer.TryCast(Of Stream),
+                        args:=args
+                    )
                 End If
 
                 Return Nothing
