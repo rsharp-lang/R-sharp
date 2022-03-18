@@ -364,6 +364,14 @@ Module graphics2D
         Return New Shapes.Line(p1, p2, CSS.Stroke.TryParse(penCSS).GDIObject)
     End Function
 
+    <ExportAPI("rasterHeatmap")>
+    Public Function rasterHeatmap(<RRawVectorArgument>
+                                  heatmap As Object,
+                                  Optional region As Rectangle = Nothing,
+                                  Optional env As Environment = Nothing) As Object
+
+    End Function
+
     <ExportAPI("draw.triangle")>
     Public Function DrawTriangle(g As IGraphics, topleft As PointF, size As SizeF,
                                  <RRawVectorArgument>
