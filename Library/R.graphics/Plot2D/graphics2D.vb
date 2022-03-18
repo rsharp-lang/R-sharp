@@ -111,6 +111,7 @@ Module graphics2D
     <ExportAPI("layout.grid")>
     Public Function layout_grid(layout As Integer(), Optional env As Environment = Nothing) As Rectangle()
         Dim dev As graphicsDevice = curDev
+        Dim size As Size = InteropArgumentHelper.getSize(dev!size, env).SizeParser
 
     End Function
 
