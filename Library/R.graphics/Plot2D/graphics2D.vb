@@ -113,7 +113,26 @@ Module graphics2D
         Dim dev As graphicsDevice = curDev
         Dim size As Size = InteropArgumentHelper.getSize(dev!size, env).SizeParser
         Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
+        Dim region As New GraphicsRegion(size, padding)
+        Dim rect As Rectangle = region.PlotRegion
+        Dim layouts As New List(Of Rectangle)
+        Dim x As Integer = rect.Left
+        Dim y As Integer = rect.Top
+        Dim w As Integer = rect.Width / layout(0)
+        Dim h As Integer = rect.Height / layout(1)
 
+        For i As Integer = 1 To layout(1)
+            x = rect.Left
+
+            For j As Integer = 1 To layout(0)
+                layouts.Add(New Rectangle(x, y, w, h))
+                x += w
+            Next
+
+            y += h
+        Next
+
+        Return layouts.ToArray
     End Function
 
     <ExportAPI("paddingString")>

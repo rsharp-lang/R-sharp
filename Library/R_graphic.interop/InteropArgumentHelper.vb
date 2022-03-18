@@ -131,7 +131,11 @@ Public Module InteropArgumentHelper
                 If strs.Length = 1 Then
                     Return strs(Scan0)
                 ElseIf strs.Length = 4 AndAlso strs.Take(4).All(Function(val) val.IsNumeric) Then
-                    Return strs.Take(4).Select(AddressOf Val).ToArray.paddingFromNumbers(default$)
+                    Return strs _
+                        .Take(4) _
+                        .Select(AddressOf Val) _
+                        .ToArray _
+                        .paddingFromNumbers(default$)
                 Else
                     Return [default]
                 End If
