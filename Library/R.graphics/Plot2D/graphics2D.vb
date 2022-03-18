@@ -398,7 +398,7 @@ Module graphics2D
         End If
 
         ' create base
-        Dim bitmap As Bitmap = New PixelRender("jet", 25).RenderRasterImage(allPixels, dimension)
+        Dim bitmap As Bitmap = New PixelRender("jet", 25, dev.g.Background).RenderRasterImage(allPixels, dimension)
 
         ' rendering onto current graphics device
         Using scaler As New RasterScaler(bitmap)
