@@ -107,6 +107,12 @@ Module graphics2D
                      End Sub)
     End Function
 
+    <ExportAPI("layout.grid")>
+    Public Function layout_grid(layout As Integer(), Optional env As Environment = Nothing) As Rectangle()
+        Dim dev As IGraphics
+
+    End Function
+
     <ExportAPI("paddingString")>
     Public Function paddingString(<RRawVectorArgument> padding As Object, Optional env As Environment = Nothing) As String
         Return InteropArgumentHelper.getPadding(padding, "padding: 0px 0px 0px 0px;")
