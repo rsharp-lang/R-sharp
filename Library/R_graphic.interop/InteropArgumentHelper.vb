@@ -135,6 +135,8 @@ Public Module InteropArgumentHelper
                 Else
                     Return [default]
                 End If
+            Case GetType(Integer), GetType(Long), GetType(Byte), GetType(Single), GetType(Double)
+                Return New Padding(CInt(padding))
             Case GetType(Long()), GetType(Integer())
                 Return DirectCast(padding, Array).paddingFromNumbers(default$)
             Case GetType(vector)
