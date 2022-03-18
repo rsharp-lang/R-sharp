@@ -115,7 +115,7 @@ Module ImageFilters
     End Function
 
     <ExportAPI("gauss_blur")>
-    <RApiReturn(GetType(Image))>
+    <RApiReturn(GetType(Bitmap))>
     Public Function gaussBlurEffect(image As Object,
                                     Optional levels As Integer = 100,
                                     Optional env As Environment = Nothing) As Object

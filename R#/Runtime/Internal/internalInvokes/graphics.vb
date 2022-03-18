@@ -80,6 +80,12 @@ Namespace Runtime.Internal.Invokes
         Dim file As Stream
         Dim args As list
 
+        Public ReadOnly Property Background As Color
+            Get
+                Return g.Background
+            End Get
+        End Property
+
         Default Public ReadOnly Property Item(ref As String) As Object
             Get
                 Return args.slots(ref)
@@ -203,6 +209,14 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Return Nothing
+        End Function
+
+        <ExportAPI("rasterFont")>
+        Public Function rasterFont(name As String,
+                                   Optional size As Single = 12,
+                                   Optional style As FontStyle = FontStyle.Regular) As Font
+
+            Return New Font(name, size, style)
         End Function
 
         ''' <summary>

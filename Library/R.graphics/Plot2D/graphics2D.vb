@@ -110,10 +110,15 @@ Module graphics2D
     End Function
 
     <ExportAPI("layout.grid")>
-    Public Function layout_grid(layout As Integer(), Optional env As Environment = Nothing) As Rectangle()
+    Public Function layout_grid(layout As Integer(),
+                                <RRawVectorArgument>
+                                Optional margin As Object = 0,
+                                Optional env As Environment = Nothing) As Rectangle()
+
         Dim dev As graphicsDevice = curDev
         Dim size As Size = InteropArgumentHelper.getSize(dev!size, env).SizeParser
         Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
+        Dim innerPadding As Padding = InteropArgumentHelper.getPadding(margin)
         Dim region As New GraphicsRegion(size, padding)
         Dim rect As Rectangle = region.PlotRegion
         Dim layouts As New List(Of Rectangle)
@@ -121,12 +126,20 @@ Module graphics2D
         Dim y As Integer = rect.Top
         Dim w As Integer = rect.Width / layout(0)
         Dim h As Integer = rect.Height / layout(1)
+        Dim cell As Rectangle
 
         For i As Integer = 1 To layout(1)
             x = rect.Left
 
             For j As Integer = 1 To layout(0)
-                layouts.Add(New Rectangle(x, y, w, h))
+                cell = New Rectangle With {
+                    .X = x + innerPadding.Left,
+                    .Y = y + innerPadding.Top,
+                    .Width = w - innerPadding.Horizontal,
+                    .Height = h - innerPadding.Vertical
+                }
+                layouts.Add(cell)
+
                 x += w
             Next
 
@@ -205,6 +218,9 @@ Module graphics2D
 
     <ExportAPI("measureString")>
     Public Function measureString(str As String, font As Object, Optional canvas As IGraphics = Nothing) As Double()
+        If canvas Is Nothing Then
+            canvas = curDev.g
+        End If
         If canvas Is Nothing Then
             canvas = New Bitmap(1, 1).CreateCanvas2D
         End If
@@ -371,6 +387,7 @@ Module graphics2D
                                   Optional region As Rectangle = Nothing,
                                   <RRawVectorArgument>
                                   Optional dimSize As Object = Nothing,
+                                  Optional gauss As Integer = 0,
                                   Optional env As Environment = Nothing) As Object
 
         Dim dev As graphicsDevice = curDev
@@ -399,6 +416,10 @@ Module graphics2D
 
         ' create base
         Dim bitmap As Bitmap = New PixelRender("jet", 25, dev.g.Background).RenderRasterImage(allPixels, dimension)
+
+        If gauss > 0 Then
+            bitmap = gaussBlurEffect(bitmap, levels:=gauss, env)
+        End If
 
         ' rendering onto current graphics device
         Using scaler As New RasterScaler(bitmap)
