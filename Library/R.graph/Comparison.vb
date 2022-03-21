@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2cf830dc3f1efae9e565db3f9124f25e, Library\R.graph\Comparison.vb"
+﻿#Region "Microsoft.VisualBasic::2cf830dc3f1efae9e565db3f9124f25e, R-sharp\Library\R.graph\Comparison.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 43
+    '    Code Lines: 20
+    ' Comment Lines: 18
+    '   Blank Lines: 5
+    '     File Size: 1.88 KB
+
 
     ' Module Comparison
     ' 

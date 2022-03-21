@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::75b54ca873b7904e85e514a890f20aad, R#\Runtime\Internal\internalInvokes\Rinterop.vb"
+﻿#Region "Microsoft.VisualBasic::75b54ca873b7904e85e514a890f20aad, R-sharp\R#\Runtime\Internal\internalInvokes\Rinterop.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 62
+    '    Code Lines: 18
+    ' Comment Lines: 39
+    '   Blank Lines: 5
+    '     File Size: 2.74 KB
+
 
     '     Module Rinterop
     ' 

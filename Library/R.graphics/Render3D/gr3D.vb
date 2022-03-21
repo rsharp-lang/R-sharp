@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ad2657bdf76cdb827611be31934a5705, Library\R.graphics\Render3D\gr3D.vb"
+﻿#Region "Microsoft.VisualBasic::ad2657bdf76cdb827611be31934a5705, R-sharp\Library\R.graphics\Render3D\gr3D.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 67
+    '    Code Lines: 46
+    ' Comment Lines: 15
+    '   Blank Lines: 6
+    '     File Size: 2.51 KB
+
 
     ' Module gr3D
     ' 

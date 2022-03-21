@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::401a1dd466b35297075b9114ca4c3a02, R#\Runtime\Internal\objects\Linq\RCType.vb"
+﻿#Region "Microsoft.VisualBasic::401a1dd466b35297075b9114ca4c3a02, R-sharp\R#\Runtime\Internal\objects\Linq\RCType.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 36
+    '    Code Lines: 28
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 1.17 KB
+
 
     '     Module RCType
     ' 

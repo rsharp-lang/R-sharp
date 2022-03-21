@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3563043e3f129f6120128b40d655d196, Library\R.base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::3563043e3f129f6120128b40d655d196, R-sharp\Library\R.base\utils\dataframe.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 624
+    '    Code Lines: 475
+    ' Comment Lines: 70
+    '   Blank Lines: 79
+    '     File Size: 23.99 KB
+
 
     ' Module dataframe
     ' 

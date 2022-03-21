@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1a3e021f6b4fb8c6a34593f2030b9274, R#\Runtime\Interop\CType\ITupleConstructor.vb"
+﻿#Region "Microsoft.VisualBasic::1a3e021f6b4fb8c6a34593f2030b9274, R-sharp\R#\Runtime\Interop\CType\ITupleConstructor.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 10
+    '    Code Lines: 7
+    ' Comment Lines: 0
+    '   Blank Lines: 3
+    '     File Size: 277.00 B
+
 
     '     Interface ITupleConstructor
     ' 

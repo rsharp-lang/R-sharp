@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f92ffed09e9590711104f5d59e309ef6, R#\Interpreter\ExecuteEngine\Linq\Syntax\StackParser.vb"
+﻿#Region "Microsoft.VisualBasic::f92ffed09e9590711104f5d59e309ef6, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Syntax\StackParser.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 182
+    '    Code Lines: 145
+    ' Comment Lines: 10
+    '   Blank Lines: 27
+    '     File Size: 7.31 KB
+
 
     '     Module StackParser
     ' 

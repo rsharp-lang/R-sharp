@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::587ad7513b22c9f14c9b647058b78c0d, studio\RData\Models\RData.vb"
+﻿#Region "Microsoft.VisualBasic::587ad7513b22c9f14c9b647058b78c0d, R-sharp\studio\RData\Models\RData.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 28
+    '    Code Lines: 14
+    ' Comment Lines: 9
+    '   Blank Lines: 5
+    '     File Size: 897.00 B
+
 
     '     Class RData
     ' 

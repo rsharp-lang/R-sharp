@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::12035b86aabeebd1dc1f135800cac6db, R#\Interpreter\Syntax\SyntaxResult.vb"
+﻿#Region "Microsoft.VisualBasic::12035b86aabeebd1dc1f135800cac6db, R-sharp\R#\Interpreter\Syntax\SyntaxResult.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 98
+    '    Code Lines: 64
+    ' Comment Lines: 16
+    '   Blank Lines: 18
+    '     File Size: 3.72 KB
+
 
     '     Class SyntaxResult
     ' 

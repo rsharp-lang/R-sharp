@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::108f393953c86664d61d879be97c5aa5, R#\Interpreter\ExecuteEngine\Linq\Query\Options.vb"
+﻿#Region "Microsoft.VisualBasic::108f393953c86664d61d879be97c5aa5, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Query\Options.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 48
+    '    Code Lines: 36
+    ' Comment Lines: 0
+    '   Blank Lines: 12
+    '     File Size: 1.60 KB
+
 
     '     Class Options
     ' 

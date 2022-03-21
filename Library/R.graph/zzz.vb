@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5bca0434842327edb0ef46343fcb9314, Library\R.graph\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::5bca0434842327edb0ef46343fcb9314, R-sharp\Library\R.graph\zzz.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 6
+    '    Code Lines: 5
+    ' Comment Lines: 0
+    '   Blank Lines: 1
+    '     File Size: 109.00 B
+
 
     ' Class zzz
     ' 

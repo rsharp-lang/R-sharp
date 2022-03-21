@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c92c4a5b88280970665a2167f0517e8e, R#\System\Package\PackageFile\Expression\RExprLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::c92c4a5b88280970665a2167f0517e8e, R-sharp\R#\System\Package\PackageFile\Expression\RExprLiteral.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 39
+    '    Code Lines: 30
+    ' Comment Lines: 0
+    '   Blank Lines: 9
+    '     File Size: 1.56 KB
+
 
     '     Class RExprLiteral
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c106f808c154aac22ae64d9f2473f714, R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::f3cd392facd4552209ae27ce703a6f47, R-sharp\R#\Runtime\Internal\internalInvokes\file.vb"
 
     ' Author:
     ' 
@@ -31,17 +31,27 @@
 
     ' Summaries:
 
+
+    ' Code Statistics:
+
+    '   Total Lines: 1268
+    '    Code Lines: 681
+    ' Comment Lines: 472
+    '   Blank Lines: 115
+    '     File Size: 57.76 KB
+
+
     '     Module file
     ' 
     '         Function: [erase], basename, buffer, bytes, close
     '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
     '                   exists, file, file_ext, filecopy, fileExt
-    '                   fileinfo, fileInfoByFile, filepath, filesize, getwd
-    '                   handleWriteLargeTextStream, handleWriteTextArray, isSystemDir, listDirs, listFiles
-    '                   loadListInternal, NextTempToken, normalizeFileName, normalizePath, openGzip
-    '                   openZip, readBin, readLines, readList, readText
-    '                   Rhome, saveList, scanZipFiles, setwd, tempdir
-    '                   tempfile, writeLines
+    '                   fileinfo, fileInfoByFile, filepath, filesize, getRelativePath
+    '                   getwd, handleWriteLargeTextStream, handleWriteTextArray, isSystemDir, listDirs
+    '                   listFiles, loadListInternal, NextTempToken, normalizeFileName, normalizePath
+    '                   openGzip, openZip, readBin, readLines, readList
+    '                   readText, Rhome, saveList, scanZipFiles, setwd
+    '                   tempdir, tempfile, writeLines
     ' 
     '         Sub: fileRemove, fileRename, unlinks
     ' 
@@ -87,6 +97,25 @@ Namespace Runtime.Internal.Invokes
     ''' These functions provide a low-level interface to the computer's file system.
     ''' </summary>
     Public Module file
+
+        ''' <summary>
+        ''' Gets the relative pathname relative to a directory.
+        ''' </summary>
+        ''' <param name="pathname">A character String Of the pathname To be converted into an relative pathname.</param>
+        ''' <param name="relativeTo">A character string of the reference pathname.</param>
+        ''' <returns>Returns a character string of the relative pathname.</returns>
+        ''' <remarks>
+        ''' In case the two paths are on different file systems, 
+        ''' for instance, C:/foo/bar/ and D:/foo/, the method 
+        ''' returns pathname as is.
+        ''' </remarks>
+        <ExportAPI("getRelativePath")>
+        Public Function getRelativePath(pathname As String(), <RDefaultExpression> Optional relativeTo As Object = "~getwd()") As String()
+            Return pathname _
+                .SafeQuery _
+                .Select(Function(path) RelativePath(relativeTo, path, appendParent:=False)) _
+                .ToArray
+        End Function
 
         ''' <summary>
         ''' ## Extract File Information
@@ -630,7 +659,7 @@ Namespace Runtime.Internal.Invokes
                                    End If
                                Loop
                            End Function() _
- _
+                                          _
                         .DoCall(AddressOf pipeline.CreateFromPopulator)
                 Else
                     Dim lines As New List(Of String)

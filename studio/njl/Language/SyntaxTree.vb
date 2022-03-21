@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8370c8e5721919306cd9b686868b1c2f, studio\njl\Language\SyntaxTree.vb"
+﻿#Region "Microsoft.VisualBasic::8370c8e5721919306cd9b686868b1c2f, R-sharp\studio\njl\Language\SyntaxTree.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 297
+    '    Code Lines: 231
+    ' Comment Lines: 16
+    '   Blank Lines: 50
+    '     File Size: 11.46 KB
+
 
     '     Class SyntaxTree
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7ffd67ef553080387e65644dc4fd6518, studio\RData\Enums\ObjectBitMask.vb"
+﻿#Region "Microsoft.VisualBasic::7ffd67ef553080387e65644dc4fd6518, R-sharp\studio\RData\Enums\ObjectBitMask.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 11
+    '    Code Lines: 7
+    ' Comment Lines: 3
+    '   Blank Lines: 1
+    '     File Size: 263.00 B
+
 
     '     Enum ObjectBitMask
     ' 

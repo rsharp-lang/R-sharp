@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::be4f91fa26cb919102640ee69cb0d7ba, R#\Interpreter\Syntax\SyntaxImplements\TryCatchSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::be4f91fa26cb919102640ee69cb0d7ba, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\TryCatchSyntax.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 40
+    '    Code Lines: 29
+    ' Comment Lines: 2
+    '   Blank Lines: 9
+    '     File Size: 1.49 KB
+
 
     '     Module TryCatchSyntax
     ' 

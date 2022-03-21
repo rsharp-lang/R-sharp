@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::df72b2e14d8f961204e161a26d064f7f, R#\Interpreter\ExecuteEngine\Linq\Query\ProjectionExpression.vb"
+﻿#Region "Microsoft.VisualBasic::df72b2e14d8f961204e161a26d064f7f, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Query\ProjectionExpression.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 139
+    '    Code Lines: 98
+    ' Comment Lines: 12
+    '   Blank Lines: 29
+    '     File Size: 4.62 KB
+
 
     '     Class ProjectionExpression
     ' 

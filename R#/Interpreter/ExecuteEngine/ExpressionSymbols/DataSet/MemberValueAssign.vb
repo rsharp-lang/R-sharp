@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9c5e728703ec04a3731a6bf806870f8f, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\MemberValueAssign.vb"
+﻿#Region "Microsoft.VisualBasic::9c5e728703ec04a3731a6bf806870f8f, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\MemberValueAssign.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 45
+    '    Code Lines: 36
+    ' Comment Lines: 0
+    '   Blank Lines: 9
+    '     File Size: 1.74 KB
+
 
     '     Class MemberValueAssign
     ' 

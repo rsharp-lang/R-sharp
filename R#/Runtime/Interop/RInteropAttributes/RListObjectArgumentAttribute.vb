@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::25ca878fd31e80fedd00910a915f1564, R#\Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::25ca878fd31e80fedd00910a915f1564, R-sharp\R#\Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 86
+    '    Code Lines: 65
+    ' Comment Lines: 9
+    '   Blank Lines: 12
+    '     File Size: 3.46 KB
+
 
     '     Class RListObjectArgumentAttribute
     ' 

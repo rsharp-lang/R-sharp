@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::159b38a5ef90e11b46e4d84e396c2d4f, Library\R_graphic.interop\gdi.vb"
+﻿#Region "Microsoft.VisualBasic::159b38a5ef90e11b46e4d84e396c2d4f, R-sharp\Library\R_graphic.interop\gdi.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 43
+    '    Code Lines: 38
+    ' Comment Lines: 0
+    '   Blank Lines: 5
+    '     File Size: 1.47 KB
+
 
     ' Module gdi
     ' 

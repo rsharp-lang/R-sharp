@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7b27a121dddb9da7678f1acfa7caacc5, R#\System\Package\PackageFile\Expression\RVector.vb"
+﻿#Region "Microsoft.VisualBasic::7b27a121dddb9da7678f1acfa7caacc5, R-sharp\R#\System\Package\PackageFile\Expression\RVector.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 48
+    '    Code Lines: 37
+    ' Comment Lines: 0
+    '   Blank Lines: 11
+    '     File Size: 1.75 KB
+
 
     '     Class RVector
     ' 

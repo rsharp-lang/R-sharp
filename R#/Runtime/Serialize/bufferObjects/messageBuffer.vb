@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fe35bc2b8764f33310d1da7fe0503d75, R#\Runtime\Serialize\bufferObjects\messageBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::7ba04c672c838db0a1a75f95130d972c, R-sharp\R#\Runtime\Serialize\bufferObjects\messageBuffer.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+    ' Code Statistics:
+
+    '   Total Lines: 153
+    '    Code Lines: 116
+    ' Comment Lines: 3
+    '   Blank Lines: 34
+    '     File Size: 5.48 KB
+
+
     '     Class messageBuffer
     ' 
     '         Properties: code, environmentStack, level, message, source
@@ -38,7 +48,7 @@
     ' 
     '         Constructor: (+2 Overloads) Sub New
     ' 
-    '         Function: CreateBuffer, GetErrorMessage
+    '         Function: CreateBuffer, GetErrorMessage, getValue
     ' 
     '         Sub: Serialize
     '         Class TextExpression

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ba5a00817ae4cf54bbb3ead0bf87ac86, studio\RData\Enums\RObjectType.vb"
+﻿#Region "Microsoft.VisualBasic::ba5a00817ae4cf54bbb3ead0bf87ac86, R-sharp\studio\RData\Enums\RObjectType.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 134
+    '    Code Lines: 34
+    ' Comment Lines: 96
+    '   Blank Lines: 4
+    '     File Size: 3.36 KB
+
 
     '     Enum RObjectType
     ' 

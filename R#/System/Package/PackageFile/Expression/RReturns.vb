@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6aac781589520bc0e6a4755cf161521b, R#\System\Package\PackageFile\Expression\RReturns.vb"
+﻿#Region "Microsoft.VisualBasic::6aac781589520bc0e6a4755cf161521b, R-sharp\R#\System\Package\PackageFile\Expression\RReturns.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 37
+    '    Code Lines: 28
+    ' Comment Lines: 0
+    '   Blank Lines: 9
+    '     File Size: 1.32 KB
+
 
     '     Class RReturns
     ' 

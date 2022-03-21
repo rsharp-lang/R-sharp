@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4ca351331fbf433f7713714100222323, R#\Language\TokenIcer\StringInterpolation.vb"
+﻿#Region "Microsoft.VisualBasic::4ca351331fbf433f7713714100222323, R-sharp\R#\Language\TokenIcer\StringInterpolation.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 95
+    '    Code Lines: 69
+    ' Comment Lines: 6
+    '   Blank Lines: 20
+    '     File Size: 3.17 KB
+
 
     '     Class StringInterpolation
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4de23a1560b1320c85729b8143327dd1, R#\Runtime\Internal\internalInvokes\Linq\lambda.vb"
+﻿#Region "Microsoft.VisualBasic::4de23a1560b1320c85729b8143327dd1, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\lambda.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 65
+    '    Code Lines: 53
+    ' Comment Lines: 2
+    '   Blank Lines: 10
+    '     File Size: 2.95 KB
+
 
     '     Module lambda
     ' 

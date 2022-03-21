@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4b20ce65b01ccbeaf5cb9d0ef37cc151, studio\Rserver\RInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::4b20ce65b01ccbeaf5cb9d0ef37cc151, R-sharp\studio\Rserver\RInvoke.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 14
+    '    Code Lines: 8
+    ' Comment Lines: 3
+    '   Blank Lines: 3
+    '     File Size: 446.00 B
+
 
     ' Class RInvoke
     ' 

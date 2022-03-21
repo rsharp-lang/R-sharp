@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::39ab405ad5a2d433b8d8d6002f47a293, R#\Interpreter\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::39ab405ad5a2d433b8d8d6002f47a293, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 134
+    '    Code Lines: 105
+    ' Comment Lines: 12
+    '   Blank Lines: 17
+    '     File Size: 5.48 KB
+
 
     '     Module FunctionInvokeSyntax
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::66eb9b66e8b547eb6124e2cf985bdf30, R#\Runtime\Internal\objects\reflector.vb"
+﻿#Region "Microsoft.VisualBasic::66eb9b66e8b547eb6124e2cf985bdf30, R-sharp\R#\Runtime\Internal\objects\reflector.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 213
+    '    Code Lines: 151
+    ' Comment Lines: 22
+    '   Blank Lines: 40
+    '     File Size: 8.04 KB
+
 
     '     Module reflector
     ' 

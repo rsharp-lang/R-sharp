@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::25dbbe34b900775a521fad7b60bebb08, R#\Language\TokenIcer\Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::8aea4d735fe57f50296426c266b7c7c1, R-sharp\R#\Language\TokenIcer\Scanner.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 508
+    '    Code Lines: 368
+    ' Comment Lines: 72
+    '   Blank Lines: 68
+    '     File Size: 21.20 KB
+
 
     '     Class Scanner
     ' 

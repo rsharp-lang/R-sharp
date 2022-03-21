@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::adbaffb732fce9aa59e5524e3dc5941c, R#\Interpreter\ExecuteEngine\Linq\DataSet\SequenceDataSet.vb"
+﻿#Region "Microsoft.VisualBasic::adbaffb732fce9aa59e5524e3dc5941c, R-sharp\R#\Interpreter\ExecuteEngine\Linq\DataSet\SequenceDataSet.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 12
+    '    Code Lines: 8
+    ' Comment Lines: 0
+    '   Blank Lines: 4
+    '     File Size: 323.00 B
+
 
     '     Class SequenceDataSet
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::679ce37ce382a005acf36c723bbb5039, R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\MemberReference.vb"
+﻿#Region "Microsoft.VisualBasic::679ce37ce382a005acf36c723bbb5039, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\MemberReference.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 51
+    '    Code Lines: 40
+    ' Comment Lines: 0
+    '   Blank Lines: 11
+    '     File Size: 1.84 KB
+
 
     '     Class MemberReference
     ' 

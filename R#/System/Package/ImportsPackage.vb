@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7f66109d83fbf3354c58f6d9a30f6fce, R#\System\Package\ImportsPackage.vb"
+﻿#Region "Microsoft.VisualBasic::7f66109d83fbf3354c58f6d9a30f6fce, R-sharp\R#\System\Package\ImportsPackage.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 213
+    '    Code Lines: 154
+    ' Comment Lines: 29
+    '   Blank Lines: 30
+    '     File Size: 9.01 KB
+
 
     '     Module ImportsPackage
     ' 

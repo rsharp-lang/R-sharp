@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::426824fd4204e414064bec235c35207d, R#\Runtime\Internal\internalInvokes\dev\bitView.vb"
+﻿#Region "Microsoft.VisualBasic::426824fd4204e414064bec235c35207d, R-sharp\R#\Runtime\Internal\internalInvokes\dev\bitView.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 46
+    '    Code Lines: 37
+    ' Comment Lines: 0
+    '   Blank Lines: 9
+    '     File Size: 1.70 KB
+
 
     '     Module bitView
     ' 

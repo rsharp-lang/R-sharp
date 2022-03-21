@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3884164949c6c2872efc61d87401ac80, R#\Runtime\Internal\objects\base\dataframeBase.vb"
+﻿#Region "Microsoft.VisualBasic::3884164949c6c2872efc61d87401ac80, R-sharp\R#\Runtime\Internal\objects\base\dataframeBase.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 88
+    '    Code Lines: 60
+    ' Comment Lines: 14
+    '   Blank Lines: 14
+    '     File Size: 3.44 KB
+
 
     '     Module dataframeBase
     ' 

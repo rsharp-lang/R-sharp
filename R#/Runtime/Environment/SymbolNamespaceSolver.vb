@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a07700e7d525976b35c8e49d66279fc9, R#\Runtime\Environment\SymbolNamespaceSolver.vb"
+﻿#Region "Microsoft.VisualBasic::a07700e7d525976b35c8e49d66279fc9, R-sharp\R#\Runtime\Environment\SymbolNamespaceSolver.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 89
+    '    Code Lines: 67
+    ' Comment Lines: 4
+    '   Blank Lines: 18
+    '     File Size: 3.64 KB
+
 
     '     Class SymbolNamespaceSolver
     ' 

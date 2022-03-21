@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::219f79bcb04fb02aa36067390b3a1176, R#\Runtime\Internal\debug.vb"
+﻿#Region "Microsoft.VisualBasic::219f79bcb04fb02aa36067390b3a1176, R-sharp\R#\Runtime\Internal\debug.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 282
+    '    Code Lines: 202
+    ' Comment Lines: 35
+    '   Blank Lines: 45
+    '     File Size: 11.15 KB
+
 
     '     Class debug
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b04814b48cc9cd95fc638a9f77b6b262, studio\Rsharp_kit\devkit\devkit.vb"
+﻿#Region "Microsoft.VisualBasic::34cbf281514672abb46348e97671518d, R-sharp\studio\Rsharp_kit\devkit\devkit.vb"
 
     ' Author:
     ' 
@@ -31,11 +31,22 @@
 
     ' Summaries:
 
+
+    ' Code Statistics:
+
+    '   Total Lines: 141
+    '    Code Lines: 97
+    ' Comment Lines: 26
+    '   Blank Lines: 18
+    '     File Size: 5.27 KB
+
+
     ' Module devkit
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: AssemblyInfo, decodeSourceMap, encodeSourceMap, gitLog, inspect
-    '               showIL, svnLog
+    '     Function: AssemblyInfo, decodeSourceMap, encodeSourceMap, getSourceFiles, gitLog
+    '               inspect, printProject, readBannerData, readVbProject, showIL
+    '               svnLog, writeCodeBanner
     ' 
     ' /********************************************************************************/
 
@@ -45,8 +56,10 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio
+Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.CodeSign
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.IL
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.SourceMap
+Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.vbproj
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.VersionControl
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -63,7 +76,13 @@ Module devkit
 
     Sub New()
         Internal.ConsolePrinter.AttachConsoleFormatter(Of ILInstruction)(Function(a) DirectCast(a, ILInstruction).GetCode)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of Project)(AddressOf printProject)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of LicenseInfo)(Function(a) a.ToString)
     End Sub
+
+    Private Function printProject(vbproj As Project) As String
+        Return vbproj.ToString
+    End Function
 
     ''' <summary>
     ''' Get .NET library module assembly information data.
@@ -73,6 +92,38 @@ Module devkit
     <ExportAPI("AssemblyInfo")>
     Public Function AssemblyInfo(dllfile As String) As AssemblyInfo
         Return Assembly.UnsafeLoadFrom(dllfile.GetFullPath).FromAssembly
+    End Function
+
+    <ExportAPI("sourceFiles")>
+    Public Function getSourceFiles(vbproj As Project) As String()
+        Return vbproj _
+            .EnumerateSourceFiles(skipAssmInfo:=True, fullName:=True) _
+            .ToArray
+    End Function
+
+    <ExportAPI("read.vbproj")>
+    Public Function readVbProject(file As String) As Project
+        Try
+            Return Project.Load(file)
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+
+    <ExportAPI("read.banner")>
+    Public Function readBannerData(file As String) As LicenseInfo
+        Return file.LoadXml(Of LicenseInfo)
+    End Function
+
+    <ExportAPI("write.code_banner")>
+    Public Function writeCodeBanner(file As String, banner As LicenseInfo, Optional rootDir As String = Nothing) As CodeStatics
+        If rootDir.StringEmpty Then
+            rootDir = file.ParentPath
+        End If
+
+        Dim stat As CodeStatics = Nothing
+        Call LicenseMgr.Insert(file, banner, rootDir, stat)
+        Return stat
     End Function
 
     <ExportAPI("svn.log")>

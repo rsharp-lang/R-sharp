@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2c6dc3845f4010cd116d022e1a1e8581, Library\R.math\stats.vb"
+﻿#Region "Microsoft.VisualBasic::2c6dc3845f4010cd116d022e1a1e8581, R-sharp\Library\R.math\stats.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 629
+    '    Code Lines: 304
+    ' Comment Lines: 264
+    '   Blank Lines: 61
+    '     File Size: 26.12 KB
+
 
     ' Module stats
     ' 

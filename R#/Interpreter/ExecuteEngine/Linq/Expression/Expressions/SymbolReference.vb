@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a9ad87a90a2ff15bda0dcfd12080497b, R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\SymbolReference.vb"
+﻿#Region "Microsoft.VisualBasic::a9ad87a90a2ff15bda0dcfd12080497b, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\SymbolReference.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 35
+    '    Code Lines: 27
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 1.03 KB
+
 
     '     Class SymbolReference
     ' 

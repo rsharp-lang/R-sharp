@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a2eac7bc77fb7191f22a3bebca631b5d, R#\System\HybridsEngine.vb"
+﻿#Region "Microsoft.VisualBasic::a2eac7bc77fb7191f22a3bebca631b5d, R-sharp\R#\System\HybridsEngine.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 136
+    '    Code Lines: 97
+    ' Comment Lines: 12
+    '   Blank Lines: 27
+    '     File Size: 5.27 KB
+
 
     '     Class HybridsEngine
     ' 

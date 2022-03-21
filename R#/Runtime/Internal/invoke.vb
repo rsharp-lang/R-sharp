@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::00b6ace6317bbaab8679ccfe17ae8530, R#\Runtime\Internal\invoke.vb"
+﻿#Region "Microsoft.VisualBasic::a8090d86f548b55ab75a4a3ebb7ab0df, R-sharp\R#\Runtime\Internal\invoke.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 149
+    '    Code Lines: 117
+    ' Comment Lines: 19
+    '   Blank Lines: 13
+    '     File Size: 6.41 KB
+
 
     '     Class invoke
     ' 
@@ -120,6 +130,7 @@ Namespace Runtime.Internal
             Call GetType(Rinterop).DoCall(AddressOf pushEnvir)
             Call GetType(dataframeBase).DoCall(AddressOf pushEnvir)
             Call GetType(bitView).DoCall(AddressOf pushEnvir)
+            Call GetType(humanReadableFormatter).DoCall(AddressOf pushEnvir)
         End Sub
 
         Friend Shared Sub pushEnvir(baseModule As Type)

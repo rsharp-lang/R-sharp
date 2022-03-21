@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cca8bfaf0a49504929bf308bb0dc899e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\ObjectWith.vb"
+﻿#Region "Microsoft.VisualBasic::cca8bfaf0a49504929bf308bb0dc899e, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\ObjectWith.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 62
+    '    Code Lines: 48
+    ' Comment Lines: 3
+    '   Blank Lines: 11
+    '     File Size: 2.25 KB
+
 
     '     Class ObjectWith
     ' 

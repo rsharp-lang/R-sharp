@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9d0980932d9950a55a49364c946692ba, R#\System\Document\ShellScript\ArgumentInfo.vb"
+﻿#Region "Microsoft.VisualBasic::9d0980932d9950a55a49364c946692ba, R-sharp\R#\System\Document\ShellScript\ArgumentInfo.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 53
+    '    Code Lines: 39
+    ' Comment Lines: 3
+    '   Blank Lines: 11
+    '     File Size: 1.64 KB
+
 
     '     Class ArgumentInfo
     ' 

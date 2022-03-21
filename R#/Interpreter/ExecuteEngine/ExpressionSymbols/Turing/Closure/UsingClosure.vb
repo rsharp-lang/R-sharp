@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f296da975d323132d645f43f6badccfa, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\UsingClosure.vb"
+﻿#Region "Microsoft.VisualBasic::f296da975d323132d645f43f6badccfa, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\UsingClosure.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 80
+    '    Code Lines: 51
+    ' Comment Lines: 16
+    '   Blank Lines: 13
+    '     File Size: 2.82 KB
+
 
     '     Class UsingClosure
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6e2d4dc7d62155ee25d8a29b20c829c4, studio\Rsharp_kit\devkit\workflow\config.json.vb"
+﻿#Region "Microsoft.VisualBasic::6e2d4dc7d62155ee25d8a29b20c829c4, R-sharp\studio\Rsharp_kit\devkit\workflow\config.json.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 114
+    '    Code Lines: 77
+    ' Comment Lines: 12
+    '   Blank Lines: 25
+    '     File Size: 3.96 KB
+
 
     ' Class ConfigJSON
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::36c2477738d7fcbf890b8656fd75d971, R#\Runtime\Interop\RInteropAttributes\RPackageModuleAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::36c2477738d7fcbf890b8656fd75d971, R-sharp\R#\Runtime\Interop\RInteropAttributes\RPackageModuleAttribute.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 9
+    '    Code Lines: 5
+    ' Comment Lines: 3
+    '   Blank Lines: 1
+    '     File Size: 310.00 B
+
 
     '     Class RPackageModuleAttribute
     ' 

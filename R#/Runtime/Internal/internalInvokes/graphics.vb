@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::76ae8a8b09aaf67bf5dbb02ecbf51906, R#\Runtime\Internal\internalInvokes\graphics.vb"
+﻿#Region "Microsoft.VisualBasic::f345c14f9b41698309dd9af343717cef, R-sharp\R#\Runtime\Internal\internalInvokes\graphics.vb"
 
 ' Author:
 ' 
@@ -31,10 +31,20 @@
 
 ' Summaries:
 
+
+' Code Statistics:
+
+'   Total Lines: 344
+'    Code Lines: 215
+' Comment Lines: 85
+'   Blank Lines: 44
+'     File Size: 14.19 KB
+
+
 '     Module graphics
 ' 
-'         Function: bitmap, devCur, devOff, fileStreamWriter, isBase64StringOrFile
-'                   plot, readImage, resizeImage, wmf
+'         Function: bitmap, devCur, devOff, drawText, isBase64StringOrFile
+'                   plot, rasterImage, readImage, resizeImage, wmf
 ' 
 '         Sub: openNew
 ' 
@@ -44,7 +54,6 @@
 #End Region
 
 Imports System.Drawing
-Imports System.Drawing.Imaging
 Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -54,6 +63,7 @@ Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -64,14 +74,45 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes
 
+    Public Structure graphicsDevice
+
+        Dim g As IGraphics
+        Dim file As Stream
+        Dim args As list
+
+        Public ReadOnly Property Background As Color
+            Get
+                Return g.Background
+            End Get
+        End Property
+
+        Default Public ReadOnly Property Item(ref As String) As Object
+            Get
+                Return args.slots(ref)
+            End Get
+        End Property
+
+        Public Overrides Function ToString() As String
+            Return $"[{g.ToString}] {args.getNames.GetJson}"
+        End Function
+
+    End Structure
+
     Module graphics
 
-        ReadOnly devlist As New List(Of (g As IGraphics, file As Stream))
+        ReadOnly devlist As New List(Of graphicsDevice)
 
-        Friend curDev As (g As IGraphics, file As Stream) = Nothing
+        ''' <summary>
+        ''' the current actived graphics device
+        ''' </summary>
+        Friend curDev As graphicsDevice = Nothing
 
-        Friend Sub openNew(dev As IGraphics, buffer As Stream)
-            curDev = (dev, buffer)
+        Friend Sub openNew(dev As IGraphics, buffer As Stream, args As list)
+            curDev = New graphicsDevice With {
+                .g = dev,
+                .file = buffer,
+                .args = args
+            }
             devlist.Add(curDev)
         End Sub
 
@@ -83,7 +124,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("dev.off")>
         Public Function devOff(Optional which% = -1, Optional env As Environment = Nothing) As Object
-            Dim dev As (g As IGraphics, file As Stream)
+            Dim dev As graphicsDevice
 
             If which < 1 Then
                 dev = devlist.LastOrDefault
@@ -170,6 +211,14 @@ Namespace Runtime.Internal.Invokes
             Return Nothing
         End Function
 
+        <ExportAPI("rasterFont")>
+        Public Function rasterFont(name As String,
+                                   Optional size As Single = 12,
+                                   Optional style As FontStyle = FontStyle.Regular) As Font
+
+            Return New Font(name, size, style)
+        End Function
+
         ''' <summary>
         ''' draw a raster image on a specific position
         ''' </summary>
@@ -250,7 +299,11 @@ Namespace Runtime.Internal.Invokes
                 If buffer Like GetType(Message) Then
                     Return buffer.TryCast(Of Message)
                 Else
-                    Call openNew(New Wmf(size, buffer.TryCast(Of Stream)), buffer.TryCast(Of Stream))
+                    Call openNew(
+                        dev:=New Wmf(size, buffer.TryCast(Of Stream)),
+                        buffer:=buffer.TryCast(Of Stream),
+                        args:=args
+                    )
                 End If
 
                 Return Nothing
@@ -290,7 +343,11 @@ Namespace Runtime.Internal.Invokes
                 If buffer Like GetType(Message) Then
                     Return buffer.TryCast(Of Message)
                 Else
-                    Call openNew(size.CreateGDIDevice(filled:=fill), buffer.TryCast(Of Stream))
+                    Call openNew(
+                        dev:=size.CreateGDIDevice(filled:=fill),
+                        buffer:=buffer.TryCast(Of Stream),
+                        args:=args
+                    )
                 End If
 
                 Return Nothing

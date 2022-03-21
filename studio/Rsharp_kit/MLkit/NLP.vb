@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::deac1ec384b3fee08d46508a6ded75b3, studio\Rsharp_kit\MLkit\NLP.vb"
+﻿#Region "Microsoft.VisualBasic::ac1c81cb1fc55a81a638b53439a06544, R-sharp\studio\Rsharp_kit\MLkit\NLP.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 26
+    '    Code Lines: 18
+    ' Comment Lines: 3
+    '   Blank Lines: 5
+    '     File Size: 836.00 B
+
 
     ' Module NLP
     ' 
@@ -65,4 +75,3 @@ Module NLP
     End Function
 
 End Module
-

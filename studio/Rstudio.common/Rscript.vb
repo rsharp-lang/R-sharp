@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::27fa90743520914a1c81373ac5cfcad8, studio\Rstudio.common\Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::27fa90743520914a1c81373ac5cfcad8, R-sharp\studio\Rstudio.common\Rscript.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 104
+    '    Code Lines: 79
+    ' Comment Lines: 13
+    '   Blank Lines: 12
+    '     File Size: 3.98 KB
+
 
     ' Module Rscript
     ' 

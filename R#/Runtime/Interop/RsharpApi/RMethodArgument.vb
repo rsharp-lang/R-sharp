@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::496e8da59746c8fafda62a99fe0031f1, R#\Runtime\Interop\RsharpApi\RMethodArgument.vb"
+﻿#Region "Microsoft.VisualBasic::496e8da59746c8fafda62a99fe0031f1, R-sharp\R#\Runtime\Interop\RsharpApi\RMethodArgument.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 161
+    '    Code Lines: 87
+    ' Comment Lines: 60
+    '   Blank Lines: 14
+    '     File Size: 6.55 KB
+
 
     '     Class RMethodArgument
     ' 

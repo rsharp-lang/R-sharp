@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7a8d30a3477588b686bd73d483c02ec0, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
+﻿#Region "Microsoft.VisualBasic::1ff42fbdf7c28faa37b5b8106b4c370d, R-sharp\R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 391
+    '    Code Lines: 300
+    ' Comment Lines: 28
+    '   Blank Lines: 63
+    '     File Size: 17.54 KB
+
 
     '     Module BinaryExpressionTree
     ' 
@@ -153,7 +163,13 @@ Namespace Interpreter.SyntaxParser
                             Call buf.Add(syntaxResult)
                         End If
                     Else
-                        syntaxResult = opts.ParseExpression(tokenBlocks(i), opts)
+                        Dim t = tokenBlocks(i)
+
+                        If t.Length = 1 AndAlso t(Scan0).name = TokenType.keyword Then
+                            t(Scan0).name = TokenType.identifier
+                        End If
+
+                        syntaxResult = opts.ParseExpression(t, opts)
 
                         If syntaxResult.isException Then
                             Return syntaxResult

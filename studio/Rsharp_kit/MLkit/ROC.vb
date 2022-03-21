@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e3a56a3f79df7a93f938aafa4db9054a, studio\Rsharp_kit\MLkit\ROC.vb"
+﻿#Region "Microsoft.VisualBasic::e3a56a3f79df7a93f938aafa4db9054a, R-sharp\studio\Rsharp_kit\MLkit\ROC.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 62
+    '    Code Lines: 51
+    ' Comment Lines: 4
+    '   Blank Lines: 7
+    '     File Size: 2.26 KB
+
 
     ' Class ROC
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::57819aabf4a5df57e2a2c03c57ad9740, Library\R.graphics\Plot2D\gr2DLabeler.vb"
+﻿#Region "Microsoft.VisualBasic::57819aabf4a5df57e2a2c03c57ad9740, R-sharp\Library\R.graphics\Plot2D\gr2DLabeler.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 98
+    '    Code Lines: 72
+    ' Comment Lines: 17
+    '   Blank Lines: 9
+    '     File Size: 3.95 KB
+
 
     ' Module gr2DLabeler
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::eb9e39c8fefe9417d89c4f0259bf229b, studio\Rsharp_kit\roxygenNet\rdocumentation.vb"
+﻿#Region "Microsoft.VisualBasic::eb9e39c8fefe9417d89c4f0259bf229b, R-sharp\studio\Rsharp_kit\roxygenNet\rdocumentation.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 13
+    '    Code Lines: 11
+    ' Comment Lines: 0
+    '   Blank Lines: 2
+    '     File Size: 471.00 B
+
 
     ' Module rdocumentation
     ' 

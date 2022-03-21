@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c8af01c20bec89108dbb838354c2103, R#\System\Document\Printer\UnixManPagePrinter.vb"
+﻿#Region "Microsoft.VisualBasic::6c8af01c20bec89108dbb838354c2103, R-sharp\R#\System\Document\Printer\UnixManPagePrinter.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 89
+    '    Code Lines: 78
+    ' Comment Lines: 0
+    '   Blank Lines: 11
+    '     File Size: 3.68 KB
+
 
     '     Module UnixManPagePrinter
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::27e774b1b1515d718894f1701de73bc4, R#\Runtime\Interop\RsharpApi\ListObjectArgumentMargin.vb"
+﻿#Region "Microsoft.VisualBasic::27e774b1b1515d718894f1701de73bc4, R-sharp\R#\Runtime\Interop\RsharpApi\ListObjectArgumentMargin.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 26
+    '    Code Lines: 8
+    ' Comment Lines: 17
+    '   Blank Lines: 1
+    '     File Size: 817.00 B
+
 
     '     Enum ListObjectArgumentMargin
     ' 

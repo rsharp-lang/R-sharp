@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aabd6fd402bc5ea24325b518cf282978, R#\Interpreter\ExecuteEngine\Linq\DataSet\RuntimeVectorDataSet.vb"
+﻿#Region "Microsoft.VisualBasic::aabd6fd402bc5ea24325b518cf282978, R-sharp\R#\Interpreter\ExecuteEngine\Linq\DataSet\RuntimeVectorDataSet.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 17
+    '    Code Lines: 13
+    ' Comment Lines: 0
+    '   Blank Lines: 4
+    '     File Size: 467.00 B
+
 
     '     Class RuntimeVectorDataSet
     ' 

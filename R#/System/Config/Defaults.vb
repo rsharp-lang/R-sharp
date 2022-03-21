@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7894811669d32cdde9e6ea8f07496adc, R#\System\Config\Defaults.vb"
+﻿#Region "Microsoft.VisualBasic::7894811669d32cdde9e6ea8f07496adc, R-sharp\R#\System\Config\Defaults.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 8
+    '    Code Lines: 5
+    ' Comment Lines: 0
+    '   Blank Lines: 3
+    '     File Size: 225.00 B
+
 
     '     Module Defaults
     ' 

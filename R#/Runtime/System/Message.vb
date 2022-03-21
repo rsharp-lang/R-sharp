@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e06fc2d81ddb5dfb8d9cc2ba21686281, R#\Runtime\System\Message.vb"
+﻿#Region "Microsoft.VisualBasic::e06fc2d81ddb5dfb8d9cc2ba21686281, R-sharp\R#\Runtime\System\Message.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 111
+    '    Code Lines: 71
+    ' Comment Lines: 23
+    '   Blank Lines: 17
+    '     File Size: 4.37 KB
+
 
     '     Class Message
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2fd53c8cb3abf4c348bbb8c6381c8885, R#\System\Package\PackageFile\Expression\RIf.vb"
+﻿#Region "Microsoft.VisualBasic::2fd53c8cb3abf4c348bbb8c6381c8885, R-sharp\R#\System\Package\PackageFile\Expression\RIf.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 67
+    '    Code Lines: 55
+    ' Comment Lines: 0
+    '   Blank Lines: 12
+    '     File Size: 2.79 KB
+
 
     '     Class RIf
     ' 

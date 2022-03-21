@@ -1,42 +1,53 @@
-﻿#Region "Microsoft.VisualBasic::8a0f9a1702e5b5c572f82f29f9bfbf0a, R#\Interpreter\Syntax\SyntaxTree\ExpressionTree.vb"
+﻿#Region "Microsoft.VisualBasic::421c79f27db32c30beaa46c0531e8846, R-sharp\R#\Interpreter\Syntax\SyntaxTree\ExpressionTree.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module ExpressionTree
-' 
-'         Function: CreateTree, ObjectInvoke, ParseExpressionTree, simpleSequence
-' 
-' 
-' /********************************************************************************/
+
+    ' Code Statistics:
+
+    '   Total Lines: 263
+    '    Code Lines: 209
+    ' Comment Lines: 17
+    '   Blank Lines: 37
+    '     File Size: 12.21 KB
+
+
+    '     Module ExpressionTree
+    ' 
+    '         Function: CreateTree, isDotNetMemberReference, ObjectInvoke, ParseDotNetmember, ParseExpressionTree
+    '                   simpleSequence
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -128,8 +139,14 @@ Namespace Interpreter.SyntaxParser
 
         <Extension>
         Public Function ParseDotNetmember(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim obj = code(0).Skip(1).Take(code(0).Length - 2).DoCall(Function(t) opts.ParseExpression(t, opts))
-            Dim target = opts.ParseExpression(code(2), opts)
+            Dim obj = code(0).Skip(1).Take(code(0).Length - 2).DoCall(Function(i) opts.ParseExpression(i, opts))
+            Dim t = code(2)
+
+            If t.Length = 1 AndAlso t(Scan0).name = TokenType.keyword Then
+                t(Scan0).name = TokenType.identifier
+            End If
+
+            Dim target As SyntaxResult = opts.ParseExpression(t, opts)
 
             If obj.isException Then
                 Return obj

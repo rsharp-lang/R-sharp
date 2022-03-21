@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::41fdfae9fbc6aa4beab5a95267659ad1, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb"
+﻿#Region "Microsoft.VisualBasic::41fdfae9fbc6aa4beab5a95267659ad1, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 51
+    '    Code Lines: 40
+    ' Comment Lines: 0
+    '   Blank Lines: 11
+    '     File Size: 1.55 KB
+
 
     '     Class UnaryNot
     ' 

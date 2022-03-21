@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7d23bdbc4546c0ccc543ee30e59e0aef, R#\Test\makeObjecttest.vb"
+﻿#Region "Microsoft.VisualBasic::7d23bdbc4546c0ccc543ee30e59e0aef, R-sharp\R#\Test\makeObjecttest.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 39
+    '    Code Lines: 31
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 1.16 KB
+
 
     ' Module makeObjecttest
     ' 

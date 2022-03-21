@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c0341251ce54173116ed055667b2280e, studio\npy\Language\Implements\ValueAssignSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::c0341251ce54173116ed055667b2280e, R-sharp\studio\npy\Language\Implements\ValueAssignSyntax.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 117
+    '    Code Lines: 88
+    ' Comment Lines: 9
+    '   Blank Lines: 20
+    '     File Size: 4.95 KB
+
 
     '     Module ValueAssignSyntax
     ' 

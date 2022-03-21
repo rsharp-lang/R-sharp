@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7570e9f9735ea40fd72748c55c6cb814, R#\System\Components\ProfileRecord.vb"
+﻿#Region "Microsoft.VisualBasic::7570e9f9735ea40fd72748c55c6cb814, R-sharp\R#\System\Components\ProfileRecord.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 59
+    '    Code Lines: 40
+    ' Comment Lines: 4
+    '   Blank Lines: 15
+    '     File Size: 1.96 KB
+
 
     '     Class ProfileRecord
     ' 

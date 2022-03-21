@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f50bacecbf11b728420ede809e546935, Rscript\Program.vb"
+﻿#Region "Microsoft.VisualBasic::f50bacecbf11b728420ede809e546935, R-sharp\Rscript\Program.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 116
+    '    Code Lines: 80
+    ' Comment Lines: 17
+    '   Blank Lines: 19
+    '     File Size: 4.56 KB
+
 
     ' Module Program
     ' 

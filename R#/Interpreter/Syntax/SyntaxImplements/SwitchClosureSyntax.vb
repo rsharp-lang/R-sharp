@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::74314e245056f8e8d9dcab4a956d1f1d, R#\Interpreter\Syntax\SyntaxImplements\SwitchClosureSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::74314e245056f8e8d9dcab4a956d1f1d, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\SwitchClosureSyntax.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 80
+    '    Code Lines: 68
+    ' Comment Lines: 0
+    '   Blank Lines: 12
+    '     File Size: 3.79 KB
+
 
     '     Module SwitchClosureSyntax
     ' 

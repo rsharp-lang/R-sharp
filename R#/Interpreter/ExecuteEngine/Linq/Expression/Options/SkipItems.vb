@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2a87c338d1671781d08f76002886d755, R#\Interpreter\ExecuteEngine\Linq\Expression\Options\SkipItems.vb"
+﻿#Region "Microsoft.VisualBasic::2a87c338d1671781d08f76002886d755, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\Options\SkipItems.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 45
+    '    Code Lines: 33
+    ' Comment Lines: 3
+    '   Blank Lines: 9
+    '     File Size: 1.41 KB
+
 
     '     Class SkipItems
     ' 

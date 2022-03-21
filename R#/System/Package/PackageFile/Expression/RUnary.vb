@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1973b4184bf441ed3076e14b0c61c7ff, R#\System\Package\PackageFile\Expression\RUnary.vb"
+﻿#Region "Microsoft.VisualBasic::1973b4184bf441ed3076e14b0c61c7ff, R-sharp\R#\System\Package\PackageFile\Expression\RUnary.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 72
+    '    Code Lines: 59
+    ' Comment Lines: 0
+    '   Blank Lines: 13
+    '     File Size: 2.85 KB
+
 
     '     Class RUnary
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f4b1442b8ca5e864fef16486fb6cc0f1, R#\Runtime\Internal\objects\utils\TableRow.vb"
+﻿#Region "Microsoft.VisualBasic::f4b1442b8ca5e864fef16486fb6cc0f1, R-sharp\R#\Runtime\Internal\objects\utils\TableRow.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 46
+    '    Code Lines: 34
+    ' Comment Lines: 6
+    '   Blank Lines: 6
+    '     File Size: 1.57 KB
+
 
     '     Class TableRow
     ' 

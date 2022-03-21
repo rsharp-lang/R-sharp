@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ee6474c66a5779db2a8388deedbca18f, Library\R.math\lpSolve.vb"
+﻿#Region "Microsoft.VisualBasic::870b7a44f1f9c0d2214662fbd77151a2, R-sharp\Library\R.math\lpSolve.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 208
+    '    Code Lines: 172
+    ' Comment Lines: 11
+    '   Blank Lines: 25
+    '     File Size: 8.78 KB
+
 
     ' Module lpSolve
     ' 

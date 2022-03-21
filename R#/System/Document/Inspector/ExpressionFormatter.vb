@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::672a4fd414b2262a5c05e2fb84e01b75, R#\System\Document\Inspector\ExpressionFormatter.vb"
+﻿#Region "Microsoft.VisualBasic::672a4fd414b2262a5c05e2fb84e01b75, R-sharp\R#\System\Document\Inspector\ExpressionFormatter.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 30
+    '    Code Lines: 19
+    ' Comment Lines: 0
+    '   Blank Lines: 11
+    '     File Size: 724.00 B
+
 
     '     Class ExpressionFormatter
     ' 

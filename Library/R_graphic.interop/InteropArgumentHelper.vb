@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c1485771d5bcc380c04668904258373, Library\R_graphic.interop\InteropArgumentHelper.vb"
+﻿#Region "Microsoft.VisualBasic::6c1485771d5bcc380c04668904258373, R-sharp\Library\R_graphic.interop\InteropArgumentHelper.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 169
+    '    Code Lines: 131
+    ' Comment Lines: 20
+    '   Blank Lines: 18
+    '     File Size: 6.14 KB
+
 
     ' Module InteropArgumentHelper
     ' 
@@ -121,10 +131,16 @@ Public Module InteropArgumentHelper
                 If strs.Length = 1 Then
                     Return strs(Scan0)
                 ElseIf strs.Length = 4 AndAlso strs.Take(4).All(Function(val) val.IsNumeric) Then
-                    Return strs.Take(4).Select(AddressOf Val).ToArray.paddingFromNumbers(default$)
+                    Return strs _
+                        .Take(4) _
+                        .Select(AddressOf Val) _
+                        .ToArray _
+                        .paddingFromNumbers(default$)
                 Else
                     Return [default]
                 End If
+            Case GetType(Integer), GetType(Long), GetType(Byte), GetType(Single), GetType(Double)
+                Return New Padding(CInt(padding))
             Case GetType(Long()), GetType(Integer())
                 Return DirectCast(padding, Array).paddingFromNumbers(default$)
             Case GetType(vector)

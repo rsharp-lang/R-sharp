@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f1660cc74ca874706e5d3fa74ecfa89e, Library\R.math\models\lmCall.vb"
+﻿#Region "Microsoft.VisualBasic::f1660cc74ca874706e5d3fa74ecfa89e, R-sharp\Library\R.math\models\lmCall.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 105
+    '    Code Lines: 86
+    ' Comment Lines: 0
+    '   Blank Lines: 19
+    '     File Size: 3.61 KB
+
 
     ' Class lmCall
     ' 

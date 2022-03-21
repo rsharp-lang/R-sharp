@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::440adc54aaa7f6fd2b0c4754e8ab8b09, studio\Rsharp_kit\devkit\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::e6ebc3b59ed7ad6c41625bfaa79aaaea, R-sharp\studio\Rsharp_kit\devkit\zzz.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+    ' Code Statistics:
+
+    '   Total Lines: 7
+    '    Code Lines: 4
+    ' Comment Lines: 0
+    '   Blank Lines: 3
+    '     File Size: 100.00 B
+
+
     ' Class zzz
     ' 
     ' 
@@ -46,4 +56,3 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Public Class zzz
 
 End Class
-

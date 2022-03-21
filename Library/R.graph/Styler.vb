@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b30da6fa8c7c54d89e1a1a7ced0607b3, Library\R.graph\Styler.vb"
+﻿#Region "Microsoft.VisualBasic::8abfc1984a49339832f0c05c1497f001, R-sharp\Library\R.graph\Styler.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 236
+    '    Code Lines: 188
+    ' Comment Lines: 21
+    '   Blank Lines: 27
+    '     File Size: 9.20 KB
+
 
     ' Module Styler
     ' 
@@ -277,4 +287,3 @@ Module Styler
         Return v
     End Function
 End Module
-

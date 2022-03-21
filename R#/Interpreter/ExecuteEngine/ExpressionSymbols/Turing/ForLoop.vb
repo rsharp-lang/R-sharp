@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d1037e43c336c5d16128ce6847fb65ed, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb"
+﻿#Region "Microsoft.VisualBasic::d1037e43c336c5d16128ce6847fb65ed, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 162
+    '    Code Lines: 106
+    ' Comment Lines: 30
+    '   Blank Lines: 26
+    '     File Size: 5.97 KB
+
 
     '     Class ForLoop
     ' 

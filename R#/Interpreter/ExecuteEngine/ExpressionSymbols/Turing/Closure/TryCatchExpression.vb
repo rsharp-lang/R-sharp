@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e64635771d1239a54e84a17710be2151, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\TryCatchExpression.vb"
+﻿#Region "Microsoft.VisualBasic::e64635771d1239a54e84a17710be2151, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\TryCatchExpression.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 67
+    '    Code Lines: 55
+    ' Comment Lines: 2
+    '   Blank Lines: 10
+    '     File Size: 2.46 KB
+
 
     '     Class TryCatchExpression
     ' 

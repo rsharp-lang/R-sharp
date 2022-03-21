@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9f6fe74df587f1ea3d7400ba817104af, Library\R.base\save\rawDeserializer.vb"
+﻿#Region "Microsoft.VisualBasic::9f6fe74df587f1ea3d7400ba817104af, R-sharp\Library\R.base\save\rawDeserializer.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 111
+    '    Code Lines: 94
+    ' Comment Lines: 0
+    '   Blank Lines: 17
+    '     File Size: 4.32 KB
+
 
     ' Module rawDeserializer
     ' 

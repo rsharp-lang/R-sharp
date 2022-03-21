@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2c3f3deecd7c91e4c3b0b8aa100ac31e, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::991b9478d5177ded063b50030d76d316, R-sharp\R#\Runtime\Internal\internalInvokes\base.vb"
 
     ' Author:
     ' 
@@ -31,21 +31,31 @@
 
     ' Summaries:
 
+
+    ' Code Statistics:
+
+    '   Total Lines: 2488
+    '    Code Lines: 1147
+    ' Comment Lines: 1126
+    '   Blank Lines: 215
+    '     File Size: 119.86 KB
+
+
     '     Module base
     ' 
     '         Function: [date], [dim], [stop], allocate, append
     '                   appendOfList, appendOfVector, autoDispose, c, cat
     '                   cbind, colnames, columnVector, doPrintInternal, factor
-    '                   factors, getOption, ifelse, invisible, isEmpty
-    '                   isEmptyArray, isList, isNA, isNull, isRVector
-    '                   length, library, makeNames, names, ncol
-    '                   neg, nrow, objectAddInvoke, options, print
-    '                   range, rbind, Rdataframe, rep, replace
-    '                   Rlist, rownames, seq, sink, source
-    '                   str, summary, t, uniqueNames, unitOfT
-    '                   warning, year
+    '                   factors, getOption, ifelse, invisible, isDataframe
+    '                   isEmpty, isEmptyArray, isList, isNA, isNull
+    '                   isRVector, length, library, makeNames, names
+    '                   ncol, neg, nrow, objectAddInvoke, options
+    '                   print, range, rbind, Rdataframe, rep
+    '                   replace, Rlist, rowBindDataFrame, rownames, seq
+    '                   sink, source, str, summary, t
+    '                   uniqueNames, unitOfT, warning, year
     ' 
-    '         Sub: [exit], q, quit, warnings
+    '         Sub: warnings
     '         Class PrinterOptions
     ' 
     '             Properties: maxPrint, quot
@@ -470,6 +480,50 @@ Namespace Runtime.Internal.Invokes
             Return REnv.asVector(Repeats(x, times), If(x Is Nothing, GetType(Object), x.GetType), env)
         End Function
 
+        Private Function rowBindDataFrame(d As dataframe, row As dataframe, env As Environment) As Object
+            If d.columns.Count <> row.columns.Count Then
+                Return Internal.debug.stop({
+                    $"mismatch column size between two dataframe!",
+                    $"({d.ncols}) columns: {d.colnames.GetJson}",
+                    $"({row.ncols}) columns: {d.colnames.GetJson}"
+                }, env)
+            End If
+
+            For Each col In row.columns
+                If Not d.hasName(col.Key) Then
+                    Return Internal.debug.stop({$"names do not match previous names", $"missing: {col.Key}"}, env)
+                End If
+            Next
+
+            Dim colNames = d.columns.Keys.ToArray
+            Dim copy = d.projectByColumn(colNames, fullSize:=True)
+            Dim copy2 = row.projectByColumn(colNames, fullSize:=True)
+            Dim totalRows As Integer = copy.nrows + copy2.nrows
+
+            For Each col As String In colNames
+                Dim a As Array = copy.columns(col)
+                Dim b As Array = copy2.columns(col)
+                Dim vec As Object() = New Object(totalRows - 1) {}
+
+                For i As Integer = 0 To a.Length - 1
+                    vec(i) = a.GetValue(i)
+                Next
+
+                For i As Integer = 0 To b.Length - 1
+                    vec(i + a.Length) = b.GetValue(i)
+                Next
+
+                copy.columns(col) = vec
+            Next
+
+            copy.rownames = copy _
+                .getRowNames _
+                .JoinIterates(copy2.getRowNames) _
+                .ToArray
+
+            Return copy
+        End Function
+
         ''' <summary>
         ''' ### Combine R Objects by Rows or Columns
         ''' 
@@ -483,51 +537,52 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("rbind")>
         <RApiReturn(GetType(dataframe))>
-        Public Function rbind(d As dataframe, row As dataframe, env As Environment) As Object
+        Public Function rbind(d As dataframe, <RRawVectorArgument> row As Object, env As Environment) As Object
             If d Is Nothing Then
-                Return row
+                If TypeOf row Is dataframe Then
+                    Return row
+                Else
+                    Dim tbl As New dataframe With {
+                        .columns = New Dictionary(Of String, Array)
+                    }
+                    Dim v As Array = REnv.asVector(Of Object)(row)
+
+                    For i As Integer = 0 To v.Length - 1
+                        tbl.columns($"v{i + 1}") = {v.GetValue(i)}
+                    Next
+
+                    Return tbl
+                End If
             ElseIf row Is Nothing Then
                 Return d
-            ElseIf d.columns.Count <> row.columns.Count Then
-                Return Internal.debug.stop({
-                    $"mismatch column size between two dataframe!",
-                    $"({d.ncols}) columns: {d.colnames.GetJson}",
-                    $"({row.ncols}) columns: {d.colnames.GetJson}"
-                }, env)
+            ElseIf TypeOf row Is dataframe Then
+                Return rowBindDataFrame(d, row, env)
             Else
-                For Each col In row.columns
-                    If Not d.hasName(col.Key) Then
-                        Return Internal.debug.stop({$"names do not match previous names", $"missing: {col.Key}"}, env)
-                    End If
-                Next
+                Dim v As Array = REnv.asVector(Of Object)(row)
+                Dim colnames As String() = d.colnames
+                Dim nrow As Integer = d.nrows
 
-                Dim colNames = d.columns.Keys.ToArray
-                Dim copy = d.projectByColumn(colNames, fullSize:=True)
-                Dim copy2 = row.projectByColumn(colNames, fullSize:=True)
-                Dim totalRows As Integer = copy.nrows + copy2.nrows
+                If v.Length <> colnames.Length Then
+                    Return Internal.debug.stop({
+                        $"mismatch column size between two dataframe!",
+                        $"({d.ncols}) columns: {d.colnames.GetJson}",
+                        $"({row.ncols}) columns: {d.colnames.GetJson}"
+                    }, env)
+                End If
 
-                For Each col As String In colNames
-                    Dim a As Array = copy.columns(col)
-                    Dim b As Array = copy2.columns(col)
-                    Dim vec As Object() = New Object(totalRows - 1) {}
+                For i As Integer = 0 To colnames.Length - 1
+                    Dim vec = New Object(nrow) {}
+                    Dim v2 = d.columns(colnames(i))
 
-                    For i As Integer = 0 To a.Length - 1
-                        vec(i) = a.GetValue(i)
+                    For j As Integer = 0 To v2.Length - 1
+                        vec(j) = v2(j)
                     Next
 
-                    For i As Integer = 0 To b.Length - 1
-                        vec(i + a.Length) = b.GetValue(i)
-                    Next
-
-                    copy.columns(col) = vec
+                    vec(v2.Length) = v(i)
+                    d.columns(colnames(i)) = REnv.TryCastGenericArray(vec, env)
                 Next
 
-                copy.rownames = copy _
-                    .getRowNames _
-                    .JoinIterates(copy2.getRowNames) _
-                    .ToArray
-
-                Return copy
+                Return d
             End If
         End Function
 

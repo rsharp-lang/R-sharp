@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6af9515e4cdb80238df8557b288cbe61, R#\Interpreter\ExecuteEngine\Linq\DataSet\JointDataSet.vb"
+﻿#Region "Microsoft.VisualBasic::6af9515e4cdb80238df8557b288cbe61, R-sharp\R#\Interpreter\ExecuteEngine\Linq\DataSet\JointDataSet.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 61
+    '    Code Lines: 45
+    ' Comment Lines: 4
+    '   Blank Lines: 12
+    '     File Size: 2.30 KB
+
 
     '     Class JointDataSet
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a66507dd8e4dfe5d4d9ffbfbf9e69ca0, Library\R.graphics\Plot2D\graphics2D.vb"
+﻿#Region "Microsoft.VisualBasic::71d91beeeaf5a99d700a02a64df096bf, R-sharp\Library\R.graphics\Plot2D\graphics2D.vb"
 
 ' Author:
 ' 
@@ -31,12 +31,24 @@
 
 ' Summaries:
 
+
+' Code Statistics:
+
+'   Total Lines: 411
+'    Code Lines: 325
+' Comment Lines: 37
+'   Blank Lines: 49
+'     File Size: 17.74 KB
+
+
 ' Module graphics2D
 ' 
-'     Function: asciiArt, axisTicks, contourPolygon, contourTracing, DrawCircle
-'               drawLegends, DrawTriangle, legend, line2D, measureString
-'               offset2D, paddingString, paddingVector, point2D, pointsVector
-'               (+2 Overloads) rectangle, scale, size, sizeVector
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asciiArt, axisTicks, colorMapLegend, contourPolygon, contourTracing
+'               DrawCircle, drawLegends, DrawTriangle, legend, line2D
+'               measureString, offset2D, paddingString, paddingVector, plotColorMap
+'               point2D, pointsVector, (+2 Overloads) rectangle, scale, size
+'               sizeVector
 ' 
 ' /********************************************************************************/
 
@@ -52,6 +64,7 @@ Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors.Scaler
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Math2D.MarchingSquares
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Text.ASCIIArt
@@ -64,6 +77,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Canvas = Microsoft.VisualBasic.Imaging.Graphics2D
@@ -93,6 +107,46 @@ Module graphics2D
             plotAPI:=Sub(ByRef g, region)
                          Call legend.Draw(g, region.PlotRegion)
                      End Sub)
+    End Function
+
+    <ExportAPI("layout.grid")>
+    Public Function layout_grid(layout As Integer(),
+                                <RRawVectorArgument>
+                                Optional margin As Object = 0,
+                                Optional env As Environment = Nothing) As Rectangle()
+
+        Dim dev As graphicsDevice = curDev
+        Dim size As Size = InteropArgumentHelper.getSize(dev!size, env).SizeParser
+        Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
+        Dim innerPadding As Padding = InteropArgumentHelper.getPadding(margin)
+        Dim region As New GraphicsRegion(size, padding)
+        Dim rect As Rectangle = region.PlotRegion
+        Dim layouts As New List(Of Rectangle)
+        Dim x As Integer = rect.Left
+        Dim y As Integer = rect.Top
+        Dim w As Integer = rect.Width / layout(0)
+        Dim h As Integer = rect.Height / layout(1)
+        Dim cell As Rectangle
+
+        For i As Integer = 1 To layout(1)
+            x = rect.Left
+
+            For j As Integer = 1 To layout(0)
+                cell = New Rectangle With {
+                    .X = x + innerPadding.Left,
+                    .Y = y + innerPadding.Top,
+                    .Width = w - innerPadding.Horizontal,
+                    .Height = h - innerPadding.Vertical
+                }
+                layouts.Add(cell)
+
+                x += w
+            Next
+
+            y += h
+        Next
+
+        Return layouts.ToArray
     End Function
 
     <ExportAPI("paddingString")>
@@ -164,6 +218,9 @@ Module graphics2D
 
     <ExportAPI("measureString")>
     Public Function measureString(str As String, font As Object, Optional canvas As IGraphics = Nothing) As Double()
+        If canvas Is Nothing Then
+            canvas = curDev.g
+        End If
         If canvas Is Nothing Then
             canvas = New Bitmap(1, 1).CreateCanvas2D
         End If
@@ -322,6 +379,54 @@ Module graphics2D
         Dim penCSS As String = InteropArgumentHelper.getStrokePenCSS(stroke)
 
         Return New Shapes.Line(p1, p2, CSS.Stroke.TryParse(penCSS).GDIObject)
+    End Function
+
+    <ExportAPI("rasterHeatmap")>
+    Public Function rasterHeatmap(<RRawVectorArgument>
+                                  heatmap As Object,
+                                  Optional region As Rectangle = Nothing,
+                                  <RRawVectorArgument>
+                                  Optional dimSize As Object = Nothing,
+                                  Optional gauss As Integer = 0,
+                                  Optional env As Environment = Nothing) As Object
+
+        Dim dev As graphicsDevice = curDev
+        Dim canvas As Size = InteropArgumentHelper.getSize(dev!size, env).SizeParser
+        Dim pixels As pipeline = pipeline.TryCreatePipeline(Of Pixel)(heatmap, env)
+        Dim dimensionStr As String = InteropArgumentHelper.getSize(dimSize, env, Nothing)
+        Dim dimension As Size
+
+        If pixels.isError Then
+            Return pixels.getError
+        End If
+        If region.IsEmpty Then
+            region = New Rectangle(New Point, canvas)
+        End If
+
+        Dim allPixels As Pixel() = pixels.populates(Of Pixel)(env).ToArray
+
+        If dimensionStr.StringEmpty Then
+            dimension = New Size With {
+                .Width = allPixels.Select(Function(p) p.X).Max,
+                .Height = allPixels.Select(Function(p) p.Y).Max
+            }
+        Else
+            dimension = dimensionStr.SizeParser
+        End If
+
+        ' create base
+        Dim bitmap As Bitmap = New PixelRender("jet", 25, dev.g.Background).RenderRasterImage(allPixels, dimension)
+
+        If gauss > 0 Then
+            bitmap = gaussBlurEffect(bitmap, levels:=gauss, env)
+        End If
+
+        ' rendering onto current graphics device
+        Using scaler As New RasterScaler(bitmap)
+            Call scaler.ScaleTo(dev.g, region)
+        End Using
+
+        Return Nothing
     End Function
 
     <ExportAPI("draw.triangle")>

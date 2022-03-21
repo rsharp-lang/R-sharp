@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f7057892c4db4eac5ff9c5e8d66a15ac, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfPromise.vb"
+﻿#Region "Microsoft.VisualBasic::f7057892c4db4eac5ff9c5e8d66a15ac, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfPromise.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 32
+    '    Code Lines: 24
+    ' Comment Lines: 2
+    '   Blank Lines: 6
+    '     File Size: 1.12 KB
+
 
     '     Class IfPromise
     ' 

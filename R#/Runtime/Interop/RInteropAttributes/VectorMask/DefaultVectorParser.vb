@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::55bdee9339c2dd2e0138e50ecb1492d4, R#\Runtime\Interop\RInteropAttributes\VectorMask\DefaultVectorParser.vb"
+﻿#Region "Microsoft.VisualBasic::55bdee9339c2dd2e0138e50ecb1492d4, R-sharp\R#\Runtime\Interop\RInteropAttributes\VectorMask\DefaultVectorParser.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 38
+    '    Code Lines: 30
+    ' Comment Lines: 5
+    '   Blank Lines: 3
+    '     File Size: 1.63 KB
+
 
     '     Structure DefaultVectorParser
     ' 

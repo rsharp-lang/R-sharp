@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4cdad9c11866af73b327f4272a6e2384, R#\Interpreter\ExecuteEngine\Linq\NamespaceDoc.vb"
+﻿#Region "Microsoft.VisualBasic::4cdad9c11866af73b327f4272a6e2384, R-sharp\R#\Interpreter\ExecuteEngine\Linq\NamespaceDoc.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 8
+    '    Code Lines: 4
+    ' Comment Lines: 3
+    '   Blank Lines: 1
+    '     File Size: 195.00 B
+
 
     '     Module NamespaceDoc
     ' 

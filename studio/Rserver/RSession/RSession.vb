@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b4ade6cd231744caccd7640c64877533, studio\Rserver\RSession\RSession.vb"
+﻿#Region "Microsoft.VisualBasic::b4ade6cd231744caccd7640c64877533, R-sharp\studio\Rserver\RSession\RSession.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 57
+    '    Code Lines: 41
+    ' Comment Lines: 1
+    '   Blank Lines: 15
+    '     File Size: 1.89 KB
+
 
     ' Class RSession
     ' 

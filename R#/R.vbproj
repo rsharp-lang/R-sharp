@@ -733,6 +733,7 @@
     <Compile Include="Runtime\graphicsPipeline.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\dev\bitView.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\dev\devtools.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\string\humanReadableFormatter.vb" />
     <Compile Include="Runtime\Internal\objects\Linq\DataframeGroup.vb" />
     <Compile Include="Runtime\Internal\objects\Linq\RCType.vb" />
     <Compile Include="Interpreter\ExecutableLoop.vb" />

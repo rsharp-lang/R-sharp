@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fe8e694b3626816d15efe91eb2cea5b1, R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\RunTimeValueExpression.vb"
+﻿#Region "Microsoft.VisualBasic::fe8e694b3626816d15efe91eb2cea5b1, R-sharp\R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\RunTimeValueExpression.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 36
+    '    Code Lines: 25
+    ' Comment Lines: 3
+    '   Blank Lines: 8
+    '     File Size: 1.13 KB
+
 
     '     Class RunTimeValueExpression
     ' 

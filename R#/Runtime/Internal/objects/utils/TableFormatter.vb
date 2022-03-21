@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3490d2f6e17486a98bcfce3b951c250a, R#\Runtime\Internal\objects\utils\TableFormatter.vb"
+﻿#Region "Microsoft.VisualBasic::3490d2f6e17486a98bcfce3b951c250a, R-sharp\R#\Runtime\Internal\objects\utils\TableFormatter.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 122
+    '    Code Lines: 94
+    ' Comment Lines: 7
+    '   Blank Lines: 21
+    '     File Size: 5.00 KB
+
 
     '     Class TableFormatter
     ' 

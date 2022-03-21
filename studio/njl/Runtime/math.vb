@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::067ffc4c0fcbeb71db474f6aa385a579, studio\njl\Runtime\math.vb"
+﻿#Region "Microsoft.VisualBasic::18ac65adb5b104ad39321aff613fb16d, R-sharp\studio\njl\Runtime\math.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+    ' Code Statistics:
+
+    '   Total Lines: 37
+    '    Code Lines: 27
+    ' Comment Lines: 5
+    '   Blank Lines: 5
+    '     File Size: 1.33 KB
+
+
     ' Module math
     ' 
     '     Function: zero
@@ -38,7 +48,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -77,4 +86,3 @@ Module math
     End Function
 
 End Module
-

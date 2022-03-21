@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::398d70ef6a416395fda4a47fd6e6c8c9, R#\Runtime\Interop\RsharpApi\ApiDocumentHelper.vb"
+﻿#Region "Microsoft.VisualBasic::398d70ef6a416395fda4a47fd6e6c8c9, R-sharp\R#\Runtime\Interop\RsharpApi\ApiDocumentHelper.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 74
+    '    Code Lines: 64
+    ' Comment Lines: 0
+    '   Blank Lines: 10
+    '     File Size: 2.82 KB
+
 
     '     Module ApiDocumentHelper
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d77eb224dc51d9f39a112dacd03d170e, R#\Runtime\Internal\internalInvokes\reflections.vb"
+﻿#Region "Microsoft.VisualBasic::d77eb224dc51d9f39a112dacd03d170e, R-sharp\R#\Runtime\Internal\internalInvokes\reflections.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 167
+    '    Code Lines: 78
+    ' Comment Lines: 74
+    '   Blank Lines: 15
+    '     File Size: 7.55 KB
+
 
     '     Module reflections
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::13d1017d8a2c1ff9d6f2f0c374e28a1d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\Profiler.vb"
+﻿#Region "Microsoft.VisualBasic::2aff497b6ceaf71286956c3fedcdcaee, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\Profiler.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+    ' Code Statistics:
+
+    '   Total Lines: 65
+    '    Code Lines: 46
+    ' Comment Lines: 9
+    '   Blank Lines: 10
+    '     File Size: 2.19 KB
+
+
     '     Class Profiler
     ' 
     '         Properties: expressionName, stackFrame, target, type
@@ -42,7 +52,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Development.Components

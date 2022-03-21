@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::903d78e936d4ae79a810629d9f37fcf9, studio\npy\PythonScriptLoader.vb"
+﻿#Region "Microsoft.VisualBasic::eff14a7edb92bcb4508014d5577027d2, R-sharp\studio\npy\PythonScriptLoader.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 61
+    '    Code Lines: 47
+    ' Comment Lines: 5
+    '   Blank Lines: 9
+    '     File Size: 2.40 KB
+
 
     ' Class PythonScriptLoader
     ' 
@@ -102,4 +112,3 @@ Public Class PythonScriptLoader : Inherits ScriptLoader
         Return program
     End Function
 End Class
-

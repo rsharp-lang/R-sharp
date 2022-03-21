@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6555e15d83848e1d5c51085f6abc69c3, studio\njl\Runtime\c.vb"
+﻿#Region "Microsoft.VisualBasic::7dbcd8799bd31a404ab9ca7d841a1025, R-sharp\studio\njl\Runtime\c.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+    ' Code Statistics:
+
+    '   Total Lines: 7
+    '    Code Lines: 4
+    ' Comment Lines: 0
+    '   Blank Lines: 3
+    '     File Size: 92.00 B
+
+
     ' Module c
     ' 
     ' 
@@ -39,7 +49,6 @@
 
 #End Region
 
-
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
 <Package("c")>
@@ -47,4 +56,3 @@ Module c
 
 
 End Module
-

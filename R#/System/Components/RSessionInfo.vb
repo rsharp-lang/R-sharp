@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9cd456977379d7610cd1f0ab5259d0ef, R#\System\Components\RSessionInfo.vb"
+﻿#Region "Microsoft.VisualBasic::e470880f7f54fe9e5cb2af8aaefe7274, R-sharp\R#\System\Components\RSessionInfo.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 137
+    '    Code Lines: 75
+    ' Comment Lines: 44
+    '   Blank Lines: 18
+    '     File Size: 5.25 KB
+
 
     '     Class RSessionInfo
     ' 

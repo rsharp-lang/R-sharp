@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9d7fee23043498a5dd1a07bf88bdf47c, R#\System\Document\ShellScript\DefaultFormatter.vb"
+﻿#Region "Microsoft.VisualBasic::9d7fee23043498a5dd1a07bf88bdf47c, R-sharp\R#\System\Document\ShellScript\DefaultFormatter.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 46
+    '    Code Lines: 38
+    ' Comment Lines: 0
+    '   Blank Lines: 8
+    '     File Size: 1.85 KB
+
 
     '     Module DefaultFormatter
     ' 

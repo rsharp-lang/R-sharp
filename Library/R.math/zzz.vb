@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::122758a67ec15b1a45d675e6ed9fe35a, Library\R.math\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::122758a67ec15b1a45d675e6ed9fe35a, R-sharp\Library\R.math\zzz.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 34
+    '    Code Lines: 29
+    ' Comment Lines: 0
+    '   Blank Lines: 5
+    '     File Size: 1.18 KB
+
 
     ' Class zzz
     ' 

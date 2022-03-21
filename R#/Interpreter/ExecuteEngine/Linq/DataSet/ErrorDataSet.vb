@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::28cbe159bc477067ccd997feefdda122, R#\Interpreter\ExecuteEngine\Linq\DataSet\ErrorDataSet.vb"
+﻿#Region "Microsoft.VisualBasic::28cbe159bc477067ccd997feefdda122, R-sharp\R#\Interpreter\ExecuteEngine\Linq\DataSet\ErrorDataSet.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 16
+    '    Code Lines: 8
+    ' Comment Lines: 4
+    '   Blank Lines: 4
+    '     File Size: 432.00 B
+
 
     '     Class ErrorDataSet
     ' 

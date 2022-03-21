@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::12940c1baed86caa78a0dbedff8c9ee3, R#\Test\interpreterTest.vb"
+﻿#Region "Microsoft.VisualBasic::12940c1baed86caa78a0dbedff8c9ee3, R-sharp\R#\Test\interpreterTest.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 1254
+    '    Code Lines: 880
+    ' Comment Lines: 21
+    '   Blank Lines: 353
+    '     File Size: 28.37 KB
+
 
     ' Module interpreterTest
     ' 

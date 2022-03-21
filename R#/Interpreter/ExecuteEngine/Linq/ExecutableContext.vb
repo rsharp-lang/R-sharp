@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1a58303c841a697a134caa11332324c1, R#\Interpreter\ExecuteEngine\Linq\ExecutableContext.vb"
+﻿#Region "Microsoft.VisualBasic::1a58303c841a697a134caa11332324c1, R-sharp\R#\Interpreter\ExecuteEngine\Linq\ExecutableContext.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 64
+    '    Code Lines: 47
+    ' Comment Lines: 6
+    '   Blank Lines: 11
+    '     File Size: 2.31 KB
+
 
     '     Class ExecutableContext
     ' 

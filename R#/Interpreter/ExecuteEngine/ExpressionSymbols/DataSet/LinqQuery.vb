@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0ada36d199e52bda611f4fe89f5a30e4, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb"
+﻿#Region "Microsoft.VisualBasic::0ada36d199e52bda611f4fe89f5a30e4, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 122
+    '    Code Lines: 96
+    ' Comment Lines: 4
+    '   Blank Lines: 22
+    '     File Size: 4.60 KB
+
 
     '     Class LinqQuery
     ' 

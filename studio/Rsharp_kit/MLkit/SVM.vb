@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1df359d5e7c8864ec21c84d2e20c22f0, studio\Rsharp_kit\MLkit\SVM.vb"
+﻿#Region "Microsoft.VisualBasic::1df359d5e7c8864ec21c84d2e20c22f0, R-sharp\studio\Rsharp_kit\MLkit\SVM.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 736
+    '    Code Lines: 543
+    ' Comment Lines: 83
+    '   Blank Lines: 110
+    '     File Size: 28.96 KB
+
 
     ' Module SVMkit
     ' 

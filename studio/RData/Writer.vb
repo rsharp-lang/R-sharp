@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2a74c63c594f9c07ecb42884641b80b3, studio\RData\Writer.vb"
+﻿#Region "Microsoft.VisualBasic::849d8182e9cc836b4839731fa73509d8, R-sharp\studio\RData\Writer.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 159
+    '    Code Lines: 123
+    ' Comment Lines: 8
+    '   Blank Lines: 28
+    '     File Size: 5.65 KB
+
 
     ' Class Writer
     ' 
@@ -203,4 +213,3 @@ Public Class Writer
         Call file.Write(nameBytes)
     End Sub
 End Class
-

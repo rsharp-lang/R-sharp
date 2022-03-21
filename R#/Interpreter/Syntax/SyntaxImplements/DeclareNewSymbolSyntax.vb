@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::38e3ce5347b319b70f2f00c9761d623b, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewSymbolSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::38e3ce5347b319b70f2f00c9761d623b, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\DeclareNewSymbolSyntax.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 273
+    '    Code Lines: 195
+    ' Comment Lines: 37
+    '   Blank Lines: 41
+    '     File Size: 10.78 KB
+
 
     '     Module DeclareNewSymbolSyntax
     ' 

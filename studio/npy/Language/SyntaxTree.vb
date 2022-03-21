@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2e1e4f3bfc010791f5c5ee140f7f53fc, studio\npy\Language\SyntaxTree.vb"
+﻿#Region "Microsoft.VisualBasic::c440ab64e1842cc1a7b2c931f6c95721, R-sharp\studio\npy\Language\SyntaxTree.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,16 @@
 
     ' Summaries:
 
+
+    ' Code Statistics:
+
+    '   Total Lines: 388
+    '    Code Lines: 314
+    ' Comment Lines: 19
+    '   Blank Lines: 55
+    '     File Size: 14.40 KB
+
+
     ' Class SyntaxTree
     ' 
     '     Constructor: (+1 Overloads) Sub New
@@ -40,7 +50,6 @@
     '     Sub: addLine, addPkgImport, addPkgLoad, addValueReturn, createError
     '          pushBlock, startAcceptorDefine, startElseDefine, startForLoopDefine, startFunctionDefine
     '          startIfDefine
-    ' 
     ' 
     ' /********************************************************************************/
 
@@ -363,7 +372,10 @@ Public Class SyntaxTree
             Else
                 Call stack.Peek.Add(current.ToExpression())
                 current = stack.Pop()
+                current.Add(expr)
                 stack.Peek.Add(current.ToExpression)
+
+                Return
             End If
 
             current = stack.Peek
@@ -398,7 +410,7 @@ Public Class SyntaxTree
                     Case "raise" : Call createError(line)
 
                     Case Else
-                        Throw New NotImplementedException
+                        Throw New NotImplementedException(line(Scan0).ToString)
                 End Select
             ElseIf line(-1).name = TokenType.sequence Then
                 Call startAcceptorDefine(line)
@@ -431,6 +443,3 @@ Public Class SyntaxTree
     End Function
 
 End Class
-
-
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4be6fe6c4e6332505ca55a4c909895e7, R#\Runtime\System\Interface\RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::4be6fe6c4e6332505ca55a4c909895e7, R-sharp\R#\Runtime\System\Interface\RFunction.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 59
+    '    Code Lines: 20
+    ' Comment Lines: 27
+    '   Blank Lines: 12
+    '     File Size: 2.04 KB
+
 
     '     Interface RFunction
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::493da5b251d0a5c88d966f70fb9d3316, studio\Rsharp_kit\MLkit\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::493da5b251d0a5c88d966f70fb9d3316, R-sharp\studio\Rsharp_kit\MLkit\zzz.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 15
+    '    Code Lines: 11
+    ' Comment Lines: 0
+    '   Blank Lines: 4
+    '     File Size: 411.00 B
+
 
     ' Class zzz
     ' 

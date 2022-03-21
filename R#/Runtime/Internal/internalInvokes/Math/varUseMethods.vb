@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::28ba808bc0a2fd679514f1909b9e6ebf, R#\Runtime\Internal\internalInvokes\Math\varUseMethods.vb"
+﻿#Region "Microsoft.VisualBasic::28ba808bc0a2fd679514f1909b9e6ebf, R-sharp\R#\Runtime\Internal\internalInvokes\Math\varUseMethods.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 15
+    '    Code Lines: 10
+    ' Comment Lines: 0
+    '   Blank Lines: 5
+    '     File Size: 375.00 B
+
 
     '     Enum varUseMethods
     ' 

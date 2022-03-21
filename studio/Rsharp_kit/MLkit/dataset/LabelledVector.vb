@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::119926855cfa22b5268c0dcd76d6bac5, studio\Rsharp_kit\MLkit\dataset\LabelledVector.vb"
+﻿#Region "Microsoft.VisualBasic::119926855cfa22b5268c0dcd76d6bac5, R-sharp\studio\Rsharp_kit\MLkit\dataset\LabelledVector.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 49
+    '    Code Lines: 33
+    ' Comment Lines: 8
+    '   Blank Lines: 8
+    '     File Size: 1.72 KB
+
 
     ' Class LabelledVector
     ' 

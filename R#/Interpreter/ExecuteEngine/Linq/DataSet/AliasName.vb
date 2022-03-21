@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d18e68916b5eca108947fc162adcf79c, R#\Interpreter\ExecuteEngine\Linq\DataSet\AliasName.vb"
+﻿#Region "Microsoft.VisualBasic::d18e68916b5eca108947fc162adcf79c, R-sharp\R#\Interpreter\ExecuteEngine\Linq\DataSet\AliasName.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 29
+    '    Code Lines: 23
+    ' Comment Lines: 0
+    '   Blank Lines: 6
+    '     File Size: 877.00 B
+
 
     '     Class AliasName
     ' 

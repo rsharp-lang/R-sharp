@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7fcc9fd24e5bcc2f0e3cb4147ab4a682, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DataFrameSlice.vb"
+﻿#Region "Microsoft.VisualBasic::7fcc9fd24e5bcc2f0e3cb4147ab4a682, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DataFrameSlice.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 51
+    '    Code Lines: 35
+    ' Comment Lines: 5
+    '   Blank Lines: 11
+    '     File Size: 1.76 KB
+
 
     '     Class DataFrameSlice
     ' 

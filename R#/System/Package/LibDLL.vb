@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e49bf54074a42e2ae63e01d68cd9c60e, R#\System\Package\LibDLL.vb"
+﻿#Region "Microsoft.VisualBasic::e49bf54074a42e2ae63e01d68cd9c60e, R-sharp\R#\System\Package\LibDLL.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 93
+    '    Code Lines: 73
+    ' Comment Lines: 8
+    '   Blank Lines: 12
+    '     File Size: 3.62 KB
+
 
     '     Class LibDLL
     ' 

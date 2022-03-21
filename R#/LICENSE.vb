@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4606b8530e6810cf84938f7a43cb73c9, R#\LICENSE.vb"
+﻿#Region "Microsoft.VisualBasic::4606b8530e6810cf84938f7a43cb73c9, R-sharp\R#\LICENSE.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 41
+    '    Code Lines: 14
+    ' Comment Lines: 23
+    '   Blank Lines: 4
+    '     File Size: 1.42 KB
+
 
     ' Module LICENSE
     ' 

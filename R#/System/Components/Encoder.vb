@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0f3482885b6cefb4c3d03c5409b4b6ff, R#\System\Components\Encoder.vb"
+﻿#Region "Microsoft.VisualBasic::0f3482885b6cefb4c3d03c5409b4b6ff, R-sharp\R#\System\Components\Encoder.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 75
+    '    Code Lines: 53
+    ' Comment Lines: 13
+    '   Blank Lines: 9
+    '     File Size: 2.97 KB
+
 
     '     Module Encoder
     ' 

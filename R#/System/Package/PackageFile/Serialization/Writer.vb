@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::194b6a8259211ec1bfebfa6228a7df74, R#\System\Package\PackageFile\Serialization\Writer.vb"
+﻿#Region "Microsoft.VisualBasic::ff494eed010373552d8fe88011439dd2, R-sharp\R#\System\Package\PackageFile\Serialization\Writer.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 256
+    '    Code Lines: 183
+    ' Comment Lines: 31
+    '   Blank Lines: 42
+    '     File Size: 10.96 KB
+
 
     '     Class Writer
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e063b2d94bc369d5703d903470f37d36, studio\Rserver\RSession\RSessionBackend.vb"
+﻿#Region "Microsoft.VisualBasic::e063b2d94bc369d5703d903470f37d36, R-sharp\studio\Rserver\RSession\RSessionBackend.vb"
 
     ' Author:
     ' 
@@ -30,6 +30,16 @@
     ' /********************************************************************************/
 
     ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 124
+    '    Code Lines: 93
+    ' Comment Lines: 4
+    '   Blank Lines: 27
+    '     File Size: 4.44 KB
+
 
     ' Class RSessionBackend
     ' 
