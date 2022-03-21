@@ -288,6 +288,8 @@ Public Module URL
 
         If files Is Nothing Then
             Return Internal.debug.stop("the required file list can not be nothing!", env)
+        ElseIf env.globalEnvironment.debugMode OrElse env.globalEnvironment.options.verbose Then
+            Call env.WriteLineHandler()($"upload file: {url}")
         End If
 
         Using http As New MultipartForm()
