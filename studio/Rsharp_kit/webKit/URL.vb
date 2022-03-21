@@ -280,16 +280,17 @@ Public Module URL
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("upload")>
+    <RApiReturn(GetType(String))>
     Public Function upload(url As String,
                            <RRawVectorArgument> files As Object,
                            Optional headers As list = Nothing,
                            Optional env As Environment = Nothing) As Object
 
-        Using http As New MultipartForm()
-            If files Is Nothing Then
-                Return Internal.debug.stop("the required file list can not be nothing!", env)
-            End If
+        If files Is Nothing Then
+            Return Internal.debug.stop("the required file list can not be nothing!", env)
+        End If
 
+        Using http As New MultipartForm()
             If TypeOf files Is vector Then
                 With DirectCast(files, vector)
                     If .getNames.IsNullOrEmpty Then
