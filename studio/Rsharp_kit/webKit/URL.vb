@@ -309,9 +309,15 @@ Public Module URL
                 End With
             ElseIf TypeOf files Is String() Then
 uploadbyfiles:
-                For Each file As String In DirectCast(files, String())
-                    Call http.Add(file.FileName, file.ReadBinary, file.FileName)
-                Next
+                Dim list As String() = DirectCast(files, String())
+
+                If list.Length = 0 Then
+                    Call http.Add("file", list(Scan0).ReadBinary, fileName:=list(Scan0).FileName)
+                Else
+                    For Each file As String In DirectCast(files, String())
+                        Call http.Add(file.FileName, file.ReadBinary, file.FileName)
+                    Next
+                End If
             ElseIf TypeOf files Is list Then
                 For Each file In DirectCast(files, list).AsGeneric(Of String)(env)
                     Call http.Add(file.Key, file.Value.ReadBinary, file.Value.FileName)
