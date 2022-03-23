@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::c0341251ce54173116ed055667b2280e, R-sharp\studio\npy\Language\Implements\ValueAssignSyntax.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 117
-    '    Code Lines: 88
-    ' Comment Lines: 9
-    '   Blank Lines: 20
-    '     File Size: 4.95 KB
+' Summaries:
 
 
-    '     Module ValueAssignSyntax
-    ' 
-    '         Function: AssignValue, TupleParser
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 117
+'    Code Lines: 88
+' Comment Lines: 9
+'   Blank Lines: 20
+'     File Size: 4.95 KB
+
+
+'     Module ValueAssignSyntax
+' 
+'         Function: AssignValue, TupleParser
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -54,6 +54,7 @@ Imports System.Data
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -113,19 +114,31 @@ Namespace Language.Implementation
                 Dim expr As SyntaxResult
                 Dim i As i32 = Scan0
 
-                For Each block As Token() In valueBlocks.Where(Function(b) Not b.isComma)
-                    expr = block.ParsePythonLine(opts)
+                If valueBlocks.Any(Function(t) t.isComma) Then
+                    For Each block As Token() In valueBlocks.Where(Function(b) Not b.isComma)
+                        expr = block.ParsePythonLine(opts)
+
+                        If expr.isException Then
+                            Return expr
+                        Else
+                            Call tuple.Add(New ValueAssignExpression(New Expression() {targetSymbols(++i)}, expr.expression))
+                        End If
+                    Next
+
+                    Dim list As New FunctionInvoke("list", stack, tuple.ToArray)
+
+                    Return New ValueAssignExpression(targetSymbols, list) With {.isByRef = True}
+                Else
+                    expr = valueBlocks.IteratesALL.ParsePythonLine(opts)
 
                     If expr.isException Then
                         Return expr
                     Else
-                        Call tuple.Add(New ValueAssignExpression(New Expression() {targetSymbols(++i)}, expr.expression))
+                        Return New ValueAssignExpression(targetSymbols, expr.expression) With {
+                            .isByRef = True
+                        }
                     End If
-                Next
-
-                Dim list As New FunctionInvoke("list", stack, tuple.ToArray)
-
-                Return New ValueAssignExpression(targetSymbols, list) With {.isByRef = True}
+                End If
             Else
                 Dim valueExpr As SyntaxResult = opts.ParseExpression(value, opts)
 

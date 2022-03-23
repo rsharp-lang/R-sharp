@@ -305,7 +305,7 @@ Namespace Interpreter.SyntaxParser
         End Function
 
         ''' <summary>
-        ''' ,
+        ''' length is 1 and also the token is comma
         ''' </summary>
         ''' <param name="tokens"></param>
         ''' <returns></returns>
