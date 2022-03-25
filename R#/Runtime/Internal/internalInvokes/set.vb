@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::3da1bd8890e7b162e2621f858f4b50c0, R-sharp\R#\Runtime\Internal\internalInvokes\set.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 326
-    '    Code Lines: 176
-    ' Comment Lines: 116
-    '   Blank Lines: 34
-    '     File Size: 15.29 KB
+' Summaries:
 
 
-    '     Module [set]
-    ' 
-    '         Function: combn, createLoop, duplicated, getObjectSet, indexOf
-    '                   intersect, jaccard, union
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 326
+'    Code Lines: 176
+' Comment Lines: 116
+'   Blank Lines: 34
+'     File Size: 15.29 KB
+
+
+'     Module [set]
+' 
+'         Function: combn, createLoop, duplicated, getObjectSet, indexOf
+'                   intersect, jaccard, union
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -251,6 +251,36 @@ Namespace Runtime.Internal.Invokes
             Next
 
             Return flags.ToArray
+        End Function
+
+        ''' <summary>
+        ''' Find Unique Combinations of All Elements 
+        ''' from Two Vectors in R. Expand data frame 
+        ''' to include all possible combinations of 
+        ''' values.
+        ''' </summary>
+        ''' <param name="a"></param>
+        ''' <param name="b"></param>
+        ''' <returns></returns>
+        <ExportAPI("crossing")>
+        Public Function crossing(a As Array, b As Array, Optional env As Environment = Nothing) As dataframe
+            Dim combn As New dataframe With {
+                .columns = New Dictionary(Of String, Array)
+            }
+            Dim al As New List(Of Object)
+            Dim bl As New List(Of Object)
+
+            For Each x1 As Object In a.AsObjectEnumerator
+                For Each y1 As Object In b.AsObjectEnumerator
+                    Call al.Add(x1)
+                    Call bl.Add(y1)
+                Next
+            Next
+
+            Call combn.columns.Add("vec1", REnv.TryCastGenericArray(al.ToArray, env))
+            Call combn.columns.Add("vec2", REnv.TryCastGenericArray(bl.ToArray, env))
+
+            Return combn
         End Function
 
         ''' <summary>
