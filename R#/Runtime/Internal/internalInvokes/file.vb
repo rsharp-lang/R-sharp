@@ -99,6 +99,17 @@ Namespace Runtime.Internal.Invokes
     Public Module file
 
         ''' <summary>
+        ''' # Generate SHA1 checksum of a file
+        ''' </summary>
+        ''' <param name="filePath"></param>
+        ''' <returns></returns>
+        ''' 
+        <ExportAPI("fileSha1")>
+        Public Function GetSha1Hash(filePath As String) As String
+            Return SecurityString.GetSha1Hash(filePath)
+        End Function
+
+        ''' <summary>
         ''' Gets the relative pathname relative to a directory.
         ''' </summary>
         ''' <param name="pathname">A character String Of the pathname To be converted into an relative pathname.</param>

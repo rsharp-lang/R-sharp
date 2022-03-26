@@ -171,6 +171,21 @@ Module buffer
         End Using
     End Function
 
+    <ExportAPI("gzip.decompress")>
+    Public Function gzipDecompression(stream As Object, Optional env As Environment = Nothing) As Object
+        Dim buffer As [Variant](Of Byte(), Message) = Rsharp.Buffer(stream, env)
+
+        If buffer Is Nothing Then
+            Return Nothing
+        ElseIf buffer Like GetType(Message) Then
+            Return buffer.TryCast(Of Message)
+        End If
+
+        Using ms As MemoryStream = buffer.TryCast(Of Byte()).UnGzipStream
+            Return ms.ToArray
+        End Using
+    End Function
+
     ''' <summary>
     ''' char to string or raw bytes to string
     ''' </summary>
