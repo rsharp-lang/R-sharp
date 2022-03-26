@@ -252,8 +252,20 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
-        Public Function AsGeneric(Of T)(env As Environment, Optional [default] As T = Nothing) As Dictionary(Of String, T)
-            Return slots.ToDictionary(Function(a) a.Key, Function(a) getValue(Of T)(a.Key, env, [default]))
+        Public Function AsGeneric(Of T)(env As Environment,
+                                        Optional [default] As T = Nothing,
+                                        Optional ByRef err As Message = Nothing) As Dictionary(Of String, T)
+
+            Try
+                Return slots _
+                    .ToDictionary(Function(a) a.Key,
+                                  Function(a)
+                                      Return getValue(Of T)(a.Key, env, [default])
+                                  End Function)
+            Catch ex As Exception
+                err = Internal.debug.stop(ex, env)
+                Return Nothing
+            End Try
         End Function
 
         Public Overrides Function ToString() As String
