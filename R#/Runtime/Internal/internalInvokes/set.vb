@@ -117,6 +117,19 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <ExportAPI("count")>
+        Public Function count(str As Array) As list
+            Dim counts = DirectCast(REnv.asVector(Of String)(str), String()) _
+                .GroupBy(Function(t) t) _
+                .ToDictionary(Function(t) t.Key,
+                              Function(t)
+                                  Return CObj(t.Count)
+                              End Function)
+            Dim data As New list With {.slots = counts}
+
+            Return data
+        End Function
+
         ''' <summary>
         ''' Performs set intersection
         ''' </summary>
