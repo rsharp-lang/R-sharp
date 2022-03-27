@@ -521,6 +521,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImageFilters.vb" />
+    <Compile Include="Plot2D\geometry2D.vb" />
     <Compile Include="zzz.vb" />
     <Compile Include="ColorBrewer.vb" />
     <Compile Include="Plot2D\graphics2D.vb" />
