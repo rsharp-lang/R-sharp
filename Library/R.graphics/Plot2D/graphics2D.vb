@@ -394,6 +394,8 @@ Module graphics2D
                                   Optional region As Rectangle = Nothing,
                                   <RRawVectorArgument>
                                   Optional dimSize As Object = Nothing,
+                                  <RRawVectorArgument>
+                                  Optional colorName As Object = "jet",
                                   Optional gauss As Integer = 0,
                                   Optional env As Environment = Nothing) As Object
 
@@ -422,7 +424,8 @@ Module graphics2D
         End If
 
         ' create base
-        Dim bitmap As Bitmap = New PixelRender("jet", 25, dev.g.Background).RenderRasterImage(allPixels, dimension)
+        Dim colorSet As String = RColorPalette.getColorSet(colorName, [default]:="jet")
+        Dim bitmap As Bitmap = New PixelRender(colorSet, 25, dev.g.Background).RenderRasterImage(allPixels, dimension)
 
         If gauss > 0 Then
             bitmap = gaussBlurEffect(bitmap, levels:=gauss, env)
