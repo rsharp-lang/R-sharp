@@ -225,7 +225,14 @@ Module graphics2D
             canvas = New Bitmap(1, 1).CreateCanvas2D
         End If
 
-        Dim fontStyle As Font = CSSFont.TryParse(InteropArgumentHelper.getFontCSS(font)).GDIObject(canvas.Dpi)
+        Dim fontStyle As Font
+
+        If TypeOf font Is Font Then
+            fontStyle = font
+        Else
+            fontStyle = CSSFont.TryParse(InteropArgumentHelper.getFontCSS(font)).GDIObject(canvas.Dpi)
+        End If
+
         Dim size As SizeF = canvas.MeasureString(str, fontStyle)
 
         Return New Double() {size.Width, size.Height}
