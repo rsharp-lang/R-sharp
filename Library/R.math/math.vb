@@ -52,6 +52,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -100,6 +101,24 @@ Module math
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of lmCall)(Function(o) o.ToString)
     End Sub
 
+    <Extension>
+    Private Function getMin(bin As DataBinBox(Of Double)) As Double
+        If bin.Count = 0 Then
+            Return bin.Boundary.Min
+        Else
+            Return bin.Raw.Min
+        End If
+    End Function
+
+    <Extension>
+    Private Function getMax(bin As DataBinBox(Of Double)) As Double
+        If bin.Count = 0 Then
+            Return bin.Boundary.Max
+        Else
+            Return bin.Raw.Max
+        End If
+    End Function
+
     ''' <summary>
     ''' 
     ''' </summary>
@@ -113,11 +132,11 @@ Module math
         Dim format As String = args.getValue("format", env, "F2")
         Dim range As String() = hist _
             .Select(Function(bin)
-                        Return $"{bin.Raw.Min.ToString(format)} ~ {bin.Raw.Max.ToString(format)}"
+                        Return $"{bin.getMin.ToString(format)} ~ {bin.getMax.ToString(format)}"
                     End Function) _
             .ToArray
-        Dim min As String() = hist.Select(Function(bin) bin.Raw.Min.ToString(format)).ToArray
-        Dim max As String() = hist.Select(Function(bin) bin.Raw.Max.ToString(format)).ToArray
+        Dim min As String() = hist.Select(Function(bin) bin.getMin.ToString(format)).ToArray
+        Dim max As String() = hist.Select(Function(bin) bin.getMax.ToString(format)).ToArray
         Dim count As Integer() = hist.Select(Function(bin) bin.Count).ToArray
 
         Return New Rdataframe With {
