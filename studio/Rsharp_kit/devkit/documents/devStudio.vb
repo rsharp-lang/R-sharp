@@ -67,7 +67,7 @@ Module devStudio
     ''' <param name="script"></param>
     ''' <returns></returns>
     Public Function getRequiredPackages(script As String) As String()
-        Dim program As Program = Program.BuildProgram(script)
+        Dim program As SMRUCC.Rsharp.Interpreter.Program = SMRUCC.Rsharp.Interpreter.Program.BuildProgram(script)
         Dim list As New List(Of String)
         Dim symbols As New List(Of SymbolReference)
 

@@ -91,7 +91,7 @@ Module jsonlite
             End If
         End If
 
-        If Program.isException(x) Then
+        If SMRUCC.Rsharp.Interpreter.Program.isException(x) Then
             Return x
         End If
 

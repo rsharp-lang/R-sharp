@@ -193,6 +193,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="documents\RFileHeader.vb" />
+    <Compile Include="SQLite\CLI.vb" />
+    <Compile Include="SQLite\TableExport.vb" />
+    <Compile Include="SQLite\Program.vb" />
     <Compile Include="workflow\automation.vb" />
     <Compile Include="workflow\config.json.vb" />
     <Compile Include="devkit.vb" />
@@ -247,6 +250,10 @@
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data\BinaryData\DataStorage\DataStorage.vbproj">
       <Project>{3c79ae03-a766-4b61-bdc4-824d78481b53}</Project>
       <Name>DataStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data\DataFrame\47_dotnet_ms-vb_data.framework.vbproj">
+      <Project>{7283c179-f852-4ead-8d8f-b82ef2cbd7db}</Project>
+      <Name>47_dotnet_ms-vb_data.framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\47-dotnet_Microsoft.VisualBasic.vbproj">
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
