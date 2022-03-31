@@ -187,7 +187,8 @@ Module stats
     ''' </summary>
     ''' <returns></returns>
     <ExportAPI("spline")>
-    Public Function spline(<RRawVectorArgument> data As Object,
+    Public Function spline(<RRawVectorArgument>
+                           data As Object,
                            Optional algorithm As SplineAlgorithms = SplineAlgorithms.BSpline,
                            Optional env As Environment = Nothing) As Object
 
