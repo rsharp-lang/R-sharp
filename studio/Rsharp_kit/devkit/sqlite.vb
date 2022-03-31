@@ -79,6 +79,12 @@ Module sqlite
         Return New Sqlite3Database(con.TryCast(Of Stream))
     End Function
 
+    ''' <summary>
+    ''' get all data object that stored in the target sqlite database.
+    ''' </summary>
+    ''' <param name="con"></param>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
     <ExportAPI("ls")>
     Public Function list(con As Sqlite3Database, Optional type As String = "table") As dataframe
         Dim tables As Sqlite3SchemaRow() = con.GetTables.ToArray
@@ -99,6 +105,13 @@ Module sqlite
         Return summary
     End Function
 
+    ''' <summary>
+    ''' export target table data
+    ''' </summary>
+    ''' <param name="con"></param>
+    ''' <param name="tableName"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("load")>
     Public Function fetchTable(con As Sqlite3Database, tableName As String, Optional env As Environment = Nothing) As dataframe
         Dim rawRef As Sqlite3Table = con.GetTable(tableName)

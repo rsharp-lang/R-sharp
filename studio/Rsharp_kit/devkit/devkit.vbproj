@@ -193,9 +193,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="documents\RFileHeader.vb" />
-    <Compile Include="SQLite\CLI.vb" />
-    <Compile Include="SQLite\TableExport.vb" />
-    <Compile Include="SQLite\Program.vb" />
     <Compile Include="workflow\automation.vb" />
     <Compile Include="workflow\config.json.vb" />
     <Compile Include="devkit.vb" />
