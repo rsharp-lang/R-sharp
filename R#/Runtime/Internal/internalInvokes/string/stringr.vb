@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::0a9760afc70be611b27eba8beba2eafd, R-sharp\R#\Runtime\Internal\internalInvokes\string\stringr.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 944
-    '    Code Lines: 591
-    ' Comment Lines: 264
-    '   Blank Lines: 89
-    '     File Size: 39.07 KB
+' Summaries:
 
 
-    '     Module stringr
-    ' 
-    '         Function: [objToString], base64Decode, base64Str, bencode, charAt
-    '                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
-    '                   fromBstring, grep, html, json, loadXml
-    '                   match, nchar, paste, randomAsciiStr, rawBufferBase64
-    '                   regexp, splitSingleStrAuto, sprintfSingle, str_empty, str_pad
-    '                   (+2 Overloads) str_replace, strPad_internal, strsplit, substr, tagvalue
-    '                   tolower, toupper, urldecode, xml
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 944
+'    Code Lines: 591
+' Comment Lines: 264
+'   Blank Lines: 89
+'     File Size: 39.07 KB
+
+
+'     Module stringr
+' 
+'         Function: [objToString], base64Decode, base64Str, bencode, charAt
+'                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
+'                   fromBstring, grep, html, json, loadXml
+'                   match, nchar, paste, randomAsciiStr, rawBufferBase64
+'                   regexp, splitSingleStrAuto, sprintfSingle, str_empty, str_pad
+'                   (+2 Overloads) str_replace, strPad_internal, strsplit, substr, tagvalue
+'                   tolower, toupper, urldecode, xml
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -733,6 +733,8 @@ Namespace Runtime.Internal.Invokes
                                     Optional env As Environment = Nothing) As Object
             If search Is Nothing Then
                 Return Internal.debug.stop("the search pattern can not be nothing!", env)
+            ElseIf subj.IsNullOrEmpty Then
+                Return {}
             End If
 
             If regexp Then
