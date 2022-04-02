@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <RootNamespace>SMRUCC.Rsharp.RDataSet</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
+	  <TargetFrameworks>net6.0;net5.0;net48</TargetFrameworks>
     <AssemblyName>RData</AssemblyName>
   
     <Platforms>AnyCPU;x64</Platforms>

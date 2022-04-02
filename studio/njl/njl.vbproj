@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>njl</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
+   <TargetFrameworks>net6.0;net5.0;net48</TargetFrameworks>
     <Description>The embedded julia language scripting environment based on the R# runtime</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>Pride Icon - Rect.png</PackageIcon>

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>SMRUCC.Python</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
+	  <TargetFrameworks>net6.0;net5.0;net48</TargetFrameworks>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>The embedded python script environment based on the R# runtime</Description>
