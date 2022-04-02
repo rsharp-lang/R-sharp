@@ -191,6 +191,10 @@ Namespace Interpreter.SyntaxParser
                                 .Take(list.Length - 2) _
                                 .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True)
 
+                                If par.isComma Then
+                                    Continue For
+                                End If
+
                                 temp = opts.ParseExpression(par, opts)
 
                                 If temp.isException Then
