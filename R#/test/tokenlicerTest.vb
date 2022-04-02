@@ -1,59 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::2b31efebc491f5629aa835e586e0da06, R-sharp\R#\Test\tokenlicerTest.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 193
-    '    Code Lines: 129
-    ' Comment Lines: 4
-    '   Blank Lines: 60
-    '     File Size: 4.71 KB
+' Summaries:
 
 
-    ' Module tokenlicerTest
-    ' 
-    '     Sub: cliInvoke, customOperatorTest, declareFunctionTest, declareTest, elementIndexer
-    '          lambdaTest, linqQueryTest, Main, numberUnittest, operatorTest
-    '          pipelineTest, regexpLiteral, sequnceTest, sourceScriptTest, specialNameTest
-    '          stringParser, stringValueAssign, syntaxBugTest
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 193
+'    Code Lines: 129
+' Comment Lines: 4
+'   Blank Lines: 60
+'     File Size: 4.71 KB
+
+
+' Module tokenlicerTest
+' 
+'     Sub: cliInvoke, customOperatorTest, declareFunctionTest, declareTest, elementIndexer
+'          lambdaTest, linqQueryTest, Main, numberUnittest, operatorTest
+'          pipelineTest, regexpLiteral, sequnceTest, sourceScriptTest, specialNameTest
+'          stringParser, stringValueAssign, syntaxBugTest
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -205,8 +206,9 @@ let user.echo as function(text as string) {
     End Sub
 
     Sub stringParser()
-        Dim stringExpression = StringInterpolation.ParseTokens("Hello ${""world"" & '!'}!! Test expression: 1+1= ${1+1} ${1+1 < x} < x;")
-        Dim str2 = StringInterpolation.ParseTokens("Another string ${ `expression is ${1+1} ? ` } + escape test \${this is not a ${'expression'}}")
+        Dim opts As SyntaxBuilderOptions = Nothing
+        Dim stringExpression = StringInterpolation.ParseTokens("Hello ${""world"" & '!'}!! Test expression: 1+1= ${1+1} ${1+1 < x} < x;", opts)
+        Dim str2 = StringInterpolation.ParseTokens("Another string ${ `expression is ${1+1} ? ` } + escape test \${this is not a ${'expression'}}", opts)
 
         Pause()
     End Sub
