@@ -54,7 +54,12 @@
 
 #End Region
 
+#If Not NET48 Then
 Imports System.ComponentModel.DataAnnotations.Schema
+#Else
+Imports System.Data.Linq.Mapping
+#End If
+
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
