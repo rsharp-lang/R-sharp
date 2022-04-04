@@ -11,7 +11,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 	  <AssemblyVersion>2.33.*</AssemblyVersion>
 	  <Deterministic>false</Deterministic>
-	  <RuntimeIdentifiers>win7-x86;win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
+	  <RuntimeIdentifiers>win7-x64;win7-x86;win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
 	  <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
 	  <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
 	  <StartupObject>R.NetCore5.Program</StartupObject>
