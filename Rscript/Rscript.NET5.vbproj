@@ -9,6 +9,7 @@
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;Rsharp_app_release;PlantMAT;NPSearch</Configurations>
     <StartupObject>Rsharp.NetCore5.Program</StartupObject>
+	  <RuntimeIdentifiers>win7-x86;win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
