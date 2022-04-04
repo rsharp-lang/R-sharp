@@ -54,7 +54,7 @@
 
 #End Region
 
-#If Not NET48 Then
+#If netcore5 = 1 Then
 Imports System.ComponentModel.DataAnnotations.Schema
 #Else
 Imports System.Data.Linq.Mapping
