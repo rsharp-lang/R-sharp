@@ -11,6 +11,8 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 	  <AssemblyVersion>2.33.*</AssemblyVersion>
 	  <Deterministic>false</Deterministic>
+
+	  <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
