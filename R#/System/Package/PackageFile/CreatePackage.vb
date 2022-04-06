@@ -289,6 +289,8 @@ Namespace Development.Package.File
             Dim out As String
             Dim runtime As String = getRuntimeTags()
 
+            Call Console.WriteLine($"       ==> build package for .NET runtime [{runtime}].")
+
             ' run documentation for dll modules which is marked as r package
             ' unixMan(pkg As pkg, output As String, env As Environment)
             For Each dll As String In ls - l - r - "*.dll" <= $"{package_dir}/assembly/{runtime}/"
