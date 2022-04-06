@@ -271,6 +271,7 @@ Namespace Development.Package.File
             ' run documentation for rscript in R folder
             Dim err As Message = REngine.Invoke("roxygen::roxygenize", {package_dir})
             Dim out As String
+            Dim runtime As String = System.Environment.Version.ToString
 
             ' run documentation for dll modules which is marked as r package
             ' unixMan(pkg As pkg, output As String, env As Environment)
