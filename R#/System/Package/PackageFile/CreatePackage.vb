@@ -248,6 +248,22 @@ Namespace Development.Package.File
             Return assets
         End Function
 
+        Private Function getRuntimeTags() As String
+            Dim runtime As Version = System.Environment.Version
+
+#If legacy Then
+            Return ""
+#Else
+            If runtime.Major = 5 Then
+                Return "net5.0"
+            ElseIf runtime.Major = 6 Then
+                Return "net6.0"
+            Else
+                Return "net48"
+            End If
+#End If
+        End Function
+
         <Extension>
         Private Function buildUnixMan(file As PackageModel, package_dir As String) As Message
             Dim REngine As New RInterpreter
@@ -271,11 +287,11 @@ Namespace Development.Package.File
             ' run documentation for rscript in R folder
             Dim err As Message = REngine.Invoke("roxygen::roxygenize", {package_dir})
             Dim out As String
-            Dim runtime As String = System.Environment.Version.ToString
+            Dim runtime As String = getRuntimeTags()
 
             ' run documentation for dll modules which is marked as r package
             ' unixMan(pkg As pkg, output As String, env As Environment)
-            For Each dll As String In ls - l - r - "*.dll" <= $"{package_dir}/assembly"
+            For Each dll As String In ls - l - r - "*.dll" <= $"{package_dir}/assembly/{runtime}/"
                 Dim assembly As Assembly = deps.LoadAssemblyOrCache(dll)
                 Dim attr = assembly.GetCustomAttributes(Of RPackageModuleAttribute)
 
