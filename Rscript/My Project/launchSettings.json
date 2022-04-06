@@ -2,7 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\GCModeller\\src\\R-sharp\\Library\\demo\\clustering\\object_detection.R\""
+      "commandLineArgs": "--build /src ../ /save ./Markdown2PDF.zip",
+      "workingDirectory": "D:\\GCModeller\\src\\workbench\\markdown2pdf\\.pkg"
     }
   }
 }
