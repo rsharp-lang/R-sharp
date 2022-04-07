@@ -64,7 +64,7 @@
 
 Imports Microsoft.VisualBasic.Serialization.JSON
 
-Namespace Development.Package.NuGet
+Namespace Development.Package.NuGet.web
 
     Public Enum NuGetMirrors
         nuget
@@ -99,7 +99,7 @@ Namespace Development.Package.NuGet
         Public Shared Function Query(term As String, Optional pre_release As Boolean = False) As PackageData()
             Dim url As String = $"{m_mirror}/query?q={term.UrlEncode}&prerelease={pre_release.ToString.ToLower}"
             Dim json As String = url.GET
-            Dim data = json.LoadJSON(Of NuGet.Search)
+            Dim data = json.LoadJSON(Of NuGet.web.Search)
 
             Return data
         End Function
