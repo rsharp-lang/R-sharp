@@ -68,6 +68,7 @@ Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml
 Imports Microsoft.VisualBasic.Text.Xml.Models
+Imports Microsoft.VisualBasic.Text.Xml.OpenXml
 Imports SMRUCC.Rsharp.Development.Package.NuGet.metadata
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -256,8 +257,10 @@ Namespace Development.Package.File
             Dim text As String
             Dim md5 As New Md5HashProvider
 
-            Using file As New StreamWriter(zip.CreateEntry("index.json").Open)
+            Using file As New StreamWriter(zip.CreateEntry("package/index.json").Open)
                 info.meta("builtTime") = Now.ToString
+                info.meta("os_built") = Environment.OSVersion.VersionString
+                info.Date = If(info.Date, Now.ToString)
                 text = info.GetJson(indent:=True)
                 checksum = checksum & md5.GetMd5Hash(text)
 
@@ -347,19 +350,40 @@ Namespace Development.Package.File
                 End Using
 
                 Dim nugetWeb As String = $"package/services/metadata/core-properties/{checksumVal.ToLower}.psmdcp"
+                Dim nugetIdx As String = $"{info.Package}.nuspec"
+                Dim webId As String
+                Dim indexId As String
+                Dim text As String
 
                 Using file As New StreamWriter(zip.CreateEntry(nugetWeb).Open)
-                    Call file.WriteLine(coreProperties.CreateMetaData(info).GetXml(xmlEncoding:=XmlEncodings.UTF8))
+                    text = coreProperties.CreateMetaData(info).GetXml(xmlEncoding:=XmlEncodings.UTF8)
+                    webId = text.MD5.Substring(0, 17).ToUpper
+
+                    Call file.WriteLine(text)
                     Call file.Flush()
                 End Using
 
-                Using file As New StreamWriter(zip.CreateEntry($"{info.Package}.nuspec").Open)
-                    Call file.WriteLine(nuspec.CreatePackageIndex(Me).GetXml(xmlEncoding:=XmlEncodings.UTF8))
+                Using file As New StreamWriter(zip.CreateEntry(nugetIdx).Open)
+                    text = nuspec.CreatePackageIndex(Me).GetXml(xmlEncoding:=XmlEncodings.UTF8)
+                    indexId = text.MD5.Substring(0, 17).ToUpper
+
+                    Call file.WriteLine(text)
                     Call file.Flush()
                 End Using
 
                 Using file As New StreamWriter(zip.CreateEntry("[Content_Types].xml").Open)
                     Call file.WriteLine(OpenXMLSolver.DefaultContentTypes.GetXml(xmlEncoding:=XmlEncodings.UTF8))
+                    Call file.Flush()
+                End Using
+
+                Using file As New StreamWriter(zip.CreateEntry("_rels/.rels").Open)
+                    Dim webmeta As New Relationship With {.Target = $"/{nugetWeb}", .Type = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties", .Id = webId}
+                    Dim indexmeta As New Relationship With {.Target = $"/{nugetIdx}", .Type = "http://schemas.microsoft.com/packaging/2010/07/manifest", .Id = indexId}
+                    Dim files As New rels With {
+                        .Relationships = {indexmeta, webmeta}
+                    }
+
+                    Call file.WriteLine(files.GetXml(xmlEncoding:=XmlEncodings.UTF8))
                     Call file.Flush()
                 End Using
 

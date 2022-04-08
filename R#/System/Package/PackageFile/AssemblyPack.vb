@@ -69,13 +69,14 @@ Namespace Development.Package.File
         Public Property assembly As String()
         Public Property directory As String
 
+        ''' <summary>
+        ''' get filtered dll file modules
+        ''' </summary>
+        ''' <returns></returns>
         Public Function GetFileContents() As String()
-            Return directory _
-                .ListFiles("*.*") _
-                .Where(Function(path)
-                           Return Not path.ExtensionSuffix("pdb")
-                       End Function) _
-                .ToArray
+            Return (From dllName As String
+                    In assembly.SafeQuery
+                    Select $"{directory}/{dllName}").ToArray
         End Function
 
         Public Iterator Function GenericEnumerator() As IEnumerator(Of String) Implements Enumeration(Of String).GenericEnumerator
