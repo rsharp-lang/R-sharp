@@ -117,10 +117,10 @@ Namespace Development.Package.File
             End If
 
             Using zip As New ZipArchive(zipFile.Open(FileMode.Open, doClear:=False, [readOnly]:=True), ZipArchiveMode.Read)
-                If zip.GetEntry("index.json") Is Nothing Then
+                If zip.GetEntry("package/index.json") Is Nothing Then
                     Return Nothing
                 Else
-                    Using file As Stream = zip.GetEntry("index.json").Open, fs As New StreamReader(file)
+                    Using file As Stream = zip.GetEntry("package/index.json").Open, fs As New StreamReader(file)
                         Return fs.ReadToEnd.LoadJSON(Of DESCRIPTION)
                     End Using
                 End If
@@ -129,7 +129,7 @@ Namespace Development.Package.File
 
         Private Function FindAllDllFiles(projDir As String) As Dictionary(Of String, String)
 #If netcore5 = 1 Then
-            Return ($"{projDir}/assembly/net5.0/") _
+            Return ($"{projDir}/assembly/{CreatePackage.getRuntimeTags}/") _
                 .EnumerateFiles("*.dll") _
                 .ToDictionary(Function(dll) dll.FileName)
 #Else
@@ -232,7 +232,7 @@ Namespace Development.Package.File
 
             ' 1. load R symbols
             For Each symbol As NamedValue(Of String) In [namespace].EnumerateSymbols
-                Using bin As New BinaryReader($"{dir}/src/{symbol.Value}".Open)
+                Using bin As New BinaryReader($"{dir}/lib/src/{symbol.Value}".Open)
                     symbolExpression = BlockReader _
                         .Read(bin) _
                         .Parse(desc:=[namespace].meta)

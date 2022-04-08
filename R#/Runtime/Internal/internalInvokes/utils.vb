@@ -759,7 +759,7 @@ Namespace Runtime.Internal.Invokes
                                                 pkgFile As String,
                                                 ByRef hit As Boolean) As Message
 
-            Dim dataSymbols = $"{pkgFile}/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, NamedValue))
+            Dim dataSymbols = $"{pkgFile}/package/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, NamedValue))
             Dim reader As String
             Dim load As Object
 

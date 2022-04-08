@@ -62,21 +62,12 @@ Namespace Development.Package.File
         ''' <summary>
         ''' dll files, apply for md5 checksum calculation
         ''' </summary>
-        ''' <returns></returns>
+        ''' <returns>get filtered dll file modules</returns>
         ''' <remarks>
         ''' 程序会将几乎所有的文件都打包进去
         ''' </remarks>
         Public Property assembly As String()
         Public Property directory As String
-
-        Public Function GetFileContents() As String()
-            Return directory _
-                .ListFiles("*.*") _
-                .Where(Function(path)
-                           Return Not path.ExtensionSuffix("pdb")
-                       End Function) _
-                .ToArray
-        End Function
 
         Public Iterator Function GenericEnumerator() As IEnumerator(Of String) Implements Enumeration(Of String).GenericEnumerator
             For Each dll As String In assembly

@@ -108,7 +108,7 @@ Namespace Runtime
                 Return Nothing
             End If
 
-            Dim manifest = $"{libdir}/manifest/symbols.json"
+            Dim manifest = $"{libdir}/package/manifest/symbols.json"
             Dim symbols As Dictionary(Of String, String) = manifest.LoadJsonFile(Of Dictionary(Of String, String))
 
             If Not symbols.ContainsKey(symbolName) Then

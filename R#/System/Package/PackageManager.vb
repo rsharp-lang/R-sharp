@@ -251,7 +251,7 @@ Namespace Development.Package
 
             Call UnZip.ImprovedExtractToDirectory(zipFile, libDir, Overwrite.Always)
 
-            For Each file As String In $"{libDir}/man".ListFiles
+            For Each file As String In $"{libDir}/package/man".ListFiles
                 Call Console.WriteLine($"    {file.FileName}")
             Next
 
@@ -282,7 +282,7 @@ Namespace Development.Package
                 .ToDictionary(Function(pkg)
                                   Return pkg.namespace
                               End Function)
-            Dim symbolNames As String() = ($"{libDir}/manifest/symbols.json") _
+            Dim symbolNames As String() = ($"{libDir}/package/manifest/symbols.json") _
                 .LoadJsonFile(Of Dictionary(Of String, String)) _
                 .Keys _
                 .ToArray
