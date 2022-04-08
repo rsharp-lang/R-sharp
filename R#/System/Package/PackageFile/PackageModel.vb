@@ -186,7 +186,7 @@ Namespace Development.Package.File
 
             ' dll is the file path
             ' pack assembly folder
-            Dim contents As String() = assembly.GetFileContents
+            Dim contents As String() = assembly.AsEnumerable.ToArray
             Dim assemblyDirFull As String = assembly.directory.GetDirectoryFullPath
 
             Call zip.WriteFiles(
