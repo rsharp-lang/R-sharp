@@ -358,6 +358,11 @@ Namespace Development.Package.File
                     Call file.Flush()
                 End Using
 
+                Using file As New StreamWriter(zip.CreateEntry("[Content_Types].xml").Open)
+                    Call file.WriteLine(OpenXMLSolver.DefaultContentTypes.GetXml(xmlEncoding:=XmlEncodings.UTF8))
+                    Call file.Flush()
+                End Using
+
                 For Each asset As KeyValuePair(Of String, String) In assets
                     Using file As New BinaryWriter(zip.CreateEntry(asset.Key).Open)
                         Call file.Write(asset.Value.ReadBinary)
