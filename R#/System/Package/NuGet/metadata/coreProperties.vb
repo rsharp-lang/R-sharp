@@ -1,9 +1,11 @@
 ﻿Imports System.Xml.Serialization
+Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Interpreter
 Imports openXml = SMRUCC.Rsharp.Development.Package.NuGet.metadata.Xmlns
 
 Namespace Development.Package.NuGet.metadata
 
-    <XmlRoot("coreProperties", [Namespace]:=OpenXML.cp)>
+    <XmlRoot("coreProperties", [Namespace]:=openXml.cp)>
     Public Class coreProperties
 
         <XmlElement(ElementName:=NameOf(creator), [Namespace]:=openXml.dc)>
@@ -23,12 +25,32 @@ Namespace Development.Package.NuGet.metadata
         Sub New()
             xmlns = New XmlSerializerNamespaces
 
-            xmlns.Add("cp", OpenXML.cp)
-            xmlns.Add("dc", OpenXML.dc)
-            xmlns.Add("dcterms", OpenXML.dcterms)
-            xmlns.Add("dcmitype", OpenXML.dcmitype)
-            xmlns.Add("xsi", OpenXML.xsi)
+            xmlns.Add("cp", openXml.cp)
+            xmlns.Add("dc", openXml.dc)
+            xmlns.Add("dcterms", openXml.dcterms)
+            xmlns.Add("dcmitype", openXml.dcmitype)
+            xmlns.Add("xsi", openXml.xsi)
         End Sub
+
+        Public Overrides Function ToString() As String
+            Return identifier
+        End Function
+
+        Public Shared Function CreateMetaData(index As DESCRIPTION) As coreProperties
+            Dim interpreter As String = GetType(RInterpreter).Assembly.ToString
+            Dim os As String = Environment.OSVersion.VersionString
+            Dim runtime As String = If(Environment.Version.Major <= 4, $".NET Framework {Environment.Version}", $".NET {Environment.Version}")
+            Dim core As New coreProperties With {
+                .creator = index.Author,
+                .description = index.Description,
+                .identifier = index.Package,
+                .keywords = index.meta.TryGetValue("keywords"),
+                .lastModifiedBy = {interpreter, os, runtime}.JoinBy(";"),
+                .version = index.Version
+            }
+
+            Return core
+        End Function
 
     End Class
 
