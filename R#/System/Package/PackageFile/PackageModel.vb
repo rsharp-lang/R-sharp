@@ -352,6 +352,11 @@ Namespace Development.Package.File
                     Call file.Flush()
                 End Using
 
+                Using file As New StreamWriter(zip.CreateEntry($"{info.Package}.nuspec").Open)
+                    Call file.WriteLine(nuspec.CreatePackageIndex(info, loading).GetXml)
+                    Call file.Flush()
+                End Using
+
                 For Each asset As KeyValuePair(Of String, String) In assets
                     Using file As New BinaryWriter(zip.CreateEntry(asset.Key).Open)
                         Call file.Write(asset.Value.ReadBinary)

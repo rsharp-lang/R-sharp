@@ -1,4 +1,6 @@
 ﻿Imports System.Xml.Serialization
+Imports SMRUCC.Rsharp.Development.Package.File
+Imports RDependency = SMRUCC.Rsharp.Development.Package.File.Dependency
 
 Namespace Development.Package.NuGet.metadata
 
@@ -20,6 +22,27 @@ Namespace Development.Package.NuGet.metadata
 
         Public Overrides Function ToString() As String
             Return metadata.ToString
+        End Function
+
+        Private Shared Iterator Function createRReference(loading As RDependency()) As IEnumerable(Of dependencies)
+
+        End Function
+
+        Public Shared Function CreatePackageIndex(index As DESCRIPTION, loading As RDependency()) As nuspec
+            Dim metadata As New nugetmeta With {
+                .authors = index.Author,
+                .copyright = index.License,
+                .description = index.Description,
+                .id = index.Package,
+                .language = "en-US",
+                .license = New tagValue With {.type = "expression", .value = index.License},
+                .requireLicenseAcceptance = True,
+                .title = index.Title,
+                .version = index.Version,
+                .dependencies = createRReference(loading).ToArray
+            }
+
+            Return New nuspec With {.metadata = metadata}
         End Function
 
     End Class
