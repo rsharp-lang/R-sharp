@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src ../ /save ./Markdown2PDF.zip",
-      "workingDirectory": "D:\\GCModeller\\src\\workbench\\markdown2pdf\\.pkg"
+      "commandLineArgs": "--build /src ../ /save ../../mzkit_1.1.0-beta.zip --skip-src-build",
+      "workingDirectory": "E:\\mzkit\\Rscript\\Library\\mzkit_app\\.pkg"
     }
   }
 }

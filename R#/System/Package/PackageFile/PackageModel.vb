@@ -118,7 +118,7 @@ Namespace Development.Package.File
                 Else
                     Dim symbolRef As String = symbol.Name.MD5
 
-                    Using file As New Writer(zip.CreateEntry($"src/{symbolRef}").Open)
+                    Using file As New Writer(zip.CreateEntry($"lib/src/{symbolRef}").Open)
                         checksum = checksum & file.Write(symbol.Value)
                         sourceMaps = sourceMaps + file.GetSymbols
                     End Using
@@ -131,7 +131,7 @@ Namespace Development.Package.File
             Dim plugin As String = LibDLL.GetDllFile($"devkit.dll", REngine.globalEnvir)
 
             If plugin.FileExists Then
-                Using file As New StreamWriter(zip.CreateEntry($"source.map").Open)
+                Using file As New StreamWriter(zip.CreateEntry($"package/source.map").Open)
                     Dim encoder As String = "VisualStudio::sourceMap_encode"
                     Dim args As Object() = {sourceMaps.ToArray, info.Package}
 
@@ -159,7 +159,7 @@ Namespace Development.Package.File
             Dim text As String
             Dim asset As Value(Of String) = ""
 
-            Using file As New StreamWriter(zip.CreateEntry("manifest/assembly.json").Open)
+            Using file As New StreamWriter(zip.CreateEntry("package/manifest/assembly.json").Open)
                 text = assembly _
                     .AsEnumerable _
                     .ToDictionary(Function(path) path.FileName,
@@ -173,7 +173,7 @@ Namespace Development.Package.File
                 Call file.Flush()
             End Using
 
-            Using file As New StreamWriter(zip.CreateEntry("assembly/readme.txt").Open)
+            Using file As New StreamWriter(zip.CreateEntry("lib/assembly/readme.txt").Open)
                 text = ".NET assembly files"
                 checksum = checksum & md5.GetMd5Hash(text)
 
@@ -192,14 +192,14 @@ Namespace Development.Package.File
                 fileOverwrite:=Overwrite.Always,
                 compression:=CompressionLevel.Fastest,
                 relativeDir:=assemblyDirFull,
-                parent:="assembly"
+                parent:="lib/assembly"
             )
         End Sub
 
         Private Sub saveDependency(zip As ZipArchive, ByRef checksum$)
             Dim md5 As New Md5HashProvider
 
-            Using file As New StreamWriter(zip.CreateEntry("manifest/dependency.json").Open)
+            Using file As New StreamWriter(zip.CreateEntry("package/manifest/dependency.json").Open)
                 Dim text = loading.GetJson(indent:=True)
                 checksum = checksum & md5.GetMd5Hash(text)
 
@@ -212,7 +212,7 @@ Namespace Development.Package.File
             Dim md5 As New Md5HashProvider
             Dim text As String
 
-            Using file As New StreamWriter(zip.CreateEntry("manifest/symbols.json").Open)
+            Using file As New StreamWriter(zip.CreateEntry("package/manifest/symbols.json").Open)
                 text = symbols.GetJson(indent:=True)
                 checksum = checksum & md5.GetMd5Hash(text)
 
@@ -225,7 +225,7 @@ Namespace Development.Package.File
             Dim md5 As New Md5HashProvider
             Dim text As String
 
-            Using file As New StreamWriter(zip.CreateEntry("manifest/data.json").Open)
+            Using file As New StreamWriter(zip.CreateEntry("package/manifest/data.json").Open)
                 text = dataSymbols _
                     .ToDictionary(Function(d) d.Key.BaseName,
                                   Function(d)
@@ -266,7 +266,7 @@ Namespace Development.Package.File
             Dim md5 As New Md5HashProvider
             Dim text As String
 
-            Using file As New StreamWriter(zip.CreateEntry("manifest/runtime.json").Open)
+            Using file As New StreamWriter(zip.CreateEntry("package/manifest/runtime.json").Open)
                 text = GetType(RInterpreter).Assembly _
                     .FromAssembly _
                     .GetJson(indent:=True)
@@ -276,7 +276,7 @@ Namespace Development.Package.File
                 Call file.Flush()
             End Using
 
-            Using file As New StreamWriter(zip.CreateEntry("manifest/framework.json").Open)
+            Using file As New StreamWriter(zip.CreateEntry("package/manifest/framework.json").Open)
                 text = GetType(App).Assembly _
                     .FromAssembly _
                     .GetJson(indent:=True)
@@ -297,13 +297,13 @@ Namespace Development.Package.File
                 manIndex(man.BaseName) = md5.GetMd5Hash(text)
                 checksum = checksum & manIndex(man.BaseName)
 
-                Using file As New StreamWriter(zip.CreateEntry($"man/{man.BaseName}.1").Open)
+                Using file As New StreamWriter(zip.CreateEntry($"package/man/{man.BaseName}.1").Open)
                     Call file.WriteLine(text)
                     Call file.Flush()
                 End Using
             Next
 
-            Using file As New StreamWriter(zip.CreateEntry("manifest/unixman.json").Open)
+            Using file As New StreamWriter(zip.CreateEntry("package/manifest/unixman.json").Open)
                 text = manIndex.GetJson(indent:=True)
                 checksum = checksum & md5.GetMd5Hash(text)
 
@@ -312,6 +312,11 @@ Namespace Development.Package.File
             End Using
         End Sub
 
+        ''' <summary>
+        ''' generate package file from here
+        ''' </summary>
+        ''' <param name="outfile"></param>
+        ''' <param name="assets"></param>
         Public Sub Flush(outfile As Stream, assets As Dictionary(Of String, String))
             Dim checksum As String = ""
             Dim md5 As New Md5HashProvider

@@ -93,7 +93,7 @@ Namespace Development.Package.File
         End Function
 
         ''' <summary>
-        ''' 
+        ''' scan for all dll files from the given package source <paramref name="dir"/>
         ''' </summary>
         ''' <param name="dir"></param>
         ''' <param name="assemblyFilters">

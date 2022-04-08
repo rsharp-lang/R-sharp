@@ -91,7 +91,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         If Not skipSourceBuild Then
             Call runMSBuild(src)
         Else
-            Call Console.WriteLine($"Skip MSBuild for .NET 5 runtime...")
+            Call Console.WriteLine($"Skip MSBuild for .NET core runtime...")
         End If
 #End If
 
