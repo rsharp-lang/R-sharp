@@ -239,6 +239,8 @@ Namespace Development.Package.File
             End Using
 
             For Each ref As KeyValuePair(Of String, String) In dataSymbols
+                ' 20220410 在这里为了保持和传统的R语言脚本对system.file函数使用上的一致性
+                ' 数据文件夹任然是放在程序包中的最顶层文件夹
                 Using file As Stream = zip.CreateEntry($"data/{ref.Key.FileName}").Open
                     Dim buffer As Byte() = ref.Key.ReadBinary
 
@@ -317,6 +319,9 @@ Namespace Development.Package.File
         ''' </summary>
         ''' <param name="outfile"></param>
         ''' <param name="assets"></param>
+        ''' <remarks>
+        ''' generate nuget package format zip archive file.
+        ''' </remarks>
         Public Sub Flush(outfile As Stream, assets As Dictionary(Of String, String))
             Dim checksum As String = ""
             Dim md5 As New Md5HashProvider
