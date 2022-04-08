@@ -1,4 +1,5 @@
 ﻿Imports System.Xml.Serialization
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports RDependency = SMRUCC.Rsharp.Development.Package.File.Dependency
 
@@ -24,11 +25,42 @@ Namespace Development.Package.NuGet.metadata
             Return metadata.ToString
         End Function
 
+        ''' <summary>
+        ''' 可以通过这个依赖列表从nuget上搜索所被引用的``R#``程序包列表
+        ''' </summary>
+        ''' <param name="loading"></param>
+        ''' <returns></returns>
         Private Shared Iterator Function createRReference(loading As RDependency()) As IEnumerable(Of dependencies)
-
+            For Each pkg As RDependency In loading
+                Yield New dependencies With {
+                    .targetFramework = pkg.library,
+                    .dependency = pkg.packages _
+                        .SafeQuery _
+                        .Select(Function(loader)
+                                    Return New dependency With {
+                                        .id = loader,
+                                        .exclude = "",
+                                        .include = "all",
+                                        .version = "n/a"
+                                    }
+                                End Function) _
+                        .ToArray
+                }
+            Next
         End Function
 
-        Public Shared Function CreatePackageIndex(index As DESCRIPTION, loading As RDependency()) As nuspec
+        Private Shared Iterator Function createDllFiles(list As AssemblyPack) As IEnumerable(Of frameworkAssembly)
+            For Each fileName As String In list.assembly.SafeQuery
+                Yield New frameworkAssembly With {
+                    .assemblyName = fileName.BaseName,
+                    .targetFramework = list.framework
+                }
+            Next
+        End Function
+
+        Public Shared Function CreatePackageIndex(pkg As PackageModel) As nuspec
+            Dim index As DESCRIPTION = pkg.info
+            Dim loading As RDependency() = pkg.loading
             Dim metadata As New nugetmeta With {
                 .authors = index.Author,
                 .copyright = index.License,
@@ -39,7 +71,8 @@ Namespace Development.Package.NuGet.metadata
                 .requireLicenseAcceptance = True,
                 .title = index.Title,
                 .version = index.Version,
-                .dependencies = createRReference(loading).ToArray
+                .dependencies = createRReference(loading).ToArray,
+                .frameworkAssemblies = createDllFiles(pkg.assembly).ToArray
             }
 
             Return New nuspec With {.metadata = metadata}

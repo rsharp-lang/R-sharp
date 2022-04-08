@@ -353,7 +353,7 @@ Namespace Development.Package.File
                 End Using
 
                 Using file As New StreamWriter(zip.CreateEntry($"{info.Package}.nuspec").Open)
-                    Call file.WriteLine(nuspec.CreatePackageIndex(info, loading).GetXml)
+                    Call file.WriteLine(nuspec.CreatePackageIndex(Me).GetXml)
                     Call file.Flush()
                 End Using
 
