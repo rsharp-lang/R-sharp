@@ -66,6 +66,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Microsoft.VisualBasic.Text.Xml
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Development.Package.NuGet.metadata
 Imports SMRUCC.Rsharp.Interpreter
@@ -348,12 +349,12 @@ Namespace Development.Package.File
                 Dim nugetWeb As String = $"package/services/metadata/core-properties/{checksumVal.ToLower}.psmdcp"
 
                 Using file As New StreamWriter(zip.CreateEntry(nugetWeb).Open)
-                    Call file.WriteLine(coreProperties.CreateMetaData(info).GetXml)
+                    Call file.WriteLine(coreProperties.CreateMetaData(info).GetXml(xmlEncoding:=XmlEncodings.UTF8))
                     Call file.Flush()
                 End Using
 
                 Using file As New StreamWriter(zip.CreateEntry($"{info.Package}.nuspec").Open)
-                    Call file.WriteLine(nuspec.CreatePackageIndex(Me).GetXml)
+                    Call file.WriteLine(nuspec.CreatePackageIndex(Me).GetXml(xmlEncoding:=XmlEncodings.UTF8))
                     Call file.Flush()
                 End Using
 

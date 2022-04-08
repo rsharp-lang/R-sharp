@@ -39,7 +39,7 @@ Namespace Development.Package.NuGet.metadata
                         .Select(Function(loader)
                                     Return New dependency With {
                                         .id = loader,
-                                        .exclude = "",
+                                        .exclude = "Build,Analyzers",
                                         .include = "all",
                                         .version = "n/a"
                                     }
