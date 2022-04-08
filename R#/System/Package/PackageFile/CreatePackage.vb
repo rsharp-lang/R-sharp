@@ -248,7 +248,7 @@ Namespace Development.Package.File
             Return assets
         End Function
 
-        Private Function getRuntimeTags() As String
+        Friend Function getRuntimeTags() As String
             Dim runtime As Version = System.Environment.Version
 
 #If legacy Then
