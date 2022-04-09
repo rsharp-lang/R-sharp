@@ -84,18 +84,17 @@ Namespace Development.Package
             Dim location As Value(Of String) = ""
 
             For Each pkg As NamespaceEnvironment In globalEnvironment.attachedNamespace
-                Dim assemblyDir As String = $"{pkg.libpath}/assembly"
-
+                For Each assemblyDir As String In {$"{pkg.libpath}/assembly", $"{pkg.libpath}/src/assembly"}
 #If netcore5 = 1 Then
-                If (location = $"{assemblyDir}/{libDll}.dll").FileExists Then
-                    Return location
-                ElseIf (location = $"{assemblyDir}/net5.0/{libDll}.dll").FileExists Then
-                    Return location
-                ElseIf (location = $"{assemblyDir}/{libDll}").FileExists Then
-                    Return location
-                ElseIf (location = $"{assemblyDir}/net5.0/{libDll}").FileExists Then
-                    Return location
-                End If
+                    If (location = $"{assemblyDir}/{libDll}.dll").FileExists Then
+                        Return location
+                    ElseIf (location = $"{assemblyDir}/net5.0/{libDll}.dll").FileExists Then
+                        Return location
+                    ElseIf (location = $"{assemblyDir}/{libDll}").FileExists Then
+                        Return location
+                    ElseIf (location = $"{assemblyDir}/net5.0/{libDll}").FileExists Then
+                        Return location
+                    End If
 #Else
                 If (location = $"{assemblyDir}/{libDll}.dll").FileExists Then
                     Return location
@@ -103,6 +102,7 @@ Namespace Development.Package
                     Return location
                 End If
 #End If
+                Next
             Next
 
             Return Nothing
