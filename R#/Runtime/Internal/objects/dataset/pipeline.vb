@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::dcc93a6927f898408b0e5268956af07c, R-sharp\R#\Runtime\Internal\objects\dataset\pipeline.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 251
-    '    Code Lines: 169
-    ' Comment Lines: 51
-    '   Blank Lines: 31
-    '     File Size: 10.89 KB
+' Summaries:
 
 
-    '     Class pipeline
-    ' 
-    '         Properties: [pipeFinalize], isError, isMessage
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: CreateFromPopulator, createVector, fromVector, getError, populates
-    '                   ToString, TryCastGroupStream, TryCastObjectVector, TryCreatePipeline
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 251
+'    Code Lines: 169
+' Comment Lines: 51
+'   Blank Lines: 31
+'     File Size: 10.89 KB
+
+
+'     Class pipeline
+' 
+'         Properties: [pipeFinalize], isError, isMessage
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: CreateFromPopulator, createVector, fromVector, getError, populates
+'                   ToString, TryCastGroupStream, TryCastObjectVector, TryCreatePipeline
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -211,7 +211,7 @@ Namespace Runtime.Internal.Object
             ElseIf upstream.elementType.raw.IsInheritsFrom(GetType(T)) Then
                 Return CreateFromPopulator(upstream.data.AsObjectEnumerator.Select(Function(o) CType(o, T)))
             Else
-                Return Message.InCompatibleType(GetType(T), upstream.elementType.raw, env, suppress:=suppress)
+                Return TryCastObjectVector(Of T)(upstream.data.AsObjectEnumerator.ToArray, env, suppress)
             End If
         End Function
 
@@ -239,6 +239,7 @@ Namespace Runtime.Internal.Object
 
             If upstream Is Nothing Then
                 Return Internal.debug.stop("the upstream data can not be nothing!", env)
+
             ElseIf TypeOf upstream Is pipeline Then
                 If DirectCast(upstream, pipeline).elementType Like GetType(T) Then
                     Return upstream
@@ -247,26 +248,35 @@ Namespace Runtime.Internal.Object
                 Else
                     Return Message.InCompatibleType(GetType(T), DirectCast(upstream, pipeline).elementType.raw, env, suppress:=suppress)
                 End If
+
             ElseIf TypeOf upstream Is T() Then
                 Return CreateFromPopulator(Of T)(DirectCast(upstream, T()))
+
             ElseIf (Not GetType(T) Is GetType(Object)) AndAlso TypeOf upstream Is T Then
                 Return CreateFromPopulator(Of T)({DirectCast(upstream, T)})
+
             ElseIf TypeOf upstream Is IEnumerable(Of T) Then
                 Return CreateFromPopulator(Of T)(DirectCast(upstream, IEnumerable(Of T)))
+
             ElseIf TypeOf upstream Is vector Then
                 Return fromVector(Of T)(DirectCast(upstream, vector), env, suppress)
+
             ElseIf TypeOf upstream Is Object() Then
                 Return TryCastObjectVector(Of T)(DirectCast(upstream, Object()), env, suppress)
+
             ElseIf TypeOf upstream Is list Then
                 ' unlist
                 Return DirectCast(upstream, list).data _
                     .DoCall(Function(ls)
                                 Return TryCastObjectVector(Of T)(ls.ToArray, env, suppress)
                             End Function)
+
             ElseIf TypeOf upstream Is Group Then
                 Return TryCastGroupStream(Of T)(DirectCast(upstream, Group), env, callerFrameName, suppress)
+
             ElseIf GetType(T) Is GetType(Object) Then
                 Return CreateFromPopulator(Of T)({upstream})
+
             Else
                 Return Message.InCompatibleType(GetType(T), upstream.GetType, env, suppress:=suppress)
             End If
