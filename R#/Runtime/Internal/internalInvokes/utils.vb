@@ -906,7 +906,7 @@ Namespace Runtime.Internal.Invokes
                     Return Internal.debug.stop({$"the required package '{package}' is not yet installed!", $"package: {package}"}, env)
                 End If
             Else
-                Return ($"{globalEnv.packages.getPackageDir(package)}/index.json") _
+                Return ($"{globalEnv.packages.getPackageDir(package)}/package/index.json") _
                     .LoadJsonFile(Of DESCRIPTION) _
                     .toList
             End If

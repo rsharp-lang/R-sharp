@@ -116,7 +116,7 @@ Namespace Runtime
             End If
 
             Dim symbolFile As String = $"{libdir}/src/{symbols(symbolName)}"
-            Dim meta As DESCRIPTION = $"{libdir}/index.json".LoadJsonFile(Of DESCRIPTION)
+            Dim meta As DESCRIPTION = $"{libdir}/package/index.json".LoadJsonFile(Of DESCRIPTION)
 
             Using bin As New BinaryReader(symbolFile.Open)
                 Dim symbolExpression = BlockReader _

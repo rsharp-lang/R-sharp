@@ -272,7 +272,7 @@ Namespace Runtime
                 Return Nothing
             End If
 
-            If (Not RzipPackageFolder.StringEmpty) AndAlso $"{RzipPackageFolder}/index.json".FileExists Then
+            If (Not RzipPackageFolder.StringEmpty) AndAlso $"{RzipPackageFolder}/package/index.json".FileExists Then
                 Return PackageLoader2.LoadPackage(RzipPackageFolder, [global])
             ElseIf package Is Nothing Then
                 If Not ignoreMissingStartupPackages Then
