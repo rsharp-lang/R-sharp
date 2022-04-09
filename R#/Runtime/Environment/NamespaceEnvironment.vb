@@ -84,7 +84,7 @@ Namespace Runtime
         End Sub
 
         Public Overrides Function ToString() As String
-            Return $"{[namespace]}: {symbols.Keys.GetJson}"
+            Return $"{[namespace]}: {libpath}"
         End Function
 
     End Class
