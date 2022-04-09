@@ -30,18 +30,18 @@ Namespace Development.Package.NuGet.metadata
         ''' </summary>
         ''' <param name="loading"></param>
         ''' <returns></returns>
-        Private Shared Iterator Function createRReference(loading As RDependency()) As IEnumerable(Of dependencies)
+        Private Shared Iterator Function createRReference(loading As RDependency(), runtime As String) As IEnumerable(Of dependencies)
             For Each pkg As RDependency In loading
                 Yield New dependencies With {
-                    .targetFramework = pkg.library,
+                    .targetFramework = runtime,
                     .dependency = pkg.packages _
                         .SafeQuery _
                         .Select(Function(loader)
                                     Return New dependency With {
                                         .id = loader,
                                         .exclude = "Build,Analyzers",
-                                        .include = "all",
-                                        .version = "n/a"
+                                        .include = pkg.library,
+                                        .version = "1.0.0.0"
                                     }
                                 End Function) _
                         .ToArray
@@ -71,7 +71,7 @@ Namespace Development.Package.NuGet.metadata
                 .requireLicenseAcceptance = True,
                 .title = index.Title,
                 .version = index.Version,
-                .dependencies = createRReference(loading).ToArray,
+                .dependencies = createRReference(loading, CreatePackage.getRuntimeTags).ToArray,
                 .frameworkAssemblies = createDllFiles(pkg.assembly).ToArray
             }
 
