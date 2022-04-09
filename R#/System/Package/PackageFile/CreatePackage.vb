@@ -131,7 +131,7 @@ Namespace Development.Package.File
                 }
             End If
 #Else
-            If (framework = $"{dir}/net5.0").DirectoryExists Then
+            If (framework = $"{dir}/{CreatePackage.getRuntimeTags}").DirectoryExists Then
                 Return New AssemblyPack With {
                     .assembly = framework _
                         .Value _
@@ -139,14 +139,14 @@ Namespace Development.Package.File
                         .filter(assemblyFilters) _
                         .ToArray,
                     .directory = framework,
-                    .framework = ".NET Core 5"
+                    .framework = CreatePackage.getRuntimeTags
                 }
             Else
                 Call Console.WriteLine("There is no .NET Core 5 assembly was found in source pack.")
 
                 Return New AssemblyPack With {
                     .assembly = {},
-                    .framework = ".NET Core 5",
+                    .framework = CreatePackage.getRuntimeTags,
                     .directory = dir
                 }
             End If
