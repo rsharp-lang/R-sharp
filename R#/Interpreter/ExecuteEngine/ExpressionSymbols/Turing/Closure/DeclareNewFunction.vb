@@ -224,6 +224,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     End If
                 End If
 
+                ' removes global symbol to makes
+                ' local symbols overrides of the
+                ' global symbols
                 For Each name As String In var.names
                     Call envir.Delete(name, seekParent:=False)
                 Next

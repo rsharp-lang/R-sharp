@@ -217,6 +217,12 @@ Namespace Runtime
             End Set
         End Property
 
+        ''' <summary>
+        ''' run environment initialize:
+        ''' 
+        ''' 1. <see cref="symbols"/>
+        ''' 2. <see cref="hiddenFunctions"/>
+        ''' </summary>
         Sub New()
             symbols = New Dictionary(Of Symbol)
             hiddenFunctions = New Dictionary(Of Symbol)
@@ -441,7 +447,7 @@ Namespace Runtime
         End Function
 
         ''' <summary>
-        ''' 
+        ''' just removes the symbol reference in the runtime environment
         ''' </summary>
         ''' <param name="name"></param>
         ''' <param name="seekParent">
@@ -591,6 +597,11 @@ Namespace Runtime
             Yield GetEnumerator()
         End Function
 
+        ''' <summary>
+        ''' add all of the data symbols from <paramref name="parent"/> to <paramref name="join"/>.
+        ''' </summary>
+        ''' <param name="join"></param>
+        ''' <param name="parent"></param>
         Private Shared Sub push(join As Environment, parent As Environment)
             For Each func In parent.funcSymbols
                 If Not join.funcSymbols.ContainsKey(func.Key) Then
@@ -604,6 +615,12 @@ Namespace Runtime
             Next
         End Sub
 
+        ''' <summary>
+        ''' join two runtime environment
+        ''' </summary>
+        ''' <param name="closure"></param>
+        ''' <param name="parent"></param>
+        ''' <returns></returns>
         Public Shared Operator &(closure As Environment, parent As Environment) As Environment
             Dim join As New Environment(closure, closure.stackFrame, isInherits:=False)
 
