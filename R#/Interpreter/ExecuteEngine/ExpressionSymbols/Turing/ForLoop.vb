@@ -179,6 +179,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
         Private Function RunLoop(value As Object, stackframe As StackFrame, env As Environment) As Object
             Dim err As Message = Nothing
 
+            ' make a copy of the given runtime environment
+            ' and then push internal loop symbols
             Using closure As Environment = DeclareNewSymbol.PushNames(
                     names:=variables,
                     value:=value,
