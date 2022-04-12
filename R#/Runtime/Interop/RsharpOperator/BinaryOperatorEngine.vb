@@ -72,6 +72,7 @@ Namespace Runtime.Interop.Operator
         Sub New()
             Call arithmeticOperators()
             Call addEtcTypeCompres()
+            Call dateTimeOperators()
         End Sub
 
         ''' <summary>
@@ -171,6 +172,14 @@ Namespace Runtime.Interop.Operator
             Call addBinary(left, right, ">=", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) >= DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
             Call addBinary(left, right, "==", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) = DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
             Call addBinary(left, right, "!=", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) <> DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
+        End Sub
+
+        Private Sub dateTimeOperators()
+            Dim left As RType = RType.GetRSharpType(GetType(Date))
+            Dim right As RType = RType.GetRSharpType(GetType(TimeSpan))
+
+            Call addBinary(left, right, "+", Function(a, b, env) BinaryCoreInternal(Of Date, TimeSpan, Date)(asVector(Of Date)(a), asVector(Of TimeSpan)(b), Function(x, y) DirectCast(x, Date) + DirectCast(y, TimeSpan)).ToArray, Nothing, [overrides]:=False)
+            Call addBinary(left, right, "-", Function(a, b, env) BinaryCoreInternal(Of Date, TimeSpan, Date)(asVector(Of Date)(a), asVector(Of TimeSpan)(b), Function(x, y) DirectCast(x, Date) - DirectCast(y, TimeSpan)).ToArray, Nothing, [overrides]:=False)
         End Sub
 
         Public Function getOperator(symbol As String, env As Environment, Optional suppress As Boolean = False) As [Variant](Of BinaryIndex, Message)

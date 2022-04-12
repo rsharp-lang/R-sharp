@@ -281,6 +281,16 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' create time span from given days value.
+        ''' </summary>
+        ''' <param name="n"></param>
+        ''' <returns></returns>
+        <ExportAPI("days")>
+        Public Function days(n As Double) As TimeSpan
+            Return TimeSpan.FromDays(n)
+        End Function
+
         <ExportAPI("year")>
         <RApiReturn(GetType(Integer))>
         Public Function year(Optional dates As Date() = Nothing) As Object
