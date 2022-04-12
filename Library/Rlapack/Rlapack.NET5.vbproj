@@ -119,6 +119,8 @@
     <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
   </ItemGroup>
 
-  <Import Project="..\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
+
+
+  <Import Project="..\shares\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
 
 </Project>

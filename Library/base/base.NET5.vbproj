@@ -79,6 +79,8 @@
     </None>
   </ItemGroup>
 
-  <Import Project="..\JsonHelper\JsonHelper.projitems" Label="Shared" />
+
+
+  <Import Project="..\shares\JsonHelper\JsonHelper.projitems" Label="Shared" />
 
 </Project>

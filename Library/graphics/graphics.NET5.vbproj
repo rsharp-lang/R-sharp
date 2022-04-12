@@ -87,7 +87,7 @@
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\application%pdf\Pdf.NET5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\text%html\html_netcore5.vbproj" />
     <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
-    <ProjectReference Include="..\R.math\Rlapack.NET5.vbproj" />
+    <ProjectReference Include="..\Rlapack\Rlapack.NET5.vbproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -106,6 +106,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <Import Project="..\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
+
+
+  <Import Project="..\shares\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
 
 </Project>
