@@ -9,10 +9,11 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;Rsharp_app_release</Configurations>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
-    <OutputPath>../../App\</OutputPath>
+    <OutputPath>../../../App\</OutputPath>
     <DocumentationFile>npy.xml</DocumentationFile>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
@@ -50,6 +51,10 @@
     <Compile Remove="test\**" />
     <EmbeddedResource Remove="test\**" />
     <None Remove="test\**" />
+    <None Include="..\..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

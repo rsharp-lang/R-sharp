@@ -11,6 +11,7 @@
     <Configurations>Debug;Release;Rsharp_app_release</Configurations>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -41,7 +42,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
     <DocumentationFile>njl.xml</DocumentationFile>
-    <OutputPath>../../App\</OutputPath>
+    <OutputPath>../../../App\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
@@ -54,6 +55,13 @@
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\..\..\R#\Rsharp-netcore5.vbproj" />
     <ProjectReference Include="..\IronCodeDom\IronCodeDom.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
