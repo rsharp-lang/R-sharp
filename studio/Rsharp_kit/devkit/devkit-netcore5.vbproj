@@ -5,7 +5,7 @@
 	  <TargetFrameworks>net6.0;net5.0;net48</TargetFrameworks>
     <AssemblyName>devkit</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
-    <Configurations>Debug;Release;Rsharp_app_release</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32</Configurations>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -31,11 +31,28 @@
     <DocumentationFile>devkit.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|AnyCPU'">
+    <DocumentationFile>devkit.xml</DocumentationFile>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DocumentationFile>devkit.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
+    <DocumentationFile>devkit.xml</DocumentationFile>
+    <OutputPath>../../../App\</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <BaseAddress>4194304</BaseAddress>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
     <DocumentationFile>devkit.xml</DocumentationFile>
     <OutputPath>../../../App\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
@@ -60,6 +77,8 @@
     <ProjectReference Include="..\..\RData\RData.NET5.vbproj" />
   </ItemGroup>
 
-  <Import Project="..\..\..\Library\JsonHelper\JsonHelper.projitems" Label="Shared" />
+
+
+  <Import Project="..\..\..\Library\shares\JsonHelper\JsonHelper.projitems" Label="Shared" />
 
 </Project>

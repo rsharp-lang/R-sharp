@@ -2,23 +2,26 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <RootNamespace>SMRUCC.Rsharp.RDataSet</RootNamespace>
-	  <TargetFrameworks>net6.0;net5.0;net48</TargetFrameworks>
-    <AssemblyName>RData</AssemblyName>
-  
+    <RootNamespace>Rstudio</RootNamespace>
+	  <TargetFrameworks>net6.0-windows;net5.0-windows;net48</TargetFrameworks>
+    <AssemblyName>Rstudio</AssemblyName>
+   
     <Platforms>AnyCPU;x64</Platforms>
-    <Configurations>Debug;Release;Rsharp_app_release;mzkit</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;mzkit;mzkit_win32</Configurations>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	  <AssemblyVersion>2.33.*</AssemblyVersion>
 	  <Deterministic>false</Deterministic>
-	  <StartupObject />
+	  <RuntimeIdentifiers>win7-x64;win7-x86;win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
+	  <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+	  <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+	  <StartupObject></StartupObject>
+	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  <UseWindowsForms>true</UseWindowsForms> 
 	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
+	  <Copyright>GPL3</Copyright>
+	  <PackageLicenseExpression>GPL3</PackageLicenseExpression>
 	  <PackageIcon>R-sharp.png</PackageIcon>
 	  <PackageIconUrl />
-	  <Description>Reader of R datasets in .rda format</Description>
-	  <PackageReleaseNotes>Reader of R datasets in .rda format</PackageReleaseNotes>
-	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -26,7 +29,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineConstants>netcore5=1</DefineConstants>
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>Rstudio.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -34,14 +37,14 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineConstants>netcore5=1</DefineConstants>
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>Rstudio.xml</DocumentationFile>
     <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
     <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>Rstudio.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
@@ -50,19 +53,35 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>Rstudio.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|AnyCPU'">
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>Rstudio.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|AnyCPU'">
+    <DocumentationFile>Rstudio.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit|AnyCPU'">
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>Rstudio.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>Rstudio.xml</DocumentationFile>
+    <OutputPath>../../App/</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
+    <DocumentationFile>Rstudio.xml</DocumentationFile>
     <OutputPath>../../App/</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
@@ -74,7 +93,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit|x64'">
-    <DocumentationFile>RData.xml</DocumentationFile>
+    <DocumentationFile>Rstudio.xml</DocumentationFile>
     <OutputPath>D:\mzkit\Rscript\Library\mzkit_app\assembly\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
@@ -86,31 +105,34 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="test\**" />
-    <EmbeddedResource Remove="test\**" />
-    <None Remove="test\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\..\docs\images\R-sharp.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<Import Include="System.Data" />
+		<Import Include="System.Drawing" />
+		<Import Include="System.Windows.Forms" />
+		<Import Include="System.Windows.Forms.Design" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\BinaryData\BinaryData\binarydata-netcore5.vbproj" />
+	<ItemGroup>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\Math\Math.NET5.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\gr\Microsoft.VisualBasic.Imaging\imaging.NET5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\application%json\JSON-netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\text%html\html_netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\text%markdown\markdown.NET5.vbproj" />
     <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
   </ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\docs\images\R-sharp.png">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
+	  </None>
+	</ItemGroup>
+
+  <Import Project="..\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
 
 </Project>

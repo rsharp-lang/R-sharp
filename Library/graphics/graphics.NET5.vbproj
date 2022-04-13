@@ -4,7 +4,7 @@
     <RootNamespace>Rgraphics</RootNamespace>
 	  <TargetFrameworks>net6.0;net5.0;net48</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
-    <Configurations>Debug;Release;Rsharp_app_release</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32</Configurations>
     <AssemblyName>graphics</AssemblyName>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
@@ -35,6 +35,16 @@
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|AnyCPU'">
+    <DocumentationFile>graphics.xml</DocumentationFile>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|AnyCPU'">
     <DocumentationFile>graphics.xml</DocumentationFile>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
@@ -46,6 +56,16 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DocumentationFile>graphics.xml</DocumentationFile>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
     <DocumentationFile>graphics.xml</DocumentationFile>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
@@ -87,7 +107,7 @@
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\application%pdf\Pdf.NET5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\text%html\html_netcore5.vbproj" />
     <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
-    <ProjectReference Include="..\R.math\Rlapack.NET5.vbproj" />
+    <ProjectReference Include="..\Rlapack\Rlapack.NET5.vbproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -106,6 +126,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <Import Project="..\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
+
+
+  <Import Project="..\shares\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
 
 </Project>

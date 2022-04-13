@@ -10,7 +10,7 @@
     <Copyright>I@xieguigang.me</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>R-sharp.png</PackageIcon>
-    <Configurations>Debug;Release;Rsharp_app_release;LipidSearch;PlantMAT;NPSearch</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;LipidSearch;PlantMAT;NPSearch;mzkit_win32</Configurations>
     <Platforms>AnyCPU;x64</Platforms>
     <PackageProjectUrl>https://github.com/SMRUCC/R-sharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SMRUCC/R-sharp</RepositoryUrl>
@@ -38,6 +38,19 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
+    <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DocumentationFile>snowFall.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
     <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
@@ -95,6 +108,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|AnyCPU'">
+    <DocumentationFile>snowFall.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|AnyCPU'">
     <DocumentationFile>snowFall.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
