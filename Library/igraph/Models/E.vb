@@ -81,6 +81,12 @@ Public Class E : Implements RNames, RNameIndex, RIndex, RIndexer
         End Get
     End Property
 
+    Public ReadOnly Property weight As vector
+        Get
+            Return vector.asVector(edges.Select(Function(l) l.weight))
+        End Get
+    End Property
+
     Sub New(edges As IEnumerable(Of Edge))
         Me.edges = edges.ToArray
         Me.edgeIndex = Me.edges.ToDictionary(Function(e) e.ID)
