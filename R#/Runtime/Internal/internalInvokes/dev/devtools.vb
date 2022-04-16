@@ -1,60 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::daa9356a762e4c0db32b14c0ca9a7754, R-sharp\R#\Runtime\Internal\internalInvokes\dev\devtools.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 131
-    '    Code Lines: 73
-    ' Comment Lines: 43
-    '   Blank Lines: 15
-    '     File Size: 5.97 KB
+' Summaries:
 
 
-    '     Module devtools
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: fetchProfileData, flash_load, profilerFrames
-    ' 
-    '         Sub: gc
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 131
+'    Code Lines: 73
+' Comment Lines: 43
+'   Blank Lines: 15
+'     File Size: 5.97 KB
+
+
+'     Module devtools
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: fetchProfileData, flash_load, profilerFrames
+' 
+'         Sub: gc
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.Repository
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Interpreter
@@ -92,6 +93,16 @@ Namespace Runtime.Internal.Invokes
             frames.columns("line") = data.profiles.Select(Function(f) f.stackframe.Line).ToArray
 
             Return frames
+        End Function
+
+        <ExportAPI("strHashcode")>
+        Public Function stringHashCode(str As String) As Integer
+            Return str.GetDeterministicHashCode
+        End Function
+
+        <ExportAPI("FNV1aHashcode")>
+        Public Function FNV1aHash(<RRawVectorArgument> [set] As Object, Optional env As Environment = Nothing) As Integer
+            Return FNV1a.GetHashCode(getObjectSet([set], env))
         End Function
 
         ''' <summary>
