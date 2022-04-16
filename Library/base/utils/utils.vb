@@ -351,7 +351,7 @@ Public Module utils
         ElseIf type Is GetType(IO.DataFrame) Then
             Return DirectCast(x, IO.DataFrame).Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf REnv.isVector(Of EntityObject)(x) Then
-            Return DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file, encoding:=encoding.CodePage, silent:=True)
+            Return DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).SaveDataSet(path:=file, encoding:=encoding.CodePage, silent:=True)
         ElseIf REnv.isVector(Of DataSet)(x) Then
             Return DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, encoding:=encoding.CodePage, silent:=True, metaBlank:=0)
         ElseIf type.IsArray OrElse type Is GetType(vector) Then
@@ -368,7 +368,7 @@ Public Module utils
                     Return stream.populates(Of DataSet)(env).SaveTo(path:=file, encoding:=encoding.CodePage, silent:=True, metaBlank:=0)
                 End If
             Else
-                Return stream.populates(Of EntityObject)(env).SaveTo(path:=file, encoding:=encoding.CodePage, silent:=True)
+                Return stream.populates(Of EntityObject)(env).SaveDataSet(path:=file, encoding:=encoding.CodePage, silent:=True)
             End If
         End If
     End Function
