@@ -74,7 +74,11 @@ Namespace Runtime
         Public Function isVector(Of T)(x As Object) As Boolean
             If x Is Nothing Then
                 Return False
-            ElseIf Not x.GetType.IsArray Then
+            ElseIf TypeOf x Is vector Then
+                x = DirectCast(x, vector).data
+            End If
+
+            If Not x.GetType.IsArray Then
                 If x.GetType Is GetType(T) Then
                     Return True
                 Else
