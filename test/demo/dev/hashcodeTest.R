@@ -14,15 +14,18 @@ print(colnames(dataset));
 
 index = dataset[, ["cas", "kegg", "formula", "inchikey", "hmdb","chebi","lipidmaps"]];
 
+cat("\n\n");
+
+print("view content index data:");
 print(index);
 
 hashSet = for(obj in as.list(index, byrow = TRUE)) {
-	# cat("\n\n");
-			
-	# str(obj);
 	toString(abs(FNV1aHashcode(obj)), format ="F0");
 }
 
+cat("\n\n");
+
+print("get unique reference id of the metadataset:");
 print(`BioDeep_${str_pad(hashSet, 10, pad = "0")}`);
 
 # [1]     "BioDeep_0575054657" "BioDeep_1600502933" "BioDeep_0835306603"
