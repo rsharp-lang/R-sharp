@@ -19,9 +19,11 @@ cat("\n\n");
 print("view content index data:");
 print(index);
 
-hashSet = for(obj in as.list(index, byrow = TRUE)) {
+hashSet = index
+|> as.list(byrow = TRUE)
+|> sapply(function(obj) {
 	toString(abs(FNV1aHashcode(obj)), format ="F0");
-}
+});
 
 cat("\n\n");
 
