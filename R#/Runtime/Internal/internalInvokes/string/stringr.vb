@@ -939,10 +939,7 @@ Namespace Runtime.Internal.Invokes
             Dim strs As String() = REnv.asVector(Of String)(x)
             Dim substrs As String() = strs _
                 .Select(Function(str)
-                            Return str.Substring(
-                                startIndex:=start - 1,
-                                length:=[stop] - start + 1
-                            )
+                            Return VBStr.Mid(str, start, [stop] - start + 1)
                         End Function) _
                 .ToArray
 
