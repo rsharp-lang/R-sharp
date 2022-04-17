@@ -493,7 +493,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 If indexer.Length = 1 Then
                     Dim idx As Object = indexer.GetValue(Scan0)
 
-                    If TypeOf idx Is Integer Then
+                    If idx Is Nothing Then
+                        idx = False
+                    End If
+
+                    If TypeOf idx Is Integer OrElse TypeOf idx Is Long Then
                         If CInt(idx) > 1 Then
                             Return Nothing
                         ElseIf TypeOf tmp Is list Then
@@ -512,7 +516,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                             Throw New NotImplementedException
                         End If
                     Else
-                        Throw New NotImplementedException
+                        Throw New NotImplementedException(idx.GetType.FullName)
                     End If
                 End If
 
