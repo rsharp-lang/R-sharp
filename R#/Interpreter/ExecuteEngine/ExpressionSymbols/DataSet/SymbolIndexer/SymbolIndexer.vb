@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::1c41d77b5571c13fc6dcf9a9a2f8020c, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 516
-    '    Code Lines: 392
-    ' Comment Lines: 55
-    '   Blank Lines: 69
-    '     File Size: 22.89 KB
+' Summaries:
 
 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
-    '                   getColumn, getDataframeRowRange, listSubset, ToString, vectorSubset
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 516
+'    Code Lines: 392
+' Comment Lines: 55
+'   Blank Lines: 69
+'     File Size: 22.89 KB
+
+
+'     Class SymbolIndexer
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
+'                   getColumn, getDataframeRowRange, listSubset, ToString, vectorSubset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -491,12 +491,28 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Dim tmp As Object = sequence.GetValue(Scan0)
 
                 If indexer.Length = 1 Then
-                    Dim i As Integer = CInt(indexer.GetValue(Scan0))
+                    Dim idx As Object = indexer.GetValue(Scan0)
 
-                    If i > 1 Then
-                        Return Nothing
-                    ElseIf TypeOf tmp Is list Then
-                        Return tmp
+                    If TypeOf idx Is Integer Then
+                        If CInt(idx) > 1 Then
+                            Return Nothing
+                        ElseIf TypeOf tmp Is list Then
+                            Return tmp
+                        End If
+                    ElseIf TypeOf idx Is Boolean Then
+                        If CBool(idx) Then
+                            Return tmp
+                        Else
+                            Return Nothing
+                        End If
+                    ElseIf TypeOf idx Is String Then
+                        If TypeOf tmp Is list Then
+                            Return DirectCast(tmp, list).getByName(CStr(idx))
+                        Else
+                            Throw New NotImplementedException
+                        End If
+                    Else
+                        Throw New NotImplementedException
                     End If
                 End If
 
