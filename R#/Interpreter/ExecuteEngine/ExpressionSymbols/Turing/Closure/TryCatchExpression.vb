@@ -92,6 +92,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 End With
             Else
                 Me.exception = New SymbolReference("ex")
+                Me.catch = New ClosureExpression({})
             End If
         End Sub
 
