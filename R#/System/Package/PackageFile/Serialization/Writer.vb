@@ -109,6 +109,7 @@ Namespace Development.Package.File
         Public ReadOnly Property RReturns As RReturns
         Public ReadOnly Property RTypeAssert As RTypeOf
         Public ReadOnly Property RShell As RCommandLine
+        Public ReadOnly Property RTryCatch As RTryCatch
 
 #Region "keywords"
         Public ReadOnly Property Rfor As RFor
@@ -141,6 +142,7 @@ Namespace Development.Package.File
             Me.RClosure = New RClosure(Me)
             Me.RReturns = New RReturns(Me)
             Me.RTypeAssert = New RTypeOf(Me)
+            Me.RTryCatch = New RTryCatch(Me)
             Me.RShell = New RCommandLine(Me)
         End Sub
 
@@ -193,7 +195,7 @@ Namespace Development.Package.File
                     Return RClosure.GetBuffer(x)
 
                 Case GetType(ReturnValue) : Return RReturns.GetBuffer(x)
-
+                Case GetType(TryCatchExpression) : Return RTryCatch.GetBuffer(x)
                 Case GetType(ScriptFolder), GetType(ScriptSymbol)
 
                     Dim message As String = $"script folder and script annotation symbol is not allowed in the package build action!"

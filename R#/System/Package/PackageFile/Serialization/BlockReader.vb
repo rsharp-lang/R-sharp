@@ -108,6 +108,8 @@ Namespace Development.Package.File
 
                         Return New RClosure(Nothing).GetExpression(buffer, Me, desc)
 
+                    Case ExpressionTypes.TryCatch : Return New RTryCatch(Nothing).GetExpression(buffer, Me, desc)
+
                     Case ExpressionTypes.StringInterpolation : Return New RStringInterpolation(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.Literal,
                          ExpressionTypes.SymbolRegexp

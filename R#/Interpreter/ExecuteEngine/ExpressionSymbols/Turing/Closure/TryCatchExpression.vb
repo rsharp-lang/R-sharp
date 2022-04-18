@@ -75,10 +75,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Get
         End Property
 
-        Dim sourceMap As StackFrame
-        Dim [try] As Expression
-        Dim [catch] As Expression
-        Dim exception As SymbolReference
+        Friend ReadOnly sourceMap As StackFrame
+        Friend ReadOnly [try] As Expression
+        Friend ReadOnly [catch] As Expression
+        Friend ReadOnly exception As SymbolReference
 
         Sub New([try] As Expression, [catch] As Expression, sourceMap As StackFrame)
             Me.try = [try]
@@ -90,7 +90,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     Me.exception = New SymbolReference(.parameterNames(Scan0))
                     Me.try = .closure
                 End With
+            Else
+                Me.exception = New SymbolReference("ex")
             End If
+        End Sub
+
+        Friend Sub New([try] As Expression, [catch] As Expression, exception As SymbolReference, sourceMap As StackFrame)
+            Me.try = [try]
+            Me.catch = [catch]
+            Me.exception = exception
+            Me.sourceMap = sourceMap
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
