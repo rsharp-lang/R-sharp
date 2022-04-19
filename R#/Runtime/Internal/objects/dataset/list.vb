@@ -223,19 +223,26 @@ Namespace Runtime.Internal.Object
                 err = value
                 Return Nothing
             Else
-                Return ctypeInternal(Of T)(value, env)
+                Return ctypeInternal(Of T)(value, env, err)
             End If
         End Function
 
-        Private Shared Function ctypeInternal(Of T)(value As Object, env As Environment) As T
+        Private Shared Function ctypeInternal(Of T)(value As Object, env As Environment, ByRef err As Message) As T
             Dim type As Type = GetType(T)
 
             If Not value Is Nothing AndAlso value.GetType Is GetType(T) Then
                 Return value
             ElseIf type.IsArray Then
-                Return CObj(asVector(value, type.GetElementType, env))
+                value = CObj(asVector(value, type.GetElementType, env))
             Else
-                Return RCType.CTypeDynamic([single](value), GetType(T), env)
+                value = RCType.CTypeDynamic([single](value), GetType(T), env)
+            End If
+
+            If TypeOf value Is Message Then
+                err = value
+                Return Nothing
+            Else
+                Return value
             End If
         End Function
 
@@ -254,7 +261,7 @@ Namespace Runtime.Internal.Object
                 err = slots(name)
                 Return Nothing
             Else
-                Return ctypeInternal(Of T)(slots(name), env)
+                Return ctypeInternal(Of T)(slots(name), env, err)
             End If
         End Function
 
