@@ -168,11 +168,22 @@ RE0:
             ' SMRUCC/R#.n/a.InitializeEnvironment at 02.lipidmaps.R:line 0
             ' SMRUCC/R#.global.<globalEnvironment> at <globalEnvironment>:line n/a
             If TypeOf obj Is vector Then
+                obj = DirectCast(obj, vector).data
                 GoTo RE0
             End If
 
             Try
-                Return Conversion.CTypeDynamic(obj, type)
+                If obj.GetType.IsArray AndAlso obj.GetType.GetElementType Is type Then
+                    If DirectCast(obj, Array).Length = 0 Then
+                        Return Nothing
+                    ElseIf DirectCast(obj, Array).Length > 1 Then
+                        Call env.AddMessage("target array contains multiple elements, while the target conversion type is a single scalar element...")
+                    End If
+
+                    Return DirectCast(obj, Array).GetValue(Scan0)
+                Else
+                    Return Conversion.CTypeDynamic(obj, type)
+                End If
             Catch ex As Exception
                 Return Internal.debug.stop(ex, env)
             End Try
