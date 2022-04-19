@@ -558,7 +558,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="strings">The string to search for a match.</param>
         ''' <param name="env"></param>
         ''' <returns></returns>
-        <ExportAPI("match")>
+        <ExportAPI("regex_match")>
         Public Function match(regexp As Regex,
                               <RRawVectorArgument>
                               strings As Object,

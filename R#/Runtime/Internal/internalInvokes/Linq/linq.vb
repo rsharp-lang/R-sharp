@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::ee9110e582beb01a890f38a9f8290d52, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 965
-    '    Code Lines: 557
-    ' Comment Lines: 305
-    '   Blank Lines: 103
-    '     File Size: 45.41 KB
+' Summaries:
 
 
-    '     Module linq
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: all, any, doWhile, fastIndexing, first
-    '                   groupBy, groupsSummary, groupSummary, last, left_join
-    '                   orderBy, produceKeyedSequence, progress, projectAs, reverse
-    '                   rotate_left, rotate_right, runFilterPipeline, runWhichFilter, skip
-    '                   sort, split, take, tryKeyBy, unique
-    '                   where, whichMax, whichMin
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 965
+'    Code Lines: 557
+' Comment Lines: 305
+'   Blank Lines: 103
+'     File Size: 45.41 KB
+
+
+'     Module linq
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: all, any, doWhile, fastIndexing, first
+'                   groupBy, groupsSummary, groupSummary, last, left_join
+'                   orderBy, produceKeyedSequence, progress, projectAs, reverse
+'                   rotate_left, rotate_right, runFilterPipeline, runWhichFilter, skip
+'                   sort, split, take, tryKeyBy, unique
+'                   where, whichMax, whichMin
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -212,6 +212,58 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Else
                 Return Rset.getObjectSet(sequence, env).Take(n).ToArray
             End If
+        End Function
+
+        ''' <summary>
+        ''' ### Value Matching
+        ''' 
+        ''' match returns a vector of the positions of 
+        ''' (first) matches of its first argument in 
+        ''' its second.
+        ''' </summary>
+        ''' <param name="x">
+        ''' vector or NULL: the values to be matched. Long 
+        ''' vectors are supported.
+        ''' </param>
+        ''' <param name="table">
+        ''' vector or NULL: the values to be matched against. 
+        ''' Long vectors are not supported. (using as index 
+        ''' object.)
+        ''' </param>
+        ''' <param name="nomatch">
+        ''' the value to be returned in the case when no 
+        ''' match is found. Note that it is coerced to 
+        ''' integer.
+        ''' </param>
+        ''' <param name="incomparables">
+        ''' a vector of values that cannot be matched. 
+        ''' Any value in x matching a value in this vector 
+        ''' is assigned the nomatch value. For historical 
+        ''' reasons, FALSE is equivalent to NULL.
+        ''' </param>
+        ''' <returns>
+        ''' A vector of the same length as x.
+        ''' An integer vector giving the position in table of 
+        ''' the first match if there Is a match, otherwise 
+        ''' nomatch.
+        ''' If x[i] Is found To equal table[j] Then the value 
+        ''' returned In the i-th position Of the Return value 
+        ''' Is j, For the smallest possible j. If no match Is 
+        ''' found, the value Is nomatch.
+        ''' </returns>
+        <ExportAPI("match")>
+        Public Function match(x As Array, table As Array,
+                              Optional nomatch As Integer = -1,
+                              Optional incomparables As Integer = Nothing) As Integer()
+
+            Dim index As Index(Of String) = DirectCast(REnv.asVector(Of String)(table), String())
+            Dim values As String() = REnv.asVector(Of String)(x)
+            Dim ordinal As Integer() = (From str As String
+                                        In values
+                                        Let i As Integer = If(str Like index, index(str) + 1, nomatch)
+                                        Select i).ToArray
+
+            Return ordinal
         End Function
 
         ''' <summary>
