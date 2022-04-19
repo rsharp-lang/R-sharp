@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::f7f7466ad4c46380a7d25cd8212f39e5, R-sharp\R#\Runtime\Internal\objects\dataset\list.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 339
-    '    Code Lines: 225
-    ' Comment Lines: 59
-    '   Blank Lines: 55
-    '     File Size: 12.22 KB
+' Summaries:
 
 
-    '     Class list
-    ' 
-    '         Properties: data, length, slots
-    ' 
-    '         Constructor: (+6 Overloads) Sub New
-    ' 
-    '         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) getByIndex, (+2 Overloads) getByName
-    '                   getNames, GetSlots, (+2 Overloads) getValue, hasName, namedValues
-    '                   setByindex, setByIndex, (+2 Overloads) setByName, setNames, ToString
-    ' 
-    '         Sub: add
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 339
+'    Code Lines: 225
+' Comment Lines: 59
+'   Blank Lines: 55
+'     File Size: 12.22 KB
+
+
+'     Class list
+' 
+'         Properties: data, length, slots
+' 
+'         Constructor: (+6 Overloads) Sub New
+' 
+'         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) getByIndex, (+2 Overloads) getByName
+'                   getNames, GetSlots, (+2 Overloads) getValue, hasName, namedValues
+'                   setByindex, setByIndex, (+2 Overloads) setByName, setNames, ToString
+' 
+'         Sub: add
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -205,7 +205,7 @@ Namespace Runtime.Internal.Object
         ''' <param name="env"></param>
         ''' <param name="default">the default value.</param>
         ''' <returns></returns>
-        Public Function getValue(Of T)(synonym As String(), env As Environment, Optional [default] As T = Nothing) As T
+        Public Function getValue(Of T)(synonym As String(), env As Environment, Optional [default] As T = Nothing, Optional ByRef err As Message = Nothing) As T
             Dim value As Object = Nothing
             Dim hasHit As Boolean = False
 
@@ -219,6 +219,9 @@ Namespace Runtime.Internal.Object
 
             If Not hasHit Then
                 Return [default]
+            ElseIf TypeOf value Is Message Then
+                err = value
+                Return Nothing
             Else
                 Return ctypeInternal(Of T)(value, env)
             End If
@@ -244,9 +247,12 @@ Namespace Runtime.Internal.Object
         ''' <param name="env"></param>
         ''' <param name="default">the default value.</param>
         ''' <returns></returns>
-        Public Function getValue(Of T)(name As String, env As Environment, Optional [default] As T = Nothing) As T
+        Public Function getValue(Of T)(name As String, env As Environment, Optional [default] As T = Nothing, Optional ByRef err As Message = Nothing) As T
             If Not slots.ContainsKey(name) Then
                 Return [default]
+            ElseIf TypeOf slots(name) Is Message Then
+                err = slots(name)
+                Return Nothing
             Else
                 Return ctypeInternal(Of T)(slots(name), env)
             End If
@@ -257,11 +263,17 @@ Namespace Runtime.Internal.Object
                                         Optional ByRef err As Message = Nothing) As Dictionary(Of String, T)
 
             Try
-                Return slots _
-                    .ToDictionary(Function(a) a.Key,
-                                  Function(a)
-                                      Return getValue(Of T)(a.Key, env, [default])
-                                  End Function)
+                Dim generic As New Dictionary(Of String, T)
+
+                For Each key As String In slots.Keys
+                    Dim value As T = getValue(Of T)(key, env, [default], err)
+
+                    If value Is Nothing AndAlso Not err Is Nothing Then
+                        Return Nothing
+                    End If
+                Next
+
+                Return generic
             Catch ex As Exception
                 err = Internal.debug.stop(ex, env)
                 Return Nothing
