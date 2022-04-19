@@ -80,7 +80,7 @@ Namespace Runtime.Internal.Object.Converts
             ElseIf type Is GetType(vbObject) Then
                 Return asObject(obj)
             End If
-
+RE0:
             Dim objType As Type = obj.GetType
 
             If objType Is type Then
@@ -150,6 +150,25 @@ Namespace Runtime.Internal.Object.Converts
                 Dim array As Array = Array.CreateInstance(objType, 1)
                 array.SetValue(obj, Scan0)
                 Return array
+            End If
+
+            ' unsure about this type cast bugs
+            ' Error in <globalEnvironment> -> InitializeEnvironment -> for_loop_[1517] -> "insert" -> insert
+            ' 1. InvalidCastException: Conversion from type 'vector' to type 'String' is not valid.
+            ' 2. stackFrames:
+            '      at Microsoft.VisualBasic.CompilerServices.Conversions.ObjectUserDefinedConversion(Object Expression, type TargetType)
+            '      at Microsoft.VisualBasic.CompilerServices.Conversions.ChangeType(Object Expression, type TargetType, Boolean Dynamic)
+            '      at SMRUCC.Rsharp.Runtime.Internal.Object.Converts.RCType.CTypeDynamic(Object obj, type type, Environment env) in D:\GCModeller\src\R-sharp\R#\Runtime\Internal\objects\RConversion\RCType.vb:line 156
+            ' 
+            ' R# Source: Call "insert"(& kb, [&lipid]:&LM_ID, "lipidmaps", &meta, "selfReference" <- False)
+
+            ' Query.R#_interop: .insert at graphR.dll: line <unknown>
+            ' SMRUCC/R#.call_function."insert" at 02.lipidmaps.R:line 90
+            ' SMRUCC/R#.forloop.for_loop_[1517] at 02.lipidmaps.R:line 36
+            ' SMRUCC/R#.n/a.InitializeEnvironment at 02.lipidmaps.R:line 0
+            ' SMRUCC/R#.global.<globalEnvironment> at <globalEnvironment>:line n/a
+            If TypeOf obj Is vector Then
+                GoTo RE0
             End If
 
             Try
