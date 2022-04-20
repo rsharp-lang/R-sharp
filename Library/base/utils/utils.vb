@@ -313,7 +313,8 @@ Public Module utils
                               Optional row_names As Object = True,
                               Optional fileEncoding As Object = "",
                               Optional tsv As Boolean = False,
-                              Optional number_format As String = "G6",
+                              <RDefaultExpression>
+                              Optional number_format As Object = "~`${getOption('f64.format')}${getOption('digits')}`",
                               Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -330,6 +331,7 @@ Public Module utils
 
         Dim type As Type = x.GetType
         Dim encoding As Encodings = TextEncodings.GetEncodings(Rsharp.GetEncoding(fileEncoding))
+        Dim formatNumber As String = DirectCast(REnv.asVector(Of String)(number_format), String()).ElementAtOrDefault(Scan0, [default]:="G6")
 
         If type Is GetType(Rdataframe) Then
             x = DirectCast(x, Rdataframe).CheckDimension(env)
@@ -339,7 +341,7 @@ Public Module utils
             End If
 
             Return DirectCast(x, Rdataframe) _
-                .DataFrameRows(row_names, env) _
+                .DataFrameRows(row_names, formatNumber, env) _
                 .Save(
                     path:=file,
                     encoding:=encoding,
@@ -382,7 +384,7 @@ Public Module utils
     ''' <param name="env"></param>
     ''' <returns></returns>
     <Extension>
-    Friend Function DataFrameRows(x As Rdataframe, row_names As Object, env As Environment) As File
+    Friend Function DataFrameRows(x As Rdataframe, row_names As Object, formatNumber As String, env As Environment) As File
         Dim inputRowNames As String() = Nothing
 
         If row_names Is Nothing Then
@@ -400,6 +402,28 @@ Public Module utils
             inputRowNames = REnv.asVector(Of String)(row_names)
             row_names = False
         End If
+
+        x = New Rdataframe(x)
+
+        For Each name As String In x.colnames
+            Dim v As Array = x.columns(name)
+
+            If TypeOf v Is Double() Then
+                v = DirectCast(v, Double()) _
+                    .Select(Function(d) d.ToString(formatNumber)) _
+                    .ToArray
+            ElseIf TypeOf v Is Object() Then
+                v = REnv.TryCastGenericArray(v, env)
+
+                If TypeOf v Is Double() Then
+                    v = DirectCast(v, Double()) _
+                        .Select(Function(d) d.ToString(formatNumber)) _
+                        .ToArray
+                End If
+            End If
+
+            x.columns(name) = v
+        Next
 
         Dim matrix As String()() = TableFormatter _
             .GetTable(

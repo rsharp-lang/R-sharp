@@ -65,8 +65,10 @@ Namespace Runtime.Interop
     ''' <remarks>
     ''' for example, there is an optional argument in package api:
     ''' 
-    ''' &lt;RDefaultExpression> 
-    ''' Optional time As Object = "~now()"
+    ''' ```
+    ''' &lt;<see cref="RDefaultExpressionAttribute"/>> 
+    ''' Optional time As <see cref="Object"/> = "~now()"
+    ''' ```
     ''' 
     ''' then the default value of the parameter time can be the 
     ''' evaluated result of the default expression ``now()``.
