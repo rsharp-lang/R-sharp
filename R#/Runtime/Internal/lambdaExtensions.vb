@@ -66,7 +66,7 @@ Namespace Runtime.Internal
         ''' <returns></returns>
         ''' 
         <DebuggerStepThrough>
-        Friend Function invokeArgument(value As Object) As InvokeParameter()
+        Friend Function invokeArgument(ParamArray value As Object()) As InvokeParameter()
             Return InvokeParameter.CreateLiterals(value)
         End Function
 

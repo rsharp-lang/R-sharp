@@ -266,9 +266,10 @@ Namespace Runtime.Internal.Invokes
                 Dim seq As New List(Of Object)
                 Dim names As New List(Of String)
                 Dim value As Object
+                Dim i As i32 = 1
 
                 For Each key As Object In list.Keys
-                    value = apply.Invoke(envir, invokeArgument(list(key)))
+                    value = apply.Invoke(envir, InvokeParameter.CreateLiterals(list(key), ++i))
 
                     If Program.isException(value) Then
                         Return value
@@ -293,11 +294,12 @@ Namespace Runtime.Internal.Invokes
                 Dim seq As New List(Of Object)
                 Dim value As Object
                 Dim argsPreviews As InvokeParameter()
+                Dim i As i32 = 1
 
                 For Each d In REnv.asVector(Of Object)(X) _
                     .AsObjectEnumerator
 
-                    argsPreviews = invokeArgument(d)
+                    argsPreviews = invokeArgument(d, ++i)
                     value = apply.Invoke(envir, argsPreviews)
 
                     If Program.isException(value) Then
@@ -369,6 +371,7 @@ Namespace Runtime.Internal.Invokes
             Dim getName As Func(Of SeqValue(Of Object), String) = keyNameAuto(names, envir)
             Dim value As Object
             Dim keyName$
+            Dim idx As i32 = 1
 
             If X.GetType Is GetType(Dictionary(Of String, Object)) Then
                 Dim i As i32 = Scan0
@@ -380,7 +383,7 @@ Namespace Runtime.Internal.Invokes
                         keyName = getName(New SeqValue(Of Object)(++i, d.Value))
                     End If
 
-                    list(keyName) = apply.Invoke(envir, invokeArgument(d.Value))
+                    list(keyName) = apply.Invoke(envir, invokeArgument(d.Value, ++idx))
 
                     If Program.isException(list(keyName)) Then
                         Return list(keyName)
@@ -392,7 +395,7 @@ Namespace Runtime.Internal.Invokes
                     .SeqIterator
 
                     keyName = getName(obj)
-                    value = apply.Invoke(envir, invokeArgument(obj.value))
+                    value = apply.Invoke(envir, invokeArgument(obj.value, ++idx))
 
                     If Program.isException(value) Then
                         Return value
@@ -406,7 +409,7 @@ Namespace Runtime.Internal.Invokes
                     .SeqIterator
 
                     keyName = getName(d)
-                    value = apply.Invoke(envir, invokeArgument(d.value))
+                    value = apply.Invoke(envir, invokeArgument(d.value, ++idx))
 
                     If Program.isException(value) Then
                         Return value
