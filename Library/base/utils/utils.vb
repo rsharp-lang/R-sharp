@@ -313,6 +313,7 @@ Public Module utils
                               Optional row_names As Object = True,
                               Optional fileEncoding As Object = "",
                               Optional tsv As Boolean = False,
+                              Optional number_format As String = "G6",
                               Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -373,6 +374,13 @@ Public Module utils
         End If
     End Function
 
+    ''' <summary>
+    ''' create R dataframe object as sciBASIC csv table file model
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="row_names"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <Extension>
     Friend Function DataFrameRows(x As Rdataframe, row_names As Object, env As Environment) As File
         Dim inputRowNames As String() = Nothing

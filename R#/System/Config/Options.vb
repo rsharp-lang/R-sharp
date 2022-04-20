@@ -145,6 +145,8 @@ Namespace Development.Configuration
         End Property
 
         ''' <summary>
+        ''' [digits]:
+        ''' 
         ''' controls the number of significant (see signif) digits to print when printing 
         ''' numeric values. It is a suggestion only. Valid values are 1...22 with default 
         ''' 7. See the note in print.default about values greater than 15.
@@ -157,7 +159,7 @@ Namespace Development.Configuration
         End Property
 
         ''' <summary>
-        ''' ``F`` or ``G``
+        ''' [f64.format]: ``F`` or ``G``
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property f64Format As String
@@ -314,7 +316,17 @@ Namespace Development.Configuration
             If configValues.ContainsKey(opt) Then
                 Return configValues(opt)
             Else
-                Return setOption(opt, [default], env)
+                ' have no config value in the settings profile
+                ' returns the default config value at here and 
+                ' save config profile
+                '
+                Select Case opt
+                    Case "f64.format" : Return setOption(opt, If([default], "G"), env)
+                    Case "digits" : Return setOption(opt, If([default], "6"), env)
+
+                    Case Else
+                        Return setOption(opt, [default], env)
+                End Select
             End If
         End Function
 

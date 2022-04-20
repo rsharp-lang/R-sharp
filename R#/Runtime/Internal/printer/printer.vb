@@ -131,6 +131,12 @@ Namespace Runtime.Internal.ConsolePrinter
             Return $"#{yy}-{mm}-{dd} {h}:{m}:{s}#"
         End Function
 
+        ''' <summary>
+        ''' get formatter function for double to string
+        ''' </summary>
+        ''' <param name="printContent"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Function f64_InternalToString(printContent As Boolean, env As GlobalEnvironment) As IStringBuilder
             Dim opts As Options = env.globalEnvironment.options
             Dim format As String = $"{opts.f64Format}{opts.digits}"
