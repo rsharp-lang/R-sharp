@@ -16,3 +16,14 @@ const queryWeb = function(url, graphquery) {
     |> graphquery::query(query)
     ;
 }
+
+#' get system os name
+#' 
+#' @return "Windows" for Microsoft Windows
+#'
+const platformName = function() {
+	const os = Sys.info();
+	const name = os$"sysname";
+	
+	name;
+}
