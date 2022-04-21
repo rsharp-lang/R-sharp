@@ -4,7 +4,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 
 Namespace Runtime.Internal.Invokes
 
-    Module drawing
+    Module internalDrawing
 
         <ExportAPI("new_bitmap")>
         Public Function new_bitmap(width As Integer, height As Integer) As Bitmap
