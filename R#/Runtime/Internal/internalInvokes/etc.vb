@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::ca8af559a7a194449b87656ebd9576f9, R-sharp\R#\Runtime\Internal\internalInvokes\etc.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 265
-    '    Code Lines: 146
-    ' Comment Lines: 97
-    '   Blank Lines: 22
-    '     File Size: 11.15 KB
+' Summaries:
 
 
-    '     Module etc
-    ' 
-    '         Function: contributors, getActivators, license, man, platformID
-    '                   RVer, sessionInfo, Sys_getenv, Sys_getlocale, Sys_info
-    '                   unixtimestamp
-    ' 
-    '         Sub: demo
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 265
+'    Code Lines: 146
+' Comment Lines: 97
+'   Blank Lines: 22
+'     File Size: 11.15 KB
+
+
+'     Module etc
+' 
+'         Function: contributors, getActivators, license, man, platformID
+'                   RVer, sessionInfo, Sys_getenv, Sys_getlocale, Sys_info
+'                   unixtimestamp
+' 
+'         Sub: demo
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -145,7 +145,16 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("Sys.info")>
         Public Function Sys_info() As list
             Return New list With {
-                .slots = New Dictionary(Of String, Object)
+                .slots = New Dictionary(Of String, Object) From {
+                    {"sysname", Win32.OSVersion.Platform.ToString},
+                    {"release", Win32.OSVersion.VersionString},
+                    {"version", Win32.OSVersion.Version.ToString},
+                    {"nodename", Win32.MachineName},
+                    {"machine", If(Win32.Is64BitOperatingSystem, "x86-64", "x86")},
+                    {"login", Win32.UserName},
+                    {"user", Win32.UserName},
+                    {"effective_user", Win32.UserDomainName}
+                }
             }
         End Function
 
