@@ -1,56 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::c78c85f065ad0142518c93e7c0dfbad1, R-sharp\Library\R.graphics\grDevices.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 419
-    '    Code Lines: 283
-    ' Comment Lines: 95
-    '   Blank Lines: 41
-    '     File Size: 17.75 KB
+' Summaries:
 
 
-    ' Module grDevices
-    ' 
-    '     Function: adjustAlpha, colorPopulator, colors, imageAttrs, pdfDevice
-    '               rgb, saveBitmap, saveImage, svg
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 419
+'    Code Lines: 283
+' Comment Lines: 95
+'   Blank Lines: 41
+'     File Size: 17.75 KB
+
+
+' Module grDevices
+' 
+'     Function: adjustAlpha, colorPopulator, colors, imageAttrs, pdfDevice
+'               rgb, saveBitmap, saveImage, svg
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
+Imports System.Drawing.Imaging
 Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.CommandLine
@@ -230,15 +231,27 @@ Public Module grDevices
         Return Nothing
     End Function
 
+    ''' <summary>
+    ''' save gdi+ image, file format to save will be auto detected via the file extension name suffix.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="graphics"></param>
+    ''' <param name="file"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Private Function saveBitmap(Of T As Image)(graphics As T, file As Object, env As Environment) As Object
         If file Is Nothing OrElse TypeOf file Is String AndAlso DirectCast(file, String).StringEmpty Then
             env.globalEnvironment.stdout.Write(DirectCast(graphics, Image))
         ElseIf TypeOf file Is String Then
-            Return DirectCast(graphics, Image).SaveAs(file)
+            Return DirectCast(graphics, Image).SaveAs(file, getFormatFromSuffix(filename:=file))
         ElseIf TypeOf file Is Stream Then
+            ' save as png image by default for stream object
+            ' due to the reason of we can not detected the
+            ' file name suffix from a stream object
             Dim fs As Stream = DirectCast(file, Stream)
-            Call DirectCast(graphics, Image).Save(fs, Imaging.ImageFormat.Png)
+            Call DirectCast(graphics, Image).Save(fs, tryMeasureFormat(fs))
             Call fs.Flush()
+
             Return fs
         ElseIf TypeOf file Is bitmapBuffer Then
             DirectCast(file, bitmapBuffer).bitmap = graphics
@@ -248,6 +261,33 @@ Public Module grDevices
         End If
 
         Return Nothing
+    End Function
+
+    Private Function tryMeasureFormat(file As Stream) As ImageFormat
+        If TypeOf file Is FileStream Then
+            Dim fs As FileStream = DirectCast(file, FileStream)
+            Dim filename As String = fs.Name
+            Dim format As ImageFormats = getFormatFromSuffix(filename)
+
+            Return format.GetFormat
+        Else
+            Return ImageFormat.Png
+        End If
+    End Function
+
+    Private Function getFormatFromSuffix(filename As String) As ImageFormats
+        Select Case filename.ExtensionSuffix.ToLower
+            Case "jpg", "jpeg" : Return ImageFormats.Jpeg
+            Case "bmp" : Return ImageFormats.Bmp
+            Case "gif" : Return ImageFormats.Gif
+            Case "ico" : Return ImageFormats.Icon
+            Case "png" : Return ImageFormats.Png
+            Case "tiff" : Return ImageFormats.Tiff
+            Case "emf" : Return ImageFormats.Emf
+            Case "wmf" : Return ImageFormats.Wmf
+            Case Else
+                Return ImageFormats.Png
+        End Select
     End Function
 
     <ExportAPI("graphics.attrs")>
