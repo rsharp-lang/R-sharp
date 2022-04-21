@@ -102,6 +102,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             cli = shell
         End Sub
 
+        Public Overrides Function ToString() As String
+            Return cli.ToString
+        End Function
+
         Public Sub SetAttribute(data As NamedValue(Of String))
             Select Case data.Name.ToLower
                 Case "ioredirect"
