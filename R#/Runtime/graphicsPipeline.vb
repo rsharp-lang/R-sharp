@@ -149,6 +149,11 @@ Namespace Runtime
         End Function
 
         <Extension>
+        Public Function getSize(args As list, env As Environment, [default] As SizeF) As SizeF
+            Return args.slots.getSize(env, [default])
+        End Function
+
+        <Extension>
         Public Function getSize(args As Dictionary(Of String, Object), env As Environment, [default] As SizeF) As SizeF
             Dim w# = 1920
             Dim h# = 1600

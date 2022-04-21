@@ -312,21 +312,32 @@ Namespace Runtime.Internal.Invokes
 
             If image Is Nothing Then
                 ' just open a new device
-                Dim size As Size = graphicsPipeline.getSize(args!size, env, "2700,2000").SizeParser
-                Dim buffer = GetFileStream(file, FileAccess.Write, env)
+                Dim size As SizeF = args.getSize(env, [default]:=New SizeF(2700, 2000))
                 Dim fill As Color = graphicsPipeline.GetRawColor(args!color, [default]:=NameOf(Color.Transparent))
 
-                If buffer Like GetType(Message) Then
-                    Return buffer.TryCast(Of Message)
-                Else
-                    Call openNew(
-                        dev:=size.CreateGDIDevice(filled:=fill),
-                        buffer:=buffer.TryCast(Of Stream),
-                        args:=args
-                    )
-                End If
+                If file Is Nothing Then
+                    ' just open a new canvas object and returns to user?
+                    Dim println As Action(Of Object) = env.WriteLineHandler
 
-                Return Nothing
+                    Call println($"open a new bitmap canvas devices:")
+                    Call println($"  (width={size.Width}, height={size.Height})")
+
+                    Return New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill)
+                Else
+                    Dim buffer = GetFileStream(file, FileAccess.Write, env)
+
+                    If buffer Like GetType(Message) Then
+                        Return buffer.TryCast(Of Message)
+                    Else
+                        Call openNew(
+                            dev:=New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill),
+                            buffer:=buffer.TryCast(Of Stream),
+                            args:=args
+                        )
+                    End If
+
+                    Return Nothing
+                End If
             Else
                 Return FileStreamWriter(
                     env:=env,
