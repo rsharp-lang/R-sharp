@@ -25,5 +25,9 @@ const platformName = function() {
 	const os = Sys.info();
 	const name = os$"sysname";
 	
-	name;
+	if (name == "Win32NT") {
+		"Windows";
+	} else {
+		name;
+	}	
 }
