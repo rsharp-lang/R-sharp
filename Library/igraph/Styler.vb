@@ -144,11 +144,11 @@ Module Styler
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("color")>
-    Public Function color(g As Object,
-                          <RRawVectorArgument>
-                          <RByRefValueAssign>
-                          Optional val As Object = Nothing,
-                          Optional env As Environment = Nothing) As Object
+    Public Function elementColor(g As Object,
+                                 <RRawVectorArgument>
+                                 <RByRefValueAssign>
+                                 Optional val As Object = Nothing,
+                                 Optional env As Environment = Nothing) As Object
 
         If val Is Nothing Then
             If TypeOf g Is E Then
