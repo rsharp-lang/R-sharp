@@ -10,7 +10,8 @@ Namespace Runtime.Internal.Invokes
 
         Dim g As IGraphics
         Dim file As Stream
-        Dim args As List
+        Dim args As list
+        Dim index As Integer
 
         Public ReadOnly Property Background As Color
             Get

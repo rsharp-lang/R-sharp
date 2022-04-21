@@ -87,7 +87,8 @@ Namespace Runtime.Internal.Invokes
             curDev = New graphicsDevice With {
                 .g = dev,
                 .file = buffer,
-                .args = args
+                .args = args,
+                .index = devlist.Count
             }
             devlist.Add(curDev)
         End Sub
@@ -141,7 +142,32 @@ Namespace Runtime.Internal.Invokes
             If curDev.g Is Nothing Then
                 Return -1
             Else
-                Return curDev.GetHashCode
+                Return curDev.index
+            End If
+        End Function
+
+        ''' <summary>
+        ''' dev.set makes the specified device the active device. If there 
+        ''' is no device with that number, it is equivalent to dev.next. 
+        ''' If which = 1 it opens a new device and selects that.
+        ''' </summary>
+        ''' <returns></returns>
+        <ExportAPI("dev.set")>
+        Public Function setCurrentDev(Optional dev As IGraphics = Nothing,
+                                      Optional which As Integer = -1,
+                                      Optional env As Environment = Nothing) As Object
+
+            If dev Is Nothing AndAlso which < 0 Then
+                Return Internal.debug.stop("no active graphics device is specificed!", env)
+            ElseIf dev Is Nothing Then
+                curDev = devlist(which)
+            Else
+                curDev = New graphicsDevice With {
+                    .args = New list With {.slots = New Dictionary(Of String, Object)},
+                    .file = Nothing,
+                    .g = dev,
+                    .index = -1
+                }
             End If
         End Function
 
