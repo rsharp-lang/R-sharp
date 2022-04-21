@@ -359,6 +359,6 @@
       <Name>R</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\..\..\Library\JsonHelper\JsonHelper.projitems" Label="Shared" />
+  <Import Project="..\..\..\Library\shares\JsonHelper\JsonHelper.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

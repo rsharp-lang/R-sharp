@@ -657,6 +657,6 @@
       <Name>R.math</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
+ 
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
