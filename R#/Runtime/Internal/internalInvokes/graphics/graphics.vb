@@ -74,30 +74,6 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes
 
-    Public Structure graphicsDevice
-
-        Dim g As IGraphics
-        Dim file As Stream
-        Dim args As list
-
-        Public ReadOnly Property Background As Color
-            Get
-                Return g.Background
-            End Get
-        End Property
-
-        Default Public ReadOnly Property Item(ref As String) As Object
-            Get
-                Return args.slots(ref)
-            End Get
-        End Property
-
-        Public Overrides Function ToString() As String
-            Return $"[{g.ToString}] {args.getNames.GetJson}"
-        End Function
-
-    End Structure
-
     Module graphics
 
         ReadOnly devlist As New List(Of graphicsDevice)

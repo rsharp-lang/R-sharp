@@ -253,7 +253,7 @@ Module Visualize
                                     If TypeOf textureBrush Is SolidBrush Then
                                         Call gr.DrawCircle(center, r, textureBrush)
                                     Else
-                                        Dim res = value.LoadImage.ColorReplace(Drawing.Color.White, Drawing.Color.Transparent)
+                                        Dim res = value.LoadImage.ColorReplace(System.Drawing.Color.White, System.Drawing.Color.Transparent)
                                         Dim size = res.Size
                                         Dim maxR = r * 2.5
                                         Dim scale = stdNum.Max(size.Width, size.Height) / maxR
