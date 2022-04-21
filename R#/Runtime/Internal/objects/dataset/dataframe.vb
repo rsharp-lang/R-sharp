@@ -214,6 +214,10 @@ Namespace Runtime.Internal.Object
         Sub New()
         End Sub
 
+        ''' <summary>
+        ''' do data clone
+        ''' </summary>
+        ''' <param name="clone"></param>
         Sub New(clone As dataframe)
             rownames = clone.rownames
             columns = New Dictionary(Of String, Array)(clone.columns)

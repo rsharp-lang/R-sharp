@@ -158,6 +158,8 @@ Module xlsx
                               Optional sheetName$ = "Sheet1",
                               Optional row_names As Boolean = True,
                               Optional fileEncoding As Object = "",
+                              <RDefaultExpression>
+                              Optional number_format As Object = "~`${getOption('f64.format')}${getOption('digits')}`",
                               Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
             Return Internal.debug.stop("Empty dataframe object!", env)
@@ -173,6 +175,7 @@ Module xlsx
         Dim type As Type = x.GetType
         Dim encoding As Encodings = TextEncodings.GetEncodings(Rsharp.GetEncoding(fileEncoding))
         Dim table As File
+        Dim formatNumber As String = DirectCast(REnv.asVector(Of String)(number_format), String()).ElementAtOrDefault(Scan0, [default]:="G6")
 
         If type Is GetType(Rdataframe) Then
             x = DirectCast(x, Rdataframe).CheckDimension(env)
@@ -181,7 +184,7 @@ Module xlsx
                 Return x
             End If
 
-            table = DirectCast(x, Rdataframe).DataFrameRows(row_names, env)
+            table = DirectCast(x, Rdataframe).DataFrameRows(row_names, formatNumber, env)
         ElseIf type Is GetType(File) Then
             table = DirectCast(x, File)
         ElseIf type Is GetType(IO.DataFrame) Then
