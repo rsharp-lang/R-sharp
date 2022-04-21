@@ -203,6 +203,8 @@ Public Module grDevices
             Return saveBitmap(Of Image)(graphics, file, env)
         ElseIf graphics.GetType Is GetType(Bitmap) Then
             Return saveBitmap(Of Bitmap)(graphics, file, env)
+        ElseIf TypeOf graphics Is Microsoft.VisualBasic.Imaging.Graphics2D Then
+            Return saveBitmap(Of Image)(DirectCast(graphics, Microsoft.VisualBasic.Imaging.Graphics2D).ImageResource, file, env)
         ElseIf graphics.GetType.IsInheritsFrom(GetType(GraphicsData)) Then
             With DirectCast(graphics, GraphicsData)
                 If file Is Nothing OrElse TypeOf file Is String AndAlso DirectCast(file, String).StringEmpty Then
