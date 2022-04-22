@@ -73,6 +73,10 @@ Namespace Runtime.Components
         ''' </summary>
         ''' <returns></returns>
         Public Property message As String()
+        ''' <summary>
+        ''' the .NET log levels of current message object, value could be warning and error 
+        ''' </summary>
+        ''' <returns></returns>
         Public Property level As MSG_TYPES
 
         ''' <summary>
@@ -99,10 +103,19 @@ Namespace Runtime.Components
         ''' Convert R# error message to VB.NET exception object
         ''' </summary>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function ToException() As RuntimeError
             Return New RuntimeError(Me)
         End Function
 
+        ''' <summary>
+        ''' create a symbol not found error message
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <param name="symbolName$"></param>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
         Public Shared Function SymbolNotFound(envir As Environment, symbolName$, type As TypeCodes) As Message
             Dim exception$
 

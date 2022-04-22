@@ -96,15 +96,22 @@ Namespace Runtime.Internal
         End Sub
 
         ''' <summary>
-        ''' 
+        ''' Create an error message to populate to the upper environment.
         ''' </summary>
-        ''' <param name="message"></param>
-        ''' <param name="envir"></param>
+        ''' <param name="message">the message content, value of this 
+        ''' parameter could be a string character data, a string vector 
+        ''' or a .NET exception object.
+        ''' </param>
+        ''' <param name="envir">
+        ''' the environment source stack of the current exception happended.
+        ''' </param>
         ''' <param name="suppress">
         ''' this parameter indicated that the R environment should not 
         ''' throw the exception when running in debug mode. 
         ''' </param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' a generated error message
+        ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function [stop](message As Object, envir As Environment, Optional suppress As Boolean = False) As Message
             Dim debugMode As Boolean = envir.globalEnvironment.debugMode AndAlso Not suppress
@@ -141,6 +148,13 @@ Namespace Runtime.Internal
             End If
         End Function
 
+        ''' <summary>
+        ''' get a stackframe list of current environment traceback
+        ''' </summary>
+        ''' <param name="parent">
+        ''' the parent enviroment traceback
+        ''' </param>
+        ''' <returns></returns>
         Friend Shared Function getEnvironmentStack(parent As Environment) As StackFrame()
             Dim frames As New List(Of StackFrame)
 
@@ -172,6 +186,12 @@ Namespace Runtime.Internal
             }
         End Function
 
+        ''' <summary>
+        ''' convert the .NET exception as the ``R#`` runtime error message.
+        ''' </summary>
+        ''' <param name="ex"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Private Shared Function createDotNetExceptionMessage(ex As Exception, envir As Environment) As Message
             Dim messages As New List(Of String)
             Dim exception As Exception = ex
@@ -196,10 +216,21 @@ Namespace Runtime.Internal
             }
         End Function
 
+        ''' <summary>
+        ''' print the stacktrace as string for a given .NET exception object
+        ''' </summary>
+        ''' <param name="err"></param>
+        ''' <returns></returns>
         Public Shared Function PrintRExceptionStackTrace(err As ExceptionData) As String
             Return PrintRStackTrace(err.StackTrace)
         End Function
 
+        ''' <summary>
+        ''' print the stacktrace as string for a given ``R#`` 
+        ''' exception message object.
+        ''' </summary>
+        ''' <param name="stacktrace"></param>
+        ''' <returns></returns>
         Public Shared Function PrintRStackTrace(stacktrace As StackFrame()) As String
             Dim info As New StringBuilder
 
@@ -210,6 +241,15 @@ Namespace Runtime.Internal
             Return info.ToString
         End Function
 
+        ''' <summary>
+        ''' print the given warning message
+        ''' </summary>
+        ''' <param name="warnings">
+        ''' a list of warning message
+        ''' </param>
+        ''' <param name="globalEnv"></param>
+        ''' <param name="all"></param>
+        ''' <returns></returns>
         Public Shared Function PrintWarningMessages(warnings As IEnumerable(Of Message), globalEnv As GlobalEnvironment, Optional all As Boolean = False) As Object
             Dim i As i32 = 1
             Dim backup As ConsoleColor

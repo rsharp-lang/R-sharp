@@ -277,6 +277,8 @@ Namespace Runtime.Internal.Object
 
                     If value Is Nothing AndAlso Not err Is Nothing Then
                         Return Nothing
+                    Else
+                        Call generic.Add(key, value)
                     End If
                 Next
 
