@@ -378,6 +378,10 @@ Namespace Runtime
                                 Return typeofT.castSingle(Of T)(o)
                             End Function) _
                     .ToArray
+            ElseIf TypeOf value Is Object() AndAlso Not GetType(t) Is GetType(Object) Then
+                value = DirectCast(value, Array) _
+                    .AsObjectEnumerator(Of T) _
+                    .ToArray
             End If
 
             Return value
