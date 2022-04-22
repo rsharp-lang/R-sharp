@@ -279,7 +279,11 @@ printSingleElement:
         ''' <param name="elementType"></param>
         ''' <returns></returns>
         <Extension>
-        Friend Function ToString(elementType As Type, env As GlobalEnvironment, printContent As Boolean, Optional allowClassPrinter As Boolean = True) As IStringBuilder
+        Friend Function ToString(elementType As Type,
+                                 env As GlobalEnvironment,
+                                 printContent As Boolean,
+                                 Optional allowClassPrinter As Boolean = True) As IStringBuilder
+
             If RtoString.ContainsKey(elementType) Then
                 Return RtoString(elementType)
             ElseIf RInternalToString.ContainsKey(elementType) Then
