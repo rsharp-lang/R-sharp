@@ -65,6 +65,19 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Public Module ApiArgumentHelpers
 
+    ''' <summary>
+    ''' create a name tagged value object from a 
+    ''' given data source value
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="value">
+    ''' any type of the .NET object
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <param name="api">
+    ''' the traceback tag
+    ''' </param>
+    ''' <returns></returns>
     Public Function GetNamedValueTuple(Of T)(value As Object, env As Environment, <CallerMemberName> Optional api$ = Nothing) As [Variant](Of NamedValue(Of T), Message)
         If value Is Nothing Then
             Return Nothing
@@ -90,7 +103,8 @@ Public Module ApiArgumentHelpers
                 Return debug.stop({
                     "invalid data type for cast to a numeric range!",
                     "required: " & GetType(NamedValue(Of T)).FullName,
-                    "given: " & value.GetType.FullName
+                    "given: " & value.GetType.FullName,
+                    ".NET traceback: " & api
                 }, env)
         End Select
     End Function

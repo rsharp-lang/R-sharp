@@ -466,6 +466,15 @@ Public Module utils
         Return DirectCast(x, Array)
     End Function
 
+    ''' <summary>
+    ''' save a generic data collection as csv data file
+    ''' </summary>
+    ''' <param name="x">should be an array to save as csv file</param>
+    ''' <param name="type">the element type of the items in the target array <paramref name="x"/></param>
+    ''' <param name="file">the file path string</param>
+    ''' <param name="encoding">text encoding of the csv text file</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function saveGeneric(x As Object, type As Type, file$, encoding As Encoding, env As Environment) As Boolean
         Return MeasureGenericType(x, type).SaveTable(file, encoding, type, silent:=True)
