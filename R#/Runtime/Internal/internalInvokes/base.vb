@@ -2298,7 +2298,7 @@ RE0:
             If namelist Is Nothing OrElse namelist.Length = 0 Then
                 Return RObj.names.getRowNames([object], envir)
             Else
-                Return RObj.names.setRowNames([object], namelist, envir)
+                Return RObj.names.setRowNames([object], REnv.asVector(Of String)(namelist), envir)
             End If
         End Function
 

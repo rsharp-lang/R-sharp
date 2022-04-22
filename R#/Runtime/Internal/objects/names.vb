@@ -196,7 +196,7 @@ RE0:
         ''' <param name="env"></param>
         ''' <returns></returns>
         Public Function setNames([object] As Object, namelist As Array, env As Environment) As Object
-            namelist = Runtime.asVector(Of String)(namelist)
+            namelist = REnv.asVector(Of String)(namelist)
 
             ' set names
             Select Case [object].GetType
@@ -232,7 +232,7 @@ RE0:
                         "given size: " & namelist.Length
                     }, envir)
                 Else
-                    data.rownames = asVector(Of String)(namelist)
+                    data.rownames = REnv.asVector(Of String)(namelist)
                     Return data.rownames
                 End If
             Else
