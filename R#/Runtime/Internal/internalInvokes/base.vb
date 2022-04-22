@@ -173,7 +173,10 @@ Namespace Runtime.Internal.Invokes
         ''' (the terms ‘category’ and ‘enumerated type’ are also used 
         ''' for factors).
         ''' </summary>
-        ''' <param name="x">a vector of data, usually taking a small number of distinct values.</param>
+        ''' <param name="x">
+        ''' a vector of data, usually taking a small number of distinct 
+        ''' values.
+        ''' </param>
         ''' <returns></returns>
         <ExportAPI("factor")>
         Public Function factor(x As String()) As Integer()
@@ -192,37 +195,67 @@ Namespace Runtime.Internal.Invokes
         ''' seq.int is a primitive which can be much faster but has a few restrictions. 
         ''' seq_along and seq_len are very fast primitives for two common cases.
         ''' </summary>
-        ''' <param name="from">the starting And (maximal) End values Of the sequence. Of length 1 unless just from Is supplied As an unnamed argument.</param>
-        ''' <param name="[to]">the starting And (maximal) End values Of the sequence. Of length 1 unless just from Is supplied As an unnamed argument.</param>
+        ''' <param name="from">the starting And (maximal) End values Of the sequence. 
+        ''' Of length 1 unless just from Is supplied As an unnamed argument.</param>
+        ''' <param name="[to]">the starting And (maximal) End values Of the sequence. 
+        ''' Of length 1 unless just from Is supplied As an unnamed argument.</param>
         ''' <param name="by">number: increment of the sequence.</param>
         ''' <returns></returns>
         ''' <remarks>
         ''' Numerical inputs should all be finite (that is, not infinite, NaN or NA).
-        ''' The interpretation Of the unnamed arguments Of seq And seq.int Is Not standard, And it Is recommended always To name the arguments When programming.
-        ''' seq Is generic, And only the default method Is described here. Note that it dispatches on the class of the first argument irrespective of argument names. This can have unintended consequences if it Is called with just one argument intending this to be taken as along.with it Is much better to use seq_along in that case.
-        ''' seq.int Is an internal generic which dispatches on methods for "seq" based on the class of the first supplied argument (before argument matching).
+        ''' The interpretation Of the unnamed arguments Of seq And seq.int Is Not standard, 
+        ''' And it Is recommended always To name the arguments When programming.
+        ''' 
+        ''' seq Is generic, And only the default method Is described here. Note that it 
+        ''' dispatches on the class of the first argument irrespective of argument names. 
+        ''' This can have unintended consequences if it Is called with just one argument 
+        ''' intending this to be taken as along.with it Is much better to use seq_along 
+        ''' in that case.
+        ''' 
+        ''' seq.int Is an internal generic which dispatches on methods for "seq" based on 
+        ''' the class of the first supplied argument (before argument matching).
+        ''' 
         ''' Typical usages are
-        ''' seq(from, to)
-        ''' seq(from, to, by= )
-        ''' seq(from, to, length.out= )
-        ''' seq(along.with= )
-        ''' seq(from)
-        ''' seq(length.out= )
-        ''' The first form generates the sequence from, from+/-1, ..., To (identical To from:to).
+        ''' 
+        ''' + seq(from, to)
+        ''' + seq(from, to, by= )
+        ''' + seq(from, to, length.out= )
+        ''' + seq(along.with= )
+        ''' + seq(from)
+        ''' + seq(length.out= )
+        ''' 
+        ''' The first form generates the sequence from, from+/-1, ..., To (identical To 
+        ''' from:to).
         '''
-        ''' The second form generates from, from+by, ..., up To the sequence value less than Or equal To To. Specifying To - from And by Of opposite signs Is an Error. Note that the computed final value can go just beyond To To allow For rounding Error, but Is truncated To To. ('Just beyond’ is by up to 1e-10 times abs(from - to).)
+        ''' The second form generates from, from+by, ..., up To the sequence value less 
+        ''' than Or equal To To. Specifying To - from And by Of opposite signs Is an Error. 
+        ''' Note that the computed final value can go just beyond To To allow For rounding 
+        ''' Error, but Is truncated To To. ('Just beyond’ is by up to 1e-10 times
+        ''' abs(from - to).)
         '''
-        ''' The third generates a sequence Of length.out equally spaced values from from To To. (length.out Is usually abbreviated To length Or len, And seq_len Is much faster.)
+        ''' The third generates a sequence Of length.out equally spaced values from from To 
+        ''' To. (length.out Is usually abbreviated To length Or len, And seq_len Is much 
+        ''' faster.)
         '''
-        ''' The fourth form generates the Integer sequence 1, 2, ..., length(along.With). (along.With Is usually abbreviated To along, And seq_along Is much faster.)
+        ''' The fourth form generates the Integer sequence 1, 2, ..., length(along.With). 
+        ''' (along.With Is usually abbreviated To along, And seq_along Is much faster.)
         '''
-        ''' The fifth form generates the sequence 1, 2, ..., length(from) (As If argument along.With had been specified), unless the argument Is numeric Of length 1 When it Is interpreted As 1:from (even for seq(0) for compatibility with S). Using either seq_along Or seq_len Is much preferred (unless strict S compatibility Is essential).
+        ''' The fifth form generates the sequence 1, 2, ..., length(from) (As If argument 
+        ''' along.With had been specified), unless the argument Is numeric Of length 1 When 
+        ''' it Is interpreted As 1:from (even for seq(0) for compatibility with S). Using 
+        ''' either seq_along Or seq_len Is much preferred (unless strict S compatibility 
+        ''' Is essential).
         '''
-        ''' The final form generates the Integer sequence 1, 2, ..., length.out unless length.out = 0, When it generates Integer(0).
+        ''' The final form generates the Integer sequence 1, 2, ..., length.out unless 
+        ''' length.out = 0, When it generates Integer(0).
         '''
-        ''' Very small sequences (With from - To Of the order Of 10^{-14} times the larger Of the ends) will Return from.
+        ''' Very small sequences (With from - To Of the order Of 10^{-14} times the larger 
+        ''' Of the ends) will Return from.
         '''
-        ''' For seq(only), up To two Of from, To And by can be supplied As complex values provided length.out Or along.With Is specified. More generally, the Default method Of seq will handle classed objects With methods For the Math, Ops And Summary group generics.
+        ''' For seq(only), up To two Of from, To And by can be supplied As complex values 
+        ''' provided length.out Or along.With Is specified. More generally, the Default 
+        ''' method Of seq will handle classed objects With methods For the Math, Ops 
+        ''' And Summary group generics.
         '''
         ''' seq.int, seq_along And seq_len are primitive.
         ''' </remarks>
@@ -1416,7 +1449,8 @@ RE0:
         ''' The generic Function Is.na indicates which elements are missing.
         ''' The generic Function Is.na&lt;- sets elements To NA.
         ''' </summary>
-        ''' <param name="x">an R object to be tested: the default method for is.na and anyNA handle atomic vectors, lists, pairlists, and NULL.</param>
+        ''' <param name="x">an R object to be tested: the default method for is.na and anyNA 
+        ''' handle atomic vectors, lists, pairlists, and NULL.</param>
         ''' <param name="env"></param>
         ''' <returns>
         ''' The default method for is.na applied to an atomic vector returns a logical vector 
@@ -1438,7 +1472,8 @@ RE0:
         ''' the data frame, And With dimnames taken from the row And column names Of the data 
         ''' frame.
         '''
-        ''' anyNA(NULL) Is false; Is.na(NULL) Is logical(0) (no longer warning since R version 3.5.0).
+        ''' anyNA(NULL) Is false; Is.na(NULL) Is logical(0) (no longer warning since R version 
+        ''' 3.5.0).
         ''' </returns>
         <ExportAPI("is.na")>
         Public Function isNA(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
@@ -1671,8 +1706,11 @@ RE0:
         ''' affect the way in which R computes and displays its results.
         ''' </summary>
         ''' <param name="opts">
-        ''' any options can be defined, using name = value. However, only the ones below are used in base R.
-        ''' Options can also be passed by giving a Single unnamed argument which Is a named list.
+        ''' any options can be defined, using name = value. However, only the 
+        ''' ones below are used in base R.
+        ''' 
+        ''' Options can also be passed by giving a Single unnamed argument which 
+        ''' Is a named list.
         ''' </param>
         ''' <param name="envir"></param>
         ''' <returns>
@@ -1683,131 +1721,220 @@ RE0:
         ''' <remarks>
         ''' Options used in base R
         ''' 
-        ''' + add.smooth: typically logical, defaulting to TRUE. Could also be set to an integer for specifying how many (simulated) smooths should be added. This is currently only used by plot.lm.
-        ''' + askYesNo: a function (typically set by a front-end) to ask the user binary response functions in a consistent way, or a vector of strings used by askYesNo to use as default responses for such questions.
+        ''' + add.smooth: typically logical, defaulting to TRUE. Could also be set to an 
+        ''' integer for specifying how many (simulated) smooths should be added. This 
+        ''' is currently only used by plot.lm.
+        ''' + askYesNo: a function (typically set by a front-end) to ask the user binary 
+        ''' response functions in a consistent way, or a vector of strings used by 
+        ''' askYesNo to use as default responses for such questions.
         '''
         ''' browserNLdisabled:
         ''' logical: whether newline is disabled as a synonym for "n" in the browser.
         '''
         ''' checkPackageLicense:
-        ''' logical, not set by default. If true, loadNamespace asks a user to accept any non-standard license at first load of the package.
+        ''' logical, not set by default. If true, loadNamespace asks a user to accept any 
+        ''' non-standard license at first load of the package.
         '''
         ''' check.bounds:
-        ''' logical, defaulting to FALSE. If true, a warning is produced whenever a vector (atomic or list) is extended, by something like x &lt;- 1:3; x[5] &lt;- 6.
+        ''' logical, defaulting to FALSE. If true, a warning is produced whenever a vector 
+        ''' (atomic or list) is extended, by something like x &lt;- 1:3; x[5] &lt;- 6.
         '''
         ''' CBoundsCheck:
-        ''' logical, controlling whether .C and .Fortran make copies to check for array over-runs on the atomic vector arguments.
+        ''' logical, controlling whether .C and .Fortran make copies to check for array 
+        ''' over-runs on the atomic vector arguments.
         '''
-        ''' Initially set from value of the environment variable R_C_BOUNDS_CHECK (set to yes to enable).
+        ''' Initially set from value of the environment variable R_C_BOUNDS_CHECK (set to 
+        ''' yes to enable).
         '''
         ''' conflicts.policy:
-        ''' character string or list controlling handling of conflicts found in calls to library or require. See library for details.
+        ''' character string or list controlling handling of conflicts found in calls to 
+        ''' library or require. See library for details.
         '''
         ''' continue:
-        ''' a non-empty string setting the prompt used for lines which continue over one line.
+        ''' a non-empty string setting the prompt used for lines which continue over one 
+        ''' line.
         '''
         ''' defaultPackages:
-        ''' the packages that are attached by default when R starts up. Initially set from value of the environment variable R_DEFAULT_PACKAGES, or if that is unset to c("datasets", "utils", "grDevices", "graphics", "stats", "methods"). (Set R_DEFAULT_PACKAGES to NULL or a comma-separated list of package names.) It will not work to set this in a ‘.Rprofile’ file, as its value is consulted before that file is read.
+        ''' the packages that are attached by default when R starts up. Initially set from 
+        ''' value of the environment variable R_DEFAULT_PACKAGES, or if that is unset 
+        ''' to c("datasets", "utils", "grDevices", "graphics", "stats", "methods"). (Set 
+        ''' R_DEFAULT_PACKAGES to NULL or a comma-separated list of package names.) It 
+        ''' will not work to set this in a ‘.Rprofile’ file, as its value is consulted 
+        ''' before that file is read.
         '''
         ''' deparse.cutoff:
-        ''' integer value controlling the printing of language constructs which are deparsed. Default 60.
+        ''' integer value controlling the printing of language constructs which are deparsed. 
+        ''' Default 60.
         '''
         ''' deparse.max.lines:
-        ''' controls the number of lines used when deparsing in traceback, browser, and upon entry to a function whose debugging flag is set. Initially unset, and only used if set to a positive integer.
+        ''' controls the number of lines used when deparsing in traceback, browser, and 
+        ''' upon entry to a function whose debugging flag is set. Initially unset, and 
+        ''' only used if set to a positive integer.
         '''
         ''' digits:
-        ''' controls the number of significant (see signif) digits to print when printing numeric values. It is a suggestion only. Valid values are 1...22 with default 7. See the note in print.default about values greater than 15.
+        ''' controls the number of significant (see signif) digits to print when printing 
+        ''' numeric values. It is a suggestion only. Valid values are 1...22 with default 
+        ''' 7. See the note in print.default about values greater than 15.
         '''
         ''' digits.secs:
-        ''' controls the maximum number of digits to print when formatting time values in seconds. Valid values are 0...6 with default 0. See strftime.
+        ''' controls the maximum number of digits to print when formatting time values 
+        ''' in seconds. Valid values are 0...6 with default 0. See strftime.
         '''
         ''' download.file.extra:
         ''' Extra command-line argument(s) for non-default methods: see download.file.
         '''
         ''' download.file.method:
-        ''' Method to be used for download.file. Currently download methods "internal", "wininet" (Windows only), "libcurl", "wget" and "curl" are available. If not set, method = "auto" is chosen: see download.file.
+        ''' Method to be used for download.file. Currently download methods "internal",
+        ''' "wininet" (Windows only), "libcurl", "wget" and "curl" are available. If 
+        ''' not set, method = "auto" is chosen: see download.file.
         '''
         ''' echo:
-        ''' logical. Only used in non-interactive mode, when it controls whether input is echoed. Command-line option --slave sets this to FALSE, but otherwise it starts the session as TRUE.
+        ''' logical. Only used in non-interactive mode, when it controls whether input 
+        ''' is echoed. Command-line option --slave sets this to FALSE, but otherwise 
+        ''' it starts the session as TRUE.
         '''
         ''' encoding:
         ''' The name of an encoding, default "native.enc". See connections.
         '''
         ''' error:
-        ''' either a function or an expression governing the handling of non-catastrophic errors such as those generated by stop as well as by signals and internally detected errors. If the option is a function, a call to that function, with no arguments, is generated as the expression. By default the option is not set: see stop for the behaviour in that case. The functions dump.frames and recover provide alternatives that allow post-mortem debugging. Note that these need to specified as e.g. options(error = utils::recover) in startup files such as ‘.Rprofile’.
+        ''' either a function or an expression governing the handling of non-catastrophic 
+        ''' errors such as those generated by stop as well as by signals and internally 
+        ''' detected errors. If the option is a function, a call to that function, with
+        ''' no arguments, is generated as the expression. By default the option is not
+        ''' set: see stop for the behaviour in that case. The functions dump.frames 
+        ''' and recover provide alternatives that allow post-mortem debugging. Note that 
+        ''' these need to specified as e.g. options(error = utils::recover) in startup
+        ''' files such as ‘.Rprofile’.
         '''
         ''' expressions:
-        ''' sets a limit on the number of nested expressions that will be evaluated. Valid values are 25...500000 with default 5000. If you increase it, you may also want to start R with a larger protection stack; see --max-ppsize in Memory. Note too that you may cause a segfault from overflow of the C stack, and on OSes where it is possible you may want to increase that. Once the limit is reached an error is thrown. The current number under evaluation can be found by calling Cstack_info.
+        ''' sets a limit on the number of nested expressions that will be evaluated. Valid 
+        ''' values are 25...500000 with default 5000. If you increase it, you may also 
+        ''' want to start R with a larger protection stack; see --max-ppsize in Memory. 
+        ''' Note too that you may cause a segfault from overflow of the C stack, and on 
+        ''' OSes where it is possible you may want to increase that. Once the limit is 
+        ''' reached an error is thrown. The current number under evaluation can be found 
+        ''' by calling Cstack_info.
         '''
         ''' interrupt:
-        ''' a function taking no arguments to be called on a user interrupt if the interrupt condition is not otherwise handled.
+        ''' a function taking no arguments to be called on a user interrupt if the interrupt 
+        ''' condition is not otherwise handled.
         '''
         ''' keep.parse.data:
-        ''' When internally storing source code (keep.source is TRUE), also store parse data. Parse data can then be retrieved with getParseData() and used e.g. for spell checking of string constants or syntax highlighting. The value has effect only when internally storing source code (see keep.source). The default is TRUE.
+        ''' When internally storing source code (keep.source is TRUE), also store parse data. 
+        ''' Parse data can then be retrieved with getParseData() and used e.g. for spell
+        ''' checking of string constants or syntax highlighting. The value has effect only
+        ''' when internally storing source code (see keep.source). The default is TRUE.
         '''
         ''' keep.parse.data.pkgs:
-        ''' As for keep.parse.data, used only when packages are installed. Defaults to FALSE unless the environment variable R_KEEP_PKG_PARSE_DATA is set to yes. The space overhead of parse data can be substantial even after compression and it causes performance overhead when loading packages.
+        ''' As for keep.parse.data, used only when packages are installed. Defaults to FALSE 
+        ''' unless the environment variable R_KEEP_PKG_PARSE_DATA is set to yes. The space 
+        ''' overhead of parse data can be substantial even after compression and it causes 
+        ''' performance overhead when loading packages.
         '''
         ''' keep.source:
-        ''' When TRUE, the source code for functions (newly defined or loaded) is stored internally allowing comments to be kept in the right places. Retrieve the source by printing or using deparse(fn, control = "useSource").
+        ''' When TRUE, the source code for functions (newly defined or loaded) is stored 
+        ''' internally allowing comments to be kept in the right places. Retrieve the source 
+        ''' by printing or using deparse(fn, control = "useSource").
         '''
         ''' The default is interactive(), i.e., TRUE for interactive use.
         '''
         ''' keep.source.pkgs:
-        ''' As for keep.source, used only when packages are installed. Defaults to FALSE unless the environment variable R_KEEP_PKG_SOURCE is set to yes.
+        ''' As for keep.source, used only when packages are installed. Defaults to FALSE 
+        ''' unless the environment variable R_KEEP_PKG_SOURCE is set to yes.
         '''
         ''' matprod:
-        ''' a string selecting the implementation of the matrix products %*%, crossprod, and tcrossprod for double and complex vectors:
+        ''' a string selecting the implementation of the matrix products %*%, crossprod, 
+        ''' and tcrossprod for double and complex vectors:
         '''
         ''' "internal"
-        ''' uses an unoptimized 3-loop algorithm which correctly propagates NaN and Inf values and is consistent in precision with other summation algorithms inside R like sum or colSums (which now means that it uses a long double accumulator for summation if available and enabled, see capabilities).
+        ''' uses an unoptimized 3-loop algorithm which correctly propagates NaN and Inf
+        ''' values and is consistent in precision with other summation algorithms inside
+        ''' R like sum or colSums (which now means that it uses a long double accumulator
+        ''' for summation if available and enabled, see capabilities).
         '''
         ''' "default"
-        ''' uses BLAS to speed up computation, but to ensure correct propagation of NaN and Inf values it uses an unoptimized 3-loop algorithm for inputs that may contain NaN or Inf values. When deemed beneficial for performance, "default" may call the 3-loop algorithm unconditionally, i.e., without checking the input for NaN/Inf values. The 3-loop algorithm uses (only) a double accumulator for summation, which is consistent with the reference BLAS implementation.
+        ''' uses BLAS to speed up computation, but to ensure correct propagation of NaN 
+        ''' and Inf values it uses an unoptimized 3-loop algorithm for inputs that may 
+        ''' contain NaN or Inf values. When deemed beneficial for performance, "default"
+        ''' may call the 3-loop algorithm unconditionally, i.e., without checking the 
+        ''' input for NaN/Inf values. The 3-loop algorithm uses (only) a double accumulator
+        ''' for summation, which is consistent with the reference BLAS implementation.
         '''
         ''' "blas"
-        ''' uses BLAS unconditionally without any checks and should be used with extreme caution. BLAS libraries do not propagate NaN or Inf values correctly and for inputs with NaN/Inf values the results may be undefined.
+        ''' uses BLAS unconditionally without any checks and should be used with extreme 
+        ''' caution. BLAS libraries do not propagate NaN or Inf values correctly and 
+        ''' for inputs with NaN/Inf values the results may be undefined.
         '''
         ''' "default.simd"
-        ''' is experimental and will likely be removed in future versions of R. It provides the same behavior as "default", but the check whether the input contains NaN/Inf values is faster on some SIMD hardware. On older systems it will run correctly, but may be much slower than "default".
+        ''' is experimental and will likely be removed in future versions of R. It 
+        ''' provides the same behavior as "default", but the check whether the input 
+        ''' contains NaN/Inf values is faster on some SIMD hardware. On older systems
+        ''' it will run correctly, but may be much slower than "default".
         '''
         ''' max.print:
-        ''' integer, defaulting to 99999. print or show methods can make use of this option, to limit the amount of information that is printed, to something in the order of (and typically slightly less than) max.print entries.
+        ''' integer, defaulting to 99999. print or show methods can make use of this option, 
+        ''' to limit the amount of information that is printed, to something in the order 
+        ''' of (and typically slightly less than) max.print entries.
         '''
         ''' OutDec:
-        ''' character string containing a single character. The preferred character to be used as the decimal point in output conversions, that is in printing, plotting, format and as.character but not when deparsing nor by sprintf nor formatC (which are sometimes used prior to printing.)
+        ''' character string containing a single character. The preferred character to be 
+        ''' used as the decimal point in output conversions, that is in printing, 
+        ''' plotting, format and as.character but not when deparsing nor by sprintf nor
+        ''' formatC (which are sometimes used prior to printing.)
         '''
         ''' pager:
-        ''' the command used for displaying text files by file.show, details depending on the platform:
+        ''' the command used for displaying text files by file.show, details depending on
+        ''' the platform:
         '''
         ''' On a unix-alike
-        ''' defaults to ‘R_HOME/bin/pager’, which is a shell script running the command-line specified by the environment variable PAGER whose default is set at configuration, usually to less.
+        ''' defaults to ‘R_HOME/bin/pager’, which is a shell script running the command-line
+        ''' specified by the environment variable PAGER whose default is set at 
+        ''' configuration, usually to less.
         '''
         ''' On Windows
-        ''' defaults to "internal", which uses a pager similar to the GUI console. Another possibility is "console" to use the console itself.
+        ''' defaults to "internal", which uses a pager similar to the GUI console. 
+        ''' Another possibility is "console" to use the console itself.
         '''
-        ''' Can be a character string or an R function, in which case it needs to accept the arguments (files, header, title, delete.file) corresponding to the first four arguments of file.show.
+        ''' Can be a character string or an R function, in which case it needs to accept
+        ''' the arguments (files, header, title, delete.file) corresponding to the 
+        ''' first four arguments of file.show.
         '''
         ''' papersize:
-        ''' the default paper format used by postscript; set by environment variable R_PAPERSIZE when R is started: if that is unset or invalid it defaults platform dependently
+        ''' the default paper format used by postscript; set by environment variable
+        ''' R_PAPERSIZE when R is started: if that is unset or invalid it defaults 
+        ''' platform dependently
         '''
         ''' on a unix-alike
-        ''' to a value derived from the locale category LC_PAPER, or if that is unavailable to a default set when R was built.
+        ''' to a value derived from the locale category LC_PAPER, or if that is unavailable 
+        ''' to a default set when R was built.
         '''
         ''' on Windows
         ''' to "a4", or "letter" in US and Canadian locales.
         '''
         ''' PCRE_limit_recursion:
-        ''' Logical: should grep(perl = TRUE) and similar limit the maximal recursion allowed when matching? PCRE can be built not to use a recursion stack (see pcre_config, but it is by default with a recursion limit of 10000000 which potentially needs a very large C stack: see the discussion at http://www.pcre.org/original/doc/html/pcrestack.html. If true, the limit is reduced using R's estimate of the C stack size available (if known), otherwise 10000. If NA, the limit is imposed only if any input string has 1000 or more bytes.
+        ''' Logical: should grep(perl = TRUE) and similar limit the maximal recursion
+        ''' allowed when matching? PCRE can be built not to use a recursion stack (see
+        ''' pcre_config, but it is by default with a recursion limit of 10000000 which 
+        ''' potentially needs a very large C stack: see the discussion at 
+        ''' http://www.pcre.org/original/doc/html/pcrestack.html. If true, the limit is 
+        ''' reduced using R's estimate of the C stack size available (if known), 
+        ''' otherwise 10000. If NA, the limit is imposed only if any input string has 
+        ''' 1000 or more bytes.
         '''
         ''' PCRE_study:
-        ''' Logical or integer: should grep(perl = TRUE) and similar ‘study’ the patterns? Either logical or a numerical threshold for the minimum number of strings to be matched for the pattern to be studied (the default is 10)). Missing values and negative numbers are treated as false.
+        ''' Logical or integer: should grep(perl = TRUE) and similar ‘study’ the patterns? 
+        ''' Either logical or a numerical threshold for the minimum number of strings 
+        ''' to be matched for the pattern to be studied (the default is 10)). Missing 
+        ''' values and negative numbers are treated as false.
         '''
         ''' PCRE_use_JIT:
-        ''' Logical: should grep(perl = TRUE), strsplit(perl = TRUE) and similar make use of PCRE's Just-In-Time compiler for studied patterns, if available? Missing values are treated as false.
+        ''' Logical: should grep(perl = TRUE), strsplit(perl = TRUE) and similar make use
+        ''' of PCRE's Just-In-Time compiler for studied patterns, if available? Missing 
+        ''' values are treated as false.
         '''
         ''' pdfviewer:
-        ''' default PDF viewer. The default is set from the environment variable R_PDFVIEWER, the default value of which
+        ''' default PDF viewer. The default is set from the environment variable
+        ''' R_PDFVIEWER, the default value of which
         '''
         ''' on a unix-alike
         ''' is set when R is configured, and
@@ -1816,39 +1943,59 @@ RE0:
         ''' is the full path to open.exe, a utility supplied with R.
         '''
         ''' printcmd:
-        ''' the command used by postscript for printing; set by environment variable R_PRINTCMD when R is started. This should be a command that expects either input to be piped to ‘stdin’ or to be given a single filename argument. Usually set to "lpr" on a Unix-alike.
+        ''' the command used by postscript for printing; set by environment variable 
+        ''' R_PRINTCMD when R is started. This should be a command that expects either 
+        ''' input to be piped to ‘stdin’ or to be given a single filename argument. 
+        ''' Usually set to "lpr" on a Unix-alike.
         '''
         ''' prompt:
-        ''' a non-empty string to be used for R's prompt; should usually end in a blank (" ").
+        ''' a non-empty string to be used for R's prompt; should usually end in a 
+        ''' blank (" ").
         '''
         ''' rl_word_breaks:
-        ''' (Unix only:) Used for the readline-based terminal interface. Default value " \t\n\"\\'`>&lt;=%;,|&amp;{()}".
+        ''' (Unix only:) Used for the readline-based terminal interface. Default 
+        ''' value " \t\n\"\\'`>&lt;=%;,|&amp;{()}".
         '''
-        ''' This is the set of characters use to break the input line into tokens for object- and file-name completion. Those who do not use spaces around operators may prefer
+        ''' This is the set of characters use to break the input line into tokens for
+        ''' object- and file-name completion. Those who do not use spaces around 
+        ''' operators may prefer
         ''' ``" \t\n\"\\'`>&lt;=+-*%;,|&amp;{()}"``
         '''
         ''' save.defaults, save.image.defaults:
         ''' see save.
         '''
         ''' scipen:
-        ''' integer. A penalty to be applied when deciding to print numeric values in fixed or exponential notation. Positive values bias towards fixed and negative towards scientific notation: fixed notation will be preferred unless it is more than scipen digits wider.
+        ''' integer. A penalty to be applied when deciding to print numeric values in 
+        ''' fixed or exponential notation. Positive values bias towards fixed and
+        ''' negative towards scientific notation: fixed notation will be preferred
+        ''' unless it is more than scipen digits wider.
         '''
         ''' setWidthOnResize:
-        ''' a logical. If set and TRUE, R run in a terminal using a recent readline library will set the width option when the terminal is resized.
+        ''' a logical. If set and TRUE, R run in a terminal using a recent readline
+        ''' library will set the width option when the terminal is resized.
         '''
         ''' showWarnCalls, showErrorCalls:
-        ''' a logical. Should warning and error messages show a summary of the call stack? By default error calls are shown in non-interactive sessions.
+        ''' a logical. Should warning and error messages show a summary of the call
+        ''' stack? By default error calls are shown in non-interactive sessions.
         '''
         ''' showNCalls:
-        ''' integer. Controls how long the sequence of calls must be (in bytes) before ellipses are used. Defaults to 40 and should be at least 30 and no more than 500.
+        ''' integer. Controls how long the sequence of calls must be (in bytes) before 
+        ''' ellipses are used. Defaults to 40 and should be at least 30 and no more 
+        ''' than 500.
         '''
         ''' show.error.locations:
-        ''' Should source locations of errors be printed? If set to TRUE or "top", the source location that is highest on the stack (the most recent call) will be printed. "bottom" will print the location of the earliest call found on the stack.
+        ''' Should source locations of errors be printed? If set to TRUE or "top", the
+        ''' source location that is highest on the stack (the most recent call) will
+        ''' be printed. "bottom" will print the location of the earliest call found 
+        ''' on the stack.
         '''
-        ''' Integer values can select other entries. The value 0 corresponds to "top" and positive values count down the stack from there. The value -1 corresponds to "bottom" and negative values count up from there.
+        ''' Integer values can select other entries. The value 0 corresponds to "top"
+        ''' and positive values count down the stack from there. The value -1 corresponds
+        ''' to "bottom" and negative values count up from there.
         '''
         ''' show.error.messages:
-        ''' a logical. Should error messages be printed? Intended for use with try or a user-installed error handler.
+        ''' a logical. Should error messages be printed? Intended for use with try or a 
+        ''' user-installed error handler.
         '''
         ''' stringsAsFactors:
         ''' The default setting for arguments of data.frame and read.table.
@@ -1857,52 +2004,79 @@ RE0:
         ''' used by functions texi2dvi and texi2pdf in package tools.
         '''
         ''' unix-alike only:
-        ''' Set at startup from the environment variable R_TEXI2DVICMD, which defaults first to the value of environment variable TEXI2DVI, and then to a value set when R was installed (the full path to a texi2dvi script if one was found). If necessary, that environment variable can be set to "emulation".
+        ''' Set at startup from the environment variable R_TEXI2DVICMD, which defaults 
+        ''' first to the value of environment variable TEXI2DVI, and then to a value 
+        ''' set when R was installed (the full path to a texi2dvi script if one was 
+        ''' found). If necessary, that environment variable can be set to "emulation".
         '''
         ''' timeout:
-        ''' integer. The timeout for some Internet operations, in seconds. Default 60 seconds. See download.file and connections.
+        ''' integer. The timeout for some Internet operations, in seconds. Default 60 
+        ''' seconds. See download.file and connections.
         '''
         ''' topLevelEnvironment:
         ''' see topenv and sys.source.
         '''
         ''' url.method:
-        ''' character string: the default method for url. Normally unset, which is equivalent to "default", which is "internal" except on Windows.
+        ''' character string: the default method for url. Normally unset, which is 
+        ''' equivalent to "default", which is "internal" except on Windows.
         '''
         ''' useFancyQuotes:
-        ''' controls the use of directional quotes in sQuote, dQuote and in rendering text help (see Rd2txt in package tools). Can be TRUE, FALSE, "TeX" or "UTF-8".
+        ''' controls the use of directional quotes in sQuote, dQuote and in rendering 
+        ''' text help (see Rd2txt in package tools). Can be TRUE, FALSE, "TeX" or 
+        ''' "UTF-8".
         '''
         ''' verbose:
-        ''' logical. Should R report extra information on progress? Set to TRUE by the command-line option --verbose.
+        ''' logical. Should R report extra information on progress? Set to TRUE by the
+        ''' command-line option --verbose.
         '''
         ''' warn:
-        ''' sets the handling of warning messages. If warn is negative all warnings are ignored. If warn is zero (the default) warnings are stored until the top–level function returns. If 10 or fewer warnings were signalled they will be printed otherwise a message saying how many were signalled. An object called last.warning is created and can be printed through the function warnings. If warn is one, warnings are printed as they occur. If warn is two (or larger, coercible to integer), all warnings are turned into errors.
+        ''' sets the handling of warning messages. If warn is negative all warnings are 
+        ''' ignored. If warn is zero (the default) warnings are stored until the 
+        ''' top–level function returns. If 10 or fewer warnings were signalled they 
+        ''' will be printed otherwise a message saying how many were signalled. An object 
+        ''' called last.warning is created and can be printed through the function
+        ''' warnings. If warn is one, warnings are printed as they occur. If warn is
+        ''' two (or larger, coercible to integer), all warnings are turned into errors.
         '''
         ''' warnPartialMatchArgs:
         ''' logical. If true, warns if partial matching is used in argument matching.
         '''
         ''' warnPartialMatchAttr:
-        ''' logical. If true, warns if partial matching is used in extracting attributes via attr.
+        ''' logical. If true, warns if partial matching is used in extracting attributes
+        ''' via attr.
         '''
         ''' warnPartialMatchDollar:
         ''' logical. If true, warns if partial matching is used for extraction by $.
         '''
         ''' warning.expression:
-        ''' an R code expression to be called if a warning is generated, replacing the standard message. If non-null it is called irrespective of the value of option warn.
+        ''' an R code expression to be called if a warning is generated, replacing the 
+        ''' standard message. If non-null it is called irrespective of the value of 
+        ''' option warn.
         '''
         ''' warning.length:
-        ''' sets the truncation limit for error and warning messages. A non-negative integer, with allowed values 100...8170, default 1000.
+        ''' sets the truncation limit for error and warning messages. A non-negative 
+        ''' integer, with allowed values 100...8170, default 1000.
         '''
         ''' nwarnings:
-        ''' the limit for the number of warnings kept when warn = 0, default 50. This will discard messages if called whilst they are being collected. If you increase this limit, be aware that the current implementation pre-allocates the equivalent of a named list for them, i.e., do not increase it to more than say a million.
+        ''' the limit for the number of warnings kept when warn = 0, default 50. This 
+        ''' will discard messages if called whilst they are being collected. If 
+        ''' you increase this limit, be aware that the current implementation pre-allocates 
+        ''' the equivalent of a named list for them, i.e., do not increase it to more 
+        ''' than say a million.
         '''
         ''' width:
-        ''' controls the maximum number of columns on a line used in printing vectors, matrices and arrays, and when filling by cat.
+        ''' controls the maximum number of columns on a line used in printing vectors,
+        ''' matrices and arrays, and when filling by cat.
         '''
         ''' Columns are normally the same as characters except in East Asian languages.
         '''
-        ''' You may want to change this if you re-size the window that R is running in. Valid values are 10...10000 with default normally 80. (The limits on valid values are in file ‘Print.h’ and can be changed by re-compiling R.) Some R consoles automatically change the value when they are resized.
+        ''' You may want to change this if you re-size the window that R is running in. 
+        ''' Valid values are 10...10000 with default normally 80. (The limits on valid
+        ''' values are in file ‘Print.h’ and can be changed by re-compiling R.) Some 
+        ''' R consoles automatically change the value when they are resized.
         '''
-        ''' See the examples on Startup for one way to set this automatically from the terminal width when R is started.
+        ''' See the examples on Startup for one way to set this automatically from the 
+        ''' terminal width when R is started.
         '''
         ''' The ‘factory-fresh’ default settings of some of these options are
         '''
@@ -1994,7 +2168,9 @@ RE0:
         ''' Functions to get or set the names of an object.
         ''' </summary>
         ''' <param name="[object]">an R object.</param>
-        ''' <param name="namelist">a character vector of up to the same length as ``x``, or ``NULL``.</param>
+        ''' <param name="namelist">
+        ''' a character vector of up to the same length as ``x``, or ``NULL``.
+        ''' </param>
         ''' <param name="envir"></param>
         ''' <returns>
         ''' For ``names``, ``NULL`` or a character vector of the same length as x. 
