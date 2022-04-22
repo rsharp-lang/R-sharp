@@ -177,10 +177,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         ''' <summary>
-        ''' 
+        ''' create data index for the given input data sequence
         ''' </summary>
-        ''' <param name="x"></param>
-        ''' <param name="mode"></param>
+        ''' <param name="x">a data array as sequence</param>
+        ''' <param name="mode">the element mode of the data input seuqnce <paramref name="x"/></param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("as.index")>
@@ -188,6 +188,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                      <RRawVectorArgument(GetType(String))>
                                      Optional mode As Object = "any|character|numeric|integer",
                                      Optional env As Environment = Nothing) As Object
+
             Select Case obj.ToString(REnv.asVector(Of String)(mode).AsObjectEnumerator.DefaultFirst("any")).ToLower
                 Case "any"
                     Throw New NotImplementedException
@@ -198,6 +199,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End Select
         End Function
 
+        ''' <summary>
+        ''' take the first n items from the given input sequence data 
+        ''' </summary>
+        ''' <param name="sequence">the input sequence data</param>
+        ''' <param name="n">the number of first n element</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("take")>
         Public Function take(<RRawVectorArgument> sequence As Object, n%, Optional env As Environment = Nothing) As Object
             If sequence Is Nothing Then
@@ -359,26 +367,41 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         ''' <summary>
-        ''' The which test filter
+        ''' ### Which indices are TRUE?
+        ''' 
+        ''' The which test filter, Give the TRUE indices of a logical 
+        ''' object, allowing for array indices.
         ''' </summary>
         ''' <param name="env"></param>
-        ''' <returns></returns>
-        ''' 
+        ''' <param name="x">
+        ''' a logical vector or array. NAs are allowed and omitted
+        ''' (treated as if FALSE).
+        ''' </param>
+        ''' <returns>
+        ''' an integer vector with length equal to sum(x), i.e., to 
+        ''' the number of TRUEs in x; Basically, the result is 
+        ''' ``(1:length(x))[x]``.
+        ''' </returns>
+        ''' <remarks>
+        ''' Unlike most other base R functions this does not coerce to 
+        ''' x to logical: only arguments with typeof logical are 
+        ''' accepted and others give an error.
+        ''' </remarks>
         <ExportAPI("which")>
         Private Function where(<RRawVectorArgument>
-                               sequence As Object,
+                               x As Object,
                                Optional test As Object = Nothing,
                                Optional pipelineFilter As Boolean = True,
                                Optional env As Environment = Nothing) As Object
 
             If test Is Nothing Then
                 ' test for which index
-                Return which.IsTrue(REnv.asLogical(sequence), offset:=1)
-            ElseIf TypeOf sequence Is pipeline Then
+                Return which.IsTrue(REnv.asLogical(x), offset:=1)
+            ElseIf TypeOf x Is pipeline Then
                 ' run in pipeline mode
-                Return runFilterPipeline(sequence, test, pipelineFilter, env)
+                Return runFilterPipeline(x, test, pipelineFilter, env)
             Else
-                Dim testResult = Rset.getObjectSet(sequence, env) _
+                Dim testResult = Rset.getObjectSet(x, env) _
                     .runWhichFilter(test, env) _
                     .ToArray
 
@@ -504,8 +527,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' minimum Or maximum respectively of x.
         ''' 
         ''' If this extremum Is unique (Or empty), the results are the same As (but more 
-        ''' efficient than) which(x == min(x, na.rm = True)) Or which(x == max(x, na.rm = True)) 
-        ''' respectively.
+        ''' efficient than) ``which(x == min(x, na.rm = True))`` Or 
+        ''' ``which(x == max(x, na.rm = True))`` respectively.
         ''' 
         ''' Logical x – First True Or False
         ''' 
