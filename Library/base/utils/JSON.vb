@@ -107,18 +107,27 @@ Module JSON
                                 Optional throwEx As Boolean = True,
                                 Optional schema As Type = Nothing,
                                 Optional env As Environment = Nothing) As Object
-        Try
+
+        If env.globalEnvironment.debugMode Then
             If schema Is Nothing Then
                 Return fromJSON(str, raw:=False, env:=env)
             Else
                 Return str.LoadObject(schema)
             End If
-        Catch ex As Exception When throwEx
-            Throw
-        Catch ex As Exception
-            Call env.AddMessage(ex.ToString, MSG_TYPES.WRN)
-            Return Nothing
-        End Try
+        Else
+            Try
+                If schema Is Nothing Then
+                    Return fromJSON(str, raw:=False, env:=env)
+                Else
+                    Return str.LoadObject(schema)
+                End If
+            Catch ex As Exception When throwEx
+                Throw
+            Catch ex As Exception
+                Call env.AddMessage(ex.ToString, MSG_TYPES.WRN)
+                Return Nothing
+            End Try
+        End If
     End Function
 
     ''' <summary>
