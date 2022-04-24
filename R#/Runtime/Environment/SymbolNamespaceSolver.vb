@@ -1,61 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::a07700e7d525976b35c8e49d66279fc9, R-sharp\R#\Runtime\Environment\SymbolNamespaceSolver.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 89
-    '    Code Lines: 67
-    ' Comment Lines: 4
-    '   Blank Lines: 18
-    '     File Size: 3.64 KB
+' Summaries:
 
 
-    '     Class SymbolNamespaceSolver
-    ' 
-    '         Properties: attachedNamespace, packageNames
-    ' 
-    '         Function: (+2 Overloads) Add, FindPackageSymbol, FindSymbol, GetEnumerator, hasNamespace
-    '                   IEnumerable_GetEnumerator, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 89
+'    Code Lines: 67
+' Comment Lines: 4
+'   Blank Lines: 18
+'     File Size: 3.64 KB
+
+
+'     Class SymbolNamespaceSolver
+' 
+'         Properties: attachedNamespace, packageNames
+' 
+'         Function: (+2 Overloads) Add, FindPackageSymbol, FindSymbol, GetEnumerator, hasNamespace
+'                   IEnumerable_GetEnumerator, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Runtime
@@ -115,15 +116,19 @@ Namespace Runtime
                 Return Nothing
             End If
 
-            Dim symbolFile As String = $"{libdir}/src/{symbols(symbolName)}"
+            Dim symbolFile As String = $"{libdir}/lib/src/{symbols(symbolName)}"
             Dim meta As DESCRIPTION = $"{libdir}/package/index.json".LoadJsonFile(Of DESCRIPTION)
 
             Using bin As New BinaryReader(symbolFile.Open)
-                Dim symbolExpression = BlockReader _
-                    .Read(bin) _
-                    .Parse(desc:=meta)
+                Try
+                    Dim symbolExpression As Expression = BlockReader _
+                       .Read(bin) _
+                       .Parse(desc:=meta)
 
-                Return symbolExpression.Evaluate(env)
+                    Return symbolExpression.Evaluate(env)
+                Catch ex As Exception
+                    Throw New Exception($"Error while load symbol {[namespace]}::{symbolName} ({symbolFile}): <{ex.GetType.FullName}>{ex.Message}!")
+                End Try
             End Using
         End Function
 

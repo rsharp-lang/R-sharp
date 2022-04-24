@@ -86,6 +86,12 @@ Namespace Development.Package.File
             Return True
         End Function
 
+        ''' <summary>
+        ''' get the root dir of the target R#(nuget) package.
+        ''' </summary>
+        ''' <param name="opt"></param>
+        ''' <param name="packageName">the R# package name</param>
+        ''' <returns></returns>
         <Extension>
         Public Function GetPackageDirectory(opt As Options, packageName$) As String
             Dim libDir As String
