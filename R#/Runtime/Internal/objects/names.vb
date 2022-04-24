@@ -227,9 +227,9 @@ RE0:
 
                 If data.nrows <> namelist.Length Then
                     Return Internal.debug.stop({
-                        "row size is not matched!",
+                        "row size is not matched on set new rownames!",
                         "nrows: " & data.nrows,
-                        "given size: " & namelist.Length
+                        "given rownames size: " & namelist.Length
                     }, envir)
                 Else
                     data.rownames = REnv.asVector(Of String)(namelist)
