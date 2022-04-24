@@ -228,6 +228,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' match returns a vector of the positions of 
         ''' (first) matches of its first argument in 
         ''' its second.
+        ''' 
+        ''' find the index of the elements in input sequence
+        ''' <paramref name="x"/> in the source target sequence
+        ''' <paramref name="table"/>
+        ''' 
+        ''' find the index of (where x in table)
         ''' </summary>
         ''' <param name="x">
         ''' vector or NULL: the values to be matched. Long 
@@ -259,6 +265,18 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' Is j, For the smallest possible j. If no match Is 
         ''' found, the value Is nomatch.
         ''' </returns>
+        ''' <remarks>
+        ''' https://stackoverflow.com/questions/7530765/get-the-index-of-the-values-of-one-vector-in-another
+        ''' 
+        ''' ```r
+        ''' first  = c("a", "c", "b");
+        ''' second = c("c", "b", "a");
+        ''' match(second, first);
+        ''' 
+        ''' #   c b a  &lt;-second 
+        ''' [1] 2 3 1
+        ''' ```
+        ''' </remarks>
         <ExportAPI("match")>
         Public Function match(x As Array, table As Array,
                               Optional nomatch As Integer = -1,
