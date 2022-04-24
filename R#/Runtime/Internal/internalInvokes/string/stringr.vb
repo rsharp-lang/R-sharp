@@ -156,6 +156,9 @@ Namespace Runtime.Internal.Invokes
                                    If xi Is Nothing Then
                                        Return ""
                                    Else
+                                       ' Call 1.0.ToString(format:="")
+                                       ' Call #2022-04-25#.ToString(format:="d MMM yyyy")
+
                                        Return DirectCast(toStringF.Invoke(xi, {format}), String)
                                    End If
                                End Function
