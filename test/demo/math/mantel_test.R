@@ -14,3 +14,4 @@ mantel = lapply(list(Spec01 = 1:7,
 										 mantel.test(varespec[, i], varechem);
 										 });
 
+str(mantel);
