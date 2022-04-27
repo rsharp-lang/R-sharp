@@ -63,8 +63,29 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
     ''' <summary>
-    ''' Loading/Attaching and Listing of Packages
+    ''' ## Loading/Attaching and Listing of Packages
+    ''' 
+    ''' library and require load and attach add-on packages.
+    ''' 
+    ''' library and require can only load/attach an installed package, 
+    ''' and this is detected by having a ‘DESCRIPTION’ file containing
+    ''' a Built: field.
+    ''' Under Unix-alikes, the code checks that the package was 
+    ''' installed under a similar operating system As given by
+    ''' R.version$platform (the canonical name Of the platform under 
+    ''' which R was compiled), provided it contains compiled code. 
+    ''' Packages which Do Not contain compiled code can be Shared 
+    ''' between Unix-alikes, but Not To other OSes because Of potential 
+    ''' problems With line endings And OS-specific help files. If 
+    ''' Sub-architectures are used, the OS similarity Is Not checked 
+    ''' since the OS used To build may differ (e.g. i386-pc-linux-gnu
+    ''' code can be built On an x86_64-unknown-linux-gnu OS).
+    ''' The package name given To library And require must match the 
+    ''' name given In the package's ‘DESCRIPTION’ file exactly, even on 
+    ''' case-insensitive file systems such as are common on Windows 
+    ''' and macOS.
     ''' </summary>
+    ''' 
     Public Class Require : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
@@ -79,9 +100,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             End Get
         End Property
 
+        ''' <summary>
+        ''' the name of a package, given as a name or 
+        ''' literal character string, or a character 
+        ''' string, depending on whether ``character.only``
+        ''' is FALSE (default) or TRUE.
+        ''' </summary>
+        ''' <returns></returns>
         Public Property packages As Expression()
         Public Property options As ValueAssignExpression()
 
+        ''' <summary>
+        ''' Loading/Attaching and Listing of Packages
+        ''' </summary>
+        ''' <param name="names"></param>
         Sub New(names As IEnumerable(Of Expression))
             packages = names.ToArray
             options = packages _
@@ -93,10 +125,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                 .ToArray
         End Sub
 
+        ''' <summary>
+        ''' Loading/Attaching and Listing of Packages
+        ''' </summary>
+        ''' <param name="packageName"></param>
         Sub New(packageName As String)
             packages = {New Literal(packageName)}
         End Sub
 
+        ''' <summary>
+        ''' Loading/Attaching and Listing of Packages
+        ''' </summary>
+        ''' <param name="names"></param>
         Sub New(names As IEnumerable(Of String))
             packages = names.Select(Function(name) New Literal(name)).ToArray
         End Sub
@@ -117,9 +157,70 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         ''' <summary>
         ''' require returns (invisibly) a logical indicating whether the 
         ''' required package is available.
+        ''' 
+        ''' library(package) and require(package) both load the namespace
+        ''' of the package with name package and attach it on the search
+        ''' list. require is designed for use inside other functions; it 
+        ''' returns FALSE and gives a warning (rather than an error as
+        ''' ``library()`` does by default) if the package does not exist. 
+        ''' Both functions check and update the list of currently attached 
+        ''' packages and do not reload a namespace which is already loaded. 
+        ''' (If you want to reload such a package, call detach(unload = TRUE)
+        ''' or unloadNamespace first.) If you want to load a package 
+        ''' without attaching it on the search list, see requireNamespace.
+        ''' To suppress messages during the loading of packages use 
+        ''' suppressPackageStartupMessages: this will suppress all messages 
+        ''' from R itself but Not necessarily all those from package authors.
+        ''' If library Is called With no package Or help argument, it lists 
+        ''' all available packages In the libraries specified by Lib.loc,
+        ''' And returns the corresponding information In an Object Of Class
+        ''' "libraryIQR". (The Structure Of this Class may change In future
+        ''' versions.) Use .packages(all = True) To obtain just the names 
+        ''' Of all available packages, And installed.packages() For more 
+        ''' information.
+        ''' library(help = somename) computes basic information about the package 
+        ''' somename, And returns this in an object of class "packageInfo". 
+        ''' (The structure of this class may change in future versions.) When 
+        ''' used with the default value (NULL) for lib.loc, the attached 
+        ''' packages are searched before the libraries.
         ''' </summary>
         ''' <param name="envir"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' Normally library returns (invisibly) the list of attached packages,
+        ''' but TRUE or FALSE if logical.return is TRUE. When called as library() 
+        ''' it returns an object of class "libraryIQR", and for library(help=),
+        ''' one of class "packageInfo".
+        ''' require returns(invisibly) a logical indicating whether the required 
+        ''' package Is available.
+        ''' </returns>
+        ''' <remarks>
+        ''' ### Conflicts
+        ''' 
+        ''' Handling of conflicts depends on the setting of the conflicts.policy 
+        ''' option. If this option Is Not set, then conflicts result in warning 
+        ''' messages if the argument warn.conflicts Is TRUE. If the option Is set
+        ''' to the character string "strict", then all unresolved conflicts signal
+        ''' errors. Conflicts can be resolved using the mask.ok, exclude, And
+        ''' include.only arguments to library And require. Defaults for mask.ok 
+        ''' And exclude can be specified using conflictRules.
+        ''' If the conflicts.policy Option Is Set To the String "depends.ok" Then
+        ''' conflicts resulting from attaching declared dependencies will Not
+        ''' produce errors, but other conflicts will. This Is likely To be the
+        ''' best setting For most users wanting some additional protection against
+        ''' unexpected conflicts.
+        ''' The policy can be tuned further by specifying the conflicts.policy Option 
+        ''' As a named list With the following fields
+        ''' 
+        ''' + error: logical; if TRUE treat unresolved conflicts as errors.
+        ''' + warn: logical; unless FALSE issue a warning message when conflicts are found.
+        ''' + generics.ok: logical; if TRUE ignore conflicts created by defining S4 
+        '''                generics for functions on the search path.
+        ''' + depends.ok: logical; if TRUE do Not treat conflicts with required 
+        '''               packages as errors.
+        ''' + can.mask: character vector Of names Of packages that are allowed To be
+        '''             masked. These would typically be base packages attached by
+        '''             Default.
+        ''' </remarks>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim names As New List(Of String)
             Dim [global] As GlobalEnvironment = envir.globalEnvironment
@@ -140,6 +241,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             Return names.ToArray
         End Function
 
+        ''' <summary>
+        ''' Loading/Attaching and Listing of Packages
+        ''' </summary>
+        ''' <returns></returns>
         Public Overrides Function ToString() As String
             Return $"require({packages.JoinBy(", ")})"
         End Function
