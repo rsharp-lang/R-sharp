@@ -683,6 +683,81 @@ Module stats
     Public Function fisher_test(a%, b%, c%, d%) As FishersExactPvalues
         Return FishersExactTest.FishersExact(a, b, c, d)
     End Function
+
+    ''' <summary>
+    ''' The Mantel test, named after Nathan Mantel, is a statistical test of 
+    ''' the correlation between two matrices. The matrices must be of the same
+    ''' dimension; in most applications, they are matrices of interrelations 
+    ''' between the same vectors of objects. The test was first published by 
+    ''' Nathan Mantel, a biostatistician at the National Institutes of Health, 
+    ''' in 1967.[1] Accounts of it can be found in advanced statistics books 
+    ''' (e.g., Sokal &amp; Rohlf 1995[2]).
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="y"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("mantel.test")>
+    <RApiReturn(GetType(Mantel.Result))>
+    Public Function mantel_test(<RRawVectorArgument> x As Object,
+                                <RRawVectorArgument> y As Object,
+                                <RRawVectorArgument>
+                                Optional c As Object = Nothing,
+                                Optional exact As Boolean = True,
+                                Optional raw As Boolean = False,
+                                Optional env As Environment = Nothing) As Object
+
+        Dim err As Message = Nothing
+        Dim matA = getMatrix(x, env, "source x", err)
+        Dim matC As Double()() = Nothing
+
+        If Not err Is Nothing Then
+            Return err
+        End If
+
+        Dim matB = getMatrix(y, env, "source y", err)
+
+        If Not err Is Nothing Then
+            Return err
+        End If
+
+        If Not c Is Nothing Then
+            matC = getMatrix(c, env, "source c", err)
+
+            If Not err Is Nothing Then
+                Return err
+            End If
+        End If
+
+        Dim model As New Mantel.Model With {
+            .[partial] = Not c Is Nothing,
+            .exact = exact,
+            .raw = raw,
+            .matsize = matA.Length
+        }
+
+        Return Mantel.test(model, matA, matB, matC)
+    End Function
+
+    Private Function getMatrix(x As Object, env As Environment, tag As String, ByRef err As Message) As Double()()
+        If TypeOf x Is Rdataframe Then
+            Dim mat As New List(Of Double())
+            Dim df As Rdataframe = DirectCast(x, Rdataframe)
+            Dim v As Array
+
+            For Each col As String In df.colnames
+                v = df.getVector(col, fullSize:=True)
+                v = REnv.TryCastGenericArray(v, env)
+
+                Call mat.Add(v)
+            Next
+
+            Return mat.ToArray
+        Else
+            err = Message.InCompatibleType(GetType(Rdataframe), x.GetType, env, message:=$"can not extract numeric matrix from {tag}!")
+            Return Nothing
+        End If
+    End Function
 End Module
 
 Public Enum SplineAlgorithms
