@@ -703,7 +703,7 @@ Module stats
                                 <RRawVectorArgument> y As Object,
                                 <RRawVectorArgument>
                                 Optional c As Object = Nothing,
-                                Optional exact As Boolean = True,
+                                Optional exact As Boolean = False,
                                 Optional raw As Boolean = False,
                                 Optional env As Environment = Nothing) As Object
 
