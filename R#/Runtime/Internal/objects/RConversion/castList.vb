@@ -131,9 +131,10 @@ Namespace Runtime.Internal.Object.Converts
         Private Function dataframe_castList(obj As Object, args As list, env As Environment) As Object
             Dim byRow As Boolean = REnv.asLogical(args!byrow)(Scan0)
             Dim names As String = any.ToString(REnv.getFirst(args!names), null:=Nothing)
+            Dim df As dataframe = DirectCast(obj, dataframe)
 
             If byRow Then
-                Dim list As list = DirectCast(obj, dataframe).listByRows
+                Dim list As list = df.listByRows
 
                 If Not names.StringEmpty Then
                     If DirectCast(obj, dataframe).hasName(names) Then
@@ -148,11 +149,17 @@ Namespace Runtime.Internal.Object.Converts
                             $"column: {names}"
                         }, env)
                     End If
+                ElseIf Not df.rownames.IsNullOrEmpty Then
+                    obj = list.setNames(df.rownames, env)
+
+                    If TypeOf obj Is Message Then
+                        Return obj
+                    End If
                 End If
 
                 Return list
             Else
-                Return DirectCast(obj, dataframe).listByColumns
+                Return df.listByColumns
             End If
         End Function
 
