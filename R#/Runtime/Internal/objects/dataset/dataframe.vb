@@ -223,6 +223,11 @@ Namespace Runtime.Internal.Object
             columns = New Dictionary(Of String, Array)(clone.columns)
         End Sub
 
+        Public Function add(Of T)(key As String, value As T()) As dataframe
+            columns(key) = value
+            Return Me
+        End Function
+
         Public Function add(Of T)(key As String, value As IEnumerable(Of T)) As dataframe
             columns(key) = value.ToArray
             Return Me
