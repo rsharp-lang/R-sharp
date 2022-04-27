@@ -97,6 +97,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             ElseIf TypeOf objVal Is vbObject Then
                 objVal = DirectCast(objVal, vbObject).target
             End If
+            If TypeOf objVal Is vector Then
+                objVal = DirectCast(objVal, vector).data
+            End If
+            If objVal.GetType.IsArray AndAlso DirectCast(objVal, Array).Length = 1 Then
+                objVal = DirectCast(objVal, Array).GetValue(Scan0)
+            End If
 
             If TypeOf objVal Is list Then
                 Return DirectCast(objVal, list).getByName(memberName)
