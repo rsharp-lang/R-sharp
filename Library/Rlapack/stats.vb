@@ -744,9 +744,10 @@ Module stats
             Dim mat As New List(Of Double())
             Dim df As Rdataframe = DirectCast(x, Rdataframe)
             Dim v As Array
+            Dim nrows As Integer = df.nrows
 
-            For Each col As String In df.colnames
-                v = df.getVector(col, fullSize:=True)
+            For Each i In df.forEachRow
+                v = i.ToArray
                 v = REnv.TryCastGenericArray(v, env)
 
                 Call mat.Add(v)

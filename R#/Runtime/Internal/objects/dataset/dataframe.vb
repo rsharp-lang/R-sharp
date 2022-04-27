@@ -249,6 +249,12 @@ Namespace Runtime.Internal.Object
             Return REnv.asVector(Of T)(columns(name))
         End Function
 
+        ''' <summary>
+        ''' get a vector from column data
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="fullSize"></param>
+        ''' <returns></returns>
         Public Function getVector(name As String, Optional fullSize As Boolean = False) As Array
             Dim col As Array = columns.TryGetValue(name)
 
