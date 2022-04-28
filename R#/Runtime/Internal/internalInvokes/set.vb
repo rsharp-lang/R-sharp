@@ -358,7 +358,7 @@ Namespace Runtime.Internal.Invokes
 
 #Disable Warning
                 For i As Integer = 0 To m - 1
-                    Call combines.add($"v{i + 1}", all.Select(Function(r) r(i)).ToArray)
+                    Call combines.add($"v{i + 1}", all.Select(Function(r) r(i)))
                 Next
 #Enable Warning
 

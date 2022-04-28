@@ -223,6 +223,16 @@ Namespace Runtime.Internal.Object
             columns = New Dictionary(Of String, Array)(clone.columns)
         End Sub
 
+        Public Function add(Of T)(key As String, value As T()) As dataframe
+            columns(key) = value
+            Return Me
+        End Function
+
+        Public Function add(Of T)(key As String, value As IEnumerable(Of T)) As dataframe
+            columns(key) = value.ToArray
+            Return Me
+        End Function
+
         Public Function add(key As String, value As Array) As dataframe
             columns(key) = value
             Return Me
@@ -249,6 +259,12 @@ Namespace Runtime.Internal.Object
             Return REnv.asVector(Of T)(columns(name))
         End Function
 
+        ''' <summary>
+        ''' get a vector from column data
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="fullSize"></param>
+        ''' <returns></returns>
         Public Function getVector(name As String, Optional fullSize As Boolean = False) As Array
             Dim col As Array = columns.TryGetValue(name)
 

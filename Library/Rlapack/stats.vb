@@ -1,63 +1,63 @@
 ﻿#Region "Microsoft.VisualBasic::2c6dc3845f4010cd116d022e1a1e8581, R-sharp\Library\R.math\stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 629
-    '    Code Lines: 304
-    ' Comment Lines: 264
-    '   Blank Lines: 61
-    '     File Size: 26.12 KB
+' Summaries:
 
 
-    ' Module stats
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asDist, corr, corrTest, dataframeRow, dist
-    '               dnorm, ECDF, fisher_test, getQuantileLevels, matrixDataFrame
-    '               median, prcomp, printMatrix, printTtest, printTwoSampleTTest
-    '               quantile, spline, tabulateMode, ttest
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 629
+'    Code Lines: 304
+' Comment Lines: 264
+'   Blank Lines: 61
+'     File Size: 26.12 KB
+
+
+' Module stats
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asDist, corr, corrTest, dataframeRow, dist
+'               dnorm, ECDF, fisher_test, getQuantileLevels, matrixDataFrame
+'               median, prcomp, printMatrix, printTtest, printTwoSampleTTest
+'               quantile, spline, tabulateMode, ttest
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -682,6 +682,99 @@ Module stats
     <ExportAPI("fisher.test")>
     Public Function fisher_test(a%, b%, c%, d%) As FishersExactPvalues
         Return FishersExactTest.FishersExact(a, b, c, d)
+    End Function
+
+    ''' <summary>
+    ''' The Mantel test, named after Nathan Mantel, is a statistical test of 
+    ''' the correlation between two matrices. The matrices must be of the same
+    ''' dimension; in most applications, they are matrices of interrelations 
+    ''' between the same vectors of objects. The test was first published by 
+    ''' Nathan Mantel, a biostatistician at the National Institutes of Health, 
+    ''' in 1967.[1] Accounts of it can be found in advanced statistics books 
+    ''' (e.g., Sokal &amp; Rohlf 1995[2]).
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="y"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("mantel.test")>
+    Public Function mantel_test(<RRawVectorArgument> x As Object,
+                                <RRawVectorArgument> y As Object,
+                                <RRawVectorArgument>
+                                Optional c As Object = Nothing,
+                                Optional exact As Boolean = False,
+                                Optional raw As Boolean = False,
+                                Optional permutation As Integer = 1000,
+                                Optional env As Environment = Nothing) As Object
+
+        Dim err As Message = Nothing
+        Dim matA = getMatrix(x, env, "source x", err)
+        Dim matC As Double()() = Nothing
+
+        If Not err Is Nothing Then
+            Return err
+        End If
+
+        Dim matB = getMatrix(y, env, "source y", err)
+
+        If Not err Is Nothing Then
+            Return err
+        End If
+
+        If Not c Is Nothing Then
+            matC = getMatrix(c, env, "source c", err)
+
+            If Not err Is Nothing Then
+                Return err
+            End If
+        End If
+
+        Dim model As New Mantel.Model With {
+            .[partial] = Not c Is Nothing,
+            .exact = exact,
+            .raw = raw,
+            .matsize = matA.Length,
+            .numrand = permutation
+        }
+        Dim res = Mantel.test(model, matA, matB, matC)
+        Dim par As New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {NameOf(Mantel.Model.exact), res.exact},
+                {NameOf(Mantel.Model.partial), res.partial},
+                {NameOf(Mantel.Model.matsize), res.matsize},
+                {NameOf(Mantel.Model.numrand), res.numrand},
+                {NameOf(Mantel.Model.raw), res.raw}
+            }
+        }
+
+        Return New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"coef", res.coef},
+                {"pvalue", res.proba},
+                {"par", par}
+            }
+        }
+    End Function
+
+    Private Function getMatrix(x As Object, env As Environment, tag As String, ByRef err As Message) As Double()()
+        If TypeOf x Is Rdataframe Then
+            Dim mat As New List(Of Double())
+            Dim df As Rdataframe = DirectCast(x, Rdataframe)
+            Dim v As Array
+            Dim nrows As Integer = df.nrows
+
+            For Each i In df.forEachRow
+                v = i.ToArray
+                v = REnv.TryCastGenericArray(v, env)
+
+                Call mat.Add(v)
+            Next
+
+            Return mat.ToArray
+        Else
+            err = Message.InCompatibleType(GetType(Rdataframe), x.GetType, env, message:=$"can not extract numeric matrix from {tag}!")
+            Return Nothing
+        End If
     End Function
 End Module
 

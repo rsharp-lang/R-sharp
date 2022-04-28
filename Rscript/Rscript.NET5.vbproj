@@ -10,6 +10,7 @@
     <Configurations>Debug;Release;Rsharp_app_release;PlantMAT;NPSearch;mzkit_win32</Configurations>
     <StartupObject>Rsharp.NetCore5.Program</StartupObject>
 	  <RuntimeIdentifiers>win7-x64;win7-x86;win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
+	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -74,7 +75,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
     <DocumentationFile>Rscript.xml</DocumentationFile>
-    <OutputPath>../App\</OutputPath>
+    <OutputPath>E:\mzkit\dist\bin\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
