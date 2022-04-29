@@ -252,11 +252,19 @@ Namespace Runtime.Internal.Object
         ''' get column by name
         ''' </summary>
         ''' <typeparam name="T"></typeparam>
-        ''' <param name="name"></param>
-        ''' <returns></returns>
+        ''' <param name="synonym">同意名列表</param>
+        ''' <returns>
+        ''' 这个函数只会返回碰见的第一个同意名的列数据
+        ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function getVector(Of T)(name As String) As T()
-            Return REnv.asVector(Of T)(columns(name))
+        Public Function getVector(Of T)(ParamArray synonym As String()) As T()
+            For Each name As String In synonym
+                If columns.ContainsKey(name) Then
+                    Return REnv.asVector(Of T)(getVector(name, fullSize:=True))
+                End If
+            Next
+
+            Return Nothing
         End Function
 
         ''' <summary>
