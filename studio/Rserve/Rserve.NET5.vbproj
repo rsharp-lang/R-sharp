@@ -52,8 +52,13 @@
     <DocumentationFile>Rserve.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	  <DefineConstants>netcore5=1</DefineConstants>
+    <OutputPath>../../../../../mzkit\dist\bin\Rstudio\bin</OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup  Condition=" '$(TargetFramework)' == 'net6.0' ">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
     <DocumentationFile>Rserve.xml</DocumentationFile>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
