@@ -69,6 +69,10 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0' ">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data\GraphQuery\GraphQuery.NET5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />

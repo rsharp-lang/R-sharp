@@ -138,6 +138,10 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0' ">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Compile Remove="test\**" />
     <EmbeddedResource Remove="test\**" />

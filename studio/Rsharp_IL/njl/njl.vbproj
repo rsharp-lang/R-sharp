@@ -65,7 +65,9 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
   </PropertyGroup>
-
+  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0' ">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\..\..\R#\Rsharp-netcore5.vbproj" />

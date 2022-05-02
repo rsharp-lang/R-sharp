@@ -84,7 +84,9 @@
     <DefineTrace>true</DefineTrace>
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
   </PropertyGroup>
-
+  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0' ">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="test\**" />
     <EmbeddedResource Remove="test\**" />
