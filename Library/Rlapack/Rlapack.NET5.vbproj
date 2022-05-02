@@ -29,7 +29,9 @@
 	  <DefineConstants>netcore5=1</DefineConstants>
 	  <BaseAddress>4194304</BaseAddress>
 	</PropertyGroup>
-
+  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0' ">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 	  <DocumentationFile>Rlapack.xml</DocumentationFile>
 	  <RemoveIntegerChecks>true</RemoveIntegerChecks>

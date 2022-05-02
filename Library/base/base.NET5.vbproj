@@ -61,7 +61,9 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>../../App\</OutputPath>
   </PropertyGroup>
-
+  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0' ">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
     <DocumentationFile>base.xml</DocumentationFile>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
