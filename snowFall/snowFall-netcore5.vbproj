@@ -15,6 +15,7 @@
     <PackageProjectUrl>https://github.com/SMRUCC/R-sharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SMRUCC/R-sharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -51,7 +52,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
-    <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
+    <OutputPath>E:\mzkit\dist\bin\Rstudio\library\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>

@@ -82,7 +82,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
     <DocumentationFile>Rstudio.xml</DocumentationFile>
-    <OutputPath>../../App/</OutputPath>
+    <OutputPath>E:\mzkit\dist\bin\Rstudio\library\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>

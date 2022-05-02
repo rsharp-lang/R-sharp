@@ -7,6 +7,7 @@
     <AssemblyName>MLkit</AssemblyName>
     <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32</Configurations>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -56,7 +57,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
-    <OutputPath>../../../App\</OutputPath>
+    <OutputPath>E:\mzkit\dist\bin\Rstudio\library\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

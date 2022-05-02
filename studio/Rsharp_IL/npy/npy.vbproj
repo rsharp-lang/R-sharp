@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
-    <OutputPath>../../../App\</OutputPath>
+    <OutputPath>E:\mzkit\dist\bin\Rstudio\library\</OutputPath>
     <DocumentationFile>npy.xml</DocumentationFile>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
