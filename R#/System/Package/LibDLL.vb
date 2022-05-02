@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::e49bf54074a42e2ae63e01d68cd9c60e, R-sharp\R#\System\Package\LibDLL.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 93
-    '    Code Lines: 73
-    ' Comment Lines: 8
-    '   Blank Lines: 12
-    '     File Size: 3.62 KB
+' Summaries:
 
 
-    '     Class LibDLL
-    ' 
-    '         Function: GetDllFile, getDllFromAppDir, getDllFromAttachedPackages
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 93
+'    Code Lines: 73
+' Comment Lines: 8
+'   Blank Lines: 12
+'     File Size: 3.62 KB
+
+
+'     Class LibDLL
+' 
+'         Function: GetDllFile, getDllFromAppDir, getDllFromAttachedPackages
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -109,11 +109,21 @@ Namespace Development.Package
         End Function
 
         Private Shared Function getDllFromAppDir(libDll As String, globalEnvironment As GlobalEnvironment) As String
-            For Each location As String In {
-                    $"{App.HOME}/{libDll}",
-                    $"{App.HOME}/Library/{libDll}",
-                    $"{App.HOME}/../lib/{libDll}"
-                }
+            Dim SetDllDirectory As String = globalEnvironment.options.getOption("SetDllDirectory", env:=globalEnvironment)
+
+            If SetDllDirectory.DirectoryExists Then
+                If $"{SetDllDirectory}/{libDll}".FileExists Then
+                    Return $"{SetDllDirectory}/{libDll}"
+                End If
+            End If
+
+            For Each location As String In New String() {
+                $"{App.HOME}/{libDll}",
+                $"{App.HOME}/Library/{libDll}",
+                $"{App.HOME}/../lib/{libDll}",
+                $"{App.HOME}/../library/{libDll}",
+                $"{App.HOME}/../Library/{libDll}"
+            }
                 If location.FileExists Then
                     Return location
                 End If
@@ -128,18 +138,10 @@ Namespace Development.Package
             ' if file not found then we test if the dll 
             ' file extension Is Missing Or Not?
             If Not libDll.ExtensionSuffix("exe", "dll") Then
-                For Each location As String In {
-                    $"{App.HOME}/{libDll}.dll",
-                    $"{App.HOME}/Library/{libDll}.dll",
-                    $"{App.HOME}/../lib/{libDll}.dll"
-                }
-                    If location.FileExists Then
-                        Return location
-                    End If
-                Next
+                Return getDllFromAppDir($"{libDll}.dll", globalEnvironment)
+            Else
+                Return Nothing
             End If
-
-            Return Nothing
         End Function
     End Class
 End Namespace
