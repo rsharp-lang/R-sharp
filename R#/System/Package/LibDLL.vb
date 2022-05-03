@@ -108,8 +108,20 @@ Namespace Development.Package
             Return Nothing
         End Function
 
-        Private Shared Function getDllFromAppDir(libDll As String, globalEnvironment As GlobalEnvironment) As String
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="libDll">
+        ''' the dll file name or full path
+        ''' </param>
+        ''' <param name="globalEnvironment"></param>
+        ''' <returns></returns>
+        Friend Shared Function getDllFromAppDir(libDll As String, globalEnvironment As GlobalEnvironment) As String
             Dim SetDllDirectory As String = globalEnvironment.options.getOption("SetDllDirectory", env:=globalEnvironment)
+
+            If libDll.FileExists Then
+                Return libDll.GetFullPath
+            End If
 
             If SetDllDirectory.DirectoryExists Then
                 If $"{SetDllDirectory}/{libDll}".FileExists Then
