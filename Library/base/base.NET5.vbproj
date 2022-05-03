@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>Rbase</RootNamespace>
-	  <TargetFrameworks>net6.0;net5.0;net48</TargetFrameworks>
+	  <TargetFrameworks>net6.0;net5.0;net48;net6.0-windows</TargetFrameworks>
     <AssemblyName>base</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32</Configurations>
@@ -61,7 +61,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>../../App\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0' ">
+  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">

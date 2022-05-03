@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<RootNamespace>Rlapack</RootNamespace>
-		<TargetFrameworks>net6.0;net5.0;net48</TargetFrameworks>
+    <TargetFrameworks>net6.0;net5.0;net48;net6.0-windows</TargetFrameworks>
 		<AssemblyName>Rlapack</AssemblyName>
 		<Authors>xie.guigang@live.com</Authors>
 		<Company>sciBASIC.NET</Company>
@@ -29,7 +29,7 @@
 	  <DefineConstants>netcore5=1</DefineConstants>
 	  <BaseAddress>4194304</BaseAddress>
 	</PropertyGroup>
-  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0' ">
+  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
