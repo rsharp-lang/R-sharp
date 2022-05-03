@@ -90,7 +90,7 @@
     <DefineTrace>true</DefineTrace>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0-windows|x64'">
     <OutputPath>E:\mzkit\dist\bin\Rstudio\library\</OutputPath>
   </PropertyGroup>
 
