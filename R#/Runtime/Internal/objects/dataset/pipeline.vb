@@ -54,11 +54,6 @@
 
 #End Region
 
-#If netcore5 = 1 Then
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-#Else
-Imports System.Web.Script.Serialization
-#End If
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -81,7 +76,6 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         Dim populatorFirstErr As Message
 
-        <ScriptIgnore>
         Public Property [pipeFinalize] As Action
 
         ''' <summary>
