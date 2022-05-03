@@ -204,7 +204,13 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("GetDllFile")>
         Public Function getDllPath(<RRawVectorArgument> files As Object, Optional env As Environment = Nothing) As Object
-            Return EvaluateFramework(Of String, String)(env, files, Function(name) LibDLL.getDllFromAppDir(name, env.globalEnvironment))
+            Return EvaluateFramework(Of String, String)(
+                env:=env,
+                x:=files,
+                eval:=Function(name)
+                          Return LibDLL.getDllFromAppDir(name, env.globalEnvironment).GetFullPath
+                      End Function
+            )
         End Function
     End Module
 End Namespace
