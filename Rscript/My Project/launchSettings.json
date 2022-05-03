@@ -3,7 +3,7 @@
     "Rscript-netcore5": {
       "commandName": "Project",
       "commandLineArgs": "E:/mzkit/src/mzkit/rstudio/services/MSI-host.R --SetDllDirectory E:/mzkit/dist/bin/Rstudio/host",
-      "workingDirectory": "E:\\mzkit\\dist\\bin"
+      "workingDirectory": "E:\\mzkit\\dist\\bin\\Rstudio\\bin"
     }
   }
 }
