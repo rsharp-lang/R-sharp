@@ -298,6 +298,14 @@ Module math
             .ToArray
     End Function
 
+    <ExportAPI("gini")>
+    Public Function Gini(<RRawVectorArgument> data As Object) As Double
+        Dim raw As Double() = DirectCast(REnv.asVector(Of Double)(data), Double())
+        Dim prob As Double() = raw.AsVector / raw.Max
+
+        Return prob.Gini
+    End Function
+
     ''' <summary>
     ''' loess fit
     ''' </summary>

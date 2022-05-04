@@ -77,6 +77,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -452,6 +453,21 @@ Module graphics2D
     Public Function DrawCircle(g As IGraphics, center As PointF, r As Single, <RRawVectorArgument> Optional color As Object = "black", Optional border As Object = Stroke.AxisGridStroke) As IGraphics
         Call Circle.Draw(g, center, r, gdi.getBrush(color), Stroke.TryParse(InteropArgumentHelper.getStrokePenCSS(border, Nothing)))
         Return g
+    End Function
+
+    <ExportAPI("draw.rectangle")>
+    Public Function DrawRectangle(color As Object, rect As Object, Optional g As IGraphics = Nothing)
+        Dim colorVal As Color = RColorPalette.GetRawColor(color)
+
+        If g Is Nothing Then
+            g = Invokes.graphics.curDev.g
+        End If
+
+        If TypeOf rect Is Rectangle Then
+            Call g.FillRectangle(New SolidBrush(colorVal), DirectCast(rect, Rectangle))
+        Else
+            Call g.FillRectangle(New SolidBrush(colorVal), DirectCast(rect, RectangleF))
+        End If
     End Function
 
     <ExportAPI("axis.ticks")>
