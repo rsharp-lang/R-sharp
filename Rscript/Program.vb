@@ -135,9 +135,14 @@ Module Program
     Private Function RunRscriptFile(filepath As String, args As CommandLine) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
+        Dim SetDllDirectory As String = args("--SetDllDirectory")
 
         If args("--debug") Then
             R.debug = True
+        End If
+
+        If Not SetDllDirectory.StringEmpty Then
+            Call R.globalEnvir.options.setOption("SetDllDirectory", SetDllDirectory)
         End If
 
         If R.debug Then

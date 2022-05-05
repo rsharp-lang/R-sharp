@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src ../ /save ../../mzkit_1.1.0-beta.zip --skip-src-build",
-      "workingDirectory": "E:\\mzkit\\Rscript\\Library\\mzkit_app\\.pkg"
+      "commandLineArgs": "E:/mzkit/src/mzkit/rstudio/services/MSI-host.R --SetDllDirectory E:/mzkit/dist/bin/Rstudio/host",
+      "workingDirectory": "E:\\mzkit\\dist\\bin\\Rstudio\\bin"
     }
   }
 }

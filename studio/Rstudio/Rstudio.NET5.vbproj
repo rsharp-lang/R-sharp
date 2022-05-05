@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <RootNamespace>Rstudio</RootNamespace>
-	  <TargetFrameworks>net6.0-windows;net5.0-windows;net48</TargetFrameworks>
+	   <TargetFrameworks>net48;net6.0-windows;net5.0-windows</TargetFrameworks>
     <AssemblyName>Rstudio</AssemblyName>
    
     <Platforms>AnyCPU;x64</Platforms>
@@ -82,7 +82,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
     <DocumentationFile>Rstudio.xml</DocumentationFile>
-    <OutputPath>../../App/</OutputPath>
+    <OutputPath>E:\mzkit\dist\bin\Rstudio\library\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
@@ -108,7 +108,9 @@
     <PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
-
+  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
 	<ItemGroup>
 		<Import Include="System.Data" />
 		<Import Include="System.Drawing" />

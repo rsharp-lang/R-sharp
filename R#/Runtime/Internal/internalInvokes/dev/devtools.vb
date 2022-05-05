@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.Repository
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.Components
+Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -194,5 +195,22 @@ Namespace Runtime.Internal.Invokes
         Public Sub gc()
             Call App.FlushMemory()
         End Sub
+
+        ''' <summary>
+        ''' get library dll file path
+        ''' </summary>
+        ''' <param name="files"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("GetDllFile")>
+        Public Function getDllPath(<RRawVectorArgument> files As Object, Optional env As Environment = Nothing) As Object
+            Return EvaluateFramework(Of String, String)(
+                env:=env,
+                x:=files,
+                eval:=Function(name)
+                          Return LibDLL.getDllFromAppDir(name, env.globalEnvironment).GetFullPath
+                      End Function
+            )
+        End Function
     End Module
 End Namespace

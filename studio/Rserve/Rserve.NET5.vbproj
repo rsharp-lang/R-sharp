@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>Rserve</RootNamespace>
-	  <TargetFrameworks>net6.0;net5.0;net48</TargetFrameworks>
+	  <TargetFrameworks>net6.0;net5.0;net48;net6.0-windows</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
     <AssemblyName>Rserve</AssemblyName>
     <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32</Configurations>
@@ -52,8 +52,13 @@
     <DocumentationFile>Rserve.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	  <DefineConstants>netcore5=1</DefineConstants>
+    <OutputPath>../../../../../mzkit\dist\bin\Rstudio\bin</OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
     <DocumentationFile>Rserve.xml</DocumentationFile>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>

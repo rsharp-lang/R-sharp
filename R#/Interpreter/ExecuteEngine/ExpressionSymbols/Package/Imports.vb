@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::246c15b0221162d9057b995b95accee6, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 308
-    '    Code Lines: 199
-    ' Comment Lines: 72
-    '   Blank Lines: 37
-    '     File Size: 12.70 KB
+' Summaries:
 
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Class [Imports]
-    ' 
-    '         Properties: expressionName, isImportsScript, library, packages, scriptSource
-    '                     type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsLibrary, importsPackages
-    '                   isImportsAllPackages, LoadLibrary, ToString
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 308
+'    Code Lines: 199
+' Comment Lines: 72
+'   Blank Lines: 37
+'     File Size: 12.70 KB
+
+
+'     Delegate Function
+' 
+' 
+'     Class [Imports]
+' 
+'         Properties: expressionName, isImportsScript, library, packages, scriptSource
+'                     type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsLibrary, importsPackages
+'                   isImportsAllPackages, LoadLibrary, ToString
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -71,6 +71,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports any = Microsoft.VisualBasic.Scripting
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
@@ -224,7 +225,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                             Return any.ToString(o, Nothing)
                         End Function) _
                 .ToArray
-            Dim dllName As String = any.ToString(Runtime.getFirst(library.Evaluate(env)))
+            Dim dllName As String = any.ToString(REnv.getFirst(library.Evaluate(env)))
             Dim libDll As Object = GetDllFile(dllName, env)
 
             If Program.isException(libDll) Then
