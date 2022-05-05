@@ -389,7 +389,25 @@ RE0:
                 Return makeDataframe.fromList(DirectCast(x, list), env)
             ElseIf makeDataframe.is_ableConverts(type) Then
                 ' generic overloads method for .NET object
+                ' direct cast at here
                 Return makeDataframe.createDataframe(type, x, args, env)
+            ElseIf type.IsArray Then
+                ' 20220505 try to handling the array bugs when
+                ' target array contains single element
+                If DirectCast(x, Array).Length = 1 AndAlso makeDataframe.is_ableConverts(type.GetElementType) Then
+                    x = DirectCast(x, Array).GetValue(Scan0)
+                    type = x.GetType
+
+                    Return makeDataframe.createDataframe(type, x, args, env)
+                Else
+                    Dim err As Message = handleUnsure(x, type, env)
+
+                    If Not err Is Nothing Then
+                        Return err
+                    Else
+                        GoTo RE0
+                    End If
+                End If
             Else
                 ' generic overloads method for .NET object
                 ' <base type>
