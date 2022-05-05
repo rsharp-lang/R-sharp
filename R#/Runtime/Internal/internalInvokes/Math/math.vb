@@ -1,59 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::f157e8b856a5e50382ed98ed15ff1bbf, R-sharp\R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 593
-    '    Code Lines: 307
-    ' Comment Lines: 224
-    '   Blank Lines: 62
-    '     File Size: 25.01 KB
+' Summaries:
 
 
-    '     Module math
-    ' 
-    '         Function: abs, cluster1D, cos, diff, exp
-    '                   getRandom, log, log10, log2, max
-    '                   mean, median, min, pearson, pow
-    '                   rnorm, round, rsd, runif, sample
-    '                   sample_int, sd, sin, sqrt, sum
-    '                   var
-    ' 
-    '         Sub: set_seed
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 593
+'    Code Lines: 307
+' Comment Lines: 224
+'   Blank Lines: 62
+'     File Size: 25.01 KB
+
+
+'     Module math
+' 
+'         Function: abs, cluster1D, cos, diff, exp
+'                   getRandom, log, log10, log2, max
+'                   mean, median, min, pearson, pow
+'                   rnorm, round, rsd, runif, sample
+'                   sample_int, sd, sin, sqrt, sum
+'                   var
+' 
+'         Sub: set_seed
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -603,6 +603,23 @@ Namespace Runtime.Internal.Invokes
                             }
                         End Function) _
                 .ToArray
+        End Function
+
+        <ExportAPI("numeric_tags")>
+        Public Function numericClassTags(<RRawVectorArgument> x As Object, offset As Double) As Integer()
+            Dim data As Double() = DirectCast(REnv.asVector(Of Double)(x), Double())
+            Dim groups = data.GroupBy(offset).ToArray
+            Dim tags As New List(Of Integer)
+            Dim means As Double() = groups.Select(Function(a) a.Average).ToArray
+
+            For Each xj As Double In data
+                Dim d = means.Select(Function(xi) stdNum.Abs(xi - xj)).ToArray
+                Dim i As Integer = which.Min(d)
+
+                Call tags.Add(i + 1)
+            Next
+
+            Return tags.ToArray
         End Function
 
         ''' <summary>
