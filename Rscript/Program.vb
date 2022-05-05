@@ -150,10 +150,10 @@ Module Program
             Call Console.WriteLine()
         End If
 
-        Call R.LoadLibrary("base", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
-        Call R.LoadLibrary("utils", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
-        Call R.LoadLibrary("grDevices", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
-        Call R.LoadLibrary("math", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+        Call R.LoadLibrary("base", silent:=True, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+        Call R.LoadLibrary("utils", silent:=True, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+        Call R.LoadLibrary("grDevices", silent:=True, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+        Call R.LoadLibrary("math", silent:=True, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
 
         Call Console.WriteLine()
 
