@@ -118,6 +118,13 @@ Public Module Extensions
         End If
     End Function
 
+    ''' <summary>
+    ''' get target value as string
+    ''' </summary>
+    ''' <param name="list"></param>
+    ''' <param name="key$"></param>
+    ''' <param name="default$"></param>
+    ''' <returns></returns>
     <Extension>
     Public Function GetString(list As list, key$, Optional default$ = Nothing) As String
         If Not list.hasName(key) Then
@@ -167,7 +174,9 @@ Public Module Extensions
     ''' <typeparam name="T">输入的元素类型</typeparam>
     ''' <typeparam name="TOut">输出的元素类型</typeparam>
     ''' <param name="env"></param>
-    ''' <param name="x">输入的数据源</param>
+    ''' <param name="x">the input object source, supports vector, list, and scalar data object.
+    ''' (输入的数据源)
+    ''' </param>
     ''' <param name="eval">求值函数</param>
     ''' <returns></returns>
     <Extension>
@@ -231,6 +240,12 @@ Public Module Extensions
         End If
     End Function
 
+    ''' <summary>
+    ''' try to convert any object as bytes byffer data
+    ''' </summary>
+    ''' <param name="stream"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Public Function Buffer(<RRawVectorArgument> stream As Object, env As Environment) As [Variant](Of Byte(), Message)
         Dim bytes As pipeline = pipeline.TryCreatePipeline(Of Byte)(stream, env)
 
