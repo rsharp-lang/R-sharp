@@ -109,7 +109,11 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' <param name="opts"></param>
         ''' <returns></returns>
         Public Function FunctionInvoke(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Return FunctionInvoke(tokens(Scan0), tokens.Skip(1).ToArray, opts)
+            Try
+                Return FunctionInvoke(tokens(Scan0), tokens.Skip(1).ToArray, opts)
+            Catch ex As Exception
+                Return New SyntaxResult(SyntaxError.CreateError(opts, ex))
+            End Try
         End Function
 
         <Extension>
