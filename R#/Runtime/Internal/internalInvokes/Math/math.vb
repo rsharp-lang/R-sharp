@@ -351,9 +351,43 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
         End Function
 
-        <ExportAPI("RSD")>
+        ''' <summary>
+        ''' ## relative standard deviation
+        ''' 
+        ''' Relative standard deviation is a common formula 
+        ''' used in statistics and probability theory to determine
+        ''' a standardized measure of the ratio of the standard
+        ''' deviation to the mean. This formula is useful in
+        ''' various situations including when comparing your 
+        ''' own data to other related data and in financial 
+        ''' settings such as the stock market.
+        ''' 
+        ''' Relative standard deviation, which also may be referred 
+        ''' to as RSD or the coefficient of variation, is used 
+        ''' to determine if the standard deviation of a set of 
+        ''' data is small or large when compared to the mean.
+        ''' In other words, the relative standard deviation can
+        ''' tell you how precise the average of your results is.
+        ''' This formula is most frequently used in chemistry, 
+        ''' statistics and other math-related settings but can 
+        ''' also be used in the business world when assessing
+        ''' finances and the stock market.
+        ''' 
+        ''' The relative standard deviation Of a Set Of data can be
+        ''' depicted As either a percentage Or As a number. The 
+        ''' higher the relative standard deviation, the more spread 
+        ''' out the results are from the mean Of the data. On the
+        ''' other hand, a lower relative standard deviation means 
+        ''' that the measurement Of data Is more precise.
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("rsd")>
         Public Function rsd(x As Array) As Double
-            Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).RSD
+            Return REnv _
+                .asVector(Of Double)(x) _
+                .AsObjectEnumerator(Of Double) _
+                .RSD
         End Function
 
         ''' <summary>
@@ -379,8 +413,45 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' ## Pearson Correlation Testing in R Programming
+        ''' 
+        ''' Correlation is a statistical measure that indicates 
+        ''' how strongly two variables are related. It involves 
+        ''' the relationship between multiple variables as well. 
+        ''' For instance, if one is interested to know whether 
+        ''' there is a relationship between the heights of fathers 
+        ''' and sons, a correlation coefficient can be calculated 
+        ''' to answer this question. Generally, it lies between 
+        ''' -1 and +1. It is a scaled version of covariance and 
+        ''' provides the direction and strength of a relationship. 
+        ''' 
+        ''' this function measure a Parametric Correlation – Pearson correlation(r): 
+        ''' It measures a linear dependence between two variables (x and y) 
+        ''' is known as a parametric correlation test because it depends on 
+        ''' the distribution of the data.
+        ''' 
+        ''' Pearson Rank Correlation is a parametric correlation. 
+        ''' The Pearson correlation coefficient is probably the most
+        ''' widely used measure for linear relationships between two 
+        ''' normal distributed variables and thus often just called 
+        ''' "correlation coefficient". 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="y"></param>
+        ''' <param name="MAXIT"></param>
+        ''' <returns>
+        ''' 1. r takes a value between -1 (negative correlation) and 1 (positive correlation).
+        ''' 2. r = 0 means no correlation.
+        ''' 3. Can Not be applied to ordinal variables.
+        ''' 4. The sample size should be moderate (20-30) For good estimation.
+        ''' 5. Outliers can lead To misleading values means Not robust With outliers.
+        ''' </returns>
         <ExportAPI("pearson")>
-        Public Function pearson(x As Array, y As Array, Optional MAXIT As Integer = 5000) As list
+        Public Function pearson(x As Array, y As Array,
+                                Optional MAXIT As Integer = 5000,
+                                Optional env As Environment = Nothing) As Object
+
             Dim data1 As Double() = REnv.asVector(Of Double)(x)
             Dim data2 As Double() = REnv.asVector(Of Double)(y)
             Dim p1#
@@ -388,7 +459,15 @@ Namespace Runtime.Internal.Invokes
             Dim z#
             Dim cor#
 
-            Beta.MAXIT = MAXIT
+            If data1.Length <> data2.Length Then
+                Return Internal.debug.stop({
+                    "incompatible dimensions!",
+                    "dims(x): " & data1.Length,
+                    "dims(y): " & data2.Length
+                }, env)
+            Else
+                Beta.MAXIT = MAXIT
+            End If
 
             cor = GetPearson(data1, data2, p1, p2, z, throwMaxIterError:=False)
 
@@ -405,7 +484,10 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' set.seed is the recommended way to specify seeds.
         ''' </summary>
-        ''' <param name="seed">a single value, interpreted as an integer, or NULL (see ‘Details’).</param>
+        ''' <param name="seed">
+        ''' a single value, interpreted as an integer, 
+        ''' or NULL (see ‘Details’).
+        ''' </param>
         ''' <remarks>
         ''' set.seed returns NULL, invisibly.
         ''' </remarks>
@@ -414,6 +496,10 @@ Namespace Runtime.Internal.Invokes
             randf.SetSeed(seed)
         End Sub
 
+        ''' <summary>
+        ''' get a random number value between ``[0,1]``.
+        ''' </summary>
+        ''' <returns></returns>
         <ExportAPI("rnd")>
         Public Function getRandom() As Double
             Return randf.seeds.NextDouble
