@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "E:/mzkit/src/mzkit/rstudio/services/MSI-host.R --SetDllDirectory E:/mzkit/dist/bin/Rstudio/host",
-      "workingDirectory": "E:\\mzkit\\dist\\bin\\Rstudio\\bin"
+      "commandLineArgs": "--build /src ../ /save ./Markdown2PDF.zip",
+      "workingDirectory": "D:\\GCModeller\\src\\workbench\\markdown2pdf\\.pkg"
     }
   }
 }
