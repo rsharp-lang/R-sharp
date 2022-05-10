@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.ComponentModel.Algorithm
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
@@ -33,6 +34,24 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 key:=Function(a) a.value,
                 compares:=Function(a, b) a.CompareTo(b)
             )
+
+            Return index
+        End Function
+
+        <ExportAPI("blockQuery")>
+        Public Function blockQuery(v As BlockSearchFunction(Of Object), x As Object) As Object()
+            Return v.Search(x).ToArray
+        End Function
+
+        <ExportAPI("blockIndex")>
+        Public Function blockIndex(v As Array,
+                                   tolerance As Double,
+                                   eval As DeclareLambdaFunction,
+                                   Optional blocks As Integer = 100,
+                                   Optional env As Environment = Nothing) As BlockSearchFunction(Of Object)
+
+            Dim f As Func(Of Object, Double) = eval.CreateLambda(Of Object, Double)(env)
+            Dim index As New BlockSearchFunction(Of Object)(v.AsObjectEnumerator, f, tolerance, blocks)
 
             Return index
         End Function
