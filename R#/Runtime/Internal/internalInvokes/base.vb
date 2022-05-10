@@ -2537,7 +2537,7 @@ RE0:
 
             Dim quot As Boolean = args.getValue("quot", env, True)
             Dim maxPrint As Integer = args.getValue("max.print", env, globalEnv.options.maxPrint)
-            Dim fields As String() = args.getValue(Of String())("fields", env, Nothing)
+            Dim fields As String() = args.getValue(Of String())("select", env, Nothing)
 
             Static dummy As New Object
 

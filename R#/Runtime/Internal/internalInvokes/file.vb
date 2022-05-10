@@ -478,7 +478,7 @@ Namespace Runtime.Internal.Invokes
             If pattern(Scan0) = "*.*" Then
                 Return zip.ls
             Else
-                Return Search.DoFileNameGreps(ls - l - r - pattern, zip.ls).ToArray
+                Return UnixBash.Search.DoFileNameGreps(ls - l - r - pattern, zip.ls).ToArray
             End If
         End Function
 
