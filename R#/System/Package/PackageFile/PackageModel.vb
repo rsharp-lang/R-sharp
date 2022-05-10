@@ -157,6 +157,11 @@ Namespace Development.Package.File
             Return symbols
         End Function
 
+        ''' <summary>
+        ''' copy .NET assembly dll files
+        ''' </summary>
+        ''' <param name="zip"></param>
+        ''' <param name="checksum"></param>
         Private Sub copyAssembly(zip As ZipArchive, ByRef checksum$)
             Dim md5 As New Md5HashProvider
             Dim text As String
@@ -177,7 +182,9 @@ Namespace Development.Package.File
             End Using
 
             Using file As New StreamWriter(zip.CreateEntry("lib/assembly/readme.txt").Open)
-                text = ".NET assembly files"
+                text = $".NET assembly files [{assembly.framework}]"
+                text = text & vbCrLf & vbCrLf
+                text = text & assembly.assembly.Select(AddressOf FileName).JoinBy(vbCrLf)
                 checksum = checksum & md5.GetMd5Hash(text)
 
                 Call file.WriteLine(text)
@@ -186,7 +193,7 @@ Namespace Development.Package.File
 
             ' dll is the file path
             ' pack assembly folder
-            Dim contents As String() = assembly.AsEnumerable.ToArray
+            Dim contents As String() = assembly.GetAllPackageContentFiles.ToArray
             Dim assemblyDirFull As String = assembly.directory.GetDirectoryFullPath
 
             Call zip.WriteFiles(
