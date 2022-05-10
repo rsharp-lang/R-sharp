@@ -1,62 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::84e57cc2c9b8fae3eb598362cf6812bf, R-sharp\R#\Runtime\Internal\printer\printer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 354
-    '    Code Lines: 265
-    ' Comment Lines: 39
-    '   Blank Lines: 50
-    '     File Size: 15.49 KB
+' Summaries:
 
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Module printer
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: DateToString, f64_InternalToString, getMaxColumns, getStrings, printStream
-    '                   ToString, ValueToString
-    ' 
-    '         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printContentArray, printInternal
-    '              printList
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 354
+'    Code Lines: 265
+' Comment Lines: 39
+'   Blank Lines: 50
+'     File Size: 15.49 KB
+
+
+'     Delegate Function
+' 
+' 
+'     Module printer
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: DateToString, f64_InternalToString, getMaxColumns, getStrings, printStream
+'                   ToString, ValueToString
+' 
+'         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printContentArray, printInternal
+'              printList
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -73,6 +73,7 @@ Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.base
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
@@ -188,7 +189,7 @@ Namespace Runtime.Internal.ConsolePrinter
             RInternalToString(GetType(T)) = formatter
         End Sub
 
-        Friend Sub printInternal(x As Object, listPrefix$, maxPrint%, quot As Boolean, env As GlobalEnvironment)
+        Friend Sub printInternal(x As Object, listPrefix As String, opts As PrinterOptions, env As GlobalEnvironment)
             Dim valueType As Type
             Dim output As RContentOutput = env.stdout
 
@@ -204,7 +205,7 @@ Namespace Runtime.Internal.ConsolePrinter
             ElseIf valueType.IsInheritsFrom(GetType(Array)) Then
                 With DirectCast(x, Array)
                     If .Length > 1 Then
-                        Call .printArray(maxPrint, env)
+                        Call .printArray(opts.maxPrint, env)
                     ElseIf .Length = 0 Then
                         Call output.WriteLine("NULL")
                     Else
@@ -217,22 +218,28 @@ Namespace Runtime.Internal.ConsolePrinter
             ElseIf valueType Is GetType(vector) Then
                 Dim vec As vector = DirectCast(x, vector)
 
-                Call vec.data.printArray(maxPrint, env)
+                Call vec.data.printArray(opts.maxPrint, env)
 
                 If Not vec.unit Is Nothing Then
                     Call output.WriteLine($"unit: {vec.unit}")
                 End If
 
             ElseIf valueType.ImplementInterface(GetType(IDictionary)) Then
-                Call DirectCast(x, IDictionary).printList(listPrefix, maxPrint, quot, env)
+                Call DirectCast(x, IDictionary).printList(listPrefix, opts, env)
             ElseIf valueType Is GetType(list) Then
                 Call DirectCast(x, list) _
                     .slots _
                     .DoCall(Sub(list)
-                                DirectCast(list, IDictionary).printList(listPrefix, maxPrint, quot, env)
+                                Call DirectCast(list, IDictionary).printList(listPrefix, opts, env)
                             End Sub)
             ElseIf valueType Is GetType(dataframe) Then
-                Call tablePrinter.PrintTable(DirectCast(x, dataframe), maxPrint, output, env)
+                Dim dataframe As dataframe = DirectCast(x, dataframe)
+
+                If Not opts.fields.IsNullOrEmpty Then
+                    dataframe = dataframe.projectByColumn(opts.fields)
+                End If
+
+                Call tablePrinter.PrintTable(dataframe, opts.maxPrint, output, env)
             ElseIf valueType Is GetType(vbObject) Then
                 Call DirectCast(x, vbObject).ToString.DoCall(AddressOf output.WriteLine)
             Else
@@ -244,7 +251,7 @@ printSingleElement:
         End Sub
 
         <Extension>
-        Private Sub printList(list As IDictionary, listPrefix$, maxPrint%, quot As Boolean, env As GlobalEnvironment)
+        Private Sub printList(list As IDictionary, listPrefix$, opts As PrinterOptions, env As GlobalEnvironment)
             Dim output As RContentOutput = env.stdout
 
             For Each objKey As Object In list.Keys
@@ -258,7 +265,7 @@ printSingleElement:
                 End If
 
                 Call output.WriteLine(key)
-                Call printer.printInternal(slotValue, key, maxPrint, quot, env)
+                Call printer.printInternal(slotValue, key, opts, env)
                 Call output.WriteLine()
             Next
         End Sub

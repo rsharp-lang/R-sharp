@@ -2537,6 +2537,7 @@ RE0:
 
             Dim quot As Boolean = args.getValue("quot", env, True)
             Dim maxPrint As Integer = args.getValue("max.print", env, globalEnv.options.maxPrint)
+            Dim fields As String() = args.getValue(Of String())("fields", env, Nothing)
 
             Static dummy As New Object
 
@@ -2551,7 +2552,8 @@ RE0:
                 Else
                     Return New PrinterOptions With {
                         .maxPrint = maxPrint,
-                        .quot = quot
+                        .quot = quot,
+                        .fields = fields
                     }.doPrintInternal(x, x.GetType, env)
                 End If
             End SyncLock
@@ -2559,8 +2561,19 @@ RE0:
 
         Friend Class PrinterOptions
 
+            ''' <summary>
+            ''' quot string with symbol `"`?
+            ''' </summary>
+            ''' <returns></returns>
             Public Property quot As Boolean = True
             Public Property maxPrint As Integer
+            ''' <summary>
+            ''' fields for select data from the dataframe 
+            ''' to print contents, nothing means print all
+            ''' fields
+            ''' </summary>
+            ''' <returns></returns>
+            Public Property fields As String()
 
         End Class
 
@@ -2595,7 +2608,7 @@ RE0:
             ElseIf type Is GetType(Message) Then
                 Return x
             Else
-                Call printer.printInternal(x, "", maxPrint, quot:=opts.quot, env:=globalEnv)
+                Call printer.printInternal(x, "", opts, env:=globalEnv)
             End If
 
             Return x
