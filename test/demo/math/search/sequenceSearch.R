@@ -28,7 +28,7 @@ profiler.fetch()
 
     x = binaryIndex(x);
     x = sapply(1:20000, any -> binarySearch(x, a));
-print(x);
+
     print("assert result:");
     print(all(x == i));
 }
