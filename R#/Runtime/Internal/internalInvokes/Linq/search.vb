@@ -47,11 +47,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         Public Function blockIndex(v As Array,
                                    tolerance As Double,
                                    eval As DeclareLambdaFunction,
-                                   Optional blocks As Integer = 100,
                                    Optional env As Environment = Nothing) As BlockSearchFunction(Of Object)
 
             Dim f As Func(Of Object, Double) = eval.CreateLambda(Of Object, Double)(env)
-            Dim index As New BlockSearchFunction(Of Object)(v.AsObjectEnumerator, f, tolerance, blocks)
+            Dim index As New BlockSearchFunction(Of Object)(v.AsObjectEnumerator, f, tolerance)
 
             Return index
         End Function
