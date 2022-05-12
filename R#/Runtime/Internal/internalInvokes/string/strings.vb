@@ -178,6 +178,21 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' Returns a string containing a copy of a specified string with no leading spaces
+        ''' (LTrim), no trailing spaces (RTrim), Or no leading Or trailing spaces (Trim).
+        ''' </summary>
+        ''' <param name="strings">Required. Any valid String expression.</param>
+        ''' <returns>
+        ''' A string containing a copy of a specified string with no leading spaces (LTrim),
+        ''' no trailing spaces (RTrim), Or no leading Or trailing spaces (Trim).</returns>
+        <ExportAPI("ltrim")>
+        Public Function ltrim(strings$()) As Object
+            Return strings _
+                .Select(Function(str) BASICString.LTrim(str)) _
+                .ToArray
+        End Function
+
+        ''' <summary>
         ''' Returns an integer specifying the start position of the first occurrence of one
         ''' string within another.
         ''' </summary>
