@@ -296,11 +296,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Dim funcVar As Object
 
             If (Not [namespace].StringEmpty) AndAlso (Not [namespace] = "n/a") Then
-                Return NamespaceFunctionSymbolReference.getPackageApiImpl(
-                    env:=envir,
-                    [namespace]:=[namespace],
-                    funcNameSymbol:=funcName
-                )
+                If [namespace] <> ".Internal" Then
+                    ' 20220512
+                    ' 
+                    ' ignore ``.Internal`` namespace
+                    ' do calls of internal invoke for makes bug fixed
+                    ' of the function overrides that comes from the
+                    ' external package
+                    Return NamespaceFunctionSymbolReference.getPackageApiImpl(
+                        env:=envir,
+                        [namespace]:=[namespace],
+                        funcNameSymbol:=funcName
+                    )
+                End If
             End If
 
             If TypeOf funcName Is Literal Then
