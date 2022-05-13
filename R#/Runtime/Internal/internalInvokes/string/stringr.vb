@@ -57,6 +57,7 @@
 #End Region
 
 Imports System.Drawing
+Imports System.Globalization
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
@@ -122,6 +123,7 @@ Namespace Runtime.Internal.Invokes
         <RApiReturn(GetType(String))>
         Public Function [objToString](<RRawVectorArgument> x As Object,
                                       Optional format$ = Nothing,
+                                      Optional culture As CultureInfo = Nothing,
                                       Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return ""
@@ -155,6 +157,12 @@ Namespace Runtime.Internal.Invokes
                     toString = Function(xi)
                                    If xi Is Nothing Then
                                        Return ""
+                                   ElseIf TypeOf xi Is Date Then
+                                       If culture Is Nothing Then
+                                           Return DirectCast(xi, Date).ToString(format)
+                                       Else
+                                           Return DirectCast(xi, Date).ToString(format, culture)
+                                       End If
                                    Else
                                        ' Call 1.0.ToString(format:="")
                                        ' Call #2022-04-25#.ToString(format:="d MMM yyyy")

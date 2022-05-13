@@ -326,5 +326,18 @@ Namespace Runtime.Internal.Invokes
                 }
             }
         End Function
+
+        ''' <summary>
+        ''' Initializes a new instance of the System.Globalization.CultureInfo class based
+        ''' on the culture specified by name.
+        ''' </summary>
+        ''' <param name="cultureName">A predefined System.Globalization.CultureInfo name,
+        ''' System.Globalization.CultureInfo.Name of an existing System.Globalization.CultureInfo, 
+        ''' Or Windows-only culture name. name Is Not case-sensitive.</param>
+        ''' <returns></returns>
+        <ExportAPI("cultureInfo")>
+        Public Function CultureInfo(Optional cultureName As String = "en-US") As CultureInfo
+            Return New CultureInfo(name:=cultureName)
+        End Function
     End Module
 End Namespace
