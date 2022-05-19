@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::674a3c277b362c016a5269152a93b06f, R-sharp\studio\Rsharp_kit\devkit\package.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 129
-    '    Code Lines: 91
-    ' Comment Lines: 25
-    '   Blank Lines: 13
-    '     File Size: 5.02 KB
+' Summaries:
 
 
-    ' Module package
-    ' 
-    '     Function: attach, deserialize, loadExpr, Parse, ParseRDataRaw
-    '               serialize, UnpackObjects
-    ' 
-    '     Sub: loadPackage
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 129
+'    Code Lines: 91
+' Comment Lines: 25
+'   Blank Lines: 13
+'     File Size: 5.02 KB
+
+
+' Module package
+' 
+'     Function: attach, deserialize, loadExpr, Parse, ParseRDataRaw
+'               serialize, UnpackObjects
+' 
+'     Sub: loadPackage
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -59,6 +59,8 @@ Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
+Imports roxygenNet
+Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.CommandLine
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -179,5 +181,24 @@ Module package
     <ExportAPI("deserialize")>
     Public Function deserialize(rdata As RObject) As Object
         Return ConvertToR.PullRObject(rdata)
+    End Function
+
+    <ExportAPI("defineR")>
+    Public Function createRDefinition(package_dir As String) As Object
+        Dim man_dir As String = $"{package_dir}/man"
+        Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{package_dir}/DESCRIPTION")
+        Dim Rscript As Rscript
+
+        For Each Rfile As String In $"{package_dir}/R".ListFiles("*.R")
+            Rscript = Rscript.AutoHandleScript(handle:=Rfile)
+
+            For Each symbol As Document In RoxygenDocument.ParseDocuments(Rscript)
+                Using definition As New StreamWriter($"{package_dir}/".Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False))
+
+                End Using
+            Next
+        Next
+
+        Return Nothing
     End Function
 End Module
