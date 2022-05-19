@@ -1,0 +1,53 @@
+﻿Imports Microsoft.VisualBasic.Emit.Marshal
+
+''' <summary>
+''' ``examples``标签里面为R代码，所以可能会出现字符串和代码注释
+''' 因为字符串或者注释之中可能会存在``{}``符号，所以会需要额外的
+''' 信息来解决这个问题
+''' </summary>
+Public Class RcodeParser : Inherits PlainTextParser
+
+    ''' <summary>
+    ''' 因为R代码示例之中任然可能含有``{}``符号，所以会需要使用一个栈对象来确定文本结束的位置
+    ''' </summary>
+    Dim codeStack As New Stack(Of Char)
+    Dim commentEscape As Boolean
+    Dim stringEscape As Boolean
+
+    Friend Sub New(text As Pointer(Of Char))
+        Call MyBase.New(text)
+        Call Me.codeStack.Push("{")
+    End Sub
+
+    Protected Overrides Sub walkChar(c As Char)
+        If c = "#"c Then
+            If stringEscape Then
+                ' Do nothing
+            ElseIf Not commentEscape Then
+                commentEscape = True
+            End If
+        ElseIf c = """"c Then
+            If commentEscape Then
+                ' Do nothing
+            ElseIf Not stringEscape Then
+                stringEscape = True
+            ElseIf stringEscape Then
+                stringEscape = False
+            End If
+        End If
+
+        If (Not commentEscape) AndAlso (Not stringEscape) Then
+            If c = "{"c Then
+                codeStack.Push("{"c)
+            ElseIf c = "}"c Then
+                codeStack.Pop()
+            End If
+        End If
+
+        If codeStack.Count = 0 Then
+            endContent = True
+        Else
+            buffer += c
+        End If
+    End Sub
+End Class
