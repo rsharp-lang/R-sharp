@@ -153,6 +153,10 @@ Namespace Convertor
                 Return Nothing
             ElseIf value.nodeType = ListNodeType.Vector Then
                 ' 已经没有数据了，结束递归
+                If rdata.value.isPrimitive Then
+                    Return rdata.CreateRVector
+                End If
+
                 If RObjectSignature.IsPairList(rdata) Then
                     Return rdata.CreatePairList
                 ElseIf RObjectSignature.IsDataFrame(rdata) Then
@@ -211,6 +215,11 @@ Namespace Convertor
             Return list
         End Function
 
+        ''' <summary>
+        ''' create primitive vector
+        ''' </summary>
+        ''' <param name="robj"></param>
+        ''' <returns></returns>
         <Extension>
         Private Function CreateRVector(robj As RObject) As vector
             Dim type As RType = robj.info.GetRType

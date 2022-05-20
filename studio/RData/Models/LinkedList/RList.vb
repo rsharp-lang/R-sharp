@@ -80,6 +80,22 @@ Namespace Struct.LinkedList
         ''' <returns></returns>
         Public Property data As Array
 
+        ''' <summary>
+        ''' data vector is not a collection of <see cref="RObject"/>?
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property isPrimitive As Boolean
+            Get
+                If data Is Nothing Then
+                    Return False
+                ElseIf data.GetType.GetElementType Is Nothing Then
+                    Return False
+                Else
+                    Return Not data.GetType.GetElementType Is GetType(RObject)
+                End If
+            End Get
+        End Property
+
         Public ReadOnly Property nodeType As ListNodeType
             Get
                 If data Is Nothing AndAlso CAR Is Nothing AndAlso CDR Is Nothing Then
