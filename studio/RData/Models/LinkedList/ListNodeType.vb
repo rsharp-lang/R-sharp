@@ -70,5 +70,6 @@ Namespace Struct.LinkedList
         ''' 当前节点为链表的中间连接节点
         ''' </summary>
         LinkedList
+        Environment
     End Enum
 End Namespace

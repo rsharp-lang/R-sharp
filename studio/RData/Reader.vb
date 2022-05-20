@@ -355,7 +355,7 @@ Public MustInherit Class Reader
         Else
             result.info = info
             result.attributes = attributes
-            result.value = value
+            result.value = RList.CreateNode(value)
             result.referenced_object = referenced_object
         End If
 
