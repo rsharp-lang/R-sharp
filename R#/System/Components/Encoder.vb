@@ -92,9 +92,11 @@ Namespace Development.Components
             ElseIf TypeOf Robj Is list Then
                 Dim list As New Dictionary(Of String, Object)
 
-                For Each slot In DirectCast(Robj, list).slots
-                    Call list.Add(slot.Key, Encoder.GetObject(slot.Value))
-                Next
+                If Not DirectCast(Robj, list).slots Is Nothing Then
+                    For Each slot In DirectCast(Robj, list).slots
+                        Call list.Add(slot.Key, Encoder.GetObject(slot.Value))
+                    Next
+                End If
 
                 Return list
             ElseIf TypeOf Robj Is vbObject Then
