@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.PDF
+Imports Microsoft.VisualBasic.Imaging.SVG
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -134,51 +135,70 @@ Public Module grDevices
     ''' <param name="file"></param>
     ''' <returns></returns>
     <ExportAPI("svg")>
-    Public Function svg(image As Object,
-                        file As Object,
+    Public Function svg(Optional image As Object = Nothing,
+                        Optional file As Object = Nothing,
                         <RListObjectArgument>
                         Optional args As list = Nothing,
                         Optional env As Environment = Nothing) As Object
 
         If image Is Nothing Then
-            Return debug.stop("the source svg image object can not be nothing!", env)
-        End If
+            Dim size As Size = graphicsPipeline.getSize(args!size, env, "2700,2000").SizeParser
+            ' just open a new device
+            Dim buffer = GetFileStream(file, FileAccess.Write, env)
+            Dim fill As Color = graphicsPipeline.GetRawColor(args!fill, [default]:="white")
 
-        Dim stream As Stream
-        Dim is_file As Boolean = False
-
-        If file Is Nothing Then
-            stream = Console.OpenStandardOutput
-        ElseIf TypeOf file Is String Then
-            stream = DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
-            is_file = True
-        ElseIf TypeOf file Is Stream Then
-            stream = file
-        Else
-            Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
-        End If
-
-        If Not TypeOf image Is SVGData Then
-            If image.GetType.IsInheritsFrom(GetType(Plot)) Then
-                Dim arg1 = args.slots
-                Dim arg2 = env.GetAcceptorArguments
-                Dim size = graphicsPipeline.getSize(If(arg1.CheckSizeArgument, arg1, arg2), env, New SizeF(3300, 2700))
-                Dim wh As String = $"{size.Width},{size.Height}"
-                Dim dpi As Integer = graphicsPipeline.getDpi(If(arg1.CheckDpiArgument, arg1, arg2), env, 300)
-
-                Call DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).Save(stream)
+            If buffer Like GetType(Message) Then
+                Return buffer.TryCast(Of Message)
             Else
-                Return Message.InCompatibleType(GetType(Plot), file.GetType, env)
+                Dim dpiXY = 300
+                Dim svgImage As New GraphicsSVG(size, dpiXY, dpiXY)
+
+                Call svgImage.Clear(fill)
+                Call Internal.Invokes.graphics.openNew(
+                    dev:=svgImage,
+                    buffer:=buffer.TryCast(Of Stream),
+                    args:=args
+                )
             End If
+
+            Return Nothing
         Else
-            Call DirectCast(image, SVGData).Save(stream)
-        End If
+            Dim stream As Stream
+            Dim is_file As Boolean = False
 
-        Call stream.Flush()
+            If file Is Nothing Then
+                stream = Console.OpenStandardOutput
+            ElseIf TypeOf file Is String Then
+                stream = DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+                is_file = True
+            ElseIf TypeOf file Is Stream Then
+                stream = file
+            Else
+                Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
+            End If
 
-        If is_file Then
-            Call stream.Close()
-            Call stream.Dispose()
+            If Not TypeOf image Is SVGData Then
+                If image.GetType.IsInheritsFrom(GetType(Plot)) Then
+                    Dim arg1 = args.slots
+                    Dim arg2 = env.GetAcceptorArguments
+                    Dim size = graphicsPipeline.getSize(If(arg1.CheckSizeArgument, arg1, arg2), env, New SizeF(3300, 2700))
+                    Dim wh As String = $"{size.Width},{size.Height}"
+                    Dim dpi As Integer = graphicsPipeline.getDpi(If(arg1.CheckDpiArgument, arg1, arg2), env, 300)
+
+                    Call DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).Save(stream)
+                Else
+                    Return Message.InCompatibleType(GetType(Plot), file.GetType, env)
+                End If
+            Else
+                Call DirectCast(image, SVGData).Save(stream)
+            End If
+
+            Call stream.Flush()
+
+            If is_file Then
+                Call stream.Close()
+                Call stream.Dispose()
+            End If
         End If
 
         Return True
