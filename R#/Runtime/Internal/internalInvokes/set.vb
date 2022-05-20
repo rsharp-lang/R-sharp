@@ -92,6 +92,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("rev")>
         Public Function rev(<RRawVectorArgument>
                             x As Object,
+                            <RListObjectArgument>
                             Optional args As list = Nothing,
                             Optional env As Environment = Nothing) As Object
 
