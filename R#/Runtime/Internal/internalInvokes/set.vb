@@ -72,6 +72,54 @@ Namespace Runtime.Internal.Invokes
     Module [set]
 
         ''' <summary>
+        ''' ## Reverse Elements
+        ''' 
+        ''' rev provides a reversed version of its argument. 
+        ''' It is generic function with a default method for 
+        ''' vectors and one for dendrograms.
+        ''' 
+        ''' Note that this Is no longer needed (nor efficient) 
+        ''' For obtaining vectors sorted into descending order,
+        ''' since that Is now rather more directly achievable 
+        ''' by sort(x, decreasing = True).
+        ''' </summary>
+        ''' <param name="x">
+        ''' a vector Or another Object For which reversal Is 
+        ''' defined.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("rev")>
+        Public Function rev(<RRawVectorArgument>
+                            x As Object,
+                            Optional args As list = Nothing,
+                            Optional env As Environment = Nothing) As Object
+
+            If TypeOf x Is list Then
+                Dim reverseMapping As Boolean = args.getValue("mapping", env, [default]:=False)
+
+                If reverseMapping Then
+                    Dim newMap As New list With {.slots = New Dictionary(Of String, Object)}
+                    Dim oldMap As list = DirectCast(x, list)
+
+                    For Each name As String In oldMap.getNames
+                        Dim str As String = oldMap.getValue(Of String)(name, env, [default]:=Nothing)
+
+                        If str IsNot Nothing AndAlso Not newMap.hasName(str) Then
+                            Call newMap.add(str, name)
+                        End If
+                    Next
+
+                    Return newMap
+                Else
+                    Throw New NotImplementedException
+                End If
+            Else
+                Throw New NotImplementedException
+            End If
+        End Function
+
+        ''' <summary>
         ''' 将任意类型的序列输入转换为统一的对象枚举序列
         ''' </summary>
         ''' <param name="x"></param>
