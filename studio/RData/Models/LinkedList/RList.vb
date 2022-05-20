@@ -98,12 +98,12 @@ Namespace Struct.LinkedList
 
         Public ReadOnly Property nodeType As ListNodeType
             Get
-                If data Is Nothing AndAlso CAR Is Nothing AndAlso CDR Is Nothing Then
+                If Not env Is Nothing Then
+                    Return ListNodeType.Environment
+                ElseIf data Is Nothing AndAlso CAR Is Nothing AndAlso CDR Is Nothing Then
                     Return ListNodeType.NA
                 ElseIf Not data Is Nothing Then
                     Return ListNodeType.Vector
-                ElseIf Not env Is Nothing Then
-                    Return ListNodeType.Environment
                 Else
                     Return ListNodeType.LinkedList
                 End If

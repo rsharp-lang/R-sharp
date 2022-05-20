@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::755f4d0d0342c2a194962965d5e42e1b, R-sharp\studio\RData\Convertor\ConvertToR.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 237
-    '    Code Lines: 170
-    ' Comment Lines: 28
-    '   Blank Lines: 39
-    '     File Size: 8.65 KB
+' Summaries:
 
 
-    '     Module ConvertToR
-    ' 
-    '         Function: CreateFactor, CreatePairList, CreateRTable, CreateRVector, PullRawData
-    '                   (+2 Overloads) PullRObject, readColumnNames, readRowNames, ToRObject
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 237
+'    Code Lines: 170
+' Comment Lines: 28
+'   Blank Lines: 39
+'     File Size: 8.65 KB
+
+
+'     Module ConvertToR
+' 
+'         Function: CreateFactor, CreatePairList, CreateRTable, CreateRVector, PullRawData
+'                   (+2 Overloads) PullRObject, readColumnNames, readRowNames, ToRObject
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -91,12 +91,15 @@ Namespace Convertor
             Do While obj.value.nodeType = ListNodeType.LinkedList
                 Dim value As RList = obj.value
                 Dim car As RObject = value.CAR
+                Dim nodeType = value.nodeType
 
-                If value.nodeType = ListNodeType.NA Then
+                If nodeType = ListNodeType.NA Then
                     Exit Do
-                ElseIf value.nodeType = ListNodeType.Vector Then
+                ElseIf nodeType = ListNodeType.Vector Then
                     Call symbols.Add(obj.symbolName, obj)
                     Exit Do
+                ElseIf nodeType = ListNodeType.Environment Then
+                    Throw New NotImplementedException
                 Else
                     ' CAR为当前节点的数据
                     ' 获取节点数据，然后继续通过CDR进行链表的递归访问
@@ -148,10 +151,11 @@ Namespace Convertor
         Private Function PullRObject(rdata As RObject, list As Dictionary(Of String, Object)) As Object
             Dim value As RList = rdata.value
             Dim car As RObject = value.CAR
+            Dim nodeType = value.nodeType
 
-            If value.nodeType = ListNodeType.NA Then
+            If nodeType = ListNodeType.NA Then
                 Return Nothing
-            ElseIf value.nodeType = ListNodeType.Vector Then
+            ElseIf nodeType = ListNodeType.Vector Then
                 ' 已经没有数据了，结束递归
                 If rdata.value.isPrimitive Then
                     Return rdata.CreateRVector
@@ -164,6 +168,18 @@ Namespace Convertor
                 Else
                     Return rdata.CreateRVector
                 End If
+            ElseIf nodeType = ListNodeType.Environment Then
+                Dim current As New list With {
+                    .slots = New Dictionary(Of String, Object)
+                }
+                Dim env As EnvironmentValue = value.env
+
+                Call current.add(NameOf(EnvironmentValue.enclosure), ToRObject(env.enclosure))
+                Call current.add(NameOf(EnvironmentValue.frame), ToRObject(env.frame))
+                Call current.add(NameOf(EnvironmentValue.hash_table), ToRObject(env.hash_table))
+                Call current.add(NameOf(EnvironmentValue.locked), env.locked)
+
+                Return current
             Else
                 ' CAR为当前节点的数据
                 ' 获取节点数据，然后继续通过CDR进行链表的递归访问
