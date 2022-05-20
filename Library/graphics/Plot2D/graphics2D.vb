@@ -389,6 +389,16 @@ Module graphics2D
         Return New Shapes.Line(p1, p2, CSS.Stroke.TryParse(penCSS).GDIObject)
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="heatmap"></param>
+    ''' <param name="region"></param>
+    ''' <param name="dimSize"></param>
+    ''' <param name="colorName"></param>
+    ''' <param name="gauss"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("rasterHeatmap")>
     Public Function rasterHeatmap(<RRawVectorArgument>
                                   heatmap As Object,
@@ -398,6 +408,7 @@ Module graphics2D
                                   <RRawVectorArgument>
                                   Optional colorName As Object = "jet",
                                   Optional gauss As Integer = 0,
+                                  Optional rasterBitmap As Boolean = False,
                                   Optional env As Environment = Nothing) As Object
 
         Dim dev As graphicsDevice = curDev
@@ -432,10 +443,14 @@ Module graphics2D
             bitmap = gaussBlurEffect(bitmap, levels:=gauss, env)
         End If
 
-        ' rendering onto current graphics device
-        Using scaler As New RasterScaler(bitmap)
-            Call scaler.ScaleTo(dev.g, region)
-        End Using
+        If rasterBitmap Then
+            Call dev.g.DrawImage(bitmap, region)
+        Else
+            ' rendering onto current graphics device
+            Using scaler As New RasterScaler(bitmap)
+                Call scaler.ScaleTo(dev.g, region)
+            End Using
+        End If
 
         Return Nothing
     End Function
