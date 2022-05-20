@@ -52,6 +52,7 @@
 
 #End Region
 
+Imports System.Drawing
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -61,6 +62,7 @@ Imports Microsoft.VisualBasic.Data.Bootstrapping.Multivariate
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.Calculus.Dynamics
 Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
@@ -69,6 +71,7 @@ Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Math.Information
+Imports Microsoft.VisualBasic.Math.Interpolation
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -606,4 +609,59 @@ Module math
         Return dataset.Similarity
     End Function
 
+    ''' <summary>
+    ''' ### Ramer-Douglas-Peucker algorithm for curve fitting with a PolyLine
+    ''' 
+    ''' The [Ramer-Douglas-Peucker algorithm](https://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm) 
+    ''' for reducing the number of points on a curve.
+    ''' 
+    ''' If there are no more than two points it does not make sense to simplify.
+    ''' In this case the input is returned without further checks of `x` and `y`.
+    ''' In particular, the input is not checked for `NA` values.
+    ''' 
+    ''' ```r
+    ''' RamerDouglasPeucker(x = c(0, 1, 3, 5), y = c(2, 1, 0, 1), epsilon = 0.5)
+    ''' ```
+    ''' </summary>
+    ''' <param name="x">The `x` values of the curve as a vector without `NA` values.</param>
+    ''' <param name="y">The `y` values of the curve as a vector without `NA` values.</param>
+    ''' <param name="epsilon">The threshold for filtering outliers from the simplified curve. an number between 0 and 1. Recomended 0.01.</param>
+    ''' <param name="method"></param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' A `data.frame` with `x` and `y` values of the simplified curve.
+    ''' </returns>
+    <ExportAPI("RamerDouglasPeucker")>
+    Public Function RamerDouglasPeucker(x As Double(), y As Double(),
+                                        Optional epsilon As Double = 0.1,
+                                        <RRawVectorArgument(GetType(String))>
+                                        Optional method As Object = "RDPsd|RDPppd",
+                                        Optional env As Environment = Nothing) As Object
+
+        If x Is Nothing OrElse y Is Nothing Then
+            Return Internal.debug.stop("the given input of numeric vector x or y can not be nothing!", env)
+        ElseIf x.Length <> y.Length Then
+            Return Internal.debug.stop($"the given input vector size x({x.Length}) is not equals to y({y.Length})!", env)
+        Else
+            Dim methods As String() = REnv.asVector(Of String)(method)
+            Dim data As PointF() = x _
+                .Select(Function(xi, i) New PointF(xi, y(i))) _
+                .ToArray
+            Dim pointList As PointF()
+
+            Select Case methods(Scan0).ToLower
+                Case "RDPsd" : pointList = data.RDPsd(epsilon)
+                Case "RDPppd" : pointList = data.RDPppd(epsilon)
+                Case Else
+                    Return Internal.debug.stop($"unknow method: {methods(Scan0)}!", env)
+            End Select
+
+            Return New Rdataframe With {
+                .columns = New Dictionary(Of String, Array) From {
+                    {"x", pointList.X},
+                    {"y", pointList.Y}
+                }
+            }
+        End If
+    End Function
 End Module

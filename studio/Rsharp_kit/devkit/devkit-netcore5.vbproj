@@ -52,7 +52,7 @@
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
     <BaseAddress>4194304</BaseAddress>
   </PropertyGroup>
-  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
@@ -78,6 +78,7 @@
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\vs_solutions\dev\VisualStudio\VisualStudio.NET5.vbproj" />
     <ProjectReference Include="..\..\..\R#\Rsharp-netcore5.vbproj" />
     <ProjectReference Include="..\..\RData\RData.NET5.vbproj" />
+    <ProjectReference Include="..\roxygenNet\roxygenNet-netcore5.vbproj" />
   </ItemGroup>
 
 
