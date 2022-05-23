@@ -17,6 +17,7 @@
 		<Platforms>AnyCPU;x64</Platforms>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
 		<Description>R# language runtime and script interpreter</Description>
 		<Configurations>Debug;Release;Rsharp_app_release;LipidSearch;PlantMAT;mzkit;NPSearch</Configurations>
 		<RepositoryType>git</RepositoryType>
