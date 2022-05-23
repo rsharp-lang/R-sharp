@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::f63565b621d96be9c3e3a5f39d16cf94, R-sharp\Library\R.graph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1126
-    '    Code Lines: 740
-    ' Comment Lines: 244
-    '   Blank Lines: 142
-    '     File Size: 43.64 KB
+' Summaries:
 
 
-    ' Module NetworkModule
-    ' 
-    '     Function: addEdge, addEdges, addNode, addNodeData, addNodes
-    '               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
-    '               degree, deleteNode, E, edgeAttributes, emptyNetwork
-    '               eval, extractAdjacenciesSubNetwork, extractSubGraph, getByGroup, getEdges
-    '               getElementByID, getNodes, graph, hasEdge, LoadNetwork
-    '               LouvainCluster, metaData, nodeAttributes, nodeClass, nodeMass
-    '               nodeNames, printGraph, printNode, SaveNetwork, setAttributes
-    '               summaryNodes, trimEdges, typeGroupOfNodes, V, weights
-    '               xref
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1126
+'    Code Lines: 740
+' Comment Lines: 244
+'   Blank Lines: 142
+'     File Size: 43.64 KB
+
+
+' Module NetworkModule
+' 
+'     Function: addEdge, addEdges, addNode, addNodeData, addNodes
+'               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
+'               degree, deleteNode, E, edgeAttributes, emptyNetwork
+'               eval, extractAdjacenciesSubNetwork, extractSubGraph, getByGroup, getEdges
+'               getElementByID, getNodes, graph, hasEdge, LoadNetwork
+'               LouvainCluster, metaData, nodeAttributes, nodeClass, nodeMass
+'               nodeNames, printGraph, printNode, SaveNetwork, setAttributes
+'               summaryNodes, trimEdges, typeGroupOfNodes, V, weights
+'               xref
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -141,20 +141,42 @@ Public Module NetworkModule
 
     <ExportAPI("graph")>
     <RApiReturn(GetType(NetworkGraph))>
-    Public Function graph(from As String(), [to] As String(), Optional env As Environment = Nothing) As Object
+    Public Function graph(from As String(), [to] As String(),
+                          Optional weights As Double() = Nothing,
+                          Optional title As list = Nothing,
+                          Optional env As Environment = Nothing) As Object
+
         If from.TryCount <> [to].TryCount Then
             Return Internal.debug.stop($"size of from node({from.TryCount}) must be equals to the to nodes({[to].TryCount})!", env)
         End If
 
         Dim g As New NetworkGraph
         Dim allKeys As String() = from.JoinIterates([to]).Distinct.ToArray
+        Dim getWeight As Func(Of Integer, Double)
+
+        If title Is Nothing Then
+            title = New list With {.slots = New Dictionary(Of String, Object)}
+        End If
+
+        If weights.IsNullOrEmpty Then
+            getWeight = Function(any) 0.0
+        ElseIf weights.Length = 1 Then
+            getWeight = Function(any) weights(Scan0)
+        Else
+            getWeight = Function(idx) weights(idx)
+        End If
+
+        Dim data As NodeData
 
         For Each id As String In allKeys
-            Call g.CreateNode(id)
+            data = New NodeData With {
+                .label = title.getValue(id, env, [default]:=id)
+            }
+            g.CreateNode(id, data)
         Next
 
         For i As Integer = 0 To from.Length - 1
-            Call g.CreateEdge(from(i), [to](i))
+            Call g.CreateEdge(from(i), [to](i), weight:=getWeight(i))
         Next
 
         Return g
