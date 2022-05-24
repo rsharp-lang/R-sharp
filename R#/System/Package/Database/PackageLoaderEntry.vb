@@ -119,6 +119,13 @@ Namespace Development.Package
         ''' </summary>
         ''' <returns></returns>
         Public Property [module] As TypeInfo
+        ''' <summary>
+        ''' the base package name of current dll module file
+        ''' if current .NET assembly module file is installed
+        ''' from the nuget zip package.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property basePackage As String
 
         Sub New()
         End Sub
@@ -127,7 +134,9 @@ Namespace Development.Package
         ''' Get package loading entry information
         ''' </summary>
         ''' <param name="exception"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' load .NET context into runtme via this object value
+        ''' </returns>
         Public Function GetLoader(ByRef exception As Exception) As Package
             ' 20220502 handling mzkit_win32 release
             Dim loader As Type = [module].GetType(

@@ -75,7 +75,9 @@ Namespace Development.Package
         ''' <summary>
         ''' the package assembly module.
         ''' </summary>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' the .NET context for imports methods and functions
+        ''' </returns>
         Public ReadOnly Property package As Type
 
         Public ReadOnly Property is_basePackage As Boolean
