@@ -144,6 +144,7 @@ Public Module NetworkModule
     Public Function graph(from As String(), [to] As String(),
                           Optional weights As Double() = Nothing,
                           Optional title As list = Nothing,
+                          Optional defaultId As Boolean = False,
                           Optional env As Environment = Nothing) As Object
 
         If from.TryCount <> [to].TryCount Then
@@ -170,7 +171,7 @@ Public Module NetworkModule
 
         For Each id As String In allKeys
             data = New NodeData With {
-                .label = title.getValue(id, env, [default]:=id)
+                .label = title.getValue(id, env, [default]:=If(defaultId, id, ""))
             }
             g.CreateNode(id, data)
         Next
