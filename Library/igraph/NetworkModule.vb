@@ -1276,7 +1276,10 @@ Public Module NetworkModule
     ''' <returns></returns>
     <ExportAPI("louvain_cluster")>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Public Function LouvainCluster(g As NetworkGraph, Optional eps As Double = 0.00001) As NetworkGraph
-        Return Communities.Analysis(g, eps:=eps)
+    Public Function LouvainCluster(g As NetworkGraph,
+                                   Optional eps As Double = 0.00001,
+                                   Optional prefix As String = Nothing) As NetworkGraph
+
+        Return Communities.Analysis(g, eps:=eps, prefix:=prefix)
     End Function
 End Module
