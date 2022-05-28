@@ -75,6 +75,7 @@ Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
 Imports Microsoft.VisualBasic.Math.Quantile
+Imports Microsoft.VisualBasic.Math.Statistics
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.FishersExact
 Imports Microsoft.VisualBasic.Math.Statistics.Linq
@@ -97,6 +98,7 @@ Module stats
         Internal.ConsolePrinter.AttachConsoleFormatter(Of TtestResult)(AddressOf printTtest)
         Internal.ConsolePrinter.AttachConsoleFormatter(Of TwoSampleResult)(AddressOf printTwoSampleTTest)
         Internal.ConsolePrinter.AttachConsoleFormatter(Of FishersExactPvalues)(Function(o) o.ToString)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of FTest)(Function(o) o.ToString)
 
         Internal.Object.Converts.makeDataframe.addHandler(GetType(DataMatrix), AddressOf matrixDataFrame)
         Internal.Object.Converts.makeDataframe.addHandler(GetType(DistanceMatrix), AddressOf matrixDataFrame)
@@ -775,6 +777,39 @@ Module stats
             err = Message.InCompatibleType(GetType(Rdataframe), x.GetType, env, message:=$"can not extract numeric matrix from {tag}!")
             Return Nothing
         End If
+    End Function
+
+    ''' <summary>
+    ''' ## F Test to Compare Two Variances
+    ''' 
+    ''' Performs an F test to compare the variances of
+    ''' two samples from normal populations.
+    ''' </summary>
+    ''' <param name="x">
+    ''' numeric vectors of data values, or fitted linear model objects 
+    ''' (inheriting from class "lm").
+    ''' </param>
+    ''' <param name="y">
+    ''' numeric vectors of data values, or fitted linear model objects 
+    ''' (inheriting from class "lm").
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' The null hypothesis is that the ratio of the variances of the 
+    ''' populations from which x and y were drawn, or in the data to 
+    ''' which the linear models x and y were fitted, is equal to ratio.
+    ''' </remarks>
+    <ExportAPI("var.test")>
+    Public Function varTest(<RRawVectorArgument> x As Object,
+                            <RRawVectorArgument> y As Object,
+                            Optional env As Environment = Nothing) As Object
+
+        Dim vx As Double() = REnv.asVector(Of Double)(x)
+        Dim vy As Double() = REnv.asVector(Of Double)(y)
+        Dim ftest As New FTest(vx, vy)
+
+        Return ftest
     End Function
 End Module
 
