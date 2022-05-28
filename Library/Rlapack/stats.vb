@@ -858,7 +858,6 @@ Module stats
         anova.findWithinGroupMeans()
         anova.setSumOfSquaresOfGroups()
         anova.setTotalSumOfSquares()
-        anova.setTotalSumOfSquares()
         anova.divide_by_degrees_of_freedom()
 
         Dim f_score As Double = anova.fScore_determineIt()
