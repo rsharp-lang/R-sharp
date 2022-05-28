@@ -827,7 +827,7 @@ Module stats
                         Optional formula As FormulaExpression = Nothing,
                         Optional env As Environment = Nothing) As Object
 
-        Dim anova As New Anova()
+        Dim anova As New AnovaTest()
         Dim observations As New List(Of Double())
 
         If formula Is Nothing Then
@@ -853,30 +853,37 @@ Module stats
             End If
         End If
 
-        anova.populate_step1(observations, type:=Anova.P_FIVE_PERCENT)
-        anova.findWithinGroupMeans_step2()
-        anova.setSumOfSquaresOfGroups_step3()
-        anova.setTotalSumOfSquares_step4()
-        anova.setTotalSumOfSquares_step5()
-        anova.divide_by_degrees_of_freedom_step6()
+        anova.populate(observations, type:=AnovaTest.P_FIVE_PERCENT)
+        anova.findWithinGroupMeans()
+        anova.setSumOfSquaresOfGroups()
+        anova.setTotalSumOfSquares()
+        anova.setTotalSumOfSquares()
+        anova.divide_by_degrees_of_freedom()
 
-        Dim f_score As Double = anova.fScore_determineIt_step7()
-
+        Dim f_score As Double = anova.fScore_determineIt()
         Dim criticalNumber = anova.criticalNumber
-
-        Dim result = "The null hypothesis is supported! There is no especial difference in these groups. "
+        Dim result As String = "The null hypothesis is supported! There is no especial difference in these groups. "
 
         If f_score > criticalNumber Then
             result = "The null hypothesis is rejected! These groups are different."
         End If
-        Console.WriteLine("Groups degrees of freedom: " & anova.numenator)
-        Console.WriteLine("Observations degrees of freedom: " & anova.denomenator)
-        Console.WriteLine("SSW_sum_of_squares_within_groups: " & anova.SSW_sum_of_squares_within_groups)
-        Console.WriteLine("SSB_sum_of_squares_between_groups: " & anova.SSB_sum_of_squares_between_groups)
-        Console.WriteLine("allObservationsMean: " & anova.allObservationsMean)
-        Console.WriteLine("Critical number: " & criticalNumber)
-        Console.WriteLine("*** F Score: " & f_score)
-        Console.WriteLine(result)
+
+        Dim output As New list With {.slots = New Dictionary(Of String, Object)}
+
+        Call output.add("Groups degrees of freedom", anova.numenator)
+        Call output.add("Observations degrees of freedom", anova.denomenator)
+        Call output.add("SSW_sum_of_squares_within_groups", anova.SSW_sum_of_squares_within_groups)
+        Call output.add("SSB_sum_of_squares_between_groups", anova.SSB_sum_of_squares_between_groups)
+        Call output.add("allObservationsMean", anova.allObservationsMean)
+        Call output.add("Critical number", criticalNumber)
+        Call output.add("F Score", f_score)
+        Call output.add("Pvalue", anova.singlePvalue)
+        Call output.add("Pvalue(double_tailed)", anova.doublePvalue)
+        Call output.add("level", anova.type)
+        Call output.add("hypothesis", result)
+        Call output.add("summary", result.ToString)
+
+        Return output
     End Function
 End Module
 
