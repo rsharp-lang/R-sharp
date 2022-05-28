@@ -1,58 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::d21ae8acb71dc9d9c401d3a56d126eca, R-sharp\R#\Runtime\Internal\objects\RConversion\castList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 145
-    '    Code Lines: 116
-    ' Comment Lines: 5
-    '   Blank Lines: 24
-    '     File Size: 5.80 KB
+' Summaries:
 
 
-    '     Module castList
-    ' 
-    '         Function: CTypeList, dataframe_castList, listInternal, objCastList
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 145
+'    Code Lines: 116
+' Comment Lines: 5
+'   Blank Lines: 24
+'     File Size: 5.80 KB
+
+
+'     Module castList
+' 
+'         Function: CTypeList, dataframe_castList, listInternal, objCastList
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.SchemaMaps
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -169,20 +170,28 @@ Namespace Runtime.Internal.Object.Converts
 
             For Each p As KeyValuePair(Of String, PropertyInfo) In vbobj.properties
                 Dim value As Object = p.Value.GetValue(vbobj.target)
+                Dim name As String
+                Dim ref As Field = p.Value.GetCustomAttribute(Of Field)
+
+                If Not ref Is Nothing Then
+                    name = ref.Name
+                Else
+                    name = p.Key
+                End If
 
                 If value Is Nothing Then
-                    list.Add(p.Key, Nothing)
+                    list.Add(name, Nothing)
                 ElseIf TypeOf value Is Array OrElse TypeOf value Is vector Then
-                    list.Add(p.Key, value)
+                    list.Add(name, value)
                 ElseIf DataFramework.IsPrimitive(value.GetType) Then
-                    list.Add(p.Key, value)
+                    list.Add(name, value)
                 Else
                     value = listInternal(value, args, env)
 
                     If TypeOf value Is Message Then
                         Return value
                     Else
-                        list.Add(p.Key, value)
+                        list.Add(name, value)
                     End If
                 End If
             Next
