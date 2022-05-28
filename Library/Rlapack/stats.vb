@@ -76,6 +76,7 @@ Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Math.Statistics
+Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.ANOVA.stats
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.FishersExact
 Imports Microsoft.VisualBasic.Math.Statistics.Linq
@@ -810,6 +811,19 @@ Module stats
         Dim ftest As New FTest(vx, vy)
 
         Return ftest
+    End Function
+
+    ''' <summary>
+    ''' ## Fit an Analysis of Variance Model
+    ''' 
+    ''' Fit an analysis of variance model by a call to lm for each stratum.
+    ''' </summary>
+    ''' <returns></returns>
+    <ExportAPI("aov")>
+    Public Function aov() As Object
+        Dim anova As New Anova()
+
+
     End Function
 End Module
 
