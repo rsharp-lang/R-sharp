@@ -1,7 +1,12 @@
 x <- c(18, 19, 22, 25, 27, 28, 41, 45, 51, 55);
 y <- c(14, 15, 15, 17, 18, 22, 25, 25, 27, 34);
 
+print(x);
+print(y);
+
 print(var.test(x, y));
+
+str(as.list(var.test(x, y)));
 
 
 #	 F test to compare two variances

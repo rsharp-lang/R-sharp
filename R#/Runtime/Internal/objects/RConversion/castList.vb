@@ -174,6 +174,8 @@ Namespace Runtime.Internal.Object.Converts
                     list.Add(p.Key, Nothing)
                 ElseIf TypeOf value Is Array OrElse TypeOf value Is vector Then
                     list.Add(p.Key, value)
+                ElseIf DataFramework.IsPrimitive(value.GetType) Then
+                    list.Add(p.Key, value)
                 Else
                     value = listInternal(value, args, env)
 
