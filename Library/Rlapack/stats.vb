@@ -76,8 +76,8 @@ Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Math.Statistics
-Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.ANOVA.stats
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis
+Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.ANOVA
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.FishersExact
 Imports Microsoft.VisualBasic.Math.Statistics.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -820,10 +820,39 @@ Module stats
     ''' </summary>
     ''' <returns></returns>
     <ExportAPI("aov")>
-    Public Function aov() As Object
+    Public Function aov(x As Rdataframe) As Object
         Dim anova As New Anova()
+        Dim observations As New List(Of Double())
 
+        For Each name As String In x.colnames
+            Dim v As Double() = REnv.asVector(Of Double)(x.getColumnVector(name))
+            Call observations.Add(v)
+        Next
 
+        anova.populate_step1(observations, type:=Anova.P_FIVE_PERCENT)
+        anova.findWithinGroupMeans_step2()
+        anova.setSumOfSquaresOfGroups_step3()
+        anova.setTotalSumOfSquares_step4()
+        anova.setTotalSumOfSquares_step5()
+        anova.divide_by_degrees_of_freedom_step6()
+
+        Dim f_score As Double = anova.fScore_determineIt_step7()
+
+        Dim criticalNumber = anova.criticalNumber
+
+        Dim result = "The null hypothesis is supported! There is no especial difference in these groups. "
+
+        If f_score > criticalNumber Then
+            result = "The null hypothesis is rejected! These groups are different."
+        End If
+        Console.WriteLine("Groups degrees of freedom: " & anova.numenator)
+        Console.WriteLine("Observations degrees of freedom: " & anova.denomenator)
+        Console.WriteLine("SSW_sum_of_squares_within_groups: " & anova.SSW_sum_of_squares_within_groups)
+        Console.WriteLine("SSB_sum_of_squares_between_groups: " & anova.SSB_sum_of_squares_between_groups)
+        Console.WriteLine("allObservationsMean: " & anova.allObservationsMean)
+        Console.WriteLine("Critical number: " & criticalNumber)
+        Console.WriteLine("*** F Score: " & f_score)
+        Console.WriteLine(result)
     End Function
 End Module
 
