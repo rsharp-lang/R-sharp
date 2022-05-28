@@ -1246,6 +1246,8 @@ RE0:
 
             If TypeOf [object] Is vector Then
                 [object] = REnv.TryCastGenericArray(DirectCast([object], vector).data, env)
+            ElseIf TypeOf [object] Is list AndAlso DirectCast([object], list).hasName("summary") Then
+                Return base.cat(DirectCast([object], list).getByName("summary"), env:=env)
             End If
 
             If Program.isException(argumentsVal) Then

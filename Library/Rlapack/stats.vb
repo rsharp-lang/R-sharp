@@ -90,6 +90,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports stdNum = System.Math
 
 ''' <summary>
 ''' 
@@ -874,6 +875,10 @@ Module stats
         Call output.add("Observations degrees of freedom", anova.denomenator)
         Call output.add("SSW_sum_of_squares_within_groups", anova.SSW_sum_of_squares_within_groups)
         Call output.add("SSB_sum_of_squares_between_groups", anova.SSB_sum_of_squares_between_groups)
+        Call output.add("SSB", anova.SSB)
+        Call output.add("SSW", anova.SSW)
+        Call output.add("Residual standard error", stdNum.Sqrt(anova.SSW))
+        Call output.add("SS_total_sum_of_squares", anova.SS_total_sum_of_squares)
         Call output.add("allObservationsMean", anova.allObservationsMean)
         Call output.add("Critical number", criticalNumber)
         Call output.add("F Score", f_score)
@@ -881,7 +886,7 @@ Module stats
         Call output.add("Pvalue(double_tailed)", anova.doublePvalue)
         Call output.add("level", anova.type)
         Call output.add("hypothesis", result)
-        Call output.add("summary", result.ToString)
+        Call output.add("summary", anova.ToString)
 
         Return output
     End Function
