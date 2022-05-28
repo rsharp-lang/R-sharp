@@ -82,6 +82,7 @@ Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.ANOVA
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.FishersExact
 Imports Microsoft.VisualBasic.Math.Statistics.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -835,7 +836,21 @@ Module stats
                 Call observations.Add(v)
             Next
         Else
-            Throw New NotImplementedException
+            Dim vec As String = formula.var
+            Dim factor As Expression = formula.formula
+
+            If TypeOf factor Is SymbolReference Then
+                Dim factorName As String = DirectCast(factor, SymbolReference).symbol
+                Dim factors As String() = REnv.asVector(Of String)(x.getColumnVector(factorName))
+                Dim data As Double() = REnv.asVector(Of Double)(x.getColumnVector(vec))
+                Dim groups = factors.Select(Function(k, i) (k, data(i))).GroupBy(Function(i) i.k).ToArray
+
+                For Each group In groups
+                    Call observations.Add(group.Select(Function(i) i.Item2).ToArray)
+                Next
+            Else
+                Return Internal.debug.stop($"not implemented for the {factor.GetType.FullName}!", env)
+            End If
         End If
 
         anova.populate_step1(observations, type:=Anova.P_FIVE_PERCENT)
