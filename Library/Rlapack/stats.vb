@@ -82,6 +82,7 @@ Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.ANOVA
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.FishersExact
 Imports Microsoft.VisualBasic.Math.Statistics.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -822,7 +823,7 @@ Module stats
     ''' <returns></returns>
     <ExportAPI("aov")>
     Public Function aov(x As Rdataframe,
-                        Optional formula As Formula = Nothing,
+                        Optional formula As FormulaExpression = Nothing,
                         Optional env As Environment = Nothing) As Object
 
         Dim anova As New Anova()
