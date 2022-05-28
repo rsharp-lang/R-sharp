@@ -59,6 +59,17 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module FormulaExpressionSyntax
 
+        Public Function RunParse(target As Token, formula As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim y As String = target.text
+            Dim expression As SyntaxResult = opts.ParseExpression(formula, opts)
+
+            If expression.isException Then
+                Return expression
+            End If
+
+            Return New FormulaExpression(y, expression.expression)
+        End Function
+
         Public Function RunParse(code As Token()(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim y As String = code(Scan0)(Scan0).text
             Dim expression As SyntaxResult = opts.ParseExpression(code.Skip(2).IteratesALL, opts)

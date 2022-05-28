@@ -228,6 +228,16 @@ Namespace Interpreter.SyntaxParser
                     Dim ifelse = item.ifElseTriple
 
                     If ifelse.ifelse Is Nothing Then
+                        If item(Scan0).name = TokenType.identifier OrElse item(Scan0).name = TokenType.keyword Then
+                            If item(1).name = TokenType.operator Then
+                                Dim opText$ = item(1).text
+
+                                If opText = "~" Then
+                                    Return SyntaxImplements.FormulaExpressionSyntax.RunParse(item(0), item.Skip(2).ToArray, opts)
+                                End If
+                            End If
+                        End If
+
                         Return item.CreateTree(opts)
                     Else
                         Return SyntaxImplements.IIfExpression(ifelse.test, ifelse.ifelse, opts)

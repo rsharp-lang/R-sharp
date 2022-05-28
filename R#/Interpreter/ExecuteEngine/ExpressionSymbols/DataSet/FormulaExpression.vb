@@ -61,6 +61,9 @@ Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
+    ''' <summary>
+    ''' var ~ formula
+    ''' </summary>
     Public Class FormulaExpression : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes

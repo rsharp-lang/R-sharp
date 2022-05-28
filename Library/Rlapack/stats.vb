@@ -73,6 +73,7 @@ Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
+Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Math.Statistics
@@ -820,14 +821,21 @@ Module stats
     ''' </summary>
     ''' <returns></returns>
     <ExportAPI("aov")>
-    Public Function aov(x As Rdataframe) As Object
+    Public Function aov(x As Rdataframe,
+                        Optional formula As Formula = Nothing,
+                        Optional env As Environment = Nothing) As Object
+
         Dim anova As New Anova()
         Dim observations As New List(Of Double())
 
-        For Each name As String In x.colnames
-            Dim v As Double() = REnv.asVector(Of Double)(x.getColumnVector(name))
-            Call observations.Add(v)
-        Next
+        If formula Is Nothing Then
+            For Each name As String In x.colnames
+                Dim v As Double() = REnv.asVector(Of Double)(x.getColumnVector(name))
+                Call observations.Add(v)
+            Next
+        Else
+            Throw New NotImplementedException
+        End If
 
         anova.populate_step1(observations, type:=Anova.P_FIVE_PERCENT)
         anova.findWithinGroupMeans_step2()
