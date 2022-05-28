@@ -29,7 +29,7 @@
 	  <DefineConstants>netcore5=1</DefineConstants>
 	  <BaseAddress>4194304</BaseAddress>
 	</PropertyGroup>
-  <PropertyGroup  Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -128,6 +128,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\DataFrame\dataframework-netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\ANOVA\ANOVA.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\DataFittings\linear-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\DataFrame\dataframeUtils-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\Math.Statistics\stats-netcore5.vbproj" />
