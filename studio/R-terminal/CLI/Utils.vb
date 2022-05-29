@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::0e6b89a5eae4081cdbbc881306cd11ef, R-sharp\studio\R-terminal\CLI\Utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 207
-    '    Code Lines: 169
-    ' Comment Lines: 5
-    '   Blank Lines: 33
-    '     File Size: 8.11 KB
+' Summaries:
 
 
-    ' Module CLI
-    ' 
-    '     Function: configJSON, configREnv, ConfigStartups, getConfig, InitializeEnvironment
-    '               Install, reset
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 207
+'    Code Lines: 169
+' Comment Lines: 5
+'   Blank Lines: 33
+'     File Size: 8.11 KB
+
+
+' Module CLI
+' 
+'     Function: configJSON, configREnv, ConfigStartups, getConfig, InitializeEnvironment
+'               Install, reset
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -171,6 +171,7 @@ Partial Module CLI
     Public Function InitializeEnvironment(args As CommandLine) As Integer
         Dim localConfigs As String = getConfig(args)
         Dim config As New Options(localConfigs, saveConfig:=False)
+        Dim file As String = Nothing
 
         Internal.debug.verbose = args("--verbose")
         Internal.debug.write($"load config file: {localConfigs}")
@@ -179,16 +180,20 @@ Partial Module CLI
         App.CurrentDirectory = App.HOME
 
         Using pkgMgr As New PackageManager(config)
-            For Each file As String In {"base.dll", "igraph.dll", "graphics.dll", "Rlapack.dll"}
-                If Not file.FileExists Then
-                    file = "Library/" & file
-                End If
+            For Each fileName As String In {"base.dll", "igraph.dll", "graphics.dll", "Rlapack.dll"}
+                For Each dir As String In {"./", "./Library", "./library", "../Library", "../library"}
+                    file = $"{dir}/{fileName}"
+
+                    If file.FileExists Then
+                        Exit For
+                    End If
+                Next
 
                 If file.FileExists Then
                     Call pkgMgr.InstallLocals(pkgFile:=file)
                     Call pkgMgr.Flush()
                 Else
-                    Call $"missing module dll: {file}".PrintException
+                    Call $"missing module dll: {fileName}".PrintException
                 End If
             Next
         End Using
