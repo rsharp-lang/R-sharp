@@ -168,6 +168,7 @@ Partial Module CLI
     <ExportAPI("--setup")>
     <Description("Initialize the R# runtime environment.")>
     <Group(SystemConfig)>
+    <Usage("--setup [--verbose]")>
     Public Function InitializeEnvironment(args As CommandLine) As Integer
         Dim localConfigs As String = getConfig(args)
         Dim config As New Options(localConfigs, saveConfig:=False)
