@@ -100,6 +100,37 @@ bitmap(file = "./scatter.png") {
 };
 ```
 
+### ggplot for ``R#``
+
+> A R language ggplot2 package liked [grammar of graphics library](https://github.com/rsharp-lang/ggplot) for R# language programming.
+
+The ``R#`` language is another scientific computing language which is designed for .NET runtime, ``R#`` is evolved from the R language. There is a famous graphics library called ``ggplot2`` in R language, so keeps the same, there is a graphics library called **[``ggplot``](https://github.com/rsharp-lang/ggplot)** was developed for ``R#`` language.
+
+![](docs/images/myeloma_violin.png)
+![](docs/images/myeloma_box.png)
+![](docs/images/myeloma_bar.png)
+
+```r
+ggplot(myeloma, aes(x = "molecular_group", y = "DEPDC1"))
++ geom_boxplot(width = 0.65)
++ geom_jitter(width = 0.3)
+# Add horizontal line at base mean 
++ geom_hline(yintercept = mean(myeloma$DEPDC1), linetype="dash", line.width = 6, color = "red")
++ ggtitle("DEPDC1 ~ molecular_group")
++ ylab("DEPDC1")
++ xlab("")
++ scale_y_continuous(labels = "F0")
+# Add global annova p-value 
++ stat_compare_means(method = "anova", label.y = 1600) 
+# Pairwise comparison against all
++ stat_compare_means(label = "p.signif", method = "t.test", ref.group = ".all.", hide.ns = TRUE)
++ theme(
+	axis.text.x = element_text(angle = 45), 
+	plot.title  = element_text(family = "Cambria Math", size = 16)
+)
+;
+```
+
 ## Language Hybrids Programming Feature
 
 The ``R#`` system is not only supports of the R liked language, it also includes a python language scripting and Julia language scripting engine which is running upon the ``R#`` runtime.
