@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--parallel --master \"34957\" --delegate \"Parallel::slave\" /@set --internal_pipeline=TRUE  --SetDllDirectory E:/GCModeller/src/R-sharp/App/net6.0",
+      "commandLineArgs": "--parallel --master \"34958\" --delegate \"Parallel::slave\" /@set --internal_pipeline=TRUE  --SetDllDirectory E:/GCModeller/src/R-sharp/App/net6.0",
       "workingDirectory": "E:\\mzkit\\dist\\bin\\Rstudio\\bin"
     }
   }

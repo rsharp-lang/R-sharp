@@ -13,7 +13,8 @@ const f = function(x, z, g) {
 const y = parallel(x = seqVals, z = bbb, n_threads = 2, ignoreError = TRUE, debug = TRUE){# , debug = TRUE, master = 3305, bootstrap = 5566) {
 	print(x);
 	# sleep(1 + rnd() * 10);
-	f(x, z, g);
+	x = f(x, z, g);
+	stop(x);
 };
 
 print("parallel loop:");
