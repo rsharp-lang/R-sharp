@@ -93,7 +93,8 @@ Namespace Context.RPC
         ''' the master environment is readonly to 
         ''' the slave parallel node.
         ''' </remarks>
-        ReadOnly env As Environment
+        Friend ReadOnly env As Environment
+
         ReadOnly socket As TcpServicesSocket
         ReadOnly result As New Dictionary(Of String, Object)
 

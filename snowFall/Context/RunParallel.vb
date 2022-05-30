@@ -107,7 +107,8 @@ Public Class RunParallel
         Dim result As Object = Nothing
         Dim bootstrap As New BootstrapSocket(index, master.port, Me.task, debugPort)
         Dim task As String = worker.GetparallelModeCommandLine(bootstrap.port, [delegate]:="Parallel::slave")
-        Dim process As RunSlavePipeline = worker.CreateSlave($"{task} --SetDllDirectory {App.HOME.CLIPath}")
+        Dim SetDllDirectory As String = master.env.globalEnvironment.options.getOption("SetDllDirectory", [default]:=App.HOME)
+        Dim process As RunSlavePipeline = worker.CreateSlave($"{task} --SetDllDirectory {SetDllDirectory.CLIPath}")
 
         Call bootstrap.Run(process)
         Call getResult(uuid:=index, result)
