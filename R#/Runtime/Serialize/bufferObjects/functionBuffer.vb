@@ -34,7 +34,21 @@ Namespace Runtime.Serialize
         End Function
 
         Protected Overrides Sub loadBuffer(stream As Stream)
-            Throw New NotImplementedException()
+            Dim fake As New DESCRIPTION With {
+                .Author = "xieguigang",
+                .[Date] = Now.ToString,
+                .Maintainer = .Author,
+                .License = "MIT",
+                .Package = NameOf(functionBuffer),
+                .Title = .Package,
+                .Type = "runtime",
+                .Version = App.Version,
+                .Description = .Package
+            }
+
+            Using reader As New BinaryReader(stream)
+                Call BlockReader.Read(reader).Parse(fake, expr:=_target)
+            End Using
         End Sub
     End Class
 End Namespace
