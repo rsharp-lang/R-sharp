@@ -71,6 +71,10 @@ Namespace Runtime.Serialize
             Throw New NotImplementedException()
         End Sub
 
+        Protected Overrides Sub loadBuffer(stream As Stream)
+            Throw New NotImplementedException()
+        End Sub
+
         Public Function getFrame() As dataframe
             Throw New NotImplementedException
         End Function
