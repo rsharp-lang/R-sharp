@@ -195,6 +195,13 @@ Public Module Parallel
         Call Console.WriteLine()
         Call Console.WriteLine("~job done!")
 
+        If TypeOf result.value Is Message Then
+            Call Console.WriteLine()
+            Call Console.WriteLine("exception:")
+            Call Console.WriteLine(result.value.ToString)
+            Call Console.WriteLine()
+        End If
+
         Call New TcpRequest(masterPort).SendMessage(req)
         Call New TcpRequest(port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
 
