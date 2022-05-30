@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"E:/mzkit/src/mzkit/rstudio/pipeline/buildMSIIndex.R\" --imzML \"P:\\MTBLS3154\\2018June2820180628_brain_POS_3s2_validated.imzML\" --cache \"F:\\TEMP/mzkit_win32/MSI_imzML/3313bb57-8002-414e-a560-9b5459f908b1\" --SetDllDirectory E:\\mzkit\\dist\\bin\\Rstudio\\host",
+      "commandLineArgs": "--parallel --master \"5566\" --delegate \"Parallel::slave\" /@set --internal_pipeline=TRUE  --SetDllDirectory \"E:/GCModeller/src/R-sharp/App/net6.0",
       "workingDirectory": "E:\\mzkit\\dist\\bin\\Rstudio\\bin"
     }
   }

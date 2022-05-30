@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Development.Package.File
@@ -107,7 +108,7 @@ Public Class RunParallel
         Dim result As Object = Nothing
         Dim bootstrap As New BootstrapSocket(index, master.port, Me.task, debugPort)
         Dim task As String = worker.GetparallelModeCommandLine(bootstrap.port, [delegate]:="Parallel::slave")
-        Dim SetDllDirectory As String = master.env.globalEnvironment.options.getOption("SetDllDirectory", [default]:=App.HOME)
+        Dim SetDllDirectory As String = master.env.globalEnvironment.options.getOption("SetDllDirectory") Or App.HOME.AsDefault
         Dim process As RunSlavePipeline = worker.CreateSlave($"{task} --SetDllDirectory {SetDllDirectory.CLIPath}")
 
         Call bootstrap.Run(process)
