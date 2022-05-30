@@ -85,12 +85,15 @@ Namespace Context.RPC
         Dim [stop] As Boolean = False
         Dim status2 As String
 
-        Sub New(uuid As Integer, master As Integer, closure As Byte(), Optional debugPort As Integer = -1)
+        Sub New(uuid As Integer, master As Integer, closure As Byte(),
+                Optional debugPort As Integer = -1,
+                Optional debug As Boolean = False)
+
             Me.masterPort = master
             Me.uuid = uuid
             Me.closure = closure
 
-            is_debug = debugPort > 0
+            is_debug = debugPort > 0 OrElse debug
             socket = New TcpServicesSocket(If(debugPort > 0, debugPort, IPCSocket.GetFirstAvailablePort))
             socket.ResponseHandler = AddressOf New ProtocolHandler(Me).HandleRequest
 

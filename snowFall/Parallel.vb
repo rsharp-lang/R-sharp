@@ -213,13 +213,20 @@ Public Module Parallel
     <ExportAPI("parallel")>
     Public Function parallel(task As Expression,
                              Optional n_threads As Integer = -1,
-                             Optional debug As Boolean = False,
-                             Optional ignoreError As Boolean = False,
+                             Optional debug As Boolean? = Nothing,
+                             Optional ignoreError As Boolean? = Nothing,
                              <RListObjectArgument>
                              Optional argv As list = Nothing,
                              Optional env As Environment = Nothing) As Object
 
-        Dim host As RunParallel = RunParallel.Initialize(task, argv, env)
+        If debug Is Nothing AndAlso argv.hasName("debug") Then
+            debug = argv.getValue(Of Boolean)("debug", env)
+        End If
+        If ignoreError Is Nothing AndAlso argv.hasName("ignoreError") Then
+            ignoreError = argv.getValue(Of Boolean)("ignoreError", env)
+        End If
+
+        Dim host As RunParallel = RunParallel.Initialize(task, argv, debug, env)
         Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) = host.produceTask
         Dim engine As New ThreadTask(Of SeqValue(Of Object))(
             task:=taskList,

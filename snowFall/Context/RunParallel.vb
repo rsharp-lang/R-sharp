@@ -86,6 +86,7 @@ Public Class RunParallel
     Public ReadOnly Property worker As R
     Public Property task As Byte()
     Public Property debugPort As Integer = -1
+    Public Property debug As Boolean = False
 
     Private Sub New()
         worker = R.FromEnvironment(App.HOME)
@@ -106,7 +107,7 @@ Public Class RunParallel
     ''' <returns></returns>
     Public Function taskFactory(index As Integer) As Object
         Dim result As Object = Nothing
-        Dim bootstrap As New BootstrapSocket(index, master.port, Me.task, debugPort)
+        Dim bootstrap As New BootstrapSocket(index, master.port, Me.task, debugPort, debug:=debug)
         Dim task As String = worker.GetparallelModeCommandLine(bootstrap.port, [delegate]:="Parallel::slave")
         Dim SetDllDirectory As String = master.env.globalEnvironment.options.getOption("SetDllDirectory") Or App.HOME.AsDefault
         Dim process As RunSlavePipeline = worker.CreateSlave($"{task} --SetDllDirectory {SetDllDirectory.CLIPath}")
@@ -121,7 +122,7 @@ Public Class RunParallel
         result = master.pop(uuid)
     End Sub
 
-    Public Shared Function Initialize(task As Expression, argv As list, env As Environment) As RunParallel
+    Public Shared Function Initialize(task As Expression, argv As list, debug As Boolean, env As Environment) As RunParallel
         Dim parallelBase As New MasterContext(
             env:=env,
             verbose:=argv.getValue("debug", env, [default]:=False),
@@ -157,7 +158,8 @@ Public Class RunParallel
                                   End Function),
                 .size = checkSize(Scan0),
                 .task = taskPayload.ToArray,
-                .debugPort = argv.getValue("bootstrap", env, -1)
+                .debugPort = argv.getValue("bootstrap", env, -1),
+                .debug = debug
             }
         End If
     End Function
