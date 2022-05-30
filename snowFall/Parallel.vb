@@ -136,9 +136,17 @@ Public Module Parallel
     Public Function runSlaveNode(port As Integer, Optional env As Environment = Nothing) As Object
         Dim req As New RequestStream(MasterContext.Protocol, RPC.Protocols.Initialize)
         Dim resp = New TcpRequest(port).SendMessage(req)
+
+        Call Console.WriteLine($"[bootstrapping] bootstrap_port={port}!")
+
         Dim uuid As Integer = BitConverter.ToInt32(resp.ChunkBuffer, Scan0)
         Dim masterPort As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 4)
         Dim size As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 8)
+
+        Call Console.WriteLine($"uuid={uuid}")
+        Call Console.WriteLine($"remote_environment={masterPort}")
+        Call Console.WriteLine($"task_body_size={size}")
+
         Dim buffer As Byte() = New Byte(size - 1) {}
         Dim closure As Expression = Nothing
         Dim result As ResultPayload = Nothing
@@ -147,6 +155,10 @@ Public Module Parallel
             master:=IPEndPoint.CreateLocal(masterPort),
             parent:=env
         )
+
+        Call Console.WriteLine("create root environment:")
+        Call Console.WriteLine(root.ToString)
+
         Dim fake As New DESCRIPTION With {
             .Author = "xieguigang",
             .[Date] = Now.ToString,
@@ -165,14 +177,27 @@ Public Module Parallel
             Call BlockReader.Read(reader).Parse(fake, expr:=closure)
         End Using
 
+        Call Console.WriteLine("get task:")
+        Call Console.WriteLine("::")
+        Call Console.WriteLine(closure.ToString)
+        Call Console.WriteLine("::")
+        Call Console.WriteLine(" --> run!")
+        Call Console.WriteLine()
+
         result = New ResultPayload(env) With {
             .uuid = uuid,
             .value = closure.Evaluate(root)
         }
         req = New RequestStream(MasterContext.Protocol, RPC.Protocols.PushResult, result)
 
+        Call Console.WriteLine()
+        Call Console.WriteLine()
+        Call Console.WriteLine("~job done!")
+
         Call New TcpRequest(masterPort).SendMessage(req)
         Call New TcpRequest(port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
+
+        Call Console.WriteLine("exit!")
 
         Return 0
     End Function
