@@ -165,12 +165,11 @@ Public Module Parallel
             Call BlockReader.Read(reader).Parse(fake, expr:=closure)
         End Using
 
-        Call New TcpRequest(port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
-
         result = New ResultPayload With {.uuid = uuid, .value = closure.Evaluate(root)}
         req = New RequestStream(MasterContext.Protocol, RPC.Protocols.PushResult, result)
 
         Call New TcpRequest(masterPort).SendMessage(req)
+        Call New TcpRequest(port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
 
         Return 0
     End Function
