@@ -1,63 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::5001b2da2ec408ea719e8d0bf93581bb, R-sharp\snowFall\Context\RunParallel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 153
-    '    Code Lines: 126
-    ' Comment Lines: 8
-    '   Blank Lines: 19
-    '     File Size: 6.33 KB
+' Summaries:
 
 
-    ' Class RunParallel
-    ' 
-    '     Properties: [error], debugPort, master, seqSet, size
-    '                 task, worker
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: getSymbol, Initialize, readSymbolSet, taskFactory
-    ' 
-    '     Sub: getResult
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 153
+'    Code Lines: 126
+' Comment Lines: 8
+'   Blank Lines: 19
+'     File Size: 6.33 KB
+
+
+' Class RunParallel
+' 
+'     Properties: [error], debugPort, master, seqSet, size
+'                 task, worker
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: getSymbol, Initialize, readSymbolSet, taskFactory
+' 
+'     Sub: getResult
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports System.Runtime.InteropServices
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -106,7 +107,7 @@ Public Class RunParallel
         Dim result As Object = Nothing
         Dim bootstrap As New BootstrapSocket(index, master.port, Me.task, debugPort)
         Dim task As String = worker.GetparallelModeCommandLine(bootstrap.port, [delegate]:="Parallel::slave")
-        Dim process As RunSlavePipeline = worker.CreateSlave(task)
+        Dim process As RunSlavePipeline = worker.CreateSlave($"{task} --SetDllDirectory {App.HOME.CLIPath}")
 
         Call bootstrap.Run(process)
         Call getResult(uuid:=index, result)
