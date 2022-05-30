@@ -85,7 +85,7 @@ Module BufferHandler
         ElseIf TypeOf result Is BufferObject Then
             buffer.data = DirectCast(result, BufferObject)
         ElseIf TypeOf result Is DeclareNewFunction Then
-            Throw New NotImplementedException(result.GetType.FullName)
+            buffer.data = New functionBuffer With {.target = result}
         Else
             Throw New NotImplementedException(result.GetType.FullName)
         End If
