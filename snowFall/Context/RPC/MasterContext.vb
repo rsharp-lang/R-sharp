@@ -113,7 +113,7 @@ Namespace Context.RPC
         Sub New(env As Environment, Optional port As Integer = -1, Optional verbose As Boolean = False)
             Me.port = If(port <= 0, IPCSocket.GetFirstAvailablePort, port)
             Me.env = New Environment(env, "snowfall-parallel@master", isInherits:=False)
-            Me.socket = New TcpServicesSocket(port, debug:=verbose OrElse port > 0)
+            Me.socket = New TcpServicesSocket(Me.port, debug:=verbose OrElse port > 0)
             Me.socket.ResponseHandler = AddressOf New ProtocolHandler(Me).HandleRequest
         End Sub
 
