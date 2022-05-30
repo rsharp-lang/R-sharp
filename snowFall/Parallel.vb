@@ -165,7 +165,10 @@ Public Module Parallel
             Call BlockReader.Read(reader).Parse(fake, expr:=closure)
         End Using
 
-        result = New ResultPayload With {.uuid = uuid, .value = closure.Evaluate(root)}
+        result = New ResultPayload(env) With {
+            .uuid = uuid,
+            .value = closure.Evaluate(root)
+        }
         req = New RequestStream(MasterContext.Protocol, RPC.Protocols.PushResult, result)
 
         Call New TcpRequest(masterPort).SendMessage(req)

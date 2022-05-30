@@ -1,16 +1,16 @@
 ﻿Imports System.IO
 Imports SMRUCC.Rsharp.Development.Package.File
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
 Namespace Runtime.Serialize
 
-    Public Class functionBuffer : Inherits BufferObject
+    Public Class rscriptBuffer : Inherits BufferObject
 
-        Public Property target As DeclareNewFunction
+        Public Property target As Expression
 
         Public Overrides ReadOnly Property code As BufferObjects
             Get
-                Return BufferObjects.function
+                Return BufferObjects.rscript
             End Get
         End Property
 
@@ -21,12 +21,9 @@ Namespace Runtime.Serialize
             Call loadBuffer(data)
         End Sub
 
-        Public Overrides Sub Serialize(buffer As Stream)
-            Dim writer As New Writer(buffer)
-
-            Using file As New Writer(buffer)
-                Call file.Write(target)
-            End Using
+        Public Overrides Sub Serialize(taskPayload As Stream)
+            Call New Writer(taskPayload).Write(target)
+            Call taskPayload.Flush()
         End Sub
 
         Public Overrides Function getValue() As Object
@@ -39,7 +36,7 @@ Namespace Runtime.Serialize
                 .[Date] = Now.ToString,
                 .Maintainer = .Author,
                 .License = "MIT",
-                .Package = NameOf(functionBuffer),
+                .Package = NameOf(rscriptBuffer),
                 .Title = .Package,
                 .Type = "runtime",
                 .Version = App.Version,

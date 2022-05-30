@@ -69,7 +69,7 @@ Namespace Runtime.Serialize
         <Description("data/vector")> vector = 200
         <Description("application/json")> list
         <Description("text/csv")> dataframe
-        <Description("application/rscript")> [function]
+        <Description("application/rscript")> rscript
 
         <Description("rstudio/debug-message")> message = 500
     End Enum

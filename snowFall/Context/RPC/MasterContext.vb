@@ -136,7 +136,7 @@ Namespace Context.RPC
 
         <Protocol(Protocols.PushResult)>
         Public Function PostResult(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
-            Dim payload As New ResultPayload(request.ChunkBuffer)
+            Dim payload As New ResultPayload(request.ChunkBuffer, env)
             Dim value As Object = payload.value
             Dim uuid As Integer = payload.uuid
 

@@ -49,7 +49,7 @@
 
 #End Region
 
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -84,8 +84,8 @@ Module BufferHandler
             buffer.data = New messageBuffer(DirectCast(result, Message))
         ElseIf TypeOf result Is BufferObject Then
             buffer.data = DirectCast(result, BufferObject)
-        ElseIf TypeOf result Is DeclareNewFunction Then
-            buffer.data = New functionBuffer With {.target = result}
+        ElseIf TypeOf result Is Expression Then
+            buffer.data = New rscriptBuffer With {.target = result}
         Else
             Throw New NotImplementedException(result.GetType.FullName)
         End If

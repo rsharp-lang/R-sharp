@@ -75,7 +75,7 @@ Namespace Runtime.Serialize
                     Case GetType(bitmapBuffer) : Return BufferObjects.bitmap
                     Case GetType(messageBuffer) : Return BufferObjects.message
                     Case GetType(vectorBuffer) : Return BufferObjects.vector
-                    Case GetType(functionBuffer) : Return BufferObjects.function
+                    Case GetType(rscriptBuffer) : Return BufferObjects.rscript
                     Case Else
                         Throw New NotImplementedException(data.GetType.FullName)
                 End Select
@@ -102,8 +102,8 @@ Namespace Runtime.Serialize
                     bufferObject = New vectorBuffer(data)
                 Case BufferObjects.message
                     bufferObject = New messageBuffer(data)
-                Case BufferObjects.function
-                    bufferObject = New functionBuffer(data)
+                Case BufferObjects.rscript
+                    bufferObject = New rscriptBuffer(data)
                 Case Else
                     Throw New NotImplementedException(code.Description)
             End Select
