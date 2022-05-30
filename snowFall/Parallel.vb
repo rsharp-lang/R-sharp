@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::956c14e492cbf2030ad5b39e532e809b, R-sharp\snowFall\Parallel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 182
-    '    Code Lines: 121
-    ' Comment Lines: 40
-    '   Blank Lines: 21
-    '     File Size: 6.83 KB
+' Summaries:
 
 
-    ' Module Parallel
-    ' 
-    '     Function: detectCores, makeCluster, parallel, produceTask, runSlaveNode
-    '               snowFall, worker
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 182
+'    Code Lines: 121
+' Comment Lines: 40
+'   Blank Lines: 21
+'     File Size: 6.83 KB
+
+
+' Module Parallel
+' 
+'     Function: detectCores, makeCluster, parallel, produceTask, runSlaveNode
+'               snowFall, worker
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports snowFall.Context
@@ -213,6 +214,7 @@ Public Module Parallel
     Public Function parallel(task As Expression,
                              Optional n_threads As Integer = -1,
                              Optional debug As Boolean = False,
+                             Optional ignoreError As Boolean = False,
                              <RListObjectArgument>
                              Optional argv As list = Nothing,
                              Optional env As Environment = Nothing) As Object
@@ -233,17 +235,35 @@ Public Module Parallel
             .OrderBy(Function(a) a.i) _
             .Select(Function(a) REnv.single(a.value)) _
             .ToArray
+        Dim output As New List(Of Object)
+        Dim errors As New List(Of (i As Integer, ex As Message))
+        Dim j As Integer = 0
 
-        For Each i In result
+        For Each i As Object In result
+            j += 1
+
             If Program.isException(i) Then
-                Call host.master.Dispose()
-                Return i
+                If Not ignoreError Then
+                    Call host.master.Dispose()
+                    Return i
+                Else
+                    Call output.Add(Nothing)
+                    Call errors.Add((j, DirectCast(i, Message)))
+                End If
+            Else
+                Call output.Add(i)
             End If
         Next
 
         Call host.master.Dispose()
 
-        Return REnv.TryCastGenericArray(result, env)
+        If errors.Any Then
+            For Each taskResult In errors
+                Call env.AddMessage($"[task_{taskResult.i}] {taskResult.ex.ToString}")
+            Next
+        End If
+
+        Return REnv.TryCastGenericArray(output.ToArray, env)
     End Function
 
     <Extension>
