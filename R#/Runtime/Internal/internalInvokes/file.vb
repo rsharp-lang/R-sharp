@@ -1111,6 +1111,8 @@ Namespace Runtime.Internal.Invokes
                 Case BufferObjects.text : Return New textBuffer
                 Case BufferObjects.bitmap : Return New bitmapBuffer
                 Case BufferObjects.vector : Return New vectorBuffer
+                Case BufferObjects.dataframe : Return New dataframeBuffer(env)
+                Case BufferObjects.rscript : Return New rscriptBuffer
                 Case Else
                     Return Internal.debug.stop(New NotImplementedException(type.Description), env)
             End Select

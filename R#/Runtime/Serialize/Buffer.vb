@@ -104,6 +104,8 @@ Namespace Runtime.Serialize
                     bufferObject = New messageBuffer(data)
                 Case BufferObjects.rscript
                     bufferObject = New rscriptBuffer(data)
+                Case BufferObjects.dataframe
+                    bufferObject = New dataframeBuffer(data)
                 Case Else
                     Throw New NotImplementedException(code.Description)
             End Select

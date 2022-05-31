@@ -71,7 +71,7 @@ Module BufferHandler
         If result Is Nothing Then
             buffer.data = rawBuffer.getEmptyBuffer
         ElseIf TypeOf result Is dataframe Then
-            Throw New NotImplementedException(result.GetType.FullName)
+            buffer.data = New dataframeBuffer(result, env)
         ElseIf TypeOf result Is vector Then
             buffer.data = vectorBuffer.CreateBuffer(DirectCast(result, vector), env)
         ElseIf TypeOf result Is list Then
