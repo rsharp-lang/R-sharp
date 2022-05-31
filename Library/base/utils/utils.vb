@@ -65,6 +65,8 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Office.Excel.Model
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.RDataSet
+Imports SMRUCC.Rsharp.RDataSet.Convertor
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -73,6 +75,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
+Imports file = Microsoft.VisualBasic.Data.csv.IO.File
 Imports fileStream = System.IO.Stream
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -206,14 +209,14 @@ Public Module utils
                     .LineTokens _
                     .DoCall(Function(lines) FileLoader.Load(lines, False, Nothing, isTsv:=tsv)) _
                     .DoCall(Function(ls)
-                                Return New File(ls)
+                                Return New file(ls)
                             End Function)
             End Using
         Else
             Return Internal.debug.stop("invalid file content type!", env)
         End If
 
-        If Not TypeOf datafile Is File Then
+        If Not TypeOf datafile Is file Then
             Return Internal.debug.stop(datafile, env)
         Else
             Return DirectCast(datafile, csv).rawToDataFrame(row_names, check_names, check_modes, comment_char, env)
@@ -365,8 +368,8 @@ Public Module utils
                     tsv:=tsv
                 )
 
-        ElseIf type Is GetType(File) Then
-            Return DirectCast(x, File).Save(path:=file, encoding:=encoding, silent:=True)
+        ElseIf type Is GetType(file) Then
+            Return DirectCast(x, file).Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf type Is GetType(IO.DataFrame) Then
             Return DirectCast(x, IO.DataFrame).Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf REnv.isVector(Of EntityObject)(x) Then
@@ -382,7 +385,7 @@ Public Module utils
                 stream = pipeline.TryCreatePipeline(Of DataSet)(x, env)
 
                 If stream.isError Then
-                    Return Message.InCompatibleType(GetType(File), type, env)
+                    Return Message.InCompatibleType(GetType(file), type, env)
                 Else
                     Return stream.populates(Of DataSet)(env).SaveTo(path:=file, encoding:=encoding.CodePage, silent:=True, metaBlank:=0)
                 End If
@@ -400,7 +403,7 @@ Public Module utils
     ''' <param name="env"></param>
     ''' <returns></returns>
     <Extension>
-    Friend Function DataFrameRows(x As Rdataframe, row_names As Object, formatNumber As String, env As Environment) As File
+    Friend Function DataFrameRows(x As Rdataframe, row_names As Object, formatNumber As String, env As Environment) As file
         Dim inputRowNames As String() = Nothing
 
         If row_names Is Nothing Then
@@ -460,7 +463,7 @@ Public Module utils
                         End If
                     End Function) _
             .ToArray
-        Dim dataframe As New File(rows)
+        Dim dataframe As New file(rows)
 
         Return dataframe
     End Function

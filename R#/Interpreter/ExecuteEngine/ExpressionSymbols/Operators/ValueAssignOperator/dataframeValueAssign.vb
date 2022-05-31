@@ -125,7 +125,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             If nrows = 0 Then
                 ' is an empty dataframe
                 targetObj.columns(indexStr) = valueArray
-            ElseIf valueArray.Length <> nrows AndAlso valueArray.Length <> 1 Then
+            ElseIf valueArray.Length = 0 Then
+                targetObj.columns.Remove(indexStr)
+            ElseIf valueArray.Length <> nrows AndAlso (valueArray.Length <> 1 AndAlso nrows <> 1) Then
                 Return Internal.debug.stop({
                     $"the given value is not equal size to the dataframe row numbers!",
                     $"nrows: {nrows}",
