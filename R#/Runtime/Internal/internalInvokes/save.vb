@@ -53,6 +53,8 @@
 
 Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Serialize
@@ -170,6 +172,23 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop("'file' must be specified!", envir)
             ElseIf objects Is Nothing Then
                 Return Internal.debug.stop("'object' is nothing!", envir)
+            End If
+
+            If TypeOf objects Is InvokeParameter() Then
+                Dim tmpList As New list With {.slots = New Dictionary(Of String, Object)}
+
+                For Each arg As InvokeParameter In DirectCast(objects, InvokeParameter())
+                    Dim name As String = arg.name
+                    Dim value As Object = arg.Evaluate(envir)
+
+                    If Program.isException(value) Then
+                        Return value
+                    Else
+                        Call tmpList.add(name, value)
+                    End If
+                Next
+
+                objects = tmpList
             End If
 
             Dim buffer As Buffer = BufferHandler.getBuffer(objects, env:=envir)
