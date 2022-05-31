@@ -12,7 +12,7 @@ const f = function(x, z, g) {
 
 const y = parallel(x = seqVals, z = bbb, n_threads = 2, ignoreError = TRUE, debug = FALSE){# , debug = TRUE, master = 3305, bootstrap = 5566) {
 	print(x);
-	# sleep(1 + rnd() * 10);
+	sleep(1 + rnd() * 10);
 	x = f(x, z, g);
 	# stop(x);
 	x;
