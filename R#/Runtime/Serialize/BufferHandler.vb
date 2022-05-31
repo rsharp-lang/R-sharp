@@ -49,6 +49,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -90,6 +91,10 @@ Namespace Runtime.Serialize
                 Return DirectCast(result, BufferObject)
             ElseIf TypeOf result Is Expression Then
                 Return New rscriptBuffer With {.target = result}
+            ElseIf DataFramework.IsPrimitive(result.GetType) Then
+                Dim vec As New vector With {.data = {result}}
+                ' save scalar value object as vector
+                Return vectorBuffer.CreateBuffer(vec, env)
             Else
                 Throw New NotImplementedException(result.GetType.FullName)
             End If
