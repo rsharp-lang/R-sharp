@@ -19,7 +19,7 @@ f = function(x) {
 
 print(dim(d));
 
-names(d) = `item_${1:nrow(d)}`;
+rownames(d) = `item_${1:nrow(d)}`;
 
 # and then save these two sequence object to disk file
 save(x, word, l, d ,  f, file = "./R#save.rda");
