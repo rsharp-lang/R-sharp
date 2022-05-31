@@ -482,7 +482,7 @@ Namespace Runtime.Internal.Invokes
         ''' respectively).
         ''' </remarks>
         <ExportAPI("dim")>
-        Public Function [dim](<RRawVectorArgument> x As Object) As Object
+        Public Function Robj_dimension(<RRawVectorArgument> x As Object) As Object
             If x Is Nothing Then
                 Return Nothing
             ElseIf TypeOf x Is dataframe Then
