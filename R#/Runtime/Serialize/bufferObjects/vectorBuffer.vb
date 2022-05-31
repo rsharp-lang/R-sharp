@@ -123,6 +123,13 @@ Namespace Runtime.Serialize
                 buffer.vector = generic
             End If
 
+            If buffer.type = "any" Then
+                buffer.type = buffer.vector _
+                    .GetType _
+                    .GetElementType _
+                    .FullName
+            End If
+
             Return buffer
         End Function
 
