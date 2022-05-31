@@ -190,7 +190,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("Sys.getlocale")>
         Public Function Sys_getlocale() As list
-            Dim invariantCulture = CultureInfo.CurrentCulture
+            Dim invariantCulture As CultureInfo = Globalization.CultureInfo.CurrentCulture
 
             Return New list With {
                 .slots = New Dictionary(Of String, Object) From {

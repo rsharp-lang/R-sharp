@@ -77,8 +77,14 @@ Namespace Runtime.Serialize
         Sub New()
         End Sub
 
+        Sub New(buffer As Stream)
+            Call loadBuffer(buffer)
+        End Sub
+
         Sub New(raw As Byte())
-            text = Encodings.UTF8.CodePage.GetString(raw)
+            Using ms As New MemoryStream(raw)
+                Call loadBuffer(ms)
+            End Using
         End Sub
 
         Public Overrides Sub Serialize(buffer As Stream)
@@ -93,5 +99,22 @@ Namespace Runtime.Serialize
         Public Overrides Function getValue() As Object
             Return text
         End Function
+
+        Protected Overrides Sub loadBuffer(stream As Stream)
+            Dim raw As Byte()
+
+            If TypeOf stream Is MemoryStream Then
+                raw = DirectCast(stream, MemoryStream).ToArray
+            Else
+                Using buffer As New MemoryStream
+                    stream.CopyTo(buffer)
+                    raw = buffer.ToArray
+                End Using
+            End If
+
+            text = Encodings.UTF8 _
+                .CodePage _
+                .GetString(raw)
+        End Sub
     End Class
 End Namespace

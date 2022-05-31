@@ -93,7 +93,8 @@ Namespace Context.RPC
         ''' the master environment is readonly to 
         ''' the slave parallel node.
         ''' </remarks>
-        ReadOnly env As Environment
+        Friend ReadOnly env As Environment
+
         ReadOnly socket As TcpServicesSocket
         ReadOnly result As New Dictionary(Of String, Object)
 
@@ -112,7 +113,7 @@ Namespace Context.RPC
         Sub New(env As Environment, Optional port As Integer = -1, Optional verbose As Boolean = False)
             Me.port = If(port <= 0, IPCSocket.GetFirstAvailablePort, port)
             Me.env = New Environment(env, "snowfall-parallel@master", isInherits:=False)
-            Me.socket = New TcpServicesSocket(port, debug:=verbose OrElse port > 0)
+            Me.socket = New TcpServicesSocket(Me.port, debug:=verbose OrElse port > 0)
             Me.socket.ResponseHandler = AddressOf New ProtocolHandler(Me).HandleRequest
         End Sub
 
@@ -135,7 +136,7 @@ Namespace Context.RPC
 
         <Protocol(Protocols.PushResult)>
         Public Function PostResult(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
-            Dim payload As New ResultPayload(request.ChunkBuffer)
+            Dim payload As New ResultPayload(request.ChunkBuffer, env)
             Dim value As Object = payload.value
             Dim uuid As Integer = payload.uuid
 

@@ -78,5 +78,9 @@ Namespace Runtime.Serialize
         Public Overrides Function getValue() As Object
             Return getList()
         End Function
+
+        Protected Overrides Sub loadBuffer(stream As Stream)
+            Throw New NotImplementedException()
+        End Sub
     End Class
 End Namespace

@@ -71,6 +71,7 @@
 Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.Serialization
+Imports SMRUCC.Rsharp.Runtime
 
 Namespace Context.RPC
 
@@ -106,16 +107,20 @@ Namespace Context.RPC
         Public Property uuid As Integer
         Public Property value As Object
 
-        Sub New()
+        Dim env As Environment
+
+        Sub New(env As Environment)
+            Me.env = env
         End Sub
 
-        Sub New(payload As Byte())
-            uuid = BitConverter.ToInt32(payload, Scan0)
-            value = Serialization.ParseBuffer(payload.Skip(4).ToArray)
+        Sub New(payload As Byte(), env As Environment)
+            Me.uuid = BitConverter.ToInt32(payload, Scan0)
+            Me.value = Serialization.ParseBuffer(payload.Skip(4).ToArray)
+            Me.env = env
         End Sub
 
         Public Overrides Sub Serialize(buffer As Stream)
-            Dim data As Byte() = Serialization.GetBuffer(value, Nothing)
+            Dim data As Byte() = Serialization.GetBuffer(value, env)
 
             Call buffer.Write(BitConverter.GetBytes(uuid), Scan0, 4)
             Call buffer.Write(data, Scan0, data.Length)

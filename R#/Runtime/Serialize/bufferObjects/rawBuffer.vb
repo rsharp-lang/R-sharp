@@ -71,6 +71,9 @@ Namespace Runtime.Serialize
             End Get
         End Property
 
+        Sub New()
+        End Sub
+
         Public Shared Function getEmptyBuffer() As rawBuffer
             Return New rawBuffer With {.buffer = New MemoryStream()}
         End Function
@@ -87,5 +90,12 @@ Namespace Runtime.Serialize
         Public Overrides Function getValue() As Object
             Return buffer
         End Function
+
+        Protected Overrides Sub loadBuffer(stream As Stream)
+            buffer = New MemoryStream
+            stream.CopyTo(buffer)
+            buffer.Flush()
+            buffer.Seek(Scan0, SeekOrigin.Begin)
+        End Sub
     End Class
 End Namespace

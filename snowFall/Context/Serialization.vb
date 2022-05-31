@@ -100,6 +100,10 @@ Public Module Serialization
     ''' <param name="symbol"></param>
     ''' <returns></returns>
     Public Function GetBytes(symbol As Symbol, env As Environment) As Byte()
+        If env.globalEnvironment.Rscript.debug Then
+            Call Console.WriteLine($"[found symbol::{symbol.name}] {symbol.ToString}")
+        End If
+
         Using buffer As New MemoryStream, writer As New BinaryDataWriter(buffer)
             Call writer.Write(symbol.name, BinaryStringFormat.ZeroTerminated)
             Call writer.Write(symbol.readonly)

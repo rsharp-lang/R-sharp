@@ -153,6 +153,7 @@ Namespace Development.CodeAnalysis
                 Case GetType(StringInterpolation) : Call GetSymbols(DirectCast(code, StringInterpolation), context)
                 Case GetType(SymbolReference)
                     Call context.Push(DirectCast(code, SymbolReference), PropertyAccess.Readable)
+                Case GetType(ValueAssignExpression) : Call GetSymbols(DirectCast(code, ValueAssignExpression), context)
 
                 Case Else
                     Throw New NotImplementedException(code.GetType.FullName)
@@ -184,6 +185,18 @@ Namespace Development.CodeAnalysis
         Private Shared Sub GetSymbols(code As IfBranch, context As Context)
             Call GetSymbolReferenceList(code.ifTest, context)
             Call GetSymbolReferenceList(code.trueClosure, context)
+        End Sub
+
+        Private Shared Sub GetSymbols(code As ValueAssignExpression, context As Context)
+            For Each target In code.targetSymbols
+                If TypeOf target Is Literal Then
+                    Call context.Push(DirectCast(target, Literal).ValueStr, PropertyAccess.Writeable)
+                Else
+                    Call GetSymbolReferenceList(target, context)
+                End If
+            Next
+
+            Call GetSymbolReferenceList(code.value, context)
         End Sub
 
         Private Shared Sub GetSymbols(code As SymbolIndexer, context As Context)

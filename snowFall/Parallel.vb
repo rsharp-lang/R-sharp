@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::956c14e492cbf2030ad5b39e532e809b, R-sharp\snowFall\Parallel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 182
-    '    Code Lines: 121
-    ' Comment Lines: 40
-    '   Blank Lines: 21
-    '     File Size: 6.83 KB
+' Summaries:
 
 
-    ' Module Parallel
-    ' 
-    '     Function: detectCores, makeCluster, parallel, produceTask, runSlaveNode
-    '               snowFall, worker
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 182
+'    Code Lines: 121
+' Comment Lines: 40
+'   Blank Lines: 21
+'     File Size: 6.83 KB
+
+
+' Module Parallel
+' 
+'     Function: detectCores, makeCluster, parallel, produceTask, runSlaveNode
+'               snowFall, worker
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports snowFall.Context
@@ -136,9 +137,17 @@ Public Module Parallel
     Public Function runSlaveNode(port As Integer, Optional env As Environment = Nothing) As Object
         Dim req As New RequestStream(MasterContext.Protocol, RPC.Protocols.Initialize)
         Dim resp = New TcpRequest(port).SendMessage(req)
+
+        Call Console.WriteLine($"[bootstrapping] bootstrap_port={port}!")
+
         Dim uuid As Integer = BitConverter.ToInt32(resp.ChunkBuffer, Scan0)
         Dim masterPort As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 4)
         Dim size As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 8)
+
+        Call Console.WriteLine($"uuid={uuid}")
+        Call Console.WriteLine($"remote_environment={masterPort}")
+        Call Console.WriteLine($"task_body_size={size}")
+
         Dim buffer As Byte() = New Byte(size - 1) {}
         Dim closure As Expression = Nothing
         Dim result As ResultPayload = Nothing
@@ -147,6 +156,10 @@ Public Module Parallel
             master:=IPEndPoint.CreateLocal(masterPort),
             parent:=env
         )
+
+        Call Console.WriteLine("create root environment:")
+        Call Console.WriteLine(root.ToString)
+
         Dim fake As New DESCRIPTION With {
             .Author = "xieguigang",
             .[Date] = Now.ToString,
@@ -165,12 +178,34 @@ Public Module Parallel
             Call BlockReader.Read(reader).Parse(fake, expr:=closure)
         End Using
 
-        Call New TcpRequest(port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
+        Call Console.WriteLine("get task:")
+        Call Console.WriteLine("::")
+        Call Console.WriteLine(closure.ToString)
+        Call Console.WriteLine("::")
+        Call Console.WriteLine(" --> run!")
+        Call Console.WriteLine()
 
-        result = New ResultPayload With {.uuid = uuid, .value = closure.Evaluate(root)}
+        result = New ResultPayload(env) With {
+            .uuid = uuid,
+            .value = closure.Evaluate(root)
+        }
         req = New RequestStream(MasterContext.Protocol, RPC.Protocols.PushResult, result)
 
+        Call Console.WriteLine()
+        Call Console.WriteLine()
+        Call Console.WriteLine("~job done!")
+
+        If TypeOf result.value Is Message Then
+            Call Console.WriteLine()
+            Call Console.WriteLine("exception:")
+            Call Console.WriteLine(result.value.ToString)
+            Call Console.WriteLine()
+        End If
+
         Call New TcpRequest(masterPort).SendMessage(req)
+        Call New TcpRequest(port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
+
+        Call Console.WriteLine("exit!")
 
         Return 0
     End Function
@@ -185,12 +220,20 @@ Public Module Parallel
     <ExportAPI("parallel")>
     Public Function parallel(task As Expression,
                              Optional n_threads As Integer = -1,
-                             Optional debug As Boolean = False,
+                             Optional debug As Boolean? = Nothing,
+                             Optional ignoreError As Boolean? = Nothing,
                              <RListObjectArgument>
                              Optional argv As list = Nothing,
                              Optional env As Environment = Nothing) As Object
 
-        Dim host As RunParallel = RunParallel.Initialize(task, argv, env)
+        If debug Is Nothing AndAlso argv.hasName("debug") Then
+            debug = argv.getValue(Of Boolean)("debug", env)
+        End If
+        If ignoreError Is Nothing AndAlso argv.hasName("ignoreError") Then
+            ignoreError = argv.getValue(Of Boolean)("ignoreError", env)
+        End If
+
+        Dim host As RunParallel = RunParallel.Initialize(task, argv, debug, env)
         Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) = host.produceTask
         Dim engine As New ThreadTask(Of SeqValue(Of Object))(
             task:=taskList,
@@ -206,17 +249,35 @@ Public Module Parallel
             .OrderBy(Function(a) a.i) _
             .Select(Function(a) REnv.single(a.value)) _
             .ToArray
+        Dim output As New List(Of Object)
+        Dim errors As New List(Of (i As Integer, ex As Message))
+        Dim j As Integer = 0
 
-        For Each i In result
+        For Each i As Object In result
+            j += 1
+
             If Program.isException(i) Then
-                Call host.master.Dispose()
-                Return i
+                If Not ignoreError Then
+                    Call host.master.Dispose()
+                    Return i
+                Else
+                    Call output.Add(Nothing)
+                    Call errors.Add((j, DirectCast(i, Message)))
+                End If
+            Else
+                Call output.Add(i)
             End If
         Next
 
         Call host.master.Dispose()
 
-        Return REnv.TryCastGenericArray(result, env)
+        If errors.Any Then
+            For Each taskResult In errors
+                Call env.AddMessage($"[task_{taskResult.i}] {taskResult.ex.ToString}")
+            Next
+        End If
+
+        Return REnv.TryCastGenericArray(output.ToArray, env)
     End Function
 
     <Extension>

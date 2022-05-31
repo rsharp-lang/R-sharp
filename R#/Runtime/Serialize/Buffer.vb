@@ -1,68 +1,68 @@
 ﻿#Region "Microsoft.VisualBasic::80533ad8b1f70d5f5d141229c4610345, R-sharp\R#\Runtime\Serialize\Buffer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 76
-    '    Code Lines: 62
-    ' Comment Lines: 0
-    '   Blank Lines: 14
-    '     File Size: 2.96 KB
+' Summaries:
 
 
-    '     Class Buffer
-    ' 
-    '         Properties: code, data
-    ' 
-    '         Function: MeasureBufferMagic, ParseBuffer, ToString
-    ' 
-    '         Sub: Serialize
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 76
+'    Code Lines: 62
+' Comment Lines: 0
+'   Blank Lines: 14
+'     File Size: 2.96 KB
+
+
+'     Class Buffer
+' 
+'         Properties: code, data
+' 
+'         Function: MeasureBufferMagic, ParseBuffer, ToString
+' 
+'         Sub: Serialize
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports System.Drawing
 Imports System.IO
-Imports System.Runtime.CompilerServices
 Imports System.Text
-Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
 
 Namespace Runtime.Serialize
 
+    ''' <summary>
+    ''' data buffer model for run ``R#`` IPC
+    ''' </summary>
     Public Class Buffer : Inherits RawStream
 
         Public Property data As BufferObject
@@ -75,6 +75,7 @@ Namespace Runtime.Serialize
                     Case GetType(bitmapBuffer) : Return BufferObjects.bitmap
                     Case GetType(messageBuffer) : Return BufferObjects.message
                     Case GetType(vectorBuffer) : Return BufferObjects.vector
+                    Case GetType(rscriptBuffer) : Return BufferObjects.rscript
                     Case Else
                         Throw New NotImplementedException(data.GetType.FullName)
                 End Select
@@ -98,9 +99,11 @@ Namespace Runtime.Serialize
                 Case BufferObjects.bitmap
                     bufferObject = New bitmapBuffer(data)
                 Case BufferObjects.vector
-                    bufferObject = vectorBuffer.CreateBuffer(data)
+                    bufferObject = New vectorBuffer(data)
                 Case BufferObjects.message
-                    bufferObject = messageBuffer.CreateBuffer(data)
+                    bufferObject = New messageBuffer(data)
+                Case BufferObjects.rscript
+                    bufferObject = New rscriptBuffer(data)
                 Case Else
                     Throw New NotImplementedException(code.Description)
             End Select

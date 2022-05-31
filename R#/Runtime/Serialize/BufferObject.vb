@@ -60,6 +60,21 @@ Namespace Runtime.Serialize
         Public MustOverride ReadOnly Property code As BufferObjects
         Public MustOverride Function getValue() As Object
 
+        Sub New()
+        End Sub
+
+        Sub New(buffer As Stream)
+            Call loadBuffer(buffer)
+        End Sub
+
+        Sub New(bytes As Byte())
+            Using ms As New MemoryStream(bytes)
+                Call loadBuffer(ms)
+            End Using
+        End Sub
+
+        Protected MustOverride Sub loadBuffer(stream As Stream)
+
         Public Shared Function SubStream(stream As Stream, from As Long, length As Integer) As MemoryStream
             Dim buffer As Byte() = New Byte(length - 1) {}
 

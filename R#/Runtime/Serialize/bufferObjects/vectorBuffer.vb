@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::a9631708f352473c8d634a0c9d6881b9, R-sharp\R#\Runtime\Serialize\bufferObjects\vectorBuffer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 156
-    '    Code Lines: 116
-    ' Comment Lines: 7
-    '   Blank Lines: 33
-    '     File Size: 5.60 KB
+' Summaries:
 
 
-    '     Class vectorBuffer
-    ' 
-    '         Properties: code, names, type, underlyingType, unit
-    '                     vector
-    ' 
-    '         Function: (+2 Overloads) CreateBuffer, getValue, getVector
-    ' 
-    '         Sub: Serialize
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 156
+'    Code Lines: 116
+' Comment Lines: 7
+'   Blank Lines: 33
+'     File Size: 5.60 KB
+
+
+'     Class vectorBuffer
+' 
+'         Properties: code, names, type, underlyingType, unit
+'                     vector
+' 
+'         Function: (+2 Overloads) CreateBuffer, getValue, getVector
+' 
+'         Sub: Serialize
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -94,6 +94,13 @@ Namespace Runtime.Serialize
             End Get
         End Property
 
+        Sub New()
+        End Sub
+
+        Sub New(buffer As Stream)
+            Call MyBase.New(buffer)
+        End Sub
+
         Public Function getVector() As vector
             Dim rtype As RType = RType.GetRSharpType(underlyingType)
             Dim unit As New unit With {.name = Me.unit}
@@ -119,7 +126,44 @@ Namespace Runtime.Serialize
             Return buffer
         End Function
 
-        Public Shared Function CreateBuffer(bytes As Stream) As vectorBuffer
+        Public Overrides Sub Serialize(buffer As Stream)
+            Dim type As Type = Type.GetType(Me.type)
+            Dim bytes As Byte()
+            Dim text As Encoding = Encodings.UTF8.CodePage
+            Dim raw As Byte()
+            Dim sizeof As Byte()
+
+            buffer.Write(BitConverter.GetBytes(names.Length), Scan0, 4)
+            buffer.Write(BitConverter.GetBytes(vector.Length), Scan0, 4)
+
+            bytes = text.GetBytes(type.FullName)
+            buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
+            buffer.Write(bytes, Scan0, bytes.Length)
+
+            bytes = text.GetBytes(unit)
+            buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
+            buffer.Write(bytes, Scan0, bytes.Length)
+
+            raw = RawStream.GetBytes(names)
+            sizeof = BitConverter.GetBytes(raw.Length)
+
+            buffer.Write(sizeof, Scan0, 4)
+            buffer.Write(raw, Scan0, raw.Length)
+
+            raw = RawStream.GetBytes(vector)
+            sizeof = BitConverter.GetBytes(raw.Length)
+
+            buffer.Write(sizeof, Scan0, 4)
+            buffer.Write(raw, Scan0, raw.Length)
+
+            buffer.Flush()
+        End Sub
+
+        Public Overrides Function getValue() As Object
+            Return getVector()
+        End Function
+
+        Protected Overrides Sub loadBuffer(bytes As Stream)
             Dim raw As Byte() = New Byte(2 * Marshal.SizeOf(GetType(Integer)) - 1) {}
             Dim text As Encoding = Encodings.UTF8.CodePage
 
@@ -164,50 +208,11 @@ Namespace Runtime.Serialize
             Using ms As New MemoryStream(raw)
                 Dim vector As Array = RawStream.GetData(ms, type.PrimitiveTypeCode)
 
-                Return New vectorBuffer With {
-                    .type = type.FullName,
-                    .names = names,
-                    .unit = unit,
-                    .vector = vector
-                }
+                Me.type = type.FullName
+                Me.names = names
+                Me.unit = unit
+                Me.vector = vector
             End Using
-        End Function
-
-        Public Overrides Sub Serialize(buffer As Stream)
-            Dim type As Type = Type.GetType(Me.type)
-            Dim bytes As Byte()
-            Dim text As Encoding = Encodings.UTF8.CodePage
-            Dim raw As Byte()
-            Dim sizeof As Byte()
-
-            buffer.Write(BitConverter.GetBytes(names.Length), Scan0, 4)
-            buffer.Write(BitConverter.GetBytes(vector.Length), Scan0, 4)
-
-            bytes = text.GetBytes(type.FullName)
-            buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
-            buffer.Write(bytes, Scan0, bytes.Length)
-
-            bytes = text.GetBytes(unit)
-            buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
-            buffer.Write(bytes, Scan0, bytes.Length)
-
-            raw = RawStream.GetBytes(names)
-            sizeof = BitConverter.GetBytes(raw.Length)
-
-            buffer.Write(sizeof, Scan0, 4)
-            buffer.Write(raw, Scan0, raw.Length)
-
-            raw = RawStream.GetBytes(vector)
-            sizeof = BitConverter.GetBytes(raw.Length)
-
-            buffer.Write(sizeof, Scan0, 4)
-            buffer.Write(raw, Scan0, raw.Length)
-
-            buffer.Flush()
         End Sub
-
-        Public Overrides Function getValue() As Object
-            Return getVector()
-        End Function
     End Class
 End Namespace
