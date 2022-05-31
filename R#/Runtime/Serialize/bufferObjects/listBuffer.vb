@@ -132,7 +132,7 @@ Namespace Runtime.Serialize
             Dim list As New Dictionary(Of String, Object)
 
             stream.Read(bytes, Scan0, bytes.Length)
-            nsize = BitConverter.ToInt32(bytes)
+            nsize = BitConverter.ToInt32(bytes, Scan0)
             bytes = New Byte(nsize - 1) {}
             stream.Read(bytes, Scan0, bytes.Length)
             tmpstr = text.GetString(bytes)
@@ -144,7 +144,7 @@ Namespace Runtime.Serialize
 
                 bytes = New Byte(4 - 1) {}
                 stream.Read(bytes, Scan0, bytes.Length)
-                nsize = BitConverter.ToInt32(bytes)
+                nsize = BitConverter.ToInt32(bytes, Scan0)
                 bytes = New Byte(nsize - 1) {}
                 stream.Read(bytes, Scan0, bytes.Length)
 

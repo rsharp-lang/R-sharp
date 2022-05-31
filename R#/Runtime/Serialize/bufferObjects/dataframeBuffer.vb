@@ -98,12 +98,12 @@ Namespace Runtime.Serialize
             tmpstr = colnames.GetJson
             bytes = text.GetBytes(tmpstr)
             buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
-            buffer.Write(bytes)
+            buffer.Write(bytes, Scan0, bytes.Length)
 
             tmpstr = rownames.GetJson
             bytes = text.GetBytes(tmpstr)
-            buffer.Write(BitConverter.GetBytes(bytes.Length))
-            buffer.Write(bytes)
+            buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
+            buffer.Write(bytes, Scan0, bytes.Length)
 
             For Each name As String In colnames
                 Dim vec As New vector With {
@@ -122,7 +122,7 @@ Namespace Runtime.Serialize
                         tmp.Flush()
                         tmp.Seek(Scan0, SeekOrigin.Begin)
                         buffer.Write(BitConverter.GetBytes(tmp.Length), Scan0, 4)
-                        buffer.Write(tmp.ToArray)
+                        buffer.Write(tmp.ToArray, Scan0, tmp.Length)
                     End If
                 End Using
             Next
