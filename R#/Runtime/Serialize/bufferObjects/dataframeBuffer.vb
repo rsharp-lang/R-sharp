@@ -97,7 +97,7 @@ Namespace Runtime.Serialize
 
             tmpstr = colnames.GetJson
             bytes = text.GetBytes(tmpstr)
-            buffer.Write(BitConverter.GetBytes(bytes.Length))
+            buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
             buffer.Write(bytes)
 
             tmpstr = rownames.GetJson
@@ -121,7 +121,7 @@ Namespace Runtime.Serialize
                         vec2.Serialize(tmp)
                         tmp.Flush()
                         tmp.Seek(Scan0, SeekOrigin.Begin)
-                        buffer.Write(tmp.Length)
+                        buffer.Write(BitConverter.GetBytes(tmp.Length), Scan0, 4)
                         buffer.Write(tmp.ToArray)
                     End If
                 End Using
