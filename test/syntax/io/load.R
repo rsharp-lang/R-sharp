@@ -1,3 +1,5 @@
+setwd(@dir);
+
 # demo dataset contains two variable: x and word
 let disk <- "./R#save.rda";
 let names as string = load(disk);
