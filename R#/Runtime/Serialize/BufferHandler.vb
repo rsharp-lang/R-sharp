@@ -92,7 +92,9 @@ Namespace Runtime.Serialize
             ElseIf TypeOf result Is Expression Then
                 Return New rscriptBuffer With {.target = result}
             ElseIf DataFramework.IsPrimitive(result.GetType) Then
-                Dim vec As New vector With {.data = {result}}
+                Dim array As Array = Array.CreateInstance(result.GetType, 1)
+                array.SetValue(result, Scan0)
+                Dim vec As New vector With {.data = array}
                 ' save scalar value object as vector
                 Return vectorBuffer.CreateBuffer(vec, env)
             Else
