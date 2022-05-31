@@ -13,5 +13,9 @@ l$a = [1,2,3,4,5];
 l$b = FALSE;
 l$c = ["hello", "world"];
 
+f = function(x) {
+	x^2 + 55;
+}
+
 # and then save these two sequence object to disk file
-save(x, word, l, d, file = "./R#save.rda");
+save(x, word, l, d ,  f, file = "./R#save.rda");
