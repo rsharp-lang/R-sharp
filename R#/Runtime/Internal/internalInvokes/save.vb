@@ -1,89 +1,65 @@
 ﻿#Region "Microsoft.VisualBasic::25ad35ff48a3ff0ac38094a59d91b185, R-sharp\Library\R.base\save\save.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 289
-    '    Code Lines: 125
-    ' Comment Lines: 133
-    '   Blank Lines: 31
-    '     File Size: 13.93 KB
+' Summaries:
 
 
-    ' Module base
-    ' 
-    '     Function: load, parseRData, readRDS, save, saveRDS
-    ' 
-    '     Sub: saveImage
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 289
+'    Code Lines: 125
+' Comment Lines: 133
+'   Blank Lines: 31
+'     File Size: 13.93 KB
+
+
+' Module base
+' 
+'     Function: load, parseRData, readRDS, save, saveRDS
+' 
+'     Sub: saveImage
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
-Imports System.IO.Compression
-Imports Microsoft.VisualBasic.ApplicationServices
-Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.ComponentModel.Collection
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Data.IO.netCDF
-Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.RDataSet
-Imports SMRUCC.Rsharp.RDataSet.Convertor
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports cdfAttribute = Microsoft.VisualBasic.Data.IO.netCDF.Components.attribute
+Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports RSymbol = SMRUCC.Rsharp.Runtime.Components.Symbol
 
 Partial Module base
-
-    ''' <summary>
-    ''' read ``*.rda`` data file which is saved from R environment. 
-    ''' </summary>
-    ''' <param name="file"></param>
-    ''' <returns></returns>
-    <ExportAPI("readRData")>
-    Public Function parseRData(file As String) As Object
-        Using buffer As Stream = file.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
-            Dim obj As Struct.RData = Reader.ParseData(buffer)
-            Dim symbols As list = ConvertToR.ToRObject(obj.object)
-
-            Return symbols
-        End Using
-    End Function
 
     ''' <summary>
     ''' ### Reload Saved Datasets
@@ -144,33 +120,29 @@ Partial Module base
             Return Internal.debug.stop({"Disk file is unavailable...", file.GetFullPath}, envir)
         End If
 
-        Dim tmp = TempFileSystem.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(8, True))
+        Using buf As Stream = file.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+            Dim buffer As Buffer = Buffer.ParseBuffer(buf)
+            Dim obj As BufferObject = buffer.data
+            Dim value As Object = obj.getValue
 
-        Call UnZip.ImprovedExtractToDirectory(file, tmp, Overwrite.Always, True)
+            If TypeOf value Is list Then
+                Dim dataList As list = DirectCast(value, list)
 
-        Using reader As New netCDFReader(tmp & "/R#.Data")
-            Dim objectNames = reader.getDataVariable("R#.objects").decodeStringVector
-            Dim numOfObjects As Integer = reader("numOfObjects")
-            Dim objects As NamedValue(Of Object)() = rawDeserializer.loadObject(reader, objectNames).ToArray
+                For Each name As String In dataList.getNames
+                    Dim var As RSymbol = envir.FindSymbol(name)
 
-            If objects.Length <> numOfObjects Then
-                Return Internal.debug.stop({"Invalid file format!", "file=" & file}, envir)
+                    If var Is Nothing Then
+                        envir.Push(name, Nothing, [readonly]:=False)
+                        var = envir.FindSymbol(name)
+                    End If
+
+                    Call var.SetValue(dataList.getByName(name), envir)
+                Next
+
+                Return dataList.getNames
             Else
-                Return objects
+                Return value
             End If
-
-            For Each obj As NamedValue(Of Object) In objects
-                Dim var As RSymbol = envir.FindSymbol(obj.Name)
-
-                If var Is Nothing Then
-                    envir.Push(obj.Name, Nothing, [readonly]:=False)
-                    var = envir.FindSymbol(obj.Name)
-                End If
-
-                Call var.SetValue(obj.Value, envir)
-            Next
-
-            Return objectNames
         End Using
     End Function
 
@@ -191,7 +163,7 @@ Partial Module base
     ''' <returns></returns>
     ''' 
     <ExportAPI("save")>
-    Public Function save(<RListObjectArgument> objects As Object, file$, envir As Environment) As Object
+    Public Function save(<RListObjectArgument> objects As Object, file$, Optional envir As Environment = Nothing) As Object
         ' 数据将会被保存为netCDF文件然后进行zip压缩保存
         If file.StringEmpty Then
             Return Internal.debug.stop("'file' must be specified!", envir)
@@ -199,36 +171,14 @@ Partial Module base
             Return Internal.debug.stop("'object' is nothing!", envir)
         End If
 
-        ' 先保存为cdf文件
-        Dim tmp As String = TempFileSystem.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True)).TrimSuffix & "/R#.Data"
-        Dim maxChartSize As Integer = 2048
-        Dim objList As NamedValue(Of Object)() = RListObjectArgumentAttribute _
-            .getObjectList(objects, envir) _
-            .ToArray
+        Dim buffer As Buffer = BufferHandler.getBuffer(objects, env:=envir)
 
-        Using cdf As CDFWriter = New CDFWriter(tmp).GlobalAttributes(
-            New cdfAttribute With {.name = "program", .type = CDFDataTypes.CHAR, .value = "SMRUCC/R#"},
-            New cdfAttribute With {.name = "numOfObjects", .type = CDFDataTypes.INT, .value = objList.Length},
-            New cdfAttribute With {.name = "maxCharSize", .type = CDFDataTypes.INT, .value = maxChartSize},
-            New cdfAttribute With {.name = "level", .type = CDFDataTypes.INT, .value = CInt(RData.RDA)},
-            New cdfAttribute With {.name = "time", .type = CDFDataTypes.DOUBLE, .value = UnixTimeStamp},
-            New cdfAttribute With {.name = "github", .type = CDFDataTypes.CHAR, .value = LICENSE.githubURL}
-        )
-
-            Dim Robjects As New NamedValue(Of Object) With {
-                .Name = "R#.objects",
-                .Value = objList.Keys.ToArray
-            }
-
-            For Each obj As NamedValue(Of Object) In objList.JoinIterates(Robjects)
-                Call cdf.writeObject(obj.Name, obj.Value)
-            Next
+        Using buf As Stream = file.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+            Call buffer.Serialize(buf)
+            Call buf.Flush()
         End Using
 
-        ' copy to target file
-        Call ZipLib.FileArchive(tmp, file, ArchiveAction.Replace, Overwrite.Always, CompressionLevel.Fastest)
-
-        Return objList.Keys.ToArray
+        Return True
     End Function
 
     ''' <summary>
@@ -266,22 +216,12 @@ Partial Module base
             Return Internal.debug.stop("'object' is nothing!", env)
         End If
 
-        ' 先保存为cdf文件
-        Dim tmp As String = TempFileSystem.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True)).TrimSuffix & "/R#.Data"
-        Dim maxChartSize As Integer = 2048
+        Dim buffer As Buffer = BufferHandler.getBuffer([object], env:=env)
 
-        Using cdf As CDFWriter = New CDFWriter(tmp).GlobalAttributes(
-            New cdfAttribute With {.name = "program", .type = CDFDataTypes.CHAR, .value = "SMRUCC/R#"},
-            New cdfAttribute With {.name = "maxCharSize", .type = CDFDataTypes.INT, .value = maxChartSize},
-            New cdfAttribute With {.name = "level", .type = CDFDataTypes.INT, .value = CInt(RData.RDS)},
-            New cdfAttribute With {.name = "version", .type = CDFDataTypes.CHAR, .value = version}
-        )
-
-            Call cdf.writeObject("data", [object])
+        Using buf As Stream = file.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+            Call buffer.Serialize(buf)
+            Call buf.Flush()
         End Using
-
-        ' copy to target file
-        Call ZipLib.FileArchive(tmp, file, ArchiveAction.Replace, Overwrite.Always, CompressionLevel.Fastest)
 
         Return True
     End Function
@@ -301,7 +241,17 @@ Partial Module base
     ''' <returns></returns>
     <ExportAPI("readRDS")>
     Public Function readRDS(file$, Optional refhook As Object = Nothing, Optional env As Environment = Nothing) As Object
+        If Not file.FileExists Then
+            Return Internal.debug.stop({"Disk file is unavailable...", file.GetFullPath}, env)
+        End If
 
+        Using buf As Stream = file.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+            Dim buffer As Buffer = Buffer.ParseBuffer(buf)
+            Dim obj As BufferObject = buffer.data
+            Dim value As Object = obj.getValue
+
+            Return value
+        End Using
     End Function
 
     ''' <summary>
@@ -338,5 +288,13 @@ Partial Module base
                          Optional safe As Boolean = True,
                          Optional envir As Environment = Nothing)
 
+        Dim objects As New list With {.slots = New Dictionary(Of String, Object)}
+
+        For Each name As String In envir.GetSymbolsNames
+            Dim value As Object = envir.FindSymbol(name).value
+            Call objects.add(name, value)
+        Next
+
+        Call save(objects, file, envir)
     End Sub
 End Module

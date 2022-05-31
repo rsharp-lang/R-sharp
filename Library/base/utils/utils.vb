@@ -52,6 +52,7 @@
 
 #End Region
 
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
@@ -90,6 +91,21 @@ Public Module utils
     Friend Sub Main()
         Call RPrinter.AttachConsoleFormatter(Of csv)(AddressOf printRawTable)
     End Sub
+
+    ''' <summary>
+    ''' read ``*.rda`` data file which is saved from R environment. 
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
+    <ExportAPI("readRData")>
+    Public Function parseRData(file As String) As Object
+        Using buffer As Stream = file.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+            Dim obj As Struct.RData = Reader.ParseData(buffer)
+            Dim symbols As list = ConvertToR.ToRObject(obj.object)
+
+            Return symbols
+        End Using
+    End Function
 
     Private Function printRawTable(raw As csv) As String
         Dim matrix As New List(Of String())
