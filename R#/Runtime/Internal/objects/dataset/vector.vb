@@ -348,6 +348,14 @@ Namespace Runtime.Internal.Object
             }
         End Function
 
+        Public Shared Function fromScalar(x As Object) As vector
+            Dim array As Array = Array.CreateInstance(x.GetType, 1)
+            Call array.SetValue(x, Scan0)
+            Return New vector With {
+                .data = array
+            }
+        End Function
+
         Public Shared Function isVectorOf(x As Object, type As TypeCodes) As Boolean
             Return TypeOf x Is vector AndAlso RType.TypeOf(x) Like RType.GetType(type)
         End Function
