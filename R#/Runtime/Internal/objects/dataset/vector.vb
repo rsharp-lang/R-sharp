@@ -352,7 +352,8 @@ Namespace Runtime.Internal.Object
             Dim array As Array = Array.CreateInstance(x.GetType, 1)
             Call array.SetValue(x, Scan0)
             Return New vector With {
-                .data = array
+                .data = array,
+                .elementType = RType.GetRSharpType(x.GetType)
             }
         End Function
 
