@@ -139,11 +139,24 @@ Public Module NetworkModule
         Return str.ToString
     End Function
 
+    ''' <summary>
+    ''' create a new graph object with the given network edge data and the node properties 
+    ''' </summary>
+    ''' <param name="from"></param>
+    ''' <param name="[to]"></param>
+    ''' <param name="weights"></param>
+    ''' <param name="title">
+    ''' the node display labels
+    ''' </param>
+    ''' <param name="defaultId"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("graph")>
     <RApiReturn(GetType(NetworkGraph))>
     Public Function graph(from As String(), [to] As String(),
                           Optional weights As Double() = Nothing,
                           Optional title As list = Nothing,
+                          Optional shape As list = Nothing,
                           Optional defaultId As Boolean = False,
                           Optional env As Environment = Nothing) As Object
 
@@ -158,6 +171,9 @@ Public Module NetworkModule
         If title Is Nothing Then
             title = New list With {.slots = New Dictionary(Of String, Object)}
         End If
+        If shape Is Nothing Then
+            shape = New list With {.slots = New Dictionary(Of String, Object)}
+        End If
 
         If weights.IsNullOrEmpty Then
             getWeight = Function(any) 0.0
@@ -168,12 +184,19 @@ Public Module NetworkModule
         End If
 
         Dim data As NodeData
+        Dim shapeData As String
 
         For Each id As String In allKeys
             data = New NodeData With {
                 .label = title.getValue(id, env, [default]:=If(defaultId, id, ""))
             }
-            g.CreateNode(id, data)
+            shapeData = shape.getValue(Of String)(id, env)
+
+            If Not shapeData.StringEmpty Then
+                data("shape") = shapeData
+            End If
+
+            Call g.CreateNode(id, data)
         Next
 
         For i As Integer = 0 To from.Length - 1
