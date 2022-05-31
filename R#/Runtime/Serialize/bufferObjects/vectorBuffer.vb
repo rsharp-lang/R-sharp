@@ -115,7 +115,7 @@ Namespace Runtime.Serialize
                 .type = vector.elementType.raw.FullName,
                 .unit = If(vector.unit?.name, "")
             }
-            Dim generic = REnv.asVector(vector.data, vector.elementType.raw, env)
+            Dim generic = REnv.TryCastGenericArray(vector.data, env)
 
             If TypeOf generic Is Message Then
                 Return generic
@@ -123,7 +123,7 @@ Namespace Runtime.Serialize
                 buffer.vector = generic
             End If
 
-            If buffer.type = "any" Then
+            If buffer.type = "System.Object" Then
                 buffer.type = buffer.vector _
                     .GetType _
                     .GetElementType _
