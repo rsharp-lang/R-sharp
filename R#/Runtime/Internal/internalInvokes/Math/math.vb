@@ -141,7 +141,7 @@ Namespace Runtime.Internal.Invokes
         ''' </returns>
         <ExportAPI("is.finite")>
         Public Function isFinite(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
-            Return EvaluateFramework(Of Double, Boolean)(env, x, eval:=Function(xi) Double.IsFinite(xi))
+            Return EvaluateFramework(Of Double, Boolean)(env, x, eval:=Function(xi) Not Double.IsInfinity(xi))
         End Function
 
         ''' <summary>
