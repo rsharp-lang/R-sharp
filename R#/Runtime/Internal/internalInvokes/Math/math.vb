@@ -78,6 +78,11 @@ Namespace Runtime.Internal.Invokes
     ''' </summary>
     Module math
 
+        <ExportAPI("is.nan")>
+        Public Function isNaN(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return EvaluateFramework(Of Double, Boolean)(env, x, eval:=Function(xi) xi.IsNaNImaginary)
+        End Function
+
         ''' <summary>
         ''' ### Lagged Differences
         ''' 
