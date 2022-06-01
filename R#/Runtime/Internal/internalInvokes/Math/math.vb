@@ -78,9 +78,97 @@ Namespace Runtime.Internal.Invokes
     ''' </summary>
     Module math
 
+        ''' <summary>
+        ''' ## Finite, Infinite and NaN Numbers
+        ''' 
+        ''' is.finite and is.infinite return a vector of the same 
+        ''' length as x, indicating which elements are finite 
+        ''' (not infinite and not missing) or infinite.
+        ''' 
+        ''' Inf And -Inf are positive And negative infinity whereas
+        ''' NaN means 'Not a Number’. (These apply to numeric values 
+        ''' and real and imaginary parts of complex values but not 
+        ''' to values of integer vectors.) Inf and NaN are reserved 
+        ''' words in the R language.
+        ''' </summary>
+        ''' <param name="x">
+        ''' R object to be tested: the default methods handle atomic 
+        ''' vectors.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' A logical vector of the same length as x: dim, dimnames 
+        ''' and names attributes are preserved.
+        ''' </returns>
+        ''' <remarks>
+        ''' is.nan tests if a numeric value is NaN. Do not test equality 
+        ''' to NaN, or even use identical, since systems typically have
+        ''' many different NaN values. One of these is used for the 
+        ''' numeric missing value NA, and is.nan is false for that value. 
+        ''' A complex number is regarded as NaN if either the real or 
+        ''' imaginary part is NaN but not NA. All elements of logical, 
+        ''' integer and raw vectors are considered not to be NaN.
+        '''
+        ''' All three functions accept NULL As input And Return a length 
+        ''' zero result. The Default methods accept character And raw vectors, 
+        ''' And Return False For all entries. Prior To R version 2.14.0 
+        ''' they accepted all input, returning False For most non-numeric 
+        ''' values; cases which are Not atomic vectors are now signalled 
+        ''' As errors.
+        '''
+        ''' All three functions are generic: you can write methods To handle 
+        ''' specific classes Of objects, see InternalMethods.
+        ''' </remarks>
         <ExportAPI("is.nan")>
         Public Function isNaN(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
             Return EvaluateFramework(Of Double, Boolean)(env, x, eval:=Function(xi) xi.IsNaNImaginary)
+        End Function
+
+        ''' <summary>
+        ''' ## Finite, Infinite and NaN Numbers
+        ''' 
+        ''' is.finite and is.infinite return a vector of the same length 
+        ''' as x, indicating which elements are finite (not infinite and 
+        ''' not missing) or infinite.
+        ''' </summary>
+        ''' <param name="x">
+        ''' R object to be tested: the default methods handle atomic vectors.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' A logical vector of the same length as x: dim, dimnames and 
+        ''' names attributes are preserved.
+        ''' </returns>
+        <ExportAPI("is.finite")>
+        Public Function isFinite(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return EvaluateFramework(Of Double, Boolean)(env, x, eval:=Function(xi) Double.IsFinite(xi))
+        End Function
+
+        ''' <summary>
+        ''' ## Finite, Infinite and NaN Numbers
+        ''' 
+        ''' is.finite and is.infinite return a vector of the same length as 
+        ''' x, indicating which elements are finite (not infinite and not 
+        ''' missing) or infinite.
+        ''' </summary>
+        ''' <param name="x">
+        ''' R object to be tested: the default methods handle atomic vectors.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' A logical vector of the same length as x: dim, dimnames and names 
+        ''' attributes are preserved.
+        ''' </returns>
+        ''' <remarks>
+        ''' is.infinite returns a vector of the same length as x the jth 
+        ''' element of which is TRUE if x[j] is infinite (i.e., equal to one
+        ''' of Inf or -Inf) and FALSE otherwise. This will be false unless x 
+        ''' is numeric or complex. Complex numbers are infinite if either the
+        ''' real or the imaginary part is.
+        ''' </remarks>
+        <ExportAPI("is.infinite")>
+        Public Function isInfinite(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return EvaluateFramework(Of Double, Boolean)(env, x, eval:=Function(xi) Double.IsInfinity(xi))
         End Function
 
         ''' <summary>
@@ -92,6 +180,13 @@ Namespace Runtime.Internal.Invokes
         ''' a numeric vector Or matrix containing the values To be differenced.
         ''' </param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' is.finite returns a vector of the same length as x the jth 
+        ''' element of which is TRUE if x[j] is finite (i.e., it is not 
+        ''' one of the values NA, NaN, Inf or -Inf) and FALSE otherwise. 
+        ''' Complex numbers are finite if both the real and imaginary 
+        ''' parts are.
+        ''' </remarks>
         <ExportAPI("diff")>
         Public Function diff(x As Double()) As Double()
             Return NumberGroups.diff(x)
