@@ -226,11 +226,19 @@ Public Module Parallel
                              Optional argv As list = Nothing,
                              Optional env As Environment = Nothing) As Object
 
-        If debug Is Nothing AndAlso argv.hasName("debug") Then
-            debug = argv.getValue(Of Boolean)("debug", env)
+        If debug Is Nothing Then
+            If argv.hasName("debug") Then
+                debug = argv.getValue(Of Boolean)("debug", env, [default]:=False)
+            Else
+                debug = False
+            End If
         End If
-        If ignoreError Is Nothing AndAlso argv.hasName("ignoreError") Then
-            ignoreError = argv.getValue(Of Boolean)("ignoreError", env)
+        If ignoreError Is Nothing Then
+            If argv.hasName("ignoreError") Then
+                ignoreError = argv.getValue(Of Boolean)("ignoreError", env, [default]:=False)
+            Else
+                ignoreError = False
+            End If
         End If
 
         Dim host As RunParallel = RunParallel.Initialize(task, argv, debug, env)
