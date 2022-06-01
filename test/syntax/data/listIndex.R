@@ -8,3 +8,11 @@ print(l[[i]]);
 
 print(l[[3]]);
 print(l[[j]]);
+
+a = min([i,i]);
+
+print("numeric index");
+print(a);
+
+print(l[[2]]);
+print(l[[a]]);
