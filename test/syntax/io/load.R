@@ -1,8 +1,12 @@
+setwd(@dir);
+
 # demo dataset contains two variable: x and word
 let disk <- "./R#save.rda";
 let names as string = load(disk);
 
 print("Display loaded data:");
+print("symbols that loaded from the dataset:");
+print(names);
 
 # x, word
 for(name in names) {

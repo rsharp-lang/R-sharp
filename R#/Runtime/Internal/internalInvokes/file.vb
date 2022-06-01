@@ -1,62 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::f3cd392facd4552209ae27ce703a6f47, R-sharp\R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1268
-    '    Code Lines: 681
-    ' Comment Lines: 472
-    '   Blank Lines: 115
-    '     File Size: 57.76 KB
+' Summaries:
 
 
-    '     Module file
-    ' 
-    '         Function: [erase], basename, buffer, bytes, close
-    '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
-    '                   exists, file, file_ext, filecopy, fileExt
-    '                   fileinfo, fileInfoByFile, filepath, filesize, getRelativePath
-    '                   getwd, handleWriteLargeTextStream, handleWriteTextArray, isSystemDir, listDirs
-    '                   listFiles, loadListInternal, NextTempToken, normalizeFileName, normalizePath
-    '                   openGzip, openZip, readBin, readLines, readList
-    '                   readText, Rhome, saveList, scanZipFiles, setwd
-    '                   tempdir, tempfile, writeLines
-    ' 
-    '         Sub: fileRemove, fileRename, unlinks
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1268
+'    Code Lines: 681
+' Comment Lines: 472
+'   Blank Lines: 115
+'     File Size: 57.76 KB
+
+
+'     Module file
+' 
+'         Function: [erase], basename, buffer, bytes, close
+'                   dataUri, dir_exists, dirCopy, dirCreate, dirname
+'                   exists, file, file_ext, filecopy, fileExt
+'                   fileinfo, fileInfoByFile, filepath, filesize, getRelativePath
+'                   getwd, handleWriteLargeTextStream, handleWriteTextArray, isSystemDir, listDirs
+'                   listFiles, loadListInternal, NextTempToken, normalizeFileName, normalizePath
+'                   openGzip, openZip, readBin, readLines, readList
+'                   readText, Rhome, saveList, scanZipFiles, setwd
+'                   tempdir, tempfile, writeLines
+' 
+'         Sub: fileRemove, fileRename, unlinks
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -76,6 +76,7 @@ Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My.UNIX
 Imports Microsoft.VisualBasic.Net.Http
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development.Components
@@ -96,6 +97,8 @@ Namespace Runtime.Internal.Invokes
     ''' 
     ''' These functions provide a low-level interface to the computer's file system.
     ''' </summary>
+    ''' 
+    <Package("file")>
     Public Module file
 
         ''' <summary>
@@ -1111,6 +1114,9 @@ Namespace Runtime.Internal.Invokes
                 Case BufferObjects.text : Return New textBuffer
                 Case BufferObjects.bitmap : Return New bitmapBuffer
                 Case BufferObjects.vector : Return New vectorBuffer
+                Case BufferObjects.dataframe : Return New dataframeBuffer(env)
+                Case BufferObjects.rscript : Return New rscriptBuffer
+                Case BufferObjects.list : Return New listBuffer(env)
                 Case Else
                     Return Internal.debug.stop(New NotImplementedException(type.Description), env)
             End Select

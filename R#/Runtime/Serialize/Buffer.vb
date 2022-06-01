@@ -76,6 +76,8 @@ Namespace Runtime.Serialize
                     Case GetType(messageBuffer) : Return BufferObjects.message
                     Case GetType(vectorBuffer) : Return BufferObjects.vector
                     Case GetType(rscriptBuffer) : Return BufferObjects.rscript
+                    Case GetType(listBuffer) : Return BufferObjects.list
+                    Case GetType(dataframeBuffer) : Return BufferObjects.dataframe
                     Case Else
                         Throw New NotImplementedException(data.GetType.FullName)
                 End Select
@@ -92,18 +94,14 @@ Namespace Runtime.Serialize
             Dim data As MemoryStream = BufferObject.SubStream(raw, 4, raw.Length - 4)
 
             Select Case code
-                Case BufferObjects.raw
-                    bufferObject = New rawBuffer With {.buffer = data}
-                Case BufferObjects.text
-                    bufferObject = New textBuffer With {.text = Encoding.UTF8.GetString(data.ToArray)}
-                Case BufferObjects.bitmap
-                    bufferObject = New bitmapBuffer(data)
-                Case BufferObjects.vector
-                    bufferObject = New vectorBuffer(data)
-                Case BufferObjects.message
-                    bufferObject = New messageBuffer(data)
-                Case BufferObjects.rscript
-                    bufferObject = New rscriptBuffer(data)
+                Case BufferObjects.raw : bufferObject = New rawBuffer With {.buffer = data}
+                Case BufferObjects.text : bufferObject = New textBuffer With {.text = Encoding.UTF8.GetString(data.ToArray)}
+                Case BufferObjects.bitmap : bufferObject = New bitmapBuffer(data)
+                Case BufferObjects.vector : bufferObject = New vectorBuffer(data)
+                Case BufferObjects.message : bufferObject = New messageBuffer(data)
+                Case BufferObjects.rscript : bufferObject = New rscriptBuffer(data)
+                Case BufferObjects.dataframe : bufferObject = New dataframeBuffer(data)
+                Case BufferObjects.list : bufferObject = New listBuffer(data)
                 Case Else
                     Throw New NotImplementedException(code.Description)
             End Select
