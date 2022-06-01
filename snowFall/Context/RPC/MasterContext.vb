@@ -154,14 +154,19 @@ Namespace Context.RPC
             Dim target As Symbol = env.FindSymbol(name)
             Dim data As Byte()
 
+            ' 
             If Not target Is Nothing Then
-                'Dim vec As Object = target.ToVector.GetValue(payload.uuid)
+                If TypeOf target.value Is RMethodInfo Then
+                    data = {}
+                Else
+                    'Dim vec As Object = target.ToVector.GetValue(payload.uuid)
 
-                'vec = REnv.TryCastGenericArray({vec}, env)
-                'target = New Symbol(name, vec, target.constraint, target.readonly) With {
-                '    .stacktrace = target.stacktrace
-                '}
-                data = Serialization.GetBytes(target, env:=env)
+                    'vec = REnv.TryCastGenericArray({vec}, env)
+                    'target = New Symbol(name, vec, target.constraint, target.readonly) With {
+                    '    .stacktrace = target.stacktrace
+                    '}
+                    data = Serialization.GetBytes(target, env:=env)
+                End If
             Else
                 Dim [loop] = getLoopSymbol(payload)
 
