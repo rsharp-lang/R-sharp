@@ -132,6 +132,10 @@ Namespace Development.CodeAnalysis
         Private Shared Sub GetSymbolReferenceList(code As Expression, context As Context)
             If code Is Nothing OrElse TypeOf code Is Literal Then
                 Return
+            ElseIf TypeOf code Is Require Then
+                ' require(xxx)
+                ' no symbol reference
+                Return
             End If
 
             Select Case code.GetType
