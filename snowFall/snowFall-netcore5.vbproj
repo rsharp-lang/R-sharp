@@ -53,7 +53,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
-    <OutputPath>E:\mzkit\dist\bin\Rstudio\library\</OutputPath>
+    <OutputPath>../../../../\mzkit\dist\bin\Rstudio\library\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>

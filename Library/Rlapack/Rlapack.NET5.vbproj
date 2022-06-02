@@ -89,7 +89,7 @@
 	  <DefineDebug>false</DefineDebug>
 	  <DefineTrace>true</DefineTrace>
 	  <BaseAddress>4194304</BaseAddress>
-	  <OutputPath>E:\mzkit\dist\bin\Rstudio\library\</OutputPath>
+	  <OutputPath>../../../../../\mzkit\dist\bin\Rstudio\library\</OutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LipidSearch|x64'">

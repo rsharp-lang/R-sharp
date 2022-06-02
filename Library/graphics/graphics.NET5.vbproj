@@ -94,6 +94,11 @@
     <OutputPath>E:\mzkit\dist\bin\Rstudio\library\</OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0|x64'">
+    <OutputPath>../../../../../\mzkit\dist\bin\Rstudio\library\</OutputPath>
+    <DefineTrace>true</DefineTrace>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
   </ItemGroup>
