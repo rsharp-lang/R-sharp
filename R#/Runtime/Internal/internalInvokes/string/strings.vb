@@ -139,7 +139,7 @@ Namespace Runtime.Internal.Invokes
         ''' Removes all leading and trailing occurrences of a set of characters specified
         ''' in an array from the current System.String object.
         ''' </summary>
-        ''' <param name="strings$"></param>
+        ''' <param name="strings">a character vector</param>
         ''' <param name="characters">An array of Unicode characters to remove, or null.</param>
         ''' <param name="env"></param>
         ''' <returns>

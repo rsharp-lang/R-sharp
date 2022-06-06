@@ -805,6 +805,11 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' test of the give character vector is empty string or not
+        ''' </summary>
+        ''' <param name="[string]"></param>
+        ''' <returns></returns>
         <ExportAPI("str_empty")>
         Public Function str_empty([string] As String()) As Boolean()
             Return [string].Select(AddressOf StringEmpty).ToArray
