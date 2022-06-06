@@ -424,8 +424,9 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="fileNames">character vector, containing path names.</param>
         ''' <returns></returns>
         <ExportAPI("dirname")>
-        Public Function dirname(fileNames As String()) As String()
-            Return fileNames.Select(AddressOf ParentPath).ToArray
+        <RApiReturn(GetType(String))>
+        Public Function dirname(<RRawVectorArgument> fileNames As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of String, String)(fileNames, Function(path) path.ParentPath)
         End Function
 
         ''' <summary>
@@ -449,14 +450,20 @@ Namespace Runtime.Internal.Invokes
                                   Optional env As Environment = Nothing) As Object
 
             If dir Is Nothing Then
-                Return Internal.debug.stop("target file system resource can not be nothing!", env)
+                Return Internal.debug.stop({
+                    $"target file system resource can not be nothing!",
+                    $"parameter_null: {NameOf(dir)}"
+                }, env)
             End If
 
             If pattern.IsNullOrEmpty Then
                 pattern = {"*.*"}
             End If
 
-            If TypeOf dir Is String AndAlso DirectCast(dir, String).ExtensionSuffix("zip") AndAlso DirectCast(dir, String).FileLength > 0 Then
+            If TypeOf dir Is String AndAlso
+                DirectCast(dir, String).ExtensionSuffix("zip") AndAlso
+                DirectCast(dir, String).FileLength > 0 Then
+
                 Using zip As New ZipFolder(DirectCast(dir, String))
                     Return zip.scanZipFiles(pattern)
                 End Using
@@ -481,7 +488,9 @@ Namespace Runtime.Internal.Invokes
             If pattern(Scan0) = "*.*" Then
                 Return zip.ls
             Else
-                Return UnixBash.Search.DoFileNameGreps(ls - l - r - pattern, zip.ls).ToArray
+                Return UnixBash.Search _
+                    .DoFileNameGreps(ls - l - r - pattern, zip.ls) _
+                    .ToArray
             End If
         End Function
 
@@ -540,7 +549,9 @@ Namespace Runtime.Internal.Invokes
         Public Function basename(fileNames$(), Optional withExtensionName As Boolean = False) As String()
             If withExtensionName Then
                 ' get fileName
-                Return fileNames.Select(AddressOf FileName).ToArray
+                Return fileNames _
+                    .Select(AddressOf FileName) _
+                    .ToArray
             Else
                 Return fileNames _
                     .Select(Function(file)
