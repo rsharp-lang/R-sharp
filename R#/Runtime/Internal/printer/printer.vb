@@ -73,6 +73,7 @@ Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.base
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -236,7 +237,14 @@ Namespace Runtime.Internal.ConsolePrinter
                 Dim dataframe As dataframe = DirectCast(x, dataframe)
 
                 If Not opts.fields.IsNullOrEmpty Then
-                    dataframe = dataframe.projectByColumn(opts.fields, env:=env)
+                    Dim result = dataframe.projectByColumn(opts.fields, env:=env)
+
+                    If TypeOf result Is Message Then
+                        Call Internal.debug.PrintMessageInternal(result, env)
+                        Return
+                    Else
+                        dataframe = result
+                    End If
                 End If
 
                 Call tablePrinter.PrintTable(dataframe, opts.maxPrint, output, env)
