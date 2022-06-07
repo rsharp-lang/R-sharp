@@ -112,6 +112,7 @@ Namespace Development.Package.File
         Public ReadOnly Property RTryCatch As RTryCatch
 
 #Region "keywords"
+        Public ReadOnly Property RBreakControls As RBreakControls
         Public ReadOnly Property Rfor As RFor
         Public ReadOnly Property Rif As RIf
         Public ReadOnly Property Relse As RElse
@@ -144,6 +145,7 @@ Namespace Development.Package.File
             Me.RTypeAssert = New RTypeOf(Me)
             Me.RTryCatch = New RTryCatch(Me)
             Me.RShell = New RCommandLine(Me)
+            Me.RBreakControls = New RBreakControls(Me)
         End Sub
 
         Public Function GetBuffer(x As Expression) As Byte()
@@ -156,6 +158,7 @@ Namespace Development.Package.File
 
                     Return RFunction.GetBuffer(x)
 
+                Case GetType(BreakLoop), GetType(ContinuteFor) : Return RBreakControls.GetBuffer(x)
                 Case GetType(Literal), GetType(Regexp) : Return RLiteral.GetBuffer(x)
                 Case GetType(StringInterpolation) : Return RString.GetBuffer(x)
                 Case GetType(ExternalCommandLine) : Return RShell.GetBuffer(x)
