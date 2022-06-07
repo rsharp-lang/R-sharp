@@ -136,10 +136,13 @@ Namespace Runtime.Internal.Object.Converts
 
             If byRow Then
                 Dim list As list = df.listByRows
+                Dim nameVec As String()
 
                 If Not names.StringEmpty Then
                     If DirectCast(obj, dataframe).hasName(names) Then
-                        obj = list.setNames(DirectCast(obj, dataframe).columns(names), env)
+                        nameVec = REnv.asVector(Of String)(DirectCast(obj, dataframe).columns(names))
+                        nameVec = nameVec.uniqueNames
+                        obj = list.setNames(nameVec, env)
 
                         If TypeOf obj Is Message Then
                             Return obj
@@ -151,6 +154,8 @@ Namespace Runtime.Internal.Object.Converts
                         }, env)
                     End If
                 ElseIf Not df.rownames.IsNullOrEmpty Then
+                    nameVec = df.rownames
+                    nameVec = nameVec.uniqueNames
                     obj = list.setNames(df.rownames, env)
 
                     If TypeOf obj Is Message Then

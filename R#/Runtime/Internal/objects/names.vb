@@ -105,6 +105,11 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' makes the name string unique by adding an additional numeric suffix
+        ''' </summary>
+        ''' <param name="names"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function uniqueNames(names As IEnumerable(Of String)) As String()
             Dim nameUniques As New Dictionary(Of String, Counter)

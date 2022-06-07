@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::da78c1a5c5ebf347e46ed44b959e6403, R-sharp\R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 528
-    '    Code Lines: 302
-    ' Comment Lines: 169
-    '   Blank Lines: 57
-    '     File Size: 21.42 KB
+' Summaries:
 
 
-    '     Class dataframe
-    ' 
-    '         Properties: colnames, columns, ncols, nrows, rownames
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: add, checkColumnNames, CreateDataFrame, forEachRow, GetByRowIndex
-    '                   getKeyByIndex, getNames, getRowIndex, getRowList, getRowNames
-    '                   (+2 Overloads) getVector, hasName, projectByColumn, setNames, sliceByRow
-    '                   subsetColData, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 528
+'    Code Lines: 302
+' Comment Lines: 169
+'   Blank Lines: 57
+'     File Size: 21.42 KB
+
+
+'     Class dataframe
+' 
+'         Properties: colnames, columns, ncols, nrows, rownames
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: add, checkColumnNames, CreateDataFrame, forEachRow, GetByRowIndex
+'                   getKeyByIndex, getNames, getRowIndex, getRowList, getRowNames
+'                   (+2 Overloads) getVector, hasName, projectByColumn, setNames, sliceByRow
+'                   subsetColData, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -325,32 +325,30 @@ Namespace Runtime.Internal.Object
         ''' <returns></returns>
         Public Function projectByColumn(selector As Array, Optional fullSize As Boolean = False) As dataframe
             Dim indexType As Type = MeasureRealElementType(selector)
+            Dim projections As New Dictionary(Of String, Array)
 
             If indexType Like RType.characters Then
-                Return New dataframe With {
-                    .rownames = rownames,
-                    .columns = DirectCast(asVector(Of String)(selector), String()) _
-                        .ToDictionary(Function(colName) colName,
-                                      Function(key)
-                                          Return getVector(key, fullSize)
-                                      End Function)
-                }
+                For Each key As String In DirectCast(asVector(Of String)(selector), String())
+                    projections(key) = getVector(key, fullSize)
+                Next
             ElseIf indexType Like RType.integers Then
                 Dim colnames As String() = Me.colnames
+                Dim key As String
 
-                Return New dataframe With {
-                    .rownames = rownames,
-                    .columns = DirectCast(asVector(Of Integer)(selector), Integer()) _
-                        .ToDictionary(Function(i) colnames(i - 1),
-                                      Function(key)
-                                          Return getVector(colnames(key - 1), fullSize)
-                                      End Function)
-                }
+                For Each i As Integer In DirectCast(asVector(Of Integer)(selector), Integer())
+                    key = colnames(i - 1)
+                    projections(key) = getVector(key, fullSize)
+                Next
             ElseIf indexType Like RType.logicals Then
                 Throw New InvalidCastException
             Else
                 Throw New InvalidCastException
             End If
+
+            Return New dataframe With {
+                .rownames = rownames,
+                .columns = projections
+            }
         End Function
 
         ''' <summary>
