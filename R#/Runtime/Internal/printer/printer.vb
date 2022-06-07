@@ -236,7 +236,7 @@ Namespace Runtime.Internal.ConsolePrinter
                 Dim dataframe As dataframe = DirectCast(x, dataframe)
 
                 If Not opts.fields.IsNullOrEmpty Then
-                    dataframe = dataframe.projectByColumn(opts.fields)
+                    dataframe = dataframe.projectByColumn(opts.fields, env:=env)
                 End If
 
                 Call tablePrinter.PrintTable(dataframe, opts.maxPrint, output, env)

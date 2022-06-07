@@ -322,14 +322,21 @@ Namespace Runtime.Internal.Object
         ''' ``data[, selector]``
         ''' </summary>
         ''' <param name="selector"></param>
-        ''' <returns></returns>
-        Public Function projectByColumn(selector As Array, Optional fullSize As Boolean = False) As dataframe
+        ''' <returns>dataframe</returns>
+        Public Function projectByColumn(selector As Array, env As Environment, Optional fullSize As Boolean = False) As Object
             Dim indexType As Type = MeasureRealElementType(selector)
             Dim projections As New Dictionary(Of String, Array)
 
             If indexType Like RType.characters Then
                 For Each key As String In DirectCast(asVector(Of String)(selector), String())
                     projections(key) = getVector(key, fullSize)
+
+                    If projections(key) Is Nothing Then
+                        Return Internal.debug.stop({
+                            $"Error in `[.data.frame`(x, ,'{key}'): undefined columns selected",
+                            $"column: {key}"
+                        }, env)
+                    End If
                 Next
             ElseIf indexType Like RType.integers Then
                 Dim colnames As String() = Me.colnames

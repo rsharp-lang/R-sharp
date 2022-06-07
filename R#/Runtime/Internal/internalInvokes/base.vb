@@ -539,8 +539,8 @@ Namespace Runtime.Internal.Invokes
             Next
 
             Dim colNames = d.columns.Keys.ToArray
-            Dim copy = d.projectByColumn(colNames, fullSize:=True)
-            Dim copy2 = row.projectByColumn(colNames, fullSize:=True)
+            Dim copy = d.projectByColumn(colNames, fullSize:=True, env:=env)
+            Dim copy2 = row.projectByColumn(colNames, fullSize:=True, env:=env)
             Dim totalRows As Integer = copy.nrows + copy2.nrows
 
             For Each col As String In colNames

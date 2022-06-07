@@ -198,7 +198,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     If result Like GetType(Message) Then
                         Return result.TryCast(Of Message)
                     Else
-                        Return result.TryCast(Of dataframe).projectByColumn(y)
+                        Return result.TryCast(Of dataframe).projectByColumn(y, env)
                     End If
                 End If
             ElseIf indexVec.length = 3 Then
@@ -236,7 +236,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 End If
             Else
                 ' dataframe projection
-                Return obj.projectByColumn(indexer)
+                Return obj.projectByColumn(indexer, envir)
             End If
         End Function
 

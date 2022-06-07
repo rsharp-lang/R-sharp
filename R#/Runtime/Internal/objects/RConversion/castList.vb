@@ -156,7 +156,7 @@ Namespace Runtime.Internal.Object.Converts
                 ElseIf Not df.rownames.IsNullOrEmpty Then
                     nameVec = df.rownames
                     nameVec = nameVec.uniqueNames
-                    obj = list.setNames(df.rownames, env)
+                    obj = list.setNames(nameVec, env)
 
                     If TypeOf obj Is Message Then
                         Return obj
