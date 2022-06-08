@@ -1248,12 +1248,38 @@ Namespace Runtime.Internal.Invokes
         End Sub
 
         ''' <summary>
-        ''' Delete files or directories
+        ''' ## Delete files or directories
+        ''' 
+        ''' ``file.remove`` attempts to remove the files named 
+        ''' in its argument. On most Unix platforms ‘file’ 
+        ''' includes empty directories, symbolic links, fifos 
+        ''' and sockets. On Windows, ‘file’ means a regular file 
+        ''' and not, say, an empty directory.
         ''' </summary>
+        ''' <param name="x">
+        ''' character vectors, containing file names or paths.
+        ''' </param>
         <ExportAPI("file.remove")>
-        Public Sub fileRemove(x As String())
+        Public Sub fileRemove(x As String(),
+                              Optional verbose As Boolean? = Nothing,
+                              Optional env As Environment = Nothing)
+
+            Dim println As Action(Of Object)
+
+            If verbose Is Nothing Then
+                verbose = env.globalEnvironment.options.verbose
+            End If
+
+            If verbose Then
+                println = env.WriteLineHandler
+            Else
+                println = Sub(any)
+                              ' do nothing
+                          End Sub
+            End If
+
             For Each file As String In x.SafeQuery
-                Call file.DeleteFile
+                Call file.DeleteFile(verbose:=println)
             Next
         End Sub
 
