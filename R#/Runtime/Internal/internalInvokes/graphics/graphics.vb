@@ -322,11 +322,34 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' save image data as bitmap image file
+        ''' ## Graphics Device for Bitmap Files via Ghostscript
+        ''' 
+        ''' save image data as bitmap image file, bitmap generates 
+        ''' a graphics file. dev2bitmap copies the current graphics 
+        ''' device to a file in a graphics format.
         ''' </summary>
         ''' <param name="image"></param>
-        ''' <param name="file"></param>
+        ''' <param name="file">The output file name, with an appropriate extension.</param>
+        ''' <param name="args">
+        ''' additional arguments for the bitmap device:
+        ''' 
+        ''' 1. size, width, height: Dimensions of the display region.
+        ''' 2. res, dpi: Resolution, in dots per inch.
+        ''' </param>
         ''' <param name="env"></param>
+        ''' <remarks>
+        ''' This section describes the implementation of the conventions for 
+        ''' graphics devices set out in the “R Internals Manual”. These devices 
+        ''' follow the underlying device, so when viewed at the stated res:
+        ''' 
+        ''' 1. The Default device size Is 7 inches square.
+        ''' 2. Font sizes are In big points.
+        ''' 3. The Default font family Is (For the standard Ghostscript setup) URW Nimbus Sans.
+        ''' 4. Line widths are As a multiple Of 1/96 inch, With no minimum.
+        ''' 5. Circle of any radius are allowed.
+        ''' 6. Colours are interpreted by the viewing/printing application.
+        ''' 
+        ''' </remarks>
         ''' <returns></returns>
         <ExportAPI("bitmap")>
         Public Function bitmap(Optional image As Object = Nothing,
@@ -339,7 +362,9 @@ Namespace Runtime.Internal.Invokes
             If image Is Nothing Then
                 ' just open a new device
                 Dim size As SizeF = args.getSize(env, [default]:=New SizeF(2700, 2000))
-                Dim fill As Color = graphicsPipeline.GetRawColor(args!color, [default]:=NameOf(Color.Transparent))
+                Dim backColor As Object = args.getValue(Of Object)({"fill", "color", "background"}, env)
+                Dim fill As Color = graphicsPipeline.GetRawColor(backColor, [default]:=NameOf(Color.Transparent))
+                Dim dpi As Integer = args.getValue(Of Integer)({"dpi", "res"}, env, [default]:=100)
 
                 If file Is Nothing Then
                     ' just open a new canvas object and returns to user?
@@ -348,7 +373,7 @@ Namespace Runtime.Internal.Invokes
                     Call println($"open a new bitmap canvas devices:")
                     Call println($"  (width={size.Width}, height={size.Height})")
 
-                    Return New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill)
+                    Return New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill, dpi:=$"{dpi},{dpi}")
                 Else
                     Dim buffer = GetFileStream(file, FileAccess.Write, env)
 
@@ -356,7 +381,7 @@ Namespace Runtime.Internal.Invokes
                         Return buffer.TryCast(Of Message)
                     Else
                         Call openNew(
-                            dev:=New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill),
+                            dev:=New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill, dpi:=$"{dpi},{dpi}"),
                             buffer:=buffer.TryCast(Of Stream),
                             args:=args
                         )
