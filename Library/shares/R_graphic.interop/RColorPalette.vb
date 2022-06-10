@@ -73,6 +73,8 @@ Module RColorPalette
     Public Function getColorSet(colorSet As Object, Optional default$ = "Set1:c8") As String
         If colorSet Is Nothing Then
             Return [default]
+        ElseIf TypeOf colorSet Is vector Then
+            colorSet = DirectCast(colorSet, vector).data
         End If
 
         Dim type As Type = colorSet.GetType
