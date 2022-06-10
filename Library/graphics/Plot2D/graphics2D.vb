@@ -104,8 +104,10 @@ Module graphics2D
             Dim dev As graphicsDevice = curDev
             Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
             Dim canvas As New GraphicsRegion(dev.g.Size, padding)
+            Dim layout As Rectangle = canvas.PlotRegion
 
-            Call legend.Draw(dev.g, canvas.PlotRegion)
+            layout = New Rectangle(layout.Right, layout.Top, padding.Right * 2 / 3, layout.Height)
+            legend.Draw(dev.g, layout)
         Else
             Return g.GraphicsPlots(
                 size.SizeParser,
@@ -206,9 +208,11 @@ Module graphics2D
                                    Optional tickFont As Object = CSSFont.PlotLabelNormal,
                                    Optional titleFont As Object = CSSFont.PlotSmallTitle,
                                    Optional unmapColor As Object = Nothing,
+                                   Optional foreColor As Object = "black",
                                    Optional env As Environment = Nothing) As ColorMapLegend
 
-        Dim colorName = RColorPalette.getColorSet(colors)
+        Dim colorName As String = RColorPalette.getColorSet(colors)
+        Dim foreColorEx As Color = RColorPalette.getColor(foreColor, [default]:="black").TranslateColor
 
         Return New ColorMapLegend(colorName, mapLevels) With {
             .format = format,
@@ -220,7 +224,8 @@ Module graphics2D
             .ticks = ticks,
             .title = title,
             .titleFont = CSSFont.TryParse(titleFont).GDIObject(300),
-            .unmapColor = RColorPalette.getColor(unmapColor, [default]:=Nothing)
+            .unmapColor = RColorPalette.getColor(unmapColor, [default]:=Nothing),
+            .foreColor = foreColorEx
         }
     End Function
 
