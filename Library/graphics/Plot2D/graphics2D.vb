@@ -110,6 +110,23 @@ Module graphics2D
                      End Sub)
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="layout">
+    ''' should be two integer element which is indicate that 
+    ''' the element count on x and the element count on y.
+    ''' </param>
+    ''' <param name="margin">
+    ''' the css internal padding data for each cell in the 
+    ''' generated grid layout.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <remarks>
+    ''' the canvas size and the entire padding is comes from the 
+    ''' current graphics device.
+    ''' </remarks>
+    ''' <returns></returns>
     <ExportAPI("layout.grid")>
     Public Function layout_grid(layout As Integer(),
                                 <RRawVectorArgument>
