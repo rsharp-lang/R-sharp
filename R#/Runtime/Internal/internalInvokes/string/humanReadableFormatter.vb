@@ -63,6 +63,12 @@ Namespace Runtime.Internal.Invokes
             Return bytes.SafeQuery.Select(AddressOf StringFormats.Lanudry).ToArray
         End Function
 
+        ''' <summary>
+        ''' split a given text data into multiple lines
+        ''' </summary>
+        ''' <param name="text"></param>
+        ''' <param name="len"></param>
+        ''' <returns></returns>
         <ExportAPI("splitParagraph")>
         Public Function splitParagraph(text As String, Optional len As Integer = 80) As String()
             Return text.SplitParagraph(len).ToArray
