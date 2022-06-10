@@ -57,13 +57,13 @@ Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports BASICString = Microsoft.VisualBasic.Strings
+Imports baseString = Microsoft.VisualBasic.Strings
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Invokes
 
     ''' <summary>
-    ''' Simulation of the <see cref="BASICString"/> module
+    ''' Simulation of the <see cref="baseString"/> module
     ''' </summary>
     Module strings
 
@@ -103,9 +103,9 @@ Namespace Runtime.Internal.Invokes
                             If len = 0 Then
                                 Return ""
                             ElseIf len < 0 Then
-                                Return BASICString.Mid(str, start)
+                                Return baseString.Mid(str, start)
                             Else
-                                Return BASICString.Mid(str, start, len)
+                                Return baseString.Mid(str, start, len)
                             End If
                         End Function) _
                 .ToArray
@@ -120,7 +120,7 @@ Namespace Runtime.Internal.Invokes
         ''' </returns>
         <ExportAPI("lcase")>
         Public Function LCase(strings As String()) As String()
-            Return strings.SafeQuery.Select(AddressOf BASICString.LCase).ToArray
+            Return strings.SafeQuery.Select(AddressOf baseString.LCase).ToArray
         End Function
 
         ''' <summary>
@@ -132,7 +132,7 @@ Namespace Runtime.Internal.Invokes
         ''' </returns>
         <ExportAPI("ucase")>
         Public Function UCase(strings As String()) As String()
-            Return strings.SafeQuery.Select(AddressOf BASICString.UCase).ToArray
+            Return strings.SafeQuery.Select(AddressOf baseString.UCase).ToArray
         End Function
 
         ''' <summary>
@@ -188,7 +188,14 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("ltrim")>
         Public Function ltrim(strings$()) As Object
             Return strings _
-                .Select(Function(str) BASICString.LTrim(str)) _
+                .Select(Function(str) baseString.LTrim(str)) _
+                .ToArray
+        End Function
+
+        <ExportAPI("rtrim")>
+        Public Function rtrim(strings As String()) As Object
+            Return strings _
+                .Select(Function(str) baseString.RTrim(str)) _
                 .ToArray
         End Function
 
@@ -237,7 +244,7 @@ Namespace Runtime.Internal.Invokes
 
                 Return strings _
                     .Select(Function(str, i)
-                                Return BASICString.InStr(str, substr(i), method)
+                                Return baseString.InStr(str, substr(i), method)
                             End Function) _
                     .ToArray
             End If
@@ -264,18 +271,18 @@ Namespace Runtime.Internal.Invokes
             Dim type As Type = x.GetType
 
             If type Is GetType(String) Then
-                Return DirectCast(x, String).Select(AddressOf BASICString.AscW).ToArray
+                Return DirectCast(x, String).Select(AddressOf baseString.AscW).ToArray
             ElseIf type Is GetType(Char) Then
-                Return {BASICString.AscW(DirectCast(x, Char))}
+                Return {baseString.AscW(DirectCast(x, Char))}
             ElseIf type Is GetType(Char()) Then
-                Return DirectCast(x, Char()).Select(AddressOf BASICString.AscW).ToArray
+                Return DirectCast(x, Char()).Select(AddressOf baseString.AscW).ToArray
             ElseIf type Is GetType(String()) Then
                 Return New list With {
                     .slots = DirectCast(x, String()) _
                         .SeqIterator _
                         .ToDictionary(Function(i) CStr(i.i + 1),
                                       Function(i)
-                                          Return CObj(i.value.Select(AddressOf BASICString.AscW).ToArray)
+                                          Return CObj(i.value.Select(AddressOf baseString.AscW).ToArray)
                                       End Function)
                 }
             Else
