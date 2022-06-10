@@ -96,18 +96,29 @@ Module graphics2D
 
     Private Function plotColorMap(legend As ColorMapLegend, args As list, env As Environment) As Object
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
-        Dim size As String = InteropArgumentHelper.getSize(args!size, env)
+        Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="0,0")
         Dim margin As String = InteropArgumentHelper.getPadding(args!padding)
 
-        Return g.GraphicsPlots(
-            size.SizeParser,
-            Padding.TryParse(margin),
-            "transparent",
-            driver:=driver,
-            dpi:="300,300",
-            plotAPI:=Sub(ByRef g, region)
-                         Call legend.Draw(g, region.PlotRegion)
-                     End Sub)
+        If Not size.SizeParser.IsValidGDIParameter Then
+            ' draw on current graphics context
+            Dim dev As graphicsDevice = curDev
+            Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
+            Dim canvas As New GraphicsRegion(dev.g.Size, padding)
+
+            Call legend.Draw(dev.g, canvas.PlotRegion)
+        Else
+            Return g.GraphicsPlots(
+                size.SizeParser,
+                Padding.TryParse(margin),
+                "transparent",
+                driver:=driver,
+                dpi:="300,300",
+                plotAPI:=Sub(ByRef g, region)
+                             Call legend.Draw(g, region.PlotRegion)
+                         End Sub)
+        End If
+
+        Return Nothing
     End Function
 
     ''' <summary>
