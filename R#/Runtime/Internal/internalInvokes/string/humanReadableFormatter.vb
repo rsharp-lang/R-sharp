@@ -70,8 +70,11 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="len"></param>
         ''' <returns></returns>
         <ExportAPI("splitParagraph")>
-        Public Function splitParagraph(text As String, Optional len As Integer = 80) As String()
-            Return text.SplitParagraph(len).ToArray
+        Public Function splitParagraph(text As String,
+                                       Optional len As Integer = 80,
+                                       Optional delimiters As String = ";:,.-_&*!+'~") As String()
+
+            Return text.SplitParagraph(len, delimiters:=delimiters).ToArray
         End Function
     End Module
 End Namespace
