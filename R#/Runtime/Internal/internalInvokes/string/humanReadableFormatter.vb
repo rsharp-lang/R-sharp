@@ -58,6 +58,11 @@ Namespace Runtime.Internal.Invokes
 
     Module humanReadableFormatter
 
+        ''' <summary>
+        ''' convert byte number into human readable size string
+        ''' </summary>
+        ''' <param name="bytes"></param>
+        ''' <returns></returns>
         <ExportAPI("byte_size")>
         Public Function size(bytes As Double()) As String()
             Return bytes.SafeQuery.Select(AddressOf StringFormats.Lanudry).ToArray
