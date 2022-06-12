@@ -129,7 +129,7 @@ Namespace Development
                 Case GetType(DeclareLambdaFunction) : Return formatLambda(expr)
                 Case Else
                     If expr.GetType.ImplementInterface(Of IBinaryExpression) Then
-                        With DirectCast(expr, BinaryOrExpression)
+                        With DirectCast(expr, IBinaryExpression)
                             Return $"{Format(.left)} { .operator} {Format(.right)}"
                         End With
                     Else
