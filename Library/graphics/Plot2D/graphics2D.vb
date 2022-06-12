@@ -442,6 +442,7 @@ Module graphics2D
                                   Optional colorName As Object = "jet",
                                   Optional gauss As Integer = 0,
                                   Optional rasterBitmap As Boolean = False,
+                                  Optional fillRect As Boolean = True,
                                   Optional env As Environment = Nothing) As Object
 
         Dim dev As graphicsDevice = curDev
@@ -470,7 +471,7 @@ Module graphics2D
 
         ' create base
         Dim colorSet As String = RColorPalette.getColorSet(colorName, [default]:="jet")
-        Dim bitmap As Bitmap = New PixelRender(colorSet, 25, dev.g.Background).RenderRasterImage(allPixels, dimension)
+        Dim bitmap As Bitmap = New PixelRender(colorSet, 25, dev.g.Background).RenderRasterImage(allPixels, dimension, fillRect:=fillRect)
 
         If gauss > 0 Then
             bitmap = gaussBlurEffect(bitmap, levels:=gauss, env)
