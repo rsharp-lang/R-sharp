@@ -384,7 +384,11 @@ Module graphics2D
             offsetPt = DirectCast(offset, Point).PointF
         ElseIf TypeOf offset Is PointF Then
             offsetPt = DirectCast(offset, PointF)
-        ElseIf TypeOf offset Is Long() OrElse TypeOf offset Is Integer() OrElse TypeOf offset Is Single() OrElse TypeOf offset Is Double() Then
+        ElseIf TypeOf offset Is Long() OrElse
+            TypeOf offset Is Integer() OrElse
+            TypeOf offset Is Single() OrElse
+            TypeOf offset Is Double() Then
+
             With REnv.asVector(Of Double)(offset)
                 offsetPt = New PointF(.GetValue(Scan0), .GetValue(1))
             End With
@@ -494,12 +498,17 @@ Module graphics2D
                                  <RRawVectorArgument>
                                  Optional color As Object = "black",
                                  Optional border As Object = Stroke.AxisStroke) As IGraphics
+
         Call Triangle.Draw(g, topleft.ToPoint, size.ToSize, gdi.getBrush(color), InteropArgumentHelper.getStrokePenCSS(border).DoCall(AddressOf Stroke.TryParse))
         Return g
     End Function
 
     <ExportAPI("draw.circle")>
-    Public Function DrawCircle(g As IGraphics, center As PointF, r As Single, <RRawVectorArgument> Optional color As Object = "black", Optional border As Object = Stroke.AxisGridStroke) As IGraphics
+    Public Function DrawCircle(g As IGraphics, center As PointF, r As Single,
+                               <RRawVectorArgument>
+                               Optional color As Object = "black",
+                               Optional border As Object = Stroke.AxisGridStroke) As IGraphics
+
         Call Circle.Draw(g, center, r, gdi.getBrush(color), Stroke.TryParse(InteropArgumentHelper.getStrokePenCSS(border, Nothing)))
         Return g
     End Function
@@ -595,7 +604,8 @@ Module graphics2D
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("contour_tracing")>
-    Public Function contourTracing(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object,
+    Public Function contourTracing(<RRawVectorArgument> x As Object,
+                                   <RRawVectorArgument> y As Object,
                                    Optional fillDots As Integer = 1,
                                    Optional env As Environment = Nothing) As GeneralPath
 
@@ -612,7 +622,9 @@ Module graphics2D
     ''' <returns></returns>
     <ExportAPI("asciiArt")>
     <RApiReturn(GetType(String))>
-    Public Function asciiArt(image As Object, Optional charSet As String = "+-*.", Optional env As Environment = Nothing) As Object
+    Public Function asciiArt(image As Object,
+                             Optional charSet As String = "+-*.",
+                             Optional env As Environment = Nothing) As Object
         Dim bitmap As Image
 
         If image Is Nothing Then
