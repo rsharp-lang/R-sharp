@@ -543,7 +543,10 @@ Namespace Runtime.Internal.Invokes
         ''' removes all of the path up to and including the last path separator (if any).
         ''' </summary>
         ''' <param name="fileNames">character vector, containing path names.</param>
-        ''' <param name="withExtensionName"></param>
+        ''' <param name="withExtensionName">
+        ''' option for config keeps the extension suffix in the name or not, 
+        ''' removes the file suffix name by default.
+        ''' </param>
         ''' <returns></returns>
         <ExportAPI("basename")>
         Public Function basename(fileNames$(), Optional withExtensionName As Boolean = False) As String()
@@ -566,12 +569,18 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("normalizeFileName")>
-        Public Function normalizeFileName(strings$()) As String()
-            Return strings _
-                .Select(Function(file)
-                            Return file.NormalizePathString(False)
-                        End Function) _
-                .ToArray
+        <RApiReturn(GetType(String))>
+        Public Function normalizeFileName(<RRawVectorArgument>
+                                          strings As Object,
+                                          Optional alphabetOnly As Boolean = True,
+                                          Optional replacement As String = "_",
+                                          Optional env As Environment = Nothing) As Object
+
+            Return env.EvaluateFramework(Of String, String)(
+                x:=strings,
+                eval:=Function(file)
+                          Return file.NormalizePathString(alphabetOnly, replacement)
+                      End Function)
         End Function
 
         ''' <summary>
