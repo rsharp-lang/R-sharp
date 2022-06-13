@@ -13,6 +13,12 @@ Namespace Runtime.Internal.Invokes
         Dim args As list
         Dim index As Integer
 
+        Public ReadOnly Property isEmpty As Boolean
+            Get
+                Return g Is Nothing
+            End Get
+        End Property
+
         Public ReadOnly Property Background As Color
             Get
                 Return g.Background
