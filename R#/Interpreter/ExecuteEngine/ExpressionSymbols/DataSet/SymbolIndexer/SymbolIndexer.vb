@@ -350,6 +350,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
             If obj.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Return listSubset(DirectCast(obj, IDictionary), indexer)
+                ' ElseIf obj.GetType.ImplementInterface(GetType(IReadOnlyDictionary)) Then
             Else
                 Return vectorSubset(obj, indexer, envir)
             End If
@@ -403,70 +404,78 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Return subset
         End Function
 
+        Private Shared Function streamView(read As Stream, offset As Long()) As Byte()
+            If offset _
+                .SlideWindows(2) _
+                .Where(Function(d) d.Length = 2) _
+                .All(Function(d)
+                         Return stdNum.Abs(d.Last - d.First) = 1
+                     End Function) Then
+
+                Dim buffer As Byte()
+
+                ' is a asc/desc range
+                If offset(1) - offset(0) > 0 Then
+                    buffer = New Byte(offset.Last - offset.First) {}
+
+                    ' asc
+                    read.Seek(offset(0) - 1, SeekOrigin.Begin)
+                    read.Read(buffer, Scan0, buffer.Length)
+                Else
+                    ' desc
+                    Throw New NotImplementedException
+                End If
+
+                Return buffer
+            Else
+                Dim buffer As New List(Of Byte)
+
+                For Each i As Long In offset
+                    Call read.Seek(i - 1, SeekOrigin.Begin)
+                    Call buffer.Add(CByte(read.ReadByte))
+                Next
+
+                Return buffer.ToArray
+            End If
+        End Function
+
+        Private Shared Function groupSubset(group As Group, indexer As Array, genericIndex As Object)
+            If TypeOf genericIndex Is Boolean() Then
+                Dim idx As Integer() = DirectCast(genericIndex, Boolean()) _
+                    .Select(Function(f, i) (f, i)) _
+                    .Where(Function(t) t.f = True) _
+                    .Select(Function(t) t.i) _
+                    .ToArray
+
+                If indexer.Length = 1 Then
+                    Return group(idx(Scan0))
+                Else
+                    Return idx _
+                        .Select(Function(i) group(i)) _
+                        .ToArray
+                End If
+            Else
+                If indexer.Length = 1 Then
+                    Return group(DirectCast(asVector(Of Integer)(indexer), Integer())(Scan0) - 1)
+                Else
+                    Return DirectCast(asVector(Of Integer)(indexer), Integer()) _
+                        .Select(Function(i) group(i - 1)) _
+                        .ToArray
+                End If
+            End If
+        End Function
+
         Private Shared Function vectorSubset(obj As Object, indexer As Array, env As Environment) As Object
             If TypeOf obj Is Group Then
                 Dim group = DirectCast(obj, Group)
                 Dim genericIndex = REnv.TryCastGenericArray(indexer, env)
 
-                If TypeOf genericIndex Is Boolean() Then
-                    Dim idx As Integer() = DirectCast(genericIndex, Boolean()) _
-                        .Select(Function(f, i) (f, i)) _
-                        .Where(Function(t) t.f = True) _
-                        .Select(Function(t) t.i) _
-                        .ToArray
-
-                    If indexer.Length = 1 Then
-                        Return group(idx(Scan0))
-                    Else
-                        Return idx _
-                            .Select(Function(i) group(i)) _
-                            .ToArray
-                    End If
-                Else
-                    If indexer.Length = 1 Then
-                        Return group(DirectCast(asVector(Of Integer)(indexer), Integer())(Scan0) - 1)
-                    Else
-                        Return DirectCast(asVector(Of Integer)(indexer), Integer()) _
-                            .Select(Function(i) group(i - 1)) _
-                            .ToArray
-                    End If
-                End If
+                Return groupSubset(group, indexer, genericIndex)
             ElseIf TypeOf obj Is Stream Then
                 Dim read As Stream = DirectCast(obj, Stream)
                 Dim offset As Long() = DirectCast(REnv.asVector(Of Long)(indexer), Long())
 
-                If offset _
-                    .SlideWindows(2) _
-                    .Where(Function(d) d.Length = 2) _
-                    .All(Function(d)
-                             Return stdNum.Abs(d.Last - d.First) = 1
-                         End Function) Then
-
-                    Dim buffer As Byte()
-
-                    ' is a asc/desc range
-                    If offset(1) - offset(0) > 0 Then
-                        buffer = New Byte(offset.Last - offset.First) {}
-
-                        ' asc
-                        read.Seek(offset(0) - 1, SeekOrigin.Begin)
-                        read.Read(buffer, Scan0, buffer.Length)
-                    Else
-                        ' desc
-                        Throw New NotImplementedException
-                    End If
-
-                    Return buffer
-                Else
-                    Dim buffer As New List(Of Byte)
-
-                    For Each i As Long In offset
-                        Call read.Seek(i - 1, SeekOrigin.Begin)
-                        Call buffer.Add(CByte(read.ReadByte))
-                    Next
-
-                    Return buffer.ToArray
-                End If
+                Return streamView(read, offset)
             End If
 
             Dim sequence As Array
