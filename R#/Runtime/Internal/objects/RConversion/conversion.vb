@@ -667,11 +667,17 @@ RE0:
                     Return New vector(New Double() { .X, .Y, .Width, .Height}, RType.GetRSharpType(GetType(Double)))
                 End With
             ElseIf x.GetType.IsArray Then
-                Return New vector With {.data = REnv.asVector(x, classType.raw, env), .elementType = classType}
+                Return New vector With {
+                    .data = REnv.asVector(x, classType.raw, env),
+                    .elementType = classType
+                }
             ElseIf TypeOf x Is pipeline Then
                 Return DirectCast(x, pipeline).createVector(env)
             ElseIf TypeOf x Is Group Then
-                Return New vector With {.data = REnv.asVector(DirectCast(x, Group).group, classType.raw, env), .elementType = classType}
+                Return New vector With {
+                    .data = REnv.asVector(DirectCast(x, Group).group, classType.raw, env),
+                    .elementType = classType
+                }
             Else
                 Dim interfaces = x.GetType.GetInterfaces
 
@@ -702,7 +708,7 @@ RE0:
             Dim buffer As New List(Of Object)
 
             For Each x As Object In DirectCast(obj, IEnumerable)
-                buffer.Add(x)
+                Call buffer.Add(x)
             Next
 
             Return New vector With {.data = REnv.TryCastGenericArray(buffer.ToArray, env)}
@@ -728,7 +734,7 @@ RE0:
             Dim i As i32 = Scan0
 
             For Each x As Object In DirectCast(buffer, IEnumerable)
-                vec.SetValue(x, ++i)
+                Call vec.SetValue(x, ++i)
             Next
 
             Return New vector With {.data = vec}
@@ -766,7 +772,7 @@ RE0:
             If obj Is Nothing Then
                 Return 0
             ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return Runtime.CTypeOfList(Of Long)(obj, env)
+                Return REnv.CTypeOfList(Of Long)(obj, env)
             ElseIf obj.GetType.IsArray Then
                 Dim type As Type = MeasureRealElementType(obj)
 
@@ -789,14 +795,14 @@ RE0:
                     ' SMRUCC/R#.call_function.str_pad at renderMap_CLI.R:line 17
                     ' SMRUCC/R#.n/a.InitializeEnvironment at renderMap_CLI.R:line 0
                     ' SMRUCC/R#.global.<globalEnvironment> at <globalEnvironment>:line n/a
-                    Return DirectCast(Runtime.asVector(Of String)(obj), String()) _
+                    Return DirectCast(REnv.asVector(Of String)(obj), String()) _
                         .Select(AddressOf Long.Parse) _
                         .ToArray
                 Else
-                    Return Runtime.asVector(Of Long)(obj)
+                    Return REnv.asVector(Of Long)(obj)
                 End If
             Else
-                Return Runtime.asVector(Of Long)(obj)
+                Return REnv.asVector(Of Long)(obj)
             End If
         End Function
 
@@ -810,7 +816,9 @@ RE0:
         ''' <param name="env"></param>
         ''' <returns></returns>
         ''' <remarks>
-        ''' ``NULL`` will be treated as ZERO based on the rule of VisualBasic runtime conversion.
+        ''' ``NULL`` will be treated as ZERO based on the rule of VisualBasic 
+        ''' runtime conversion, the ``as.numeric`` function makes an array value 
+        ''' copy always.
         ''' </remarks>
         <ExportAPI("as.numeric")>
         <RApiReturn(GetType(Double))>
@@ -824,7 +832,7 @@ RE0:
             End If
 
             If x.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return Runtime.CTypeOfList(Of Double)(x, env)
+                Return REnv.CTypeOfList(Of Double)(x, env)
             ElseIf TypeOf x Is Double() Then
                 Return New vector(x, RType.GetRSharpType(GetType(Double)))
             ElseIf TypeOf x Is Integer() OrElse TypeOf x Is Long() OrElse TypeOf x Is Single() OrElse TypeOf x Is Short() Then
@@ -843,24 +851,27 @@ RE0:
                     Return data _
                         .Select(Function(obj) CStr(obj).ParseDouble) _
                         .ToArray
+                Else
+                    Return data _
+                        .populateNumeric(env) _
+                        .ToArray
                 End If
-
-                Dim populates = Iterator Function() As IEnumerable(Of Double)
-                                    For Each item As Object In data
-                                        If item Is Nothing Then
-                                            Yield 0
-                                        ElseIf TypeOf item Is String Then
-                                            Yield Val(DirectCast(item, String))
-                                        ElseIf TypeOf item Is Double Then
-                                            Yield DirectCast(item, Double)
-                                        Else
-                                            Yield DirectCast(RCType.CTypeDynamic(item, GetType(Double), env), Double)
-                                        End If
-                                    Next
-                                End Function
-
-                Return populates().ToArray
             End If
+        End Function
+
+        <Extension>
+        Private Iterator Function populateNumeric(data As IEnumerable(Of Object), env As Environment) As IEnumerable(Of Double)
+            For Each item As Object In data
+                If item Is Nothing Then
+                    Yield 0
+                ElseIf TypeOf item Is String Then
+                    Yield Val(DirectCast(item, String))
+                ElseIf TypeOf item Is Double Then
+                    Yield DirectCast(item, Double)
+                Else
+                    Yield DirectCast(RCType.CTypeDynamic(item, GetType(Double), env), Double)
+                End If
+            Next
         End Function
 
         ''' <summary>
