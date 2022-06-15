@@ -68,6 +68,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -192,7 +193,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     End If
                 Else
                     Dim x = indexVec.values(Scan0).Evaluate(env)
-                    Dim y = asVector(Of Object)(indexVec.values(1).Evaluate(env))
+                    Dim y = REnv.asVector(Of Object)(indexVec.values(1).Evaluate(env))
                     Dim result = data.sliceByRow(x, env)
 
                     If result Like GetType(Message) Then
@@ -302,7 +303,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         .FirstOrDefault
 
                     If Not readDefault Is Nothing Then
-                        Dim keys As String() = asVector(Of String)(indexer)
+                        Dim keys As String() = REnv.asVector(Of String)(indexer)
 
                         If indexer.Length = 1 Then
                             Return readDefault.GetValue(obj, {keys(Scan0)})
@@ -366,7 +367,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Dim i As New List(Of Object)
 
                 If TypeOf indexer Is Boolean() OrElse MeasureArrayElementType(indexer) Is GetType(Boolean) Then
-                    For Each flag As SeqValue(Of Boolean) In DirectCast(asVector(Of Boolean)(indexer), Boolean()).SeqIterator
+                    For Each flag As SeqValue(Of Boolean) In DirectCast(REnv.asVector(Of Boolean)(indexer), Boolean()).SeqIterator
                         If flag.value Then
                             ' get by index
                             Call i.Add(allKeys(flag.i))
@@ -456,9 +457,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 End If
             Else
                 If indexer.Length = 1 Then
-                    Return group(DirectCast(asVector(Of Integer)(indexer), Integer())(Scan0) - 1)
+                    Return group(DirectCast(REnv.asVector(Of Integer)(indexer), Integer())(Scan0) - 1)
                 Else
-                    Return DirectCast(asVector(Of Integer)(indexer), Integer()) _
+                    Return DirectCast(REnv.asVector(Of Integer)(indexer), Integer()) _
                         .Select(Function(i) group(i - 1)) _
                         .ToArray
                 End If
@@ -488,10 +489,26 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             ElseIf TypeOf obj Is RMethodInfo OrElse TypeOf obj Is DeclareLambdaFunction OrElse TypeOf obj Is DeclareNewFunction Then
                 Return Internal.debug.stop({$"object of type 'closure' is not subsettable", $"closure: {obj}"}, env)
             Else
-                ' 20210526 为了避免类型转换带来的性能损耗
-                ' 在这里需要手动判断数组或者向量
-                ' 最后再执行这个函数来转换数组
-                sequence = REnv.asVector(Of Object)(obj)
+                Dim type As Type = obj.GetType
+                Dim item As PropertyInfo = type.GetProperties _
+                    .Where(Function(p)
+                               Return p.Name = "Item" AndAlso
+                                      p.CanRead AndAlso
+                                      p.GetIndexParameters.Count = 1
+                           End Function) _
+                    .FirstOrDefault
+
+                If Not item Is Nothing Then
+                    Dim argType As Type = item.GetIndexParameters()(Scan0).ParameterType
+                    Dim index As Object = RCType.CTypeDynamic(indexer, argType, env)
+
+                    Return item.GetValue(obj, {index})
+                Else
+                    ' 20210526 为了避免类型转换带来的性能损耗
+                    ' 在这里需要手动判断数组或者向量
+                    ' 最后再执行这个函数来转换数组
+                    sequence = REnv.asVector(Of Object)(obj)
+                End If
             End If
 
             If sequence.Length = 0 Then
@@ -554,7 +571,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                                    Return type.getItem.GetValue(tmp, {i - 1})
                                End Function
 
-                        Return DirectCast(asVector(Of Integer)(indexer), Integer()) _
+                        Return DirectCast(REnv.asVector(Of Integer)(indexer), Integer()) _
                             .Select(item) _
                             .ToArray
                     Else

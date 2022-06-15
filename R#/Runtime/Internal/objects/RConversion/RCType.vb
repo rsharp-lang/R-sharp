@@ -72,7 +72,7 @@ Namespace Runtime.Internal.Object.Converts
         ''' <param name="obj"></param>
         ''' <param name="type"></param>
         ''' <returns>
-        ''' an error message will be returns if the conversion error happends
+        ''' an error <see cref="Message"/> will be returns if the conversion error happends
         ''' </returns>
         Public Shared Function CTypeDynamic(obj As Object, type As Type, env As Environment) As Object
             If obj Is Nothing Then
