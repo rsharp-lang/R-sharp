@@ -344,8 +344,18 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="na_rm">a logical indicating whether missing values should be removed.</param>
         ''' <returns></returns>
         <ExportAPI("max")>
-        Public Function max(x As Array, Optional na_rm As Boolean = False, Optional env As Environment = Nothing) As Double
-            Dim dbl = REnv.asVector(Of Double)(x).AsObjectEnumerator(Of Double).ToArray
+        Public Function max(<RRawVectorArgument>
+                            x As Object,
+                            Optional na_rm As Boolean = False,
+                            Optional env As Environment = Nothing) As Object
+
+            If TypeOf x Is list Then
+                Return Internal.debug.stop("Error in max(x) : invalid 'type' (list) of argument", env)
+            End If
+
+            Dim dbl = REnv.asVector(Of Double)(x) _
+                .AsObjectEnumerator(Of Double) _
+                .ToArray
 
             If dbl.Length = 0 Then
                 Call env.AddMessage({"no non-missing arguments to max; returning -Inf"}, MSG_TYPES.WRN)
@@ -359,11 +369,22 @@ Namespace Runtime.Internal.Invokes
         ''' 
         ''' </summary>
         ''' <param name="x"></param>
-        ''' <param name="na_rm">a logical indicating whether missing values should be removed.</param>
+        ''' <param name="na_rm">
+        ''' a logical indicating whether missing values should be removed.
+        ''' </param>
         ''' <returns></returns>
         <ExportAPI("min")>
-        Public Function min(x As Array, Optional na_rm As Boolean = False, Optional env As Environment = Nothing) As Double
-            Dim dbl = REnv.asVector(Of Double)(x).AsObjectEnumerator(Of Double).ToArray
+        Public Function min(<RRawVectorArgument> x As Object,
+                            Optional na_rm As Boolean = False,
+                            Optional env As Environment = Nothing) As Object
+
+            If TypeOf x Is list Then
+                Return Internal.debug.stop("Error in min(x) : invalid 'type' (list) of argument", env)
+            End If
+
+            Dim dbl = REnv.asVector(Of Double)(x) _
+                .AsObjectEnumerator(Of Double) _
+                .ToArray
 
             If dbl.Length = 0 Then
                 Call env.AddMessage({"no non-missing arguments to min; returning Inf"}, MSG_TYPES.WRN)
@@ -385,7 +406,9 @@ Namespace Runtime.Internal.Invokes
             If x Is Nothing OrElse x.Length = 0 Then
                 Return 0
             Else
-                Dim array As Double() = REnv.asVector(Of Double)(x).AsObjectEnumerator(Of Double).ToArray
+                Dim array As Double() = REnv.asVector(Of Double)(x) _
+                    .AsObjectEnumerator(Of Double) _
+                    .ToArray
 
                 If na_rm Then
                     Return array.Where(Function(a) Not a.IsNaNImaginary).Average
