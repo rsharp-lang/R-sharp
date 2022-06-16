@@ -207,9 +207,25 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("take")>
-        Public Function take(<RRawVectorArgument> sequence As Object, n%, Optional env As Environment = Nothing) As Object
+        Public Function take(<RRawVectorArgument>
+                             sequence As Object,
+                             n%,
+                             Optional env As Environment = Nothing) As Object
+
             If sequence Is Nothing Then
                 Return Nothing
+            ElseIf TypeOf sequence Is list Then
+                Dim list As list = DirectCast(sequence, list)
+                Dim names As String() = list.getNames.Take(n).ToArray
+                Dim subset As New list With {
+                    .slots = names _
+                        .ToDictionary(Function(key) key,
+                                      Function(key)
+                                          Return list.slots(key)
+                                      End Function)
+                }
+
+                Return subset
             ElseIf TypeOf sequence Is pipeline Then
                 Return DirectCast(sequence, pipeline) _
                     .populates(Of Object)(env) _
