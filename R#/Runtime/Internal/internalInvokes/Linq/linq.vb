@@ -207,9 +207,25 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("take")>
-        Public Function take(<RRawVectorArgument> sequence As Object, n%, Optional env As Environment = Nothing) As Object
+        Public Function take(<RRawVectorArgument>
+                             sequence As Object,
+                             n%,
+                             Optional env As Environment = Nothing) As Object
+
             If sequence Is Nothing Then
                 Return Nothing
+            ElseIf TypeOf sequence Is list Then
+                Dim list As list = DirectCast(sequence, list)
+                Dim names As String() = list.getNames.Take(n).ToArray
+                Dim subset As New list With {
+                    .slots = names _
+                        .ToDictionary(Function(key) key,
+                                      Function(key)
+                                          Return list.slots(key)
+                                      End Function)
+                }
+
+                Return subset
             ElseIf TypeOf sequence Is pipeline Then
                 Return DirectCast(sequence, pipeline) _
                     .populates(Of Object)(env) _
@@ -756,24 +772,76 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                         End Function) _
                 .ToArray
 
-            Return result
+            If TypeOf sequence Is list Then
+                Dim ref As Dictionary(Of String, Object) = DirectCast(sequence, list).slots
+                Dim subListGroups As New list With {.slots = New Dictionary(Of String, Object)}
+
+                For Each subgroup As Group In result
+                    Dim key As String = Scripting.ToString(subgroup.key)
+                    Dim subKeys As String() = subgroup.group.AsObjectEnumerator(Of String)().ToArray
+                    Dim subList As New list With {.slots = New Dictionary(Of String, Object)}
+
+                    For Each name As String In subKeys
+                        subList.slots.Add(name, ref(name))
+                    Next
+
+                    subListGroups.add(key, subList)
+                Next
+
+                Return subListGroups
+            Else
+                Return result
+            End If
         End Function
 
+        ''' <summary>
+        ''' get key value from the input data sequence and 
+        ''' then populate the key with the original value 
+        ''' elements.
+        ''' </summary>
+        ''' <param name="keyBy"></param>
+        ''' <param name="sequence"></param>
+        ''' <param name="env"></param>
+        ''' <param name="err"></param>
+        ''' <returns>
+        ''' ***** element names will be returns as object reference 
+        ''' if the given <paramref name="sequence"/> is a 
+        ''' list. *****
+        ''' </returns>
         <Extension>
-        Private Function produceKeyedSequence(keyBy As Func(Of Object, Object), sequence As Object, env As Environment, ByRef err As Message) As IEnumerable(Of (key As Object, obj As Object))
+        Private Function produceKeyedSequence(keyBy As Func(Of Object, Object),
+                                              sequence As Object,
+                                              env As Environment,
+                                              ByRef err As Message) As IEnumerable(Of (key As Object, obj As Object))
+
             Dim projectList As New List(Of (key As Object, obj As Object))
             Dim key As Object
 
-            For Each item As Object In Rset.getObjectSet(sequence, env)
-                key = keyBy(item)
+            If TypeOf sequence Is list Then
+                Dim list As list = DirectCast(sequence, list)
 
-                If Program.isException(key) Then
-                    err = key
-                    Exit For
-                Else
-                    projectList.Add((key, item))
-                End If
-            Next
+                For Each name As String In list.getNames
+                    key = keyBy(list.slots(name))
+
+                    If Program.isException(key) Then
+                        err = key
+                        Exit For
+                    Else
+                        projectList.Add((key, CObj(name)))
+                    End If
+                Next
+            Else
+                For Each item As Object In Rset.getObjectSet(sequence, env)
+                    key = keyBy(item)
+
+                    If Program.isException(key) Then
+                        err = key
+                        Exit For
+                    Else
+                        projectList.Add((key, item))
+                    End If
+                Next
+            End If
 
             Return projectList
         End Function
@@ -954,17 +1022,30 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             If desc Then
                 result = projectList _
-                    .OrderByDescending(Function(o) o.key) _
-                    .Select(Function(a) a.obj) _
-                    .ToArray
+                        .OrderByDescending(Function(o) o.key) _
+                        .Select(Function(a) a.obj) _
+                        .ToArray
             Else
                 result = projectList _
-                    .OrderBy(Function(o) o.key) _
-                    .Select(Function(a) a.obj) _
-                    .ToArray
+                        .OrderBy(Function(o) o.key) _
+                        .Select(Function(a) a.obj) _
+                        .ToArray
             End If
 
-            Return result
+            If TypeOf sequence Is list Then
+                Dim ref = DirectCast(sequence, list).slots
+                Dim orderList As New list With {
+                    .slots = New Dictionary(Of String, Object)
+                }
+
+                For Each key As String In result.AsObjectEnumerator(Of String)
+                    Call orderList.slots.Add(key, ref(key))
+                Next
+
+                Return orderList
+            Else
+                Return result
+            End If
         End Function
 
         ''' <summary>
