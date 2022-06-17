@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--parallel --master \"34957\" --delegate \"Parallel::slave\" /@set --internal_pipeline=TRUE  --SetDllDirectory E:/GCModeller/src/R-sharp/App/net6.0",
-      "workingDirectory": "E:\\mzkit\\dist\\bin\\Rstudio\\bin"
+      "commandLineArgs": "\"D:/mzkit/src/mzkit/rstudio/pipeline/MS1deconv.R\" --raw \"F:/Temp/mzkit_win32/.cache/a8/a8403263b3216570f14eecb421f12538.mzPack\" --save \"F:/Temp/mzkit_win32/c6299dfbfe2c5757864d6d11c7c74025/7824_deconv_peaktable_0610b.csv\" --SetDllDirectory D:/mzkit/dist/bin/Rstudio/host",
+      "workingDirectory": "D:\\mzkit\\dist\\bin\\Rstudio\\bin"
     }
   }
 }
