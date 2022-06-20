@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--parallel --master \"34957\" --delegate \"Parallel::slave\" /@set --internal_pipeline=TRUE  --SetDllDirectory E:/GCModeller/src/R-sharp/App/net6.0",
+      "commandLineArgs": "\"E:/mzkit/src/mzkit/rstudio/pipeline/Mummichog.R\" --biodeep_ssid \"docker-20220617180648-32c7ce950e44b3c8b6f1571066e16e9c\" --raw \"F:/TEMP/mzkit_win32/.cache/00/007fa409466e2f1be7a402fd6e23e3f3.mzPack\" --save \"F:/TEMP/mzkit_win32/f0290000/Mummichog_0979e__save\" --SetDllDirectory E:/mzkit/dist/bin/Rstudio/host",
       "workingDirectory": "E:\\mzkit\\dist\\bin\\Rstudio\\bin"
     }
   }

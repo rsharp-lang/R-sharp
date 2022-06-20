@@ -182,6 +182,11 @@ Module Program
         Dim workdir As String = args("--WORKDIR")
         Dim strict As Boolean = args.ContainsParameter("--strict") And args("--strict")
         Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
+        Dim SetDllDirectory As String = args("--SetDllDirectory")
+
+        If Not SetDllDirectory.StringEmpty Then
+            Call R.globalEnvir.options.setOption("SetDllDirectory", SetDllDirectory)
+        End If
 
         ' 显示的指定在VisualStudio中进行调试的程序包zip文件路径或者文件夹路径
         Dim attach As String = args("--attach")
