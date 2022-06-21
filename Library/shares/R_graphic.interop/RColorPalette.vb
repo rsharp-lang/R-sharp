@@ -217,6 +217,12 @@ Module RColorPalette
             .ToArray
     End Function
 
+    ''' <summary>
+    ''' get a single color literal string
+    ''' </summary>
+    ''' <param name="color"></param>
+    ''' <param name="default$"></param>
+    ''' <returns></returns>
     Public Function getColor(color As Object, Optional default$ = "black") As String
         If color Is Nothing Then
             Return [default]
