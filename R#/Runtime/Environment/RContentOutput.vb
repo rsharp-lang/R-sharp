@@ -99,7 +99,16 @@ Namespace Runtime
             Me.stdout = stdout
         End Sub
 
-        Public Sub openSink(logfile As String, Optional split As Boolean = True, Optional append As Boolean = False)
+        ''' <summary>
+        ''' open a new log file session
+        ''' </summary>
+        ''' <param name="logfile"></param>
+        ''' <param name="split"></param>
+        ''' <param name="append"></param>
+        Public Sub openSink(logfile As String,
+                            Optional split As Boolean = True,
+                            Optional append As Boolean = False)
+
             Me.split = split
             Me.logfile = logfile.OpenWriter(append:=append)
         End Sub
