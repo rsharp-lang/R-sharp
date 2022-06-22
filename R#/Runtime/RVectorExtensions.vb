@@ -415,17 +415,15 @@ Namespace Runtime
 
                         If GetType(T) Is GetType(Double) OrElse GetType(T) Is GetType(Single) Then
                             If str = "NA" Then
-                                o = Double.NaN
+                                o = Conversion.CTypeDynamic(Double.NaN, typeofT)
                             ElseIf str = "NULL" OrElse str = "" Then
-                                o = 0.0
+                                o = Conversion.CTypeDynamic(0.0, typeofT)
                             Else
                                 o = Conversion.CTypeDynamic(o, typeofT)
                             End If
                         Else
-                            If str = "NA" Then
-                                o = 0
-                            ElseIf str = "NULL" OrElse str = "" Then
-                                o = 0
+                            If str = "NA" OrElse str = "NULL" OrElse str = "" Then
+                                o = Conversion.CTypeDynamic(0, typeofT)
                             Else
                                 o = Conversion.CTypeDynamic(o, typeofT)
                             End If
