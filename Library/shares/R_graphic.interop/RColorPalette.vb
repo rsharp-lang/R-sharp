@@ -96,6 +96,32 @@ Module RColorPalette
 
     <Extension>
     Public Function CreateColorMaps(uniqClass As String(),
+                                    colorArguments As Object,
+                                    env As Environment,
+                                    Optional [default] As String = "Clusters") As Dictionary(Of String, Color)
+
+        If TypeOf colorArguments Is list Then
+            ' key -> color mapping
+            Dim colorList As list = DirectCast(colorArguments, list)
+            Dim colors As New Dictionary(Of String, Color)
+
+            For Each classLabel As String In uniqClass
+                colors(classLabel) = RColorPalette.GetRawColor(colorList.getByName(classLabel))
+            Next
+
+            Return colors
+        Else
+            ' string vector
+            ' mapping in orders
+            Dim colorSet As String() = RColorPalette.getColors(colorArguments, uniqClass.Length, [default])
+            Dim colors As Dictionary(Of String, Color) = uniqClass.CreateColorMaps(colorSet)
+
+            Return colors
+        End If
+    End Function
+
+    <Extension>
+    Public Function CreateColorMaps(uniqClass As String(),
                                     colorSet As String(),
                                     Optional [default] As String = "black") As Dictionary(Of String, Color)
 
@@ -191,6 +217,12 @@ Module RColorPalette
             .ToArray
     End Function
 
+    ''' <summary>
+    ''' get a single color literal string
+    ''' </summary>
+    ''' <param name="color"></param>
+    ''' <param name="default$"></param>
+    ''' <returns></returns>
     Public Function getColor(color As Object, Optional default$ = "black") As String
         If color Is Nothing Then
             Return [default]

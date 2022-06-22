@@ -405,16 +405,28 @@ Namespace Runtime
 
             If Not o.GetType Is typeofT Then
                 ' handling some special situation
-                If GetType(T) Is GetType(Double) Then
+                If GetType(T) Is GetType(Double) OrElse
+                    GetType(T) Is GetType(Single) OrElse
+                    GetType(T) Is GetType(Integer) OrElse
+                    GetType(T) Is GetType(Long) Then
+
                     If TypeOf o Is String Then
                         Dim str = CStr(o)
 
-                        If str = "NA" Then
-                            o = Double.NaN
-                        ElseIf str = "NULL" OrElse str = "" Then
-                            o = 0.0
+                        If GetType(T) Is GetType(Double) OrElse GetType(T) Is GetType(Single) Then
+                            If str = "NA" Then
+                                o = Conversion.CTypeDynamic(Double.NaN, typeofT)
+                            ElseIf str = "NULL" OrElse str = "" Then
+                                o = Conversion.CTypeDynamic(0.0, typeofT)
+                            Else
+                                o = Conversion.CTypeDynamic(o, typeofT)
+                            End If
                         Else
-                            o = Conversion.CTypeDynamic(o, typeofT)
+                            If str = "NA" OrElse str = "NULL" OrElse str = "" Then
+                                o = Conversion.CTypeDynamic(0, typeofT)
+                            Else
+                                o = Conversion.CTypeDynamic(o, typeofT)
+                            End If
                         End If
                     Else
                         o = Conversion.CTypeDynamic(o, typeofT)

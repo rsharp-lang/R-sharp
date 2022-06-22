@@ -220,8 +220,7 @@ Module plots
                                     env As Environment) As Object
 
         Dim uniqClass As String() = classList.Distinct.ToArray
-        Dim colorSet As String() = RColorPalette.getColors(args!colorSet, uniqClass.Length, "Clusters")
-        Dim colors As Dictionary(Of String, Color) = uniqClass.CreateColorMaps(colorSet)
+        Dim colors As Dictionary(Of String, Color) = uniqClass.CreateColorMaps(args!colorSet, env)
         Dim classSerials As New Dictionary(Of String, List(Of PointData))
 
         If classList.Length <> x.Length Then
