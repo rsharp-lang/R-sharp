@@ -292,14 +292,14 @@ Namespace Runtime.Internal
         ''' this function will returns 500 error code
         ''' </returns>
         Public Shared Function PrintMessageInternal(message As Message, globalEnv As GlobalEnvironment) As Object
-            Dim stdout As StreamWriter
+            Dim stdout As TextWriter
             Dim redirectErr2stdout As Boolean
 
             If globalEnv Is Nothing Then
                 stdout = App.StdOut
                 redirectErr2stdout = False
             Else
-                stdout = New StreamWriter(globalEnv.stdout.stream, Encodings.ASCII.CodePage)
+                stdout = globalEnv.stdout  ' New StreamWriter(globalEnv.stdout.stream, Encodings.ASCII.CodePage)
                 redirectErr2stdout = globalEnv.Rscript.redirectError2stdout
                 globalEnv.stdout.Flush()
             End If
@@ -309,7 +309,10 @@ Namespace Runtime.Internal
             Return 500
         End Function
 
-        Public Shared Sub writeErrMessage(message As Message, Optional stdout As StreamWriter = Nothing, Optional redirectError2stdout As Boolean = False)
+        Public Shared Sub writeErrMessage(message As Message,
+                                          Optional stdout As TextWriter = Nothing,
+                                          Optional redirectError2stdout As Boolean = False)
+
             Dim execRoutine$ = message.environmentStack _
                 .SafeQuery _
                 .Reverse _

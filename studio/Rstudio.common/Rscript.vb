@@ -110,6 +110,8 @@ FINAL:
             Call globalEnv.messages.Clear()
         End If
 
+        Call globalEnv.stdout.Flush()
+
         Return code
     End Function
 
