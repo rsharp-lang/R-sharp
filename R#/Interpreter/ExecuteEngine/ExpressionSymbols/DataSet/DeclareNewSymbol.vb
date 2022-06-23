@@ -199,6 +199,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
             If Program.isException(value) Then
                 Return value
+            ElseIf TypeOf value Is IfPromise Then
+                ' 20220623 try to make bugs fixed of the if else branch
+                ' if else promise value will cause the tuple syntax failured
+                value = DirectCast(value, IfPromise).Value
             End If
 
             If type = TypeCodes.boolean AndAlso TypeOf value Is String Then
