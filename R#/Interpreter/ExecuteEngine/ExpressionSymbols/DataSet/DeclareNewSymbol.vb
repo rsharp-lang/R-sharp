@@ -215,7 +215,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         type = value.GetType.GetRTypeCode
                     End If
 
-                    If type = TypeCodes.boolean OrElse type = TypeCodes.double OrElse type = TypeCodes.integer OrElse type = TypeCodes.string Then
+                    If type = TypeCodes.boolean OrElse
+                        type = TypeCodes.double OrElse
+                        type = TypeCodes.integer OrElse
+                        type = TypeCodes.string Then
+
                         value = REnv.TryCastGenericArray({value}, envir)
                     End If
                 End If
