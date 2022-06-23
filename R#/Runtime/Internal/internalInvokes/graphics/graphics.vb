@@ -256,12 +256,12 @@ Namespace Runtime.Internal.Invokes
         ''' 
         ''' Generic function for plotting of R objects. 
         ''' </summary>
-        ''' <param name="[object]"></param>
+        ''' <param name="graphics"></param>
         ''' <param name="args"></param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("plot")>
-        Public Function plot(<RRawVectorArgument> [object] As Object,
+        Public Function plot(<RRawVectorArgument> graphics As Object,
                              <RRawVectorArgument, RListObjectArgument> args As Object,
                              Optional env As Environment = Nothing) As Object
 
@@ -269,12 +269,33 @@ Namespace Runtime.Internal.Invokes
 
             If Program.isException(argumentsVal) Then
                 Return argumentsVal
+            ElseIf TypeOf graphics Is Image OrElse TypeOf graphics Is Bitmap Then
+                If Not curDev.g Is Nothing Then
+                    ' rendering on current graphics device
+                    Dim image As Image = CType(graphics, Image)
+                    Dim argumentList As list = DirectCast(argumentsVal, list)
+                    Dim pos As New Point
+
+                    If argumentList.hasName("x") OrElse argumentList.hasName("y") Then
+                        pos = New Point With {
+                            .X = argumentList.getValue("x", env, [default]:=0),
+                            .Y = argumentList.getValue("y", env, [default]:=0)
+                        }
+                    End If
+
+                    Call curDev.g.DrawImage(image, pos)
+
+                    Return Nothing
+                Else
+                    ' just returns the image
+                    Return graphics
+                End If
             Else
                 If Not curDev.g Is Nothing Then
                     DirectCast(argumentsVal, list).add("grDevices", curDev)
                 End If
 
-                Return DirectCast(argumentsVal, list).invokeGeneric([object], env)
+                Return DirectCast(argumentsVal, list).invokeGeneric(graphics, env)
             End If
         End Function
 
