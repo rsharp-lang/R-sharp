@@ -81,7 +81,8 @@ Module Rscript
     Friend Function handleResult(result As Object,
                                  globalEnv As GlobalEnvironment,
                                  Optional program As RProgram = Nothing,
-                                 Optional autoPrint As Boolean = False) As Integer
+                                 Optional autoPrint As Boolean = False,
+                                 Optional inspect As Boolean = False) As Integer
 
         Dim requirePrintErr As Boolean = False
         Dim code As Integer = 0
@@ -108,7 +109,11 @@ Module Rscript
                 End If
             End If
         ElseIf autoPrint Then
-            Call base.print(result, , globalEnv)
+            If inspect Then
+                Call base.str(result,, globalEnv)
+            Else
+                Call base.print(result, , globalEnv)
+            End If
         End If
 FINAL:
         If globalEnv.messages > 0 Then

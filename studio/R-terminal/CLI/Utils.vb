@@ -290,7 +290,7 @@ Partial Module CLI
                 result = Internal.debug.stop(New NotImplementedException(file.ExtensionSuffix), R.globalEnvir)
         End Select
 
-        Return Rscript.handleResult(result, R.globalEnvir, autoPrint:=True)
+        Return Rscript.handleResult(result, R.globalEnvir, autoPrint:=True, inspect:=True)
     End Function
 
 End Module
