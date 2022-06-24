@@ -278,9 +278,14 @@ Partial Module CLI
 
         Select Case file.ExtensionSuffix
             Case "csv"
-
+                R.Imports({"utils"}, "base.dll")
+                result = R.Evaluate($"read.csv('{file}', row.names = 1);")
             Case "tsv"
+                R.Imports({"utils"}, "base.dll")
+                result = R.Evaluate($"read.csv('{file}', row.names = 1, tsv = TRUE);")
             Case "json"
+                R.Imports({"JSON"}, "base.dll")
+                result = R.Evaluate($"json_decode(readText('{file}'));")
             Case Else
                 result = Internal.debug.stop(New NotImplementedException(file.ExtensionSuffix), R.globalEnvir)
         End Select
