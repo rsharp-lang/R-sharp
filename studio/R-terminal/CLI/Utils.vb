@@ -269,6 +269,7 @@ Partial Module CLI
         Dim file As String = args.Tokens.ElementAtOrNull(1)
         Dim R As New RInterpreter
         Dim result As Object
+        Dim inspectObject As Boolean = False
 
         If file.StringEmpty Then
             result = Internal.debug.stop("missing file path!", R.globalEnvir)
@@ -286,11 +287,17 @@ Partial Module CLI
             Case "json"
                 R.Imports({"JSON"}, "base.dll")
                 result = R.Evaluate($"json_decode(readText('{file}'));")
+                inspectObject = True
             Case Else
                 result = Internal.debug.stop(New NotImplementedException(file.ExtensionSuffix), R.globalEnvir)
         End Select
 
-        Return Rscript.handleResult(result, R.globalEnvir, autoPrint:=True, inspect:=True)
+        Return Rscript.handleResult(
+            result:=result,
+            globalEnv:=R.globalEnvir,
+            autoPrint:=True,
+            inspect:=inspectObject
+        )
     End Function
 
 End Module
