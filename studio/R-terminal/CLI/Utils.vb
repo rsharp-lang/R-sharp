@@ -262,4 +262,30 @@ Partial Module CLI
         Return 0
     End Function
 
+    <ExportAPI("/view")>
+    <Description("View any text data file.")>
+    <Usage("/view <filepath/to/data>")>
+    Public Function View(args As CommandLine) As Integer
+        Dim file As String = args.Tokens.ElementAtOrNull(1)
+        Dim R As New RInterpreter
+        Dim result As Object
+
+        If file.StringEmpty Then
+            result = Internal.debug.stop("missing file path!", R.globalEnvir)
+        ElseIf Not file.FileExists Then
+            result = Internal.debug.stop({$"target file '{file}' is not exists on your filesystem!", $"fullpath: {file.GetFullPath}"}, R.globalEnvir)
+        End If
+
+        Select Case file.ExtensionSuffix
+            Case "csv"
+
+            Case "tsv"
+            Case "json"
+            Case Else
+                result = Internal.debug.stop(New NotImplementedException(file.ExtensionSuffix), R.globalEnvir)
+        End Select
+
+        Return Rscript.handleResult(result, R.globalEnvir)
+    End Function
+
 End Module

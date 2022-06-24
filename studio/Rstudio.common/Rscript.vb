@@ -69,7 +69,7 @@ Module Rscript
     Dim echo As Index(Of String) = {"print", "cat", "echo", "q", "quit", "require", "library", "str"}
 
     ''' <summary>
-    ''' 
+    ''' handle data object auto print
     ''' </summary>
     ''' <param name="result"></param>
     ''' <param name="globalEnv"></param>
