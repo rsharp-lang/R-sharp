@@ -260,6 +260,15 @@ RE0:
                     Dim [new] As New Dictionary(Of String, Array)
                     Dim names As String() = asVector(Of String)(namelist)
 
+                    If raw.Length <> names.Length Then
+                        Return Internal.debug.stop(
+                            {
+                                $"Error in names(x) <- value:",
+                                $"'names' attribute [{names.Length}] must be the same length as the vector [{raw.Length}]",
+                                $"set column names error!"
+                            }, envir)
+                    End If
+
                     For i As Integer = 0 To names.Length - 1
                         [new].Add(names(i), raw(i).Value)
                     Next
@@ -267,7 +276,7 @@ RE0:
                     .columns = [new]
                 End With
             Else
-                Throw New NotImplementedException
+                Return Internal.debug.stop(New NotImplementedException, envir)
             End If
 
             Return [object]
