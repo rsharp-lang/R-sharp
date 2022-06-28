@@ -1,5 +1,6 @@
 ﻿
 Imports System.IO
+Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.DataStorage.HDSPack
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
@@ -40,8 +41,14 @@ Module HDSutils
     End Function
 
     <ExportAPI("tree")>
-    Public Sub Tree(pack As StreamPack)
-        Call pack.superBlock.Tree(App.StdOut,)
-    End Sub
+    Public Function Tree(pack As StreamPack) As String
+        Dim sb As New StringBuilder
+        Dim device As New StringWriter(sb)
+
+        Call pack.superBlock.Tree(device,)
+        Call device.Flush()
+
+        Return sb.ToString
+    End Function
 
 End Module
