@@ -51,4 +51,19 @@ Module HDSutils
         Return sb.ToString
     End Function
 
+    <ExportAPI("getText")>
+    Public Function readText(pack As StreamPack, fileName As String) As String
+        Dim file As StreamBlock = pack.GetObject(fileName)
+
+        If file Is Nothing Then
+            Return Nothing
+        Else
+            Using buffer As Stream = pack.OpenBlock(file),
+                read As New StreamReader(buffer)
+
+                Return read.ReadToEnd
+            End Using
+        End If
+    End Function
+
 End Module
