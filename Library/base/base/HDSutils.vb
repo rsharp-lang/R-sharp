@@ -8,7 +8,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 
-<Package("HDF5.utils")>
+<Package("HDS")>
 Module HDSutils
 
     Sub New()
