@@ -39,4 +39,9 @@ Module HDSutils
         Return pack.ListFiles.ToArray
     End Function
 
+    <ExportAPI("tree")>
+    Public Sub Tree(pack As StreamPack)
+        Call pack.superBlock.Tree(App.StdOut,)
+    End Sub
+
 End Module
