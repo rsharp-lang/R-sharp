@@ -7,6 +7,7 @@ Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Package("HDS")>
@@ -22,7 +23,20 @@ Module HDSutils
     Public Function openStream(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
         If file Is Nothing Then
             Return Internal.debug.stop("file for open can not be nothing!", env)
-        ElseIf TypeOf file Is String Then
+        ElseIf TypeOf file Is vector Then
+            Dim v As Array = DirectCast(file, vector).data
+
+            If v.Length = 0 Then
+                Return Internal.debug.stop("file for open can not be nothing!", env)
+            ElseIf v.Length > 1 Then
+                file = v.GetValue(Scan0)
+                env.AddMessage($"the input file vector contains more than one element, use the first element as file path!")
+            Else
+                file = v.GetValue(Scan0)
+            End If
+        End If
+
+        If TypeOf file Is String Then
             If DirectCast(file, String).FileExists Then
                 Return New StreamPack(DirectCast(file, String))
             Else
