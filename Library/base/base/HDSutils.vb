@@ -59,7 +59,7 @@ Module HDSutils
         Dim sb As New StringBuilder
         Dim device As New StringWriter(sb)
 
-        Call pack.superBlock.Tree(device,)
+        Call pack.superBlock.Tree(device, pack:=pack)
         Call device.Flush()
 
         Return sb.ToString
