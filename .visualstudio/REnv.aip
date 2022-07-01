@@ -120,6 +120,7 @@
     <ROW Component="R.exe" ComponentId="{FBBA8719-7B69-4125-BE3D-4569EFB25AF4}" Directory_="bin_Dir" Attributes="256" KeyPath="R.exe"/>
     <ROW Component="RData.dll" ComponentId="{8D3055A0-A56E-4B01-B025-9573CCEACED1}" Directory_="bin_Dir" Attributes="256" KeyPath="RData.dll"/>
     <ROW Component="REnv.dll" ComponentId="{C905B436-A9EC-420B-9207-441AC5775C7A}" Directory_="bin_Dir" Attributes="256" KeyPath="REnv.dll"/>
+    <ROW Component="REnv.zip" ComponentId="{33A9A8B3-0DE8-4E03-A3B7-9B000FE3EC53}" Directory_="packages_Dir" Attributes="0" KeyPath="REnv.zip" Type="0"/>
     <ROW Component="Rlapack.dll" ComponentId="{371EC626-5044-4A1E-9153-B37CFE23F246}" Directory_="bin_Dir" Attributes="256" KeyPath="Rlapack.dll"/>
     <ROW Component="Rscript.dll" ComponentId="{3FCF4D06-31C6-4547-BCE8-5E38BA91D6AB}" Directory_="bin_Dir" Attributes="256" KeyPath="Rscript.dll"/>
     <ROW Component="Rscript.exe" ComponentId="{A4370584-94A9-47C4-B078-AF22A4FCADDB}" Directory_="bin_Dir" Attributes="256" KeyPath="Rscript.exe"/>
@@ -143,7 +144,6 @@
     <ROW Component="help" ComponentId="{799B0B1A-49F5-4A89-9A0A-A029EFA8C728}" Directory_="help_Dir" Attributes="0"/>
     <ROW Component="igraph.dll" ComponentId="{CF1291D6-94DA-4FE8-BC09-841D1F187D4D}" Directory_="bin_Dir" Attributes="256" KeyPath="igraph.dll"/>
     <ROW Component="images" ComponentId="{876F8BF7-C8F9-4763-9ECE-3DA87986B37D}" Directory_="images_Dir" Attributes="0"/>
-    <ROW Component="packages" ComponentId="{EE967CA6-BAEF-4F16-B298-8C62EF9479A0}" Directory_="packages_Dir" Attributes="0"/>
     <ROW Component="roxygenNet.dll" ComponentId="{F32ED1E1-F1E2-4738-82DD-815AC04683A8}" Directory_="bin_Dir" Attributes="256" KeyPath="roxygenNet.dll"/>
     <ROW Component="signalKit.dll" ComponentId="{9BECCD11-D3A1-4B74-82D4-6A8DCD50AA80}" Directory_="bin_Dir" Attributes="256" KeyPath="signalKit.dll"/>
     <ROW Component="snowFall.dll" ComponentId="{3B946644-F5C0-46E4-8392-6C356B7DEF1F}" Directory_="bin_Dir" Attributes="256" KeyPath="snowFall.dll"/>
@@ -266,6 +266,7 @@
     <ROW File="webKit.dll" Component_="webKit.dll" FileName="webKit.dll" Attributes="0" SourcePath="..\App\net6.0-windows\webKit.dll" SelfReg="false"/>
     <ROW File="LICENSE" Component_="LICENSE" FileName="LICENSE" Attributes="0" SourcePath="..\LICENSE" SelfReg="false"/>
     <ROW File="README.md" Component_="LICENSE" FileName="README.md" Attributes="0" SourcePath="..\README.md" SelfReg="false"/>
+    <ROW File="REnv.zip" Component_="REnv.zip" FileName="REnv.zip" Attributes="0" SourcePath="..\App\REnv.zip" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -344,7 +345,6 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
     <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
-    <ROW Directory_="packages_Dir" Component_="packages" ManualDelete="false"/>
     <ROW Directory_="help_Dir" Component_="help" ManualDelete="false"/>
     <ROW Directory_="images_Dir" Component_="images" ManualDelete="false"/>
     <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR" ManualDelete="false"/>
@@ -377,6 +377,7 @@
     <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
     <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
     <ROW Action="R.exe" Type="1554" Source="R.exe" Target="--setup"/>
+    <ROW Action="R.exe_1" Type="1042" Source="R.exe" Target="--install.packages /module ../pkgs/REnv.zip"/>
     <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[AppDataFolder][Manufacturer]\[ProductName]"/>
     <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
@@ -467,13 +468,13 @@
     <ROW Feature_="MainFeature" Component_="System.Drawing.Common.dll_4"/>
     <ROW Feature_="MainFeature" Component_="System.Resources.Extensions.dll"/>
     <ROW Feature_="MainFeature" Component_="webKit.dll"/>
-    <ROW Feature_="MainFeature" Component_="packages"/>
     <ROW Feature_="MainFeature" Component_="LICENSE"/>
     <ROW Feature_="MainFeature" Component_="help"/>
     <ROW Feature_="MainFeature" Component_="images"/>
     <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
     <ROW Feature_="MainFeature" Component_="AI_CustomARPName"/>
     <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
+    <ROW Feature_="MainFeature" Component_="REnv.zip"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="PrideIconRound.exe" SourcePath="..\docs\images\rstudio-icons-main\Icons\Windows\Round\Pride Icon - Round.ico" Index="0"/>
@@ -502,6 +503,7 @@
     <ROW Action="AI_GetArpIconPath" Sequence="1401"/>
     <ROW Action="AI_RemoveExternalUIStub" Condition="(REMOVE=&quot;ALL&quot;) AND ((VersionNT &gt; 500) OR((VersionNT = 500) AND (ServicePackLevel &gt;= 4)))" Sequence="1501"/>
     <ROW Action="R.exe" Sequence="6401"/>
+    <ROW Action="R.exe_1" Sequence="6402"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
     <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
