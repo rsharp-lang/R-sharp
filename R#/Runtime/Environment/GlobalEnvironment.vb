@@ -134,6 +134,7 @@ Namespace Runtime
         Public Property lastException As Message
 
         Public ReadOnly Property types As New Dictionary(Of String, RType)
+        Public ReadOnly Property factors As New Dictionary(Of String, factor)
         Public ReadOnly Property symbolLanguages As SymbolLanguageProcessor
 
         ''' <summary>

@@ -68,6 +68,9 @@ Namespace Runtime.Internal.Object
     ''' </remarks>
     Public Class factor : Inherits RsharpDataObject
 
+        ''' <summary>
+        ''' order in character asc
+        ''' </summary>
         ReadOnly m_levels As New Dictionary(Of String, Integer)
 
         ''' <summary>
@@ -83,6 +86,12 @@ Namespace Runtime.Internal.Object
         Public ReadOnly Property levels As String()
             Get
                 Return m_levels.Keys.ToArray
+            End Get
+        End Property
+
+        Public ReadOnly Property factorId As String
+            Get
+                Return m_levels.Keys.JoinBy("|").MD5
             End Get
         End Property
 
