@@ -371,18 +371,17 @@ Module math
                 Call columns.Add(df.getVector(Of Double)(colName))
             Next
 
-            Dim matrix As New List(Of Logistic.Instance)
+            Dim matrix As New List(Of Instance)
 
             For i As Integer = 0 To y.Length - 1
 #Disable Warning
-                Call matrix.Add(New Logistic.Instance(label:=y(i), x:=columns.Select(Function(c) c(i)).ToArray))
+                Call matrix.Add(New Instance(label:=y(i), x:=columns.Select(Function(c) c(i)).ToArray))
 #Enable Warning
             Next
 
             Dim log As Logistic = family
             log = New Logistic(columns.Count, log.rate)
-            log.train(matrix)
-            Return log
+            Return log.train(matrix)
         Else
             Return Internal.debug.stop(New NotImplementedException, env)
         End If
