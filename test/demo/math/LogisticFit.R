@@ -1,5 +1,7 @@
 require(REnv);
 
+imports "validation" from "MLkit";
+
 data = classify_cancer();
 
 print(data, max.print = 6);
@@ -15,3 +17,11 @@ print(y);
 print(abs(y - data$labels));
 
 print(mean(abs(y - data$labels)));
+
+roc = prediction(y, data$labels);
+
+print(`AUC: ${AUC(roc)}`);
+
+bitmap(file = `${@dir}/logit_roc.png`) {
+	plot(roc);
+}
