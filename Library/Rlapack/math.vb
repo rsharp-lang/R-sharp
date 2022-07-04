@@ -357,6 +357,12 @@ Module math
 
         Dim df As Rdataframe = DirectCast(data, Rdataframe)
         Dim y As Double() = df.getVector(Of Double)(formula.var)
+        Dim println As Action(Of String) = Nothing
+
+        If env.globalEnvironment.options.verbose Then
+            Dim cat = env.WriteLineHandler
+            println = Sub(msg) Call cat(msg)
+        End If
 
         If TypeOf family Is Logistic AndAlso TypeOf data Is Rdataframe Then
             Dim symbol As Object = formula.GetSymbols(env)
@@ -380,7 +386,7 @@ Module math
             Next
 
             Dim log As Logistic = family
-            Dim logfit = New Logistic(columns.Count, log.rate).train(matrix)
+            Dim logfit = New Logistic(columns.Count, log.rate, println).train(matrix)
             Dim lm As New lmCall(formula.var, DirectCast(symbol, String())) With {
                 .formula = formula,
                 .lm = logfit,
