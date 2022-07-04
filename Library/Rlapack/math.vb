@@ -380,8 +380,14 @@ Module math
             Next
 
             Dim log As Logistic = family
-            log = New Logistic(columns.Count, log.rate)
-            Return log.train(matrix)
+            Dim logfit = New Logistic(columns.Count, log.rate).train(matrix)
+            Dim lm As New lmCall(formula.var, DirectCast(symbol, String())) With {
+                .formula = formula,
+                .lm = logfit,
+                .data = df.ToString
+            }
+
+            Return lm
         Else
             Return Internal.debug.stop(New NotImplementedException, env)
         End If
