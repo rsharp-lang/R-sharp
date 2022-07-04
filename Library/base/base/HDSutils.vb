@@ -55,11 +55,15 @@ Module HDSutils
     End Function
 
     <ExportAPI("tree")>
-    Public Function Tree(pack As StreamPack) As String
+    Public Function Tree(pack As StreamPack, Optional showReadme As Boolean = True) As String
         Dim sb As New StringBuilder
         Dim device As New StringWriter(sb)
 
-        Call pack.superBlock.Tree(device, pack:=pack)
+        Call pack.superBlock.Tree(
+            text:=device,
+            pack:=pack,
+            showReadme:=showReadme
+        )
         Call device.Flush()
 
         Return sb.ToString
