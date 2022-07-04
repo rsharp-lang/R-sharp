@@ -386,7 +386,7 @@ Module math
             Next
 
             Dim log As Logistic = family
-            Dim logfit = New Logistic(columns.Count, log.rate, println).train(matrix)
+            Dim logfit = New Logistic(columns.Count, log.rate, println) With {.ITERATIONS = log.ITERATIONS}.train(matrix)
             Dim lm As New lmCall(formula.var, DirectCast(symbol, String())) With {
                 .formula = formula,
                 .lm = logfit,
@@ -429,9 +429,20 @@ Module math
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("binomial")>
-    Public Function binomial(Optional link As String = "logit", Optional env As Environment = Nothing) As Object
+    Public Function binomial(Optional link As String = "logit",
+                             <RListObjectArgument>
+                             Optional args As list = Nothing,
+                             Optional env As Environment = Nothing) As Object
+
         Select Case LCase(link)
-            Case "logit" : Return New Logistic
+            Case "logit"
+                Dim learnRate As Double = args.getValue("rate", env, [default]:=0.01)
+                Dim iteration As Integer = args.getValue("iteration", env, [default]:=5000)
+
+                Return New Logistic() With {
+                    .rate = learnRate,
+                    .ITERATIONS = iteration
+                }
             Case Else
                 Return Internal.debug.stop(New NotImplementedException(link), env)
         End Select
