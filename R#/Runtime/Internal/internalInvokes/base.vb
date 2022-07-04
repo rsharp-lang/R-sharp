@@ -675,9 +675,9 @@ Namespace Runtime.Internal.Invokes
                         Next
                     End With
                 ElseIf TypeOf col Is Array Then
-                    d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, Array))
+                    d.columns.Add(nameKey, DirectCast(col, Array))
                 ElseIf TypeOf col Is vector Then
-                    d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, vector).data)
+                    d.columns.Add(nameKey, DirectCast(col, vector).data)
                 ElseIf TypeOf col Is dataframe Then
                     Dim colnames = d.columns.Keys.ToArray
                     Dim append As dataframe = DirectCast(col, dataframe)
@@ -688,7 +688,7 @@ Namespace Runtime.Internal.Invokes
                         d.columns.Add(newNames(i + colnames.Length), append.columns(oldColNames(i)))
                     Next
                 Else
-                    d.columns.Add($"X{d.columns.Count + 2}", {col})
+                    d.columns.Add(nameKey, {col})
                 End If
             Next
 
