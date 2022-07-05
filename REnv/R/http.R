@@ -87,7 +87,7 @@ const getImage = function(url, interval = 3) {
 #' @details using of the http get function required of set options of
 #'     ``http.cache_dir`` at first!
 #'
-const getHtml = function(url, interval = 3) {
+const getHtml = function(url, interval = 3, filetype = "html") {
   # finally read data from cache
   readText(http_get(
     url = url,
@@ -100,7 +100,7 @@ const getHtml = function(url, interval = 3) {
       }
     },
     interval = interval,
-    filetype = "html")
+    filetype = filetype)
   )
   ;
 }
