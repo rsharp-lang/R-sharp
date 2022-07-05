@@ -55,6 +55,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.SchemaMaps
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
@@ -169,6 +170,13 @@ Namespace Runtime.Internal.Object.Converts
             End If
         End Function
 
+        ''' <summary>
+        ''' cast .NET object to R# list object
+        ''' </summary>
+        ''' <param name="vbobj"></param>
+        ''' <param name="args"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <Extension>
         Private Function objCastList(vbobj As vbObject, args As list, env As Environment) As Object
             Dim list As New Dictionary(Of String, Object)
@@ -187,7 +195,19 @@ Namespace Runtime.Internal.Object.Converts
                 If value Is Nothing Then
                     list.Add(name, Nothing)
                 ElseIf TypeOf value Is Array OrElse TypeOf value Is vector Then
-                    list.Add(name, value)
+                    Dim v As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(value), env)
+                    Dim type As Type = v.GetType.GetElementType
+
+                    If Not DataFramework.IsPrimitive(type) Then
+                        v = v _
+                            .AsObjectEnumerator _
+                            .Select(Function(o)
+                                        Return listInternal(o, args, env)
+                                    End Function) _
+                            .ToArray
+                    End If
+
+                    list.Add(name, v)
                 ElseIf DataFramework.IsPrimitive(value.GetType) Then
                     list.Add(name, value)
                 Else
