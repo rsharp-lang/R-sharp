@@ -386,7 +386,7 @@ Module math
             Next
 
             Dim log As Logistic = family
-            Dim logfit = New Logistic(columns.Count, log.rate, println) With {.ITERATIONS = log.ITERATIONS}.train(matrix)
+            Dim logfit = New Logistic(columns.Count, log.ALPHA, println) With {.ITERATIONS = log.ITERATIONS}.train(matrix)
             Dim lm As New lmCall(formula.var, DirectCast(symbol, String())) With {
                 .formula = formula,
                 .lm = logfit,
@@ -440,7 +440,7 @@ Module math
                 Dim iteration As Integer = args.getValue("iteration", env, [default]:=5000)
 
                 Return New Logistic() With {
-                    .rate = learnRate,
+                    .ALPHA = learnRate,
                     .ITERATIONS = iteration
                 }
             Case Else
