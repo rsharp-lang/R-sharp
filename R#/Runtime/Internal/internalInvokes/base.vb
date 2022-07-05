@@ -667,17 +667,17 @@ Namespace Runtime.Internal.Invokes
 
                             If Not value Is Nothing Then
                                 If TypeOf value Is Array Then
-                                    d.columns.Add(name, DirectCast(value, Array))
+                                    Call safeAddColumn(d, name, DirectCast(value, Array))
                                 Else
-                                    d.columns.Add(name, {value})
+                                    Call safeAddColumn(d, name, {value})
                                 End If
                             End If
                         Next
                     End With
                 ElseIf TypeOf col Is Array Then
-                    d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, Array))
+                    Call safeAddColumn(d, nameKey, DirectCast(col, Array))
                 ElseIf TypeOf col Is vector Then
-                    d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, vector).data)
+                    Call safeAddColumn(d, nameKey, DirectCast(col, vector).data)
                 ElseIf TypeOf col Is dataframe Then
                     Dim colnames = d.columns.Keys.ToArray
                     Dim append As dataframe = DirectCast(col, dataframe)
@@ -688,12 +688,20 @@ Namespace Runtime.Internal.Invokes
                         d.columns.Add(newNames(i + colnames.Length), append.columns(oldColNames(i)))
                     Next
                 Else
-                    d.columns.Add($"X{d.columns.Count + 2}", {col})
+                    Call safeAddColumn(d, nameKey, {col})
                 End If
             Next
 
             Return d
         End Function
+
+        Private Sub safeAddColumn(d As dataframe, namekey As String, col As Array)
+            If d.hasName(namekey) Then
+                namekey = $"X{d.columns.Count + 2}"
+            End If
+
+            Call d.columns.Add(namekey, col)
+        End Sub
 
         ''' <summary>
         ''' ### matrix transpose

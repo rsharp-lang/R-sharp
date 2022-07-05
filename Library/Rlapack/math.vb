@@ -357,6 +357,12 @@ Module math
 
         Dim df As Rdataframe = DirectCast(data, Rdataframe)
         Dim y As Double() = df.getVector(Of Double)(formula.var)
+        Dim println As Action(Of String) = Nothing
+
+        If env.globalEnvironment.options.verbose Then
+            Dim cat = env.WriteLineHandler
+            println = Sub(msg) Call cat(msg)
+        End If
 
         If TypeOf family Is Logistic AndAlso TypeOf data Is Rdataframe Then
             Dim symbol As Object = formula.GetSymbols(env)
@@ -380,8 +386,14 @@ Module math
             Next
 
             Dim log As Logistic = family
-            log = New Logistic(columns.Count, log.rate)
-            Return log.train(matrix)
+            Dim logfit = New Logistic(columns.Count, log.rate, println) With {.ITERATIONS = log.ITERATIONS}.train(matrix)
+            Dim lm As New lmCall(formula.var, DirectCast(symbol, String())) With {
+                .formula = formula,
+                .lm = logfit,
+                .data = df.ToString
+            }
+
+            Return lm
         Else
             Return Internal.debug.stop(New NotImplementedException, env)
         End If
@@ -417,9 +429,20 @@ Module math
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("binomial")>
-    Public Function binomial(Optional link As String = "logit", Optional env As Environment = Nothing) As Object
+    Public Function binomial(Optional link As String = "logit",
+                             <RListObjectArgument>
+                             Optional args As list = Nothing,
+                             Optional env As Environment = Nothing) As Object
+
         Select Case LCase(link)
-            Case "logit" : Return New Logistic
+            Case "logit"
+                Dim learnRate As Double = args.getValue("rate", env, [default]:=0.01)
+                Dim iteration As Integer = args.getValue("iteration", env, [default]:=5000)
+
+                Return New Logistic() With {
+                    .rate = learnRate,
+                    .ITERATIONS = iteration
+                }
             Case Else
                 Return Internal.debug.stop(New NotImplementedException(link), env)
         End Select

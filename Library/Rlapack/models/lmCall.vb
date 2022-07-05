@@ -105,6 +105,18 @@ Coefficients:
   {formula.Factors(Scan0).ToString("G4")}    {formula.Factors(1).ToString("G4")}  
 
 "
+        ElseIf TypeOf lm Is LogisticFit Then
+            Dim formula = DirectCast(DirectCast(lm, LogisticFit).Polynomial, Polynomial)
+
+            Return $"
+Call:
+glm(formula = {formula.ToString(variables, "G3")}, family = binomial(link = ""logit""), data = <{data}>)
+
+Coefficients:
+(Intercept)            {variables(Scan0)}    
+  {formula.Factors(Scan0).ToString("G4")}    {formula.Factors(1).ToString("G4")}  
+
+"
         Else
             Dim formula = DirectCast(DirectCast(lm, MLRFit).Polynomial, MultivariatePolynomial)
 
