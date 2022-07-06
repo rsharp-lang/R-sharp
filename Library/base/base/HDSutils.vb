@@ -18,6 +18,13 @@ Module HDSutils
         Call Internal.ConsolePrinter.AttachConsoleFormatter(Of StreamBlock)(Function(o) o.ToString)
     End Sub
 
+    <ExportAPI("createStream")>
+    Public Function createStream(file As String) As Object
+        Dim pack As New StreamPack(file)
+        Call pack.Clear()
+        Return pack
+    End Function
+
     <ExportAPI("openStream")>
     <RApiReturn(GetType(StreamPack))>
     Public Function openStream(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
@@ -82,6 +89,18 @@ Module HDSutils
                 Return read.ReadToEnd
             End Using
         End If
+    End Function
+
+    <ExportAPI("saveFile")>
+    Public Function saveFile(hds As StreamPack, fileName As String, data As Object)
+        Using buf As Stream = hds.OpenBlock(fileName)
+            Dim write As Byte() = New Byte(8 * 1024 * 1024 * Rnd()) {}
+
+            Call buf.Write(write, Scan0, write.Length)
+            Call buf.Flush()
+        End Using
+
+        Return True
     End Function
 
 End Module
