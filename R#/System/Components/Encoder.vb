@@ -67,7 +67,7 @@ Namespace Development.Components
         ''' <returns></returns>
         Private Function TryHandleNonVector(vec As Array) As Object
             If vec.Length = 1 Then
-                Return vec.GetValue(Scan0)
+                Return Encoder.GetObject(vec.GetValue(Scan0))
             Else
                 Dim array As New List(Of Object)
 
@@ -102,7 +102,14 @@ Namespace Development.Components
             ElseIf TypeOf Robj Is vbObject Then
                 Return Encoder.GetObject(DirectCast(Robj, vbObject).target)
             ElseIf TypeOf Robj Is dataframe Then
-                Return DirectCast(Robj, dataframe).columns
+                Dim raw = DirectCast(Robj, dataframe).columns
+                Dim decode As New Dictionary(Of String, Object)
+
+                For Each slot In raw
+                    Call decode.Add(slot.Key, Encoder.GetObject(slot.Value))
+                Next
+
+                Return decode
             Else
                 Return Robj
             End If
