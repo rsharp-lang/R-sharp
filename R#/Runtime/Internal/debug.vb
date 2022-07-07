@@ -320,7 +320,7 @@ Namespace Runtime.Internal
                 .JoinBy(" -> ")
             Dim i As i32 = 1
             Dim backup As ConsoleColor
-            Dim dev As StreamWriter
+            Dim dev As TextWriter
 
             If App.IsConsoleApp Then
                 backup = Console.ForegroundColor
