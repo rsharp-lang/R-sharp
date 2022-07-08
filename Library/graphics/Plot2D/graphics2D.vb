@@ -535,11 +535,25 @@ Module graphics2D
         Else
             Call g.FillRectangle(New SolidBrush(colorVal), DirectCast(rect, RectangleF))
         End If
+
+        Return g
     End Function
 
+    ''' <summary>
+    ''' create axis tick vector data based on a given data range value
+    ''' </summary>
+    ''' <param name="x">
+    ''' a numeric vector data for specific the data range.
+    ''' </param>
+    ''' <param name="ticks">
+    ''' the number of the ticks in the generated output axis tick vector
+    ''' </param>
+    ''' <returns></returns>
     <ExportAPI("axis.ticks")>
-    Public Function axisTicks(<RRawVectorArgument> x As Object) As Double()
-        Return DirectCast(REnv.asVector(Of Double)(x), Double()).Range.CreateAxisTicks
+    Public Function axisTicks(<RRawVectorArgument> x As Object, Optional ticks As Integer = 10) As Double()
+        Return DirectCast(REnv.asVector(Of Double)(x), Double()) _
+            .Range _
+            .CreateAxisTicks(ticks)
     End Function
 
     ''' <summary>
