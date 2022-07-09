@@ -327,8 +327,17 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
                 If RType.TypeOf(i) Like RType.integers Then
                     Dim names As String() = DirectCast(obj, RNameIndex).getNames
+                    Dim offset As Integer = CInt(i) - 1
 
-                    Return DirectCast(obj, RNameIndex).getByName(names(CInt(i) - 1))
+                    If offset > names.Length - 1 Then
+                        Return Internal.debug.stop({
+                            $"Error in list[[{i}]] : subscript out of bounds",
+                            $"list size: {names.Length}",
+                            $"offset: {i}"
+                        }, envir)
+                    End If
+
+                    Return DirectCast(obj, RNameIndex).getByName(names(offset))
                 Else
                     Return DirectCast(obj, RNameIndex).getByName(any.ToString(i))
                 End If
