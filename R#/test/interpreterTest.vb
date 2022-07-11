@@ -221,7 +221,7 @@ bitmap(file = `./network.png`) %do% {
     End Sub
 
     Sub Main()
-
+        Call multipleIfElse()
         Call expressionTest2()
 
         Call pipelineBulder()

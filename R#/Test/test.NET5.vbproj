@@ -24,7 +24,7 @@
 		<PackageTags>R#,rsharp</PackageTags>
 		<FileVersion>1.5635.*</FileVersion>
 		<OutputType>Exe</OutputType>
-		<StartupObject>test.nugetTest</StartupObject>
+		<StartupObject>test.interpreterTest</StartupObject>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
