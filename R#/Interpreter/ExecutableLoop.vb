@@ -263,6 +263,9 @@ Namespace Interpreter
 
                         lastHit.Result = prom.Result
                         lastHit.Value = prom.Value
+                    ElseIf TypeOf expression Is ElseBranch Then
+                        ' envir.ifPromise.Pop(strict:=False)
+                        ' do nothing
                     Else
                         envir.ifPromise.Add(last)
                     End If
