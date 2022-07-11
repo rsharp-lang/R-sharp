@@ -1,5 +1,27 @@
 options(strict = FALSE);    
 
+if (0 > 1) {
+   stop("invalid stack!");	
+} else {
+	print("1 > envirnment stack test success!");
+}
+
+
+if (0 > 1) {
+   stop("invalid stack!");	
+} else {
+
+	if (0 > 1) {
+	   stop("invalid stack!");	
+	} else {
+		print("2 > envirnment stack test success!");
+	}
+
+
+	print("3 > envirnment stack test success!");
+}
+
+
 if (1 > 0 ) {
 
 	# header = "123";
@@ -25,10 +47,7 @@ if (1 > 0 ) {
 			stop('test');
 		}
 	}
+} else {
+	stop("invalid stack!");	
 }
 
-if (0 > 1) {
-   stop("invalid stack!");	
-} else {
-	print("envirnment stack test success!");
-}
