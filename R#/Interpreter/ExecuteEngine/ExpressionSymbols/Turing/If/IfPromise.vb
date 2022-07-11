@@ -61,8 +61,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
     Friend Class IfPromise
 
-        Public ReadOnly Property Result As Boolean
-        Public ReadOnly Property Value As Object
+        Public Property Result As Boolean
+        Public Property Value As Object
         Public Property assignTo As Expression
         Public Property [elseIf] As Boolean = False
 
