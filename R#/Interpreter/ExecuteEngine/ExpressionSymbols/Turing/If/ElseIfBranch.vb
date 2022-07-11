@@ -89,7 +89,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                         Return resultVal
                     Else
                         last = New IfPromise(resultVal, False) With {
-                            .assignTo = envir.ifPromise.Last.assignTo
+                            .assignTo = envir.ifPromise.Last.assignTo,
+                            .[elseIf] = True
                         }
                     End If
                 End If
