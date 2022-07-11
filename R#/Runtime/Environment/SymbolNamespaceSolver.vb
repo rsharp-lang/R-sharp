@@ -134,6 +134,10 @@ Namespace Runtime
             End Using
         End Function
 
+        ''' <summary>
+        ''' gets all attached namespace list in json string array format.
+        ''' </summary>
+        ''' <returns></returns>
         Public Overrides Function ToString() As String
             Return attachedNamespace.Keys.GetJson
         End Function
