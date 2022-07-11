@@ -75,6 +75,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
             Return $"[{If([elseIf], "elseif", "if")} {Result.ToString.ToLower}] {assignTo} <- {any.ToString(Value, null:="NULL")}"
         End Function
 
+        ''' <summary>
+        ''' the value assign will be skip to evaluate 
+        ''' if the target <see cref="assignTo"/> is 
+        ''' nothing.
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Function DoValueAssign(envir As Environment) As Object
             ' 没有变量需要进行closure的返回值设置
             ' 则跳过
