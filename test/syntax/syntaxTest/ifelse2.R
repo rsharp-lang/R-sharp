@@ -27,4 +27,8 @@ if (1 > 0 ) {
 	}
 }
 
-
+if (0 > 1) {
+   stop("invalid stack!");	
+} else {
+	print("envirnment stack test success!");
+}
