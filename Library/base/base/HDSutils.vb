@@ -94,7 +94,11 @@ Module HDSutils
     <ExportAPI("saveFile")>
     Public Function saveFile(hds As StreamPack, fileName As String, data As Object)
         Using buf As Stream = hds.OpenBlock(fileName)
-            Dim write As Byte() = New Byte(8 * 1024 * 1024 * Rnd()) {}
+            Dim write As Byte() = {}
+
+            If TypeOf data Is String Then
+                write = Encoding.UTF8.GetBytes(CStr(data))
+            End If
 
             Call buf.Write(write, Scan0, write.Length)
             Call buf.Flush()
