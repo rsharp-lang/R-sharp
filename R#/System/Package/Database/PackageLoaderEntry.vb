@@ -139,6 +139,8 @@ Namespace Development.Package
         ''' </returns>
         Public Function GetLoader(ByRef exception As Exception) As Package
             ' 20220502 handling mzkit_win32 release
+            Dim level1Parent As String = App.HOME.ParentPath
+            Dim level2Parent As String = level1Parent.ParentPath
             Dim loader As Type = [module].GetType(
                 knownFirst:=True,
                 throwEx:=False,
@@ -146,8 +148,10 @@ Namespace Development.Package
                 searchPath:={
                     $"{App.HOME}/Library",
                     $"{App.HOME}/library",
-                    $"{App.HOME.ParentPath}/Library",
-                    $"{App.HOME.ParentPath}/library"
+                    $"{level1Parent}/Library",
+                    $"{level1Parent}/library",
+                    $"{level2Parent}/Library",
+                    $"{level2Parent}/library"
                 }
             )
             Dim info As New PackageAttribute([namespace]) With {
