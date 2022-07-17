@@ -93,6 +93,32 @@ Module interpreterTest
         Pause()
     End Sub
 
+    Sub multipleIfElse()
+        Call R.Evaluate("
+
+options(strict = FALSE);    
+
+for(header in ['123', '97.5%-tile:', '2.5%-tile:', 'xxx']) {
+
+	print(header);
+	
+	if (header == '2.5%-tile:') {
+		print(4);
+	} else if (header == '97.5%-tile:') {
+		print(400);
+	} else if (header == $""\d+"") {
+		print('is a number');
+	} else {
+		stop('test');
+	}
+}
+
+
+")
+
+        Pause()
+    End Sub
+
     Sub syntaxTest()
         Call R.Parse("  names = 1;   names$""Removed Synonyms"" = NULL;")
 
@@ -195,7 +221,7 @@ bitmap(file = `./network.png`) %do% {
     End Sub
 
     Sub Main()
-
+        Call multipleIfElse()
         Call expressionTest2()
 
         Call pipelineBulder()

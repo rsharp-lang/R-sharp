@@ -160,8 +160,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="App\**" />
 	  <Compile Remove="Test\**" />
+	  <EmbeddedResource Remove="App\**" />
 	  <EmbeddedResource Remove="Test\**" />
+	  <None Remove="App\**" />
 	  <None Remove="Test\**" />
 	  <None Include="..\docs\images\R-sharp.png">
 	    <Pack>True</Pack>

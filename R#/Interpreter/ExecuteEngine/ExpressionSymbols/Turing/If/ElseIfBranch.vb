@@ -87,10 +87,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
                     If Program.isException(resultVal) Then
                         Return resultVal
-                    Else
-                        last = New IfPromise(resultVal, False) With {
-                            .assignTo = envir.ifPromise.Last.assignTo
+                    ElseIf Not DirectCast(resultVal, IfPromise).Result Then
+                        ' current branch test is false
+                        last = New IfPromise(Nothing, False) With {
+                            .assignTo = envir.ifPromise.Last.assignTo,
+                            .[elseIf] = True
                         }
+                    Else
+                        last = DirectCast(resultVal, IfPromise)
+                        last.elseIf = True
+                        last.assignTo = envir.ifPromise.Last.assignTo
                     End If
                 End If
 

@@ -141,7 +141,7 @@ Namespace Runtime.Internal.Object
 
             ' create an empty vector with 
             ' allocable data buffer
-            Dim buffer As Array = Array.CreateInstance(model, BufferSize)
+            Dim buffer As Array = Array.CreateInstance(model, CInt(BufferSize / 4))
             Dim objType As Type
 
             For Each obj As Object In input

@@ -25,12 +25,12 @@ const http_get = function(url, streamTo, interval = 3, filetype = "html") {
   test_cache = (!file.exists(cache_file)) || (file.size(cache_file) <= 0);
 
   if (length(test_cache) == 0) {
-	warning(print(`invalid cache key for [${url}]!`));
-	
-	print(prefix);
-	print(cacheKey);
-	
-	test_cache = FALSE;
+    warning(print(`invalid cache key for [${url}]!`));
+    
+    print(prefix);
+    print(cacheKey);
+    
+    test_cache = FALSE;
   }
 
   if (test_cache) {
