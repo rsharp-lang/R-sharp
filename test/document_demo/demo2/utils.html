@@ -1,182 +1,205 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>utils</title>
+    <meta name="author" content="xie.guigang@gcmodeller.org" />
+    <meta name="copyright" content="SMRUCC genomics Copyright (c) 2020" />
+    <meta name="keywords" content="GCModeller; Xanthomonas; Artificial Life" />
+    <meta name="generator" content="https://github.com/xieguigang/xDoc" />
+    <meta name="theme-color" content="#333" />
+    <meta name="last-update" content="7/18/2022 11:16:35 AM" />
+    <meta name="description" content="A software system aim at Artificial Life system design and analysis." />
+    <meta class="foundation-data-attribute-namespace" />
+    <meta class="foundation-mq-xxlarge" />
+    <meta class="foundation-mq-xlarge" />
+    <meta class="foundation-mq-large" />
+    <meta class="foundation-mq-medium" />
+    <meta class="foundation-mq-small" />
+    <meta class="foundation-mq-topbar" />
+  </head>
+  <body>
+    <table width="100%" summary="page for {utils}">
+      <tbody>
+        <tr>
+          <td>{utils}</td>
+          <td style="text-align: right;">R# Documentation</td>
+        </tr>
+      </tbody>
+    </table>
+    <h1>utils</h1>
+    <hr />
+    <p><p>The R Utils Package</p></p>
+    <div id="main-wrapper">
+                           <div>
+  <h2 id="readRData">readRData</h2>
+  <hr />
+  <p>
+                    <p>read <code>*.rda</code> data file which is saved from R environment.</p>  
+                
+                    <pre><p>let <code>readRData</code> as function(<code>file</code> as string) -> <code>any</code> {
+    #
+    # .NET API information
+    #
+    # module: Rbase.utils
+    # LibPath: D:/GCModeller/src/R-sharp/App/net6.0
+    # library: base.dll
+    # package: "utils"
+    #
+    return call <code>R&#35;.interop_[utils::parseRData]</code>(...);
+}</p></pre>
 
-<head>
-    <title>{$title}</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-    <style rel="stylesheet" type="text/css">
-        @media screen {
-            .container {
-                padding-right: 10px;
-                padding-left: 10px;
-                margin-right: auto;
-                margin-left: auto;
-                max-width: 900px;
-            }
-        }
+                    <div>
+  <h4>Arguments</h4>
+  <ul>
+                   <li>
+  <code>file</code>: -
+                </li>
+                </ul>
+</div>
+                       
+                    
 
-        .rimage img {
-            /* from knitr - for examples and demos */
-            width: 96%;
-            margin-left: 2%;
-        }
+                    <span style="font-size:0.9em; display: none"><h4>Details</h4><blockquote></blockquote></span></p>
+</div><br /><div>
+  <h2 id="read.csv">read.csv</h2>
+  <hr />
+  <p>
+                    <h3>Data Input</h3>
 
-        .katex {
-            font-size: 1.1em;
-        }
+<p>Reads a file in table format and creates a data frame from it, <br />
+ with cases corresponding to lines and variables to fields in <br />
+ the file.</p>  
+                
+                    <pre><p>let <code>read.csv</code> as function(<code>file</code> as any, 
+<code>row_names</code> as any = <code>&lt;NULL&gt;</code>, 
+<code>check_names</code> as boolean = TRUE, 
+<code>check_modes</code> as boolean = TRUE, 
+<code>encoding</code> as any = "unknown", 
+<code>comment_char</code> as string = "#", 
+<code>tsv</code> as boolean = FALSE, 
+[<code>&lt;Environment&gt;</code>]) -> <code>&lt;generic&gt; dataframe</code> {
+    #
+    # .NET API information
+    #
+    # module: Rbase.utils
+    # LibPath: D:/GCModeller/src/R-sharp/App/net6.0
+    # library: base.dll
+    # package: "utils"
+    #
+    return call <code>R&#35;.interop_[utils::read_csv]</code>(...);
+}</p></pre>
 
-        code {
-            color: inherit;
-            background: inherit;
-        }
+                    <div>
+  <h4>Arguments</h4>
+  <ul>
+                   <li>
+  <code>file</code>: the name of the file which the data are to be read from. Each <br />
+ row of the table appears as one line of the file. If it does <br />
+ not contain an absolute path, the file name is relative to the <br />
+ current working directory, getwd(). Tilde-expansion is performed <br />
+ where supported. This can be a compressed file (see file).</p>
 
-        body {
-            line-height: 1.4;
-            background: white;
-            color: black;
-        }
+<p>Alternatively, file can be a readable text-mode connection (which <br />
+ will be opened for reading if necessary, And if so closed (And <br />
+ hence destroyed) at the end of the function call). (If <code>stdin()</code><br />
+ Is used, the prompts for lines may be somewhat confusing. <br />
+ Terminate input with a blank line Or an EOF signal, Ctrl-D on Unix <br />
+ And Ctrl-Z on Windows. Any pushback on stdin() will be cleared <br />
+ before return.)</p>
 
-        a:link {
-            background: white;
-            color: blue;
-        }
+<p>file can also be a complete URL. (For the supported URL schemes, <br />
+ see the 'URLs’ section of the help for <code>url</code>.)
+                </li>
+<li>
+  <code>encoding</code>: encoding to be assumed for input strings. It is used to mark character <br />
+ strings as known to be in Latin-1 or UTF-8 (see Encoding): it is not <br />
+ used to re-encode the input, but allows R to handle encoded strings in <br />
+ their native encoding (if one of those two). </p>
 
-        a:visited {
-            background: white;
-            color: rgb(50%, 0%, 50%);
-        }
+<p>use @<code>P:System.Text.Encoding.Default</code> by default.
+                </li>
+<li>
+  <code>row_names</code>: a vector of row names. This can be a vector giving the actual row names, <br />
+ or a single number giving the column of the table which contains the <br />
+ row names, or character string giving the name of the table column <br />
+ containing the row names.</p>
 
-        h1 {
-            background: white;
-            color: rgb(55%, 55%, 55%);
-            font-family: monospace;
-            font-size: 1.4em;
-            /* x-large; */
-            text-align: center;
-        }
+<p>If there Is a header And the first row contains one fewer field than the <br />
+ number Of columns, the first column In the input Is used For the row <br />
+ names. Otherwise If row.names Is missing, the rows are numbered.</p>
 
-        h2 {
-            background: white;
-            color: rgb(40%, 40%, 40%);
-            font-family: monospace;
-            font-size: 1.2em;
-            /* large; */
-            text-align: center;
-        }
+<p>Using row.names = NULL forces row numbering. Missing Or NULL row.names <br />
+ generate row names that are considered To be 'automatic’ (and not <br />
+ preserved by as.matrix).
+                </li>
+                </ul>
+</div>
+                       
+                    
 
-        h3 {
-            background: white;
-            color: rgb(40%, 40%, 40%);
-            font-family: monospace;
-            font-size: 1.2em;
-            /* large; */
-        }
+                    <span style="font-size:0.9em; display: none"><h4>Details</h4><blockquote></blockquote></span></p>
+</div><br /><div>
+  <h2 id="write.csv">write.csv</h2>
+  <hr />
+  <p>
+                    <h3>Data Output</h3>
 
-        h4 {
-            background: white;
-            color: rgb(40%, 40%, 40%);
-            font-family: monospace;
-            font-style: italic;
-            font-size: 1.2em;
-            /* large; */
-        }
+<p>prints its required argument <code>x</code> (after converting it to a <br />
+ data frame if it is not one nor a matrix) to a file or <br />
+ connection.</p>  
+                
+                    <pre><p>let <code>write.csv</code> as function(<code>x</code> as any, 
+<code>file</code> as string = <code>&lt;NULL&gt;</code>, 
+<code>row_names</code> as any = TRUE, 
+<code>fileEncoding</code> as any = "", 
+<code>tsv</code> as boolean = FALSE, 
+<code>number_format</code> as any = "" &amp; CALL "GETOPTION"("F64.FORMAT") &amp; "" &amp; CALL "GETOPTION"("DIGITS"), 
+[<code>&lt;Environment&gt;</code>]) -> <code>boolean</code> {
+    #
+    # .NET API information
+    #
+    # module: Rbase.utils
+    # LibPath: D:/GCModeller/src/R-sharp/App/net6.0
+    # library: base.dll
+    # package: "utils"
+    #
+    return call <code>R&#35;.interop_[utils::write_csv]</code>(...);
+}</p></pre>
 
-        h5 {
-            background: white;
-            color: rgb(40%, 40%, 40%);
-            font-family: monospace;
-        }
+                    <div>
+  <h4>Arguments</h4>
+  <ul>
+                   <li>
+  <code>x</code>: the object to be written, preferably a matrix or data frame. <br />
+ If not, it is attempted to coerce x to a data frame.
+                </li>
+<li>
+  <code>file</code>: either a character string naming a file or a connection open <br />
+ for writing. "" indicates output to the console.
+                </li>
+<li>
+  <code>fileEncoding</code>: character string: if non-empty declares the encoding to be <br />
+ used on a file (not a connection) so the character data can <br />
+ be re-encoded as they are written.
+                </li>
+<li>
+  <code>env</code>: -
+                </li>
+<li>
+  <code>row_names</code>: either a logical value indicating whether the row names of <br />
+ x are to be written along with x, or a character vector of <br />
+ row names to be written.
+                </li>
+                </ul>
+</div>
+                       
+                    
 
-        h6 {
-            background: white;
-            color: rgb(40%, 40%, 40%);
-            font-family: monospace;
-            font-style: italic;
-        }
-
-        img.toplogo {
-            width: 4em;
-            vertical-align: middle;
-        }
-
-        img.arrow {
-            width: 30px;
-            height: 30px;
-            border: 0;
-        }
-
-        span.acronym {
-            font-size: small;
-        }
-
-        span.env {
-            font-family: monospace;
-        }
-
-        span.file {
-            font-family: monospace;
-        }
-
-        span.option {
-            font-family: monospace;
-        }
-
-        span.pkg {
-            font-weight: bold;
-        }
-
-        span.samp {
-            font-family: monospace;
-        }
-
-        div.vignettes a:hover {
-            background: rgb(85%, 85%, 85%);
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-
-        <table style="width: 100%;">
-            <tr>
-                <td>{$name} {{$package}}</td>
-                <td style="text-align: right;">R Documentation</td>
-            </tr>
-        </table>
-
-        <h2>{$title}</h2>
-
-        <h3>Description</h3>
-
-        {$description}
-
-        <h3>Usage</h3>
-
-        <pre><code class='language-R'>{$usage}</code></pre>
-
-        <h3>Arguments</h3>
-
-        <table>
-            {$arguments}
-        </table>
-
-
-        <h3>Details</h3>
-
-        {$details}
-
-
-        <h3>Value</h3>
-
-        {$values}
-
-        <hr />
-        <div style="text-align: center;">[Package <em>{$package}</em> version {$version} <a
-                href="./index.html">Index</a>]
-        </div>
-    </div>
-</body>
-
+                    <span style="font-size:0.9em; display: none"><h4>Details</h4><blockquote></blockquote></span></p>
+</div>
+                       </div>
+  </body>
 </html>

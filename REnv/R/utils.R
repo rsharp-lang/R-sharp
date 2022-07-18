@@ -49,7 +49,7 @@ const Rdocuments = function(pkgName, outputdir = "./") {
 	}
 	
 	pkgName
-	|> makehtml.docs(template = template)
+	|> makehtml.docs()
 	|> writeLines(con = `${outputdir}/${pkgName}.html`)
 	;
 }
