@@ -437,7 +437,7 @@ Module math
         Select Case LCase(link)
             Case "logit"
                 Dim learnRate As Double = args.getValue("rate", env, [default]:=0.01)
-                Dim iteration As Integer = args.getValue("iteration", env, [default]:=5000)
+                Dim iteration As Integer = args.getValue("iteration", env, [default]:=500)
 
                 Return New Logistic() With {
                     .ALPHA = learnRate,

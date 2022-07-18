@@ -448,6 +448,7 @@ Module graphics2D
                                   Optional colorLevels As Integer = 255,
                                   Optional rasterBitmap As Boolean = False,
                                   Optional fillRect As Boolean = True,
+                                  Optional strict As Boolean = True,
                                   Optional env As Environment = Nothing) As Object
 
         Dim dev As graphicsDevice = curDev
@@ -466,10 +467,14 @@ Module graphics2D
         Dim allPixels As Pixel() = pixels.populates(Of Pixel)(env).ToArray
 
         If dimensionStr.StringEmpty Then
-            dimension = New Size With {
-                .Width = allPixels.Select(Function(p) p.X).Max,
-                .Height = allPixels.Select(Function(p) p.Y).Max
-            }
+            If allPixels.Length > 0 OrElse strict Then
+                dimension = New Size With {
+                    .Width = allPixels.Select(Function(p) p.X).Max,
+                    .Height = allPixels.Select(Function(p) p.Y).Max
+                }
+            ElseIf Not strict Then
+                Return Nothing
+            End If
         Else
             dimension = dimensionStr.SizeParser
         End If

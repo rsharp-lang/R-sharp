@@ -256,7 +256,20 @@ Namespace Interpreter
 
                     End If
                 ElseIf last.GetType Is GetType(IfPromise) Then
-                    envir.ifPromise.Add(last)
+                    Dim prom As IfPromise = last
+
+                    If prom.elseIf Then
+                        Dim lastHit As IfPromise = envir.ifPromise.Last
+
+                        lastHit.Result = prom.Result
+                        lastHit.Value = prom.Value
+                    ElseIf TypeOf expression Is ElseBranch Then
+                        ' envir.ifPromise.Pop(strict:=False)
+                        ' do nothing
+                    Else
+                        envir.ifPromise.Add(last)
+                    End If
+
                     last = DirectCast(last, IfPromise).Value
 
                     If envir.ifPromise.Last.Result AndAlso isBreakSignal(last) Then

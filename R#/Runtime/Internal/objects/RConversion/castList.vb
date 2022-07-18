@@ -136,35 +136,7 @@ Namespace Runtime.Internal.Object.Converts
             Dim df As dataframe = DirectCast(obj, dataframe)
 
             If byRow Then
-                Dim list As list = df.listByRows
-                Dim nameVec As String()
-
-                If Not names.StringEmpty Then
-                    If DirectCast(obj, dataframe).hasName(names) Then
-                        nameVec = REnv.asVector(Of String)(DirectCast(obj, dataframe).columns(names))
-                        nameVec = nameVec.uniqueNames
-                        obj = list.setNames(nameVec, env)
-
-                        If TypeOf obj Is Message Then
-                            Return obj
-                        End If
-                    Else
-                        Return Internal.debug.stop({
-                            $"undefined column '{names}' that selected for used as list names!",
-                            $"column: {names}"
-                        }, env)
-                    End If
-                ElseIf Not df.rownames.IsNullOrEmpty Then
-                    nameVec = df.rownames
-                    nameVec = nameVec.uniqueNames
-                    obj = list.setNames(nameVec, env)
-
-                    If TypeOf obj Is Message Then
-                        Return obj
-                    End If
-                End If
-
-                Return list
+                Return df.listByRows(names, env)
             Else
                 Return df.listByColumns
             End If

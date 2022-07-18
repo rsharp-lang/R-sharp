@@ -105,7 +105,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 Dim last As IfPromise
 
                 If envir.ifPromise.Last.Result = True Then
-                    last = envir.ifPromise.Pop
+                    last = envir.ifPromise.Last
                 Else
                     Dim resultVal As Object = closure.Invoke(envir, {})
 
