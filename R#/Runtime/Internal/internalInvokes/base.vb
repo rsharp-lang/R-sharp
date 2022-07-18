@@ -84,6 +84,7 @@ Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Configuration
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
@@ -2744,7 +2745,14 @@ RE0:
         Public Function library(package As String, env As Environment) As Object
             Dim require As Expression
 
-            If package.IndexOf(":"c) > -1 OrElse package.IndexOf("/"c) > -1 Then
+            If package.DirectoryExists Then
+                ' hot load of a package directory
+                Dim errMsg As Message = PackageLoader2.Hotload(package, env.globalEnvironment)
+
+                If Not errMsg Is Nothing Then
+                    Return errMsg
+                End If
+            ElseIf package.IndexOf(":"c) > -1 OrElse package.IndexOf("/"c) > -1 Then
                 With package.StringSplit("[:/]+")
                     require = New [Imports](.Last, .First)
                 End With
