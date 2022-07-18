@@ -66,15 +66,22 @@ Namespace Development
         Public Property sourceMap As StackFrame
 
         Public Overrides Function ToString() As String
-            Return $"{name}({parameters _
+            Dim required = parameters.Where(Function(a) a.text.StringEmpty).ToArray
+            Dim optionals = parameters.Where(Function(a) Not a.text.StringEmpty).ToArray
+            Dim part1 = $"{name}({required _
                 .Select(Function(a)
-                            If a.text.StringEmpty Then
-                                Return a.name
-                            Else
-                                Return $"{a.name} = {a.text}"
-                            End If
+                            Return a.name
                         End Function) _
-                .JoinBy(", ")})"
+                .JoinBy(", ")}"
+            Dim part2 As String = ""
+
+            If optionals.Length > 0 Then
+                part2 = optionals _
+                    .Select(Function(a) $"{a.name} = {a.text},") _
+                    .JoinBy(vbCrLf)
+            End If
+
+            Return $"{part1}{vbCrLf}{part2})"
         End Function
 
         Public Shared Function GetArgument(arg As DeclareNewSymbol) As NamedValue
@@ -86,8 +93,8 @@ Namespace Development
             End If
 
             Return New NamedValue With {
-                .name = name,
-                .Text = val
+                .name = name.Replace("_", "."),
+                .text = val
             }
         End Function
 
