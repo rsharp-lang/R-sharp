@@ -283,7 +283,7 @@ Module JSON
             Return Internal.debug.stop($"the given json data model must be an object! ({json.GetType.Name} was given...)", env)
         End If
 
-        Call BSON.WriteBuffer(DirectCast(obj, JsonObject), stream)
+        Call BSON.WriteBuffer(DirectCast(json, JsonObject), stream)
 
         If file Is Nothing Then
             Return DirectCast(stream, MemoryStream).ToArray
