@@ -131,7 +131,11 @@ Public Class [function]
     Public Function createHtml(docs As Document, template As String, pkg As RPackage) As String
         Dim assembly As AssemblyInfo = pkg.package.Assembly.FromAssembly
 
-        With New ScriptBuilder(blankTemplate)
+        If template.StringEmpty Then
+            template = blankTemplate.ToString
+        End If
+
+        With New ScriptBuilder(template)
             !name_title = docs.declares.name
             !usage = docs.declares _
                 .ToString _
