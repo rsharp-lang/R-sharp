@@ -99,10 +99,11 @@ Module RJSON
     <Extension>
     Friend Function createRObj(json As JsonElement,
                                env As Environment,
-                               Optional strictSchemaCheck As Boolean = False) As Object
+                               Optional strictSchemaCheck As Boolean = False,
+                               Optional decodeMetachar As Boolean = True) As Object
 
         If TypeOf json Is JsonValue Then
-            Return DirectCast(json, JsonValue).GetStripString
+            Return DirectCast(json, JsonValue).GetStripString(decodeMetachar)
         ElseIf TypeOf json Is JsonArray Then
             Dim array As JsonArray = DirectCast(json, JsonArray)
 
@@ -127,9 +128,15 @@ Module RJSON
             Dim list As New list With {
                 .slots = New Dictionary(Of String, Object)
             }
+            Dim obj As Object
 
             For Each item As NamedValue(Of JsonElement) In DirectCast(json, JsonObject)
-                Call list.slots.Add(item.Name, item.Value.createRObj(env, strictSchemaCheck))
+                obj = item.Value.createRObj(
+                    env:=env,
+                    strictSchemaCheck:=strictSchemaCheck,
+                    decodeMetachar:=decodeMetachar
+                )
+                list.slots.Add(item.Name, obj)
             Next
 
             Return list

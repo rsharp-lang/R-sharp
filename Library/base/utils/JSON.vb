@@ -210,7 +210,7 @@ Module JSON
         If raw Then
             Return json
         Else
-            Return json.createRObj(env)
+            Return json.createRObj(env, decodeMetachar:=False)
         End If
     End Function
 
@@ -222,9 +222,12 @@ Module JSON
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("object")>
-    Public Function buildObject(json As JsonElement, schema As Object, Optional env As Environment = Nothing) As Object
+    Public Function buildObject(json As JsonElement, schema As Object,
+                                Optional decodeMetachar As Boolean = True,
+                                Optional env As Environment = Nothing) As Object
+
         Dim type As RType = env.globalEnvironment.GetType([typeof]:=schema)
-        Dim obj As Object = json.CreateObject(type)
+        Dim obj As Object = json.CreateObject(type, decodeMetachar:=decodeMetachar)
 
         Return obj
     End Function

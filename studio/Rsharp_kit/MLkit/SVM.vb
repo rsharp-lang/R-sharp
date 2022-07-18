@@ -552,9 +552,9 @@ Module SVMkit
         End If
 
         If jsonObj.Score(GetType(SVMMultipleSetJSON)) > jsonObj.Score(GetType(SvmModelJSON)) Then
-            Return jsonObj.CreateObject(Of SVMMultipleSetJSON).CreateSVMModel
+            Return jsonObj.CreateObject(Of SVMMultipleSetJSON)(decodeMetachar:=True).CreateSVMModel
         Else
-            Return jsonObj.CreateObject(Of SvmModelJSON).CreateSVMModel
+            Return jsonObj.CreateObject(Of SvmModelJSON)(decodeMetachar:=True).CreateSVMModel
         End If
     End Function
 

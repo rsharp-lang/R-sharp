@@ -198,7 +198,7 @@ Module RawIO
             Dim json As JsonObject = New JsonParser().OpenJSON(line)
             Dim vals As String() = projection _
                 .Select(Function(name)
-                            Return json(name).AsString
+                            Return json(name).AsString(decodeMetachar:=True)
                         End Function) _
                 .ToArray
 
