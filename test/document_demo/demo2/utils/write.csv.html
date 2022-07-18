@@ -154,7 +154,12 @@
 
         <h3>Usage</h3>
 
-        <pre><code class='language-R'>write.csv(x, file, row_names = True, fileEncoding, tsv = False, number_format = "" & Call "getOption"("f64.format") & "" & Call "getOption"("digits"), env)</code></pre>
+        <pre><code class='language-R'>write.csv(x
+file = NULL,
+row.names = TRUE,
+fileEncoding = "",
+tsv = FALSE,
+number.format = "" & Call "getOption"("f64.format") & "" & Call "getOption"("digits"))</code></pre>
 
         <h3>Arguments</h3>
 
@@ -180,7 +185,7 @@
 <dd><p><p>-</p></p></dd>
 
 
-<dt>row_names</dt>
+<dt>row.names</dt>
 <dd><p><p>either a logical value indicating whether the row names of <br />
  x are to be written along with x, or a character vector of <br />
  row names to be written.</p></p></dd>

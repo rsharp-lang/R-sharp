@@ -154,7 +154,13 @@
 
         <h3>Usage</h3>
 
-        <pre><code class='language-R'>read.csv(file, row_names, check_names = True, check_modes = True, encoding = unknown, comment_char = #, tsv = False, env)</code></pre>
+        <pre><code class='language-R'>read.csv(file
+row.names = NULL,
+check.names = TRUE,
+check.modes = TRUE,
+encoding = "unknown",
+comment.char = "#",
+tsv = FALSE)</code></pre>
 
         <h3>Arguments</h3>
 
@@ -188,7 +194,7 @@
 <p>use @<code>P:System.Text.Encoding.Default</code> by default.</p></p></dd>
 
 
-<dt>row_names</dt>
+<dt>row.names</dt>
 <dd><p><p>a vector of row names. This can be a vector giving the actual row names, <br />
  or a single number giving the column of the table which contains the <br />
  row names, or character string giving the name of the table column <br />

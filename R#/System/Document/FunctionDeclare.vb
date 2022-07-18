@@ -77,8 +77,8 @@ Namespace Development
 
             If optionals.Length > 0 Then
                 part2 = optionals _
-                    .Select(Function(a) $"{a.name} = {a.text},") _
-                    .JoinBy(vbCrLf)
+                    .Select(Function(a) $"{a.name} = {a.text}") _
+                    .JoinBy("," & vbCrLf)
             End If
 
             Return $"{part1}{vbCrLf}{part2})"

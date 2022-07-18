@@ -85,6 +85,9 @@ Public Class [function]
         Dim func As New FunctionDeclare With {
             .name = api.name,
             .parameters = api.parameters _
+                .Where(Function(p)
+                           Return Not p.type.raw Is GetType(Environment)
+                       End Function) _
                 .Select(AddressOf argument) _
                 .ToArray
         }
@@ -116,6 +119,7 @@ Public Class [function]
 
     Private Function argument(arg As RMethodArgument) As NamedValue
         Dim argName As String
+        Dim argText As String
 
         If arg.isObjectList Then
             argName = "..."
@@ -123,9 +127,23 @@ Public Class [function]
             argName = arg.name
         End If
 
+        If arg.isOptional Then
+            If TypeOf arg.default Is Boolean Then
+                argText = arg.default.ToString.ToUpper
+            ElseIf TypeOf arg.default Is String OrElse TypeOf arg.default Is Char Then
+                argText = $"""{arg.default}"""
+            ElseIf arg.default Is Nothing Then
+                argText = "NULL"
+            Else
+                argText = any.ToString(arg.default)
+            End If
+        Else
+            argText = Nothing
+        End If
+
         Return New NamedValue With {
-            .name = argName,
-            .text = any.ToString(arg.default)
+            .name = argName.Replace("_", "."),
+            .text = argText
         }
     End Function
 
@@ -146,7 +164,7 @@ Public Class [function]
             !arguments = docs.parameters _
                 .Select(Function(arg)
                             Return $"
-<dt>{arg.name}</dt>
+<dt>{arg.name.Replace("_", ".")}</dt>
 <dd><p>{arg.text}</p></dd>
 "
                         End Function) _
