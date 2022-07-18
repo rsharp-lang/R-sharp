@@ -156,7 +156,10 @@ Module JSON
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("parseJSON")>
-    Public Function fromJSON(str As String, Optional raw As Boolean = False, Optional env As Environment = Nothing) As Object
+    Public Function fromJSON(str As String,
+                             Optional raw As Boolean = False,
+                             Optional env As Environment = Nothing) As Object
+
         Dim rawElement As JsonElement = New JsonParser().OpenJSON(str)
 
         If raw Then
