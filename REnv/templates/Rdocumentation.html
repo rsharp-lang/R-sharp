@@ -141,7 +141,7 @@
 
         <table style="width: 100%;">
             <tr>
-                <td>{$name} {{$package}}</td>
+                <td>{$name_title} {{$package}}</td>
                 <td style="text-align: right;">R Documentation</td>
             </tr>
         </table>
@@ -150,7 +150,7 @@
 
         <h3>Description</h3>
 
-        {$description}
+        {$summary}
 
         <h3>Usage</h3>
 
@@ -163,14 +163,14 @@
         </table>
 
 
-        <h3>Details</h3>
+        <h3 style="display: {$show_details};">Details</h3>
 
         {$details}
 
 
         <h3>Value</h3>
 
-        {$values}
+        {$value}
 
         <hr />
         <div style="text-align: center;">[Package <em>{$package}</em> version {$version} <a
