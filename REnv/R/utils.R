@@ -50,6 +50,6 @@ const Rdocuments = function(pkgName, outputdir = "./") {
 	
 	pkgName
 	|> makehtml.docs()
-	|> writeLines(con = `${outputdir}/${pkgName}.html`)
+	|> writeLines(con = `${outputdir}/${pkgName}/index.html`)
 	;
 }
