@@ -1,4 +1,5 @@
 imports ["Html", "http", "graphquery"] from "webKit";
+imports "utils.docs" from "roxygenNet";
 
 #' Run graphquery on html document
 #'
@@ -30,4 +31,11 @@ const platformName = function() {
 	} else {
 		name;
 	}	
+}
+
+const Rdocuments = function(pkgName, outputdir = "./") {
+	pkgName 
+	|> makehtml.docs(template = readText(system.file("templates/Rdocumentation.html", package = "REnv")))
+	|> writeLines(con = `${outputdir}/${pkgName}.html`)
+	;
 }
