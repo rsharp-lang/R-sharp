@@ -1,58 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::6cf02320a6f804ae6b7f624f99139559, R-sharp\Library\R.base\utils\JSON.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 220
-    '    Code Lines: 126
-    ' Comment Lines: 74
-    '   Blank Lines: 20
-    '     File Size: 8.72 KB
+' Summaries:
 
 
-    ' Module JSON
-    ' 
-    '     Function: buildObject, fromJSON, json_decode, json_encode, parseBSON
-    '               writeBSON
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 220
+'    Code Lines: 126
+' Comment Lines: 74
+'   Blank Lines: 20
+'     File Size: 8.72 KB
+
+
+' Module JSON
+' 
+'     Function: buildObject, fromJSON, json_decode, json_encode, parseBSON
+'               writeBSON
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
@@ -239,7 +240,13 @@ Module JSON
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("write.bson")>
-    Public Function writeBSON(obj As Object, Optional file As Object = Nothing, Optional env As Environment = Nothing) As Object
+    Public Function writeBSON(obj As Object,
+                              Optional file As Object = Nothing,
+                              Optional maskReadonly As Boolean = False,
+                              Optional enumToStr As Boolean = True,
+                              Optional unixTimestamp As Boolean = True,
+                              Optional env As Environment = Nothing) As Object
+
         Dim stream As Stream
 
         If file Is Nothing Then
@@ -254,16 +261,26 @@ Module JSON
             End If
         End If
 
-        If TypeOf obj Is vbObject Then
-            obj = DirectCast(obj, vbObject).target
+        Dim opts As New JSONSerializerOptions With {
+            .indent = False,
+            .maskReadonly = maskReadonly,
+            .enumToString = enumToStr,
+            .unixTimestamp = unixTimestamp
+        }
+
+        Dim err As Message = Nothing
+        Dim json As JsonElement
+
+        If obj Is Nothing Then
+            Return Internal.debug.stop("the given object data can not be nothing!", env)
+        Else
+            json = opts.GetJsonLiteralRaw(obj, err, env)
         End If
 
-        If Not TypeOf obj Is JsonObject Then
-            obj = ObjectSerializer.GetJsonElement(
-                schema:=obj.GetType,
-                obj:=obj,
-                opt:=New JSONSerializerOptions
-            )
+        If Not err Is Nothing Then
+            Return err
+        ElseIf Not TypeOf json Is JsonObject Then
+            Return Internal.debug.stop($"the given json data model must be an object! ({json.GetType.Name} was given...)", env)
         End If
 
         Call BSON.WriteBuffer(DirectCast(obj, JsonObject), stream)
