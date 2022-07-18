@@ -51,23 +51,16 @@
 #End Region
 
 Imports System.IO
-Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
-Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
-Imports SMRUCC.Rsharp.Development.Components
-Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' JSON (JavaScript Object Notation) is a lightweight data-interchange format. 
@@ -242,7 +235,7 @@ Module JSON
     ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
-    <ExportAPI("write.bson")>
+    <ExportAPI("writeBSON")>
     Public Function writeBSON(obj As Object,
                               Optional file As Object = Nothing,
                               Optional maskReadonly As Boolean = False,

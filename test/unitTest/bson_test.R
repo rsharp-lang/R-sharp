@@ -7,6 +7,6 @@ data = {
 
 };
 
-write.bson(data, file = datafile);
+writeBSON(data, file = datafile);
 
 str(parseBSON(readBin(datafile)));
