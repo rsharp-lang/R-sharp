@@ -69,8 +69,10 @@
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
+Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -2751,7 +2753,11 @@ RE0:
 
                 If Not errMsg Is Nothing Then
                     Return errMsg
+                Else
+                    Return Nothing
                 End If
+            ElseIf package.FileExists Then
+                Return env.globalEnvironment.Rscript.attachPackageFile(zip:=package)
             ElseIf package.IndexOf(":"c) > -1 OrElse package.IndexOf("/"c) > -1 Then
                 With package.StringSplit("[:/]+")
                     require = New [Imports](.Last, .First)
@@ -2769,6 +2775,13 @@ RE0:
                     .attachedNamespace _
                     .packageNames
             End If
+        End Function
+
+        <Extension>
+        Friend Function attachPackageFile(R As RInterpreter, zip As String) As Object
+            Dim tmpDir As String = TempFileSystem.GetAppSysTempFile("_package", App.PID.ToHexString, zip.BaseName)
+            Call UnZip.ImprovedExtractToDirectory(zip, tmpDir, Overwrite.Always)
+            Return PackageLoader2.LoadPackage(tmpDir, R.globalEnvir)
         End Function
     End Module
 End Namespace
