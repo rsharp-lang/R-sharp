@@ -76,7 +76,7 @@ Public Class [function]
         End If
     End Function
 
-    Public Function createHtml(api As RMethodInfo, env As Environment) As String
+    Public Function createHtml(api As RMethodInfo, template As String, env As Environment) As String
         Dim xml As ProjectMember = env.globalEnvironment _
             .packages _
             .packageDocs _
@@ -103,7 +103,7 @@ Public Class [function]
             .details = markdown.Transform(xml.Remarks)
         }
 
-        Return createHtml(docs, pkg)
+        Return createHtml(docs, template, pkg)
     End Function
 
     Private Function argument(arg As param) As NamedValue
@@ -128,7 +128,7 @@ Public Class [function]
         }
     End Function
 
-    Public Function createHtml(docs As Document, pkg As RPackage) As String
+    Public Function createHtml(docs As Document, template As String, pkg As RPackage) As String
         Dim assembly As AssemblyInfo = pkg.package.Assembly.FromAssembly
 
         With New ScriptBuilder(blankTemplate)

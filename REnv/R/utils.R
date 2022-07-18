@@ -1,5 +1,6 @@
 imports ["Html", "http", "graphquery"] from "webKit";
 imports "utils.docs" from "roxygenNet";
+imports "rdocumentation" from "roxygenNet";
 
 #' Run graphquery on html document
 #'
@@ -34,8 +35,21 @@ const platformName = function() {
 }
 
 const Rdocuments = function(pkgName, outputdir = "./") {
-	pkgName 
-	|> makehtml.docs(template = readText(system.file("templates/Rdocumentation.html", package = "REnv")))
+	const template as string = "templates/Rdocumentation.html" 
+	|> system.file(package = "REnv") 
+	|> readText()
+	;
+	const functions = pkgName |> getFunctions();
+
+	for(f in names(functions)) {
+		functions[[f]]
+		|> documentation(template)
+		|> writeLines(con = `${outputdir}/${pkgName}/${f}.html`)
+		;
+	}
+	
+	pkgName
+	|> makehtml.docs(template = template)
 	|> writeLines(con = `${outputdir}/${pkgName}.html`)
 	;
 }
