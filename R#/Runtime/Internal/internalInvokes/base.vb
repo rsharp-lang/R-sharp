@@ -2749,12 +2749,15 @@ RE0:
 
             If package.DirectoryExists Then
                 ' hot load of a package directory
-                Dim errMsg As Message = PackageLoader2.Hotload(package, env.globalEnvironment)
+                Dim meta As DESCRIPTION = Nothing
+                Dim errMsg As Message = PackageLoader2.Hotload(package, env.globalEnvironment, meta)
 
                 If Not errMsg Is Nothing Then
                     Return errMsg
                 Else
-                    Return Nothing
+                    ' this meta data object is required for
+                    ' run package document build
+                    Return meta
                 End If
             ElseIf package.FileExists Then
                 Return env.globalEnvironment.Rscript.attachPackageFile(zip:=package)

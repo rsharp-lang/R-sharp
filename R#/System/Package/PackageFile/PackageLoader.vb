@@ -153,13 +153,15 @@ Namespace Development.Package.File
         ''' <param name="projDir"></param>
         ''' <param name="env"></param>
         ''' <returns></returns>
-        Public Function Hotload(projDir As String, env As GlobalEnvironment) As Message
-            Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{projDir}/DESCRIPTION")
+        Public Function Hotload(projDir As String, env As GlobalEnvironment, Optional ByRef meta As DESCRIPTION = Nothing) As Message
             Dim [error] As New Value(Of Message)
             Dim onload As DeclareNewFunction
             Dim temp As New PackageModel With {
                 .symbols = New Dictionary(Of String, Expression)
             }
+
+            meta = DESCRIPTION.Parse($"{projDir}/DESCRIPTION")
+
             Dim pkg As New PackageNamespace With {
                 .libPath = projDir,
                 .meta = meta,
