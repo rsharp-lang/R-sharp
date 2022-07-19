@@ -287,6 +287,7 @@ Namespace Development.Package.File
             ' run documentation for rscript in R folder
             Dim err As Message = REngine.Invoke("roxygen::roxygenize", {package_dir})
             Dim out As String
+            Dim outputHtml As String
             Dim runtime As String = getRuntimeTags()
 
             Call Console.WriteLine($"       ==> build package for .NET runtime [{runtime}].")
@@ -303,6 +304,7 @@ Namespace Development.Package.File
 
                 For Each pkg As Package In PackageLoader.ParsePackages(dll:=dll)
                     out = $"{package_dir}/man/{dll.BaseName}/{pkg.namespace}"
+                    outputHtml = $"{package_dir}/man/html/{dll.BaseName}/{pkg.namespace}"
 
                     Call Console.WriteLine($"         -> load: {pkg.info.Namespace}")
                     Call REngine.Invoke("unixMan", pkg, out, REngine.globalEnvir)
