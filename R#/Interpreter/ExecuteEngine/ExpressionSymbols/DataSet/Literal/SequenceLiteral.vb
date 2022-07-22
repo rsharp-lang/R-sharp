@@ -192,6 +192,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Private Shared Function integerSeq(start As Long, steps As Integer, ends As Long) As Object
             Dim seq As New List(Of Long)
 
+            If start > ends Then
+                If steps = 1 Then
+                    ' steps is the default value
+                    steps = -1
+                End If
+            End If
+
             If steps > 0 Then
                 Do While start <= ends
                     seq += start
@@ -209,6 +216,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
         Private Shared Function numericSeq(start As Double, steps As Double, ends As Double) As Object
             Dim seq As New List(Of Double)
+
+            If start > ends Then
+                If steps = 1.0 Then
+                    ' steps is the default value
+                    steps = -1
+                End If
+            End If
 
             If steps > 0 Then
                 Do While start <= ends
