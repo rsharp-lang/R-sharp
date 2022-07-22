@@ -134,7 +134,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return "n/a"
             End If
 
-            For Each testType As String In {}
+            For Each testType As String In {"num", "int"}
                 If test.All(Function(t) t = testType) Then
                     Return testType
                 End If
@@ -142,7 +142,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
             Static numeric As Index(Of String) = {"num", "int"}
 
-            If test.All(Function(t) t Like numeric) Then
+            If test(0) = "chr" AndAlso test(1) = "chr" AndAlso test(2) Like numeric Then
+                Return "chr"
+            ElseIf test.All(Function(t) t Like numeric) Then
                 Return "num"
             Else
                 Return "n/a"
