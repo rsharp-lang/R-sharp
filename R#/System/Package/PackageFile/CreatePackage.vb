@@ -311,7 +311,7 @@ Namespace Development.Package.File
 
                 For Each pkg As Package In PackageLoader.ParsePackages(dll:=dll)
                     out = $"{package_dir}/man/{dll.BaseName}/{pkg.namespace}"
-                    outputHtml = $"{package_dir}/man/html/{dll.BaseName}/{pkg.namespace}"
+                    outputHtml = $"{package_dir}/vignettes/{dll.BaseName}/{pkg.namespace}"
 
                     Call Console.WriteLine($"         -> load: {pkg.info.Namespace}")
 
