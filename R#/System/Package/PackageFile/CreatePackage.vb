@@ -177,7 +177,8 @@ Namespace Development.Package.File
             Dim file As New PackageModel With {
                 .info = desc,
                 .symbols = New Dictionary(Of String, Expression),
-                .assembly = getAssemblyList($"{target}/assembly", assemblyFilters)
+                .assembly = getAssemblyList($"{target}/assembly", assemblyFilters),
+                .pkg_dir = target
             }
             Dim loading As New List(Of Expression)
             Dim [error] As New Value(Of Message)
@@ -276,6 +277,7 @@ Namespace Development.Package.File
             Dim plugin As String = LibDLL.GetDllFile("roxygenNet.dll", REngine.globalEnvir)
 
             file.unixman = New Dictionary(Of String, String)
+            file.vignettes = New Dictionary(Of String, String)
 
             If Not plugin.FileExists Then
                 Return Nothing
@@ -334,6 +336,15 @@ Namespace Development.Package.File
                 For Each unixMan As String In ls - l - r - "*.1" <= $"{package_dir}/man"
                     symbolName = unixMan.BaseName
                     file.unixman(symbolName) = unixMan
+
+                    Call Console.WriteLine("        " & symbolName)
+                Next
+
+                Call Console.WriteLine("        " & "[*] Loading html vignettes index...")
+
+                For Each htmlHelp As String In ls - l - r - "*.html" <= $"{package_dir}/vignettes"
+                    symbolName = htmlHelp.BaseName
+                    file.vignettes(symbolName) = htmlHelp
 
                     Call Console.WriteLine("        " & symbolName)
                 Next

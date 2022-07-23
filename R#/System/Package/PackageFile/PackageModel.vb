@@ -93,6 +93,8 @@ Namespace Development.Package.File
         Public Property loading As Dependency()
         Public Property assembly As AssemblyPack
         Public Property unixman As Dictionary(Of String, String)
+        Public Property vignettes As Dictionary(Of String, String)
+        Public Property pkg_dir As String
 
         Public Overrides Function ToString() As String
             Return info.ToString
@@ -305,6 +307,9 @@ Namespace Development.Package.File
             Dim md5 As New Md5HashProvider
             Dim text As String
             Dim manIndex As New Dictionary(Of String, String)
+            Dim htmlIndex As New Dictionary(Of String, String)
+            Dim relpath As String
+            Dim pkg_dir As String = Me.pkg_dir.GetDirectoryFullPath
 
             For Each man As String In unixman.Values
                 text = man.ReadAllText
@@ -316,6 +321,26 @@ Namespace Development.Package.File
                     Call file.Flush()
                 End Using
             Next
+
+            For Each man As String In vignettes.Values
+                text = man.ReadAllText
+                htmlIndex(man.BaseName) = md5.GetMd5Hash(text)
+                checksum = checksum & htmlIndex(man.BaseName)
+                relpath = man.GetFullPath.Replace(pkg_dir, "")
+
+                Using file As New StreamWriter(zip.CreateEntry($"package/{relpath}").Open)
+                    Call file.WriteLine(text)
+                    Call file.Flush()
+                End Using
+            Next
+
+            Using file As New StreamWriter(zip.CreateEntry("package/manifest/vignettes.json").Open)
+                text = htmlIndex.GetJson(indent:=True)
+                checksum = checksum & md5.GetMd5Hash(text)
+
+                Call file.WriteLine(text)
+                Call file.Flush()
+            End Using
 
             Using file As New StreamWriter(zip.CreateEntry("package/manifest/unixman.json").Open)
                 text = manIndex.GetJson(indent:=True)
