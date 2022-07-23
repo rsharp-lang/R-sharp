@@ -1,5 +1,7 @@
 imports ["Html", "http"] from "webKit";
 
+require(JSON);
+
 #' A general method for Http get request
 #'
 #' @param streamTo A lambda function that accept a url and a parameter of file cache location.
@@ -103,4 +105,14 @@ const getHtml = function(url, interval = 3, filetype = "html") {
     filetype = filetype)
   )
   ;
+}
+
+const getJSON = function(url, interval = 3, raw_text = FALSE) {
+  const json_text as string = getHtml(url, interval, filetype = "json");
+
+  if (raw_text) {
+    json_text;
+  } else {
+    json_text |> json_decode();
+  }
 }

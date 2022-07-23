@@ -10,11 +10,11 @@ const classify_cancer = function() {
         strsplit(str, "\s+", fixed = FALSE, perl = TRUE);
     });
 	
-    const tags = sapply(data, x -> x[1]);
-    const labels = sapply(data, x -> x[length(x)]); 
+    const tags         = sapply(data, x -> x[1]);
+    const labels       = sapply(data, x -> x[length(x)]); 
     const i as integer = 2:(length(data[[1]]) - 1); 
-    const matrix = lapply(data, r -> r[i]);
-    const dataset = list();
+    const matrix       = lapply(data, r -> r[i]);
+    const dataset      = list();
 
     for(i in 1:length(i)) {
         dataset[[`V${i}`]] = matrix 
