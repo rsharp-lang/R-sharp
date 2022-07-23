@@ -264,6 +264,12 @@ Namespace Development.Package.File
 #End If
         End Function
 
+        ''' <summary>
+        ''' create unix .1 man page file and html help documents
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="package_dir"></param>
+        ''' <returns></returns>
         <Extension>
         Private Function buildUnixMan(file As PackageModel, package_dir As String) As Message
             Dim REngine As New RInterpreter
@@ -315,6 +321,8 @@ Namespace Development.Package.File
                 Return err
             Else
                 Dim symbolName As String
+
+                Call Console.WriteLine("        " & "[*] Loading unix man page index...")
 
                 For Each unixMan As String In ls - l - r - "*.1" <= $"{package_dir}/man"
                     symbolName = unixMan.BaseName
