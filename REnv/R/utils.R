@@ -47,16 +47,23 @@ const Rdocuments = function(pkgName, outputdir = "./") {
 	|> readText()
 	;
 	const functions = pkgName |> getFunctions();
+	const docs_dir = {
+		if (typeof pkgName is "string") {
+			pkgName;
+		} else {
+			[pkgName]::namespace;
+		}
+	}
 
 	for(f in names(functions)) {
 		functions[[f]]
 		|> documentation(template)
-		|> writeLines(con = `${outputdir}/${pkgName}/${f}.html`)
+		|> writeLines(con = `${outputdir}/${docs_dir}/${f}.html`)
 		;
 	}
 	
 	pkgName
 	|> makehtml.docs()
-	|> writeLines(con = `${outputdir}/${pkgName}/index.html`)
+	|> writeLines(con = `${outputdir}/${docs_dir}/index.html`)
 	;
 }

@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::36256052f83b283c062431cd7829f47a, R-sharp\studio\Rsharp_kit\roxygenNet\docs.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 223
-    '    Code Lines: 174
-    ' Comment Lines: 13
-    '   Blank Lines: 36
-    '     File Size: 8.47 KB
+' Summaries:
 
 
-    ' Module docs
-    ' 
-    '     Function: apiDocsHtml, getDefaultTemplate, makeHtmlDocs, makeMarkdownDocs, PackageIndex
-    '               parameterTable
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 223
+'    Code Lines: 174
+' Comment Lines: 13
+'   Blank Lines: 36
+'     File Size: 8.47 KB
+
+
+' Module docs
+' 
+'     Function: apiDocsHtml, getDefaultTemplate, makeHtmlDocs, makeMarkdownDocs, PackageIndex
+'               parameterTable
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -62,10 +62,12 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.text.markdown
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
+Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 
 ''' <summary>
 ''' R# help document tools
@@ -150,11 +152,8 @@ Module docs
     ''' This method create a single html help page file for generates pdf help manual file.
     ''' </remarks>
     <ExportAPI("makehtml.docs")>
-    Public Function makeHtmlDocs(package$, Optional template$ = Nothing, Optional globalEnv As GlobalEnvironment = Nothing) As String
-        Dim apis As NamedValue(Of MethodInfo)() = globalEnv.packages _
-            .FindPackage(package, Nothing) _
-            .DoCall(AddressOf ImportsPackage.GetAllApi) _
-            .ToArray
+    Public Function makeHtmlDocs(package As Object, Optional template$ = Nothing, Optional globalEnv As GlobalEnvironment = Nothing) As String
+        Dim apis = rdocumentation.getPkgApisList(package, globalEnv)
 
         Static defaultTemplate As [Default](Of String) = "<!DOCTYPE html>" & getDefaultTemplate().ToString
 
@@ -163,20 +162,28 @@ Module docs
         Dim annotations As AnnotationDocs = globalEnv.packages.packageDocs
         Dim Rapi As RMethodInfo
 
-        For Each api As NamedValue(Of MethodInfo) In apis
+        For Each api As NamedValue(Of MethodInfo) In apis.TryCast(Of NamedValue(Of MethodInfo)())
             Rapi = New RMethodInfo(api)
             apiList += annotations _
                 .GetAnnotations(api.Value, requireNoneNull:=True) _
                 .DoCall(AddressOf Rapi.apiDocsHtml)
         Next
 
-        With docs
-            !packageName = package
-            !packageDescription = globalEnv.packages _
-                .GetPackageDocuments(package) _
-                .DoCall(AddressOf markdown.Transform)
-            !apiList = apiList.JoinBy("<br />")
-        End With
+        If TypeOf package Is String Then
+            With docs
+                !packageName = any.ToString(package)
+                !packageDescription = globalEnv.packages _
+                    .GetPackageDocuments(any.ToString(package)) _
+                    .DoCall(AddressOf markdown.Transform)
+                !apiList = apiList.JoinBy("<br />")
+            End With
+        Else
+            With docs
+                !packageName = DirectCast(package, Development.Package.Package).namespace
+                !packageDescription = DirectCast(package, Development.Package.Package).GetPackageDescription(globalEnv)
+                !apiList = apiList.JoinBy("<br />")
+            End With
+        End If
 
         Return docs.ToString
     End Function
