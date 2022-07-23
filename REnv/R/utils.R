@@ -58,12 +58,12 @@ const Rdocuments = function(pkgName, outputdir = "./") {
 	for(f in names(functions)) {
 		functions[[f]]
 		|> documentation(template)
-		|> writeLines(con = `${outputdir}/${docs_dir}/${f}.html`)
+		|> writeLines(con = `${outputdir}/${f}.html`)
 		;
 	}
 	
 	pkgName
 	|> makehtml.docs()
-	|> writeLines(con = `${outputdir}/${docs_dir}/index.html`)
+	|> writeLines(con = `${outputdir}/../${docs_dir}.html`)
 	;
 }
