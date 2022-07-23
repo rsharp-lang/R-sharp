@@ -190,9 +190,10 @@ Module docs
 
     <Extension>
     Private Function apiDocsHtml(api As RMethodInfo, apiDocs As ProjectMember) As String
+        Dim innerLink As String = $"./{api.namespace}/{api.name}.html"
         Dim docs =
             <div>
-                <h2 id=<%= api.name %>><%= api.name %></h2>
+                <h2 id=<%= api.name %>><a href=<%= innerLink %>><%= api.name %></a></h2>
                 <hr/>
 
                 <p>
@@ -253,6 +254,10 @@ Module docs
                 </ul>
             </div>)
         Dim args As New List(Of XElement)
+
+        If docs.Params.IsNullOrEmpty Then
+            Return ""
+        End If
 
         For Each arg In docs.Params.SafeQuery
             args +=
