@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::74a78471a8a54619b7ee66fc227c0dc4, R-sharp\R#\System\Document\FunctionDeclare.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 44
-    '    Code Lines: 36
-    ' Comment Lines: 0
-    '   Blank Lines: 8
-    '     File Size: 1.54 KB
+' Summaries:
 
 
-    '     Class FunctionDeclare
-    ' 
-    '         Properties: name, parameters, sourceMap
-    ' 
-    '         Function: GetArgument, ToString, valueText
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 44
+'    Code Lines: 36
+' Comment Lines: 0
+'   Blank Lines: 8
+'     File Size: 1.54 KB
+
+
+'     Class FunctionDeclare
+' 
+'         Properties: name, parameters, sourceMap
+' 
+'         Function: GetArgument, ToString, valueText
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -66,21 +66,39 @@ Namespace Development
         Public Property sourceMap As StackFrame
 
         Public Overrides Function ToString() As String
+            Return ToString(html:=False)
+        End Function
+
+        Public Overloads Function ToString(html As Boolean) As String
             Dim required = parameters.Where(Function(a) a.text.StringEmpty).ToArray
             Dim optionals = parameters.Where(Function(a) Not a.text.StringEmpty).ToArray
-            Dim part1 = $"{name}({required _
-                .Select(Function(a)
-                            Return a.name
-                        End Function) _
-                .JoinBy(", ")}"
+            Dim part1 As String
             Dim part2 As String = ""
+
+            If html Then
+                part1 = $"<strong>{name}</strong>({required _
+                    .Select(Function(a)
+                                Return $"<i>{a.name}</i>"
+                            End Function) _
+                    .JoinBy(", ")}"
+            Else
+                part1 = $"{name}({required _
+                    .Select(Function(a)
+                                Return a.name
+                            End Function) _
+                    .JoinBy(", ")}"
+            End If
 
             If optionals.Length > 0 Then
                 part2 = optionals _
-                    .Select(Function(a) $"{a.name} = {a.text}") _
+                    .Select(Function(a) $"<i>{a.name}</i> = {a.text}") _
                     .JoinBy("," & vbCrLf)
 
-                Return $"{part1},{vbCrLf}{part2})"
+                If required.IsNullOrEmpty Then
+                    Return $"{part1}{vbCrLf}{part2})"
+                Else
+                    Return $"{part1},{vbCrLf}{part2})"
+                End If
             Else
                 Return $"{part1})"
             End If

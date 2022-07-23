@@ -165,7 +165,7 @@ Public Class [function]
         With New ScriptBuilder(template)
             !name_title = docs.declares.name
             !usage = docs.declares _
-                .ToString _
+                .ToString(html:=True) _
                 .Trim(" "c, ASCII.CR, ASCII.LF)
             !title = docs.title
             !summary = docs.description
