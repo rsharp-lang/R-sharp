@@ -280,7 +280,7 @@ Namespace Development.Package.File
             If Not plugin.FileExists Then
                 Return Nothing
             Else
-                Call REngine.LoadLibrary("JSON")
+                Call REngine.LoadLibrary("JSON", silent:=True)
                 Call PackageLoader.ParsePackages(plugin) _
                     .Where(Function(pkg) pkg.namespace = "roxygen") _
                     .FirstOrDefault _
