@@ -313,7 +313,13 @@ Namespace Development.Package.File
                     outputHtml = $"{package_dir}/man/html/{dll.BaseName}/{pkg.namespace}"
 
                     Call Console.WriteLine($"         -> load: {pkg.info.Namespace}")
-                    Call REngine.Invoke("unixMan", pkg, out, REngine.globalEnvir)
+
+                    Try
+                        Call REngine.Invoke("unixMan", pkg, out, REngine.globalEnvir)
+                        Call REngine.Invoke("REnv::Rdocuments", pkg, outputHtml, REngine.globalEnvir)
+                    Catch ex As Exception
+
+                    End Try
                 Next
             Next
 
