@@ -109,7 +109,7 @@ Namespace Development
                                     valHtml = $"<span style='color: blue;'>{valHtml}</span>"
                                 End If
 
-                                Return $"<i>{a.name}</i> = {valHtml}"
+                                Return $"    <i>{a.name}</i> = {valHtml}"
                             End Function) _
                     .JoinBy("," & vbCrLf)
 
