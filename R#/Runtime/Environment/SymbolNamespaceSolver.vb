@@ -116,6 +116,10 @@ Namespace Runtime
                 Return Nothing
             ElseIf Not symbols.ContainsKey(symbolName) Then
                 Return Nothing
+            Else
+                ' load target package directory
+                ' for attatch all of the upstream dependency symbols
+                Call PackageLoader2.LoadPackage(libdir, env.globalEnvironment)
             End If
 
             Dim symbolFile As String = $"{libdir}/lib/src/{symbols(symbolName)}"
