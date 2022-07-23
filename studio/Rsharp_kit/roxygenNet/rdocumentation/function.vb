@@ -94,18 +94,26 @@ Public Class [function]
         Dim pkg As RPackage = api.GetPackageInfo
         Dim docs As New Document With {
             .declares = func,
-            .title = Strings.Trim(xml.Summary.LineIterators.FirstOrDefault).Trim(" "c, "#"c),
-            .description = xml.Summary _
+            .title = func.name,
+            .description = func.name,
+            .parameters = {},
+            .returns = "",
+            .details = ""
+        }
+
+        If Not xml Is Nothing Then
+            docs.title = Strings.Trim(xml.Summary.LineIterators.FirstOrDefault).Trim(" "c, "#"c)
+            docs.description = xml.Summary _
                 .LineIterators _
                 .Skip(1) _
                 .JoinBy("<br />") _
-                .DoCall(AddressOf markdown.Transform),
-            .parameters = xml.Params _
+                .DoCall(AddressOf markdown.Transform)
+            docs.parameters = xml.Params _
                 .Select(AddressOf argument) _
-                .ToArray,
-            .returns = markdown.Transform(xml.Returns),
-            .details = markdown.Transform(xml.Remarks)
-        }
+                .ToArray
+            docs.returns = markdown.Transform(xml.Returns)
+            docs.details = markdown.Transform(xml.Remarks)
+        End If
 
         Return createHtml(docs, template, pkg)
     End Function
