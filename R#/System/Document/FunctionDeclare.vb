@@ -79,9 +79,11 @@ Namespace Development
                 part2 = optionals _
                     .Select(Function(a) $"{a.name} = {a.text}") _
                     .JoinBy("," & vbCrLf)
-            End If
 
-            Return $"{part1}{vbCrLf}{part2})"
+                Return $"{part1},{vbCrLf}{part2})"
+            Else
+                Return $"{part1})"
+            End If
         End Function
 
         Public Shared Function GetArgument(arg As DeclareNewSymbol) As NamedValue
