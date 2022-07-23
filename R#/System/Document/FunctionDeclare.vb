@@ -91,7 +91,26 @@ Namespace Development
 
             If optionals.Length > 0 Then
                 part2 = optionals _
-                    .Select(Function(a) $"<i>{a.name}</i> = {a.text}") _
+                    .Select(Function(a)
+                                Dim valHtml As String = a.text
+
+                                If Not valHtml.StringEmpty Then
+                                    If (valHtml.First = """"c AndAlso valHtml.Last = """"c) OrElse
+                                       (valHtml.First = "`"c AndAlso valHtml.Last = "`"c) OrElse
+                                       (valHtml.First = "'"c AndAlso valHtml.Last = "'"c) Then
+
+                                        valHtml = $"<span style='color: brown;'><strong>{valHtml}</strong></span>"
+                                    End If
+                                Else
+                                    valHtml = "NULL"
+                                End If
+
+                                If valHtml = "NULL" OrElse valHtml = "NA" Then
+                                    valHtml = $"<span style='color: blue;'>{valHtml}</span>"
+                                End If
+
+                                Return $"<i>{a.name}</i> = {valHtml}"
+                            End Function) _
                     .JoinBy("," & vbCrLf)
 
                 If required.IsNullOrEmpty Then
