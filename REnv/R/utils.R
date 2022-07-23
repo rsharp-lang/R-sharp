@@ -34,6 +34,13 @@ const platformName = function() {
 	}	
 }
 
+#' Create html documents for ``R#`` package module
+#' 
+#' @param pkgName the ``R#`` package module itself 
+#'    or the package character text name.
+#' @param outputdir the output directory path for 
+#'    save the html documents.
+#' 
 const Rdocuments = function(pkgName, outputdir = "./") {
 	const template as string = "templates/Rdocumentation.html" 
 	|> system.file(package = "REnv") 

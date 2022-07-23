@@ -54,11 +54,13 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 
 <Package("rdocumentation")>
 Public Module rdocumentation
@@ -68,12 +70,33 @@ Public Module rdocumentation
         Return New [function]().createHtml(func, template, env)
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="package">
+    ''' the ``R#`` package module name or the module object itself.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("getFunctions")>
-    Public Function getFunctions(package As String, Optional env As Environment = Nothing) As list
-        Dim apis As NamedValue(Of MethodInfo)() = env.globalEnvironment.packages _
-           .FindPackage(package, Nothing) _
-           .DoCall(AddressOf ImportsPackage.GetAllApi) _
-           .ToArray
+    Public Function getFunctions(package As Object, Optional env As Environment = Nothing) As Object
+        Dim apis As NamedValue(Of MethodInfo)()
+
+        If TypeOf package Is String Then
+            apis = env.globalEnvironment.packages _
+                .FindPackage(any.ToString(package), Nothing) _
+                .DoCall(AddressOf ImportsPackage.GetAllApi) _
+                .ToArray
+        ElseIf TypeOf package Is Development.Package.Package Then
+            apis = ImportsPackage _
+                .GetAllApi(DirectCast(package, Development.Package.Package)) _
+                .ToArray
+        Else
+            Return Components _
+                .Message _
+                .InCompatibleType(GetType(String), package.GetType, env)
+        End If
+
         Dim funcs As New list With {.slots = New Dictionary(Of String, Object)}
         Dim func As RMethodInfo
 
