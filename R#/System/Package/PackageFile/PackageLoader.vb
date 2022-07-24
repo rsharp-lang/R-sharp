@@ -150,7 +150,12 @@ Namespace Development.Package.File
         ''' 
         ''' 在启动的时候对未进行编译的程序包进行热加载
         ''' </summary>
-        ''' <param name="projDir"></param>
+        ''' <param name="projDir">
+        ''' the package source project directory, which is should be un-build...
+        ''' for load the package directory which is installed into the R library
+        ''' folder, use the method <see cref="PackageLoader2.LoadPackage"/>
+        ''' instead.
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         Public Function Hotload(projDir As String, env As GlobalEnvironment, Optional ByRef meta As DESCRIPTION = Nothing) As Message

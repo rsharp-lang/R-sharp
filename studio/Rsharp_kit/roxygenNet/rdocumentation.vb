@@ -52,13 +52,17 @@
 Imports System.Reflection
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 
 <Package("rdocumentation")>
 Public Module rdocumentation
@@ -68,20 +72,47 @@ Public Module rdocumentation
         Return New [function]().createHtml(func, template, env)
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="package">
+    ''' the ``R#`` package module name or the module object itself.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("getFunctions")>
-    Public Function getFunctions(package As String, Optional env As Environment = Nothing) As list
-        Dim apis As NamedValue(Of MethodInfo)() = env.globalEnvironment.packages _
-           .FindPackage(package, Nothing) _
-           .DoCall(AddressOf ImportsPackage.GetAllApi) _
-           .ToArray
+    Public Function getFunctions(package As Object, Optional env As Environment = Nothing) As Object
+        Dim apis = getPkgApisList(package, env)
+
+        If apis Like GetType(Message) Then
+            Return apis.TryCast(Of Message)
+        End If
+
         Dim funcs As New list With {.slots = New Dictionary(Of String, Object)}
         Dim func As RMethodInfo
 
-        For Each f As NamedValue(Of MethodInfo) In apis
+        For Each f As NamedValue(Of MethodInfo) In apis.TryCast(Of NamedValue(Of MethodInfo)())
             func = New RMethodInfo(f)
             funcs.add(func.name, func)
         Next
 
         Return funcs
+    End Function
+
+    Friend Function getPkgApisList(package As Object, env As Environment) As [Variant](Of Message, NamedValue(Of MethodInfo)())
+        If TypeOf package Is String Then
+            Return env.globalEnvironment.packages _
+                .FindPackage(any.ToString(package), Nothing) _
+                .DoCall(AddressOf ImportsPackage.GetAllApi) _
+                .ToArray
+        ElseIf TypeOf package Is Development.Package.Package Then
+            Return ImportsPackage _
+                .GetAllApi(DirectCast(package, Development.Package.Package)) _
+                .ToArray
+        Else
+            Return Components _
+                .Message _
+                .InCompatibleType(GetType(String), package.GetType, env)
+        End If
     End Function
 End Module

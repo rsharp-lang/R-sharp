@@ -177,7 +177,8 @@ Namespace Development.Package.File
             Dim file As New PackageModel With {
                 .info = desc,
                 .symbols = New Dictionary(Of String, Expression),
-                .assembly = getAssemblyList($"{target}/assembly", assemblyFilters)
+                .assembly = getAssemblyList($"{target}/assembly", assemblyFilters),
+                .pkg_dir = target
             }
             Dim loading As New List(Of Expression)
             Dim [error] As New Value(Of Message)
@@ -264,16 +265,24 @@ Namespace Development.Package.File
 #End If
         End Function
 
+        ''' <summary>
+        ''' create unix .1 man page file and html help documents
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="package_dir"></param>
+        ''' <returns></returns>
         <Extension>
         Private Function buildUnixMan(file As PackageModel, package_dir As String) As Message
             Dim REngine As New RInterpreter
             Dim plugin As String = LibDLL.GetDllFile("roxygenNet.dll", REngine.globalEnvir)
 
             file.unixman = New Dictionary(Of String, String)
+            file.vignettes = New Dictionary(Of String, String)
 
             If Not plugin.FileExists Then
                 Return Nothing
             Else
+                Call REngine.LoadLibrary("JSON", silent:=True)
                 Call PackageLoader.ParsePackages(plugin) _
                     .Where(Function(pkg) pkg.namespace = "roxygen") _
                     .FirstOrDefault _
@@ -304,10 +313,16 @@ Namespace Development.Package.File
 
                 For Each pkg As Package In PackageLoader.ParsePackages(dll:=dll)
                     out = $"{package_dir}/man/{dll.BaseName}/{pkg.namespace}"
-                    outputHtml = $"{package_dir}/man/html/{dll.BaseName}/{pkg.namespace}"
+                    outputHtml = $"{package_dir}/vignettes/{dll.BaseName}/{pkg.namespace}"
 
                     Call Console.WriteLine($"         -> load: {pkg.info.Namespace}")
-                    Call REngine.Invoke("unixMan", pkg, out, REngine.globalEnvir)
+
+                    Try
+                        Call REngine.Invoke("unixMan", pkg, out, REngine.globalEnvir)
+                        Call REngine.Invoke("REnv::Rdocuments", pkg, outputHtml, REngine.globalEnvir)
+                    Catch ex As Exception
+
+                    End Try
                 Next
             Next
 
@@ -316,9 +331,20 @@ Namespace Development.Package.File
             Else
                 Dim symbolName As String
 
+                Call Console.WriteLine("        " & "[*] Loading unix man page index...")
+
                 For Each unixMan As String In ls - l - r - "*.1" <= $"{package_dir}/man"
                     symbolName = unixMan.BaseName
                     file.unixman(symbolName) = unixMan
+
+                    Call Console.WriteLine("        " & symbolName)
+                Next
+
+                Call Console.WriteLine("        " & "[*] Loading html vignettes index...")
+
+                For Each htmlHelp As String In ls - l - r - "*.html" <= $"{package_dir}/vignettes"
+                    symbolName = htmlHelp.BaseName
+                    file.vignettes(symbolName) = htmlHelp
 
                     Call Console.WriteLine("        " & symbolName)
                 Next

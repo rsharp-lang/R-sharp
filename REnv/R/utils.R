@@ -34,22 +34,36 @@ const platformName = function() {
 	}	
 }
 
+#' Create html documents for ``R#`` package module
+#' 
+#' @param pkgName the ``R#`` package module itself 
+#'    or the package character text name.
+#' @param outputdir the output directory path for 
+#'    save the html documents.
+#' 
 const Rdocuments = function(pkgName, outputdir = "./") {
 	const template as string = "templates/Rdocumentation.html" 
 	|> system.file(package = "REnv") 
 	|> readText()
 	;
 	const functions = pkgName |> getFunctions();
+	const docs_dir = {
+		if (typeof pkgName is "string") {
+			pkgName;
+		} else {
+			[pkgName]::namespace;
+		}
+	}
 
 	for(f in names(functions)) {
 		functions[[f]]
 		|> documentation(template)
-		|> writeLines(con = `${outputdir}/${pkgName}/${f}.html`)
+		|> writeLines(con = `${outputdir}/${f}.html`)
 		;
 	}
 	
 	pkgName
 	|> makehtml.docs()
-	|> writeLines(con = `${outputdir}/${pkgName}/index.html`)
+	|> writeLines(con = `${outputdir}/../${docs_dir}.html`)
 	;
 }
