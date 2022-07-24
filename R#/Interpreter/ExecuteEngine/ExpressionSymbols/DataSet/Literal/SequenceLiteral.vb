@@ -173,7 +173,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Case "int" : Return integerSeq(start:=REnv.getFirst(init), steps:=REnv.getFirst(offset), ends:=REnv.getFirst(stops))
                 Case "chr" : Return characterSeq(start:=getChar(REnv.getFirst(init)), steps:=REnv.getFirst(offset), ends:=getChar(REnv.getFirst(stops)))
                 Case Else
-                    Return Internal.debug.stop($"data type of the sequence literal is not supported!", envir)
+                    Return Internal.debug.stop({
+                        $"data type of the sequence literal is not supported!",
+                        $"init: {RType.TypeOf(init)}",
+                        $"stops: {RType.TypeOf(stops)}",
+                        $"offset: {RType.TypeOf(offset)}"
+                    }, envir)
             End Select
         End Function
 
