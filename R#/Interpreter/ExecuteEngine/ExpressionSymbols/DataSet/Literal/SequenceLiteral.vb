@@ -116,7 +116,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Private Shared Function measureSequence(init As Object, stops As Object, offset As Object) As String
             Dim test = New Object() {init, stops, offset} _
                 .Select(Function(num)
-                            Dim ntype As Type = num.GetType
+                            Dim rtype As RType = RType.TypeOf(num)
+                            Dim ntype As Type = rtype.raw
 
                             If ntype Like RType.floats Then
                                 Return "num"
