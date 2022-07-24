@@ -1,0 +1,34 @@
+﻿.TH DENSITY2DCUT 1 2022-07-25 "" "Evaluate geom density of 2d points"
+.SH NAME
+density2DCut \- density2DCut(data,
+    <i>k</i> = 6,
+    <i>qcut</i> = 0.1,
+    <i>f</i> = 10)
+.SH SYNOPSIS
+\fIdensity2DCut(data,
+    <i>k</i> = 6,
+    <i>qcut</i> = 0.1,
+    <i>f</i> = 10)\fR
+.SH OPTIONS
+.PP
+\fBdata\fB \fR\- . 
+.PP
+.PP
+\fBk\fB \fR\- 6. 
+.PP
+.PP
+\fBqcut\fB \fR\- 0.1. the quantile cutoff threshold for define points as low density points(noise).
+.PP
+.PP
+\fBf\fB \fR\- 10. 
+.PP
+.SH VALUE
+.PP
+a new dataframe object with data fields: x, y, density, and noise boolean flags
+.PP
+.SH FILES
+.PP
+SMRUCC/R#.declare_function.density2DCut at geom.R:line 11
+.PP
+.SH COPYRIGHT
+Copyright © xieguigang, MIT Licensed 2022
