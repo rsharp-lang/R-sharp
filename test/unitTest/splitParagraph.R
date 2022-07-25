@@ -12,6 +12,12 @@ labels = "The coverage cutoff value for measure the RGB ion combination score. i
         ms-imaging folder, then it means this parameter cutoff value 
         may be too high for filter ions list, try to make this threshold cutoff value smaller.";
 		
-labels = splitParagraph(Html::plainText(labels), 24);
+		print("the raw text:");
+		cat(labels);
+		cat("\n\n\n");
+		
+labels = splitParagraph(Html::plainText(labels), 64);
+
+print("the text split result:");
 
 print(labels);
