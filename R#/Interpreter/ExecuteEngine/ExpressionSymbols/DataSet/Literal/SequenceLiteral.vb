@@ -172,7 +172,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Select Case measureSequence(init, stops, offset)
                 Case "num" : Return numericSeq(start:=REnv.getFirst(init), steps:=REnv.getFirst(offset), ends:=REnv.getFirst(stops))
                 Case "int" : Return integerSeq(start:=REnv.getFirst(init), steps:=REnv.getFirst(offset), ends:=REnv.getFirst(stops))
-                Case "chr" : Return characterSeq(start:=getChar(REnv.getFirst(init)), steps:=REnv.getFirst(offset), ends:=getChar(REnv.getFirst(stops)))
+                Case "chr"
+                    Return characterSeq(
+                        start:=getChar(REnv.getFirst(init)),
+                        steps:=REnv.getFirst(offset),
+                        ends:=getChar(REnv.getFirst(stops))
+                    )
                 Case Else
                     Return Internal.debug.stop({
                         $"data type of the sequence literal is not supported!",
