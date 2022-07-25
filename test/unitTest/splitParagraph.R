@@ -1,12 +1,12 @@
 imports "Html" from "webKit";
 
-# labels = "1,2-dipalmitoyl-3'-<i>O</i>-(L-lysyl)-phosphatid... [M-H2O+NH4]+ 851.634";
+labels = "1,2-dipalmitoyl-3'-<i>O</i>-(L-lysyl)-phosphatid... [M-H2O+NH4]+ 851.634";
 
-# print(labels);
+print(labels);
 
-# labels = splitParagraph(Html::plainText(labels), 24);
+labels = splitParagraph(Html::plainText(labels), 24);
 
-# print(labels);
+print(labels);
 
 labels = "The coverage cutoff value for measure the RGB ion combination score. if there is no ms-imaging result in the triple ions 
         ms-imaging folder, then it means this parameter cutoff value 
