@@ -77,7 +77,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("splitParagraph")>
         Public Function splitParagraph(text As String,
                                        Optional len As Integer = 80,
-                                       Optional delimiters As String = ";:,.-_&*!+'~",
+                                       Optional delimiters As String = ";:,.-_&*!+'~" & vbTab & " ",
                                        Optional floatChars As Integer = 6) As String()
             Return text _
                 .SplitParagraph(
