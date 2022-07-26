@@ -413,6 +413,16 @@ ReturnTable:
         Return New RowObject(vals.AsObjectEnumerator.Select(AddressOf any.ToString))
     End Function
 
+    ''' <summary>
+    ''' parse text line as csv row.
+    ''' </summary>
+    ''' <param name="line"></param>
+    ''' <returns></returns>
+    <ExportAPI("parseRow")>
+    Public Function parseRow(line As String, Optional delimiter As Char = ","c, Optional quot As Char = ASCII.Quot) As String()
+        Return Tokenizer.CharsParser(line, delimiter, quot).ToArray
+    End Function
+
     <ExportAPI("append.cells")>
     Public Function appendCells(row As RowObject, cells As Array) As RowObject
         row.AddRange(cells.AsObjectEnumerator.Select(AddressOf any.ToString))
