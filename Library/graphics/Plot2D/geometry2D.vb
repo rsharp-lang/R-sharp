@@ -119,7 +119,7 @@ Module geometry2D
         Dim points2 As Point2D() = n _
             .SeqRandom _
             .Select(Function(i)
-                        Return New Point2D(randf.NextInteger(size.Width), randf.NextInteger(size.Height))
+                        Return New Point2D(randf.NextInteger(sizeVal.Width), randf.NextInteger(sizeVal.Height))
                     End Function) _
             .ToArray
         Dim tree2 As New KdTree(Of Point2D)(points2, New PointAccess)

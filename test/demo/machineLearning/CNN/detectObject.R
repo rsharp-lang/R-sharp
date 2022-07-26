@@ -19,7 +19,7 @@ for(imgfile in list.files(@dir, pattern = "*.jpg")) {
 	
 	result |> head(n = 10) |> print();
 	result |> write.csv(
-		file = `${@dir}/${basename(imgfile)}.csv`, 
+		file      = `${@dir}/${basename(imgfile)}.csv`, 
 		row.names = FALSE
 	)
 	;
@@ -28,3 +28,4 @@ for(imgfile in list.files(@dir, pattern = "*.jpg")) {
 }
 
 sink();
+
