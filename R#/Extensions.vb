@@ -74,6 +74,15 @@ Public Module Extensions
         debugLevels = Enums(Of DebugLevels).ToDictionary(Function(flag) flag.Description.ToLower)
     End Sub
 
+    <Extension>
+    Public Function toList(data As dataframe, env As Environment, Optional byrow As Boolean = False) As list
+        If byrow Then
+            Return data.listByRows(Nothing, env)
+        Else
+            Return data.listByColumns
+        End If
+    End Function
+
     Public Function ParseDebugLevel(argVal As String) As DebugLevels
         Return debugLevels.TryGetValue(Strings.LCase(argVal), [default]:=Interpreter.DebugLevels.All)
     End Function
