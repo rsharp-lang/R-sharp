@@ -379,8 +379,14 @@ Namespace Interpreter
         ''' <summary>
         ''' direct invoke
         ''' </summary>
-        ''' <param name="funcName$"></param>
-        ''' <param name="args"></param>
+        ''' <param name="funcName">
+        ''' the function name, can be prefixed with the package namespace
+        ''' </param>
+        ''' <param name="args">
+        ''' the argument without names, this function will pass the
+        ''' argument value to target R# function directly with aligned 
+        ''' with the function argument list.
+        ''' </param>
         ''' <returns></returns>
         Public Function Invoke(funcName$, ParamArray args As Object()) As Object
             Dim find As Object
@@ -410,6 +416,10 @@ Namespace Interpreter
         ''' <param name="funcName">the R function name</param>
         ''' <param name="args">the named parameter list</param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' the named parameter list will be aligned with the function 
+        ''' argument list and then do function invoke.
+        ''' </remarks>
         Public Function Invoke(funcName$, args As NamedValue(Of Object)()) As Object
             Dim find As Object = FunctionInvoke.GetFunctionVar(New Literal(funcName), globalEnvir)
             Dim parameters As InvokeParameter() = args _
