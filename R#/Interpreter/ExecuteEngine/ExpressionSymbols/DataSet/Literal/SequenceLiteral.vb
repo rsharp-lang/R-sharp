@@ -116,7 +116,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Private Shared Function measureSequence(init As Object, stops As Object, offset As Object) As String
             Dim test = New Object() {init, stops, offset} _
                 .Select(Function(num)
-                            Dim ntype As Type = num.GetType
+                            Dim rtype As RType = RType.TypeOf(num)
+                            Dim ntype As Type = rtype.raw
 
                             If ntype Like RType.floats Then
                                 Return "num"
@@ -171,9 +172,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Select Case measureSequence(init, stops, offset)
                 Case "num" : Return numericSeq(start:=REnv.getFirst(init), steps:=REnv.getFirst(offset), ends:=REnv.getFirst(stops))
                 Case "int" : Return integerSeq(start:=REnv.getFirst(init), steps:=REnv.getFirst(offset), ends:=REnv.getFirst(stops))
-                Case "chr" : Return characterSeq(start:=getChar(REnv.getFirst(init)), steps:=REnv.getFirst(offset), ends:=getChar(REnv.getFirst(stops)))
+                Case "chr"
+                    Return characterSeq(
+                        start:=getChar(REnv.getFirst(init)),
+                        steps:=REnv.getFirst(offset),
+                        ends:=getChar(REnv.getFirst(stops))
+                    )
                 Case Else
-                    Return Internal.debug.stop($"data type of the sequence literal is not supported!", envir)
+                    Return Internal.debug.stop({
+                        $"data type of the sequence literal is not supported!",
+                        $"init: {RType.TypeOf(init)}",
+                        $"stops: {RType.TypeOf(stops)}",
+                        $"offset: {RType.TypeOf(offset)}"
+                    }, envir)
             End Select
         End Function
 

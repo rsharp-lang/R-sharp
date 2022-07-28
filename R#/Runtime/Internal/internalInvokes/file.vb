@@ -549,7 +549,15 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("basename")>
-        Public Function basename(fileNames$(), Optional withExtensionName As Boolean = False) As String()
+        <RApiReturn(GetType(String))>
+        Public Function basename(fileNames$(),
+                                 Optional withExtensionName As Boolean = False,
+                                 Optional env As Environment = Nothing) As Object
+
+            If fileNames Is Nothing Then
+                Return Internal.debug.stop("the given file name can not be nothing!", env)
+            End If
+
             If withExtensionName Then
                 ' get fileName
                 Return fileNames _

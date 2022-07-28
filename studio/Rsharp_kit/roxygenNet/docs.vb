@@ -90,7 +90,7 @@ Module docs
                        <meta name="keywords" content="GCModeller; Xanthomonas; Artificial Life"/>
                        <meta name="generator" content="https://github.com/xieguigang/xDoc"/>
                        <meta name="theme-color" content="#333"/>
-                       <meta name="last-update" content=<%= Now.ToString %>/>
+                       <meta name="last-update" content=<%= Now.ToString(format:="yyyy-MM-dd") %>/>
                        <meta name="description" content="A software system aim at Artificial Life system design and analysis."/>
 
                        <meta class="foundation-data-attribute-namespace"/>

@@ -361,7 +361,14 @@ Namespace Runtime.Internal.Object
         ''' <summary>
         ''' ``data[selector, ]``
         ''' </summary>
-        ''' <param name="selector"></param>
+        ''' <param name="selector">
+        ''' accepts:
+        ''' 
+        ''' 1. logical vector as row selector
+        ''' 2. integer vector for take rows by row number
+        ''' 3. character vector for take rows by row name
+        ''' 
+        ''' </param>
         ''' <returns></returns>
         Public Function sliceByRow(selector As Array, env As Environment) As [Variant](Of dataframe, Message)
             Dim indexType As Type = MeasureRealElementType(selector)
