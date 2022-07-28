@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src ../ ",
-      "workingDirectory": "E:\\GCModeller\\src\\workbench\\markdown2pdf\\.pkg"
+      "commandLineArgs": "\"E:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=33361",
+      "workingDirectory": "E:\\mzkit\\dist\\bin\\Rstudio\\host"
     }
   }
 }
