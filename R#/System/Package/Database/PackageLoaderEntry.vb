@@ -142,6 +142,7 @@ Namespace Development.Package
             Dim level1Parent As String = App.HOME.ParentPath
             Dim level2Parent As String = level1Parent.ParentPath
             Dim dllDirectory As String() = {
+                $"{App.HOME}",
                 $"{App.HOME}/Library",
                 $"{App.HOME}/library",
                 $"{level1Parent}/Library",
