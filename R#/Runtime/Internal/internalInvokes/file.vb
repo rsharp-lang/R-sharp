@@ -301,9 +301,16 @@ Namespace Runtime.Internal.Invokes
         ''' 
         <ExportAPI("file.copy")>
         <RApiReturn(GetType(Boolean()))>
-        Public Function filecopy(from$(), to$(), Optional env As Environment = Nothing) As Object
+        Public Function filecopy(from$(), to$(),
+                                 Optional overwrite As Boolean = False,
+                                 Optional env As Environment = Nothing) As Object
+
             Dim result As New List(Of Object)
-            Dim isDir As Boolean = (from.Length > 1 AndAlso [to].Length = 1) OrElse (from.Length = 1 AndAlso from(Scan0).DirectoryExists AndAlso [to].Length = 1 AndAlso [to](Scan0).EndsWith("/"c))
+            Dim isDir As Boolean = (from.Length > 1 AndAlso [to].Length = 1) OrElse
+                (from.Length = 1 AndAlso
+                 from(Scan0).DirectoryExists AndAlso
+                 [to].Length = 1 AndAlso
+                 [to](Scan0).EndsWith("/"c))
 
             If from.Length = 0 Then
                 Return {}
