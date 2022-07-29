@@ -328,7 +328,7 @@ Namespace Development.Package.File
                 checksum = checksum & htmlIndex(man.BaseName)
                 relpath = man.GetFullPath.Replace(pkg_dir, "")
 
-                Using file As New StreamWriter(zip.CreateEntry($"package/{relpath}").Open)
+                Using file As New StreamWriter(zip.CreateEntry($"package/{relpath.Replace("\", "/")}").Open)
                     Call file.WriteLine(text)
                     Call file.Flush()
                 End Using
