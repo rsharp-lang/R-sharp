@@ -133,16 +133,16 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
                     Dim calls As FunctionInvoke = invoke.expression
                     Dim lambdaSymbol = calls.parameters
-                    Dim symbolName = InvokeParameter.GetSymbolName(calls.funcName)
+                    Dim symbolName = InvokeParameter.GetSymbolName(calls.funcName).Trim(""""c)
                     Dim symbolCall As New DeclareNewSymbol(InvokeParameter.GetSymbolName(lambdaSymbol(0)), trace)
-                    Dim body = opts.ParseExpression(code.Skip(3), opts)
+                    Dim body = opts.ParseExpression(code.Skip(3).IteratesALL, opts)
 
                     If body.isException Then
                         Return body
                     End If
 
                     Dim func As New DeclareLambdaFunction(
-                        name:=symbolName,
+                        name:=$"{symbolName}({symbolCall.names.JoinBy(", ")}) = {body.ToString}",
                         parameter:=symbolCall,
                         closure:=body.expression,
                         stackframe:=trace
