@@ -122,6 +122,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim trace As StackFrame = opts.GetStackTrace(code(1)(Scan0))
 
             If symbolNames Like GetType(SyntaxErrorException) Then
+                ' const f(x) = x + 1;
+
                 Return SyntaxResult.CreateError(
                     err:=symbolNames.TryCast(Of SyntaxErrorException),
                     opts:=opts.SetCurrentRange(code.IteratesALL.ToArray)
