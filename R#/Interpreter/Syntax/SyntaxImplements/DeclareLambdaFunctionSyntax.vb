@@ -93,6 +93,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Return New SyntaxResult(lambda)
         End Function
 
+        Public Function DeclareLambdaFunction(name As String, body As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
+
+        End Function
+
         ''' <summary>
         ''' 只允许拥有一个参数，并且只允许出现一行代码
         ''' </summary>

@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::03451067e19cfc484b72b29ba489f299, R-sharp\R#\Runtime\System\InvokeParameter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 224
-    '    Code Lines: 158
-    ' Comment Lines: 38
-    '   Blank Lines: 28
-    '     File Size: 8.61 KB
+' Summaries:
 
 
-    '     Class InvokeParameter
-    ' 
-    '         Properties: haveSymbolName, index, isAcceptor, isProbablyVectorNameTuple, isSymbolAssign
-    '                     name, value
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: Create, CreateArguments, CreateLiterals, Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 224
+'    Code Lines: 158
+' Comment Lines: 38
+'   Blank Lines: 28
+'     File Size: 8.61 KB
+
+
+'     Class InvokeParameter
+' 
+'         Properties: haveSymbolName, index, isAcceptor, isProbablyVectorNameTuple, isSymbolAssign
+'                     name, value
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: Create, CreateArguments, CreateLiterals, Evaluate, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -72,26 +72,7 @@ Namespace Runtime.Components
 
         Public ReadOnly Property name As String
             Get
-                If value Is Nothing Then
-                    Return ""
-                ElseIf TypeOf value Is SymbolReference Then
-                    Return DirectCast(value, SymbolReference).symbol
-                ElseIf TypeOf value Is ValueAssignExpression Then
-                    Return DirectCast(value, ValueAssignExpression) _
-                        .targetSymbols(Scan0) _
-                        .DoCall(AddressOf ValueAssignExpression.GetSymbol)
-                ElseIf TypeOf value Is VectorLiteral Then
-                    With DirectCast(value, VectorLiteral)
-                        If .length = 1 AndAlso TypeOf .First Is ValueAssignExpression Then
-                            ' [a = b] :> func(...)
-                            Return DirectCast(.First, ValueAssignExpression).targetSymbols(Scan0).ToString
-                        Else
-                            Return .ToString
-                        End If
-                    End With
-                Else
-                    Return value.ToString
-                End If
+                Return GetSymbolName(expr:=value)
             End Get
         End Property
 
@@ -161,6 +142,29 @@ Namespace Runtime.Components
             Me.index = index
             Me.value = New RuntimeValueLiteral(runtimeValue)
         End Sub
+
+        Public Shared Function GetSymbolName(expr As Expression) As String
+            If expr Is Nothing Then
+                Return ""
+            ElseIf TypeOf expr Is SymbolReference Then
+                Return DirectCast(expr, SymbolReference).symbol
+            ElseIf TypeOf expr Is ValueAssignExpression Then
+                Return DirectCast(expr, ValueAssignExpression) _
+                    .targetSymbols(Scan0) _
+                    .DoCall(AddressOf ValueAssignExpression.GetSymbol)
+            ElseIf TypeOf expr Is VectorLiteral Then
+                With DirectCast(expr, VectorLiteral)
+                    If .length = 1 AndAlso TypeOf .First Is ValueAssignExpression Then
+                        ' [a = b] :> func(...)
+                        Return DirectCast(.First, ValueAssignExpression).targetSymbols(Scan0).ToString
+                    Else
+                        Return .ToString
+                    End If
+                End With
+            Else
+                Return expr.ToString
+            End If
+        End Function
 
         ''' <summary>
         ''' get value part

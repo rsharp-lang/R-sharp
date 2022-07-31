@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::38e3ce5347b319b70f2f00c9761d623b, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\DeclareNewSymbolSyntax.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 273
-    '    Code Lines: 195
-    ' Comment Lines: 37
-    '   Blank Lines: 41
-    '     File Size: 10.78 KB
+' Summaries:
 
 
-    '     Module DeclareNewSymbolSyntax
-    ' 
-    '         Function: (+4 Overloads) DeclareNewSymbol, getNames, getSymbolTokens, ModeOf
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 273
+'    Code Lines: 195
+' Comment Lines: 37
+'   Blank Lines: 41
+'     File Size: 10.78 KB
+
+
+'     Module DeclareNewSymbolSyntax
+' 
+'         Function: (+4 Overloads) DeclareNewSymbol, getNames, getSymbolTokens, ModeOf
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -123,11 +123,40 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             If symbolNames Like GetType(SyntaxErrorException) Then
                 ' const f(x) = x + 1;
+                If code(1).isFunctionInvoke Then
+                    Dim symbolPart = code(1)
+                    Dim invoke = FunctionInvokeSyntax.FunctionInvoke(symbolPart, opts)
 
-                Return SyntaxResult.CreateError(
-                    err:=symbolNames.TryCast(Of SyntaxErrorException),
-                    opts:=opts.SetCurrentRange(code.IteratesALL.ToArray)
-                )
+                    If invoke.isException Then
+                        Return invoke
+                    End If
+
+                    Dim calls As FunctionInvoke = invoke.expression
+                    Dim lambdaSymbol = calls.parameters
+                    Dim symbolName = InvokeParameter.GetSymbolName(calls.funcName)
+                    Dim symbolCall As New DeclareNewSymbol(InvokeParameter.GetSymbolName(lambdaSymbol(0)), trace)
+                    Dim body = opts.ParseExpression(code.Skip(3), opts)
+
+                    If body.isException Then
+                        Return body
+                    End If
+
+                    Dim func As New DeclareLambdaFunction(
+                        name:=symbolName,
+                        parameter:=symbolCall,
+                        closure:=body.expression,
+                        stackframe:=trace
+                    )
+
+                    symbolCall = New DeclareNewSymbol(symbolName, trace, func)
+
+                    Return New SyntaxResult(symbolCall)
+                Else
+                    Return SyntaxResult.CreateError(
+                        err:=symbolNames.TryCast(Of SyntaxErrorException),
+                        opts:=opts.SetCurrentRange(code.IteratesALL.ToArray)
+                    )
+                End If
             End If
 
             If code = 2 Then
