@@ -59,9 +59,9 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
-Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
-Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language
+Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
+Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports Rscript = SMRUCC.Rsharp.Runtime.Components.Rscript
 
