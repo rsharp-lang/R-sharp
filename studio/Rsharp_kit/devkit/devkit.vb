@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::34cbf281514672abb46348e97671518d, R-sharp\studio\Rsharp_kit\devkit\devkit.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 141
-    '    Code Lines: 97
-    ' Comment Lines: 26
-    '   Blank Lines: 18
-    '     File Size: 5.27 KB
+' Summaries:
 
 
-    ' Module devkit
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: AssemblyInfo, decodeSourceMap, encodeSourceMap, getSourceFiles, gitLog
-    '               inspect, printProject, readBannerData, readVbProject, showIL
-    '               svnLog, writeCodeBanner
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 141
+'    Code Lines: 97
+' Comment Lines: 26
+'   Blank Lines: 18
+'     File Size: 5.27 KB
+
+
+' Module devkit
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: AssemblyInfo, decodeSourceMap, encodeSourceMap, getSourceFiles, gitLog
+'               inspect, printProject, readBannerData, readVbProject, showIL
+'               svnLog, writeCodeBanner
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.CodeS
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.IL
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.SourceMap
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.vbproj
+Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.vbproj.Xml
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.VersionControl
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
