@@ -61,7 +61,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
-Namespace Interpreter.SyntaxParser
+Namespace Language.Syntax.SyntaxParser
 
     Friend Class PipelineProcessor : Inherits GenericSymbolOperatorProcessor
 

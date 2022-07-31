@@ -58,7 +58,7 @@ Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
-Namespace Interpreter.SyntaxParser.SyntaxImplements
+Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
     Module FunctionAcceptorSyntax
 

@@ -56,7 +56,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 
-Namespace Interpreter.SyntaxParser
+Namespace Language.Syntax.SyntaxParser
 
     Public Class SyntaxError
 

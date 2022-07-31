@@ -62,7 +62,7 @@ Imports RExpression = SMRUCC.Rsharp.Interpreter.ExecuteEngine.Expression
 
 <Assembly: InternalsVisibleTo("SMRUCC.Language.CodeDom")>
 
-Namespace Interpreter.SyntaxParser
+Namespace Language.Syntax.SyntaxParser
 
     ''' <summary>
     ''' The R# expression syntax build result, the result of this 

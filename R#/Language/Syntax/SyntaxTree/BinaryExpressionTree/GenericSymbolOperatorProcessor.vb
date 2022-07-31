@@ -59,7 +59,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 
-Namespace Interpreter.SyntaxParser
+Namespace Language.Syntax.SyntaxParser
 
     Friend MustInherit Class GenericSymbolOperatorProcessor
 

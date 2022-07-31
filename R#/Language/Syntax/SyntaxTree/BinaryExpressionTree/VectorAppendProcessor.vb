@@ -55,7 +55,7 @@ Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
-Namespace Interpreter.SyntaxParser
+Namespace Language.Syntax.SyntaxParser
 
     Friend Class VectorAppendProcessor : Inherits GenericSymbolOperatorProcessor
 

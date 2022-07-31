@@ -58,7 +58,7 @@ Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports [String] = SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets.StringInterpolation
 
-Namespace Interpreter.SyntaxParser.SyntaxImplements
+Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
     Module StringInterpolationSyntax
 

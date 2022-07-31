@@ -56,7 +56,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
-Namespace Interpreter.SyntaxParser.SyntaxImplements
+Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
     Module WhileLoopSyntax
 

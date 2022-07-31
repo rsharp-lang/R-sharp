@@ -58,7 +58,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.LINQ.Syntax
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
-Namespace Interpreter.SyntaxParser.SyntaxImplements
+Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
     Module LinqExpressionSyntax
 
