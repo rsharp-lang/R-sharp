@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Rsharp-netcore5": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\biodeep\\bionovogene_health\\metacolon\\gut_microbiome\\workflow\\16sReport.R\" --OTU_table \"D:\\biodeep\\bionovogene_health\\metacolon\\gut_microbiome\\test\\20220507\\mothur_OTU_table.csv\" --metagenome \"D:\\biodeep\\bionovogene_health\\metacolon\\gut_microbiome\\test\\20220507\\metagenome.csv\" --sampleinfo \"D:\\biodeep\\bionovogene_health\\metacolon\\gut_microbiome\\test\\20220507\\sampleinfo.csv\" --attach \"D:\\biodeep\\bionovogene_health\\metacolon\\gut_microbiome\" --template \"D:\\biodeep\\bionovogene_health\\metacolon\\templates\\pdf\\20220725\\html\""
+    }
+  }
+}
