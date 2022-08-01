@@ -122,6 +122,9 @@ Namespace Runtime.Interop
         End Sub
     End Class
 
+    ''' <summary>
+    ''' export data type to ``R#`` runtime environment
+    ''' </summary>
     <AttributeUsage(AttributeTargets.Class, AllowMultiple:=True, Inherited:=True)>
     Public Class RTypeExportAttribute : Inherits RInteropAttribute
 
