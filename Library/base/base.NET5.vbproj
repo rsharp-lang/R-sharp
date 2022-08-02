@@ -75,6 +75,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>../../../../../\mzkit\dist\bin\Rstudio\library\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'" />
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\BinaryData\BinaryData\binarydata-netcore5.vbproj" />

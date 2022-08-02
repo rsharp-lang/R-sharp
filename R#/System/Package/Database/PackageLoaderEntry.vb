@@ -141,18 +141,20 @@ Namespace Development.Package
             ' 20220502 handling mzkit_win32 release
             Dim level1Parent As String = App.HOME.ParentPath
             Dim level2Parent As String = level1Parent.ParentPath
+            Dim dllDirectory As String() = {
+                $"{App.HOME}",
+                $"{App.HOME}/Library",
+                $"{App.HOME}/library",
+                $"{level1Parent}/Library",
+                $"{level1Parent}/library",
+                $"{level2Parent}/Library",
+                $"{level2Parent}/library"
+            }
             Dim loader As Type = [module].GetType(
                 knownFirst:=True,
                 throwEx:=False,
                 getException:=exception,
-                searchPath:={
-                    $"{App.HOME}/Library",
-                    $"{App.HOME}/library",
-                    $"{level1Parent}/Library",
-                    $"{level1Parent}/library",
-                    $"{level2Parent}/Library",
-                    $"{level2Parent}/library"
-                }
+                searchPath:=dllDirectory
             )
             Dim info As New PackageAttribute([namespace]) With {
                 .Category = category,
@@ -162,6 +164,12 @@ Namespace Development.Package
                 .Revision = revision,
                 .Url = url
             }
+
+            If loader Is Nothing AndAlso Not exception Is Nothing Then
+                If TypeOf exception Is DllNotFoundException Then
+                    exception = New DllNotFoundException($"{exception.Message}, SetDllDirectory [{dllDirectory.JoinBy(", ")}]")
+                End If
+            End If
 
             If loader Is Nothing Then
                 Return Nothing
