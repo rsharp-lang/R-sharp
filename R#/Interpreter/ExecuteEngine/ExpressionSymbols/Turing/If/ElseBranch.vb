@@ -100,7 +100,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             If envir.ifPromise = 0 Then
-                Return Internal.debug.stop(New SyntaxErrorException, envir)
+                Return Internal.debug.stop("syntax error: missing if branch condition test!", envir)
             Else
                 Dim last As IfPromise
 
