@@ -48,6 +48,7 @@
     <ROW Directory="images_Dir" Directory_Parent="APPDIR" DefaultDir="images"/>
     <ROW Directory="lib_2_Dir" Directory_Parent="win_Dir" DefaultDir="lib"/>
     <ROW Directory="lib_Dir" Directory_Parent="unix_Dir" DefaultDir="lib"/>
+    <ROW Directory="library_Dir" Directory_Parent="APPDIR" DefaultDir="library"/>
     <ROW Directory="net6.0_2_Dir" Directory_Parent="lib_2_Dir" DefaultDir="net6.0"/>
     <ROW Directory="net6.0_Dir" Directory_Parent="lib_Dir" DefaultDir="net6.0"/>
     <ROW Directory="nuget_Dir" Directory_Parent="APPDIR" DefaultDir="nuget"/>
@@ -147,6 +148,7 @@
     <ROW Component="help" ComponentId="{799B0B1A-49F5-4A89-9A0A-A029EFA8C728}" Directory_="help_Dir" Attributes="0"/>
     <ROW Component="igraph.dll" ComponentId="{CF1291D6-94DA-4FE8-BC09-841D1F187D4D}" Directory_="bin_Dir" Attributes="256" KeyPath="igraph.dll"/>
     <ROW Component="images" ComponentId="{876F8BF7-C8F9-4763-9ECE-3DA87986B37D}" Directory_="images_Dir" Attributes="0"/>
+    <ROW Component="library" ComponentId="{4CF3640B-B964-47B3-A4F3-E93E1E6EBE27}" Directory_="library_Dir" Attributes="0"/>
     <ROW Component="njl.dll" ComponentId="{DF0C2867-569E-411C-B67C-13D9BDFABD5B}" Directory_="bin_Dir" Attributes="256" KeyPath="njl.dll"/>
     <ROW Component="npy.dll" ComponentId="{14ECC39D-5274-4EFA-9566-579864B453BD}" Directory_="bin_Dir" Attributes="256" KeyPath="npy.dll"/>
     <ROW Component="nts.dll" ComponentId="{E07C0335-E8EF-4B3D-9700-9DB2AC23DB2B}" Directory_="bin_Dir" Attributes="256" KeyPath="nts.dll"/>
@@ -385,6 +387,7 @@
     <ROW Directory_="help_Dir" Component_="help" ManualDelete="false"/>
     <ROW Directory_="images_Dir" Component_="images" ManualDelete="false"/>
     <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR" ManualDelete="false"/>
+    <ROW Directory_="library_Dir" Component_="library" ManualDelete="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
     <ROW Action="AI_AppSearchEx" Type="1" Source="Prereq.dll" Target="DoAppSearchEx"/>
@@ -416,7 +419,7 @@
     <ROW Action="AI_SetArpReadmeFile" Type="51" Source="ARPREADME" Target="[#LICENSE]"/>
     <ROW Action="R.exe" Type="1554" Source="R.exe" Target="--reset"/>
     <ROW Action="R.exe_1" Type="1554" Source="R.exe" Target="--setup"/>
-    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[WindowsVolume][ProductName]"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[WindowsVolume]\Rsharp"/>
     <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
   </COMPONENT>
@@ -518,6 +521,7 @@
     <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Math.SignalProcessing.dll"/>
     <ROW Feature_="MainFeature" Component_="signalKit.dll"/>
     <ROW Feature_="MainFeature" Component_="base.1.0.0.nupkg"/>
+    <ROW Feature_="MainFeature" Component_="library"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="PrideIconRound.exe" SourcePath="..\docs\images\rstudio-icons-main\Icons\Windows\Round\Pride Icon - Round.ico" Index="0"/>
