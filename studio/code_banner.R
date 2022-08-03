@@ -1,4 +1,4 @@
-imports "devkit" from "VisualStudio";
+imports "VisualStudio" from "devkit";
 imports "./banner.py";
 
 # banner data for update onto the source files
