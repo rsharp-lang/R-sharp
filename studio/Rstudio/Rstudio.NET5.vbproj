@@ -138,4 +138,6 @@
 
   <Import Project="..\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
 
+  <ProjectExtensions><VisualStudio><UserProperties global_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>
