@@ -83,6 +83,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
         Public Property members As NamedValue(Of Expression)()
 
+        Public ReadOnly Property size As Integer
+            Get
+                Return members.Length
+            End Get
+        End Property
+
         Sub New(members As IEnumerable(Of NamedValue(Of Expression)))
             Me.members = members.ToArray
         End Sub

@@ -93,6 +93,7 @@ Namespace Development.Package.File
         Shared ReadOnly magicBytes As Byte() = Encoding.ASCII.GetBytes(Magic)
 
         Public ReadOnly Property RSymbol As RSymbol
+        Public ReadOnly Property RJSON As RJSON
         Public ReadOnly Property RSymbolRef As RSymbolReference
         Public ReadOnly Property RSymbolIndex As RSymbolIndex
         Public ReadOnly Property RSymbolAssign As RSymbolAssign
@@ -146,6 +147,7 @@ Namespace Development.Package.File
             Me.RTryCatch = New RTryCatch(Me)
             Me.RShell = New RCommandLine(Me)
             Me.RBreakControls = New RBreakControls(Me)
+            Me.RJSON = New RJSON(Me)
         End Sub
 
         Public Function GetBuffer(x As Expression) As Byte()
@@ -160,6 +162,7 @@ Namespace Development.Package.File
 
                 Case GetType(BreakLoop), GetType(ContinuteFor) : Return RBreakControls.GetBuffer(x)
                 Case GetType(Literal), GetType(Regexp) : Return RLiteral.GetBuffer(x)
+                Case GetType(JSONLiteral) : Return RJSON.GetBuffer(x)
                 Case GetType(StringInterpolation) : Return RString.GetBuffer(x)
                 Case GetType(ExternalCommandLine) : Return RShell.GetBuffer(x)
                 Case GetType(ModeOf) : Return RTypeAssert.GetBuffer(x)

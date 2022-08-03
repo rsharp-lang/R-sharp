@@ -119,6 +119,7 @@ Namespace Development.Package.File
 
                         Return New RLiteral(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.ExpressionLiteral : Return New RExprLiteral(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.JSONLiteral : Return New RJSON(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.TypeOf : Return New RTypeOf(Nothing).GetExpression(buffer, Me, desc)
 
                     Case ExpressionTypes.VectorLiteral : Return New RVector(Nothing).GetExpression(buffer, Me, desc)
