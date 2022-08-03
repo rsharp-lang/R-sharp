@@ -103,9 +103,17 @@ Module devkit
     End Function
 
     <ExportAPI("read.vbproj")>
-    Public Function readVbProject(file As String) As Project
+    Public Function readVbProject(file As String, Optional legacy As Boolean = False) As Project
         Try
-            Return Project.Load(file)
+            Dim vbproj As Project = Project.Load(file)
+
+            If Not legacy Then
+                If Not vbproj.IsDotNetCoreSDK Then
+                    Return Nothing
+                End If
+            End If
+
+            Return vbproj
         Catch ex As Exception
             Return Nothing
         End Try

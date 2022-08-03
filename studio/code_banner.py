@@ -85,10 +85,10 @@ def process_project(vbproj, refer):
     return v
 
 for refer in projects:
-    vbproj = read.vbproj(file = refer)
+    vbproj = read.vbproj(file = refer, legacy = True)
     
     if is.null(vbproj):
-        print(`skip of the .NET Sdk project: ${refer}...`)
+        print(`skip of the .NET Framework project: ${refer}...`)
     else        
         print(`processing vbproj: ${refer}`)
 
