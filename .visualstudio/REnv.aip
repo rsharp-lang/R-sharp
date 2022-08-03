@@ -50,6 +50,7 @@
     <ROW Directory="lib_Dir" Directory_Parent="unix_Dir" DefaultDir="lib"/>
     <ROW Directory="net6.0_2_Dir" Directory_Parent="lib_2_Dir" DefaultDir="net6.0"/>
     <ROW Directory="net6.0_Dir" Directory_Parent="lib_Dir" DefaultDir="net6.0"/>
+    <ROW Directory="nuget_Dir" Directory_Parent="APPDIR" DefaultDir="nuget"/>
     <ROW Directory="packages_Dir" Directory_Parent="APPDIR" DefaultDir="pkgs"/>
     <ROW Directory="runtimes_Dir" Directory_Parent="bin_Dir" DefaultDir="runtimes"/>
     <ROW Directory="unix_Dir" Directory_Parent="runtimes_Dir" DefaultDir="unix"/>
@@ -72,8 +73,10 @@
     <ROW Component="Microsoft.VisualBasic.Data.GraphQuery.dll" ComponentId="{D7D8B510-CFD5-4965-8B75-F7E44373A50F}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.GraphQuery.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.GraphTheory.dll" ComponentId="{A50B472F-8177-43A8-8E0E-8B2F906414A0}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.GraphTheory.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.IO.MessagePack.dll" ComponentId="{539A2A5C-2217-4D2C-9F7D-0594962C87E3}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.IO.MessagePack.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Data.Signal.IO.dll" ComponentId="{0457D0CF-A557-48D3-B888-74019869029D}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.Signal.IO.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.Storage.dll" ComponentId="{B387383C-DD9C-45AF-A053-0DDAD02B0FCD}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.Storage.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.TrinityNLP.dll" ComponentId="{BCFD3EE8-B03D-4735-8595-7C290047A0E5}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.TrinityNLP.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Data.Wave.dll" ComponentId="{36ADE33C-7B43-4A2D-8E89-159B9348E8F7}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.Wave.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.visualize.Network.IO.Extensions.dll" ComponentId="{A203FA8E-57CC-4436-A172-DF4E2F67F08F}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.visualize.Network.IO.Extensions.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.visualize.Network.Visualizer.dll" ComponentId="{66AAFDAD-B677-4FF7-9DC8-3D7E23479BFB}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.visualize.Network.Visualizer.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.visualize.Network.dll" ComponentId="{5BDF73F9-CA01-47B5-B420-7F1743DA0A99}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.visualize.Network.dll"/>
@@ -105,6 +108,7 @@
     <ROW Component="Microsoft.VisualBasic.Math.Lambda.dll" ComponentId="{90150EE1-EBDF-480E-9274-0968BCDE5E87}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Math.Lambda.dll"/>
     <ROW Component="Microsoft.VisualBasic.Math.ODEsSolver.dll" ComponentId="{C494980A-07D7-4555-93F5-B4E0F702F2CD}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Math.ODEsSolver.dll"/>
     <ROW Component="Microsoft.VisualBasic.Math.Randomizer.dll" ComponentId="{C8AB5F63-17C3-471C-AF99-402C896A8212}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Math.Randomizer.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Math.SignalProcessing.dll" ComponentId="{FDB1C890-76A9-48FA-877A-7B5B0B0BFE13}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Math.SignalProcessing.dll"/>
     <ROW Component="Microsoft.VisualBasic.Math.Statistics.ANOVA.dll" ComponentId="{D294AEE6-9093-4D69-B04E-CF061CFD6287}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Math.Statistics.ANOVA.dll"/>
     <ROW Component="Microsoft.VisualBasic.Math.Statistics.dll" ComponentId="{F0D23E2A-C9D5-44BE-90A4-687C9E93824B}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Math.Statistics.dll"/>
     <ROW Component="Microsoft.VisualBasic.Network.dll" ComponentId="{D28CD97D-868A-4668-BEE3-7E9ECA5F3F88}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Network.dll"/>
@@ -135,6 +139,7 @@
     <ROW Component="System.Drawing.Common.dll_3" ComponentId="{CEEBD859-46BF-4540-BEA9-EEF481738BB5}" Directory_="net6.0_2_Dir" Attributes="0" KeyPath="System.Drawing.Common.dll_3"/>
     <ROW Component="System.Drawing.Common.dll_4" ComponentId="{2AFCF56B-41F3-4D9D-AA6E-F29C5E933B93}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Drawing.Common.dll_4"/>
     <ROW Component="System.Resources.Extensions.dll" ComponentId="{763205A3-2C56-4EAF-BDAB-3FE2D09C4642}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Resources.Extensions.dll"/>
+    <ROW Component="base.1.0.0.nupkg" ComponentId="{9C27DAFC-42C5-476A-A366-0D4C0E770E2C}" Directory_="nuget_Dir" Attributes="0" KeyPath="base.1.0.0.nupkg" Type="0"/>
     <ROW Component="base.deps.json" ComponentId="{F0ED4640-E075-4B48-BD03-A876C6EF8803}" Directory_="bin_Dir" Attributes="0" KeyPath="base.deps.json" Type="0"/>
     <ROW Component="base.dll" ComponentId="{848C8B58-E62F-4C6F-BAD0-3EECAEB58663}" Directory_="bin_Dir" Attributes="256" KeyPath="base.dll"/>
     <ROW Component="devkit.dll" ComponentId="{5F40894B-BF36-4010-A517-3CD9EDD8B6F6}" Directory_="bin_Dir" Attributes="256" KeyPath="devkit.dll"/>
@@ -146,6 +151,7 @@
     <ROW Component="npy.dll" ComponentId="{14ECC39D-5274-4EFA-9566-579864B453BD}" Directory_="bin_Dir" Attributes="256" KeyPath="npy.dll"/>
     <ROW Component="nts.dll" ComponentId="{E07C0335-E8EF-4B3D-9700-9DB2AC23DB2B}" Directory_="bin_Dir" Attributes="256" KeyPath="nts.dll"/>
     <ROW Component="roxygenNet.dll" ComponentId="{F32ED1E1-F1E2-4738-82DD-815AC04683A8}" Directory_="bin_Dir" Attributes="256" KeyPath="roxygenNet.dll"/>
+    <ROW Component="signalKit.dll" ComponentId="{37EE6E50-CA83-4BE8-ABA6-3C8D325043F5}" Directory_="bin_Dir" Attributes="256" KeyPath="signalKit.dll"/>
     <ROW Component="snowFall.dll" ComponentId="{3B946644-F5C0-46E4-8392-6C356B7DEF1F}" Directory_="bin_Dir" Attributes="256" KeyPath="snowFall.dll"/>
     <ROW Component="webKit.dll" ComponentId="{B1443870-C373-4BE4-88B5-6BBDF5B135A2}" Directory_="bin_Dir" Attributes="256" KeyPath="webKit.dll"/>
   </COMPONENT>
@@ -275,6 +281,29 @@
     <ROW File="REnv.deps.json" Component_="base.deps.json" FileName="RENVDE~1.JSO|REnv.deps.json" Attributes="0" SourcePath="..\App\net6.0\REnv.deps.json" SelfReg="false"/>
     <ROW File="REnv.runtimeconfig.json" Component_="base.deps.json" FileName="RENVRU~1.JSO|REnv.runtimeconfig.json" Attributes="0" SourcePath="..\App\net6.0\REnv.runtimeconfig.json" SelfReg="false"/>
     <ROW File="SMRUCC.Language.CodeDom.dll" Component_="SMRUCC.Language.CodeDom.dll" FileName="SMRUCC~1.DLL|SMRUCC.Language.CodeDom.dll" Attributes="0" SourcePath="..\App\net6.0\SMRUCC.Language.CodeDom.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.Signal.IO.dll" Component_="Microsoft.VisualBasic.Data.Signal.IO.dll" FileName="MICRO~11.DLL|Microsoft.VisualBasic.Data.Signal.IO.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.Data.Signal.IO.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.Wave.dll" Component_="Microsoft.VisualBasic.Data.Wave.dll" FileName="MICRO~18.DLL|Microsoft.VisualBasic.Data.Wave.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.Data.Wave.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.Wave.dll.config" Component_="base.deps.json" FileName="MICROS~2.CON|Microsoft.VisualBasic.Data.Wave.dll.config" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.Data.Wave.dll.config" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Math.SignalProcessing.dll" Component_="Microsoft.VisualBasic.Math.SignalProcessing.dll" FileName="MICRO~40.DLL|Microsoft.VisualBasic.Math.SignalProcessing.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.Math.SignalProcessing.dll" SelfReg="false"/>
+    <ROW File="Rserver.deps.json" Component_="base.deps.json" FileName="RSERVE~3.JSO|Rserver.deps.json" Attributes="0" SourcePath="..\App\net6.0\Rserver.deps.json" SelfReg="false"/>
+    <ROW File="signalKit.deps.json" Component_="base.deps.json" FileName="SIGNAL~1.JSO|signalKit.deps.json" Attributes="0" SourcePath="..\App\net6.0\signalKit.deps.json" SelfReg="false"/>
+    <ROW File="signalKit.dll" Component_="signalKit.dll" FileName="SIGNAL~1.DLL|signalKit.dll" Attributes="0" SourcePath="..\App\net6.0\signalKit.dll" SelfReg="false"/>
+    <ROW File="base.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="BASE10~1.NUP|base.1.0.0.nupkg" Attributes="0" SourcePath="..\App\base.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="devkit.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="DEVKIT~1.NUP|devkit.1.0.0.nupkg" Attributes="0" SourcePath="..\App\devkit.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="graphics.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="GRAPHI~1.NUP|graphics.1.0.0.nupkg" Attributes="0" SourcePath="..\App\graphics.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="igraph.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="IGRAPH~1.NUP|igraph.1.0.0.nupkg" Attributes="0" SourcePath="..\App\igraph.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="MLkit.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="MLKIT1~1.NUP|MLkit.1.0.0.nupkg" Attributes="0" SourcePath="..\App\MLkit.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="njl.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="NJL100~1.NUP|njl.1.0.0.nupkg" Attributes="0" SourcePath="..\App\njl.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="npy.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="NPY100~1.NUP|npy.1.0.0.nupkg" Attributes="0" SourcePath="..\App\npy.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="nts.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="NTS100~1.NUP|nts.1.0.0.nupkg" Attributes="0" SourcePath="..\App\nts.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="RData.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="RDATA1~1.NUP|RData.1.0.0.nupkg" Attributes="0" SourcePath="..\App\RData.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="REnv.5.1.3.5558.nupkg" Component_="base.1.0.0.nupkg" FileName="RENV51~1.NUP|REnv.5.1.3.5558.nupkg" Attributes="0" SourcePath="..\App\REnv.5.1.3.5558.nupkg" SelfReg="false"/>
+    <ROW File="Rlapack.5.0.1.2389.nupkg" Component_="base.1.0.0.nupkg" FileName="RLAPAC~1.NUP|Rlapack.5.0.1.2389.nupkg" Attributes="0" SourcePath="..\App\Rlapack.5.0.1.2389.nupkg" SelfReg="false"/>
+    <ROW File="roxygenNet.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="ROXYGE~1.NUP|roxygenNet.1.0.0.nupkg" Attributes="0" SourcePath="..\App\roxygenNet.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="Rserver.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="RSERVE~1.NUP|Rserver.1.0.0.nupkg" Attributes="0" SourcePath="..\App\Rserver.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="Rstudio.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="RSTUDI~1.NUP|Rstudio.1.0.0.nupkg" Attributes="0" SourcePath="..\App\Rstudio.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="snowFall.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="SNOWFA~1.NUP|snowFall.1.0.0.nupkg" Attributes="0" SourcePath="..\App\snowFall.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="webKit.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="WEBKIT~1.NUP|webKit.1.0.0.nupkg" Attributes="0" SourcePath="..\App\webKit.1.0.0.nupkg" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -385,9 +414,9 @@
     <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
     <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
     <ROW Action="AI_SetArpReadmeFile" Type="51" Source="ARPREADME" Target="[#LICENSE]"/>
-    <ROW Action="R.exe" Type="1554" Source="R.exe" Target="--setup"/>
-    <ROW Action="R.exe_1" Type="1042" Source="R.exe" Target="--install.packages /module ../pkgs/REnv.zip"/>
-    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[AppDataFolder][Manufacturer]\[ProductName]"/>
+    <ROW Action="R.exe" Type="1554" Source="R.exe" Target="--reset"/>
+    <ROW Action="R.exe_1" Type="1554" Source="R.exe" Target="--setup"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[WindowsVolume][ProductName]"/>
     <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
   </COMPONENT>
@@ -484,6 +513,11 @@
     <ROW Feature_="MainFeature" Component_="npy.dll"/>
     <ROW Feature_="MainFeature" Component_="nts.dll"/>
     <ROW Feature_="MainFeature" Component_="SMRUCC.Language.CodeDom.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Data.Signal.IO.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Data.Wave.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Math.SignalProcessing.dll"/>
+    <ROW Feature_="MainFeature" Component_="signalKit.dll"/>
+    <ROW Feature_="MainFeature" Component_="base.1.0.0.nupkg"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="PrideIconRound.exe" SourcePath="..\docs\images\rstudio-icons-main\Icons\Windows\Round\Pride Icon - Round.ico" Index="0"/>
@@ -511,9 +545,9 @@
     <ROW Action="AI_DetectSoftware" Sequence="101"/>
     <ROW Action="AI_GetArpIconPath" Sequence="1401"/>
     <ROW Action="AI_RemoveExternalUIStub" Condition="(REMOVE=&quot;ALL&quot;) AND ((VersionNT &gt; 500) OR((VersionNT = 500) AND (ServicePackLevel &gt;= 4)))" Sequence="1501"/>
+    <ROW Action="AI_SetArpReadmeFile" Condition="NOT Installed" Sequence="1001"/>
     <ROW Action="R.exe" Sequence="6401"/>
     <ROW Action="R.exe_1" Sequence="6402"/>
-    <ROW Action="AI_SetArpReadmeFile" Condition="NOT Installed" Sequence="1001"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
     <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
