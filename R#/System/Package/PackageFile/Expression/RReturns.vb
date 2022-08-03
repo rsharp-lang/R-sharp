@@ -38,7 +38,7 @@
     '    Code Lines: 28
     ' Comment Lines: 0
     '   Blank Lines: 9
-    '     File Size: 1.32 KB
+    '     File Size: 1.31 KB
 
 
     '     Class RReturns

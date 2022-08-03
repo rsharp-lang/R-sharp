@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bc0f696dbfc7924f0aab21081c214e4f, R-sharp\R#\Runtime\Internal\objects\dataset\vector.vb"
+﻿#Region "Microsoft.VisualBasic::f8d8966757daba8d60197e2c44946f58, R-sharp\R#\Runtime\Internal\objects\dataset\vector.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 309
-    '    Code Lines: 212
+    '   Total Lines: 318
+    '    Code Lines: 220
     ' Comment Lines: 45
-    '   Blank Lines: 52
-    '     File Size: 11.37 KB
+    '   Blank Lines: 53
+    '     File Size: 11.72 KB
 
 
     '     Class vector
@@ -46,8 +46,9 @@
     '         Properties: data, factor, length, unit
     ' 
     '         Constructor: (+7 Overloads) Sub New
-    '         Function: asVector, (+2 Overloads) getByIndex, getByName, getNames, hasName
-    '                   isVectorOf, setByindex, setByIndex, setNames, ToString
+    '         Function: asVector, fromScalar, (+2 Overloads) getByIndex, getByName, getNames
+    '                   hasName, isVectorOf, setByindex, setByIndex, setNames
+    '                   ToString
     '         Operators: <>, =
     ' 
     ' 

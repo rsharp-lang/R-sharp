@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dd62d08547ad2e1aca86965f99e27463, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::3abc4c3902e94dd132baef3e018ccbf1, R-sharp\R#\Language\Syntax\SyntaxImplements\SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 136
     ' Comment Lines: 41
     '   Blank Lines: 31
-    '     File Size: 7.90 KB
+    '     File Size: 7.91 KB
 
 
     '     Module SymbolIndexerSyntax

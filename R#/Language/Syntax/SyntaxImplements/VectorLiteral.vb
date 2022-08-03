@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::35a46795548cc2dcc58dc52e354e682e, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\VectorLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::20ed5f8a2e00354acbf71309e7dd5361, R-sharp\R#\Language\Syntax\SyntaxImplements\VectorLiteral.vb"
 
     ' Author:
     ' 

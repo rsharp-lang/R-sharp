@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8abfc1984a49339832f0c05c1497f001, R-sharp\Library\R.graph\Styler.vb"
+﻿#Region "Microsoft.VisualBasic::282894ac5a2276e245b84b3323d2c811, R-sharp\Library\igraph\Styler.vb"
 
     ' Author:
     ' 
@@ -38,12 +38,12 @@
     '    Code Lines: 188
     ' Comment Lines: 21
     '   Blank Lines: 27
-    '     File Size: 9.20 KB
+    '     File Size: 9.24 KB
 
 
     ' Module Styler
     ' 
-    '     Function: color, size, width
+    '     Function: elementColor, size, width
     ' 
     '     Sub: SetPenColor, SetPenWidth
     ' 

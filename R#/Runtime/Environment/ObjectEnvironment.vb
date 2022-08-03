@@ -38,7 +38,7 @@
     '    Code Lines: 22
     ' Comment Lines: 23
     '   Blank Lines: 7
-    '     File Size: 1.60 KB
+    '     File Size: 1.59 KB
 
 
     '     Class ObjectEnvironment

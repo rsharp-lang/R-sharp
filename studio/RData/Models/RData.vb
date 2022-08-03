@@ -38,7 +38,7 @@
     '    Code Lines: 14
     ' Comment Lines: 9
     '   Blank Lines: 5
-    '     File Size: 897.00 B
+    '     File Size: 897 B
 
 
     '     Class RData

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e32d62a49dfbc9a3bdebb0a86551d02c, R-sharp\studio\RData\Models\LinkedList\ListNodeType.vb"
+﻿#Region "Microsoft.VisualBasic::222bae921efc91ad79978339a253e4d9, R-sharp\studio\RData\Models\LinkedList\ListNodeType.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 18
-    '    Code Lines: 7
+    '   Total Lines: 19
+    '    Code Lines: 8
     ' Comment Lines: 10
     '   Blank Lines: 1
-    '     File Size: 498.00 B
+    '     File Size: 519 B
 
 
     '     Enum ListNodeType
     ' 
-    '         LinkedList, NA, Vector
+    '         Environment, LinkedList, NA, Vector
     ' 
     '  
     ' 

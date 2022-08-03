@@ -38,7 +38,7 @@
     '    Code Lines: 15
     ' Comment Lines: 2
     '   Blank Lines: 5
-    '     File Size: 531.00 B
+    '     File Size: 531 B
 
 
     ' Module docTest

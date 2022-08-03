@@ -38,7 +38,7 @@
     '    Code Lines: 33
     ' Comment Lines: 24
     '   Blank Lines: 12
-    '     File Size: 2.39 KB
+    '     File Size: 2.38 KB
 
 
     '     Class RDispose

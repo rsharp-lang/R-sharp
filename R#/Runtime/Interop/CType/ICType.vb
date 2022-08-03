@@ -38,7 +38,7 @@
     '    Code Lines: 6
     ' Comment Lines: 7
     '   Blank Lines: 5
-    '     File Size: 426.00 B
+    '     File Size: 426 B
 
 
     '     Interface ICTypeList

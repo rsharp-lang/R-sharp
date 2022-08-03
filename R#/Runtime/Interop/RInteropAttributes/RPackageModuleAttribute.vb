@@ -38,7 +38,7 @@
     '    Code Lines: 5
     ' Comment Lines: 3
     '   Blank Lines: 1
-    '     File Size: 310.00 B
+    '     File Size: 310 B
 
 
     '     Class RPackageModuleAttribute

@@ -38,7 +38,7 @@
     '    Code Lines: 25
     ' Comment Lines: 3
     '   Blank Lines: 8
-    '     File Size: 1.13 KB
+    '     File Size: 1.12 KB
 
 
     '     Class RunTimeValueExpression

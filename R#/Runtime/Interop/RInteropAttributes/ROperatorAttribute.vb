@@ -38,7 +38,7 @@
     '    Code Lines: 12
     ' Comment Lines: 4
     '   Blank Lines: 5
-    '     File Size: 576.00 B
+    '     File Size: 576 B
 
 
     '     Class ROperatorAttribute

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::83082d700dedbd39664701722f46f162, R-sharp\snowFall\Context\Serialization.vb"
+﻿#Region "Microsoft.VisualBasic::e4a52cc480caa47a3bf553092b0805fa, R-sharp\snowFall\Context\Serialization.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 96
-    '    Code Lines: 57
+    '   Total Lines: 100
+    '    Code Lines: 60
     ' Comment Lines: 27
-    '   Blank Lines: 12
-    '     File Size: 3.51 KB
+    '   Blank Lines: 13
+    '     File Size: 3.67 KB
 
 
     ' Module Serialization

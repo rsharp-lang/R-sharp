@@ -1,62 +1,62 @@
-﻿#Region "Microsoft.VisualBasic::6498805f851abb9196596d8e452ca93c, R-sharp\R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::e6e490e9ba07bc55df64db3c06b3bf0b, R-sharp\R#\Interpreter\RInterpreter.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 608
-'    Code Lines: 379
-' Comment Lines: 134
-'   Blank Lines: 95
-'     File Size: 24.86 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class RInterpreter
-' 
-'         Properties: configFile, debug, globalEnvir, redirectError2stdout, Rsharp
-'                     silent, strict, warnings
-' 
-'         Constructor: (+2 Overloads) Sub New
-' 
-'         Function: [Imports], [Set], (+2 Overloads) Evaluate, FromEnvironmentConfiguration, getDataStream
-'                   InitializeEnvironment, (+3 Overloads) Invoke, (+2 Overloads) LoadLibrary, options, Parse
-'                   RedirectOutput, Run, RunInternal, Source
-' 
-'         Sub: _construct, (+3 Overloads) Add, (+2 Overloads) Dispose, Inspect, (+2 Overloads) Print
-'              PrintMemory
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 620
+    '    Code Lines: 381
+    ' Comment Lines: 144
+    '   Blank Lines: 95
+    '     File Size: 25.45 KB
+
+
+    '     Class RInterpreter
+    ' 
+    '         Properties: configFile, debug, globalEnvir, redirectError2stdout, Rsharp
+    '                     silent, strict, warnings
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    ' 
+    '         Function: [Imports], [Set], (+2 Overloads) Evaluate, FromEnvironmentConfiguration, getDataStream
+    '                   InitializeEnvironment, (+3 Overloads) Invoke, (+2 Overloads) LoadLibrary, options, Parse
+    '                   RedirectOutput, Run, RunInternal, Source
+    ' 
+    '         Sub: _construct, (+3 Overloads) Add, (+2 Overloads) Dispose, Inspect, (+2 Overloads) Print
+    '              PrintMemory
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

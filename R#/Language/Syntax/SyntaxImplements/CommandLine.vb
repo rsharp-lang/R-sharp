@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a44d77457d110cd652fb9665e95c2c2d, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\CommandLine.vb"
+﻿#Region "Microsoft.VisualBasic::ef1e8de01c82e769e45ef1b91a1a4279, R-sharp\R#\Language\Syntax\SyntaxImplements\CommandLine.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 82
     ' Comment Lines: 12
     '   Blank Lines: 17
-    '     File Size: 4.30 KB
+    '     File Size: 4.31 KB
 
 
     '     Module CommandLineSyntax

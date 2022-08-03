@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d1cbf2e43ebfa80fd842cd54e11fa552, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\JSONLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::61d1ad2bdf484ea1590297709a1b65eb, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\JSONLiteral.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 62
-    '    Code Lines: 44
+    '   Total Lines: 68
+    '    Code Lines: 49
     ' Comment Lines: 6
-    '   Blank Lines: 12
-    '     File Size: 1.96 KB
+    '   Blank Lines: 13
+    '     File Size: 2.12 KB
 
 
     '     Class JSONLiteral
     ' 
-    '         Properties: expressionName, members, type
+    '         Properties: expressionName, members, size, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, ToString

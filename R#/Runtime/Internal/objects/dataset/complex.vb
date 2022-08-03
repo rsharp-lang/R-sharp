@@ -38,7 +38,7 @@
     '    Code Lines: 6
     ' Comment Lines: 3
     '   Blank Lines: 3
-    '     File Size: 231.00 B
+    '     File Size: 231 B
 
 
     '     Class complex

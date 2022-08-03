@@ -38,7 +38,7 @@
     '    Code Lines: 21
     ' Comment Lines: 8
     '   Blank Lines: 5
-    '     File Size: 1.11 KB
+    '     File Size: 1.10 KB
 
 
     ' Module automationUtils

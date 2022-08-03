@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aabfb5df67569c8d4298d0153f6180c8, R-sharp\R#\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::a31b695d30aeb32f501745082a680d49, R-sharp\R#\Extensions.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 201
-    '    Code Lines: 154
-    ' Comment Lines: 20
-    '   Blank Lines: 27
-    '     File Size: 7.13 KB
+    '   Total Lines: 225
+    '    Code Lines: 162
+    ' Comment Lines: 35
+    '   Blank Lines: 28
+    '     File Size: 7.92 KB
 
 
     ' Module Extensions
     ' 
     '     Constructor: (+1 Overloads) Sub New
     '     Function: AsRReturn, Buffer, EvaluateFramework, GetEncoding, GetObject
-    '               GetString, ParseDebugLevel, SafeCreateColumns
+    '               GetString, ParseDebugLevel, SafeCreateColumns, toList
     ' 
     ' /********************************************************************************/
 

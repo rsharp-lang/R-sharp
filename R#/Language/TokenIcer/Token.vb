@@ -38,7 +38,7 @@
     '    Code Lines: 44
     ' Comment Lines: 11
     '   Blank Lines: 10
-    '     File Size: 2.20 KB
+    '     File Size: 2.19 KB
 
 
     '     Class Token

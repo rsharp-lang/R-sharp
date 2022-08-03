@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a09eedd9eb7700a5fcfcd4091ee074fb, R-sharp\Library\R.math\symbolic.vb"
+﻿#Region "Microsoft.VisualBasic::a09eedd9eb7700a5fcfcd4091ee074fb, R-sharp\Library\Rlapack\symbolic.vb"
 
     ' Author:
     ' 

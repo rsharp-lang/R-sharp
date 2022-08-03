@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9af7205c6bd8b3e1c2abe628a6b52e92, R-sharp\studio\njl\Language\JlScanner.vb"
+﻿#Region "Microsoft.VisualBasic::9af7205c6bd8b3e1c2abe628a6b52e92, R-sharp\studio\Rsharp_IL\njl\Language\JlScanner.vb"
 
     ' Author:
     ' 

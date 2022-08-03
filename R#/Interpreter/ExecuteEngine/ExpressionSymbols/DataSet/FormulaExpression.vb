@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aa5ed07afd8ec6e268a47950356f894e, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\FormulaExpression.vb"
+﻿#Region "Microsoft.VisualBasic::0dddae7d73a91d96df0130d77b1045b6, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\FormulaExpression.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 95
+    '   Total Lines: 98
     '    Code Lines: 63
-    ' Comment Lines: 15
+    ' Comment Lines: 18
     '   Blank Lines: 17
-    '     File Size: 3.35 KB
+    '     File Size: 3.41 KB
 
 
     '     Class FormulaExpression

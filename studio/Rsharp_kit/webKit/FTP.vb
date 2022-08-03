@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8084f76f8cc404b382389edd2a7d039b, R-sharp\studio\Rsharp_kit\webKit\FTP.vb"
+﻿#Region "Microsoft.VisualBasic::8eb05c7762da1a10905022c58ab60bd3, R-sharp\studio\Rsharp_kit\webKit\FTP.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 126
-    '    Code Lines: 84
+    '   Total Lines: 128
+    '    Code Lines: 86
     ' Comment Lines: 21
     '   Blank Lines: 21
-    '     File Size: 4.58 KB
+    '     File Size: 4.69 KB
 
 
     ' Module FTP

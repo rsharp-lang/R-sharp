@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c60d03841f3cfc8fe7cd58d731e01471, R-sharp\studio\Rsharp_kit\devkit\sqlite.vb"
+﻿#Region "Microsoft.VisualBasic::70e30b5d6748a1490d3ee75d45e8a803, R-sharp\studio\Rsharp_kit\devkit\sqlite.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 71
+    '   Total Lines: 84
     '    Code Lines: 56
-    ' Comment Lines: 3
+    ' Comment Lines: 16
     '   Blank Lines: 12
-    '     File Size: 2.91 KB
+    '     File Size: 3.33 KB
 
 
     ' Module sqlite

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a954f4bced4dd2dddc1d8b66baaf952d, R-sharp\Library\R.graphics\ImageFilters.vb"
+﻿#Region "Microsoft.VisualBasic::ae81a16c5920fcb4bb185536a75d12a9, R-sharp\Library\graphics\ImageFilters.vb"
 
     ' Author:
     ' 

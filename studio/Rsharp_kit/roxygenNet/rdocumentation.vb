@@ -1,51 +1,51 @@
-﻿#Region "Microsoft.VisualBasic::eb9e39c8fefe9417d89c4f0259bf229b, R-sharp\studio\Rsharp_kit\roxygenNet\rdocumentation.vb"
+﻿#Region "Microsoft.VisualBasic::72b39157b2f0b2b4c892af3b380a73af, R-sharp\studio\Rsharp_kit\roxygenNet\rdocumentation.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 13
-'    Code Lines: 11
-' Comment Lines: 0
-'   Blank Lines: 2
-'     File Size: 471.00 B
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module rdocumentation
-' 
-'     Function: rdocumentation
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 67
+    '    Code Lines: 51
+    ' Comment Lines: 8
+    '   Blank Lines: 8
+    '     File Size: 2.56 KB
+
+
+    ' Module rdocumentation
+    ' 
+    '     Function: getFunctions, getPkgApisList, rdocumentation
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

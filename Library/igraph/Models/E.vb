@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ce56ff69e049607a49162e2cd880f988, R-sharp\Library\R.graph\Models\E.vb"
+﻿#Region "Microsoft.VisualBasic::0fa99d3e676b865fc8b38357b4cebafd, R-sharp\Library\igraph\Models\E.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 97
-    '    Code Lines: 74
+    '   Total Lines: 103
+    '    Code Lines: 79
     ' Comment Lines: 3
-    '   Blank Lines: 20
-    '     File Size: 3.46 KB
+    '   Blank Lines: 21
+    '     File Size: 3.62 KB
 
 
     ' Class E
     ' 
-    '     Properties: size
+    '     Properties: size, weight
     ' 
     '     Constructor: (+1 Overloads) Sub New
     '     Function: EvaluateIndexer, (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, hasName

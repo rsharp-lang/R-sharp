@@ -38,7 +38,7 @@
     '    Code Lines: 8
     ' Comment Lines: 4
     '   Blank Lines: 4
-    '     File Size: 432.00 B
+    '     File Size: 432 B
 
 
     '     Class ErrorDataSet

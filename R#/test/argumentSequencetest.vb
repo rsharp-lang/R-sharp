@@ -38,7 +38,7 @@
     '    Code Lines: 17
     ' Comment Lines: 1
     '   Blank Lines: 6
-    '     File Size: 673.00 B
+    '     File Size: 673 B
 
 
     ' Module argumentSequencetest

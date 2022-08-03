@@ -38,7 +38,7 @@
     '    Code Lines: 19
     ' Comment Lines: 5
     '   Blank Lines: 5
-    '     File Size: 865.00 B
+    '     File Size: 865 B
 
 
     '     Class HostSymbol

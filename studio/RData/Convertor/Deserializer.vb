@@ -38,7 +38,7 @@
     '    Code Lines: 9
     ' Comment Lines: 0
     '   Blank Lines: 5
-    '     File Size: 297.00 B
+    '     File Size: 297 B
 
 
     '     Module Deserializer

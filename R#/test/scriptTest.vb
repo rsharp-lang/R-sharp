@@ -38,7 +38,7 @@
     '    Code Lines: 20
     ' Comment Lines: 0
     '   Blank Lines: 7
-    '     File Size: 655.00 B
+    '     File Size: 655 B
 
 
     ' Module scriptTest

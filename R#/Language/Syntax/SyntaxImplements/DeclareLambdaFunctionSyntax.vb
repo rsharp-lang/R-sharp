@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7e169b31db1d24fa394aa3dfe7ed6bd3, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\DeclareLambdaFunctionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::6c38c6dbc517ecdfb3a109a4766324b3, R-sharp\R#\Language\Syntax\SyntaxImplements\DeclareLambdaFunctionSyntax.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 90
-    '    Code Lines: 76
+    '   Total Lines: 94
+    '    Code Lines: 78
     ' Comment Lines: 7
-    '   Blank Lines: 7
-    '     File Size: 3.90 KB
+    '   Blank Lines: 9
+    '     File Size: 4.07 KB
 
 
     '     Module DeclareLambdaFunctionSyntax
     ' 
-    '         Function: (+2 Overloads) DeclareLambdaFunction
+    '         Function: (+3 Overloads) DeclareLambdaFunction
     ' 
     ' 
     ' /********************************************************************************/

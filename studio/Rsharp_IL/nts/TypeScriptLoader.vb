@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::587472520bc63dd17c561d406449a96b, R-sharp\studio\nts\TypeScriptLoader.vb"
+﻿#Region "Microsoft.VisualBasic::587472520bc63dd17c561d406449a96b, R-sharp\studio\Rsharp_IL\nts\TypeScriptLoader.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 16
     ' Comment Lines: 0
     '   Blank Lines: 6
-    '     File Size: 650.00 B
+    '     File Size: 650 B
 
 
     ' Class TypeScriptLoader

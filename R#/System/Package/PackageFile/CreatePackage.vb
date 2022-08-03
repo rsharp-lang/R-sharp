@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::21b7e4ba32e1ecee89d494c0911743fa, R-sharp\R#\System\Package\PackageFile\CreatePackage.vb"
+﻿#Region "Microsoft.VisualBasic::f9f8573032df85900449c6fc4b0dfdb8, R-sharp\R#\System\Package\PackageFile\CreatePackage.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 425
-    '    Code Lines: 324
-    ' Comment Lines: 38
-    '   Blank Lines: 63
-    '     File Size: 17.52 KB
+    '   Total Lines: 472
+    '    Code Lines: 356
+    ' Comment Lines: 44
+    '   Blank Lines: 72
+    '     File Size: 19.46 KB
 
 
     '     Module CreatePackage
     ' 
     '         Function: Build, buildRscript, buildUnixMan, checkIndex, createAssetList
-    '                   filter, getAssemblyList, getDataSymbols, getFileReader, IsFunctionDeclare
-    '                   loadingDependency, MakeFunction
+    '                   filter, getAssemblyList, getDataSymbols, getFileReader, getRuntimeTags
+    '                   IsFunctionDeclare, loadingDependency, MakeFunction
     ' 
     ' 
     ' /********************************************************************************/

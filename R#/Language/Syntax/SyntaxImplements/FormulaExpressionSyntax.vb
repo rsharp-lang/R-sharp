@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6a880bb86061c81dedd322735fb6c2a1, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::d714515644296cbefbaba8934e002e05, R-sharp\R#\Language\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 34
-    '    Code Lines: 27
+    '   Total Lines: 45
+    '    Code Lines: 35
     ' Comment Lines: 0
-    '   Blank Lines: 7
-    '     File Size: 1.50 KB
+    '   Blank Lines: 10
+    '     File Size: 1.94 KB
 
 
     '     Module FormulaExpressionSyntax
     ' 
-    '         Function: GetExpressionLiteral, RunParse
+    '         Function: GetExpressionLiteral, (+2 Overloads) RunParse
     ' 
     ' 
     ' /********************************************************************************/

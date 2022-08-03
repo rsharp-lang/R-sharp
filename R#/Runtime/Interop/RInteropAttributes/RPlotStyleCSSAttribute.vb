@@ -38,7 +38,7 @@
     '    Code Lines: 12
     ' Comment Lines: 12
     '   Blank Lines: 3
-    '     File Size: 997.00 B
+    '     File Size: 997 B
 
 
     '     Class RPlotStyleCSSAttribute

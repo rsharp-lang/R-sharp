@@ -38,7 +38,7 @@
     '    Code Lines: 23
     ' Comment Lines: 0
     '   Blank Lines: 8
-    '     File Size: 858.00 B
+    '     File Size: 858 B
 
 
     '     Class MethodInvoke

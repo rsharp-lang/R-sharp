@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::14f50393712fc4bddba5def5dff36ca1, R-sharp\R#\Runtime\graphicsPipeline.vb"
+﻿#Region "Microsoft.VisualBasic::cf3b62915a8ea7663a6638a93395a06f, R-sharp\R#\Runtime\graphicsPipeline.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 180
-    '    Code Lines: 150
+    '   Total Lines: 185
+    '    Code Lines: 154
     ' Comment Lines: 7
-    '   Blank Lines: 23
-    '     File Size: 7.61 KB
+    '   Blank Lines: 24
+    '     File Size: 7.81 KB
 
 
     '     Module graphicsPipeline
     ' 
     '         Function: CheckDpiArgument, CheckSizeArgument, eval, getDpi, GetRawColor
-    '                   (+2 Overloads) getSize
+    '                   (+3 Overloads) getSize
     ' 
     '         Sub: getSize
     ' 

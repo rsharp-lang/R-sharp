@@ -38,7 +38,7 @@
     '    Code Lines: 16
     ' Comment Lines: 0
     '   Blank Lines: 5
-    '     File Size: 613.00 B
+    '     File Size: 613 B
 
 
     '     Class VectorLiteral

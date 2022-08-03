@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a153b13fa223d5f933941a2ab5b8d791, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\RDoc.vb"
+﻿#Region "Microsoft.VisualBasic::87d45183eea8d0c3c311cf7ac672ff9a, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\RDoc\RDoc.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 111
-    '    Code Lines: 71
+    '   Total Lines: 40
+    '    Code Lines: 25
     ' Comment Lines: 8
-    '   Blank Lines: 32
-    '     File Size: 2.76 KB
+    '   Blank Lines: 7
+    '     File Size: 1.24 KB
 
 
     ' Class RDoc
@@ -47,43 +47,6 @@
     '                 name, title, usage
     ' 
     '     Function: GetHtmlDoc, GetMarkdownDoc
-    ' 
-    ' Class Item
-    ' 
-    '     Properties: description, name
-    ' 
-    ' Class Enumerate
-    ' 
-    '     Properties: items
-    ' 
-    ' Class Doc
-    ' 
-    '     Properties: Fragments, PlainText
-    ' 
-    '     Function: GetHtml, GetMarkdown, ToString
-    ' 
-    ' Class DocFragment
-    ' 
-    ' 
-    ' 
-    ' Class PlainText
-    ' 
-    '     Properties: text
-    ' 
-    '     Function: ToString
-    ' 
-    ' Class Code
-    ' 
-    '     Properties: content
-    ' 
-    '     Function: ToString
-    ' 
-    ' Class Link
-    ' 
-    '     Properties: target
-    ' 
-    '     Function: ToString
-    ' 
     ' 
     ' /********************************************************************************/
 
@@ -129,4 +92,3 @@ Public Class RDoc : Implements INamedValue
         Throw New NotImplementedException
     End Function
 End Class
-

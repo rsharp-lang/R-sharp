@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d01444ef2a92d3039732c3dfac268142, R-sharp\studio\npy\Language\PythonLine.vb"
+﻿#Region "Microsoft.VisualBasic::d01444ef2a92d3039732c3dfac268142, R-sharp\studio\Rsharp_IL\npy\Language\PythonLine.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 21
     ' Comment Lines: 0
     '   Blank Lines: 7
-    '     File Size: 770.00 B
+    '     File Size: 770 B
 
 
     ' Class PythonLine

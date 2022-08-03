@@ -38,7 +38,7 @@
     '    Code Lines: 10
     ' Comment Lines: 9
     '   Blank Lines: 2
-    '     File Size: 503.00 B
+    '     File Size: 503 B
 
 
     '     Enum CharFlags

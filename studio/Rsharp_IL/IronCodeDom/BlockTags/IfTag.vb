@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0e9740f7fdf743d4b52740b0819c8ca2, R-sharp\studio\IronCodeDom\BlockTags\IfTag.vb"
+﻿#Region "Microsoft.VisualBasic::0e9740f7fdf743d4b52740b0819c8ca2, R-sharp\studio\Rsharp_IL\IronCodeDom\BlockTags\IfTag.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 17
     ' Comment Lines: 0
     '   Blank Lines: 8
-    '     File Size: 854.00 B
+    '     File Size: 854 B
 
 
     ' Class IfTag

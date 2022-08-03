@@ -38,7 +38,7 @@
     '    Code Lines: 65
     ' Comment Lines: 0
     '   Blank Lines: 14
-    '     File Size: 3.18 KB
+    '     File Size: 3.17 KB
 
 
     '     Class RSymbol

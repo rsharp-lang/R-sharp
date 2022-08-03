@@ -38,7 +38,7 @@
     '    Code Lines: 8
     ' Comment Lines: 5
     '   Blank Lines: 4
-    '     File Size: 434.00 B
+    '     File Size: 434 B
 
 
     '     Class invisible

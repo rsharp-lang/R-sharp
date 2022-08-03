@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9877df8028875cb8477e67894474497d, R-sharp\R#\Runtime\Internal\internalInvokes\utils.vb"
+﻿#Region "Microsoft.VisualBasic::1f353c18562ac3402bac2b87be07daee, R-sharp\R#\Runtime\Internal\internalInvokes\utils.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 506
     ' Comment Lines: 311
     '   Blank Lines: 82
-    '     File Size: 42.69 KB
+    '     File Size: 42.70 KB
 
 
     '     Module utils

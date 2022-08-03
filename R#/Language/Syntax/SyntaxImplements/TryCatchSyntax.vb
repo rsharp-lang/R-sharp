@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::be4f91fa26cb919102640ee69cb0d7ba, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\TryCatchSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::6c0064fc9c3f908ccd80a077ff588e83, R-sharp\R#\Language\Syntax\SyntaxImplements\TryCatchSyntax.vb"
 
     ' Author:
     ' 

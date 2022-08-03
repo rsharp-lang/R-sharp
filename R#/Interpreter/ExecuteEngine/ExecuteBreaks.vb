@@ -38,7 +38,7 @@
     '    Code Lines: 7
     ' Comment Lines: 12
     '   Blank Lines: 1
-    '     File Size: 536.00 B
+    '     File Size: 536 B
 
 
     '     Enum ExecuteBreaks

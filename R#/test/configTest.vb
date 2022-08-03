@@ -38,7 +38,7 @@
     '    Code Lines: 14
     ' Comment Lines: 0
     '   Blank Lines: 6
-    '     File Size: 417.00 B
+    '     File Size: 417 B
 
 
     ' Module configTest

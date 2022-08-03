@@ -38,7 +38,7 @@
     '    Code Lines: 127
     ' Comment Lines: 94
     '   Blank Lines: 21
-    '     File Size: 11.97 KB
+    '     File Size: 11.96 KB
 
 
     '     Class Rscript

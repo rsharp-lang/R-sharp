@@ -1,51 +1,51 @@
-﻿#Region "Microsoft.VisualBasic::b115b5aabe647393025174e229b959a5, R-sharp\studio\Rsharp_kit\roxygenNet\rdocumentation\function.vb"
+﻿#Region "Microsoft.VisualBasic::b2d54353ca3398e7ba5e71eb07ccc879, R-sharp\studio\Rsharp_kit\roxygenNet\rdocumentation\function.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 278
-'    Code Lines: 238
-' Comment Lines: 0
-'   Blank Lines: 40
-'     File Size: 13.74 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Class [function]
-' 
-'     Function: (+2 Overloads) argument, blankTemplate, (+3 Overloads) createHtml
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 310
+    '    Code Lines: 267
+    ' Comment Lines: 0
+    '   Blank Lines: 43
+    '     File Size: 15.00 KB
+
+
+    ' Class [function]
+    ' 
+    '     Function: (+2 Overloads) argument, blankTemplate, (+3 Overloads) createHtml
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2cf830dc3f1efae9e565db3f9124f25e, R-sharp\Library\R.graph\Comparison.vb"
+﻿#Region "Microsoft.VisualBasic::2cf830dc3f1efae9e565db3f9124f25e, R-sharp\Library\igraph\Comparison.vb"
 
     ' Author:
     ' 

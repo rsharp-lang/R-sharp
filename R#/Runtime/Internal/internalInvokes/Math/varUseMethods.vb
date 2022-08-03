@@ -38,7 +38,7 @@
     '    Code Lines: 10
     ' Comment Lines: 0
     '   Blank Lines: 5
-    '     File Size: 375.00 B
+    '     File Size: 375 B
 
 
     '     Enum varUseMethods

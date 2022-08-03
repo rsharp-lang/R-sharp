@@ -38,7 +38,7 @@
     '    Code Lines: 5
     ' Comment Lines: 0
     '   Blank Lines: 2
-    '     File Size: 151.00 B
+    '     File Size: 151 B
 
 
     '     Interface RPrint

@@ -38,7 +38,7 @@
     '    Code Lines: 6
     ' Comment Lines: 0
     '   Blank Lines: 4
-    '     File Size: 244.00 B
+    '     File Size: 244 B
 
 
     '     Interface RIndexer

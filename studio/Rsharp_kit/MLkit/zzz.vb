@@ -38,7 +38,7 @@
     '    Code Lines: 11
     ' Comment Lines: 0
     '   Blank Lines: 4
-    '     File Size: 411.00 B
+    '     File Size: 411 B
 
 
     ' Class zzz

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::64cf785a493b73155a6606587c49d770, R-sharp\R#\GlobalSuppressions.vb"
+﻿#Region "Microsoft.VisualBasic::0080e67c13446dfe57a660dd14c77054, R-sharp\R#\GlobalSuppressions.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 6
     ' Comment Lines: 4
     '   Blank Lines: 2
-    '     File Size: 1.53 KB
+    '     File Size: 1.54 KB
 
 
     ' 

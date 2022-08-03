@@ -38,7 +38,7 @@
     '    Code Lines: 8
     ' Comment Lines: 5
     '   Blank Lines: 3
-    '     File Size: 406.00 B
+    '     File Size: 406 B
 
 
     '     Class RExtraInfo

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a8090d86f548b55ab75a4a3ebb7ab0df, R-sharp\R#\Runtime\Internal\invoke.vb"
+﻿#Region "Microsoft.VisualBasic::a5bd101b93a33be2ecc9fd3a7e25f044, R-sharp\R#\Runtime\Internal\invoke.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 149
-    '    Code Lines: 117
+    '   Total Lines: 150
+    '    Code Lines: 118
     ' Comment Lines: 19
     '   Blank Lines: 13
-    '     File Size: 6.41 KB
+    '     File Size: 6.47 KB
 
 
     '     Class invoke

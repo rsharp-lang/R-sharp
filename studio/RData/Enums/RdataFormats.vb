@@ -38,7 +38,7 @@
     '    Code Lines: 9
     ' Comment Lines: 12
     '   Blank Lines: 3
-    '     File Size: 539.00 B
+    '     File Size: 539 B
 
 
     '     Enum RdataFormats

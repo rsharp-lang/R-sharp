@@ -65,7 +65,7 @@ def process_project(vbproj, refer):
     return v
     
 def processSingle(refer):
-    vbproj = read.vbproj(file = refer, legacy = True)
+    vbproj = read.vbproj(file = refer, legacy = False)
     
     if is.null(vbproj):
         print(`skip of the .NET Framework project: ${refer}...`)

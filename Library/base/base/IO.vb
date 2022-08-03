@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ca2bee3582203a0928090fb5afc8e9ec, R-sharp\Library\R.base\base\IO.vb"
+﻿#Region "Microsoft.VisualBasic::42a545edc4d5f7fdaeb477952f394b2b, R-sharp\Library\base\base\IO.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 125
     ' Comment Lines: 20
     '   Blank Lines: 16
-    '     File Size: 6.53 KB
+    '     File Size: 6.55 KB
 
 
     ' Module RawIO

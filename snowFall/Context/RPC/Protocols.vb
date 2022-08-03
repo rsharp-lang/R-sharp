@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f0b4053b5be0d6186e38bd993dd506db, R-sharp\snowFall\Context\RPC\Protocols.vb"
+﻿#Region "Microsoft.VisualBasic::9136a51ea62ea39270dd807b1d436dc7, R-sharp\snowFall\Context\RPC\Protocols.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 55
-    '    Code Lines: 42
+    '   Total Lines: 60
+    '    Code Lines: 46
     ' Comment Lines: 0
-    '   Blank Lines: 13
-    '     File Size: 1.55 KB
+    '   Blank Lines: 14
+    '     File Size: 1.70 KB
 
 
     '     Enum Protocols

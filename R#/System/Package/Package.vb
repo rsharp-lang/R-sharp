@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::283584fc9b67954c585e0b6d9f6ee8b3, R-sharp\R#\System\Package\Package.vb"
+﻿#Region "Microsoft.VisualBasic::63fed2bb8fbd6fca34693c1be34ccbdd, R-sharp\R#\System\Package\Package.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 143
+    '   Total Lines: 145
     '    Code Lines: 97
-    ' Comment Lines: 23
+    ' Comment Lines: 25
     '   Blank Lines: 23
-    '     File Size: 4.72 KB
+    '     File Size: 4.80 KB
 
 
     '     Class Package

@@ -38,7 +38,7 @@
     '    Code Lines: 17
     ' Comment Lines: 4
     '   Blank Lines: 5
-    '     File Size: 997.00 B
+    '     File Size: 997 B
 
 
     '     Class Host

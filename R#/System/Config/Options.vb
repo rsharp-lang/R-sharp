@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::431fa5b342de82102fb8a7de0a2d6ab7, R-sharp\R#\System\Config\Options.vb"
+﻿#Region "Microsoft.VisualBasic::25b949158b8f29f7dbdb4f9746e338f7, R-sharp\R#\System\Config\Options.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 345
-    '    Code Lines: 184
-    ' Comment Lines: 118
-    '   Blank Lines: 43
-    '     File Size: 13.37 KB
+    '   Total Lines: 357
+    '    Code Lines: 189
+    ' Comment Lines: 124
+    '   Blank Lines: 44
+    '     File Size: 13.88 KB
 
 
     '     Class Options

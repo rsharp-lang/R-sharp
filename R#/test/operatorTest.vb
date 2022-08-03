@@ -38,7 +38,7 @@
     '    Code Lines: 17
     ' Comment Lines: 0
     '   Blank Lines: 8
-    '     File Size: 594.00 B
+    '     File Size: 594 B
 
 
     ' Module operatorTest

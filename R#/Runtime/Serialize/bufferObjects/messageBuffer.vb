@@ -1,66 +1,66 @@
-﻿#Region "Microsoft.VisualBasic::7ba04c672c838db0a1a75f95130d972c, R-sharp\R#\Runtime\Serialize\bufferObjects\messageBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::0d0798bd76aa6087b787f32773ca345e, R-sharp\R#\Runtime\Serialize\bufferObjects\messageBuffer.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 153
-'    Code Lines: 116
-' Comment Lines: 3
-'   Blank Lines: 34
-'     File Size: 5.48 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class messageBuffer
-' 
-'         Properties: code, environmentStack, level, message, source
-'                     trace
-' 
-'         Constructor: (+2 Overloads) Sub New
-' 
-'         Function: CreateBuffer, GetErrorMessage, getValue
-' 
-'         Sub: Serialize
-'         Class TextExpression
-' 
-'             Properties: expressionName, text, type
-' 
-'             Function: Evaluate, ToString
-' 
-' 
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 153
+    '    Code Lines: 116
+    ' Comment Lines: 3
+    '   Blank Lines: 34
+    '     File Size: 5.42 KB
+
+
+    '     Class messageBuffer
+    ' 
+    '         Properties: code, environmentStack, level, message, source
+    '                     trace
+    ' 
+    '         Constructor: (+3 Overloads) Sub New
+    ' 
+    '         Function: GetErrorMessage, getValue
+    ' 
+    '         Sub: loadBuffer, Serialize
+    '         Class TextExpression
+    ' 
+    '             Properties: expressionName, text, type
+    ' 
+    '             Function: Evaluate, ToString
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::53d9ff377e60a08dd7ce4de14811740c, R-sharp\R#\Runtime\Serialize\BufferObject.vb"
+﻿#Region "Microsoft.VisualBasic::773c3c0b62f4bd8c0ba97ce593b286c1, R-sharp\R#\Runtime\Serialize\BufferObject.vb"
 
     ' Author:
     ' 
@@ -34,15 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 20
-    '    Code Lines: 14
+    '   Total Lines: 35
+    '    Code Lines: 25
     ' Comment Lines: 0
-    '   Blank Lines: 6
-    '     File Size: 658.00 B
+    '   Blank Lines: 10
+    '     File Size: 1016 B
 
 
     '     Class BufferObject
     ' 
+    '         Constructor: (+3 Overloads) Sub New
     '         Function: SubStream
     ' 
     ' 

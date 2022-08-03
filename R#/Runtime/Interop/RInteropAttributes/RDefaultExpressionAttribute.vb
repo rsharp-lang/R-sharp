@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e8d4713993c4edace61990ba2155acfc, R-sharp\R#\Runtime\Interop\RInteropAttributes\RDefaultExpressionAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::ab03898fd543ea016b6ca755d46bc295, R-sharp\R#\Runtime\Interop\RInteropAttributes\RDefaultExpressionAttribute.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 35
+    '   Total Lines: 37
     '    Code Lines: 16
-    ' Comment Lines: 15
+    ' Comment Lines: 17
     '   Blank Lines: 4
-    '     File Size: 1.21 KB
+    '     File Size: 1.27 KB
 
 
     '     Class RDefaultExpressionAttribute

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2392394a4ba9310bf16a24c40ed160f6, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\FunctionAcceptorSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::ec2000d2904316bc151ae052acc30b2d, R-sharp\R#\Language\Syntax\SyntaxImplements\FunctionAcceptorSyntax.vb"
 
     ' Author:
     ' 

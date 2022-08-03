@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b3b452ac7c635509dd8e247650a03de6, R-sharp\R#\Interpreter\Syntax\SyntaxTree\ExpressionSignature.vb"
+﻿#Region "Microsoft.VisualBasic::874444c512fde55aa50a8c586e7362b6, R-sharp\R#\Language\Syntax\SyntaxTree\ExpressionSignature.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 277
     ' Comment Lines: 71
     '   Blank Lines: 46
-    '     File Size: 14.12 KB
+    '     File Size: 14.16 KB
 
 
     '     Module ExpressionSignature

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::abafff1c3b930d7f57bfa833a0306512, R-sharp\R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\GenericSymbolOperatorProcessor.vb"
+﻿#Region "Microsoft.VisualBasic::23280baac6b6c92fe2c254e3ddf08ae7, R-sharp\R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\GenericSymbolOperatorProcessor.vb"
 
     ' Author:
     ' 

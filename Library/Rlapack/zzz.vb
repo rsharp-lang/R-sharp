@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::122758a67ec15b1a45d675e6ed9fe35a, R-sharp\Library\R.math\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::122758a67ec15b1a45d675e6ed9fe35a, R-sharp\Library\Rlapack\zzz.vb"
 
     ' Author:
     ' 

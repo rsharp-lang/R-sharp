@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e7e1564df07cba23ceb09649d5e7e975, R-sharp\Rscript\CLI\CLI.vb"
+﻿#Region "Microsoft.VisualBasic::2e283b220826dd6db282e92c6e9bb357, R-sharp\Rscript\CLI\CLI.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 127
     ' Comment Lines: 3
     '   Blank Lines: 22
-    '     File Size: 6.12 KB
+    '     File Size: 6.14 KB
 
 
     ' Module CLI

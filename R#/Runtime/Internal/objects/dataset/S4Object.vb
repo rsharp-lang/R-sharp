@@ -38,7 +38,7 @@
     '    Code Lines: 4
     ' Comment Lines: 0
     '   Blank Lines: 2
-    '     File Size: 94.00 B
+    '     File Size: 94 B
 
 
     '     Class S4Object

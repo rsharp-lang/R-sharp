@@ -1,58 +1,58 @@
-﻿#Region "Microsoft.VisualBasic::5001b2da2ec408ea719e8d0bf93581bb, R-sharp\snowFall\Context\RunParallel.vb"
+﻿#Region "Microsoft.VisualBasic::7e132528dc65a3a50ce82b21a184ae31, R-sharp\snowFall\Context\RunParallel.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 153
-'    Code Lines: 126
-' Comment Lines: 8
-'   Blank Lines: 19
-'     File Size: 6.33 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Class RunParallel
-' 
-'     Properties: [error], debugPort, master, seqSet, size
-'                 task, worker
-' 
-'     Constructor: (+1 Overloads) Sub New
-' 
-'     Function: getSymbol, Initialize, readSymbolSet, taskFactory
-' 
-'     Sub: getResult
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 158
+    '    Code Lines: 131
+    ' Comment Lines: 8
+    '   Blank Lines: 19
+    '     File Size: 6.71 KB
+
+
+    ' Class RunParallel
+    ' 
+    '     Properties: [error], debug, debugPort, master, seqSet
+    '                 size, task, worker
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    ' 
+    '     Function: getSymbol, Initialize, readSymbolSet, taskFactory
+    ' 
+    '     Sub: getResult
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

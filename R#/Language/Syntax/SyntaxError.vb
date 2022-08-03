@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::329551963b7b9d9c7c97833fe81bd842, R-sharp\R#\Interpreter\Syntax\SyntaxError.vb"
+﻿#Region "Microsoft.VisualBasic::9d5002536ca1a3bbd3bfc147e7188499, R-sharp\R#\Language\Syntax\SyntaxError.vb"
 
     ' Author:
     ' 

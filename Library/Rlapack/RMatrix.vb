@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2dca05321d45fc33e874747c7a76e99d, R-sharp\Library\R.math\RMatrix.vb"
+﻿#Region "Microsoft.VisualBasic::2dca05321d45fc33e874747c7a76e99d, R-sharp\Library\Rlapack\RMatrix.vb"
 
     ' Author:
     ' 

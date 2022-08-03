@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1389eba31349aed21836ff4d5d305044, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\DocParser.vb"
+﻿#Region "Microsoft.VisualBasic::670498b182e641be087f9046b7652405, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\DocParser.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 211
-    '    Code Lines: 145
-    ' Comment Lines: 31
-    '   Blank Lines: 35
-    '     File Size: 6.78 KB
+    '   Total Lines: 106
+    '    Code Lines: 74
+    ' Comment Lines: 17
+    '   Blank Lines: 15
+    '     File Size: 3.87 KB
 
 
     ' Class DocParser
@@ -53,31 +53,6 @@
     ' 
     ' 
     ' 
-    ' 
-    ' Class RDocParser
-    ' 
-    ' 
-    ' 
-    ' Class ContentParser
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: GetCurrentContent
-    ' 
-    '     Sub: walkChar
-    ' 
-    ' Class PlainTextParser
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: GetCurrentText
-    ' 
-    '     Sub: walkChar
-    ' 
-    ' Class RcodeParser
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Sub: walkChar
     ' 
     ' /********************************************************************************/
 
@@ -189,8 +164,3 @@ Public Class DocParser : Inherits RDocParser
         End If
     End Sub
 End Class
-
-
-
-
-

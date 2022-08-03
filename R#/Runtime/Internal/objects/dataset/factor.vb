@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::832846094ab84115f2ae438f8da686c0, R-sharp\R#\Runtime\Internal\objects\dataset\factor.vb"
+﻿#Region "Microsoft.VisualBasic::b191210357ee7c4d9c99f964f19bd833, R-sharp\R#\Runtime\Internal\objects\dataset\factor.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 111
-    '    Code Lines: 78
-    ' Comment Lines: 16
-    '   Blank Lines: 17
-    '     File Size: 3.79 KB
+    '   Total Lines: 120
+    '    Code Lines: 83
+    ' Comment Lines: 19
+    '   Blank Lines: 18
+    '     File Size: 4.04 KB
 
 
     '     Class factor
     ' 
-    '         Properties: levels, nlevel
+    '         Properties: factorId, levels, nlevel
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: (+2 Overloads) asCharacter, asFactor, CreateFactor

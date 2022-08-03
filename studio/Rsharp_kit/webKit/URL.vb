@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9488acf6fedf9e6ca5a38283f7028d7e, R-sharp\studio\Rsharp_kit\webKit\URL.vb"
+﻿#Region "Microsoft.VisualBasic::c61374b8b55a806a040034bafcd35d22, R-sharp\studio\Rsharp_kit\webKit\URL.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 282
-    '    Code Lines: 183
+    '   Total Lines: 291
+    '    Code Lines: 191
     ' Comment Lines: 70
-    '   Blank Lines: 29
-    '     File Size: 11.08 KB
+    '   Blank Lines: 30
+    '     File Size: 11.53 KB
 
 
     ' Module URL

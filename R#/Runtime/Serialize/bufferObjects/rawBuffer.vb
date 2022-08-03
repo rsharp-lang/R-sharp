@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::20a9d2b1932668b0c56b2a2c46a09d65, R-sharp\R#\Runtime\Serialize\bufferObjects\rawBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::8b25023b8189740b9dc6a2e8df12a413, R-sharp\R#\Runtime\Serialize\bufferObjects\rawBuffer.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,22 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 35
-    '    Code Lines: 23
+    '   Total Lines: 45
+    '    Code Lines: 31
     ' Comment Lines: 3
-    '   Blank Lines: 9
-    '     File Size: 928.00 B
+    '   Blank Lines: 11
+    '     File Size: 1.20 KB
 
 
     '     Class rawBuffer
     ' 
     '         Properties: buffer, code
     ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
     '         Function: getEmptyBuffer, getValue
     ' 
-    '         Sub: Serialize
+    '         Sub: loadBuffer, Serialize
     ' 
     ' 
     ' /********************************************************************************/

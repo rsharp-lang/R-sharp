@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bd56ab10d22a022bd8c3f19a6b0c7ec0, R-sharp\R#\Interpreter\ExecutableLoop.vb"
+﻿#Region "Microsoft.VisualBasic::8a14127eded72b656c6cb196e52068bb, R-sharp\R#\Interpreter\ExecutableLoop.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 221
-    '    Code Lines: 146
-    ' Comment Lines: 42
-    '   Blank Lines: 33
-    '     File Size: 8.74 KB
+    '   Total Lines: 234
+    '    Code Lines: 154
+    ' Comment Lines: 44
+    '   Blank Lines: 36
+    '     File Size: 9.24 KB
 
 
     '     Enum DebugLevels

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::07c9252c248e2d6654e256c7e7778c69, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\StringInterpolationSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::facb89c7ce19698c69f957efc540135e, R-sharp\R#\Language\Syntax\SyntaxImplements\StringInterpolationSyntax.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 36
     ' Comment Lines: 0
     '   Blank Lines: 6
-    '     File Size: 1.79 KB
+    '     File Size: 1.80 KB
 
 
     '     Module StringInterpolationSyntax

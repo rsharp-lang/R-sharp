@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6b58fe2e6fd90bc88453534181835129, R-sharp\R#\Runtime\Interop\RInteropAttributes\RInteropAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::7fa462658c3ffbba9f6d752ea56099da, R-sharp\R#\Runtime\Interop\RInteropAttributes\RInteropAttribute.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 67
+    '   Total Lines: 70
     '    Code Lines: 39
-    ' Comment Lines: 12
+    ' Comment Lines: 15
     '   Blank Lines: 16
-    '     File Size: 2.41 KB
+    '     File Size: 2.50 KB
 
 
     '     Class RInteropAttribute

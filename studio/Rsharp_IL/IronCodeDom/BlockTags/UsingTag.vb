@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::edb06eaf583e1d7cf7d005d8269811de, R-sharp\studio\IronCodeDom\BlockTags\UsingTag.vb"
+﻿#Region "Microsoft.VisualBasic::edb06eaf583e1d7cf7d005d8269811de, R-sharp\studio\Rsharp_IL\IronCodeDom\BlockTags\UsingTag.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 13
     ' Comment Lines: 0
     '   Blank Lines: 5
-    '     File Size: 650.00 B
+    '     File Size: 650 B
 
 
     ' Class UsingTag

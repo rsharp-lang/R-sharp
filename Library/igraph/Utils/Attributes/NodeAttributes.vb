@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::afc444f4c1562c1d4c3cd1ea7370acac, R-sharp\Library\R.graph\Utils\Attributes\NodeAttributes.vb"
+﻿#Region "Microsoft.VisualBasic::afc444f4c1562c1d4c3cd1ea7370acac, R-sharp\Library\igraph\Utils\Attributes\NodeAttributes.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f14eb00aa5d9065958baba14decbb740, R-sharp\R#\Interpreter\Syntax\SyntaxImplements\WhileLoopSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::def348f61ec94315ef9d0ff87975ddac, R-sharp\R#\Language\Syntax\SyntaxImplements\WhileLoopSyntax.vb"
 
     ' Author:
     ' 

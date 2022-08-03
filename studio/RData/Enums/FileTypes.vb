@@ -38,7 +38,7 @@
     '    Code Lines: 11
     ' Comment Lines: 18
     '   Blank Lines: 3
-    '     File Size: 849.00 B
+    '     File Size: 849 B
 
 
     '     Enum FileTypes

@@ -38,7 +38,7 @@
     '    Code Lines: 10
     ' Comment Lines: 3
     '   Blank Lines: 4
-    '     File Size: 421.00 B
+    '     File Size: 421 B
 
 
     '     Class RVersions

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0884a5a465bb81c9899a424fcdb4c108, R-sharp\R#\Runtime\Environment\GlobalEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::b174d0183b8cb48c2814c512fb43f839, R-sharp\R#\Runtime\Environment\GlobalEnvironment.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 278
-    '    Code Lines: 183
+    '   Total Lines: 279
+    '    Code Lines: 184
     ' Comment Lines: 53
     '   Blank Lines: 42
-    '     File Size: 11.28 KB
+    '     File Size: 11.36 KB
 
 
     '     Class GlobalEnvironment
     ' 
-    '         Properties: attachedNamespace, debugLevel, debugMode, hybridsEngine, lastException
-    '                     log4vb_redirect, options, packages, profiler2, Rscript
-    '                     scriptDir, stdout, symbolLanguages, types
+    '         Properties: attachedNamespace, debugLevel, debugMode, factors, hybridsEngine
+    '                     lastException, log4vb_redirect, options, packages, profiler2
+    '                     Rscript, scriptDir, stdout, symbolLanguages, types
     ' 
     '         Constructor: (+2 Overloads) Sub New
     ' 

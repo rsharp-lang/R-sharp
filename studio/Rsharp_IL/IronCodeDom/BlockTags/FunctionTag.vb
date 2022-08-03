@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c7e2a79ad25be7234647ec0b455d3a59, R-sharp\studio\IronCodeDom\BlockTags\FunctionTag.vb"
+﻿#Region "Microsoft.VisualBasic::c7e2a79ad25be7234647ec0b455d3a59, R-sharp\studio\Rsharp_IL\IronCodeDom\BlockTags\FunctionTag.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 14
     ' Comment Lines: 0
     '   Blank Lines: 5
-    '     File Size: 718.00 B
+    '     File Size: 718 B
 
 
     ' Class FunctionTag

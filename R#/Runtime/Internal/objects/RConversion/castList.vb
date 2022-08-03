@@ -1,52 +1,52 @@
-﻿#Region "Microsoft.VisualBasic::d21ae8acb71dc9d9c401d3a56d126eca, R-sharp\R#\Runtime\Internal\objects\RConversion\castList.vb"
+﻿#Region "Microsoft.VisualBasic::85498f5312fe6d3b24255eeab36b8854, R-sharp\R#\Runtime\Internal\objects\RConversion\castList.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 145
-'    Code Lines: 116
-' Comment Lines: 5
-'   Blank Lines: 24
-'     File Size: 5.80 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module castList
-' 
-'         Function: CTypeList, dataframe_castList, listInternal, objCastList
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 160
+    '    Code Lines: 124
+    ' Comment Lines: 12
+    '   Blank Lines: 24
+    '     File Size: 6.43 KB
+
+
+    '     Module castList
+    ' 
+    '         Function: CTypeList, dataframe_castList, listInternal, objCastList
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

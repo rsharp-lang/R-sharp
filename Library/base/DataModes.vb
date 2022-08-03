@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5dab9086114a92beb4d71adb9079e499, R-sharp\Library\R.base\DataModes.vb"
+﻿#Region "Microsoft.VisualBasic::5dab9086114a92beb4d71adb9079e499, R-sharp\Library\base\DataModes.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 5
     ' Comment Lines: 0
     '   Blank Lines: 0
-    '     File Size: 68.00 B
+    '     File Size: 68 B
 
 
     ' Enum DataModes

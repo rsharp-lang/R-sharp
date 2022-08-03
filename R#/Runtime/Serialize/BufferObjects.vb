@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::01b88cda75afe5077323ea1078c57b8b, R-sharp\R#\Runtime\Serialize\BufferObjects.vb"
+﻿#Region "Microsoft.VisualBasic::36331341dde95b87d782c4b8a9e0e419, R-sharp\R#\Runtime\Serialize\BufferObjects.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 20
-    '    Code Lines: 12
+    '   Total Lines: 21
+    '    Code Lines: 13
     ' Comment Lines: 3
     '   Blank Lines: 5
-    '     File Size: 531.00 B
+    '     File Size: 585 B
 
 
     '     Enum BufferObjects

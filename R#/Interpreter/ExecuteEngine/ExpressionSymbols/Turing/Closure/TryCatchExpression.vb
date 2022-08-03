@@ -1,55 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::e64635771d1239a54e84a17710be2151, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\TryCatchExpression.vb"
+﻿#Region "Microsoft.VisualBasic::527e619b610615bca81f281399b5ac19, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\TryCatchExpression.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 67
-'    Code Lines: 55
-' Comment Lines: 2
-'   Blank Lines: 10
-'     File Size: 2.46 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class TryCatchExpression
-' 
-'         Properties: expressionName, type
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: Evaluate
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 84
+    '    Code Lines: 69
+    ' Comment Lines: 3
+    '   Blank Lines: 12
+    '     File Size: 3.13 KB
+
+
+    '     Class TryCatchExpression
+    ' 
+    '         Properties: expressionName, type
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: Evaluate
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

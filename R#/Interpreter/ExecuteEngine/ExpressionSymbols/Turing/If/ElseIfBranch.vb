@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::978423893e4299b18017d0ee0e97174f, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\ElseIfBranch.vb"
+﻿#Region "Microsoft.VisualBasic::0a6dcde6ae9c267cb8d2bf2819ad71d3, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\ElseIfBranch.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 48
-    '    Code Lines: 38
-    ' Comment Lines: 0
+    '   Total Lines: 54
+    '    Code Lines: 43
+    ' Comment Lines: 1
     '   Blank Lines: 10
-    '     File Size: 1.73 KB
+    '     File Size: 2.09 KB
 
 
     '     Class ElseIfBranch

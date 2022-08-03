@@ -38,7 +38,7 @@
     '    Code Lines: 9
     ' Comment Lines: 19
     '   Blank Lines: 1
-    '     File Size: 681.00 B
+    '     File Size: 681 B
 
 
     '     Enum SymbolIndexers

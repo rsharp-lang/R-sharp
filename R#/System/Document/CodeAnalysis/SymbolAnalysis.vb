@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b1368c75c89a01a3eb53dd80f5f3f068, R-sharp\R#\System\Document\CodeAnalysis\SymbolAnalysis.vb"
+﻿#Region "Microsoft.VisualBasic::ddd4c17c18967724dc3e78dccd20b6d4, R-sharp\R#\System\Document\CodeAnalysis\SymbolAnalysis.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 250
-    '    Code Lines: 198
-    ' Comment Lines: 7
-    '   Blank Lines: 45
-    '     File Size: 10.68 KB
+    '   Total Lines: 267
+    '    Code Lines: 211
+    ' Comment Lines: 9
+    '   Blank Lines: 47
+    '     File Size: 11.46 KB
 
 
     '     Class SymbolAnalysis
@@ -47,7 +47,7 @@
     ' 
     '         Function: GetNameEnums, GetSymbolReferenceList, SymbolAccess, ToString
     ' 
-    '         Sub: GetSymbolReferenceList, (+11 Overloads) GetSymbols, Push
+    '         Sub: GetSymbolReferenceList, (+12 Overloads) GetSymbols, Push
     '         Class Context
     ' 
     '             Constructor: (+2 Overloads) Sub New

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f51c75800ece52b8ee15aaa1c13e65f2, R-sharp\Library\R.base\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::f51c75800ece52b8ee15aaa1c13e65f2, R-sharp\Library\base\zzz.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 5
     ' Comment Lines: 0
     '   Blank Lines: 1
-    '     File Size: 101.00 B
+    '     File Size: 101 B
 
 
     ' Class zzz

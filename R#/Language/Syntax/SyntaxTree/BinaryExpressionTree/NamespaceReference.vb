@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d04fd5a62af971d3c084a0aba7d1256f, R-sharp\R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NamespaceReference.vb"
+﻿#Region "Microsoft.VisualBasic::7879461321e5eaf37b11d301b284dd44, R-sharp\R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\NamespaceReference.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 67
     ' Comment Lines: 3
     '   Blank Lines: 14
-    '     File Size: 3.49 KB
+    '     File Size: 3.50 KB
 
 
     '     Class NamespaceReferenceProcessor

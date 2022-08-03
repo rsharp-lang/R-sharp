@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::221818530371931c51360f094aa6be47, R-sharp\Library\R.math\models\corMat.vb"
+﻿#Region "Microsoft.VisualBasic::221818530371931c51360f094aa6be47, R-sharp\Library\Rlapack\models\corMat.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 7
     ' Comment Lines: 3
     '   Blank Lines: 5
-    '     File Size: 278.00 B
+    '     File Size: 278 B
 
 
     ' Class corMat

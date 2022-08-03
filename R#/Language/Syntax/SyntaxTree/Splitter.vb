@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d687a1754d9f267b6faaa43090bf19b3, R-sharp\R#\Interpreter\Syntax\SyntaxTree\Splitter.vb"
+﻿#Region "Microsoft.VisualBasic::f27df6a06b3c74be50270dd4c7d27a7a, R-sharp\R#\Language\Syntax\SyntaxTree\Splitter.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 72
     ' Comment Lines: 5
     '   Blank Lines: 13
-    '     File Size: 3.63 KB
+    '     File Size: 3.64 KB
 
 
     '     Module Splitter

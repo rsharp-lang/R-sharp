@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7dbcd8799bd31a404ab9ca7d841a1025, R-sharp\studio\njl\Runtime\c.vb"
+﻿#Region "Microsoft.VisualBasic::7dbcd8799bd31a404ab9ca7d841a1025, R-sharp\studio\Rsharp_IL\njl\Runtime\c.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 4
     ' Comment Lines: 0
     '   Blank Lines: 3
-    '     File Size: 92.00 B
+    '     File Size: 92 B
 
 
     ' Module c

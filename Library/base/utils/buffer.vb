@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::40db15dccc125e5fd09f30d22d630b66, R-sharp\Library\R.base\utils\buffer.vb"
+﻿#Region "Microsoft.VisualBasic::6b1dce0e8bc1c90b2b8b5ff4ef2be30a, R-sharp\Library\base\utils\buffer.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 198
-    '    Code Lines: 143
+    '   Total Lines: 213
+    '    Code Lines: 155
     ' Comment Lines: 31
-    '   Blank Lines: 24
-    '     File Size: 7.44 KB
+    '   Blank Lines: 27
+    '     File Size: 7.99 KB
 
 
     ' Module buffer
     ' 
-    '     Function: escapeString, float, getString, normChar, numberFramework
-    '               toInteger, zlibDecompress
+    '     Function: escapeString, float, getString, gzipDecompression, normChar
+    '               numberFramework, toInteger, zlibDecompress
     ' 
     ' /********************************************************************************/
 

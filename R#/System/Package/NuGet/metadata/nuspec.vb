@@ -1,4 +1,83 @@
-﻿Imports System.Xml.Serialization
+﻿#Region "Microsoft.VisualBasic::9e71b6d9069f2042cfd541e8be3815b1, R-sharp\R#\System\Package\NuGet\metadata\nuspec.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 387
+    '    Code Lines: 104
+    ' Comment Lines: 259
+    '   Blank Lines: 24
+    '     File Size: 16.22 KB
+
+
+    '     Class nuspec
+    ' 
+    '         Properties: metadata
+    ' 
+    '         Function: createDllFiles, CreatePackageIndex, createRReference, ToString
+    ' 
+    '     Class nugetmeta
+    ' 
+    '         Properties: authors, copyright, dependencies, description, frameworkAssemblies
+    '                     icon, id, language, license, licenseUrl
+    '                     projectUrl, readme, repository, requireLicenseAcceptance, tags
+    '                     title, version
+    ' 
+    '         Function: ToString
+    ' 
+    '     Class tagValue
+    ' 
+    '         Properties: type, url, value
+    ' 
+    '     Class dependencies
+    ' 
+    '         Properties: dependency, targetFramework
+    ' 
+    '     Class dependency
+    ' 
+    '         Properties: exclude, id, include, version
+    ' 
+    '     Class frameworkAssembly
+    ' 
+    '         Properties: assemblyName, targetFramework
+    ' 
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports RDependency = SMRUCC.Rsharp.Development.Package.File.Dependency

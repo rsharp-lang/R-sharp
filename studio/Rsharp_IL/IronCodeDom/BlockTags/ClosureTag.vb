@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a4eb7d784b71dda554081c8cfc57f31c, R-sharp\studio\IronCodeDom\BlockTags\ClosureTag.vb"
+﻿#Region "Microsoft.VisualBasic::a4eb7d784b71dda554081c8cfc57f31c, R-sharp\studio\Rsharp_IL\IronCodeDom\BlockTags\ClosureTag.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 14
     ' Comment Lines: 0
     '   Blank Lines: 5
-    '     File Size: 625.00 B
+    '     File Size: 625 B
 
 
     ' Class ClosureTag

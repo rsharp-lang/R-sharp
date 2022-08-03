@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::23dffc1c77bdf6daa5d8cd34e1454ef4, R-sharp\Library\R.base\base\HDF5utils.vb"
+﻿#Region "Microsoft.VisualBasic::23dffc1c77bdf6daa5d8cd34e1454ef4, R-sharp\Library\base\base\HDF5utils.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 25
     ' Comment Lines: 0
     '   Blank Lines: 2
-    '     File Size: 1.10 KB
+    '     File Size: 1.09 KB
 
 
     ' Module HDF5utils

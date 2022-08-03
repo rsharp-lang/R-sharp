@@ -1,56 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::ca8af559a7a194449b87656ebd9576f9, R-sharp\R#\Runtime\Internal\internalInvokes\etc.vb"
+﻿#Region "Microsoft.VisualBasic::434f4bb9dd9d35bb491406569dd74c3f, R-sharp\R#\Runtime\Internal\internalInvokes\etc.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 265
-'    Code Lines: 146
-' Comment Lines: 97
-'   Blank Lines: 22
-'     File Size: 11.15 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module etc
-' 
-'         Function: contributors, getActivators, license, man, platformID
-'                   RVer, sessionInfo, Sys_getenv, Sys_getlocale, Sys_info
-'                   unixtimestamp
-' 
-'         Sub: demo
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 287
+    '    Code Lines: 159
+    ' Comment Lines: 105
+    '   Blank Lines: 23
+    '     File Size: 12.40 KB
+
+
+    '     Module etc
+    ' 
+    '         Function: contributors, CultureInfo, getActivators, license, man
+    '                   platformID, RVer, sessionInfo, Sys_getenv, Sys_getlocale
+    '                   Sys_info, unixtimestamp
+    ' 
+    '         Sub: demo
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d171dd01fee38f38c3122958aca67fff, R-sharp\R#\Runtime\Environment\NamespaceEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::ffb9ad6e1d7b052ceb69e2816d9a5991, R-sharp\R#\Runtime\Environment\NamespaceEnvironment.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 25
     ' Comment Lines: 0
     '   Blank Lines: 8
-    '     File Size: 1.12 KB
+    '     File Size: 1.11 KB
 
 
     '     Class NamespaceEnvironment

@@ -38,7 +38,7 @@
     '    Code Lines: 8
     ' Comment Lines: 17
     '   Blank Lines: 1
-    '     File Size: 817.00 B
+    '     File Size: 817 B
 
 
     '     Enum ListObjectArgumentMargin

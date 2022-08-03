@@ -38,7 +38,7 @@
     '    Code Lines: 15
     ' Comment Lines: 7
     '   Blank Lines: 7
-    '     File Size: 875.00 B
+    '     File Size: 875 B
 
 
     '     Class DataFrameDataSet

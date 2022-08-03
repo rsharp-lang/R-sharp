@@ -1,56 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::03451067e19cfc484b72b29ba489f299, R-sharp\R#\Runtime\System\InvokeParameter.vb"
+﻿#Region "Microsoft.VisualBasic::82018f72b082804325f4a6341f750bc2, R-sharp\R#\Runtime\System\InvokeParameter.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 224
-'    Code Lines: 158
-' Comment Lines: 38
-'   Blank Lines: 28
-'     File Size: 8.61 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class InvokeParameter
-' 
-'         Properties: haveSymbolName, index, isAcceptor, isProbablyVectorNameTuple, isSymbolAssign
-'                     name, value
-' 
-'         Constructor: (+3 Overloads) Sub New
-'         Function: Create, CreateArguments, CreateLiterals, Evaluate, ToString
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 228
+    '    Code Lines: 161
+    ' Comment Lines: 38
+    '   Blank Lines: 29
+    '     File Size: 8.67 KB
+
+
+    '     Class InvokeParameter
+    ' 
+    '         Properties: haveSymbolName, index, isAcceptor, isProbablyVectorNameTuple, isSymbolAssign
+    '                     name, value
+    ' 
+    '         Constructor: (+3 Overloads) Sub New
+    '         Function: Create, CreateArguments, CreateLiterals, Evaluate, GetSymbolName
+    '                   ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

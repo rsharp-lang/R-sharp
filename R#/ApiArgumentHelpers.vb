@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8f2399d320c5ca60c40e14d106edf646, R-sharp\R#\ApiArgumentHelpers.vb"
+﻿#Region "Microsoft.VisualBasic::a736ef9092b6898176416fe98bb2a173, R-sharp\R#\ApiArgumentHelpers.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 170
-    '    Code Lines: 143
-    ' Comment Lines: 6
+    '   Total Lines: 184
+    '    Code Lines: 144
+    ' Comment Lines: 19
     '   Blank Lines: 21
-    '     File Size: 6.63 KB
+    '     File Size: 7.07 KB
 
 
     ' Module ApiArgumentHelpers

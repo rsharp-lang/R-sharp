@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f6e20b3bff4ffcad0d4c57f667f45d2c, R-sharp\Library\R.graph\Layouts.vb"
+﻿#Region "Microsoft.VisualBasic::f6e20b3bff4ffcad0d4c57f667f45d2c, R-sharp\Library\igraph\Layouts.vb"
 
     ' Author:
     ' 
