@@ -19,7 +19,16 @@ str(li |> orderBy(i -> i$x));
 # filter by x
 print("list filter by x greater than zero!");
 print("and then order by x desc:");
-str(li |> which(i -> i$x > 0) |> orderBy(i -> i$x, desc = TRUE));
+print("and then take top 3:");
+
+str(
+
+li 
+|> which(i -> i$x > 0) 
+|> orderBy(i -> i$x, desc = TRUE) 
+|> head(n = 3)
+
+);
 
 # group by y
 print("list group by y:");
