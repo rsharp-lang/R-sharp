@@ -596,7 +596,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
 
             Dim predicate As Predicate(Of Object) = getFunc
-            Dim result As Object
+            Dim result As Boolean
 
             For Each item As Object In sequence
                 result = predicate(item)
