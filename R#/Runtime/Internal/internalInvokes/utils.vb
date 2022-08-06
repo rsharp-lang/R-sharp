@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::1f353c18562ac3402bac2b87be07daee, R-sharp\R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 899
-    '    Code Lines: 506
-    ' Comment Lines: 311
-    '   Blank Lines: 82
-    '     File Size: 42.70 KB
+' Summaries:
 
 
-    '     Module utils
-    ' 
-    '         Function: createAlternativeName, createCommandLine, createTimespan, data, dataSearchByPackageDir
-    '                   debugTool, description, FindSystemFile, GetInstalledPackages, head
-    '                   installPackages, keyGroups, md5, memorySize, now
-    '                   readFile, system, systemFile, wget, workdir
-    ' 
-    '         Sub: cls, pause, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 899
+'    Code Lines: 506
+' Comment Lines: 311
+'   Blank Lines: 82
+'     File Size: 42.70 KB
+
+
+'     Module utils
+' 
+'         Function: createAlternativeName, createCommandLine, createTimespan, data, dataSearchByPackageDir
+'                   debugTool, description, FindSystemFile, GetInstalledPackages, head
+'                   installPackages, keyGroups, md5, memorySize, now
+'                   readFile, system, systemFile, wget, workdir
+' 
+'         Sub: cls, pause, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -1032,6 +1032,45 @@ Namespace Runtime.Internal.Invokes
                                          Optional list As list = Nothing,
                                          Optional environment As Environment = Nothing) As Object
 
+            Dim root As String = $"{path}/{name}".GetDirectoryFullPath
+
+            Call Console.WriteLine("Creating directories ...")
+
+            For Each dir As String In {"data", "man", "R"}
+                Call $"{root}/{dir}".MakeDir
+            Next
+
+            Call Console.WriteLine("Creating DESCRIPTION ...")
+            Call $"Package: {name}
+Type: Package
+Title: What the package does (short line)
+Version: 1.0
+Date: {now.ToString("yyyy-MM-dd")}
+Author: Who wrote it
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: More about what it does (maybe more than one line)
+License: What license is it under?
+".SaveTo($"{root}/DESCRIPTION")
+
+            Call Console.WriteLine("Creating NAMESPACE ...")
+            Call "exportPattern(""^[[:alpha:]]+"")".SaveTo($"{root}/NAMESPACE")
+
+            Call Console.WriteLine("Creating Read-and-delete-me ...")
+            Call "* Edit the help file skeletons in 'man', possibly combining help files for multiple functions.
+* Edit the exports in 'NAMESPACE', and add necessary imports.
+* Put any VisualBasic/C# code in 'src'.
+* If you have compiled code, add a useDynLib() directive to 'NAMESPACE'.
+* Run R CMD build to build the package tarball.
+* Run R CMD check to check the package tarball.
+
+Read ""Writing R Extensions"" for more information.".SaveTo($"{root}/Read-and-delete-me")
+
+            Call Console.WriteLine("Saving functions and data ...")
+            Call Console.WriteLine("Making help files ...")
+            Call Console.WriteLine("Done.")
+            Call Console.WriteLine($"Further steps are described in '{$"{root}/Read-and-delete-me".GetFullPath}'.")
+
+            Return Nothing
         End Function
     End Module
 End Namespace
