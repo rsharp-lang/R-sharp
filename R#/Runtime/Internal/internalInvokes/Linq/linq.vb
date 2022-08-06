@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::0c1264afc2ef1a8c1f087afa6a9927fb, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1161
-    '    Code Lines: 643
-    ' Comment Lines: 397
-    '   Blank Lines: 121
-    '     File Size: 53.89 KB
+' Summaries:
 
 
-    '     Module linq
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: all, any, doWhile, fastIndexing, first
-    '                   groupBy, groupsSummary, groupSummary, last, left_join
-    '                   match, orderBy, produceKeyedSequence, progress, projectAs
-    '                   reverse, rotate_left, rotate_right, runFilterPipeline, runWhichFilter
-    '                   skip, sort, split, take, tryKeyBy
-    '                   unique, where, whichMax, whichMin
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1161
+'    Code Lines: 643
+' Comment Lines: 397
+'   Blank Lines: 121
+'     File Size: 53.89 KB
+
+
+'     Module linq
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: all, any, doWhile, fastIndexing, first
+'                   groupBy, groupsSummary, groupSummary, last, left_join
+'                   match, orderBy, produceKeyedSequence, progress, projectAs
+'                   reverse, rotate_left, rotate_right, runFilterPipeline, runWhichFilter
+'                   skip, sort, split, take, tryKeyBy
+'                   unique, where, whichMax, whichMin
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -456,6 +456,26 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             ElseIf TypeOf x Is pipeline Then
                 ' run in pipeline mode
                 Return runFilterPipeline(x, test, pipelineFilter, env)
+            ElseIf TypeOf x Is list Then
+                Dim subKeys As New list With {.slots = New Dictionary(Of String, Object)}
+                Dim list As list = DirectCast(x, list)
+                Dim filter = getPredicate(test, env)
+
+                If filter Like GetType(Message) Then
+                    Return filter.TryCast(Of Message)
+                End If
+
+                Dim predicate As Predicate(Of Object) = filter.TryCast(Of Predicate(Of Object))
+
+                For Each name As String In list.getNames
+                    Dim testFlag As Boolean = predicate(list.getByName(name))
+
+                    If testFlag Then
+                        subKeys.add(name, list.getByName(name))
+                    End If
+                Next
+
+                Return subKeys
             Else
                 Dim testResult = Rset.getObjectSet(x, env) _
                     .runWhichFilter(test, env) _
@@ -497,7 +517,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
         End Function
 
-        Private Function runFilterPipeline(sequence As Object, test As Object, pipelineFilter As Boolean, env As Environment) As Object
+        Private Function runFilterPipeline(sequence As Object,
+                                           test As Object,
+                                           pipelineFilter As Boolean,
+                                           env As Environment) As Object
+
             Return DirectCast(sequence, pipeline) _
                     .populates(Of Object)(env) _
                     .runWhichFilter(test, env) _
@@ -538,8 +562,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                             End Function)
         End Function
 
-        <Extension>
-        Private Iterator Function runWhichFilter(sequence As IEnumerable(Of Object), test As Object, env As Environment) As IEnumerable(Of Object)
+        Private Function getPredicate(test As Object, env As Environment) As [Variant](Of Predicate(Of Object), Message)
             Dim predicate As Predicate(Of Object)
 
             If TypeOf test Is RFunction Then
@@ -554,12 +577,34 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             ElseIf TypeOf test Is Func(Of Object, Boolean) Then
                 predicate = New Predicate(Of Object)(AddressOf DirectCast(test, Func(Of Object, Boolean)).Invoke)
             Else
-                Yield Internal.debug.stop(Message.InCompatibleType(GetType(Predicate(Of Object)), test.GetType, env), env)
+                Return Internal.debug.stop(Message.InCompatibleType(GetType(Predicate(Of Object)), test.GetType, env), env)
+            End If
+
+            Return predicate
+        End Function
+
+        <Extension>
+        Private Iterator Function runWhichFilter(sequence As IEnumerable(Of Object),
+                                                 test As Object,
+                                                 env As Environment) As IEnumerable(Of Object)
+
+            Dim getFunc = getPredicate(test, env)
+
+            If getFunc Like GetType(Message) Then
+                Yield getFunc.TryCast(Of Message)
                 Return
             End If
 
+            Dim predicate As Predicate(Of Object) = getFunc
+            Dim result As Boolean
+
             For Each item As Object In sequence
-                Yield (predicate(item), item)
+                result = predicate(item)
+                'If Program.isException(result) Then
+                '    Yield result
+                '    Exit For
+                'End If
+                Yield (result, item)
             Next
         End Function
 
