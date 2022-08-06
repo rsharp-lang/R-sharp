@@ -952,5 +952,86 @@ Namespace Runtime.Internal.Invokes
         Public Function createTimespan(ticks As Integer) As TimeSpan
             Return TimeSpan.FromTicks(ticks)
         End Function
+
+        ''' <summary>
+        ''' ### Create a Skeleton for a New Source Package
+        ''' 
+        ''' package.skeleton automates some of the setup for a new source 
+        ''' package. It creates directories, saves functions, data, and 
+        ''' R code files to appropriate places, and creates skeleton help
+        ''' files and a ‘Read-and-delete-me’ file describing further steps 
+        ''' in packaging.
+        ''' </summary>
+        ''' <param name="name">
+        ''' character string: the package name and directory name for your package. 
+        ''' Must be a valid package name.
+        ''' </param>
+        ''' <param name="path">path to put the package directory in.</param>
+        ''' <param name="force">
+        ''' If False will Not overwrite an existing directory.</param>
+        ''' <param name="code_files">
+        ''' a character vector with the paths to R code files to build the 
+        ''' package around. See ‘Details’.
+        ''' </param>
+        ''' <param name="encoding">
+        ''' optionally a character string with an encoding for an optional 
+        ''' Encoding: line in ‘DESCRIPTION’ when non-ASCII characters will 
+        ''' be used; typically one of "latin1", "latin2", or "UTF-8"; see 
+        ''' the WRE manual.
+        ''' </param>
+        ''' <param name="list">
+        ''' character vector naming the R objects to put in the package. Usually, 
+        ''' at most one of list, environment, or code_files will be supplied. 
+        ''' See ‘Details’.
+        ''' </param>
+        ''' <param name="environment">
+        ''' an environment where objects are looked for. See ‘Details’.
+        ''' </param>
+        ''' <remarks>
+        ''' The arguments list, environment, and code_files provide alternative
+        ''' ways to initialize the package. If code_files is supplied, the files
+        ''' so named will be sourced to form the environment, then used to 
+        ''' generate the package skeleton. Otherwise list defaults to the objects
+        ''' in environment (including those whose names start with .), but can 
+        ''' be supplied to select a subset of the objects in that environment.
+        ''' 
+        ''' Stubs of help files are generated for functions, data objects, And S4 
+        ''' classes And methods, using the prompt, promptClass, And promptMethods 
+        ''' functions. If an object from another package Is intended to be imported 
+        ''' And re-exported without changes, the promptImport function should be 
+        ''' used after package.skeleton to generate a simple help file linking to 
+        ''' the original one.
+        ''' 
+        ''' The package sources are placed In subdirectory name Of path. If code_files 
+        ''' Is supplied, these files are copied; otherwise, objects will be dumped 
+        ''' into individual source files. The file names In code_files should have 
+        ''' suffix ".R" And be In the current working directory.
+        ''' 
+        ''' The filenames created For source And documentation Try To be valid For
+        ''' all OSes known To run R. Invalid characters are replaced by _, invalid 
+        ''' names are preceded by zz, names are converted To lower Case (To avoid 
+        ''' Case collisions On Case-insensitive file systems) And Finally the converted 
+        ''' names are made unique by make.unique(sep = "_"). This can be done For 
+        ''' code And help files but Not data files (which are looked For by name). 
+        ''' Also, the code And help files should have names starting With an ASCII 
+        ''' letter Or digit, And this Is checked And If necessary z prepended.
+        ''' Functions with names starting with a dot are placed in file 'R/name-internal.R’.
+        ''' When you are done, delete the 'Read-and-delete-me’ file, as it should 
+        ''' not be distributed.
+        ''' </remarks>
+        ''' <returns>
+        ''' Used for its side-effects.
+        ''' </returns>
+        <ExportAPI("package.skeleton")>
+        Public Function package_skeleton(Optional name As String = "anRpackage",
+                                         Optional path As String = "./",
+                                         Optional force As Boolean = False,
+                                         Optional code_files As String() = Nothing,
+                                         Optional encoding As String = "unknown",
+                                         <RListObjectArgument>
+                                         Optional list As list = Nothing,
+                                         Optional environment As Environment = Nothing) As Object
+
+        End Function
     End Module
 End Namespace
