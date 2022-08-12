@@ -198,7 +198,7 @@ Module plots
         Dim y As Double() = args.findNumberVector(size:=x.Length, env)
         Dim ptSize As Single = args.getValue({"point_size", "point.size"}, env, 15)
         Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
-        Dim reverse As Boolean = args.getValue(Of Boolean)("reverse", env, False)
+        Dim reverse As Boolean = args.getValue("reverse", env, False)
         Dim drawLine As Boolean = y Is Nothing
         Dim shape As LegendStyles = args.getValue("shape", env, "Circle").ParseLegendStyle
 
@@ -275,7 +275,12 @@ Module plots
         Return plotSerials(lines, args, env)
     End Function
 
-    Private Function modelWithoutClass(x As Double(), y As Double(), ptSize As Single, args As list, reverse As Boolean, shape As LegendStyles, env As Environment) As Object
+    Private Function modelWithoutClass(x As Double(), y As Double(),
+                                       ptSize As Single,
+                                       args As list,
+                                       reverse As Boolean,
+                                       shape As LegendStyles,
+                                       env As Environment) As Object
         Dim line As SerialData
 
         If y Is Nothing Then

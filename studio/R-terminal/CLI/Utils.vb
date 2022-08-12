@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::2c66a50570e4d8c706ee2aeb65b39c18, R-sharp\studio\R-terminal\CLI\Utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 251
-    '    Code Lines: 208
-    ' Comment Lines: 5
-    '   Blank Lines: 38
-    '     File Size: 9.93 KB
+' Summaries:
 
 
-    ' Module CLI
-    ' 
-    '     Function: configJSON, configREnv, ConfigStartups, getConfig, InitializeEnvironment
-    '               Install, reset, View
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 251
+'    Code Lines: 208
+' Comment Lines: 5
+'   Blank Lines: 38
+'     File Size: 9.93 KB
+
+
+' Module CLI
+' 
+'     Function: configJSON, configREnv, ConfigStartups, getConfig, InitializeEnvironment
+'               Install, reset, View
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -71,12 +71,13 @@ Partial Module CLI
     <Usage("--install.packages /module <*.dll/*.zip> [--verbose]")>
     <Argument("/module", False, CLITypes.File,
               Extensions:="*.dll,*.zip",
-              Description:=".NET Framework 4.8 assembly module file or compiled R# zip package file.")>
+              Description:=".NET6.0 assembly module file or compiled R# zip package file.")>
     <Group(SystemConfig)>
     Public Function Install(args As CommandLine) As Integer
         Dim module$ = args <= "/module"
         Dim localConfigs As String = getConfig(args)
         Dim config As New Options(localConfigs, saveConfig:=False)
+        Dim err As Exception = Nothing
 
         Internal.debug.verbose = args("--verbose")
         Internal.debug.write($"load config file: {localConfigs}")
@@ -93,14 +94,24 @@ Partial Module CLI
 
         Using pkgMgr As New PackageManager(config)
             If Not [module].ToLower.StartsWith("scan=") Then
-                Call pkgMgr.InstallLocals(pkgFile:=[module])
+                Call pkgMgr.InstallLocals(pkgFile:=[module], err:=err)
+
+                If Not err Is Nothing Then
+                    Call App.LogException(err)
+                    Return 500
+                End If
             Else
                 For Each file As String In ls - l - "*.dll" <= [module].GetTagValue("=", trim:=True).Value
                     Try
                         Dim assm As Assembly = Assembly.LoadFrom(file.GetFullPath)
 
                         If Not assm.GetCustomAttribute(Of RPackageModuleAttribute) Is Nothing Then
-                            Call pkgMgr.InstallLocals(pkgFile:=file)
+                            Call pkgMgr.InstallLocals(pkgFile:=file, err:=err)
+
+                            If Not err Is Nothing Then
+                                Call App.LogException(err)
+                                Return 500
+                            End If
                         End If
                     Catch ex As Exception
 
@@ -190,9 +201,16 @@ Partial Module CLI
                     End If
                 Next
 
+                Dim err As Exception = Nothing
+
                 If file.FileExists Then
-                    Call pkgMgr.InstallLocals(pkgFile:=file)
+                    Call pkgMgr.InstallLocals(pkgFile:=file, err:=err)
                     Call pkgMgr.Flush()
+
+                    If Not err Is Nothing Then
+                        Call App.LogException(err)
+                        Return 500
+                    End If
                 Else
                     Call $"missing module dll: {fileName}".PrintException
                 End If

@@ -129,10 +129,15 @@ Namespace Runtime.Internal.Invokes
         Public Function installPackages(packages$(), Optional envir As Environment = Nothing) As Object
             Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
             Dim namespaces As New List(Of String)
+            Dim err As Exception = Nothing
 
             For Each pkgName As String In packages.SafeQuery
                 If pkgName.FileExists Then
-                    namespaces += pkgMgr.InstallLocals(pkgName)
+                    namespaces += pkgMgr.InstallLocals(pkgName, err)
+
+                    If Not err Is Nothing Then
+                        Return Internal.debug.stop(err, envir)
+                    End If
                 Else
                     Return Internal.debug.stop($"Library module '{pkgName.GetFullPath}' is not exists on your file system!", envir)
                 End If
