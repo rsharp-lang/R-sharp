@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::29734b873a56bf04c304867442b294bd, R-sharp\R#\System\Package\PackageFile\PackageModel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 374
-    '    Code Lines: 283
-    ' Comment Lines: 25
-    '   Blank Lines: 66
-    '     File Size: 16.06 KB
+' Summaries:
 
 
-    '     Class PackageModel
-    ' 
-    '         Properties: assembly, dataSymbols, info, loading, pkg_dir
-    '                     symbols, unixman, vignettes
-    ' 
-    '         Function: ToString, writeSymbols
-    ' 
-    '         Sub: copyAssembly, Flush, saveDataSymbols, saveDependency, saveSymbols
-    '              saveUnixManIndex, writeIndex, writeRuntime
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 374
+'    Code Lines: 283
+' Comment Lines: 25
+'   Blank Lines: 66
+'     File Size: 16.06 KB
+
+
+'     Class PackageModel
+' 
+'         Properties: assembly, dataSymbols, info, loading, pkg_dir
+'                     symbols, unixman, vignettes
+' 
+'         Function: ToString, writeSymbols
+' 
+'         Sub: copyAssembly, Flush, saveDataSymbols, saveDependency, saveSymbols
+'              saveUnixManIndex, writeIndex, writeRuntime
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -236,6 +236,10 @@ Namespace Development.Package.File
         Private Sub saveDataSymbols(zip As ZipArchive, ByRef checksum$)
             Dim md5 As New Md5HashProvider
             Dim text As String
+            Dim dirBase As String = (pkg_dir & "/data") _
+                .GetDirectoryFullPath _
+                .Replace("\", "/") _
+                .Replace("//", "/")
 
             Using file As New StreamWriter(zip.CreateEntry("package/manifest/data.json").Open)
                 text = dataSymbols _
@@ -251,9 +255,17 @@ Namespace Development.Package.File
             End Using
 
             For Each ref As KeyValuePair(Of String, String) In dataSymbols
+                Dim relpath As String = ref.Key _
+                    .GetFullPath _
+                    .Replace("\", "/") _
+                    .Replace("//", "/") _
+                    .Replace(dirBase, "") _
+                    .Replace("\", "/") _
+                    .Replace("//", "/")
+
                 ' 20220410 在这里为了保持和传统的R语言脚本对system.file函数使用上的一致性
                 ' 数据文件夹任然是放在程序包中的最顶层文件夹
-                Using file As Stream = zip.CreateEntry($"data/{ref.Key.FileName}").Open
+                Using file As Stream = zip.CreateEntry($"data/{relpath}").Open
                     Dim buffer As Byte() = ref.Key.ReadBinary
 
                     Call file.Write(buffer, Scan0, buffer.Length)

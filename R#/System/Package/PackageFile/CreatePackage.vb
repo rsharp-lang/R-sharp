@@ -498,7 +498,7 @@ Namespace Development.Package.File
                 projDir = $"{projDir}/"
             End If
 
-            Return EnumerateFiles(dir, "*.*") _
+            Return (ls -l -r -"*.*" <= dir) _
                 .Where(Function(filepath)
                            Return Not ignores.IsFileIgnored(filepath.Replace("\", "/").Replace(projDir, ""))
                        End Function) _
