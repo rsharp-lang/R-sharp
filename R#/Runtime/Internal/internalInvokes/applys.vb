@@ -156,7 +156,11 @@ Namespace Runtime.Internal.Invokes
             x = New list With {.slots = New Dictionary(Of String, Object)}
 
             For i As Integer = 0 To names.Count - 1
-                Call x.add(names(i), seq(i))
+                If Program.isException(seq(i)) Then
+                    Return seq(i)
+                Else
+                    Call x.add(names(i), seq(i))
+                End If
             Next
 
             Return x
@@ -172,7 +176,7 @@ Namespace Runtime.Internal.Invokes
                             Return (
                                 i:=a.i,
                                 key:=any.ToString(a.key),
-                                value:=apply.Invoke(envir, invokeArgument(a.value))
+                                value:=apply.Invoke(envir, invokeArgument(a.value, a.i + 1))
                             )
                         End Function) _
                 .OrderBy(Function(a) a.i)
@@ -180,10 +184,6 @@ Namespace Runtime.Internal.Invokes
             Dim names As New List(Of String)
 
             For Each tuple As (i As Integer, key As String, value As Object) In values
-                If Program.isException(tuple.value) Then
-                    Return tuple.value
-                End If
-
                 seq.Add(REnv.single(tuple.value))
                 names.Add(tuple.key)
             Next
@@ -221,6 +221,12 @@ Namespace Runtime.Internal.Invokes
 
                 names = result.names
                 seq = result.objects
+
+                For Each i In seq
+                    If Program.isException(i) Then
+                        Return i
+                    End If
+                Next
             Else
                 Dim values As IEnumerable(Of Object) = REnv.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
