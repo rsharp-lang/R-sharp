@@ -260,12 +260,12 @@ Namespace Development.Package.File
                     .Replace("\", "/") _
                     .Replace("//", "/") _
                     .Replace(dirBase, "") _
-                    .Replace("\", "/") _
-                    .Replace("//", "/")
+                    .Replace("\", "/")
+                Dim dataKey As String = $"data/{relpath}".Replace("//", "/")
 
                 ' 20220410 在这里为了保持和传统的R语言脚本对system.file函数使用上的一致性
                 ' 数据文件夹任然是放在程序包中的最顶层文件夹
-                Using file As Stream = zip.CreateEntry($"data/{relpath}").Open
+                Using file As Stream = zip.CreateEntry(dataKey).Open
                     Dim buffer As Byte() = ref.Key.ReadBinary
 
                     Call file.Write(buffer, Scan0, buffer.Length)
