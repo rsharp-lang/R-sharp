@@ -196,6 +196,10 @@ Namespace Runtime.Internal.Object
         End Function
 
         Private Shared Function fromVector(Of T)(upstream As vector, env As Environment, suppress As Boolean) As pipeline
+            If upstream.length = 0 Then
+                Return CreateFromPopulator(New T() {})
+            End If
+
             If upstream.elementType Like GetType(T) Then
                 Return CreateFromPopulator(upstream.data.AsObjectEnumerator(Of T))
             ElseIf GetType(T) Is GetType(Object) Then
