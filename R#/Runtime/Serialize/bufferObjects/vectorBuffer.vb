@@ -166,6 +166,10 @@ Namespace Runtime.Serialize
             buffer.Write(sizeof, Scan0, 4)
             buffer.Write(raw, Scan0, raw.Length)
 
+            If TypeOf vector Is Object() Then
+                vector = TryCastGenericArray(vector, env)
+            End If
+
             If vector.GetType.GetElementType Is GetType(list) Then
                 Dim rawBlocks As New List(Of Byte)
 
