@@ -1,59 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::b3449c64599c5d5ea68b20940436ed8b, R-sharp\R#\Runtime\Serialize\bufferObjects\vectorBuffer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 168
-    '    Code Lines: 125
-    ' Comment Lines: 7
-    '   Blank Lines: 36
-    '     File Size: 5.84 KB
+' Summaries:
 
 
-    '     Class vectorBuffer
-    ' 
-    '         Properties: code, names, type, underlyingType, unit
-    '                     vector
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    ' 
-    '         Function: CreateBuffer, getValue, getVector
-    ' 
-    '         Sub: loadBuffer, Serialize
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 168
+'    Code Lines: 125
+' Comment Lines: 7
+'   Blank Lines: 36
+'     File Size: 5.84 KB
+
+
+'     Class vectorBuffer
+' 
+'         Properties: code, names, type, underlyingType, unit
+'                     vector
+' 
+'         Constructor: (+2 Overloads) Sub New
+' 
+'         Function: CreateBuffer, getValue, getVector
+' 
+'         Sub: loadBuffer, Serialize
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -96,7 +96,13 @@ Namespace Runtime.Serialize
             End Get
         End Property
 
-        Sub New()
+        Dim env As Environment
+
+        Private Sub New()
+        End Sub
+
+        Sub New(env As Environment)
+            Me.env = env
         End Sub
 
         Sub New(buffer As Stream)
@@ -115,7 +121,8 @@ Namespace Runtime.Serialize
             Dim buffer As New vectorBuffer With {
                 .names = If(vector.getNames, {}),
                 .type = vector.elementType.raw.FullName,
-                .unit = If(vector.unit?.name, "")
+                .unit = If(vector.unit?.name, ""),
+                .env = env
             }
             Dim generic = REnv.TryCastGenericArray(vector.data, env)
 
@@ -159,7 +166,23 @@ Namespace Runtime.Serialize
             buffer.Write(sizeof, Scan0, 4)
             buffer.Write(raw, Scan0, raw.Length)
 
-            raw = RawStream.GetBytes(vector)
+            If vector.GetType.GetElementType Is GetType(list) Then
+                Dim rawBlocks As New List(Of Byte)
+
+                rawBlocks.AddRange(BitConverter.GetBytes(vector.Length))
+
+                For Each list As list In DirectCast(vector, list())
+                    Dim temp As New listBuffer(list, env)
+                    raw = temp.Serialize
+                    rawBlocks.AddRange(BitConverter.GetBytes(raw.Length))
+                    rawBlocks.AddRange(raw)
+                Next
+
+                raw = rawBlocks.ToArray
+            Else
+                raw = RawStream.GetBytes(vector)
+            End If
+
             sizeof = BitConverter.GetBytes(raw.Length)
 
             buffer.Write(sizeof, Scan0, 4)
@@ -215,7 +238,30 @@ Namespace Runtime.Serialize
             bytes.Read(raw, Scan0, raw.Length)
 
             Using ms As New MemoryStream(raw)
-                Dim vector As Array = RawStream.GetData(ms, type.PrimitiveTypeCode)
+                Dim vector As Array
+
+                If type Is GetType(list) Then
+                    Dim list As New List(Of list)
+                    Dim nsize As Integer
+                    Dim temp As listBuffer
+
+                    raw = New Byte(3) {}
+                    ms.Read(raw, Scan0, raw.Length)
+                    nsize = BitConverter.ToInt32(raw, Scan0)
+
+                    For i As Integer = 0 To nsize - 1
+                        raw = New Byte(3) {}
+                        ms.Read(raw, Scan0, raw.Length)
+                        raw = New Byte(BitConverter.ToInt32(raw, Scan0) - 1) {}
+                        ms.Read(raw, Scan0, raw.Length)
+                        temp = New listBuffer(New MemoryStream(raw))
+                        list.Add(temp.getValue)
+                    Next
+
+                    vector = list.ToArray
+                Else
+                    vector = RawStream.GetData(ms, type.PrimitiveTypeCode)
+                End If
 
                 Me.type = type.FullName
                 Me.names = names

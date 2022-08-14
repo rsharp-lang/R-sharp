@@ -1148,7 +1148,7 @@ Namespace Runtime.Internal.Invokes
                 Case BufferObjects.raw : Return New rawBuffer
                 Case BufferObjects.text : Return New textBuffer
                 Case BufferObjects.bitmap : Return New bitmapBuffer
-                Case BufferObjects.vector : Return New vectorBuffer
+                Case BufferObjects.vector : Return New vectorBuffer(env)
                 Case BufferObjects.dataframe : Return New dataframeBuffer(env)
                 Case BufferObjects.rscript : Return New rscriptBuffer
                 Case BufferObjects.list : Return New listBuffer(env)
