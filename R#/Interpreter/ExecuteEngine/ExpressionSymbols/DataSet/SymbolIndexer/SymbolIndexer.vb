@@ -1,62 +1,63 @@
 ﻿#Region "Microsoft.VisualBasic::f8a45317e65f3690762934e78db7fda6, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 571
-    '    Code Lines: 440
-    ' Comment Lines: 56
-    '   Blank Lines: 75
-    '     File Size: 25.32 KB
+' Summaries:
 
 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
-    '                   getColumn, getDataframeRowRange, groupSubset, listSubset, streamView
-    '                   ToString, vectorSubset
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 571
+'    Code Lines: 440
+' Comment Lines: 56
+'   Blank Lines: 75
+'     File Size: 25.32 KB
+
+
+'     Class SymbolIndexer
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
+'                   getColumn, getDataframeRowRange, groupSubset, listSubset, streamView
+'                   ToString, vectorSubset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports System.Reflection
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -360,14 +361,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
 
             If obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return listSubset(DirectCast(obj, IDictionary), indexer)
+                Return listSubset(DirectCast(obj, IDictionary), indexer, env:=envir)
                 ' ElseIf obj.GetType.ImplementInterface(GetType(IReadOnlyDictionary)) Then
             Else
                 Return vectorSubset(obj, indexer, envir)
             End If
         End Function
 
-        Private Shared Function listSubset(list As IDictionary, indexer As Array) As Object
+        Private Shared Function listSubset(list As IDictionary, indexer As Array, env As Environment) As Object
             Dim allKeys = (From x In list.Keys).ToArray
 
             If REnv.isVector(Of String)(indexer) Then
@@ -376,17 +377,29 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Else
                 Dim i As New List(Of Object)
 
+                If indexer.Length >= list.Count Then
+                    env.AddMessage($"the index size({indexer.Length}) is greater than the size({list.Count}) of the target list!", MSG_TYPES.WRN)
+                End If
+
                 If TypeOf indexer Is Boolean() OrElse MeasureArrayElementType(indexer) Is GetType(Boolean) Then
                     For Each flag As SeqValue(Of Boolean) In DirectCast(REnv.asVector(Of Boolean)(indexer), Boolean()).SeqIterator
                         If flag.value Then
                             ' get by index
-                            Call i.Add(allKeys(flag.i))
+                            If flag.i >= allKeys.Length Then
+                                Call i.Add(Nothing)
+                            Else
+                                Call i.Add(allKeys(flag.i))
+                            End If
                         End If
                     Next
                 Else
                     ' get by index
                     For Each flag As Integer In DirectCast(REnv.asVector(Of Integer)(indexer), Integer())
-                        Call i.Add(allKeys(flag - 1))
+                        If flag >= allKeys.Length Then
+                            Call i.Add(Nothing)
+                        Else
+                            Call i.Add(allKeys(flag - 1))
+                        End If
                     Next
                 End If
 
@@ -405,7 +418,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                                      In names.AsObjectEnumerator
                                      Where Not key Is Nothing
 
-                If list.Contains(key:=id) Then
+                If (id Is Nothing) OrElse list.Contains(key:=id) Then
                     subset.slots(id) = list(id)
                 Else
                     subset.slots(id) = Nothing
