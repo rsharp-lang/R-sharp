@@ -197,6 +197,7 @@ Namespace Runtime.Internal.Object
 
         Private Shared Function fromVector(Of T)(upstream As vector, env As Environment, suppress As Boolean) As pipeline
             If upstream.length = 0 Then
+                env.AddMessage("the input vector is in empty size!", MSG_TYPES.WRN)
                 Return CreateFromPopulator(New T() {})
             End If
 
