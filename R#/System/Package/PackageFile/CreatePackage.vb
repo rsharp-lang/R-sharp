@@ -249,19 +249,21 @@ Namespace Development.Package.File
             Return assets
         End Function
 
+        ''' <summary>
+        ''' get assembly runtime folder tag
+        ''' </summary>
+        ''' <returns>net48, net6.0, net5.0</returns>
         Friend Function getRuntimeTags() As String
             Dim runtime As Version = System.Environment.Version
 
 #If legacy Then
             Return ""
 #Else
-            If runtime.Major = 5 Then
-                Return "net5.0"
-            ElseIf runtime.Major = 6 Then
-                Return "net6.0"
-            Else
-                Return "net48"
-            End If
+            Select Case runtime.Major
+                Case >= 5 : Return $"net{runtime.Major}.0"
+                Case Else
+                    Return "net48"
+            End Select
 #End If
         End Function
 

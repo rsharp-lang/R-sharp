@@ -88,11 +88,11 @@ Namespace Development.Package
 #If netcore5 = 1 Then
                     If (location = $"{assemblyDir}/{libDll}.dll").FileExists Then
                         Return location
-                    ElseIf (location = $"{assemblyDir}/net5.0/{libDll}.dll").FileExists Then
+                    ElseIf (location = $"{assemblyDir}/{CreatePackage.getRuntimeTags}/{libDll}.dll").FileExists Then
                         Return location
                     ElseIf (location = $"{assemblyDir}/{libDll}").FileExists Then
                         Return location
-                    ElseIf (location = $"{assemblyDir}/net5.0/{libDll}").FileExists Then
+                    ElseIf (location = $"{assemblyDir}/{CreatePackage.getRuntimeTags}/{libDll}").FileExists Then
                         Return location
                     End If
 #Else
