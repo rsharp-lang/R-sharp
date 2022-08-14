@@ -109,7 +109,9 @@ Namespace Runtime.Internal.Object
         ''' 这个构造函数主要是应用于内部编程的快速创建
         ''' </summary>
         ''' <param name="input"></param>
-        ''' <param name="type"></param>
+        ''' <param name="type">
+        ''' should be the array element type
+        ''' </param>
         Sub New(input As Array, type As RType)
             data = input
             elementType = type
