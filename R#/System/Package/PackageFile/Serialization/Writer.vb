@@ -113,6 +113,8 @@ Namespace Development.Package.File
         Public ReadOnly Property RShell As RCommandLine
         Public ReadOnly Property RTryCatch As RTryCatch
 
+        Public ReadOnly Property RAnnotation As RAnnotation
+
 #Region "keywords"
         Public ReadOnly Property RBreakControls As RBreakControls
         Public ReadOnly Property Rfor As RFor
@@ -149,6 +151,7 @@ Namespace Development.Package.File
             Me.RShell = New RCommandLine(Me)
             Me.RBreakControls = New RBreakControls(Me)
             Me.RJSON = New RJSON(Me)
+            Me.RAnnotation = New RAnnotation(Me)
         End Sub
 
         Public Function GetBuffer(x As Expression) As Byte()
@@ -160,6 +163,8 @@ Namespace Development.Package.File
                      GetType(UsingClosure)
 
                     Return RFunction.GetBuffer(x)
+
+                Case GetType(Profiler) : Return RAnnotation.GetBuffer(x)
 
                 Case GetType(BreakLoop), GetType(ContinuteFor) : Return RBreakControls.GetBuffer(x)
                 Case GetType(Literal), GetType(Regexp) : Return RLiteral.GetBuffer(x)
