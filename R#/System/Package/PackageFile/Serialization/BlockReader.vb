@@ -104,6 +104,8 @@ Namespace Development.Package.File
 
                         Return New RCallFunction(Nothing).GetExpression(buffer, Me, desc)
 
+                    Case ExpressionTypes.Annotation : Return New RAnnotation(Nothing).GetExpression(buffer, Me, desc)
+
                     Case ExpressionTypes.If, ExpressionTypes.ElseIf : Return New RIf(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.For : Return New RFor(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.Else : Return New RElse(Nothing).GetExpression(buffer, Me, desc)
