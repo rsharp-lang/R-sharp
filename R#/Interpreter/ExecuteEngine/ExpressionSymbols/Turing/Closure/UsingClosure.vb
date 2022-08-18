@@ -114,12 +114,26 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     Return Message.InCompatibleType(GetType(IDisposable), resource.GetType, env)
                 End If
 
-                ' run using closure and get result
-                result = closure.Evaluate(env)
+                Try
+                    ' run using closure and get result
+                    result = closure.Evaluate(env)
+                Catch ex As Exception
+                    Return Internal.debug.stop({
+                        $"error while evaluate the closure expression: {ex.Message}",
+                        $"runtime exception: {ex.GetType.Name}"
+                    }, env)
+                End Try
 
-                ' then dispose the target
-                ' release handle and clean up the resource
-                Call DirectCast(resource, IDisposable).Dispose()
+                Try
+                    ' then dispose the target
+                    ' release handle and clean up the resource
+                    Call DirectCast(resource, IDisposable).Dispose()
+                Catch ex As Exception
+                    Return Internal.debug.stop({
+                        $"error while dispose target resource automatically: {ex.Message}",
+                        $"runtime exception: {ex.GetType.Name}"
+                    }, env)
+                End Try
 
                 Return result
             End Using
