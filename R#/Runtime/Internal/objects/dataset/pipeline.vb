@@ -275,7 +275,12 @@ Namespace Runtime.Internal.Object
 
             ElseIf GetType(T) Is GetType(Object) Then
                 Return CreateFromPopulator(Of T)({upstream})
-
+            ElseIf upstream.GetType.IsArray Then
+                If GetType(T).IsInterface AndAlso upstream.GetType.GetElementType.ImplementInterface(Of T) Then
+                    Return CreateFromPopulator(DirectCast(upstream, Array).AsObjectEnumerator.Select(Function(o) DirectCast(o, T)))
+                Else
+                    Return Message.InCompatibleType(GetType(T), upstream.GetType, env, suppress:=suppress)
+                End If
             Else
                 Return Message.InCompatibleType(GetType(T), upstream.GetType, env, suppress:=suppress)
             End If
