@@ -171,14 +171,17 @@ Namespace Runtime.Internal.Invokes
             Dim values = DirectCast(list.Keys, IEnumerable) _
                 .Cast(Of Object) _
                 .Select(Function(a, i) (i, key:=a, value:=list(a))) _
+                .Split(list.Count / (App.CPUCoreNumbers * 4)) _
                 .AsParallel _
-                .Select(Function(a)
-                            Return (
+                .Select(Function(sublist)
+                            Return sublist.Select(Function(a) (
                                 i:=a.i,
                                 key:=any.ToString(a.key),
                                 value:=apply.Invoke(envir, invokeArgument(a.value, a.i + 1))
-                            )
+                            ))
                         End Function) _
+                .ToArray _
+                .IteratesALL _
                 .OrderBy(Function(a) a.i)
             Dim seq As New List(Of Object)
             Dim names As New List(Of String)
