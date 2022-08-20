@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Parallel.Threads
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -168,27 +169,39 @@ Namespace Runtime.Internal.Invokes
 
         <Extension>
         Private Function parallelList(list As IDictionary, apply As RFunction, envir As Environment) As (names As List(Of String), objects As List(Of Object))
-            Dim values = DirectCast(list.Keys, IEnumerable) _
-                .Cast(Of Object) _
-                .Select(Function(a, i) (i, key:=a, value:=list(a))) _
-                .Split(list.Count / (App.CPUCoreNumbers * 4)) _
-                .AsParallel _
-                .Select(Function(sublist)
-                            Return sublist.Select(Function(a) (
-                                i:=a.i,
-                                key:=any.ToString(a.key),
-                                value:=apply.Invoke(envir, invokeArgument(a.value, a.i + 1))
-                            ))
-                        End Function) _
-                .ToArray _
-                .IteratesALL _
-                .OrderBy(Function(a) a.i)
+            Dim values As New List(Of (i%, key$, value As Object))
+            Dim host As New ThreadPool(App.CPUCoreNumbers)
+            Dim i As i32 = 1
+
+            Call host.Start()
+
+            For Each key As Object In list.Keys
+                Dim value As Object = list(key)
+                Dim index As Integer = ++i
+
+                Call host.RunTask(
+                    Sub()
+                        Dim result = (
+                            i:=index,
+                            key:=any.ToString(key),
+                            value:=apply.Invoke(envir, invokeArgument(value, index))
+                        )
+
+                        SyncLock values
+                            Call values.Add(result)
+                        End SyncLock
+                    End Sub)
+            Next
+
+            Call host.WaitAll()
+            Call host.Dispose()
+
             Dim seq As New List(Of Object)
             Dim names As New List(Of String)
 
-            For Each tuple As (i As Integer, key As String, value As Object) In values
-                seq.Add(REnv.single(tuple.value))
-                names.Add(tuple.key)
+            For Each tuple As (i As Integer, key As String, value As Object) In values.OrderBy(Function(a) a.i)
+                Call seq.Add(REnv.single(tuple.value))
+                Call names.Add(tuple.key)
             Next
 
             Return (names, seq)
