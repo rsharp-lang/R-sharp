@@ -170,7 +170,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             ElseIf msgFunc.GetType.ImplementInterface(Of RFunction) Then
                 Call DirectCast(msgFunc, RFunction).Invoke({x}, env)
             Else
-                Return Message.InCompatibleType(GetType(RFunction), msgFunc.GetType, env)
+                Call base.print(msgFunc,, env)
             End If
 
             Return x
