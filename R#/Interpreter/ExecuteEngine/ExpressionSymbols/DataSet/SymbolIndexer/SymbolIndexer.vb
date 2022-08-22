@@ -168,7 +168,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         Return getColumn(obj, indexer, envir)
                     End If
                 ElseIf indexType = SymbolIndexers.dataframeRows Then
-                    Return DirectCast(obj, dataframe).sliceByRow(indexer, envir).Value
+                    If Not TypeOf obj Is dataframe Then
+                        Return Message.InCompatibleType(GetType(dataframe), obj.GetType, envir)
+                    Else
+                        Return DirectCast(obj, dataframe) _
+                            .sliceByRow(indexer, envir) _
+                            .Value
+                    End If
                 Else
                     Return Internal.debug.stop(New NotImplementedException(indexType.ToString), envir)
                 End If
