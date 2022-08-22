@@ -162,7 +162,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     ' a[index]
                     Return getByIndex(obj, indexer, envir)
                 ElseIf indexType = SymbolIndexers.dataframeColumns Then
-                    Return getColumn(obj, indexer, envir)
+                    If Not TypeOf obj Is dataframe Then
+                        Return Message.InCompatibleType(GetType(dataframe), obj.GetType, envir)
+                    Else
+                        Return getColumn(obj, indexer, envir)
+                    End If
                 ElseIf indexType = SymbolIndexers.dataframeRows Then
                     Return DirectCast(obj, dataframe).sliceByRow(indexer, envir).Value
                 Else
