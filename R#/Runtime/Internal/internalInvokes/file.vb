@@ -456,6 +456,8 @@ Namespace Runtime.Internal.Invokes
                                   Optional recursive As Boolean = False,
                                   Optional env As Environment = Nothing) As Object
 
+            Dim listfile As String()
+
             If dir Is Nothing Then
                 Return Internal.debug.stop({
                     $"target file system resource can not be nothing!",
@@ -472,26 +474,35 @@ Namespace Runtime.Internal.Invokes
                 DirectCast(dir, String).FileLength > 0 Then
 
                 Using zip As New ZipFolder(DirectCast(dir, String))
-                    Return zip.scanZipFiles(pattern)
+                    listfile = zip.scanZipFiles("*.*")
                 End Using
             ElseIf TypeOf dir Is Stream Then
                 Dim zip As New ZipFolder(DirectCast(dir, Stream))
-                Return zip.scanZipFiles(pattern)
+                listfile = zip.scanZipFiles("*.*")
             ElseIf TypeOf dir Is ZipFolder Then
-                Return DirectCast(dir, ZipFolder).scanZipFiles(pattern)
+                listfile = DirectCast(dir, ZipFolder).scanZipFiles("*.*")
             Else
                 Dim dirStr As String = any.ToString(dir)
 
                 If recursive Then
-                    Return (ls - l - r - pattern <= dirStr).ToArray
+                    listfile = (ls - l - r - "*.*" <= dirStr).ToArray
                 Else
-                    Return (ls - l - pattern <= dirStr).ToArray
+                    listfile = (ls - l - "*.*" <= dirStr).ToArray
                 End If
             End If
+
+            Return listfile _
+                .Where(Function(path)
+                           Dim name As String = path.FileName
+                           Dim test As Boolean = pattern.Any(Function(t) name.IsPattern(t))
+
+                           Return test
+                       End Function) _
+                .ToArray
         End Function
 
         <Extension>
-        Private Function scanZipFiles(zip As ZipFolder, pattern As String()) As String()
+        Private Function scanZipFiles(zip As ZipFolder, ParamArray pattern As String()) As String()
             If pattern(Scan0) = "*.*" Then
                 Return zip.ls
             Else
