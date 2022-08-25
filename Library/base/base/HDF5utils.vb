@@ -75,4 +75,9 @@ Module HDF5utils
             Return Internal.debug.stop(Message.InCompatibleType(GetType(String), file.GetType, env), env)
         End If
     End Function
+
+    <ExportAPI("getData")>
+    Public Function getData(hdf5 As hdf5file, path As String) As Object
+        Return hdf5(path).data
+    End Function
 End Module
