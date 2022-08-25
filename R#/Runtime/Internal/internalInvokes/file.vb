@@ -440,13 +440,16 @@ Namespace Runtime.Internal.Invokes
         ''' List the Files in a Directory/Folder
         ''' </summary>
         ''' <param name="dir">
-        ''' a character vector of full path names; the default corresponds to the working directory, ``getwd()``. 
-        ''' Tilde expansion (see path.expand) is performed. Missing values will be ignored.
+        ''' a character vector of full path names; the default corresponds to the 
+        ''' working directory, ``getwd()``. 
+        ''' Tilde expansion (see path.expand) is performed. Missing values will be 
+        ''' ignored.
         ''' 
         ''' or zip folder object if this parameter is a file stream r zip file path.
         ''' </param>
         ''' <param name="pattern">
-        ''' an optional regular expression. Only file names which match the regular expression will be returned.
+        ''' an optional regular expression/wildcard expression. Only file names which 
+        ''' match the regular expression will be returned.
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("list.files")>
@@ -454,6 +457,7 @@ Namespace Runtime.Internal.Invokes
         Public Function listFiles(Optional dir As Object = "./",
                                   Optional pattern$() = Nothing,
                                   Optional recursive As Boolean = False,
+                                  Optional wildcard As Boolean = True,
                                   Optional env As Environment = Nothing) As Object
 
             Dim listfile As String()
@@ -469,36 +473,57 @@ Namespace Runtime.Internal.Invokes
                 pattern = {"*.*"}
             End If
 
+            ' 20220825 regexp *.* will be filter by the pattern
+            ' regular expression at last
+
             If TypeOf dir Is String AndAlso
                 DirectCast(dir, String).ExtensionSuffix("zip") AndAlso
                 DirectCast(dir, String).FileLength > 0 Then
 
                 Using zip As New ZipFolder(DirectCast(dir, String))
-                    listfile = zip.scanZipFiles("*.*")
+                    If wildcard Then
+                        listfile = zip.scanZipFiles(pattern)
+                    Else
+                        listfile = zip.scanZipFiles("*.*")
+                    End If
                 End Using
             ElseIf TypeOf dir Is Stream Then
                 Dim zip As New ZipFolder(DirectCast(dir, Stream))
-                listfile = zip.scanZipFiles("*.*")
+
+                If wildcard Then
+                    listfile = zip.scanZipFiles(pattern)
+                Else
+                    listfile = zip.scanZipFiles("*.*")
+                End If
             ElseIf TypeOf dir Is ZipFolder Then
-                listfile = DirectCast(dir, ZipFolder).scanZipFiles("*.*")
+                If wildcard Then
+                    listfile = DirectCast(dir, ZipFolder).scanZipFiles(pattern)
+                Else
+                    listfile = DirectCast(dir, ZipFolder).scanZipFiles("*.*")
+                End If
             Else
                 Dim dirStr As String = any.ToString(dir)
+                Dim match As String() = If(wildcard, pattern, {"*.*"})
 
                 If recursive Then
-                    listfile = (ls - l - r - "*.*" <= dirStr).ToArray
+                    listfile = (ls - l - r - match <= dirStr).ToArray
                 Else
-                    listfile = (ls - l - "*.*" <= dirStr).ToArray
+                    listfile = (ls - l - match <= dirStr).ToArray
                 End If
             End If
 
-            Return listfile _
-                .Where(Function(path)
-                           Dim name As String = path.FileName
-                           Dim test As Boolean = pattern.Any(Function(t) name.IsPattern(t))
+            If wildcard Then
+                Return listfile
+            Else
+                Return listfile _
+                    .Where(Function(path)
+                               Dim name As String = path.FileName
+                               Dim test As Boolean = pattern.Any(Function(t) name.IsPattern(t))
 
-                           Return test
-                       End Function) _
-                .ToArray
+                               Return test
+                           End Function) _
+                    .ToArray
+            End If
         End Function
 
         <Extension>
