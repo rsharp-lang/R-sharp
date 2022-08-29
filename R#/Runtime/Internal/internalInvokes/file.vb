@@ -303,6 +303,7 @@ Namespace Runtime.Internal.Invokes
         <RApiReturn(GetType(Boolean()))>
         Public Function filecopy(from$(), to$(),
                                  Optional overwrite As Boolean = False,
+                                 Optional verbose As Boolean = False,
                                  Optional env As Environment = Nothing) As Object
 
             Dim result As New List(Of Object)
