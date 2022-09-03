@@ -1,59 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::a5bd101b93a33be2ecc9fd3a7e25f044, R-sharp\R#\Runtime\Internal\invoke.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 150
-    '    Code Lines: 118
-    ' Comment Lines: 19
-    '   Blank Lines: 13
-    '     File Size: 6.47 KB
+' Summaries:
 
 
-    '     Class invoke
-    ' 
-    '         Properties: ls
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: [stop], getFunction, invalidParameter, invokeInternals, isRInternal
-    '                   missingParameter
-    ' 
-    '         Sub: pushEnvir
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 150
+'    Code Lines: 118
+' Comment Lines: 19
+'   Blank Lines: 13
+'     File Size: 6.47 KB
+
+
+'     Class invoke
+' 
+'         Properties: ls
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: [stop], getFunction, invalidParameter, invokeInternals, isRInternal
+'                   missingParameter
+' 
+'         Sub: pushEnvir
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -132,6 +132,7 @@ Namespace Runtime.Internal
             Call GetType(bitView).DoCall(AddressOf pushEnvir)
             Call GetType(search).DoCall(AddressOf pushEnvir)
             Call GetType(humanReadableFormatter).DoCall(AddressOf pushEnvir)
+            Call GetType(time).DoCall(AddressOf pushEnvir)
         End Sub
 
         Friend Shared Sub pushEnvir(baseModule As Type)
