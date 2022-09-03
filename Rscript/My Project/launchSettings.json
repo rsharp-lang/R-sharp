@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"/mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=33361",
+      "commandLineArgs": "--build /src E:\\Erica --skip-src-build",
       "workingDirectory": "\\mzkit\\dist\\bin\\Rstudio\\host"
     }
   }
