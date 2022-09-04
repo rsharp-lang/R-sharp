@@ -209,7 +209,7 @@ Namespace Runtime.Internal.Invokes
                 env:=env,
                 x:=files,
                 eval:=Function(name)
-                          Return LibDLL.getDllFromAppDir(name, env.globalEnvironment).GetFullPath
+                          Return LibDLL.getDllFromAppDir(name, env.globalEnvironment, Nothing).GetFullPath
                       End Function
             )
         End Function

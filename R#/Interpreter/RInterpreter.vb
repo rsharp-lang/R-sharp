@@ -165,7 +165,8 @@ Namespace Interpreter
             _globalEnvir.Push(".GlobalEnv", globalEnvir, True, TypeCodes.generic)
 
             For Each dllName As String In env.options.environments.SafeQuery
-                Dim dllfile As String = LibDLL.getDllFromAppDir(dllName, env)
+                Dim searchContext As New List(Of String)
+                Dim dllfile As String = LibDLL.getDllFromAppDir(dllName, env, searchContext)
 
                 If dllfile.FileExists Then
                     Try

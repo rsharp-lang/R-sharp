@@ -64,7 +64,7 @@ Namespace Development.Package
 
         Public Shared Function GetDllFile(libDllName As String,
                                           env As Environment,
-                                          Optional ByRef searchContext As List(Of String) = Nothing) As String
+                                          Optional ByRef searchContext As Generic.List(Of String) = Nothing) As String
 
             Dim location As Value(Of String) = ""
 
@@ -99,7 +99,7 @@ Namespace Development.Package
         ''' <returns></returns>
         Private Shared Function getDllFromAttachedPackages(libDll As String,
                                                            globalEnvironment As GlobalEnvironment,
-                                                           ByRef searchContext As List(Of String)) As String
+                                                           ByRef searchContext As Generic.List(Of String)) As String
             Dim location As Value(Of String) = ""
 
             For Each pkg As NamespaceEnvironment In globalEnvironment.attachedNamespace
@@ -137,7 +137,7 @@ Namespace Development.Package
         ''' </param>
         ''' <param name="globalEnvironment"></param>
         ''' <returns></returns>
-        Friend Shared Function getDllFromAppDir(libDll As String, globalEnvironment As GlobalEnvironment, ByRef searchContext As List(Of String)) As String
+        Friend Shared Function getDllFromAppDir(libDll As String, globalEnvironment As GlobalEnvironment, ByRef searchContext As Generic.List(Of String)) As String
             Dim SetDllDirectory As String = globalEnvironment.options.getOption("SetDllDirectory", env:=globalEnvironment)
 
             If libDll.FileExists Then
