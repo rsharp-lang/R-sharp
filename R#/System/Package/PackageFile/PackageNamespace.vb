@@ -123,6 +123,9 @@ Namespace Development.Package.File
         End Function
 
         Public Function FindAssemblyPath(assemblyName As String) As String
+            ' 20220904
+            ' the native library name will not be matched
+            '
             If assembly.ContainsKey($"{assemblyName}.dll") Then
 #If netcore5 = 1 Then
                 ' is an installed package

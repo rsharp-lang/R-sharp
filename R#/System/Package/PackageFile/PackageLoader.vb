@@ -238,7 +238,7 @@ Namespace Development.Package.File
             Dim debugEcho As Boolean = env.debugMode
             Dim symbolExpression As Expression
             Dim symbols As New List(Of RFunction)
-            Dim pkgEnv As NamespaceEnvironment = env.attachedNamespace.Add([namespace])
+            Dim pkgEnv As NamespaceEnvironment
 
             If debugEcho Then
                 Call Console.WriteLine($"load package from directory: '{dir}'.")
@@ -269,7 +269,8 @@ Namespace Development.Package.File
                 Return result
             End If
 
-            Call pkgEnv.AddSymbols(symbols)
+            pkgEnv = env.attachedNamespace.Add([namespace])
+            pkgEnv.AddSymbols(symbols)
 
             Return Nothing
         End Function

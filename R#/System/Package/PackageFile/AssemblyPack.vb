@@ -72,7 +72,10 @@ Namespace Development.Package.File
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getRelativePath(fullname As String) As String
-            Return PathExtensions.RelativePath(directory, fullname)
+            Return PathExtensions.RelativePath(directory, fullname) _
+                .Replace("\", "/") _
+                .Replace($"{framework}/", "") _
+                .Trim("."c, "/"c)
         End Function
 
         ''' <summary>
