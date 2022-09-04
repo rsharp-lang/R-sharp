@@ -438,17 +438,20 @@ Namespace Runtime.Internal.Invokes
             Dim keyName$
             Dim idx As i32 = 1
 
-            If X.GetType Is GetType(Dictionary(Of String, Object)) Then
+            If X.GetType.ImplementInterface(Of IDictionary) Then
                 Dim i As i32 = Scan0
+                Dim dict As IDictionary = DirectCast(X, IDictionary)
 
-                For Each d In DirectCast(X, Dictionary(Of String, Object))
+                For Each d As Object In dict.Keys
+                    value = dict(d)
+
                     If names Is Nothing Then
-                        keyName = d.Key
+                        keyName = any.ToString(d)
                     Else
-                        keyName = getName(New SeqValue(Of Object)(++i, d.Value))
+                        keyName = getName(New SeqValue(Of Object)(++i, value))
                     End If
 
-                    list(keyName) = apply.Invoke(envir, invokeArgument(d.Value, ++idx))
+                    list(keyName) = apply.Invoke(envir, invokeArgument(value, ++idx))
 
                     If Program.isException(list(keyName)) Then
                         Return list(keyName)

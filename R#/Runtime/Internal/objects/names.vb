@@ -210,12 +210,32 @@ RE0:
                 Case GetType(vector)
                     Return DirectCast([object], vector).setNames(namelist, env)
                 Case Else
+                    If [object].GetType.ImplementInterface(Of IDictionary) Then
+                        Return DirectCast([object], IDictionary).setNames(namelist, env)
+                    End If
+
                     Return Internal.debug.stop({
                         "set names for the given type of object is unsupported! please consider convert it as vector at first...",
                         "func: names",
                         "objtype: " & [object].GetType.FullName
                     }, env)
             End Select
+        End Function
+
+        <Extension>
+        Private Function setNames(dict As IDictionary, namelist As String(), env As Environment) As Object
+            Dim oldkeys = dict.Keys.ToArray(Of String)
+
+            For i As Integer = 0 To dict.Count - 1
+                Dim oldKey = oldkeys(i)
+                Dim newKey = namelist(i)
+                Dim value = dict(oldKey)
+
+                dict.Remove(oldKey)
+                dict.Add(newKey, value)
+            Next
+
+            Return dict
         End Function
 
         Public Function getRowNames([object] As Object, envir As Environment) As Object
