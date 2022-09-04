@@ -62,12 +62,29 @@ Namespace Development.Package
 
     Public Class LibDLL
 
-        Public Shared Function GetDllFile(libDllName As String, env As Environment) As String
+        Public Shared Function GetDllFile(libDllName As String,
+                                          env As Environment,
+                                          Optional ByRef searchContext As List(Of String) = Nothing) As String
+
             Dim location As Value(Of String) = ""
 
-            If Not (location = getDllFromAppDir(libDllName, env.globalEnvironment)).StringEmpty Then
+            If searchContext Is Nothing Then
+                searchContext = New List(Of String)
+            End If
+
+            If Not (location = getDllFromAppDir(
+                libDll:=libDllName,
+                globalEnvironment:=env.globalEnvironment,
+                searchContext:=searchContext
+            )).StringEmpty Then
+
                 Return CType(location, String)
-            ElseIf Not (location = getDllFromAttachedPackages(libDllName, env.globalEnvironment)).StringEmpty Then
+            ElseIf Not (location = getDllFromAttachedPackages(
+                libDll:=libDllName,
+                globalEnvironment:=env.globalEnvironment,
+                searchContext:=searchContext
+            )).StringEmpty Then
+
                 Return CType(location, String)
             Else
                 Return Nothing
@@ -80,7 +97,9 @@ Namespace Development.Package
         ''' <param name="libDll"></param>
         ''' <param name="globalEnvironment"></param>
         ''' <returns></returns>
-        Private Shared Function getDllFromAttachedPackages(libDll As String, globalEnvironment As GlobalEnvironment) As String
+        Private Shared Function getDllFromAttachedPackages(libDll As String,
+                                                           globalEnvironment As GlobalEnvironment,
+                                                           ByRef searchContext As List(Of String)) As String
             Dim location As Value(Of String) = ""
 
             For Each pkg As NamespaceEnvironment In globalEnvironment.attachedNamespace
@@ -102,6 +121,8 @@ Namespace Development.Package
                     Return location
                 End If
 #End If
+                    Call searchContext.Add(assemblyDir)
+                    Call searchContext.Add($"{assemblyDir}/{CreatePackage.getRuntimeTags}")
                 Next
             Next
 
@@ -116,7 +137,7 @@ Namespace Development.Package
         ''' </param>
         ''' <param name="globalEnvironment"></param>
         ''' <returns></returns>
-        Friend Shared Function getDllFromAppDir(libDll As String, globalEnvironment As GlobalEnvironment) As String
+        Friend Shared Function getDllFromAppDir(libDll As String, globalEnvironment As GlobalEnvironment, ByRef searchContext As List(Of String)) As String
             Dim SetDllDirectory As String = globalEnvironment.options.getOption("SetDllDirectory", env:=globalEnvironment)
 
             If libDll.FileExists Then
@@ -124,6 +145,8 @@ Namespace Development.Package
             End If
 
             If SetDllDirectory.DirectoryExists Then
+                Call searchContext.Add($"{SetDllDirectory}/{libDll}")
+
                 If $"{SetDllDirectory}/{libDll}".FileExists Then
                     Return $"{SetDllDirectory}/{libDll}"
                 End If
@@ -138,6 +161,8 @@ Namespace Development.Package
             }
                 If location.FileExists Then
                     Return location
+                Else
+                    Call searchContext.Add(location)
                 End If
             Next
 
@@ -150,7 +175,7 @@ Namespace Development.Package
             ' if file not found then we test if the dll 
             ' file extension Is Missing Or Not?
             If Not libDll.ExtensionSuffix("exe", "dll") Then
-                Return getDllFromAppDir($"{libDll}.dll", globalEnvironment)
+                Return getDllFromAppDir($"{libDll}.dll", globalEnvironment, searchContext)
             Else
                 Return Nothing
             End If
