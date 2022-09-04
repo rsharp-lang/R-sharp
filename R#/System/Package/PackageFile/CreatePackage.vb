@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::f9f8573032df85900449c6fc4b0dfdb8, R-sharp\R#\System\Package\PackageFile\CreatePackage.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 472
-    '    Code Lines: 356
-    ' Comment Lines: 44
-    '   Blank Lines: 72
-    '     File Size: 19.46 KB
+' Summaries:
 
 
-    '     Module CreatePackage
-    ' 
-    '         Function: Build, buildRscript, buildUnixMan, checkIndex, createAssetList
-    '                   filter, getAssemblyList, getDataSymbols, getFileReader, getRuntimeTags
-    '                   IsFunctionDeclare, loadingDependency, MakeFunction
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 472
+'    Code Lines: 356
+' Comment Lines: 44
+'   Blank Lines: 72
+'     File Size: 19.46 KB
+
+
+'     Module CreatePackage
+' 
+'         Function: Build, buildRscript, buildUnixMan, checkIndex, createAssetList
+'                   filter, getAssemblyList, getDataSymbols, getFileReader, getRuntimeTags
+'                   IsFunctionDeclare, loadingDependency, MakeFunction
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -132,10 +133,13 @@ Namespace Development.Package.File
             End If
 #Else
             If (framework = $"{dir}/{CreatePackage.getRuntimeTags}").DirectoryExists Then
+                ' may contains some native library
+                ' so we list all possible dll files 
+                ' in all sub-directory
                 Return New AssemblyPack With {
                     .assembly = framework _
                         .Value _
-                        .EnumerateFiles("*.dll") _
+                        .ListFiles("*.dll") _
                         .filter(assemblyFilters) _
                         .ToArray,
                     .directory = framework,
@@ -306,8 +310,28 @@ Namespace Development.Package.File
             ' run documentation for dll modules which is marked as r package
             ' unixMan(pkg As pkg, output As String, env As Environment)
             For Each dll As String In ls - l - r - "*.dll" <= $"{package_dir}/assembly/{runtime}/"
-                Dim assembly As Assembly = deps.LoadAssemblyOrCache(dll)
-                Dim attr = assembly.GetCustomAttributes(Of RPackageModuleAttribute)
+                Dim assembly As Assembly = deps.LoadAssemblyOrCache(dll, strict:=False)
+                Dim attr As IEnumerable(Of RPackageModuleAttribute)
+
+                If assembly Is Nothing Then
+                    Dim tokens = dll.ParentPath.Split("\"c, "/"c)
+                    Dim levelsToAssemblyFolder = tokens _
+                        .Reverse _
+                        .Where(Function(str) str <> "") _
+                        .Select(Function(t, i) (t, i)) _
+                        .Where(Function(s) s.t = "assembly") _
+                        .First.i
+
+                    If levelsToAssemblyFolder > 1 Then
+                        ' assembly/net6.0/bin/nativeLibrary.dll
+                        Continue For
+                    Else
+                        ' throw exception
+                        Return Internal.debug.stop($"invalid library image file: {dll}", REngine.globalEnvir)
+                    End If
+                Else
+                    attr = assembly.GetCustomAttributes(Of RPackageModuleAttribute)
+                End If
 
                 If attr Is Nothing OrElse Not attr.Any Then
                     Continue For
@@ -500,7 +524,7 @@ Namespace Development.Package.File
                 projDir = $"{projDir}/"
             End If
 
-            Return (ls -l -r -"*.*" <= dir) _
+            Return (ls - l - r - "*.*" <= dir) _
                 .Where(Function(filepath)
                            Return Not ignores.IsFileIgnored(filepath.Replace("\", "/").Replace(projDir, ""))
                        End Function) _

@@ -172,7 +172,7 @@ Namespace Development.Package.File
             Using file As New StreamWriter(zip.CreateEntry("package/manifest/assembly.json").Open)
                 text = assembly _
                     .AsEnumerable _
-                    .ToDictionary(Function(path) path.FileName,
+                    .ToDictionary(Function(path) assembly.getRelativePath(path),
                                   Function(fileName)
                                       Return md5.GetMd5Hash(fileName.ReadBinary)
                                   End Function) _

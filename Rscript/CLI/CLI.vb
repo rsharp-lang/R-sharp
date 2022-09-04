@@ -96,8 +96,10 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 #End If
 
         Using outputfile As FileStream = save.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+            ' framework dll module ignores
             Dim assemblyFilters As Index(Of String) = {
-                "Rscript.exe", "R#.exe", "Rscript.dll", "R#.dll", "REnv.dll", "RData.dll", "Microsoft.VisualBasic.Runtime.dll"
+                "Rscript.exe", "R#.exe", "Rscript.dll", "R#.dll", "REnv.dll", "RData.dll",
+                "Microsoft.VisualBasic.Runtime.dll"
             }
             Dim err As Message = meta.Build(src, outputfile, assemblyFilters)
 
