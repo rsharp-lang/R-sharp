@@ -111,7 +111,7 @@ Namespace Development.Package.File
                 Return New AssemblyPack With {
                     .assembly = {},
                     .framework = "n/a",
-                    .directory = dir
+                    .directory = dir.GetDirectoryFullPath
                 }
             End If
 
@@ -121,13 +121,13 @@ Namespace Development.Package.File
             If Not dlls.IsNullOrEmpty Then
                 Return New AssemblyPack With {
                     .assembly = dlls.filter(assemblyFilters),
-                    .directory = dir,
+                    .directory = dir.GetDirectoryFullPath,
                     .framework = ".NET Framework 4.8"
                 }
             Else
                 Return New AssemblyPack With {
                     .assembly = {},
-                    .directory = dir,
+                    .directory = dir.GetDirectoryFullPath,
                     .framework = ".NET Framework 4.8"
                 }
             End If
@@ -142,7 +142,7 @@ Namespace Development.Package.File
                         .ListFiles("*.dll") _
                         .filter(assemblyFilters) _
                         .ToArray,
-                    .directory = framework,
+                    .directory = CStr(framework).GetDirectoryFullPath,
                     .framework = CreatePackage.getRuntimeTags
                 }
             Else
@@ -151,7 +151,7 @@ Namespace Development.Package.File
                 Return New AssemblyPack With {
                     .assembly = {},
                     .framework = CreatePackage.getRuntimeTags,
-                    .directory = dir
+                    .directory = dir.GetDirectoryFullPath
                 }
             End If
 #End If

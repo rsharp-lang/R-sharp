@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src E:\\Erica --skip-src-build",
-      "workingDirectory": "\\mzkit\\dist\\bin\\Rstudio\\host"
+      "commandLineArgs": "--build /src ../ /save ./ggplot.zip --skip-src-build",
+      "workingDirectory": "\\GCModeller\\src\\runtime\\ggplot\\.pkg"
     }
   }
 }
