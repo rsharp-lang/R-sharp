@@ -309,7 +309,7 @@ load:       Return LoadLibrary(filepath, env, names)
                 Else
                     Return Internal.debug.stop({
                         $"Missing library file: '{libDll}'!",
-                        $"Search_Context: {searchContext.JoinBy("; ")}"
+                        $"Search_Context: {searchContext.Distinct.JoinBy("; ")}"
                     }, env, suppress:=True)
                 End If
             End If
