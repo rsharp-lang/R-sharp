@@ -504,19 +504,19 @@ Module clustering
     ''' ### get cluster result data
     ''' 
     ''' </summary>
-    ''' <param name="data"></param>
+    ''' <param name="x"></param>
     ''' <param name="labels"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("cluster.groups")>
     <RApiReturn(GetType(String), GetType(list))>
-    Public Function clusterGroups(<RRawVectorArgument> data As Object,
+    Public Function clusterGroups(<RRawVectorArgument> x As Object,
                                   <RRawVectorArgument>
                                   Optional labels As Object = Nothing,
                                   Optional labelclass_tuple As Boolean = False,
                                   Optional env As Environment = Nothing) As Object
 
-        Dim rawInputs As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(data, env)
+        Dim rawInputs As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(x, env)
 
         If rawInputs.isError Then
             Return rawInputs.getError
