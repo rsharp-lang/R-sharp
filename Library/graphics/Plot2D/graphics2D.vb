@@ -94,6 +94,13 @@ Module graphics2D
         Call Internal.generic.add("plot", GetType(ColorMapLegend), AddressOf plotColorMap)
     End Sub
 
+    ''' <summary>
+    ''' evaluate location automatically
+    ''' </summary>
+    ''' <param name="legend"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Private Function plotColorMap(legend As ColorMapLegend, args As list, env As Environment) As Object
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="0,0")

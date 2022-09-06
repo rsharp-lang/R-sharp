@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::b7a1d0327ad0b2bd5955e9761c6dd06b, R-sharp\Library\graphics\Plot2D\plots.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 936
-    '    Code Lines: 720
-    ' Comment Lines: 122
-    '   Blank Lines: 94
-    '     File Size: 42.70 KB
+' Summaries:
 
 
-    ' Module plots
-    ' 
-    '     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
-    '               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
-    '               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotArray, plotContourLayers
-    '               plotFormula, plotLinearYFit, plotLmCall, plotODEResult, plotPieChart
-    '               PlotPolygon, plotSerials, plotVector, UpSetPlot
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 936
+'    Code Lines: 720
+' Comment Lines: 122
+'   Blank Lines: 94
+'     File Size: 42.70 KB
+
+
+' Module plots
+' 
+'     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
+'               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
+'               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotArray, plotContourLayers
+'               plotFormula, plotLinearYFit, plotLmCall, plotODEResult, plotPieChart
+'               PlotPolygon, plotSerials, plotVector, UpSetPlot
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -104,6 +104,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
@@ -727,13 +728,14 @@ Module plots
 
         Dim serials As SerialData() = DirectCast(data, SerialData())
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="2100,1600")
-        Dim padding = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 150px 150px 200px 200px;")
+        Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 150px 150px 200px 200px;")
         Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
         Dim showLegend As Boolean
         Dim spline As Splines = args.getValue(Of Splines)("interplot", env, Splines.None)
         Dim xlim As Double = args.getValue("xlim", env, Double.NaN)
         Dim ylim As Double = args.getValue("ylim", env, Double.NaN)
         Dim absoluteScale As Boolean = args.getValue("absolute_scale", env, False)
+        Dim driver As Drivers = imageDriverHandler.getDriver(env)
 
         If args.hasName("showLegend") Then
             showLegend = getFirst(asLogical(args!showLegend))
@@ -741,29 +743,61 @@ Module plots
             showLegend = True
         End If
 
-        Return Scatter2D.Plot(
-            c:=serials,
-            size:=size, padding:=padding,
-            Xlabel:=args.getValue("x.lab", env, "X"),
-            Ylabel:=args.getValue("y.lab", env, "Y"),
-            drawLine:=getFirst(asLogical(args!line)),
-            legendBgFill:=RColorPalette.getColor(args!legendBgFill, Nothing),
-            legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
-            showLegend:=showLegend,
-            title:=title,
-            legendSplit:=args.getValue(Of Integer)("legend.block", env),
-            ablines:=args.getValue(Of Line())("abline", env),
-            hullConvexList:=args.getValue(Of String())("convexHull", env),
-            XtickFormat:=args.getValue(Of String)("x.format", env, "F2"),
-            YtickFormat:=args.getValue(Of String)("y.format", env, "F2"),
-            interplot:=spline,
-            axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.Win7VeryLarge),
-            gridFill:=RColorPalette.getColor(args("grid.fill"), "lightgray"),
-            xlim:=xlim,
-            ylim:=ylim,
-            XaxisAbsoluteScalling:=absoluteScale,
-            YaxisAbsoluteScalling:=absoluteScale
-        )
+        If Not size.SizeParser.IsValidGDIParameter Then
+            ' draw on current graphics context
+            Dim dev As graphicsDevice = curDev
+            Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
+            Dim canvas As New GraphicsRegion(dev.g.Size, padding)
+
+            Call Scatter2D.Plot(
+                serials, dev.g, canvas,
+                Xlabel:=args.getValue("x.lab", env, "X"),
+                Ylabel:=args.getValue("y.lab", env, "Y"),
+                drawLine:=getFirst(asLogical(args!line)),
+                legendBgFill:=RColorPalette.getColor(args!legendBgFill, Nothing),
+                legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
+                showLegend:=showLegend,
+                title:=title,
+                legendSplit:=args.getValue(Of Integer)("legend.block", env),
+                ablines:=args.getValue(Of Line())("abline", env),
+                hullConvexList:=args.getValue(Of String())("convexHull", env),
+                XtickFormat:=args.getValue(Of String)("x.format", env, "F2"),
+                YtickFormat:=args.getValue(Of String)("y.format", env, "F2"),
+                interplot:=spline,
+                axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.Win7VeryLarge),
+                gridFill:=RColorPalette.getColor(args("grid.fill"), "lightgray"),
+                xlim:=xlim,
+                ylim:=ylim,
+                XaxisAbsoluteScalling:=absoluteScale,
+                YaxisAbsoluteScalling:=absoluteScale
+            )
+
+            Return Nothing
+        Else
+            Return Scatter2D.Plot(
+                c:=serials,
+                size:=size, padding:=margin,
+                Xlabel:=args.getValue("x.lab", env, "X"),
+                Ylabel:=args.getValue("y.lab", env, "Y"),
+                drawLine:=getFirst(asLogical(args!line)),
+                legendBgFill:=RColorPalette.getColor(args!legendBgFill, Nothing),
+                legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
+                showLegend:=showLegend,
+                title:=title,
+                legendSplit:=args.getValue(Of Integer)("legend.block", env),
+                ablines:=args.getValue(Of Line())("abline", env),
+                hullConvexList:=args.getValue(Of String())("convexHull", env),
+                XtickFormat:=args.getValue(Of String)("x.format", env, "F2"),
+                YtickFormat:=args.getValue(Of String)("y.format", env, "F2"),
+                interplot:=spline,
+                axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.Win7VeryLarge),
+                gridFill:=RColorPalette.getColor(args("grid.fill"), "lightgray"),
+                xlim:=xlim,
+                ylim:=ylim,
+                XaxisAbsoluteScalling:=absoluteScale,
+                YaxisAbsoluteScalling:=absoluteScale
+            )
+        End If
     End Function
 
     <ExportAPI("upset")>
