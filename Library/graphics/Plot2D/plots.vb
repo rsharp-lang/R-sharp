@@ -743,7 +743,7 @@ Module plots
             showLegend = True
         End If
 
-        If Not size.SizeParser.IsValidGDIParameter Then
+        If args.CheckGraphicsDeviceExists Then
             ' draw on current graphics context
             Dim dev As graphicsDevice = curDev
             Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
