@@ -113,7 +113,12 @@ Module graphics2D
             Dim canvas As New GraphicsRegion(dev.g.Size, padding)
             Dim layout As Rectangle = canvas.PlotRegion
 
-            layout = New Rectangle(layout.Right, layout.Top, padding.Right * 2 / 3, layout.Height)
+            layout = New Rectangle(
+                x:=layout.Right + padding.Right / 4,
+                y:=layout.Top,
+                width:=padding.Right * 2 / 3,
+                height:=layout.Height
+            )
             legend.Draw(dev.g, layout)
         Else
             Return g.GraphicsPlots(
