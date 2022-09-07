@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::5e94ae0e7fe68e6d5d0228947d413fb9, R-sharp\Library\base\utils\xlsx.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 193
-    '    Code Lines: 137
-    ' Comment Lines: 38
-    '   Blank Lines: 18
-    '     File Size: 8.11 KB
+' Summaries:
 
 
-    ' Module xlsx
-    ' 
-    '     Function: createSheet, createWorkbook, getSheetNames, openXlsx, readXlsx
-    '               writeXlsx
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 193
+'    Code Lines: 137
+' Comment Lines: 38
+'   Blank Lines: 18
+'     File Size: 8.11 KB
+
+
+' Module xlsx
+' 
+'     Function: createSheet, createWorkbook, getSheetNames, openXlsx, readXlsx
+'               writeXlsx
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -55,6 +55,8 @@ Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MIME
+Imports Microsoft.VisualBasic.MIME.Office.Excel
 Imports Microsoft.VisualBasic.MIME.Office.Excel.MsHtml
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XML.xl.worksheets
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -70,6 +72,8 @@ Imports msXlsx = Microsoft.VisualBasic.MIME.Office.Excel.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rsharp = SMRUCC.Rsharp
+Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataFrame
+Imports Microsoft.VisualBasic.Language
 
 ''' <summary>
 ''' Xlsx file toolkit
@@ -174,10 +178,54 @@ Module xlsx
             End If
         End If
 
-        Dim type As Type = x.GetType
         Dim encoding As Encodings = TextEncodings.GetEncodings(Rsharp.GetEncoding(fileEncoding))
-        Dim table As File
         Dim formatNumber As String = DirectCast(REnv.asVector(Of String)(number_format), String()).ElementAtOrDefault(Scan0, [default]:="G6")
+        Dim table As csv
+
+        If x.GetType Is GetType(list) AndAlso file.ExtensionSuffix("xlsx") Then
+            Dim zip = Office.Excel.CreateNew
+            Dim tables As list = DirectCast(x, list)
+
+            ' save multiple sheet table
+            For Each name As String In tables.getNames
+                Dim temp = coercesDataTable(tables.getByName(name), row_names, formatNumber, env)
+
+                If temp Like GetType(Message) Then
+                    Return temp.TryCast(Of Message)
+                ElseIf temp Is Nothing Then
+                    Return Message.InCompatibleType(GetType(csv), x.GetType, env)
+                Else
+                    zip.WriteSheetTable(temp, sheetName:=name)
+                End If
+            Next
+
+            Return zip.SaveTo(file)
+        Else
+            Dim temp As [Variant](Of Message, csv) = coercesDataTable(x, row_names, formatNumber, env)
+
+            If temp Like GetType(Message) Then
+                Return temp.TryCast(Of Message)
+            ElseIf Not temp Is Nothing Then
+                table = temp
+            Else
+                Return Message.InCompatibleType(GetType(csv), x.GetType, env)
+            End If
+        End If
+
+        If file.ExtensionSuffix("xls") Then
+            Return table _
+                .ToExcel(sheetName) _
+                .SaveTo(file, encoding.CodePage, append:=False)
+        Else
+            ' save xlsx zip package
+            Dim zip = Office.Excel.CreateNew
+            zip.WriteSheetTable(table, sheetName)
+            Return zip.SaveTo(file)
+        End If
+    End Function
+
+    Private Function coercesDataTable(x As Object, row_names As Boolean, formatNumber As String, env As Environment) As [Variant](Of Message, csv)
+        Dim type As Type = x.GetType
 
         If type Is GetType(Rdataframe) Then
             x = DirectCast(x, Rdataframe).CheckDimension(env)
@@ -186,13 +234,13 @@ Module xlsx
                 Return x
             End If
 
-            table = DirectCast(x, Rdataframe).DataFrameRows(row_names, formatNumber, env)
-        ElseIf type Is GetType(File) Then
-            table = DirectCast(x, File)
-        ElseIf type Is GetType(IO.DataFrame) Then
-            table = DirectCast(x, IO.DataFrame)
+            Return DirectCast(x, Rdataframe).DataFrameRows(row_names, formatNumber, env)
+        ElseIf type Is GetType(csv) Then
+            Return DirectCast(x, csv)
+        ElseIf type Is GetType(DataTable) Then
+            Return DirectCast(x, DataTable)
         ElseIf REnv.isVector(Of EntityObject)(x) Then
-            table = Reflector.GetsRowData(
+            Return Reflector.GetsRowData(
                 source:=DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).Select(Function(d) CObj(d)),
                 type:=GetType(EntityObject),
                 strict:=False,
@@ -201,9 +249,9 @@ Module xlsx
                 metaBlank:="",
                 reorderKeys:=0,
                 layout:=Nothing
-            ).DoCall(Function(rows) New File(rows))
+            ).DoCall(Function(rows) New csv(rows))
         ElseIf REnv.isVector(Of DataSet)(x) Then
-            table = Reflector.GetsRowData(
+            Return Reflector.GetsRowData(
                 source:=DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).Select(Function(d) CObj(d)),
                 type:=GetType(DataSet),
                 strict:=False,
@@ -212,18 +260,16 @@ Module xlsx
                 metaBlank:="",
                 reorderKeys:=0,
                 layout:=Nothing
-            ).DoCall(Function(rows) New File(rows))
+            ).DoCall(Function(rows) New csv(rows))
         ElseIf type.IsArray OrElse type Is GetType(vector) Then
-            table = Reflector.doSave(objSource:=utils.MeasureGenericType(x, type),
+            Return Reflector.doSave(objSource:=utils.MeasureGenericType(x, type),
                 typeDef:=type,
                 strict:=False,
                 schemaOut:=Nothing
-            ).DoCall(Function(rows) New File(rows))
+            ).DoCall(Function(rows) New csv(rows))
         Else
-            Return Message.InCompatibleType(GetType(File), type, env)
+            Return Nothing
         End If
-
-        Return table.ToExcel(sheetName).SaveTo(file, encoding.CodePage, append:=False)
     End Function
 
     <ExportAPI("createWorkbook")>
