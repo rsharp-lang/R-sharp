@@ -73,6 +73,7 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rsharp = SMRUCC.Rsharp
 Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataFrame
+Imports Microsoft.VisualBasic.Language
 
 ''' <summary>
 ''' Xlsx file toolkit
@@ -177,56 +178,38 @@ Module xlsx
             End If
         End If
 
-        Dim type As Type = x.GetType
         Dim encoding As Encodings = TextEncodings.GetEncodings(Rsharp.GetEncoding(fileEncoding))
-        Dim table As csv
         Dim formatNumber As String = DirectCast(REnv.asVector(Of String)(number_format), String()).ElementAtOrDefault(Scan0, [default]:="G6")
+        Dim table As csv
 
-        If type Is GetType(Rdataframe) Then
-            x = DirectCast(x, Rdataframe).CheckDimension(env)
-
-            If TypeOf x Is Message Then
-                Return x
-            End If
-
-            table = DirectCast(x, Rdataframe).DataFrameRows(row_names, formatNumber, env)
-        ElseIf type Is GetType(csv) Then
-            table = DirectCast(x, csv)
-        ElseIf type Is GetType(DataTable) Then
-            table = DirectCast(x, DataTable)
-        ElseIf REnv.isVector(Of EntityObject)(x) Then
-            table = Reflector.GetsRowData(
-                source:=DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).Select(Function(d) CObj(d)),
-                type:=GetType(EntityObject),
-                strict:=False,
-                maps:=Nothing,
-                parallel:=False,
-                metaBlank:="",
-                reorderKeys:=0,
-                layout:=Nothing
-            ).DoCall(Function(rows) New csv(rows))
-        ElseIf REnv.isVector(Of DataSet)(x) Then
-            table = Reflector.GetsRowData(
-                source:=DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).Select(Function(d) CObj(d)),
-                type:=GetType(DataSet),
-                strict:=False,
-                maps:=Nothing,
-                parallel:=False,
-                metaBlank:="",
-                reorderKeys:=0,
-                layout:=Nothing
-            ).DoCall(Function(rows) New csv(rows))
-        ElseIf type.IsArray OrElse type Is GetType(vector) Then
-            table = Reflector.doSave(objSource:=utils.MeasureGenericType(x, type),
-                typeDef:=type,
-                strict:=False,
-                schemaOut:=Nothing
-            ).DoCall(Function(rows) New csv(rows))
-        ElseIf type Is GetType(list) AndAlso file.ExtensionSuffix("xlsx") Then
+        If x.GetType Is GetType(list) AndAlso file.ExtensionSuffix("xlsx") Then
             Dim zip = Office.Excel.CreateNew
+            Dim tables As list = DirectCast(x, list)
 
+            ' save multiple sheet table
+            For Each name As String In tables.getNames
+                Dim temp = coercesDataTable(tables.getByName(name), row_names, formatNumber, env)
+
+                If temp Like GetType(Message) Then
+                    Return temp.TryCast(Of Message)
+                ElseIf temp Is Nothing Then
+                    Return Message.InCompatibleType(GetType(csv), x.GetType, env)
+                Else
+                    zip.WriteSheetTable(temp, sheetName:=name)
+                End If
+            Next
+
+            Return zip.SaveTo(file)
         Else
-            Return Message.InCompatibleType(GetType(csv), type, env)
+            Dim temp As [Variant](Of Message, csv) = coercesDataTable(x, row_names, formatNumber, env)
+
+            If temp Like GetType(Message) Then
+                Return temp.TryCast(Of Message)
+            ElseIf Not temp Is Nothing Then
+                table = temp
+            Else
+                Return Message.InCompatibleType(GetType(csv), x.GetType, env)
+            End If
         End If
 
         If file.ExtensionSuffix("xls") Then
@@ -238,6 +221,54 @@ Module xlsx
             Dim zip = Office.Excel.CreateNew
             zip.WriteSheetTable(table, sheetName)
             Return zip.SaveTo(file)
+        End If
+    End Function
+
+    Private Function coercesDataTable(x As Object, row_names As Boolean, formatNumber As String, env As Environment) As [Variant](Of Message, csv)
+        Dim type As Type = x.GetType
+
+        If type Is GetType(Rdataframe) Then
+            x = DirectCast(x, Rdataframe).CheckDimension(env)
+
+            If TypeOf x Is Message Then
+                Return x
+            End If
+
+            Return DirectCast(x, Rdataframe).DataFrameRows(row_names, formatNumber, env)
+        ElseIf type Is GetType(csv) Then
+            Return DirectCast(x, csv)
+        ElseIf type Is GetType(DataTable) Then
+            Return DirectCast(x, DataTable)
+        ElseIf REnv.isVector(Of EntityObject)(x) Then
+            Return Reflector.GetsRowData(
+                source:=DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).Select(Function(d) CObj(d)),
+                type:=GetType(EntityObject),
+                strict:=False,
+                maps:=Nothing,
+                parallel:=False,
+                metaBlank:="",
+                reorderKeys:=0,
+                layout:=Nothing
+            ).DoCall(Function(rows) New csv(rows))
+        ElseIf REnv.isVector(Of DataSet)(x) Then
+            Return Reflector.GetsRowData(
+                source:=DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).Select(Function(d) CObj(d)),
+                type:=GetType(DataSet),
+                strict:=False,
+                maps:=Nothing,
+                parallel:=False,
+                metaBlank:="",
+                reorderKeys:=0,
+                layout:=Nothing
+            ).DoCall(Function(rows) New csv(rows))
+        ElseIf type.IsArray OrElse type Is GetType(vector) Then
+            Return Reflector.doSave(objSource:=utils.MeasureGenericType(x, type),
+                typeDef:=type,
+                strict:=False,
+                schemaOut:=Nothing
+            ).DoCall(Function(rows) New csv(rows))
+        Else
+            Return Nothing
         End If
     End Function
 
