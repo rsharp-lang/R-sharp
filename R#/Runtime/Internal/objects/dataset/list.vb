@@ -183,7 +183,11 @@ Namespace Runtime.Internal.Object
                     .Select(Function(null, i) $"[[{i + 1}]]") _
                     .ToArray
             ElseIf oldNames.Length <> names.Length Then
-                Return Internal.debug.stop("Inconsist name list length!", envir)
+                Return Internal.debug.stop({
+                    $"Inconsist name list length!",
+                    $"list size: {oldNames.Length}",
+                    $"set names: {names.Length}"
+                }, envir)
             End If
 
             newSlots = oldNames _
