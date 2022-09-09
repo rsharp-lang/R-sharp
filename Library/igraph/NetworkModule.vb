@@ -140,7 +140,8 @@ Public Module NetworkModule
     End Function
 
     ''' <summary>
-    ''' create a new graph object with the given network edge data and the node properties 
+    ''' create a new graph object with the given network 
+    ''' edge data and the node properties 
     ''' </summary>
     ''' <param name="from"></param>
     ''' <param name="[to]"></param>
@@ -148,7 +149,11 @@ Public Module NetworkModule
     ''' <param name="title">
     ''' the node display labels
     ''' </param>
-    ''' <param name="defaultId"></param>
+    ''' <param name="defaultId">
+    ''' using the node id as the node display labels 
+    ''' if the target object is missing from the title
+    ''' list.
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("graph")>
