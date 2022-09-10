@@ -1,57 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::7f66109d83fbf3354c58f6d9a30f6fce, R-sharp\R#\System\Package\ImportsPackage.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 213
-    '    Code Lines: 154
-    ' Comment Lines: 29
-    '   Blank Lines: 30
-    '     File Size: 9.01 KB
+' Summaries:
 
 
-    '     Module ImportsPackage
-    ' 
-    '         Function: (+2 Overloads) GetAllApi, ImportsStatic, ImportsStaticInternalImpl
-    ' 
-    '         Sub: ImportsInstance, ImportsSymbolLanguages
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 213
+'    Code Lines: 154
+' Comment Lines: 29
+'   Blank Lines: 30
+'     File Size: 9.01 KB
+
+
+'     Module ImportsPackage
+' 
+'         Function: (+2 Overloads) GetAllApi, ImportsStatic, ImportsStaticInternalImpl
+' 
+'         Sub: ImportsInstance, ImportsSymbolLanguages
+' 
+' 
+' /********************************************************************************/
 
 #End Region
-
 #If netcore5 = 0 Then
 Imports System.ComponentModel.Composition
 #Else
@@ -71,6 +70,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Interop.Operator
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Development.Package
 
@@ -81,6 +81,14 @@ Namespace Development.Package
 
         Public Function GetAllApi(package As Package) As IEnumerable(Of NamedValue(Of MethodInfo))
             Return GetAllApi(package.package, strict:=True, includesInternal:=False)
+        End Function
+
+        Private Function getFlags(includesInternal As Boolean) As BindingFlags
+            If includesInternal Then
+                Return BindingFlags.NonPublic Or BindingFlags.Public Or BindingFlags.Static
+            Else
+                Return BindingFlags.Public Or BindingFlags.Static
+            End If
         End Function
 
         ''' <summary>
@@ -94,40 +102,72 @@ Namespace Development.Package
                                            Optional strict As Boolean = True,
                                            Optional includesInternal As Boolean = False) As IEnumerable(Of NamedValue(Of MethodInfo))
 
-            Dim access As BindingFlags
-
-            If includesInternal Then
-                access = BindingFlags.NonPublic Or BindingFlags.Public Or BindingFlags.Static
-            Else
-                access = BindingFlags.Public Or BindingFlags.Static
-            End If
-
+            Dim access As BindingFlags = getFlags(includesInternal)
             Dim methods As MethodInfo() = package.GetMethods(access)
-            Dim name As String
-            Dim flag As ExportAPIAttribute
-            Dim exportFlag As ExportAttribute
+            Dim found As NamedValue(Of MethodInfo)
 
             For Each method As MethodInfo In methods
-                flag = method.GetCustomAttribute(Of ExportAPIAttribute)
+                found = TryParse(method, strict)
 
-                If flag Is Nothing Then
-                    exportFlag = method.GetCustomAttribute(Of ExportAttribute)
+                If Not found.Value Is Nothing Then
+                    Yield found
+                End If
+            Next
+        End Function
 
-                    If strict AndAlso exportFlag Is Nothing Then
-                        Continue For
-                    Else
-                        name = method.Name
-                    End If
-                Else
-                    name = flag.Name
+        Private Function ParseAnyFlagName(method As MethodInfo, strict As Boolean, ByRef notFound As Boolean) As String
+            Dim exportFlag = method.GetCustomAttribute(Of ExportAttribute)
+            Dim anyAttr As CustomAttributeData
+
+            Static exportTag As Index(Of String) = {"Export", "ExportAPI"}
+
+            If exportFlag Is Nothing Then
+                ' continute test with the custom attribute name
+                anyAttr = method.CustomAttributes _
+                    .Where(Function(a)
+                               Dim b1 = a.AttributeType.Name Like exportTag
+                               Dim b2 = a.AttributeType.Name.Replace("Attribute", "") Like exportTag
+
+                               Return b1 OrElse b2
+                           End Function) _
+                    .FirstOrDefault
+
+                If Not anyAttr Is Nothing Then
+                    Dim argv = anyAttr.NamedArguments _
+                        .Where(Function(a) a.MemberName.TextEquals("name")) _
+                        .FirstOrDefault
+
+                    Return any.ToString(argv.TypedValue.Value)
+                ElseIf strict Then
+                    notFound = True
                 End If
 
-                Yield New NamedValue(Of MethodInfo) With {
-                    .Name = If(name.StringEmpty, method.Name, name),
-                    .Value = method,
-                    .Description = method.Name
-                }
-            Next
+                Return Nothing
+            Else
+                Return method.Name
+            End If
+        End Function
+
+        Private Function TryParse(method As MethodInfo, strict As Boolean) As NamedValue(Of MethodInfo)
+            Dim flag = method.GetCustomAttribute(Of ExportAPIAttribute)
+            Dim name As String
+            Dim notFound As Boolean = False
+
+            If flag Is Nothing Then
+                name = ParseAnyFlagName(method, strict, notFound)
+
+                If notFound Then
+                    Return Nothing
+                End If
+            Else
+                name = flag.Name
+            End If
+
+            Return New NamedValue(Of MethodInfo) With {
+                .Name = If(name.StringEmpty, method.Name, name),
+                .Value = method,
+                .Description = method.Name
+            }
         End Function
 
         Const obsoleteAssemblyImage$ = "Unable to load R# package module '{0}', due to the reason of obsolete assembly file! Please re-compile your package under the latest R#/sciBASIC.NET runtime!"
@@ -152,7 +192,7 @@ Namespace Development.Package
             Catch ex As Exception
                 If TypeOf ex Is MissingMethodException Then
                     With DirectCast(ex, MissingMethodException)
-                        If .Message = ".ctor" AndAlso InStr(ex.StackTrace, "GetCustomAttribute") > 0 Then
+                        If .Message = ".ctor" AndAlso Microsoft.VisualBasic.InStr(ex.StackTrace, "GetCustomAttribute") > 0 Then
                             Throw New TypeLoadException(String.Format(obsoleteAssemblyImage, package.FullName), ex)
                         Else
                             Throw
@@ -212,6 +252,14 @@ Namespace Development.Package
                 envir.globalEnvironment.types(type.name) = RType.GetRSharpType(type.model)
             Next
 
+            Call ImportsPackage.runMain(package, envir)
+            Call BinaryOperatorEngine.ImportsOperators(package, envir)
+            Call ImportsPackage.ImportsSymbolLanguages(package, envir.globalEnvironment)
+
+            Return masked
+        End Function
+
+        Private Sub runMain(package As Type, envir As Environment)
             ' find module initializer
             Dim init As MethodInfo = package _
                 .GetMethods(bindingAttr:=BindingFlags.Public Or BindingFlags.Static) _
@@ -227,12 +275,7 @@ Namespace Development.Package
                     Call init.Invoke(Nothing, {envir})
                 End If
             End If
-
-            Call BinaryOperatorEngine.ImportsOperators(package, envir)
-            Call ImportsPackage.ImportsSymbolLanguages(package, envir.globalEnvironment)
-
-            Return masked
-        End Function
+        End Sub
 
         Private Sub ImportsSymbolLanguages(package As Type, env As GlobalEnvironment)
             For Each method In From m As MethodInfo
@@ -246,6 +289,11 @@ Namespace Development.Package
             Next
         End Sub
 
+        ''' <summary>
+        ''' imports class object instance methods.
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <param name="target"></param>
         <Extension>
         Public Sub ImportsInstance(envir As Environment, target As Object)
             Dim methods = target.GetType.GetMethods(BindingFlags.Public Or BindingFlags.Instance)
@@ -260,7 +308,12 @@ Namespace Development.Package
             Dim [global] As GlobalEnvironment = envir.globalEnvironment
 
             For Each api As RMethodInfo In Rmethods
-                Call [global].Push(api.name, api, [readonly]:=False, mode:=TypeCodes.closure)
+                Call [global].Push(
+                    name:=api.name,
+                    value:=api,
+                    [readonly]:=False,
+                    mode:=TypeCodes.closure
+                )
             Next
         End Sub
     End Module

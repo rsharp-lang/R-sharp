@@ -140,7 +140,7 @@ Namespace Runtime.Interop
         ''' Static method
         ''' </summary>
         ''' <param name="api"></param>
-        Sub New(api As NamedValue(Of MethodInfo))
+        Friend Sub New(api As NamedValue(Of MethodInfo))
             Call Me.New(api.Name, api.Value, Nothing)
         End Sub
 
@@ -149,7 +149,9 @@ Namespace Runtime.Interop
         ''' </summary>
         ''' <param name="name"></param>
         ''' <param name="closure"><see cref="MethodInfo"/> from parsing .NET dll module file.</param>
-        ''' <param name="target"></param>
+        ''' <param name="target">
+        ''' for object instance method used only, nothing means static method
+        ''' </param>
         Sub New(name$, closure As MethodInfo, target As Object)
             Me.name = name
             Me.api = New MethodInvoke With {.method = closure, .target = target}
