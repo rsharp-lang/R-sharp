@@ -94,6 +94,13 @@ Module graphics2D
         Call Internal.generic.add("plot", GetType(ColorMapLegend), AddressOf plotColorMap)
     End Sub
 
+    ''' <summary>
+    ''' evaluate location automatically
+    ''' </summary>
+    ''' <param name="legend"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Private Function plotColorMap(legend As ColorMapLegend, args As list, env As Environment) As Object
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="0,0")
@@ -106,7 +113,12 @@ Module graphics2D
             Dim canvas As New GraphicsRegion(dev.g.Size, padding)
             Dim layout As Rectangle = canvas.PlotRegion
 
-            layout = New Rectangle(layout.Right, layout.Top, padding.Right * 2 / 3, layout.Height)
+            layout = New Rectangle(
+                x:=layout.Right + padding.Right / 4,
+                y:=layout.Top,
+                width:=padding.Right * 2 / 3,
+                height:=layout.Height
+            )
             legend.Draw(dev.g, layout)
         Else
             Return g.GraphicsPlots(
