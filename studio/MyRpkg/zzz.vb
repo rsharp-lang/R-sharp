@@ -1,6 +1,7 @@
 ﻿Public Class zzz
 
     Public Shared Sub onLoad()
-        ' package startup
+        ' on package startup
+        ' do some package library initialization work at here
     End Sub
 End Class
