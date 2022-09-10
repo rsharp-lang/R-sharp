@@ -64,7 +64,7 @@ Module scriptTest
     End Sub
 
     Sub testSource()
-        Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\Library\R.base.dll")
+        Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\Library\R.base.dll", Nothing)
         Call R.Source(script)
         Call Pause()
     End Sub
