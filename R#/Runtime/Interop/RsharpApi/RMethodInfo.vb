@@ -140,7 +140,7 @@ Namespace Runtime.Interop
         ''' Static method
         ''' </summary>
         ''' <param name="api"></param>
-        Friend Sub New(api As NamedValue(Of MethodInfo))
+        Sub New(api As NamedValue(Of MethodInfo))
             Call Me.New(api.Name, api.Value, Nothing)
         End Sub
 
