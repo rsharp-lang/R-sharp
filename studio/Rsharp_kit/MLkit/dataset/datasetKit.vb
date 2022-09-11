@@ -57,7 +57,6 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv
-Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.IO.MessagePack
 Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
@@ -65,8 +64,10 @@ Imports Microsoft.VisualBasic.DataMining.FeatureFrame
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
+Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -225,8 +226,8 @@ Module datasetKit
     End Function
 
     <ExportAPI("read.mnist.labelledvector")>
-    Public Function readMNISTLabelledVector(messagepack As String, Optional takes As Integer = -1) As DataFrame
-        Using file As Stream = messagepack.Open(IO.FileMode.Open, doClear:=False, [readOnly]:=True)
+    Public Function readMNISTLabelledVector(messagepack As String, Optional takes As Integer = -1) As Rdataframe
+        Using file As Stream = messagepack.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
             Return LabelledVector.CreateDataFrame(MsgPackSerializer.Deserialize(Of LabelledVector())(file), takes)
         End Using
     End Function
@@ -242,7 +243,7 @@ Module datasetKit
     <ExportAPI("gaussian")>
     Public Function demoMatrix(size As Integer, dimensions As Integer,
                                Optional pzero As Double = 0.8,
-                               Optional nclass% = 5) As DataFrame
+                               Optional nclass% = 5) As Rdataframe
 
         Dim tagRanges = nclass _
             .Sequence _
@@ -259,7 +260,7 @@ Module datasetKit
             dataset.Add(New NamedValue(Of Double()) With {.Name = tag.name, .Value = vec, .Description = i})
         Next
 
-        Dim matrix As New DataFrame With {
+        Dim matrix As New Rdataframe With {
             .columns = New Dictionary(Of String, Array)
         }
 
@@ -308,18 +309,40 @@ Module datasetKit
         Dim encoderMaps As New FeatureEncoder
 
         For Each fieldName As String In encoder.getNames
+            Dim code As Object = encoder.getByName(fieldName)
 
+            If TypeOf code Is RMethodInfo Then
+                Dim name As String = DirectCast(code, RMethodInfo).GetRawDeclares.Name
+
+                If name = NameOf(binEncoder) Then
+                    encoderMaps.AddEncodingRule(fieldName, AddressOf FeatureEncoder.NumericBinsEncoder)
+                ElseIf name = NameOf(factorEncoder) Then
+                    encoderMaps.AddEncodingRule(fieldName, AddressOf FeatureEncoder.EnumEncoder)
+                ElseIf name = NameOf(boolEncoder) Then
+                    encoderMaps.AddEncodingRule(fieldName, AddressOf FeatureEncoder.FlagEncoder)
+                Else
+                    Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {name}"), env)
+                End If
+            Else
+                Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {code.GetType.FullName}"), env)
+            End If
         Next
+
+        Return encoderMaps.Encoding(features)
     End Function
 
     <ExportAPI("to_bins")>
     Public Function binEncoder(feature As FeatureVector) As Object
-
+        Throw New NotImplementedException
     End Function
 
     <ExportAPI("to_factors")>
     Public Function factorEncoder(feature As FeatureVector) As Object
-
+        Throw New NotImplementedException
     End Function
 
+    <ExportAPI("to_ints")>
+    Public Function boolEncoder(feature As FeatureVector) As Object
+        Throw New NotImplementedException
+    End Function
 End Module
