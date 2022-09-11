@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3a06bb0a8dd8ef594a31ac929c204658, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\RcodeParser.vb"
+﻿#Region "Microsoft.VisualBasic::3e6393c402a13e85c25e8ad5a4b0e9c9, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\RcodeParser.vb"
 
     ' Author:
     ' 
@@ -103,4 +103,3 @@ Public Class RcodeParser : Inherits PlainTextParser
         End If
     End Sub
 End Class
-

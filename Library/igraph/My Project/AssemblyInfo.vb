@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::97551a9a439b4d67146f911327b92e01, R-sharp\Library\igraph\My Project\AssemblyInfo.vb"
+﻿#Region "Microsoft.VisualBasic::9bae3c7a0fc4b7d856ce638430983050, R-sharp\Library\igraph\My Project\AssemblyInfo.vb"
 
     ' Author:
     ' 
@@ -84,4 +84,3 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Assembly: AssemblyFileVersion("1.20.*")>
 #End If
 <Assembly: RPackageModule>
-

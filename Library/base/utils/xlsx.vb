@@ -1,52 +1,52 @@
-﻿#Region "Microsoft.VisualBasic::5e94ae0e7fe68e6d5d0228947d413fb9, R-sharp\Library\base\utils\xlsx.vb"
+﻿#Region "Microsoft.VisualBasic::51220afb76bb8f1381b4ab5cfa2475b7, R-sharp\Library\base\utils\xlsx.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 193
-'    Code Lines: 137
-' Comment Lines: 38
-'   Blank Lines: 18
-'     File Size: 8.11 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module xlsx
-' 
-'     Function: createSheet, createWorkbook, getSheetNames, openXlsx, readXlsx
-'               writeXlsx
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 239
+    '    Code Lines: 175
+    ' Comment Lines: 40
+    '   Blank Lines: 24
+    '     File Size: 9.90 KB
+
+
+    ' Module xlsx
+    ' 
+    '     Function: coercesDataTable, createSheet, createWorkbook, getSheetNames, openXlsx
+    '               readXlsx, writeXlsx
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

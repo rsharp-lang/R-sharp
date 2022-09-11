@@ -1,57 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::f8a45317e65f3690762934e78db7fda6, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::f83d1f5f7e0a5b250afe2dae54e05b3e, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 571
-'    Code Lines: 440
-' Comment Lines: 56
-'   Blank Lines: 75
-'     File Size: 25.32 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class SymbolIndexer
-' 
-'         Properties: expressionName, type
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
-'                   getColumn, getDataframeRowRange, groupSubset, listSubset, streamView
-'                   ToString, vectorSubset
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 594
+    '    Code Lines: 462
+    ' Comment Lines: 56
+    '   Blank Lines: 76
+    '     File Size: 26.52 KB
+
+
+    '     Class SymbolIndexer
+    ' 
+    '         Properties: expressionName, type
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
+    '                   getColumn, getDataframeRowRange, groupSubset, listSubset, streamView
+    '                   ToString, vectorSubset
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

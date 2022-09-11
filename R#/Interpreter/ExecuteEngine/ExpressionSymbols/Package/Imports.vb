@@ -1,61 +1,61 @@
-﻿#Region "Microsoft.VisualBasic::ef3ae7272eeb102c3375a9f54f6fc879, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
+﻿#Region "Microsoft.VisualBasic::1cf8a41953d76f26fa0e0d81aab99929, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 309
-'    Code Lines: 200
-' Comment Lines: 72
-'   Blank Lines: 37
-'     File Size: 12.73 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Delegate Function
-' 
-' 
-'     Class [Imports]
-' 
-'         Properties: expressionName, isImportsScript, library, packages, scriptSource
-'                     type
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsLibrary, importsPackages
-'                   isImportsAllPackages, LoadLibrary, ToString
-' 
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 314
+    '    Code Lines: 205
+    ' Comment Lines: 72
+    '   Blank Lines: 37
+    '     File Size: 13.01 KB
+
+
+    '     Delegate Function
+    ' 
+    ' 
+    '     Class [Imports]
+    ' 
+    '         Properties: expressionName, isImportsScript, library, packages, scriptSource
+    '                     type
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsLibrary, importsPackages
+    '                   isImportsAllPackages, LoadLibrary, ToString
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

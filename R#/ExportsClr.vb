@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6a8130ee5e65e2aa3c3901b9d6a30445, R-sharp\R#\ExportsClr.vb"
+﻿#Region "Microsoft.VisualBasic::f5f524727fa07a3bf9453860df4daca5, R-sharp\R#\ExportsClr.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 16
+    '   Total Lines: 15
     '    Code Lines: 8
     ' Comment Lines: 3
-    '   Blank Lines: 5
-    '     File Size: 360 B
+    '   Blank Lines: 4
+    '     File Size: 358 B
 
 
     ' Class ExportsClr
@@ -48,7 +48,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::15fb3023c4f324e70d35a42ba47e0c72, R-sharp\snowFall\My Project\Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::2f4526626982ec9ad68b622577b6df90, R-sharp\snowFall\My Project\Resources.Designer.vb"
 
     ' Author:
     ' 
@@ -112,4 +112,3 @@ Namespace My.Resources
         End Property
     End Module
 End Namespace
-

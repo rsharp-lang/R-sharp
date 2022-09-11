@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3059c1aa95a5e2173cd2082060fb2035, R-sharp\R#\System\Package\PackageFile\Serialization\Writer.vb"
+﻿#Region "Microsoft.VisualBasic::e69293ad15862767272e9b7f680e4188, R-sharp\R#\System\Package\PackageFile\Serialization\Writer.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 264
-    '    Code Lines: 192
+    '   Total Lines: 269
+    '    Code Lines: 195
     ' Comment Lines: 31
-    '   Blank Lines: 41
-    '     File Size: 11.52 KB
+    '   Blank Lines: 43
+    '     File Size: 11.71 KB
 
 
     '     Class Writer
     ' 
-    '         Properties: RBinary, RBreakControls, RCallFunction, RClosure, Relse
-    '                     RExpr, Rfor, RFunction, Rif, RImports
-    '                     RJSON, RLiteral, RReturns, RShell, RString
-    '                     RSymbol, RSymbolAssign, RSymbolIndex, RSymbolRef, RTryCatch
-    '                     RTypeAssert, RUnary, RVector
+    '         Properties: RAnnotation, RBinary, RBreakControls, RCallFunction, RClosure
+    '                     Relse, RExpr, Rfor, RFunction, Rif
+    '                     RImports, RJSON, RLiteral, RReturns, RShell
+    '                     RString, RSymbol, RSymbolAssign, RSymbolIndex, RSymbolRef
+    '                     RTryCatch, RTypeAssert, RUnary, RVector
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a90c2b9019b11567166ff51e787e42ba, R-sharp\R#\Test\scriptTest.vb"
+﻿#Region "Microsoft.VisualBasic::dc3b13f87750dd6533f6b7851c335e4b, R-sharp\R#\Test\scriptTest.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 20
     ' Comment Lines: 0
     '   Blank Lines: 7
-    '     File Size: 655 B
+    '     File Size: 664 B
 
 
     ' Module scriptTest

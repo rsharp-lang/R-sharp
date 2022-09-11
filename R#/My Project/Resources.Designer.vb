@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ea691c8f754bf113933ffecd3222449a, R-sharp\R#\My Project\Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::baa731c9397c33634b9372fc930632f5, R-sharp\R#\My Project\Resources.Designer.vb"
 
     ' Author:
     ' 
@@ -152,4 +152,3 @@ Namespace My.Resources
         End Property
     End Module
 End Namespace
-

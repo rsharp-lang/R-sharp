@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f8d8966757daba8d60197e2c44946f58, R-sharp\R#\Runtime\Internal\objects\dataset\vector.vb"
+﻿#Region "Microsoft.VisualBasic::f842471075a6f95dda2a4f80cafc096c, R-sharp\R#\Runtime\Internal\objects\dataset\vector.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 318
+    '   Total Lines: 320
     '    Code Lines: 220
-    ' Comment Lines: 45
+    ' Comment Lines: 47
     '   Blank Lines: 53
-    '     File Size: 11.72 KB
+    '     File Size: 11.79 KB
 
 
     '     Class vector

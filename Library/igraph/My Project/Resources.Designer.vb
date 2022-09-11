@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a2bcb1a8a3165d305ccd06a9ead6ab21, R-sharp\Library\igraph\My Project\Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::c98a21aee0910ce1035bd42683b5039b, R-sharp\Library\igraph\My Project\Resources.Designer.vb"
 
     ' Author:
     ' 
@@ -113,4 +113,3 @@ Namespace My.Resources
         End Property
     End Module
 End Namespace
-

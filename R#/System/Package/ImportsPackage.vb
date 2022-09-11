@@ -1,56 +1,58 @@
-﻿#Region "Microsoft.VisualBasic::7f66109d83fbf3354c58f6d9a30f6fce, R-sharp\R#\System\Package\ImportsPackage.vb"
+﻿#Region "Microsoft.VisualBasic::d2b152b9151438327110c678fbe9053c, R-sharp\R#\System\Package\ImportsPackage.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 213
-'    Code Lines: 154
-' Comment Lines: 29
-'   Blank Lines: 30
-'     File Size: 9.01 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module ImportsPackage
-' 
-'         Function: (+2 Overloads) GetAllApi, ImportsStatic, ImportsStaticInternalImpl
-' 
-'         Sub: ImportsInstance, ImportsSymbolLanguages
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 267
+    '    Code Lines: 194
+    ' Comment Lines: 35
+    '   Blank Lines: 38
+    '     File Size: 11.14 KB
+
+
+    '     Module ImportsPackage
+    ' 
+    '         Function: (+2 Overloads) GetAllApi, getFlags, ImportsStatic, ImportsStaticInternalImpl, ParseAnyFlagName
+    '                   TryParse
+    ' 
+    '         Sub: ImportsInstance, ImportsSymbolLanguages, runMain
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
+
 #If netcore5 = 0 Then
 Imports System.ComponentModel.Composition
 #Else

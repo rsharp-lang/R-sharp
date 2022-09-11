@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a5d9d43af9862c29ae93d333556bbd50, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\RDoc\ContentModel.vb"
+﻿#Region "Microsoft.VisualBasic::06dcec06f37504498bb075115e1b433d, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\RDoc\ContentModel.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 58
+    '   Total Lines: 57
     '    Code Lines: 39
     ' Comment Lines: 0
-    '   Blank Lines: 19
-    '     File Size: 1.27 KB
+    '   Blank Lines: 18
+    '     File Size: 1.26 KB
 
 
     ' Class Doc
@@ -73,7 +73,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 #Region "Doc content model"
 
@@ -132,4 +131,3 @@ Public Class Link : Inherits DocFragment
 End Class
 
 #End Region
-
