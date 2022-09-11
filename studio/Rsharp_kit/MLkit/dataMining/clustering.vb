@@ -1,63 +1,63 @@
 ﻿#Region "Microsoft.VisualBasic::d8a159f0d4f2e614636ee75a004df010, R-sharp\studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 780
-    '    Code Lines: 529
-    ' Comment Lines: 165
-    '   Blank Lines: 86
-    '     File Size: 33.10 KB
+' Summaries:
 
 
-    ' Module clustering
-    ' 
-    '     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
-    '               dbscan, dbscan_objects, densityA, ensureNotIsDistance, fuzzyCMeans
-    '               hclust, hleaf, hnode, Kmeans, showHclust
-    '               ToHClust
-    ' 
-    '     Sub: Main
-    '     Class point2DReader
-    ' 
-    '         Function: activate, getByDimension, GetDimensions, metric, nodeIs
-    ' 
-    '         Sub: setByDimensin
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 780
+'    Code Lines: 529
+' Comment Lines: 165
+'   Blank Lines: 86
+'     File Size: 33.10 KB
+
+
+' Module clustering
+' 
+'     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
+'               dbscan, dbscan_objects, densityA, ensureNotIsDistance, fuzzyCMeans
+'               hclust, hleaf, hnode, Kmeans, showHclust
+'               ToHClust
+' 
+'     Sub: Main
+'     Class point2DReader
+' 
+'         Function: activate, getByDimension, GetDimensions, metric, nodeIs
+' 
+'         Sub: setByDimensin
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -87,6 +87,7 @@ Imports Distance = Microsoft.VisualBasic.DataMining.HierarchicalClustering.Hiera
 Imports Point2D = System.Drawing.Point
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports FeatureFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
 
 ''' <summary>
 ''' R# data clustering tools
@@ -97,6 +98,7 @@ Module clustering
     Friend Sub Main()
         Call REnv.Internal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
 
+        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(FeatureFrame), AddressOf toDataframe)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(FuzzyCMeansEntity()), AddressOf cmeansSummary)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(
@@ -107,6 +109,33 @@ Module clustering
 
         Call REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
     End Sub
+
+    Private Function toDataframe(features As FeatureFrame, args As list, env As Environment) As Rdataframe
+
+    End Function
+
+    <ExportAPI("toFeatureSet")>
+    <RApiReturn(GetType(FeatureFrame))>
+    Public Function toFeatureSet(x As Rdataframe, Optional env As Environment = Nothing) As Object
+        Dim featureSet As New Dictionary(Of String, FeatureVector)
+        Dim general As Array
+
+        For Each name As String In x.columns.Keys
+            general = x(columnName:=name)
+            general = TryCastGenericArray(general, env)
+
+            If Not FeatureVector.CheckSupports(general.GetType.GetElementType) Then
+                Return Internal.debug.stop($"not supports '{name}'!", env)
+            End If
+
+            featureSet(name) = FeatureVector.FromGeneral(general)
+        Next
+
+        Return New FeatureFrame With {
+            .rownames = x.getRowNames,
+            .features = featureSet
+        }
+    End Function
 
     Private Function showHclust(cluster As Cluster) As String
         Return cluster.ToConsoleLine
