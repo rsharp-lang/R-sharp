@@ -323,6 +323,9 @@ Module datasetKit
 
                 If TypeOf code Is SymbolReference Then
                     err = mapEncoder(DirectCast(code, SymbolReference).symbol, fieldName, encoderMaps, env)
+                ElseIf TypeOf code Is NamespaceFunctionSymbolReference Then
+                    code = DirectCast(code, NamespaceFunctionSymbolReference).symbol
+                    err = mapEncoder(DirectCast(code, SymbolReference).symbol, fieldName, encoderMaps, env)
                 Else
                     Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {code.GetType.FullName}"), env)
                 End If
