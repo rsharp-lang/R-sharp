@@ -218,7 +218,7 @@ Module dataframe
             Return col _
                 .Skip(1) _
                 .ToArray _
-                .DoCall(AddressOf IO.DataImports.ParseVector)
+                .DoCall(AddressOf TypeCast.DataImports.ParseVector)
         Else
             Return DirectCast(col.Skip(1).ToArray, Array)
         End If
