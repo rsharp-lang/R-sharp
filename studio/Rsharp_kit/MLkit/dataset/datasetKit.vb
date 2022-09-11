@@ -288,4 +288,33 @@ Module datasetKit
         Next
     End Function
 
+    ''' <summary>
+    ''' do feature encoding
+    ''' </summary>
+    ''' <param name="features"></param>
+    ''' <param name="encoder">
+    ''' a set of the encoder function that apply to the 
+    ''' corresponding feature data.
+    ''' </param>
+    ''' <returns></returns>
+    <ExportAPI("encoding")>
+    <RApiReturn(GetType(FeatureFrame))>
+    Public Function Encoding(features As FeatureFrame,
+                             <RListObjectArgument>
+                             encoder As list,
+                             Optional env As Environment = Nothing) As Object
+
+
+    End Function
+
+    <ExportAPI("to_bins")>
+    Public Function binEncoder(feature As FeatureVector) As Object
+
+    End Function
+
+    <ExportAPI("to_factors")>
+    Public Function factorEncoder(feature As FeatureVector) As Object
+
+    End Function
+
 End Module
