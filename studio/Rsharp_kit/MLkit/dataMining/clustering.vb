@@ -84,10 +84,10 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Distance = Microsoft.VisualBasic.DataMining.HierarchicalClustering.Hierarchy.Distance
+Imports FeatureFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
 Imports Point2D = System.Drawing.Point
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports FeatureFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
 
 ''' <summary>
 ''' R# data clustering tools
@@ -111,7 +111,14 @@ Module clustering
     End Sub
 
     Private Function toDataframe(features As FeatureFrame, args As list, env As Environment) As Rdataframe
-
+        Return New Rdataframe With {
+            .columns = features.features _
+                .ToDictionary(Function(v) v.Key,
+                              Function(v)
+                                  Return v.Value.vector
+                              End Function),
+            .rownames = features.rownames
+        }
     End Function
 
     <ExportAPI("toFeatureSet")>
