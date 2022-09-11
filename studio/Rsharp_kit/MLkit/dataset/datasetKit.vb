@@ -343,11 +343,11 @@ Module datasetKit
 
     Private Function mapEncoder(code As String, fieldName As String, encoderMaps As FeatureEncoder, env As Environment) As Message
         Select Case code
-            Case NameOf(binEncoder)
+            Case NameOf(binEncoder), "to_bins"
                 encoderMaps.AddEncodingRule(fieldName, AddressOf FeatureEncoder.NumericBinsEncoder)
-            Case NameOf(factorEncoder)
+            Case NameOf(factorEncoder), "to_factors"
                 encoderMaps.AddEncodingRule(fieldName, AddressOf FeatureEncoder.EnumEncoder)
-            Case NameOf(boolEncoder)
+            Case NameOf(boolEncoder), "to_ints"
                 encoderMaps.AddEncodingRule(fieldName, AddressOf FeatureEncoder.FlagEncoder)
             Case Else
                 Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {code}"), env)
