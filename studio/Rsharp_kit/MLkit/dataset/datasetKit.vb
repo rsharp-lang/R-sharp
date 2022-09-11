@@ -56,7 +56,6 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.IO.MessagePack
 Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
@@ -64,7 +63,6 @@ Imports Microsoft.VisualBasic.DataMining.FeatureFrame
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
-Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
@@ -72,7 +70,10 @@ Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
@@ -310,25 +311,46 @@ Module datasetKit
 
         For Each fieldName As String In encoder.getNames
             Dim code As Object = encoder.getByName(fieldName)
+            Dim err As Message = Nothing
 
             If TypeOf code Is RMethodInfo Then
-                Dim name As String = DirectCast(code, RMethodInfo).GetRawDeclares.Name
+                err = mapEncoder(DirectCast(code, RMethodInfo).GetRawDeclares.Name, fieldName, encoderMaps, env)
+            ElseIf TypeOf code Is DeclareLambdaFunction Then
+                Dim lambda = DirectCast(code, DeclareLambdaFunction)
 
-                If name = NameOf(binEncoder) Then
-                    encoderMaps.AddEncodingRule(fieldName, AddressOf FeatureEncoder.NumericBinsEncoder)
-                ElseIf name = NameOf(factorEncoder) Then
-                    encoderMaps.AddEncodingRule(fieldName, AddressOf FeatureEncoder.EnumEncoder)
-                ElseIf name = NameOf(boolEncoder) Then
-                    encoderMaps.AddEncodingRule(fieldName, AddressOf FeatureEncoder.FlagEncoder)
+                fieldName = lambda.parameterNames.First
+                code = lambda.closure
+
+                If TypeOf code Is SymbolReference Then
+                    err = mapEncoder(DirectCast(code, SymbolReference).symbol, fieldName, encoderMaps, env)
                 Else
-                    Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {name}"), env)
+                    Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {code.GetType.FullName}"), env)
                 End If
             Else
                 Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {code.GetType.FullName}"), env)
             End If
+
+            If Not err Is Nothing Then
+                Return err
+            End If
         Next
 
         Return encoderMaps.Encoding(features)
+    End Function
+
+    Private Function mapEncoder(code As String, fieldName As String, encoderMaps As FeatureEncoder, env As Environment) As Message
+        Select Case code
+            Case NameOf(binEncoder)
+                encoderMaps.AddEncodingRule(fieldName, AddressOf FeatureEncoder.NumericBinsEncoder)
+            Case NameOf(factorEncoder)
+                encoderMaps.AddEncodingRule(fieldName, AddressOf FeatureEncoder.EnumEncoder)
+            Case NameOf(boolEncoder)
+                encoderMaps.AddEncodingRule(fieldName, AddressOf FeatureEncoder.FlagEncoder)
+            Case Else
+                Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {code}"), env)
+        End Select
+
+        Return Nothing
     End Function
 
     <ExportAPI("to_bins")>
