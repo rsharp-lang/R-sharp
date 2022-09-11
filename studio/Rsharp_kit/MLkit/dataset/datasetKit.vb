@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::d31c5265220070ff37138a07f221f023, R-sharp\studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 193
-    '    Code Lines: 144
-    ' Comment Lines: 28
-    '   Blank Lines: 21
-    '     File Size: 7.86 KB
+' Summaries:
 
 
-    ' Module datasetKit
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: demoMatrix, dimensionRange, EmbeddingRender, getNormalizeMatrix, readMNISTLabelledVector
-    '               readModelDataset, Tabular
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 193
+'    Code Lines: 144
+' Comment Lines: 28
+'   Blank Lines: 21
+'     File Size: 7.86 KB
+
+
+' Module datasetKit
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: demoMatrix, dimensionRange, EmbeddingRender, getNormalizeMatrix, readMNISTLabelledVector
+'               readModelDataset, Tabular
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.IO.MessagePack
 Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
+Imports Microsoft.VisualBasic.DataMining.FeatureFrame
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
@@ -224,7 +225,7 @@ Module datasetKit
     End Function
 
     <ExportAPI("read.mnist.labelledvector")>
-    Public Function readMNISTLabelledVector(messagepack As String, Optional takes As Integer = -1) As dataframe
+    Public Function readMNISTLabelledVector(messagepack As String, Optional takes As Integer = -1) As DataFrame
         Using file As Stream = messagepack.Open(IO.FileMode.Open, doClear:=False, [readOnly]:=True)
             Return LabelledVector.CreateDataFrame(MsgPackSerializer.Deserialize(Of LabelledVector())(file), takes)
         End Using
@@ -241,7 +242,7 @@ Module datasetKit
     <ExportAPI("gaussian")>
     Public Function demoMatrix(size As Integer, dimensions As Integer,
                                Optional pzero As Double = 0.8,
-                               Optional nclass% = 5) As dataframe
+                               Optional nclass% = 5) As DataFrame
 
         Dim tagRanges = nclass _
             .Sequence _
@@ -258,7 +259,7 @@ Module datasetKit
             dataset.Add(New NamedValue(Of Double()) With {.Name = tag.name, .Value = vec, .Description = i})
         Next
 
-        Dim matrix As New dataframe With {
+        Dim matrix As New DataFrame With {
             .columns = New Dictionary(Of String, Array)
         }
 
@@ -304,7 +305,11 @@ Module datasetKit
                              encoder As list,
                              Optional env As Environment = Nothing) As Object
 
+        Dim encoderMaps As New FeatureEncoder
 
+        For Each fieldName As String In encoder.getNames
+
+        Next
     End Function
 
     <ExportAPI("to_bins")>
