@@ -57,7 +57,7 @@ Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
-Imports Microsoft.VisualBasic.DataMining.ComponentModel.Evaluation
+Imports Microsoft.VisualBasic.DataMining.Evaluation
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
