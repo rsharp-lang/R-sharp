@@ -84,7 +84,6 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Distance = Microsoft.VisualBasic.DataMining.HierarchicalClustering.Hierarchy.Distance
-Imports FeatureFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
 Imports Point2D = System.Drawing.Point
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -98,7 +97,6 @@ Module clustering
     Friend Sub Main()
         Call REnv.Internal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
 
-        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(FeatureFrame), AddressOf toDataframe)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(FuzzyCMeansEntity()), AddressOf cmeansSummary)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(
@@ -109,40 +107,6 @@ Module clustering
 
         Call REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
     End Sub
-
-    Private Function toDataframe(features As FeatureFrame, args As list, env As Environment) As Rdataframe
-        Return New Rdataframe With {
-            .columns = features.features _
-                .ToDictionary(Function(v) v.Key,
-                              Function(v)
-                                  Return v.Value.vector
-                              End Function),
-            .rownames = features.rownames
-        }
-    End Function
-
-    <ExportAPI("toFeatureSet")>
-    <RApiReturn(GetType(FeatureFrame))>
-    Public Function toFeatureSet(x As Rdataframe, Optional env As Environment = Nothing) As Object
-        Dim featureSet As New Dictionary(Of String, FeatureVector)
-        Dim general As Array
-
-        For Each name As String In x.columns.Keys
-            general = x(columnName:=name)
-            general = TryCastGenericArray(general, env)
-
-            If Not FeatureVector.CheckSupports(general.GetType.GetElementType) Then
-                Return Internal.debug.stop($"not supports '{name}'!", env)
-            End If
-
-            featureSet(name) = FeatureVector.FromGeneral(general)
-        Next
-
-        Return New FeatureFrame With {
-            .rownames = x.getRowNames,
-            .features = featureSet
-        }
-    End Function
 
     Private Function showHclust(cluster As Cluster) As String
         Return cluster.ToConsoleLine

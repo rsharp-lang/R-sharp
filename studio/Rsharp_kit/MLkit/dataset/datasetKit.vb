@@ -54,23 +54,31 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.csv
+Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.IO.MessagePack
 Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
-Imports Microsoft.VisualBasic.MachineLearning.Debugger
+Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataSet
+Imports FeatureFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' the machine learning dataset toolkit
@@ -79,8 +87,42 @@ Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 Module datasetKit
 
     Sub New()
-
+        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(FeatureFrame), AddressOf toDataframe)
     End Sub
+
+    Private Function toDataframe(features As FeatureFrame, args As list, env As Environment) As Rdataframe
+        Return New Rdataframe With {
+            .columns = features.features _
+                .ToDictionary(Function(v) v.Key,
+                              Function(v)
+                                  Return v.Value.vector
+                              End Function),
+            .rownames = features.rownames
+        }
+    End Function
+
+    <ExportAPI("toFeatureSet")>
+    <RApiReturn(GetType(FeatureFrame))>
+    Public Function toFeatureSet(x As Rdataframe, Optional env As Environment = Nothing) As Object
+        Dim featureSet As New Dictionary(Of String, FeatureVector)
+        Dim general As Array
+
+        For Each name As String In x.columns.Keys
+            general = x(columnName:=name)
+            general = TryCastGenericArray(general, env)
+
+            If Not FeatureVector.CheckSupports(general.GetType.GetElementType) Then
+                Return Internal.debug.stop($"not supports '{name}'!", env)
+            End If
+
+            featureSet(name) = FeatureVector.FromGeneral(general)
+        Next
+
+        Return New FeatureFrame With {
+            .rownames = x.getRowNames,
+            .features = featureSet
+        }
+    End Function
 
     Friend Function EmbeddingRender(input As IDataEmbedding, args As list, env As Environment) As GraphicsData
         Dim size$ = InteropArgumentHelper.getSize(args!size, env)
@@ -197,7 +239,10 @@ Module datasetKit
     ''' <param name="nclass">number of class tags</param>
     ''' <returns></returns>
     <ExportAPI("gaussian")>
-    Public Function demoMatrix(size As Integer, dimensions As Integer, Optional pzero As Double = 0.8, Optional nclass% = 5) As dataframe
+    Public Function demoMatrix(size As Integer, dimensions As Integer,
+                               Optional pzero As Double = 0.8,
+                               Optional nclass% = 5) As dataframe
+
         Dim tagRanges = nclass _
             .Sequence _
             .Select(Function(tag)
