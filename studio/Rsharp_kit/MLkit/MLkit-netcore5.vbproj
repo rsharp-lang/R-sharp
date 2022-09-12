@@ -8,6 +8,8 @@
     <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32</Configurations>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Title>SMRUCC Machine Learning Toolkit for R#</Title>
+    <Copyright>I@XIEGUIGANG.ME</Copyright>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

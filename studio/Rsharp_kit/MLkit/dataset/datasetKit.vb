@@ -372,7 +372,7 @@ Module datasetKit
     End Function
 
     <ExportAPI("to_bins")>
-    Public Function binEncoder(Optional nbins As Integer = 3, Optional format As String = "G3") As FeatureEncoder
+    Public Function binEncoder(Optional nbins As Integer = 3, Optional format As String = "G4") As FeatureEncoder
         Return New NumericBinsEncoder(nbins, format)
     End Function
 
