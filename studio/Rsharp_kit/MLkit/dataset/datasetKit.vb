@@ -52,6 +52,7 @@
 #End Region
 
 Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -317,25 +318,7 @@ Module datasetKit
             If TypeOf code Is RMethodInfo Then
                 err = mapEncoder(DirectCast(code, RMethodInfo).GetRawDeclares.Name, fieldName, encoderMaps, env)
             ElseIf TypeOf code Is DeclareLambdaFunction Then
-                Dim lambda = DirectCast(code, DeclareLambdaFunction)
-
-                fieldName = lambda.parameterNames.First
-                code = lambda.closure.Evaluate(env)
-
-                If Program.isException(code) Then
-                    Return code
-                End If
-
-                If TypeOf code Is SymbolReference Then
-                    err = mapEncoder(DirectCast(code, SymbolReference).symbol, fieldName, encoderMaps, env)
-                ElseIf TypeOf code Is NamespaceFunctionSymbolReference Then
-                    code = DirectCast(code, NamespaceFunctionSymbolReference).symbol
-                    err = mapEncoder(DirectCast(code, SymbolReference).symbol, fieldName, encoderMaps, env)
-                ElseIf TypeOf code Is FeatureEncoder Then
-                    encoderMaps.AddEncodingRule(fieldName, DirectCast(code, FeatureEncoder))
-                Else
-                    Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {code.GetType.FullName}"), env)
-                End If
+                err = encoderMaps.mapLambda(DirectCast(code, DeclareLambdaFunction), env)
             Else
                 Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {code.GetType.FullName}"), env)
             End If
@@ -346,6 +329,31 @@ Module datasetKit
         Next
 
         Return encoderMaps.Encoding(features)
+    End Function
+
+    <Extension>
+    Private Function mapLambda(encoderMaps As Encoder, lambda As DeclareLambdaFunction, env As Environment) As Object
+        Dim fieldName = lambda.parameterNames.First
+        Dim code = lambda.closure.Evaluate(env)
+
+        If Program.isException(code) Then
+            Return code
+        End If
+
+        If TypeOf code Is SymbolReference Then
+            Return mapEncoder(DirectCast(code, SymbolReference).symbol, fieldName, encoderMaps, env)
+        ElseIf TypeOf code Is NamespaceFunctionSymbolReference Then
+            code = DirectCast(code, NamespaceFunctionSymbolReference).symbol
+            Return mapEncoder(DirectCast(code, SymbolReference).symbol, fieldName, encoderMaps, env)
+        ElseIf TypeOf code Is RMethodInfo Then
+            Return mapEncoder(DirectCast(code, RMethodInfo).GetRawDeclares.Name, fieldName, encoderMaps, env)
+        ElseIf TypeOf code Is FeatureEncoder Then
+            encoderMaps.AddEncodingRule(fieldName, DirectCast(code, FeatureEncoder))
+        Else
+            Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {code.GetType.FullName}"), env)
+        End If
+
+        Return Nothing
     End Function
 
     Private Function mapEncoder(code As String, fieldName As String, encoderMaps As Encoder, env As Environment) As Message
