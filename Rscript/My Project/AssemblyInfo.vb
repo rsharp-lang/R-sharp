@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::089e539a096c874d2790c288a4f91c19, R-sharp\Rscript\My Project\AssemblyInfo.vb"
+﻿#Region "Microsoft.VisualBasic::4753e9d02ac2c24720a97b2886df3c0e, R-sharp\Rscript\My Project\AssemblyInfo.vb"
 
     ' Author:
     ' 
@@ -82,4 +82,3 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyVersion("1.99.*")>
 <Assembly: AssemblyFileVersion("2.321.*")>
 #end if
-

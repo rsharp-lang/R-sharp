@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::266e5326b68bccc8e842b92917405140, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\ContentParser.vb"
+﻿#Region "Microsoft.VisualBasic::d107b77a62036d506e130d190d1b607e, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\ContentParser.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 12
     ' Comment Lines: 4
     '   Blank Lines: 4
-    '     File Size: 578 B
+    '     File Size: 576 B
 
 
     ' Class ContentParser
@@ -73,4 +73,3 @@ Public Class ContentParser : Inherits RDocParser
         Throw New NotImplementedException
     End Function
 End Class
-

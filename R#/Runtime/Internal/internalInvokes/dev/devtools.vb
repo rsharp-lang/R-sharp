@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ba2c367235bc3c7c927c6870aaafb780, R-sharp\R#\Runtime\Internal\internalInvokes\dev\devtools.vb"
+﻿#Region "Microsoft.VisualBasic::7fe2b524a44bfac65e9195e86289daa8, R-sharp\R#\Runtime\Internal\internalInvokes\dev\devtools.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 93
     ' Comment Lines: 49
     '   Blank Lines: 18
-    '     File Size: 7.16 KB
+    '     File Size: 7.17 KB
 
 
     '     Module devtools

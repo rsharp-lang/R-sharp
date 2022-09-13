@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d7491427161ee6a775eb815fb4d208d3, R-sharp\R#\Test\tokenlicerTest.vb"
+﻿#Region "Microsoft.VisualBasic::e04a7a38dd9370f7aba3e6e3d3369d11, R-sharp\R#\Test\tokenlicerTest.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 131
     ' Comment Lines: 4
     '   Blank Lines: 60
-    '     File Size: 4.82 KB
+    '     File Size: 4.83 KB
 
 
     ' Module tokenlicerTest
@@ -54,7 +54,7 @@
 
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
+Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 

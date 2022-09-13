@@ -1,0 +1,1 @@
+A blank R# package .NET 6.0 library source module template

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9049bebb624606f055c3e0f5d9bef910, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\RDoc\Collection.vb"
+﻿#Region "Microsoft.VisualBasic::2b1cf73859d154c522e738445d250e46, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\RDoc\Collection.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 9
     ' Comment Lines: 0
     '   Blank Lines: 6
-    '     File Size: 391 B
+    '     File Size: 389 B
 
 
     ' Class Item
@@ -68,4 +68,3 @@ Public Class Enumerate
     Public Property items As Doc()
 
 End Class
-

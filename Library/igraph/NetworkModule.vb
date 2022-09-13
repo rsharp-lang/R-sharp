@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6e67496de6ec31e20b40fc21e4868115, R-sharp\Library\igraph\NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::6140626e3b7f46aeb5e21a0dd81fe8f5, R-sharp\Library\igraph\NetworkModule.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1247
-    '    Code Lines: 817
+    '   Total Lines: 1248
+    '    Code Lines: 818
     ' Comment Lines: 276
     '   Blank Lines: 154
-    '     File Size: 48.06 KB
+    '     File Size: 48.13 KB
 
 
     ' Module NetworkModule
@@ -65,6 +65,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.TypeCast
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.GraphTheory.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network

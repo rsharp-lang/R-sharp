@@ -1,54 +1,54 @@
-﻿#Region "Microsoft.VisualBasic::f9f8573032df85900449c6fc4b0dfdb8, R-sharp\R#\System\Package\PackageFile\CreatePackage.vb"
+﻿#Region "Microsoft.VisualBasic::3c79483b0ab9116889030606df3db701, R-sharp\R#\System\Package\PackageFile\CreatePackage.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 472
-'    Code Lines: 356
-' Comment Lines: 44
-'   Blank Lines: 72
-'     File Size: 19.46 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module CreatePackage
-' 
-'         Function: Build, buildRscript, buildUnixMan, checkIndex, createAssetList
-'                   filter, getAssemblyList, getDataSymbols, getFileReader, getRuntimeTags
-'                   IsFunctionDeclare, loadingDependency, MakeFunction
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 498
+    '    Code Lines: 371
+    ' Comment Lines: 53
+    '   Blank Lines: 74
+    '     File Size: 20.78 KB
+
+
+    '     Module CreatePackage
+    ' 
+    '         Function: Build, buildRscript, buildUnixMan, checkIndex, createAssetList
+    '                   filter, getAssemblyList, getDataSymbols, getFileReader, getRuntimeTags
+    '                   IsFunctionDeclare, loadingDependency, MakeFunction
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

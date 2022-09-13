@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::eaf91492437dfa15b89c7575669f467e, R-sharp\studio\Rsharp_kit\devkit\documents\RDefinition.vb"
+﻿#Region "Microsoft.VisualBasic::513e90aa69d50013644c321ad88be6ea, R-sharp\studio\Rsharp_kit\devkit\documents\RDefinition.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 7
     ' Comment Lines: 0
     '   Blank Lines: 4
-    '     File Size: 267 B
+    '     File Size: 265 B
 
 
     ' Class RDefinition
@@ -60,4 +60,3 @@ Public Class RDefinition
     End Sub
 
 End Class
-

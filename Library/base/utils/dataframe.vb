@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d97b387e23be35971774cc32ef021f54, R-sharp\Library\base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::d540758e98ce6ccc4f89ca9d3e8de7b7, R-sharp\Library\base\utils\dataframe.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 491
     ' Comment Lines: 75
     '   Blank Lines: 83
-    '     File Size: 24.91 KB
+    '     File Size: 24.92 KB
 
 
     ' Module dataframe
@@ -218,7 +218,7 @@ Module dataframe
             Return col _
                 .Skip(1) _
                 .ToArray _
-                .DoCall(AddressOf IO.DataImports.ParseVector)
+                .DoCall(AddressOf TypeCast.DataImports.ParseVector)
         Else
             Return DirectCast(col.Skip(1).ToArray, Array)
         End If

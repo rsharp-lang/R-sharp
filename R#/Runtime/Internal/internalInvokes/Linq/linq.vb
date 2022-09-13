@@ -1,58 +1,58 @@
-﻿#Region "Microsoft.VisualBasic::0c1264afc2ef1a8c1f087afa6a9927fb, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::942086a8ab724f905246a10f40032132, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 1161
-'    Code Lines: 643
-' Comment Lines: 397
-'   Blank Lines: 121
-'     File Size: 53.89 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module linq
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: all, any, doWhile, fastIndexing, first
-'                   groupBy, groupsSummary, groupSummary, last, left_join
-'                   match, orderBy, produceKeyedSequence, progress, projectAs
-'                   reverse, rotate_left, rotate_right, runFilterPipeline, runWhichFilter
-'                   skip, sort, split, take, tryKeyBy
-'                   unique, where, whichMax, whichMin
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 1206
+    '    Code Lines: 673
+    ' Comment Lines: 401
+    '   Blank Lines: 132
+    '     File Size: 55.52 KB
+
+
+    '     Module linq
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: all, any, doWhile, fastIndexing, first
+    '                   getPredicate, groupBy, groupsSummary, groupSummary, last
+    '                   left_join, match, orderBy, produceKeyedSequence, progress
+    '                   projectAs, reverse, rotate_left, rotate_right, runFilterPipeline
+    '                   runWhichFilter, skip, sort, split, take
+    '                   tryKeyBy, unique, where, whichMax, whichMin
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

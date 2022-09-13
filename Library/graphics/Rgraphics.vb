@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::98d6820758a31f8199f4e433f46a633e, R-sharp\Library\graphics\Rgraphics.vb"
+﻿#Region "Microsoft.VisualBasic::2e57e5647dd816710d12f459ca2975dc, R-sharp\Library\graphics\Rgraphics.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 36
+    '   Total Lines: 35
     '    Code Lines: 10
     ' Comment Lines: 22
-    '   Blank Lines: 4
-    '     File Size: 1.33 KB
+    '   Blank Lines: 3
+    '     File Size: 1.32 KB
 
 
     ' Module Rgraphics
@@ -48,7 +48,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -85,4 +84,3 @@ Module Rgraphics
 
     End Function
 End Module
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c7d5ce1beb50eb93c5304ece98b56fca, R-sharp\snowFall\Lambda.vb"
+﻿#Region "Microsoft.VisualBasic::907740faefec26f1b8915197b303da2e, R-sharp\snowFall\Lambda.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 13
     ' Comment Lines: 14
     '   Blank Lines: 3
-    '     File Size: 954 B
+    '     File Size: 952 B
 
 
     ' Module Lambda
@@ -79,4 +79,3 @@ Module Lambda
         Throw New NotImplementedException
     End Function
 End Module
-

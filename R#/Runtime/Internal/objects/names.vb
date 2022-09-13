@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6a0e51a7f1a9737817c3f165649383e0, R-sharp\R#\Runtime\Internal\objects\names.vb"
+﻿#Region "Microsoft.VisualBasic::dd887cc3921f34353d652948636197d1, R-sharp\R#\Runtime\Internal\objects\names.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 232
-    '    Code Lines: 185
+    '   Total Lines: 252
+    '    Code Lines: 200
     ' Comment Lines: 14
-    '   Blank Lines: 33
-    '     File Size: 9.22 KB
+    '   Blank Lines: 38
+    '     File Size: 9.93 KB
 
 
     '     Module names
     ' 
     '         Function: checkChar, getArrayNames, getColNames, getNames, getRowNames
-    '                   makeNames, setColNames, setNames, setRowNames, uniqueNames
+    '                   makeNames, setColNames, (+2 Overloads) setNames, setRowNames, uniqueNames
     ' 
     ' 
     ' /********************************************************************************/

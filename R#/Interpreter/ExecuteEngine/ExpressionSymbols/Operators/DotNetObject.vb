@@ -1,55 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::dfce19f96847ae4ceae0dc2dc0b89d9c, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DotNetObject.vb"
+﻿#Region "Microsoft.VisualBasic::81400af510d0dd089b5c50ea0f751e3f, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DotNetObject.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 76
-'    Code Lines: 61
-' Comment Lines: 3
-'   Blank Lines: 12
-'     File Size: 3.02 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class DotNetObject
-' 
-'         Properties: [object], expressionName, member, type
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: Evaluate, ToString
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 118
+    '    Code Lines: 92
+    ' Comment Lines: 7
+    '   Blank Lines: 19
+    '     File Size: 4.71 KB
+
+
+    '     Class DotNetObject
+    ' 
+    '         Properties: [object], expressionName, member, type
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: Evaluate, getReader, readSingle, readVectorShadows, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

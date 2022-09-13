@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::23dffc1c77bdf6daa5d8cd34e1454ef4, R-sharp\Library\base\base\HDF5utils.vb"
+﻿#Region "Microsoft.VisualBasic::1d357e8c99819962e2bdcf76fd3bf9ef, R-sharp\Library\base\base\HDF5utils.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 27
-    '    Code Lines: 25
+    '   Total Lines: 32
+    '    Code Lines: 29
     ' Comment Lines: 0
-    '   Blank Lines: 2
-    '     File Size: 1.09 KB
+    '   Blank Lines: 3
+    '     File Size: 1.25 KB
 
 
     ' Module HDF5utils
     ' 
-    '     Function: openHDF5
+    '     Function: getData, openHDF5
     ' 
     ' /********************************************************************************/
 
