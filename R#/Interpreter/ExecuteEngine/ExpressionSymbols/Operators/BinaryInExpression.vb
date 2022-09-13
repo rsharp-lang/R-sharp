@@ -122,9 +122,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End If
 
             Dim flags As Boolean()
+            Dim seqtype As Type = sequence.GetType
+            ' 20220913 vector type implements the rnames
+            ' interface but we usually needs to found data 
+            ' in its values
+            Dim isNameList As Boolean = seqtype IsNot GetType(vector) AndAlso
+                seqtype.ImplementInterface(Of RNames) AndAlso
+                REnv.MeasureRealElementType(testLeft) Is GetType(String)
 
             ' test string key in list index name?
-            If sequence.GetType.ImplementInterface(Of RNames) AndAlso REnv.MeasureRealElementType(testLeft) Is GetType(String) Then
+            If isNameList Then
                 flags = testListIndex(DirectCast(sequence, RNames), testLeft)
             Else
                 ' try custom operator at first
@@ -143,6 +150,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Return flags
         End Function
 
+        ''' <summary>
+        ''' check keys in left is exists in the namelist of right?
+        ''' </summary>
+        ''' <param name="sequence"></param>
+        ''' <param name="testLeft"></param>
+        ''' <returns></returns>
         Private Shared Function testListIndex(sequence As RNames, testLeft As String()) As Boolean()
             Return testLeft _
                 .Select(Function(a)
