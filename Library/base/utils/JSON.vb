@@ -156,23 +156,33 @@ Module JSON
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("parseJSON")>
-    Public Function fromJSON(str As String,
+    Public Function fromJSON(str As Object,
                              Optional raw As Boolean = False,
                              Optional env As Environment = Nothing) As Object
 
-        Dim rawElement As JsonElement = New JsonParser().OpenJSON(str)
+        If TypeOf str Is String Then
+            Dim rawElement As JsonElement = New JsonParser().OpenJSON(str)
 
-        If raw Then
-            Return rawElement
-        ElseIf rawElement Is Nothing Then
-            If env.globalEnvironment.options.strict Then
-                Return Internal.debug.stop("invalid format of the input json string!", env)
+            If raw Then
+                Return rawElement
+            ElseIf rawElement Is Nothing Then
+                If env.globalEnvironment.options.strict Then
+                    Return Internal.debug.stop("invalid format of the input json string!", env)
+                Else
+                    env.AddMessage("invalid format of the input json string!", MSG_TYPES.WRN)
+                    Return Nothing
+                End If
             Else
-                env.AddMessage("invalid format of the input json string!", MSG_TYPES.WRN)
-                Return Nothing
+                Return rawElement.createRObj(env)
+            End If
+        ElseIf TypeOf str Is JsonElement Then
+            If raw Then
+                Return str
+            Else
+                Return DirectCast(str, JsonElement).createRObj(env)
             End If
         Else
-            Return rawElement.createRObj(env)
+            Return Message.InCompatibleType(GetType(String), str.GetType, env)
         End If
     End Function
 
