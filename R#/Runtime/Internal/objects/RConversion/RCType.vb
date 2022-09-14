@@ -56,6 +56,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Development.Components
 Imports any = Microsoft.VisualBasic.Scripting
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 
 Namespace Runtime.Internal.Object.Converts
 
@@ -87,7 +88,12 @@ RE0:
                 Return obj
             ElseIf objType.IsArray AndAlso Not type.IsArray Then
                 obj = [single](obj)
-                objType = obj.GetType
+
+                If obj Is Nothing AndAlso DataFramework.IsNumericType(type) Then
+                    Return CTypeDynamic(0, type, env)
+                Else
+                    objType = obj.GetType
+                End If
             ElseIf objType Is GetType(vector) AndAlso Not type.IsArray Then
                 obj = [single](obj)
                 objType = obj.GetType
