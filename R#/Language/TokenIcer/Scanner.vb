@@ -430,7 +430,7 @@ Namespace Language.TokenIcer
             Return Nothing
         End Function
 
-        Public Const RSymbol$ = "([_\.])?[a-z][a-z0-9_\.]*"
+        Public Const RSymbol$ = "([_\.])*[a-z][a-z0-9_\.]*"
 
         ''' <summary>
         ''' 这个函数的调用会将<see cref="buffer"/>清空
