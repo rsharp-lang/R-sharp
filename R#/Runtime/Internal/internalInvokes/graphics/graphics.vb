@@ -270,11 +270,14 @@ Namespace Runtime.Internal.Invokes
 
             If Program.isException(argumentsVal) Then
                 Return argumentsVal
-            ElseIf TypeOf graphics Is Image OrElse TypeOf graphics Is Bitmap Then
+            End If
+
+            Dim argumentList As list = DirectCast(argumentsVal, list)
+
+            If TypeOf graphics Is Image OrElse TypeOf graphics Is Bitmap Then
                 If Not curDev.g Is Nothing Then
                     ' rendering on current graphics device
                     Dim image As Image = CType(graphics, Image)
-                    Dim argumentList As list = DirectCast(argumentsVal, list)
                     Dim pos As New Point
 
                     If argumentList.hasName("x") OrElse argumentList.hasName("y") Then
@@ -293,10 +296,10 @@ Namespace Runtime.Internal.Invokes
                 End If
             Else
                 If Not curDev.g Is Nothing Then
-                    DirectCast(argumentsVal, list).add("grDevices", curDev)
+                    Call argumentList.add("grDevices", curDev)
                 End If
 
-                Return DirectCast(argumentsVal, list).invokeGeneric(graphics, env)
+                Return argumentList.invokeGeneric(graphics, env)
             End If
         End Function
 
