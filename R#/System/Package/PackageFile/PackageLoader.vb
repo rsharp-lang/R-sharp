@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::3cbe8b06054e8f758e66fd6ca033f3e8, R-sharp\R#\System\Package\PackageFile\PackageLoader.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 289
-    '    Code Lines: 196
-    ' Comment Lines: 46
-    '   Blank Lines: 47
-    '     File Size: 11.04 KB
+' Summaries:
 
 
-    '     Module PackageLoader2
-    ' 
-    '         Function: callOnLoad, CheckPackage, FindAllDllFiles, GetPackageDirectory, GetPackageIndex
-    '                   GetPackageName, Hotload, loadDependency, LoadPackage
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 289
+'    Code Lines: 196
+' Comment Lines: 46
+'   Blank Lines: 47
+'     File Size: 11.04 KB
+
+
+'     Module PackageLoader2
+' 
+'         Function: callOnLoad, CheckPackage, FindAllDllFiles, GetPackageDirectory, GetPackageIndex
+'                   GetPackageName, Hotload, loadDependency, LoadPackage
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -188,7 +188,21 @@ Namespace Development.Package.File
             onload = temp.symbols.TryGetValue(".onLoad")
             pkg.dependency = loading.loadingDependency.ToArray
 
-            For Each symbol In temp.symbols
+            For Each symbol As KeyValuePair(Of String, Expression) In temp.symbols _
+                .OrderByDescending(Function(f)
+                                       ' 20220915
+                                       '
+                                       ' load function at first
+                                       ' then evaluate other symbol expression
+                                       ' due to the reason of function evaluation
+                                       ' is lazy
+                                       If f.Value.isCallable Then
+                                           Return 1
+                                       Else
+                                           Return 0
+                                       End If
+                                   End Function)
+
                 If symbol.Key <> ".onLoad" Then
                     Call symbol.Value.Evaluate(env)
                 End If
