@@ -60,6 +60,7 @@
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Text
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Microsoft.VisualBasic.Serialization
 Imports Microsoft.VisualBasic.Text
@@ -183,6 +184,10 @@ Namespace Runtime.Serialize
                 Next
 
                 raw = rawBlocks.ToArray
+            ElseIf vector.AsObjectEnumerator.All(Function(xi) xi Is Nothing) Then
+                ' contains no data due to the reason of all element
+                ' in vector is nothing
+                raw = {}
             Else
                 raw = RawStream.GetBytes(vector)
             End If
@@ -263,6 +268,9 @@ Namespace Runtime.Serialize
                     Next
 
                     vector = list.ToArray
+                ElseIf ms.Length = 0 AndAlso vector_size > 0 AndAlso type Is GetType(Object) Then
+                    ' all vector content is null
+                    vector = Array.CreateInstance(type, vector_size)
                 Else
                     vector = RawStream.GetData(ms, type.PrimitiveTypeCode)
                 End If

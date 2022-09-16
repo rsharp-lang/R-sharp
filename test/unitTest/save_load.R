@@ -9,7 +9,8 @@ data = list(
 	empty = list(),
 	blank = "",
 	zero = [],
-	value = "123"
+	value = "123",
+	empty_vector = [NULL,NULL,NULL,NULL,NULL]
 
 );
 
