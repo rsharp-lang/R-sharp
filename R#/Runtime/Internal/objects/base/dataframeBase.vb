@@ -105,6 +105,10 @@ Namespace Runtime.Internal.Object
                                Optional renames As list = Nothing,
                                Optional env As Environment = Nothing) As Object
 
+            If x Is Nothing Then
+                Return Nothing
+            End If
+
             Dim rownameCopy As String() = If(x.rownames.IsNullOrEmpty, Nothing, x.rownames.ToArray)
             Dim copy As New dataframe With {
                 .rownames = rownameCopy,
