@@ -13,10 +13,12 @@ data = list(
 
 );
 
+str(data);
+
 save(data, file = "./empty.dat");
 
 data = NULL;
 
-load("./empty.dat")
+load("./empty.dat");
 
 str(data);
