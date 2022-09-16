@@ -94,7 +94,18 @@ Namespace Runtime.Serialize
             Dim data As MemoryStream = BufferObject.SubStream(raw, 4, raw.Length - 4)
 
             Select Case code
-                Case BufferObjects.raw : bufferObject = New rawBuffer With {.buffer = data}
+                Case BufferObjects.raw
+                    ' 20220916
+                    ' 
+                    ' try to make patch to the NULL literal result
+                    '
+                    If data.Length = 0 Then
+                        bufferObject = New NullObject
+                    Else
+                        bufferObject = New rawBuffer With {
+                            .buffer = data
+                        }
+                    End If
                 Case BufferObjects.text : bufferObject = New textBuffer With {.text = Encoding.UTF8.GetString(data.ToArray)}
                 Case BufferObjects.bitmap : bufferObject = New bitmapBuffer(data)
                 Case BufferObjects.vector : bufferObject = New vectorBuffer(data)

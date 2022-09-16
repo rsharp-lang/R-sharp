@@ -56,6 +56,32 @@ Imports Microsoft.VisualBasic.Serialization
 
 Namespace Runtime.Serialize
 
+    Public Class NullObject : Inherits BufferObject
+
+        Public Overrides ReadOnly Property code As BufferObjects
+            Get
+                Return BufferObjects.vector
+            End Get
+        End Property
+
+        Public Overrides Sub Serialize(buffer As Stream)
+            ' do nothing/no value
+        End Sub
+
+        Protected Overrides Sub loadBuffer(stream As Stream)
+            ' do nothing/no value
+        End Sub
+
+        ''' <summary>
+        ''' returns nothing, due to the reason of NULL means
+        ''' no value
+        ''' </summary>
+        ''' <returns></returns>
+        Public Overrides Function getValue() As Object
+            Return Nothing
+        End Function
+    End Class
+
     Public MustInherit Class BufferObject : Inherits RawStream
 
         Public MustOverride ReadOnly Property code As BufferObjects
