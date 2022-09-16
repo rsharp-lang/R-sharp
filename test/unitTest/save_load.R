@@ -10,7 +10,8 @@ data = list(
 	blank = "",
 	zero = [],
 	value = "123",
-	empty_vector = [NULL,NULL,NULL,NULL,NULL]
+	empty_vector = [NULL,NULL,NULL,NULL,NULL],
+	possible_NULL = ["", NULL, "xxxx"]
 
 );
 
