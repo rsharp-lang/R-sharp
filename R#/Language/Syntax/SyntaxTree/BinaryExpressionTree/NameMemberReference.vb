@@ -63,7 +63,7 @@ Namespace Language.Syntax.SyntaxParser
     Friend Class NameMemberReferenceProcessor : Inherits GenericSymbolOperatorProcessor
 
         Sub New()
-            Call MyBase.New("$")
+            Call MyBase.New("$", "@")
         End Sub
 
         Protected Overrides Function view() As String

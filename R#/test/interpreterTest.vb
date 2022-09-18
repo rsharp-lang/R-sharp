@@ -220,7 +220,16 @@ bitmap(file = `./network.png`) %do% {
         Pause()
     End Sub
 
+    Sub simpleSymbolIndexTest()
+        Dim exp2 = R.Parse("a@b")
+        Dim exp1 = R.Parse("a$b")
+
+        Pause()
+    End Sub
+
     Sub Main()
+        Call simpleSymbolIndexTest()
+
         Call multipleIfElse()
         Call expressionTest2()
 
