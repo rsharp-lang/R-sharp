@@ -32,6 +32,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Me.index = index
         End Sub
 
+        Public Overrides Function ToString() As String
+            Return $"{symbol}@{index}"
+        End Function
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim data As Object = symbol.Evaluate(envir)
             Dim member As Object = index.Evaluate(envir)
