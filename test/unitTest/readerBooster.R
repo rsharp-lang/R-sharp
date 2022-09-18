@@ -1,4 +1,4 @@
-obj = lapply(1:3000, x -> list(aaa = x));
+obj = lapply(1:80000, x -> list(aaa = x));
 vec1 = NULL;
 vec2 = NULL;
 vec3 = NULL;
@@ -16,22 +16,22 @@ t1=sum(profile[, "ticks"]);
 print(profile);
 print(t1);
 
-@profile {
+# @profile {
 
-	# test function
-	vec2 = sapply(obj, function(i) {
-		i$aaa;
-	});
+	# # test function
+	# vec2 = sapply(obj, function(i) {
+		# i$aaa;
+	# });
 
-}
+# }
 
-print(vec2);
+# print(vec2);
 	
-profile = profiler.fetch() |> as.data.frame();
-t2=sum(profile[, "ticks"]);
+# profile = profiler.fetch() |> as.data.frame();
+# t2=sum(profile[, "ticks"]);
 
-print(profile, max.print = 6);
-print(t2);
+# print(profile, max.print = 6);
+# print(t2);
 
 @profile {
 
@@ -50,4 +50,4 @@ print(t3);
 
 
 print(t1/t3);
-print(t2/t3);
+# print(t2/t3);
