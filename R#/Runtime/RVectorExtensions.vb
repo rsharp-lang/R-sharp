@@ -278,6 +278,21 @@ Namespace Runtime
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Public Function TryCastGenericArray(vec As Array, env As Environment) As Object
+            If vec _
+                .AsObjectEnumerator _
+                .Take(100) _
+                .All(Function(xi)
+                         Return TypeOf xi Is vector AndAlso DirectCast(xi, vector).length = 1
+                     End Function) Then
+
+                vec = vec _
+                    .AsObjectEnumerator _
+                    .Select(Function(xi)
+                                Return DirectCast(xi, vector).data.GetValue(Scan0)
+                            End Function) _
+                    .ToArray
+            End If
+
             Return asVector(vec, MeasureRealElementType(vec), env)
         End Function
 
