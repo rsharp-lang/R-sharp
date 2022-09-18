@@ -252,6 +252,7 @@ Namespace Language.Syntax.SyntaxParser
 
             Dim processors As GenericSymbolOperatorProcessor() = {
                 New NameMemberReferenceProcessor(),
+                New ArrayVectorLoopProcessor(),
                 New NamespaceReferenceProcessor(),
                 New PipelineProcessor(opts.pipelineSymbols), ' pipeline操作符是优先度最高的                
                 New VectorAppendProcessor()                  ' append操作符

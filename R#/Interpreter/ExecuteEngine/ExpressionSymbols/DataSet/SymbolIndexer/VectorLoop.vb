@@ -27,6 +27,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End Get
         End Property
 
+        Sub New(symbol As Expression, index As Expression)
+            Me.symbol = symbol
+            Me.index = index
+        End Sub
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim data As Object = symbol.Evaluate(envir)
             Dim member As Object = index.Evaluate(envir)

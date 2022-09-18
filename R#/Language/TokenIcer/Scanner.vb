@@ -141,7 +141,10 @@ Namespace Language.TokenIcer
 
                             Dim symbol = token.Value.text
 
-                            If symbol.Length = 1 AndAlso Not symbol Like longOperatorParts Then
+                            If symbol.Length = 1 AndAlso
+                                (Not symbol Like longOperatorParts) AndAlso
+                                (Not symbol = "@") Then
+
                                 With populateToken()
                                     If Not .IsNothing Then
                                         Yield .DoCall(Function(t) finalizeToken(t, start))
