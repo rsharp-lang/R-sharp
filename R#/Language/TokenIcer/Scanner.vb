@@ -227,7 +227,7 @@ Namespace Language.TokenIcer
             "+=", "-=", "*=", "/=",
             "|>", ":>", "::"
         }
-        Shared ReadOnly RshortOperators As Char() = {"$"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
+        Shared ReadOnly RshortOperators As Char() = {"$"c, "@"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
 
         Friend Shared ReadOnly Rkeywords As Index(Of String) = {
             "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
@@ -525,7 +525,7 @@ Namespace Language.TokenIcer
             Select Case text
                 'Case RInterpreter.lastVariableName
                 '    Return New Token With {.name = TokenType.identifier, .text = text}
-                Case "|>", ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||", "$"
+                Case "|>", ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||", "$", "@"
                     Return New Token With {.name = TokenType.operator, .text = text}
                 Case ":"
                     Return New Token With {.name = TokenType.sequence, .text = text}

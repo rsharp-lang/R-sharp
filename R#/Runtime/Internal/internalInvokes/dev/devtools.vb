@@ -145,6 +145,11 @@ Namespace Runtime.Internal.Invokes
             Return New invisible()
         End Function
 
+        ''' <summary>
+        ''' get performance profile data
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("profiler.fetch")>
         Public Function fetchProfileData(Optional env As Environment = Nothing) As ProfilerFrames
             Dim globalEnv As GlobalEnvironment = env.globalEnvironment
