@@ -422,6 +422,12 @@ Namespace Language.TokenIcer
                     Return populateToken(bufferNext:=c)
                 ElseIf keepsDelimiter AndAlso buffer = 1 AndAlso buffer(Scan0) Like delimiter Then
                     Return populateToken(bufferNext:=c)
+                ElseIf lastPopoutToken IsNot Nothing AndAlso
+                    (lastPopoutToken.name = TokenType.identifier OrElse lastPopoutToken.name = TokenType.keyword) AndAlso
+                    buffer = 1 AndAlso
+                    buffer(Scan0) = "@" Then
+
+                    Return populateToken(bufferNext:=c)
                 Else
                     buffer += c
                 End If
@@ -484,7 +490,9 @@ Namespace Language.TokenIcer
                 End If
             End If
 
-            If text.First = "@"c Then
+            If text = "@"c Then
+                Return New Token With {.name = TokenType.operator, .text = "@"}
+            ElseIf text.First = "@"c Then
                 Return New Token With {.name = TokenType.annotation, .text = text}
             ElseIf text.Trim(" "c, ASCII.TAB) = "" OrElse text = vbCr OrElse text = vbLf Then
                 If keepsDelimiter Then
