@@ -96,7 +96,7 @@ Namespace Language
             '
             For i As Integer = 1 To _tokens.Length - 1
                 If _tokens(i).name = TokenType.keyword Then
-                    If _tokens(i - 1) = (TokenType.operator, {"$", "::"}) Then
+                    If _tokens(i - 1) = (TokenType.operator, {"@", "$", "::"}) Then
                         _tokens(i).name = TokenType.identifier
                     End If
                 End If

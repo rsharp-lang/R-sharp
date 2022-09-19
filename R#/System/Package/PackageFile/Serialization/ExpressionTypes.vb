@@ -98,6 +98,7 @@ Namespace Development.Package.File
         Require = 50
 
         Constructor = 60
+        VectorLoop
 
         GetArgument = 70
 

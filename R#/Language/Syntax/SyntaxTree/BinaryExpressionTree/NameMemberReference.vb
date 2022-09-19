@@ -60,6 +60,34 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
 Namespace Language.Syntax.SyntaxParser
 
+    Friend Class ArrayVectorLoopProcessor : Inherits GenericSymbolOperatorProcessor
+
+        Sub New()
+            Call MyBase.New("@")
+        End Sub
+
+        Protected Overrides Function expression(a As [Variant](Of SyntaxResult, String), b As [Variant](Of SyntaxResult, String), opts As SyntaxBuilderOptions) As SyntaxResult
+            If a.VA.isException Then
+                Return a
+            ElseIf b.VA.isException Then
+                Return b
+            Else
+                Return NameMemberReferenceProcessor.createIndexer(
+                    a:=a.VA.expression,
+                    b:=b.VA.expression,
+                    template:=Function(symbol, member) New VectorLoop(symbol, member),
+                    opts:=opts
+                )
+            End If
+        End Function
+
+        Protected Overrides Function view() As String
+            Return "x@member"
+        End Function
+    End Class
+
+    Public Delegate Function IndexerTemplate(symbol As Expression, member As Expression) As Expression
+
     Friend Class NameMemberReferenceProcessor : Inherits GenericSymbolOperatorProcessor
 
         Sub New()
@@ -80,7 +108,15 @@ Namespace Language.Syntax.SyntaxParser
             End If
         End Function
 
-        Private Shared Function createIndexer(a As Expression, b As Expression, opts As SyntaxBuilderOptions) As SyntaxResult
+        Private Function createIndexer(a As Expression, b As Expression, opts As SyntaxBuilderOptions) As SyntaxResult
+            Return createIndexer(a, b, Function(symbol, member) New SymbolIndexer(symbol, member), opts)
+        End Function
+
+        Friend Shared Function createIndexer(a As Expression,
+                                             b As Expression,
+                                             template As IndexerTemplate,
+                                             opts As SyntaxBuilderOptions) As SyntaxResult
+
             Dim typeofName As Type = b.GetType
             Dim nameSymbol As String
 
@@ -90,7 +126,7 @@ Namespace Language.Syntax.SyntaxParser
                 nameSymbol = DirectCast(b, Literal).value
             ElseIf typeofName Is GetType(FunctionInvoke) Then
                 Dim invoke As FunctionInvoke = DirectCast(b, FunctionInvoke)
-                Dim funcVar As New SymbolIndexer(a, invoke.funcName)
+                Dim funcVar As Expression = template(a, invoke.funcName)
                 Dim stacktrace As New StackFrame With {
                     .File = opts.source.fileName,
                     .Line = "n/a",
@@ -106,7 +142,7 @@ Namespace Language.Syntax.SyntaxParser
                 ' merge symbol into binary expression
                 ' symbol$name in ...
                 Dim bin As BinaryInExpression = DirectCast(b, BinaryInExpression)
-                Dim left As SyntaxResult = createIndexer(a, bin.left, opts)
+                Dim left As SyntaxResult = createIndexer(a, bin.left, template, opts)
 
                 If left.isException Then
                     Return left
@@ -119,7 +155,7 @@ Namespace Language.Syntax.SyntaxParser
                 ' merge symbol into binary expression
                 ' symbol$name <op> ...
                 Dim bin As BinaryExpression = DirectCast(b, BinaryExpression)
-                Dim left As SyntaxResult = createIndexer(a, bin.left, opts)
+                Dim left As SyntaxResult = createIndexer(a, bin.left, template, opts)
 
                 If left.isException Then
                     Return left
@@ -134,7 +170,7 @@ Namespace Language.Syntax.SyntaxParser
                 ' a$b[x]
                 ' use symbol b as index name
                 Dim bin As SymbolIndexer = DirectCast(b, SymbolIndexer)
-                Dim left As SyntaxResult = createIndexer(a, bin.symbol, opts)
+                Dim left As SyntaxResult = createIndexer(a, bin.symbol, template, opts)
 
                 If left.isException Then
                     Return left
@@ -148,7 +184,7 @@ Namespace Language.Syntax.SyntaxParser
             End If
 
             ' a$b symbol reference
-            Dim symbolRef As New SymbolIndexer(a, New Literal(nameSymbol))
+            Dim symbolRef As Expression = template(symbol:=a, member:=New Literal(nameSymbol))
             Return New SyntaxResult(symbolRef)
         End Function
     End Class

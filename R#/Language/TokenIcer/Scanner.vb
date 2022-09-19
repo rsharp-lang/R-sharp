@@ -141,7 +141,10 @@ Namespace Language.TokenIcer
 
                             Dim symbol = token.Value.text
 
-                            If symbol.Length = 1 AndAlso Not symbol Like longOperatorParts Then
+                            If symbol.Length = 1 AndAlso
+                                (Not symbol Like longOperatorParts) AndAlso
+                                (Not symbol = "@") Then
+
                                 With populateToken()
                                     If Not .IsNothing Then
                                         Yield .DoCall(Function(t) finalizeToken(t, start))
@@ -227,7 +230,7 @@ Namespace Language.TokenIcer
             "+=", "-=", "*=", "/=",
             "|>", ":>", "::"
         }
-        Shared ReadOnly RshortOperators As Char() = {"$"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
+        Shared ReadOnly RshortOperators As Char() = {"$"c, "@"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
 
         Friend Shared ReadOnly Rkeywords As Index(Of String) = {
             "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
@@ -422,6 +425,12 @@ Namespace Language.TokenIcer
                     Return populateToken(bufferNext:=c)
                 ElseIf keepsDelimiter AndAlso buffer = 1 AndAlso buffer(Scan0) Like delimiter Then
                     Return populateToken(bufferNext:=c)
+                ElseIf lastPopoutToken IsNot Nothing AndAlso
+                    (lastPopoutToken.name = TokenType.identifier OrElse lastPopoutToken.name = TokenType.keyword) AndAlso
+                    buffer = 1 AndAlso
+                    buffer(Scan0) = "@" Then
+
+                    Return populateToken(bufferNext:=c)
                 Else
                     buffer += c
                 End If
@@ -484,7 +493,9 @@ Namespace Language.TokenIcer
                 End If
             End If
 
-            If text.First = "@"c Then
+            If text = "@"c Then
+                Return New Token With {.name = TokenType.operator, .text = "@"}
+            ElseIf text.First = "@"c Then
                 Return New Token With {.name = TokenType.annotation, .text = text}
             ElseIf text.Trim(" "c, ASCII.TAB) = "" OrElse text = vbCr OrElse text = vbLf Then
                 If keepsDelimiter Then
@@ -525,7 +536,7 @@ Namespace Language.TokenIcer
             Select Case text
                 'Case RInterpreter.lastVariableName
                 '    Return New Token With {.name = TokenType.identifier, .text = text}
-                Case "|>", ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||", "$"
+                Case "|>", ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||", "$", "@"
                     Return New Token With {.name = TokenType.operator, .text = text}
                 Case ":"
                     Return New Token With {.name = TokenType.sequence, .text = text}
