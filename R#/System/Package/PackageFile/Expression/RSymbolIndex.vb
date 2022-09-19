@@ -104,7 +104,7 @@ Namespace Development.Package.File.Expressions
             End Using
         End Sub
 
-        Public Overloads Sub WriteBuffer(ms As MemoryStream, x As vectorloop)
+        Public Overloads Sub WriteBuffer(ms As MemoryStream, x As VectorLoop)
 
         End Sub
 
