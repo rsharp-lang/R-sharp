@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::cf66410ece61b7af8eaf857ec289c01d, R-sharp\R#\Runtime\Internal\internalInvokes\applys.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 493
-    '    Code Lines: 330
-    ' Comment Lines: 88
-    '   Blank Lines: 75
-    '     File Size: 20.26 KB
+' Summaries:
 
 
-    '     Module applys
-    ' 
-    '         Function: apply, checkInternal, (+2 Overloads) keyNameAuto, lapply, parallelList
-    '                   parLapply, parSapply, sapply
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 493
+'    Code Lines: 330
+' Comment Lines: 88
+'   Blank Lines: 75
+'     File Size: 20.26 KB
+
+
+'     Module applys
+' 
+'         Function: apply, checkInternal, (+2 Overloads) keyNameAuto, lapply, parallelList
+'                   parLapply, parSapply, sapply
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -138,6 +138,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("parLapply")>
         Public Function parLapply(x As list, FUN As Object,
                                   Optional group As Integer = -1,
+                                  Optional n_threads As Integer = -1,
                                   Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return Nothing
@@ -152,7 +153,7 @@ Namespace Runtime.Internal.Invokes
             Dim seq As List(Of Object)
             Dim names As List(Of String)
             Dim apply As RFunction = FUN
-            Dim result = x.slots.parallelList(apply, group, env)
+            Dim result = x.slots.parallelList(apply, group, n_threads, env)
 
             seq = result.objects
             names = result.names
@@ -173,10 +174,11 @@ Namespace Runtime.Internal.Invokes
         Private Function parallelList(list As IDictionary,
                                       apply As RFunction,
                                       group As Integer,
+                                      n_threads As Integer,
                                       envir As Environment) As (names As List(Of String), objects As List(Of Object))
 
             Dim values As New List(Of (i%, key$, value As Object))
-            Dim host As New ThreadPool(App.CPUCoreNumbers)
+            Dim host As New ThreadPool(If(n_threads <= 0, App.CPUCoreNumbers, n_threads))
 
             Call host.Start()
 
@@ -257,6 +259,7 @@ Namespace Runtime.Internal.Invokes
                                   X As Object,
                                   FUN As Object,
                                   Optional group As Integer = -1,
+                                  Optional n_threads As Integer = -1,
                                   Optional envir As Environment = Nothing) As Object
             If X Is Nothing Then
                 Return New Object() {}
@@ -278,7 +281,7 @@ Namespace Runtime.Internal.Invokes
 
             If X.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Dim list As IDictionary = DirectCast(X, IDictionary)
-                Dim result = list.parallelList(apply, group, envir)
+                Dim result = list.parallelList(apply, group, n_threads, envir)
 
                 names = result.names
                 seq = result.objects
