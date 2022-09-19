@@ -198,5 +198,14 @@ Namespace Runtime
 
             Return env
         End Function
+
+        <Extension>
+        Public Function verboseOption(env As Environment, opt As Boolean?) As Boolean
+            If opt Is Nothing Then
+                Return env.globalEnvironment.options.verbose
+            Else
+                Return opt
+            End If
+        End Function
     End Module
 End Namespace

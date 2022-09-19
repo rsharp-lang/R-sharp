@@ -139,6 +139,7 @@ Namespace Runtime.Internal.Invokes
         Public Function parLapply(x As list, FUN As Object,
                                   Optional group As Integer = -1,
                                   Optional n_threads As Integer = -1,
+                                  Optional verbose As Boolean? = Nothing,
                                   Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return Nothing
@@ -153,7 +154,7 @@ Namespace Runtime.Internal.Invokes
             Dim seq As List(Of Object)
             Dim names As List(Of String)
             Dim apply As RFunction = FUN
-            Dim result = x.slots.parallelList(apply, group, n_threads, env)
+            Dim result = x.slots.parallelList(apply, group, n_threads, env.verboseOption(opt:=verbose), env)
 
             seq = result.objects
             names = result.names
@@ -175,10 +176,20 @@ Namespace Runtime.Internal.Invokes
                                       apply As RFunction,
                                       group As Integer,
                                       n_threads As Integer,
+                                      verbose As Boolean,
                                       envir As Environment) As (names As List(Of String), objects As List(Of Object))
 
             Dim values As New List(Of (i%, key$, value As Object))
-            Dim host As New ThreadPool(If(n_threads <= 0, App.CPUCoreNumbers, n_threads))
+            Dim task_threads As Integer = If(n_threads <= 0, App.CPUCoreNumbers, n_threads)
+            Dim println As Action(Of Object) = envir.WriteLineHandler
+
+            If task_threads > App.CPUCoreNumbers Then
+                task_threads = App.CPUCoreNumbers
+                println($"[warning] the given task threads number({n_threads}) is greater than the CPU core thread number({App.CPUCoreNumbers}), set task threads number to {task_threads}!")
+            End If
+
+            Dim host As New ThreadPool(task_threads)
+            Dim i As i32 = 1
 
             Call host.Start()
 
@@ -188,21 +199,32 @@ Namespace Runtime.Internal.Invokes
                     .SeqIterator _
                     .Split(partitionSize:=group)
 
+                Call println($"create {key_groups.Length} task groups based on {list.Count} data inputs!")
+
                 For Each keys As SeqValue(Of Object)() In key_groups
                     Dim value_group As SeqValue(Of (Object, Object))() = keys _
-                        .Select(Function(i)
-                                    Return New SeqValue(Of (Object, Object))(i.i, (i.value, list(i.value)))
+                        .Select(Function(xi)
+                                    Return New SeqValue(Of (Object, Object))(xi.i, (xi.value, list(xi.value)))
                                 End Function) _
                         .ToArray
+                    Dim task_id As Integer = ++i
+
+                    If verbose Then
+                        Call println($"[task_queue] queue {task_id}...")
+                    End If
 
                     Call host.RunTask(
                         Sub()
+                            If verbose Then
+                                Call println($"[task_queue] run {task_id}...")
+                            End If
+
                             Dim result = value_group _
-                                .Select(Function(i)
+                                .Select(Function(xi)
                                             Return (
-                                                i:=i.i,
-                                                key:=any.ToString(i.value.Item1),
-                                                value:=apply.Invoke(envir, invokeArgument(i.value.Item2, i.i))
+                                                i:=xi.i,
+                                                key:=any.ToString(xi.value.Item1),
+                                                value:=apply.Invoke(envir, invokeArgument(xi.value.Item2, xi.i))
                                             )
                                         End Function) _
                                 .ToArray
@@ -212,11 +234,13 @@ Namespace Runtime.Internal.Invokes
                                     Call values.Add(pop)
                                 Next
                             End SyncLock
+
+                            If verbose Then
+                                Call println($"[task_queue] finish {task_id}!")
+                            End If
                         End Sub)
                 Next
             Else
-                Dim i As i32 = 1
-
                 For Each key As Object In list.Keys
                     Dim value As Object = list(key)
                     Dim index As Integer = ++i
@@ -239,6 +263,10 @@ Namespace Runtime.Internal.Invokes
             Call host.WaitAll()
             Call host.Dispose()
 
+            If verbose Then
+                Call println("all job done!")
+            End If
+
             Dim seq As New List(Of Object)
             Dim names As New List(Of String)
 
@@ -260,6 +288,7 @@ Namespace Runtime.Internal.Invokes
                                   FUN As Object,
                                   Optional group As Integer = -1,
                                   Optional n_threads As Integer = -1,
+                                  Optional verbose As Boolean? = Nothing,
                                   Optional envir As Environment = Nothing) As Object
             If X Is Nothing Then
                 Return New Object() {}
@@ -281,7 +310,7 @@ Namespace Runtime.Internal.Invokes
 
             If X.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Dim list As IDictionary = DirectCast(X, IDictionary)
-                Dim result = list.parallelList(apply, group, n_threads, envir)
+                Dim result = list.parallelList(apply, group, n_threads, envir.verboseOption(opt:=verbose), envir)
 
                 names = result.names
                 seq = result.objects
