@@ -104,6 +104,10 @@ Namespace Development.Package.File.Expressions
             End Using
         End Sub
 
+        Public Overloads Sub WriteBuffer(ms As MemoryStream, x As vectorloop)
+
+        End Sub
+
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
             Using bin As New BinaryReader(buffer)
                 If raw.expression = ExpressionTypes.DotNetMemberReference Then
