@@ -133,10 +133,10 @@ Namespace Convertor
                     Return Nothing
                 End If
 
-                If tag.characters = key Then
+                If tag IsNot Nothing AndAlso tag.characters = key Then
                     Return robj
                 End If
-                If Not tag.referenced_object Is Nothing AndAlso tag.referenced_object.characters = key Then
+                If tag.referenced_object IsNot Nothing AndAlso tag.referenced_object.characters = key Then
                     Return robj
                 End If
 

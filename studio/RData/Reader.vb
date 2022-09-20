@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::09dd4163d18e5e32bb3c18e916501cad, R-sharp\studio\RData\Reader.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 376
-    '    Code Lines: 257
-    ' Comment Lines: 64
-    '   Blank Lines: 55
-    '     File Size: 13.53 KB
+' Summaries:
 
 
-    ' Delegate Function
-    ' 
-    ' 
-    ' Class Reader
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: expand_altrep_to_object, parse_all, parse_bool, parse_complex, parse_extra_info
-    '               parse_R_object, parse_versions, ParseData, ParseRDataBinary, parseVector
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 376
+'    Code Lines: 257
+' Comment Lines: 64
+'   Blank Lines: 55
+'     File Size: 13.53 KB
+
+
+' Delegate Function
+' 
+' 
+' Class Reader
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: expand_altrep_to_object, parse_all, parse_bool, parse_complex, parse_extra_info
+'               parse_R_object, parse_versions, ParseData, ParseRDataBinary, parseVector
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -141,7 +141,7 @@ Public MustInherit Class Reader
         Return New RData With {
             .versions = versions,
             .extra = extra_info,
-            .[Object] = obj
+            .[object] = obj
         }
     End Function
 
@@ -195,13 +195,13 @@ Public MustInherit Class Reader
     ''' <param name="state"></param>
     ''' <returns></returns>
     Public Function expand_altrep_to_object(info As RObject, state As RObject) As (RObjectInfo, Object)
-        Dim class_sym As RObject = info.value.data(0)
+        Dim class_sym As RObject = info.value.data.GetValue(0)
 
         Do While class_sym.info.type = RObjectType.REF
             class_sym = class_sym.referenced_object
         Loop
 
-        Dim altrep_name As String = DirectCast(class_sym.value.data, Char())
+        Dim altrep_name As String = DirectCast(class_sym.value.data, Char()).CharString
         Dim constructor = altrep_constructor_dict(altrep_name)
 
         Return constructor(state)
@@ -312,7 +312,7 @@ Public MustInherit Class Reader
             Dim altrep_state = parse_R_object(reference_list)
             Dim altrep_attr = parse_R_object(reference_list)
 
-            If expand_altrep Then
+            If expand_altrep AndAlso Not altrep_info.value.data.IsNullOrEmpty Then
                 With expand_altrep_to_object(info:=altrep_info, state:=altrep_state)
                     info = .Item1
                     value = .Item2
@@ -320,7 +320,13 @@ Public MustInherit Class Reader
 
                 attributes = altrep_attr
             Else
-                value = (altrep_info, altrep_state, altrep_attr)
+                ' value = (altrep_info, altrep_state, altrep_attr)
+                ' 20220920 下面这个数据构造可能是错误的
+                value = New RObject With {
+                    .info = altrep_info.info,
+                    .value = RList.CreateNode(altrep_state),
+                    .attributes = altrep_attr
+                }
             End If
 
         ElseIf info.type = RObjectType.EMPTYENV Then
@@ -334,7 +340,9 @@ Public MustInherit Class Reader
             ' Index is 1-based
             referenced_object = reference_list(info.reference - 1)
         Else
-            Throw New NotImplementedException($"Type {info.type} not implemented")
+            ' Throw New NotImplementedException($"Type {info.type} not implemented")
+            Call $"Type {info.type} not implemented".Warning
+            value = Nothing
         End If
 
         If info.tag AndAlso Not tag_read Then
