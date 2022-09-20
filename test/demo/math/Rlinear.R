@@ -8,5 +8,5 @@ pkg = "D:\biodeep\biodeep_pipeline\biodeepMSMS_v5\data\HQ_linears.rda"
 |> lapply(package_utils::deserialize)
 ;
 
-str(pkg);
+print(pkg);
 
