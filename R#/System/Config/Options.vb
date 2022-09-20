@@ -1,66 +1,67 @@
 ﻿#Region "Microsoft.VisualBasic::25b949158b8f29f7dbdb4f9746e338f7, R-sharp\R#\System\Config\Options.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 357
-    '    Code Lines: 189
-    ' Comment Lines: 124
-    '   Blank Lines: 44
-    '     File Size: 13.88 KB
+' Summaries:
 
 
-    '     Class Options
-    ' 
-    '         Properties: [lib], [strict], digits, environments, f64Format
-    '                     HTTPUserAgent, julia, lib_loc, localConfig, log4vb_redirect
-    '                     maxPrint, memoryLoad, MimeType, nwarnings, python
-    '                     stdout_multipline, typescript, verbose
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    ' 
-    '         Function: getAllConfigs, getOption, setOption, ToString
-    ' 
-    '         Sub: (+2 Overloads) Dispose, flush
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 357
+'    Code Lines: 189
+' Comment Lines: 124
+'   Blank Lines: 44
+'     File Size: 13.88 KB
+
+
+'     Class Options
+' 
+'         Properties: [lib], [strict], digits, environments, f64Format
+'                     HTTPUserAgent, julia, lib_loc, localConfig, log4vb_redirect
+'                     maxPrint, memoryLoad, MimeType, nwarnings, python
+'                     stdout_multipline, typescript, verbose
+' 
+'         Constructor: (+2 Overloads) Sub New
+' 
+'         Function: getAllConfigs, getOption, setOption, ToString
+' 
+'         Sub: (+2 Overloads) Dispose, flush
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.My.FrameworkInternal
 Imports Microsoft.VisualBasic.Net.Protocols.ContentTypes
@@ -323,6 +324,7 @@ Namespace Development.Configuration
                 Select Case opt
                     Case "f64.format" : Return setOption(opt, If([default], "G"), env)
                     Case "digits" : Return setOption(opt, If([default], "6"), env)
+                    Case "avx_simd" : Return SIMD.enable.ToString
 
                     Case Else
                         Return setOption(opt, [default], env)
@@ -351,13 +353,18 @@ Namespace Development.Configuration
 
             If Not env Is Nothing AndAlso opt = "strict" Then
                 env.globalEnvironment.Rscript.strict = value.ParseBoolean
-            ElseIf opt = "memory.load" Then
-                If value = "max" Then
-                    Call FrameworkInternal.ConfigMemory(MemoryLoads.Heavy)
-                Else
-                    Call FrameworkInternal.ConfigMemory(MemoryLoads.Light)
-                End If
             End If
+
+            Select Case opt
+                Case "memory.load"
+                    If value = "max" Then
+                        Call FrameworkInternal.ConfigMemory(MemoryLoads.Heavy)
+                    Else
+                        Call FrameworkInternal.ConfigMemory(MemoryLoads.Light)
+                    End If
+                Case "avx_simd"
+                    SIMD.enable = value.ParseBoolean
+            End Select
 
             Call flush()
             Call App.JoinVariable(opt, value)
