@@ -53,6 +53,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.RDataSet.Flags
 Imports SMRUCC.Rsharp.RDataSet.Struct
 Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
@@ -187,6 +188,14 @@ Namespace Convertor
                 Dim currentName As String = If(rdata.tag?.characters, rdata.characters)
                 Dim CDR As RObject = value.CDR
 
+                ' 20220920 duplicated symbol names?
+                If list.ContainsKey(currentName) Then
+                    currentName = list.Keys _
+                        .JoinIterates({currentName}) _
+                        .uniqueNames _
+                        .Last
+                End If
+
                 ' pull an object
                 Call list.Add(currentName, current)
 
@@ -225,7 +234,7 @@ Namespace Convertor
             Dim list As New list
 
             For i As Integer = 0 To names.Length - 1
-                Call list.add(names(i), ConvertToR.PullRObject(elements(i), Nothing))
+                Call list.add(names(i), ConvertToR.PullRObject(elements(i), New Dictionary(Of String, Object)))
             Next
 
             Return list
