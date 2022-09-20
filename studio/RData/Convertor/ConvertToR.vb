@@ -138,7 +138,7 @@ Namespace Convertor
         End Function
 
         Public Function PullRObject(rdata As RObject) As Object
-            Return PullRObject(rdata, Nothing)
+            Return PullRObject(rdata, New Dictionary(Of String, Object))
         End Function
 
         ''' <summary>
@@ -184,7 +184,7 @@ Namespace Convertor
                 ' CAR为当前节点的数据
                 ' 获取节点数据，然后继续通过CDR进行链表的递归访问
                 Dim current As Object = PullRObject(car, list)
-                Dim currentName As String = rdata.tag.characters
+                Dim currentName As String = If(rdata.tag?.characters, rdata.characters)
                 Dim CDR As RObject = value.CDR
 
                 ' pull an object

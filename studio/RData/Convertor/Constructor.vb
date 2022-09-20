@@ -133,11 +133,14 @@ Namespace Convertor
                     Return Nothing
                 End If
 
-                If tag IsNot Nothing AndAlso tag.characters = key Then
-                    Return robj
-                End If
-                If tag.referenced_object IsNot Nothing AndAlso tag.referenced_object.characters = key Then
-                    Return robj
+                If tag IsNot Nothing Then
+                    If tag.characters = key Then
+                        Return robj
+                    End If
+
+                    If tag.referenced_object IsNot Nothing AndAlso tag.referenced_object.characters = key Then
+                        Return robj
+                    End If
                 End If
 
                 robj = robj.value.CDR
