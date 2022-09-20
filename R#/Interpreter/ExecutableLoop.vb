@@ -86,18 +86,24 @@ Namespace Interpreter
     ''' </summary>
     Public NotInheritable Class ExecutableLoop
 
-        Shared ReadOnly Rsharp As Process = Process.GetCurrentProcess()
+        ' 20220920
+        ' shared object is not working well on the parallel
+        ' due to the reason of synclock will block the 
+        ' parallel threads job
+        '
+        ' so this execute job module code should be a class
+        ' instance, not shared code for run some parallel code
+        ' example like parLapply and parSapply.
 
-        Shared memSize As Double
-        Shared memSize2 As Double
-        Shared memoryDelta As Double
-        Shared refreshMemory As Boolean = False
+        ReadOnly Rsharp As Process = Process.GetCurrentProcess()
 
-        Shared Sub New()
+        Dim memSize As Double
+        Dim memSize2 As Double
+        Dim memoryDelta As Double
+        Dim refreshMemory As Boolean = False
+
+        Sub New()
             memSize = Rsharp.WorkingSet64 / 1024 / 1024
-        End Sub
-
-        Private Sub New()
         End Sub
 
         ''' <summary>
@@ -105,7 +111,7 @@ Namespace Interpreter
         ''' </summary>
         ''' <param name="env"></param>
         ''' <returns></returns>
-        Public Shared Function Execute(execQueue As IEnumerable(Of Expression), env As Environment) As Object
+        Public Function Execute(execQueue As IEnumerable(Of Expression), env As Environment) As Object
             Dim last As Object = Nothing
             Dim breakLoop As Boolean = False
             Dim debug As Boolean = env.globalEnvironment.debugMode
@@ -151,7 +157,7 @@ Namespace Interpreter
             Return last
         End Function
 
-        Private Shared Sub runRefreshMemory()
+        Private Sub runRefreshMemory()
             If Not refreshMemory Then
                 SyncLock Rsharp
                     memSize2 = Rsharp.WorkingSet64 / 1024 / 1024
@@ -165,7 +171,7 @@ Namespace Interpreter
             End If
         End Sub
 
-        Private Shared Sub printMemoryProfile()
+        Private Sub printMemoryProfile()
             If memoryDelta > 0 Then
                 Call printDebug($"[app_memory] {memSize2.ToString("F2")} MB, delta {memoryDelta.ToString("F2")} MB", ConsoleColor.Red)
             Else
@@ -173,7 +179,7 @@ Namespace Interpreter
             End If
         End Sub
 
-        Private Shared Sub configException(env As Environment, last As Object, expression As Expression)
+        Private Sub configException(env As Environment, last As Object, expression As Expression)
             If Not last Is Nothing AndAlso Program.isException(last) Then
                 Dim err As Message = last
 
@@ -200,9 +206,9 @@ Namespace Interpreter
         ''' <param name="envir"></param>
         ''' <param name="breakLoop"></param>
         ''' <returns></returns>
-        Public Shared Function ExecuteCodeLine(expression As Expression, envir As Environment,
-                                               Optional ByRef breakLoop As Boolean = False,
-                                               Optional showExpression As Boolean = False) As Object
+        Public Function ExecuteCodeLine(expression As Expression, envir As Environment,
+                                        Optional ByRef breakLoop As Boolean = False,
+                                        Optional showExpression As Boolean = False) As Object
             Dim last As Object
 
             If showExpression Then

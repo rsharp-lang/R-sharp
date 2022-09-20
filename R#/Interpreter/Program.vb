@@ -93,7 +93,7 @@ Namespace Interpreter
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Execute(envir As Environment) As Object
-            Return ExecutableLoop.Execute(execQueue, envir)
+            Return New ExecutableLoop().Execute(execQueue, envir)
         End Function
 
         Public Function EndWithFuncCalls(ParamArray anyFuncs As String()) As Boolean

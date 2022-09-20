@@ -1,70 +1,70 @@
 ﻿#Region "Microsoft.VisualBasic::791aa0a039c2c98e91f813ccb486057c, R-sharp\R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 2721
-    '    Code Lines: 1181
-    ' Comment Lines: 1320
-    '   Blank Lines: 220
-    '     File Size: 124.89 KB
+' Summaries:
 
 
-    '     Module base
-    ' 
-    '         Function: [date], [stop], allocate, append, appendOfList
-    '                   appendOfVector, attachPackageFile, autoDispose, c, cat
-    '                   cbind, colnames, columnVector, days, doPrintInternal
-    '                   factor, factors, getOption, ifelse, invisible
-    '                   isDataframe, isEmpty, isEmptyArray, isList, isNA
-    '                   isNull, isRVector, length, library, makeNames
-    '                   names, ncol, neg, nrow, objectAddInvoke
-    '                   options, print, range, rbind, Rdataframe
-    '                   rep, replace, Rlist, Robj_dimension, rowBindDataFrame
-    '                   rownames, seq, sink, source, str
-    '                   summary, t, uniqueNames, unitOfT, warning
-    '                   year
-    ' 
-    '         Sub: safeAddColumn, warnings
-    '         Class PrinterOptions
-    ' 
-    '             Properties: fields, maxPrint, quot
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 2721
+'    Code Lines: 1181
+' Comment Lines: 1320
+'   Blank Lines: 220
+'     File Size: 124.89 KB
+
+
+'     Module base
+' 
+'         Function: [date], [stop], allocate, append, appendOfList
+'                   appendOfVector, attachPackageFile, autoDispose, c, cat
+'                   cbind, colnames, columnVector, days, doPrintInternal
+'                   factor, factors, getOption, ifelse, invisible
+'                   isDataframe, isEmpty, isEmptyArray, isList, isNA
+'                   isNull, isRVector, length, library, makeNames
+'                   names, ncol, neg, nrow, objectAddInvoke
+'                   options, print, range, rbind, Rdataframe
+'                   rep, replace, Rlist, Robj_dimension, rowBindDataFrame
+'                   rownames, seq, sink, source, str
+'                   summary, t, uniqueNames, unitOfT, warning
+'                   year
+' 
+'         Sub: safeAddColumn, warnings
+'         Class PrinterOptions
+' 
+'             Properties: fields, maxPrint, quot
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -945,6 +945,35 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <Extension>
+        Private Function appendFinal(env As Environment, x As Object, values As Object) As Object
+            Dim xType As Type = x.GetType
+
+            If TypeOf values Is vector Then
+                values = DirectCast(values, vector).data
+            End If
+            If values.GetType.IsArray Then
+                If values.GetType.GetElementType Is xType Then
+                    Dim vec As Array = Array.CreateInstance(xType, 1)
+                    vec.SetValue(x, Scan0)
+                    Return env.appendOfVector(vec, values)
+                Else
+                    Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}", $"type of values: {values.GetType.FullName}"}, env)
+                End If
+            Else
+                If values.GetType Is xType Then
+                    Dim array As Array = Array.CreateInstance(xType, 2)
+                    array.SetValue(x, Scan0)
+                    array.SetValue(values, 1)
+                    Return New vector With {.data = array, .elementType = RType.GetRSharpType(xType)}
+                Else
+                    Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}", $"type of values: {values.GetType.FullName}"}, env)
+                End If
+            End If
+
+            Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}", $"type of values: {values.GetType.FullName}"}, env)
+        End Function
+
         ''' <summary>
         ''' implements ``append`` via the add method
         ''' </summary>
@@ -954,50 +983,30 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <Extension>
         Private Function objectAddInvoke(env As Environment, x As Object, values As Object) As Object
+            Dim xType As Type = x.GetType
+
             Static collectionCache As New Dictionary(Of Type, MethodInfo)
-
-            SyncLock collectionCache
-                Dim xType As Type = x.GetType
 RE0:
-                If collectionCache.ContainsKey(xType) Then
-                    If collectionCache(xType) Is Nothing Then
-                        ' 之前已经被解析过了
-                        ' 但是找不到Add方法
-                        If TypeOf values Is vector Then
-                            values = DirectCast(values, vector).data
-                        End If
-                        If values.GetType.IsArray Then
-                            If values.GetType.GetElementType Is xType Then
-                                Dim vec As Array = Array.CreateInstance(xType, 1)
-                                vec.SetValue(x, Scan0)
-                                Return env.appendOfVector(vec, values)
-                            Else
-                                Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}", $"type of values: {values.GetType.FullName}"}, env)
-                            End If
-                        Else
-                            If values.GetType Is xType Then
-                                Dim array As Array = Array.CreateInstance(xType, 2)
-                                array.SetValue(x, Scan0)
-                                array.SetValue(values, 1)
-                                Return New vector With {.data = array, .elementType = RType.GetRSharpType(xType)}
-                            Else
-                                Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}", $"type of values: {values.GetType.FullName}"}, env)
-                            End If
-                        End If
-
-                        Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {xType.FullName}", $"type of values: {values.GetType.FullName}"}, env)
-                    End If
-                Else
-                    collectionCache(xType) = xType _
-                        .GetMethods(PublicProperty) _
-                        .Where(Function(f)
-                                   Return f.Name = "Add" AndAlso f.GetParameters.Length = 1
-                               End Function) _
-                        .FirstOrDefault
-
-                    GoTo RE0
+            If collectionCache.ContainsKey(xType) Then
+                If collectionCache(xType) Is Nothing Then
+                    ' 之前已经被解析过了
+                    ' 但是找不到Add方法
+                    Return env.appendFinal(x, values)
                 End If
-            End SyncLock
+            Else
+                Dim handle = xType _
+                    .GetMethods(PublicProperty) _
+                    .Where(Function(f)
+                               Return f.Name = "Add" AndAlso f.GetParameters.Length = 1
+                           End Function) _
+                    .FirstOrDefault
+
+                SyncLock collectionCache
+                    collectionCache(xType) = handle
+                End SyncLock
+
+                GoTo RE0
+            End If
 
             Dim add As MethodInfo = collectionCache(x.GetType)
             Dim valueType As Type = add.GetParameters.First.ParameterType
@@ -2553,24 +2562,25 @@ RE0:
             Dim maxPrint As Integer = args.getValue("max.print", env, globalEnv.options.maxPrint)
             Dim fields As String() = args.getValue(Of String())("select", env, Nothing)
 
+            ' keeps pretty print in multiple threading environment
             Static dummy As New Object
 
-            ' keeps pretty print in multiple threading environment
-            SyncLock dummy
-
-                ' 这个函数是由用户指定调用的，会忽略掉invisible属性值
-                If x Is Nothing Then
+            ' 这个函数是由用户指定调用的，会忽略掉invisible属性值
+            If x Is Nothing Then
+                SyncLock dummy
                     Call globalEnv.stdout.WriteLine("NULL")
                     ' just returns nothing literal
                     Return Nothing
-                Else
+                End SyncLock
+            Else
+                SyncLock dummy
                     Return New PrinterOptions With {
                         .maxPrint = maxPrint,
                         .quot = quot,
                         .fields = fields
                     }.doPrintInternal(x, x.GetType, env)
-                End If
-            End SyncLock
+                End SyncLock
+            End If
         End Function
 
         Friend Class PrinterOptions
