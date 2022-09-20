@@ -324,7 +324,7 @@ Namespace Development.Configuration
                 Select Case opt
                     Case "f64.format" : Return setOption(opt, If([default], "G"), env)
                     Case "digits" : Return setOption(opt, If([default], "6"), env)
-                    Case "avx_simd" : Return SIMD.enable.ToString
+                    Case "avx_simd" : Return SIMD.config.ToString
 
                     Case Else
                         Return setOption(opt, [default], env)
@@ -363,7 +363,11 @@ Namespace Development.Configuration
                         Call FrameworkInternal.ConfigMemory(MemoryLoads.Light)
                     End If
                 Case "avx_simd"
-                    SIMD.enable = value.ParseBoolean
+                    If value.ParseBoolean Then
+                        SIMD.config = SIMDConfiguration.auto
+                    Else
+                        SIMD.config = SIMDConfiguration.disable
+                    End If
             End Select
 
             Call flush()
