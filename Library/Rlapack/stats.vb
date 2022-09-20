@@ -148,6 +148,82 @@ Module stats
         Return sb.ToString
     End Function
 
+    Public Enum p_adjust_methods
+        holm
+        hochberg
+        hommel
+        bonferroni
+        BH
+        BY
+        fdr
+        none
+    End Enum
+
+    ''' <summary>
+    ''' ### Adjust P-values for Multiple Comparisons
+    ''' 
+    ''' Given a set of p-values, returns p-values adjusted 
+    ''' using one of several methods.
+    ''' </summary>
+    ''' <param name="p">
+    ''' numeric vector Of p-values (possibly With NAs). Any other R Object Is 
+    ''' coerced by As.numeric.
+    ''' </param>
+    ''' <param name="method">
+    ''' correction method. Can be abbreviated.
+    ''' </param>
+    ''' <param name="n">
+    ''' number of comparisons, must be at least length(p); only set this (to 
+    ''' non-default) when you know what you are doing!
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <remarks>
+    ''' The adjustment methods include the Bonferroni correction ("bonferroni") 
+    ''' in which the p-values are multiplied by the number of comparisons. Less
+    ''' conservative corrections are also included by Holm (1979) ("holm"), 
+    ''' Hochberg (1988) ("hochberg"), Hommel (1988) ("hommel"), Benjamini &amp; 
+    ''' Hochberg (1995) ("BH" or its alias "fdr"), and Benjamini &amp; Yekutieli 
+    ''' (2001) ("BY"), respectively. A pass-through option ("none") is also included.
+    ''' The set of methods are contained in the p.adjust.methods vector for the 
+    ''' benefit of methods that need to have the method as an option and pass it 
+    ''' on to p.adjust.
+    ''' 
+    ''' The first four methods are designed To give strong control Of the family-wise 
+    ''' Error rate. There seems no reason To use the unmodified Bonferroni correction 
+    ''' because it Is dominated by Holm's method, which is also valid under arbitrary
+    ''' assumptions.
+    ''' 
+    ''' Hochberg's and Hommel's methods are valid when the hypothesis tests are 
+    ''' independent or when they are non-negatively associated (Sarkar, 1998; Sarkar 
+    ''' and Chang, 1997). Hommel's method is more powerful than Hochberg's, but the 
+    ''' difference is usually small and the Hochberg p-values are faster to compute.
+    ''' The "BH" (aka "fdr") And "BY" method of Benjamini, Hochberg, And Yekutieli 
+    ''' control the false discovery rate, the expected proportion of false discoveries
+    ''' amongst the rejected hypotheses. The false discovery rate Is a less stringent 
+    ''' condition than the family-wise error rate, so these methods are more powerful 
+    ''' than the others.
+    ''' 
+    ''' Note that you can Set n larger than length(p) which means the unobserved
+    ''' p-values are assumed To be greater than all the observed p For "bonferroni" 
+    ''' And "holm" methods And equal To 1 For the other methods.
+    ''' </remarks>
+    ''' <returns>
+    ''' A numeric vector of corrected p-values (of the same length as p, with names 
+    ''' copied from p).
+    ''' </returns>
+    <ExportAPI("p.adjust")>
+    <RApiReturn(GetType(Double))>
+    Public Function p_adjust(p As Double(),
+                             Optional method As p_adjust_methods = p_adjust_methods.fdr,
+                             Optional n As Integer? = Nothing,
+                             Optional env As Environment = Nothing) As Object
+        Select Case method
+            Case p_adjust_methods.fdr : Return p.FDR(n).ToArray
+            Case Else
+                Return Internal.debug.stop(New NotImplementedException(method.Description), env)
+        End Select
+    End Function
+
     ''' <summary>
     ''' ## Empirical Cumulative Distribution Function
     ''' 
