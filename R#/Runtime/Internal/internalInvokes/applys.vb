@@ -136,7 +136,9 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("parLapply")>
-        Public Function parLapply(x As list, FUN As Object, env As Environment) As Object
+        Public Function parLapply(x As list, FUN As Object,
+                                  Optional group As Integer = -1,
+                                  Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return Nothing
             End If
@@ -150,7 +152,7 @@ Namespace Runtime.Internal.Invokes
             Dim seq As List(Of Object)
             Dim names As List(Of String)
             Dim apply As RFunction = FUN
-            Dim result = x.slots.parallelList(apply, env)
+            Dim result = x.slots.parallelList(apply, group, env)
 
             seq = result.objects
             names = result.names
@@ -168,30 +170,69 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <Extension>
-        Private Function parallelList(list As IDictionary, apply As RFunction, envir As Environment) As (names As List(Of String), objects As List(Of Object))
+        Private Function parallelList(list As IDictionary,
+                                      apply As RFunction,
+                                      group As Integer,
+                                      envir As Environment) As (names As List(Of String), objects As List(Of Object))
+
             Dim values As New List(Of (i%, key$, value As Object))
             Dim host As New ThreadPool(App.CPUCoreNumbers)
-            Dim i As i32 = 1
 
             Call host.Start()
 
-            For Each key As Object In list.Keys
-                Dim value As Object = list(key)
-                Dim index As Integer = ++i
+            If group > 1 Then
+                Dim key_groups = list.Keys _
+                    .ToArray(Of Object) _
+                    .SeqIterator _
+                    .Split(partitionSize:=group)
 
-                Call host.RunTask(
-                    Sub()
-                        Dim result = (
-                            i:=index,
-                            key:=any.ToString(key),
-                            value:=apply.Invoke(envir, invokeArgument(value, index))
-                        )
+                For Each keys As SeqValue(Of Object)() In key_groups
+                    Dim value_group As SeqValue(Of (Object, Object))() = keys _
+                        .Select(Function(i)
+                                    Return New SeqValue(Of (Object, Object))(i.i, (i.value, list(i.value)))
+                                End Function) _
+                        .ToArray
 
-                        SyncLock values
-                            Call values.Add(result)
-                        End SyncLock
-                    End Sub)
-            Next
+                    Call host.RunTask(
+                        Sub()
+                            Dim result = value_group _
+                                .Select(Function(i)
+                                            Return (
+                                                i:=i.i,
+                                                key:=any.ToString(i.value.Item1),
+                                                value:=apply.Invoke(envir, invokeArgument(i.value.Item2, i.i))
+                                            )
+                                        End Function) _
+                                .ToArray
+
+                            SyncLock values
+                                For Each pop In result
+                                    Call values.Add(pop)
+                                Next
+                            End SyncLock
+                        End Sub)
+                Next
+            Else
+                Dim i As i32 = 1
+
+                For Each key As Object In list.Keys
+                    Dim value As Object = list(key)
+                    Dim index As Integer = ++i
+
+                    Call host.RunTask(
+                        Sub()
+                            Dim result = (
+                                i:=index,
+                                key:=any.ToString(key),
+                                value:=apply.Invoke(envir, invokeArgument(value, index))
+                            )
+
+                            SyncLock values
+                                Call values.Add(result)
+                            End SyncLock
+                        End Sub)
+                Next
+            End If
 
             Call host.WaitAll()
             Call host.Dispose()
@@ -212,7 +253,11 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <returns></returns>
         <ExportAPI("parSapply")>
-        Public Function parSapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
+        Public Function parSapply(<RRawVectorArgument>
+                                  X As Object,
+                                  FUN As Object,
+                                  Optional group As Integer = -1,
+                                  Optional envir As Environment = Nothing) As Object
             If X Is Nothing Then
                 Return New Object() {}
             End If
@@ -233,7 +278,7 @@ Namespace Runtime.Internal.Invokes
 
             If X.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Dim list As IDictionary = DirectCast(X, IDictionary)
-                Dim result = list.parallelList(apply, envir)
+                Dim result = list.parallelList(apply, group, envir)
 
                 names = result.names
                 seq = result.objects
