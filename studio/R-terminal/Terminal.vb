@@ -210,7 +210,7 @@ Type 'q()' to quit R.
         ' Call R.LoadLibrary("grDevices")
         ' Call R.LoadLibrary("stats")
         For Each pkgName As String In R.configFile.GetStartupLoadingPackages
-            Call R.LoadLibrary(packageName:=pkgName)
+            Call R.LoadLibrary(packageName:=pkgName, silent:=True)
         Next
 
         Console.WriteLine()

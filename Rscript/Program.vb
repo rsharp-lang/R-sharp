@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::97ee104510ba77890f944748b3bf74d1, R-sharp\Rscript\Program.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 121
-    '    Code Lines: 84
-    ' Comment Lines: 17
-    '   Blank Lines: 20
-    '     File Size: 4.84 KB
+' Summaries:
 
 
-    ' Module Program
-    ' 
-    '     Function: Main, Run, RunRscriptFile
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 121
+'    Code Lines: 84
+' Comment Lines: 17
+'   Blank Lines: 20
+'     File Size: 4.84 KB
+
+
+' Module Program
+' 
+'     Function: Main, Run, RunRscriptFile
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -114,12 +114,12 @@ Module Program
 
                 Return 500
             Else
-                Call R.LoadLibrary("base", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
-                Call R.LoadLibrary("utils", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
-                Call R.LoadLibrary("grDevices", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
-                Call R.LoadLibrary("math", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+                Call R.LoadLibrary("base", ignoreMissingStartupPackages:=ignoreMissingStartupPackages, silent:=True)
+                Call R.LoadLibrary("utils", ignoreMissingStartupPackages:=ignoreMissingStartupPackages, silent:=True)
+                Call R.LoadLibrary("grDevices", ignoreMissingStartupPackages:=ignoreMissingStartupPackages, silent:=True)
+                Call R.LoadLibrary("math", ignoreMissingStartupPackages:=ignoreMissingStartupPackages, silent:=True)
 
-                Call Console.WriteLine()
+                ' Call Console.WriteLine()
             End If
 
             Dim result As Object = R.Run(program)
@@ -150,10 +150,10 @@ Module Program
             Call Console.WriteLine()
         End If
 
-        Call R.LoadLibrary("base", silent:=True, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
-        Call R.LoadLibrary("utils", silent:=True, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
-        Call R.LoadLibrary("grDevices", silent:=True, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
-        Call R.LoadLibrary("math", silent:=True, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+        Call R.LoadLibrary("base", silent:=Not R.debug, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+        Call R.LoadLibrary("utils", silent:=Not R.debug, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+        Call R.LoadLibrary("grDevices", silent:=Not R.debug, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+        Call R.LoadLibrary("math", silent:=Not R.debug, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
 
         Call Console.WriteLine()
 

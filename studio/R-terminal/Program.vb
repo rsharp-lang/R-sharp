@@ -216,7 +216,7 @@ Module Program
         For Each pkgName As String In startupsLoading
             Call R.LoadLibrary(
                 packageName:=pkgName,
-                silent:=silent,
+                silent:=True,
                 ignoreMissingStartupPackages:=ignoreMissingStartupPackages
             )
         Next
