@@ -117,6 +117,12 @@ Module Program
         Return 0
     End Function
 
+    ''' <summary>
+    ''' all of the external package module will not loaded, only use the 
+    ''' library package functions from the R# core runtime module.
+    ''' </summary>
+    ''' <param name="args"></param>
+    ''' <returns></returns>
     Private Function RunExpression(args As CommandLine) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Dim [error] As String = Nothing
@@ -216,7 +222,7 @@ Module Program
         For Each pkgName As String In startupsLoading
             Call R.LoadLibrary(
                 packageName:=pkgName,
-                silent:=silent,
+                silent:=True,
                 ignoreMissingStartupPackages:=ignoreMissingStartupPackages
             )
         Next

@@ -262,6 +262,10 @@ printSingleElement:
         Private Sub printList(list As IDictionary, listPrefix$, opts As PrinterOptions, env As GlobalEnvironment)
             Dim output As RContentOutput = env.stdout
 
+            If list Is Nothing Then
+                Return
+            End If
+
             For Each objKey As Object In list.Keys
                 Dim slotValue As Object = list(objKey)
                 Dim key$ = objKey.ToString

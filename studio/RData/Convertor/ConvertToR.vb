@@ -53,6 +53,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.RDataSet.Flags
 Imports SMRUCC.Rsharp.RDataSet.Struct
 Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
@@ -138,7 +139,7 @@ Namespace Convertor
         End Function
 
         Public Function PullRObject(rdata As RObject) As Object
-            Return PullRObject(rdata, Nothing)
+            Return PullRObject(rdata, New Dictionary(Of String, Object))
         End Function
 
         ''' <summary>
@@ -184,8 +185,16 @@ Namespace Convertor
                 ' CAR为当前节点的数据
                 ' 获取节点数据，然后继续通过CDR进行链表的递归访问
                 Dim current As Object = PullRObject(car, list)
-                Dim currentName As String = rdata.tag.characters
+                Dim currentName As String = If(rdata.tag?.characters, rdata.characters)
                 Dim CDR As RObject = value.CDR
+
+                ' 20220920 duplicated symbol names?
+                If list.ContainsKey(currentName) Then
+                    currentName = list.Keys _
+                        .JoinIterates({currentName}) _
+                        .uniqueNames _
+                        .Last
+                End If
 
                 ' pull an object
                 Call list.Add(currentName, current)
@@ -225,7 +234,7 @@ Namespace Convertor
             Dim list As New list
 
             For i As Integer = 0 To names.Length - 1
-                Call list.add(names(i), ConvertToR.PullRObject(elements(i), Nothing))
+                Call list.add(names(i), ConvertToR.PullRObject(elements(i), New Dictionary(Of String, Object)))
             Next
 
             Return list
