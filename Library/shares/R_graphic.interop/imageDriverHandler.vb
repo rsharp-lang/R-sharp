@@ -82,6 +82,15 @@ Module imageDriverHandler
         Return Drivers.Default
     End Function
 
+    ''' <summary>
+    ''' Checking the graphics context
+    ''' 
+    ''' check for the argument name 'grDevices' is exists in the given
+    ''' argument list or not and also the argument value should be the 
+    ''' object type of <see cref="graphicsDevice"/>.
+    ''' </summary>
+    ''' <param name="args"></param>
+    ''' <returns></returns>
     <Extension>
     Public Function CheckGraphicsDeviceExists(args As list) As Boolean
         Return args.hasName("grDevices") AndAlso TypeOf args("grDevices") Is graphicsDevice
