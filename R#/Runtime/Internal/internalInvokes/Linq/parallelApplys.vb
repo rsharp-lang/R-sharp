@@ -56,6 +56,23 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return (names, seq)
         End Function
 
+        ''' <summary>
+        ''' try to make a deep clone of the environment context for run parallel code.
+        ''' </summary>
+        ''' <param name="env">
+        ''' due to the reason of make deep copy of this environment context, 
+        ''' so that the global variable value update in the parallel code
+        ''' may not effect the environment context in the main thread.
+        ''' 
+        ''' in this point of view, keep less global variable reference will
+        ''' be better in parallel
+        ''' </param>
+        ''' <returns></returns>
+        <Extension>
+        Public Function deepCloneContext(env As Environment) As Environment
+            Return env
+        End Function
+
         <Extension>
         Private Sub pushGroupParallelTask(host As ThreadPool,
                                           list As IDictionary,
@@ -79,6 +96,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                             End Function) _
                     .ToArray
                 Dim task_id As Integer = ++i
+                Dim env As Environment = envir.deepCloneContext
 
                 If verbose Then
                     Call println($"[task_queue] queue {task_id}...")
@@ -95,7 +113,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                         Return (
                                             i:=xi.i,
                                             key:=anyObj.ToString(xi.value.Item1),
-                                            value:=apply.Invoke(envir, invokeArgument(xi.value.Item2, xi.i))
+                                            value:=apply.Invoke(env, invokeArgument(xi.value.Item2, xi.i))
                                         )
                                     End Function) _
                             .ToArray
@@ -120,13 +138,14 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             For Each key As Object In list.Keys
                 Dim value As Object = list(key)
                 Dim index As Integer = ++i
+                Dim env As Environment = envir.deepCloneContext
 
                 Call host.RunTask(
                     Sub()
                         Dim result = (
                             i:=index,
                             key:=anyObj.ToString(key),
-                            value:=apply.Invoke(envir, invokeArgument(value, index))
+                            value:=apply.Invoke(env, invokeArgument(value, index))
                         )
 
                         SyncLock values
