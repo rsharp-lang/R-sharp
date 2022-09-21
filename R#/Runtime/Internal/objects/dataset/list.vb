@@ -69,11 +69,18 @@ Imports SMRUCC.Rsharp.Runtime.Interop.CType
 
 Namespace Runtime.Internal.Object
 
+    ''' <summary>
+    ''' A tuple paired list object model
+    ''' </summary>
     Public Class list : Inherits RsharpDataObject
         Implements RNames, RIndex, RNameIndex, ITupleConstructor
 
         Public Property slots As Dictionary(Of String, Object)
 
+        ''' <summary>
+        ''' gets the <see cref="slots"/> collection size
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property length As Integer Implements RIndex.length
             Get
                 Return slots.Count
@@ -98,7 +105,11 @@ Namespace Runtime.Internal.Object
         ''' Get slot value by name
         ''' </summary>
         ''' <param name="name"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' returns nothing if there is no given 
+        ''' <paramref name="name"/> exists in the
+        ''' slots
+        ''' </returns>
         Default Public ReadOnly Property SlotValue(name As String) As Object
             Get
                 Return getByName(name)

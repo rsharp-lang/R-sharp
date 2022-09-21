@@ -721,6 +721,13 @@ Module plots
         )
     End Function
 
+    ''' <summary>
+    ''' plot scatter 2d serial data
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Public Function plotSerials(data As Object, args As list, env As Environment) As Object
         If TypeOf data Is SerialData Then
             data = {DirectCast(data, SerialData)}
@@ -746,7 +753,7 @@ Module plots
         If args.CheckGraphicsDeviceExists Then
             ' draw on current graphics context
             Dim dev As graphicsDevice = curDev
-            Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
+            Dim padding As Padding = InteropArgumentHelper.getPadding(dev.getArgumentValue("padding", args))
             Dim canvas As New GraphicsRegion(dev.g.Size, padding)
 
             Call Scatter2D.Plot(
@@ -802,7 +809,7 @@ Module plots
 
     <ExportAPI("upset")>
     Public Function UpSetPlot(upset As list, Optional env As Environment = Nothing) As Object
-
+        Throw New NotImplementedException
     End Function
 
     ''' <summary>
