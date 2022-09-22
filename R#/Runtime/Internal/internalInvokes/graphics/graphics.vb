@@ -64,7 +64,6 @@ Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.Runtime
-Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -82,10 +81,14 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' the current actived graphics device
         ''' </summary>
-        Friend curDev As graphicsDevice = Nothing
+        Public ReadOnly Property curDev As graphicsDevice
+            Get
+                Return devlist.LastOrDefault
+            End Get
+        End Property
 
         Friend Sub openNew(dev As IGraphics, buffer As Stream, args As list)
-            curDev = New graphicsDevice With {
+            Dim curDev = New graphicsDevice With {
                 .g = dev,
                 .file = buffer,
                 .args = args,
@@ -154,6 +157,7 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <returns></returns>
         <ExportAPI("dev.set")>
+        <RApiReturn(GetType(graphicsDevice))>
         Public Function setCurrentDev(Optional dev As IGraphics = Nothing,
                                       Optional which As Integer = -1,
                                       Optional env As Environment = Nothing) As Object
@@ -161,15 +165,17 @@ Namespace Runtime.Internal.Invokes
             If dev Is Nothing AndAlso which < 0 Then
                 Return Internal.debug.stop("no active graphics device is specificed!", env)
             ElseIf dev Is Nothing Then
-                curDev = devlist(which)
+                devlist.Swap(which, devlist.Count - 1)
             Else
-                curDev = New graphicsDevice With {
+                devlist.Add(New graphicsDevice With {
                     .args = New list With {.slots = New Dictionary(Of String, Object)},
                     .file = Nothing,
                     .g = dev,
-                    .index = -1
-                }
+                    .index = devlist.Count
+                })
             End If
+
+            Return curDev
         End Function
 
         ''' <summary>
@@ -257,8 +263,10 @@ Namespace Runtime.Internal.Invokes
         ''' 
         ''' Generic function for plotting of R objects. 
         ''' </summary>
-        ''' <param name="graphics"></param>
-        ''' <param name="args"></param>
+        ''' <param name="graphics">
+        ''' the graphics context
+        ''' </param>
+        ''' <param name="args">plot arguments</param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("plot")>
