@@ -744,12 +744,15 @@ RE0:
         ''' <summary>
         ''' Cast the raw dictionary object to R# list object
         ''' </summary>
-        ''' <param name="obj"></param>
+        ''' <param name="obj">
+        ''' this function will make a data copy if the input data is already a <see cref="list"/>
+        ''' </param>
         ''' <param name="args">
         ''' for dataframe type:
         ''' 
         ''' + ``byrow``: logical, default is FALSE, means cast dataframe to list directly by column hash table values
         ''' + ``names``: character, the column names that will be used as the list names
+        ''' 
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("as.list")>
@@ -757,6 +760,11 @@ RE0:
         Public Function asList(obj As Object, <RListObjectArgument> args As Object, Optional env As Environment = Nothing) As Object
             If obj Is Nothing Then
                 Return Nothing
+            ElseIf TypeOf obj Is list Then
+                ' just make a list data copy
+                Return New list(DirectCast(obj, list).elementType) With {
+                    .slots = New Dictionary(Of String, Object)(DirectCast(obj, list).slots)
+                }
             Else
                 Return listInternal(obj, base.Rlist(args, env), env)
             End If
