@@ -272,7 +272,7 @@ Namespace Runtime.Internal.Invokes
                     .Select(Function(pkg) pkg.namespace) _
                     .ToArray
             Else
-                Dim func = env.enumerateFunctions _
+                Dim func = env.EnumerateAllFunctions _
                     .Where(Function(fun)
                                Return TypeOf fun.value Is RMethodInfo AndAlso DirectCast(fun.value, RMethodInfo).GetPackageInfo.namespace = name
                            End Function) _
