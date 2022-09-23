@@ -90,6 +90,10 @@ Public Class RunParallel
 
     Private Sub New()
         worker = R.FromEnvironment(App.HOME)
+
+#If NETCOREAPP Then
+        worker.dotnetcoreApp = True
+#End If
     End Sub
 
     Public Function getSymbol(symbol As GetSymbol) As (hit As Boolean, val As Object)
