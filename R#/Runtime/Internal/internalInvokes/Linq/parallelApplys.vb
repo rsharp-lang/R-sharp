@@ -41,7 +41,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
 
             Call host.Start()
-            Call host.WaitAll()
+            Call host.WaitAll(verbose)
             Call host.Dispose()
 
             If verbose Then
@@ -160,6 +160,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                         )
                                     End Function) _
                             .ToArray
+
+                        If verbose Then
+                            Call println($"[task_queue] append to result {task_id}!")
+                        End If
 
                         SyncLock values
                             For Each pop In result
