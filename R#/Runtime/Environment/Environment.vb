@@ -101,7 +101,9 @@ Namespace Runtime
         ''' <summary>
         ''' <see cref="debug.getEnvironmentStack"/>
         ''' </summary>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' from current stack to top stack
+        ''' </returns>
         Public ReadOnly Property stackTrace As StackFrame()
             Get
                 Return debug.getEnvironmentStack(Me)
@@ -670,11 +672,16 @@ Namespace Runtime
         End Sub
 
         ''' <summary>
-        ''' join two runtime environment
+        ''' join two runtime environment, this function works for
+        ''' the function closure environment setup initialization.
         ''' </summary>
         ''' <param name="closure"></param>
         ''' <param name="parent"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' this operator procedure calls may lock all of the parent 
+        ''' environment context chain in parallel context
+        ''' </remarks>
         Public Shared Operator &(closure As Environment, parent As Environment) As Environment
             Dim join As New Environment(closure, closure.stackFrame, isInherits:=False)
 
