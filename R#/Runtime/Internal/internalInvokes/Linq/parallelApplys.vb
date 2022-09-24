@@ -1,5 +1,6 @@
 ﻿Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -74,6 +75,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         Public Function deepCloneContext(env As Environment, tag As String) As Environment
             Dim symbols As New Dictionary(Of String, Symbol)
             Dim funcs As New Dictionary(Of String, Symbol)
+            Dim empty As Environment = env.globalEnvironment
 
             ' modification of the symbol value
             ' may not affect the parent environment context
@@ -96,8 +98,16 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 End If
             Next
 
+            ' create empty stack to break the 
+            ' parallel sync lock in environment
+            ' join for initialize the function 
+            ' call context
+            For Each frame As StackFrame In env.stackTrace.Reverse
+                empty = New Environment(empty, frame, isInherits:=False)
+            Next
+
             Dim context As New Environment(
-                parent:=env,
+                parent:=empty,
                 stackName:=$"parallel_task[{MethodBase.GetCurrentMethod.Name} ~ {tag}]",
                 symbols:=symbols.Values,
                 funcs:=funcs.Values

@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::3386b53b685772159abb59393bba0c11, R-sharp\snowFall\Context\RPC\BootstrapSocket.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 117
-    '    Code Lines: 90
-    ' Comment Lines: 0
-    '   Blank Lines: 27
-    '     File Size: 3.87 KB
+' Summaries:
 
 
-    '     Class BootstrapSocket
-    ' 
-    '         Properties: port
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: folk, NodeSetup, Run, stopSocket, ToString
-    ' 
-    '         Sub: setStatus
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 117
+'    Code Lines: 90
+' Comment Lines: 0
+'   Blank Lines: 27
+'     File Size: 3.87 KB
+
+
+'     Class BootstrapSocket
+' 
+'         Properties: port
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: folk, NodeSetup, Run, stopSocket, ToString
+' 
+'         Sub: setStatus
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -89,14 +89,19 @@ Namespace Context.RPC
                 Optional debugPort As Integer = -1,
                 Optional debug As Boolean = False)
 
+            Dim protocol As DataRequestHandler = AddressOf New ProtocolHandler(Me).HandleRequest
+
             Me.masterPort = master
             Me.uuid = uuid
             Me.closure = closure
 
             is_debug = debugPort > 0 OrElse debug
-            socket = New TcpServicesSocket(If(debugPort > 0, debugPort, IPCSocket.GetFirstAvailablePort))
-            socket.ResponseHandler = AddressOf New ProtocolHandler(Me).HandleRequest
 
+            ' loop until the socket run success?
+            socket = New TcpServicesSocket(If(debugPort > 0, debugPort, IPCSocket.GetFirstAvailablePort))
+            socket.ResponseHandler = protocol
+
+            Call New Thread(AddressOf socket.Run).Start()
             Call setStatus("initialized")
         End Sub
 
@@ -113,21 +118,27 @@ Namespace Context.RPC
         End Sub
 
         Public Function Run(process As RunSlavePipeline) As RunSlavePipeline
-            Dim wait As Action = folk(process)
+            Dim task As (background As Thread, wait As Action) = folk(process)
 
-            Call New Thread(AddressOf socket.Run).Start()
-
+            ' wait at this loop for wait slave node
+            ' initialize execute context environment
+            ' job done
             Do While Not [stop]
                 Call Thread.Sleep(1)
+
+                If task.background.ThreadState <> ThreadState.Running Then
+                    Exit Do
+                End If
             Loop
 
+            ' wait job done of running slave task
             Call socket.Dispose()
-            Call wait()
+            Call task.wait()
 
             Return process
         End Function
 
-        Private Function folk(process As RunSlavePipeline) As Action
+        Private Function folk(process As RunSlavePipeline) As (background As Thread, wait As Action)
             Dim thread As New Thread(
                 Sub()
                     If Not is_debug Then
@@ -142,24 +153,46 @@ Namespace Context.RPC
 
             Call setStatus("folk and wait slave node initializing")
             Call thread.Start()
+            Call Threading.Thread.Sleep(100)
 
-            Return Sub()
-                       Call setStatus("wait task running")
+            Dim wait As Action =
+                Sub()
+                    Call setStatus("wait task running")
 
-                       Do While thread.ThreadState = ThreadState.Running
-                           Call Thread.Sleep(1)
-                       Loop
+                    Do While thread.ThreadState = ThreadState.Running
+                        Call Thread.Sleep(1)
+                    Loop
 
-                       Call setStatus("job done!")
-                   End Sub
+                    Call setStatus("job done!")
+                End Sub
+
+            Return (thread, wait)
         End Function
 
+        ''' <summary>
+        ''' 2. and then send signal to notify this socket that 
+        ''' slave node has been initialized, and then shutdown
+        ''' this socket
+        ''' 
+        ''' 3. the slave node run task and request data from
+        ''' the remote environment
+        ''' </summary>
+        ''' <param name="request"></param>
+        ''' <param name="remoteAddress"></param>
+        ''' <returns></returns>
         <Protocol(Protocols.Stop)>
         Public Function stopSocket(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
             Me.stop = True
             Return New DataPipe("OK")
         End Function
 
+        ''' <summary>
+        ''' 1. the node run environment setup and initialization 
+        ''' at first via request this method
+        ''' </summary>
+        ''' <param name="request"></param>
+        ''' <param name="remoteAddress"></param>
+        ''' <returns></returns>
         <Protocol(Protocols.Initialize)>
         Public Function NodeSetup(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
             Dim payload As New List(Of Byte)
