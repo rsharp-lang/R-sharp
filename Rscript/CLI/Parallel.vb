@@ -50,6 +50,7 @@
 #End Region
 
 Imports System.ComponentModel
+Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -60,11 +61,23 @@ Imports SMRUCC.Rsharp.Interpreter
 Partial Module CLI
 
     <ExportAPI("--parallel")>
-    <Usage("--parallel --master <master_port> [--delegate <delegate_name>]")>
+    <Usage("--parallel --master <master_port> [--delegate <delegate_name> --redirect_stdout <logfile.txt>]")>
     <Description("Create a new parallel thread process for running a new parallel task.")>
     <Argument("--master", False, CLITypes.Integer, AcceptTypes:={GetType(Integer)}, Description:="the TCP port of the master node.")>
     Public Function parallelMode(args As CommandLine) As Integer
         Dim masterPort As Integer = args <= "--master"
+        Dim logfile As String = args <= "--redirect_stdout"
+
+        If Not logfile.StringEmpty Then
+            Dim stdout As StreamWriter = App.RedirectLogging(logfile)
+
+            Call App.AddExitCleanHook(
+                Sub()
+                    Call stdout.Flush()
+                    Call stdout.Close()
+                End Sub)
+        End If
+
         Dim delegateName As String = args("--delegate")
         Dim REngine As New RInterpreter
         Dim plugin As String = LibDLL.GetDllFile($"snowFall.dll", REngine.globalEnvir)
