@@ -140,10 +140,22 @@ Namespace Runtime.Internal.Object
             Next
         End Sub
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="type">
+        ''' <see cref="elementType"/>
+        ''' </param>
         Sub New(type As Type)
             Call Me.New(RType.GetRSharpType(type))
         End Sub
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="type">
+        ''' <see cref="elementType"/>
+        ''' </param>
         Sub New(type As RType)
             elementType = type
             slots = New Dictionary(Of String, Object)

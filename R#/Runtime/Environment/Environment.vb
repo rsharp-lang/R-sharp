@@ -235,6 +235,24 @@ Namespace Runtime
             Log4VB.redirectWarning = AddressOf redirectWarning
         End Sub
 
+        ''' <summary>
+        ''' context constructor for parallel task
+        ''' </summary>
+        ''' <param name="parent"></param>
+        ''' <param name="stackName"></param>
+        ''' <param name="symbols"></param>
+        ''' <param name="funcs"></param>
+        Friend Sub New(parent As Environment, stackName As String,
+                       symbols As IEnumerable(Of Symbol),
+                       funcs As IEnumerable(Of Symbol)
+            )
+
+            Call Me.New(parent, stackName)
+
+            Me.symbols = symbols.ToDictionary
+            Me.hiddenFunctions = funcs.ToDictionary
+        End Sub
+
         ''' <param name="isInherits">
         ''' If is inherits mode, then all of the modification in sub-environment will affects the <paramref name="parent"/> environment.
         ''' Otherwise, the modification in sub-environment will do nothing to the <paramref name="parent"/> environment.
@@ -577,16 +595,44 @@ Namespace Runtime
             End If
         End Function
 
-        Public Function enumerateFunctions() As IEnumerable(Of Symbol)
-            Dim list = funcSymbols.SafeQuery.Select(Function(fun) fun.Value).ToList
+        ''' <summary>
+        ''' get all function symbols based on the environment context lineage to the root environment
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function EnumerateAllFunctions() As IEnumerable(Of Symbol)
+            Dim list = funcSymbols.SafeQuery _
+                .Select(Function(fun) fun.Value) _
+                .ToList
 
             If Not parent Is Nothing Then
-                list.AddRange(parent.enumerateFunctions)
+                list.AddRange(parent.EnumerateAllFunctions)
             End If
 
             Return list.Distinct
         End Function
 
+        ''' <summary>
+        ''' get all symbols based on the environment context lineage to the root environment
+        ''' </summary>
+        ''' <returns>
+        ''' not includes the function symbols
+        ''' </returns>
+        Public Function EnumerateAllSymbols() As IEnumerable(Of Symbol)
+            Dim list = symbols.SafeQuery _
+                .Select(Function(fun) fun.Value) _
+                .ToList
+
+            If Not parent Is Nothing Then
+                list.AddRange(parent.EnumerateAllSymbols)
+            End If
+
+            Return list.Distinct
+        End Function
+
+        ''' <summary>
+        ''' get all symbols in current environment context 
+        ''' </summary>
+        ''' <returns></returns>
         Public Iterator Function GetEnumerator() As IEnumerator(Of Symbol) Implements IEnumerable(Of Symbol).GetEnumerator
             For Each var As Symbol In symbols.Values
                 Yield var

@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::155b641de1801a0dbb83cbff9035ff43, R-sharp\Rscript\CLI\Parallel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 43
-    '    Code Lines: 37
-    ' Comment Lines: 0
-    '   Blank Lines: 6
-    '     File Size: 1.78 KB
+' Summaries:
 
 
-    ' Module CLI
-    ' 
-    '     Function: parallelMode
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 43
+'    Code Lines: 37
+' Comment Lines: 0
+'   Blank Lines: 6
+'     File Size: 1.78 KB
+
+
+' Module CLI
+' 
+'     Function: parallelMode
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -60,6 +60,11 @@ Imports SMRUCC.Rsharp.Interpreter
 
 Partial Module CLI
 
+    ''' <summary>
+    ''' run parallel combine with the snowFall package
+    ''' </summary>
+    ''' <param name="args"></param>
+    ''' <returns></returns>
     <ExportAPI("--parallel")>
     <Usage("--parallel --master <master_port> [--delegate <delegate_name> --redirect_stdout <logfile.txt>]")>
     <Description("Create a new parallel thread process for running a new parallel task.")>
@@ -79,8 +84,13 @@ Partial Module CLI
         End If
 
         Dim delegateName As String = args("--delegate")
+        Dim SetDllDirectory As String = args("--SetDllDirectory")
         Dim REngine As New RInterpreter
         Dim plugin As String = LibDLL.GetDllFile($"snowFall.dll", REngine.globalEnvir)
+
+        If Not SetDllDirectory.StringEmpty Then
+            Call REngine.globalEnvir.options.setOption("SetDllDirectory", SetDllDirectory)
+        End If
 
         If plugin.FileExists Then
             Dim reference As NamedValue(Of String)
@@ -90,6 +100,13 @@ Partial Module CLI
             Else
                 reference = delegateName.GetTagValue("::")
             End If
+
+            Call REngine.LoadLibrary("base", silent:=False, ignoreMissingStartupPackages:=False)
+            Call REngine.LoadLibrary("utils", silent:=False, ignoreMissingStartupPackages:=False)
+            Call REngine.LoadLibrary("grDevices", silent:=False, ignoreMissingStartupPackages:=False)
+            Call REngine.LoadLibrary("math", silent:=False, ignoreMissingStartupPackages:=False)
+
+            Call Console.WriteLine()
 
             Call PackageLoader.ParsePackages(plugin) _
                 .Where(Function(pkg) pkg.namespace = reference.Name) _

@@ -1,8 +1,10 @@
-﻿Imports System.Runtime.CompilerServices
+﻿Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Parallel.Threads
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports anyObj = Microsoft.VisualBasic.Scripting
@@ -69,8 +71,39 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' </param>
         ''' <returns></returns>
         <Extension>
-        Public Function deepCloneContext(env As Environment) As Environment
-            Return env
+        Public Function deepCloneContext(env As Environment, tag As String) As Environment
+            Dim symbols As New Dictionary(Of String, Symbol)
+            Dim funcs As New Dictionary(Of String, Symbol)
+
+            ' modification of the symbol value
+            ' may not affect the parent environment context
+            '
+            ' the later order of the symbol it is, the more close to the root
+            ' environment context it does. the lower level symbol with the same
+            ' name could overloads the symbol in top level.
+            '
+            ' so we skip the symbols which we found that there is
+            ' already a symbol with the exactly same name in the hash
+            ' table
+            For Each symbol As Symbol In env.EnumerateAllSymbols
+                If Not symbols.ContainsKey(symbol.name) Then
+                    Call symbols.Add(symbol.name, symbol)
+                End If
+            Next
+            For Each symbol As Symbol In env.EnumerateAllFunctions
+                If Not funcs.ContainsKey(symbol.name) Then
+                    Call funcs.Add(symbol.name, symbol)
+                End If
+            Next
+
+            Dim context As New Environment(
+                parent:=env,
+                stackName:=$"parallel_task[{MethodBase.GetCurrentMethod.Name} ~ {tag}]",
+                symbols:=symbols.Values,
+                funcs:=funcs.Values
+            )
+
+            Return context
         End Function
 
         <Extension>
@@ -96,7 +129,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                             End Function) _
                     .ToArray
                 Dim task_id As Integer = ++i
-                Dim env As Environment = envir.deepCloneContext
+                Dim env As Environment = envir.deepCloneContext("parallel_task_group_" & task_id)
 
                 If verbose Then
                     Call println($"[task_queue] queue {task_id}...")
@@ -138,13 +171,14 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             For Each key As Object In list.Keys
                 Dim value As Object = list(key)
                 Dim index As Integer = ++i
-                Dim env As Environment = envir.deepCloneContext
+                Dim keyName As String = anyObj.ToString(key)
+                Dim env As Environment = envir.deepCloneContext(keyName)
 
                 Call host.RunTask(
                     Sub()
                         Dim result = (
                             i:=index,
-                            key:=anyObj.ToString(key),
+                            key:=keyName,
                             value:=apply.Invoke(env, invokeArgument(value, index))
                         )
 

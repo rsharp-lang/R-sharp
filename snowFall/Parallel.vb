@@ -214,7 +214,13 @@ Public Module Parallel
     ''' run parallel of R# expression
     ''' </summary>
     ''' <param name="task"></param>
-    ''' <param name="argv"></param>
+    ''' <param name="___argvSet_____">
+    ''' 
+    ''' due to the reason of some short parameter name may 
+    ''' conflict with the symbol name in script code, so 
+    ''' make a such long name in weird and strange string 
+    ''' pattern to avoid such bug.
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("parallel")>
@@ -223,25 +229,25 @@ Public Module Parallel
                              Optional debug As Boolean? = Nothing,
                              Optional ignoreError As Boolean? = Nothing,
                              <RListObjectArgument>
-                             Optional argv As list = Nothing,
+                             Optional ___argvSet_____ As list = Nothing,
                              Optional env As Environment = Nothing) As Object
 
         If debug Is Nothing Then
-            If argv.hasName("debug") Then
-                debug = argv.getValue(Of Boolean)("debug", env, [default]:=False)
+            If ___argvSet_____.hasName("debug") Then
+                debug = ___argvSet_____.getValue(Of Boolean)("debug", env, [default]:=False)
             Else
                 debug = False
             End If
         End If
         If ignoreError Is Nothing Then
-            If argv.hasName("ignoreError") Then
-                ignoreError = argv.getValue(Of Boolean)("ignoreError", env, [default]:=False)
+            If ___argvSet_____.hasName("ignoreError") Then
+                ignoreError = ___argvSet_____.getValue(Of Boolean)("ignoreError", env, [default]:=False)
             Else
                 ignoreError = False
             End If
         End If
 
-        Dim host As RunParallel = RunParallel.Initialize(task, argv, debug, env)
+        Dim host As RunParallel = RunParallel.Initialize(task, ___argvSet_____, debug, env)
         Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) = host.produceTask
         Dim engine As New ThreadTask(Of SeqValue(Of Object))(
             task:=taskList,
