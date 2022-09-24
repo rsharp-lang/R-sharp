@@ -93,6 +93,7 @@ Public Class RunParallel
         worker = R.FromEnvironment(App.HOME)
 
 #If NETCOREAPP Then
+        worker.SetDotNetCoreDll()
         worker.dotnetcoreApp = True
 #End If
     End Sub
