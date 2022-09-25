@@ -171,7 +171,7 @@ Namespace Context.RPC
                     ' Call process.Run()
                     ' Call Interaction.Shell(process.ToString, AppWinStyle.NormalFocus, Wait:=True)
                     Call task.Start()
-                    ' Call task.WaitForExit()
+                    Call task.WaitForExit()
                     ' End If
                 End Sub)
 
