@@ -142,8 +142,10 @@ Public Module Parallel
     <ExportAPI("slave")>
     Public Function runSlaveNode(port As Integer, Optional env As Environment = Nothing) As Object
         Dim req As New RequestStream(MasterContext.Protocol, RPC.Protocols.Initialize)
-        Dim resp = New TcpRequest(port).SendMessage(req)
+        Dim localMaster As String = LANTools.GetIPAddress.ToString
+        Dim resp = New TcpRequest(hostName:=localMaster, remotePort:=port).SendMessage(req)
 
+        Call Console.WriteLine($"[slave_task] master_host={localMaster}")
         Call Console.WriteLine($"[bootstrapping] bootstrap_port={port}!")
 
         Dim uuid As Integer = BitConverter.ToInt32(resp.ChunkBuffer, Scan0)
@@ -153,13 +155,14 @@ Public Module Parallel
         Call Console.WriteLine($"uuid={uuid}")
         Call Console.WriteLine($"remote_environment={masterPort}")
         Call Console.WriteLine($"task_body_size={size}")
+        Call New TcpRequest(localMaster, port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
 
         Dim buffer As Byte() = New Byte(size - 1) {}
         Dim closure As Expression = Nothing
         Dim result As ResultPayload = Nothing
         Dim root As New RemoteEnvironment(
             uuid:=uuid,
-            master:=IPEndPoint.CreateLocal(masterPort),
+            master:=IPEndPoint.CreateLocal(masterPort, host:=localMaster),
             parent:=env
         )
 
@@ -208,9 +211,7 @@ Public Module Parallel
             Call Console.WriteLine()
         End If
 
-        Call New TcpRequest(masterPort).SendMessage(req)
-        Call New TcpRequest(port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
-
+        Call New TcpRequest(localMaster, masterPort).SendMessage(req)
         Call Console.WriteLine("exit!")
 
         Return 0
