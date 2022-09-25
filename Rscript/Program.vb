@@ -137,9 +137,19 @@ Module Program
         Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
         Dim SetDllDirectory As String = args("--SetDllDirectory")
         Dim redirectConsoleLog As String = args("--redirect_stdout")
+        Dim redirectErrorLog As String = args("--redirect_stderr")
 
         If Not redirectConsoleLog.StringEmpty Then
             Dim text = App.RedirectLogging(redirectConsoleLog)
+
+            Call App.AddExitCleanHook(
+                Sub()
+                    Call text.Flush()
+                    Call text.Close()
+                End Sub)
+        End If
+        If Not redirectErrorLog.StringEmpty Then
+            Dim text = App.RedirectErrLogging(redirectErrorLog)
 
             Call App.AddExitCleanHook(
                 Sub()
