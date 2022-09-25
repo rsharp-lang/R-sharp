@@ -86,8 +86,13 @@ Public Class RunParallel
     Public Property size As Integer
     Public ReadOnly Property worker As R
     Public Property task As Byte()
+    ''' <summary>
+    ''' set port number for slave node bootstrap socket
+    ''' </summary>
+    ''' <returns></returns>
     Public Property debugPort As Integer = -1
     Public Property debug As Boolean = False
+    Public Property slaveDebug As Boolean = False
 
     Private Sub New()
         worker = R.FromEnvironment(App.HOME)
@@ -126,6 +131,10 @@ Public Class RunParallel
         Call bootstrap.Run(process)
         Call getResult(uuid:=index, result)
 
+        If slaveDebug Then
+            Call App.Pause()
+        End If
+
         Return result
     End Function
 
@@ -133,6 +142,21 @@ Public Class RunParallel
         result = master.pop(uuid)
     End Sub
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="task"></param>
+    ''' <param name="argv">
+    ''' there are some additional parameter in this object list that can be config:
+    ''' 
+    ''' 1. ``debug``: set true for open debug mode
+    ''' 2. ``master``: set the tcp port of the master node
+    ''' 3. ``bootstrap``: set the bootstrap tcp port of the slave node
+    ''' 4. ``slaveDebug``: set this option to pause will make the master node pause when run a new salve node for run debug
+    ''' </param>
+    ''' <param name="debug"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Public Shared Function Initialize(task As Expression, argv As list, debug As Boolean, env As Environment) As RunParallel
         Dim parallelBase As New MasterContext(
             env:=env,
@@ -170,7 +194,8 @@ Public Class RunParallel
                 .size = checkSize(Scan0),
                 .task = taskPayload.ToArray,
                 .debugPort = argv.getValue("bootstrap", env, -1),
-                .debug = debug
+                .debug = debug,
+                .slaveDebug = argv.getValue("slaveDebug", env, False)
             }
         End If
     End Function

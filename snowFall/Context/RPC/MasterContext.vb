@@ -109,7 +109,9 @@ Namespace Context.RPC
         ''' <param name="env">
         ''' the R# context environment
         ''' </param>
-        ''' <param name="port"></param>
+        ''' <param name="port">
+        ''' the master tcp port
+        ''' </param>
         Sub New(env As Environment, Optional port As Integer = -1, Optional verbose As Boolean = False)
             Me.port = If(port <= 0, IPCSocket.GetFirstAvailablePort, port)
             Me.env = New Environment(env, "snowfall-parallel@master", isInherits:=False)

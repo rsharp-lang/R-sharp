@@ -85,6 +85,16 @@ Namespace Context.RPC
         Dim [stop] As Boolean = False
         Dim status2 As String
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="uuid"></param>
+        ''' <param name="master"></param>
+        ''' <param name="closure"></param>
+        ''' <param name="debugPort">
+        ''' [debug_only] the tcp port of this services socket.
+        ''' </param>
+        ''' <param name="debug"></param>
         Sub New(uuid As Integer, master As Integer, closure As Byte(),
                 Optional debugPort As Integer = -1,
                 Optional debug As Boolean = False)

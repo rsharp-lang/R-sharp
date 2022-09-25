@@ -221,6 +221,12 @@ Public Module Parallel
     ''' </summary>
     ''' <param name="task"></param>
     ''' <param name="___argvSet_____">
+    ''' there are some additional parameter in this object list that can be config:
+    ''' 
+    ''' 1. ``debug``: set true for open debug mode
+    ''' 2. ``master``: set the tcp port of the master node
+    ''' 3. ``bootstrap``: set the bootstrap tcp port of the slave node
+    ''' 4. ``slaveDebug``: set this option to pause will make the master node pause when run a new salve node for run debug
     ''' 
     ''' due to the reason of some short parameter name may 
     ''' conflict with the symbol name in script code, so 
