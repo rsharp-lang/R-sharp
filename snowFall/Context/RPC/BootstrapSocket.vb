@@ -156,12 +156,22 @@ Namespace Context.RPC
         End Function
 
         Private Function folk(process As RunSlavePipeline) As (background As Thread, wait As Action)
+            Dim task As New Process With {
+                .StartInfo = New ProcessStartInfo With {
+                    .Arguments = process.Arguments,
+                    .FileName = "dotnet",
+                    .UseShellExecute = True
+                }
+            }
             Dim thread As New Thread(
                 Sub()
-                    If Not is_debug Then
-                        Call Thread.Sleep(500)
-                        Call process.Run()
-                    End If
+                    ' If Not is_debug Then
+                    Call Thread.Sleep(500)
+                    ' Call process.Run()
+                    ' Call Interaction.Shell(process.ToString, AppWinStyle.NormalFocus, Wait:=True)
+                    Call task.Start()
+                    ' Call task.WaitForExit()
+                    ' End If
                 End Sub)
 
             If is_debug Then
