@@ -136,6 +136,17 @@ Module Program
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
         Dim SetDllDirectory As String = args("--SetDllDirectory")
+        Dim redirectConsoleLog As String = args("--redirect_stdout")
+
+        If Not redirectConsoleLog.StringEmpty Then
+            Dim text = App.RedirectLogging(redirectConsoleLog)
+
+            Call App.AddExitCleanHook(
+                Sub()
+                    Call text.Flush()
+                    Call text.Close()
+                End Sub)
+        End If
 
         If args("--debug") Then
             R.debug = True
