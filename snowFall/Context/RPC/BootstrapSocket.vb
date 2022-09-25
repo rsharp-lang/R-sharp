@@ -81,6 +81,7 @@ Namespace Context.RPC
         ReadOnly uuid As Integer
         ReadOnly masterPort As Integer
         ReadOnly is_debug As Boolean = False
+        ReadOnly slave_debug As Boolean = False
 
         Dim [stop] As Boolean = False
         Dim status2 As String
@@ -97,13 +98,15 @@ Namespace Context.RPC
         ''' <param name="debug"></param>
         Sub New(uuid As Integer, master As Integer, closure As Byte(),
                 Optional debugPort As Integer = -1,
-                Optional debug As Boolean = False)
+                Optional debug As Boolean = False,
+                Optional slave_debug As Boolean = False)
 
             Dim protocol As DataRequestHandler = AddressOf New ProtocolHandler(Me).HandleRequest
 
             Me.masterPort = master
             Me.uuid = uuid
             Me.closure = closure
+            Me.slave_debug = slave_debug
 
             is_debug = debugPort > 0 OrElse debug
 
@@ -140,6 +143,10 @@ Namespace Context.RPC
                     Exit Do
                 End If
             Loop
+
+            If slave_debug Then
+                Call App.Pause()
+            End If
 
             ' wait job done of running slave task
             Call socket.Dispose()

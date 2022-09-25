@@ -118,7 +118,7 @@ Public Class RunParallel
     ''' <returns></returns>
     Public Function taskFactory(index As Integer) As Object
         Dim result As Object = Nothing
-        Dim bootstrap As New BootstrapSocket(index, master.port, Me.task, debugPort, debug:=debug)
+        Dim bootstrap As New BootstrapSocket(index, master.port, Me.task, debugPort, debug:=debug, slave_debug:=slaveDebug)
         Dim tempfile As String = If(debug, TempFileSystem.GetAppSysTempFile(".log", $"{App.PID}.{bootstrap.GetHashCode}.{index}", $"task_{index}___-"), Nothing)
         Dim task As String = worker.GetparallelModeCommandLine(bootstrap.port, [delegate]:="Parallel::slave", redirect_stdout:=tempfile)
         Dim SetDllDirectory As String = master.env.globalEnvironment.options.getOption("SetDllDirectory") Or App.HOME.AsDefault
@@ -130,10 +130,6 @@ Public Class RunParallel
 
         Call bootstrap.Run(process)
         Call getResult(uuid:=index, result)
-
-        If slaveDebug Then
-            Call App.Pause()
-        End If
 
         Return result
     End Function

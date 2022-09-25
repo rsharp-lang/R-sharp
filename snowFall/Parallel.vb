@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::590facdcabe9f0bb92f946bef09cb8f7, R-sharp\snowFall\Parallel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 251
-    '    Code Lines: 178
-    ' Comment Lines: 40
-    '   Blank Lines: 33
-    '     File Size: 9.18 KB
+' Summaries:
 
 
-    ' Module Parallel
-    ' 
-    '     Function: detectCores, makeCluster, parallel, produceTask, runSlaveNode
-    '               snowFall, worker
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 251
+'    Code Lines: 178
+' Comment Lines: 40
+'   Blank Lines: 33
+'     File Size: 9.18 KB
+
+
+' Module Parallel
+' 
+'     Function: detectCores, makeCluster, parallel, produceTask, runSlaveNode
+'               snowFall, worker
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -142,11 +142,13 @@ Public Module Parallel
     <ExportAPI("slave")>
     Public Function runSlaveNode(port As Integer, Optional env As Environment = Nothing) As Object
         Dim req As New RequestStream(MasterContext.Protocol, RPC.Protocols.Initialize)
-        Dim localMaster As String = LANTools.GetIPAddress.ToString
-        Dim resp = New TcpRequest(hostName:=localMaster, remotePort:=port).SendMessage(req)
+        Dim localMaster As String = env.globalEnvironment.options.getOption("localMaster", LANTools.GetIPAddress.ToString, env)
+        Dim resp As RequestStream
 
         Call Console.WriteLine($"[slave_task] master_host={localMaster}")
         Call Console.WriteLine($"[bootstrapping] bootstrap_port={port}!")
+
+        resp = New TcpRequest(hostName:=localMaster, remotePort:=port).SendMessage(req)
 
         Dim uuid As Integer = BitConverter.ToInt32(resp.ChunkBuffer, Scan0)
         Dim masterPort As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 4)
@@ -155,7 +157,6 @@ Public Module Parallel
         Call Console.WriteLine($"uuid={uuid}")
         Call Console.WriteLine($"remote_environment={masterPort}")
         Call Console.WriteLine($"task_body_size={size}")
-        Call New TcpRequest(localMaster, port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
 
         Dim buffer As Byte() = New Byte(size - 1) {}
         Dim closure As Expression = Nothing
@@ -212,6 +213,7 @@ Public Module Parallel
         End If
 
         Call New TcpRequest(localMaster, masterPort).SendMessage(req)
+        Call New TcpRequest(localMaster, port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
         Call Console.WriteLine("exit!")
 
         Return 0

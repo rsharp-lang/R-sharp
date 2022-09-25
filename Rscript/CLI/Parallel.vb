@@ -66,12 +66,13 @@ Partial Module CLI
     ''' <param name="args"></param>
     ''' <returns></returns>
     <ExportAPI("--parallel")>
-    <Usage("--parallel --master <master_port> [--delegate <delegate_name> --redirect_stdout <logfile.txt>]")>
+    <Usage("--parallel --master <master_port> [--host <localhost> --delegate <delegate_name> --redirect_stdout <logfile.txt>]")>
     <Description("Create a new parallel thread process for running a new parallel task.")>
     <Argument("--master", False, CLITypes.Integer, AcceptTypes:={GetType(Integer)}, Description:="the TCP port of the master node.")>
     Public Function parallelMode(args As CommandLine) As Integer
         Dim masterPort As Integer = args <= "--master"
         Dim logfile As String = args <= "--redirect_stdout"
+        Dim hostName As String = args("--host")
 
         If Not logfile.StringEmpty Then
             Dim stdout As StreamWriter = App.RedirectLogging(logfile)
@@ -90,6 +91,9 @@ Partial Module CLI
 
         If Not SetDllDirectory.StringEmpty Then
             Call REngine.globalEnvir.options.setOption("SetDllDirectory", SetDllDirectory)
+        End If
+        If Not hostName.StringEmpty Then
+            Call REngine.globalEnvir.options.setOption("localMaster", hostName)
         End If
 
         If plugin.FileExists Then
