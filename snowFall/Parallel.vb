@@ -133,6 +133,12 @@ Public Module Parallel
         }
     End Function
 
+    ''' <summary>
+    ''' run slave pipeline task on this new folked sub-process
+    ''' </summary>
+    ''' <param name="port"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("slave")>
     Public Function runSlaveNode(port As Integer, Optional env As Environment = Nothing) As Object
         Dim req As New RequestStream(MasterContext.Protocol, RPC.Protocols.Initialize)

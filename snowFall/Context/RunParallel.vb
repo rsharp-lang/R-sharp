@@ -114,7 +114,8 @@ Public Class RunParallel
     Public Function taskFactory(index As Integer) As Object
         Dim result As Object = Nothing
         Dim bootstrap As New BootstrapSocket(index, master.port, Me.task, debugPort, debug:=debug)
-        Dim task As String = worker.GetparallelModeCommandLine(bootstrap.port, [delegate]:="Parallel::slave")
+        Dim tempfile As String = If(debug, TempFileSystem.GetAppSysTempFile(".log", $"{App.PID}.{bootstrap.GetHashCode}.{index}", $"task_{index}___-"), Nothing)
+        Dim task As String = worker.GetparallelModeCommandLine(bootstrap.port, [delegate]:="Parallel::slave", redirect_stdout:=tempfile)
         Dim SetDllDirectory As String = master.env.globalEnvironment.options.getOption("SetDllDirectory") Or App.HOME.AsDefault
         Dim process As RunSlavePipeline = worker.CreateSlave($"{task} --SetDllDirectory {SetDllDirectory.CLIPath}")
 
