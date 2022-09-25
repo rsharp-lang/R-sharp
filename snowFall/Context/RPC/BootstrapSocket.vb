@@ -115,6 +115,7 @@ Namespace Context.RPC
             socket.ResponseHandler = protocol
 
             Call New Thread(AddressOf socket.Run).Start()
+            Call Thread.Sleep(300)
             Call setStatus("initialized")
         End Sub
 
@@ -180,7 +181,7 @@ Namespace Context.RPC
 
             Call setStatus("folk and wait slave node initializing")
             Call thread.Start()
-            Call Threading.Thread.Sleep(100)
+            Call Threading.Thread.Sleep(1000)
 
             Dim wait As Action =
                 Sub()
