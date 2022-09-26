@@ -189,7 +189,9 @@ Namespace Language.Syntax.SyntaxParser
             If code = 1 Then
                 Dim item As Token() = code(Scan0)
 
-                If item.isLiteral Then
+                If item.isVectorLoop Then
+                    Return New VectorLoop(New SymbolReference(item(Scan0)), New SymbolReference(item(2).text.Trim("@"c)))
+                ElseIf item.isLiteral Then
                     Return SyntaxImplements.LiteralSyntax(item(Scan0), opts)
                 ElseIf item.isIdentifier Then
                     Return New SymbolReference(item(Scan0))

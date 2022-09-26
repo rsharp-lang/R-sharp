@@ -228,7 +228,7 @@ bitmap(file = `./network.png`) %do% {
     End Sub
 
     Sub index2222()
-        Dim exp = R.Parse("a@{b}")
+        Dim exp = R.Parse("allrows@{name};")
 
         Pause()
     End Sub

@@ -337,6 +337,17 @@ Namespace Language.Syntax.SyntaxParser
             End If
         End Function
 
+        <Extension>
+        Public Function isVectorLoop(tokens As Token()) As Boolean
+            If tokens(0).name = TokenType.identifier OrElse tokens(0).name = TokenType.keyword Then
+                If tokens(1).name = TokenType.open AndAlso tokens(3).name = TokenType.close Then
+                    Return tokens(2).name = TokenType.annotation
+                End If
+            End If
+
+            Return False
+        End Function
+
         ''' <summary>
         ''' XXX
         ''' </summary>
