@@ -80,6 +80,7 @@ Namespace Context.RPC
         ''' symbols list that which is missing from the master node
         ''' </summary>
         ReadOnly missing404 As New Index(Of String)
+        ReadOnly verbose As Boolean = False
 
         Sub New(uuid As Integer, master As IPEndPoint, parent As Environment)
             Call MyBase.New(
@@ -109,11 +110,8 @@ Namespace Context.RPC
                 missingOnMaster = name Like missing404
             End SyncLock
 
-            If Not missingOnMaster Then
-                Call Console.WriteLine($"try find symbol: {name}")
-            End If
-
             If local Is Nothing AndAlso Not missingOnMaster Then
+                Call Console.WriteLine($"try find symbol: {name}")
                 Call Console.WriteLine($"but not exists on local or cache...")
                 Call Console.WriteLine($"request symbol '{name}' from master!")
 
