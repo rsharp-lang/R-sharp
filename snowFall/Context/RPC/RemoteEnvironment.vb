@@ -109,7 +109,9 @@ Namespace Context.RPC
                 missingOnMaster = name Like missing404
             End SyncLock
 
-            Call Console.WriteLine($"try find symbol: {name}")
+            If Not missingOnMaster Then
+                Call Console.WriteLine($"try find symbol: {name}")
+            End If
 
             If local Is Nothing AndAlso Not missingOnMaster Then
                 Call Console.WriteLine($"but not exists on local or cache...")
