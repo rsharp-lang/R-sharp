@@ -132,15 +132,15 @@ Namespace Context.RPC
         End Sub
 
         Public Function Run(process As RunSlavePipeline) As RunSlavePipeline
-            Dim task As (background As Thread, wait As Action) = folk(process)
+            Dim task As (background As Thread, wait As Action, Task As Process) = folk(process)
 
             ' wait at this loop for wait slave node
             ' initialize execute context environment
             ' job done
             Do While Not [stop]
-                Call Thread.Sleep(1)
+                Call Thread.Sleep(100)
 
-                If task.background.ThreadState <> ThreadState.Running Then
+                If task.Task.HasExited Then
                     Exit Do
                 End If
             Loop
@@ -156,7 +156,7 @@ Namespace Context.RPC
             Return process
         End Function
 
-        Private Function folk(process As RunSlavePipeline) As (background As Thread, wait As Action)
+        Private Function folk(process As RunSlavePipeline) As (background As Thread, wait As Action, Task As Process)
             Dim task As New Process With {
                 .StartInfo = New ProcessStartInfo With {
                     .Arguments = process.Arguments,
@@ -187,14 +187,14 @@ Namespace Context.RPC
                 Sub()
                     Call setStatus("wait task running")
 
-                    Do While thread.ThreadState = ThreadState.Running
-                        Call Thread.Sleep(1)
+                    Do While Not task.HasExited
+                        Call Thread.Sleep(100)
                     Loop
 
                     Call setStatus("job done!")
                 End Sub
 
-            Return (thread, wait)
+            Return (thread, wait, task)
         End Function
 
         ''' <summary>
