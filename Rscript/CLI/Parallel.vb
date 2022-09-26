@@ -109,6 +109,7 @@ Partial Module CLI
             Call REngine.LoadLibrary("utils", silent:=False, ignoreMissingStartupPackages:=False)
             Call REngine.LoadLibrary("grDevices", silent:=False, ignoreMissingStartupPackages:=False)
             Call REngine.LoadLibrary("math", silent:=False, ignoreMissingStartupPackages:=False)
+            Call REngine.LoadLibrary("stats", silent:=False, ignoreMissingStartupPackages:=False)
 
             Call Console.WriteLine()
 
