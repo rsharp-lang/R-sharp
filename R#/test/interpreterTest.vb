@@ -227,7 +227,14 @@ bitmap(file = `./network.png`) %do% {
         Pause()
     End Sub
 
+    Sub index2222()
+        Dim exp = R.Parse("a@{b}")
+
+        Pause()
+    End Sub
+
     Sub Main()
+        Call index2222()
         Call simpleSymbolIndexTest()
 
         Call multipleIfElse()

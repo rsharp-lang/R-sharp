@@ -43,7 +43,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Sub
 
         Public Overrides Function ToString() As String
-            Return $"{symbol}@{index}"
+            If TypeOf index Is Literal Then
+                Return $"{symbol}@{index}"
+            Else
+                Return $"{symbol}@{{{index}}}"
+            End If
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
