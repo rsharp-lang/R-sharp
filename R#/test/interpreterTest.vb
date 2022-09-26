@@ -229,6 +229,7 @@ bitmap(file = `./network.png`) %do% {
 
     Sub index2222()
         Dim exp = R.Parse("allrows@{name};")
+        Dim exp2 = R.Parse("if (flag) {aaa;  } else { bbb;}")
 
         Pause()
     End Sub
