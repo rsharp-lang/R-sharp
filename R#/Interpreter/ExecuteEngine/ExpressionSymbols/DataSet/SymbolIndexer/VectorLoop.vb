@@ -12,13 +12,23 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
     ''' the perl syntax:
     ''' 
     ''' ``list@name`` means ``sapply(list, x -> x$name);``
-    ''' 
+    ''' ``list@{name}`` means ``sapply(list, x -> x[[name]]);``
     ''' </summary>
     Public Class VectorLoop : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
 
+        ''' <summary>
+        ''' the target member name
+        ''' 
+        ''' should be string literal or a symbol reference 
+        ''' expression produce the variable name
+        ''' </summary>
         Friend ReadOnly index As Expression
+        ''' <summary>
+        ''' target list symbol that will extract vector data
+        ''' from it
+        ''' </summary>
         Friend symbol As Expression
 
         Public Overrides ReadOnly Property expressionName As ExpressionTypes
