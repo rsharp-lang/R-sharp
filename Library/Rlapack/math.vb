@@ -450,20 +450,37 @@ Module math
     End Function
 
     ''' <summary>
+    ''' cast the list data dump from the R ``lm`` result
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <returns></returns>
+    <ExportAPI("as.lm_call")>
+    Public Function asLmcall(x As list) As lmCall
+        Return source.fromRlmSource(source:=x)
+    End Function
+
+    ''' <summary>
     ''' ### Fitting Linear Models
     ''' 
-    ''' do linear modelling, lm is used to fit linear models. It can be used to carry out regression, 
-    ''' single stratum analysis of variance and analysis of covariance (although aov may provide a 
-    ''' more convenient interface for these).
+    ''' do linear modelling, lm is used to fit linear models. It can be used 
+    ''' to carry out regression, single stratum analysis of variance and 
+    ''' analysis of covariance (although aov may provide a more convenient 
+    ''' interface for these).
     ''' </summary>
-    ''' <param name="formula">a formula expression of the target expression</param>
-    ''' <param name="data">A dataframe for provides the data source for doing the linear modelling.</param>
+    ''' <param name="formula">
+    ''' a formula expression of the target expression
+    ''' </param>
+    ''' <param name="data">
+    ''' A dataframe for provides the data source for doing the linear modelling.
+    ''' </param>
     ''' <param name="weights">
-    ''' A numeric vector for provides weight value for the points in the linear modelling processing.
+    ''' A numeric vector for provides weight value for the points 
+    ''' in the linear modelling processing.
     ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("lm")>
+    <RApiReturn(GetType(lmCall))>
     Public Function lm(formula As FormulaExpression, data As Object,
                        <RRawVectorArgument>
                        Optional weights As Object = Nothing,
