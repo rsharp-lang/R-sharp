@@ -253,7 +253,8 @@ Namespace Development.CommandLine
                 TypeOf expr Is ScriptSymbol OrElse
                 TypeOf expr Is BreakPoint OrElse
                 TypeOf expr Is Regexp OrElse
-                TypeOf expr Is ContinuteFor Then
+                TypeOf expr Is ContinuteFor OrElse
+                TypeOf expr Is VectorLoop Then
 
                 Return
             End If
@@ -303,6 +304,10 @@ Namespace Development.CommandLine
                 Call AnalysisTree(member.Value, attrs)
             Next
         End Sub
+
+        'Private Sub analysisTree(expr As VectorLoop, attrs As ArgumentInfo)
+        '    ' do nothing
+        'End Sub
 
         Private Sub analysisTree(expr As ByRefFunctionCall, attrs As ArgumentInfo)
             Call AnalysisTree(expr.funcRef, attrs)
