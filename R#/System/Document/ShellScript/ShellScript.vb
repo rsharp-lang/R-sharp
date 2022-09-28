@@ -254,7 +254,8 @@ Namespace Development.CommandLine
                 TypeOf expr Is BreakPoint OrElse
                 TypeOf expr Is Regexp OrElse
                 TypeOf expr Is ContinuteFor OrElse
-                TypeOf expr Is VectorLoop Then
+                TypeOf expr Is VectorLoop OrElse
+                TypeOf expr Is TryCatchExpression Then
 
                 Return
             End If
