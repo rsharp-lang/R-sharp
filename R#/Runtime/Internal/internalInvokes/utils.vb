@@ -60,6 +60,7 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Threading
 Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Parsers
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -1153,6 +1154,11 @@ Read ""Writing R Extensions"" for more information.".SaveTo($"{root}/Read-and-de
                                   Optional unzip As String = "internal",
                                   Optional setTimes As Boolean = False) As Object
 
+            Call Zip.UnZip.ImprovedExtractToDirectory(
+                sourceArchiveFileName:=zipfile,
+                destinationDirectoryName:=exdir,
+                overwriteMethod:=If(overwrite, Zip.Overwrite.Always, Zip.Overwrite.Never)
+            )
         End Function
     End Module
 End Namespace
