@@ -1159,6 +1159,8 @@ Read ""Writing R Extensions"" for more information.".SaveTo($"{root}/Read-and-de
                 destinationDirectoryName:=exdir,
                 overwriteMethod:=If(overwrite, Zip.Overwrite.Always, Zip.Overwrite.Never)
             )
+
+            Return Nothing
         End Function
     End Module
 End Namespace
