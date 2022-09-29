@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::00050aff3bd8f73c5bf609f64f7c654d, R-sharp\R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1024
-    '    Code Lines: 551
-    ' Comment Lines: 380
-    '   Blank Lines: 93
-    '     File Size: 49.36 KB
+' Summaries:
 
 
-    '     Module utils
-    ' 
-    '         Function: createAlternativeName, createCommandLine, createTimespan, data, dataSearchByPackageDir
-    '                   debugTool, description, FindSystemFile, GetInstalledPackages, head
-    '                   installPackages, keyGroups, md5, memorySize, now
-    '                   package_skeleton, readFile, system, systemFile, wget
-    '                   workdir
-    ' 
-    '         Sub: cls, pause, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1024
+'    Code Lines: 551
+' Comment Lines: 380
+'   Blank Lines: 93
+'     File Size: 49.36 KB
+
+
+'     Module utils
+' 
+'         Function: createAlternativeName, createCommandLine, createTimespan, data, dataSearchByPackageDir
+'                   debugTool, description, FindSystemFile, GetInstalledPackages, head
+'                   installPackages, keyGroups, md5, memorySize, now
+'                   package_skeleton, readFile, system, systemFile, wget
+'                   workdir
+' 
+'         Sub: cls, pause, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -1077,6 +1077,82 @@ Read ""Writing R Extensions"" for more information.".SaveTo($"{root}/Read-and-de
             Call Console.WriteLine($"Further steps are described in '{$"{root}/Read-and-delete-me".GetFullPath}'.")
 
             Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' ### Extract or List Zip Archives
+        ''' 
+        ''' Extract files from or list a zip archive.
+        ''' </summary>
+        ''' <param name="zipfile">
+        ''' The pathname of the zip file: tilde expansion (see 
+        ''' path.expand) will be performed.
+        ''' </param>
+        ''' <param name="files">
+        ''' A character vector of recorded filepaths to be extracted: 
+        ''' the default is to extract all files.
+        ''' </param>
+        ''' <param name="list">
+        ''' If TRUE, list the files and extract none. The 
+        ''' equivalent of unzip -l.
+        ''' </param>
+        ''' <param name="overwrite">
+        ''' If TRUE, overwrite existing files (the equivalent of unzip -o),
+        ''' otherwise ignore such files (the equivalent of unzip -n).
+        ''' </param>
+        ''' <param name="junkpaths">
+        ''' If TRUE, use only the basename of the stored filepath when 
+        ''' extracting. The equivalent of unzip -j.
+        ''' </param>
+        ''' <param name="exdir">
+        ''' The directory to extract files to (the equivalent of unzip -d). 
+        ''' It will be created if necessary.
+        ''' </param>
+        ''' <param name="unzip">
+        ''' The method to be used. An alternative is to use getOption("unzip"),
+        ''' which on a Unix-alike may be set to the path to a unzip program.
+        ''' </param>
+        ''' <param name="setTimes">
+        ''' logical. For the internal method only, should the file times be set 
+        ''' based on the times in the zip file? (NB: this applies to included 
+        ''' files, not to directories.)
+        ''' </param>
+        ''' <returns>
+        ''' If list = TRUE, a data frame with columns Name (character) Length 
+        ''' (the size of the uncompressed file, numeric) and Date (of class
+        ''' "POSIXct").
+        ''' Otherwise for the "internal" method, a character vector of the 
+        ''' filepaths extracted to, invisibly.
+        ''' </returns>
+        ''' <remarks>
+        ''' The default internal method is a minimal implementation, principally 
+        ''' designed for Windows' users to be able to unpack Windows binary 
+        ''' packages without external software. It does not (for example) support 
+        ''' Unicode filenames as introduced in zip 3.0: for that use unzip = 
+        ''' "unzip" with unzip 6.00 or later. It does have some support for bzip2 
+        ''' compression and > 2GB zip files (but not >= 4GB files pre-compression 
+        ''' contained in a zip file: like many builds of unzip it may truncate 
+        ''' these, in R's case with a warning if possible).
+        ''' If unzip specifies a program, the format of the dates listed with 
+        ''' list = TRUE is unknown (on Windows it can even depend on the current
+        ''' locale) and the return values could be NA or expressed in the wrong 
+        ''' time zone or misinterpreted (the latter being far less likely as from 
+        ''' unzip 6.00).
+        ''' File times in zip files are stored in the style of MS-DOS, as local 
+        ''' times to an accuracy of 2 seconds. This is not very useful when transferring 
+        ''' zip files between machines (even across continents), so we chose not 
+        ''' to restore them by default.
+        ''' </remarks>
+        <ExportAPI("unzip")>
+        Public Function unzipFile(zipfile As String,
+                                  Optional files As Object = null,
+                                  Optional list As Boolean = False,
+                                  Optional overwrite As Boolean = True,
+                                  Optional junkpaths As Boolean = False,
+                                  Optional exdir As String = ".",
+                                  Optional unzip As String = "internal",
+                                  Optional setTimes As Boolean = False) As Object
+
         End Function
     End Module
 End Namespace
