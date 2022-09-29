@@ -100,7 +100,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Return getPackageApiImpl(envir, [namespace], symbol)
         End Function
 
-        Private Shared Function getFuncNameSymbolText(funcNameSymbol As Expression, env As Environment) As Object
+        Friend Shared Function getFuncNameSymbolText(funcNameSymbol As Expression, env As Environment) As Object
             Select Case funcNameSymbol.GetType
                 Case GetType(Literal)
                     Return DirectCast(funcNameSymbol, Literal).value

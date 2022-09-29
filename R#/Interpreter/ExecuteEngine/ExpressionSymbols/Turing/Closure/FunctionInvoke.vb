@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::942c1edca472216f2df3690424f20ec7, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 417
-    '    Code Lines: 255
-    ' Comment Lines: 116
-    '   Blank Lines: 46
-    '     File Size: 17.10 KB
+' Summaries:
 
 
-    '     Class FunctionInvoke
-    ' 
-    '         Properties: [namespace], expressionName, funcName, parameters, stackFrame
-    '                     type
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: allIsValueAssign, CheckInvoke, doInvokeFuncVar, EnumerateInvokedParameters, Evaluate
-    '                   (+2 Overloads) GetFunctionVar, getFuncVar, HandleResult, invokeRInternal, runOptions
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 417
+'    Code Lines: 255
+' Comment Lines: 116
+'   Blank Lines: 46
+'     File Size: 17.10 KB
+
+
+'     Class FunctionInvoke
+' 
+'         Properties: [namespace], expressionName, funcName, parameters, stackFrame
+'                     type
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: allIsValueAssign, CheckInvoke, doInvokeFuncVar, EnumerateInvokedParameters, Evaluate
+'                   (+2 Overloads) GetFunctionVar, getFuncVar, HandleResult, invokeRInternal, runOptions
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -308,6 +308,23 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         [namespace]:=[namespace],
                         funcNameSymbol:=funcName
                     )
+                Else
+                    Dim funcStr As Object = NamespaceFunctionSymbolReference.getFuncNameSymbolText(funcName, envir)
+
+                    If TypeOf funcStr Is Message Then
+                        Return funcStr
+                    End If
+
+                    ' .Internal::function
+                    ' means should found the function from the internal
+                    ' base environment directly
+                    Dim method As RMethodInfo = Internal.invoke.getFunction(funcStr)
+
+                    If method Is Nothing Then
+                        Return Message.SymbolNotFound(envir, funcStr, TypeCodes.closure)
+                    Else
+                        Return method
+                    End If
                 End If
             End If
 
