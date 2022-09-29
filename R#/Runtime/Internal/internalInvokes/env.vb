@@ -457,13 +457,15 @@ Namespace Runtime.Internal.Invokes
                 Return New ExceptionData With {
                     .StackTrace = debug.getEnvironmentStack(env),
                     .Message = {"n/a"},
-                    .TypeFullName = "n/a"
+                    .TypeFullName = "n/a",
+                    .Source = ""
                 }
             Else
                 Return New ExceptionData With {
                     .StackTrace = exception.environmentStack,
                     .Message = exception.message,
-                    .TypeFullName = GetType(Message).FullName
+                    .TypeFullName = GetType(Message).FullName,
+                    .Source = exception.source.ToString
                 }
             End If
         End Function
