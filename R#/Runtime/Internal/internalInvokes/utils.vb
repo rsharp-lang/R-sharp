@@ -1146,7 +1146,7 @@ Read ""Writing R Extensions"" for more information.".SaveTo($"{root}/Read-and-de
         ''' </remarks>
         <ExportAPI("unzip")>
         Public Function unzipFile(zipfile As String,
-                                  Optional files As Object = null,
+                                  Optional files As Object = Nothing,
                                   Optional list As Boolean = False,
                                   Optional overwrite As Boolean = True,
                                   Optional junkpaths As Boolean = False,
