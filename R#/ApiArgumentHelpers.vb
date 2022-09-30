@@ -228,6 +228,8 @@ Public Module ApiArgumentHelpers
             Return DirectCast(file, Stream)
         ElseIf TypeOf file Is Byte() Then
             Return New MemoryStream(DirectCast(file, Byte()))
+        ElseIf TypeOf file Is StreamWriter AndAlso mode = FileAccess.Write Then
+            Return DirectCast(file, StreamWriter).BaseStream
         Else
             Return Internal.debug.stop(Message.InCompatibleType(GetType(Stream), file.GetType, env,, NameOf(file)), env)
         End If
