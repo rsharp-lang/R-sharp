@@ -128,22 +128,25 @@ End Function
 
 ''' <summary>
 ''' ```bash
-''' --parallel --master &lt;master_port&gt; [--delegate &lt;delegate_name&gt; --redirect_stdout &lt;logfile.txt&gt;]
+''' --parallel --master &lt;master_port&gt; [--host &lt;localhost&gt; --delegate &lt;delegate_name&gt; --redirect_stdout &lt;logfile.txt&gt;]
 ''' ```
 ''' Create a new parallel thread process for running a new parallel task.
 ''' </summary>
 '''
 ''' <param name="master"> the TCP port of the master node.
 ''' </param>
-Public Function parallelMode(master As String, Optional [delegate] As String = "", Optional redirect_stdout As String = "") As Integer
-Dim cli = GetparallelModeCommandLine(master:=master, [delegate]:=[delegate], redirect_stdout:=redirect_stdout, internal_pipelineMode:=True)
+Public Function parallelMode(master As String, Optional host As String = "", Optional [delegate] As String = "", Optional redirect_stdout As String = "") As Integer
+Dim cli = GetparallelModeCommandLine(master:=master, host:=host, [delegate]:=[delegate], redirect_stdout:=redirect_stdout, internal_pipelineMode:=True)
     Dim proc As IIORedirectAbstract = RunDotNetApp(cli)
     Return proc.Run()
 End Function
-Public Function GetparallelModeCommandLine(master As String, Optional [delegate] As String = "", Optional redirect_stdout As String = "", Optional internal_pipelineMode As Boolean = True) As String
+Public Function GetparallelModeCommandLine(master As String, Optional host As String = "", Optional [delegate] As String = "", Optional redirect_stdout As String = "", Optional internal_pipelineMode As Boolean = True) As String
     Dim CLI As New StringBuilder("--parallel")
     Call CLI.Append(" ")
     Call CLI.Append("--master " & """" & master & """ ")
+    If Not host.StringEmpty Then
+            Call CLI.Append("--host " & """" & host & """ ")
+    End If
     If Not [delegate].StringEmpty Then
             Call CLI.Append("--delegate " & """" & [delegate] & """ ")
     End If
