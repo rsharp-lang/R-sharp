@@ -99,7 +99,7 @@ Module jsonlitePackage
     <RApiReturn(GetType(String))>
     Public Function base64_enc(<RRawVectorArgument> input As Object, Optional env As Environment = Nothing) As Object
 
-
+        Throw New NotImplementedException
     End Function
 
     ''' <summary>
@@ -117,7 +117,7 @@ Module jsonlitePackage
     <ExportAPI>
     <RApiReturn(GetType(String))>
     Public Function base64_dec(<RRawVectorArgument> input As Object, Optional env As Environment = Nothing) As Object
-
+        Throw New NotImplementedException
     End Function
 
     ''' <summary>
@@ -134,7 +134,7 @@ Module jsonlitePackage
     ''' <returns></returns>
     <ExportAPI>
     Public Function flatten(x As Rdataframe, Optional recursive As Boolean = True) As Object
-
+        Throw New NotImplementedException
     End Function
 
     ''' <summary>
@@ -183,7 +183,7 @@ Module jsonlitePackage
                                Optional args As list = Nothing,
                                Optional env As Environment = Nothing) As Object
 
-
+        Throw New NotImplementedException
     End Function
 
     ''' <summary>
@@ -266,7 +266,7 @@ Module jsonlitePackage
                              <RRawVectorArgument(GetType(String))> Optional force As Boolean = False,
                              <RRawVectorArgument(GetType(String))> Optional args As list = Nothing,
                              <RRawVectorArgument(GetType(String))> Optional env As Environment = Nothing) As Object
-
+        Throw New NotImplementedException
     End Function
 
 End Module

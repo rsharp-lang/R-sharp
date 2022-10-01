@@ -155,7 +155,7 @@ Module RawIO
         If Not filter Is Nothing Then
             filterFunc =
                 Function(row)
-
+                    Throw New NotImplementedException
                 End Function
         End If
 

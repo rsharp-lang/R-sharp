@@ -274,7 +274,7 @@ Module xlsx
 
     <ExportAPI("createWorkbook")>
     Public Function createWorkbook() As msXlsx
-
+        Throw New NotImplementedException
     End Function
 
     ''' <summary>
