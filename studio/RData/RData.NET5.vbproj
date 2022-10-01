@@ -7,7 +7,7 @@
     <AssemblyName>RData</AssemblyName>
   
     <Platforms>AnyCPU;x64</Platforms>
-    <Configurations>Debug;Release;Rsharp_app_release;mzkit</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;mzkit;gcmodeller_desktop</Configurations>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	  <AssemblyVersion>2.33.*</AssemblyVersion>
 	  <Deterministic>false</Deterministic>
