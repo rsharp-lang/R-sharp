@@ -126,7 +126,9 @@ Public Class RProcessor
     End Sub
 
     Public Sub RscriptHttpGet(p As HttpProcessor)
-        Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure)
+        Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure) With {
+            .AccessControlAllowOrigin = "*"
+        }
             ' /<scriptFileName>?...args
             Dim request As New HttpRequest(p)
             Dim Rscript As String = RscriptRouter(request)

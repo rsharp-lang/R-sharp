@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::31f0eadc9c6ce67f15fc23be83327a45, R-sharp\studio\Rserver\Rweb\Rweb.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 105
-    '    Code Lines: 82
-    ' Comment Lines: 4
-    '   Blank Lines: 19
-    '     File Size: 3.68 KB
+' Summaries:
 
 
-    ' Class Rweb
-    ' 
-    '     Properties: NextRequestId, Processor, TcpPort
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: callback, getHttpProcessor, Run
-    ' 
-    '     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 105
+'    Code Lines: 82
+' Comment Lines: 4
+'   Blank Lines: 19
+'     File Size: 3.68 KB
+
+
+' Class Rweb
+' 
+'     Properties: NextRequestId, Processor, TcpPort
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: callback, getHttpProcessor, Run
+' 
+'     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -145,7 +145,9 @@ Public Class Rweb : Inherits HttpServer
 
                 Call p.writeSuccess(0)
             Case Else
-                Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure)
+                Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure) With {
+                    .AccessControlAllowOrigin = "*"
+                }
                     Call Processor.RscriptHttpPost(request, response)
                 End Using
         End Select
