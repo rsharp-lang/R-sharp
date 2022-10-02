@@ -1,9 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    
     <OutputType>Exe</OutputType>
     <RootNamespace>Rsharp.NetCore5</RootNamespace>
-	  <TargetFrameworks>net6.0;net5.0;net48;net6.0-windows</TargetFrameworks>
+
     <AssemblyName>Rscript</AssemblyName>
     <ApplicationIcon>R#.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64</Platforms>

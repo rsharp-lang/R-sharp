@@ -60,6 +60,7 @@ Imports System.Text
 Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
 Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Parallel
@@ -241,15 +242,20 @@ Public Class RProcessor
             startups:=startups
         )
 
-        If App.IsMicrosoftPlatform Then
-            Call App.Shell(Rslave.Path, arguments, CLR:=True, debug:=True).Run()
-        Else
-#If netcore5 = 1 Then
-            Call UNIX.Shell("dotnet", $"{Rslave.Path.ChangeSuffix("dll").CLIPath} {arguments}", verbose:=True)
-#Else
-            Call UNIX.Shell("mono", $"{Rslave.Path.CLIPath} {arguments}", verbose:=True)
-#End If
-        End If
+        '        If App.IsMicrosoftPlatform Then
+        '            Call App.Shell(Rslave.Path, arguments, CLR:=True, debug:=True).Run()
+        '        Else
+        '#If netcore5 = 1 Then
+        '            Call UNIX.Shell("dotnet", $"{Rslave.Path.ChangeSuffix("dll").CLIPath} {arguments}", verbose:=True)
+        '#Else
+        '            Call UNIX.Shell("mono", $"{Rslave.Path.CLIPath} {arguments}", verbose:=True)
+        '#End If
+        '        End If
+        Dim task As RunSlavePipeline = Rslave.CreateSlave(arguments, workdir:=App.HOME)
+        task.Shell = True
+        task.Run()
+
+        Call Console.WriteLine(task.ToString)
 
         If Not is_background Then
             Call pushBackResult(request_id, response)
