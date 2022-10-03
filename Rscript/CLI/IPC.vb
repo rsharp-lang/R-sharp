@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::3aaadd545063539b38bd39ecd1c478f3, R-sharp\Rscript\CLI\IPC.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 234
-    '    Code Lines: 197
-    ' Comment Lines: 7
-    '   Blank Lines: 30
-    '     File Size: 10.16 KB
+' Summaries:
 
 
-    ' Module CLI
-    ' 
-    '     Function: postResult, slaveMode, tryHandleJSON
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 234
+'    Code Lines: 197
+' Comment Lines: 7
+'   Blank Lines: 30
+'     File Size: 10.16 KB
+
+
+' Module CLI
+' 
+'     Function: postResult, slaveMode, tryHandleJSON
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Configuration
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
@@ -94,7 +95,7 @@ Partial Module CLI
     ''' <param name="args"></param>
     ''' <returns></returns>
     <ExportAPI("--slave")>
-    <Usage("--slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [--debug /timeout=<timeout in ms, default=1000> /retry=<retry_times, default=5> /MASTER=<ip, default=localhost> --startups <packageNames, default=""""> /entry=<function_name, default=NULL>]")>
+    <Usage("--slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [--debug /timeout=<timeout in ms, default=1000> /retry=<retry_times, default=5> /MASTER=<ip, default=localhost> --startups <packageNames, default=""""> /entry=<function_name, default=NULL> --attach <debug_pkg_dir>]")>
     <Description("Create a R# cluster node for run background or parallel task. This IPC command will run a R# script file that specified by the ``/exec`` argument, and then post back the result data json to the specific master listener.")>
     <Argument("/exec", False, CLITypes.File, AcceptTypes:={GetType(String)}, Extensions:="*.R", Description:="a specific R# script for run as background task.")>
     <Argument("/args", False, CLITypes.Base64, PipelineTypes.std_in,
@@ -138,6 +139,7 @@ Partial Module CLI
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Dim result As Object = Nothing
         Dim upstream As New IPEndPoint(master, port)
+        Dim pkg_attach As String = args("--attach")
 
         If Not script.FileExists Then
             Dim msgErr As String = $"R# script file '{script.GetFullPath}' is not found on your filesystem!"
@@ -196,6 +198,10 @@ Partial Module CLI
             Call R.LoadLibrary(packageName:=pkgName)
         Next
 
+        If Not pkg_attach.StringEmpty AndAlso pkg_attach.DirectoryExists Then
+            Call Console.WriteLine($"load required packages from alternative repository: '{pkg_attach.GetDirectoryFullPath}'...")
+            Call PackageLoader2.Hotload(pkg_attach, R.globalEnvir)
+        End If
         If isDebugMode Then
             Call Console.WriteLine("[load] source target script...")
         End If
