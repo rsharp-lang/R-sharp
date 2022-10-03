@@ -154,8 +154,12 @@ Public Class Rweb : Inherits HttpServer
     End Sub
 
     Public Overrides Sub handleOtherMethod(p As HttpProcessor)
-        ' Call p.writeFailure(404, "not allowed!")
-        Call p.HandlePOSTRequest()
+        Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure) With {
+            .AccessControlAllowOrigin = "*"
+        }
+            Call response.WriteHTML("passed")
+            Call p.outputStream.Flush()
+        End Using
     End Sub
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
