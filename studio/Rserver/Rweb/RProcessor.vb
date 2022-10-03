@@ -222,7 +222,15 @@ Public Class RProcessor
                 Dim document = DirectCast(check_x, Rdataframe).DataFrameRows(row_names, formatNumber, env)
                 Dim ms As New MemoryStream
 
-                Call StreamIO.SaveDataFrame(document, ms, Encoding.UTF8, tsv:=False, silent:=False)
+                Call StreamIO.SaveDataFrame(
+                    csv:=document,
+                    file:=ms,
+                    encoding:=Encoding.UTF8,
+                    tsv:=False,
+                    silent:=False,
+                    autoCloseFile:=False
+                )
+
                 Call ms.Flush()
                 Call response.WriteHttp("text/csv", ms.Length)
                 Call response.Write(ms.ToArray)
