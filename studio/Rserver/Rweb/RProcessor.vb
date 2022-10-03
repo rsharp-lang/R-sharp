@@ -226,7 +226,7 @@ Public Class RProcessor
                     csv:=document,
                     file:=ms,
                     encoding:=Encoding.UTF8,
-                    tsv:=False,
+                    tsv:=DirectCast(result, dataframeBuffer).tsv,
                     silent:=False,
                     autoCloseFile:=False
                 )

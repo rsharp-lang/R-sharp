@@ -74,6 +74,7 @@ Namespace Runtime.Serialize
         End Property
 
         Public Property dataframe As dataframe
+        Public Property tsv As Boolean
 
         Dim env As Environment
 
@@ -106,6 +107,7 @@ Namespace Runtime.Serialize
             bytes = text.GetBytes(tmpstr)
             buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
             buffer.Write(bytes, Scan0, bytes.Length)
+            buffer.Write(CByte(If(tsv, 1, 0)))
 
             For Each name As String In colnames
                 Dim vec As New vector With {
@@ -153,6 +155,7 @@ Namespace Runtime.Serialize
             stream.Read(bytes, Scan0, nsize)
             tmpstr = text.GetString(bytes)
             rownames = tmpstr.LoadJSON(Of String())
+            tsv = If(stream.ReadByte, True, False)
 
             For Each name As String In colnames
                 bytes = New Byte(4 - 1) {}

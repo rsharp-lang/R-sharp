@@ -339,6 +339,7 @@ Public Module utils
 
         If TypeOf file Is dataframeBuffer Then
             DirectCast(file, dataframeBuffer).dataframe = x
+            DirectCast(file, dataframeBuffer).tsv = tsv
             Return file
         ElseIf TypeOf file Is textBuffer Then
             Dim document = DirectCast(x, Rdataframe).DataFrameRows(row_names, "G8", env)
