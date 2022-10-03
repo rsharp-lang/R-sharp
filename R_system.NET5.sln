@@ -189,6 +189,8 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "MachineLearning.Data.Extens
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "FeatureFrame", "..\runtime\sciBASIC#\Data_science\DataMining\FeatureFrame\FeatureFrame.vbproj", "{7202297B-4B28-4FCA-94D2-AA6E55B097A9}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "dataframeHelper", "Library\shares\dataframeHelper\dataframeHelper.shproj", "{843B6786-8992-48BF-99BE-6579B9645961}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Biodeep|Any CPU = Biodeep|Any CPU
@@ -7348,12 +7350,14 @@ Global
 		{5315059F-B087-4585-85BF-F44259649680} = {4C9749C4-2DF0-4FC5-BB83-3AB71C217001}
 		{1F0FD444-B825-463E-A02F-8885012C1346} = {4C9749C4-2DF0-4FC5-BB83-3AB71C217001}
 		{7202297B-4B28-4FCA-94D2-AA6E55B097A9} = {4C9749C4-2DF0-4FC5-BB83-3AB71C217001}
+		{843B6786-8992-48BF-99BE-6579B9645961} = {DB9C6014-424E-40B5-8860-F65F4B95065F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {685F6825-92A4-45A5-8738-721B2AA306B3}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		studio\Rstudio.common\Rstudio.common.projitems*{14010b90-bc3b-42d9-a52c-30ca537d3c11}*SharedItemsImports = 13
+		Library\shares\dataframeHelper\dataframeHelper.projitems*{361137d5-1024-44fe-b61d-fcebec342c06}*SharedItemsImports = 5
 		Library\shares\JsonHelper\JsonHelper.projitems*{361137d5-1024-44fe-b61d-fcebec342c06}*SharedItemsImports = 5
 		Library\shares\JsonHelper\JsonHelper.projitems*{470aab61-e443-46ea-8e9f-8e67b7750e25}*SharedItemsImports = 5
 		Library\shares\R_graphic.interop\R_graphic.interop.projitems*{4de5c337-fa74-4eb9-a2ba-a29899031216}*SharedItemsImports = 5
@@ -7361,8 +7365,10 @@ Global
 		Library\shares\JsonHelper\JsonHelper.projitems*{56c088d6-6362-4377-8ec8-fd0165eae0d9}*SharedItemsImports = 5
 		Library\shares\R_graphic.interop\R_graphic.interop.projitems*{700b6326-6278-4677-9dd3-0d63a3486fec}*SharedItemsImports = 5
 		..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{7df565ae-6e7a-4667-ab6d-9908acbeed8b}*SharedItemsImports = 13
+		Library\shares\dataframeHelper\dataframeHelper.projitems*{843b6786-8992-48bf-99be-6579b9645961}*SharedItemsImports = 13
 		studio\Rstudio.common\Rstudio.common.projitems*{9aa7a0bd-50a7-4f14-a2cf-345519a55a3f}*SharedItemsImports = 5
 		Library\shares\JsonHelper\JsonHelper.projitems*{b2ae1422-d7da-4053-a386-eb2ea9326d68}*SharedItemsImports = 13
+		Library\shares\dataframeHelper\dataframeHelper.projitems*{c16d56c1-461b-41d8-87b9-23b0c7785770}*SharedItemsImports = 5
 		studio\Rstudio.common\Rstudio.common.projitems*{c97e077f-466f-44f2-8363-d606fc093e5e}*SharedItemsImports = 5
 		studio\Rstudio.common\Rstudio.common.projitems*{e1995e16-ba23-44ea-81bb-187e93f3d906}*SharedItemsImports = 5
 		..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{e1995e16-ba23-44ea-81bb-187e93f3d906}*SharedItemsImports = 5

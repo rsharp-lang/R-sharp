@@ -130,4 +130,8 @@
 
   <Import Project="..\shares\JsonHelper\JsonHelper.projitems" Label="Shared" />
 
+
+
+  <Import Project="..\shares\dataframeHelper\dataframeHelper.projitems" Label="Shared" />
+
 </Project>
