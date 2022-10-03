@@ -73,6 +73,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports any = Microsoft.VisualBasic.Scripting
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports file = Microsoft.VisualBasic.Data.csv.IO.File
@@ -327,7 +328,7 @@ Public Module utils
     <ExportAPI("write.csv")>
     <RApiReturn(GetType(Boolean))>
     Public Function write_csv(<RRawVectorArgument> x As Object,
-                              Optional file$ = Nothing,
+                              Optional file As Object = Nothing,
                               <RRawVectorArgument>
                               Optional row_names As Object = True,
                               Optional fileEncoding As Object = "",
@@ -336,6 +337,35 @@ Public Module utils
                               Optional number_format As Object = "~`${getOption('f64.format')}${getOption('digits')}`",
                               Optional env As Environment = Nothing) As Object
 
+        If TypeOf file Is dataframeBuffer Then
+            DirectCast(file, dataframeBuffer).dataframe = x
+            Return file
+        ElseIf TypeOf file Is textBuffer Then
+            Dim document = DirectCast(x, Rdataframe).DataFrameRows(row_names, "G8", env)
+            Dim ms As New MemoryStream
+            Dim text As String
+
+            StreamIO.SaveDataFrame(document, ms, Encoding.UTF8, tsv:=tsv, silent:=False)
+            ms.Flush()
+            text = Encoding.UTF8.GetString(ms.ToArray)
+            ms.Dispose()
+            DirectCast(file, textBuffer).text = text
+            Return file
+        ElseIf file Is Nothing OrElse TypeOf file Is String Then
+            Return env.saveTextFile(x, file, row_names, fileEncoding, tsv, number_format)
+        Else
+            Return Message.InCompatibleType(GetType(String), file.GetType, env)
+        End If
+    End Function
+
+    <Extension>
+    Private Function saveTextFile(env As Environment,
+                                  x As Object,
+                                  file$,
+                                  row_names As Object,
+                                  fileEncoding As Object,
+                                  tsv As Boolean,
+                                  number_format As Object) As Object
         If x Is Nothing Then
             Call env.AddMessage("Empty dataframe object!", MSG_TYPES.WRN)
             Return "".SaveTo(file)
@@ -375,7 +405,13 @@ Public Module utils
         ElseIf REnv.isVector(Of EntityObject)(x) Then
             Return DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).SaveDataSet(path:=file, encoding:=encoding, silent:=True)
         ElseIf REnv.isVector(Of DataSet)(x) Then
-            Return DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, encoding:=encoding.CodePage, silent:=True, metaBlank:=0)
+            Return DirectCast(REnv.asVector(Of DataSet)(x), DataSet()) _
+                .SaveTo(
+                    path:=file,
+                    encoding:=encoding.CodePage,
+                    silent:=True,
+                    metaBlank:=0
+                )
         ElseIf type.IsArray OrElse type Is GetType(vector) Then
             Return saveGeneric(x, type, file, encoding.CodePage, env)
         Else
@@ -387,7 +423,13 @@ Public Module utils
                 If stream.isError Then
                     Return Message.InCompatibleType(GetType(file), type, env)
                 Else
-                    Return stream.populates(Of DataSet)(env).SaveTo(path:=file, encoding:=encoding.CodePage, silent:=True, metaBlank:=0)
+                    Return stream.populates(Of DataSet)(env) _
+                        .SaveTo(
+                            path:=file,
+                            encoding:=encoding.CodePage,
+                            silent:=True,
+                            metaBlank:=0
+                        )
                 End If
             Else
                 Return stream.populates(Of EntityObject)(env).SaveDataSet(path:=file, encoding:=encoding, silent:=True)
