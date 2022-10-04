@@ -509,7 +509,7 @@ Module stats
                              Optional y As Rdataframe = Nothing,
                              Optional use As String = "pairwise",
                              Optional method As String = "pearson")
-
+        Throw New NotImplementedException
     End Function
 
     <ExportAPI("dnorm")>

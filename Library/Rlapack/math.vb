@@ -319,7 +319,7 @@ Module math
     ''' <returns></returns>
     <ExportAPI("loess")>
     Public Function loess(formula As FormulaExpression, data As Object, Optional env As Environment = Nothing) As Object
-
+        Throw New NotImplementedException
     End Function
 
     ''' <summary>

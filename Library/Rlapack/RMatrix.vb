@@ -90,7 +90,9 @@ Module RMatrix
 
         If sparse Then
         Else
-
+            Throw New NotImplementedException
         End If
+
+        Throw New NotImplementedException
     End Function
 End Module

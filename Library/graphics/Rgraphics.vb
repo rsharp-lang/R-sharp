@@ -81,6 +81,6 @@ Module Rgraphics
     Public Function image(x As Object,
                           Optional col As Object = "YlOrRd",
                           Optional env As Environment = Nothing) As Object
-
+        Throw New NotImplementedException
     End Function
 End Module
