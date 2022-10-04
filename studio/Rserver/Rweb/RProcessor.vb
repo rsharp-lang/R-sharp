@@ -185,7 +185,7 @@ Public Class RProcessor
     ''' <param name="args">script arguments</param>
     ''' <param name="response"></param>
     Private Sub runRweb(Rscript As String, request_id$, args As Dictionary(Of String, String()), response As HttpResponse, is_background As Boolean)
-        Dim argsText As String = args.GetJson.Base64String
+        Dim argsText As String = args.GetJson.Base64String(gzip:=True)
         Dim port As Integer = localRServer.TcpPort
         Dim master As String = "localhost"
         Dim entry As String = "run"

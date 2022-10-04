@@ -122,7 +122,7 @@ Partial Module CLI
     Public Function slaveMode(args As CommandLine) As Integer
         Dim script As String = args <= "/exec"
         Dim arguments As Dictionary(Of String, String()) = args("/args") _
-            .Base64Decode _
+            .Base64Decode(ungzip:=True) _
             .tryHandleJSON
         Dim port As Integer = args <= "/PORT"
         Dim master As String = args("/MASTER") Or "localhost"
