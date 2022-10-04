@@ -1273,7 +1273,7 @@ Namespace Runtime.Internal.Invokes
         ''' ### Create Names For Temporary Files
         ''' </summary>
         ''' <param name="check">
-        ''' logical indicating if tmpdir() should be checked and recreated if no longer valid.
+        ''' logical indicating if ``tmpdir()`` should be checked and recreated if no longer valid.
         ''' </param>
         ''' <returns>the path of the per-session temporary directory.</returns>
         ''' <remarks>
