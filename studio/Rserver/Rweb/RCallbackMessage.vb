@@ -45,7 +45,7 @@ Module RCallbackMessage
 
                     bytes = Encoding.ASCII.GetBytes(str)
 
-                    Call response.WriteHttp("image/png;charset=utf8;base64", bytes.Length)
+                    Call response.WriteHttp("image/png;charset=utf-8;base64", bytes.Length)
                     Call response.Write(bytes)
                 Else
                     Call response.WriteHttp("image/png", bytes.Length)
