@@ -30,7 +30,7 @@ Module RCallbackMessage
         End If
     End Sub
 
-    Public Sub SendHttpResponseMessage(result As BufferObject, response As HttpResponse, debug As Boolean, showErr As Boolean)
+    Public Sub SendHttpResponseMessage(result As BufferObject, request As HttpRequest, response As HttpResponse, debug As Boolean, showErr As Boolean)
         If TypeOf result Is messageBuffer Then
             Call sendRStudioErrDebugMessage(DirectCast(result, messageBuffer).GetErrorMessage, response, showErr)
         ElseIf TypeOf result Is bitmapBuffer Then
@@ -38,10 +38,20 @@ Module RCallbackMessage
 
             Using buffer As New MemoryStream(bytes)
                 bytes = buffer.UnGzipStream.ToArray
-            End Using
 
-            Call response.WriteHttp("image/png", bytes.Length)
-            Call response.Write(bytes)
+                If request.URL(query:="base64").ParseBoolean Then
+                    Dim base64 As New DataURI(New MemoryStream(bytes), mime:="image/png")
+                    Dim str As String = base64.ToString
+
+                    bytes = Encoding.ASCII.GetBytes(str)
+
+                    Call response.WriteHttp("image/png;charset=utf8;base64", bytes.Length)
+                    Call response.Write(bytes)
+                Else
+                    Call response.WriteHttp("image/png", bytes.Length)
+                    Call response.Write(bytes)
+                End If
+            End Using
         ElseIf TypeOf result Is textBuffer Then
             Dim bytes As Byte() = result.Serialize
 

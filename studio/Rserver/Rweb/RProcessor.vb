@@ -120,10 +120,10 @@ Public Class RProcessor
         End If
 
         If is_background Then
-            Call RunTask(Sub() Call runRweb(Rscript, request_id, args, response, is_background))
+            Call RunTask(Sub() Call runRweb(Rscript, request_id, args, request, response, is_background))
             Call response.WriteHTML(request_id)
         Else
-            Call runRweb(Rscript, request_id, args, response, is_background)
+            Call runRweb(Rscript, request_id, args, request, response, is_background)
         End If
     End Sub
 
@@ -144,15 +144,15 @@ Public Class RProcessor
                     Call p.WriteLine(requestPostback.ContainsKey(request_id))
                 End SyncLock
             ElseIf request.URL.path = "get_invoke" Then
-                Call pushBackResult(request.URL("request_id"), response)
+                Call pushBackResult(request.URL("request_id"), request, response)
             ElseIf Not Rscript.FileExists Then
                 Call p.writeFailure(404, "file not found!")
             ElseIf is_background Then
                 Call $"task '{request_id}' will be running in background.".__DEBUG_ECHO
-                Call New Action(Sub() Call runRweb(Rscript, request_id, request.URL.query, response, is_background)).BeginInvoke(Nothing, Nothing)
+                Call New Action(Sub() Call runRweb(Rscript, request_id, request.URL.query, request, response, is_background)).BeginInvoke(Nothing, Nothing)
                 Call response.WriteHTML(request_id)
             Else
-                Call runRweb(Rscript, request_id, request.URL.query, response, is_background)
+                Call runRweb(Rscript, request_id, request.URL.query, request, response, is_background)
             End If
         End Using
     End Sub
@@ -162,7 +162,7 @@ Public Class RProcessor
         Return $"{Rweb}/{request.URL.path}.R"
     End Function
 
-    Private Sub pushBackResult(request_id$, response As HttpResponse)
+    Private Sub pushBackResult(request_id$, request As HttpRequest, response As HttpResponse)
         Dim result As BufferObject = requestPostback.TryGetValue(request_id)
 
         If result Is Nothing Then
@@ -175,7 +175,7 @@ Public Class RProcessor
             Call requestPostback.Remove(request_id)
         End SyncLock
 
-        Call RCallbackMessage.SendHttpResponseMessage(result, response, debug, showErr:=showError)
+        Call RCallbackMessage.SendHttpResponseMessage(result, request, response, debug, showErr:=showError)
     End Sub
 
     ''' <summary>
@@ -184,7 +184,13 @@ Public Class RProcessor
     ''' <param name="Rscript">the file path of the target R# script file</param>
     ''' <param name="args">script arguments</param>
     ''' <param name="response"></param>
-    Private Sub runRweb(Rscript As String, request_id$, args As Dictionary(Of String, String()), response As HttpResponse, is_background As Boolean)
+    Private Sub runRweb(Rscript As String,
+                        request_id$,
+                        args As Dictionary(Of String, String()),
+                        request As HttpRequest,
+                        response As HttpResponse,
+                        is_background As Boolean)
+
         Dim argsText As String = args.GetJson.Base64String(gzip:=True)
         Dim port As Integer = localRServer.TcpPort
         Dim master As String = "localhost"
@@ -221,7 +227,7 @@ Public Class RProcessor
         Call Console.WriteLine(task.ToString)
 
         If Not is_background Then
-            Call pushBackResult(request_id, response)
+            Call pushBackResult(request_id, request, response)
         End If
     End Sub
 End Class
