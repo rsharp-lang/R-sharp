@@ -344,7 +344,13 @@ Module plots
     End Function
 
     Public Function plotVector(x As vector, args As list, env As Environment) As Object
-        Return plotArray(REnv.asVector(Of Double)(x), args, env)
+        Dim array As Array = REnv.TryCastGenericArray(x.data, env)
+
+        If TypeOf array Is SerialData() Then
+            Return plotSerials(array, args, env)
+        Else
+            Return plotArray(REnv.asVector(Of Double)(array), args, env)
+        End If
     End Function
 
     Public Function plot_hclust(cluster As Cluster, args As list, env As Environment) As Object
