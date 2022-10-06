@@ -1,64 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::b47fbfb83cf8057808e47d3a28e8806f, R-sharp\Library\Rlapack\stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 836
-    '    Code Lines: 444
-    ' Comment Lines: 304
-    '   Blank Lines: 88
-    '     File Size: 34.75 KB
+' Summaries:
 
 
-    ' Module stats
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: aov, asDist, corr, corrTest, dataframeRow
-    '               dist, dnorm, ECDF, fisher_test, getMatrix
-    '               getQuantileLevels, mantel_test, matrixDataFrame, median, prcomp
-    '               printMatrix, printTtest, printTwoSampleTTest, quantile, spline
-    '               tabulateMode, ttest, varTest
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 836
+'    Code Lines: 444
+' Comment Lines: 304
+'   Blank Lines: 88
+'     File Size: 34.75 KB
+
+
+' Module stats
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: aov, asDist, corr, corrTest, dataframeRow
+'               dist, dnorm, ECDF, fisher_test, getMatrix
+'               getQuantileLevels, mantel_test, matrixDataFrame, median, prcomp
+'               printMatrix, printTtest, printTwoSampleTTest, quantile, spline
+'               tabulateMode, ttest, varTest
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -109,7 +109,36 @@ Module stats
         Internal.Object.Converts.makeDataframe.addHandler(GetType(DataMatrix), AddressOf matrixDataFrame)
         Internal.Object.Converts.makeDataframe.addHandler(GetType(DistanceMatrix), AddressOf matrixDataFrame)
         Internal.Object.Converts.makeDataframe.addHandler(GetType(CorrelationMatrix), AddressOf matrixDataFrame)
+        Internal.Object.Converts.makeDataframe.addHandler(GetType(PCAcalls), AddressOf PCATable)
     End Sub
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="args">
+    ''' npc = i32
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    Private Function PCATable(x As PCAcalls, args As list, env As Environment) As Rdataframe
+        Dim npc As Integer = args.getValue("npc", env, 2)
+        Dim data As New Rdataframe With {
+            .rownames = x.labels,
+            .columns = New Dictionary(Of String, Array)
+        }
+        Dim components = x.pca.Project(npc)
+
+        For i As Integer = 0 To npc - 1
+#Disable Warning
+            Dim v As Array = components.Select(Function(r) r(i)).ToArray
+            Dim name As String = $"dim{i + 1}"
+#Enable Warning
+            data.columns.Add(name, v)
+        Next
+
+        Return data
+    End Function
 
     Private Function matrixDataFrame(x As DataMatrix, args As list, env As Environment) As Rdataframe
         Dim table As New Rdataframe With {
@@ -356,6 +385,7 @@ Module stats
         End If
 
         Dim matrix As Double()()
+        Dim labels As String()
 
         If TypeOf x Is Rdataframe Then
             With DirectCast(x, Rdataframe)
@@ -366,15 +396,27 @@ Module stats
                             End Function) _
                     .Select(Function(v) DirectCast(v, Double())) _
                     .ToArray
+                labels = .getRowNames
             End With
         Else
             Throw New NotImplementedException
         End If
 
         Dim PCA As New PCA(matrix, center, scale)
+        Dim calls As New PCAcalls With {
+            .labels = labels,
+            .pca = PCA
+        }
 
-        Return PCA
+        Return calls
     End Function
+
+    Public Class PCAcalls
+
+        Public Property pca As PCA
+        Public Property labels As String()
+
+    End Class
 
     ''' <summary>
     ''' 
