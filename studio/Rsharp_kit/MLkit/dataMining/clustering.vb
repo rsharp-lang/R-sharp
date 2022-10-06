@@ -151,9 +151,14 @@ Module clustering
         Dim matrix As New Rdataframe With {
             .columns = New Dictionary(Of String, Array)
         }
+        Dim header As String
+        Dim colVals As Array
+        Dim row_names = args.getValue(Of Object)("row.names", env, Nothing)
 
         For Each column As String() In table.Columns
-            matrix.columns.Add(column(Scan0), column.Skip(1).ToArray)
+            header = column(Scan0)
+            colVals = column.Skip(1).ToArray
+            matrix.columns.Add(header, colVals)
         Next
 
         Return matrix
