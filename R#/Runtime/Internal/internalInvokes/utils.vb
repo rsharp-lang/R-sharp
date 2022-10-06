@@ -1225,6 +1225,10 @@ Read ""Writing R Extensions"" for more information.".SaveTo($"{root}/Read-and-de
             Else
                 Dim filepaths As String() = REnv.asVector(Of String)(files)
 
+                filepaths = filepaths _
+                    .Where(Function(file) file.FileExists) _
+                    .ToArray
+
                 Call ApplicationServices.Zip.AddToArchive(
                     files:=filepaths,
                     archiveFullName:=zipfile,
