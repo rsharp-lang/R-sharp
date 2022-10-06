@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": " --slave /exec \"E:/GCModeller/src/workbench/win32_desktop/fastRWeb//analysis_apps/enrichment.R\" /args \"eyJpZCI6WyJlNDM0ZGQ5YzdmNTczZmIwMzkyNGUwYzRkM2Q0NGQ0NSJdLCJiYWNrZ3JvdW5kIjpbIkdPIl0sInN5bWJvbHMiOlsiQjFYNkI3IiwiQzRaUU43IiwiTzMyNTgzIiwiUDAwMzUwIiwiUDAwMzYzIiwiUDAwNDQ4IiwiUDAwNDUyIiwiUDAwNDkwIiwiUDAwNTA5IiwiUDAwNTYxIiwiUDAwNTYyIiwiUDAwNTc5IiwiUDAwNTgyIiwiUDAwNjM0IiwiUDAwNzIyIiwiUDAwODAzIiwiUDAwODA1IiwiUDAwODExIiwiUDAwODY0IiwiUDAwODkzIiwiUDAwODk0IiwiUDAwOTE0IiwiUDAwOTI2IiwiUDAwOTM1IiwiUDAwOTM2IiwiUDAwOTQ2IiwiUDAwOTU2Il19\" /request-id \"web_request__0800f\" /PORT \"3838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE --attach E:\\GCModeller\\src\\workbench\\pkg",
+      "commandLineArgs": "--slave /exec \"E:/GCModeller/src/workbench/win32_desktop/fastRWeb//analysis_apps/plas.R\" /args \"H4sIAAAAAAAACo2SbWuDMBCA/8t9qp1S81JmC/0ljZaocRVsHE06AqX/fXkZY6QZ9otJjie55+68w9wLBfsjHO8MNL9+CM1gz8CgQys0R+vVxC+9W9Ebnz7PbmdoI1HGNjYUtllh7BlyBl98ugn/QIHKksEjj57FB4MKgxNwmeSJ1yA/GuRXA69X1oNteNZIHFz+nDPLBT/cSOL8SOyXSkZ9MmorJIWh8Q3krtRQ59DNUmkudapxvmvRTZJI5st6kaOxyTMWphRx+B+OLHNh1jGX8AvTeBUky5XwZUTGYrZBT0zstE0wKR0/4WGUfDrp8SLciLcudBVqnm56nKUL+R/WhZVQysZOY+/CuGvL97bqW1yhYaj6Ybcbtsh+8EBbwTuoH99SX1sLcwMAAA==\" /request-id \"web_request__02403\" /PORT \"3838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE --attach E:\\GCModeller\\src\\workbench\\pkg",
       "workingDirectory": "\\mzkit\\dist\\bin\\Rstudio\\bin"
     }
   }
