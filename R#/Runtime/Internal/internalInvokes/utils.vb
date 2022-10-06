@@ -57,6 +57,7 @@
 #End Region
 
 Imports System.IO
+Imports System.IO.Compression
 Imports System.Runtime.CompilerServices
 Imports System.Threading
 Imports Microsoft.VisualBasic.ApplicationServices
@@ -1159,6 +1160,79 @@ Read ""Writing R Extensions"" for more information.".SaveTo($"{root}/Read-and-de
                 destinationDirectoryName:=exdir,
                 overwriteMethod:=If(overwrite, Zip.Overwrite.Always, Zip.Overwrite.Never)
             )
+
+            Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' Create Zip Archives
+        ''' 
+        ''' A wrapper for an external zip command to create zip archives.
+        ''' </summary>
+        ''' <param name="zipfile">
+        ''' The pathname of the zip file: tilde expansion (see path.expand) will be performed.
+        ''' </param>
+        ''' <param name="files">
+        ''' A character vector of recorded filepaths to be included.
+        ''' </param>
+        ''' <param name="flags">
+        ''' A character string of flags to be passed to the command: see ‘Details’.
+        ''' </param>
+        ''' <param name="extras">
+        ''' An optional character vector: see ‘Details’.
+        ''' </param>
+        ''' <param name="zip">
+        ''' A character string specifying the external command to be used.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' The status value returned by the external command, invisibly.
+        ''' </returns>
+        ''' <remarks>
+        ''' On a Unix-alike, the default for zip will by default use the value of 
+        ''' R_ZIPCMD, which is set in ‘etc/Renviron’ if an unzip command was found
+        ''' during configuration. On Windows, the default relies on a zip program
+        ''' (for example that from Rtools) being in the path.
+        ''' 
+        ''' The default for flags is that appropriate for zipping up a directory
+        ''' tree in a portable way: see the system-specific help for the zip command 
+        ''' for other possibilities.
+        ''' 
+        ''' Argument extras can be used to specify -x or -i followed by a list of 
+        ''' filepaths to exclude or include. Since extras will be treated as if 
+        ''' passed to system, if the filepaths contain spaces they must be quoted 
+        ''' e.g. by shQuote.
+        ''' </remarks>
+        <ExportAPI("zip")>
+        Public Function create_zip(zipfile As String,
+                                   <RRawVectorArgument>
+                                   files As Object,
+                                   Optional flags As String = "-r9X",
+                                   Optional extras As String = "",
+                                   Optional zip As Object = "Sys.getenv(""R_ZIPCMD"", ""zip"")",
+                                   Optional env As Environment = Nothing) As Object
+
+            If TypeOf files Is list Then
+                Using zipArchive As ZipArchive = IO.Compression.ZipFile.Open(zipfile, ZipArchiveMode.Create)
+                    Dim filelist As list = DirectCast(files, list)
+                    Dim path As String
+
+                    For Each name As String In filelist.getNames
+                        path = filelist.getValue(Of String)(name, env)
+                        zipArchive.CreateEntryFromFile(path, name, CompressionLevel.SmallestSize)
+                    Next
+                End Using
+            Else
+                Dim filepaths As String() = REnv.asVector(Of String)(files)
+
+                Call ApplicationServices.Zip.AddToArchive(
+                    files:=filepaths,
+                    archiveFullName:=zipfile,
+                    action:=ArchiveAction.Replace,
+                    fileOverwrite:=Overwrite.Always,
+                    compression:=CompressionLevel.SmallestSize
+                )
+            End If
 
             Return Nothing
         End Function
