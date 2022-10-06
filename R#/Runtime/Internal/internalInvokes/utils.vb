@@ -1219,7 +1219,7 @@ Read ""Writing R Extensions"" for more information.".SaveTo($"{root}/Read-and-de
 
                     For Each name As String In filelist.getNames
                         path = filelist.getValue(Of String)(name, env)
-                        zipArchive.CreateEntryFromFile(path, name, CompressionLevel.SmallestSize)
+                        zipArchive.CreateEntryFromFile(path, name, CompressionLevel.Optimal)
                     Next
                 End Using
             Else
@@ -1234,7 +1234,7 @@ Read ""Writing R Extensions"" for more information.".SaveTo($"{root}/Read-and-de
                     archiveFullName:=zipfile,
                     action:=ArchiveAction.Replace,
                     fileOverwrite:=Overwrite.Always,
-                    compression:=CompressionLevel.SmallestSize
+                    compression:=CompressionLevel.Optimal
                 )
             End If
 
