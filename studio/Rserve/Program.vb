@@ -77,6 +77,10 @@ Module Program
         Dim tcp As Integer = args("--tcp") Or 3838
         Dim startups As String() = args("--startups").Split("[,;]\s*", regexp:=True)
 
+        ' 20221007 fix of the relative path error
+        ' by translate to absolute path at first!
+        Rweb = Rweb.GetDirectoryFullPath
+
         Using http As New Rweb(Rweb, port, tcp, show_error, threads:=n_threads)
             Call http.Processor.WithStartups(startups)
             Return http.Run()
