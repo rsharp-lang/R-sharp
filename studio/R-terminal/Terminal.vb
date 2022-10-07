@@ -225,9 +225,11 @@ Type 'q()' to quit R.
                 terminate.Cancel = True
                 cancel.Set()
 
+#Disable Warning
                 If Not Rtask Is Nothing Then
                     Rtask.Abort()
                 End If
+#Enable Warning
             End Sub
 
         Call New Shell(New PS1("> "), AddressOf doRunScriptWithSpecialCommand) With {
