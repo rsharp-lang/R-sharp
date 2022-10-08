@@ -262,7 +262,10 @@ Namespace Runtime.Internal.Object
             ElseIf type.IsArray Then
                 value = CObj(asVector(value, type.GetElementType, env))
             Else
-                value = RCType.CTypeDynamic([single](value), GetType(T), env)
+                ' 20221008
+                ' is not a array
+                ' so set the force single parameter as TRUE
+                value = RCType.CTypeDynamic([single](value, forceSingle:=True), GetType(T), env)
             End If
 
             If TypeOf value Is Message Then

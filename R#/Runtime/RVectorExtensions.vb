@@ -144,11 +144,15 @@ Namespace Runtime
         ''' then the single value will be populate, otherwise will 
         ''' populate the input x
         ''' </param>
+        ''' <param name="forceSingle">
+        ''' this function returns the first element in array always
+        ''' if this parameter is set to true
+        ''' </param>
         ''' <returns></returns>
         ''' <remarks>
         ''' 这个函数只会在确认只有一个向量元素的情况下才会返回单个元素
         ''' </remarks>
-        Public Function [single](x As Object) As Object
+        Public Function [single](x As Object, Optional forceSingle As Boolean = False) As Object
             If x Is Nothing Then
                 Return Nothing
             End If
@@ -158,12 +162,16 @@ Namespace Runtime
                     Return DirectCast(x, Array).GetValue(Scan0)
                 ElseIf DirectCast(x, Array).Length = 0 Then
                     Return Nothing
+                ElseIf forceSingle Then
+                    Return DirectCast(x, Array).GetValue(Scan0)
                 End If
             ElseIf x.GetType Is GetType(vector) Then
                 If DirectCast(x, vector).length = 1 Then
                     Return DirectCast(x, vector).data.GetValue(Scan0)
                 ElseIf DirectCast(x, vector).length = 0 Then
                     Return Nothing
+                ElseIf forceSingle Then
+                    Return DirectCast(x, vector).data.GetValue(Scan0)
                 End If
             End If
 
