@@ -222,7 +222,7 @@ Module clustering
     ''' <summary>
     ''' K-Means Clustering
     ''' </summary>
-    ''' <param name="dataset">
+    ''' <param name="x">
     ''' numeric matrix of data, or an object that can be coerced 
     ''' to such a matrix (such as a numeric vector or a data 
     ''' frame with all numeric columns).
@@ -239,7 +239,7 @@ Module clustering
     <ExportAPI("kmeans")>
     <RApiReturn(GetType(EntityClusterModel))>
     Public Function Kmeans(<RRawVectorArgument>
-                           dataset As Object,
+                           x As Object,
                            Optional centers% = 3,
                            Optional parallel As Boolean = True,
                            Optional debug As Boolean = False,
@@ -247,23 +247,23 @@ Module clustering
 
         Dim model As EntityClusterModel()
 
-        If dataset Is Nothing Then
+        If x Is Nothing Then
             Return Nothing
-        ElseIf dataset.GetType.IsArray Then
-            Select Case REnv.MeasureArrayElementType(dataset)
+        ElseIf x.GetType.IsArray Then
+            Select Case REnv.MeasureArrayElementType(x)
                 Case GetType(DataSet)
-                    model = DirectCast(REnv.asVector(Of DataSet)(dataset), DataSet()).ToKMeansModels
+                    model = DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).ToKMeansModels
                 Case GetType(EntityClusterModel)
-                    model = REnv.asVector(Of EntityClusterModel)(dataset)
+                    model = REnv.asVector(Of EntityClusterModel)(x)
                 Case Else
-                    Return REnv.Internal.debug.stop(New InvalidProgramException(dataset.GetType.FullName), env)
+                    Return REnv.Internal.debug.stop(New InvalidProgramException(x.GetType.FullName), env)
             End Select
-        ElseIf TypeOf dataset Is Rdataframe Then
-            Dim colNames As String() = DirectCast(dataset, Rdataframe).columns _
+        ElseIf TypeOf x Is Rdataframe Then
+            Dim colNames As String() = DirectCast(x, Rdataframe).columns _
                 .Keys _
                 .ToArray
 
-            model = DirectCast(dataset, Rdataframe) _
+            model = DirectCast(x, Rdataframe) _
                 .forEachRow _
                 .Select(Function(r)
                             Return New EntityClusterModel With {
@@ -278,7 +278,7 @@ Module clustering
                         End Function) _
                 .ToArray
         Else
-            Return REnv.Internal.debug.stop(New InvalidProgramException(dataset.GetType.FullName), env)
+            Return REnv.Internal.debug.stop(New InvalidProgramException(x.GetType.FullName), env)
         End If
 
         Return model.Kmeans(centers, debug, parallel).ToArray
