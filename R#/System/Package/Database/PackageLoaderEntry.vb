@@ -167,7 +167,14 @@ Namespace Development.Package
 
             If loader Is Nothing AndAlso Not exception Is Nothing Then
                 If TypeOf exception Is DllNotFoundException Then
-                    exception = New DllNotFoundException($"{exception.Message}, SetDllDirectory [{dllDirectory.JoinBy(", ")}]")
+                    Dim dllDirectoryList As String = dllDirectory _
+                        .Select(Function(dir)
+                                    Return dir.GetDirectoryFullPath
+                                End Function) _
+                        .Distinct _
+                        .JoinBy(", ")
+
+                    exception = New DllNotFoundException($"{exception.Message}, SetDllDirectory [{dllDirectoryList}]")
                 End If
             End If
 
