@@ -54,6 +54,7 @@
 Imports System.Reflection
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
+Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Runtime.Interop.Operator
 
@@ -62,11 +63,17 @@ Namespace Runtime.Interop.Operator
         ReadOnly left, right As RType
         ReadOnly method As MethodInfo
 
+        Public Property op As ROperatorAttribute
+
         Sub New(left As RType, right As RType, api As MethodInfo)
             Me.left = left
             Me.right = right
             Me.method = api
         End Sub
+
+        Public Overrides Function ToString() As String
+            Return $"{left}{op}{right} => {method.ToString}"
+        End Function
 
         Public Function GetInvoke(argsN As Integer) As IBinaryOperator
             ' fix of System.Reflection.TargetParameterCountException: Parameter count mismatch.
@@ -102,7 +109,11 @@ Namespace Runtime.Interop.Operator
             ElseIf TypeOf y Is Message Then
                 Return y
             Else
-                Return method.Invoke(Nothing, {x, y, internal})
+                Try
+                    Return method.Invoke(Nothing, {x, y, internal})
+                Catch ex As Exception
+                    Return REnv.debug.stop(New Exception(ToString, ex), internal)
+                End Try
             End If
         End Function
 

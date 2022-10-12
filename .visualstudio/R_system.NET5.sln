@@ -7264,6 +7264,7 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\studio\Rstudio.common\Rstudio.common.projitems*{14010b90-bc3b-42d9-a52c-30ca537d3c11}*SharedItemsImports = 13
+		..\Library\shares\dataframeHelper\dataframeHelper.projitems*{361137d5-1024-44fe-b61d-fcebec342c06}*SharedItemsImports = 5
 		..\Library\shares\JsonHelper\JsonHelper.projitems*{361137d5-1024-44fe-b61d-fcebec342c06}*SharedItemsImports = 5
 		..\Library\shares\JsonHelper\JsonHelper.projitems*{470aab61-e443-46ea-8e9f-8e67b7750e25}*SharedItemsImports = 5
 		..\Library\shares\R_graphic.interop\R_graphic.interop.projitems*{4de5c337-fa74-4eb9-a2ba-a29899031216}*SharedItemsImports = 5
@@ -7273,6 +7274,7 @@ Global
 		..\..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{7df565ae-6e7a-4667-ab6d-9908acbeed8b}*SharedItemsImports = 13
 		..\studio\Rstudio.common\Rstudio.common.projitems*{9aa7a0bd-50a7-4f14-a2cf-345519a55a3f}*SharedItemsImports = 5
 		..\Library\shares\JsonHelper\JsonHelper.projitems*{b2ae1422-d7da-4053-a386-eb2ea9326d68}*SharedItemsImports = 13
+		..\Library\shares\dataframeHelper\dataframeHelper.projitems*{c16d56c1-461b-41d8-87b9-23b0c7785770}*SharedItemsImports = 5
 		..\studio\Rstudio.common\Rstudio.common.projitems*{c97e077f-466f-44f2-8363-d606fc093e5e}*SharedItemsImports = 5
 		..\studio\Rstudio.common\Rstudio.common.projitems*{e1995e16-ba23-44ea-81bb-187e93f3d906}*SharedItemsImports = 5
 		..\..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{e1995e16-ba23-44ea-81bb-187e93f3d906}*SharedItemsImports = 5
