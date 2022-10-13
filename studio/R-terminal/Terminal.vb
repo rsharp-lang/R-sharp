@@ -233,7 +233,7 @@ Type 'q()' to quit R.
         Return 0
     End Function
 
-    Private Sub doRunScriptWithSpecialCommand(script As String)
+    Private Async Sub doRunScriptWithSpecialCommand(script As String)
         cts = New CancellationTokenSource
 
         Select Case script
@@ -241,15 +241,9 @@ Type 'q()' to quit R.
                 Call Console.Clear()
             Case Else
                 If Not script Is Nothing Then
-                    Rtask = New RunScript(script).doRunScript(cts.Token)
-
-                    Do While Not Rtask.IsCompleted
-                        If cts.IsCancellationRequested Then
-                            Exit Do
-                        Else
-                            Call Thread.Sleep(1)
-                        End If
-                    Loop
+                    Await New RunScript(script) _
+                        .doRunScript(cts.Token) _
+                        .CancelWith(cts.Token)
                 Else
                     Console.WriteLine()
                 End If
