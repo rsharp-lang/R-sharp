@@ -140,7 +140,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Dim right As RType = RType.GetRSharpType(sequence.GetType)
 
                 If Not op Like GetType(Message) AndAlso op.TryCast(Of BinaryIndex).hasOperator(left, right) Then
-                    Return op.TryCast(Of BinaryIndex).Evaluate(testLeft, sequence, envir)
+                    Return op.TryCast(Of BinaryIndex).Evaluate(testLeft, sequence, Me.ToString, envir)
                 Else
                     ' and then try index hash
                     flags = testVectorIndexOf(getIndex(sequence).AsObjectEnumerator.Indexing, testLeft)
