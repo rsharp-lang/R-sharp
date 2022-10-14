@@ -125,7 +125,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 right = b.GetType.FullName
             End If
 
-            Return Internal.debug.stop(New NotImplementedException($"<{left}> {[operator]} <{right}>"), env)
+            Return Internal.debug.stop(New NotImplementedException($"[{left}] {[operator]} [{right}]"), env)
         End Function
 
         Public Function DoStringBinary(Of Out)(a As Object, b As Object, op As Func(Of Object, Object, Object)) As Out()
