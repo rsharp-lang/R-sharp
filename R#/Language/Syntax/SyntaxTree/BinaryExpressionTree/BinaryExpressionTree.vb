@@ -444,6 +444,12 @@ Namespace Language.Syntax.SyntaxParser
                 Dim symbol As New DeclareNewSymbol(DirectCast(a, Literal).ValueStr, unknow)
                 Dim lambda As New DeclareLambdaFunction($"f({a}) -> {b}", symbol, b, unknow)
 
+                ' 20221014 handling for the syntax implements:
+                ' 
+                ' dataframe |> rename(
+                '     "#OTU ID" -> OTU_num
+                ' );
+                '
                 Return lambda
             Else
                 Return New BinaryExpression(a, b, opToken)
