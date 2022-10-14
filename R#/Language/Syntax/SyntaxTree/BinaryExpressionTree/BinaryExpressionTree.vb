@@ -438,6 +438,13 @@ Namespace Language.Syntax.SyntaxParser
                 Return New BinaryOrExpression(a, b)
             ElseIf opToken = "|>" OrElse opToken = ":>" Then
                 Return PipelineProcessor.buildPipeline(a, b, opts)
+            ElseIf opToken = "->" AndAlso TypeOf a Is Literal Then
+                ' is a lambda expression?
+                Dim unknow = StackFrame.FromUnknownLocation("CreateBinary")
+                Dim symbol As New DeclareNewSymbol(DirectCast(a, Literal).ValueStr, unknow)
+                Dim lambda As New DeclareLambdaFunction($"f({a}) -> {b}", symbol, b, unknow)
+
+                Return lambda
             Else
                 Return New BinaryExpression(a, b, opToken)
             End If
