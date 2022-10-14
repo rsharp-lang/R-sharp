@@ -188,7 +188,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             If handleResult Like GetType(Message) Then
                 Return handleResult.TryCast(Of Message)
             Else
-                Return handleResult.TryCast(Of BinaryIndex).Evaluate(a, b, envir)
+                Return handleResult.TryCast(Of BinaryIndex).Evaluate(a, b, Me.ToString, envir)
             End If
         End Function
 

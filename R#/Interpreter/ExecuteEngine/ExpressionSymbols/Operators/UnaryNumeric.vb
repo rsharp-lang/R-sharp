@@ -75,6 +75,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Get
         End Property
 
+        ''' <summary>
+        ''' +-!
+        ''' </summary>
         Friend ReadOnly [operator] As String
         ''' <summary>
         ''' 可能是一个符号，也可以能是一个对象引用
@@ -100,7 +103,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     If handleResult Like GetType(Message) Then
                         Return handleResult.TryCast(Of Message)
                     Else
-                        Return handleResult.TryCast(Of BinaryIndex).Evaluate(0, value, envir)
+                        Return handleResult.TryCast(Of BinaryIndex).Evaluate(0, value, Me.ToString, envir)
                     End If
                 Case Else
                     Throw New NotImplementedException([operator])

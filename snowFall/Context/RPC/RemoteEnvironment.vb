@@ -85,7 +85,7 @@ Namespace Context.RPC
         Sub New(uuid As Integer, master As IPEndPoint, parent As Environment)
             Call MyBase.New(
                 parent:=parent,
-                stackName:=$"&H{uuid.ToHexString}@{master.ToString}",
+                stackName:=$"snowfall_prallel_RPC_slave_node%&H{uuid.ToHexString}@{master.ToString}",
                 isInherits:=False
             )
 

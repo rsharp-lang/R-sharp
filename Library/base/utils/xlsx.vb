@@ -54,6 +54,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME
 Imports Microsoft.VisualBasic.MIME.Office.Excel
@@ -68,12 +69,11 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
+Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataFrame
 Imports msXlsx = Microsoft.VisualBasic.MIME.Office.Excel.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rsharp = SMRUCC.Rsharp
-Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataFrame
-Imports Microsoft.VisualBasic.Language
 
 ''' <summary>
 ''' Xlsx file toolkit
@@ -119,6 +119,7 @@ Module xlsx
                              Optional check_names As Boolean = True,
                              Optional check_modes As Boolean = True,
                              Optional comment_char As Char = "#"c,
+                             Optional skip_rows As Integer = -1,
                              Optional env As Environment = Nothing) As Object
         Dim xlsx As msXlsx
         Dim table As csv
@@ -144,7 +145,14 @@ Module xlsx
         ElseIf table Is Nothing Then
             Return Nothing
         Else
-            Return table.rawToDataFrame(row_names, check_names, check_modes, comment_char, env)
+            Return table.rawToDataFrame(
+                row_names:=row_names,
+                check_names:=check_names,
+                check_modes:=check_modes,
+                comment_char:=comment_char,
+                skip_rows:=skip_rows,
+                env:=env
+            )
         End If
     End Function
 

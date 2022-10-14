@@ -123,15 +123,15 @@ Namespace Runtime.Interop.Operator
             hashIndexCache.Add(hashKey, bin)
         End Sub
 
-        Public Function Evaluate(left As Object, right As Object, env As Environment) As Object
+        Public Function Evaluate(left As Object, right As Object, traceExpr As String, env As Environment) As Object
             If left Is Nothing Then
                 If Not right Is Nothing Then
-                    Return leftNull(right, env)
+                    Return leftNull(right, traceExpr, env)
                 Else
-                    Return noneValue(env)
+                    Return noneValue(traceExpr, env)
                 End If
             ElseIf right Is Nothing Then
-                Return rightNull(left, env)
+                Return rightNull(left, traceExpr, env)
             ElseIf base.isEmpty(left) Then
                 Return New Object() {}
             ElseIf base.isEmpty(right) Then
@@ -156,7 +156,8 @@ Namespace Runtime.Interop.Operator
                         $"operator symbol '{symbol}' is not defined for binary expression ({t1} {symbol} {t2})",
                         $"symbol: {symbol}",
                         $"typeof left: {t1}",
-                        $"typeof right: {t2}"
+                        $"typeof right: {t2}",
+                        $"traceback: {traceExpr}"
                     }, env)
                 End If
             End If
@@ -184,7 +185,7 @@ Namespace Runtime.Interop.Operator
         ''' <param name="left"></param>
         ''' <param name="env"></param>
         ''' <returns></returns>
-        Private Function rightNull(left As Object, env As Environment) As Object
+        Private Function rightNull(left As Object, traceExpr As String, env As Environment) As Object
             Dim t As RType = typeOfImpl(left)
 
             For Each op As BinaryOperator In operators
@@ -197,11 +198,12 @@ Namespace Runtime.Interop.Operator
                 $"operator symbol '{symbol}' is not defined for binary expression ({t} {symbol} NA)",
                 $"symbol: {symbol}",
                 $"typeof left: {t}",
-                $"typeof right: NA"
+                $"typeof right: NA",
+                $"traceback: {traceExpr}"
             }, env)
         End Function
 
-        Private Function noneValue(env As Environment) As Object
+        Private Function noneValue(traceExpr As String, env As Environment) As Object
             Dim tVoid As RType = RType.GetRSharpType(GetType(Void))
             Dim hashKey As String = $"{tVoid}|{tVoid}"
 
@@ -210,7 +212,8 @@ Namespace Runtime.Interop.Operator
             Else
                 Return Internal.debug.stop({
                      $"operator symbol '{symbol}' is not defined for binary expression (NULL {symbol} NULL)",
-                     $"symbol: {symbol}"
+                     $"symbol: {symbol}",
+                     $"traceback: {traceExpr}"
                 }, env)
             End If
         End Function
@@ -221,7 +224,7 @@ Namespace Runtime.Interop.Operator
         ''' <param name="right"></param>
         ''' <param name="env"></param>
         ''' <returns></returns>
-        Private Function leftNull(right As Object, env As Environment) As Object
+        Private Function leftNull(right As Object, traceExpr As String, env As Environment) As Object
             Dim t As RType = typeOfImpl(right)
 
             For Each op As BinaryOperator In operators
@@ -234,7 +237,8 @@ Namespace Runtime.Interop.Operator
                 $"operator symbol '{symbol}' is not defined for binary expression (NA {symbol} {t})",
                 $"symbol: {symbol}",
                 $"typeof left: NA",
-                $"typeof right: {t}"
+                $"typeof right: {t}",
+                $"traceback: {traceExpr}"
             }, env)
         End Function
 

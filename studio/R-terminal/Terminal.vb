@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::774b22ad33c699eaa6c1d49ddfc14380, R-sharp\studio\R-terminal\Terminal.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 219
-    '    Code Lines: 126
-    ' Comment Lines: 60
-    '   Blank Lines: 33
-    '     File Size: 7.46 KB
+' Summaries:
 
 
-    ' Module Terminal
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: RunTerminal
-    ' 
-    '     Sub: [exit], doRunScript, doRunScriptWithSpecialCommand, q, quit
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 219
+'    Code Lines: 126
+' Comment Lines: 60
+'   Blank Lines: 33
+'     File Size: 7.46 KB
+
+
+' Module Terminal
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: RunTerminal
+' 
+'     Sub: [exit], doRunScript, doRunScriptWithSpecialCommand, q, quit
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -74,8 +74,8 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 Module Terminal
 
     Dim R As RInterpreter
-    Dim Rtask As Thread
-    Dim cancel As New ManualResetEvent(initialState:=False)
+    Dim Rtask As Task
+    Dim cts As CancellationTokenSource
 
 #Region "enable quit the R# environment in the terminal console mode"
 
@@ -223,13 +223,7 @@ Type 'q()' to quit R.
                 ' ctrl + C just break the current executation
                 ' not exit program running
                 terminate.Cancel = True
-                cancel.Set()
-
-#Disable Warning
-                If Not Rtask Is Nothing Then
-                    Rtask.Abort()
-                End If
-#Enable Warning
+                cts.Cancel()
             End Sub
 
         Call New Shell(New PS1("> "), AddressOf doRunScriptWithSpecialCommand) With {
@@ -239,18 +233,17 @@ Type 'q()' to quit R.
         Return 0
     End Function
 
-    Private Sub doRunScriptWithSpecialCommand(script As String)
+    Private Async Sub doRunScriptWithSpecialCommand(script As String)
+        cts = New CancellationTokenSource
+
         Select Case script
             Case "CLS"
                 Call Console.Clear()
             Case Else
                 If Not script Is Nothing Then
-                    Rtask = New Thread(Sub() Call doRunScript(script))
-                    Rtask.Start()
-
-                    ' block the running task thread at here
-                    cancel.Reset()
-                    cancel.WaitOne()
+                    Await New RunScript(script) _
+                        .doRunScript(cts.Token) _
+                        .CancelWith(cts.Token)
                 Else
                     Console.WriteLine()
                 End If
@@ -259,18 +252,29 @@ Type 'q()' to quit R.
         Console.Title = "R# language"
     End Sub
 
-    Private Sub doRunScript(script As String)
-        Dim error$ = Nothing
-        Dim program As RProgram = RProgram.BuildProgram(script, [error]:=[error])
-        Dim result As Object
+    Private Class RunScript
 
-        If Not [error].StringEmpty Then
-            result = REnv.Internal.debug.stop([error], R.globalEnvir)
-        Else
-            result = REnv.TryCatch(Function() R.Run(program), debug:=R.debug)
-        End If
+        ReadOnly script As String
 
-        Call Rscript.handleResult(result, R.globalEnvir, program)
-        Call cancel.Set()
-    End Sub
+        Sub New(script As String)
+            Me.script = script
+        End Sub
+
+        Public Async Function doRunScript(ct As CancellationToken) As Task(Of Integer)
+            Dim error$ = Nothing
+            Dim program As RProgram = RProgram.BuildProgram(script, [error]:=[error])
+            Dim result As Object
+
+            Await Task.Delay(1)
+
+            If Not [error].StringEmpty Then
+                result = REnv.Internal.debug.stop([error], R.globalEnvir)
+            Else
+                result = REnv.TryCatch(Function() R.Run(program), debug:=R.debug)
+            End If
+
+            Return Rscript.handleResult(result, R.globalEnvir, program)
+        End Function
+
+    End Class
 End Module

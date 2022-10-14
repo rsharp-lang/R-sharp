@@ -231,7 +231,8 @@ Namespace Runtime.Interop.Operator
                 If Not opTag Is Nothing Then
                     Dim left As RType = RType.GetRSharpType(args(Scan0).ParameterType)
                     Dim right As RType = RType.GetRSharpType(args(1).ParameterType)
-                    Dim invoke As IBinaryOperator = New ROperatorInvoke(left, right, method).GetInvoke(argsN:=args.Length)
+                    Dim op As New ROperatorInvoke(left, right, method) With {.op = opTag}
+                    Dim invoke As IBinaryOperator = op.GetInvoke(argsN:=args.Length)
 
                     Call addBinary(left, right, opTag.operator, invoke, env, [overrides]:=True)
                 End If
