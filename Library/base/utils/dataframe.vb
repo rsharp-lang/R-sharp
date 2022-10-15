@@ -261,10 +261,23 @@ Module dataframe
                                    Optional check_names As Boolean = True,
                                    Optional check_modes As Boolean = True,
                                    Optional comment_char As Char = "#"c,
+                                   Optional skip_rows As Integer = -1,
                                    Optional env As Environment = Nothing) As Object
 
-        Dim cols() = raw.stripCommentRows(comment_char).Columns.ToArray
-        Dim colNames As String() = cols.Select(Function(col) col(Scan0)).ToArray
+        Dim cols() = raw _
+            .DoCall(Function(table)
+                        If skip_rows > 0 Then
+                            Return New csv(table.Skip(skip_rows))
+                        Else
+                            Return table
+                        End If
+                    End Function) _
+            .stripCommentRows(comment_char) _
+            .Columns _
+            .ToArray
+        Dim colNames As String() = cols _
+            .Select(Function(col) col(Scan0)) _
+            .ToArray
 
         If check_names Then
             colNames = Internal.Invokes.base.makeNames(colNames, unique:=True)

@@ -144,10 +144,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Function
 
         Public Function DoValueAssign(envir As Environment, value As Object) As Object
-            If Not value Is Nothing AndAlso value.GetType Is GetType(IfPromise) Then
+            If TypeOf value Is IfPromise Then
                 ' 如果是if分支返回的结果，则将if分支的赋值对象设置为
                 ' 当前的赋值操作的目标对象符号
                 DirectCast(value, IfPromise).assignTo = Me
+                Return value
+            ElseIf Program.isException(value) Then
                 Return value
             Else
                 If Not value Is Nothing AndAlso TypeOf value Is invisible Then

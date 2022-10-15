@@ -188,6 +188,7 @@ Public Module utils
                              Optional encoding As Object = "unknown",
                              Optional comment_char As String = "#",
                              Optional tsv As Boolean = False,
+                             Optional skip_rows As Integer = -1,
                              Optional env As Environment = Nothing) As Object
 
         Dim datafile As Object
@@ -220,7 +221,14 @@ Public Module utils
         If Not TypeOf datafile Is file Then
             Return Internal.debug.stop(datafile, env)
         Else
-            Return DirectCast(datafile, csv).rawToDataFrame(row_names, check_names, check_modes, comment_char, env)
+            Return DirectCast(datafile, csv).rawToDataFrame(
+                row_names:=row_names,
+                check_names:=check_names,
+                check_modes:=check_modes,
+                comment_char:=comment_char,
+                skip_rows:=skip_rows,
+                env:=env
+            )
         End If
     End Function
 
