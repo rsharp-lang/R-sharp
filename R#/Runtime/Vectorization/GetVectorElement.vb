@@ -56,6 +56,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 
 Namespace Runtime.Vectorization
 
@@ -179,6 +180,10 @@ Namespace Runtime.Vectorization
             If x Is Nothing Then
                 Return New GetVectorElement(vec:=Nothing)
             Else
+                If TypeOf x Is vector Then
+                    x = DirectCast(x, vector).data
+                End If
+
                 Dim type As Type = x.GetType
 
                 If type Is typedefine(Of T).baseType Then
