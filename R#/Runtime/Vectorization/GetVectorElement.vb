@@ -73,11 +73,11 @@ Namespace Runtime.Vectorization
         ''' <summary>
         ''' is a scalar value
         ''' </summary>
-        ReadOnly [single] As Object
+        Friend ReadOnly [single] As Object
         ''' <summary>
         ''' is a vector data
         ''' </summary>
-        ReadOnly vector As Array
+        Friend ReadOnly vector As Array
         ''' <summary>
         ''' method cache for get value by index for unify
         ''' the <see cref="[single]"/> scalar and the 
