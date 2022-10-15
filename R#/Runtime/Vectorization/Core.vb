@@ -63,7 +63,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports REnv = SMRUCC.Rsharp.Runtime
 
-Namespace Runtime
+Namespace Runtime.Vectorization
 
     ''' <summary>
     ''' Operator impl core
