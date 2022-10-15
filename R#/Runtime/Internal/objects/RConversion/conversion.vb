@@ -1018,7 +1018,7 @@ RE0:
             ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Return Runtime.CTypeOfList(Of Boolean)(obj, env)
             Else
-                Return Runtime.asLogical(obj)
+                Return Vectorization.asLogical(obj)
             End If
         End Function
 

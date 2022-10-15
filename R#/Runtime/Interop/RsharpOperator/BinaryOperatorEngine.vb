@@ -59,6 +59,7 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Runtime.Interop.Operator
 

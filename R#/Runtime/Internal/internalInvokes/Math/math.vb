@@ -298,7 +298,7 @@ Namespace Runtime.Internal.Invokes
 
             Select Case elementType
                 Case GetType(Boolean)
-                    Return Runtime.asLogical(array).Select(Function(b) If(b, 1, 0)).Sum
+                    Return Vectorization.asLogical(array).Select(Function(b) If(b, 1, 0)).Sum
                 Case GetType(Integer), GetType(Long), GetType(Short), GetType(Byte)
                     Return Runtime.asVector(Of Long)(x).AsObjectEnumerator(Of Long).Sum
                 Case Else
@@ -311,7 +311,7 @@ Namespace Runtime.Internal.Invokes
             x = Runtime.asVector(Of Double)(x)
             y = Runtime.asVector(Of Double)(y)
 
-            Return Runtime.Core.Power(Of Double, Double, Double)(x, y).ToArray
+            Return Vectorization.Power(Of Double, Double, Double)(x, y).ToArray
         End Function
 
         <ExportAPI("sqrt")>

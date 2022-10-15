@@ -131,7 +131,7 @@ Namespace Runtime.Internal.Object.Converts
 
         <Extension>
         Private Function dataframe_castList(obj As Object, args As list, env As Environment) As Object
-            Dim byRow As Boolean = REnv.asLogical(args!byrow)(Scan0)
+            Dim byRow As Boolean = Vectorization.asLogical(args!byrow)(Scan0)
             Dim names As String = any.ToString(REnv.getFirst(args!names), null:=Nothing)
             Dim df As dataframe = DirectCast(obj, dataframe)
 

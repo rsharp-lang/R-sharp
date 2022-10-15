@@ -99,7 +99,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
                 If Program.isException(test) Then
                     Return test
-                ElseIf False = asLogical(test)(Scan0) Then
+                ElseIf False = Vectorization.asLogical(test)(Scan0) Then
                     Exit Do
                 Else
                     value = Me.loopBody.Evaluate(env)

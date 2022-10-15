@@ -95,7 +95,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim ifTestResult = ifTest.Evaluate(envir)
-            Dim test As Boolean = REnv.asLogical(ifTestResult)(Scan0)
+            Dim test As Boolean = Vectorization.asLogical(ifTestResult)(Scan0)
 
             If test = True Then
                 Return trueResult.Evaluate(envir)

@@ -628,7 +628,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim vec As Array
 
             If REnv.isVector(Of Boolean)(indexer) Then
-                vec = Rarray.getByIndex(which.IsTrue(REnv.asLogical(indexer), offset:=1))
+                vec = Rarray.getByIndex(which.IsTrue(Vectorization.asLogical(indexer), offset:=1))
             ElseIf indexer.Length = 1 Then
                 Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
             Else

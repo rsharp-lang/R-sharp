@@ -374,7 +374,7 @@ Namespace Runtime.Internal.Object
             Dim indexType As Type = MeasureRealElementType(selector)
 
             If indexType Like RType.logicals Then
-                Return GetByRowIndex(index:=which.IsTrue(asLogical(selector)))
+                Return GetByRowIndex(index:=which.IsTrue(Vectorization.asLogical(selector)))
             ElseIf indexType Like RType.integers Then
                 Return GetByRowIndex(index:=DirectCast(asVector(Of Integer)(selector), Integer()).Select(Function(i) i - 1).ToArray)
             ElseIf indexType Like RType.characters Then
