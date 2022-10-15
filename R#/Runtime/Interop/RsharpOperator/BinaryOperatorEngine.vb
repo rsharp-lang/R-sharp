@@ -124,11 +124,15 @@ Namespace Runtime.Interop.Operator
             Call addBinary(dateType, dateType, "==", equalsTo, Nothing)
         End Sub
 
+        ' 20221016 为了更加高效率的实现SIMD相关的功能
+        ' 在这里数学计算的的运算符调用就不使用泛型函数来执行了
+        ' 在这里的泛型函数可能会带来比较大的性能损失
+
         Private Sub addFloatOperators()
             Dim left As RType = RType.GetRSharpType(GetType(Double))
             Dim right As RType = RType.GetRSharpType(GetType(Double))
 
-            Call addBinary(left, right, "+", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) + DirectCast(y, Double)).ToArray, Nothing)
+            Call addBinary(left, right, "+", AddressOf Vectorization.Add.f64_op_add_f64, Nothing)
             Call addBinary(left, right, "-", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) - DirectCast(y, Double)).ToArray, Nothing)
             Call addBinary(left, right, "*", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) * DirectCast(y, Double)).ToArray, Nothing)
             Call addBinary(left, right, "/", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) / DirectCast(y, Double)).ToArray, Nothing)
@@ -160,6 +164,11 @@ Namespace Runtime.Interop.Operator
             Call addBinary(left, right, "!=", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) <> DirectCast(y, Long)).ToArray, Nothing)
         End Sub
 
+        ''' <summary>
+        ''' left and right should be in different type
+        ''' </summary>
+        ''' <param name="left"></param>
+        ''' <param name="right"></param>
         Private Sub addMixedOperators(left As RType, right As RType)
             Call addBinary(left, right, "+", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) + DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
             Call addBinary(left, right, "-", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) - DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
