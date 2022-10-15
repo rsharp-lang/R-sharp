@@ -103,7 +103,7 @@ Module plot3D
         Dim cx As Double() = REnv.asVector(Of Double)(x)
         Dim cy As Double() = REnv.asVector(Of Double)(y)
         Dim cz As Double() = REnv.asVector(Of Double)(z)
-        Dim aligns As Array() = Core.VectorAlignment(cx, cy, cz).ToArray
+        Dim aligns As Array() = Vectorization.VectorAlignment(cx, cy, cz).ToArray
         Dim points As New List(Of NamedValue(Of Point3D))
 
         cx = aligns(0)

@@ -1218,7 +1218,7 @@ Public Module NetworkModule
                 .Where(Function(n)
                            Dim test As Object = selector.Invoke(env, InvokeParameter.CreateLiterals(n))
                            ' get test result
-                           Return REnv _
+                           Return Vectorization _
                                .asLogical(test) _
                                .FirstOrDefault
                        End Function) _
