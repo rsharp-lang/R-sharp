@@ -1,62 +1,69 @@
 ﻿#Region "Microsoft.VisualBasic::0e12f14d2af42d09cc3eee31e22634a2, R-sharp\R#\Runtime\System\GetVectorElement.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 68
-    '    Code Lines: 54
-    ' Comment Lines: 4
-    '   Blank Lines: 10
-    '     File Size: 2.27 KB
+' Summaries:
 
 
-    '     Class GetVectorElement
-    ' 
-    '         Properties: isNullOrEmpty
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: CastTo, Getter
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 68
+'    Code Lines: 54
+' Comment Lines: 4
+'   Blank Lines: 10
+'     File Size: 2.27 KB
+
+
+'     Class GetVectorElement
+' 
+'         Properties: isNullOrEmpty
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: CastTo, Getter
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime.Vectorization
+
+    Public Enum VectorTypes
+        None
+        Scalar
+        Vector
+    End Enum
 
     ''' <summary>
     ''' helper class object for make a safe vector element visiting
@@ -91,18 +98,55 @@ Namespace Runtime.Vectorization
             End Get
         End Property
 
+        Public ReadOnly Property size As Integer
+            Get
+                If vector Is Nothing Then
+                    Return 0
+                Else
+                    Return vector.Length
+                End If
+            End Get
+        End Property
+
+        Public Property Mode As VectorTypes
+
+        ''' <summary>
+        ''' maybe a scalar value or a array vector
+        ''' </summary>
+        ''' <param name="vec"></param>
         Sub New(vec As Array)
             Me.vector = vec
 
-            If vec Is Nothing Then
+            If vec Is Nothing OrElse vec.Length = 0 Then
                 [single] = Nothing
-            ElseIf vec.Length = 0 Then
-                [single] = Nothing
+                Mode = VectorTypes.None
             Else
                 [single] = vec.GetValue(Scan0)
+
+                If [single] Is Nothing Then
+                    Me.vector = Nothing
+                    Mode = VectorTypes.None
+                ElseIf vec.Length = 1 Then
+                    Mode = VectorTypes.Scalar
+                Else
+                    Mode = VectorTypes.Vector
+                End If
             End If
 
             m_get = Getter()
+        End Sub
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="scalar">
+        ''' this item should never be nothing?
+        ''' </param>
+        Private Sub New(scalar As Object)
+            Me.vector = {scalar}
+            Me.[single] = scalar
+            Me.m_get = Getter()
+            Me.Mode = VectorTypes.Scalar
         End Sub
 
         Public Function CastTo(Of T)(cast As Func(Of Object, T)) As GetVectorElement
@@ -128,6 +172,36 @@ Namespace Runtime.Vectorization
                                Return vector.GetValue(i)
                            End If
                        End Function
+            End If
+        End Function
+
+        Public Shared Function Create(Of T)(x As Object) As GetVectorElement
+            If x Is Nothing Then
+                Return New GetVectorElement(vec:=Nothing)
+            Else
+                Dim type As Type = x.GetType
+
+                If type Is typedefine(Of T).baseType Then
+                    ' is a scalar
+                    Return New GetVectorElement(scalar:=x)
+                ElseIf type.ImplementInterface(typedefine(Of T).enumerable) Then
+                    ' is a generic collection
+                    If type.IsArray Then
+                        Return New GetVectorElement(DirectCast(x, Array))
+                    Else
+                        ' cast collection to array
+                        Dim list As New List(Of Object)
+
+                        For Each item As Object In DirectCast(x, IEnumerable)
+                            Call list.Add(item)
+                        Next
+
+                        Return New GetVectorElement(list.ToArray)
+                    End If
+                Else
+                    ' do type cast?
+                    Throw New InvalidCastException($"Do we require a type cast for {type} -> {GetType(T)}?")
+                End If
             End If
         End Function
     End Class

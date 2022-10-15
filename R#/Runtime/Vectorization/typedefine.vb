@@ -7,11 +7,11 @@
     Public NotInheritable Class typedefine(Of T)
 
         ''' <summary>
-        ''' The vector based type
+        ''' The vector based type(type of scaler value)
         ''' </summary>
         Public Shared ReadOnly baseType As Type
         ''' <summary>
-        ''' The abstract vector type
+        ''' The abstract vector type(array, list, collection, etc)
         ''' </summary>
         Public Shared ReadOnly enumerable As Type
 
