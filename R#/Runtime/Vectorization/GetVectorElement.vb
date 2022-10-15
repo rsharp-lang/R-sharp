@@ -56,15 +56,26 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Linq
 
-Namespace Runtime.Components
+Namespace Runtime.Vectorization
 
     ''' <summary>
     ''' helper class object for make a safe vector element visiting
     ''' </summary>
     Public Class GetVectorElement
 
+        ''' <summary>
+        ''' is a scalar value
+        ''' </summary>
         ReadOnly [single] As Object
+        ''' <summary>
+        ''' is a vector data
+        ''' </summary>
         ReadOnly vector As Array
+        ''' <summary>
+        ''' method cache for get value by index for unify
+        ''' the <see cref="[single]"/> scalar and the 
+        ''' <see cref="vector"/> array.
+        ''' </summary>
         ReadOnly m_get As Func(Of Integer, Object)
 
         Public ReadOnly Property isNullOrEmpty As Boolean
