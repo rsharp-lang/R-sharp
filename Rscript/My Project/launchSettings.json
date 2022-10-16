@@ -2,8 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=33361 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host",
-      "workingDirectory": "\\mzkit\\dist\\bin\\Rstudio\\bin"
+      "commandLineArgs": "--slave /exec \"E:/GCModeller/src/workbench/win32_desktop/fastRWeb//analysis_apps/Rplots/patterns_plot.R\" /args \"H4sIAAAAAAAACqtWKi7OTFGyilYyMDE2SElLMktLtTA0NbM0S00yNzdKNrVIMjA0MjRLMlaKrQUAoBSiGS0AAAA=\" /request-id \"web_request__0014c\" /PORT \"3838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE --attach E:\\GCModeller\\src\\workbench\\pkg"
     }
   }
 }
