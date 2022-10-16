@@ -221,10 +221,12 @@ Public Class RProcessor
         '#End If
         '        End If
         Dim task As RunSlavePipeline = Rslave.CreateSlave(arguments, workdir:=App.HOME)
+
+        ' view commandline
+        Call Console.WriteLine(task.ToString)
+
         task.Shell = True
         task.Run()
-
-        Call Console.WriteLine(task.ToString)
 
         If Not is_background Then
             Call pushBackResult(request_id, request, response)
