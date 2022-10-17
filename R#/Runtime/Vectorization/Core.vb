@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::70d7a3e28279f8726b780f542f41c6dd, R-sharp\R#\Runtime\Core.vb"
+﻿#Region "Microsoft.VisualBasic::9fc2a792b4927fb5e7764606c4b314dc, R-sharp\R#\Runtime\Vectorization\Core.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 346
-    '    Code Lines: 229
-    ' Comment Lines: 62
-    '   Blank Lines: 55
-    '     File Size: 14.23 KB
+    '   Total Lines: 322
+    '    Code Lines: 219
+    ' Comment Lines: 52
+    '   Blank Lines: 51
+    '     File Size: 13.54 KB
 
 
     '     Module Core
@@ -46,11 +46,6 @@
     '         Function: [Module], Add, asLogical, BinaryCoreInternal, Divide
     '                   Minus, Multiply, op_In, Power, safeDivided
     '                   safeModule, safeMultiply, UnaryCoreInternal, VectorAlignment
-    '         Class typedefine
-    ' 
-    '             Constructor: (+2 Overloads) Sub New
-    ' 
-    ' 
     ' 
     ' 
     ' /********************************************************************************/

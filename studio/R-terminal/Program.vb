@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a819c055337b2011cef866c1726938dc, R-sharp\studio\R-terminal\Program.vb"
+﻿#Region "Microsoft.VisualBasic::bbd7a94581d0410c0d4b21dcea08a5a9, R-sharp\studio\R-terminal\Program.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 231
+    '   Total Lines: 237
     '    Code Lines: 167
-    ' Comment Lines: 30
+    ' Comment Lines: 36
     '   Blank Lines: 34
-    '     File Size: 9.23 KB
+    '     File Size: 9.47 KB
 
 
     ' Module Program

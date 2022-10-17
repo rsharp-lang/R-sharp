@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e5dbf25b76de6d473ce00543f92aea15, R-sharp\R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::28956229c596335b8a2359c93ee56f58, R-sharp\R#\Interpreter\RInterpreter.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 382
     ' Comment Lines: 144
     '   Blank Lines: 95
-    '     File Size: 25.52 KB
+    '     File Size: 24.90 KB
 
 
     '     Class RInterpreter

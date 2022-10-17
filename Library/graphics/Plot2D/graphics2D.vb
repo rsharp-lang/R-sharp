@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f6f2315f02ae49985d9e51882d4fcc10, R-sharp\Library\graphics\Plot2D\graphics2D.vb"
+﻿#Region "Microsoft.VisualBasic::602279c4c7899821338b4a6394dbcb0c, R-sharp\Library\graphics\Plot2D\graphics2D.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 471
     ' Comment Lines: 84
     '   Blank Lines: 76
-    '     File Size: 25.79 KB
+    '     File Size: 25.16 KB
 
 
     ' Module graphics2D

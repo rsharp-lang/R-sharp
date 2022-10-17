@@ -1,53 +1,54 @@
-﻿#Region "Microsoft.VisualBasic::d31c5265220070ff37138a07f221f023, R-sharp\studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
+﻿#Region "Microsoft.VisualBasic::93e1d98fb4ad416d25fdd25c5b776528, R-sharp\studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 193
-'    Code Lines: 144
-' Comment Lines: 28
-'   Blank Lines: 21
-'     File Size: 7.86 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module datasetKit
-' 
-'     Constructor: (+1 Overloads) Sub New
-'     Function: demoMatrix, dimensionRange, EmbeddingRender, getNormalizeMatrix, readMNISTLabelledVector
-'               readModelDataset, Tabular
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 335
+    '    Code Lines: 257
+    ' Comment Lines: 37
+    '   Blank Lines: 41
+    '     File Size: 13.54 KB
+
+
+    ' Module datasetKit
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    '     Function: binEncoder, boolEncoder, demoMatrix, dimensionRange, EmbeddingRender
+    '               Encoding, factorEncoder, getNormalizeMatrix, mapEncoder, mapLambda
+    '               readMNISTLabelledVector, readModelDataset, Tabular, toDataframe, toFeatureSet
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

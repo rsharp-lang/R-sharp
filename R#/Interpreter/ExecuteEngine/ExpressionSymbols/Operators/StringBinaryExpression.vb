@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d1d27122ad2960535157ddcbdd398ca7, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\StringBinaryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::d15024767495c6ed7c76ab428a175f1f, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\StringBinaryExpression.vb"
 
     ' Author:
     ' 

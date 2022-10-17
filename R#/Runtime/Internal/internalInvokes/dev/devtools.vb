@@ -1,57 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::7fe2b524a44bfac65e9195e86289daa8, R-sharp\R#\Runtime\Internal\internalInvokes\dev\devtools.vb"
+﻿#Region "Microsoft.VisualBasic::68c2268d1ac086d7154c1224976a317c, R-sharp\R#\Runtime\Internal\internalInvokes\dev\devtools.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 160
-'    Code Lines: 93
-' Comment Lines: 49
-'   Blank Lines: 18
-'     File Size: 7.17 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module devtools
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: fetchProfileData, flash_load, FNV1aHash, getDllPath, profilerFrames
-'                   stringHashCode
-' 
-'         Sub: gc
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 188
+    '    Code Lines: 105
+    ' Comment Lines: 62
+    '   Blank Lines: 21
+    '     File Size: 8.24 KB
+
+
+    '     Module devtools
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: fetchProfileData, flash_load, FNV1aHash, getDllPath, profilerFrames
+    '                   stringHashCode
+    ' 
+    '         Sub: gc, raiseException, raiseThreadException
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

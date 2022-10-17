@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2e57e5647dd816710d12f459ca2975dc, R-sharp\Library\graphics\Rgraphics.vb"
+﻿#Region "Microsoft.VisualBasic::68a8df60b147ec003351f6b4f320200e, R-sharp\Library\graphics\Rgraphics.vb"
 
     ' Author:
     ' 
@@ -35,10 +35,10 @@
     ' Code Statistics:
 
     '   Total Lines: 35
-    '    Code Lines: 10
+    '    Code Lines: 11
     ' Comment Lines: 22
-    '   Blank Lines: 3
-    '     File Size: 1.32 KB
+    '   Blank Lines: 2
+    '     File Size: 1.36 KB
 
 
     ' Module Rgraphics

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::57131e8299fd1304a0fb5b0f027bf766, R-sharp\snowFall\Context\RPC\MasterContext.vb"
+﻿#Region "Microsoft.VisualBasic::200286405d6f1a2f87c597430f906462, R-sharp\snowFall\Context\RPC\MasterContext.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 160
+    '   Total Lines: 162
     '    Code Lines: 96
-    ' Comment Lines: 38
+    ' Comment Lines: 40
     '   Blank Lines: 26
-    '     File Size: 6.12 KB
+    '     File Size: 6.01 KB
 
 
     '     Class MasterContext

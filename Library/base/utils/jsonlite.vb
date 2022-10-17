@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b74e1cd35f375992f012facb6fbc2bf6, R-sharp\Library\base\utils\jsonlite.vb"
+﻿#Region "Microsoft.VisualBasic::3da1b13741ed8603e744f2206933c721, R-sharp\Library\base\utils\jsonlite.vb"
 
     ' Author:
     ' 
@@ -35,10 +35,10 @@
     ' Code Statistics:
 
     '   Total Lines: 221
-    '    Code Lines: 60
+    '    Code Lines: 65
     ' Comment Lines: 147
-    '   Blank Lines: 14
-    '     File Size: 12.06 KB
+    '   Blank Lines: 9
+    '     File Size: 12.27 KB
 
 
     ' Module jsonlitePackage

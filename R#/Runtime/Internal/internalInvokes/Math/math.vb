@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::62f13bb61d5616760b863b821d4a7d3d, R-sharp\R#\Runtime\Internal\internalInvokes\Math\math.vb"
+﻿#Region "Microsoft.VisualBasic::2b54cf601a99148d5f26fa2c7a4722fd, R-sharp\R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
     ' Author:
     ' 

@@ -1,70 +1,70 @@
-﻿#Region "Microsoft.VisualBasic::791aa0a039c2c98e91f813ccb486057c, R-sharp\R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::04bce631a5b1e8ecd1d495922b2ec62e, R-sharp\R#\Runtime\Internal\internalInvokes\base.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 2721
-'    Code Lines: 1181
-' Comment Lines: 1320
-'   Blank Lines: 220
-'     File Size: 124.89 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module base
-' 
-'         Function: [date], [stop], allocate, append, appendOfList
-'                   appendOfVector, attachPackageFile, autoDispose, c, cat
-'                   cbind, colnames, columnVector, days, doPrintInternal
-'                   factor, factors, getOption, ifelse, invisible
-'                   isDataframe, isEmpty, isEmptyArray, isList, isNA
-'                   isNull, isRVector, length, library, makeNames
-'                   names, ncol, neg, nrow, objectAddInvoke
-'                   options, print, range, rbind, Rdataframe
-'                   rep, replace, Rlist, Robj_dimension, rowBindDataFrame
-'                   rownames, seq, sink, source, str
-'                   summary, t, uniqueNames, unitOfT, warning
-'                   year
-' 
-'         Sub: safeAddColumn, warnings
-'         Class PrinterOptions
-' 
-'             Properties: fields, maxPrint, quot
-' 
-' 
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 2731
+    '    Code Lines: 1189
+    ' Comment Lines: 1320
+    '   Blank Lines: 222
+    '     File Size: 124.92 KB
+
+
+    '     Module base
+    ' 
+    '         Function: [date], [stop], allocate, append, appendFinal
+    '                   appendOfList, appendOfVector, attachPackageFile, autoDispose, c
+    '                   cat, cbind, colnames, columnVector, days
+    '                   doPrintInternal, factor, factors, getOption, ifelse
+    '                   invisible, isDataframe, isEmpty, isEmptyArray, isList
+    '                   isNA, isNull, isRVector, length, library
+    '                   makeNames, names, ncol, neg, nrow
+    '                   objectAddInvoke, options, print, range, rbind
+    '                   Rdataframe, rep, replace, Rlist, Robj_dimension
+    '                   rowBindDataFrame, rownames, seq, sink, source
+    '                   str, summary, t, uniqueNames, unitOfT
+    '                   warning, year
+    ' 
+    '         Sub: safeAddColumn, warnings
+    '         Class PrinterOptions
+    ' 
+    '             Properties: fields, maxPrint, quot
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

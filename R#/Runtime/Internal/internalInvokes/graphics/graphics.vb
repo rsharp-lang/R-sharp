@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b8ca79a4d0d52e4bd30c986d456bb1b9, R-sharp\R#\Runtime\Internal\internalInvokes\graphics\graphics.vb"
+﻿#Region "Microsoft.VisualBasic::0ef2e1d8d42ccb78fab3583b1bdb948a, R-sharp\R#\Runtime\Internal\internalInvokes\graphics\graphics.vb"
 
     ' Author:
     ' 
@@ -34,14 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 450
-    '    Code Lines: 276
-    ' Comment Lines: 120
-    '   Blank Lines: 54
-    '     File Size: 19.11 KB
+    '   Total Lines: 461
+    '    Code Lines: 282
+    ' Comment Lines: 122
+    '   Blank Lines: 57
+    '     File Size: 18.87 KB
 
 
     '     Module graphics
+    ' 
+    '         Properties: curDev
     ' 
     '         Function: bitmap, devCur, devOff, drawText, isBase64StringOrFile
     '                   plot, rasterFont, rasterImage, readImage, resizeImage

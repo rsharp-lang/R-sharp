@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d94a371aa5e3d4fb58fb5f88923fcfbc, R-sharp\R#\Runtime\Serialize\bufferObjects\dataframeBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::5b8e34f53eda161775cb0c77e3d2e602, R-sharp\R#\Runtime\Serialize\bufferObjects\dataframeBuffer.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 128
-    '    Code Lines: 105
+    '   Total Lines: 131
+    '    Code Lines: 108
     ' Comment Lines: 0
     '   Blank Lines: 23
-    '     File Size: 4.56 KB
+    '     File Size: 4.70 KB
 
 
     '     Class dataframeBuffer
     ' 
-    '         Properties: code, dataframe
+    '         Properties: code, dataframe, tsv
     ' 
     '         Constructor: (+3 Overloads) Sub New
     ' 

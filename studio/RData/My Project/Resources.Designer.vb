@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5f9a06e5989eabddbdecdbbc3dc5e60c, R-sharp\studio\RData\My Project\Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::f2f96c2bb0a880e9be5403543ae38f34, R-sharp\studio\RData\My Project\Resources.Designer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 32
     ' Comment Lines: 23
     '   Blank Lines: 8
-    '     File Size: 2.81 KB
+    '     File Size: 2.75 KB
 
 
     '     Module Resources

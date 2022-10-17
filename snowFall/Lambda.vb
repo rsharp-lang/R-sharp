@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::907740faefec26f1b8915197b303da2e, R-sharp\snowFall\Lambda.vb"
+﻿#Region "Microsoft.VisualBasic::c92cf16ecdfa5e73ff7274ea726a2b2a, R-sharp\snowFall\Lambda.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 13
     ' Comment Lines: 14
     '   Blank Lines: 3
-    '     File Size: 952 B
+    '     File Size: 923 B
 
 
     ' Module Lambda

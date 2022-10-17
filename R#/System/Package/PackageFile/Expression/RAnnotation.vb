@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4056c4d4d318aa71b17d2c8f00de2822, R-sharp\R#\System\Package\PackageFile\Expression\RAnnotation.vb"
+﻿#Region "Microsoft.VisualBasic::c16d1d6c0e87c36ce719914533d8263f, R-sharp\R#\System\Package\PackageFile\Expression\RAnnotation.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 34
     ' Comment Lines: 0
     '   Blank Lines: 9
-    '     File Size: 1.72 KB
+    '     File Size: 1.67 KB
 
 
     '     Class RAnnotation

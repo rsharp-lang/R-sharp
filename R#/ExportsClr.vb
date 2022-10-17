@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f5f524727fa07a3bf9453860df4daca5, R-sharp\R#\ExportsClr.vb"
+﻿#Region "Microsoft.VisualBasic::d0f08ef40c400f1c1dac5cdaf2064005, R-sharp\R#\ExportsClr.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 8
     ' Comment Lines: 3
     '   Blank Lines: 4
-    '     File Size: 358 B
+    '     File Size: 344 B
 
 
     ' Class ExportsClr

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5f9fcc2b9975532bcf3ab2cfc5de9059, R-sharp\R#\System\Package\Database\PackageLoaderEntry.vb"
+﻿#Region "Microsoft.VisualBasic::6e13aec6da55642901912d85e378092b, R-sharp\R#\System\Package\Database\PackageLoaderEntry.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 140
-    '    Code Lines: 82
+    '   Total Lines: 147
+    '    Code Lines: 88
     ' Comment Lines: 40
-    '   Blank Lines: 18
-    '     File Size: 4.68 KB
+    '   Blank Lines: 19
+    '     File Size: 4.98 KB
 
 
     '     Class PackageInfo

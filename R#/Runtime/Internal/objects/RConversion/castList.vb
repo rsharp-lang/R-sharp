@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::85498f5312fe6d3b24255eeab36b8854, R-sharp\R#\Runtime\Internal\objects\RConversion\castList.vb"
+﻿#Region "Microsoft.VisualBasic::644b3f7784259dd3a77c0e5143a73775, R-sharp\R#\Runtime\Internal\objects\RConversion\castList.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 124
     ' Comment Lines: 12
     '   Blank Lines: 24
-    '     File Size: 6.43 KB
+    '     File Size: 6.44 KB
 
 
     '     Module castList

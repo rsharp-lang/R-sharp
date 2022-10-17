@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6e19f3792c4a3021fe1c2b944b87064c, R-sharp\Library\Rlapack\math.vb"
+﻿#Region "Microsoft.VisualBasic::8f22be212c5575d11126cdeeba9172fc, R-sharp\Library\Rlapack\math.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 740
-    '    Code Lines: 461
-    ' Comment Lines: 189
+    '   Total Lines: 757
+    '    Code Lines: 467
+    ' Comment Lines: 200
     '   Blank Lines: 90
-    '     File Size: 30.36 KB
+    '     File Size: 30.80 KB
 
 
     ' Module math
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: asFormula, binomial, create_deSolve_DataFrame, DiffEntropy, getBinTable
-    '               getMax, getMin, Gini, glm, Hist
-    '               lm, loess, predict, RamerDouglasPeucker, (+2 Overloads) RK4
-    '               sim, ssm, summaryFit
+    '     Function: asFormula, asLmcall, binomial, create_deSolve_DataFrame, DiffEntropy
+    '               getBinTable, getMax, getMin, Gini, glm
+    '               Hist, lm, loess, predict, RamerDouglasPeucker
+    '               (+2 Overloads) RK4, sim, ssm, summaryFit
     ' 
     ' /********************************************************************************/
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::adabf7a2d1ad5e04692fdb0e869acda8, R-sharp\studio\MyRpkg\Rpkg.vb"
+﻿#Region "Microsoft.VisualBasic::f05ad95a394f70e5abc9da221fa1f91c, R-sharp\studio\MyRpkg\Rpkg.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 13
     ' Comment Lines: 0
     '   Blank Lines: 4
-    '     File Size: 436 B
+    '     File Size: 418 B
 
 
     ' Module Rpkg
@@ -66,4 +66,3 @@ Public Module Rpkg
         Call base.print("Hello world!",, env)
     End Sub
 End Module
-

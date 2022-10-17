@@ -1,55 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::874444c512fde55aa50a8c586e7362b6, R-sharp\R#\Language\Syntax\SyntaxTree\ExpressionSignature.vb"
+﻿#Region "Microsoft.VisualBasic::b4c3a79d870f4409c6310806d92476e4, R-sharp\R#\Language\Syntax\SyntaxTree\ExpressionSignature.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 394
-'    Code Lines: 277
-' Comment Lines: 71
-'   Blank Lines: 46
-'     File Size: 14.16 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module ExpressionSignature
-' 
-'         Function: ifElseTriple, isAcceptor, isAnonymous, isByRefCall, isComma
-'                   isFunctionInvoke, isIdentifier, (+2 Overloads) isKeyword, (+2 Overloads) isLambdaFunction, isLiteral
-'                   isNamespaceReferenceCall, isOneOfKeywords, isOperator, isSequenceSyntax, isSimpleSymbolIndexer
-'                   isStackOf, isTuple, isValueAssign, parseComplexSymbolIndexer
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 407
+    '    Code Lines: 288
+    ' Comment Lines: 71
+    '   Blank Lines: 48
+    '     File Size: 14.29 KB
+
+
+    '     Module ExpressionSignature
+    ' 
+    '         Function: ifElseTriple, isAcceptor, isAnonymous, isByRefCall, isComma
+    '                   isFunctionInvoke, isIdentifier, (+2 Overloads) isKeyword, (+2 Overloads) isLambdaFunction, isLiteral
+    '                   isNamespaceReferenceCall, isOneOfKeywords, isOperator, isSequenceSyntax, isSimpleSymbolIndexer
+    '                   isStackOf, isTuple, isValueAssign, isVectorLoop, parseComplexSymbolIndexer
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

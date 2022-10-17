@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1cf8a41953d76f26fa0e0d81aab99929, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
+﻿#Region "Microsoft.VisualBasic::b713861e90730eaeac662c604260fb8e, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 205
     ' Comment Lines: 72
     '   Blank Lines: 37
-    '     File Size: 13.01 KB
+    '     File Size: 12.69 KB
 
 
     '     Delegate Function

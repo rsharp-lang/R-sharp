@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6140626e3b7f46aeb5e21a0dd81fe8f5, R-sharp\Library\igraph\NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::1cfe4be0c58a343a44fb3dc719f5b35e, R-sharp\Library\igraph\NetworkModule.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1248
+    '   Total Lines: 1253
     '    Code Lines: 818
-    ' Comment Lines: 276
+    ' Comment Lines: 281
     '   Blank Lines: 154
-    '     File Size: 48.13 KB
+    '     File Size: 48.28 KB
 
 
     ' Module NetworkModule

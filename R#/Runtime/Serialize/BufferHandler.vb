@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8847aad2083cb762499eadf45191219c, R-sharp\R#\Runtime\Serialize\BufferHandler.vb"
+﻿#Region "Microsoft.VisualBasic::279bbeb91f721e8c999cab028e3840cf, R-sharp\R#\Runtime\Serialize\BufferHandler.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 57
     ' Comment Lines: 1
     '   Blank Lines: 9
-    '     File Size: 3.12 KB
+    '     File Size: 3.05 KB
 
 
     '     Module BufferHandler

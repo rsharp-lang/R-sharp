@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b086dd64c92052b122106ff860b278ce, R-sharp\R#\Runtime\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::ebfcf4e35409b4df2f4ef36eedb89c19, R-sharp\R#\Runtime\Extensions.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 150
-    '    Code Lines: 99
+    '   Total Lines: 159
+    '    Code Lines: 107
     ' Comment Lines: 30
-    '   Blank Lines: 21
-    '     File Size: 5.60 KB
+    '   Blank Lines: 22
+    '     File Size: 5.90 KB
 
 
     '     Module Extensions
     ' 
     '         Function: isCallable, MeasureArrayElementType, MeasureRealElementType, Push, TryCatch
+    '                   verboseOption
     ' 
     ' 
     ' /********************************************************************************/

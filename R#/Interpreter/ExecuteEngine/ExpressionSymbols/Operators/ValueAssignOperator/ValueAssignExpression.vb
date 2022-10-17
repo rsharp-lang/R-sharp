@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::baac01ffbcbab27bd56a76ebca23cf5d, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssignExpression.vb"
+﻿#Region "Microsoft.VisualBasic::341cc101da94012c4a0443270b28a9c4, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssignExpression.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 482
-    '    Code Lines: 363
+    '   Total Lines: 484
+    '    Code Lines: 365
     ' Comment Lines: 39
     '   Blank Lines: 80
-    '     File Size: 20.77 KB
+    '     File Size: 20.81 KB
 
 
     '     Class ValueAssignExpression

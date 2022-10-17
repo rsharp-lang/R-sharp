@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::773c3c0b62f4bd8c0ba97ce593b286c1, R-sharp\R#\Runtime\Serialize\BufferObject.vb"
+﻿#Region "Microsoft.VisualBasic::62162482cbc46ac13cef5b6a094063c5, R-sharp\R#\Runtime\Serialize\BufferObject.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,21 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 35
-    '    Code Lines: 25
-    ' Comment Lines: 0
-    '   Blank Lines: 10
-    '     File Size: 1016 B
+    '   Total Lines: 61
+    '    Code Lines: 39
+    ' Comment Lines: 7
+    '   Blank Lines: 15
+    '     File Size: 1.76 KB
 
 
+    '     Class NullObject
+    ' 
+    '         Properties: code
+    ' 
+    '         Function: getValue
+    ' 
+    '         Sub: loadBuffer, Serialize
+    ' 
     '     Class BufferObject
     ' 
     '         Constructor: (+3 Overloads) Sub New

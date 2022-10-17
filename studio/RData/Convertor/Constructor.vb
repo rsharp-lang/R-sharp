@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7effead9c003e990698aca84442ee9b3, R-sharp\studio\RData\Convertor\Constructor.vb"
+﻿#Region "Microsoft.VisualBasic::f5abff83764cd84aceefd81490d8d409, R-sharp\studio\RData\Convertor\Constructor.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 108
-    '    Code Lines: 85
+    '   Total Lines: 111
+    '    Code Lines: 87
     ' Comment Lines: 6
-    '   Blank Lines: 17
-    '     File Size: 3.85 KB
+    '   Blank Lines: 18
+    '     File Size: 3.94 KB
 
 
     '     Module Constructor

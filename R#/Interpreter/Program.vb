@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::02814b85b0f34dde2dcabe7d1ac9fb21, R-sharp\R#\Interpreter\Program.vb"
+﻿#Region "Microsoft.VisualBasic::e77ffcccc7d4c8bcf74d1ffed16dc736, R-sharp\R#\Interpreter\Program.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 99
     ' Comment Lines: 11
     '   Blank Lines: 22
-    '     File Size: 5.15 KB
+    '     File Size: 5.16 KB
 
 
     '     Class Program

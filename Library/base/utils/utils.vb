@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b6bca6f7c0671b10922dd1dad9258c58, R-sharp\Library\base\utils\utils.vb"
+﻿#Region "Microsoft.VisualBasic::c6189600a1cee2e714d4e6eae17198d8, R-sharp\Library\base\utils\utils.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 447
-    '    Code Lines: 301
-    ' Comment Lines: 103
-    '   Blank Lines: 43
-    '     File Size: 19.37 KB
+    '   Total Lines: 425
+    '    Code Lines: 294
+    ' Comment Lines: 95
+    '   Blank Lines: 36
+    '     File Size: 18.68 KB
 
 
     ' Module utils
     ' 
-    '     Function: DataFrameRows, ensureRowNames, MeasureGenericType, parseRData, printRawTable
-    '               read_csv, saveGeneric, setRowNames, write_csv
+    '     Function: ensureRowNames, MeasureGenericType, parseRData, printRawTable, read_csv
+    '               saveGeneric, saveTextFile, setRowNames, write_csv
     ' 
     '     Sub: Main
     ' 

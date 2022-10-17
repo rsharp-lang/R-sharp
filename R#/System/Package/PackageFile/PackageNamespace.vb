@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::75e6677cfe9bb8a239fb6bfe4de55072, R-sharp\R#\System\Package\PackageFile\PackageNamespace.vb"
+﻿#Region "Microsoft.VisualBasic::680638cba22638287c5a47d8974eee67, R-sharp\R#\System\Package\PackageFile\PackageNamespace.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 69
     ' Comment Lines: 19
     '   Blank Lines: 15
-    '     File Size: 4.20 KB
+    '     File Size: 4.10 KB
 
 
     '     Class PackageNamespace

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2dca05321d45fc33e874747c7a76e99d, R-sharp\Library\Rlapack\RMatrix.vb"
+﻿#Region "Microsoft.VisualBasic::4bc55067ecad9786eb3a760eabf73755, R-sharp\Library\Rlapack\RMatrix.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 45
-    '    Code Lines: 28
-    ' Comment Lines: 10
-    '   Blank Lines: 7
-    '     File Size: 1.39 KB
+    '   Total Lines: 198
+    '    Code Lines: 67
+    ' Comment Lines: 116
+    '   Blank Lines: 15
+    '     File Size: 7.85 KB
 
 
     ' Module RMatrix
     ' 
-    '     Function: Matrix
+    '     Function: eigen, Matrix
     ' 
     ' /********************************************************************************/
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::865615e8d1d34ac49c728cc031a5109b, R-sharp\R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\NameMemberReference.vb"
+﻿#Region "Microsoft.VisualBasic::d5118f24905e4d708366ea5932234b38, R-sharp\R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\NameMemberReference.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,26 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 102
-    '    Code Lines: 78
+    '   Total Lines: 138
+    '    Code Lines: 107
     ' Comment Lines: 9
-    '   Blank Lines: 15
-    '     File Size: 4.38 KB
+    '   Blank Lines: 22
+    '     File Size: 5.90 KB
 
 
+    '     Class ArrayVectorLoopProcessor
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: expression, view
+    ' 
+    '     Delegate Function
+    ' 
+    ' 
     '     Class NameMemberReferenceProcessor
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: createIndexer, expression, view
+    '         Function: (+2 Overloads) createIndexer, expression, view
+    ' 
     ' 
     ' 
     ' /********************************************************************************/

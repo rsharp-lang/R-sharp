@@ -1,58 +1,58 @@
-﻿#Region "Microsoft.VisualBasic::00050aff3bd8f73c5bf609f64f7c654d, R-sharp\R#\Runtime\Internal\internalInvokes\utils.vb"
+﻿#Region "Microsoft.VisualBasic::5361e7d3bd07b6fa69cfe9572defa154, R-sharp\R#\Runtime\Internal\internalInvokes\utils.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 1024
-'    Code Lines: 551
-' Comment Lines: 380
-'   Blank Lines: 93
-'     File Size: 49.36 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module utils
-' 
-'         Function: createAlternativeName, createCommandLine, createTimespan, data, dataSearchByPackageDir
-'                   debugTool, description, FindSystemFile, GetInstalledPackages, head
-'                   installPackages, keyGroups, md5, memorySize, now
-'                   package_skeleton, readFile, system, systemFile, wget
-'                   workdir
-' 
-'         Sub: cls, pause, sleep
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 1186
+    '    Code Lines: 601
+    ' Comment Lines: 483
+    '   Blank Lines: 102
+    '     File Size: 57.34 KB
+
+
+    '     Module utils
+    ' 
+    '         Function: create_zip, createAlternativeName, createCommandLine, createTimespan, data
+    '                   dataSearchByPackageDir, debugTool, description, FindSystemFile, GetInstalledPackages
+    '                   head, installPackages, keyGroups, md5, memorySize
+    '                   now, package_skeleton, readFile, system, systemFile
+    '                   unzipFile, wget, workdir
+    ' 
+    '         Sub: cls, pause, sleep
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8a14127eded72b656c6cb196e52068bb, R-sharp\R#\Interpreter\ExecutableLoop.vb"
+﻿#Region "Microsoft.VisualBasic::4530a00b03de4ec4021957915845171b, R-sharp\R#\Interpreter\ExecutableLoop.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 234
-    '    Code Lines: 154
-    ' Comment Lines: 44
+    '   Total Lines: 240
+    '    Code Lines: 152
+    ' Comment Lines: 52
     '   Blank Lines: 36
-    '     File Size: 9.24 KB
+    '     File Size: 9.47 KB
 
 
     '     Enum DebugLevels
@@ -51,7 +51,7 @@
     ' 
     '     Class ExecutableLoop
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+1 Overloads) Sub New
     ' 
     '         Function: Execute, ExecuteCodeLine, isBreakSignal
     ' 

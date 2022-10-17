@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::32c3bf039e805e3966105d6f2d3a8dc1, R-sharp\Library\base\utils\JSON.vb"
+﻿#Region "Microsoft.VisualBasic::634b82bdc166cff2a6fb9fe63e7b7d77, R-sharp\Library\base\utils\JSON.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 245
-    '    Code Lines: 145
+    '   Total Lines: 255
+    '    Code Lines: 155
     ' Comment Lines: 74
     '   Blank Lines: 26
-    '     File Size: 9.70 KB
+    '     File Size: 9.85 KB
 
 
     ' Module JSON

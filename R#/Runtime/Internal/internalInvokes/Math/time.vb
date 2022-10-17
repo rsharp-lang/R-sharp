@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7cdfca4ea30bdfdefe7cf3c3121f5c1f, R-sharp\R#\Runtime\Internal\internalInvokes\Math\time.vb"
+﻿#Region "Microsoft.VisualBasic::0ac73286fadccd5433078d621b1a6703, R-sharp\R#\Runtime\Internal\internalInvokes\Math\time.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 13
     ' Comment Lines: 0
     '   Blank Lines: 4
-    '     File Size: 450 B
+    '     File Size: 434 B
 
 
     '     Module time

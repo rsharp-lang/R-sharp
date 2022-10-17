@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6093958ef1791c514a4ab5c9fe98311b, R-sharp\studio\Rsharp_kit\webKit\My Project\Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::2f22d42b6413231307ac843b77df9f72, R-sharp\studio\Rsharp_kit\webKit\My Project\Resources.Designer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 32
     ' Comment Lines: 23
     '   Blank Lines: 8
-    '     File Size: 2.77 KB
+    '     File Size: 2.71 KB
 
 
     '     Module Resources

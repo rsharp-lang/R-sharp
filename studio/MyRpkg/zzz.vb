@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d61a868db4537dc0bb659903b95ed1da, R-sharp\studio\MyRpkg\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::c2414cd48534a3141d2b35312e2d65f2, R-sharp\studio\MyRpkg\zzz.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 4
     ' Comment Lines: 2
     '   Blank Lines: 1
-    '     File Size: 169 B
+    '     File Size: 161 B
 
 
     ' Class zzz
@@ -56,4 +56,3 @@ Public Class zzz
         ' do some package library initialization work at here
     End Sub
 End Class
-

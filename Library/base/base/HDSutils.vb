@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::308438ddba11550a83e802acc84e6185, R-sharp\Library\base\base\HDSutils.vb"
+﻿#Region "Microsoft.VisualBasic::cf2525c35660834d0eb9cbed40aca73a, R-sharp\Library\base\base\HDSutils.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 93
     ' Comment Lines: 0
     '   Blank Lines: 19
-    '     File Size: 3.95 KB
+    '     File Size: 3.83 KB
 
 
     ' Module HDSutils

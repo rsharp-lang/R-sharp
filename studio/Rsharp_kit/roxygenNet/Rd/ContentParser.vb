@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d107b77a62036d506e130d190d1b607e, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\ContentParser.vb"
+﻿#Region "Microsoft.VisualBasic::8033de9209c8c29adbb4367448ac212e, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\ContentParser.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 12
     ' Comment Lines: 4
     '   Blank Lines: 4
-    '     File Size: 576 B
+    '     File Size: 557 B
 
 
     ' Class ContentParser

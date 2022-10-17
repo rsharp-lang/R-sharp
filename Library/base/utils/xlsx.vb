@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::51220afb76bb8f1381b4ab5cfa2475b7, R-sharp\Library\base\utils\xlsx.vb"
+﻿#Region "Microsoft.VisualBasic::4354c42ae19825b897c5b9116e10d2f7, R-sharp\Library\base\utils\xlsx.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 239
-    '    Code Lines: 175
+    '   Total Lines: 247
+    '    Code Lines: 184
     ' Comment Lines: 40
-    '   Blank Lines: 24
-    '     File Size: 9.90 KB
+    '   Blank Lines: 23
+    '     File Size: 10.20 KB
 
 
     ' Module xlsx

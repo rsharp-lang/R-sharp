@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::95060b38b05cb7970c4f2429e674e917, R-sharp\R#\Runtime\Internal\internalInvokes\string\humanReadableFormatter.vb"
+﻿#Region "Microsoft.VisualBasic::0749726e534521acb48a875321ff15c6, R-sharp\R#\Runtime\Internal\internalInvokes\string\humanReadableFormatter.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 30
     ' Comment Lines: 11
     '   Blank Lines: 5
-    '     File Size: 1.74 KB
+    '     File Size: 1.69 KB
 
 
     '     Module humanReadableFormatter

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b712c648de774418067011d2eaa60d4f, R-sharp\R#\System\Package\PackageFile\PackageModel.vb"
+﻿#Region "Microsoft.VisualBasic::b43bbe6b2de7d60f8a7fc991ca87e97a, R-sharp\R#\System\Package\PackageFile\PackageModel.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 294
     ' Comment Lines: 25
     '   Blank Lines: 67
-    '     File Size: 16.57 KB
+    '     File Size: 16.18 KB
 
 
     '     Class PackageModel

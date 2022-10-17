@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2d8b1e94be0b06d06006bb647ec5f707, R-sharp\R#\Language\TokenLine.vb"
+﻿#Region "Microsoft.VisualBasic::52ecbe283620e21d4fa326c8784f443d, R-sharp\R#\Language\TokenLine.vb"
 
     ' Author:
     ' 

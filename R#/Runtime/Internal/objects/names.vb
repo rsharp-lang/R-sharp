@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dd887cc3921f34353d652948636197d1, R-sharp\R#\Runtime\Internal\objects\names.vb"
+﻿#Region "Microsoft.VisualBasic::d172a349a7ae39c71b6519c0ff7c3a75, R-sharp\R#\Runtime\Internal\objects\names.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 200
     ' Comment Lines: 14
     '   Blank Lines: 38
-    '     File Size: 9.93 KB
+    '     File Size: 9.68 KB
 
 
     '     Module names

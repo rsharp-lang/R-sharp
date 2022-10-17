@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::939b95c570a1389f9979e8495fe359de, R-sharp\studio\Rsharp_kit\signalKit\My Project\Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::94f0cd4708baa668dcab9997a2fe3ed7, R-sharp\studio\Rsharp_kit\signalKit\My Project\Resources.Designer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 31
     ' Comment Lines: 23
     '   Blank Lines: 8
-    '     File Size: 2.77 KB
+    '     File Size: 2.71 KB
 
 
     '     Module Resources
