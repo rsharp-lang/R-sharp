@@ -12,15 +12,15 @@ Namespace Runtime.Vectorization
                 Return CDbl(vx.single) * CDbl(vy.single)
             ElseIf vx.Mode = VectorTypes.Scalar Then
                 ' scalar + vector
-                Return SIMD.Add.f64_op_add_f64_scalar(vy.vector, CDbl(vx.single))
+                Return SIMD.Multiply.f64_scalar_op_multiply_f64(CDbl(vx.single), vy.vector)
             ElseIf vy.Mode = VectorTypes.Scalar Then
                 ' vector + scalar
-                Return SIMD.Add.f64_op_add_f64_scalar(vx.vector, CDbl(vy.single))
+                Return SIMD.Multiply.f64_scalar_op_multiply_f64(CDbl(vy.single), vx.vector)
             ElseIf vx.size <> vy.size Then
                 Throw New InvalidProgramException("vector size should be matched!")
             Else
                 ' vector + vector
-                Return SIMD.Add.f64_op_add_f64(vx.vector, vy.vector)
+                Return SIMD.Multiply.f64_op_multiply_f64(vx.vector, vy.vector)
             End If
         End Function
     End Class
