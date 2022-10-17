@@ -124,7 +124,10 @@ Namespace Runtime.Vectorization
             Else
                 [single] = vec.GetValue(Scan0)
 
-                If [single] Is Nothing Then
+                ' vector just has one element
+                ' and also the single element is nothing
+                ' then the entire vector is a null literal value
+                If vec.Length = 1 AndAlso [single] Is Nothing Then
                     Me.vector = Nothing
                     Mode = VectorTypes.None
                 ElseIf vec.Length = 1 Then
