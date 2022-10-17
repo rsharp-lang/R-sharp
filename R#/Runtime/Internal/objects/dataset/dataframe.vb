@@ -66,6 +66,7 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object
@@ -374,7 +375,7 @@ Namespace Runtime.Internal.Object
             Dim indexType As Type = MeasureRealElementType(selector)
 
             If indexType Like RType.logicals Then
-                Return GetByRowIndex(index:=which.IsTrue(asLogical(selector)))
+                Return GetByRowIndex(index:=which.IsTrue(Vectorization.asLogical(selector)))
             ElseIf indexType Like RType.integers Then
                 Return GetByRowIndex(index:=DirectCast(asVector(Of Integer)(selector), Integer()).Select(Function(i) i - 1).ToArray)
             ElseIf indexType Like RType.characters Then

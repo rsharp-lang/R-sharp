@@ -121,7 +121,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 Return test
             End If
 
-            Dim flags As Boolean() = REnv.asLogical(test)
+            Dim flags As Boolean() = Vectorization.asLogical(test)
 
             If flags.Length = 0 Then
                 Return Internal.debug.stop({

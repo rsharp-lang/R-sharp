@@ -95,7 +95,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                                               Return DirectCast(wildcard, String).WildcardMatch(DirectCast(txt, String))
                                           End Function
 
-                        Return Runtime.Core _
+                        Return Vectorization _
                            .BinaryCoreInternal(Of String, String, Boolean)(text, patterns, likePattern) _
                            .ToArray
                     ElseIf TypeOf b Is Regex Then
@@ -132,7 +132,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Dim va = getStringArray(a).ToArray
             Dim vb = getStringArray(b).ToArray
 
-            Return Runtime.Core _
+            Return Vectorization _
                 .BinaryCoreInternal(Of String, String, Out)(va, vb, op) _
                 .ToArray
         End Function

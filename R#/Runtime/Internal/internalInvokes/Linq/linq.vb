@@ -452,7 +452,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             If test Is Nothing Then
                 ' test for which index
-                Return which.IsTrue(REnv.asLogical(x), offset:=1)
+                Return which.IsTrue(Vectorization.asLogical(x), offset:=1)
             ElseIf TypeOf x Is pipeline Then
                 ' run in pipeline mode
                 Return runFilterPipeline(x, test, pipelineFilter, env)
@@ -570,7 +570,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                 Dim arg = InvokeParameter.CreateLiterals(item)
                                 Dim result = DirectCast(test, RFunction).Invoke(env, arg)
 
-                                Return REnv.asLogical(result)(Scan0)
+                                Return Vectorization.asLogical(result)(Scan0)
                             End Function
             ElseIf TypeOf test Is Predicate(Of Object) Then
                 predicate = DirectCast(test, Predicate(Of Object))
@@ -737,7 +737,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             For Each item As Object In Rset.getObjectSet(sequence, envir)
                 arg = InvokeParameter.CreateLiterals(item)
-                pass = REnv.asLogical(test.Invoke(envir, arg))(Scan0)
+                pass = Vectorization.asLogical(test.Invoke(envir, arg))(Scan0)
 
                 If pass Then
                     Return item
@@ -776,7 +776,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             For Each item As Object In Rset.getObjectSet(sequence, envir)
                 arg = InvokeParameter.CreateLiterals(item)
-                pass = REnv.asLogical(test.Invoke(envir, arg))(Scan0)
+                pass = Vectorization.asLogical(test.Invoke(envir, arg))(Scan0)
 
                 If pass Then
                     lastVal = item
@@ -1154,7 +1154,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("any")>
         Public Function any(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
-            Return REnv.asLogical(test).Any(Function(b) b = True)
+            Return Vectorization.asLogical(test).Any(Function(b) b = True)
         End Function
 
         ''' <summary>
@@ -1183,7 +1183,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("all")>
         Public Function all(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
-            Return REnv.asLogical(test).All(Function(b) b = True)
+            Return Vectorization.asLogical(test).All(Function(b) b = True)
         End Function
 
         <ExportAPI("while")>

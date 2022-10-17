@@ -106,10 +106,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 If Program.isException(b) Then
                     Return b
                 Else
-                    Return REnv.Core _
+                    Return Vectorization _
                         .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
-                            x:=Core.asLogical(a),
-                            y:=Core.asLogical(b),
+                            x:=Vectorization.asLogical(a),
+                            y:=Vectorization.asLogical(b),
                             [do]:=Function(x, y) x OrElse y
                         ) _
                         .ToArray

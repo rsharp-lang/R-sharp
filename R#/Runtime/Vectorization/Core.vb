@@ -63,36 +63,12 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports REnv = SMRUCC.Rsharp.Runtime
 
-Namespace Runtime
+Namespace Runtime.Vectorization
 
     ''' <summary>
     ''' Operator impl core
     ''' </summary>
     Public Module Core
-
-        ''' <summary>
-        ''' Type cache module
-        ''' </summary>
-        ''' <typeparam name="T"></typeparam>
-        Public NotInheritable Class typedefine(Of T)
-
-            ''' <summary>
-            ''' The vector based type
-            ''' </summary>
-            Public Shared ReadOnly baseType As Type
-            ''' <summary>
-            ''' The abstract vector type
-            ''' </summary>
-            Public Shared ReadOnly enumerable As Type
-
-            Private Sub New()
-            End Sub
-
-            Shared Sub New()
-                baseType = GetType(T)
-                enumerable = GetType(IEnumerable(Of T))
-            End Sub
-        End Class
 
         ReadOnly numericTypes As Index(Of Type) = {GetType(Integer), GetType(Long), GetType(Double), GetType(Single)}
 

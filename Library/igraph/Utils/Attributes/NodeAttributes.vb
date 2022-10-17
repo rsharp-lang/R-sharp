@@ -55,8 +55,8 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.visualize.Network.Layouts
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
 Imports REnv = SMRUCC.Rsharp.Runtime

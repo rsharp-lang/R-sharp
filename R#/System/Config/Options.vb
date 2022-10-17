@@ -62,6 +62,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Math
+Imports Microsoft.VisualBasic.Math.SIMD
 Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.My.FrameworkInternal
 Imports Microsoft.VisualBasic.Net.Protocols.ContentTypes
@@ -324,7 +325,7 @@ Namespace Development.Configuration
                 Select Case opt
                     Case "f64.format" : Return setOption(opt, If([default], "G"), env)
                     Case "digits" : Return setOption(opt, If([default], "6"), env)
-                    Case "avx_simd" : Return SIMD.config.ToString
+                    Case "avx_simd" : Return SIMDEnvironment.config.ToString
                     Case "system_tempdir" : Return App.SysTemp
 
                     Case Else
@@ -365,9 +366,9 @@ Namespace Development.Configuration
                     End If
                 Case "avx_simd"
                     If value.ParseBoolean Then
-                        SIMD.config = SIMDConfiguration.auto
+                        SIMDEnvironment.config = SIMDConfiguration.auto
                     Else
-                        SIMD.config = SIMDConfiguration.disable
+                        SIMDEnvironment.config = SIMDConfiguration.disable
                     End If
             End Select
 

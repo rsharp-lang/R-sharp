@@ -91,7 +91,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Function
 
         Public Shared Function [Not](logical As Object) As Boolean()
-            Dim logicals As Boolean() = REnv.asLogical(logical)
+            Dim logicals As Boolean() = Vectorization.asLogical(logical)
             Dim nots As Boolean() = logicals _
                 .Select(Function(b) Not b) _
                 .ToArray

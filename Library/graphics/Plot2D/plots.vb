@@ -751,7 +751,7 @@ Module plots
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
 
         If args.hasName("showLegend") Then
-            showLegend = getFirst(asLogical(args!showLegend))
+            showLegend = getFirst(Vectorization.asLogical(args!showLegend))
         Else
             showLegend = True
         End If
@@ -766,7 +766,7 @@ Module plots
                 serials, dev.g, canvas,
                 Xlabel:=args.getValue("x.lab", env, "X"),
                 Ylabel:=args.getValue("y.lab", env, "Y"),
-                drawLine:=getFirst(asLogical(args!line)),
+                drawLine:=getFirst(Vectorization.asLogical(args!line)),
                 legendBgFill:=RColorPalette.getColor(args!legendBgFill, Nothing),
                 legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
                 showLegend:=showLegend,
@@ -792,7 +792,7 @@ Module plots
                 size:=size, padding:=margin,
                 Xlabel:=args.getValue("x.lab", env, "X"),
                 Ylabel:=args.getValue("y.lab", env, "Y"),
-                drawLine:=getFirst(asLogical(args!line)),
+                drawLine:=getFirst(Vectorization.asLogical(args!line)),
                 legendBgFill:=RColorPalette.getColor(args!legendBgFill, Nothing),
                 legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
                 showLegend:=showLegend,
