@@ -285,7 +285,7 @@ Namespace Runtime.Vectorization
                                     End Function) _
                             .ToArray
                     Else
-                        Throw New InvalidOperationException("Vector length between the X and Y should be equals!")
+                        Throw New InvalidOperationException($"Vector length between the X({xlist.Length}) and Y({ylist.Length}) should be equals!")
                     End If
                 Else
                     Throw New InvalidCastException(ytype.FullName)
