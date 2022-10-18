@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::94af1fc8ff48faa2cba531903a52fa12, R-sharp\R#\Runtime\Internal\objects\RConversion\conversion.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1036
-    '    Code Lines: 633
-    ' Comment Lines: 294
-    '   Blank Lines: 109
-    '     File Size: 46.28 KB
+' Summaries:
 
 
-    '     Module RConversion
-    ' 
-    '         Function: asCharacters, asDataframe, asDate, asDate2, asInteger
-    '                   asList, asLogicals, asNumeric, asObject, asPipeline
-    '                   asRaw, asVector, castArrayOfGeneric, castArrayOfObject, castListRowsToDataframe
-    '                   castListToDataframe, castType, handleListFeatureProjections, handleUnsure, isCharacter
-    '                   isLogical, populateNumeric, tryUnlistArray, unlist, unlistOfRList
-    '                   unlistRecursive
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1036
+'    Code Lines: 633
+' Comment Lines: 294
+'   Blank Lines: 109
+'     File Size: 46.28 KB
+
+
+'     Module RConversion
+' 
+'         Function: asCharacters, asDataframe, asDate, asDate2, asInteger
+'                   asList, asLogicals, asNumeric, asObject, asPipeline
+'                   asRaw, asVector, castArrayOfGeneric, castArrayOfObject, castListRowsToDataframe
+'                   castListToDataframe, castType, handleListFeatureProjections, handleUnsure, isCharacter
+'                   isLogical, populateNumeric, tryUnlistArray, unlist, unlistOfRList
+'                   unlistRecursive
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -813,6 +813,64 @@ RE0:
             Else
                 Return REnv.asVector(Of Long)(obj)
             End If
+        End Function
+
+        ''' <summary>
+        ''' # Double-Precision Vectors
+        ''' 
+        ''' Create, coerce to or test for a double-precision vector.
+        ''' </summary>
+        ''' <param name="x">object to be coerced or tested.</param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' as.double attempts to coerce its argument to be of double
+        ''' type: like as.vector it strips attributes including names. 
+        ''' (To ensure that an object is of double type without 
+        ''' stripping attributes, use storage.mode.) Character strings 
+        ''' containing optional whitespace followed by either a 
+        ''' decimal representation or a hexadecimal representation 
+        ''' (starting with 0x or 0X) can be converted, as can special 
+        ''' values such as "NA", "NaN", "Inf" and "infinity", 
+        ''' irrespective of case.
+        ''' </returns>
+        ''' <remarks>
+        ''' as.double is a generic function. It is identical to as.numeric. 
+        ''' Methods should return an object of base type "double".
+        ''' 
+        ''' ### Double-precision values
+        ''' All R platforms are required To work With values conforming To
+        ''' the IEC 60559 (also known As IEEE 754) standard. This basically
+        ''' works With a precision Of 53 bits, And represents To that 
+        ''' precision a range Of absolute values from about 2E-308 To 2E+308.
+        ''' It also has special values NaN (many Of them), plus And minus 
+        ''' infinity And plus And minus zero (although R acts As If these 
+        ''' are the same). There are also denormal(ized) (Or subnormal)
+        ''' numbers With absolute values above Or below the range given
+        ''' above but represented To less precision.
+        ''' 
+        ''' See .Machine for precise information on these limits. Note that
+        ''' ultimately how double precision numbers are handled Is down to 
+        ''' the CPU/FPU And compiler.
+        ''' 
+        ''' In IEEE 754-2008/IEC605592011 this Is called 'binary64’ format.
+        ''' 
+        ''' ### Note on names
+        ''' It Is a historical anomaly that R has two names for its floating-
+        ''' point vectors, double And numeric (And formerly had real).
+        ''' 
+        ''' Double Is the name Of the type. numeric Is the name Of the mode 
+        ''' And also Of the implicit Class. As an S4 formal Class, use 
+        ''' "numeric".
+        ''' 
+        ''' The potential confusion Is that R has used mode "numeric" To mean 
+        ''' 'double or integer’, which conflicts with the S4 usage. Thus is.numeric
+        ''' tests the mode, not the class, but as.numeric (which is identical
+        ''' to as.double) coerces to the class.
+        ''' </remarks>
+        <ExportAPI("as.double")>
+        <RApiReturn(GetType(Double))>
+        Public Function asDouble(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return asNumeric(x, env)
         End Function
 
         ''' <summary>
