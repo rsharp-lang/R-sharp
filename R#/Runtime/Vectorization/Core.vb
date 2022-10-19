@@ -55,11 +55,21 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Vectorization
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x">scalar</param>
+    ''' <param name="y">scalar</param>
+    ''' <param name="env"></param>
+    ''' <returns>this function should populate a single value result or a error message</returns>
+    Public Delegate Function op_evaluator(x As Object, y As Object, env As Environment) As Object
 
     ''' <summary>
     ''' Operator impl core
@@ -228,6 +238,8 @@ Namespace Runtime.Vectorization
         End Function
 
         ''' <summary>
+        ''' this function just apply for the custom operator
+        ''' 
         ''' [Vector core] Generic binary operator core for numeric type.
         ''' </summary>
         ''' <typeparam name="TX"></typeparam>
@@ -236,33 +248,52 @@ Namespace Runtime.Vectorization
         ''' <param name="x"></param>
         ''' <param name="y"></param>
         ''' <param name="[do]"></param>
-        ''' <returns></returns>
-        Public Function BinaryCoreInternal(Of TX, TY, TOut)(x As Object,
-                                                            y As Object,
-                                                            [do] As Func(Of Object, Object, Object),
-                                                            env As Environment) As Object
-
+        ''' <returns>
+        ''' error message or array of <typeparamref name="TOut"/>.
+        ''' </returns>
+        Public Function BinaryCoreInternal(Of TX, TY, TOut)(x As Object, y As Object, [do] As op_evaluator, env As Environment) As Object
             Dim vx As GetVectorElement = GetVectorElement.Create(Of TX)(x)
             Dim vy As GetVectorElement = GetVectorElement.Create(Of TY)(y)
+            Dim result As Object
 
             If vx.Mode = VectorTypes.Scalar AndAlso vy.Mode = VectorTypes.Scalar Then
-                Return [do](vx.single, vy.single)
-            ElseIf vx.Mode = VectorTypes.Scalar Then
+                result = [do](vx.single, vy.single, env)
+
+                If Program.isException(result) Then
+                    Return result
+                Else
+                    Return New TOut() {DirectCast(result, TOut)}
+                End If
+            End If
+
+            Dim populater As New List(Of TOut)
+
+            If vx.Mode = VectorTypes.Scalar Then
                 ' scalar do vector
                 x = vx.single
 
-                Return From yi As Object
-                       In vy.vector
-                       Select DirectCast([do](x, yi), TOut)
+                For Each yi As Object In vy.vector
+                    result = [do](x, yi, env)
 
+                    If Program.isException(result) Then
+                        Return result
+                    Else
+                        populater.Add(DirectCast(result, TOut))
+                    End If
+                Next
             ElseIf vy.Mode = VectorTypes.Scalar Then
                 ' vector do scalar
                 y = vy.single
 
-                Return From xi As Object
-                       In vx.vector
-                       Select DirectCast([do](xi, y), TOut)
+                For Each xi As Object In vx.vector
+                    result = [do](xi, y, env)
 
+                    If Program.isException(result) Then
+                        Return result
+                    Else
+                        populater.Add(DirectCast(result, TOut))
+                    End If
+                Next
             ElseIf vx.size <> vy.size Then
                 Return Internal.debug.stop({
                     $"vector length between the X({vx.size}) and Y({vy.size}) should be equals!",
@@ -272,14 +303,19 @@ Namespace Runtime.Vectorization
             Else
                 ' vector do vector
                 Dim nsize As Integer = vx.size
-                Dim result As New List(Of TOut)
 
                 For i As Integer = 0 To nsize - 1
-                    Call result.Add([do](vx.vector(i), vy.vector(i)))
-                Next
+                    result = [do](vx.vector(i), vy.vector(i), env)
 
-                Return result
+                    If Program.isException(result) Then
+                        Return result
+                    Else
+                        populater.Add(DirectCast(result, TOut))
+                    End If
+                Next
             End If
+
+            Return populater.ToArray
         End Function
 
         ''' <summary>

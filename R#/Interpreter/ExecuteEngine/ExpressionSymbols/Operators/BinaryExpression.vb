@@ -156,24 +156,24 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                         Return Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
                             x:=REnv.asVector(Of Boolean)(a),
                             y:=REnv.asVector(Of Boolean)(b),
-                            [do]:=Function(x, y) x = y,
+                            [do]:=Function(x, y, env2) x = y,
                             env:=envir
-                        ).ToArray
+                        )
                     Case "!="
                         Return Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
                             x:=REnv.asVector(Of Boolean)(a),
                             y:=REnv.asVector(Of Boolean)(b),
-                            [do]:=Function(x, y) x <> y,
+                            [do]:=Function(x, y, env2) x <> y,
                             env:=envir
-                        ).ToArray
+                        )
                     Case "&&"
                         Return Core _
                             .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
                                 x:=Core.asLogical(a),
                                 y:=Core.asLogical(b),
-                                [do]:=Function(x, y) x AndAlso y,
+                                [do]:=Function(x, y, env2) x AndAlso y,
                                 env:=envir
-                            ).ToArray
+                            )
                 End Select
             ElseIf [operator] = "&&" AndAlso (tleft?.raw Like RType.logicals OrElse tright?.raw Like RType.logicals) Then
                 Dim xi = Core.asLogical(a)
@@ -183,9 +183,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
                         x:=xi,
                         y:=yi,
-                        [do]:=Function(x, y) x AndAlso y,
+                        [do]:=Function(x, y, env2) x AndAlso y,
                         env:=envir
-                    ).ToArray
+                    )
             End If
 
             Dim handleResult = BinaryOperatorEngine.getOperator([operator], envir)

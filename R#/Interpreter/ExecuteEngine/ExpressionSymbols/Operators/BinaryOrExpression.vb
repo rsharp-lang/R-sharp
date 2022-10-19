@@ -110,9 +110,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                         .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
                             x:=Vectorization.asLogical(a),
                             y:=Vectorization.asLogical(b),
-                            [do]:=Function(x, y) x OrElse y
-                        ) _
-                        .ToArray
+                            [do]:=Function(x, y, env2) x OrElse y,
+                            env:=envir
+                        )
                 End If
             Else
                 ' let arg as string = ?"--opt" || default;

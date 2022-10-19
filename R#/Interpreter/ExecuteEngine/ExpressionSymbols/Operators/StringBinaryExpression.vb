@@ -54,6 +54,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.Text.Patterns
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports any = Microsoft.VisualBasic.Scripting
 
@@ -61,7 +62,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
     Module StringBinaryExpression
 
-        Private Function TextEquivalency(a As Object, b As Object, env As Environment) As Boolean()
+        Private Function TextEquivalency(a As Object, b As Object, env As Environment) As Object
             Dim text As String()
             Dim r As Regex
 
@@ -72,7 +73,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 r = DirectCast(b, Regex)
                 text = getStringArray(a).ToArray
             Else
-                Return DoStringBinary(Of Boolean)(a, b, Function(x, y) x = y, env)
+                Return DoStringBinary(Of Boolean)(a, b, Function(x, y, env2) x = y, env)
             End If
 
             Return text _
@@ -82,22 +83,27 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
         Public Function StringBinaryOperator(env As Environment, a As Object, b As Object, [operator] As String) As Object
             Select Case [operator]
-                Case "&" : Return DoStringBinary(Of String)(a, b, Function(x, y) x & y, env)
+                Case "&" : Return DoStringBinary(Of String)(a, b, Function(x, y, env2) x & y, env)
                 Case "==" : Return TextEquivalency(a, b, env)
-                Case "!=" : Return TextEquivalency(a, b, env).Select(Function(t) Not t).ToArray
+                Case "!="
+                    Dim flagsObj = TextEquivalency(a, b, env)
+
+                    If TypeOf flagsObj Is Message Then
+                        Return flagsObj
+                    Else
+                        Return DirectCast(flagsObj, Boolean()).Select(Function(t) Not t).ToArray
+                    End If
                 Case "like"
                     Dim text As String() = getStringArray(a).ToArray
 
                     If Runtime.isVector(Of String)(b) Then
                         ' <string-for-test> like wildcard_patterns
                         Dim patterns As String() = getStringArray(b).ToArray
-                        Dim likePattern = Function(txt, wildcard)
+                        Dim likePattern = Function(txt, wildcard, env2)
                                               Return DirectCast(wildcard, String).WildcardMatch(DirectCast(txt, String))
                                           End Function
 
-                        Return Vectorization _
-                           .BinaryCoreInternal(Of String, String, Boolean)(text, patterns, likePattern, env) _
-                           .ToArray
+                        Return Vectorization.BinaryCoreInternal(Of String, String, Boolean)(text, patterns, likePattern, env)
                     ElseIf TypeOf b Is Regex Then
                         ' <string-for-test> link regexp_pattern
                         Return text _
@@ -128,13 +134,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Return Internal.debug.stop(New NotImplementedException($"[{left}] {[operator]} [{right}]"), env)
         End Function
 
-        Public Function DoStringBinary(Of Out)(a As Object, b As Object, op As Func(Of Object, Object, Object), env As Environment) As Out()
+        Public Function DoStringBinary(Of Out)(a As Object, b As Object, op As Vectorization.op_evaluator, env As Environment) As Object
             Dim va = getStringArray(a).ToArray
             Dim vb = getStringArray(b).ToArray
 
-            Return Vectorization _
-                .BinaryCoreInternal(Of String, String, Out)(va, vb, op, env) _
-                .ToArray
+            Return Vectorization.BinaryCoreInternal(Of String, String, Out)(va, vb, op, env)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
