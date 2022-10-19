@@ -9,6 +9,8 @@ const modulo = function(x, y)  print(x % y);
 const multiply = function(x, y)  print( x * y);
 const subtract = function(x, y)print( x - y);
 
+# print(z + z);
+
 test = function(op) {
 print(op);
 
@@ -32,3 +34,5 @@ test(op = exponent);
 test(op = modulo);
 test(op = multiply);
 test(op = subtract);
+
+
