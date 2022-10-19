@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::9fc2a792b4927fb5e7764606c4b314dc, R-sharp\R#\Runtime\Vectorization\Core.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 322
-    '    Code Lines: 219
-    ' Comment Lines: 52
-    '   Blank Lines: 51
-    '     File Size: 13.54 KB
+' Summaries:
 
 
-    '     Module Core
-    ' 
-    '         Function: [Module], Add, asLogical, BinaryCoreInternal, Divide
-    '                   Minus, Multiply, op_In, Power, safeDivided
-    '                   safeModule, safeMultiply, UnaryCoreInternal, VectorAlignment
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 322
+'    Code Lines: 219
+' Comment Lines: 52
+'   Blank Lines: 51
+'     File Size: 13.54 KB
+
+
+'     Module Core
+' 
+'         Function: [Module], Add, asLogical, BinaryCoreInternal, Divide
+'                   Minus, Multiply, op_In, Power, safeDivided
+'                   safeModule, safeMultiply, UnaryCoreInternal, VectorAlignment
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -237,66 +237,39 @@ Namespace Runtime.Vectorization
         ''' <param name="[do]"></param>
         ''' <returns></returns>
         Public Function BinaryCoreInternal(Of TX, TY, TOut)(x As Object, y As Object, [do] As Func(Of Object, Object, Object)) As IEnumerable(Of TOut)
-            Dim xtype As Type = x.GetType
-            Dim ytype As Type = y.GetType
+            Dim vx As GetVectorElement = GetVectorElement.Create(Of TX)(x)
+            Dim vy As GetVectorElement = GetVectorElement.Create(Of TY)(y)
 
-            If xtype Is typedefine(Of TX).baseType Then
+            If vx.Mode = VectorTypes.Scalar AndAlso vy.Mode = VectorTypes.Scalar Then
+                Return New TOut() {DirectCast([do](vx.single, vy.single), TOut)}
+            ElseIf vx.Mode = VectorTypes.Scalar Then
+                ' scalar do vector
+                x = vx.single
 
-                If ytype Is typedefine(Of TY).baseType Then
-                    Return {DirectCast([do](x, y), TOut)}
+                Return From yi As Object
+                       In vy.vector
+                       Select DirectCast([do](x, yi), TOut)
 
-                ElseIf ytype.ImplementInterface(typedefine(Of TY).enumerable) Then
+            ElseIf vy.Mode = VectorTypes.Scalar Then
+                ' vector do scalar
+                y = vy.single
 
-                    Return DirectCast(y, IEnumerable(Of TY)) _
-                        .Select(Function(yi) DirectCast([do](x, yi), TOut)) _
-                        .ToArray
+                Return From xi As Object
+                       In vx.vector
+                       Select DirectCast([do](xi, y), TOut)
 
-                Else
-                    Throw New InvalidCastException(ytype.FullName)
-                End If
-
-            ElseIf xtype.ImplementInterface(typedefine(Of TX).enumerable) Then
-
-                If ytype Is typedefine(Of TY).baseType Then
-                    Return DirectCast(x, IEnumerable(Of TX)) _
-                        .Select(Function(xi) DirectCast([do](xi, y), TOut)) _
-                        .ToArray
-
-                ElseIf ytype.ImplementInterface(typedefine(Of TY).enumerable) Then
-
-                    Dim xlist = DirectCast(x, IEnumerable(Of TX)).ToArray
-                    Dim ylist = DirectCast(y, IEnumerable(Of TY)).ToArray
-
-                    If xlist.Length = 1 Then
-                        x = xlist(0)
-                        Return DirectCast(y, IEnumerable(Of TY)) _
-                            .Select(Function(yi) DirectCast([do](x, yi), TOut)) _
-                            .ToArray
-                    ElseIf ylist.Length = 1 Then
-                        y = ylist(0)
-                        Return DirectCast(x, IEnumerable(Of TX)) _
-                            .Select(Function(xi) DirectCast([do](xi, y), TOut)) _
-                            .ToArray
-                    ElseIf xlist.Length = ylist.Length Then
-                        Return xlist _
-                            .SeqIterator _
-                            .Select(Function(xi)
-                                        Return DirectCast([do](CObj(xi.value), CObj(ylist(xi))), TOut)
-                                    End Function) _
-                            .ToArray
-                    Else
-                        Throw New InvalidOperationException($"Vector length between the X({xlist.Length}) and Y({ylist.Length}) should be equals!")
-                    End If
-                Else
-                    Throw New InvalidCastException(ytype.FullName)
-                End If
-
+            ElseIf vx.size <> vy.size Then
+                Throw New InvalidOperationException($"vector length between the X({vx.size}) and Y({vy.size}) should be equals!")
             Else
-                If Not xtype.IsArray AndAlso Not ytype.IsArray Then
-                    Return {DirectCast([do](CObj(x), CObj(y)), TOut)}
-                End If
+                ' vector do vector
+                Dim nsize As Integer = vx.size
+                Dim result As New List(Of TOut)
 
-                Throw New InvalidCastException(xtype.FullName)
+                For i As Integer = 0 To nsize - 1
+                    Call result.Add([do](vx.vector(i), vy.vector(i)))
+                Next
+
+                Return result
             End If
         End Function
 

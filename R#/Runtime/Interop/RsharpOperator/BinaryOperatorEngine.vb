@@ -137,7 +137,7 @@ Namespace Runtime.Interop.Operator
             Call addBinary(left, right, "*", AddressOf Vectorization.Multiply.f64_op_multiply_f64, Nothing)
             Call addBinary(left, right, "/", AddressOf Vectorization.Divide.f64_op_divide_f64, Nothing)
             Call addBinary(left, right, "%", AddressOf Vectorization.Modulo.f64_op_modulo_f64, Nothing)
-            Call addBinary(left, right, "^", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) ^ DirectCast(y, Double)).ToArray, Nothing)
+            Call addBinary(left, right, "^", AddressOf Vectorization.Exponent.f64_op_exponent_f64, Nothing)
             Call addBinary(left, right, "<", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) < DirectCast(y, Double)).ToArray, Nothing)
             Call addBinary(left, right, ">", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) > DirectCast(y, Double)).ToArray, Nothing)
             Call addBinary(left, right, "<=", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) <= DirectCast(y, Double)).ToArray, Nothing)

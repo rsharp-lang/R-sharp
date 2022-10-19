@@ -63,15 +63,15 @@ Namespace Runtime.Vectorization
             If vx.Mode = VectorTypes.Scalar AndAlso vy.Mode = VectorTypes.Scalar Then
                 Return CDbl(vx.single) - CDbl(vy.single)
             ElseIf vx.Mode = VectorTypes.Scalar Then
-                ' scalar / vector
+                ' scalar - vector
                 Return SIMD.Subtract.f64_scalar_op_subtract_f64(CDbl(vx.single), vy.vector)
             ElseIf vy.Mode = VectorTypes.Scalar Then
-                ' vector / scalar
+                ' vector - scalar
                 Return SIMD.Subtract.f64_op_subtract_f64_scalar(vx.vector, CDbl(vy.single))
             ElseIf vx.size <> vy.size Then
                 Throw New InvalidProgramException("vector size should be matched!")
             Else
-                ' vector / vector
+                ' vector - vector
                 Return SIMD.Subtract.f64_op_subtract_f64(vx.vector, vy.vector)
             End If
         End Function
