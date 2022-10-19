@@ -212,7 +212,12 @@ Namespace Runtime.Interop.Operator
         ''' <param name="overrides">
         ''' Overrides of the existed operator evaluation when the operator symbol and the binary type is matched?
         ''' </param>
-        Public Sub addBinary(left As RType, right As RType, symbol As String, op As IBinaryOperator, env As Environment, Optional [overrides] As Boolean = True)
+        Public Sub addBinary(left As RType, right As RType,
+                             symbol As String,
+                             op As IBinaryOperator,
+                             env As Environment,
+                             Optional [overrides] As Boolean = True)
+
             If Not index.ContainsKey(symbol) Then
                 index.Add(symbol, New BinaryIndex(symbol))
             End If
