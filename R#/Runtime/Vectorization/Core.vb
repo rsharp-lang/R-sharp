@@ -56,6 +56,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Vectorization
@@ -236,12 +237,16 @@ Namespace Runtime.Vectorization
         ''' <param name="y"></param>
         ''' <param name="[do]"></param>
         ''' <returns></returns>
-        Public Function BinaryCoreInternal(Of TX, TY, TOut)(x As Object, y As Object, [do] As Func(Of Object, Object, Object)) As IEnumerable(Of TOut)
+        Public Function BinaryCoreInternal(Of TX, TY, TOut)(x As Object,
+                                                            y As Object,
+                                                            [do] As Func(Of Object, Object, Object),
+                                                            env As Environment) As Object
+
             Dim vx As GetVectorElement = GetVectorElement.Create(Of TX)(x)
             Dim vy As GetVectorElement = GetVectorElement.Create(Of TY)(y)
 
             If vx.Mode = VectorTypes.Scalar AndAlso vy.Mode = VectorTypes.Scalar Then
-                Return New TOut() {DirectCast([do](vx.single, vy.single), TOut)}
+                Return [do](vx.single, vy.single)
             ElseIf vx.Mode = VectorTypes.Scalar Then
                 ' scalar do vector
                 x = vx.single
@@ -259,7 +264,11 @@ Namespace Runtime.Vectorization
                        Select DirectCast([do](xi, y), TOut)
 
             ElseIf vx.size <> vy.size Then
-                Throw New InvalidOperationException($"vector length between the X({vx.size}) and Y({vy.size}) should be equals!")
+                Return Internal.debug.stop({
+                    $"vector length between the X({vx.size}) and Y({vy.size}) should be equals!",
+                    $"sizeof_x: {vx.size}",
+                    $"sizeof_y: {vy.size}"
+                }, env)
             Else
                 ' vector do vector
                 Dim nsize As Integer = vx.size
@@ -271,46 +280,6 @@ Namespace Runtime.Vectorization
 
                 Return result
             End If
-        End Function
-
-        ''' <summary>
-        ''' Generic ``+`` operator for numeric type
-        ''' </summary>
-        ''' <typeparam name="TX"></typeparam>
-        ''' <typeparam name="TY"></typeparam>
-        ''' <typeparam name="TOut"></typeparam>
-        ''' <param name="x"></param>
-        ''' <param name="y"></param>
-        ''' <returns></returns>
-        ''' 
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function Add(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object) As IEnumerable(Of TOut)
-            Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a + b)
-        End Function
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function Minus(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object) As IEnumerable(Of TOut)
-            Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a - b)
-        End Function
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function Multiply(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object) As IEnumerable(Of TOut)
-            Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a * b)
-        End Function
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function Divide(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object) As IEnumerable(Of TOut)
-            Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a / b)
-        End Function
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function Power(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object) As IEnumerable(Of TOut)
-            Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a ^ b)
-        End Function
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function [Module](Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object) As IEnumerable(Of TOut)
-            Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a Mod b)
         End Function
 
         ''' <summary>
