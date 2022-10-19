@@ -113,8 +113,8 @@ Namespace Runtime.Components
                     Return False
                 ElseIf TypeOf value Is ValueAssignExpression Then
                     Return True
-                ElseIf hasObjectList AndAlso TypeOf value Is SymbolReference Then
-                    Return True
+                ElseIf TypeOf value Is SymbolReference Then
+                    Return hasObjectList
                 Else
                     Return False
                 End If

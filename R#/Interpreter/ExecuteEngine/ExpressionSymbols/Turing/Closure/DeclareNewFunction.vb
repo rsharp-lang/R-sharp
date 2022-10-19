@@ -113,6 +113,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' The environment of current function closure
         ''' </summary>
         Friend envir As Environment
+        Friend hasObjectList As Boolean
 
         Sub New(funcName$, parameters As DeclareNewSymbol(), body As ClosureExpression, stackframe As StackFrame)
             Me.funcName = funcName
@@ -120,6 +121,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Me.body = body
             Me.body.program.Rscript = Rscript.FromText(funcName)
             Me.stackFrame = stackframe
+            Me.hasObjectList = parameters.Any(Function(p) p.m_names(0) = "...")
         End Sub
 
         Friend Sub SetSymbol(newName As String)
@@ -184,7 +186,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             '    End If
             'End With
 
-            arguments = InvokeParameter.CreateArguments(parent, params, hasObjectList:=True)
+            arguments = InvokeParameter.CreateArguments(parent, params, hasObjectList)
             argumentKeys = arguments.Keys.ToArray
 
             ' initialize environment
