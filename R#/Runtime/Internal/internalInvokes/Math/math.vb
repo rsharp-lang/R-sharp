@@ -307,11 +307,11 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("pow")>
-        Public Function pow(x As Array, y As Array) As Object
+        Public Function pow(x As Array, y As Array, Optional env As Environment = Nothing) As Object
             x = Runtime.asVector(Of Double)(x)
             y = Runtime.asVector(Of Double)(y)
 
-            Return Vectorization.Power(Of Double, Double, Double)(x, y).ToArray
+            Return Vectorization.Exponent.f64_op_exponent_f64(x, y, env)
         End Function
 
         <ExportAPI("sqrt")>

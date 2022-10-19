@@ -104,11 +104,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     End If
                 End With
 
-                current = StringBinaryExpression.DoStringBinary(Of String)(
+                [next] = StringBinaryExpression.DoStringBinary(Of String)(
                     a:=current,
                     b:=[next],
-                    op:=Function(x, y) x & y
+                    op:=Function(x, y, env2) x & y,
+                    env:=envir
                 )
+
+                If TypeOf [next] Is Message Then
+                    Return [next]
+                Else
+                    current = DirectCast([next], String())
+                End If
             Next
 
             Dim currentStrings As String() = DirectCast(REnv.asVector(Of String)(current), String())
