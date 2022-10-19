@@ -69,7 +69,7 @@ Namespace Runtime.Vectorization
                 ' vector * scalar
                 Return SIMD.Multiply.f64_scalar_op_multiply_f64(CDbl(vy.single), vx.vector)
             ElseIf vx.size <> vy.size Then
-                Throw New InvalidProgramException("vector size should be matched!")
+                Throw New InvalidProgramException($"vector size of x({vx.size}) and y({vy.size}) should be matched!")
             Else
                 ' vector * vector
                 Return SIMD.Multiply.f64_op_multiply_f64(vx.vector, vy.vector)

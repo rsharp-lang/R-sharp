@@ -18,7 +18,7 @@ Namespace Runtime.Vectorization
                 ' vector % scalar
                 Return SIMD.Modulo.f64_op_modulo_f64_scalar(vx.vector, CDbl(vy.single))
             ElseIf vx.size <> vy.size Then
-                Throw New InvalidProgramException("vector size should be matched!")
+                Throw New InvalidProgramException($"vector size of x({vx.size}) and y({vy.size}) should be matched!")
             Else
                 ' vector % vector
                 Return SIMD.Modulo.f64_op_modulo_f64(vx.vector, vy.vector)
