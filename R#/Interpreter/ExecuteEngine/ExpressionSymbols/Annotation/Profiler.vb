@@ -67,6 +67,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
     ''' 
     ''' 开始进行性能计数
     ''' </summary>
+    ''' <remarks>It is not recommended that open the profiler 
+    ''' session in the production mode, due to the reason of
+    ''' profiler sampling will take too much time to generate 
+    ''' sample data.
+    ''' </remarks>
     Public Class Profiler : Inherits Expression
         Implements IRuntimeTrace
 
