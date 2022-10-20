@@ -162,6 +162,8 @@ Namespace Runtime.Internal.Invokes
 
             If data.Length = 0 Then
                 Return {Double.NaN, Double.NaN}
+            ElseIf data.Length = 1 Then
+                Return {data(0), data(0)}
             Else
                 Dim min As Double = data.Min
                 Dim max As Double = data.Max
