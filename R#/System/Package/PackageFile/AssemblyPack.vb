@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::4bd46cefc197bc75466bd82a4b0ffa70, R-sharp\R#\System\Package\PackageFile\AssemblyPack.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 65
-    '    Code Lines: 37
-    ' Comment Lines: 19
-    '   Blank Lines: 9
-    '     File Size: 2.36 KB
+' Summaries:
 
 
-    '     Class AssemblyPack
-    ' 
-    '         Properties: assembly, directory, framework
-    ' 
-    '         Function: GenericEnumerator, GetAllPackageContentFiles, GetEnumerator, getRelativePath
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 65
+'    Code Lines: 37
+' Comment Lines: 19
+'   Blank Lines: 9
+'     File Size: 2.36 KB
+
+
+'     Class AssemblyPack
+' 
+'         Properties: assembly, directory, framework
+' 
+'         Function: GenericEnumerator, GetAllPackageContentFiles, GetEnumerator, getRelativePath
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -90,12 +90,16 @@ Namespace Development.Package.File
             For Each dll As String In assembly
                 Dim depsJson As String = $"{dll.ParentPath}/{dll.BaseName}.deps.json"
                 Dim appConfig As String = $"{dll.ParentPath}/{dll.FileName}.config"
+                Dim runtimeConfig As String = $"{dll.ParentPath}/{dll.BaseName}.runtimeconfig.json"
 
                 If depsJson.FileExists Then
                     Yield depsJson.GetFullPath
                 End If
                 If appConfig.FileExists Then
                     Yield appConfig.GetFullPath
+                End If
+                If runtimeConfig.FileExists Then
+                    Yield runtimeConfig.GetFullPath
                 End If
 
                 Yield dll
