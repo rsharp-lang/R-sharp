@@ -278,7 +278,11 @@ Public Module utils
                         ' unsure for the NULL literal bug in build R package
                         Return Nothing
                     Else
-                        Return Internal.debug.stop({"undefined column was selected as row names!", "given: " & key}, env)
+                        Return Internal.debug.stop({
+                            "undefined column was selected as row names!",
+                            "given: " & key,
+                            "you can check your table file format andalso check the parameters: check.names, comment.char, skip_rows"
+                        }, env)
                     End If
                 Else
                     dataframe.rownames = row_names.data _
