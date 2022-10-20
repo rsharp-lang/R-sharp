@@ -271,7 +271,7 @@ Public Module utils
                     Dim key = any.ToString(row_names.data.GetValue(Scan0))
 
                     If dataframe.columns.ContainsKey(key) Then
-                        dataframe.rownames = dataframe.columns(key)
+                        dataframe.rownames = dataframe.columns.Item(key)
                         dataframe.columns.Remove(key)
                     ElseIf key = "" Then
                         ' 20210912
