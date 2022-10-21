@@ -124,6 +124,8 @@ Namespace Runtime.Internal.Object
             Dim sb As New StringBuilder
             Dim i As i32 = 1
             Dim keyValues As New List(Of (key$, value$))
+            Dim slotKeyStr As String
+            Dim isIntKey As Boolean
 
             If list.Count = 0 Then
                 Return $"{indent}list()"
@@ -133,14 +135,20 @@ Namespace Runtime.Internal.Object
 
             For Each slotKey As Object In (From x In list.Keys.AsQueryable Select x Take list_len)
                 value = list(slotKey)
+                slotKeyStr = slotKey.ToString
+                isIntKey = slotKeyStr.IsPattern("\d+")
 
-                If ++i = CInt(Val(slotKey.ToString)) Then
-                    slotKey = $"[{slotKey}]"
+                If isIntKey Then
+                    If ++i = Integer.Parse(slotKeyStr) Then
+                        slotKeyStr = $"[{slotKeyStr}]"
+                    End If
+                Else
+                    i = i + 1
                 End If
 
-                slotKey = $"{indent}$ {slotKey}"
+                slotKeyStr = $"{indent}$ {slotKeyStr}"
                 value = GetStructure(value, env, indent & "..", list_len)
-                keyValues.Add((slotKey, DirectCast(value, String)))
+                keyValues.Add((slotKeyStr, DirectCast(value, String)))
             Next
 
             Dim truncated$ = Nothing

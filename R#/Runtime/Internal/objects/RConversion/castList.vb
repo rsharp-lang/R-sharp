@@ -120,13 +120,13 @@ Namespace Runtime.Internal.Object.Converts
         Friend Function listInternal(obj As Object, args As list, env As Environment) As Object
             Dim type As Type = obj.GetType
 
-            If type.ImplementInterface(Of ICTypeList) Then
-                Return DirectCast(obj, ICTypeList).toList
-            End If
             If TypeOf obj Is vector Then
                 Return vector_castList(DirectCast(obj, vector).data, args, env)
             ElseIf type.IsArray Then
                 Return vector_castList(DirectCast(obj, Array), args, env)
+            End If
+            If type.ImplementInterface(Of ICTypeList) Then
+                Return DirectCast(obj, ICTypeList).toList
             End If
 
             Select Case type
