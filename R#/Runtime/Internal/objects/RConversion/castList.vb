@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::644b3f7784259dd3a77c0e5143a73775, R-sharp\R#\Runtime\Internal\objects\RConversion\castList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 160
-    '    Code Lines: 124
-    ' Comment Lines: 12
-    '   Blank Lines: 24
-    '     File Size: 6.44 KB
+' Summaries:
 
 
-    '     Module castList
-    ' 
-    '         Function: CTypeList, dataframe_castList, listInternal, objCastList
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 160
+'    Code Lines: 124
+' Comment Lines: 12
+'   Blank Lines: 24
+'     File Size: 6.44 KB
+
+
+'     Module castList
+' 
+'         Function: CTypeList, dataframe_castList, listInternal, objCastList
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -86,11 +86,47 @@ Namespace Runtime.Internal.Object.Converts
             Return table
         End Function
 
+        Public Function vector_castList(vec As Array, args As list, env As Environment) As Object
+            Dim names As String() = args.getValue(Of String())("names", env)
+
+            If names.IsNullOrEmpty Then
+                names = vec.Length _
+                    .Sequence _
+                    .Select(Function(i) $"X_{i}") _
+                    .ToArray
+            Else
+                names = names.uniqueNames
+            End If
+
+            If names.Length <> vec.Length Then
+                Return Internal.debug.stop({
+                    $"size of names is mis-matched with the dimension of your vector!",
+                    $"sizeof_names: {names.Length}",
+                    $"dimensionof_vector: {vec.Length}"
+                }, env)
+            End If
+
+            Dim newList As New list With {
+                .slots = New Dictionary(Of String, Object)
+            }
+
+            For i As Integer = 0 To vec.Length - 1
+                Call newList.add(names(i), vec(i))
+            Next
+
+            Return newList
+        End Function
+
         Friend Function listInternal(obj As Object, args As list, env As Environment) As Object
             Dim type As Type = obj.GetType
 
             If type.ImplementInterface(Of ICTypeList) Then
                 Return DirectCast(obj, ICTypeList).toList
+            End If
+            If TypeOf obj Is vector Then
+                Return vector_castList(DirectCast(obj, vector).data, args, env)
+            ElseIf type.IsArray Then
+                Return vector_castList(DirectCast(obj, Array), args, env)
             End If
 
             Select Case type
