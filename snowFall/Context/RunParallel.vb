@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::d26e59c906d5a5b7329c89684009379d, R-sharp\snowFall\Context\RunParallel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 190
-    '    Code Lines: 142
-    ' Comment Lines: 27
-    '   Blank Lines: 21
-    '     File Size: 7.91 KB
+' Summaries:
 
 
-    ' Class RunParallel
-    ' 
-    '     Properties: [error], debug, debugPort, master, seqSet
-    '                 size, slaveDebug, task, worker
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: getSymbol, Initialize, readSymbolSet, taskFactory
-    ' 
-    '     Sub: getResult
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 190
+'    Code Lines: 142
+' Comment Lines: 27
+'   Blank Lines: 21
+'     File Size: 7.91 KB
+
+
+' Class RunParallel
+' 
+'     Properties: [error], debug, debugPort, master, seqSet
+'                 size, slaveDebug, task, worker
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: getSymbol, Initialize, readSymbolSet, taskFactory
+' 
+'     Sub: getResult
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
@@ -83,6 +84,7 @@ Public Class RunParallel
     Public Property [error] As Message
     Public Property master As MasterContext
     Public Property seqSet As Dictionary(Of String, Array)
+    Public Property taskNames As String()
     Public Property size As Integer
     Public ReadOnly Property worker As R
     Public Property task As Byte()
@@ -114,7 +116,9 @@ Public Class RunParallel
     ''' <summary>
     ''' run task on the remote slave node from this function
     ''' </summary>
-    ''' <param name="index"></param>
+    ''' <param name="index">
+    ''' A zero-based task index
+    ''' </param>
     ''' <returns></returns>
     Public Function taskFactory(index As Integer) As Object
         Dim result As Object = Nothing
@@ -122,7 +126,7 @@ Public Class RunParallel
         Dim tempfile As String = If(debug, TempFileSystem.GetAppSysTempFile(".log", $"{App.PID}.{bootstrap.GetHashCode}.{index}", $"task_{index}___-"), Nothing)
         Dim task As String = worker.GetparallelModeCommandLine(bootstrap.port, [delegate]:="Parallel::slave", redirect_stdout:=tempfile)
         Dim SetDllDirectory As String = master.env.globalEnvironment.options.getOption("SetDllDirectory") Or App.HOME.AsDefault
-        Dim process As RunSlavePipeline = worker.CreateSlave($"{task} --SetDllDirectory {SetDllDirectory.CLIPath}")
+        Dim process As RunSlavePipeline = worker.CreateSlave($"{task} {If(taskNames.IsNullOrEmpty, "", $"--task ""{taskNames(index)}""")} --SetDllDirectory {SetDllDirectory.CLIPath}")
 
         If debug Then
             Call base.print(process.ToString,, master.env)
@@ -164,10 +168,26 @@ Public Class RunParallel
             .Select(Function(seq) seq.Length) _
             .Where(Function(l) l <> 1) _
             .ToArray
+        Dim taskNames As New Dictionary(Of String, String())
 
         For Each var As NamedCollection(Of Object) In seqSet
             If var.name.StringEmpty AndAlso var.value.Length = 1 AndAlso TypeOf var(Scan0) Is Message Then
                 Return DirectCast(var(Scan0), Message)
+            ElseIf argv.hasName(var.name) Then
+                Dim namelist As String() = Nothing
+
+                If TypeOf argv(var.name) Is list Then
+                    namelist = DirectCast(argv(var.name), list).getNames
+                ElseIf argv(var.name).GetType.ImplementInterface(Of IDictionary) Then
+                    namelist = (From key As Object
+                                In DirectCast(argv(var.name), IDictionary).Keys
+                                Let str As String = key.ToString
+                                Select str).ToArray
+                End If
+
+                If (Not namelist.IsNullOrEmpty) AndAlso namelist.Length = checkSize(0) Then
+                    Call taskNames.Add(var.name, namelist)
+                End If
             End If
         Next
 
@@ -191,8 +211,35 @@ Public Class RunParallel
                 .task = taskPayload.ToArray,
                 .debugPort = argv.getValue("bootstrap", env, -1),
                 .debug = debug,
-                .slaveDebug = argv.getValue("slaveDebug", env, False)
+                .slaveDebug = argv.getValue("slaveDebug", env, False),
+                .taskNames = setTaskNames(taskNames)
             }
+        End If
+    End Function
+
+    Private Shared Function setTaskNames(namelist As Dictionary(Of String, String())) As String()
+        If namelist.IsNullOrEmpty Then
+            Return Nothing
+        Else
+            Dim taskNames As String() = New String(namelist.First.Value.Length - 1) {}
+            Dim nameSet = namelist.ToArray
+
+            For i As Integer = 0 To taskNames.Length - 1
+#Disable Warning
+                taskNames(i) = nameSet _
+                    .Select(Function(idx) idx.Value(i)) _
+                    .JoinBy("+")
+#Enable Warning
+                If taskNames(i).StringEmpty Then
+                    taskNames(i) = $"task_{i}"
+                ElseIf taskNames(i).Length > 32 Then
+                    taskNames(i) = Microsoft.VisualBasic.Strings.Mid(taskNames(i), 1, 32) & "..."
+                End If
+
+                taskNames(i) = taskNames(i).TrimNewLine("~")
+            Next
+
+            Return taskNames
         End If
     End Function
 

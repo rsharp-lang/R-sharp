@@ -757,7 +757,10 @@ RE0:
         ''' <returns></returns>
         <ExportAPI("as.list")>
         <RApiReturn(GetType(list))>
-        Public Function asList(obj As Object, <RListObjectArgument> args As Object, Optional env As Environment = Nothing) As Object
+        Public Function asList(<RRawVectorArgument> obj As Object,
+                               <RListObjectArgument> args As Object,
+                               Optional env As Environment = Nothing) As Object
+
             If obj Is Nothing Then
                 Return Nothing
             ElseIf TypeOf obj Is list Then
