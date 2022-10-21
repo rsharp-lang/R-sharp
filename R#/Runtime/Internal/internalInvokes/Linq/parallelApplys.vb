@@ -186,7 +186,9 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             Call println($"create {key_groups.Length} task groups based on {list.Count} data inputs!")
 
+            ' for each key group
             For Each keys As SeqValue(Of Object)() In key_groups
+                ' get task group of current key group
                 Dim value_group As SeqValue(Of (Object, Object))() = keys _
                     .Select(Function(xi)
                                 Return New SeqValue(Of (Object, Object))(xi.i, (xi.value, list(xi.value)))
@@ -194,6 +196,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     .ToArray
                 Dim task_id As Integer = ++i
                 Dim env As Environment = envir.deepCloneContext("parallel_task_group_" & task_id)
+                Dim queueTaskName As String = "task_group~" & keys.Select(Function(c) anyObj.ToString(c.value)).JoinBy("+")
 
                 If verbose Then
                     Call println($"[task_queue] queue {task_id}...")
@@ -228,12 +231,16 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                         If verbose Then
                             Call println($"[task_queue] finish {task_id}!")
                         End If
-                    End Sub)
+                    End Sub, name:=queueTaskName)
             Next
         End Sub
 
         <Extension>
-        Private Sub pushParallelTask(host As ThreadPool, list As IDictionary, apply As RFunction, envir As Environment, values As List(Of (i%, key$, value As Object)))
+        Private Sub pushParallelTask(host As ThreadPool,
+                                     list As IDictionary,
+                                     apply As RFunction,
+                                     envir As Environment,
+                                     values As List(Of (i%, key$, value As Object)))
             Dim i As i32 = 1
 
             For Each key As Object In list.Keys
@@ -253,7 +260,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                         SyncLock values
                             Call values.Add(result)
                         End SyncLock
-                    End Sub)
+                    End Sub, name:=keyName)
             Next
         End Sub
     End Module
