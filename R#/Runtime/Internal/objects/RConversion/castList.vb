@@ -87,6 +87,10 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         Public Function vector_castList(vec As Array, args As list, env As Environment) As Object
+            If vec.Length = 1 Then
+                Return listInternal(vec.GetValue(Scan0), args, env)
+            End If
+
             Dim names As String() = args.getValue(Of String())("names", env)
 
             If names.IsNullOrEmpty Then
