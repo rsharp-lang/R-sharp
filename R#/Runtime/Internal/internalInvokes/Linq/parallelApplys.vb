@@ -86,7 +86,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 println($"[warning] the given task threads number({n_threads}) is greater than the CPU core thread number({App.CPUCoreNumbers}), set task threads number to {task_threads}!")
             End If
 
-            Dim host As New ThreadPool(task_threads)
+            Dim host As New ThreadPool(task_threads, maxQueueSize:=1)
 
             If group > 1 Then
                 Call host.pushGroupParallelTask(list, apply, envir, group, verbose, values)
