@@ -873,7 +873,7 @@ RE0:
         <ExportAPI("as.double")>
         <RApiReturn(GetType(Double))>
         Public Function asDouble(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
-            Return asNumeric(x, env)
+            Return REnv.asVector(x, GetType(Double), env)
         End Function
 
         ''' <summary>

@@ -187,7 +187,9 @@ Namespace Runtime
         ''' <see cref="vbObject"/>.)
         ''' </summary>
         ''' <param name="value"></param>
-        ''' <param name="type"></param>
+        ''' <param name="type">
+        ''' should be the element type of the target vector array
+        ''' </param>
         ''' <returns>
         ''' 如果执行出错，这个函数会返回一个错误消息
         ''' </returns>
