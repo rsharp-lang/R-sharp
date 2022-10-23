@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::7ef89a8ea7e5ccc11d4e2e2045794930, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\parallelApplys.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 206
-    '    Code Lines: 150
-    ' Comment Lines: 26
-    '   Blank Lines: 30
-    '     File Size: 8.81 KB
+' Summaries:
 
 
-    '     Module parallelApplys
-    ' 
-    '         Function: deepCloneContext, parallelList
-    ' 
-    '         Sub: pushGroupParallelTask, pushParallelTask
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 206
+'    Code Lines: 150
+' Comment Lines: 26
+'   Blank Lines: 30
+'     File Size: 8.81 KB
+
+
+'     Module parallelApplys
+' 
+'         Function: deepCloneContext, parallelList
+' 
+'         Sub: pushGroupParallelTask, pushParallelTask
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -99,12 +99,18 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 println($"[warning] the given task threads number({n_threads}) is greater than the CPU core thread number({App.CPUCoreNumbers}), set task threads number to {task_threads}!")
             End If
 
-            Dim host As New ThreadPool(task_threads, maxQueueSize:=1)
+            Dim host As New ThreadPool(
+                maxThread:=task_threads,
+                maxQueueSize:=1,
+                exceptionCallback:=
+                    Sub(name, ex)
+                        Call values.Add((0, name, Internal.debug.stop(ex, envir, suppress:=True)))
+                    End Sub)
 
             If group > 1 Then
                 Call host.pushGroupParallelTask(list, apply, envir, group, verbose, values)
             Else
-                Call host.pushParallelTask(list, apply, envir, values)
+                Call host.pushParallelTask(list, apply, envir, verbose, values)
             End If
 
             Call host.Start()
@@ -260,8 +266,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                      list As IDictionary,
                                      apply As RFunction,
                                      envir As Environment,
+                                     verbose As Boolean,
                                      values As List(Of (i%, key$, value As Object)))
             Dim i As i32 = 1
+            Dim println = envir.WriteLineHandler
+            Dim sizeAll = list.Count
 
             For Each key As Object In list.Keys
                 Dim value As Object = list(key)
@@ -279,6 +288,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
                         SyncLock values
                             Call values.Add(result)
+
+                            If verbose Then
+                                Call println($"[{(values.Count / sizeAll * 100).ToString("F2")}%] {keyName}, job done!")
+                            End If
                         End SyncLock
                     End Sub, name:=keyName)
             Next

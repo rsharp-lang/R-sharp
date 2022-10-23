@@ -72,6 +72,8 @@ Namespace Runtime.Vectorization
         None
         Scalar
         Vector
+
+        [Error]
     End Enum
 
     ''' <summary>
@@ -93,6 +95,8 @@ Namespace Runtime.Vectorization
         ''' <see cref="vector"/> array.
         ''' </summary>
         ReadOnly m_get As Func(Of Integer, Object)
+
+        Public ReadOnly Property [Error] As Exception
 
         Public ReadOnly Property isNullOrEmpty As Boolean
             Get
@@ -146,6 +150,11 @@ Namespace Runtime.Vectorization
             End If
 
             m_get = Getter()
+        End Sub
+
+        Private Sub New(ex As Exception)
+            Me.Error = ex
+            Me.Mode = VectorTypes.Error
         End Sub
 
         ''' <summary>
@@ -216,7 +225,7 @@ Namespace Runtime.Vectorization
                     End If
                 Else
                     ' do type cast?
-                    Throw New InvalidCastException($"Do we require a type cast for {type} -> {GetType(T)}?")
+                    Return New GetVectorElement(ex:=New InvalidCastException($"Do we require a type cast for {type} -> {GetType(T)}?"))
                 End If
             End If
         End Function

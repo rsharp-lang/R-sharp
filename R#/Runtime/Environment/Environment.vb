@@ -82,7 +82,8 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Namespace Runtime
 
     ''' <summary>
-    ''' 在一个环境对象容器之中，所有的对象都是以变量来表示的
+    ''' A ``R#`` scripting runtime context.
+    ''' (在一个环境对象容器之中，所有的对象都是以变量来表示的)
     ''' </summary>
     Public Class Environment : Implements IEnumerable(Of Symbol)
         Implements IDisposable

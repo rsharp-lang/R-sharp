@@ -9,6 +9,12 @@ Namespace Runtime.Vectorization
             Dim vx As GetVectorElement = GetVectorElement.Create(Of Double)(x)
             Dim vy As GetVectorElement = GetVectorElement.Create(Of Double)(y)
 
+            If vx.Mode = VectorTypes.Error Then
+                Return vx.Error
+            ElseIf vy.Mode = VectorTypes.Error Then
+                Return vy.Error
+            End If
+
             If vx.Mode = VectorTypes.Scalar AndAlso vy.Mode = VectorTypes.Scalar Then
                 Return CDbl(vx.single) Mod CDbl(vy.single)
             ElseIf vx.Mode = VectorTypes.Scalar Then

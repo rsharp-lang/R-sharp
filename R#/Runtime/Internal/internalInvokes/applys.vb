@@ -168,6 +168,7 @@ Namespace Runtime.Internal.Invokes
             Dim seq As List(Of Object)
             Dim apply As RFunction = FUN
             Dim result = x.slots.parallelList(apply, group, n_threads, env.verboseOption(opt:=verbose), env)
+            Dim rawSize As Integer = x.length
 
             If names.IsNullOrEmpty Then
                 names = result.names.ToArray
@@ -187,6 +188,14 @@ Namespace Runtime.Internal.Invokes
             ' original input sequence
             seq = result.objects
             x = New list With {.slots = New Dictionary(Of String, Object)}
+
+            If seq.Count <> rawSize Then
+                Return Internal.debug.stop({
+                    $"the size of the raw sequence input({rawSize}) is not matched with the size of the result sequence({seq.Count})!",
+                    $"sizeof_rawSeq: {rawSize}",
+                    $"sizeof_result: {seq.Count}"
+                }, env)
+            End If
 
             For i As Integer = 0 To names.Length - 1
                 If Program.isException(seq(i)) Then
