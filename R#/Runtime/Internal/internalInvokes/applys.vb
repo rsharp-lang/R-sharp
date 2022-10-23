@@ -171,7 +171,7 @@ Namespace Runtime.Internal.Invokes
 
             If names.IsNullOrEmpty Then
                 names = result.names.ToArray
-            ElseIf names.Length = result.names.Count Then
+            ElseIf names.Length = x.length Then
                 ' do nothing, use the parameter user input(assign new names)
             Else
                 ' the size of the names that user input from the parameter
