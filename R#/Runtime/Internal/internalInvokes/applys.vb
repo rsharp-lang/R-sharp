@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::df7d4997df33ab2bdb599099b75673ce, R-sharp\R#\Runtime\Internal\internalInvokes\applys.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 461
-    '    Code Lines: 307
-    ' Comment Lines: 88
-    '   Blank Lines: 66
-    '     File Size: 18.96 KB
+' Summaries:
 
 
-    '     Module applys
-    ' 
-    '         Function: apply, checkInternal, (+2 Overloads) keyNameAuto, lapply, parLapply
-    '                   parSapply, sapply
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 461
+'    Code Lines: 307
+' Comment Lines: 88
+'   Blank Lines: 66
+'     File Size: 18.96 KB
+
+
+'     Module applys
+' 
+'         Function: apply, checkInternal, (+2 Overloads) keyNameAuto, lapply, parLapply
+'                   parSapply, sapply
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -133,11 +133,27 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' Parallel version of ``lapply``.
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="FUN"></param>
+        ''' <param name="group"></param>
+        ''' <param name="n_threads"></param>
+        ''' <param name="verbose"></param>
+        ''' <param name="names">
+        ''' Set new names to the result list, the size of this parameter
+        ''' should be equals to the size of the original input sequence 
+        ''' size.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("parLapply")>
         Public Function parLapply(x As list, FUN As Object,
                                   Optional group As Integer = -1,
                                   Optional n_threads As Integer = -1,
                                   Optional verbose As Boolean? = Nothing,
+                                  Optional names As String() = Nothing,
                                   Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return Nothing
@@ -150,15 +166,29 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Dim seq As List(Of Object)
-            Dim names As List(Of String)
             Dim apply As RFunction = FUN
             Dim result = x.slots.parallelList(apply, group, n_threads, env.verboseOption(opt:=verbose), env)
 
+            If names.IsNullOrEmpty Then
+                names = result.names.ToArray
+            ElseIf names.Length = result.names.Count Then
+                ' do nothing, use the parameter user input(assign new names)
+            Else
+                ' the size of the names that user input from the parameter
+                ' is not matched with the sequence size
+                Return Internal.debug.stop({
+                    $"the size of the names input({names.Length}) is not matched with the size of the input sequence({x.length})!",
+                    $"sizeof_names: {names.Length}",
+                    $"sizeof_sequence: {x.length}"
+                }, env)
+            End If
+
+            ' the result data set still keeps the same order with the
+            ' original input sequence
             seq = result.objects
-            names = result.names
             x = New list With {.slots = New Dictionary(Of String, Object)}
 
-            For i As Integer = 0 To names.Count - 1
+            For i As Integer = 0 To names.Length - 1
                 If Program.isException(seq(i)) Then
                     Return seq(i)
                 Else

@@ -278,14 +278,27 @@ Namespace Runtime
         End Function
 
         ''' <summary>
-        ''' 返回错误消息或者结果向量
+        ''' This function make sure the return array is not a generic type array
+        ''' 
+        ''' (返回错误消息或者结果向量)
         ''' </summary>
         ''' <param name="vec"></param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' A class variant type: error message or a generic array
+        ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Public Function TryCastGenericArray(vec As Array, env As Environment) As Object
+            Dim elementType As Type = vec.GetType.GetElementType
+
+            If elementType IsNot Nothing AndAlso
+                elementType IsNot GetType(Object) AndAlso
+                Not elementType.IsArray Then
+
+                Return vec
+            End If
+
             If vec _
                 .AsObjectEnumerator _
                 .Take(100) _

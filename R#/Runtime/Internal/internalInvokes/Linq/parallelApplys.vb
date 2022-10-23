@@ -69,6 +69,19 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
     Module parallelApplys
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="list"></param>
+        ''' <param name="apply"></param>
+        ''' <param name="group"></param>
+        ''' <param name="n_threads"></param>
+        ''' <param name="verbose"></param>
+        ''' <param name="envir"></param>
+        ''' <returns>
+        ''' the returns result value sequence keeps the 
+        ''' same order with the input sequence.
+        ''' </returns>
         <Extension>
         Friend Function parallelList(list As IDictionary,
                                      apply As RFunction,
@@ -105,7 +118,14 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim seq As New List(Of Object)
             Dim names As New List(Of String)
 
-            For Each tuple As (i As Integer, key As String, value As Object) In values.OrderBy(Function(a) a.i)
+            For Each tuple As (i As Integer, key As String, value As Object) In values _
+                .OrderBy(Function(a)
+                             ' 20221023 re-order data by index try to make the
+                             ' result sequence keeps the same order with the 
+                             ' original input sequence
+                             Return a.i
+                         End Function)
+
                 Call seq.Add(REnv.single(tuple.value))
                 Call names.Add(tuple.key)
             Next
