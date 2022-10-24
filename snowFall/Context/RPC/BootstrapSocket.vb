@@ -222,9 +222,16 @@ Namespace Context.RPC
                 Sub()
                     Call setStatus("wait task running")
 
-                    Do While Not task.HasExited
-                        Call Thread.Sleep(100)
-                    Loop
+                    Try
+                        Do While Not task.HasExited
+                            Call Thread.Sleep(100)
+                        Loop
+                    Catch ex As Exception
+                        ' 20221024
+                        ' the process object is closed
+                        ' so may throw exception
+                        ' exit from here directly!
+                    End Try
 
                     Call setStatus("job done!")
                 End Sub
