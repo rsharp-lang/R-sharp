@@ -128,7 +128,7 @@ Partial Module CLI
         Dim arguments As Dictionary(Of String, String()) = args("/args") _
             .Base64Decode(ungzip:=True) _
             .tryHandleJSON
-        Dim port As Integer = args <= "/PORT"
+        Dim port As Integer = CInt(Val(args <= "/PORT"))
         Dim master As String = args("/MASTER") Or "localhost"
         Dim entry As String = args <= "/entry"
         Dim request_id As String = args <= "/request-id"
