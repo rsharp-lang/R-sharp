@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::a23ba35a47530032348db32d7427a08e, R-sharp\snowFall\Context\RPC\BootstrapSocket.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 178
-    '    Code Lines: 110
-    ' Comment Lines: 37
-    '   Blank Lines: 31
-    '     File Size: 6.09 KB
+' Summaries:
 
 
-    '     Class BootstrapSocket
-    ' 
-    '         Properties: port
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: folk, NodeSetup, Run, stopSocket, ToString
-    ' 
-    '         Sub: setStatus
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 178
+'    Code Lines: 110
+' Comment Lines: 37
+'   Blank Lines: 31
+'     File Size: 6.09 KB
+
+
+'     Class BootstrapSocket
+' 
+'         Properties: port
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: folk, NodeSetup, Run, stopSocket, ToString
+' 
+'         Sub: setStatus
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -102,6 +102,7 @@ Namespace Context.RPC
                 Optional slave_debug As Boolean = False)
 
             Dim protocol As DataRequestHandler = AddressOf New ProtocolHandler(Me).HandleRequest
+            Dim tcpPort As Integer
 
             Me.masterPort = master
             Me.uuid = uuid
@@ -111,7 +112,8 @@ Namespace Context.RPC
             is_debug = debugPort > 0 OrElse debug
 
             ' loop until the socket run success?
-            socket = New TcpServicesSocket(If(debugPort > 0, debugPort, IPCSocket.GetFirstAvailablePort))
+            tcpPort = If(debugPort > 0, debugPort, IPCSocket.GetFirstAvailablePort)
+            socket = New TcpServicesSocket(tcpPort)
             socket.ResponseHandler = protocol
 
             Call New Thread(AddressOf socket.Run).Start()
