@@ -768,6 +768,8 @@ RE0:
                 Return New list(DirectCast(obj, list).elementType) With {
                     .slots = New Dictionary(Of String, Object)(DirectCast(obj, list).slots)
                 }
+            ElseIf obj.GetType.ImplementInterface(Of IDictionary) Then
+                Return DirectCast(obj, IDictionary).dictionaryToRList
             Else
                 Return listInternal(obj, base.Rlist(args, env), env)
             End If

@@ -146,27 +146,33 @@ Namespace Runtime.Internal.Object.Converts
                 Case Else
                     ' 将字典对象转换为列表对象
                     If type.ImplementInterface(GetType(IDictionary)) Then
-                        Dim objList As New Dictionary(Of String, Object)
-                        Dim eleType As RType = RType.any
-
-                        With DirectCast(obj, IDictionary)
-                            For Each key As Object In .Keys
-                                Call objList.Add(any.ToString(key), .Item(key))
-                            Next
-                        End With
-
-                        If Not type.GetGenericArguments.ElementAtOrDefault(1) Is Nothing Then
-                            eleType = RType.GetRSharpType(type.GetGenericArguments()(1))
-                        End If
-
-                        Return New list With {
-                            .slots = objList,
-                            .elementType = eleType
-                        }
+                        Return DirectCast(obj, IDictionary).dictionaryToRList
                     Else
                         Return New vbObject(obj).objCastList(args, env)
                     End If
             End Select
+        End Function
+
+        <Extension>
+        Friend Function dictionaryToRList(dict As IDictionary) As list
+            Dim objList As New Dictionary(Of String, Object)
+            Dim eleType As RType = RType.any
+            Dim type As Type = dict.GetType
+
+            With dict
+                For Each key As Object In .Keys
+                    Call objList.Add(any.ToString(key), .Item(key))
+                Next
+            End With
+
+            If Not type.GetGenericArguments.ElementAtOrDefault(1) Is Nothing Then
+                eleType = RType.GetRSharpType(type.GetGenericArguments()(1))
+            End If
+
+            Return New list With {
+                .slots = objList,
+                .elementType = eleType
+            }
         End Function
 
         <Extension>

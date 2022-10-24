@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::de69825d2032d78fbb3c386c0fde700c, R-sharp\snowFall\Context\RPC\RemoteEnvironment.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 102
-    '    Code Lines: 60
-    ' Comment Lines: 27
-    '   Blank Lines: 15
-    '     File Size: 3.92 KB
+' Summaries:
 
 
-    '     Class RemoteEnvironment
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: FindSymbol, getRemoteSymbol
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 102
+'    Code Lines: 60
+' Comment Lines: 27
+'   Blank Lines: 15
+'     File Size: 3.92 KB
+
+
+'     Class RemoteEnvironment
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: FindSymbol, getRemoteSymbol
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -111,9 +111,11 @@ Namespace Context.RPC
             End SyncLock
 
             If local Is Nothing AndAlso Not missingOnMaster Then
-                Call Console.WriteLine($"try find symbol: {name}")
-                Call Console.WriteLine($"but not exists on local or cache...")
-                Call Console.WriteLine($"request symbol '{name}' from master!")
+                If verbose Then
+                    Call Console.WriteLine($"try find symbol: {name}")
+                    Call Console.WriteLine($"but not exists on local or cache...")
+                    Call Console.WriteLine($"request symbol '{name}' from master!")
+                End If
 
                 Return getRemoteSymbol(name)
             Else
@@ -126,11 +128,15 @@ Namespace Context.RPC
             Dim req As New RequestStream(MasterContext.Protocol, Protocols.GetSymbol, msg)
             Dim resp = New TcpRequest(master).SendMessage(req)
 
-            Call Console.WriteLine($"[get_symbol] {msg.GetJson}")
+            If verbose Then
+                Call Console.WriteLine($"[get_symbol] {msg.GetJson}")
+            End If
 
             Using buffer As New MemoryStream(resp.ChunkBuffer)
                 If buffer.Length = 0 OrElse resp.Protocol = 404 Then
-                    Call Console.WriteLine($"[404/NOT FOUND] target symbol is also not find on master environment!")
+                    If verbose Then
+                        Call Console.WriteLine($"[404/NOT FOUND] target symbol is also not find on master environment!")
+                    End If
 
                     ' this symbol will not query in the master
                     ' environment any more
@@ -143,8 +149,12 @@ Namespace Context.RPC
                 Else
                     ' deserialize
                     Dim value As Symbol = Serialization.GetValue(buffer)
+
+                    If verbose Then
+                        Call Console.WriteLine($"[symbol::{name}] {value.ToString}")
+                    End If
+
                     ' and then push/cache to local environment
-                    Call Console.WriteLine($"[symbol::{name}] {value.ToString}")
                     Call symbols.Add(name, value)
                     Return value
                 End If
