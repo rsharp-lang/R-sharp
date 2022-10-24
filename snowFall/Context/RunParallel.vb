@@ -58,6 +58,7 @@
 
 Imports System.IO
 Imports System.Runtime.InteropServices
+Imports System.Threading
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -122,9 +123,35 @@ Public Class RunParallel
     ''' <returns></returns>
     Public Function taskFactory(index As Integer) As Object
         Dim result As Object = Nothing
-        Dim bootstrap As New BootstrapSocket(index, master.port, Me.task, debugPort, debug:=debug, slave_debug:=slaveDebug)
+        Dim bootstrap As BootstrapSocket = Nothing
+
+        Do While True
+            bootstrap = New BootstrapSocket(
+                uuid:=index,
+                master:=master.port,
+                closure:=Me.task,
+                debugPort:=debugPort,
+                debug:=debug,
+                slave_debug:=slaveDebug
+            )
+
+            Call Thread.Sleep(500)
+
+            ' 20221024 try to handling of the socket binding error
+            ' System.Net.Sockets.SocketException (98): Address already in use
+            If Not bootstrap.NotAvaiable Then
+                Exit Do
+            Else
+                bootstrap.Dispose()
+            End If
+        Loop
+
         Dim tempfile As String = If(debug, TempFileSystem.GetAppSysTempFile(".log", $"{App.PID}.{bootstrap.GetHashCode}.{index}", $"task_{index}___-"), Nothing)
-        Dim task As String = worker.GetparallelModeCommandLine(bootstrap.port, [delegate]:="Parallel::slave", redirect_stdout:=tempfile)
+        Dim task As String = worker.GetparallelModeCommandLine(
+            master:=bootstrap.port,
+            [delegate]:="Parallel::slave",
+            redirect_stdout:=tempfile
+        )
         Dim SetDllDirectory As String = master.env.globalEnvironment.options.getOption("SetDllDirectory") Or App.HOME.AsDefault
         Dim process As RunSlavePipeline = worker.CreateSlave($"{task} {If(taskNames.IsNullOrEmpty, "", $"--task ""{taskNames(index)}""")} --SetDllDirectory {SetDllDirectory.CLIPath}")
 

@@ -67,7 +67,7 @@ Imports Parallel
 Namespace Context.RPC
 
     <Protocol(GetType(Protocols))>
-    Public Class BootstrapSocket
+    Public Class BootstrapSocket : Implements IDisposable
 
         Public ReadOnly Property port As Integer
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -86,8 +86,20 @@ Namespace Context.RPC
         Dim [stop] As Boolean = False
         Dim status2 As String
 
+        Private disposedValue As Boolean
+
         ''' <summary>
+        ''' error during start the socket, most error:
         ''' 
+        ''' ```
+        ''' System.Net.Sockets.SocketException (98): Address already in use
+        ''' ```
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property NotAvaiable As Boolean = False
+
+        ''' <summary>
+        ''' Create a new socket and start the tcp socket services
         ''' </summary>
         ''' <param name="uuid"></param>
         ''' <param name="master"></param>
@@ -96,6 +108,9 @@ Namespace Context.RPC
         ''' [debug_only] the tcp port of this services socket.
         ''' </param>
         ''' <param name="debug"></param>
+        ''' <remarks>
+        ''' test is error or not on socket start via the property <see cref="NotAvaiable"/>.
+        ''' </remarks>
         Sub New(uuid As Integer, master As Integer, closure As Byte(),
                 Optional debugPort As Integer = -1,
                 Optional debug As Boolean = False,
@@ -116,9 +131,18 @@ Namespace Context.RPC
             socket = New TcpServicesSocket(tcpPort)
             socket.ResponseHandler = protocol
 
-            Call New Thread(AddressOf socket.Run).Start()
+            Call New Thread(AddressOf startAsync).Start()
             Call Thread.Sleep(300)
             Call setStatus("initialized")
+        End Sub
+
+        Private Sub startAsync()
+            Try
+                socket.Run()
+                _NotAvaiable = False
+            Catch ex As Exception
+                _NotAvaiable = True
+            End Try
         End Sub
 
         Public Overrides Function ToString() As String
@@ -234,5 +258,32 @@ Namespace Context.RPC
 
             Return New DataPipe(payload)
         End Function
+
+        Protected Overridable Sub Dispose(disposing As Boolean)
+            If Not disposedValue Then
+                If disposing Then
+                    ' TODO: dispose managed state (managed objects)
+                    Me.stop = True
+                    Me.socket.Dispose()
+                End If
+
+                ' TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                ' TODO: set large fields to null
+                disposedValue = True
+            End If
+        End Sub
+
+        ' ' TODO: override finalizer only if 'Dispose(disposing As Boolean)' has code to free unmanaged resources
+        ' Protected Overrides Sub Finalize()
+        '     ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+        '     Dispose(disposing:=False)
+        '     MyBase.Finalize()
+        ' End Sub
+
+        Public Sub Dispose() Implements IDisposable.Dispose
+            ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+            Dispose(disposing:=True)
+            GC.SuppressFinalize(Me)
+        End Sub
     End Class
 End Namespace
