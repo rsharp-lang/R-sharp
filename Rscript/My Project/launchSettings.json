@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "./http.R --listen 19612 --wwwroot ../../web/ --attach ../../Apps/Rstudio/packages/Rserver.zip",
+      "commandLineArgs": "--slave /exec E:\\GCModeller\\src\\workbench\\win32_desktop\\fastRWeb\\database\\ec_numbers.R --uniprot \"K:\\Downloads\\uniprot-compressed_true_download_true_format_xml_query__28_28taxonom-2022.10.02-09.21.31.14.xml\"",
       "workingDirectory": "E:\\GCModeller\\src\\workbench\\win32_desktop\\src\\Rstudio"
     }
   }

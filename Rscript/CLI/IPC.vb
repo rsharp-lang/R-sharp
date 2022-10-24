@@ -75,6 +75,10 @@ Partial Module CLI
 
     <Extension>
     Private Function tryHandleJSON(json As String) As Dictionary(Of String, String())
+        If json.StringEmpty Then
+            Return New Dictionary(Of String, String())
+        End If
+
         Try
             Return json.LoadJSON(Of Dictionary(Of String, String()))
         Catch ex As Exception
