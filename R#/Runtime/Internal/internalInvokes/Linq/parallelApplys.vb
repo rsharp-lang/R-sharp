@@ -224,6 +224,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Dim env As Environment = envir.deepCloneContext("parallel_task_group_" & task_id)
                 Dim queueTaskName As String = "task_group~" & keys.Select(Function(c) anyObj.ToString(c.value)).JoinBy("+")
 
+                If queueTaskName.Length > 32 Then
+                    queueTaskName = Mid(queueTaskName, 1, 32) & "..."
+                End If
+
                 If verbose Then
                     Call println($"[task_queue] queue {task_id}...")
                 End If
