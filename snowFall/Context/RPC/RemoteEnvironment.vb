@@ -134,32 +134,51 @@ Namespace Context.RPC
 
             Using buffer As New MemoryStream(resp.ChunkBuffer)
                 If buffer.Length = 0 OrElse resp.Protocol = 404 Then
-                    If verbose Then
-                        Call Console.WriteLine($"[404/NOT FOUND] target symbol is also not find on master environment!")
-                    End If
-
-                    ' this symbol will not query in the master
-                    ' environment any more
-                    SyncLock missing404
-                        Call missing404.Add(name)
-                    End SyncLock
-
-                    ' symbol not found
-                    Return Nothing
+                    Return buffer404(name)
                 Else
-                    ' deserialize
-                    Dim value As Symbol = Serialization.GetValue(buffer)
-
-                    If verbose Then
-                        Call Console.WriteLine($"[symbol::{name}] {value.ToString}")
-                    End If
-
-                    ' and then push/cache to local environment
-                    Call symbols.Add(name, value)
-                    Return value
+                    Return loadRemoteSymbol(name, buffer)
                 End If
             End Using
         End Function
 
+        ''' <summary>
+        ''' deserialize
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="buffer"></param>
+        ''' <returns></returns>
+        Private Function loadRemoteSymbol(name As String, buffer As MemoryStream) As Symbol
+            Dim value As Symbol
+
+            Try
+                value = Serialization.GetValue(buffer)
+            Catch ex As Exception
+                Throw New InvalidProgramException($"error while get remote symbol: '{name}'", ex)
+            End Try
+
+            If verbose Then
+                Call Console.WriteLine($"[symbol::{name}] {value.ToString}")
+            End If
+
+            ' and then push/cache to local environment
+            Call symbols.Add(name, value)
+
+            Return value
+        End Function
+
+        Private Function buffer404(name As String) As Symbol
+            If verbose Then
+                Call Console.WriteLine($"[404/NOT FOUND] target symbol is also not find on master environment!")
+            End If
+
+            ' this symbol will not query in the master
+            ' environment any more
+            SyncLock missing404
+                Call missing404.Add(name)
+            End SyncLock
+
+            ' symbol not found
+            Return Nothing
+        End Function
     End Class
 End Namespace
