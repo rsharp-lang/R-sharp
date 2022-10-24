@@ -273,13 +273,13 @@ Namespace Development.Package.File
                 End Using
             Next
 
-            ' 2. run '.onLoad'
-            If Not (result = env.callOnLoad(pkg:=[namespace])) Is Nothing Then
+            ' 2. load dependency
+            If Not (result = env.loadDependency(pkg:=[namespace])) Is Nothing Then
                 Return result
             End If
 
-            ' 3. load dependency
-            If Not (result = env.loadDependency(pkg:=[namespace])) Is Nothing Then
+            ' 3. run '.onLoad'
+            If Not (result = env.callOnLoad(pkg:=[namespace])) Is Nothing Then
                 Return result
             End If
 
