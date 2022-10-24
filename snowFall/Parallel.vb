@@ -195,10 +195,20 @@ Public Module Parallel
         Call Console.WriteLine(" --> run!")
         Call Console.WriteLine()
 
-        result = New ResultPayload(env) With {
-            .uuid = uuid,
-            .value = closure.Evaluate(root)
-        }
+        Try
+            ' run task closure at here
+            result = New ResultPayload(env) With {
+                .uuid = uuid,
+                .value = closure.Evaluate(root)
+            }
+        Catch ex As Exception
+            ' 20221024 capture the unexpected error
+            result = New ResultPayload(env) With {
+                .uuid = uuid,
+                .value = Internal.debug.stop(ex, env, suppress:=True)
+            }
+        End Try
+
         req = New RequestStream(MasterContext.Protocol, RPC.Protocols.PushResult, result)
 
         Call Console.WriteLine()
