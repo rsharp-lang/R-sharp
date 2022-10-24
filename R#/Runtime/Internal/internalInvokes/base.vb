@@ -2188,6 +2188,17 @@ RE0:
         End Function
 
         ''' <summary>
+        ''' save the options configuration data to file
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("options_flush")>
+        Public Function options_flush(Optional env As Environment = Nothing) As Object
+            env.globalEnvironment.options.flush(save:=True)
+            Return Nothing
+        End Function
+
+        ''' <summary>
         ''' # The Names of an Object
         ''' 
         ''' Functions to get or set the names of an object.

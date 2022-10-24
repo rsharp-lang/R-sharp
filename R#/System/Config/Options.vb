@@ -384,10 +384,10 @@ Namespace Development.Configuration
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
-        Public Sub flush()
+        Public Sub flush(Optional save As Boolean = False)
             ' 20210603 在R之中，设置options好像并不会保存配置文件
             ' options设置仅在当前环境中有效
-            If saveConfig Then
+            If saveConfig OrElse save Then
                 Call file _
                     .GetXml _
                     .SaveTo(localConfig)
