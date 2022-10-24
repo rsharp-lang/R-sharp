@@ -174,16 +174,26 @@ Partial Module CLI
 
                 Call App.JoinVariable(arg.Key, arg.Value.JoinBy("; "))
             Next
+
+            ' debug via commandline
+            ' set commandline arguments
+            For Each arg As NamedValue(Of String) In args
+                Dim name As String = CLITools.TrimParamPrefix(arg.Name)
+
+                If Not arguments.ContainsKey(name) Then
+                    arguments.Add(name, {arg.Value})
+                End If
+            Next
         End If
 
-        Dim parameters As NamedValue(Of Object)() = arguments _
+        Dim parameters As List(Of NamedValue(Of Object)) = arguments _
             .Select(Function(a)
                         Return New NamedValue(Of Object) With {
                             .Name = a.Key,
                             .Value = a.Value
                         }
                     End Function) _
-            .ToArray
+            .AsList
 
         R.debug = isDebugMode
 
@@ -206,7 +216,7 @@ Partial Module CLI
             Call Console.WriteLine("[load] source target script...")
         End If
 
-        result = R.Source(script, parameters)
+        result = R.Source(script, parameters.ToArray)
 
         If TypeOf result Is Message Then
             If isDebugMode Then
@@ -226,7 +236,7 @@ Partial Module CLI
                 Call Console.WriteLine($"[call] {entry}")
             End If
 
-            result = R.Invoke(entry, parameters)
+            result = R.Invoke(entry, parameters.ToArray)
         Else
         End If
 
