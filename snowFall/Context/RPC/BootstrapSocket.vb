@@ -166,9 +166,18 @@ Namespace Context.RPC
             Do While Not [stop]
                 Call Thread.Sleep(100)
 
-                If task.Task.HasExited Then
+                Try
+                    ' 20221024
+                    ' System.InvalidOperationException: No process is associated with this object.
+                    If task.Task.HasExited Then
+                        Exit Do
+                    End If
+                Catch ex As Exception
+                    ' the task is already been exited
+                    ' break the loop directly when this
+                    ' error occurs
                     Exit Do
-                End If
+                End Try
             Loop
 
             If slave_debug Then
