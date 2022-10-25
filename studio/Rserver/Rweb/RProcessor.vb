@@ -155,7 +155,7 @@ Public Class RProcessor
                 request_id = request.URL("request_id")
 
                 SyncLock requestPostback
-                    Call p.WriteLine(requestPostback.ContainsKey(request_id))
+                    Call response.WriteHTML(requestPostback.ContainsKey(request_id))
                 End SyncLock
             ElseIf request.URL.path = "get_invoke" Then
                 Call pushBackResult(request.URL("request_id"), request, response)
