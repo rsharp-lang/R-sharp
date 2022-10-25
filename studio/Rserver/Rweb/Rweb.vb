@@ -137,6 +137,9 @@ Public Class Rweb : Inherits HttpServer
 
         Select Case request.URL.path
             Case "callback"
+                ' IPC slave node post back the result data for
+                ' a specific background task
+                ' the task is referenced via a unique request id
                 Dim requestId As String = request.URL("request")
                 Dim data As HttpPostedFile = request.POSTData.files _
                     .TryGetValue("data") _
