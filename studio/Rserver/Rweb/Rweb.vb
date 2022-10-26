@@ -78,13 +78,19 @@ Public Class Rweb : Inherits HttpServer
 
     Public ReadOnly Property Processor As RProcessor
 
+    ''' <summary>
+    ''' next unique request id
+    ''' </summary>
+    ''' <returns></returns>
     Public Shared ReadOnly Property NextRequestId As String
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Get
-            Return App.GetNextUniqueName("web_request__")
+            Return App.GetNextUniqueName("web_request__") & Now.ToString.MD5.Substring(2, 4)
         End Get
     End Property
 
     Public ReadOnly Property TcpPort As Integer
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Get
             Return socket.LocalPort
         End Get
@@ -110,6 +116,7 @@ Public Class Rweb : Inherits HttpServer
         Return MyBase.Run()
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Overrides Sub handleGETRequest(p As HttpProcessor)
         Call Processor.RscriptHttpGet(p)
     End Sub
@@ -130,6 +137,9 @@ Public Class Rweb : Inherits HttpServer
 
         Select Case request.URL.path
             Case "callback"
+                ' IPC slave node post back the result data for
+                ' a specific background task
+                ' the task is referenced via a unique request id
                 Dim requestId As String = request.URL("request")
                 Dim data As HttpPostedFile = request.POSTData.files _
                     .TryGetValue("data") _

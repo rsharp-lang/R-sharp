@@ -64,6 +64,9 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports REnv = SMRUCC.Rsharp.Runtime
 
+''' <summary>
+''' 
+''' </summary>
 Public Class RProcessor
 
     Dim Rweb As String
@@ -95,6 +98,15 @@ Public Class RProcessor
         End SyncLock
     End Sub
 
+    ''' <summary>
+    ''' put the task into background queue by adding a query parameter
+    ''' 
+    ''' ```
+    ''' rweb_background=true
+    ''' ```
+    ''' </summary>
+    ''' <param name="request"></param>
+    ''' <param name="response"></param>
     Public Sub RscriptHttpPost(request As HttpPOSTRequest, response As HttpResponse)
         ' /<scriptFileName>?...args
         Dim Rscript As String = RscriptRouter(request)
@@ -119,6 +131,8 @@ Public Class RProcessor
             Next
         End If
 
+        ' the request id is send back to the client 
+        ' in plain text format
         If is_background Then
             Call RunTask(Sub() Call runRweb(Rscript, request_id, args, request, response, is_background))
             Call response.WriteHTML(request_id)
@@ -141,7 +155,7 @@ Public Class RProcessor
                 request_id = request.URL("request_id")
 
                 SyncLock requestPostback
-                    Call p.WriteLine(requestPostback.ContainsKey(request_id))
+                    Call response.WriteHTML(requestPostback.ContainsKey(request_id))
                 End SyncLock
             ElseIf request.URL.path = "get_invoke" Then
                 Call pushBackResult(request.URL("request_id"), request, response)
