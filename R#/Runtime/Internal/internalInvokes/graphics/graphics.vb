@@ -512,7 +512,7 @@ Namespace Runtime.Internal.Invokes
                 newSize = New Size(factor(0), factor(1))
             End If
 
-            Dim resize As Image = bitmap.Resize(newSize)
+            Dim resize As Image = bitmap.Resize(newSize.Width, onlyResizeIfWider:=newSize.Width > bitmap.Size.Width)
             Return resize
         End Function
     End Module
