@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--slave /exec E:\\GCModeller\\src\\workbench\\win32_desktop\\fastRWeb\\database\\ec_numbers.R --uniprot \"K:\\Downloads\\uniprot-compressed_true_download_true_format_xml_query__28_28taxonom-2022.10.02-09.21.31.14.xml\" --attach E:\\GCModeller\\src\\workbench\\pkg",
+      "commandLineArgs": "--slave /exec \"E:/GCModeller/src/workbench/win32_desktop/fastRWeb//modeller/create_project.R\" /args \"H4sIAAAAAAAACrWNTQrCMBQG75K1FFEL0q2oK0/gV0J+XuqzaV5Jgi7Eu2u9g7OazTAvNdgQVHdVxw44Hy7iKUbKQMkOeEoeLSV3+yqn7UZ7KmOVGfA0CZCcZe1NNYXqkp/0eqHd71pgoCQTu+Z36FeqmAcFjvSfGzlpLMuc5a769wdu/VF/2AAAAA==\" /request-id \"web_request__2459081fce\" /PORT \"3838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE --attach E:\\GCModeller\\src\\workbench\\win32_desktop\\src\\Rstudio\\Rstudio",
       "workingDirectory": "E:\\GCModeller\\src\\workbench\\win32_desktop\\src\\Rstudio"
     }
   }
