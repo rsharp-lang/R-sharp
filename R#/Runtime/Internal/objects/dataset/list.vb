@@ -161,6 +161,11 @@ Namespace Runtime.Internal.Object
             slots = New Dictionary(Of String, Object)
         End Sub
 
+        ''' <summary>
+        ''' add key-value directly 
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="value"></param>
         Public Sub add(name As String, value As Object)
             If slots Is Nothing Then
                 slots = New Dictionary(Of String, Object)
@@ -169,6 +174,11 @@ Namespace Runtime.Internal.Object
             Call slots.Add(name, value)
         End Sub
 
+        ''' <summary>
+        ''' does <see cref="slots"/> has the specific <paramref name="name"/>?
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
         Public Function hasName(name As String) As Boolean Implements RNames.hasName
             Return slots.ContainsKey(name)
         End Function
@@ -232,7 +242,10 @@ Namespace Runtime.Internal.Object
         ''' <param name="env"></param>
         ''' <param name="default">the default value.</param>
         ''' <returns></returns>
-        Public Function getValue(Of T)(synonym As String(), env As Environment, Optional [default] As T = Nothing, Optional ByRef err As Message = Nothing) As T
+        Public Function getValue(Of T)(synonym As String(), env As Environment,
+                                       Optional [default] As T = Nothing,
+                                       Optional ByRef err As Message = Nothing) As T
+
             Dim value As Object = Nothing
             Dim hasHit As Boolean = False
 
@@ -284,7 +297,10 @@ Namespace Runtime.Internal.Object
         ''' <param name="env"></param>
         ''' <param name="default">the default value.</param>
         ''' <returns></returns>
-        Public Function getValue(Of T)(name As String, env As Environment, Optional [default] As T = Nothing, Optional ByRef err As Message = Nothing) As T
+        Public Function getValue(Of T)(name As String, env As Environment,
+                                       Optional [default] As T = Nothing,
+                                       Optional ByRef err As Message = Nothing) As T
+
             If Not slots.ContainsKey(name) Then
                 Return [default]
             ElseIf TypeOf slots(name) Is Message Then
@@ -298,7 +314,6 @@ Namespace Runtime.Internal.Object
         Public Function AsGeneric(Of T)(env As Environment,
                                         Optional [default] As T = Nothing,
                                         Optional ByRef err As Message = Nothing) As Dictionary(Of String, T)
-
             Try
                 Dim generic As New Dictionary(Of String, T)
 

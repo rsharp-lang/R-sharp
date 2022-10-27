@@ -1,5 +1,5 @@
 require(HDS);
 
-data = HDS::openStream("T:\project\2022 KD\MALDI Da 50-1000\analysis\H39572-CHCA-1.mzPack");
+data = HDS::openStream("D:\biodeep\biodeepdb_v3\biodeepdb_v3\data\biodeepdb_v3.pack");
 
 print(HDS::tree(data));
