@@ -51,8 +51,11 @@
 #End Region
 
 Imports System.Drawing
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap.hqx
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.Filters
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -142,4 +145,9 @@ Module ImageFilters
         Return bitmap
     End Function
 
+    <ExportAPI("hqx_scales")>
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function HqxScalesF(image As Image, Optional scale As HqxScales = HqxScales.Hqx_2x) As Object
+        Return New RasterScaler(New Bitmap(image)).Scale(scale)
+    End Function
 End Module
