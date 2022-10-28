@@ -148,6 +148,10 @@ Module ImageFilters
     <ExportAPI("hqx_scales")>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function HqxScalesF(image As Image, Optional scale As HqxScales = HqxScales.Hqx_2x) As Object
+        If Not RgbYuv.IsAllocated Then
+            Call RgbYuv.hqxInit()
+        End If
+
         Return New RasterScaler(New Bitmap(image)).Scale(scale)
     End Function
 End Module
