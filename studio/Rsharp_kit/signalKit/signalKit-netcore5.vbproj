@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>signalKit</RootNamespace>
-    <TargetFrameworks>net6.0;net5.0;net48;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net6.0;net6.0-windows</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
     <AssemblyName>signalKit</AssemblyName>
     <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32</Configurations>
