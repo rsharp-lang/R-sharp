@@ -131,6 +131,7 @@ Partial Module CLI
         Dim port As Integer = CInt(Val(args <= "/PORT"))
         Dim master As String = args("/MASTER") Or "localhost"
         Dim entry As String = args("/entry") Or "run"
+        ' the unique web request id
         Dim request_id As String = args <= "/request-id"
         Dim retryTimes As Integer = args("/retry") Or 5
         Dim timeout As Double = args("/timeout") Or 1000
@@ -188,6 +189,18 @@ Partial Module CLI
                     arguments.Add(name, {arg.Value})
                 End If
             Next
+
+            ' set request id to function parameters
+            If Not arguments.ContainsKey("web_request_id") Then
+                arguments.Add("web_request_id", {request_id})
+            End If
+
+            ' and also set to the runtime environments
+            R.globalEnvir.options.setOption(
+                opt:="web_request_id",
+                value:=request_id,
+                env:=R.globalEnvir
+            )
         End If
 
         Dim parameters As List(Of NamedValue(Of Object)) = arguments _
@@ -259,6 +272,17 @@ Partial Module CLI
         )
     End Function
 
+    ''' <summary>
+    ''' post back the result data to the fastRweb host
+    ''' </summary>
+    ''' <param name="env"></param>
+    ''' <param name="result"></param>
+    ''' <param name="master"></param>
+    ''' <param name="request_id"></param>
+    ''' <param name="retryTimes"></param>
+    ''' <param name="timeoutMS"></param>
+    ''' <param name="isDebugMode"></param>
+    ''' <returns></returns>
     <Extension>
     Private Function postResult(env As Environment,
                                 result As Object,
