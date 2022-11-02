@@ -399,6 +399,9 @@ Namespace Runtime
         ''' 这个函数查找失败的时候只会返回空值
         ''' </summary>
         ''' <param name="name"></param>
+        ''' <param name="inherits">
+        ''' andalso look into the parent environment for the target symbol by <paramref name="name"/>?
+        ''' </param>
         ''' <returns></returns>
         Public Overridable Function FindSymbol(name As String, Optional [inherits] As Boolean = True) As Symbol
             If (name.First = "["c AndAlso name.Last = "]"c) Then
@@ -470,12 +473,16 @@ Namespace Runtime
         ''' <summary>
         ''' just removes the symbol reference in the runtime environment
         ''' </summary>
-        ''' <param name="name"></param>
+        ''' <param name="name">
+        ''' target symbol name that will be removes 
+        ''' from the current environment context.
+        ''' </param>
         ''' <param name="seekParent">
-        ''' 是否将任意环境路径中的目标符号引用进行删除？
+        ''' andalso removes the symbol with the same name in any parent environment context?
+        ''' (是否将任意环境路径中的目标符号引用进行删除？)
         ''' </param>
         Public Sub Delete(name As String, Optional seekParent As Boolean = False)
-            If FindSymbol(name) Is Nothing Then
+            If FindSymbol(name, [inherits]:=seekParent) Is Nothing Then
                 Return
             End If
 
@@ -493,6 +500,18 @@ Namespace Runtime
                 .ToArray
         End Function
 
+        ''' <summary>
+        ''' do value assign
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="value"></param>
+        ''' <param name="strict">
+        ''' create a new symbol automatically if target symbol <paramref name="name"/> 
+        ''' is not exists in current environment context? otherwise this function will 
+        ''' populate an error message if this parameter value is config as false by 
+        ''' default.
+        ''' </param>
+        ''' <returns></returns>
         Public Function AssignSymbol(name As String, value As Object, Optional [strict] As Boolean = False) As Object
             If symbols.ContainsKey(name) Then
                 Return symbols(name).SetValue(value, Me)
@@ -504,9 +523,9 @@ Namespace Runtime
         End Function
 
         ''' <summary>
-        ''' Variable declare
+        ''' Variable declare, just add a new symbol in current environment context.
         ''' </summary>
-        ''' <param name="name$"></param>
+        ''' <param name="name"></param>
         ''' <param name="value"></param>
         ''' <param name="mode"></param>
         ''' <returns>返回错误消息或者对象值</returns>
