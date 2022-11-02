@@ -55,14 +55,18 @@ Imports Microsoft.VisualBasic.Language
 
 Namespace Development.Package.File
 
+    Friend Interface IFilePredicate
+        Function isMatch(relpath As String) As Boolean
+    End Interface
+
     ''' <summary>
     ''' file handler of ``.Rbuildignore``
     ''' </summary>
     Public Class Rbuildignore
 
-        ReadOnly patterns As Predicate(Of String)()
+        ReadOnly patterns As IFilePredicate()
 
-        Sub New(patterns As IEnumerable(Of Predicate(Of String)))
+        Private Sub New(patterns As IEnumerable(Of IFilePredicate))
             Me.patterns = patterns.ToArray
         End Sub
 
@@ -75,8 +79,8 @@ Namespace Development.Package.File
         ''' <returns></returns>
         Public Function IsFileIgnored(relpath As String) As Boolean
             ' test on all pattern match
-            For Each pattern As Predicate(Of String) In patterns
-                If pattern(relpath) Then
+            For Each pattern As IFilePredicate In patterns
+                If pattern.isMatch(relpath) Then
                     Return True
                 End If
             Next
@@ -101,13 +105,13 @@ Namespace Development.Package.File
                 .Where(Function(line) Not line.StringEmpty) _
                 .Where(Function(line) Not line.StartsWith("#")) _
                 .ToArray
-            Dim patterns As New List(Of Predicate(Of String))
+            Dim patterns As New List(Of IFilePredicate)
 
             For Each line As String In list
                 If line.StartsWith("^") AndAlso line.EndsWith("$") Then
-                    patterns.Add(AddressOf New PatternMatch(line).isMatch)
+                    Call patterns.Add(New PatternMatch(line))
                 Else
-                    patterns.Add(AddressOf New RegularMatch(line).isMatch)
+                    Call patterns.Add(New RegularMatch(line))
                 End If
             Next
 

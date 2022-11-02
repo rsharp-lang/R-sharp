@@ -53,7 +53,7 @@
 
 Namespace Development.Package.File
 
-    Public Class RegularMatch
+    Public Class RegularMatch : Implements IFilePredicate
 
         ReadOnly filepath As String
 
@@ -71,8 +71,12 @@ Namespace Development.Package.File
             Return relpath.Replace("\", "/").StringReplace("[/]{2,}", "/").Trim("/"c, "."c)
         End Function
 
-        Public Function isMatch(relpath As String) As Boolean
+        Public Function isMatch(relpath As String) As Boolean Implements IFilePredicate.isMatch
             Return Norm(relpath).StartsWith(filepath)
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"(file_path) {filepath}"
         End Function
     End Class
 End Namespace
