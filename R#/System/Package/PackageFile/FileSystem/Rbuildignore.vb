@@ -89,6 +89,7 @@ Namespace Development.Package.File
         ''' 
         ''' 1. a regular expression pattern should start with symbol ``^`` and ends with the symbol ``$``
         ''' 2. a relative file path pattern just required a relative file path to a specific file
+        ''' 3. comment line start with the ``#`` symbol
         ''' </summary>
         ''' <param name="file">
         ''' a text file its file path or the content data text itself
@@ -98,6 +99,7 @@ Namespace Development.Package.File
             Dim list As String() = file _
                 .LineIterators _
                 .Where(Function(line) Not line.StringEmpty) _
+                .Where(Function(line) Not line.StartsWith("#")) _
                 .ToArray
             Dim patterns As New List(Of Predicate(Of String))
 
