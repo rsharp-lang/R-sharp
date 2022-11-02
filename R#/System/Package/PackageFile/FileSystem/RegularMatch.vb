@@ -57,6 +57,12 @@ Namespace Development.Package.File
 
         ReadOnly filepath As String
 
+        ''' <summary>
+        ''' normal file path matched
+        ''' </summary>
+        ''' <param name="pattern">
+        ''' a relative file path
+        ''' </param>
         Sub New(pattern As String)
             filepath = Norm(pattern)
         End Sub

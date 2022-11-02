@@ -85,7 +85,10 @@ Namespace Development.Package.File
         End Function
 
         ''' <summary>
+        ''' create a file name matches pattern
         ''' 
+        ''' 1. a regular expression pattern should start with symbol ``^`` and ends with the symbol ``$``
+        ''' 2. a relative file path pattern just required a relative file path to a specific file
         ''' </summary>
         ''' <param name="file">
         ''' a text file its file path or the content data text itself

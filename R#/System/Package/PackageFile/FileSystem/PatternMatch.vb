@@ -60,6 +60,12 @@ Namespace Development.Package.File
 
         ReadOnly r As regexp
 
+        ''' <summary>
+        ''' create a new regular expression pattern match object
+        ''' </summary>
+        ''' <param name="pattern">
+        ''' a regular expression pattern
+        ''' </param>
         Sub New(pattern As String)
             r = New regexp(pattern, RegexOptions.Compiled Or RegexOptions.Multiline)
         End Sub
