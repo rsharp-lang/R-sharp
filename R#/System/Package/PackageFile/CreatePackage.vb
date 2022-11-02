@@ -524,9 +524,12 @@ Namespace Development.Package.File
                 projDir = $"{projDir}/"
             End If
 
+            projDir = projDir.Replace("\", "/")
+
             Return (ls - l - r - "*.*" <= dir) _
                 .Where(Function(filepath)
-                           Return Not ignores.IsFileIgnored(filepath.Replace("\", "/").Replace(projDir, ""))
+                           filepath = filepath.Replace("\", "/").Replace(projDir, "")
+                           Return Not ignores.IsFileIgnored(filepath)
                        End Function) _
                 .Select(Function(filepath)
                             Return (filepath, read:=getFileReader(filepath))
