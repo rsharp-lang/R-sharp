@@ -273,7 +273,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 If indexer.Length = 1 Then
                     Return DirectCast(obj, dataframe).getColumnVector(indexer.GetValue(Scan0).ToString)
                 Else
-                    Return Internal.debug.stop("dataframe get by column name only supprts one key element!", envir)
+                    Return Internal.debug.stop({
+                       $"dataframe get by column name only supprts one key element!",
+                       $"symbol: {Me.symbol.ToString}",
+                       $"indexer: {Me.index.ToString}"
+                    }, envir)
                 End If
             ElseIf objType Is GetType(vector) Then
                 If indexer.Length = 1 Then
@@ -332,7 +336,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Return Internal.debug.stop({
                          "Target object can not be indexed by name!",
                          "required: " & GetType(RNameIndex).FullName,
-                         "given: " & objType.FullName
+                         "given: " & objType.FullName,
+                         "symbol: " & Me.symbol.ToString,
+                         "indexer: " & Me.index.ToString
                     }, envir)
                 End If
             ElseIf indexer.Length = 1 Then
@@ -346,7 +352,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         Return Internal.debug.stop({
                             $"Error in list[[{i}]] : subscript out of bounds",
                             $"list size: {names.Length}",
-                            $"offset: {i}"
+                            $"offset: {i}",
+                            $"symbol_list: {symbol.ToString}",
+                            $"indexer: {Me.index.ToString}"
                         }, envir)
                     End If
 
