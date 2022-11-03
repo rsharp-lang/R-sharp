@@ -96,6 +96,16 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         ''' <summary>
+        ''' the given string is in datetime format?
+        ''' </summary>
+        ''' <param name="str"></param>
+        ''' <returns></returns>
+        <ExportAPI("is.date")>
+        Public Function isDateTime(str As String) As Boolean
+            Return DateTime.TryParse(str, Nothing)
+        End Function
+
+        ''' <summary>
         ''' parse string text content as date time values
         ''' </summary>
         ''' <param name="obj"></param>
