@@ -30,6 +30,19 @@ bitmap(file = "./pixel-hqx_4x.png") {
 	hqx_scales(image, "Hqx_4x");
 }
 
+image = readImage("./cat.bmp");
+
+bitmap(file = "./cat-hqx_2x.png") {
+	hqx_scales(image, "Hqx_2x");
+}
+
+bitmap(file = "./cat-hqx_3x.png") {
+	hqx_scales(image, "Hqx_3x");
+}
+
+bitmap(file = "./cat-hqx_4x.png") {
+	hqx_scales(image, "Hqx_4x");
+}
 
 image = readImage("./tumblr_lqb1p7EIoF1qcsurn.png");
 
