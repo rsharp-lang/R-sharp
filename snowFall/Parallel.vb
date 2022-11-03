@@ -211,7 +211,7 @@ Public Module Parallel
 
         req = New RequestStream(MasterContext.Protocol, RPC.Protocols.PushResult, result)
 
-        Call Console.WriteLine()
+        ' Call Console.WriteLine()
         Call Console.WriteLine()
         Call Console.WriteLine("~job done!")
 
