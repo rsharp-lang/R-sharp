@@ -105,6 +105,10 @@ Partial Module CLI
                 reference = delegateName.GetTagValue("::")
             End If
 
+            Dim parallelFunc As String = reference.Description
+            Dim argv = New Object() {masterPort, REngine.globalEnvir}
+
+            ' load primary base libraries
             Call REngine.LoadLibrary("base", silent:=False, ignoreMissingStartupPackages:=False)
             Call REngine.LoadLibrary("utils", silent:=False, ignoreMissingStartupPackages:=False)
             Call REngine.LoadLibrary("grDevices", silent:=False, ignoreMissingStartupPackages:=False)
@@ -119,7 +123,12 @@ Partial Module CLI
                 .DoCall(Sub(pkg)
                             Call REngine.globalEnvir.ImportsStatic(pkg.package)
                         End Sub)
-            Call REngine.Invoke(reference.Description, {masterPort, REngine.globalEnvir})
+            Call REngine.Invoke(parallelFunc, argv)
+
+            ' 20221103 unsure for the bug that some working thread
+            ' is not exit from current parallel slave process?
+            ' try to end current process directly!
+            End
         Else
             Return 500
         End If
