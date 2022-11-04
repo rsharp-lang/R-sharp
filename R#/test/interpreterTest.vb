@@ -213,6 +213,13 @@ bitmap(file = `./network.png`) %do% {
         Pause()
     End Sub
 
+    Sub pipelineBuilder2()
+        Dim script As String = "filter_pipeline(log() -> TrIQ() -> soft())"
+        Dim a = R.Parse(script)
+
+        Pause()
+    End Sub
+
     Sub expressionTest2()
         Dim p = R.Parse("sum += 1.0/(k*k)")
         Dim p2 = R.Parse("x$sum += 1.0/(k*k)")
@@ -235,6 +242,7 @@ bitmap(file = `./network.png`) %do% {
     End Sub
 
     Sub Main()
+        Call pipelineBuilder2()
         Call index2222()
         Call simpleSymbolIndexTest()
 
