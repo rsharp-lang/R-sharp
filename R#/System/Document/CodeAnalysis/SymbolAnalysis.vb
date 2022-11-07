@@ -158,10 +158,16 @@ Namespace Development.CodeAnalysis
                 Case GetType(SymbolReference)
                     Call context.Push(DirectCast(code, SymbolReference), PropertyAccess.Readable)
                 Case GetType(ValueAssignExpression) : Call GetSymbols(DirectCast(code, ValueAssignExpression), context)
+                Case GetType(UsingClosure) : Call GetSymbols(DirectCast(code, UsingClosure), context)
 
                 Case Else
                     Throw New NotImplementedException(code.GetType.FullName)
             End Select
+        End Sub
+
+        Private Shared Sub GetSymbols(code As UsingClosure, context As Context)
+            Call GetSymbolReferenceList(code.params, context)
+            Call GetSymbolReferenceList(code.closure, context)
         End Sub
 
         Private Shared Sub GetSymbols(code As StringInterpolation, context As Context)
