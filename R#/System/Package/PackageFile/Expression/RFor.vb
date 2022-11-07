@@ -105,7 +105,7 @@ Namespace Development.Package.File.Expressions
                 Dim vars As New List(Of String)
 
                 For i As Integer = 0 To varSize - 1
-                    Call Writer.readZEROBlock(bin) _
+                    Call StreamHelper.ReadZEROBlock(bin) _
                         .DoCall(Function(bytes)
                                     Return Encoding.ASCII.GetString(bytes.ToArray)
                                 End Function) _

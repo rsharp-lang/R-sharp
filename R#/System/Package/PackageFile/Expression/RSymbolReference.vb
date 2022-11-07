@@ -118,8 +118,8 @@ Namespace Development.Package.File.Expressions
 
         Private Function parseFunctionRef(io As BinaryReader, desc As DESCRIPTION) As Expression
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(io, desc)
-            Dim ns As String = Writer _
-                .readZEROBlock(io) _
+            Dim ns As String = StreamHelper _
+                .ReadZEROBlock(io) _
                 .DoCall(Function(bytes)
                             Return Encoding.ASCII.GetString(bytes.ToArray)
                         End Function)

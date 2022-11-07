@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::3cd1f651b1d63e574dec353c7d630870, R-sharp\R#\System\Package\PackageFile\Expression\RTypeOf.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 46
-    '    Code Lines: 37
-    ' Comment Lines: 0
-    '   Blank Lines: 9
-    '     File Size: 1.71 KB
+' Summaries:
 
 
-    '     Class RTypeOf
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: GetExpression
-    ' 
-    '         Sub: WriteBuffer
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 46
+'    Code Lines: 37
+' Comment Lines: 0
+'   Blank Lines: 9
+'     File Size: 1.71 KB
+
+
+'     Class RTypeOf
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: GetExpression
+' 
+'         Sub: WriteBuffer
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -87,7 +87,7 @@ Namespace Development.Package.File.Expressions
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
             Using bin As New BinaryReader(buffer)
-                Dim key As String = Writer.readZEROBlock(bin) _
+                Dim key As String = StreamHelper.ReadZEROBlock(bin) _
                     .DoCall(Function(bytes)
                                 Return Encoding.ASCII.GetString(bytes.ToArray)
                             End Function)
