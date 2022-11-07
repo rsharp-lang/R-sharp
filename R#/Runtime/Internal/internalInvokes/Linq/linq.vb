@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::b3c449f8c26339d0b349897b77c7de09, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1206
-    '    Code Lines: 673
-    ' Comment Lines: 401
-    '   Blank Lines: 132
-    '     File Size: 55.58 KB
+' Summaries:
 
 
-    '     Module linq
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: all, any, doWhile, fastIndexing, first
-    '                   getPredicate, groupBy, groupsSummary, groupSummary, last
-    '                   left_join, match, orderBy, produceKeyedSequence, progress
-    '                   projectAs, reverse, rotate_left, rotate_right, runFilterPipeline
-    '                   runWhichFilter, skip, sort, split, take
-    '                   tryKeyBy, unique, where, whichMax, whichMin
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1206
+'    Code Lines: 673
+' Comment Lines: 401
+'   Blank Lines: 132
+'     File Size: 55.58 KB
+
+
+'     Module linq
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: all, any, doWhile, fastIndexing, first
+'                   getPredicate, groupBy, groupsSummary, groupSummary, last
+'                   left_join, match, orderBy, produceKeyedSequence, progress
+'                   projectAs, reverse, rotate_left, rotate_right, runFilterPipeline
+'                   runWhichFilter, skip, sort, split, take
+'                   tryKeyBy, unique, where, whichMax, whichMin
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -1196,21 +1196,65 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Throw New NotImplementedException
         End Function
 
+        <Extension>
+        Private Function splitByPartitionSize(seq As pipeline, argv As list, env As Environment) As Object
+            Dim vec As Object() = seq.populates(Of Object)(env).ToArray
+            Dim size As Integer
+
+            If argv.hasName("parts") Then
+                Dim parts = argv.getValue("parts", env, [default]:=0)
+
+                If parts = 0 Then
+                    Return Internal.debug.stop("invalid parameter value parts!", env)
+                Else
+                    size = vec.Length / parts
+                End If
+            Else
+                size = argv.getValue("size", env, [default]:=0)
+
+                If size = 0 Then
+                    Return Internal.debug.stop("invalid parameter value size!", env)
+                End If
+            End If
+
+            Dim matrix As Object()() = vec.Split(partitionSize:=size)
+            Dim list As New list With {.slots = New Dictionary(Of String, Object)}
+
+            For i As Integer = 0 To matrix.Length - 1
+                Call list.add($"`{i + 1}`", REnv.TryCastGenericArray(matrix(i), env))
+            Next
+
+            Return list
+        End Function
+
         ''' <summary>
         ''' split content sequence with a given condition as element delimiter.
         ''' </summary>
         ''' <param name="x">a given data sequence</param>
         ''' <param name="delimiter">an element test function to determine that element is a delimiter object</param>
+        ''' <param name="argv">
+        ''' + parts: will split the input sequence into n(parts = n) multiple parts
+        ''' + size: will split the input sequence into m multiple parts, and each part size is n(size=n)
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("split")>
-        Public Function split(<RRawVectorArgument> x As Object, delimiter As Object, Optional env As Environment = Nothing) As Object
+        Public Function split(<RRawVectorArgument> x As Object,
+                              Optional delimiter As Object = Nothing,
+                              <RListObjectArgument>
+                              Optional argv As list = Nothing,
+                              Optional env As Environment = Nothing) As Object
+
             Dim seq As pipeline = pipeline.TryCreatePipeline(Of Object)(x, env)
             Dim _split As Predicate(Of Object)
             Dim _error As Message = Nothing
 
             If delimiter Is Nothing Then
-                Return Internal.debug.stop("the required delimiter value can not be nothing!", env)
+                If argv.hasName("parts") OrElse argv.hasName("size") Then
+                    Return seq.splitByPartitionSize(argv, env)
+                Else
+                    Return Internal.debug.stop("the required delimiter value can not be nothing!", env)
+                End If
             ElseIf delimiter.GetType.ImplementInterface(Of RFunction) Then
                 _split = Function(obj)
                              If Not _error Is Nothing Then

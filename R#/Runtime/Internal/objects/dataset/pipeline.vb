@@ -274,7 +274,11 @@ Namespace Runtime.Internal.Object
                 Return TryCastGroupStream(Of T)(DirectCast(upstream, Group), env, callerFrameName, suppress)
 
             ElseIf GetType(T) Is GetType(Object) Then
-                Return CreateFromPopulator(Of T)({upstream})
+                If upstream.GetType.IsArray Then
+                    Return CreateFromPopulator(Of T)(From x In DirectCast(upstream, Array) Select x)
+                Else
+                    Return CreateFromPopulator(Of T)({upstream})
+                End If
             ElseIf upstream.GetType.IsArray Then
                 If GetType(T).IsInterface AndAlso upstream.GetType.GetElementType.ImplementInterface(Of T) Then
                     Return CreateFromPopulator(DirectCast(upstream, Array).AsObjectEnumerator.Select(Function(o) DirectCast(o, T)))

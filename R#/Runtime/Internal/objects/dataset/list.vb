@@ -1,66 +1,67 @@
 ﻿#Region "Microsoft.VisualBasic::8f4c52b425d4e9127f00b371e989c53c, R-sharp\R#\Runtime\Internal\objects\dataset\list.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 402
-    '    Code Lines: 257
-    ' Comment Lines: 85
-    '   Blank Lines: 60
-    '     File Size: 13.94 KB
+' Summaries:
 
 
-    '     Class list
-    ' 
-    '         Properties: data, length, slots
-    ' 
-    '         Constructor: (+6 Overloads) Sub New
-    ' 
-    '         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) getByIndex, (+2 Overloads) getByName
-    '                   getNames, GetSlots, (+2 Overloads) getValue, hasName, namedValues
-    '                   setByindex, setByIndex, (+2 Overloads) setByName, setNames, ToString
-    ' 
-    '         Sub: add
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 402
+'    Code Lines: 257
+' Comment Lines: 85
+'   Blank Lines: 60
+'     File Size: 13.94 KB
+
+
+'     Class list
+' 
+'         Properties: data, length, slots
+' 
+'         Constructor: (+6 Overloads) Sub New
+' 
+'         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) getByIndex, (+2 Overloads) getByName
+'                   getNames, GetSlots, (+2 Overloads) getValue, hasName, namedValues
+'                   setByindex, setByIndex, (+2 Overloads) setByName, setNames, ToString
+' 
+'         Sub: add
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
@@ -242,6 +243,10 @@ Namespace Runtime.Internal.Object
         ''' <param name="env"></param>
         ''' <param name="default">the default value.</param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' this method will evaluate the value <see cref="Expression"/> 
+        ''' to target <typeparamref name="T"/> automatically.
+        ''' </remarks>
         Public Function getValue(Of T)(synonym As String(), env As Environment,
                                        Optional [default] As T = Nothing,
                                        Optional ByRef err As Message = Nothing) As T
@@ -267,8 +272,25 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' cast data type
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="value">
+        ''' if value is an expression andalso <typeparamref name="T"/> 
+        ''' type is not an expression, then this function will try to 
+        ''' evaluate the expression as value and then cast data type 
+        ''' again.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <param name="err"></param>
+        ''' <returns></returns>
         Private Shared Function ctypeInternal(Of T)(value As Object, env As Environment, ByRef err As Message) As T
             Dim type As Type = GetType(T)
+
+            If TypeOf value Is Expression AndAlso Not GetType(T).IsInheritsFrom(GetType(Expression)) Then
+                value = DirectCast(value, Expression).Evaluate(env)
+            End If
 
             If Not value Is Nothing AndAlso value.GetType Is GetType(T) Then
                 Return value
@@ -297,6 +319,10 @@ Namespace Runtime.Internal.Object
         ''' <param name="env"></param>
         ''' <param name="default">the default value.</param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' this method will evaluate the value <see cref="Expression"/> 
+        ''' to target <typeparamref name="T"/> automatically.
+        ''' </remarks>
         Public Function getValue(Of T)(name As String, env As Environment,
                                        Optional [default] As T = Nothing,
                                        Optional ByRef err As Message = Nothing) As T
