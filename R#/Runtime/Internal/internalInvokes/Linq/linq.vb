@@ -1221,7 +1221,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim list As New list With {.slots = New Dictionary(Of String, Object)}
 
             For i As Integer = 0 To matrix.Length - 1
-                Call list.add($"`{i + 1}`", matrix(i))
+                Call list.add($"`{i + 1}`", REnv.TryCastGenericArray(matrix(i), env))
             Next
 
             Return list
