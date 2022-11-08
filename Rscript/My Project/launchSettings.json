@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--slave /exec E:\\GCModeller\\src\\workbench\\win32_desktop\\fastRWeb\\database\\imports_rhea.R /args \"\" /request-id request_id /PORT=7452 --attach \"E:\\GCModeller\\src\\workbench\\pkg\" --src \"E:\\GCModeller\\src\\workbench\\win32_desktop\\src\\Rstudio\\data\\rhea\\rhea-reactions.txt\""
+      "commandLineArgs": "--slave /exec E:\\GCModeller\\src\\workbench\\win32_desktop\\fastRWeb\\modeller\\create_network.R /args \"\" /request-id request_id /PORT=7452 --attach \"E:\\GCModeller\\src\\workbench\\win32_desktop\\src\\Rstudio\\Rstudio\" --proj \"E:\\GCModeller\\src\\workbench\\win32_desktop\\demo\\ncbi_dataset\\GCF_000005845\\eco.bioproj\""
     }
   }
 }
