@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::bc09d4d52bfc715317bfc5e2fa39afc8, R-sharp\R#\System\Package\PackageFile\Expression\RFunction.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 201
-    '    Code Lines: 162
-    ' Comment Lines: 0
-    '   Blank Lines: 39
-    '     File Size: 8.81 KB
+' Summaries:
 
 
-    '     Class RFunction
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: GetExpression, getTypeCode, parseFormula, ParseFunction, parseLambda
-    '                   parseUsingClosure
-    ' 
-    '         Sub: WriteBuffer
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 201
+'    Code Lines: 162
+' Comment Lines: 0
+'   Blank Lines: 39
+'     File Size: 8.81 KB
+
+
+'     Class RFunction
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: GetExpression, getTypeCode, parseFormula, ParseFunction, parseLambda
+'                   parseUsingClosure
+' 
+'         Sub: WriteBuffer
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -209,8 +209,8 @@ Namespace Development.Package.File.Expressions
 
         Private Shared Function ParseFunction(reader As BinaryReader, desc As DESCRIPTION) As DeclareNewFunction
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader, desc)
-            Dim funcName As String = Writer _
-                .readZEROBlock(reader) _
+            Dim funcName As String = StreamHelper _
+                .ReadZEROBlock(reader) _
                 .DoCall(Function(bytes)
                             Return Encoding.ASCII.GetString(bytes.ToArray)
                         End Function)

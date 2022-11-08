@@ -270,14 +270,6 @@ Namespace Development.Package.File
             End Using
         End Function
 
-        Friend Shared Iterator Function readZEROBlock(bin As BinaryReader) As IEnumerable(Of Byte)
-            Dim [byte] As Value(Of Byte) = 0
-
-            Do While ([byte] = bin.ReadByte) <> 0
-                Yield [byte].Value
-            Loop
-        End Function
-
         Public Shared Function ReadSourceMap(bin As BinaryReader, desc As DESCRIPTION) As StackFrame
             Dim length As Integer = bin.ReadInt32
             Dim bytes As Byte() = bin.ReadBytes(length)
