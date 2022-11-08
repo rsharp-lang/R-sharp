@@ -2,8 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src ../ /save ./biodeepdbkit.zip --skip-src-build",
-      "workingDirectory": "D:\\biodeep\\biodeepdb_v3\\biodeepdb_v3\\.pkg"
+      "commandLineArgs": "--slave /exec E:\\GCModeller\\src\\workbench\\win32_desktop\\fastRWeb\\database\\imports_rhea.R /args \"\" /request-id request_id /PORT=7452 --attach \"E:\\GCModeller\\src\\workbench\\pkg\" --src \"E:\\GCModeller\\src\\workbench\\win32_desktop\\src\\Rstudio\\data\\rhea\\rhea-reactions.txt\""
     }
   }
 }
