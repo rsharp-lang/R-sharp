@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::48e14f3c55418caea52fdd979d738c7e, R-sharp\R#\System\Package\PackageFile\Expression\RCallFunction.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 187
-    '    Code Lines: 156
-    ' Comment Lines: 0
-    '   Blank Lines: 31
-    '     File Size: 8.82 KB
+' Summaries:
 
 
-    '     Class RCallFunction
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: GetExpression, getFunctionName, getParameters, getTypeCode, parseByRef
-    '                   parseIif, parseInvoke, parseNew, parseSeq
-    ' 
-    '         Sub: WriteBuffer
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 187
+'    Code Lines: 156
+' Comment Lines: 0
+'   Blank Lines: 31
+'     File Size: 8.82 KB
+
+
+'     Class RCallFunction
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: GetExpression, getFunctionName, getParameters, getTypeCode, parseByRef
+'                   parseIif, parseInvoke, parseNew, parseSeq
+' 
+'         Sub: WriteBuffer
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -138,7 +138,7 @@ Namespace Development.Package.File.Expressions
 
         Private Shared Function parseSeq(bin As BinaryReader, desc As DESCRIPTION) As SequenceLiteral
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
-            Dim ns$ = Writer.readZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
+            Dim ns$ = StreamHelper.ReadZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
             Dim name As Literal = BlockReader.ParseBlock(bin).Parse(desc)
             Dim paramSize As Integer = bin.ReadByte
             Dim args As New List(Of Expression)
@@ -152,7 +152,7 @@ Namespace Development.Package.File.Expressions
 
         Private Shared Function parseNew(bin As BinaryReader, desc As DESCRIPTION) As CreateObject
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
-            Dim ns$ = Writer.readZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
+            Dim ns$ = bin.ReadZEROBlock().DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
             Dim name As Literal = BlockReader.ParseBlock(bin).Parse(desc)
             Dim paramSize As Integer = bin.ReadByte
             Dim args As New List(Of Expression)
@@ -166,7 +166,7 @@ Namespace Development.Package.File.Expressions
 
         Private Shared Function parseIif(bin As BinaryReader, desc As DESCRIPTION) As IIfExpression
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
-            Dim ns$ = Writer.readZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
+            Dim ns$ = bin.ReadZEROBlock().DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
             Dim func As Expression = BlockReader.ParseBlock(bin).Parse(desc)
             Dim paramSize As Integer = bin.ReadByte
             Dim args As New List(Of Expression)
@@ -180,7 +180,7 @@ Namespace Development.Package.File.Expressions
 
         Private Shared Function parseByRef(bin As BinaryReader, desc As DESCRIPTION) As ByRefFunctionCall
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
-            Dim ns$ = Writer.readZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
+            Dim ns$ = bin.ReadZEROBlock().DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
             Dim func As Expression = BlockReader.ParseBlock(bin).Parse(desc)
             Dim paramSize As Integer = bin.ReadByte
             Dim args As New List(Of Expression)
@@ -215,7 +215,7 @@ Namespace Development.Package.File.Expressions
 
         Private Shared Function parseInvoke(bin As BinaryReader, desc As DESCRIPTION) As FunctionInvoke
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
-            Dim ns$ = Writer.readZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
+            Dim ns$ = StreamHelper.ReadZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
             Dim func As Expression = BlockReader.ParseBlock(bin).Parse(desc)
             Dim parmSize As Integer = bin.ReadByte
             Dim args As New List(Of Expression)
