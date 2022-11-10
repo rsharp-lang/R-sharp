@@ -81,6 +81,16 @@ Namespace Runtime.Interop.Operator
         ''' <summary>
         ''' key=hascode1|hashcode2
         ''' </summary>
+        ''' <remarks>
+        ''' ### 20221110 due to the reason of run parallel, so we 
+        ''' needs to lock this cache list for avoid lock error.
+        ''' 
+        ''' System.InvalidOperationException: 
+        ''' Operations that change non-concurrent collections must 
+        ''' have exclusive access. A concurrent update was performed 
+        ''' on this collection and corrupted its state. The
+        ''' collection's state is no longer correct.
+        ''' </remarks>
         ReadOnly hashIndexCache As New Dictionary(Of String, BinaryOperator)
 
         Sub New(symbol As String)
@@ -88,7 +98,11 @@ Namespace Runtime.Interop.Operator
         End Sub
 
         Public Function hasOperator(left As RType, right As RType) As Boolean
-            Return hashIndexCache.ContainsKey($"{left}|{right}")
+            Dim key As String = $"{left}|{right}"
+
+            SyncLock hashIndexCache
+                Return hashIndexCache.ContainsKey(key)
+            End SyncLock
         End Function
 
         ''' <summary>
@@ -107,20 +121,22 @@ Namespace Runtime.Interop.Operator
                 .operatorSymbol = symbol
             }
 
-            If hashIndexCache.ContainsKey(hashKey) Then
-                If Not env Is Nothing Then
-                    Call env.AddMessage({
-                        $"operator '{hashKey}' is replace by {bin}",
-                        $"hash key: {hashKey}",
-                        $"binary: {bin}"
-                    }, MSG_TYPES.WRN)
+            SyncLock hashIndexCache
+                If hashIndexCache.ContainsKey(hashKey) Then
+                    If Not env Is Nothing Then
+                        Call env.AddMessage({
+                            $"operator '{hashKey}' is replace by {bin}",
+                            $"hash key: {hashKey}",
+                            $"binary: {bin}"
+                        }, MSG_TYPES.WRN)
+                    End If
+
+                    hashIndexCache.Remove(hashKey)
                 End If
 
-                hashIndexCache.Remove(hashKey)
-            End If
-
-            operators.Add(bin)
-            hashIndexCache.Add(hashKey, bin)
+                Call operators.Add(bin)
+                Call hashIndexCache.Add(hashKey, bin)
+            End SyncLock
         End Sub
 
         Public Function Evaluate(left As Object, right As Object, traceExpr As String, env As Environment) As Object
@@ -140,15 +156,26 @@ Namespace Runtime.Interop.Operator
                 Dim t1 As RType = typeOfImpl(left)
                 Dim t2 As RType = typeOfImpl(right)
                 Dim hashKey As String = $"{t1}|{t2}"
+                Dim op_get As BinaryOperator
 
-                If hashIndexCache.ContainsKey(hashKey) Then
-                    Return hashIndexCache(hashKey).Execute(left, right, env)
-                Else
+                SyncLock hashIndexCache
+                    If hashIndexCache.ContainsKey(hashKey) Then
+                        op_get = hashIndexCache(hashKey)
+                    Else
+                        op_get = Nothing
+                    End If
+                End SyncLock
+
+                If op_get Is Nothing Then
                     ' do type match and then create hashKey index cache
                     For Each op As BinaryOperator In operators
                         If t1 Like op.left AndAlso t2 Like op.right Then
-                            hashIndexCache.Add(hashKey, op)
-                            Return hashIndexCache(hashKey).Execute(left, right, env)
+                            SyncLock hashIndexCache
+                                hashIndexCache.Add(hashKey, op)
+                                op_get = hashIndexCache(hashKey)
+                            End SyncLock
+
+                            Return op_get.Execute(left, right, env)
                         End If
                     Next
 
@@ -159,6 +186,8 @@ Namespace Runtime.Interop.Operator
                         $"typeof right: {t2}",
                         $"traceback: {traceExpr}"
                     }, env)
+                Else
+                    Return op_get.Execute(left, right, env)
                 End If
             End If
         End Function
@@ -206,16 +235,21 @@ Namespace Runtime.Interop.Operator
         Private Function noneValue(traceExpr As String, env As Environment) As Object
             Dim tVoid As RType = RType.GetRSharpType(GetType(Void))
             Dim hashKey As String = $"{tVoid}|{tVoid}"
+            Dim op As BinaryOperator
 
-            If hashIndexCache.ContainsKey(hashKey) Then
-                Return hashIndexCache(hashKey).Execute(Nothing, Nothing, env)
-            Else
-                Return Internal.debug.stop({
-                     $"operator symbol '{symbol}' is not defined for binary expression (NULL {symbol} NULL)",
-                     $"symbol: {symbol}",
-                     $"traceback: {traceExpr}"
-                }, env)
-            End If
+            SyncLock hashIndexCache
+                If hashIndexCache.ContainsKey(hashKey) Then
+                    op = hashIndexCache(hashKey)
+                Else
+                    Return Internal.debug.stop({
+                         $"operator symbol '{symbol}' is not defined for binary expression (NULL {symbol} NULL)",
+                         $"symbol: {symbol}",
+                         $"traceback: {traceExpr}"
+                    }, env)
+                End If
+            End SyncLock
+
+            Return op.Execute(Nothing, Nothing, env)
         End Function
 
         ''' <summary>
