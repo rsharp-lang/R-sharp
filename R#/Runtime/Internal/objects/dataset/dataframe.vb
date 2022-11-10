@@ -257,6 +257,9 @@ Namespace Runtime.Internal.Object
         ''' <returns>
         ''' 这个函数只会返回碰见的第一个同意名的列数据
         ''' </returns>
+        ''' <remarks>
+        ''' this function returns a vector in full size always
+        ''' </remarks>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getVector(Of T)(ParamArray synonym As String()) As T()
             For Each name As String In synonym
@@ -272,7 +275,13 @@ Namespace Runtime.Internal.Object
         ''' get a vector from column data
         ''' </summary>
         ''' <param name="name"></param>
-        ''' <param name="fullSize"></param>
+        ''' <param name="fullSize">
+        ''' the data vector should be fill with the 
+        ''' identical value when deal with the scalar
+        ''' value. This function just returns the 
+        ''' scalar value by default is the target 
+        ''' column contains just one element
+        ''' </param>
         ''' <returns></returns>
         Public Function getVector(name As String, Optional fullSize As Boolean = False) As Array
             Dim col As Array = columns.TryGetValue(name)
