@@ -448,8 +448,8 @@ Namespace Runtime.Internal.Invokes
                     End If
                 End If
 
-                Dim getYes As Func(Of Integer, Object) = New GetVectorElement(yes).Getter
-                Dim getNo As Func(Of Integer, Object) = New GetVectorElement(no).Getter
+                Dim getYes As Func(Of Integer, Object) = New GetVectorElement(yes, GetType(Object)).Getter
+                Dim getNo As Func(Of Integer, Object) = New GetVectorElement(no, GetType(Object)).Getter
 
                 For i As Integer = 0 To test.Length - 1
                     If test(i) Then

@@ -223,17 +223,17 @@ Namespace Runtime.Vectorization
         ''' <param name="x"></param>
         ''' <param name="[do]"></param>
         ''' <returns></returns>
-        Public Function UnaryCoreInternal(Of T As IComparable(Of T), TOut)(x As Object, [do] As Func(Of Object, Object)) As IEnumerable(Of TOut)
-            Dim type As Type = x.GetType
+        Public Function UnaryCoreInternal(Of T As IComparable(Of T), TOut)(x As Object, [do] As Func(Of Object, Object)) As Object
+            Dim v As GetVectorElement = GetVectorElement.Create(Of T)(x)
 
-            If type Is typedefine(Of T).baseType Then
-                Return {DirectCast([do](x), TOut)}
-            ElseIf type.ImplementInterface(typedefine(Of T).enumerable) Then
-                Return DirectCast(x, IEnumerable(Of T)) _
-                    .Select(Function(o) DirectCast([do](o), TOut)) _
-                    .ToArray
+            If v.Mode = VectorTypes.Error Then
+                Throw v.Error
+            ElseIf v.Mode = VectorTypes.Scalar Then
+                Return DirectCast([do](v.single), TOut)
+            ElseIf v.Mode = VectorTypes.None Then
+                Return Nothing
             Else
-                Throw New InvalidCastException(type.FullName)
+                Return v.Populate(Of TOut)(unary:=[do]).ToArray
             End If
         End Function
 

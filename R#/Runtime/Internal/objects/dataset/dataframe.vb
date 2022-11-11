@@ -293,8 +293,9 @@ Namespace Runtime.Internal.Object
 
             If fullSize Then
                 Dim nrows As Integer = Me.nrows
-                Dim vec As Array = Array.CreateInstance(col.GetType.GetElementType, nrows)
-                Dim getter = New GetVectorElement(col).Getter
+                Dim elementType As Type = col.GetType.GetElementType
+                Dim vec As Array = Array.CreateInstance(elementType, nrows)
+                Dim getter = New GetVectorElement(col, elementType).Getter
 
                 For i As Integer = 0 To nrows - 1
                     vec.SetValue(getter(i), i)

@@ -97,6 +97,7 @@ Namespace Runtime.Vectorization
         ReadOnly m_get As Func(Of Integer, Object)
 
         Public ReadOnly Property [Error] As Exception
+        Public ReadOnly Property elementType As Type
 
         Public ReadOnly Property isNullOrEmpty As Boolean
             Get
@@ -127,8 +128,9 @@ Namespace Runtime.Vectorization
         ''' maybe a scalar value or a array vector
         ''' </summary>
         ''' <param name="vec"></param>
-        Sub New(vec As Array)
+        Private Sub New(vec As Array, type As Type)
             Me.vector = vec
+            Me.elementType = type
 
             If vec Is Nothing OrElse vec.Length = 0 Then
                 [single] = Nothing
@@ -163,22 +165,29 @@ Namespace Runtime.Vectorization
         ''' <param name="scalar">
         ''' this item should never be nothing?
         ''' </param>
-        Private Sub New(scalar As Object)
+        Sub New(scalar As Object, type As Type)
             Me.vector = {scalar}
             Me.[single] = scalar
             Me.m_get = Getter()
             Me.Mode = VectorTypes.Scalar
+            Me.elementType = type
         End Sub
 
         Public Function CastTo(Of T)(cast As Func(Of Object, T)) As GetVectorElement
             If vector Is Nothing OrElse vector.Length = 0 Then
-                Return New GetVectorElement({})
+                Return New GetVectorElement({}, GetType(T))
             Else
                 Return (From item As Object In vector.AsQueryable Select cast(item)) _
                     .DoCall(Function(n)
-                                Return New GetVectorElement(n.ToArray)
+                                Return New GetVectorElement(n.ToArray, GetType(T))
                             End Function)
             End If
+        End Function
+
+        Public Iterator Function Populate(Of T)(unary As Func(Of Object, Object)) As IEnumerable(Of T)
+            For i As Integer = 0 To vector.Length - 1
+                Yield DirectCast(unary(vector.GetValue(i)), T)
+            Next
         End Function
 
         Public Function Getter() As Func(Of Integer, Object)
@@ -196,9 +205,19 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
+        Public Shared Function DoesSizeMatch(v1 As GetVectorElement, v2 As GetVectorElement) As Boolean
+            If v1.size = 1 OrElse v2.size = 1 Then
+                Return True
+            Else
+                Return v2.size = v2.size
+            End If
+        End Function
+
         Public Shared Function Create(Of T)(x As Object) As GetVectorElement
             If x Is Nothing Then
-                Return New GetVectorElement(vec:=Nothing)
+                Return New GetVectorElement(vec:=Nothing, GetType(T))
+            ElseIf TypeOf x Is GetVectorElement AndAlso DirectCast(x, GetVectorElement).elementType Is GetType(T) Then
+                Return DirectCast(x, GetVectorElement)
             Else
                 If TypeOf x Is vector Then
                     x = DirectCast(x, vector).data
@@ -208,11 +227,11 @@ Namespace Runtime.Vectorization
 
                 If type Is typedefine(Of T).baseType Then
                     ' is a scalar
-                    Return New GetVectorElement(scalar:=x)
+                    Return New GetVectorElement(scalar:=x, type:=type)
                 ElseIf type.ImplementInterface(typedefine(Of T).enumerable) Then
                     ' is a generic collection
                     If type.IsArray Then
-                        Return New GetVectorElement(DirectCast(x, Array))
+                        Return New GetVectorElement(DirectCast(x, Array), GetType(T))
                     Else
                         ' cast collection to array
                         Dim list As New List(Of Object)
@@ -221,7 +240,7 @@ Namespace Runtime.Vectorization
                             Call list.Add(item)
                         Next
 
-                        Return New GetVectorElement(list.ToArray)
+                        Return New GetVectorElement(list.ToArray, GetType(T))
                     End If
                 Else
                     ' do type cast?

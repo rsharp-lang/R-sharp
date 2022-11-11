@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::0f1a106778633f979036dfc074ab06b4, R-sharp\R#\Runtime\Internal\internalInvokes\string\stringr.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 959
-    '    Code Lines: 598
-    ' Comment Lines: 271
-    '   Blank Lines: 90
-    '     File Size: 39.91 KB
+' Summaries:
 
 
-    '     Module stringr
-    ' 
-    '         Function: [objToString], base64Decode, base64Str, bencode, charAt
-    '                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
-    '                   fromBstring, grep, html, json, loadXml
-    '                   match, nchar, paste, randomAsciiStr, rawBufferBase64
-    '                   regexp, splitSingleStrAuto, sprintfSingle, str_empty, str_pad
-    '                   (+2 Overloads) str_replace, strPad_internal, strsplit, substr, tagvalue
-    '                   tolower, toupper, urldecode, xml
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 959
+'    Code Lines: 598
+' Comment Lines: 271
+'   Blank Lines: 90
+'     File Size: 39.91 KB
+
+
+'     Module stringr
+' 
+'         Function: [objToString], base64Decode, base64Str, bencode, charAt
+'                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
+'                   fromBstring, grep, html, json, loadXml
+'                   match, nchar, paste, randomAsciiStr, rawBufferBase64
+'                   regexp, splitSingleStrAuto, sprintfSingle, str_empty, str_pad
+'                   (+2 Overloads) str_replace, strPad_internal, strsplit, substr, tagvalue
+'                   tolower, toupper, urldecode, xml
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -81,10 +81,12 @@ Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports encoder = SMRUCC.Rsharp.Development.Components.Encoder
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
+Imports stdNum = System.Math
 Imports VBStr = Microsoft.VisualBasic.Strings
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
@@ -1012,6 +1014,28 @@ Namespace Runtime.Internal.Invokes
                             )
                         End Function) _
                 .ToArray
+        End Function
+
+        <ExportAPI("text_equals")>
+        Public Function text_equals(<RRawVectorArgument> x As Object,
+                                    <RRawVectorArgument> y As Object,
+                                    Optional null_equals As Boolean = False,
+                                    Optional empty_equals As Boolean = True,
+                                    Optional env As Environment = Nothing) As Object
+
+            Dim v1 = GetVectorElement.Create(Of String)(x)
+            Dim v2 = GetVectorElement.Create(Of String)(y)
+            Dim size As Integer = stdNum.Max(v1.size, v2.size)
+            Dim op As op_evaluator =
+                Function(xi, yi, envir)
+                    Return TextEquals(DirectCast(xi, String), DirectCast(yi, String), null_equals, empty_equals)
+                End Function
+
+            If Not GetVectorElement.DoesSizeMatch(v1, v2) Then
+                Return Internal.debug.stop($"the size of x({v1.size}) is not matched with size of y({v2.size})!", env)
+            Else
+                Return Core.BinaryCoreInternal(Of String, String, Boolean)(v1, v2, op, env)
+            End If
         End Function
     End Module
 End Namespace
