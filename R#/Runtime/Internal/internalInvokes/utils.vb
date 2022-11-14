@@ -916,7 +916,7 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return ($"{globalEnv.packages.getPackageDir(package)}/package/index.json") _
                     .LoadJsonFile(Of DESCRIPTION) _
-                    .toList
+                   ?.toList
             End If
         End Function
 
