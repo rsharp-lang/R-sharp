@@ -82,7 +82,7 @@ Module NodeAttributes
 
     <Extension>
     Public Function SetNodeAttributeInVector(elements As node(), name$, values As Object) As Object
-        Dim valArray As New GetVectorElement(REnv.asVector(Of Object)(values))
+        Dim valArray As New GetVectorElement(REnv.asVector(Of Object)(values), GetType(Object))
         Dim value As Object
 
         If name = "color" Then
