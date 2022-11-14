@@ -304,7 +304,7 @@ Namespace Runtime.Internal.Object
                 ' fill vector data with the single scalar 
                 ' object to make a vector in full size
                 For i As Integer = 0 To nrows - 1
-                    vec.SetValue(scalar, i)
+                    Call vec.SetValue(scalar, i)
                 Next
 
                 Return vec
