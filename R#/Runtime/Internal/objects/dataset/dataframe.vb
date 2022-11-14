@@ -101,13 +101,13 @@ Namespace Runtime.Internal.Object
     ''' number of rows.
     ''' The column names should be non-empty, And attempts To use 
     ''' empty names will have unsupported results. Duplicate column 
-    ''' names are allowed, but you need To use check.names = False 
+    ''' names are allowed, but you need To use ``check.names = False``
     ''' For data.frame To generate such a data frame. However, 
     ''' Not all operations On data frames will preserve duplicated 
     ''' column names: For example matrix-Like subsetting will 
     ''' force column names in the result To be unique.
     ''' data.frame converts each of its arguments to a data frame 
-    ''' by calling as.data.frame(optional = TRUE). As that Is a 
+    ''' by calling ``as.data.frame(optional = TRUE)``. As that Is a 
     ''' generic function, methods can be written to change the 
     ''' behaviour of arguments according to their classes: R comes 
     ''' With many such methods. Character variables passed To 
@@ -135,8 +135,8 @@ Namespace Runtime.Internal.Object
     ''' row names And Not a column (by name Or number).
     ''' Names are removed from vector inputs Not Protected by I.
     ''' Default.stringsAsFactors Is a utility that takes 
-    ''' getOption("stringsAsFactors") And ensures the result Is 
-    ''' TRUE Or FALSE (Or throws an error if the value Is Not
+    ''' ``getOption("stringsAsFactors")`` And ensures the result Is 
+    ''' ``TRUE`` Or ``FALSE`` (Or throws an error if the value Is Not
     ''' NULL).
     ''' 
     ''' > Chambers, J. M. (1992) Data for models. Chapter 3 of 
