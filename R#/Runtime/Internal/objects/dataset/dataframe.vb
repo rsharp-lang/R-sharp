@@ -291,14 +291,20 @@ Namespace Runtime.Internal.Object
                 Return Nothing
             End If
 
-            If fullSize Then
-                Dim nrows As Integer = Me.nrows
-                Dim elementType As Type = col.GetType.GetElementType
-                Dim vec As Array = Array.CreateInstance(elementType, nrows)
-                Dim getter = New GetVectorElement(col, elementType).Getter
+            If fullSize AndAlso col.Length <> nrows Then
+                If col.Length <> 1 Then
+                    Throw New InvalidProgramException
+                End If
 
+                Dim nrows As Integer = Me.nrows
+                Dim scalar As Object = col.GetValue(Scan0)
+                Dim elementType As Type = If(scalar Is Nothing, GetType(Object), scalar.GetType)
+                Dim vec As Array = Array.CreateInstance(elementType, nrows)
+
+                ' fill vector data with the single scalar 
+                ' object to make a vector in full size
                 For i As Integer = 0 To nrows - 1
-                    vec.SetValue(getter(i), i)
+                    vec.SetValue(scalar, i)
                 Next
 
                 Return vec
