@@ -1,55 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::82e2cea2cf1256a23c6dfeddae2dea21, R-sharp\studio\Rserve\Program.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 51
-    '    Code Lines: 36
-    ' Comment Lines: 7
-    '   Blank Lines: 8
-    '     File Size: 2.10 KB
+' Summaries:
 
 
-    ' Module Program
-    ' 
-    '     Function: Main, runSession, start
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 51
+'    Code Lines: 36
+' Comment Lines: 7
+'   Blank Lines: 8
+'     File Size: 2.10 KB
+
+
+' Module Program
+' 
+'     Function: Main, runSession, start
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.ComponentModel
+Imports Flute.Http.Core
+Imports Flute.Http.FileSystem
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.Default
@@ -67,7 +69,12 @@ Module Program
     Public Function listen(args As CommandLine) As Integer
         Dim wwwroot As String = args <= "/wwwroot"
         Dim port As Integer = args("/port") Or 80
+        Dim localfs As New WebFileSystemListener() With {
+            .fs = New FileSystem(wwwroot)
+        }
+        Dim localhost As New HttpSocket(app:=AddressOf localfs.WebHandler, port:=port)
 
+        Return localhost.Run
     End Function
 
     ''' <summary>
