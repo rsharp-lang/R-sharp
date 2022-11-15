@@ -265,7 +265,7 @@ Namespace Runtime
         End Sub
 
         ''' <summary>
-        ''' 
+        ''' Create a new runtime environment context
         ''' </summary>
         ''' <param name="parent"></param>
         ''' <param name="stackFrame"></param>
@@ -670,13 +670,17 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="join"></param>
         ''' <param name="parent"></param>
-        Private Shared Sub push(join As Environment, parent As Environment)
-            Dim funcs As KeyValuePair(Of String, Symbol)()
+        Private Shared Sub PushEnvironmentContext(join As Environment, parent As Environment)
             Dim symbols As KeyValuePair(Of String, Symbol)()
+            Dim funcs As KeyValuePair(Of String, Symbol)()
 
             SyncLock parent
-                funcs = parent.funcSymbols.ToArray
-                symbols = parent.symbols.ToArray
+                SyncLock parent.funcSymbols
+                    funcs = parent.funcSymbols.ToArray
+                End SyncLock
+                SyncLock parent.symbols
+                    symbols = parent.symbols.ToArray
+                End SyncLock
             End SyncLock
 
             For Each func As KeyValuePair(Of String, Symbol) In funcs
@@ -703,9 +707,11 @@ Namespace Runtime
         ''' environment context chain in parallel context
         ''' </remarks>
         Public Shared Operator &(closure As Environment, parent As Environment) As Environment
+            ' 20221115 is_inherits = false, means create new empty
+            ' symbol table and the function table
             Dim join As New Environment(closure, closure.stackFrame, isInherits:=False)
 
-            Call push(join, parent:=closure)
+            Call PushEnvironmentContext(join, parent:=closure)
 
             Do
                 ' ignored of the initialize stack
@@ -717,7 +723,7 @@ Namespace Runtime
                 End If
 
                 ' 20220103 try to fix of missing symbols
-                push(join, parent)
+                PushEnvironmentContext(join, parent)
                 parent = parent.parent
                 ' pop to global environment
                 ' parent of global env is nothing
