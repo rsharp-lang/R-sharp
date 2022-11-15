@@ -1,62 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::bc5a0abb922e85a14766d4603312a848, R-sharp\R#\Runtime\Environment\Environment.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 690
-    '    Code Lines: 392
-    ' Comment Lines: 204
-    '   Blank Lines: 94
-    '     File Size: 26.74 KB
+' Summaries:
 
 
-    '     Class Environment
-    ' 
-    '         Properties: funcSymbols, globalEnvironment, isGlobal, isLINQContext, last
-    '                     messages, parent, stackFrame, stackTrace
-    ' 
-    '         Constructor: (+5 Overloads) Sub New
-    ' 
-    '         Function: asRVector, AssignSymbol, EnumerateAllFunctions, EnumerateAllSymbols, Evaluate
-    '                   FindFunction, FindFunctionWithNamespaceRestrict, FindSymbol, GetAcceptorArguments, GetEnumerator
-    '                   GetSymbolsNames, IEnumerable_GetEnumerator, Push, ToString, WriteLineHandler
-    ' 
-    '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, push
-    '              redirectError, redirectWarning, setStackInfo
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 690
+'    Code Lines: 392
+' Comment Lines: 204
+'   Blank Lines: 94
+'     File Size: 26.74 KB
+
+
+'     Class Environment
+' 
+'         Properties: funcSymbols, globalEnvironment, isGlobal, isLINQContext, last
+'                     messages, parent, stackFrame, stackTrace
+' 
+'         Constructor: (+5 Overloads) Sub New
+' 
+'         Function: asRVector, AssignSymbol, EnumerateAllFunctions, EnumerateAllSymbols, Evaluate
+'                   FindFunction, FindFunctionWithNamespaceRestrict, FindSymbol, GetAcceptorArguments, GetEnumerator
+'                   GetSymbolsNames, IEnumerable_GetEnumerator, Push, ToString, WriteLineHandler
+' 
+'         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, push
+'              redirectError, redirectWarning, setStackInfo
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -671,15 +671,73 @@ Namespace Runtime
         ''' <param name="join"></param>
         ''' <param name="parent"></param>
         Private Shared Sub PushEnvironmentContext(join As Environment, parent As Environment)
-            Dim symbols As KeyValuePair(Of String, Symbol)()
-            Dim funcs As KeyValuePair(Of String, Symbol)()
+            Dim symbols As New List(Of KeyValuePair(Of String, Symbol))
+            Dim funcs As New List(Of KeyValuePair(Of String, Symbol))
 
+            ' 20221115 try to make bugs fixed for the parallel object lock
+            ' Linq ToArray has bug when deal with the parallel on unix
+            ' .NET6
+            ' 
+            ' Error in <globalEnvironment> -> <globalEnvironment> -> InitializeEnvironment -> "doMSMSalignment" -> "doMSMSalignment" -> doMSMSalignment -> ".protocol_workflow" -> ".protocol_workflow" -> .protocol_workflow -> "protocol" -> "protocol" -> workflow.general_annotation -> "treeSearch" -> "treeSearch" -> treeSearch -> else_false -> parLapply -> parallel_task[deepCloneContext ~ parallel_task_group_11] -> parallel_task[deepCloneContext ~ parallel_task_group_11] -> run_search -> "cluster_hitscores" -> "cluster_hitscores" -> cluster_hitscores -> "extract_clusterscore" -> "extract_clusterscore" -> extract_clusterscore -> for_loop_[1] -> "cluster_score" -> "cluster_score" -> cluster_score -> lapply
+            ' 1. ArgumentException: Destination array is not long enough to copy all the items in the collection. Check array index and length.
+            ' 2. stackFrames: 
+            ' at System.Collections.Generic.SortedSet`1.CopyTo(T[] array, Int32 index, Int32 count)
+            ' at System.Collections.Generic.EnumerableHelpers.ToArray[T](IEnumerable`1 source)
+            ' at SMRUCC.Rsharp.Runtime.Environment.PushEnvironmentContext(Environment join, Environment parent)
+            ' at SMRUCC.Rsharp.Runtime.Environment.op_Concatenate(Environment closure, Environment parent)
+            ' at SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure.DeclareNewFunction.InitializeEnvironment(Environment parent, InvokeParameter[] params, Boolean& runDispose)
+            ' at SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure.DeclareNewFunction.Invoke(Environment parent, InvokeParameter[] params)
+            ' at SMRUCC.Rsharp.Runtime.Internal.Invokes.applys.lapply(Object X, Object FUN, Object names, Environment envir)
+
+            ' "candidates" <- Call "lapply"(Call "groupBy"(Call "as.list"(&candidates, "byrow" <- True), [r] -> &r["id"]), declare function '$<$anonymous_800704>'(block) {
+            ' # function_internal
+            ' <in_memory> <$anonymous_800704>: 
+            ' Call "list"("forward" <- Call "sapply"(&block, [i] -> &i["forward"]), "reverse" <- Call "sapply"(&block, [i] -> &i["reverse"]), "jaccard" <- Call "sapply"(&block, [i] -> &i["jaccard"]), "rt" <- Call "sapply"(&block, [i] -> &i["rt"]));
+            ' })
+            ' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+            ' applys.R#_interop::.lapply at REnv.dll:line <unknown>
+            ' biodeepMSMS.declare_function.cluster_score at cluster_score.R:line 16
+            ' biodeepMSMS.call_function."cluster_score" at extract_clusterscore.R:line 14
+            ' biodeepMSMS.call_function."cluster_score" at extract_clusterscore.R:line 14
+            ' biodeepMSMS.forloop.for_loop_[1] at extract_clusterscore.R:line 6
+            ' biodeepMSMS.declare_function.extract_clusterscore at extract_clusterscore.R:line 2
+            ' biodeepMSMS.call_function."extract_clusterscore" at cluster_hitscores.R:line 24
+            ' biodeepMSMS.call_function."extract_clusterscore" at cluster_hitscores.R:line 24
+            ' biodeepMSMS.declare_function.cluster_hitscores at cluster_hitscores.R:line 3
+            ' biodeepMSMS.call_function."cluster_hitscores" at treeSearch.R:line 25
+            ' biodeepMSMS.call_function."cluster_hitscores" at treeSearch.R:line 25
+            ' biodeepMSMS.declare_function.run_search at treeSearch.R:line 15
+            ' unknown.unknown.parallel_task[deepCloneContext ~ parallel_task_group_11] at n/a:line n/a
+            ' unknown.unknown.parallel_task[deepCloneContext ~ parallel_task_group_11] at n/a:line n/a
+            ' applys.R#_interop::.parLapply at REnv.dll:line <unknown>
+            ' biodeepMSMS.n/a.else_false at treeSearch.R:line 33
+            ' biodeepMSMS.declare_function.treeSearch at treeSearch.R:line 3
+            ' biodeepMSMS.call_function."treeSearch" at general.R:line 8
+            ' biodeepMSMS.call_function."treeSearch" at general.R:line 8
+            ' biodeepMSMS.declare_function.workflow.general_annotation at general.R:line 3
+            ' biodeepMSMS.call_function."protocol" at run_workflow.R:line 23
+            ' biodeepMSMS.call_function."protocol" at run_workflow.R:line 23
+            ' biodeepMSMS.declare_function..protocol_workflow at run_workflow.R:line 20
+            ' biodeepMSMS.call_function.".protocol_workflow" at main.R:line 93
+            ' biodeepMSMS.call_function.".protocol_workflow" at main.R:line 93
+            ' biodeepMSMS.declare_function.doMSMSalignment at main.R:line 29
+            ' SMRUCC/R#.call_function."doMSMSalignment" at config_run.R:line 6
+            ' SMRUCC/R#.call_function."doMSMSalignment" at config_run.R:line 6
+            ' SMRUCC/R#.n/a.InitializeEnvironment at config_run.R:line 0
+            ' SMRUCC/R#.global.<globalEnvironment> at <globalEnvironment>:line n/a
+            ' SMRUCC/R#.global.<globalEnvironment> at <globalEnvironment>:line n/a
+            '
             SyncLock parent
                 SyncLock parent.funcSymbols
-                    funcs = parent.funcSymbols.ToArray
+                    For Each symbol In parent.funcSymbols
+                        Call funcs.Add(symbol)
+                    Next
                 End SyncLock
                 SyncLock parent.symbols
-                    symbols = parent.symbols.ToArray
+                    For Each symbol In parent.symbols
+                        Call symbols.Add(symbol)
+                    Next
                 End SyncLock
             End SyncLock
 
