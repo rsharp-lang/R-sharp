@@ -2,7 +2,7 @@
   "profiles": {
     "Rserve.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--start --port \"7452\" --tcp \"3838\" --rweb \"E:/GCModeller/src/workbench/win32_desktop/fastRWeb/\" --n_threads \"8\" /@set --internal_pipeline=TRUE"
+      "commandLineArgs": "--listen /wwwroot \"D:\\mzkit\\src\\mzkit\\webview\" /port 80"
     }
   }
 }
