@@ -61,6 +61,15 @@ Module Program
         Return GetType(Program).RunCLI(App.CommandLine)
     End Function
 
+    <ExportAPI("--listen")>
+    <Description("Start a local static web server for hosting statics web page files")>
+    <Usage("--listen /wwwroot <directory_path> [/port <http_port, default=80>]")>
+    Public Function listen(args As CommandLine) As Integer
+        Dim wwwroot As String = args <= "/wwwroot"
+        Dim port As Integer = args("/port") Or 80
+
+    End Function
+
     ''' <summary>
     ''' Run rscript
     ''' </summary>
