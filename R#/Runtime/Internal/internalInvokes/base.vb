@@ -1232,7 +1232,7 @@ RE0:
                         uniqKeys(key) = 0
                     End If
 
-                    list.Add(key, value)
+                    Call list.Add(key, value)
                 End If
             Next
 
