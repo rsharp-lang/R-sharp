@@ -175,8 +175,11 @@ Namespace Runtime
         ''' <summary>
         ''' Get/set variable value
         ''' </summary>
-        ''' <param name="name$"></param>
-        ''' <returns></returns>
+        ''' <param name="name"></param>
+        ''' <returns>
+        ''' getter of this property is a wrapper of function <see cref="FindSymbol(String, Boolean)"/>,
+        ''' and the setter of this property is a wrapper of visit data table <see cref="symbols"/>.
+        ''' </returns>
         ''' <remarks>
         ''' If the current stack does not contains the target variable, then the program will try to find the variable in his parent
         ''' if variable in format like [var], then it means a global or parent environment variable
