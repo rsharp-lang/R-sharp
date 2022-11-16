@@ -1195,7 +1195,10 @@ RE0:
         ''' <returns></returns>
         <ExportAPI("list")>
         <RApiReturn(GetType(list))>
-        Public Function Rlist(<RListObjectArgument, RRawVectorArgument> slots As Object, Optional envir As Environment = Nothing) As Object
+        Public Function Rlist(<RListObjectArgument, RRawVectorArgument>
+                              slots As Object,
+                              Optional envir As Environment = Nothing) As Object
+
             Dim list As New Dictionary(Of String, Object)
             Dim slot As InvokeParameter
             Dim key As String
