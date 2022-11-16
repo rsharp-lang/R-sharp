@@ -199,14 +199,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <summary>
         ''' set parameters
         ''' </summary>
-        ''' <param name="parent"></param>
+        ''' <param name="caller_context">
+        ''' The environment context from the caller stack
+        ''' </param>
         ''' <param name="params"></param>
         ''' <param name="runDispose">
         ''' A byref parameter to indicated that the resulted <see cref="Environment"/> should 
         ''' be release after this function has been successfully executated? 
         ''' </param>
         ''' <returns></returns>
-        Private Function InitializeEnvironment(parent As Environment,
+        Private Function InitializeEnvironment(caller_context As Environment,
                                                params As InvokeParameter(),
                                                ByRef runDispose As Boolean) As [Variant](Of Message, Environment)
             Dim var As DeclareNewSymbol
@@ -215,11 +217,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Dim envir As Environment = Me.envir
 
             If envir Is Nothing Then
-                runDispose = False
-                envir = parent
+                runDispose = True
+                envir = New Environment(caller_context, $"R_invoke${Me.funcName}", isInherits:=False)
             Else
                 runDispose = True
-                envir = New ClosureEnvironment(parent, envir)
+                envir = New Environment(envir, $"R_invoke${Me.funcName}", isInherits:=False)
             End If
 
             Dim argumentKeys As String()
@@ -236,7 +238,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             '    End If
             'End With
 
-            arguments = InvokeParameter.CreateArguments(parent, params, hasObjectList)
+            arguments = InvokeParameter.CreateArguments(caller_context, params, hasObjectList)
             argumentKeys = arguments.Keys.ToArray
 
             ' initialize environment
@@ -244,44 +246,44 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 var = Me.parameters(i)
 
                 If arguments.ContainsKey(var.names(Scan0)) Then
-                    value = arguments(var.names(Scan0)).Evaluate(envir)
+                    value = arguments(var.names(Scan0)).Evaluate(caller_context)
                 ElseIf i >= params.Length Then
                     ' missing, use default value
                     If var.hasInitializeExpression Then
-                        value = var.value.Evaluate(envir)
+                        value = var.value.Evaluate(caller_context)
 
                         If Program.isException(value) Then
                             Return DirectCast(value, Message)
                         End If
                     Else
-                        Return DirectCast(MissingParameters(var, funcName, envir), Message)
+                        Return DirectCast(MissingParameters(var, funcName, caller_context), Message)
                     End If
                 Else
                     key = "$" & i
 
                     If arguments.ContainsKey(key) Then
-                        value = arguments(key).Evaluate(envir)
+                        value = arguments(key).Evaluate(caller_context)
                     ElseIf var.hasInitializeExpression Then
-                        value = var.value.Evaluate(envir)
+                        value = var.value.Evaluate(caller_context)
                     ElseIf TypeOf params(i).value Is ValueAssignExpression Then
                         ' symbol :> func
                         ' will cause parameter name as symbol name
                         ' produce key not found error
                         ' try to fix such bug
                         ' value = arguments(argumentKeys(i))
-                        Return Internal.debug.stop({$"argument '{var.names.First}' is required, but missing!", $"name: {var.names.First}"}, envir)
+                        Return Internal.debug.stop({$"argument '{var.names.First}' is required, but missing!", $"name: {var.names.First}"}, caller_context)
                     Else
                         key = argumentKeys(i)
-                        value = arguments(key).Evaluate(envir)
+                        value = arguments(key).Evaluate(caller_context)
                     End If
                 End If
 
                 ' removes global symbol to makes
                 ' local symbols overrides of the
                 ' global symbols
-                For Each name As String In var.names
-                    Call envir.Delete(name, seekParent:=False)
-                Next
+                'For Each name As String In var.names
+                '    Call envir.Delete(name, seekParent:=False)
+                'Next
 
                 ' 20191120 对于函数对象而言，由于拥有自己的环境，在构建闭包之后
                 ' 多次调用函数会重复利用之前的环境参数
@@ -297,7 +299,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 'Else
                 Dim err As Message = Nothing
 
-                ' 不存在，则插入新的
+                ' add parameter symbol into the environment context
+                ' of the target function invoke context
                 Call DeclareNewSymbol.PushNames(var.names, value, var.type, False, envir, err:=err)
 
                 If Not err Is Nothing Then
