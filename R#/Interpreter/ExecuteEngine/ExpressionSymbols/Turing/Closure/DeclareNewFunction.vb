@@ -58,6 +58,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
@@ -107,7 +108,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
     ''' byte-compiled. This is not normally user-visible, but it indicated 
     ''' when functions are printed.
     ''' 
-    ''' > Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) The New S Language. Wadsworth & Brooks/Cole.
+    ''' > Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) The New S Language.
+    ''' Wadsworth &amp; Brooks/Cole.
     ''' </remarks>
     Public Class DeclareNewFunction : Inherits SymbolExpression
         Implements RFunction
@@ -165,6 +167,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' renames current function object its symbol name
         ''' </summary>
         ''' <param name="newName"></param>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Friend Sub SetSymbol(newName As String)
             _funcName = newName
         End Sub
@@ -312,7 +316,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 Return env.TryCast(Of Message)
             Else
                 ' unsure for the symbol conflicts
-                envir = New Environment(env.TryCast(Of Environment), stackFrame, isInherits:=False)
+                ' envir = New Environment(env.TryCast(Of Environment), stackFrame, isInherits:=False)
+                envir = env.TryCast(Of Environment)
             End If
 
             If runDispose Then
@@ -339,7 +344,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 envir = parent
             Else
                 runDispose = True
-                envir = New Environment(parent, stackFrame, isInherits:=False) & envir
+                ' envir = New Environment(parent, stackFrame, isInherits:=False) & envir
+                envir = New ClosureEnvironment(parent, envir)
             End If
 
             For i As Integer = 0 To parameters.Length - 1
@@ -377,6 +383,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End If
         End Function
 
+        ''' <summary>
+        ''' just create a new function object in the environment context
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim symbol As Symbol = envir.FindFunction(funcName)
 
@@ -401,6 +412,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 }}"
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getReturns(env As Environment) As RType Implements RFunction.getReturns
             Return RType.GetRSharpType(GetType(Object))
         End Function
