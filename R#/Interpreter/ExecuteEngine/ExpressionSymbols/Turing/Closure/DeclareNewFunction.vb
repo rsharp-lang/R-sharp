@@ -75,12 +75,40 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
     ''' <summary>
-    ''' 普通的函数定义模型
+    ''' ## Function Definition
+    ''' 
+    ''' An R function object. These functions provide the base mechanisms 
+    ''' for defining new functions in the R language.
+    ''' 
+    ''' The names in an argument list can be back-quoted non-standard names 
+    ''' (see ‘backquote’).
+    ''' If value is missing, NULL is returned. If it is a single expression,
+    ''' the value of the evaluated expression is returned. (The expression 
+    ''' is evaluated as soon as return is called, in the evaluation frame 
+    ''' of the function and before any on.exit expression is evaluated.)
+    ''' If the end of a function is reached without calling return, the value
+    ''' of the last evaluated expression is returned.
+    ''' 
+    ''' (普通的函数定义模型: 
     ''' 
     ''' 普通的函数与lambda函数<see cref="DeclareLambdaFunction"/>在结构上是一致的，
     ''' 但是有一个区别就是lambda函数<see cref="DeclareLambdaFunction"/>是没有<see cref="Environment"/>的，
-    ''' 所以lambda函数会更加的轻量化，不容易产生内存溢出的问题
+    ''' 所以lambda函数会更加的轻量化，不容易产生内存溢出的问题)
     ''' </summary>
+    ''' <remarks>
+    ''' This type of function is not the only type in R: they are called 
+    ''' closures (a name with origins in LISP) to distinguish them from 
+    ''' primitive functions.
+    ''' A closure has three components, its formals (its argument list), 
+    ''' its body (expr in the ‘Usage’ section) and its environment which 
+    ''' provides the enclosure of the evaluation frame when the closure is 
+    ''' used.
+    ''' There is an optional further component if the closure has been 
+    ''' byte-compiled. This is not normally user-visible, but it indicated 
+    ''' when functions are printed.
+    ''' 
+    ''' > Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) The New S Language. Wadsworth & Brooks/Cole.
+    ''' </remarks>
     Public Class DeclareNewFunction : Inherits SymbolExpression
         Implements RFunction
         Implements IRuntimeTrace
@@ -110,9 +138,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Public ReadOnly Property body As ClosureExpression
 
         ''' <summary>
-        ''' The environment of current function closure
+        ''' The environment of current function closure, this environment
+        ''' context is comes from the environment where this function 
+        ''' symbol is created.
+        ''' 
+        ''' this environment context holder make the closure it works for 
+        ''' holding the executation context
         ''' </summary>
         Friend envir As Environment
+        ''' <summary>
+        ''' does the parameter set of this function contains a ``...`` 
+        ''' object list parameter?
+        ''' </summary>
         Friend hasObjectList As Boolean
 
         Sub New(funcName$, parameters As DeclareNewSymbol(), body As ClosureExpression, stackframe As StackFrame)
@@ -124,6 +161,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Me.hasObjectList = parameters.Any(Function(p) p.m_names(0) = "...")
         End Sub
 
+        ''' <summary>
+        ''' renames current function object its symbol name
+        ''' </summary>
+        ''' <param name="newName"></param>
         Friend Sub SetSymbol(newName As String)
             _funcName = newName
         End Sub
@@ -156,7 +197,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' </summary>
         ''' <param name="parent"></param>
         ''' <param name="params"></param>
-        ''' <param name="runDispose"></param>
+        ''' <param name="runDispose">
+        ''' A byref parameter to indicated that the resulted <see cref="Environment"/> should 
+        ''' be release after this function has been successfully executated? 
+        ''' </param>
         ''' <returns></returns>
         Private Function InitializeEnvironment(parent As Environment, params As InvokeParameter(), ByRef runDispose As Boolean) As [Variant](Of Message, Environment)
             Dim var As DeclareNewSymbol

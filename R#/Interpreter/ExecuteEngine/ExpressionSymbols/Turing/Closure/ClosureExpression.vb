@@ -62,7 +62,9 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
     ''' <summary>
-    ''' 其实就是一段拥有自己的<see cref="Environment"/>的没有名称的匿名函数
+    ''' Is a kind of expression collection which consist with multiple 
+    ''' expression lines.
+    ''' (其实就是一段拥有自己的<see cref="Environment"/>的没有名称的匿名函数)
     ''' </summary>
     Public Class ClosureExpression : Inherits Expression
 
