@@ -206,7 +206,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' be release after this function has been successfully executated? 
         ''' </param>
         ''' <returns></returns>
-        Private Function InitializeEnvironment(parent As Environment, params As InvokeParameter(), ByRef runDispose As Boolean) As [Variant](Of Message, Environment)
+        Private Function InitializeEnvironment(parent As Environment,
+                                               params As InvokeParameter(),
+                                               ByRef runDispose As Boolean) As [Variant](Of Message, Environment)
             Dim var As DeclareNewSymbol
             Dim value As Object
             Dim arguments As Dictionary(Of String, InvokeParameter)

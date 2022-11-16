@@ -25,9 +25,13 @@ Namespace Runtime
         ''' is not found in the environment context
         ''' </returns>
         Public Overrides Function FindSymbol(name As String, Optional [inherits] As Boolean = True) As Symbol
-            Dim symbol As Symbol = closure_context.FindSymbol(name, [inherits])
+            Dim symbol As Symbol = MyBase.FindSymbol(name, [inherits]:=False)
 
-            If symbols Is Nothing Then
+            If symbol Is Nothing Then
+                symbol = closure_context.FindSymbol(name, [inherits])
+            End If
+
+            If symbol Is Nothing Then
                 symbol = parent_context.FindSymbol(name, [inherits])
             End If
 
