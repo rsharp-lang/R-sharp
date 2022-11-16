@@ -61,6 +61,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports any = Microsoft.VisualBasic.Scripting
 Imports r = System.Text.RegularExpressions.Regex
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -119,7 +120,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             ElseIf strData.GetType.ImplementInterface(Of RFunction) Then
                 Return Internal.debug.stop({
                     $"the given symbols is a function symbol, can not be apply for regular expression pattern matches!",
-                    $"symbol expression: {text.ToString}"
+                    $"symbol expression: {text.ToString}",
+                    $"symbol value: {any.ToString(strData)}"
                 }, env)
             End If
 
