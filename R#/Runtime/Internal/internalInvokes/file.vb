@@ -65,6 +65,7 @@ Imports System.IO.Compression
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel
@@ -831,6 +832,7 @@ Namespace Runtime.Internal.Invokes
                                    text As Object,
                                    Optional con As Object = Nothing,
                                    Optional sep$ = vbCrLf,
+                                   Optional fs As IFileSystemEnvironment = Nothing,
                                    Optional env As Environment = Nothing) As Object
 
             If TypeOf text Is vector Then
@@ -840,21 +842,26 @@ Namespace Runtime.Internal.Invokes
             If TypeOf text Is pipeline Then
                 Return DirectCast(text, pipeline) _
                     .populates(Of String)(env) _
-                    .handleWriteLargeTextStream(con, sep, env)
+                    .handleWriteLargeTextStream(con, sep, fs, env)
             ElseIf TypeOf text Is String Then
-                Return DirectCast(text, String).handleWriteTextArray(con, env)
+                Return DirectCast(text, String).handleWriteTextArray(con, fs, env)
             Else
                 Return REnv.asVector(Of Object)(text) _
                     .AsObjectEnumerator _
                     .JoinBy(sep) _
-                    .handleWriteTextArray(con, env)
+                    .handleWriteTextArray(con, fs, env)
             End If
 
             Return Nothing
         End Function
 
         <Extension>
-        Private Function handleWriteLargeTextStream(text As IEnumerable(Of String), con As Object, sep As String, env As Environment) As Object
+        Private Function handleWriteLargeTextStream(text As IEnumerable(Of String),
+                                                    con As Object,
+                                                    sep As String,
+                                                    fs As IFileSystemEnvironment,
+                                                    env As Environment) As Object
+
             If con Is Nothing OrElse (TypeOf con Is String AndAlso DirectCast(con, String).StringEmpty) Then
                 Dim stdOut As Action(Of String)
 
@@ -868,7 +875,11 @@ Namespace Runtime.Internal.Invokes
                     Call stdOut(line)
                 Next
             ElseIf TypeOf con Is String Then
-                Call text.SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
+                If fs Is Nothing Then
+                    Call text.SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
+                Else
+                    Call fs.WriteText(text.JoinBy(vbCr), con)
+                End If
             ElseIf TypeOf con Is textBuffer Then
                 DirectCast(con, textBuffer).text = text.JoinBy(sep)
                 Return con
@@ -888,7 +899,11 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <Extension>
-        Private Function handleWriteTextArray(text As String, con As Object, env As Environment) As Object
+        Private Function handleWriteTextArray(text As String,
+                                              con As Object,
+                                              fs As IFileSystemEnvironment,
+                                              env As Environment) As Object
+
             If con Is Nothing OrElse (TypeOf con Is String AndAlso DirectCast(con, String).StringEmpty) Then
                 Dim stdOut As Action(Of String)
 
@@ -900,7 +915,11 @@ Namespace Runtime.Internal.Invokes
 
                 Call stdOut(text)
             ElseIf TypeOf con Is String Then
-                Call text.SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
+                If fs Is Nothing Then
+                    Call text.SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
+                Else
+                    Call fs.WriteText(text, con)
+                End If
             ElseIf TypeOf con Is textBuffer Then
                 DirectCast(con, textBuffer).text = text
                 Return con
