@@ -57,7 +57,9 @@
 
 Imports System.Net.Http
 Imports System.Net.Http.Headers
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net
@@ -210,12 +212,16 @@ Public Module URL
     ''' </summary>
     ''' <param name="url"></param>
     ''' <param name="headers"></param>
+    ''' <param name="cache">
+    ''' used for make compatibility to the offline mode
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("requests.get")>
     Public Function [get](url As String,
                           Optional headers As list = Nothing,
                           Optional default404 As Object = "(404) Not Found!",
+                          Optional cache As WebTextQuery = Nothing,
                           Optional env As Environment = Nothing) As WebResponseResult
 
         Dim httpHeaders As Dictionary(Of String, String) = headers?.AsGeneric(Of String)(env)
@@ -230,9 +236,18 @@ Public Module URL
             }
         Else
             Try
-                Return HttpGet _
-                    .BuildWebRequest(url, httpHeaders, Nothing, Nothing) _
-                    .UrlGet(echo:=verbose)
+                If cache Is Nothing Then
+                    Return HttpGet _
+                        .BuildWebRequest(url, httpHeaders, Nothing, Nothing) _
+                        .UrlGet(echo:=verbose)
+                Else
+                    Return New WebResponseResult With {
+                        .url = url,
+                        .html = cache.QueryCacheText(url, cacheType:=".txt"),
+                        .headers = ResponseHeaders.Header200,
+                        .timespan = 0
+                    }
+                End If
             Catch ex As Exception When InStr(ex.Message, "(404) Not Found") > 0
                 Return New WebResponseResult With {
                     .url = url,
@@ -243,6 +258,26 @@ Public Module URL
             Catch ex As Exception
                 Throw
             End Try
+        End If
+    End Function
+
+    ''' <summary>
+    ''' create a new http cache context
+    ''' </summary>
+    ''' <param name="fs"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("http.cache")>
+    Public Function httpCache(fs As Object, Optional env As Environment = Nothing) As Object
+        If fs Is Nothing Then
+            Return Internal.debug.stop("the required cache context can not be nothing!", env)
+        End If
+        If TypeOf fs Is String Then
+            Return New WebTextQuery(DirectCast(fs, String))
+        ElseIf fs.GetType.ImplementInterface(Of IFileSystemEnvironment) Then
+            Return New WebTextQuery(DirectCast(fs, IFileSystemEnvironment))
+        Else
+            Return Message.InCompatibleType(GetType(IFileSystemEnvironment), fs.GetType, env)
         End If
     End Function
 
@@ -396,3 +431,41 @@ uploadbyfiles:
         Return Http.wget.Download(url, saveAs)
     End Function
 End Module
+
+Public Class WebTextQuery : Inherits WebQueryModule(Of String)
+
+    Sub New(dir As String)
+        Call MyBase.New(dir)
+    End Sub
+
+    Sub New(fs As IFileSystemEnvironment)
+        Call MyBase.New(fs)
+    End Sub
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="context">The query context is the url string</param>
+    ''' <returns></returns>
+    Protected Overrides Function doParseUrl(context As String) As String
+        Return context
+    End Function
+
+    ''' <summary>
+    ''' a general method just used for get html text
+    ''' </summary>
+    ''' <param name="html"></param>
+    ''' <param name="schema"></param>
+    ''' <returns></returns>
+    Protected Overrides Function doParseObject(html As String, schema As Type) As Object
+        Return html
+    End Function
+
+    Protected Overrides Function doParseGuid(context As String) As String
+        Return MD5(context)
+    End Function
+
+    Protected Overrides Function contextPrefix(guid As String) As String
+        Return guid.Substring(2, 2)
+    End Function
+End Class
