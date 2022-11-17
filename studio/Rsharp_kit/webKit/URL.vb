@@ -433,6 +433,7 @@ uploadbyfiles:
 End Module
 
 Public Class WebTextQuery : Inherits WebQueryModule(Of String)
+    Implements IHttpGet
 
     Sub New(dir As String)
         Call MyBase.New(dir)
@@ -441,6 +442,10 @@ Public Class WebTextQuery : Inherits WebQueryModule(Of String)
     Sub New(fs As IFileSystemEnvironment)
         Call MyBase.New(fs)
     End Sub
+
+    Public Function GetText(url As String) As String Implements IHttpGet.GetText
+        Return QueryCacheText(url, cacheType:=".txt")
+    End Function
 
     ''' <summary>
     ''' 
