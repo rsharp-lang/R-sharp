@@ -55,6 +55,7 @@ Imports Flute.Http.FileSystem
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.Default
+Imports Microsoft.VisualBasic.Net
 Imports Rserver
 
 Module Program
@@ -72,9 +73,17 @@ Module Program
         Dim localfs As New WebFileSystemListener() With {
             .fs = New FileSystem(wwwroot)
         }
-        Dim localhost As New HttpSocket(app:=AddressOf localfs.WebHandler, port:=port)
+        Dim localhost As New HttpSocket(
+            app:=AddressOf localfs.WebHandler,
+            port:=port
+        )
 
-        Return localhost.Run
+        If Not Tcp.PortIsAvailable(port) Then
+            Call Console.WriteLine($"local tcp port(={port}) is in used!")
+            Return 500
+        Else
+            Return localhost.Run
+        End If
     End Function
 
     ''' <summary>
