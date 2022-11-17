@@ -79,7 +79,21 @@ Module HDSutils
 
     <ExportAPI("disk_defragment")>
     Public Function DiskDefragmentation(pack As StreamPack) As Object
+        Dim buffer As New MemoryStream
+        Dim newPack As New StreamPack(buffer, 8 * 1024 * 1024)
 
+        For Each file As StreamBlock In pack.files
+            Dim data = pack.OpenBlock(file)
+            Dim newfile = newPack.OpenBlock(file.fullName)
+
+            data.CopyTo(newfile)
+            newfile.Flush()
+            newfile.Dispose()
+
+            For Each attr In file.attributes.attributes
+
+            Next
+        Next
     End Function
 
     <ExportAPI("openStream")>
