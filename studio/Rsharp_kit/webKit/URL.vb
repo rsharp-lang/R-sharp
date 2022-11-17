@@ -435,6 +435,12 @@ End Module
 Public Class WebTextQuery : Inherits WebQueryModule(Of String)
     Implements IHttpGet
 
+    Public ReadOnly Property fs As IFileSystemEnvironment
+        Get
+            Return cache
+        End Get
+    End Property
+
     Sub New(dir As String)
         Call MyBase.New(dir)
     End Sub

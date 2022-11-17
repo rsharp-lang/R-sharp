@@ -81,6 +81,7 @@ Module HDSutils
     <RApiReturn(GetType(StreamPack))>
     Public Function openStream(<RRawVectorArgument> file As Object,
                                Optional [readonly] As Boolean = False,
+                               Optional allowCreate As Boolean = False,
                                Optional env As Environment = Nothing) As Object
 
         If file Is Nothing Then
@@ -101,6 +102,8 @@ Module HDSutils
         If TypeOf file Is String Then
             If DirectCast(file, String).FileExists Then
                 Return New StreamPack(DirectCast(file, String), [readonly]:=[readonly])
+            ElseIf allowCreate Then
+                Return HDSutils.createStream(DirectCast(file, String))
             Else
                 Return Internal.debug.stop("the given file is not found on your filesystem!", env)
             End If
