@@ -77,6 +77,11 @@ Module HDSutils
         Return pack
     End Function
 
+    <ExportAPI("disk_defragment")>
+    Public Function DiskDefragmentation(pack As StreamPack) As Object
+
+    End Function
+
     <ExportAPI("openStream")>
     <RApiReturn(GetType(StreamPack))>
     Public Function openStream(<RRawVectorArgument> file As Object,
