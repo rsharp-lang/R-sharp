@@ -2,7 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--slave /exec E:\\GCModeller\\src\\workbench\\win32_desktop\\fastRWeb\\modeller\\create_network.R /args \"\" /request-id request_id /PORT=7452 --attach \"E:\\GCModeller\\src\\workbench\\win32_desktop\\src\\Rstudio\\Rstudio\" --proj \"E:\\GCModeller\\src\\workbench\\win32_desktop\\demo\\ncbi_dataset\\GCF_000005845\\eco.bioproj\""
+      "commandLineArgs": "\"D:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=33361 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host",
+      "workingDirectory": "D:\\mzkit\\dist\\bin\\Rstudio\\bin"
     }
   }
 }
