@@ -265,6 +265,10 @@ Namespace Development.Configuration
 
         Dim saveConfig As Boolean = False
 
+        Shared Sub New()
+            Call OptionHooks.AddDefaultHooks()
+        End Sub
+
         ''' <summary>
         ''' 
         ''' </summary>
@@ -357,20 +361,9 @@ Namespace Development.Configuration
                 env.globalEnvironment.Rscript.strict = value.ParseBoolean
             End If
 
-            Select Case opt
-                Case "memory.load"
-                    If value = "max" Then
-                        Call FrameworkInternal.ConfigMemory(MemoryLoads.Heavy)
-                    Else
-                        Call FrameworkInternal.ConfigMemory(MemoryLoads.Light)
-                    End If
-                Case "avx_simd"
-                    If value.ParseBoolean Then
-                        SIMDEnvironment.config = SIMDConfiguration.auto
-                    Else
-                        SIMDEnvironment.config = SIMDConfiguration.disable
-                    End If
-            End Select
+            If OptionHooks.CheckHook(opt) Then
+                Call OptionHooks.UpdateConfigurationCallback(opt, configVal:=value)
+            End If
 
             Call flush()
             Call App.JoinVariable(opt, value)
