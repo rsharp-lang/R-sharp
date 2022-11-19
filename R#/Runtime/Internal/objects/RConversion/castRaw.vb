@@ -133,7 +133,7 @@ Namespace Runtime.Internal.Object.Converts
                 Case GetType(Double)
                     chunk = BitConverter.GetBytes(DirectCast(item, Double))
                 Case GetType(Byte)
-                    chunk = BitConverter.GetBytes(DirectCast(item, Byte))
+                    chunk = {DirectCast(item, Byte)}
                 Case GetType(Boolean)
                     chunk = {CByte(If(DirectCast(item, Boolean), 1, 0))}
                     isNumeric = False
