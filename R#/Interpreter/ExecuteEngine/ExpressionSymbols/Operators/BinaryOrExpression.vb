@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7613f2a7519d01bdc13bb203b7865474, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryOrExpression.vb"
+﻿#Region "Microsoft.VisualBasic::0b7f93708d2ce258259fc9c36e271edb, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryOrExpression.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 58
     ' Comment Lines: 5
     '   Blank Lines: 13
-    '     File Size: 2.64 KB
+    '     File Size: 2.65 KB
 
 
     '     Class BinaryOrExpression

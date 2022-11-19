@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2b54cf601a99148d5f26fa2c7a4722fd, R-sharp\R#\Runtime\Internal\internalInvokes\Math\math.vb"
+﻿#Region "Microsoft.VisualBasic::1a83cc9aa1bfc8825685347109a77a99, R-sharp\R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 362
     ' Comment Lines: 383
     '   Blank Lines: 74
-    '     File Size: 35.60 KB
+    '     File Size: 35.64 KB
 
 
     '     Module math

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::23b982ca41c411fb3797385d58cf3c66, R-sharp\R#\Runtime\Vectorization\Arithmetic\Add.vb"
+﻿#Region "Microsoft.VisualBasic::d53228991683e58e7f8e698676167133, R-sharp\R#\Runtime\Vectorization\Arithmetic\Add.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 27
-    '    Code Lines: 20
+    '   Total Lines: 37
+    '    Code Lines: 29
     ' Comment Lines: 3
-    '   Blank Lines: 4
-    '     File Size: 1.17 KB
+    '   Blank Lines: 5
+    '     File Size: 1.49 KB
 
 
     '     Class Add

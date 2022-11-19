@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::170d81441f4e3a2720d6240270bb3e71, R-sharp\studio\Rsharp_kit\webKit\URL.vb"
+﻿#Region "Microsoft.VisualBasic::1aa0c5d3813e5ae5160d2b8acfd90ab9, R-sharp\studio\Rsharp_kit\webKit\URL.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 341
-    '    Code Lines: 232
-    ' Comment Lines: 70
-    '   Blank Lines: 39
-    '     File Size: 13.37 KB
+    '   Total Lines: 425
+    '    Code Lines: 286
+    ' Comment Lines: 90
+    '   Blank Lines: 49
+    '     File Size: 16.29 KB
 
 
     ' Class JSONContent
@@ -48,8 +48,16 @@
     ' 
     ' Module URL
     ' 
-    '     Function: [get], content, encodeTokenPart, HttpClientPost, HttpCookies
-    '               post, upload, urlcomponent, urlencode, wget
+    '     Function: [get], content, encodeTokenPart, httpCache, HttpClientPost
+    '               HttpCookies, post, upload, urlcomponent, urlencode
+    '               wget
+    ' 
+    ' Class WebTextQuery
+    ' 
+    '     Properties: fs
+    ' 
+    '     Constructor: (+2 Overloads) Sub New
+    '     Function: contextPrefix, doParseGuid, doParseObject, doParseUrl, GetText
     ' 
     ' /********************************************************************************/
 

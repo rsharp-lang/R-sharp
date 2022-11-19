@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0643a20bf77851a75ca6a0f6f338f679, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\StringInterpolation.vb"
+﻿#Region "Microsoft.VisualBasic::0eee57e2a60422f245efd9459ec5a737, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\StringInterpolation.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 71
-    '    Code Lines: 52
+    '   Total Lines: 78
+    '    Code Lines: 58
     ' Comment Lines: 5
-    '   Blank Lines: 14
-    '     File Size: 2.49 KB
+    '   Blank Lines: 15
+    '     File Size: 2.73 KB
 
 
     '     Class StringInterpolation

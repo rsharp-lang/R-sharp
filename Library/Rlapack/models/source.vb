@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6136cc032c26f307fa58a87f666ef482, R-sharp\Library\Rlapack\models\source.vb"
+﻿#Region "Microsoft.VisualBasic::f472d63242e76b5bdf3dee6425b695b8, R-sharp\Library\Rlapack\models\source.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 6
     ' Comment Lines: 0
     '   Blank Lines: 2
-    '     File Size: 202 B
+    '     File Size: 200 B
 
 
     ' Module source
@@ -57,4 +57,3 @@ Module source
         Throw New NotImplementedException
     End Function
 End Module
-

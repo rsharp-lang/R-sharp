@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6aa5aa31af02f64a9450ed79ebee9871, R-sharp\R#\System\Package\PackageFile\PackageLoader.vb"
+﻿#Region "Microsoft.VisualBasic::302b42d1c9348d41b9e9cccdb3a11307, R-sharp\R#\System\Package\PackageFile\PackageLoader.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 203
     ' Comment Lines: 52
     '   Blank Lines: 48
-    '     File Size: 11.51 KB
+    '     File Size: 11.81 KB
 
 
     '     Module PackageLoader2

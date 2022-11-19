@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2631f987bd5e728e31469132e17515e3, R-sharp\R#\System\Package\PackageFile\FileSystem\RegularMatch.vb"
+﻿#Region "Microsoft.VisualBasic::9ba827881d2a845843018044c3c1be44, R-sharp\R#\System\Package\PackageFile\FileSystem\RegularMatch.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 19
-    '    Code Lines: 14
-    ' Comment Lines: 0
-    '   Blank Lines: 5
-    '     File Size: 555 B
+    '   Total Lines: 29
+    '    Code Lines: 17
+    ' Comment Lines: 6
+    '   Blank Lines: 6
+    '     File Size: 892 B
 
 
     '     Class RegularMatch
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: isMatch, Norm
+    '         Function: isMatch, Norm, ToString
     ' 
     ' 
     ' /********************************************************************************/

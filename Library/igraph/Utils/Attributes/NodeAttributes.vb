@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::141222f1d039a41b037a402a6f64dafd, R-sharp\Library\igraph\Utils\Attributes\NodeAttributes.vb"
+﻿#Region "Microsoft.VisualBasic::32abc48e61d2b0f9d3219986a46fa2fc, R-sharp\Library\igraph\Utils\Attributes\NodeAttributes.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 87
     ' Comment Lines: 0
     '   Blank Lines: 12
-    '     File Size: 3.82 KB
+    '     File Size: 3.84 KB
 
 
     ' Module NodeAttributes

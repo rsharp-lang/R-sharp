@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d0ae69bbaf138f9faf51d3b67f5d730a, R-sharp\R#\System\Config\Options.vb"
+﻿#Region "Microsoft.VisualBasic::cd5fcfb64e4b1d9e71db1f6efab0a44e, R-sharp\R#\System\Config\Options.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 370
-    '    Code Lines: 201
+    '   Total Lines: 361
+    '    Code Lines: 191
     ' Comment Lines: 124
-    '   Blank Lines: 45
-    '     File Size: 14.45 KB
+    '   Blank Lines: 46
+    '     File Size: 14.04 KB
 
 
     '     Class Options
@@ -48,7 +48,7 @@
     '                     maxPrint, memoryLoad, MimeType, nwarnings, python
     '                     stdout_multipline, typescript, verbose
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+3 Overloads) Sub New
     ' 
     '         Function: getAllConfigs, getOption, setOption, ToString
     ' 

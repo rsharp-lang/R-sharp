@@ -1,65 +1,65 @@
-﻿#Region "Microsoft.VisualBasic::ddd4c17c18967724dc3e78dccd20b6d4, R-sharp\R#\System\Document\CodeAnalysis\SymbolAnalysis.vb"
+﻿#Region "Microsoft.VisualBasic::bb87116f42c12cb75c7e1e30ea1a5805, R-sharp\R#\System\Document\CodeAnalysis\SymbolAnalysis.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 267
-'    Code Lines: 211
-' Comment Lines: 9
-'   Blank Lines: 47
-'     File Size: 11.46 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class SymbolAnalysis
-' 
-'         Constructor: (+2 Overloads) Sub New
-' 
-'         Function: GetNameEnums, GetSymbolReferenceList, SymbolAccess, ToString
-' 
-'         Sub: GetSymbolReferenceList, (+12 Overloads) GetSymbols, Push
-'         Class Context
-' 
-'             Constructor: (+2 Overloads) Sub New
-' 
-'             Function: ToString
-' 
-'             Sub: Create, (+2 Overloads) Push
-' 
-' 
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 297
+    '    Code Lines: 236
+    ' Comment Lines: 9
+    '   Blank Lines: 52
+    '     File Size: 12.67 KB
+
+
+    '     Class SymbolAnalysis
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    ' 
+    '         Function: GetNameEnums, GetSymbolReferenceList, SymbolAccess, ToString
+    ' 
+    '         Sub: GetSymbolReferenceList, (+16 Overloads) GetSymbols, Push
+    '         Class Context
+    ' 
+    '             Constructor: (+2 Overloads) Sub New
+    ' 
+    '             Function: ToString
+    ' 
+    '             Sub: Create, (+2 Overloads) Push
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0ef2e1d8d42ccb78fab3583b1bdb948a, R-sharp\R#\Runtime\Internal\internalInvokes\graphics\graphics.vb"
+﻿#Region "Microsoft.VisualBasic::0fdfe3dc4d662995ccb21e5154145de4, R-sharp\R#\Runtime\Internal\internalInvokes\graphics\graphics.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 282
     ' Comment Lines: 122
     '   Blank Lines: 57
-    '     File Size: 18.87 KB
+    '     File Size: 18.93 KB
 
 
     '     Module graphics

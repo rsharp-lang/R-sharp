@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9d314443d7879ad2f5bc13cc27c94248, R-sharp\R#\System\Package\PackageFile\CreatePackage.vb"
+﻿#Region "Microsoft.VisualBasic::5e99304b0a84953f8cd7bfaec9299c43, R-sharp\R#\System\Package\PackageFile\CreatePackage.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 498
-    '    Code Lines: 371
+    '   Total Lines: 501
+    '    Code Lines: 373
     ' Comment Lines: 53
-    '   Blank Lines: 74
-    '     File Size: 20.28 KB
+    '   Blank Lines: 75
+    '     File Size: 20.38 KB
 
 
     '     Module CreatePackage

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c6189600a1cee2e714d4e6eae17198d8, R-sharp\Library\base\utils\utils.vb"
+﻿#Region "Microsoft.VisualBasic::2109a413c6e4473e335473ddbc660861, R-sharp\Library\base\utils\utils.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 425
-    '    Code Lines: 294
+    '   Total Lines: 429
+    '    Code Lines: 298
     ' Comment Lines: 95
     '   Blank Lines: 36
-    '     File Size: 18.68 KB
+    '     File Size: 18.90 KB
 
 
     ' Module utils

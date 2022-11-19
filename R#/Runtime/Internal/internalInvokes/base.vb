@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::04bce631a5b1e8ecd1d495922b2ec62e, R-sharp\R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::02a0983202c28e17767c3c43ce22d86f, R-sharp\R#\Runtime\Internal\internalInvokes\base.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 2731
-    '    Code Lines: 1189
-    ' Comment Lines: 1320
-    '   Blank Lines: 222
-    '     File Size: 124.92 KB
+    '   Total Lines: 2747
+    '    Code Lines: 1198
+    ' Comment Lines: 1325
+    '   Blank Lines: 224
+    '     File Size: 122.78 KB
 
 
     '     Module base
@@ -50,11 +50,11 @@
     '                   invisible, isDataframe, isEmpty, isEmptyArray, isList
     '                   isNA, isNull, isRVector, length, library
     '                   makeNames, names, ncol, neg, nrow
-    '                   objectAddInvoke, options, print, range, rbind
-    '                   Rdataframe, rep, replace, Rlist, Robj_dimension
-    '                   rowBindDataFrame, rownames, seq, sink, source
-    '                   str, summary, t, uniqueNames, unitOfT
-    '                   warning, year
+    '                   objectAddInvoke, options, options_flush, print, range
+    '                   rbind, Rdataframe, rep, replace, Rlist
+    '                   Robj_dimension, rowBindDataFrame, rownames, seq, sink
+    '                   source, str, summary, t, uniqueNames
+    '                   unitOfT, warning, year
     ' 
     '         Sub: safeAddColumn, warnings
     '         Class PrinterOptions

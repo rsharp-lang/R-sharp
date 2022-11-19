@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8fab5aade406c446399f6b74cf358aa3, R-sharp\R#\Runtime\Internal\objects\dataset\pipeline.vb"
+﻿#Region "Microsoft.VisualBasic::7ef7857c44b73b59f9d48177d2feeac0, R-sharp\R#\Runtime\Internal\objects\dataset\pipeline.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 265
-    '    Code Lines: 173
+    '   Total Lines: 269
+    '    Code Lines: 177
     ' Comment Lines: 51
     '   Blank Lines: 41
-    '     File Size: 11.13 KB
+    '     File Size: 11.33 KB
 
 
     '     Class pipeline

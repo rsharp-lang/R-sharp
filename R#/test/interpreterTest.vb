@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0733e8b05e59ed8a0de64aa442df237c, R-sharp\R#\Test\interpreterTest.vb"
+﻿#Region "Microsoft.VisualBasic::a5b2881bada08ef529d78e6cc5d2726f, R-sharp\R#\Test\interpreterTest.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1297
-    '    Code Lines: 911
+    '   Total Lines: 1305
+    '    Code Lines: 917
     ' Comment Lines: 21
-    '   Blank Lines: 365
-    '     File Size: 27.88 KB
+    '   Blank Lines: 367
+    '     File Size: 28.09 KB
 
 
     ' Module interpreterTest
@@ -48,10 +48,10 @@
     '          doCalltest, expressionTest2, formulaTest, functiondeclaretest2, headTest
     '          ifTest, index2222, inlineFunctiontest, isEmptyTest, lastSymbolTest
     '          Main, markdownTest, missingSymbolInStringInterpolate, moduleTest, multipleIfElse
-    '          negativeValTest, numberLiteralsTest, objClasstest, orDefaultTest, pipelineBulder
-    '          printClassTest, regexpTest, sequenceGeneratorTest, simpleSymbolIndexTest, strictTest
-    '          suppressTest, symbolIndextest, syntaxErrorTest, syntaxTest, syntaxTest2
-    '          unaryNegTest, usingTest, whileTest, withTest
+    '          negativeValTest, numberLiteralsTest, objClasstest, orDefaultTest, pipelineBuilder2
+    '          pipelineBulder, printClassTest, regexpTest, sequenceGeneratorTest, simpleSymbolIndexTest
+    '          strictTest, suppressTest, symbolIndextest, syntaxErrorTest, syntaxTest
+    '          syntaxTest2, unaryNegTest, usingTest, whileTest, withTest
     ' module test1
     ' 
     '     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, constantTest

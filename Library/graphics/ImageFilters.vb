@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ae81a16c5920fcb4bb185536a75d12a9, R-sharp\Library\graphics\ImageFilters.vb"
+﻿#Region "Microsoft.VisualBasic::9d517633ae64eab44811621c24deb2a3, R-sharp\Library\graphics\ImageFilters.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 93
-    '    Code Lines: 77
+    '   Total Lines: 101
+    '    Code Lines: 85
     ' Comment Lines: 0
     '   Blank Lines: 16
-    '     File Size: 3.54 KB
+    '     File Size: 3.98 KB
 
 
     ' Module ImageFilters
     ' 
-    '     Function: Diffusion, Emboss, gaussBlurEffect, Pencil, Sharp
-    '               Soften, WoodCarving
+    '     Function: Diffusion, Emboss, gaussBlurEffect, HqxScalesF, Pencil
+    '               Sharp, Soften, WoodCarving
     ' 
     ' /********************************************************************************/
 

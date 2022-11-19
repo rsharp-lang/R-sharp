@@ -1,62 +1,62 @@
-﻿#Region "Microsoft.VisualBasic::bc5a0abb922e85a14766d4603312a848, R-sharp\R#\Runtime\Environment\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::8b018a4fe0e67ec4b7c92efff0016e3d, R-sharp\R#\Runtime\Environment\Environment.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 690
-'    Code Lines: 392
-' Comment Lines: 204
-'   Blank Lines: 94
-'     File Size: 26.74 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class Environment
-' 
-'         Properties: funcSymbols, globalEnvironment, isGlobal, isLINQContext, last
-'                     messages, parent, stackFrame, stackTrace
-' 
-'         Constructor: (+5 Overloads) Sub New
-' 
-'         Function: asRVector, AssignSymbol, EnumerateAllFunctions, EnumerateAllSymbols, Evaluate
-'                   FindFunction, FindFunctionWithNamespaceRestrict, FindSymbol, GetAcceptorArguments, GetEnumerator
-'                   GetSymbolsNames, IEnumerable_GetEnumerator, Push, ToString, WriteLineHandler
-' 
-'         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, push
-'              redirectError, redirectWarning, setStackInfo
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 777
+    '    Code Lines: 400
+    ' Comment Lines: 281
+    '   Blank Lines: 96
+    '     File Size: 33.12 KB
+
+
+    '     Class Environment
+    ' 
+    '         Properties: funcSymbols, globalEnvironment, isGlobal, isLINQContext, last
+    '                     messages, parent, stackFrame, stackTrace
+    ' 
+    '         Constructor: (+5 Overloads) Sub New
+    ' 
+    '         Function: asRVector, AssignSymbol, EnumerateAllFunctions, EnumerateAllSymbols, Evaluate
+    '                   FindFunction, FindFunctionWithNamespaceRestrict, FindSymbol, GetAcceptorArguments, GetEnumerator
+    '                   GetSymbolsNames, IEnumerable_GetEnumerator, Push, ToString, WriteLineHandler
+    ' 
+    '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, PushEnvironmentContext
+    '              redirectError, redirectWarning, setStackInfo
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

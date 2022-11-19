@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cf2525c35660834d0eb9cbed40aca73a, R-sharp\Library\base\base\HDSutils.vb"
+﻿#Region "Microsoft.VisualBasic::294ae0d9214e155cd69f8c7a57c2efb0, R-sharp\Library\base\base\HDSutils.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 112
-    '    Code Lines: 93
+    '   Total Lines: 134
+    '    Code Lines: 110
     ' Comment Lines: 0
-    '   Blank Lines: 19
-    '     File Size: 3.83 KB
+    '   Blank Lines: 24
+    '     File Size: 4.59 KB
 
 
     ' Module HDSutils
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: createStream, listFiles, openStream, readText, saveFile
-    '               Tree
+    '     Function: createStream, DiskDefragmentation, listFiles, openStream, readText
+    '               saveFile, Tree
     ' 
     ' /********************************************************************************/
 

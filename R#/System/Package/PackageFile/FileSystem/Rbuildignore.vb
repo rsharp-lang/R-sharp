@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7c8e52ecd6069e769f1b43a2f8a74a43, R-sharp\R#\System\Package\PackageFile\FileSystem\Rbuildignore.vb"
+﻿#Region "Microsoft.VisualBasic::dcbdedab7efc30b39f09cfd6877413c5, R-sharp\R#\System\Package\PackageFile\FileSystem\Rbuildignore.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 60
-    '    Code Lines: 32
-    ' Comment Lines: 18
-    '   Blank Lines: 10
-    '     File Size: 1.92 KB
+    '   Total Lines: 69
+    '    Code Lines: 36
+    ' Comment Lines: 22
+    '   Blank Lines: 11
+    '     File Size: 2.31 KB
 
 
+    '     Interface IFilePredicate
+    ' 
+    '         Function: isMatch
+    ' 
     '     Class Rbuildignore
     ' 
     '         Constructor: (+1 Overloads) Sub New

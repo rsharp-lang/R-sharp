@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e62b349f2051429432383b33e10103fe, R-sharp\R#\System\Package\PackageFile\Serialization\Writer.vb"
+﻿#Region "Microsoft.VisualBasic::b6174775df486f31a5e49823dd0cef76, R-sharp\R#\System\Package\PackageFile\Serialization\Writer.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 269
-    '    Code Lines: 195
+    '   Total Lines: 261
+    '    Code Lines: 189
     ' Comment Lines: 31
-    '   Blank Lines: 43
-    '     File Size: 11.47 KB
+    '   Blank Lines: 41
+    '     File Size: 11.46 KB
 
 
     '     Class Writer
@@ -51,7 +51,7 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: (+2 Overloads) GetBuffer, GetSymbols, ReadSourceMap, readZEROBlock, Write
+    '         Function: (+2 Overloads) GetBuffer, GetSymbols, ReadSourceMap, Write
     ' 
     '         Sub: (+2 Overloads) Dispose
     ' 

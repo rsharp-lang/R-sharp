@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1b1471623762658b534cab9118385662, R-sharp\studio\Rserver\Rweb\RCallbackMessage.vb"
+﻿#Region "Microsoft.VisualBasic::be470679d424233781cc1466bf2af420, R-sharp\studio\Rserver\Rweb\RCallbackMessage.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 86
     ' Comment Lines: 0
     '   Blank Lines: 15
-    '     File Size: 4.09 KB
+    '     File Size: 4.08 KB
 
 
     ' Module RCallbackMessage
@@ -150,4 +150,3 @@ Module RCallbackMessage
         End If
     End Sub
 End Module
-
