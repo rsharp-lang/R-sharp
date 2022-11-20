@@ -336,6 +336,8 @@ Namespace Runtime
         ''' get all variable symbol names(function symbol is not included)
         ''' </summary>
         ''' <returns></returns>
+        ''' 
+        <DebuggerStepThrough>
         Public Function GetSymbolsNames() As IEnumerable(Of String)
             Return symbols.Keys
         End Function
@@ -345,10 +347,13 @@ Namespace Runtime
         ''' <see cref="base.print(Object, list, Environment)"/> 
         ''' </summary>
         ''' <returns></returns>
+        ''' 
+        <DebuggerStepThrough>
         Public Function WriteLineHandler() As Action(Of Object)
             Return Sub(line) Call base.print(line, , Me)
         End Function
 
+        <DebuggerStepThrough>
         Protected Sub redirectError(obj$, msg$, level As MSG_TYPES)
             Call AddMessage({msg, $"{stackFrame.Method.ToString}\[{obj}]"}, level:=MSG_TYPES.ERR)
         End Sub
@@ -374,6 +379,7 @@ Namespace Runtime
                 .DoCall(AddressOf messages.Add)
         End Sub
 
+        <DebuggerStepThrough>
         Public Sub setStackInfo(stackframe As StackFrame)
             _stackFrame = stackframe
         End Sub
