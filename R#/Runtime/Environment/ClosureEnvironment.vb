@@ -57,13 +57,11 @@ Namespace Runtime
 
     Public Class ClosureEnvironment : Inherits Environment
 
-        ReadOnly parent_context As Environment
         ReadOnly closure_context As Environment
 
-        Sub New(parent As Environment, closure_context As Environment)
-            Call MyBase.New(parent, parent.stackFrame, isInherits:=False)
+        Sub New(caller As Environment, closure_context As Environment)
+            Call MyBase.New(caller, caller.stackFrame, isInherits:=False)
 
-            Me.parent_context = parent
             Me.closure_context = closure_context
         End Sub
 
@@ -78,14 +76,10 @@ Namespace Runtime
         ''' is not found in the environment context
         ''' </returns>
         Public Overrides Function FindSymbol(name As String, Optional [inherits] As Boolean = True) As Symbol
-            Dim symbol As Symbol = MyBase.FindSymbol(name, [inherits]:=False)
+            Dim symbol As Symbol = closure_context.FindSymbol(name, [inherits])
 
             If symbol Is Nothing Then
-                symbol = closure_context.FindSymbol(name, [inherits])
-            End If
-
-            If symbol Is Nothing Then
-                symbol = parent_context.FindSymbol(name, [inherits])
+                symbol = MyBase.FindSymbol(name, [inherits]:=False)
             End If
 
             Return symbol

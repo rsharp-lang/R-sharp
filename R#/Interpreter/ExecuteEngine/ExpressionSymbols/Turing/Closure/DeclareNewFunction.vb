@@ -221,7 +221,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 envir = New Environment(caller_context, $"R_invoke${Me.funcName}", isInherits:=False)
             Else
                 runDispose = True
-                envir = New Environment(envir, $"R_invoke${Me.funcName}", isInherits:=False)
+                envir = New ClosureEnvironment(caller_context, envir)
             End If
 
             Dim argumentKeys As String()
@@ -338,19 +338,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' direct invoke of this R# function
         ''' </summary>
         ''' <param name="arguments"></param>
-        ''' <param name="parent"></param>
+        ''' <param name="caller"></param>
         ''' <returns></returns>
-        Public Function Invoke(arguments() As Object, parent As Environment) As Object Implements RFunction.Invoke
+        Public Function Invoke(arguments() As Object, caller As Environment) As Object Implements RFunction.Invoke
             Dim envir As Environment = Me.envir
             Dim argVal As Object
             Dim runDispose As Boolean = False
 
             If envir Is Nothing Then
-                envir = parent
+                envir = caller
             Else
                 runDispose = True
                 ' envir = New Environment(parent, stackFrame, isInherits:=False) & envir
-                envir = New ClosureEnvironment(parent, envir)
+                envir = New ClosureEnvironment(caller, envir)
             End If
 
             For i As Integer = 0 To parameters.Length - 1
