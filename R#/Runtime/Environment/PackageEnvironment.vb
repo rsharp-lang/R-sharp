@@ -94,7 +94,8 @@ Namespace Runtime
                     .stacktrace = Me.stackTrace
                 }
 
-                Call Me.symbols.Add(callable.name, symbol)
+                Me.symbols.Add(callable.name, symbol)
+                Me.globalEnvironment.funcSymbols(callable.name) = symbol
 
                 If TypeOf callable Is DeclareNewFunction Then
                     DirectCast(callable, DeclareNewFunction).Namespace = [namespace].packageName
