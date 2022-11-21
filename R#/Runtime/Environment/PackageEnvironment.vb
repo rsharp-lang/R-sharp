@@ -55,6 +55,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Runtime
@@ -86,11 +87,17 @@ Namespace Runtime
         End Function
 
         Public Sub AddSymbols(symbols As IEnumerable(Of RFunction))
-            For Each symbol As RFunction In symbols
-                Call Me.symbols.Add(symbol.name, symbol)
+            For Each callable As RFunction In symbols
+                Dim symbol As New Symbol(callable) With {
+                    .name = callable.name,
+                    .[readonly] = True,
+                    .stacktrace = Me.stackTrace
+                }
 
-                If TypeOf symbol Is DeclareNewFunction Then
-                    DirectCast(symbol, DeclareNewFunction).Namespace = [namespace].packageName
+                Call Me.symbols.Add(callable.name, symbol)
+
+                If TypeOf callable Is DeclareNewFunction Then
+                    DirectCast(callable, DeclareNewFunction).Namespace = [namespace].packageName
                 End If
             Next
         End Sub
