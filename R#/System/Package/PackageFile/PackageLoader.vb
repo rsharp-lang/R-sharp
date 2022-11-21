@@ -165,6 +165,7 @@ Namespace Development.Package.File
                 .symbols = New Dictionary(Of String, Expression)
             }
 
+            projDir = projDir.GetDirectoryFullPath
             meta = DESCRIPTION.Parse($"{projDir}/DESCRIPTION")
 
             Dim pkg As New PackageNamespace With {

@@ -54,6 +54,7 @@
 #End Region
 
 Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -67,32 +68,40 @@ Namespace Runtime
         Public ReadOnly Property env As GlobalEnvironment
 
         Default Public ReadOnly Property GetNamespace(ref As String) As PackageEnvironment
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return attachedNamespace.TryGetValue(ref)
             End Get
         End Property
 
         Public ReadOnly Property packageNames As String()
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return attachedNamespace.Keys.ToArray
             End Get
         End Property
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(env As GlobalEnvironment)
             Me.env = env
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function hasNamespace(pkgName As String) As Boolean
             Return attachedNamespace.ContainsKey(pkgName)
         End Function
 
         Public Function Add([namespace] As PackageNamespace) As PackageEnvironment
             attachedNamespace([namespace].packageName) = New PackageEnvironment(env, [namespace].packageName, [namespace].libPath)
+            attachedNamespace([namespace].packageName).SetPackage([namespace])
+
             Return attachedNamespace([namespace].packageName)
         End Function
 
         Public Function Add(pkgName$, libdll$) As PackageEnvironment
             attachedNamespace(pkgName) = New PackageEnvironment(env, pkgName, libdll.ParentPath)
+            attachedNamespace(pkgName).SetPackage(New PackageNamespace(pkgName, libdll.ParentPath))
+
             Return attachedNamespace(pkgName)
         End Function
 
@@ -148,6 +157,8 @@ Namespace Runtime
         ''' gets all attached namespace list in json string array format.
         ''' </summary>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
             Return attachedNamespace.Keys.GetJson
         End Function

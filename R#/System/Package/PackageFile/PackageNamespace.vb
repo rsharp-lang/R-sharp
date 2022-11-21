@@ -100,6 +100,18 @@ Namespace Development.Package.File
         Sub New()
         End Sub
 
+        Sub New(pkgName As String, libpath As String)
+            Me.meta = New DESCRIPTION With {.Package = pkgName, .Title = pkgName}
+            Me.libPath = libpath
+            Me.checksum = "n/a"
+            Me.assembly = New Dictionary(Of String, String)
+            Me.dependency = {}
+            Me.symbols = New Dictionary(Of String, String)
+            Me.datafiles = New Dictionary(Of String, NamedValue)
+            Me.runtime = New AssemblyInfo
+            Me.framework = New AssemblyInfo
+        End Sub
+
         ''' <summary>
         ''' 
         ''' </summary>
@@ -118,7 +130,9 @@ Namespace Development.Package.File
             framework = $"{dir}/package/manifest/framework.json".LoadJsonFile(Of AssemblyInfo)
         End Sub
 
-        Public Shared Function Check(dir As String, env As Environment) As Message
+        Public Shared Function Check(ByRef dir As String, env As Environment) As Message
+            dir = dir.GetDirectoryFullPath
+
             If Not dir.DirectoryExists Then Return Internal.debug.stop({$"package '{dir.BaseName}' is not installed!", $"package: {dir.BaseName}"}, env)
             If Not $"{dir}/package/index.json".FileExists Then Return Internal.debug.stop("missing package index file!", env)
             If Not $"{dir}/CHECKSUM".FileExists Then Return Internal.debug.stop("no package checksum data!", env)
