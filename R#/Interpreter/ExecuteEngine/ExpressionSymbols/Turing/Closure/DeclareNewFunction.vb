@@ -221,7 +221,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 envir = New Environment(caller_context, $"R_invoke${Me.funcName}", isInherits:=False)
             Else
                 runDispose = True
-                envir = New ClosureEnvironment(caller_context, envir)
+                envir = New ClosureEnvironment(caller_context, ClosureEnvironment.renameFrame(Me.stackFrame, $"R_invoke${Me.funcName}"), envir)
             End If
 
             Dim argumentKeys As String()
@@ -350,7 +350,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Else
                 runDispose = True
                 ' envir = New Environment(parent, stackFrame, isInherits:=False) & envir
-                envir = New ClosureEnvironment(caller, envir)
+                envir = New ClosureEnvironment(
+                    caller:=caller,
+                    frame:=ClosureEnvironment.renameFrame(Me.stackFrame, $"R_invoke${Me.funcName}"),
+                    closure_context:=envir
+                )
             End If
 
             For i As Integer = 0 To parameters.Length - 1
