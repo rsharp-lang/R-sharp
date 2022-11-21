@@ -1,78 +1,78 @@
 ﻿#Region "Microsoft.VisualBasic::50ecf58371c0182b5f8f4933fd54a441, R-sharp\Library\Rlapack\stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 954
-    '    Code Lines: 494
-    ' Comment Lines: 365
-    '   Blank Lines: 95
-    '     File Size: 39.62 KB
+' Summaries:
 
 
-    ' Module stats
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: matrixDataFrame, PCATable, printMatrix, printTtest, printTwoSampleTTest
-    '     Enum p_adjust_methods
-    ' 
-    '         BH, bonferroni, BY, fdr, hochberg
-    '         holm, hommel, none
-    ' 
-    ' 
-    ' 
-    '     Class PCAcalls
-    ' 
-    '         Properties: labels, pca
-    ' 
-    '         Function: ECDF, p_adjust, prcomp, spline, tabulateMode
-    ' 
-    '  
-    ' 
-    '     Function: aov, asDist, corr, corrTest, dataframeRow
-    '               dist, dnorm, fisher_test, getMatrix, getQuantileLevels
-    '               mantel_test, median, quantile, ttest, varTest
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 954
+'    Code Lines: 494
+' Comment Lines: 365
+'   Blank Lines: 95
+'     File Size: 39.62 KB
+
+
+' Module stats
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: matrixDataFrame, PCATable, printMatrix, printTtest, printTwoSampleTTest
+'     Enum p_adjust_methods
+' 
+'         BH, bonferroni, BY, fdr, hochberg
+'         holm, hommel, none
+' 
+' 
+' 
+'     Class PCAcalls
+' 
+'         Properties: labels, pca
+' 
+'         Function: ECDF, p_adjust, prcomp, spline, tabulateMode
+' 
+'  
+' 
+'     Function: aov, asDist, corr, corrTest, dataframeRow
+'               dist, dnorm, fisher_test, getMatrix, getQuantileLevels
+'               mantel_test, median, quantile, ttest, varTest
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -106,6 +106,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports stdNum = System.Math
+Imports stdVector = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 
 ''' <summary>
 ''' 
@@ -1021,6 +1022,11 @@ Module stats
         Call output.add("summary", anova.ToString)
 
         Return output
+    End Function
+
+    <ExportAPI("z")>
+    Public Function z_score(x As Double()) As Double()
+        Return New stdVector(x).Z.ToArray
     End Function
 End Module
 
