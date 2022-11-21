@@ -394,7 +394,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim symbol As Symbol = envir.FindFunction(funcName)
+            Dim symbol As Symbol = envir.funcSymbols.TryGetValue(funcName)
 
             If symbol Is Nothing Then
                 envir.funcSymbols(funcName) = New Symbol(Me, TypeCodes.closure) With {
@@ -405,6 +405,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 symbol.SetValue(Me, envir)
             End If
 
+            ' initialize of the internal closure environment
+            ' where this function is created
             Me.envir = New Environment(envir, stackFrame, isInherits:=True)
 
             Return Me

@@ -457,7 +457,7 @@ Namespace Runtime
         ''' <returns>
         ''' returns nothing if symbol not found
         ''' </returns>
-        Public Function FindFunction(name As String, Optional [inherits] As Boolean = True) As Symbol
+        Public Overridable Function FindFunction(name As String, Optional [inherits] As Boolean = True) As Symbol
             If (name.First = "["c AndAlso name.Last = "]"c) Then
                 Return globalEnvironment.FindFunction(name.GetStackValue("[", "]"))
             ElseIf name.IndexOf("::") > 0 Then

@@ -65,6 +65,16 @@ Namespace Runtime
             Me.closure_context = closure_context
         End Sub
 
+        Public Overrides Function FindFunction(name As String, Optional [inherits] As Boolean = True) As Symbol
+            Dim symbol As Symbol = closure_context.FindFunction(name, [inherits]:=[inherits])
+
+            If symbol Is Nothing Then
+                symbol = MyBase.FindFunction(name, [inherits])
+            End If
+
+            Return symbol
+        End Function
+
         ''' <summary>
         ''' find in closure internal context at first 
         ''' and then find on the parent context
