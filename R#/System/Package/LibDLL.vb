@@ -102,7 +102,7 @@ Namespace Development.Package
                                                            ByRef searchContext As Generic.List(Of String)) As String
             Dim location As Value(Of String) = ""
 
-            For Each pkg As NamespaceEnvironment In globalEnvironment.attachedNamespace
+            For Each pkg As PackageEnvironment In globalEnvironment.attachedNamespace
                 For Each assemblyDir As String In {$"{pkg.libpath}/assembly", $"{pkg.libpath}/lib/assembly", pkg.libpath}
 #If netcore5 = 1 Then
                     If (location = $"{assemblyDir}/{libDll}.dll").FileExists Then
