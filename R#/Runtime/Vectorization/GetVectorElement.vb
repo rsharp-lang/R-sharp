@@ -166,10 +166,21 @@ Namespace Runtime.Vectorization
         ''' this item should never be nothing?
         ''' </param>
         Sub New(scalar As Object, type As Type)
-            Me.vector = {scalar}
-            Me.[single] = scalar
+            If (Not type.IsArray) AndAlso (scalar IsNot Nothing) AndAlso scalar.GetType.IsArray Then
+                Me.vector = DirectCast(scalar, Array)
+            Else
+                Me.vector = {scalar}
+            End If
+
+            If Me.vector.Length > 0 Then
+                Me.[single] = Me.vector.GetValue(Scan0)
+                Me.Mode = If(Me.vector.Length = 1, VectorTypes.Scalar, VectorTypes.Vector)
+            Else
+                Me.single = Nothing
+                Me.Mode = VectorTypes.None
+            End If
+
             Me.m_get = Getter()
-            Me.Mode = VectorTypes.Scalar
             Me.elementType = type
         End Sub
 

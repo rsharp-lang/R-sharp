@@ -411,55 +411,61 @@ Namespace Runtime.Internal.Invokes
             If test.Length = 0 Then
                 Return {}
             ElseIf test.Length = 1 Then
-                Dim flag As Boolean = test(Scan0)
+                Return ifelseScalar(test(Scan0), yes, no, env)
+            Else
+                Return ifelseVector(test, yes, no, env)
+            End If
+        End Function
 
-                If flag Then
-                    If TypeOf yes Is Expression Then
-                        Return DirectCast(yes, Expression).Evaluate(env)
-                    Else
-                        Return yes
-                    End If
+        Private Function ifelseVector(test As Boolean(), yes As Object, no As Object, env As Environment) As Object
+            Dim result As New List(Of Object)
+
+            If TypeOf yes Is Expression Then
+                yes = DirectCast(yes, Expression).Evaluate(env)
+
+                If Program.isException(yes) Then
+                    Return yes
                 Else
-                    If TypeOf no Is Expression Then
-                        Return DirectCast(no, Expression).Evaluate(env)
-                    Else
-                        Return no
-                    End If
+                    yes = REnv.asVector(Of Object)(yes)
+                End If
+            End If
+            If TypeOf no Is Expression Then
+                no = DirectCast(no, Expression).Evaluate(env)
+
+                If Program.isException(no) Then
+                    Return no
+                Else
+                    no = REnv.asVector(Of Object)(no)
+                End If
+            End If
+
+            Dim getYes As Func(Of Integer, Object) = New GetVectorElement(yes, GetType(Object)).Getter
+            Dim getNo As Func(Of Integer, Object) = New GetVectorElement(no, GetType(Object)).Getter
+
+            For i As Integer = 0 To test.Length - 1
+                If test(i) Then
+                    result.Add(getYes(i))
+                Else
+                    result.Add(getNo(i))
+                End If
+            Next
+
+            Return REnv.TryCastGenericArray(result, env)
+        End Function
+
+        Private Function ifelseScalar(flag As Boolean, yes As Expression, no As Expression, env As Environment) As Object
+            If flag Then
+                If TypeOf yes Is Expression Then
+                    Return DirectCast(yes, Expression).Evaluate(env)
+                Else
+                    Return yes
                 End If
             Else
-                Dim result As New List(Of Object)
-
-                If TypeOf yes Is Expression Then
-                    yes = DirectCast(yes, Expression).Evaluate(env)
-
-                    If Program.isException(yes) Then
-                        Return yes
-                    Else
-                        yes = REnv.asVector(Of Object)(yes)
-                    End If
-                End If
                 If TypeOf no Is Expression Then
-                    no = DirectCast(no, Expression).Evaluate(env)
-
-                    If Program.isException(no) Then
-                        Return no
-                    Else
-                        no = REnv.asVector(Of Object)(no)
-                    End If
+                    Return DirectCast(no, Expression).Evaluate(env)
+                Else
+                    Return no
                 End If
-
-                Dim getYes As Func(Of Integer, Object) = New GetVectorElement(yes, GetType(Object)).Getter
-                Dim getNo As Func(Of Integer, Object) = New GetVectorElement(no, GetType(Object)).Getter
-
-                For i As Integer = 0 To test.Length - 1
-                    If test(i) Then
-                        result.Add(getYes(i))
-                    Else
-                        result.Add(getNo(i))
-                    End If
-                Next
-
-                Return REnv.TryCastGenericArray(result, env)
             End If
         End Function
 
