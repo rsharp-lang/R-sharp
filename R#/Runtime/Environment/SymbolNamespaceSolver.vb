@@ -60,11 +60,13 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Runtime
-    Public Class SymbolNamespaceSolver : Implements IEnumerable(Of NamespaceEnvironment)
 
-        Public ReadOnly Property attachedNamespace As New Dictionary(Of String, NamespaceEnvironment)
+    Public Class SymbolNamespaceSolver : Implements IEnumerable(Of PackageEnvironment)
 
-        Default Public ReadOnly Property GetNamespace(ref As String) As NamespaceEnvironment
+        Public ReadOnly Property attachedNamespace As New Dictionary(Of String, PackageEnvironment)
+        Public ReadOnly Property env As GlobalEnvironment
+
+        Default Public ReadOnly Property GetNamespace(ref As String) As PackageEnvironment
             Get
                 Return attachedNamespace.TryGetValue(ref)
             End Get
@@ -76,17 +78,21 @@ Namespace Runtime
             End Get
         End Property
 
+        Sub New(env As GlobalEnvironment)
+            Me.env = env
+        End Sub
+
         Public Function hasNamespace(pkgName As String) As Boolean
             Return attachedNamespace.ContainsKey(pkgName)
         End Function
 
-        Public Function Add([namespace] As PackageNamespace) As NamespaceEnvironment
-            attachedNamespace([namespace].packageName) = New NamespaceEnvironment([namespace].packageName, [namespace].libPath)
+        Public Function Add([namespace] As PackageNamespace) As PackageEnvironment
+            attachedNamespace([namespace].packageName) = New PackageEnvironment(env, [namespace].packageName, [namespace].libPath)
             Return attachedNamespace([namespace].packageName)
         End Function
 
-        Public Function Add(pkgName$, libdll$) As NamespaceEnvironment
-            attachedNamespace(pkgName) = New NamespaceEnvironment(pkgName, libdll.ParentPath)
+        Public Function Add(pkgName$, libdll$) As PackageEnvironment
+            attachedNamespace(pkgName) = New PackageEnvironment(env, pkgName, libdll.ParentPath)
             Return attachedNamespace(pkgName)
         End Function
 
@@ -94,7 +100,7 @@ Namespace Runtime
             If Not attachedNamespace.ContainsKey([namespace]) Then
                 Return Nothing
             Else
-                Return attachedNamespace([namespace]).symbols.TryGetValue(symbolName)
+                Return attachedNamespace([namespace]).FindFunction(symbolName, [inherits]:=False)?.value
             End If
         End Function
 
@@ -146,9 +152,9 @@ Namespace Runtime
             Return attachedNamespace.Keys.GetJson
         End Function
 
-        Public Iterator Function GetEnumerator() As IEnumerator(Of NamespaceEnvironment) Implements IEnumerable(Of NamespaceEnvironment).GetEnumerator
-            For Each item As NamespaceEnvironment In attachedNamespace.Values
-                Yield item
+        Public Iterator Function GetEnumerator() As IEnumerator(Of PackageEnvironment) Implements IEnumerable(Of PackageEnvironment).GetEnumerator
+            For Each ns As PackageEnvironment In attachedNamespace.Values
+                Yield ns
             Next
         End Function
 

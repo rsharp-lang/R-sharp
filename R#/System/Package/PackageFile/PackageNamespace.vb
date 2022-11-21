@@ -86,6 +86,10 @@ Namespace Development.Package.File
         Public Property runtime As AssemblyInfo
         Public Property framework As AssemblyInfo
 
+        ''' <summary>
+        ''' the namespace of the package library
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property packageName As String
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
