@@ -189,14 +189,14 @@ Module docs
                 !packageDescription = globalEnv.packages _
                     .GetPackageDocuments(any.ToString(package)) _
                     .DoCall(AddressOf markdown.Transform)
-                !apiList = apiList.JoinBy("<br />")
-                !base_dll = DirectCast(package, Development.Package.Package).dllName
+                !apiList = apiList.JoinBy(vbCrLf)
+                !base_dll = "*"
             End With
         Else
             With docs
                 !packageName = DirectCast(package, Development.Package.Package).namespace
                 !packageDescription = DirectCast(package, Development.Package.Package).GetPackageDescription(globalEnv)
-                !apiList = apiList.JoinBy("<br />")
+                !apiList = apiList.JoinBy(vbCrLf)
                 !base_dll = DirectCast(package, Development.Package.Package).dllName
             End With
         End If
@@ -208,25 +208,10 @@ Module docs
     Private Function apiDocsHtml(api As RMethodInfo, apiDocs As ProjectMember) As String
         Dim innerLink As String = $"./{api.namespace}/{api.name}.html"
         Dim docs =
-            <div>
-                <h2 id=<%= api.name %>><a href=<%= innerLink %>><%= api.name %></a></h2>
-                <hr/>
-
-                <p>
-                    {$summary}  
-                
-                    <pre>{$usage}</pre>
-
-                    {$parameters}
-                       
-                    {$value}
-
-                    <span style="font-size:0.9em; display: %s">
-                        <h4>Details</h4>
-                        <blockquote>{$remarks}</blockquote>
-                    </span>
-                </p>
-            </div>
+            <tr>
+                <td id=<%= api.name %>><a href=<%= innerLink %>><%= api.name %></a></td>
+                <td>{$summary}</td>
+            </tr>
         Dim html As New ScriptBuilder(docs)
         Dim displayRemarks As String
         Dim parameters$ = ""
