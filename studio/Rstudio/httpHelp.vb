@@ -21,4 +21,9 @@ Public Module httpHelp
         Return libpath
     End Function
 
+    <ExportAPI("index")>
+    Public Function getHelpIndex(Optional env As Environment = Nothing) As Object
+
+    End Function
+
 End Module
