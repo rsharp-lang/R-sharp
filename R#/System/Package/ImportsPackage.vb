@@ -223,6 +223,13 @@ Namespace Development.Package
                 .ToArray
             Dim masked As New List(Of String)
 
+            ' 20221122 the const keyword is limited to the user code
+            ' which means, user can not set value of a locked symbol
+            ' in script
+            ' but the function declare in a package is no limited via
+            ' this keyword, the imports function can overrides the 
+            ' const keyword.
+
             For Each api As RMethodInfo In Rmethods
                 symbol = [global].FindFunction(api.name)
 
@@ -235,8 +242,11 @@ Namespace Development.Package
 
                     [global].funcSymbols.Add(symbol)
                 Else
+                    ' even the const symbol that could be
                     ' overrides and masked by current package
-                    symbol.SetValue(api, envir)
+                    ' while in the progress of package
+                    ' imports
+                    symbol.SetValue(api, envir, [overrides]:=True)
                     masked += symbol.name
                 End If
             Next
