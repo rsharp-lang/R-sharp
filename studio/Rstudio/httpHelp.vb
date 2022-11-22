@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Microsoft.VisualBasic.Text.Xml
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 
@@ -32,6 +33,19 @@ Public Module httpHelp
 
 
         Return ""
+    End Function
+
+    <ExportAPI("vignettes")>
+    Public Function vignettes(ref As String, Optional env As Environment = Nothing) As Object
+        If ref.IsPattern("(.+[$]){2}.+") Then
+            ' pkg$dll$index
+            Dim t = ref.Split("$"c)
+            Dim path = $"{lib_renv}/{t(0)}/package\vignettes/{t(1)}/{t(2)}.html"
+
+            Return path.ReadAllText
+        Else
+            Return ""
+        End If
     End Function
 
     <ExportAPI("browse")>
@@ -65,15 +79,16 @@ Public Module httpHelp
 
         For Each dir As String In mods
             Dim subIndex = dir.EnumerateFiles("*.html").ToArray
+            Dim modLinks = subIndex.Select(Function(index) $"<a href='/vignettes?ref={pkg}${dir.BaseName}${index.BaseName}'>{index.BaseName}</a>").JoinBy("; ")
             Dim row As XElement =
                 <tr>
                     <td><%= dir.BaseName %></td>
                     <td>
-                        <%= subIndex.Select(Function(index) $"<a href='/vignettes?ref=/{pkg}/{index.BaseName}'>{index.BaseName}</a>").JoinBy("; ") %>
+                        %s
                     </td>
                 </tr>
 
-            Call modules.AppendLine(row.ToString)
+            Call modules.AppendLine(sprintf(row, modLinks))
         Next
 
         With html

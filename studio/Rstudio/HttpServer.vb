@@ -91,7 +91,10 @@ Public Module HttpServer
     ''' <returns></returns>
     <ExportAPI("getUrl")>
     Public Function getUrl(req As HttpRequest) As list
-        Dim url As URL = req.URL
+        Return urlList(req.URL)
+    End Function
+
+    Private Function urlList(url As URL) As list
         Dim queryData As New list(RType.GetRSharpType(GetType(String))) With {
             .slots = url.query _
                 .ToDictionary(Function(q) q.Key,
@@ -111,6 +114,11 @@ Public Module HttpServer
                 {"protocol", url.protocol}
             }
         }
+    End Function
+
+    <ExportAPI("parseUrl")>
+    Public Function parseUrl(url As String) As list
+        Return urlList(New URL(url))
     End Function
 
     ''' <summary>

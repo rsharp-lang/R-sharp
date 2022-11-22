@@ -20,11 +20,12 @@ help::http_load();
 #' @param url the url object that parsed from the
 #'     http request.
 #' 
-const router = function(url) {
+const router = function(url, headers) {
   const relpath as string = trim(url$path, ".");
   const httpHelp = {
 	"/search": any -> help::search(url$query$q),
-	"/browse": any -> help::browse(url$query$pkg)
+	"/browse": any -> help::browse(url$query$pkg),
+	"/vignettes": any -> help::vignettes(url$query$ref)
   };
   
   if ([relpath == ""] || [relpath == "/"]) {
@@ -43,47 +44,38 @@ const router = function(url) {
 	    is_html   = TRUE
 	  );
 	} else {
-	  localfile_router(relpath, url);
+	  localfile_router(relpath, url, headers);
 	}
   }  
 }
 
-const localfile_router = function(relpath, url) {
-	let file as string = `${webContext}/${relpath}.R`;
-	let isMap_temp as boolean = startsWith(url$path, "@temp");
+const localfile_router = function(relpath, url, headers) {
+	const refer = http::parseUrl(headers$Referer);
 
-	if (file.ext(relpath) != "R") {
-	  const tempfile as string = ifelse(
-		isMap_temp, 
-		gsub(relpath, "@temp", getOption("system_tempdir")),
-		`${webContext}/${relpath}`
-	  ); 
-	  
-	  print("non-script file:");
-	  print(tempfile);
+	str(refer);
 
-	  list(
+	if ([file.ext(relpath) == "html"]) {
+
+	}
+	
+	const file as string = `${webContext}/${relpath}.R`;
+	const isMap_temp as boolean = startsWith(url$path, "@temp");
+	const tempfile as string = ifelse(isMap_temp, gsub(relpath, "@temp", getOption("system_tempdir")), `${webContext}/${relpath}`); 
+	
+	print("non-script file:");
+	print(tempfile);
+
+	list(
 		file = normalizePath(tempfile), 
 		is_script = FALSE,
 		is_html   = FALSE
-	  );
-	} else {
-	  if (file.exists(file)) {
-		list(file = normalizePath(file), is_script = TRUE, is_html = FALSE);
-	  } else {
-		list(
-			file = normalizePath(`${webContext}/${relpath}/index.html`), 
-			is_script = FALSE, 
-			is_html = FALSE
-		);
-	  }
-	}
+	);
 }
 
 #' Handle http GET request
 #' 
 const handleHttpGet = function(req, response) {
-  const local = router(getUrl(req));
+  const local = router(getUrl(req), getHeaders(req));
 
   print("request from the browser client:");
   str(getUrl(req));
