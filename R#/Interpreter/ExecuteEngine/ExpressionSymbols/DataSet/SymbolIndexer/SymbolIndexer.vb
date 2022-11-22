@@ -581,10 +581,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         If TypeOf tmp Is list Then
                             Return DirectCast(tmp, list).getByName(CStr(idx))
                         Else
-                            Throw New NotImplementedException
+                            Return Internal.debug.stop(New NotImplementedException, env)
                         End If
                     Else
-                        Throw New NotImplementedException(idx.GetType.FullName)
+                        Return Internal.debug.stop(New NotImplementedException(idx.GetType.FullName), env)
                     End If
                 End If
 
