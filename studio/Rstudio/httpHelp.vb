@@ -1,5 +1,6 @@
 ﻿Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -36,15 +37,18 @@ Public Module httpHelp
     End Function
 
     <ExportAPI("vignettes")>
-    Public Function vignettes(ref As String, Optional env As Environment = Nothing) As Object
-        If ref.IsPattern("(.+[$]){2}.+") Then
+    Public Function vignettes(ref As String, Optional context As String = Nothing, Optional env As Environment = Nothing) As Object
+        If context.StringEmpty Then
             ' pkg$dll$index
-            Dim t = ref.Split("$"c)
+            Dim t = ref.DecodeBase64.LoadJSON(Of String())
             Dim path = $"{lib_renv}/{t(0)}/package\vignettes/{t(1)}/{t(2)}.html"
 
             Return path.ReadAllText
         Else
-            Return ""
+            Dim t = context.DecodeBase64.LoadJSON(Of String())
+            Dim path = $"{lib_renv}/{t(0)}/package\vignettes/{t(1)}/{ref}"
+
+            Return path.ReadAllText
         End If
     End Function
 
@@ -79,7 +83,7 @@ Public Module httpHelp
 
         For Each dir As String In mods
             Dim subIndex = dir.EnumerateFiles("*.html").ToArray
-            Dim modLinks = subIndex.Select(Function(index) $"<a href='/vignettes?ref={pkg}${dir.BaseName}${index.BaseName}'>{index.BaseName}</a>").JoinBy("; ")
+            Dim modLinks = subIndex.Select(Function(index) $"<a href='/vignettes?q={New String() {pkg, dir.BaseName, index.BaseName}.GetJson.Base64String}'>{index.BaseName}</a>").JoinBy("; ")
             Dim row As XElement =
                 <tr>
                     <td><%= dir.BaseName %></td>

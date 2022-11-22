@@ -25,7 +25,7 @@ const router = function(url, headers) {
   const httpHelp = {
 	"/search": any -> help::search(url$query$q),
 	"/browse": any -> help::browse(url$query$pkg),
-	"/vignettes": any -> help::vignettes(url$query$ref)
+	"/vignettes": any -> help::vignettes(url$query$q)
   };
   
   if ([relpath == ""] || [relpath == "/"]) {
@@ -54,22 +54,31 @@ const localfile_router = function(relpath, url, headers) {
 
 	str(refer);
 
-	if ([file.ext(relpath) == "html"]) {
+	if ([file.ext(relpath) == "html"] && [refer$path == "vignettes"]) {
+		list(
+			file = help::vignettes(relpath, context = refer$query$q),
+			is_script = FALSE,
+			is_html   = TRUE
+		);
+	} else {
+		const isMap_temp as boolean = startsWith(url$path, "@temp");
+		const tempfile as string = {
+			if(isMap_temp) {
+				gsub(relpath, "@temp", getOption("system_tempdir"))
+			} else {
+				`${webContext}/${relpath}`;
+			} 
+		}
+		
+		print("non-script file:");
+		print(tempfile);
 
+		list(
+			file = normalizePath(tempfile), 
+			is_script = FALSE,
+			is_html   = FALSE
+		);
 	}
-	
-	const file as string = `${webContext}/${relpath}.R`;
-	const isMap_temp as boolean = startsWith(url$path, "@temp");
-	const tempfile as string = ifelse(isMap_temp, gsub(relpath, "@temp", getOption("system_tempdir")), `${webContext}/${relpath}`); 
-	
-	print("non-script file:");
-	print(tempfile);
-
-	list(
-		file = normalizePath(tempfile), 
-		is_script = FALSE,
-		is_html   = FALSE
-	);
 }
 
 #' Handle http GET request
