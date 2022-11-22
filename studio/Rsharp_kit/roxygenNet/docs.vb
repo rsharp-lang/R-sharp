@@ -91,7 +91,7 @@ Module docs
                        <meta name="generator" content="https://github.com/xieguigang/xDoc"/>
                        <meta name="theme-color" content="#333"/>
                        <meta name="last-update" content=<%= Now.ToString(format:="yyyy-MM-dd") %>/>
-                       <meta name="description" content="A software system aim at Artificial Life system design and analysis."/>
+                       <meta name="description" content="{$packageDescription}"/>
 
                        <meta class="foundation-data-attribute-namespace"/>
                        <meta class="foundation-mq-xxlarge"/>
