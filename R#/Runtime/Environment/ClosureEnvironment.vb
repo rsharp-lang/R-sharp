@@ -56,6 +56,9 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime
 
+    ''' <summary>
+    ''' A local environment of the function closure
+    ''' </summary>
     Public Class ClosureEnvironment : Inherits Environment
 
         ReadOnly closure_context As Environment
@@ -83,8 +86,14 @@ Namespace Runtime
         End Function
 
         Public Overrides Function FindFunction(name As String, Optional [inherits] As Boolean = True) As Symbol
-            Dim symbol As Symbol = closure_context.FindFunction(name, [inherits]:=[inherits])
+            ' found on local environment at first
+            Dim symbol As Symbol = funcSymbols.TryGetValue(name)
 
+            ' then found function in the closure environment
+            If symbol Is Nothing Then
+                symbol = closure_context.FindFunction(name, [inherits]:=[inherits])
+            End If
+            ' at last, found symbol in global
             If symbol Is Nothing Then
                 symbol = MyBase.FindFunction(name, [inherits])
             End If
@@ -103,8 +112,14 @@ Namespace Runtime
         ''' is not found in the environment context
         ''' </returns>
         Public Overrides Function FindSymbol(name As String, Optional [inherits] As Boolean = True) As Symbol
-            Dim symbol As Symbol = closure_context.FindSymbol(name, [inherits])
+            ' found on local environment at first
+            Dim symbol As Symbol = Me.symbols.TryGetValue(name)
 
+            ' then found symbol in the closure environment
+            If symbol Is Nothing Then
+                symbol = closure_context.FindSymbol(name, [inherits])
+            End If
+            ' at last, found symbol in global
             If symbol Is Nothing Then
                 symbol = MyBase.FindSymbol(name, [inherits]:=False)
             End If
