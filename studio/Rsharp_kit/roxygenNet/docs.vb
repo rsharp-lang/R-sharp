@@ -120,7 +120,15 @@ Module docs
                        <p>{$packageDescription}</p>
 
                        <div id="main-wrapper">
-                           {$apiList}
+                           <table>
+                               <thead>
+                                   <tr>
+                                       <th>function</th>
+                                       <th>description</th>
+                                   </tr>
+                               </thead>
+                               <tbody>{$apiList}</tbody>
+                           </table>
                        </div>
                    </body>
                </html>
