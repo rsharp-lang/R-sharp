@@ -213,6 +213,10 @@ Public Module HttpServer
 
     <ExportAPI("pushDownload")>
     Public Sub pushDownload(response As HttpResponse, filename As String)
-        Call response.SendFile(filename)
+        If Not filename.FileExists Then
+            Call response.WriteError(404, "not found!")
+        Else
+            Call response.SendFile(filename)
+        End If
     End Sub
 End Module

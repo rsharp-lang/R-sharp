@@ -11,6 +11,8 @@ const httpPort as integer  = ?"--listen"  || 80;
 [@type "directory"]
 const webContext as string = ?"--wwwroot" || "./";
 
+help::http_load();
+
 # /search?q=keyword
 
 #' Route url as local R script file
