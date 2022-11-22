@@ -23,7 +23,7 @@ Public Module httpHelp
 
     <ExportAPI("index")>
     Public Function getHelpIndex(Optional env As Environment = Nothing) As Object
-
+        Return ""
     End Function
 
 End Module
