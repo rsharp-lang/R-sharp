@@ -23,7 +23,8 @@ help::http_load();
 const router = function(url) {
   const relpath as string = trim(url$path, ".");
   const httpHelp = {
-	"/search": any -> help::search(url$query$q)
+	"/search": any -> help::search(url$query$q),
+	"/browse": any -> help::browse(url$query$pkg)
   };
   
   if ([relpath == ""] || [relpath == "/"]) {

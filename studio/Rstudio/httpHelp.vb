@@ -1,6 +1,7 @@
 ﻿Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
@@ -33,6 +34,59 @@ Public Module httpHelp
         Return ""
     End Function
 
+    <ExportAPI("browse")>
+    Public Function handlePackage(pkg As String, Optional env As Environment = Nothing) As Object
+        Dim libmeta As String = $"{lib_renv}/{pkg}\package\index.json"
+        Dim mods As String() = $"{lib_renv}/{pkg}/package\vignettes".ListDirectory.ToArray
+        Dim meta As DESCRIPTION = libmeta.LoadJSON(Of DESCRIPTION)
+        Dim innerTempl =
+            <html>
+                <head>
+                    <title>{$title}</title>
+                </head>
+                <body>
+                    <h1>
+                        {$title}
+                    </h1>
+                    <hr/>
+                    <p>
+                        Documentation for package ‘{$pkg}’ version {$ver}
+                    </p>
+                    <p>
+                        {$desc}
+                    </p>
+                    <table>
+                        {$modules}
+                    </table>
+                </body>
+            </html>
+        Dim html As New ScriptBuilder(innerTempl)
+        Dim modules As New StringBuilder
+
+        For Each dir As String In mods
+            Dim subIndex = dir.EnumerateFiles("*.html").ToArray
+            Dim row As XElement =
+                <tr>
+                    <td><%= dir.BaseName %></td>
+                    <td>
+                        <%= subIndex.Select(Function(index) $"<a href='/vignettes?ref=/{pkg}/{index.BaseName}'>{index.BaseName}</a>").JoinBy("; ") %>
+                    </td>
+                </tr>
+
+            Call modules.AppendLine(row.ToString)
+        Next
+
+        With html
+            !title = meta.Title
+            !pkg = meta.Package
+            !ver = meta.Version
+            !desc = meta.Description
+            !modules = modules.ToString
+        End With
+
+        Return html.ToString
+    End Function
+
     <ExportAPI("index")>
     Public Function getHelpIndex(Optional env As Environment = Nothing) As Object
         Dim dirs As String() = lib_renv _
@@ -46,7 +100,7 @@ Public Module httpHelp
         For Each pkg As String In dirs
             Dim info As DESCRIPTION = pkg.LoadJsonFile(Of DESCRIPTION)
             Dim line As String = $"<tr>
-<td>{info.Package}</td>
+<td><a href='/browse?pkg={info.Package}'>{info.Package}</a></td>
 <td>{info.Title}</td>
 </tr>"
             Call html.AppendLine(line)
