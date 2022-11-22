@@ -201,6 +201,15 @@ Namespace Runtime.Vectorization
             Next
         End Function
 
+        Public Function Getter(Of T)() As Func(Of Integer, T)
+            Dim gets = Me.Getter
+            Dim castDirect = Function(i) As T
+                                 Return CType(gets(i), T)
+                             End Function
+
+            Return castDirect
+        End Function
+
         Public Function Getter() As Func(Of Integer, Object)
             If isNullOrEmpty OrElse vector.Length = 1 Then
                 Return Function() [single]

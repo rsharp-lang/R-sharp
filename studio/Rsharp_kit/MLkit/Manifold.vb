@@ -123,7 +123,7 @@ Module Manifold
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("umap")>
-    <RApiReturn(GetType(list))>
+    <RApiReturn("labels", "umap")>
     Public Function umapProjection(<RRawVectorArgument> data As Object,
                                    Optional dimension% = 2,
                                    Optional numberOfNeighbors As Integer = 15,
