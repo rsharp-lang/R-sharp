@@ -742,7 +742,7 @@ Namespace Runtime.Internal.Invokes
             ' 直接使用程序包之中的路径文件夹
             Dim attached = env.globalEnvironment.attachedNamespace
 
-            For Each pkgNs As NamespaceEnvironment In package _
+            For Each pkgNs As PackageEnvironment In package _
                 .Where(Function(ns) attached.hasNamespace(ns)) _
                 .Select(Function(ns)
                             Return attached(ns)

@@ -90,7 +90,7 @@ Namespace Runtime
 
         Public ReadOnly Property options As Options
         Public ReadOnly Property packages As PackageManager
-        Public ReadOnly Property attachedNamespace As New SymbolNamespaceSolver
+        Public ReadOnly Property attachedNamespace As SymbolNamespaceSolver
         Public ReadOnly Property hybridsEngine As New HybridsEngine
         Public ReadOnly Property profiler2 As New Stack(Of ProfilerFrames)
 
@@ -167,6 +167,7 @@ Namespace Runtime
             Me.stdout = New RContentOutput(App.StdOut.DefaultValue, env:=OutputEnvironments.Console)
             Me.log4vb_redirect = options.log4vb_redirect
             Me.symbolLanguages = New SymbolLanguageProcessor(Me)
+            Me.attachedNamespace = New SymbolNamespaceSolver(Me)
 
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub

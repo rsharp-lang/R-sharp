@@ -221,7 +221,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 envir = New Environment(caller_context, $"R_invoke${Me.funcName}", isInherits:=False)
             Else
                 runDispose = True
-                envir = New Environment(envir, $"R_invoke${Me.funcName}", isInherits:=False)
+                envir = New ClosureEnvironment(caller_context, ClosureEnvironment.renameFrame(Me.stackFrame, $"R_invoke${Me.funcName}"), envir)
             End If
 
             Dim argumentKeys As String()
@@ -338,19 +338,23 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' direct invoke of this R# function
         ''' </summary>
         ''' <param name="arguments"></param>
-        ''' <param name="parent"></param>
+        ''' <param name="caller"></param>
         ''' <returns></returns>
-        Public Function Invoke(arguments() As Object, parent As Environment) As Object Implements RFunction.Invoke
+        Public Function Invoke(arguments() As Object, caller As Environment) As Object Implements RFunction.Invoke
             Dim envir As Environment = Me.envir
             Dim argVal As Object
             Dim runDispose As Boolean = False
 
             If envir Is Nothing Then
-                envir = parent
+                envir = caller
             Else
                 runDispose = True
                 ' envir = New Environment(parent, stackFrame, isInherits:=False) & envir
-                envir = New ClosureEnvironment(parent, envir)
+                envir = New ClosureEnvironment(
+                    caller:=caller,
+                    frame:=ClosureEnvironment.renameFrame(Me.stackFrame, $"R_invoke${Me.funcName}"),
+                    closure_context:=envir
+                )
             End If
 
             For i As Integer = 0 To parameters.Length - 1
@@ -394,7 +398,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim symbol As Symbol = envir.FindFunction(funcName)
+            Dim symbol As Symbol = envir.funcSymbols.TryGetValue(funcName)
 
             If symbol Is Nothing Then
                 envir.funcSymbols(funcName) = New Symbol(Me, TypeCodes.closure) With {
@@ -405,6 +409,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 symbol.SetValue(Me, envir)
             End If
 
+            ' initialize of the internal closure environment
+            ' where this function is created
             Me.envir = New Environment(envir, stackFrame, isInherits:=True)
 
             Return Me
