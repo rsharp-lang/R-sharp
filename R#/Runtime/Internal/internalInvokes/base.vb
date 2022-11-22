@@ -658,7 +658,10 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("cbind")>
-        Public Function cbind(<RListObjectArgument> x As list, env As Environment) As dataframe
+        Public Function cbind(<RListObjectArgument> x As list,
+                              Optional strict As Boolean = False,
+                              Optional env As Environment = Nothing) As dataframe
+
             Dim nameList As String() = x.getNames
             Dim d As dataframe = x.getByName(nameList(Scan0))
 
@@ -691,20 +694,83 @@ Namespace Runtime.Internal.Invokes
                 ElseIf TypeOf col Is vector Then
                     Call safeAddColumn(d, nameKey, DirectCast(col, vector).data)
                 ElseIf TypeOf col Is dataframe Then
-                    Dim colnames = d.columns.Keys.ToArray
                     Dim append As dataframe = DirectCast(col, dataframe)
-                    Dim oldColNames = append.columns.Keys.ToArray
-                    Dim newNames = colnames.JoinIterates(oldColNames).uniqueNames
 
-                    For i As Integer = 0 To append.columns.Count - 1
-                        d.columns.Add(newNames(i + colnames.Length), append.columns(oldColNames(i)))
-                    Next
+                    If Not strict Then
+                        Dim colnames = d.columns.Keys.ToArray
+                        Dim oldColNames = append.columns.Keys.ToArray
+                        Dim newNames = colnames.JoinIterates(oldColNames).uniqueNames
+
+                        ' dataframe will be merged directly
+                        For i As Integer = 0 To append.columns.Count - 1
+                            d.columns.Add(newNames(i + colnames.Length), append.columns(oldColNames(i)))
+                        Next
+                    Else
+                        d = strictColumnAppend(d, append, env)
+                    End If
                 Else
                     Call safeAddColumn(d, nameKey, {col})
                 End If
             Next
 
             Return d
+        End Function
+
+        Private Function strictColumnAppend(df As dataframe, y As dataframe, env As Environment) As dataframe
+            Dim df_names = df.colnames
+            Dim y_names = y.colnames
+            Dim union_names = df_names.JoinIterates(y_names).uniqueNames.ToArray
+            Dim df_rows = df.forEachRow(df_names).ToDictionary
+            Dim y_rows = y.forEachRow(y_names).ToArray
+
+            For Each row In y_rows
+                Dim a As Object()
+                Dim b As Object() = row.value
+                Dim v As Object() = New Object(union_names.Length - 1) {}
+
+                If df_rows.ContainsKey(row.name) Then
+                    a = df_rows(row.name).value
+                Else
+                    a = New Object(df_names.Length - 1) {}
+                End If
+
+                Call Array.ConstrainedCopy(a, Scan0, v, Scan0, a.Length)
+                Call Array.ConstrainedCopy(b, Scan0, v, a.Length, b.Length)
+
+                df_rows(row.name) = New NamedCollection(Of Object) With {
+                    .name = row.name,
+                    .value = v.ToArray
+                }
+            Next
+
+            For Each name As String In df_rows.Keys.ToArray
+                If df_rows(name).Length <> union_names.Length Then
+                    ' append null
+                    Dim v = New Object(union_names.Length - 1) {}
+                    Array.ConstrainedCopy(df_rows(name).value, Scan0, v, Scan0, df_rows(name).Length)
+                    df_rows(name) = New NamedCollection(Of Object) With {
+                        .name = name,
+                        .value = v
+                    }
+                End If
+            Next
+
+            ' cast back to dataframe
+            Dim union_data As New dataframe With {
+                .columns = New Dictionary(Of String, Array),
+                .rownames = df_rows.Keys.ToArray
+            }
+
+            For i As Integer = 0 To union_names.Length - 1
+                Dim key As String = union_names(i)
+                Dim idx As Integer = i
+                Dim v As Object() = union_data.rownames.Select(Function(n) df_rows(n).value(idx)).ToArray
+                Dim vec As Array = REnv.TryCastGenericArray(v, env)
+
+                Call union_data.columns.Add(key, vec)
+            Next
+
+            Return union_data
         End Function
 
         Private Sub safeAddColumn(d As dataframe, namekey As String, col As Array)
