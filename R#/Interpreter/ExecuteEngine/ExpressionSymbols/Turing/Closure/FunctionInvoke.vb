@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::94121ff0ae39c8db84b5168c7149fb70, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 434
-    '    Code Lines: 266
-    ' Comment Lines: 119
-    '   Blank Lines: 49
-    '     File Size: 17.42 KB
+' Summaries:
 
 
-    '     Class FunctionInvoke
-    ' 
-    '         Properties: [namespace], expressionName, funcName, parameters, stackFrame
-    '                     type
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: allIsValueAssign, CheckInvoke, doInvokeFuncVar, EnumerateInvokedParameters, Evaluate
-    '                   (+2 Overloads) GetFunctionVar, getFuncVar, HandleResult, invokeRInternal, runOptions
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 434
+'    Code Lines: 266
+' Comment Lines: 119
+'   Blank Lines: 49
+'     File Size: 17.42 KB
+
+
+'     Class FunctionInvoke
+' 
+'         Properties: [namespace], expressionName, funcName, parameters, stackFrame
+'                     type
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: allIsValueAssign, CheckInvoke, doInvokeFuncVar, EnumerateInvokedParameters, Evaluate
+'                   (+2 Overloads) GetFunctionVar, getFuncVar, HandleResult, invokeRInternal, runOptions
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -137,8 +137,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <param name="parameters"></param>
         Sub New(funcVar As Expression, stackFrame As StackFrame, ParamArray parameters As Expression())
             Me.funcName = funcVar
-            Me.parameters = parameters.AsList
-            Me.stackFrame = stackFrame
+            Me.parameters = parameters.ToArray
+            Me.stackFrame = New StackFrame With {
+                .File = stackFrame.File,
+                .Line = stackFrame.Line,
+                .Method = New Method With {
+                    .[Module] = stackFrame.Method.Module,
+                    .[Namespace] = stackFrame.Method.Namespace,
+                    .Method = $"{stackFrame.Method.Method}({ Mid(parameters.JoinBy(", ").TrimNewLine, 1, 32)}...)"
+                }
+            }
         End Sub
 
         Public Iterator Function EnumerateInvokedParameters() As IEnumerable(Of Expression)
@@ -188,7 +196,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     result = Regexp.Matches(target, parameters(Scan0), env)
                 ElseIf target Is Nothing AndAlso TypeOf funcName Is Literal Then
                     ' 可能是一个系统的内置函数
-                    result = invokeRInternal(DirectCast(funcName, Literal).ValueStr, envir)
+                    result = invokeRInternal(DirectCast(funcName, Literal).ValueStr, env)
                 Else
                     result = doInvokeFuncVar(target, env)
                 End If

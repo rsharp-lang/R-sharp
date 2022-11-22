@@ -210,8 +210,18 @@ Namespace Runtime.Components
             Me.m_val = value
         End Sub
 
-        Public Function SetValue(x As Object, env As Environment) As Message
-            If [readonly] Then
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="env"></param>
+        ''' <param name="overrides">
+        ''' set this parameter to value TRUE to apply for the 
+        ''' script symbol imports
+        ''' </param>
+        ''' <returns></returns>
+        Public Function SetValue(x As Object, env As Environment, Optional [overrides] As Boolean = False) As Message
+            If [readonly] AndAlso Not [overrides] Then
                 Return Internal.debug.stop($"cannot change value of locked binding for '{name}'", env)
             Else
                 m_val = x

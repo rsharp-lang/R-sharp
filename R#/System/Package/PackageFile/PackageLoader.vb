@@ -70,6 +70,27 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Development.Package.File
 
+    ''' <summary>
+    ''' Load R package folder
+    ''' 
+    ''' 20221122
+    '''
+    ''' just load the R source file at here, the
+    ''' package module inside the .NET dll file its
+    ''' loading procedure is lazy, load a specific dll 
+    ''' file until the ``imports`` expression is 
+    ''' evaluated in the R script file
+    ''' </summary>
+    ''' <remarks>
+    ''' the package loading procedure between the <see cref="Hotload(String, GlobalEnvironment, ByRef DESCRIPTION)"/> and
+    ''' <see cref="LoadPackage(String, GlobalEnvironment)"/> is similar to each other, but have some significatent 
+    ''' difference between each other:
+    ''' 
+    ''' 1. hotload function handling the source project folder, all of the R source is the original text file
+    ''' 2. loadpackage function handling the package installed folder, all of the R source is serialized as binary data file
+    ''' 3. the directory folder structure is also different between the source project folder and the package library folder
+    ''' 
+    ''' </remarks>
     Public Module PackageLoader2
 
         ''' <summary>
@@ -165,6 +186,7 @@ Namespace Development.Package.File
                 .symbols = New Dictionary(Of String, Expression)
             }
 
+            projDir = projDir.GetDirectoryFullPath
             meta = DESCRIPTION.Parse($"{projDir}/DESCRIPTION")
 
             Dim pkg As New PackageNamespace With {
@@ -173,6 +195,7 @@ Namespace Development.Package.File
                 .assembly = FindAllDllFiles(projDir)
             }
             Dim loading As New List(Of Expression)
+            Dim pkgEnv As PackageEnvironment = env.attachedNamespace.Add(pkg)
 
             Call Console.WriteLine($"R# package '{meta.Package}' hot load:")
 
@@ -204,18 +227,18 @@ Namespace Development.Package.File
                                    End Function)
 
                 If symbol.Key <> ".onLoad" Then
-                    Call symbol.Value.Evaluate(env)
+                    Call symbol.Value.Evaluate(pkgEnv)
                 End If
             Next
 
             ' 2. load dependency
-            If Not ([error] = env.loadDependency(pkg)) Is Nothing Then
+            If Not ([error] = pkgEnv.loadDependency(pkg)) Is Nothing Then
                 Return [error]
             End If
 
             ' 3. run '.onLoad'
             If Not onload Is Nothing Then
-                Dim result = onload.Invoke(env, params:={})
+                Dim result = onload.Invoke(pkgEnv, params:={})
 
                 If Program.isException(result) Then
                     Return result
@@ -228,9 +251,7 @@ Namespace Development.Package.File
                   Where type.ImplementInterface(Of RFunction)
                   Select DirectCast(symbol, RFunction)) _
                      .DoCall(Sub(list)
-                                 Call env.attachedNamespace _
-                                    .Add(pkg) _
-                                    .AddSymbols(list)
+                                 Call pkgEnv.AddSymbols(list)
                              End Sub)
 
             Return Nothing
@@ -252,7 +273,7 @@ Namespace Development.Package.File
             Dim debugEcho As Boolean = env.debugMode
             Dim symbolExpression As Expression
             Dim symbols As New List(Of RFunction)
-            Dim pkgEnv As NamespaceEnvironment
+            Dim pkgEnv As PackageEnvironment = env.attachedNamespace.Add([namespace])
 
             If debugEcho Then
                 Call Console.WriteLine($"load package from directory: '{dir}'.")
@@ -265,7 +286,7 @@ Namespace Development.Package.File
                         .Read(bin) _
                         .Parse(desc:=[namespace].meta)
 
-                    Call symbolExpression.Evaluate(env)
+                    Call symbolExpression.Evaluate(pkgEnv)
 
                     If symbolExpression.GetType.ImplementInterface(Of RFunction) Then
                         Call symbols.Add(symbolExpression)
@@ -274,17 +295,16 @@ Namespace Development.Package.File
             Next
 
             ' 2. load dependency
-            If Not (result = env.loadDependency(pkg:=[namespace])) Is Nothing Then
+            If Not (result = pkgEnv.loadDependency(pkg:=[namespace])) Is Nothing Then
                 Return result
             End If
 
             ' 3. run '.onLoad'
-            If Not (result = env.callOnLoad(pkg:=[namespace])) Is Nothing Then
+            If Not (result = pkgEnv.callOnLoad(pkg:=[namespace])) Is Nothing Then
                 Return result
             End If
 
-            pkgEnv = env.attachedNamespace.Add([namespace])
-            pkgEnv.AddSymbols(symbols)
+            Call pkgEnv.AddSymbols(symbols)
 
             Return Nothing
         End Function
@@ -295,7 +315,7 @@ Namespace Development.Package.File
         ''' <param name="env"></param>
         ''' <param name="pkg"></param>
         <Extension>
-        Private Function loadDependency(env As GlobalEnvironment, pkg As PackageNamespace) As Message
+        Private Function loadDependency(env As PackageEnvironment, pkg As PackageNamespace) As Message
             Dim result As Object
 
             ' require(library) at first for mount library directory
@@ -308,7 +328,7 @@ Namespace Development.Package.File
 
                 If dependency.library.StringEmpty Then
                     For Each pkgName As String In dependency.packages
-                        Call env.LoadLibrary(pkgName)
+                        Call env.globalEnvironment.LoadLibrary(pkgName)
                     Next
                 Else
                     Dim dllFile As String = pkg.FindAssemblyPath(dependency.library)
@@ -331,7 +351,7 @@ Namespace Development.Package.File
         End Function
 
         <Extension>
-        Private Function callOnLoad(env As GlobalEnvironment, pkg As PackageNamespace) As Message
+        Private Function callOnLoad(env As PackageEnvironment, pkg As PackageNamespace) As Message
             Dim onLoad As String = $"{pkg.libPath}/.onload"
             Dim result As Object = Nothing
 
