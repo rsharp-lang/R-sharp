@@ -113,17 +113,9 @@ Module docs
                        <h1>{$packageName}</h1>
                        <hr/>
                        <p>
-                           <pre>
-                               <code>
-                                   <span style="color: blue;">imports</span>
-                                   <span>&amp;nbsp;</span>
-                                   <span style="color: brown">"{$packageName}"</span>
-                                   <span>&amp;nbsp;</span>
-                                   <span style="color: blue;">from</span>
-                                   <span>&amp;nbsp;</span>
-                                   <span style="color: brown">"{$base_dll}"</span>
-                               </code>
-                           </pre>
+                           <code>
+                               <span style="color: blue;">imports</span><span style="color: brown"> "{$packageName}"</span><span style="color: blue;"> from</span><span style="color: brown"> "{$base_dll}"</span>
+                           </code>
                        </p>
                        <p>{$packageDescription}</p>
 
@@ -143,18 +135,18 @@ Module docs
             .DoCall(AddressOf ImportsPackage.GetAllApi) _
             .ToArray
         Dim docs As New ScriptBuilder("")
-        Dim dllName As String = Nothing
+        Dim dllName As String = "*"
 
         If apis.Length > 0 Then
             dllName = apis(Scan0).Value.DeclaringType.Assembly.Location.BaseName
         End If
 
         With docs
+            !base_dll = dllName
             !packageName = package
             !packageDescription = globalEnv.packages _
                 .GetPackageDocuments(package) _
                 .DoCall(AddressOf markdown.Transform)
-            !base_dll = dllName
         End With
 
         Return docs.ToString
