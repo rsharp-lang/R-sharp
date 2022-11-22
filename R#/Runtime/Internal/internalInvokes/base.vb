@@ -665,10 +665,17 @@ Namespace Runtime.Internal.Invokes
             Dim nameList As String() = x.getNames
             Dim d As dataframe = x.getByName(nameList(Scan0))
 
-            d = New dataframe With {
-                .columns = New Dictionary(Of String, Array)(d.columns),
-                .rownames = d.rownames
-            }
+            If d Is Nothing Then
+                d = New dataframe With {
+                    .columns = New Dictionary(Of String, Array),
+                    .rownames = {}
+                }
+            Else
+                d = New dataframe With {
+                    .columns = New Dictionary(Of String, Array)(d.columns),
+                    .rownames = d.rownames
+                }
+            End If
 
             For Each nameKey As String In nameList.Skip(1)
                 Dim col As Object = x.getByName(nameKey)
@@ -717,6 +724,10 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Private Function strictColumnAppend(df As dataframe, y As dataframe, env As Environment) As dataframe
+            If y Is Nothing Then
+                Return df
+            End If
+
             Dim df_names = df.colnames
             Dim y_names = y.colnames
             Dim union_names = df_names.JoinIterates(y_names).uniqueNames.ToArray
