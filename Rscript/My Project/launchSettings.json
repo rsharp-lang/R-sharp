@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=33361 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host",
-      "workingDirectory": "D:\\mzkit\\dist\\bin\\Rstudio\\bin"
+      "commandLineArgs": "--build /src ../ ",
+      "workingDirectory": "D:\\GCModeller\\src\\workbench\\pkg\\.pkg"
     }
   }
 }

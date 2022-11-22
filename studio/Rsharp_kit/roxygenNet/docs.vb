@@ -91,7 +91,7 @@ Module docs
                        <meta name="generator" content="https://github.com/xieguigang/xDoc"/>
                        <meta name="theme-color" content="#333"/>
                        <meta name="last-update" content=<%= Now.ToString(format:="yyyy-MM-dd") %>/>
-                       <meta name="description" content="A software system aim at Artificial Life system design and analysis."/>
+                       <meta name="description" content="{$packageDescription}"/>
 
                        <meta class="foundation-data-attribute-namespace"/>
                        <meta class="foundation-mq-xxlarge"/>
@@ -112,10 +112,23 @@ Module docs
 
                        <h1>{$packageName}</h1>
                        <hr/>
+                       <p>
+                           <code>
+                               <span style="color: blue;">imports</span><span style="color: brown"> "{$packageName}"</span><span style="color: blue;"> from</span><span style="color: brown"> "{$base_dll}"</span>
+                           </code>
+                       </p>
                        <p>{$packageDescription}</p>
 
                        <div id="main-wrapper">
-                           {$apiList}
+                           <table>
+                               <thead>
+                                   <tr>
+                                       <th>function</th>
+                                       <th>description</th>
+                                   </tr>
+                               </thead>
+                               <tbody>{$apiList}</tbody>
+                           </table>
                        </div>
                    </body>
                </html>
@@ -130,13 +143,18 @@ Module docs
             .DoCall(AddressOf ImportsPackage.GetAllApi) _
             .ToArray
         Dim docs As New ScriptBuilder("")
+        Dim dllName As String = "*"
+
+        If apis.Length > 0 Then
+            dllName = apis(Scan0).Value.DeclaringType.Assembly.Location.BaseName
+        End If
 
         With docs
+            !base_dll = dllName
             !packageName = package
             !packageDescription = globalEnv.packages _
                 .GetPackageDocuments(package) _
                 .DoCall(AddressOf markdown.Transform)
-            ' !apiList = apiList.JoinBy("<br />")
         End With
 
         Return docs.ToString
@@ -149,10 +167,14 @@ Module docs
     ''' <param name="globalEnv"></param>
     ''' <returns></returns>
     ''' <remarks>
-    ''' This method create a single html help page file for generates pdf help manual file.
+    ''' This method create a single html help page file for generates 
+    ''' pdf help manual file.
     ''' </remarks>
     <ExportAPI("makehtml.docs")>
-    Public Function makeHtmlDocs(package As Object, Optional template$ = Nothing, Optional globalEnv As GlobalEnvironment = Nothing) As String
+    Public Function makeHtmlDocs(package As Object,
+                                 Optional template$ = Nothing,
+                                 Optional globalEnv As GlobalEnvironment = Nothing) As String
+
         Dim apis = rdocumentation.getPkgApisList(package, globalEnv)
 
         Static defaultTemplate As [Default](Of String) = "<!DOCTYPE html>" & getDefaultTemplate().ToString
@@ -175,13 +197,15 @@ Module docs
                 !packageDescription = globalEnv.packages _
                     .GetPackageDocuments(any.ToString(package)) _
                     .DoCall(AddressOf markdown.Transform)
-                !apiList = apiList.JoinBy("<br />")
+                !apiList = apiList.JoinBy(vbCrLf)
+                !base_dll = "*"
             End With
         Else
             With docs
                 !packageName = DirectCast(package, Development.Package.Package).namespace
                 !packageDescription = DirectCast(package, Development.Package.Package).GetPackageDescription(globalEnv)
-                !apiList = apiList.JoinBy("<br />")
+                !apiList = apiList.JoinBy(vbCrLf)
+                !base_dll = DirectCast(package, Development.Package.Package).dllName
             End With
         End If
 
@@ -192,25 +216,10 @@ Module docs
     Private Function apiDocsHtml(api As RMethodInfo, apiDocs As ProjectMember) As String
         Dim innerLink As String = $"./{api.namespace}/{api.name}.html"
         Dim docs =
-            <div>
-                <h2 id=<%= api.name %>><a href=<%= innerLink %>><%= api.name %></a></h2>
-                <hr/>
-
-                <p>
-                    {$summary}  
-                
-                    <pre>{$usage}</pre>
-
-                    {$parameters}
-                       
-                    {$value}
-
-                    <span style="font-size:0.9em; display: %s">
-                        <h4>Details</h4>
-                        <blockquote>{$remarks}</blockquote>
-                    </span>
-                </p>
-            </div>
+            <tr>
+                <td id=<%= api.name %>><a href=<%= innerLink %>><%= api.name %></a></td>
+                <td>{$summary}</td>
+            </tr>
         Dim html As New ScriptBuilder(docs)
         Dim displayRemarks As String
         Dim parameters$ = ""
