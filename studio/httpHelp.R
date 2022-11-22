@@ -26,7 +26,7 @@ const router = function(url) {
 	"/search": any -> help::search(url$query$q)
   };
   
-  if (relpath == "") {
+  if ([relpath == ""] || [relpath == "/"]) {
     list(
       file = help::index(),
       is_script = FALSE,
