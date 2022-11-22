@@ -70,6 +70,27 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Development.Package.File
 
+    ''' <summary>
+    ''' Load R package folder
+    ''' 
+    ''' 20221122
+    '''
+    ''' just load the R source file at here, the
+    ''' package module inside the .NET dll file its
+    ''' loading procedure is lazy, load a specific dll 
+    ''' file until the ``imports`` expression is 
+    ''' evaluated in the R script file
+    ''' </summary>
+    ''' <remarks>
+    ''' the package loading procedure between the <see cref="Hotload(String, GlobalEnvironment, ByRef DESCRIPTION)"/> and
+    ''' <see cref="LoadPackage(String, GlobalEnvironment)"/> is similar to each other, but have some significatent 
+    ''' difference between each other:
+    ''' 
+    ''' 1. hotload function handling the source project folder, all of the R source is the original text file
+    ''' 2. loadpackage function handling the package installed folder, all of the R source is serialized as binary data file
+    ''' 3. the directory folder structure is also different between the source project folder and the package library folder
+    ''' 
+    ''' </remarks>
     Public Module PackageLoader2
 
         ''' <summary>
