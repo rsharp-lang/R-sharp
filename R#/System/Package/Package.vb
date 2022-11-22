@@ -119,6 +119,12 @@ Namespace Development.Package
             End Get
         End Property
 
+        Public ReadOnly Property dllName As String
+            Get
+                Return package.Assembly.Location.BaseName
+            End Get
+        End Property
+
         Dim assemblyInfoCache As AssemblyInfo
 
         Sub New(info As PackageAttribute, package As Type)

@@ -190,12 +190,14 @@ Module docs
                     .GetPackageDocuments(any.ToString(package)) _
                     .DoCall(AddressOf markdown.Transform)
                 !apiList = apiList.JoinBy("<br />")
+                !base_dll = DirectCast(package, Development.Package.Package).dllName
             End With
         Else
             With docs
                 !packageName = DirectCast(package, Development.Package.Package).namespace
                 !packageDescription = DirectCast(package, Development.Package.Package).GetPackageDescription(globalEnv)
                 !apiList = apiList.JoinBy("<br />")
+                !base_dll = DirectCast(package, Development.Package.Package).dllName
             End With
         End If
 
