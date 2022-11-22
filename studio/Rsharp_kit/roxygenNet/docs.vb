@@ -112,6 +112,19 @@ Module docs
 
                        <h1>{$packageName}</h1>
                        <hr/>
+                       <p>
+                           <pre>
+                               <code>
+                                   <span style="color: blue;">imports</span>
+                                   <span>&amp;nbsp;</span>
+                                   <span style="color: brown">"{$packageName}"</span>
+                                   <span>&amp;nbsp;</span>
+                                   <span style="color: blue;">from</span>
+                                   <span>&amp;nbsp;</span>
+                                   <span style="color: brown">"{$base_dll}"</span>
+                               </code>
+                           </pre>
+                       </p>
                        <p>{$packageDescription}</p>
 
                        <div id="main-wrapper">
@@ -130,13 +143,18 @@ Module docs
             .DoCall(AddressOf ImportsPackage.GetAllApi) _
             .ToArray
         Dim docs As New ScriptBuilder("")
+        Dim dllName As String = Nothing
+
+        If apis.Length > 0 Then
+            dllName = apis(Scan0).Value.DeclaringType.Assembly.Location.BaseName
+        End If
 
         With docs
             !packageName = package
             !packageDescription = globalEnv.packages _
                 .GetPackageDocuments(package) _
                 .DoCall(AddressOf markdown.Transform)
-            ' !apiList = apiList.JoinBy("<br />")
+            !base_dll = dllName
         End With
 
         Return docs.ToString
@@ -149,10 +167,14 @@ Module docs
     ''' <param name="globalEnv"></param>
     ''' <returns></returns>
     ''' <remarks>
-    ''' This method create a single html help page file for generates pdf help manual file.
+    ''' This method create a single html help page file for generates 
+    ''' pdf help manual file.
     ''' </remarks>
     <ExportAPI("makehtml.docs")>
-    Public Function makeHtmlDocs(package As Object, Optional template$ = Nothing, Optional globalEnv As GlobalEnvironment = Nothing) As String
+    Public Function makeHtmlDocs(package As Object,
+                                 Optional template$ = Nothing,
+                                 Optional globalEnv As GlobalEnvironment = Nothing) As String
+
         Dim apis = rdocumentation.getPkgApisList(package, globalEnv)
 
         Static defaultTemplate As [Default](Of String) = "<!DOCTYPE html>" & getDefaultTemplate().ToString

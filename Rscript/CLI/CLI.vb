@@ -87,7 +87,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         End If
 
         ' build .net5 assembly via dotnet msbuild command?
-#If netcore5 = 1 Then
+#If NETCOREAPP Then
         If Not skipSourceBuild Then
             Call runMSBuild(src)
         Else
