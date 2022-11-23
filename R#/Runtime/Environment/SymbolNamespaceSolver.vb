@@ -55,9 +55,11 @@
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Runtime
@@ -110,8 +112,15 @@ Namespace Runtime
                 Return Nothing
             Else
                 Dim ns As PackageEnvironment = attachedNamespace([namespace])
-                Dim symbol = ns.FindFunction(symbolName, [inherits]:=True)
+                Dim func As Symbol = ns.funcSymbols.TryGetValue(symbolName)
 
+                If func IsNot Nothing AndAlso func.value.GetType.ImplementInterface(Of INamespaceReferenceSymbol) Then
+                    If DirectCast(func.value, INamespaceReferenceSymbol).namespace = [namespace] Then
+                        Return func.value
+                    End If
+                End If
+
+                Dim symbol As Symbol = ns.FindFunction(symbolName, [inherits]:=True)
                 Return symbol?.value
             End If
         End Function
@@ -163,7 +172,7 @@ Namespace Runtime
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
-            Return attachedNamespace.Keys.GetJson
+            Return $"{attachedNamespace.Count} namespace is attached: " & attachedNamespace.Keys.ToArray.GetJson
         End Function
 
         Public Iterator Function GetEnumerator() As IEnumerator(Of PackageEnvironment) Implements IEnumerable(Of PackageEnvironment).GetEnumerator

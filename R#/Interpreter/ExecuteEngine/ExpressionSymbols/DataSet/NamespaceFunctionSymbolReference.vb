@@ -148,9 +148,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
 
             If pkg Is Nothing Then
-                funcName = env.FindFunction(funcName)
+                Dim nsText As String
 
-                If funcName Is Nothing OrElse DirectCast(DirectCast(funcName, Symbol).value, INamespaceReferenceSymbol).namespace <> [namespace] Then
+                funcName = env.FindFunction(funcName)
+                nsText = DirectCast(DirectCast(funcName, Symbol).value, INamespaceReferenceSymbol).namespace
+
+                If funcName Is Nothing OrElse nsText <> [namespace] Then
                     Return Internal.debug.stop({
                         $"we can not found any namespace called: '{[namespace]}'!",
                         $"namespace: {[namespace]}",
