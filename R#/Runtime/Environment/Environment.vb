@@ -434,7 +434,7 @@ Namespace Runtime
             Dim tokens As String() = Microsoft.VisualBasic.Strings.Split(name, "::")
             Dim pkgName As String = tokens(Scan0)
             Dim symbolName As String = tokens(1)
-            Dim attaches = globalEnvironment.attachedNamespace
+            Dim attaches As SymbolNamespaceSolver = globalEnvironment.attachedNamespace
             Dim funcSymbol As RFunction = attaches.FindSymbol(pkgName, symbolName)
 
             If funcSymbol Is Nothing Then

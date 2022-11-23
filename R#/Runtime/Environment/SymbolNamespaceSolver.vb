@@ -109,7 +109,10 @@ Namespace Runtime
             If Not attachedNamespace.ContainsKey([namespace]) Then
                 Return Nothing
             Else
-                Return attachedNamespace([namespace]).FindFunction(symbolName, [inherits]:=False)?.value
+                Dim ns As PackageEnvironment = attachedNamespace([namespace])
+                Dim symbol = ns.FindFunction(symbolName, [inherits]:=True)
+
+                Return symbol?.value
             End If
         End Function
 

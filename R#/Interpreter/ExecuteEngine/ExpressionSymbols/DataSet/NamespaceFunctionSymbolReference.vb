@@ -151,7 +151,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 funcName = env.FindFunction(funcName)
 
                 If funcName Is Nothing OrElse DirectCast(DirectCast(funcName, Symbol).value, INamespaceReferenceSymbol).namespace <> [namespace] Then
-                    Return Internal.debug.stop({$"we can not found any namespace called: '{[namespace]}'!", $"namespace: {[namespace]}"}, env)
+                    Return Internal.debug.stop({
+                        $"we can not found any namespace called: '{[namespace]}'!",
+                        $"namespace: {[namespace]}",
+                        $"function symbol: {funcNameSymbol}<{funcName}>"
+                    }, env)
                 End If
 
                 Return DirectCast(funcName, Symbol).value
