@@ -660,6 +660,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("cbind")>
         Public Function cbind(<RListObjectArgument> x As list,
                               Optional strict As Boolean = False,
+                              Optional [default] As Object = Nothing,
                               Optional env As Environment = Nothing) As dataframe
 
             Dim nameList As String() = x.getNames
@@ -713,7 +714,7 @@ Namespace Runtime.Internal.Invokes
                             d.columns.Add(newNames(i + colnames.Length), append.columns(oldColNames(i)))
                         Next
                     Else
-                        d = strictColumnAppend(d, append, env)
+                        d = strictColumnAppend(d, append, [default], env)
                     End If
                 Else
                     Call safeAddColumn(d, nameKey, {col})
@@ -723,7 +724,7 @@ Namespace Runtime.Internal.Invokes
             Return d
         End Function
 
-        Private Function strictColumnAppend(df As dataframe, y As dataframe, env As Environment) As dataframe
+        Private Function strictColumnAppend(df As dataframe, y As dataframe, [default] As Object, env As Environment) As dataframe
             If y Is Nothing Then
                 Return df
             End If
@@ -737,12 +738,12 @@ Namespace Runtime.Internal.Invokes
             For Each row In y_rows
                 Dim a As Object()
                 Dim b As Object() = row.value
-                Dim v As Object() = New Object(union_names.Length - 1) {}
+                Dim v As Object() = Replicate([default], union_names.Length).ToArray
 
                 If df_rows.ContainsKey(row.name) Then
                     a = df_rows(row.name).value
                 Else
-                    a = New Object(df_names.Length - 1) {}
+                    a = Replicate([default], df_names.Length).ToArray
                 End If
 
                 Call Array.ConstrainedCopy(a, Scan0, v, Scan0, a.Length)
@@ -757,7 +758,7 @@ Namespace Runtime.Internal.Invokes
             For Each name As String In df_rows.Keys.ToArray
                 If df_rows(name).Length <> union_names.Length Then
                     ' append null
-                    Dim v = New Object(union_names.Length - 1) {}
+                    Dim v = Replicate([default], union_names.Length).ToArray
                     Array.ConstrainedCopy(df_rows(name).value, Scan0, v, Scan0, df_rows(name).Length)
                     df_rows(name) = New NamedCollection(Of Object) With {
                         .name = name,
@@ -775,7 +776,11 @@ Namespace Runtime.Internal.Invokes
             For i As Integer = 0 To union_names.Length - 1
                 Dim key As String = union_names(i)
                 Dim idx As Integer = i
-                Dim v As Object() = union_data.rownames.Select(Function(n) df_rows(n).value(idx)).ToArray
+                Dim v As Object() = union_data.rownames _
+                    .Select(Function(n)
+                                Return df_rows(n).value(idx)
+                            End Function) _
+                    .ToArray
                 Dim vec As Array = REnv.TryCastGenericArray(v, env)
 
                 Call union_data.columns.Add(key, vec)
