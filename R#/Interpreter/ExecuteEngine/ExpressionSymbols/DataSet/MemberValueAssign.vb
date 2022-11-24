@@ -95,7 +95,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim list As RNameIndex = DirectCast(firstVal, RNameIndex)
             Dim result As Object = Me.value.Evaluate(envir)
 
-            If TypeOf list Is list AndAlso names.Length = 1 Then
+            If Program.isException(result) Then
+                Return result
+            ElseIf TypeOf list Is list AndAlso names.Length = 1 Then
                 Return list.setByName(names(Scan0), result, envir)
             Else
                 Return list.setByName(names, REnv.asVector(Of Object)(result), envir)
