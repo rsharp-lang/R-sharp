@@ -144,6 +144,12 @@ Public Module roxygen
         Return New MarkdownHTML().Transform(text:=markdown)
     End Function
 
+    ''' <summary>
+    ''' generate unix man page and the markdown index page file
+    ''' </summary>
+    ''' <param name="pkg"></param>
+    ''' <param name="output"></param>
+    ''' <param name="env"></param>
     <ExportAPI("unixMan")>
     Public Sub unixMan(pkg As pkg, output As String, Optional env As Environment = Nothing)
         Dim xmldocs As AnnotationDocs = env _

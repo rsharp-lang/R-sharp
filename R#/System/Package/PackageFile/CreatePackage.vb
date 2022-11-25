@@ -344,6 +344,8 @@ Namespace Development.Package.File
                     Call Console.WriteLine($"         -> load: {pkg.info.Namespace}")
 
                     Try
+                        ' create unix man page
+                        ' and then create html documents
                         Call REngine.Invoke("unixMan", pkg, out, REngine.globalEnvir)
                         Call REngine.Invoke("REnv::Rdocuments", pkg, outputHtml, REngine.globalEnvir)
                     Catch ex As Exception
