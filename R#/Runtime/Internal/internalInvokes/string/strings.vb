@@ -173,7 +173,11 @@ Namespace Runtime.Internal.Invokes
 
             Return strings _
                 .Select(Function(str)
-                            Return str.Trim(chars)
+                            If str.StringEmpty(whitespaceAsEmpty:=False) Then
+                                Return ""
+                            Else
+                                Return str.Trim(chars)
+                            End If
                         End Function) _
                 .ToArray
         End Function

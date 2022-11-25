@@ -141,7 +141,7 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <typeparam name="T"></typeparam>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>direct cast</returns>
         Public Iterator Function populates(Of T)(env As Environment) As IEnumerable(Of T)
             Dim cast As T
 
