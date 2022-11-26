@@ -69,6 +69,11 @@ Namespace Runtime
         Public ReadOnly Property attachedNamespace As New Dictionary(Of String, PackageEnvironment)
         Public ReadOnly Property env As GlobalEnvironment
 
+        ''' <summary>
+        ''' an overrloads of [func_name => [namespace => func]]
+        ''' </summary>
+        Friend ReadOnly funcOverloads As New Dictionary(Of String, Dictionary(Of String, RFunction))
+
         Default Public ReadOnly Property GetNamespace(ref As String) As PackageEnvironment
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
@@ -106,7 +111,9 @@ Namespace Runtime
         ''' </remarks>
         Public Function Add([namespace] As PackageNamespace) As PackageEnvironment
             attachedNamespace([namespace].packageName) = New PackageEnvironment(env, [namespace].packageName, [namespace].libPath)
-            attachedNamespace([namespace].packageName).SetPackage([namespace])
+            attachedNamespace([namespace].packageName) _
+                .SetPackage([namespace]) _
+                .Attach(Me)
 
             Return attachedNamespace([namespace].packageName)
         End Function
@@ -128,7 +135,9 @@ Namespace Runtime
                 pkg = New PackageEnvironment(env, pkgName, libdll.ParentPath)
 
                 attachedNamespace(pkgName) = pkg
-                attachedNamespace(pkgName).SetPackage(New PackageNamespace(pkgName, libdll.ParentPath))
+                attachedNamespace(pkgName) _
+                    .SetPackage(New PackageNamespace(pkgName, libdll.ParentPath)) _
+                    .Attach(Me)
             End If
 
             Return pkg

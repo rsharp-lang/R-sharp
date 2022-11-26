@@ -65,10 +65,13 @@ Namespace Runtime
         Public ReadOnly Property [namespace] As New PackageNamespace
         Public ReadOnly Property libpath As String
 
+        Dim m_symbolSolver As SymbolNamespaceSolver
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(globalEnv As GlobalEnvironment, packageName As String, libpath As String)
             Call MyBase.New(globalEnv, pkgFrame(packageName), isInherits:=False)
 
+            ' config for load .NET assembly module files
             Me.libpath = libpath
         End Sub
 
@@ -100,8 +103,19 @@ Namespace Runtime
                 If TypeOf callable Is DeclareNewFunction Then
                     DirectCast(callable, DeclareNewFunction).Namespace = [namespace].packageName
                 End If
+
+                If Not m_symbolSolver.funcOverloads.ContainsKey(callable.name) Then
+                    m_symbolSolver.funcOverloads.Add(callable.name, New Dictionary(Of String, RFunction))
+                End If
+
+                m_symbolSolver.funcOverloads(callable.name)([namespace].packageName) = callable
             Next
         End Sub
+
+        Public Function Attach(solver As SymbolNamespaceSolver) As PackageEnvironment
+            Me.m_symbolSolver = solver
+            Return Me
+        End Function
 
         Public Function SetPackage(pkg As PackageNamespace) As PackageEnvironment
             [_namespace] = pkg
