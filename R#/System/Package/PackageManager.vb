@@ -152,12 +152,14 @@ Namespace Development.Package
         End Function
 
         ''' <summary>
-        ''' If the package is not exists or load package failure
-        ''' then this function returns nothing
+        ''' Find a dll module package
         ''' </summary>
         ''' <param name="packageName"></param>
         ''' <param name="exception"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' If the package is not exists or load package failure
+        ''' then this function returns nothing
+        ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function FindPackage(packageName As String, ByRef exception As Exception) As Package
             Return pkgDb.FindPackage(packageName, exception)
