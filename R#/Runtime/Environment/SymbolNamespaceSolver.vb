@@ -146,6 +146,8 @@ Namespace Runtime
         Public Function FindSymbol(namespace$, symbolName$) As RFunction
             If Not attachedNamespace.ContainsKey([namespace]) Then
                 Return Nothing
+            ElseIf funcOverloads.ContainsKey(symbolName) AndAlso funcOverloads(symbolName).ContainsKey([namespace]) Then
+                Return funcOverloads(symbolName)([namespace])
             Else
                 Dim ns As PackageEnvironment = attachedNamespace([namespace])
                 Dim func As Symbol = ns.funcSymbols.TryGetValue(symbolName)
