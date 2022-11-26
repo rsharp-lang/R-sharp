@@ -98,6 +98,12 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="[namespace]"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' 20221126 due to the reason of zip/source folder package 
+        ''' its directory path is required for loading the internal 
+        ''' .NET assembly file, so we needs to overrides the old
+        ''' package module at here?
+        ''' </remarks>
         Public Function Add([namespace] As PackageNamespace) As PackageEnvironment
             attachedNamespace([namespace].packageName) = New PackageEnvironment(env, [namespace].packageName, [namespace].libPath)
             attachedNamespace([namespace].packageName).SetPackage([namespace])
@@ -116,10 +122,16 @@ Namespace Runtime
         ''' </param>
         ''' <returns></returns>
         Public Function Add(pkgName$, libdll$) As PackageEnvironment
-            attachedNamespace(pkgName) = New PackageEnvironment(env, pkgName, libdll.ParentPath)
-            attachedNamespace(pkgName).SetPackage(New PackageNamespace(pkgName, libdll.ParentPath))
+            Dim pkg As PackageEnvironment = attachedNamespace.TryGetValue(pkgName)
 
-            Return attachedNamespace(pkgName)
+            If pkg Is Nothing Then
+                pkg = New PackageEnvironment(env, pkgName, libdll.ParentPath)
+
+                attachedNamespace(pkgName) = pkg
+                attachedNamespace(pkgName).SetPackage(New PackageNamespace(pkgName, libdll.ParentPath))
+            End If
+
+            Return pkg
         End Function
 
         Public Function FindSymbol(namespace$, symbolName$) As RFunction

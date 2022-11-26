@@ -94,7 +94,7 @@ Namespace Runtime
                     .stacktrace = Me.stackTrace
                 }
 
-                Me.symbols.Add(callable.name, symbol)
+                Me.symbols(callable.name) = symbol
                 Me.globalEnvironment.funcSymbols(callable.name) = symbol
 
                 If TypeOf callable Is DeclareNewFunction Then
