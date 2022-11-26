@@ -93,6 +93,11 @@ Namespace Runtime
             Return attachedNamespace.ContainsKey(pkgName)
         End Function
 
+        ''' <summary>
+        ''' attach a R# zip/project folder source package
+        ''' </summary>
+        ''' <param name="[namespace]"></param>
+        ''' <returns></returns>
         Public Function Add([namespace] As PackageNamespace) As PackageEnvironment
             attachedNamespace([namespace].packageName) = New PackageEnvironment(env, [namespace].packageName, [namespace].libPath)
             attachedNamespace([namespace].packageName).SetPackage([namespace])
@@ -100,6 +105,16 @@ Namespace Runtime
             Return attachedNamespace([namespace].packageName)
         End Function
 
+        ''' <summary>
+        ''' add a package module from a given .NET assembly file
+        ''' </summary>
+        ''' <param name="pkgName">
+        ''' the name of the package module inside a .NET dll file
+        ''' </param>
+        ''' <param name="libdll">
+        ''' the file path of the target .NET dll file
+        ''' </param>
+        ''' <returns></returns>
         Public Function Add(pkgName$, libdll$) As PackageEnvironment
             attachedNamespace(pkgName) = New PackageEnvironment(env, pkgName, libdll.ParentPath)
             attachedNamespace(pkgName).SetPackage(New PackageNamespace(pkgName, libdll.ParentPath))
