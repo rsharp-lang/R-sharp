@@ -92,8 +92,8 @@ Namespace Development.Package.File
         Public Property dataSymbols As Dictionary(Of String, String)
         Public Property loading As Dependency()
         Public Property assembly As AssemblyPack
-        Public Property unixman As Dictionary(Of String, String)
-        Public Property vignettes As Dictionary(Of String, String)
+        Public Property unixman As List(Of String)
+        Public Property vignettes As List(Of String)
         Public Property pkg_dir As String
 
         Public Overrides Function ToString() As String
@@ -323,7 +323,7 @@ Namespace Development.Package.File
             Dim relpath As String
             Dim pkg_dir As String = Me.pkg_dir.GetDirectoryFullPath
 
-            For Each man As String In unixman.Values
+            For Each man As String In unixman
                 text = man.ReadAllText
                 manIndex(man.BaseName) = md5.GetMd5Hash(text)
                 checksum = checksum & manIndex(man.BaseName)
@@ -334,7 +334,8 @@ Namespace Development.Package.File
                 End Using
             Next
 
-            For Each man As String In vignettes.Values
+            ' for each html file path
+            For Each man As String In vignettes
                 text = man.ReadAllText
                 htmlIndex(man.BaseName) = md5.GetMd5Hash(text)
                 checksum = checksum & htmlIndex(man.BaseName)

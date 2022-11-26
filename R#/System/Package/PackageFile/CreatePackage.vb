@@ -282,8 +282,8 @@ Namespace Development.Package.File
             Dim REngine As New RInterpreter
             Dim plugin As String = LibDLL.GetDllFile("roxygenNet.dll", REngine.globalEnvir)
 
-            file.unixman = New Dictionary(Of String, String)
-            file.vignettes = New Dictionary(Of String, String)
+            file.unixman = New List(Of String)
+            file.vignettes = New List(Of String)
 
             If Not plugin.FileExists Then
                 Return Nothing
@@ -344,6 +344,8 @@ Namespace Development.Package.File
                     Call Console.WriteLine($"         -> load: {pkg.info.Namespace}")
 
                     Try
+                        ' create unix man page
+                        ' and then create html documents
                         Call REngine.Invoke("unixMan", pkg, out, REngine.globalEnvir)
                         Call REngine.Invoke("REnv::Rdocuments", pkg, outputHtml, REngine.globalEnvir)
                     Catch ex As Exception
@@ -355,24 +357,18 @@ Namespace Development.Package.File
             If Not err Is Nothing Then
                 Return err
             Else
-                Dim symbolName As String
-
                 Call Console.WriteLine("        " & "[*] Loading unix man page index...")
 
                 For Each unixMan As String In ls - l - r - "*.1" <= $"{package_dir}/man"
-                    symbolName = unixMan.BaseName
-                    file.unixman(symbolName) = unixMan
-
-                    Call Console.WriteLine("        " & symbolName)
+                    Call file.unixman.Add(unixMan)
+                    Call Console.WriteLine("        " & unixMan.BaseName)
                 Next
 
                 Call Console.WriteLine("        " & "[*] Loading html vignettes index...")
 
                 For Each htmlHelp As String In ls - l - r - "*.html" <= $"{package_dir}/vignettes"
-                    symbolName = htmlHelp.BaseName
-                    file.vignettes(symbolName) = htmlHelp
-
-                    Call Console.WriteLine("        " & symbolName)
+                    Call file.vignettes.Add(htmlHelp)
+                    Call Console.WriteLine("        " & htmlHelp.BaseName)
                 Next
             End If
 

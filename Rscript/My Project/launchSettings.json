@@ -3,7 +3,7 @@
     "Rscript-netcore5": {
       "commandName": "Project",
       "commandLineArgs": "--build /src ../ ",
-      "workingDirectory": "D:\\GCModeller\\src\\workbench\\pkg\\.pkg"
+      "workingDirectory": "\\GCModeller\\src\\workbench\\pkg\\.pkg"
     }
   }
 }
