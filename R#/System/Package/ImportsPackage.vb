@@ -1,58 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::42b993fa2fa425a66c8b19cb3f8b41ab, R-sharp\R#\System\Package\ImportsPackage.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 267
-    '    Code Lines: 194
-    ' Comment Lines: 35
-    '   Blank Lines: 38
-    '     File Size: 10.88 KB
+' Summaries:
 
 
-    '     Module ImportsPackage
-    ' 
-    '         Function: (+2 Overloads) GetAllApi, getFlags, ImportsStatic, ImportsStaticInternalImpl, ParseAnyFlagName
-    '                   TryParse
-    ' 
-    '         Sub: ImportsInstance, ImportsSymbolLanguages, runMain
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 267
+'    Code Lines: 194
+' Comment Lines: 35
+'   Blank Lines: 38
+'     File Size: 10.88 KB
+
+
+'     Module ImportsPackage
+' 
+'         Function: (+2 Overloads) GetAllApi, getFlags, ImportsStatic, ImportsStaticInternalImpl, ParseAnyFlagName
+'                   TryParse
+' 
+'         Sub: ImportsInstance, ImportsSymbolLanguages, runMain
+' 
+' 
+' /********************************************************************************/
 
 #End Region
-
 #If netcore5 = 0 Then
 Imports System.ComponentModel.Composition
 #Else
@@ -60,6 +59,7 @@ Imports System.Composition
 #End If
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports System.Runtime.InteropServices.JavaScript.JSType
 #If netcore5 = 1 Then
 Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
 #End If
@@ -150,7 +150,8 @@ Namespace Development.Package
             End If
         End Function
 
-        Private Function TryParse(method As MethodInfo, strict As Boolean) As NamedValue(Of MethodInfo)
+        <Extension>
+        Public Function GetExportName(method As MethodInfo, strict As Boolean) As String
             Dim flag = method.GetCustomAttribute(Of ExportAPIAttribute)
             Dim name As String
             Dim notFound As Boolean = False
@@ -163,6 +164,18 @@ Namespace Development.Package
                 End If
             Else
                 name = flag.Name
+            End If
+
+            Return name
+        End Function
+
+        Private Function TryParse(method As MethodInfo, strict As Boolean) As NamedValue(Of MethodInfo)
+            Dim name As String = method.GetExportName(strict)
+
+            ' name will be empty when strict parameter is TRUE
+            ' andalso the export attribute is not found
+            If name Is Nothing Then
+                Return Nothing
             End If
 
             Return New NamedValue(Of MethodInfo) With {

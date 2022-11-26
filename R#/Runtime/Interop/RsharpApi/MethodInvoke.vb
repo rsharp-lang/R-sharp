@@ -54,6 +54,7 @@
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Development.Package
 Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime.Interop
@@ -69,6 +70,12 @@ Namespace Runtime.Interop
             End Get
         End Property
 
+        Public ReadOnly Property moduleNamespace As String
+            Get
+                Return method.DeclaringType.NamespaceEntry(nullWrapper:=True).Namespace
+            End Get
+        End Property
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Function Invoke(parameters As Object()) As Object
@@ -77,7 +84,15 @@ Namespace Runtime.Interop
 
         <DebuggerStepThrough>
         Public Overrides Function ToString() As String
-            Return $"{any.ToString(target, "NULL")}::{method.ToString}"
+            Dim obj As String = If(isStatic, moduleNamespace, any.ToString(target, "NULL"))
+            Dim exportName As String = ImportsPackage.GetExportName(method, strict:=False)
+            Dim params = method _
+                .GetParameters _
+                .Select(Function(p) If(p.IsOptional, $"[{p.Name}]", p.Name)) _
+                .ToArray
+            Dim ftoString As String = $"{exportName}({params.JoinBy(", ")})"
+
+            Return $"{obj}::{ftoString}"
         End Function
 
     End Class
