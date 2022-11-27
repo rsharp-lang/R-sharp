@@ -1102,23 +1102,36 @@ Namespace Runtime.Internal.Invokes
             If con Is Nothing Then
                 Return Internal.debug.stop("the required connection can not be nothing!", env)
             ElseIf TypeOf con Is Stream Then
-                With DirectCast(con, Stream)
-                    Call .Flush()
-                    Call .Close()
-                    Call .Dispose()
-                End With
+                Try
+                    With DirectCast(con, Stream)
+                        Call .Flush()
+                        Call .Close()
+                        Call .Dispose()
+                    End With
+                Catch ex As Exception
+                    Call env.AddMessage(ex.Message)
+                End Try
 
                 Return True
             ElseIf TypeOf con Is StreamWriter Then
-                With DirectCast(con, StreamWriter)
-                    Call .Flush()
-                    Call .Close()
-                    Call .Dispose()
-                End With
+                Try
+                    With DirectCast(con, StreamWriter)
+                        Call .Flush()
+                        Call .Close()
+                        Call .Dispose()
+                    End With
+                Catch ex As Exception
+                    Call env.AddMessage(ex.Message)
+                End Try
 
                 Return True
             ElseIf con.GetType.ImplementInterface(GetType(IDisposable)) Then
-                Call DirectCast(con, IDisposable).Dispose()
+                Try
+                    Call DirectCast(con, IDisposable).Dispose()
+                Catch ex As Exception
+                    Call env.AddMessage(ex.Message)
+                End Try
+
                 Return True
             Else
                 Return Internal.debug.stop(Message.InCompatibleType(GetType(Stream), con.GetType, env), env)
