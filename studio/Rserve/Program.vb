@@ -66,10 +66,11 @@ Module Program
 
     <ExportAPI("--listen")>
     <Description("Start a local static web server for hosting statics web page files")>
-    <Usage("--listen /wwwroot <directory_path> [/port <http_port, default=80>]")>
+    <Usage("--listen /wwwroot <directory_path> [--attach <other_directory_path> /port <http_port, default=80>]")>
     Public Function listen(args As CommandLine) As Integer
         Dim wwwroot As String = args <= "/wwwroot"
         Dim port As Integer = args("/port") Or 80
+        Dim attach As String = args("--attach")
         Dim localfs As New WebFileSystemListener() With {
             .fs = New FileSystem(wwwroot)
         }
@@ -77,6 +78,12 @@ Module Program
             app:=AddressOf localfs.WebHandler,
             port:=port
         )
+
+        If Not attach.StringEmpty Then
+            Call localfs.fs _
+                .AttachFolder(attach) _
+                .ToArray
+        End If
 
         If Not Tcp.PortIsAvailable(port) Then
             Call Console.WriteLine($"local tcp port(={port}) is in used!")
