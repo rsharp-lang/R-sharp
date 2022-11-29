@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src ../ ",
-      "workingDirectory": "\\GCModeller\\src\\workbench\\pkg\\.pkg"
+      "commandLineArgs": "--build /src ../ /save \"./biodeepMSMS.zip\" --skip-src-build",
+      "workingDirectory": "D:\\biodeep\\biodeep_pipeline\\biodeepMSMS_v5\\.pkg"
     }
   }
 }
