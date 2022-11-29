@@ -104,7 +104,7 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="array"></param>
         ''' <returns></returns>
-        Public Function MeasureRealElementType(array As Array) As Type
+        Public Function MeasureRealElementType(array As Array, Optional defaultType As Type = Nothing) As Type
             Dim arrayType As Type = array.GetType
             Dim x As Object
             Dim types As New List(Of Type)
@@ -128,7 +128,7 @@ Namespace Runtime
             Next
 
             If types.Count = 0 Then
-                Return GetType(Void)
+                Return If(defaultType, GetType(Void))
             ElseIf types.Count = 1 Then
                 Return types(Scan0)
             Else

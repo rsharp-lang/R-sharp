@@ -934,24 +934,34 @@ RE0:
                         .Select(Function(obj) CStr(obj).ParseDouble) _
                         .ToArray
                 Else
-                    Return data _
-                        .populateNumeric(env) _
-                        .ToArray
+                    Dim dbls As Double() = New Double(data.Length - 1) {}
+                    Dim i As Integer = 0
+
+                    For Each item As Object In data.populateNumeric(env)
+                        If Program.isException(item) Then
+                            Return item
+                        Else
+                            dbls(i) = CDbl(item)
+                            i += 1
+                        End If
+                    Next
+
+                    Return dbls
                 End If
             End If
         End Function
 
         <Extension>
-        Private Iterator Function populateNumeric(data As IEnumerable(Of Object), env As Environment) As IEnumerable(Of Double)
+        Private Iterator Function populateNumeric(data As IEnumerable(Of Object), env As Environment) As IEnumerable(Of Object)
             For Each item As Object In data
                 If item Is Nothing Then
-                    Yield 0
+                    Yield 0.0
                 ElseIf TypeOf item Is String Then
                     Yield Val(DirectCast(item, String))
                 ElseIf TypeOf item Is Double Then
                     Yield DirectCast(item, Double)
                 Else
-                    Yield DirectCast(RCType.CTypeDynamic(item, GetType(Double), env), Double)
+                    Yield RCType.CTypeDynamic(item, GetType(Double), env)
                 End If
             Next
         End Function
