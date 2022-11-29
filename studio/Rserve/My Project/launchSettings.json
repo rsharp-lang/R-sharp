@@ -2,7 +2,7 @@
   "profiles": {
     "Rserve.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--listen /wwwroot \"D:\\mzkit\\src\\mzkit\\webview\" /port 80"
+      "commandLineArgs": "--listen /wwwroot \"E:\\mzkit\\src\\mzkit\\webview\" --attach \"F:\\TEMP\\mzkit_win32\\c69ea0-Slide3\" /port 6003"
     }
   }
 }
