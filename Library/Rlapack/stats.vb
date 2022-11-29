@@ -789,7 +789,9 @@ Module stats
                           Optional mu# = 0,
                           Optional paired As Boolean = False,
                           Optional var_equal As Boolean = False,
-                          Optional conf_level# = 0.95) As Object
+                          Optional conf_level# = 0.95,
+                          Optional t As Object = Nothing,
+                          Optional env As Environment = Nothing) As Object
 
         Dim test As Object
 

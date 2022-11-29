@@ -99,6 +99,16 @@ Namespace Runtime.Components
             End Get
         End Property
 
+        Public ReadOnly Property isFormula As Boolean
+            Get
+                If value Is Nothing Then
+                    Return False
+                Else
+                    Return TypeOf value Is FormulaExpression
+                End If
+            End Get
+        End Property
+
         ''' <summary>
         ''' 
         ''' </summary>
