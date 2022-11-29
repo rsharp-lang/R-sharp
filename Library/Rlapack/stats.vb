@@ -796,7 +796,7 @@ Module stats
                           Optional env As Environment = Nothing) As Object
 
         If Not t Is Nothing AndAlso TypeOf x Is Rdataframe Then
-            Dim symbols As String() = FormulaExpression.GetSymbols(t)
+            Dim symbols As String() = FormulaExpression.GetSymbols(t.formula)
             Dim v As New Dictionary(Of String, Double())
             Dim table As Rdataframe = x
             Dim ref As Symbol

@@ -4,3 +4,11 @@ x = [0.89,0.6964,0.997079,0.7979];
 
 p = t.test(m, [0,0,0,0], t ~ a + b + c + x);
 
+print([p]::Pvalue);
+
+print([p]::TestValue);
+
+print("mean of x:");
+print([p]::MeanX);
+
+
