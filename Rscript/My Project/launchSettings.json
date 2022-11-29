@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src ../ ",
+      "commandLineArgs": "--build /src \"D:\\biodeep\\biodeepdb_v3\\biodeepdb_v3\\biodeepdb_v3.Rproj\" /save \"C:\\Users\\lipidsearch\\Documents\\MSI\\packages\\biodeepdbkit.zip\" --skip-src-build",
       "workingDirectory": "\\GCModeller\\src\\workbench\\pkg\\.pkg"
     }
   }
