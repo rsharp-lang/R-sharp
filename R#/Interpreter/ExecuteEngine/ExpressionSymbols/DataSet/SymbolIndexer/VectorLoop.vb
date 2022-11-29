@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::af7224f716ea69a88abf7b46ab4b0603, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\VectorLoop.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 80
-    '    Code Lines: 49
-    ' Comment Lines: 17
-    '   Blank Lines: 14
-    '     File Size: 2.68 KB
+' Summaries:
 
 
-    '     Class VectorLoop
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 80
+'    Code Lines: 49
+' Comment Lines: 17
+'   Blank Lines: 14
+'     File Size: 2.68 KB
+
+
+'     Class VectorLoop
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -117,16 +117,55 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
             Dim memberName As String = any.ToString(REnv.single(member))
 
-            If Not TypeOf data Is list Then
-                Return Message.InCompatibleType(GetType(list), data.GetType, envir)
+            If TypeOf data Is list Then
+                Return getListVector(DirectCast(data, list), memberName, envir)
+            ElseIf TypeOf data Is vector Then
+                data = DirectCast(data, vector).data
             End If
 
-            Dim datalist As list = DirectCast(data, list)
-            Dim vec As Object() = New Object(datalist.length - 1) {}
-            Dim source As Object() = datalist.data.ToArray
+            If data Is Nothing Then
+                Return Nothing
+            ElseIf data.GetType.IsArray Then
+                Return getVectorList(data, memberName, envir)
+            End If
+
+            Return Message.InCompatibleType(GetType(list), data.GetType, envir)
+        End Function
+
+        Private Shared Function getVectorList(data As Array, memberName As String, envir As Environment)
+            Dim vec As Object() = New Object(data.Length - 1) {}
+            Dim item As Object
 
             For i As Integer = 0 To vec.Length - 1
-                vec(i) = DirectCast(source(i), list).getByName(memberName)
+                item = data(i)
+
+                If item Is Nothing Then
+                    vec(i) = Nothing
+                ElseIf TypeOf item Is list Then
+                    vec(i) = DirectCast(item, list).getByName(memberName)
+                Else
+                    Return Message.InCompatibleType(GetType(list), item.GetType, envir)
+                End If
+            Next
+
+            Return REnv.TryCastGenericArray(vec, env:=envir)
+        End Function
+
+        Private Shared Function getListVector(datalist As list, memberName As String, envir As Environment)
+            Dim vec As Object() = New Object(datalist.length - 1) {}
+            Dim source As Object() = datalist.data.ToArray
+            Dim item As Object
+
+            For i As Integer = 0 To vec.Length - 1
+                item = source(i)
+
+                If item Is Nothing Then
+                    vec(i) = Nothing
+                ElseIf TypeOf item Is list Then
+                    vec(i) = DirectCast(source(i), list).getByName(memberName)
+                Else
+                    Return Message.InCompatibleType(GetType(list), item.GetType, envir)
+                End If
             Next
 
             Return REnv.TryCastGenericArray(vec, env:=envir)
