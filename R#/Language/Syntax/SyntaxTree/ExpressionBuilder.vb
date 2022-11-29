@@ -506,7 +506,22 @@ Binary:
                     .ToArray
 
                 If target.Length = 1 AndAlso target(Scan0).name = TokenType.comma Then
-                    Return New SyntaxResult(SyntaxError.CreateError(opts, New Exception("invalid syntax!")))
+                    Dim singleToken = target(Scan0)
+
+                    Select Case singleToken.name
+                        Case TokenType.comma,
+                             TokenType.delimiter,
+                             TokenType.iif,
+                             TokenType.newLine,
+                             TokenType.open,
+                             TokenType.operator,
+                             TokenType.terminator,
+                             TokenType.sequence,
+                             TokenType.close,
+                             TokenType.annotation
+
+                            Return New SyntaxResult(SyntaxError.CreateError(opts, New Exception("invalid syntax!")))
+                    End Select
                 End If
 
                 ' the exception is always the last one
