@@ -79,6 +79,7 @@
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
@@ -97,6 +98,7 @@ Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.ANOVA
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.FishersExact
 Imports Microsoft.VisualBasic.Math.Statistics.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
@@ -790,25 +792,63 @@ Module stats
                           Optional paired As Boolean = False,
                           Optional var_equal As Boolean = False,
                           Optional conf_level# = 0.95,
-                          Optional t As Object = Nothing,
+                          Optional t As FormulaExpression = Nothing,
                           Optional env As Environment = Nothing) As Object
 
-        Dim test As Object
+        If Not t Is Nothing AndAlso TypeOf x Is Rdataframe Then
+            Dim symbols As String() = FormulaExpression.GetSymbols(t)
+            Dim v As New Dictionary(Of String, Double())
+            Dim table As Rdataframe = x
+            Dim ref As Symbol
 
-        If y Is Nothing Then
-            test = t.Test(REnv.asVector(Of Double)(x), alternative, mu, alpha:=1 - conf_level)
+            For Each name As String In symbols
+                If table.hasName(name) Then
+                    v.Add(name, REnv.asVector(Of Double)(table.getColumnVector(name)))
+                Else
+                    ref = env.FindSymbol(name)
+
+                    If ref Is Nothing Then
+                        Return Internal.debug.stop($"missing required symbol '{name}' for evaluate formula!", env)
+                    Else
+                        v.Add(name, REnv.asVector(Of Double)(ref.value))
+                    End If
+                End If
+            Next
+
+            Dim test As Object() = New Object(table.nrows - 1) {}
+            Dim idx As Integer
+
+            For i As Integer = 0 To table.nrows - 1
+                idx = i
+                x = symbols.Select(Function(r) v(r)(idx)).ToArray
+                x = ttest(x, y, alternative, mu, paired, var_equal, conf_level,, env)
+
+                If Program.isException(x) Then
+                    Return x
+                Else
+                    test(i) = x
+                End If
+            Next
+
+            Return test
         Else
-            test = t.Test(
-                a:=REnv.asVector(Of Double)(x),
-                b:=REnv.asVector(Of Double)(y),
-                alternative:=alternative,
-                mu:=mu,
-                alpha:=1 - conf_level,
-                varEqual:=var_equal
-            )
-        End If
+            Dim test As Object
 
-        Return test
+            If y Is Nothing Then
+                test = Statistics.Hypothesis.t.Test(REnv.asVector(Of Double)(x), alternative, mu, alpha:=1 - conf_level)
+            Else
+                test = Statistics.Hypothesis.t.Test(
+                    a:=REnv.asVector(Of Double)(x),
+                    b:=REnv.asVector(Of Double)(y),
+                    alternative:=alternative,
+                    mu:=mu,
+                    alpha:=1 - conf_level,
+                    varEqual:=var_equal
+                )
+            End If
+
+            Return test
+        End If
     End Function
 
     ''' <summary>
