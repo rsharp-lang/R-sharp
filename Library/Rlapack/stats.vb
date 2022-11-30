@@ -833,12 +833,17 @@ Module stats
             Return test
         Else
             Dim test As Object
+            Dim vx As Double() = REnv.asVector(Of Double)(x)
+
+            If vx.Length > 0 Then
+                vx(Scan0) += 0.0000000000001
+            End If
 
             If y Is Nothing Then
-                test = Statistics.Hypothesis.t.Test(REnv.asVector(Of Double)(x), alternative, mu, alpha:=1 - conf_level)
+                test = Statistics.Hypothesis.t.Test(vx, alternative, mu, alpha:=1 - conf_level)
             Else
                 test = Statistics.Hypothesis.t.Test(
-                    a:=REnv.asVector(Of Double)(x),
+                    a:=vx,
                     b:=REnv.asVector(Of Double)(y),
                     alternative:=alternative,
                     mu:=mu,
