@@ -65,6 +65,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -351,11 +352,21 @@ Namespace Runtime.Interop
                     If arguments.ContainsKey(nameKey) Then
                         If arg.islazyeval Then
                             Yield arguments(nameKey).value
+                        ElseIf arguments(nameKey).isFormula AndAlso Not arg.acceptFormula Then
+                            Dim formula As FormulaExpression = arguments(nameKey).value
+                            Dim var As String = formula.var
+
+                            ' 20221130
+                            ' syntax sugar for do something like:
+                            ' t.test(data.frame(...), y, t ~ a + b + c + x);
+                            Call arguments.Add(var, arguments(nameKey))
+
+                            GoTo opt
                         Else
                             Yield getValue(arg, arguments(nameKey).Evaluate(envir), apiTrace, envir, False)
                         End If
                     Else
-                        If arg.isOptional Then
+opt:                    If arg.isOptional Then
                             If TypeOf arg.default Is Expression Then
                                 Yield DirectCast(arg.default, Expression).Evaluate(envir)
                             ElseIf arg.type.raw Is GetType(Environment) Then
@@ -398,6 +409,9 @@ Namespace Runtime.Interop
         ''' offset bugs
         ''' </param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' returns an error message when type cast error
+        ''' </remarks>
         Friend Shared Function getValue(arg As RMethodArgument,
                                         value As Object,
                                         trace$,

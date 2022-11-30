@@ -56,6 +56,7 @@
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
 Namespace Runtime.Interop
 
@@ -118,6 +119,21 @@ Namespace Runtime.Interop
         Public ReadOnly Property requireRawExpression As Boolean
             Get
                 Return type IsNot Nothing AndAlso type.raw.IsInheritsFrom(GetType(Expression), strict:=False)
+            End Get
+        End Property
+
+        Public ReadOnly Property acceptFormula As Boolean
+            Get
+                If type Is Nothing Then
+                    Return False
+                End If
+
+                Select Case type.raw
+                    Case GetType(Object), GetType(FormulaExpression), GetType(Expression)
+                        Return True
+                    Case Else
+                        Return False
+                End Select
             End Get
         End Property
 

@@ -541,25 +541,25 @@ Namespace Runtime.Internal.Object
         ''' </param>
         ''' <returns></returns>
         Private Function subsetColData(c As Array, index As Integer()) As Array
-            Dim type As Type = MeasureRealElementType(c)
-            Dim a As Array = Array.CreateInstance(type, index.Length)
+            Dim type As Type = MeasureRealElementType(c, defaultType:=GetType(Object))
+            Dim V As Array = Array.CreateInstance(type, index.Length)
 
             If index.Length = 0 Then
-                Return a
+                Return V
             ElseIf c.Length = 1 Then
                 ' single value
-                Call a.SetValue(c.GetValue(Scan0), Scan0)
+                Call V.SetValue(c.GetValue(Scan0), Scan0)
             Else
                 For Each i As SeqValue(Of Integer) In index.SeqIterator
                     If i.value = -1 Then
-                        Call a.SetValue(Nothing, i)
+                        Call V.SetValue(Nothing, i)
                     Else
-                        Call a.SetValue(c.GetValue(i.value), i)
+                        Call V.SetValue(c.GetValue(i.value), i)
                     End If
                 Next
             End If
 
-            Return a
+            Return V
         End Function
 
         ''' <summary>
