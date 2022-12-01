@@ -143,6 +143,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     vec(i) = Nothing
                 ElseIf TypeOf item Is list Then
                     vec(i) = DirectCast(item, list).getByName(memberName)
+                ElseIf TypeOf item Is dataframe Then
+                    vec(i) = DirectCast(item, dataframe).getColumnVector(memberName)
                 Else
                     Return Message.InCompatibleType(GetType(list), item.GetType, envir)
                 End If
@@ -163,6 +165,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     vec(i) = Nothing
                 ElseIf TypeOf item Is list Then
                     vec(i) = DirectCast(source(i), list).getByName(memberName)
+                ElseIf TypeOf item Is dataframe Then
+                    vec(i) = DirectCast(item, dataframe).getColumnVector(memberName)
                 Else
                     Return Message.InCompatibleType(GetType(list), item.GetType, envir)
                 End If

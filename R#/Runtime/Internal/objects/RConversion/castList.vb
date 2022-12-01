@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::77dcc39c5f46ac0103625f8606dc193e, R-sharp\R#\Runtime\Internal\objects\RConversion\castList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 206
-    '    Code Lines: 162
-    ' Comment Lines: 12
-    '   Blank Lines: 32
-    '     File Size: 7.76 KB
+' Summaries:
 
 
-    '     Module castList
-    ' 
-    '         Function: CTypeList, dataframe_castList, dictionaryToRList, listInternal, objCastList
-    '                   vector_castList
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 206
+'    Code Lines: 162
+' Comment Lines: 12
+'   Blank Lines: 32
+'     File Size: 7.76 KB
+
+
+'     Module castList
+' 
+'         Function: CTypeList, dataframe_castList, dictionaryToRList, listInternal, objCastList
+'                   vector_castList
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -87,21 +88,33 @@ Namespace Runtime.Internal.Object.Converts
             Return table
         End Function
 
-        Public Function vector_castList(vec As Array, args As list, env As Environment) As Object
-            If vec.Length = 1 Then
-                Return listInternal(vec.GetValue(Scan0), args, env)
-            End If
-
+        <Extension>
+        Private Function listElementNames(vec As Array, args As list, env As Environment) As String()
             Dim names As String() = args.getValue(Of String())("names", env)
 
             If names.IsNullOrEmpty Then
-                names = vec.Length _
+                Return vec.Length _
                     .Sequence _
                     .Select(Function(i) $"X_{i}") _
                     .ToArray
             Else
-                names = names.uniqueNames
+                Return names.uniqueNames
             End If
+        End Function
+
+        Public Function vector_castList(vec As Array, args As list, env As Environment) As Object
+            If vec.Length = 1 Then
+                If GetVectorElement.IsScalar(vec(Scan0)) Then
+                    Dim scalarNames As String() = vec.listElementNames(args, env)
+                    Dim list As New list With {.slots = New Dictionary(Of String, Object)}
+                    Call list.add(scalarNames(Scan0), vec(Scan0))
+                    Return list
+                Else
+                    Return listInternal(vec.GetValue(Scan0), args, env)
+                End If
+            End If
+
+            Dim names As String() = vec.listElementNames(args, env)
 
             If names.Length <> vec.Length Then
                 Return Internal.debug.stop({
@@ -129,7 +142,10 @@ Namespace Runtime.Internal.Object.Converts
                 Return vector_castList(DirectCast(obj, vector).data, args, env)
             ElseIf type.IsArray Then
                 Return vector_castList(DirectCast(obj, Array), args, env)
+            ElseIf GetVectorElement.IsScalar(obj) Then
+                Return vector_castList(New Object() {obj}, args, env)
             End If
+
             If type.ImplementInterface(Of ICTypeList) Then
                 Return DirectCast(obj, ICTypeList).toList
             End If
