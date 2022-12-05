@@ -638,7 +638,16 @@ Namespace Runtime.Internal.Invokes
                                           strings As Object,
                                           Optional alphabetOnly As Boolean = True,
                                           Optional replacement As String = "_",
+                                          Optional shrink As Boolean = True,
+                                          Optional maxchars As Integer = 32,
                                           Optional env As Environment = Nothing) As Object
+
+            If shrink AndAlso (replacement = "[" OrElse replacement = "]") Then
+                Return Internal.debug.stop({
+                    $"regular expression pattern error: '[{replacement}\s]{{2,}}'!",
+                    $"please change the replacement character: '{replacement}'"
+                }, env)
+            End If
 
             Return env.EvaluateFramework(Of String, String)(
                 x:=strings,
@@ -646,7 +655,19 @@ Namespace Runtime.Internal.Invokes
                           If file Is Nothing Then
                               Return ""
                           Else
-                              Return file.NormalizePathString(alphabetOnly, replacement)
+                              file = file.NormalizePathString(alphabetOnly, replacement)
+
+                              If shrink Then
+                                  file = file.StringReplace(
+                                     pattern:=$"[{replacement}\s]{{2,}}",
+                                     replaceAs:=replacement
+                                  )
+                              End If
+                              If file.Length > maxchars Then
+                                  file = $"{file.Substring(0, maxchars - 3)}..."
+                              End If
+
+                              Return file
                           End If
                       End Function)
         End Function
