@@ -621,6 +621,17 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' removes all of the invalid character for the windows file name
+        ''' </summary>
+        ''' <param name="strings"></param>
+        ''' <param name="alphabetOnly"></param>
+        ''' <param name="replacement">
+        ''' all of the invalid character for the windows file name 
+        ''' will be replaced as this placeholder character
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("normalizeFileName")>
         <RApiReturn(GetType(String))>
         Public Function normalizeFileName(<RRawVectorArgument>
@@ -632,7 +643,11 @@ Namespace Runtime.Internal.Invokes
             Return env.EvaluateFramework(Of String, String)(
                 x:=strings,
                 eval:=Function(file)
-                          Return file.NormalizePathString(alphabetOnly, replacement)
+                          If file Is Nothing Then
+                              Return ""
+                          Else
+                              Return file.NormalizePathString(alphabetOnly, replacement)
+                          End If
                       End Function)
         End Function
 
