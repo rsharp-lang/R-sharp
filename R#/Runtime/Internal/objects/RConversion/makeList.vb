@@ -51,6 +51,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -69,6 +70,13 @@ Namespace Runtime.Internal.Object.Converts
             }
         End Function
 
+        ''' <summary>
+        ''' cast the dataframe object to row list
+        ''' </summary>
+        ''' <param name="data"></param>
+        ''' <returns>
+        ''' row list wrap the column list
+        ''' </returns>
         <Extension>
         Public Function listByRows(data As dataframe) As list
             Dim rows As New Dictionary(Of String, Object)
@@ -88,11 +96,16 @@ Namespace Runtime.Internal.Object.Converts
 
             Dim index As Integer
             Dim row As Dictionary(Of String, Object)
+            Dim rownames As String() = If(
+                data.rownames.IsNullOrEmpty,
+                data.nrows.Sequence(offset:=1).Select(Function(i) $"[[{i}]]").ToArray,
+                data.rownames.uniqueNames
+            )
 
             For i As Integer = 0 To data.nrows - 1
                 index = i
                 row = columns.ToDictionary(Function(col) col, Function(col) getVals(col)(index))
-                rows.Add($"[[{index + 1}]]", New list With {.slots = row})
+                rows.Add(rownames(i), New list With {.slots = row})
             Next
 
             Return New list With {.slots = rows}
