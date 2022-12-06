@@ -427,7 +427,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                         envir:=envir
                     )
                 Else
-                    Return Internal.debug.stop("invalid data name source!", envir)
+                    Return Internal.debug.stop({
+                        $"invalid data value source! it should be a vector type!",
+                        $"given: {value.GetType.FullName}",
+                        $"symbol indexer: {symbolIndex.indexType.Description}"
+                    }, envir)
                 End If
             End If
 
