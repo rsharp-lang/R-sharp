@@ -1117,7 +1117,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 ' to dataframe
                 Dim columns As New Dictionary(Of String, Array)
                 Dim colNames = DirectCast(sequence, dataframe).colnames
-                Dim v As Object()
+                Dim v As Array
 
                 For Each name As String In colNames
                     v = rows _
