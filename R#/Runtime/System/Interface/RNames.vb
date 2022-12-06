@@ -91,11 +91,38 @@ Namespace Runtime.Components.Interface
 
     End Interface
 
+    ''' <summary>
+    ''' a collection data model in R# language that indicates each element has names
+    ''' </summary>
     Public Interface RNameIndex : Inherits IReflector
 
+        ''' <summary>
+        ''' get an element by name
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
         Function getByName(name As String) As Object
+        ''' <summary>
+        ''' get a set of data elements by name set
+        ''' </summary>
+        ''' <param name="names"></param>
+        ''' <returns></returns>
         Function getByName(names As String()) As Object
+        ''' <summary>
+        ''' set data element value by a given name
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="value"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Function setByName(name As String, value As Object, envir As Environment) As Object
+        ''' <summary>
+        ''' set a data collection of values by a given name list
+        ''' </summary>
+        ''' <param name="names"></param>
+        ''' <param name="value"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Function setByName(names As String(), value As Array, envir As Environment) As Object
 
     End Interface
