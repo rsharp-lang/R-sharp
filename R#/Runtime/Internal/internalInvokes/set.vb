@@ -97,6 +97,11 @@ Namespace Runtime.Internal.Invokes
                             Optional args As list = Nothing,
                             Optional env As Environment = Nothing) As Object
 
+            If x Is Nothing Then
+                Call env.AddMessage("x is nothing for do sequence order reverse", MSG_TYPES.WRN)
+                Return Nothing
+            End If
+
             If TypeOf x Is list Then
                 Dim reverseMapping As Boolean = args.getValue("mapping", env, [default]:=False)
 
@@ -116,6 +121,22 @@ Namespace Runtime.Internal.Invokes
                 Else
                     Throw New NotImplementedException
                 End If
+            ElseIf TypeOf x Is vector Then
+                Dim vec As vector = DirectCast(x, vector)
+                Dim a As Array = Array.CreateInstance(vec.data.GetType.GetElementType, vec.length)
+
+                Call Array.ConstrainedCopy(vec.data, Scan0, a, Scan0, vec.length)
+                Call Array.Reverse(a)
+
+                Return New vector() With {.data = a}
+            ElseIf x.GetType.IsArray Then
+                Dim vec As Array = DirectCast(x, Array)
+                Dim a As Array = Array.CreateInstance(vec.GetType.GetElementType, vec.Length)
+
+                Call Array.ConstrainedCopy(vec, Scan0, a, Scan0, vec.Length)
+                Call Array.Reverse(a)
+
+                Return New vector() With {.data = a}
             Else
                 Throw New NotImplementedException
             End If
