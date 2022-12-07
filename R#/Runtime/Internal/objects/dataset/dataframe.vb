@@ -391,9 +391,9 @@ Namespace Runtime.Internal.Object
             Dim indexType As Type = MeasureRealElementType(selector)
 
             If indexType Like RType.logicals Then
-                Return GetByRowIndex(index:=which.IsTrue(Vectorization.asLogical(selector)))
+                Return GetByRowIndex(index:=which.IsTrue(Vectorization.asLogical(selector)), env)
             ElseIf indexType Like RType.integers Then
-                Return GetByRowIndex(index:=DirectCast(asVector(Of Integer)(selector), Integer()).Select(Function(i) i - 1).ToArray)
+                Return GetByRowIndex(index:=DirectCast(asVector(Of Integer)(selector), Integer()).Select(Function(i) i - 1).ToArray, env)
             ElseIf indexType Like RType.characters Then
                 Dim indexNames As String() = asVector(Of String)(selector)
                 Dim rowNames As Index(Of String) = Me.getRowNames
@@ -408,7 +408,7 @@ Namespace Runtime.Internal.Object
                     End If
                 Next
 
-                Return GetByRowIndex(index)
+                Return GetByRowIndex(index, env)
             Else
                 Return Internal.debug.stop(New NotImplementedException(indexType.FullName), env)
             End If
@@ -513,8 +513,10 @@ Namespace Runtime.Internal.Object
         ''' <param name="index">
         ''' 以零为底的索引号列表，-1对应的行将会返回空值的行数据
         ''' </param>
-        ''' <returns></returns>
-        Public Function GetByRowIndex(index As Integer(), env As Environment) As dataframe
+        ''' <returns>
+        ''' a dataframe object with row subset or an error message
+        ''' </returns>
+        Public Function GetByRowIndex(index As Integer(), env As Environment) As [Variant](Of dataframe, Message)
             Dim subsetRowNumbers As String() = index _
                 .Select(Function(i, j)
                             Return rownames.ElementAtOrDefault(i, j + 1)
@@ -523,19 +525,19 @@ Namespace Runtime.Internal.Object
             Dim subsetData As New Dictionary(Of String, Array)
 
             For Each col In columns
-                Dim v = subsetColData(C.Value, index, env)
+                Dim v = subsetColData(col.Value, index, env)
 
                 If TypeOf v Is Message Then
-                    Return v
+                    Return DirectCast(v, Message)
                 Else
-                    subsetData.Add(C.key, v)
+                    subsetData.Add(col.Key, v)
                 End If
             Next
 
             Return New dataframe With {
-                    .rownames = subsetRowNumbers,
-                    .columns = subsetData
-                }
+                .rownames = subsetRowNumbers,
+                .columns = subsetData
+            }
         End Function
 
         ''' <summary>

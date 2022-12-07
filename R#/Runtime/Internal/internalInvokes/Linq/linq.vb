@@ -141,8 +141,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim i As Integer() = keyX _
                 .Select(Function(key) idx.TryGetValue(key, [default]:=-1)) _
                 .ToArray
+            Dim rightSubset = right.GetByRowIndex(i, env)
 
-            right = right.GetByRowIndex(i)
+            If rightSubset Like GetType(Message) Then
+                Return rightSubset.TryCast(Of Message)
+            End If
+
+            right = rightSubset.TryCast(Of dataframe)
             left = New dataframe(left)
 
             For Each colName As String In right.colnames
