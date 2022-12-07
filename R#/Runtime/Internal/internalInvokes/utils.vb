@@ -220,8 +220,10 @@ Namespace Runtime.Internal.Invokes
 
                 Dim group_parts As New Dictionary(Of String, Object)
 
+                ' 20221207
+                ' group index is zero-based
                 For Each group In groupIndex
-                    Dim part = summary.GetByRowIndex(group.Value, envir)
+                    Dim part = summary.GetByRowIndex(group.Value, envir) ' checked
 
                     If part Like GetType(Message) Then
                         Return part.TryCast(Of Message)
@@ -238,6 +240,11 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="keys"></param>
+        ''' <returns>index value is zero based</returns>
         <Extension>
         Private Function keyGroups(keys As String()) As Dictionary(Of String, Integer())
             Dim uniques As String() = keys.Distinct.ToArray
@@ -245,10 +252,14 @@ Namespace Runtime.Internal.Invokes
             Return uniques _
                 .ToDictionary(Function(key) key,
                               Function(key)
-                                  Return keys.SeqIterator _
+                                  ' seq iterator is zero-based
+                                  Return keys _
+                                      .SeqIterator _
                                       .Where(Function(name) name.value = key) _
-                                      .Select(Function(index) index.i) _
-.ToArray
+                                      .Select(Function(index)
+                                                  Return index.i
+                                              End Function) _
+                                      .ToArray
                               End Function)
         End Function
 

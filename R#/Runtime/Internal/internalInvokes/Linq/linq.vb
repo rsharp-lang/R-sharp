@@ -137,11 +137,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 keyY = right.getColumnVector(by_y)
             End If
 
+            ' 20221207
+            ' index i is zero-based
             Dim idx As Dictionary(Of String, Integer) = Index(Of String).Indexing(keyY)
             Dim i As Integer() = keyX _
                 .Select(Function(key) idx.TryGetValue(key, [default]:=-1)) _
                 .ToArray
-            Dim rightSubset = right.GetByRowIndex(i, env)
+            Dim rightSubset = right.GetByRowIndex(i, env) ' checked
 
             If rightSubset Like GetType(Message) Then
                 Return rightSubset.TryCast(Of Message)

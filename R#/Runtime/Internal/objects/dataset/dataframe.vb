@@ -391,15 +391,32 @@ Namespace Runtime.Internal.Object
             Dim indexType As Type = MeasureRealElementType(selector)
 
             If indexType Like RType.logicals Then
-                Return GetByRowIndex(index:=which.IsTrue(Vectorization.asLogical(selector)), env)
+                ' which is true is zero-based by default
+                Return GetByRowIndex(index:=which.IsTrue(Vectorization.asLogical(selector)), env) ' checked
             ElseIf indexType Like RType.integers Then
-                Return GetByRowIndex(index:=DirectCast(asVector(Of Integer)(selector), Integer()).Select(Function(i) i - 1).ToArray, env)
+                Dim i_raw As Integer() = DirectCast(asVector(Of Integer)(selector), Integer())
+                Dim i_offset As Integer()
+
+                If i_raw.Any(Function(i) i <= 0) Then
+                    ' is already zero-based
+                    i_offset = i_raw
+                Else
+                    ' needs offset 1
+                    i_offset = i_raw _
+                        .Select(Function(i) i - 1) _
+                        .ToArray
+                End If
+
+                ' questinable
+                Return GetByRowIndex(index:=i_offset, env)
             ElseIf indexType Like RType.characters Then
                 Dim indexNames As String() = asVector(Of String)(selector)
                 Dim rowNames As Index(Of String) = Me.getRowNames
                 Dim index As New List(Of Integer)
                 Dim i As i32 = 0
 
+                ' 20221207
+                ' index is zero-based
                 For Each name As String In indexNames
                     If (i = rowNames.IndexOf(name)) = -1 Then
                         Return Internal.debug.stop({$"missing row '{name}' in the given dataframe...", $"rowname: {name}"}, env)
@@ -408,7 +425,7 @@ Namespace Runtime.Internal.Object
                     End If
                 Next
 
-                Return GetByRowIndex(index, env)
+                Return GetByRowIndex(index, env) ' checked
             Else
                 Return Internal.debug.stop(New NotImplementedException(indexType.FullName), env)
             End If
@@ -562,7 +579,7 @@ Namespace Runtime.Internal.Object
                     If i.value = -1 Then
                         Call V.SetValue(Nothing, i)
                     Else
-                        If i.value >= c.Length OrElse c.Length = 0 Then
+                        If i.value >= c.Length OrElse c.Length = 0 OrElse i.value < 0 Then
                             ' 20221207
                             '
                             ' System.IndexOutOfRangeException: index was outside the bounds of the array.
