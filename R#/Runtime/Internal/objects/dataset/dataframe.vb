@@ -562,7 +562,7 @@ Namespace Runtime.Internal.Object
                     If i.value = -1 Then
                         Call V.SetValue(Nothing, i)
                     Else
-                        If i.value >= c.Length Then
+                        If i.value >= c.Length OrElse c.Length = 0 Then
                             ' 20221207
                             '
                             ' System.IndexOutOfRangeException: index was outside the bounds of the array.
