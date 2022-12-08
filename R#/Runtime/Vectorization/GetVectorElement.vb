@@ -62,6 +62,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
@@ -266,6 +267,16 @@ Namespace Runtime.Vectorization
                     ' do type cast?
                     Return New GetVectorElement(ex:=New InvalidCastException($"Do we require a type cast for {type} -> {GetType(T)}?"))
                 End If
+            End If
+        End Function
+
+        Public Shared Function IsScalar(obj As Object) As Boolean
+            If obj Is Nothing Then
+                Return True
+            ElseIf DataFramework.IsPrimitive(obj.GetType) Then
+                Return True
+            Else
+                Return False
             End If
         End Function
     End Class

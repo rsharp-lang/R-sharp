@@ -420,7 +420,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     envir.AddMessage($"'{symbolIndex.index}' contains multiple index, only use first index key value...")
                 End If
             Else
-                result = DirectCast(targetObj, RNameIndex).setByName(indexStr, DirectCast(value, Array), envir)
+                If value.GetType.IsArray Then
+                    result = DirectCast(targetObj, RNameIndex).setByName(
+                        names:=indexStr,
+                        value:=DirectCast(value, Array),
+                        envir:=envir
+                    )
+                Else
+                    Return Internal.debug.stop({
+                        $"invalid data value source! it should be a vector type!",
+                        $"given: {value.GetType.FullName}",
+                        $"symbol indexer: {symbolIndex.indexType.Description}"
+                    }, envir)
+                End If
             End If
 
             If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then

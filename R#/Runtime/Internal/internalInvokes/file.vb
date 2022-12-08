@@ -621,18 +621,54 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' removes all of the invalid character for the windows file name
+        ''' </summary>
+        ''' <param name="strings"></param>
+        ''' <param name="alphabetOnly"></param>
+        ''' <param name="replacement">
+        ''' all of the invalid character for the windows file name 
+        ''' will be replaced as this placeholder character
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("normalizeFileName")>
         <RApiReturn(GetType(String))>
         Public Function normalizeFileName(<RRawVectorArgument>
                                           strings As Object,
                                           Optional alphabetOnly As Boolean = True,
                                           Optional replacement As String = "_",
+                                          Optional shrink As Boolean = True,
+                                          Optional maxchars As Integer = 32,
                                           Optional env As Environment = Nothing) As Object
+
+            If shrink AndAlso (replacement = "[" OrElse replacement = "]") Then
+                Return Internal.debug.stop({
+                    $"regular expression pattern error: '[{replacement}\s]{{2,}}'!",
+                    $"please change the replacement character: '{replacement}'"
+                }, env)
+            End If
 
             Return env.EvaluateFramework(Of String, String)(
                 x:=strings,
                 eval:=Function(file)
-                          Return file.NormalizePathString(alphabetOnly, replacement)
+                          If file Is Nothing Then
+                              Return ""
+                          Else
+                              file = file.NormalizePathString(alphabetOnly, replacement)
+
+                              If shrink Then
+                                  file = file.StringReplace(
+                                     pattern:=$"[{replacement}\s]{{2,}}",
+                                     replaceAs:=replacement
+                                  )
+                              End If
+                              If file.Length > maxchars Then
+                                  file = $"{file.Substring(0, maxchars - 3)}..."
+                              End If
+
+                              Return file
+                          End If
                       End Function)
         End Function
 

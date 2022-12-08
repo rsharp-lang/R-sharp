@@ -1,59 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::0bc665c7102a3228bf242da7925a2219, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1250
-    '    Code Lines: 705
-    ' Comment Lines: 405
-    '   Blank Lines: 140
-    '     File Size: 56.15 KB
+' Summaries:
 
 
-    '     Module linq
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: all, any, doWhile, fastIndexing, first
-    '                   getPredicate, groupBy, groupsSummary, groupSummary, last
-    '                   left_join, match, orderBy, produceKeyedSequence, progress
-    '                   projectAs, reverse, rotate_left, rotate_right, runFilterPipeline
-    '                   runWhichFilter, skip, sort, split, splitByPartitionSize
-    '                   take, tryKeyBy, unique, where, whichMax
-    '                   whichMin
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1250
+'    Code Lines: 705
+' Comment Lines: 405
+'   Blank Lines: 140
+'     File Size: 56.15 KB
+
+
+'     Module linq
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: all, any, doWhile, fastIndexing, first
+'                   getPredicate, groupBy, groupsSummary, groupSummary, last
+'                   left_join, match, orderBy, produceKeyedSequence, progress
+'                   projectAs, reverse, rotate_left, rotate_right, runFilterPipeline
+'                   runWhichFilter, skip, sort, split, splitByPartitionSize
+'                   take, tryKeyBy, unique, where, whichMax
+'                   whichMin
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -69,6 +69,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports obj = Microsoft.VisualBasic.Scripting
@@ -136,12 +137,19 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 keyY = right.getColumnVector(by_y)
             End If
 
+            ' 20221207
+            ' index i is zero-based
             Dim idx As Dictionary(Of String, Integer) = Index(Of String).Indexing(keyY)
             Dim i As Integer() = keyX _
                 .Select(Function(key) idx.TryGetValue(key, [default]:=-1)) _
                 .ToArray
+            Dim rightSubset = right.GetByRowIndex(i, env) ' checked
 
-            right = right.GetByRowIndex(i)
+            If rightSubset Like GetType(Message) Then
+                Return rightSubset.TryCast(Of Message)
+            End If
+
+            right = rightSubset.TryCast(Of dataframe)
             left = New dataframe(left)
 
             For Each colName As String In right.colnames
@@ -1063,17 +1071,83 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' Sorts the elements of a sequence in ascending order according to a key.
         ''' </summary>
         ''' <param name="sequence">A sequence of values to order.</param>
-        ''' <param name="getKey">A function to extract a key from an element.</param>
+        ''' <param name="getKey">
+        ''' A function to extract a key from an element. and this parameter value 
+        ''' can also be the field name or column name to sort.
+        ''' </param>
         ''' <param name="envir"></param>
-        ''' <returns>An System.Linq.IOrderedEnumerable`1 whose elements are sorted according to a
-        ''' key.</returns>
+        ''' <returns>
+        ''' An System.Linq.IOrderedEnumerable`1 whose elements are sorted according 
+        ''' to a key. The sort result could be situations:
+        ''' 
+        ''' 1. a vector which is sort by the element evaluated value
+        ''' 2. a list which is sort by the specific element value
+        ''' 3. a dataframe which is sort its rows by a specific column value
+        ''' 
+        ''' </returns>
         <ExportAPI("orderBy")>
         Public Function orderBy(<RRawVectorArgument>
                                 sequence As Object,
-                                Optional getKey As RFunction = Nothing,
+                                Optional getKey As Object = Nothing,
                                 Optional desc As Boolean = False,
                                 Optional envir As Environment = Nothing) As Object
 
+            If TypeOf getKey Is String Then
+                Return sortByKeyValue(sequence, getKey, desc, envir)
+            ElseIf getKey Is Nothing OrElse getKey.GetType.ImplementInterface(Of RFunction) Then
+                Return sortByKeyFunction(sequence, getKey, desc, envir)
+            Else
+                Return Message.InCompatibleType(GetType(RFunction), getKey.GetType, envir)
+            End If
+        End Function
+
+        Private Function sortByKeyValue(sequence As Object, key As String, desc As Boolean, envir As Environment) As Object
+            If TypeOf sequence Is dataframe Then
+                Dim rows = DirectCast(sequence, dataframe) _
+                    .listByRows.slots _
+                    .ToArray
+
+                If desc Then
+                    rows = rows _
+                        .OrderByDescending(
+                            Function(i)
+                                Return DirectCast(i.Value, list).slots()(key)
+                            End Function) _
+                        .ToArray
+                Else
+                    rows = rows _
+                        .OrderBy(Function(i) DirectCast(i.Value, list).slots()(key)) _
+                        .ToArray
+                End If
+
+                ' re-assemble back the row list
+                ' to dataframe
+                Dim columns As New Dictionary(Of String, Array)
+                Dim colNames = DirectCast(sequence, dataframe).colnames
+                Dim v As Array
+
+                For Each name As String In colNames
+                    v = rows _
+                        .Select(Function(i)
+                                    Return DirectCast(i.Value, list).slots()(name)
+                                End Function) _
+                        .ToArray
+                    v = REnv.TryCastGenericArray(v, envir)
+                    columns(name) = v
+                Next
+
+                Return New dataframe With {
+                    .columns = columns,
+                    .rownames = rows _
+                        .Select(Function(r) r.Key) _
+                        .ToArray
+                }
+            Else
+                Return Internal.debug.stop(New NotImplementedException(), envir)
+            End If
+        End Function
+
+        Private Function sortByKeyFunction(sequence As Object, getKey As RFunction, desc As Boolean, envir As Environment) As Object
             Dim result As Array
             Dim measure = tryKeyBy(getKey, envir)
 
