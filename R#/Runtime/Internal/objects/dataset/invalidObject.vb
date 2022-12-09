@@ -11,6 +11,12 @@ Namespace Runtime.Internal.Object
         ''' <returns></returns>
         Public Shared ReadOnly Property value As New invalidObject
 
+        Public ReadOnly Property literalAny As Object
+            Get
+                Return Nothing
+            End Get
+        End Property
+
         Private Sub New()
         End Sub
 

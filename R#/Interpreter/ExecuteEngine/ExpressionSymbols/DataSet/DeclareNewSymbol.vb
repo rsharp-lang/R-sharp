@@ -75,11 +75,15 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
+    ''' <summary>
+    ''' An expressin for create a new symbol inside the runtime environment
+    ''' </summary>
     Public Class DeclareNewSymbol : Inherits SymbolExpression
         Implements IRuntimeTrace
 
         ''' <summary>
-        ''' 对于tuple类型，会存在多个变量
+        ''' tuple names.
+        ''' (对于tuple语法，会存在多个变量)
         ''' </summary>
         Public ReadOnly Property names As IReadOnlyCollection(Of String)
             Get
@@ -107,6 +111,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Get
         End Property
 
+        ''' <summary>
+        ''' the size of the symbol names
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property symbolSize As Integer
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
@@ -114,6 +122,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Get
         End Property
 
+        ''' <summary>
+        ''' does current symbol declaration contains multiple symbol targets?
+        ''' </summary>
+        ''' <returns>
+        ''' TRUE means contains multiple symbol target, it is a new tuple syntax;
+        ''' FALSE means just has one symbol target to create in the context.
+        ''' </returns>
         Public ReadOnly Property isTuple As Boolean
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
@@ -122,14 +137,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Property
 
         ''' <summary>
-        ''' 初始值
+        ''' The symbol initial value.(初始值)
         ''' </summary>
         Public ReadOnly Property value As Expression
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return m_value
             End Get
         End Property
 
+        ''' <summary>
+        ''' the unit name of the symbol value if it is a vector
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property unit As String
             Get
                 Return attributes.TryGetValue("unit").FirstOrDefault
