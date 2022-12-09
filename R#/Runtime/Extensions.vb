@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports vbObject = SMRUCC.Rsharp.Runtime.Internal.Object.vbObject
 
 Namespace Runtime
@@ -91,7 +92,10 @@ Namespace Runtime
             For i As Integer = 0 To array.Length - 1
                 x = array.GetValue(i)
 
-                If Not x Is Nothing Then
+                If x IsNot Nothing AndAlso
+                    x IsNot invalidObject.value AndAlso
+                    x IsNot GetType(Void) Then
+
                     Return x.GetType
                 End If
             Next
@@ -116,7 +120,10 @@ Namespace Runtime
             For i As Integer = 0 To array.Length - 1
                 x = array.GetValue(i)
 
-                If Not x Is Nothing Then
+                If x IsNot Nothing AndAlso
+                    x IsNot invalidObject.value AndAlso
+                    x IsNot GetType(Void) Then
+
                     arrayType = x.GetType
 
                     If arrayType Is GetType(vbObject) Then
