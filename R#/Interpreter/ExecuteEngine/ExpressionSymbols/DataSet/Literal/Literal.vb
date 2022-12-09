@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports any = Microsoft.VisualBasic.Scripting
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -132,7 +133,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Get
                 If value Is Nothing Then
                     Return ""
-                ElseIf value Is GetType(Void) Then
+                ElseIf value Is GetType(Void) OrElse value Is invalidObject.value Then
                     Return "NA"
                 Else
                     Return any.ToString(value)
