@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::25c544b56a03d44ce1e4652b7dbb2cd1, R-sharp\studio\Rserve\Program.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 76
-    '    Code Lines: 59
-    ' Comment Lines: 7
-    '   Blank Lines: 10
-    '     File Size: 3.03 KB
+' Summaries:
 
 
-    ' Module Program
-    ' 
-    '     Function: listen, Main, runSession, start
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 76
+'    Code Lines: 59
+' Comment Lines: 7
+'   Blank Lines: 10
+'     File Size: 3.03 KB
+
+
+' Module Program
+' 
+'     Function: listen, Main, runSession, start
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Net
+Imports Parallel
 Imports Rserver
 
 Module Program
@@ -86,7 +87,7 @@ Module Program
                 .ToArray
         End If
 
-        Call Utils.BindToParent(parentId:=parent, kill:=localhost)
+        Call Utils.BindToMaster(parentId:=parent, kill:=localhost)
 
         If Not Tcp.PortIsAvailable(port) Then
             Call Console.WriteLine($"local tcp port(={port}) is in used!")
@@ -111,6 +112,7 @@ Module Program
         Dim show_error As Boolean = args("--show_error")
         Dim tcp As Integer = args("--tcp") Or 3838
         Dim startups As String() = args("--startups").Split("[,;]\s*", regexp:=True)
+        Dim parent As String = args("--parent")
 
         ' 20221007 fix of the relative path error
         ' by translate to absolute path at first!
@@ -118,6 +120,8 @@ Module Program
 
         Using http As New Rweb(Rweb, port, tcp, show_error, threads:=n_threads)
             Call http.Processor.WithStartups(startups)
+            Call Utils.BindToMaster(parent, http)
+
             Return http.Run()
         End Using
     End Function
@@ -128,8 +132,10 @@ Module Program
     Public Function runSession(args As CommandLine) As Integer
         Dim port As Integer = args("--port") Or 8848
         Dim workspace As String = args("--workspace") Or "./"
+        Dim parent As String = args("--parent")
 
         Using http As New RSession(port, workspace)
+            Call Utils.BindToMaster(parent, http)
             Return http.Run
         End Using
     End Function

@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports vbObject = SMRUCC.Rsharp.Runtime.Internal.Object.vbObject
 
 Namespace Runtime
@@ -87,11 +88,19 @@ Namespace Runtime
         ''' <returns></returns>
         Public Function MeasureArrayElementType(array As Array) As Type
             Dim x As Object
+            Dim arrayType As Type = array.GetType
+
+            If arrayType.HasElementType AndAlso Not arrayType.GetElementType Is GetType(Object) Then
+                Return arrayType.GetElementType
+            End If
 
             For i As Integer = 0 To array.Length - 1
                 x = array.GetValue(i)
 
-                If Not x Is Nothing Then
+                If x IsNot Nothing AndAlso
+                    x IsNot invalidObject.value AndAlso
+                    x IsNot GetType(Void) Then
+
                     Return x.GetType
                 End If
             Next
@@ -116,7 +125,10 @@ Namespace Runtime
             For i As Integer = 0 To array.Length - 1
                 x = array.GetValue(i)
 
-                If Not x Is Nothing Then
+                If x IsNot Nothing AndAlso
+                    x IsNot invalidObject.value AndAlso
+                    x IsNot GetType(Void) Then
+
                     arrayType = x.GetType
 
                     If arrayType Is GetType(vbObject) Then
@@ -173,6 +185,11 @@ Namespace Runtime
             End If
         End Function
 
+        ''' <summary>
+        ''' test target object is a <see cref="RFunction"/> or not
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         Public Function isCallable(x As Object) As Boolean
             If x Is Nothing Then
                 Return False

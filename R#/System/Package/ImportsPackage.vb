@@ -52,15 +52,15 @@
 ' /********************************************************************************/
 
 #End Region
-#If netcore5 = 0 Then
+
+#If Not NETCOREAPP Then
 Imports System.ComponentModel.Composition
 #Else
 Imports System.Composition
 #End If
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
-Imports System.Runtime.InteropServices.JavaScript.JSType
-#If netcore5 = 1 Then
+#If NETCOREAPP Then
 Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
 #End If
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -197,7 +197,7 @@ Namespace Development.Package
         <Extension>
         Public Function ImportsStatic(env As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
             Try
-#If netcore5 = 1 Then
+#If NETCOREAPP Then
                 Call deps.TryHandleNetCore5AssemblyBugs(package)
 #End If
                 Call package.Assembly.TryRunZzzOnLoad
