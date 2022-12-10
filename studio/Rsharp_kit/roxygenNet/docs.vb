@@ -114,19 +114,13 @@ Module docs
                        <hr/>
                        <p>
                            <code>
-                               <span style="color: blue;">imports</span><span style="color: brown"> "{$packageName}"</span><span style="color: blue;"> from</span><span style="color: brown"> "{$base_dll}"</span>
+                               <span style="color: blue;">imports</span><span style="color: brown"> "{$packageName}"</span><span style="color: blue;"> from</span><span style="color: brown"> "{$base_dll}"</span>;
                            </code>
                        </p>
                        <p>{$packageDescription}</p>
 
                        <div id="main-wrapper">
                            <table>
-                               <thead>
-                                   <tr>
-                                       <th>function</th>
-                                       <th>description</th>
-                                   </tr>
-                               </thead>
                                <tbody>{$apiList}</tbody>
                            </table>
                        </div>
