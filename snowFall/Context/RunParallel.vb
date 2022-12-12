@@ -124,6 +124,7 @@ Public Class RunParallel
     Public Function taskFactory(index As Integer) As Object
         Dim result As Object = Nothing
         Dim bootstrap As BootstrapSocket = Nothing
+        Dim println = master.env.WriteLineHandler
 
         Do While True
             bootstrap = New BootstrapSocket(
@@ -156,12 +157,12 @@ Public Class RunParallel
         Dim process As RunSlavePipeline = worker.CreateSlave($"{task} {If(taskNames.IsNullOrEmpty, "", $"--task ""{taskNames(index)}""")} --SetDllDirectory {SetDllDirectory.CLIPath}")
 
         If debug Then
-            Call base.print(process.ToString,, master.env)
+            Call println(process.ToString)
         End If
 
         Call bootstrap.Run(process)
         Call getResult(uuid:=index, result)
-        Call base.print($"get parallel result from node_#{index}!")
+        Call println($"get parallel result from node_#{index}!")
 
         Return result
     End Function
