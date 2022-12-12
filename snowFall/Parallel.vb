@@ -139,6 +139,9 @@ Public Module Parallel
     ''' <param name="port"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
+    ''' <remarks>
+    ''' this function will break the rscript process when its job done!
+    ''' </remarks>
     <ExportAPI("slave")>
     Public Function runSlaveNode(port As Integer, Optional env As Environment = Nothing) As Object
         Dim req As New RequestStream(MasterContext.Protocol, RPC.Protocols.Initialize)
@@ -222,11 +225,12 @@ Public Module Parallel
             Call Console.WriteLine()
         End If
 
+        ' sync work on tcp request
         Call New TcpRequest(localMaster, masterPort).SendMessage(req)
         Call New TcpRequest(localMaster, port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
         Call Console.WriteLine("exit!")
 
-        Return 0
+        Return App.Exit(0)
     End Function
 
     ''' <summary>
@@ -273,6 +277,7 @@ Public Module Parallel
         End If
 
         Dim host As RunParallel = RunParallel.Initialize(task, ___argvSet_____, debug, env)
+        Dim println = env.WriteLineHandler
         Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) = host.produceTask
         Dim engine As New ThreadTask(Of SeqValue(Of Object))(
             task:=taskList,
@@ -292,6 +297,8 @@ Public Module Parallel
         Dim errors As New List(Of (i As Integer, ex As Message))
         Dim j As Integer = 0
 
+        Call println("all parallel job done!")
+
         For Each i As Object In result
             j += 1
 
@@ -308,9 +315,12 @@ Public Module Parallel
             End If
         Next
 
+        Call println("close master node services!")
         Call host.master.Dispose()
 
         If errors.Any Then
+            Call println("error was found during the parallel work process...")
+
             For Each taskResult In errors
                 Call env.AddMessage($"[task_{taskResult.i}] {taskResult.ex.ToString}")
             Next

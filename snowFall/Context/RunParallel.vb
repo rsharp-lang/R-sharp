@@ -161,6 +161,7 @@ Public Class RunParallel
 
         Call bootstrap.Run(process)
         Call getResult(uuid:=index, result)
+        Call base.print($"get parallel result from node_#{index}!")
 
         Return result
     End Function
