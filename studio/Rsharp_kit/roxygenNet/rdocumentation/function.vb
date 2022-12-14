@@ -115,6 +115,17 @@ Public Class [function]
             docs.details = markdown.Transform(xml.Remarks)
         End If
 
+        If docs.returns.StringEmpty Then
+            ' generate document automatically based on the return type
+            Dim types As Type() = api.GetUnionTypes.ToArray
+
+            If types.Length = 1 Then
+                docs.returns = $"this function returns data object in type {types(Scan0).FullName}."
+            ElseIf types.Length > 1 Then
+                docs.returns = $"this function returns data object in these one of the listed data types: {types.Select(Function(t) t.FullName).JoinBy(", ")}."
+            End If
+        End If
+
         Return createHtml(docs, template, pkg)
     End Function
 

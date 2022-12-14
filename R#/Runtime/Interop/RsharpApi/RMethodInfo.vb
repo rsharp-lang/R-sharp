@@ -112,6 +112,9 @@ Namespace Runtime.Interop
             End Get
         End Property
 
+        ''' <summary>
+        ''' <see cref="MethodInfo"/>
+        ''' </summary>
         ReadOnly api As MethodInvoke
 
         ''' <summary>
@@ -177,6 +180,28 @@ Namespace Runtime.Interop
         ''' <returns></returns>
         Public Function GetRawDeclares() As MethodInfo
             Return api.method
+        End Function
+
+        Public Iterator Function GetUnionTypes() As IEnumerable(Of Type)
+            Dim method As MethodInfo = GetRawDeclares()
+
+            If method.ReturnType Is Nothing OrElse method.ReturnType Is GetType(Void) Then
+                Return
+            End If
+
+            If Not method.ReturnType Is GetType(Object) Then
+                Yield method.ReturnType
+            Else
+                Dim attr = method.GetCustomAttribute(Of RApiReturnAttribute)()
+
+                If Not attr Is Nothing Then
+                    For Each type As Type In attr.returnTypes
+                        Yield type
+                    Next
+                Else
+                    Yield GetType(Object)
+                End If
+            End If
         End Function
 
         Public Function GetPackageInfo() As Package
