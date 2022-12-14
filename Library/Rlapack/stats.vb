@@ -536,6 +536,21 @@ Module stats
         End If
     End Function
 
+    <ExportAPI("corr_sign")>
+    Public Function corr_sign(c As CorrelationMatrix) As matrix
+        Return New matrix With {.mat = c.Sign}
+    End Function
+
+    <ROperator("*")>
+    Public Function mul(f As matrix, c As CorrelationMatrix) As CorrelationMatrix
+        Return DirectCast(f.mat, Double()()) * c
+    End Function
+
+    <ROperator("^")>
+    Public Function pow(c As CorrelationMatrix, p As Double) As CorrelationMatrix
+        Return c.Power(p)
+    End Function
+
     ''' <summary>
     ''' Find the correlations, sample sizes, and probability 
     ''' values between elements of a matrix or data.frame.
