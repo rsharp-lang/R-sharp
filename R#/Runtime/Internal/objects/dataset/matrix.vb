@@ -56,5 +56,7 @@ Namespace Runtime.Internal.Object
 
     Public Class matrix : Inherits RsharpDataObject
 
+        Public Property mat As Array
+
     End Class
 End Namespace

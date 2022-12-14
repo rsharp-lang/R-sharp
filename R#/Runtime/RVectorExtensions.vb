@@ -145,7 +145,7 @@ Namespace Runtime
         ''' populate the input x
         ''' </param>
         ''' <param name="forceSingle">
-        ''' this function returns the first element in array always
+        ''' this function returns the first element in array/vector always
         ''' if this parameter is set to true
         ''' </param>
         ''' <returns></returns>
