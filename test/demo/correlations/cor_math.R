@@ -27,3 +27,5 @@ m
 |> correlation.graph(0, 1)
 |> save.network(file = `${@dir}/corr_graph/`, properties = "*")
 ;
+
+print(read.csv(`${@dir}/corr_graph/network-edges.csv`));
