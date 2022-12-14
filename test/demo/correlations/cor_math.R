@@ -1,3 +1,6 @@
+require(igraph.builder);
+require(igraph);
+
 # unit test of the correlation math
 
 m = data.frame(
@@ -19,3 +22,8 @@ print(m);
 m = corr_sign(m) * (m ^ 2);
 
 print(m);
+
+m 
+|> correlation.graph(0, 1)
+|> save.network(file = `${@dir}/corr_graph/`, properties = "*")
+;
