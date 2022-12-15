@@ -58,6 +58,13 @@ Namespace Runtime.Interop
     ''' <summary>
     ''' 表示这个参数是一个数组，环境系统不应该自动调用getFirst取第一个值
     ''' </summary>
+    ''' <remarks>
+    ''' there are some string literal rule for the default 
+    ''' vector string parser:
+    ''' 
+    ''' 1. 字符串类型默认使用``|``作为分隔符
+    ''' 2. 数值类型默认使用``,``作为分隔符
+    ''' </remarks>
     <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
     Public Class RRawVectorArgumentAttribute : Inherits RInteropAttribute
 
