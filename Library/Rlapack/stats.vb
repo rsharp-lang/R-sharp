@@ -1150,7 +1150,24 @@ Module stats
     ''' data <paramref name="x"/> is a dataframe or matrix
     ''' object
     ''' </param>
-    ''' <returns></returns>
+    ''' <returns>
+    ''' NA, NaN, Inf missing value in the matrix will be set
+    ''' to the default value zero in the return value of this 
+    ''' function
+    ''' </returns>
+    ''' <remarks>
+    ''' #### Standard score(z-score)
+    ''' 
+    ''' In statistics, the standard score is the signed number of standard deviations by which the value of 
+    ''' an observation or data point is above the mean value of what is being observed or measured. Observed 
+    ''' values above the mean have positive standard scores, while values below the mean have negative 
+    ''' standard scores. The standard score is a dimensionless quantity obtained by subtracting the population 
+    ''' mean from an individual raw score and then dividing the difference by the population standard deviation. 
+    ''' This conversion process is called standardizing or normalizing (however, "normalizing" can refer to 
+    ''' many types of ratios; see normalization for more).
+    ''' 
+    ''' > https://en.wikipedia.org/wiki/Standard_score
+    ''' </remarks>
     <ExportAPI("z")>
     <RApiReturn(GetType(Double))>
     Public Function z_score(<RRawVectorArgument>
