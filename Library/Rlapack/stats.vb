@@ -1125,7 +1125,10 @@ Module stats
             End If
         Else
             Dim v As Double() = REnv.asVector(Of Double)(x)
-            Dim z As Double() = New stdVector(v).Z.ToArray
+            Dim z As Double() = New stdVector(v) _
+                .Z _
+                .Select(Function(d) If(d.IsNaNImaginary, 0.0, d)) _
+                .ToArray
 
             Return z
         End If
@@ -1139,7 +1142,10 @@ Module stats
                 .ToDictionary(Function(c) c.Key,
                                 Function(c)
                                     Dim dz As Double() = REnv.asVector(Of Double)(c.Value)
-                                    Dim zz As Double() = New stdVector(dz).Z.ToArray
+                                    Dim zz As Double() = New stdVector(dz) _
+                                        .Z _
+                                        .Select(Function(v) If(v.IsNaNImaginary, 0.0, v)) _
+                                        .ToArray
 
                                     Return DirectCast(zz, Array)
                                 End Function)
@@ -1157,7 +1163,14 @@ Module stats
                     End Function) _
             .ToArray
         Dim z = rows _
-            .Select(Function(r) New NamedCollection(Of Double)(r.name, New stdVector(r.value).Z.ToArray)) _
+            .Select(Function(r)
+                        Dim zi = New stdVector(r.value) _
+                            .Z _
+                            .Select(Function(v) If(v.IsNaNImaginary, 0.0, v)) _
+                            .ToArray
+
+                        Return New NamedCollection(Of Double)(r.name, zi)
+                    End Function) _
             .ToArray
         Dim dz As New Rdataframe With {
             .columns = New Dictionary(Of String, Array),
@@ -1169,7 +1182,9 @@ Module stats
 
         For i As Integer = 0 To col.Length - 1
             index = i
-            dz.add(col(i), z.Select(Function(r) r.value(index)).ToArray)
+            dz.columns(col(i)) = z _
+                .Select(Function(r) r.value(index)) _
+                .ToArray
         Next
 
         Return dz
