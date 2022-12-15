@@ -1099,6 +1099,49 @@ Module stats
     End Function
 
     ''' <summary>
+    ''' set the NA, NaN, Inf value to the default value
+    ''' </summary>
+    ''' <param name="x">
+    ''' a numeric vector or a dataframe object of all elements in numeric mode.
+    ''' </param>
+    ''' <param name="default"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("filterMissing")>
+    Public Function filterMissing(<RRawVectorArgument>
+                                  x As Object,
+                                  Optional [default] As Double = 0.0,
+                                  Optional env As Environment = Nothing) As Object
+
+        If TypeOf x Is Rdataframe Then
+            ' run for each column 
+            Dim d As Rdataframe = DirectCast(x, Rdataframe)
+            Dim cols = d.columns _
+                .ToDictionary(Function(c) c.Key,
+                                Function(c)
+                                    Dim v As Double() = REnv.asVector(Of Double)(c.Value)
+                                    Dim m As Double() = v _
+                                        .Select(Function(xi) If(xi.IsNaNImaginary, [default], xi)) _
+                                        .ToArray
+
+                                    Return DirectCast(m, Array)
+                                End Function)
+
+            Return New Rdataframe With {
+                .rownames = d.rownames,
+                .columns = cols
+            }
+        Else
+            Dim v As Double() = REnv.asVector(Of Double)(x)
+            Dim m As Double() = v _
+                .Select(Function(xi) If(xi.IsNaNImaginary, [default], xi)) _
+                .ToArray
+
+            Return m
+        End If
+    End Function
+
+    ''' <summary>
     ''' z-score
     ''' </summary>
     ''' <param name="x"></param>
@@ -1119,18 +1162,17 @@ Module stats
             Dim d As Rdataframe = DirectCast(x, Rdataframe)
 
             If byrow Then
-                Return d.z_scoreByRow
+                Return filterMissing(d.z_scoreByRow, [default]:=0.0, env:=env)
             Else
-                Return d.z_scoreByColumn
+                Return filterMissing(d.z_scoreByColumn, [default]:=0.0, env:=env)
             End If
         Else
             Dim v As Double() = REnv.asVector(Of Double)(x)
             Dim z As Double() = New stdVector(v) _
                 .Z _
-                .Select(Function(d) If(d.IsNaNImaginary, 0.0, d)) _
                 .ToArray
 
-            Return z
+            Return filterMissing(z, [default]:=0.0, env:=env)
         End If
     End Function
 
@@ -1144,7 +1186,6 @@ Module stats
                                     Dim dz As Double() = REnv.asVector(Of Double)(c.Value)
                                     Dim zz As Double() = New stdVector(dz) _
                                         .Z _
-                                        .Select(Function(v) If(v.IsNaNImaginary, 0.0, v)) _
                                         .ToArray
 
                                     Return DirectCast(zz, Array)
@@ -1166,7 +1207,6 @@ Module stats
             .Select(Function(r)
                         Dim zi = New stdVector(r.value) _
                             .Z _
-                            .Select(Function(v) If(v.IsNaNImaginary, 0.0, v)) _
                             .ToArray
 
                         Return New NamedCollection(Of Double)(r.name, zi)
