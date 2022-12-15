@@ -1098,9 +1098,81 @@ Module stats
         Return output
     End Function
 
+    ''' <summary>
+    ''' z-score
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="byrow">
+    ''' this parameter works when the data type of the input 
+    ''' data <paramref name="x"/> is a dataframe or matrix
+    ''' object
+    ''' </param>
+    ''' <returns></returns>
     <ExportAPI("z")>
-    Public Function z_score(x As Double()) As Double()
-        Return New stdVector(x).Z.ToArray
+    <RApiReturn(GetType(Double))>
+    Public Function z_score(<RRawVectorArgument>
+                            x As Object,
+                            Optional byrow As Boolean = False,
+                            Optional env As Environment = Nothing) As Object
+
+        If TypeOf x Is Rdataframe Then
+            Dim d As Rdataframe = DirectCast(x, Rdataframe)
+
+            If byrow Then
+                Return d.z_scoreByRow
+            Else
+                Return d.z_scoreByColumn
+            End If
+        Else
+            Dim v As Double() = REnv.asVector(Of Double)(x)
+            Dim z As Double() = New stdVector(v).Z.ToArray
+
+            Return z
+        End If
+    End Function
+
+    <Extension>
+    Private Function z_scoreByColumn(d As Rdataframe) As Rdataframe
+        Dim z As New Rdataframe With {
+            .rownames = d.rownames,
+            .columns = d.columns _
+                .ToDictionary(Function(c) c.Key,
+                                Function(c)
+                                    Dim dz As Double() = REnv.asVector(Of Double)(c.Value)
+                                    Dim zz As Double() = New stdVector(dz).Z.ToArray
+
+                                    Return DirectCast(zz, Array)
+                                End Function)
+        }
+
+        Return z
+    End Function
+
+    <Extension>
+    Private Function z_scoreByRow(d As Rdataframe) As Rdataframe
+        Dim col As String() = d.colnames
+        Dim rows = d.forEachRow(col) _
+            .Select(Function(r)
+                        Return New NamedCollection(Of Double)(r.name, value:=REnv.asVector(Of Double)(r.value))
+                    End Function) _
+            .ToArray
+        Dim z = rows _
+            .Select(Function(r) New NamedCollection(Of Double)(r.name, New stdVector(r.value).Z.ToArray)) _
+            .ToArray
+        Dim dz As New Rdataframe With {
+            .columns = New Dictionary(Of String, Array),
+            .rownames = z _
+                .Select(Function(i) i.name) _
+                .ToArray
+        }
+        Dim index As Integer
+
+        For i As Integer = 0 To col.Length - 1
+            index = i
+            dz.add(col(i), z.Select(Function(r) r.value(index)).ToArray)
+        Next
+
+        Return dz
     End Function
 End Module
 
