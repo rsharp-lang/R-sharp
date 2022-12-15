@@ -94,6 +94,11 @@ Namespace Development.Package.File
         Public Property assembly As AssemblyPack
         Public Property unixman As List(Of String)
         Public Property vignettes As List(Of String)
+        ''' <summary>
+        ''' documents about the clr data types
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property clr As New Dictionary(Of String, String)
         Public Property pkg_dir As String
 
         Public Overrides Function ToString() As String
@@ -364,6 +369,13 @@ Namespace Development.Package.File
             End Using
         End Sub
 
+        Private Sub saveClrDcouments(zip As ZipArchive, ByRef checksum$)
+            Using file As New StreamWriter(zip.CreateEntry("package/clr/readme.txt").Open)
+                Call file.WriteLine(".NET CLR object documents at here!")
+                Call file.Flush()
+            End Using
+        End Sub
+
         ''' <summary>
         ''' generate package file from here
         ''' </summary>
@@ -386,6 +398,7 @@ Namespace Development.Package.File
                 Call saveDependency(zip, checksum)
                 Call writeIndex(zip, checksum)
                 Call writeRuntime(zip, checksum)
+                Call saveClrDcouments(zip, checksum)
 
                 Dim checksumVal As String = md5.GetMd5Hash(checksum).ToUpper
 
