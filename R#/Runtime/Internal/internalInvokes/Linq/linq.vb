@@ -63,8 +63,10 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Parallel.Tasks
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -166,14 +168,34 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <summary>
         ''' apply for the pipeline progress report
         ''' </summary>
-        ''' <param name="x"></param>
+        ''' <param name="x">
+        ''' the pipeline object or a progress number if 
+        ''' current function invoke is occurs in a parallel 
+        ''' task.
+        ''' </param>
         ''' <param name="msgFunc">a text message to display or function for show message</param>
         ''' <param name="env"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' value range of parameter <paramref name="x"/> should be in numeric 
+        ''' range ``[0,100]`` if the progress function is invoked in a parallel 
+        ''' stack environment.
+        ''' </remarks>
         <ExportAPI("progress")>
-        Public Function progress(<RRawVectorArgument> x As Object, msgFunc As Object, Optional env As Environment = Nothing) As Object
+        Public Function progress(<RRawVectorArgument>
+                                 x As Object,
+                                 Optional msgFunc As Object = Nothing,
+                                 Optional env As Environment = Nothing) As Object
+
             If msgFunc Is Nothing Then
-                Call base.print("",, env)
+                Dim symbol As Symbol = env.FindSymbol(parallelApplys.ParallelTaskWorkerSymbol)
+                Dim worker As TaskWorker = TryCast(symbol?.value, TaskWorker)
+
+                If Not worker Is Nothing Then
+                    worker.progress = REnv.single(REnv.asVector(Of Double)(x), forceSingle:=True)
+                Else
+                    Call base.print("",, env)
+                End If
             ElseIf TypeOf msgFunc Is String Then
                 Call base.print(msgFunc,, env)
             ElseIf msgFunc.GetType.ImplementInterface(Of RFunction) Then
