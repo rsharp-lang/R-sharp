@@ -1098,9 +1098,153 @@ Module stats
         Return output
     End Function
 
+    ''' <summary>
+    ''' set the NA, NaN, Inf value to the default value
+    ''' </summary>
+    ''' <param name="x">
+    ''' a numeric vector or a dataframe object of all elements in numeric mode.
+    ''' </param>
+    ''' <param name="default"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("filterMissing")>
+    Public Function filterMissing(<RRawVectorArgument>
+                                  x As Object,
+                                  Optional [default] As Double = 0.0,
+                                  Optional env As Environment = Nothing) As Object
+
+        If TypeOf x Is Rdataframe Then
+            ' run for each column 
+            Dim d As Rdataframe = DirectCast(x, Rdataframe)
+            Dim cols = d.columns _
+                .ToDictionary(Function(c) c.Key,
+                                Function(c)
+                                    Dim v As Double() = REnv.asVector(Of Double)(c.Value)
+                                    Dim m As Double() = v _
+                                        .Select(Function(xi) If(xi.IsNaNImaginary, [default], xi)) _
+                                        .ToArray
+
+                                    Return DirectCast(m, Array)
+                                End Function)
+
+            Return New Rdataframe With {
+                .rownames = d.rownames,
+                .columns = cols
+            }
+        Else
+            Dim v As Double() = REnv.asVector(Of Double)(x)
+            Dim m As Double() = v _
+                .Select(Function(xi) If(xi.IsNaNImaginary, [default], xi)) _
+                .ToArray
+
+            Return m
+        End If
+    End Function
+
+    ''' <summary>
+    ''' z-score
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="byrow">
+    ''' this parameter works when the data type of the input 
+    ''' data <paramref name="x"/> is a dataframe or matrix
+    ''' object
+    ''' </param>
+    ''' <returns>
+    ''' NA, NaN, Inf missing value in the matrix will be set
+    ''' to the default value zero in the return value of this 
+    ''' function
+    ''' </returns>
+    ''' <remarks>
+    ''' #### Standard score(z-score)
+    ''' 
+    ''' In statistics, the standard score is the signed number of standard deviations by which the value of 
+    ''' an observation or data point is above the mean value of what is being observed or measured. Observed 
+    ''' values above the mean have positive standard scores, while values below the mean have negative 
+    ''' standard scores. The standard score is a dimensionless quantity obtained by subtracting the population 
+    ''' mean from an individual raw score and then dividing the difference by the population standard deviation. 
+    ''' This conversion process is called standardizing or normalizing (however, "normalizing" can refer to 
+    ''' many types of ratios; see normalization for more).
+    ''' 
+    ''' > https://en.wikipedia.org/wiki/Standard_score
+    ''' </remarks>
     <ExportAPI("z")>
-    Public Function z_score(x As Double()) As Double()
-        Return New stdVector(x).Z.ToArray
+    <RApiReturn(GetType(Double))>
+    Public Function z_score(<RRawVectorArgument>
+                            x As Object,
+                            Optional byrow As Boolean = False,
+                            Optional env As Environment = Nothing) As Object
+
+        If TypeOf x Is Rdataframe Then
+            Dim d As Rdataframe = DirectCast(x, Rdataframe)
+
+            If byrow Then
+                Return filterMissing(d.z_scoreByRow, [default]:=0.0, env:=env)
+            Else
+                Return filterMissing(d.z_scoreByColumn, [default]:=0.0, env:=env)
+            End If
+        Else
+            Dim v As Double() = REnv.asVector(Of Double)(x)
+            Dim z As Double() = New stdVector(v) _
+                .Z _
+                .ToArray
+
+            Return filterMissing(z, [default]:=0.0, env:=env)
+        End If
+    End Function
+
+    <Extension>
+    Private Function z_scoreByColumn(d As Rdataframe) As Rdataframe
+        Dim z As New Rdataframe With {
+            .rownames = d.rownames,
+            .columns = d.columns _
+                .ToDictionary(Function(c) c.Key,
+                                Function(c)
+                                    Dim dz As Double() = REnv.asVector(Of Double)(c.Value)
+                                    Dim zz As Double() = New stdVector(dz) _
+                                        .Z _
+                                        .ToArray
+
+                                    Return DirectCast(zz, Array)
+                                End Function)
+        }
+
+        Return z
+    End Function
+
+    <Extension>
+    Private Function z_scoreByRow(d As Rdataframe) As Rdataframe
+        Dim col As String() = d.colnames
+        Dim rows = d.forEachRow(col) _
+            .Select(Function(r)
+                        Return New NamedCollection(Of Double)(r.name, value:=REnv.asVector(Of Double)(r.value))
+                    End Function) _
+            .ToArray
+        Dim z = rows _
+            .Select(Function(r)
+                        Dim zi = New stdVector(r.value) _
+                            .Z _
+                            .ToArray
+
+                        Return New NamedCollection(Of Double)(r.name, zi)
+                    End Function) _
+            .ToArray
+        Dim dz As New Rdataframe With {
+            .columns = New Dictionary(Of String, Array),
+            .rownames = z _
+                .Select(Function(i) i.name) _
+                .ToArray
+        }
+        Dim index As Integer
+
+        For i As Integer = 0 To col.Length - 1
+            index = i
+            dz.columns(col(i)) = z _
+                .Select(Function(r) r.value(index)) _
+                .ToArray
+        Next
+
+        Return dz
     End Function
 End Module
 
