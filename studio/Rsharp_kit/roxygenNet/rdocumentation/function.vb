@@ -144,7 +144,7 @@ Public Class [function]
 
                 Return rtype.mode.Description
             Case Else
-                Return $"<a href=""{type.FullName}"">{type.Name}</a>"
+                Return $"<a href=""/clr/{type.FullName.Replace("."c, "/"c)}"">{type.Name}</a>"
         End Select
     End Function
 
