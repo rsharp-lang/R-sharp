@@ -144,7 +144,12 @@ Public Class [function]
 
                 Return rtype.mode.Description
             Case Else
-                Return $"<a href=""/clr/{type.FullName.Replace("."c, "/"c)}"">{type.Name}</a>"
+
+                If type Is GetType(Object) Then
+                    Return "<i>any</i> kind"
+                Else
+                    Return $"<a href=""/clr/{type.FullName.Replace("."c, "/"c)}.html"">{type.Name}</a>"
+                End If
         End Select
     End Function
 
