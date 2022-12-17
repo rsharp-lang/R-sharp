@@ -63,10 +63,9 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Parallel.Tasks
+Imports Microsoft.VisualBasic.Parallel.Tasks.TaskQueue(Of Long)
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -192,7 +191,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Dim worker As TaskWorker = TryCast(symbol?.value, TaskWorker)
 
                 If Not worker Is Nothing Then
-                    worker.progress = REnv.single(REnv.asVector(Of Double)(x), forceSingle:=True)
+                    worker.progress = REnv.single(
+                        x:=REnv.asVector(Of Double)(x),
+                        forceSingle:=True
+                    )
                 Else
                     Call base.print("",, env)
                 End If
