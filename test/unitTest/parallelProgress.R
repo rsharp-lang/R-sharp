@@ -1,5 +1,5 @@
-# list = as.list( [4,5,6,7,8]);
-list = as.list(1);
+list = as.list( [4,5,6,7,8]);
+# list = as.list(1);
 
 str(list);
 
@@ -16,6 +16,6 @@ parLapply(list, function(x) {
     progress(100);
 
     x ^ 2;
-}) 
+}, n_threads = 4) 
 |> str();
 
