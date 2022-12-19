@@ -660,12 +660,21 @@ Namespace Runtime.Internal.Invokes
         ''' ‘Value’. (For the "data.frame" method of cbind these can 
         ''' be further arguments to data.frame such as stringsAsFactors.)
         ''' </param>
+        ''' <param name="strict">
+        ''' this option affects the column merge speed. When this option is 
+        ''' set to TRUE, then cbind function will check the row order at first
+        ''' and then do row re-ordering for column appends.
+        ''' When this option is set to FALSE, then the cbind function will
+        ''' merge the dataframe directly without any row order checking. So
+        ''' you must ensure that the row order is keeps the same when doing
+        ''' non-strict cbind invoke.
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("cbind")>
         <RApiReturn(GetType(dataframe))>
         Public Function cbind(<RListObjectArgument> x As list,
-                              Optional strict As Boolean = False,
+                              Optional strict As Boolean = True,
                               Optional [default] As Object = Nothing,
                               Optional env As Environment = Nothing) As Object
 
@@ -697,7 +706,7 @@ Namespace Runtime.Internal.Invokes
             If col Is Nothing Then
                 Return Nothing
             ElseIf TypeOf col Is dataframe Then
-                Return col
+                Return DirectCast(col, dataframe)
             ElseIf TypeOf col Is vector OrElse col.GetType.IsArray Then
                 Return New dataframe With {
                     .rownames = Nothing,
@@ -753,6 +762,8 @@ Namespace Runtime.Internal.Invokes
                     Dim newNames = colnames.JoinIterates(oldColNames).uniqueNames
 
                     ' dataframe will be merged directly
+                    ' this needs the row order between the 
+                    ' two dataframe object keeps the same
                     For i As Integer = 0 To append.columns.Count - 1
                         d.columns.Add(newNames(i + colnames.Length), append.columns(oldColNames(i)))
                     Next
