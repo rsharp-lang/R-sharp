@@ -149,7 +149,7 @@
 	  <DefineDebug>false</DefineDebug>
 	  <DefineTrace>true</DefineTrace>
 	  <BaseAddress>4194304</BaseAddress>
-	  <OutputPath>D:\PlantMAT\PlantMAT\assembly\</OutputPath>
+	 
 	  <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
 	</PropertyGroup>
 
@@ -163,7 +163,7 @@
 	  <DefineDebug>false</DefineDebug>
 	  <DefineTrace>true</DefineTrace>
 	  <BaseAddress>4194304</BaseAddress>
-	  <OutputPath>D:\biodeep\biodeepdb_v3\metaCluster\NPSearch\assembly\</OutputPath>
+	
 	  <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
 	</PropertyGroup>
 

@@ -1,58 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::d950ae359bf729bb78701771f5ab5ce0, R-sharp\R#\System\Document\FunctionDeclare.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 90
-    '    Code Lines: 74
-    ' Comment Lines: 0
-    '   Blank Lines: 16
-    '     File Size: 3.58 KB
+' Summaries:
 
 
-    '     Class FunctionDeclare
-    ' 
-    '         Properties: name, parameters, sourceMap
-    ' 
-    '         Function: GetArgument, (+2 Overloads) ToString, valueText
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 90
+'    Code Lines: 74
+' Comment Lines: 0
+'   Blank Lines: 16
+'     File Size: 3.58 KB
+
+
+'     Class FunctionDeclare
+' 
+'         Properties: name, parameters, sourceMap
+' 
+'         Function: GetArgument, (+2 Overloads) ToString, valueText
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Drawing
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -89,6 +92,8 @@ Namespace Development
                     .JoinBy(", ")}"
             End If
 
+            Static literals As Index(Of String) = {"NULL", "NA", "TRUE", "FALSE", "Inf", "NaN"}
+
             If optionals.Length > 0 Then
                 part2 = optionals _
                     .Select(Function(a)
@@ -99,13 +104,20 @@ Namespace Development
                                        (valHtml.First = "`"c AndAlso valHtml.Last = "`"c) OrElse
                                        (valHtml.First = "'"c AndAlso valHtml.Last = "'"c) Then
 
-                                        valHtml = $"<span style='color: brown;'><strong>{valHtml}</strong></span>"
+                                        Dim isColor As Boolean = False
+                                        Dim color As Color = valHtml.Trim(""""c, "'"c, "`"c).TranslateColor(throwEx:=False, success:=isColor)
+
+                                        If isColor Then
+                                            valHtml = $"<span style='color: {color.ToHtmlColor};'><strong>{valHtml}</strong></span>"
+                                        Else
+                                            valHtml = $"<span style='color: brown;'><strong>{valHtml}</strong></span>"
+                                        End If
                                     End If
                                 Else
                                     valHtml = "NULL"
                                 End If
 
-                                If valHtml = "NULL" OrElse valHtml = "NA" Then
+                                If valHtml Like literals Then
                                     valHtml = $"<span style='color: blue;'>{valHtml}</span>"
                                 End If
 
