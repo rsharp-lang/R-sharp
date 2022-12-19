@@ -678,6 +678,8 @@ Namespace Runtime.Internal.Invokes
 
                 If result Like GetType(Message) Then
                     Return result.TryCast(Of Message)
+                ElseIf result Is Nothing Then
+                    ' just do nothing
                 Else
                     d = result.TryCast(Of dataframe)
                 End If
