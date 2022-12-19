@@ -413,9 +413,9 @@ Namespace Runtime
         ''' </param>
         ''' <returns></returns>
         Public Overridable Function FindSymbol(name As String, Optional [inherits] As Boolean = True) As Symbol
-            If (name.First = "["c AndAlso name.Last = "]"c) Then
-                Return globalEnvironment.FindSymbol(name.GetStackValue("[", "]"))
-            End If
+            'If (name.First = "["c AndAlso name.Last = "]"c) Then
+            '    Return globalEnvironment.FindSymbol(name.GetStackValue("[", "]"))
+            'End If
 
             If symbols.ContainsKey(name) Then
                 Return symbols(name)

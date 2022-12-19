@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::dadf2f2c2ca24c2cb76e8fdadc92f89d, R-sharp\R#\Runtime\Internal\internalInvokes\set.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 418
-    '    Code Lines: 229
-    ' Comment Lines: 143
-    '   Blank Lines: 46
-    '     File Size: 18.95 KB
+' Summaries:
 
 
-    '     Module [set]
-    ' 
-    '         Function: combn, count, createLoop, crossing, duplicated
-    '                   getObjectSet, indexOf, intersect, jaccard, rev
-    '                   union
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 418
+'    Code Lines: 229
+' Comment Lines: 143
+'   Blank Lines: 46
+'     File Size: 18.95 KB
+
+
+'     Module [set]
+' 
+'         Function: combn, count, createLoop, crossing, duplicated
+'                   getObjectSet, indexOf, intersect, jaccard, rev
+'                   union
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -71,6 +71,25 @@ Namespace Runtime.Internal.Invokes
     ''' Set Operations
     ''' </summary>
     Module [set]
+
+        ''' <summary>
+        ''' ### setdiff: Set Difference of Subsets
+        ''' </summary>
+        ''' <returns></returns>
+        ''' 
+        <ExportAPI("setdiff")>
+        Public Function setdiff(x As Array, y As Array, Optional env As Environment = Nothing) As Object
+            Dim s1 As String() = REnv.asVector(Of String)(x)
+            Dim s2 As String() = REnv.asVector(Of String)(y)
+            Dim diffs As New List(Of String)
+            Dim i1 = s1.Indexing
+            Dim i2 = s2.Indexing
+
+            Call diffs.AddRange(From s As String In s1 Where Not s Like i2)
+            Call diffs.AddRange(From s As String In s2 Where Not s Like i1)
+
+            Return diffs.ToArray
+        End Function
 
         ''' <summary>
         ''' ## Reverse Elements

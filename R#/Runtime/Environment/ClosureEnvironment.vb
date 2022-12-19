@@ -53,6 +53,7 @@
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 
 Namespace Runtime
 
@@ -121,7 +122,14 @@ Namespace Runtime
             End If
             ' at last, found symbol in global
             If symbol Is Nothing Then
-                symbol = MyBase.FindSymbol(name, [inherits]:=False)
+                Dim findInParent As Boolean = False
+
+                ' 20221217 make an exception for the parallel task progress report
+                findInParent = findInParent OrElse name = parallelApplys.ParallelTaskWorkerSymbol
+                ' make another exceptions?
+                ' ...
+
+                symbol = MyBase.FindSymbol(name, [inherits]:=findInParent)
             End If
 
             Return symbol

@@ -1,70 +1,70 @@
 ﻿#Region "Microsoft.VisualBasic::02a0983202c28e17767c3c43ce22d86f, R-sharp\R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 2747
-    '    Code Lines: 1198
-    ' Comment Lines: 1325
-    '   Blank Lines: 224
-    '     File Size: 122.78 KB
+' Summaries:
 
 
-    '     Module base
-    ' 
-    '         Function: [date], [stop], allocate, append, appendFinal
-    '                   appendOfList, appendOfVector, attachPackageFile, autoDispose, c
-    '                   cat, cbind, colnames, columnVector, days
-    '                   doPrintInternal, factor, factors, getOption, ifelse
-    '                   invisible, isDataframe, isEmpty, isEmptyArray, isList
-    '                   isNA, isNull, isRVector, length, library
-    '                   makeNames, names, ncol, neg, nrow
-    '                   objectAddInvoke, options, options_flush, print, range
-    '                   rbind, Rdataframe, rep, replace, Rlist
-    '                   Robj_dimension, rowBindDataFrame, rownames, seq, sink
-    '                   source, str, summary, t, uniqueNames
-    '                   unitOfT, warning, year
-    ' 
-    '         Sub: safeAddColumn, warnings
-    '         Class PrinterOptions
-    ' 
-    '             Properties: fields, maxPrint, quot
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 2747
+'    Code Lines: 1198
+' Comment Lines: 1325
+'   Blank Lines: 224
+'     File Size: 122.78 KB
+
+
+'     Module base
+' 
+'         Function: [date], [stop], allocate, append, appendFinal
+'                   appendOfList, appendOfVector, attachPackageFile, autoDispose, c
+'                   cat, cbind, colnames, columnVector, days
+'                   doPrintInternal, factor, factors, getOption, ifelse
+'                   invisible, isDataframe, isEmpty, isEmptyArray, isList
+'                   isNA, isNull, isRVector, length, library
+'                   makeNames, names, ncol, neg, nrow
+'                   objectAddInvoke, options, options_flush, print, range
+'                   rbind, Rdataframe, rep, replace, Rlist
+'                   Robj_dimension, rowBindDataFrame, rownames, seq, sink
+'                   source, str, summary, t, uniqueNames
+'                   unitOfT, warning, year
+' 
+'         Sub: safeAddColumn, warnings
+'         Class PrinterOptions
+' 
+'             Properties: fields, maxPrint, quot
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -540,7 +540,8 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop({
                     $"mismatch column size between two dataframe!",
                     $"({d.ncols}) columns: {d.colnames.GetJson}",
-                    $"({row.ncols}) columns: {d.colnames.GetJson}"
+                    $"({row.ncols}) columns: {row.colnames.GetJson}",
+                    $"diffs: {DirectCast([set].setdiff(d.colnames, row.colnames, env), String()).GetJson}"
                 }, env)
             End If
 
@@ -613,19 +614,22 @@ Namespace Runtime.Internal.Invokes
             ElseIf TypeOf row Is dataframe Then
                 Return rowBindDataFrame(d, row, env)
             Else
+                ' dataframe rbind with a vector row
                 Dim v As Array = REnv.asVector(Of Object)(row)
                 Dim colnames As String() = d.colnames
                 Dim nrow As Integer = d.nrows
 
                 If v.Length <> colnames.Length Then
                     Return Internal.debug.stop({
-                        $"mismatch column size between two dataframe!",
-                        $"({d.ncols}) columns: {d.colnames.GetJson}",
-                        $"({row.ncols}) columns: {d.colnames.GetJson}"
+                        $"mismatch column size between dataframe and vector row!",
+                        $"({v.Length}) columns: {DirectCast(REnv.asVector(Of String)(v), String()).GetJson}",
+                        $"({colnames.Length}) columns: {d.colnames.GetJson}"
                     }, env)
                 End If
 
                 For i As Integer = 0 To colnames.Length - 1
+                    ' for each col, append one element
+                    ' so no nrow-1 for create vec
                     Dim vec = New Object(nrow) {}
                     Dim v2 = d.columns(colnames(i))
 
