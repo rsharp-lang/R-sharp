@@ -150,7 +150,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' in this point of view, keep less global variable reference will
         ''' be better in parallel
         ''' </param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' modification of the environment context in the parallel closure 
+        ''' will not affects the parent environment context 
+        ''' <paramref name="env"/>. 
+        ''' </returns>
         <Extension>
         Public Function deepCloneContext(env As Environment, tag As String) As Environment
             Dim symbols As New Dictionary(Of String, Symbol)
@@ -265,6 +269,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Next
         End Sub
 
+        Public Const ParallelTaskWorkerSymbol As String = "$parallel_task_worker~<environment_context!>"
+
         <Extension>
         Private Sub pushParallelTask(host As ThreadPool,
                                      list As IDictionary,
@@ -283,7 +289,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Dim env As Environment = envir.deepCloneContext(keyName)
 
                 Call host.RunTask(
-                    Sub()
+                    Sub(worker)
+
+                        Call env.Push(ParallelTaskWorkerSymbol, worker, [readonly]:=True)
+
                         Dim result = (
                             i:=index,
                             key:=keyName,
