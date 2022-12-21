@@ -285,6 +285,11 @@ Public Module Parallel
         End If
 
         Dim host As RunParallel = RunParallel.Initialize(task, ___argvSet_____, debug, verbose, env)
+
+        If host.error IsNot Nothing Then
+            Return host.error
+        End If
+
         Dim println = env.WriteLineHandler
         Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) = host.produceTask
         Dim engine As New ThreadTask(Of SeqValue(Of Object))(
