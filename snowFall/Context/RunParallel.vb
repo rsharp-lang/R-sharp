@@ -186,18 +186,33 @@ Public Class RunParallel
     ''' <param name="debug"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
-    Public Shared Function Initialize(task As Expression, argv As list, debug As Boolean, env As Environment) As RunParallel
+    Public Shared Function Initialize(task As Expression,
+                                      argv As list,
+                                      debug As Boolean,
+                                      verbose As Boolean,
+                                      env As Environment) As RunParallel
+
         Dim parallelBase As New MasterContext(
             env:=env,
             verbose:=argv.getValue("debug", env, [default]:=False),
             port:=argv.getValue("master", env, -1)
         )
+        Dim println = env.WriteLineHandler
+
+        If verbose Then
+            Call println("get parallel sequence symbol set.")
+        End If
+
         Dim seqSet As NamedCollection(Of Object)() = readSymbolSet(task, parallelBase, argv, env).ToArray
         Dim checkSize As Integer() = seqSet _
             .Select(Function(seq) seq.Length) _
             .Where(Function(l) l <> 1) _
             .ToArray
         Dim taskNames As New Dictionary(Of String, String())
+
+        If verbose Then
+            Call println($"get ${seqSet.Length} symbol set!")
+        End If
 
         For Each var As NamedCollection(Of Object) In seqSet
             If var.name.StringEmpty AndAlso var.value.Length = 1 AndAlso TypeOf var(Scan0) Is Message Then
@@ -220,11 +235,19 @@ Public Class RunParallel
             End If
         Next
 
+        If verbose Then
+            Call println("create symbol list job done! start to serialize task expression to stream data!")
+        End If
+
         Dim taskPayload As New MemoryStream
 
         Call New Writer(taskPayload).Write(task)
         Call taskPayload.Flush()
         Call taskPayload.Seek(Scan0, SeekOrigin.Begin)
+
+        If verbose Then
+            Call println("parallel host object is generated!")
+        End If
 
         If checkSize.Distinct.Count <> 1 Then
             Return Internal.debug.stop("the sequence size should be equals to each other!", env)

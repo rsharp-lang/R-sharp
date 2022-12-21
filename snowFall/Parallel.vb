@@ -257,6 +257,7 @@ Public Module Parallel
                              Optional n_threads As Integer = -1,
                              Optional debug As Boolean? = Nothing,
                              Optional ignoreError As Boolean? = Nothing,
+                             Optional verbose As Boolean? = Nothing,
                              <RListObjectArgument>
                              Optional ___argvSet_____ As list = Nothing,
                              Optional env As Environment = Nothing) As Object
@@ -275,8 +276,15 @@ Public Module Parallel
                 ignoreError = False
             End If
         End If
+        If verbose Is Nothing Then
+            If ___argvSet_____.hasName("verbose") Then
+                verbose = ___argvSet_____.getValue(Of Boolean)("verbose", env, [default]:=False)
+            Else
+                verbose = False
+            End If
+        End If
 
-        Dim host As RunParallel = RunParallel.Initialize(task, ___argvSet_____, debug, env)
+        Dim host As RunParallel = RunParallel.Initialize(task, ___argvSet_____, debug, verbose, env)
         Dim println = env.WriteLineHandler
         Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) = host.produceTask
         Dim engine As New ThreadTask(Of SeqValue(Of Object))(
@@ -285,7 +293,16 @@ Public Module Parallel
             verbose:=env.globalEnvironment.debugMode
         )
 
+        If verbose Then
+            Call println("start host services!")
+            Call println(host.master.ToString)
+        End If
+
         Call New Thread(Sub() host.master.Run(AddressOf host.getSymbol)).Start()
+
+        If verbose Then
+            Call println("run parallel!")
+        End If
 
         Dim result As Object() = engine _
             .WithDegreeOfParallelism(n_threads) _
@@ -297,7 +314,9 @@ Public Module Parallel
         Dim errors As New List(Of (i As Integer, ex As Message))
         Dim j As Integer = 0
 
-        Call println("all parallel job done!")
+        If verbose Then
+            Call println("all parallel job done!")
+        End If
 
         For Each i As Object In result
             j += 1
@@ -315,7 +334,10 @@ Public Module Parallel
             End If
         Next
 
-        Call println("close master node services!")
+        If verbose Then
+            Call println("close master node services!")
+        End If
+
         Call host.master.Dispose()
 
         If errors.Any Then
