@@ -82,6 +82,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.My.JavaScript
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.Components
@@ -659,73 +660,135 @@ Namespace Runtime.Internal.Invokes
         ''' ‘Value’. (For the "data.frame" method of cbind these can 
         ''' be further arguments to data.frame such as stringsAsFactors.)
         ''' </param>
+        ''' <param name="strict">
+        ''' this option affects the column merge speed. When this option is 
+        ''' set to TRUE, then cbind function will check the row order at first
+        ''' and then do row re-ordering for column appends.
+        ''' When this option is set to FALSE, then the cbind function will
+        ''' merge the dataframe directly without any row order checking. So
+        ''' you must ensure that the row order is keeps the same when doing
+        ''' non-strict cbind invoke.
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("cbind")>
+        <RApiReturn(GetType(dataframe))>
         Public Function cbind(<RListObjectArgument> x As list,
-                              Optional strict As Boolean = False,
+                              Optional strict As Boolean = True,
                               Optional [default] As Object = Nothing,
-                              Optional env As Environment = Nothing) As dataframe
+                              Optional env As Environment = Nothing) As Object
 
             Dim nameList As String() = x.getNames
-            Dim d As dataframe = x.getByName(nameList(Scan0))
+            Dim d As dataframe = Nothing
 
-            If d Is Nothing Then
-                d = New dataframe With {
-                    .columns = New Dictionary(Of String, Array),
-                    .rownames = {}
-                }
-            Else
-                d = New dataframe With {
-                    .columns = New Dictionary(Of String, Array)(d.columns),
-                    .rownames = d.rownames
-                }
-            End If
-
-            For Each nameKey As String In nameList.Skip(1)
+            For Each nameKey As String In nameList
                 Dim col As Object = x.getByName(nameKey)
+                Dim result = d.cbind(nameKey, col, strict, [default], env)
 
-                If TypeOf col Is list Then
-                    With DirectCast(col, list)
-                        Dim value As Object
-
-                        For Each name As String In .slots.Keys
-                            value = .slots(name)
-
-                            If Not value Is Nothing Then
-                                If TypeOf value Is Array Then
-                                    Call safeAddColumn(d, name, DirectCast(value, Array))
-                                Else
-                                    Call safeAddColumn(d, name, {value})
-                                End If
-                            End If
-                        Next
-                    End With
-                ElseIf TypeOf col Is Array Then
-                    Call safeAddColumn(d, nameKey, DirectCast(col, Array))
-                ElseIf TypeOf col Is vector Then
-                    Call safeAddColumn(d, nameKey, DirectCast(col, vector).data)
-                ElseIf TypeOf col Is dataframe Then
-                    Dim append As dataframe = DirectCast(col, dataframe)
-
-                    If Not strict Then
-                        Dim colnames = d.columns.Keys.ToArray
-                        Dim oldColNames = append.columns.Keys.ToArray
-                        Dim newNames = colnames.JoinIterates(oldColNames).uniqueNames
-
-                        ' dataframe will be merged directly
-                        For i As Integer = 0 To append.columns.Count - 1
-                            d.columns.Add(newNames(i + colnames.Length), append.columns(oldColNames(i)))
-                        Next
-                    Else
-                        d = strictColumnAppend(d, append, [default], env)
-                    End If
+                If result Like GetType(Message) Then
+                    Return result.TryCast(Of Message)
+                ElseIf result Is Nothing Then
+                    ' just do nothing
                 Else
-                    Call safeAddColumn(d, nameKey, {col})
+                    d = result.TryCast(Of dataframe)
                 End If
             Next
 
             Return d
+        End Function
+
+        <Extension>
+        Private Function columnCombine01(d As dataframe, nameKey As String,
+                                         col As Object,
+                                         strict As Boolean,
+                                         [default] As Object,
+                                         env As Environment) As [Variant](Of Message, dataframe)
+            If col Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf col Is dataframe Then
+                Return DirectCast(col, dataframe)
+            ElseIf TypeOf col Is vector OrElse col.GetType.IsArray Then
+                Return New dataframe With {
+                    .rownames = Nothing,
+                    .columns = New Dictionary(Of String, Array) From {
+                        {nameKey, REnv.asVector(Of Object)(col)}
+                    }
+                }
+            ElseIf TypeOf col Is list Then
+                ' list names as row names
+                Return New dataframe With {
+                    .rownames = DirectCast(col, list).getNames,
+                    .columns = New Dictionary(Of String, Array) From {
+                        {nameKey, DirectCast(col, list).GetVector(.rownames)}
+                    }
+                }
+            Else
+                Return Message.InCompatibleType(GetType(dataframe), col.GetType, env)
+            End If
+        End Function
+
+        <Extension>
+        Private Function columnCombine11(d As dataframe, nameKey As String,
+                                         col As Object,
+                                         strict As Boolean,
+                                         [default] As Object,
+                                         env As Environment) As [Variant](Of Message, dataframe)
+            If TypeOf col Is list Then
+                With DirectCast(col, list)
+                    Dim value As Object
+
+                    For Each name As String In .slots.Keys
+                        value = .slots(name)
+
+                        If Not value Is Nothing Then
+                            If TypeOf value Is Array Then
+                                Call safeAddColumn(d, name, DirectCast(value, Array))
+                            Else
+                                Call safeAddColumn(d, name, {value})
+                            End If
+                        End If
+                    Next
+                End With
+            ElseIf TypeOf col Is Array Then
+                Call safeAddColumn(d, nameKey, DirectCast(col, Array))
+            ElseIf TypeOf col Is vector Then
+                Call safeAddColumn(d, nameKey, DirectCast(col, vector).data)
+            ElseIf TypeOf col Is dataframe Then
+                Dim append As dataframe = DirectCast(col, dataframe)
+
+                If Not strict Then
+                    Dim colnames = d.columns.Keys.ToArray
+                    Dim oldColNames = append.columns.Keys.ToArray
+                    Dim newNames = colnames.JoinIterates(oldColNames).uniqueNames
+
+                    ' dataframe will be merged directly
+                    ' this needs the row order between the 
+                    ' two dataframe object keeps the same
+                    For i As Integer = 0 To append.columns.Count - 1
+                        d.columns.Add(newNames(i + colnames.Length), append.columns(oldColNames(i)))
+                    Next
+                Else
+                    d = strictColumnAppend(d, append, [default], env)
+                End If
+            Else
+                Call safeAddColumn(d, nameKey, {col})
+            End If
+
+            Return d
+        End Function
+
+        <Extension>
+        Private Function cbind(d As dataframe, nameKey As String,
+                               col As Object,
+                               strict As Boolean,
+                               [default] As Object,
+                               env As Environment) As [Variant](Of Message, dataframe)
+
+            If d Is Nothing Then
+                Return d.columnCombine01(nameKey, col, strict, [default], env)
+            Else
+                Return d.columnCombine11(nameKey, col, strict, [default], env)
+            End If
         End Function
 
         Private Function strictColumnAppend(df As dataframe, y As dataframe, [default] As Object, env As Environment) As dataframe

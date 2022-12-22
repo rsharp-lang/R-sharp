@@ -58,6 +58,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -196,7 +197,14 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                         forceSingle:=True
                     )
                 Else
-                    Call base.print("",, env)
+                    Dim typeX As RType = RType.TypeOf(x)
+                    Dim stack = env.stackTrace.ElementAtOrDefault(2)
+
+                    If typeX.mode.IsNumeric Then
+                        Call RunSlavePipeline.SendProgress(CDbl(REnv.single(x, True)), If(stack Is Nothing, "Pipeline progress report", stack.Method.Method))
+                    Else
+                        Call base.print("",, env)
+                    End If
                 End If
             ElseIf TypeOf msgFunc Is String Then
                 Call base.print(msgFunc,, env)

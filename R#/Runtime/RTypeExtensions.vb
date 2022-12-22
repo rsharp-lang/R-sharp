@@ -126,6 +126,14 @@ Namespace Runtime
                    type = TypeCodes.string
         End Function
 
+        ''' <summary>
+        ''' Target R type is a kind of numeric type?
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <returns>
+        ''' this function returns true if the <paramref name="type"/> is 
+        ''' <see cref="TypeCodes.double"/> or <see cref="TypeCodes.integer"/>
+        ''' </returns>
         <Extension>
         Public Function IsNumeric(type As TypeCodes) As Boolean
             Return type = TypeCodes.double OrElse type = TypeCodes.integer

@@ -1,63 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::95857b9ed20620cfafb2c8d47f432e8e, R-sharp\R#\Runtime\Internal\objects\dataset\list.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 443
-    '    Code Lines: 265
-    ' Comment Lines: 116
-    '   Blank Lines: 62
-    '     File Size: 15.58 KB
+' Summaries:
 
 
-    '     Class list
-    ' 
-    '         Properties: data, length, slots
-    ' 
-    '         Constructor: (+6 Overloads) Sub New
-    ' 
-    '         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) getByIndex, (+2 Overloads) getByName
-    '                   getNames, GetSlots, (+2 Overloads) getValue, hasName, namedValues
-    '                   setByindex, setByIndex, (+2 Overloads) setByName, setNames, ToString
-    ' 
-    '         Sub: add
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 443
+'    Code Lines: 265
+' Comment Lines: 116
+'   Blank Lines: 62
+'     File Size: 15.58 KB
+
+
+'     Class list
+' 
+'         Properties: data, length, slots
+' 
+'         Constructor: (+6 Overloads) Sub New
+' 
+'         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) getByIndex, (+2 Overloads) getByName
+'                   getNames, GetSlots, (+2 Overloads) getValue, hasName, namedValues
+'                   setByindex, setByIndex, (+2 Overloads) setByName, setNames, ToString
+' 
+'         Sub: add
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -418,6 +419,14 @@ Namespace Runtime.Internal.Object
                               End Function)
 
             Return New list With {.slots = subset}
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function GetVector(names As String()) As Array
+            Return names _
+                .SafeQuery _
+                .Select(Function(key) slots.TryGetValue(key)) _
+                .ToArray
         End Function
 
         ''' <summary>
