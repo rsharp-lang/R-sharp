@@ -189,6 +189,13 @@ Namespace Development.Package.File
             projDir = projDir.GetDirectoryFullPath
             meta = DESCRIPTION.Parse($"{projDir}/DESCRIPTION")
 
+            If meta.Package.StringEmpty Then
+                Return Internal.debug.stop(
+                    message:=$"invalid project source folder: {projDir}, please check of the DESCRIPTION is file exists or not, or is invalid file format?",
+                    envir:=env
+                )
+            End If
+
             Dim pkg As New PackageNamespace With {
                 .libPath = projDir,
                 .meta = meta,
