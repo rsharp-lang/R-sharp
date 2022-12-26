@@ -604,6 +604,8 @@ Namespace Runtime.Internal.Invokes
                     }
                     Dim v As Array = REnv.asVector(Of Object)(row)
 
+                    ' create new dataframe from a vector
+                    ' and this new dataframe just contains one element
                     For i As Integer = 0 To v.Length - 1
                         tbl.columns($"v{i + 1}") = {v.GetValue(i)}
                     Next
@@ -613,6 +615,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf row Is Nothing Then
                 Return d
             ElseIf TypeOf row Is dataframe Then
+                ' row bind of two dataframe object
                 Return rowBindDataFrame(d, row, env)
             Else
                 ' dataframe rbind with a vector row
