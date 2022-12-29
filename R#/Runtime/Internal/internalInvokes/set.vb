@@ -207,6 +207,14 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' is a ``table`` liked function for count string occurance number
+        ''' </summary>
+        ''' <param name="str">
+        ''' A character vector that may contains the
+        ''' duplicated string value
+        ''' </param>
+        ''' <returns></returns>
         <ExportAPI("count")>
         Public Function count(str As Array) As list
             Dim counts = DirectCast(REnv.asVector(Of String)(str), String()) _
