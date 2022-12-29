@@ -75,6 +75,7 @@ Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.base
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.math
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
@@ -109,6 +110,7 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(MemoryStream)) = AddressOf printStream
             RtoString(GetType(FormulaExpression)) = Function(f) f.ToString
             RtoString(GetType(complex)) = Function(c) printComplex(DirectCast(c, complex))
+            RtoString(GetType(corTestResult)) = Function(o) o.ToString
 
             ' Rscript expression to string
             RtoString(GetType(Literal)) = Function(o) DirectCast(o, Literal).ToString

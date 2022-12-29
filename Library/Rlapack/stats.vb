@@ -87,6 +87,7 @@ Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Calculus
+Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
@@ -111,7 +112,13 @@ Imports stdNum = System.Math
 Imports stdVector = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 
 ''' <summary>
+''' ### The R Stats Package 
 ''' 
+''' R statistical functions, This package contains 
+''' functions for statistical calculations and random 
+''' number generation.
+''' 
+''' For a complete list of functions, use ``library(help = "stats")``.
 ''' </summary>
 <Package("stats")>
 Module stats

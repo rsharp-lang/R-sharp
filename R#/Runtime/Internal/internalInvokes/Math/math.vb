@@ -605,6 +605,59 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### Test for Association/Correlation Between Paired Samples
+        ''' 
+        ''' Test for association between paired samples, using one of 
+        ''' Pearson's product moment correlation coefficient, Kendall's 
+        ''' \tauτ or Spearman's \rhoρ.
+        ''' </summary>
+        ''' <param name="x">numeric vectors of data values. x and y must have the same length.</param>
+        ''' <param name="y">numeric vectors of data values. x and y must have the same length.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("cor.test")>
+        Public Function cor_test(x As Double(), y As Double(), Optional env As Environment = Nothing) As Object
+            Dim pvalue As Double
+            Dim prob2 As Double
+            Dim z As Double, t As Double, df As Double
+            Dim pcc As Double = Correlations.GetPearson(x, y, pvalue, prob2, z, t, df, throwMaxIterError:=False)
+
+            Return New corTestResult With {
+                .cor = pcc,
+                .df = df,
+                .prob2 = prob2,
+                .pvalue = pvalue,
+                .t = t,
+                .z = z
+            }
+        End Function
+
+        Public Class corTestResult
+
+            Public Property cor As Double
+            Public Property pvalue As Double
+            Public Property prob2 As Double
+            Public Property z As Double
+            Public Property t As Double
+            Public Property df As Integer
+
+            Public Overrides Function ToString() As String
+                Return $"
+	Pearson's product-moment correlation
+
+data:  a and b
+t = {t}, df = {df}, p-value = {pvalue}
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.14908034  0.01559428
+sample estimates:
+        cor 
+{cor}
+"
+            End Function
+        End Class
+
+        ''' <summary>
         ''' set.seed is the recommended way to specify seeds.
         ''' </summary>
         ''' <param name="seed">
