@@ -616,14 +616,26 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("cor.test")>
-        Public Function cor_test(x As Double(), y As Double(), Optional env As Environment = Nothing) As Object
+        Public Function cor_test(x As Double(), y As Double(),
+                                 <RRawVectorArgument(GetType(String))>
+                                 Optional method As Object = "pearson|kendall|spearman",
+                                 Optional env As Environment = Nothing) As Object
+
             Dim pvalue As Double
             Dim prob2 As Double
             Dim z As Double, t As Double, df As Double
-            Dim pcc As Double = Correlations.GetPearson(x, y, pvalue, prob2, z, t, df, throwMaxIterError:=False)
+            Dim cor As Double
+
+            Select Case LCase(CStr(REnv.single(method, forceSingle:=True)))
+                Case "pearson" : cor = Correlations.GetPearson(x, y)
+                Case "kendall" : cor = Correlations.rankKendallTauBeta(x, y)
+                Case "spearman" : cor = Correlations.Spearman(x, y)
+            End Select
+
+            Call Correlations.TestStats(cor, x.Length, z, pvalue, prob2, t, df, throwMaxIterError:=False)
 
             Return New corTestResult With {
-                .cor = pcc,
+                .cor = cor,
                 .df = df,
                 .prob2 = prob2,
                 .pvalue = pvalue,

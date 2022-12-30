@@ -120,7 +120,7 @@ Namespace Runtime.Internal.Invokes
         ''' Returns a string or character converted to lowercase.
         ''' </returns>
         <ExportAPI("lcase")>
-        Public Function LCase(strings As String()) As String()
+        Public Function LCaseStrings(strings As String()) As String()
             Return strings.SafeQuery.Select(AddressOf baseString.LCase).ToArray
         End Function
 
