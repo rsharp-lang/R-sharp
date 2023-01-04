@@ -74,6 +74,11 @@ Namespace Runtime.Internal.Invokes
 
     Module env
 
+        <ExportAPI("exists")>
+        Public Function exists(name As String, Optional envir As Environment = Nothing) As Boolean
+            Return envir.FindSymbol(name) IsNot Nothing
+        End Function
+
         ''' <summary>
         ''' ### Assign a Value to a Name
         ''' 
