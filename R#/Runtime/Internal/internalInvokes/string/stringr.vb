@@ -365,7 +365,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("base64")>
-        <RApiReturn(GetType(Byte))>
+        <RApiReturn(GetType(String))>
         Public Function base64Str(<RRawVectorArgument> raw As Object,
                                   Optional chunkSize As Integer = -1,
                                   Optional env As Environment = Nothing) As Object
