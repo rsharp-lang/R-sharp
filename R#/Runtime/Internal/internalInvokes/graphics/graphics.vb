@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::0fdfe3dc4d662995ccb21e5154145de4, R-sharp\R#\Runtime\Internal\internalInvokes\graphics\graphics.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 461
-    '    Code Lines: 282
-    ' Comment Lines: 122
-    '   Blank Lines: 57
-    '     File Size: 18.93 KB
+' Summaries:
 
 
-    '     Module graphics
-    ' 
-    '         Properties: curDev
-    ' 
-    '         Function: bitmap, devCur, devOff, drawText, isBase64StringOrFile
-    '                   plot, rasterFont, rasterImage, readImage, resizeImage
-    '                   setCurrentDev, wmf
-    ' 
-    '         Sub: openNew
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 461
+'    Code Lines: 282
+' Comment Lines: 122
+'   Blank Lines: 57
+'     File Size: 18.93 KB
+
+
+'     Module graphics
+' 
+'         Properties: curDev
+' 
+'         Function: bitmap, devCur, devOff, drawText, isBase64StringOrFile
+'                   plot, rasterFont, rasterImage, readImage, resizeImage
+'                   setCurrentDev, wmf
+' 
+'         Sub: openNew
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -70,6 +70,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports stdNum = System.Math
 
 <Assembly: InternalsVisibleTo("ggplot")>
 <Assembly: InternalsVisibleTo("graphics")>
@@ -472,6 +473,50 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' Create thumbnail image
+        ''' </summary>
+        ''' <param name="image"></param>
+        ''' <param name="max_width"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("thumbnail")>
+        Public Function thumbnail(image As Object, Optional max_width As Integer = 250, Optional env As Environment = Nothing) As Object
+            Dim bitmapVal = getImageObject(image, env)
+            Dim bitmap As Bitmap
+
+            If bitmapVal Like GetType(Message) Then
+                Return bitmapVal.TryCast(Of Message)
+            Else
+                bitmap = bitmapVal.TryCast(Of Bitmap)
+            End If
+
+            Dim resize As Image = bitmap.Resize(max_width, onlyResizeIfWider:=False)
+
+            If resize.Height / bitmap.Width > 1.3 Then
+                ' 高度远远大于宽度，则垂直居中截断图片
+                Dim newHeight As Integer = max_width
+                Dim offsetY = (resize.Height - max_width) / 2
+                Dim corp As Image = resize.ImageCrop(New Rectangle(0, offsetY, resize.Width, newHeight))
+
+                Return corp
+            Else
+                Return resize
+            End If
+        End Function
+
+        Private Function getImageObject(image As Object, env As Environment) As [Variant](Of Bitmap, Message)
+            If image Is Nothing Then
+                Return Internal.debug.stop("the required image data can not be nothing!", env)
+            ElseIf TypeOf image Is Image Then
+                Return CType(DirectCast(image, Image), Bitmap)
+            ElseIf TypeOf image Is Bitmap Then
+                Return DirectCast(image, Bitmap)
+            Else
+                Return Message.InCompatibleType(GetType(Bitmap), image.GetType, env)
+            End If
+        End Function
+
+        ''' <summary>
         ''' resize image to a new pixel size
         ''' </summary>
         ''' <param name="image"></param>
@@ -490,17 +535,14 @@ Namespace Runtime.Internal.Invokes
                 factor = factor.Take(2).ToArray
             End If
 
-            Dim bitmap As Bitmap
+            Dim bitmapVal = getImageObject(image, env)
             Dim newSize As Size
+            Dim bitmap As Bitmap
 
-            If image Is Nothing Then
-                Return Internal.debug.stop("the required image data can not be nothing!", env)
-            ElseIf TypeOf image Is Image Then
-                bitmap = CType(DirectCast(image, Image), Bitmap)
-            ElseIf TypeOf image Is Bitmap Then
-                bitmap = DirectCast(image, Bitmap)
+            If bitmapVal Like GetType(Message) Then
+                Return bitmapVal.TryCast(Of Message)
             Else
-                Return Message.InCompatibleType(GetType(Bitmap), image.GetType, env)
+                bitmap = bitmapVal.TryCast(Of Bitmap)
             End If
 
             If factor.Length = 1 Then
