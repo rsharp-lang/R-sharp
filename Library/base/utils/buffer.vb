@@ -155,6 +155,12 @@ Module buffer
         End If
     End Function
 
+    ''' <summary>
+    ''' zip compression of stream data
+    ''' </summary>
+    ''' <param name="stream"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("zlib_stream")>
     Public Function zlibStream(<RRawVectorArgument>
                                stream As Object,

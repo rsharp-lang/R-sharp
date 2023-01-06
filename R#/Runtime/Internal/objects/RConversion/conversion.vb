@@ -1110,8 +1110,9 @@ RE0:
         ''' </summary>
         ''' <param name="obj">numeric values or character vector</param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>A stream object that contains raw bytes data</returns>
         <ExportAPI("as.raw")>
+        <RApiReturn(GetType(Stream))>
         Public Function asRaw(<RRawVectorArgument> obj As Object,
                               Optional encoding As Encodings = Encodings.UTF8WithoutBOM,
                               Optional networkByteOrder As Boolean = True,
