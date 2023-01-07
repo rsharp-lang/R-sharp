@@ -492,7 +492,7 @@ Namespace Runtime.Internal.Invokes
 
             Dim resize As Image = bitmap.Resize(max_width, onlyResizeIfWider:=False)
 
-            If resize.Height / bitmap.Width > 1.3 Then
+            If resize.Height / resize.Width > 1.3 Then
                 ' 高度远远大于宽度，则垂直居中截断图片
                 Dim newHeight As Integer = max_width
                 Dim offsetY = (resize.Height - max_width) / 2
