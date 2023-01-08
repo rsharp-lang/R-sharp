@@ -255,7 +255,7 @@ Public Class RProcessor
 
         ' --slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [/MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]
         Dim arguments As String = Rslave.GetslaveModeCommandLine(
-            exec:=Rscript,
+            exec:=Rscript.GetFullPath,
             args:=argsText,
             request_id:=request_id,
             PORT:=port,
