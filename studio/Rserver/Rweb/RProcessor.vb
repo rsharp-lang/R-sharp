@@ -225,15 +225,9 @@ Public Class RProcessor
             startups:=startups
         )
 
-        '        If App.IsMicrosoftPlatform Then
-        '            Call App.Shell(Rslave.Path, arguments, CLR:=True, debug:=True).Run()
-        '        Else
-        '#If netcore5 = 1 Then
-        '            Call UNIX.Shell("dotnet", $"{Rslave.Path.ChangeSuffix("dll").CLIPath} {arguments}", verbose:=True)
-        '#Else
-        '            Call UNIX.Shell("mono", $"{Rslave.Path.CLIPath} {arguments}", verbose:=True)
-        '#End If
-        '        End If
+        Rslave.dotnetcoreApp = True
+        Rslave.SetDotNetCoreDll()
+
         Dim task As RunSlavePipeline = Rslave.CreateSlave(arguments, workdir:=App.HOME)
 
         ' view commandline
