@@ -162,14 +162,54 @@ Public Class RProcessor
             ElseIf Not Rscript.FileExists Then
                 Call p.writeFailure(404, "file not found!")
             ElseIf is_background Then
+                Dim task As New WebTask With {
+                    .Rscript = Rscript,
+                    .request_id = request_id,
+                    .host = Me,
+                    .query = request.URL.query,
+                    .request = request,
+                    .response = response
+                }
+
                 Call $"task '{request_id}' will be running in background.".__DEBUG_ECHO
-                Call New Action(Sub() Call runRweb(Rscript, request_id, request.URL.query, request, response, is_background)).BeginInvoke(Nothing, Nothing)
+                Call task.CommitTask()
                 Call response.WriteHTML(request_id)
             Else
                 Call runRweb(Rscript, request_id, request.URL.query, request, response, is_background)
             End If
         End Using
     End Sub
+
+    Private Class WebTask
+
+        Public Rscript As String
+        Public request_id As String
+        Public query As Dictionary(Of String, String())
+        Public request As HttpRequest
+        Public response As HttpResponse
+        Public host As RProcessor
+
+        Public Async Function CommitTask() As Task(Of Boolean)
+            Return Await Task.Run(AddressOf callInternal)
+        End Function
+
+        Private Function callInternal() As Boolean
+            Call host.runRweb(
+                Rscript:=Rscript,
+                request_id:=request_id,
+                args:=request.URL.query,
+                request:=request,
+                response:=response,
+                is_background:=True
+            )
+
+            Return True
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return request_id
+        End Function
+    End Class
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function RscriptRouter(request As HttpRequest) As String
