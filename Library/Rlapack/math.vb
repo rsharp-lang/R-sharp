@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::8f22be212c5575d11126cdeeba9172fc, R-sharp\Library\Rlapack\math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 757
-    '    Code Lines: 467
-    ' Comment Lines: 200
-    '   Blank Lines: 90
-    '     File Size: 30.80 KB
+' Summaries:
 
 
-    ' Module math
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asFormula, asLmcall, binomial, create_deSolve_DataFrame, DiffEntropy
-    '               getBinTable, getMax, getMin, Gini, glm
-    '               Hist, lm, loess, predict, RamerDouglasPeucker
-    '               (+2 Overloads) RK4, sim, ssm, summaryFit
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 757
+'    Code Lines: 467
+' Comment Lines: 200
+'   Blank Lines: 90
+'     File Size: 30.80 KB
+
+
+' Module math
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asFormula, asLmcall, binomial, create_deSolve_DataFrame, DiffEntropy
+'               getBinTable, getMax, getMin, Gini, glm
+'               Hist, lm, loess, predict, RamerDouglasPeucker
+'               (+2 Overloads) RK4, sim, ssm, summaryFit
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -76,6 +76,7 @@ Imports Microsoft.VisualBasic.Math.Interpolation
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -481,15 +482,37 @@ Module math
     ''' <returns></returns>
     <ExportAPI("lm")>
     <RApiReturn(GetType(lmCall))>
-    Public Function lm(formula As FormulaExpression, data As Object,
+    Public Function lm(formula As FormulaExpression,
+                       Optional data As Object = Nothing,
                        <RRawVectorArgument>
                        Optional weights As Object = Nothing,
                        Optional env As Environment = Nothing) As Object
 
-        Dim df As Rdataframe
+        Dim df As Rdataframe = Nothing
 
         If data Is Nothing Then
-            Return Internal.debug.stop({"the required data can not be nothing!"}, env)
+            Dim symbol As Symbol = env.FindSymbol(formula.var)
+
+            ' check variables in the environment
+            If symbol IsNot Nothing Then
+                Dim vars = SymbolAnalysis.GetSymbolReferenceList(formula.formula).ToArray
+
+                df = New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+                df.add(formula.var, REnv.asVector(Of Double)(symbol.value))
+
+                For Each v In vars
+                    symbol = env.FindSymbol(v.Name)
+
+                    If symbol Is Nothing Then
+                        df = Nothing
+                        Exit For
+                    End If
+                Next
+            End If
+
+            If df Is Nothing Then
+                Return Internal.debug.stop({"the required data can not be nothing!"}, env)
+            End If
         ElseIf TypeOf data Is Rdataframe Then
             df = DirectCast(data, Rdataframe)
 
