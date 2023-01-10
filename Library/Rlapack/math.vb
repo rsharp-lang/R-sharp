@@ -506,6 +506,8 @@ Module math
                     If symbol Is Nothing Then
                         df = Nothing
                         Exit For
+                    Else
+                        df.add(v.Name, REnv.asVector(Of Double)(symbol.value))
                     End If
                 Next
             End If
