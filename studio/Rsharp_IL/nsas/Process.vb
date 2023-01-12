@@ -20,3 +20,22 @@ Public Enum ProcessOperation
     PRINT
 End Enum
 
+Public Class PrintProcess : Inherits Process
+
+    Public Overrides ReadOnly Property Operation As ProcessOperation
+        Get
+            Return ProcessOperation.PRINT
+        End Get
+    End Property
+
+End Class
+
+Public Class ImportProcess : Inherits Process
+
+    Public Overrides ReadOnly Property Operation As ProcessOperation
+        Get
+            Return ProcessOperation.IMPORT
+        End Get
+    End Property
+
+End Class
