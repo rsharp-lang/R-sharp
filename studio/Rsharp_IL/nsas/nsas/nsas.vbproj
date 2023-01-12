@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <RootNamespace>nsas</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
-
-</Project>
