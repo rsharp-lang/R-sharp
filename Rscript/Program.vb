@@ -102,6 +102,8 @@ Module Program
                 End If
             Loop
 
+            Dim args As CommandLine = App.CommandLine
+            Dim vanillaMode As Boolean = args("--vanilla") 
             Dim Rscript As RscriptText = RscriptText.AutoHandleScript(script.ToString)
             Dim [error] As String = Nothing
             Dim program As RProgram = RProgram.CreateProgram(Rscript, debug:=False, [error]:=[error])
