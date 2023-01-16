@@ -68,6 +68,7 @@ Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Parser
 
 <Assembly: InternalsVisibleTo("npy")>
+<Assembly: InternalsVisibleTo("nsas")>
 
 Namespace Language.TokenIcer
 
