@@ -106,12 +106,18 @@ Public Module Extensions
     End Function
 
     ''' <summary>
-    ''' Get text encoding value, returns <see cref="Encoding.Default"/> by default.
+    ''' Get text encoding value, returns <see cref="Encoding.Default"/> by default if no matched.
     ''' </summary>
-    ''' <param name="val"></param>
+    ''' <param name="val">
+    ''' 
+    ''' </param>
     ''' <returns></returns>
+    ''' <remarks>
+    ''' utf8 encoding will be returned if the parameter 
+    ''' value is nothing orelse is unknown string value.
+    ''' </remarks>
     Public Function GetEncoding(val As Object) As Encoding
-        If val Is Nothing Then
+        If val Is Nothing OrElse (TypeOf val Is String AndAlso val = "unknown") Then
             Return Encodings.UTF8WithoutBOM.CodePage
         ElseIf TypeOf val Is Encoding Then
             Return val
@@ -119,7 +125,12 @@ Public Module Extensions
             Return DirectCast(val, Encodings).CodePage
         ElseIf val.GetType Like RType.characters Then
             Dim encodingName$ = any.ToString(Runtime.asVector(Of String)(val).AsObjectEnumerator.First)
-            Dim encodingVal As Encoding = TextEncodings.ParseEncodingsName(encodingName).CodePage
+            Dim encodingVal As Encoding = TextEncodings _
+                .ParseEncodingsName(
+                    encoding:=encodingName,
+                    onFailure:=Encodings.UTF8
+                ) _
+                .CodePage
 
             Return encodingVal
         Else
