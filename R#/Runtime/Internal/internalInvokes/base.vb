@@ -151,17 +151,15 @@ Namespace Runtime.Internal.Invokes
         <RApiReturn(GetType(Double))>
         Public Function range(<RRawVectorArgument>
                               x As Object,
-                              Optional na_rm As Boolean = False,
+                              Optional na_rm As Object = False,
                               Optional finite As Boolean = False,
-                              <RListObjectArgument>
-                              Optional args As list = Nothing,
                               Optional env As Environment = Nothing) As Object
 
-            If args.length = 2 AndAlso args.slots.Values.All(Function(a) DataFramework.IsNumericType(a.GetType)) Then
+            If RType.TypeOf(x).mode.IsNumeric AndAlso RType.TypeOf(na_rm).mode.IsNumeric Then
                 ' range(min, max) for in operator
                 ' example as:   x in range(1, 5)
                 ' the given vector x element in numeric range 1..5
-                Dim minMax As Double() = REnv.asVector(Of Double)(args.slots.Values)
+                Dim minMax As Double() = REnv.asVector(Of Double)({x, na_rm})
                 Dim rangeVal As New DoubleRange(minMax)
 
                 Return rangeVal
