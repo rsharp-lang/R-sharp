@@ -394,7 +394,7 @@ Module plots
                 .Select(Function(colorName, i)
                             Return New ColorClass With {
                                 .color = colorName,
-                                .enumInt = i,
+                                .factor = i,
                                 .name = colorName
                             }
                         End Function) _

@@ -222,7 +222,7 @@ Module SVMkit
                 .Select(Function(a)
                             Return New ColorClass With {
                                 .color = a.color,
-                                .enumInt = a.enumInt,
+                                .factor = a.factor,
                                 .name = a.name
                             }
                         End Function) _
@@ -465,7 +465,7 @@ Module SVMkit
                     .GroupBy(Function(a) a.name) _
                     .Select(Function(a) a.First)
 
-                    Call param.weights.Add(label.enumInt, 1)
+                    Call param.weights.Add(label.factor, 1)
                 Next
             End If
         End If
@@ -513,7 +513,7 @@ Module SVMkit
 
             ' 因为会被反复使用，所以可能会出现重名的问题
             ' 在这里直接设置
-            args.weights(key:=label.enumInt) = 1
+            args.weights(key:=label.factor) = 1
         Next
 
         Return (args, topicProblem, topic)
