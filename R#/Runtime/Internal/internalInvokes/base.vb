@@ -159,7 +159,7 @@ Namespace Runtime.Internal.Invokes
                 ' range(min, max) for in operator
                 ' example as:   x in range(1, 5)
                 ' the given vector x element in numeric range 1..5
-                Dim minMax As Double() = REnv.asVector(Of Double)({x, na_rm})
+                Dim minMax As Double() = REnv.asVector(Of Double)(base.append(x, na_rm, env))
                 Dim rangeVal As New DoubleRange(minMax)
 
                 Return rangeVal

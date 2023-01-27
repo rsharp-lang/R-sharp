@@ -55,6 +55,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -133,6 +134,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             ' test string key in list index name?
             If isNameList Then
                 flags = testListIndex(DirectCast(sequence, RNames), testLeft)
+            ElseIf seqtype Is GetType(DoubleRange) Then
+                flags = testInNumericRange(testLeft, sequence)
             Else
                 ' try custom operator at first
                 Dim op = BinaryOperatorEngine.getOperator("in", envir, suppress:=True)
@@ -148,6 +151,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End If
 
             Return flags
+        End Function
+
+        Private Shared Function testInNumericRange(left As Array, range As DoubleRange) As Boolean()
+            Dim x As Double() = REnv.asVector(Of Double)(left)
+            Dim test = From xi As Double
+                       In x
+                       Select range.IsInside(xi)
+
+            Return test.ToArray
         End Function
 
         ''' <summary>
