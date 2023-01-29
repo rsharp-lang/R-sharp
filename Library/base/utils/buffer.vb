@@ -97,7 +97,13 @@ Module buffer
     End Function
 
     <Extension>
-    Private Function numberFramework(Of T)(env As Environment, <RRawVectorArgument> stream As Object, networkOrder As Boolean, width As Integer, fromBlock As Func(Of Byte(), Integer, T)) As Object
+    Private Function numberFramework(Of T)(env As Environment,
+                                           <RRawVectorArgument>
+                                           stream As Object,
+                                           networkOrder As Boolean,
+                                           width As Integer,
+                                           fromBlock As Func(Of Byte(), Integer, T)) As Object
+
         Dim buffer As [Variant](Of Byte(), Message) = Rsharp.Buffer(stream, env)
 
         If buffer Is Nothing Then
@@ -150,6 +156,30 @@ Module buffer
     End Function
 
     ''' <summary>
+    ''' zip compression of stream data
+    ''' </summary>
+    ''' <param name="stream"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("zlib_stream")>
+    Public Function zlibStream(<RRawVectorArgument>
+                               stream As Object,
+                               Optional env As Environment = Nothing) As Object
+
+        Dim buffer As [Variant](Of Byte(), Message) = Rsharp.Buffer(stream, env)
+
+        If buffer Is Nothing Then
+            Return Nothing
+        ElseIf buffer Like GetType(Message) Then
+            Return buffer.TryCast(Of Message)
+        End If
+
+        Using ms As MemoryStream = New MemoryStream(buffer.TryCast(Of Byte())).Zip
+            Return ms.ToArray
+        End Using
+    End Function
+
+    ''' <summary>
     ''' zlib decompression of the raw data buffer
     ''' </summary>
     ''' <param name="stream"></param>
@@ -157,7 +187,7 @@ Module buffer
     ''' <returns></returns>
     <ExportAPI("zlib.decompress")>
     <RApiReturn(GetType(Byte))>
-    Public Function zlibDecompress(stream As Object, Optional env As Environment = Nothing) As Object
+    Public Function zlibDecompress(<RRawVectorArgument> stream As Object, Optional env As Environment = Nothing) As Object
         Dim buffer As [Variant](Of Byte(), Message) = Rsharp.Buffer(stream, env)
 
         If buffer Is Nothing Then
@@ -172,7 +202,7 @@ Module buffer
     End Function
 
     <ExportAPI("gzip.decompress")>
-    Public Function gzipDecompression(stream As Object, Optional env As Environment = Nothing) As Object
+    Public Function gzipDecompression(<RRawVectorArgument> stream As Object, Optional env As Environment = Nothing) As Object
         Dim buffer As [Variant](Of Byte(), Message) = Rsharp.Buffer(stream, env)
 
         If buffer Is Nothing Then

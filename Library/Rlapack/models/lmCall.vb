@@ -70,6 +70,18 @@ Public Class lmCall
     Public Property data As String
     Public Property weights As String
 
+    Public ReadOnly Property R2 As Double
+        Get
+            Return lm.R2
+        End Get
+    End Property
+
+    Public ReadOnly Property equation As String
+        Get
+            Return formula.ToString
+        End Get
+    End Property
+
     Sub New(name As String, variables As String())
         Me.name = name
         Me.variables = variables

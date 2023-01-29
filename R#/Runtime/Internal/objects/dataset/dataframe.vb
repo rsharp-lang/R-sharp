@@ -168,14 +168,7 @@ Namespace Runtime.Internal.Object
         Public ReadOnly Property nrows As Integer
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
-                If columns.Count = 0 Then
-                    Return 0
-                Else
-                    Return Aggregate col As Array
-                           In columns.Values
-                           Let len = col.Length
-                           Into Max(len)
-                End If
+                Return GetRowNumbers()
             End Get
         End Property
 
@@ -290,12 +283,14 @@ Namespace Runtime.Internal.Object
                 Return Nothing
             End If
 
-            If fullSize AndAlso col.Length <> nrows Then
+            Dim rowSize As Integer = Me.GetRowNumbers
+
+            If fullSize AndAlso col.Length <> rowSize Then
                 If col.Length <> 1 Then
                     Throw New InvalidProgramException
                 End If
 
-                Dim nrows As Integer = Me.nrows
+                Dim nrows As Integer = rowSize
                 Dim scalar As Object = col.GetValue(Scan0)
                 Dim elementType As Type = If(scalar Is Nothing, GetType(Object), scalar.GetType)
                 Dim vec As Array = Array.CreateInstance(elementType, nrows)
@@ -612,6 +607,17 @@ Namespace Runtime.Internal.Object
                     .ToArray
             Else
                 Return rownames
+            End If
+        End Function
+
+        Public Function GetRowNumbers() As Integer
+            If columns.Count = 0 Then
+                Return 0
+            Else
+                Return Aggregate col As Array
+                       In columns.Values
+                       Let len = col.Length
+                       Into Max(len)
             End If
         End Function
 
