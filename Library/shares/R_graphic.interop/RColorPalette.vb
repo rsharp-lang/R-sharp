@@ -246,7 +246,9 @@ Module RColorPalette
             Case GetType(Integer()), GetType(Long()), GetType(Short())
                 Return DirectCast(color, Array).GetValue(Scan0).ToString
             Case GetType(SolidBrush)
+#Disable Warning
                 Return DirectCast(color, SolidBrush).Color.ToHtmlColor
+#Enable Warning
             Case Else
                 Return [default]
         End Select

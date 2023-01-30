@@ -52,6 +52,8 @@
 Imports System.Drawing
 Imports Microsoft.VisualBasic.Imaging
 
+#Disable Warning
+
 Module gdi
 
     Public Function getBrush(color As Object, Optional default$ = "black") As Brush
@@ -92,3 +94,5 @@ Module gdi
         End Select
     End Function
 End Module
+
+#Enable Warning
