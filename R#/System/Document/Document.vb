@@ -106,7 +106,7 @@ Namespace Development
                     .category = 1,
                     .keyword = keywords.JoinBy(", "),
                     .index = declares.name,
-                    .[date] = Now,
+                    .[date] = New Date(Now.Year, Now.Month, 1),
                     .title = title
                 }
             }
