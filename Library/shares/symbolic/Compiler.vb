@@ -1,6 +1,8 @@
+Imports Microsoft.VisualBasic.Math.Scripting.MathExpression
 Imports Microsoft.VisualBasic.MIME.application.xml.MathML
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports MathExp = Microsoft.VisualBasic.Math.Scripting.MathExpression.Impl.Expression
 
 Friend Module Compiler
 
@@ -16,7 +18,8 @@ Friend Module Compiler
 
     End Function
 
-    Public Function GetLambda(exp As String, ParamArray args As String()) As LambdaExpression
+    Public Function GetLambda(raw As String, ParamArray args As String()) As LambdaExpression
+        Dim exp As MathExp = ExpressionEngine.Parse(DirectCast(raw, String))
 
     End Function
 End Module
