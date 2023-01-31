@@ -86,11 +86,10 @@ Module docs
                        <title>{$packageName}</title>
 
                        <meta name="author" content="xie.guigang@gcmodeller.org"/>
-                       <meta name="copyright" content="SMRUCC genomics Copyright (c) 2020"/>
+                       <meta name="copyright" content="SMRUCC genomics Copyright (c) 2022"/>
                        <meta name="keywords" content="GCModeller; Xanthomonas; Artificial Life"/>
-                       <meta name="generator" content="https://github.com/xieguigang/xDoc"/>
+                       <meta name="generator" content="https://github.com/rsharp-lang"/>
                        <meta name="theme-color" content="#333"/>
-                       <meta name="last-update" content=<%= Now.ToString(format:="yyyy-MM-dd") %>/>
                        <meta name="description" content="{$packageDescription}"/>
 
                        <meta class="foundation-data-attribute-namespace"/>
