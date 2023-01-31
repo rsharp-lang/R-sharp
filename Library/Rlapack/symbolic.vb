@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -103,10 +104,13 @@ Module symbolic
     <RApiReturn(GetType(LambdaExpression))>
     Public Function lambda(formula As Object, Optional env As Environment = Nothing) As Object
         If TypeOf formula Is FormulaExpression Then
+            Return Compiler.GetLambda(DirectCast(formula, FormulaExpression))
         ElseIf TypeOf formula Is DeclareLambdaFunction Then
+            Return Compiler.GetLambda(DirectCast(formula, DeclareLambdaFunction))
         ElseIf TypeOf formula Is String Then
+            Return Compiler.GetLambda(DirectCast(formula, String))
         Else
-
+            Return Message.InCompatibleType(GetType(DeclareLambdaFunction), formula.GetType, env)
         End If
     End Function
 
