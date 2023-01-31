@@ -536,9 +536,17 @@ Namespace Development.Package.File
                               End Function)
         End Function
 
+        ''' <summary>
+        ''' + ``%s``, means the <paramref name="path"/> parameter value
+        ''' + ``1%``, means integer value 1
+        ''' + ``1#``, means float value 1
+        ''' + ``$``, means the <see cref="Environment"/> parameter reference
+        ''' </summary>
+        ''' <param name="path"></param>
+        ''' <returns></returns>
         Private Function getFileReader(path As String) As String
             Select Case path.ExtensionSuffix.ToLower
-                Case "csv" : Return "read.csv,%s,1%,TRUE,TRUE,utf8,#,FALSE,-1,$"
+                Case "csv" : Return "read.csv,%s,1%,TRUE,TRUE,utf8,#,FALSE,-1%,$"
                 Case "txt" : Return "readLines,%s,NULL"
                 Case "rda" : Return "load,%s,$,FALSE"
                 Case "rds" : Return "readRDS,%s,NULL,$"
