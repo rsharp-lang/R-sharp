@@ -173,7 +173,7 @@ Namespace Runtime.Components
                     End If
                 End With
             Else
-                Return expr.ToString
+                Return ValueAssignExpression.GetSymbol(expr)
             End If
         End Function
 

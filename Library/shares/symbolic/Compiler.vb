@@ -5,6 +5,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports MathExp = Microsoft.VisualBasic.Math.Scripting.MathExpression.Impl.Expression
 Imports MathSymbol = Microsoft.VisualBasic.MIME.application.xml.MathML.SymbolExpression
 
@@ -56,6 +57,16 @@ Friend Module Compiler
             Return New MathSymbol(DirectCast(exp, SymbolReference).symbol) With {.isNumericLiteral = False}
         ElseIf TypeOf exp Is Literal Then
             Return New MathSymbol(DirectCast(exp, Literal).ValueStr) With {.isNumericLiteral = True}
+        ElseIf TypeOf exp Is FunctionInvoke Then
+            Dim doCall As FunctionInvoke = DirectCast(exp, FunctionInvoke)
+            Dim name As String = InvokeParameter.GetSymbolName(doCall.funcName)
+
+            Return New MathFunctionExpression With {
+                .name = name,
+                .parameters = doCall.parameters _
+                    .Select(AddressOf Compiler.BuildExpression) _
+                    .ToArray
+            }
         Else
             Throw New NotImplementedException(exp.GetType.FullName)
         End If
