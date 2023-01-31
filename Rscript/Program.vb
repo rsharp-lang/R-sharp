@@ -102,6 +102,8 @@ Module Program
                 End If
             Loop
 
+            Dim args As CommandLine = App.CommandLine
+            Dim vanillaMode As Boolean = args("--vanilla") 
             Dim Rscript As RscriptText = RscriptText.AutoHandleScript(script.ToString)
             Dim [error] As String = Nothing
             Dim program As RProgram = RProgram.CreateProgram(Rscript, debug:=False, [error]:=[error])
@@ -114,12 +116,7 @@ Module Program
 
                 Return 500
             Else
-                Call R.LoadLibrary("base", ignoreMissingStartupPackages:=ignoreMissingStartupPackages, silent:=True)
-                Call R.LoadLibrary("utils", ignoreMissingStartupPackages:=ignoreMissingStartupPackages, silent:=True)
-                Call R.LoadLibrary("grDevices", ignoreMissingStartupPackages:=ignoreMissingStartupPackages, silent:=True)
-                Call R.LoadLibrary("math", ignoreMissingStartupPackages:=ignoreMissingStartupPackages, silent:=True)
-
-                ' Call Console.WriteLine()
+                Call LoadLibrary(R, ignoreMissingStartupPackages, "base", "utils", "grDevices", "math")
             End If
 
             Dim result As Object = R.Run(program)
@@ -131,6 +128,18 @@ Module Program
             End If
         End Using
     End Function
+
+    Private Sub LoadLibrary(REnv As RInterpreter, ignoreMissingStartupPackages As Boolean, ParamArray names As String())
+        For Each pkgName As String In names
+            Call REnv.LoadLibrary(
+                packageName:=pkgName,
+                ignoreMissingStartupPackages:=ignoreMissingStartupPackages,
+                silent:=True
+            )
+        Next
+
+        ' Call Console.WriteLine()
+    End Sub
 
     Private Function RunRscriptFile(filepath As String, args As CommandLine) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)

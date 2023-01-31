@@ -641,6 +641,13 @@ Namespace Interpreter
             End SyncLock
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="configs">
+        ''' the filepath of the configuration file
+        ''' </param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Shared Function FromEnvironmentConfiguration(configs As String) As RInterpreter
