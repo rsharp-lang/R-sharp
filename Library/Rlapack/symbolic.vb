@@ -56,6 +56,8 @@ Imports Microsoft.VisualBasic.Math.Scripting
 Imports Microsoft.VisualBasic.Math.Scripting.MathExpression.Impl
 Imports Microsoft.VisualBasic.MIME.application.xml.MathML
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -90,6 +92,22 @@ Module symbolic
     <ExportAPI("parse.mathml")>
     Public Function ParseMathML(mathml As String) As LambdaExpression
         Return LambdaExpression.FromMathML(mathml)
+    End Function
+
+    ''' <summary>
+    ''' convert the formula expression to the mathml lambda expression model
+    ''' </summary>
+    ''' <param name="formula"></param>
+    ''' <returns></returns>
+    <ExportAPI("lambda")>
+    <RApiReturn(GetType(LambdaExpression))>
+    Public Function lambda(formula As Object, Optional env As Environment = Nothing) As Object
+        If TypeOf formula Is FormulaExpression Then
+        ElseIf TypeOf formula Is DeclareLambdaFunction Then
+        ElseIf TypeOf formula Is String Then
+        Else
+
+        End If
     End Function
 
     <ExportAPI("as.polynomial")>
