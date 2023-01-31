@@ -574,7 +574,12 @@ Namespace Runtime.Internal.Invokes
                     Call base.print("run on UNIX mono!", , env)
                 End If
 
-                std_out = UNIX.Shell("mono", $"{executative.CLIPath} {arguments}", verbose:=show_output_on_console, stdin:=inputStr.JoinBy(vbLf))
+                std_out = UNIX.Shell(
+                    command:="mono",
+                    args:=$"{executative.CLIPath} {arguments}",
+                    verbose:=show_output_on_console,
+                    stdin:=inputStr.JoinBy(vbLf)
+                )
             Else
                 If env.globalEnvironment.debugMode Then
                     Call base.print("run a UNIX program.",, env)

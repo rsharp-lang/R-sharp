@@ -67,8 +67,7 @@ Public Class activation
 
         Return New LayerActives With {
             .hiddens = ActiveFunction.Parse(hidden Or defaultActive),
-            .output = ActiveFunction.Parse(output Or defaultActive),
-            .input = ActiveFunction.Parse(defaultActive)
+            .output = ActiveFunction.Parse(output Or defaultActive)
         }
     End Function
 
