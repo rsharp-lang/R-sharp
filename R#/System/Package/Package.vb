@@ -189,18 +189,24 @@ Namespace Development.Package
             End If
         End Function
 
-        Public Function GetPackageDescription(env As Environment) As String
+        Public Function GetPackageDescription(env As Environment, Optional remarks As Boolean = False) As String
             If isMissing Then
                 Return Nothing
             Else
                 Dim pkgMgr As PackageManager = env.globalEnvironment.packages
                 Dim docs As String = pkgMgr.GetPackageDocuments([namespace])
 
+                ' 20230201
+                '
+                ' if the package module is not a registered dll file
+                ' inside the local package repository, then
+                ' we should find the package document from the external
+                ' location at here
                 If docs Is Nothing Then
                     Dim xml = pkgMgr.packageDocs.GetAnnotations(package)
 
                     If Not xml Is Nothing Then
-                        docs = xml.Summary
+                        docs = If(remarks, xml.Remarks, xml.Summary)
                     End If
                 End If
 

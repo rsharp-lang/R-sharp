@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::2877ea3899ddba233732fc039d97ab65, R-sharp\studio\Rsharp_kit\roxygenNet\docs.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 235
-    '    Code Lines: 185
-    ' Comment Lines: 13
-    '   Blank Lines: 37
-    '     File Size: 9.11 KB
+' Summaries:
 
 
-    ' Module docs
-    ' 
-    '     Function: apiDocsHtml, getDefaultTemplate, makeHtmlDocs, makeMarkdownDocs, PackageIndex
-    '               parameterTable
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 235
+'    Code Lines: 185
+' Comment Lines: 13
+'   Blank Lines: 37
+'     File Size: 9.11 KB
+
+
+' Module docs
+' 
+'     Function: apiDocsHtml, getDefaultTemplate, makeHtmlDocs, makeMarkdownDocs, PackageIndex
+'               parameterTable
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.text.markdown
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
+Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
@@ -121,10 +122,12 @@ Module docs
                        <hr/>
                        <p>
                            <code>
+                               <span style="color: green;">{$desc_comments}</span>
                                <span style="color: blue;">imports</span><span style="color: brown"> "{$packageName}"</span><span style="color: blue;"> from</span><span style="color: brown"> "{$base_dll}"</span>;
                            </code>
                        </p>
                        <p>{$packageDescription}</p>
+                       <p>{$packageRemarks}</p>
 
                        <div id="main-wrapper">
                            <table>
@@ -192,25 +195,49 @@ Module docs
                 .DoCall(AddressOf Rapi.apiDocsHtml)
         Next
 
+        Dim desc As String = ""
+
         If TypeOf package Is String Then
+            desc = globalEnv.packages _
+                .GetPackageDocuments(any.ToString(package)) _
+                .DoCall(AddressOf markdown.Transform)
+
             With docs
                 !packageName = any.ToString(package)
-                !packageDescription = globalEnv.packages _
-                    .GetPackageDocuments(any.ToString(package)) _
+                !packageDescription = desc
+                !packageRemarks = globalEnv.packages _
+                    .GetPackageDocuments(any.ToString(package), remarks:=True) _
                     .DoCall(AddressOf markdown.Transform)
                 !apiList = apiList.JoinBy(vbCrLf)
                 !base_dll = "*"
             End With
         Else
-            Dim desc As String = DirectCast(package, Development.Package.Package) _
-                .GetPackageDescription(globalEnv)
+            Dim remakrs As String = DirectCast(package, Development.Package.Package) _
+                .GetPackageDescription(globalEnv, remarks:=True) _
+                .DoCall(AddressOf markdown.Transform)
+
+            desc = DirectCast(package, Development.Package.Package) _
+                .GetPackageDescription(globalEnv) _
+                .DoCall(AddressOf markdown.Transform)
 
             With docs
                 !packageName = DirectCast(package, Development.Package.Package).namespace
                 !packageDescription = desc
+                !packageRemarks = remakrs
                 !apiList = apiList.JoinBy(vbCrLf)
                 !base_dll = DirectCast(package, Development.Package.Package).dllName
             End With
+        End If
+
+        If Not desc.StringEmpty Then
+            desc = desc _
+                .StringSplit("[<]br\s*/?>", True) _
+                .Select(Function(html)
+                            Return "# " & html.StripHTMLTags
+                        End Function) _
+                .JoinBy(vbCrLf)
+
+            docs!desc_comments = desc
         End If
 
         Return docs.ToString

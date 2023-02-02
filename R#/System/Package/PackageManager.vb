@@ -134,7 +134,16 @@ Namespace Development.Package
             Return PackageLoader2.GetPackageDirectory(config, pkgName)
         End Function
 
-        Public Function GetPackageDocuments(pkgName As String) As String
+        ''' <summary>
+        ''' Handling the document reading for the CLR module which
+        ''' has been registered inside the local package repository
+        ''' </summary>
+        ''' <param name="pkgName"></param>
+        ''' <param name="remarks">
+        ''' get the remarks text?
+        ''' </param>
+        ''' <returns></returns>
+        Public Function GetPackageDocuments(pkgName As String, Optional remarks As Boolean = False) As String
             Dim type As Type = Me.FindPackage(pkgName, Nothing)?.package
             Dim docs As ProjectType
 
@@ -147,7 +156,7 @@ Namespace Development.Package
             If docs Is Nothing Then
                 Return Nothing
             Else
-                Return docs.Summary
+                Return If(remarks, docs.Remarks, docs.Summary)
             End If
         End Function
 
