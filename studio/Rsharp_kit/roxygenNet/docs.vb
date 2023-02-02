@@ -122,15 +122,16 @@ Module docs
                        <hr/>
                        <p>
                            <code>
-                               <span style="color: blue;">require</span>(<span style="color: black; font-weight: bold;">{$package}</span>)
+                               <span style="color: blue;">require</span>(<span style="color: black; font-weight: bold;">{$package}</span>);
                                <br/>
                                <br/>
                                <span style="color: green;">{$desc_comments}</span><br/>
                                <span style="color: blue;">imports</span><span style="color: brown"> "{$packageName}"</span><span style="color: blue;"> from</span><span style="color: brown"> "{$base_dll}"</span>;
                            </code>
                        </p>
+                       <br/>
                        <p>{$packageDescription}</p>
-                       <p>{$packageRemarks}</p>
+                       <p style="font-style: italic; font-size: 0.9em;">{$packageRemarks}</p>
 
                        <div id="main-wrapper">
                            <table>
@@ -241,7 +242,7 @@ Module docs
             desc = desc _
                 .StringSplit("[<]br\s*/?>", True) _
                 .Select(Function(html)
-                            Return "# " & html.StripHTMLTags
+                            Return "#' " & html.StripHTMLTags
                         End Function) _
                 .JoinBy(vbCrLf)
 
