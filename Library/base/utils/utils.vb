@@ -163,7 +163,7 @@ Public Module utils
         ' read csv data
         Dim reader As csvData = csvData.Load(
             stream:=buffer.TryCast(Of Stream),
-            encoding:=encoding,
+            encoding:=textEncoding,
             isTsv:=tsv
         )
         Dim seq As Array = reader _
