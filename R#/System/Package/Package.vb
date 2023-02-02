@@ -196,6 +196,14 @@ Namespace Development.Package
                 Dim pkgMgr As PackageManager = env.globalEnvironment.packages
                 Dim docs As String = pkgMgr.GetPackageDocuments([namespace])
 
+                If docs Is Nothing Then
+                    Dim xml = pkgMgr.packageDocs.GetAnnotations(package)
+
+                    If Not xml Is Nothing Then
+                        docs = xml.Summary
+                    End If
+                End If
+
                 Return docs
             End If
         End Function
