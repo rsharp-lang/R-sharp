@@ -122,7 +122,10 @@ Module docs
                        <hr/>
                        <p>
                            <code>
-                               <span style="color: green;">{$desc_comments}</span>
+                               <span style="color: blue;">require</span>(<span style="color: black; font-weight: bold;">{$package}</span>)
+                               <br/>
+                               <br/>
+                               <span style="color: green;">{$desc_comments}</span><br/>
                                <span style="color: blue;">imports</span><span style="color: brown"> "{$packageName}"</span><span style="color: blue;"> from</span><span style="color: brown"> "{$base_dll}"</span>;
                            </code>
                        </p>
@@ -167,7 +170,7 @@ Module docs
     ''' <summary>
     ''' Create html help document for the specific package module
     ''' </summary>
-    ''' <param name="package">The package name</param>
+    ''' <param name="pkgName">The package name</param>
     ''' <param name="globalEnv"></param>
     ''' <returns></returns>
     ''' <remarks>
@@ -175,11 +178,12 @@ Module docs
     ''' pdf help manual file.
     ''' </remarks>
     <ExportAPI("makehtml.docs")>
-    Public Function makeHtmlDocs(package As Object,
+    Public Function makeHtmlDocs(pkgName As Object,
                                  Optional template$ = Nothing,
+                                 Optional package As String = Nothing,
                                  Optional globalEnv As GlobalEnvironment = Nothing) As String
 
-        Dim apis = rdocumentation.getPkgApisList(package, globalEnv)
+        Dim apis = rdocumentation.getPkgApisList(pkgName, globalEnv)
 
         Static defaultTemplate As [Default](Of String) = "<!DOCTYPE html>" & getDefaultTemplate().ToString
 
@@ -197,35 +201,39 @@ Module docs
 
         Dim desc As String = ""
 
-        If TypeOf package Is String Then
+        If TypeOf pkgName Is String Then
+            package = If(package, any.ToString(pkgName))
             desc = globalEnv.packages _
-                .GetPackageDocuments(any.ToString(package)) _
+                .GetPackageDocuments(any.ToString(pkgName)) _
                 .DoCall(AddressOf markdown.Transform)
 
             With docs
-                !packageName = any.ToString(package)
+                !packageName = any.ToString(pkgName)
                 !packageDescription = desc
                 !packageRemarks = globalEnv.packages _
-                    .GetPackageDocuments(any.ToString(package), remarks:=True) _
+                    .GetPackageDocuments(any.ToString(pkgName), remarks:=True) _
                     .DoCall(AddressOf markdown.Transform)
                 !apiList = apiList.JoinBy(vbCrLf)
                 !base_dll = "*"
+                !package = package
             End With
         Else
-            Dim remakrs As String = DirectCast(package, Development.Package.Package) _
+            Dim remakrs As String = DirectCast(pkgName, Development.Package.Package) _
                 .GetPackageDescription(globalEnv, remarks:=True) _
                 .DoCall(AddressOf markdown.Transform)
 
-            desc = DirectCast(package, Development.Package.Package) _
+            desc = DirectCast(pkgName, Development.Package.Package) _
                 .GetPackageDescription(globalEnv) _
                 .DoCall(AddressOf markdown.Transform)
+            package = If(package, DirectCast(pkgName, Development.Package.Package).namespace)
 
             With docs
-                !packageName = DirectCast(package, Development.Package.Package).namespace
+                !packageName = DirectCast(pkgName, Development.Package.Package).namespace
                 !packageDescription = desc
                 !packageRemarks = remakrs
                 !apiList = apiList.JoinBy(vbCrLf)
-                !base_dll = DirectCast(package, Development.Package.Package).dllName
+                !base_dll = DirectCast(pkgName, Development.Package.Package).dllName
+                !package = package
             End With
         End If
 
