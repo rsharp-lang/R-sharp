@@ -202,9 +202,12 @@ Module docs
                 !base_dll = "*"
             End With
         Else
+            Dim desc As String = DirectCast(package, Development.Package.Package) _
+                .GetPackageDescription(globalEnv)
+
             With docs
                 !packageName = DirectCast(package, Development.Package.Package).namespace
-                !packageDescription = DirectCast(package, Development.Package.Package).GetPackageDescription(globalEnv)
+                !packageDescription = desc
                 !apiList = apiList.JoinBy(vbCrLf)
                 !base_dll = DirectCast(package, Development.Package.Package).dllName
             End With
