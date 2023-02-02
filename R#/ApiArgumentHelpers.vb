@@ -211,6 +211,21 @@ Public Module ApiArgumentHelpers
         Return True
     End Function
 
+    ''' <summary>
+    ''' get a file stream object
+    ''' </summary>
+    ''' <param name="file">
+    ''' the file resource could be one of the:
+    ''' 
+    ''' 1. a valid file path to a filesystem location
+    ''' 2. a stream object that can be read/write based on the <paramref name="mode"/> context
+    ''' 3. a raw bytes array for construct a memory stream in this function(readonly)
+    ''' 
+    ''' </param>
+    ''' <param name="mode"></param>
+    ''' <param name="env"></param>
+    ''' <param name="suppress"></param>
+    ''' <returns></returns>
     Public Function GetFileStream(file As Object, mode As FileAccess, env As Environment, Optional suppress As Boolean = False) As [Variant](Of Stream, Message)
         If TypeOf file Is vector Then
             file = DirectCast(file, vector).data

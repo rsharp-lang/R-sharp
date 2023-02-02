@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::2109a413c6e4473e335473ddbc660861, R-sharp\Library\base\utils\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 429
-    '    Code Lines: 298
-    ' Comment Lines: 95
-    '   Blank Lines: 36
-    '     File Size: 18.90 KB
+' Summaries:
 
 
-    ' Module utils
-    ' 
-    '     Function: ensureRowNames, MeasureGenericType, parseRData, printRawTable, read_csv
-    '               saveGeneric, saveTextFile, setRowNames, write_csv
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 429
+'    Code Lines: 298
+' Comment Lines: 95
+'   Blank Lines: 36
+'     File Size: 18.90 KB
+
+
+' Module utils
+' 
+'     Function: ensureRowNames, MeasureGenericType, parseRData, printRawTable, read_csv
+'               saveGeneric, saveTextFile, setRowNames, write_csv
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -83,6 +83,8 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports Rsharp = SMRUCC.Rsharp
 Imports textStream = System.IO.StreamReader
+Imports csvData = Microsoft.VisualBasic.Data.csv.IO.DataFrame
+Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
 
 ''' <summary>
 ''' The R Utils Package 
@@ -128,6 +130,48 @@ Public Module utils
         Next
 
         Return matrix.Print(False)
+    End Function
+
+    ''' <summary>
+    ''' load csv as a .NET CLR object vector
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="type">
+    ''' the object type value, and it should be one of the:
+    ''' 
+    ''' 1. class name from the <see cref="RTypeExportAttribute"/>
+    ''' 2. .NET CLR <see cref="Type"/> value
+    ''' 3. R-sharp <see cref="RType"/> value
+    ''' 4. R-sharp primitive <see cref="TypeCodes"/> value
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("load.csv")>
+    Public Function loadCsv(<RRawVectorArgument> file As Object, type As Object,
+                            Optional encoding As Object = "unknown",
+                            Optional tsv As Boolean = False,
+                            Optional env As Environment = Nothing) As Object
+
+        Dim textEncoding As Encoding = Rsharp.GetEncoding(encoding)
+        Dim typeinfo As Type = env.globalEnvironment.GetType([typeof]:=type)
+        Dim buffer = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
+
+        If buffer Like GetType(Message) Then
+            Return buffer.TryCast(Of Message)
+        End If
+
+        ' read csv data
+        Dim reader As csvData = csvData.Load(
+            stream:=buffer.TryCast(Of Stream),
+            encoding:=encoding,
+            isTsv:=tsv
+        )
+        Dim seq As Array = reader _
+            .LoadDataToObject(typeinfo, strict:=False, metaBlank:="", silent:=True) _
+            .ToArray
+        Dim generic As Array = REnv.TryCastGenericArray(seq, env)
+
+        Return generic
     End Function
 
     ''' <summary>

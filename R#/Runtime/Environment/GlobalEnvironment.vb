@@ -214,13 +214,22 @@ Namespace Runtime
         ''' <summary>
         ''' get type definition from a given type object or type name
         ''' </summary>
-        ''' <param name="typeof"></param>
+        ''' <param name="typeof">
+        ''' the object type value, and it should be one of the:
+        ''' 
+        ''' 1. class name from the <see cref="RTypeExportAttribute"/>
+        ''' 2. .NET CLR <see cref="Type"/> value
+        ''' 3. R-sharp <see cref="RType"/> value
+        ''' 4. R-sharp primitive <see cref="TypeCodes"/> value
+        ''' </param>
         ''' <returns></returns>
         Public Overloads Function [GetType]([typeof] As Object) As RType
             If TypeOf [typeof] Is Type Then
                 Return RType.GetRSharpType(DirectCast([typeof], Type))
             ElseIf TypeOf [typeof] Is RType Then
                 Return DirectCast([typeof], RType)
+            ElseIf TypeOf [typeof] Is TypeCodes Then
+                Return RType.GetType(DirectCast([typeof], TypeCodes))
             End If
 
             Dim className As String = anything.ToString([typeof], "any")
