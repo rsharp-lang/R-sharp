@@ -63,6 +63,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Normalizer
+Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
@@ -323,7 +324,7 @@ Module machineLearning
             If Not scattered Then
                 Return .GetXml.SaveTo(file)
             Else
-                Return .ScatteredStore(file)
+                Return .ScatteredStore(Directory.FromLocalFileSystem(file))
             End If
         End With
     End Function
