@@ -75,6 +75,14 @@ Imports any = Microsoft.VisualBasic.Scripting
 <Package("utils.docs", Category:=APICategories.SoftwareTools, Publisher:="I@xieguigang.me")>
 Module docs
 
+    ''' <summary>
+    ''' default template for the package module in a dll assembly file:
+    ''' 
+    ''' ```
+    ''' imports name from dll
+    ''' ```
+    ''' </summary>
+    ''' <returns></returns>
     Private Function getDefaultTemplate() As XElement
         Return <html lang="zh-CN">
                    <head>
@@ -87,7 +95,7 @@ Module docs
 
                        <meta name="author" content="xie.guigang@gcmodeller.org"/>
                        <meta name="copyright" content="SMRUCC genomics Copyright (c) 2022"/>
-                       <meta name="keywords" content="GCModeller; Xanthomonas; Artificial Life"/>
+                       <meta name="keywords" content="R#; {$packageName}; {$base_dll}"/>
                        <meta name="generator" content="https://github.com/rsharp-lang"/>
                        <meta name="theme-color" content="#333"/>
                        <meta name="description" content="{$packageDescription}"/>
