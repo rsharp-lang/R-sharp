@@ -92,7 +92,7 @@ Public Module xgboost
         Dim max_depth = params.getValue("max_depth", env, 7)
         Dim scale_pos_weight = params.getValue("scale_pos_weight", env, 1.0)
         Dim rowsample = params.getValue("subsample", env, 0.8)
-        Dim colample = params.getValue("colsample", env, 0.8)
+        Dim colsample = params.getValue("colsample", env, 0.8)
         Dim min_child_weight = params.getValue("min_child_weight", env, 1.0)
         Dim min_sample_split = params.getValue("min_sample_split", env, 5)
         Dim lambda = params.getValue("reg_lambda", env, 1.0)
@@ -100,21 +100,55 @@ Public Module xgboost
         Dim num_thread = params.getValue("num_thread", env, -1)
         Dim model As New GBM
 
-        Call model.fit(data, validates)
+        Call model.fit(
+            trainset:=data,
+            valset:=validates,
+            early_stopping_rounds:=early_stopping_round,
+            maximize:=maximize,
+            eval_metric:=eval_metric,
+            loss:=loss,
+            eta:=eta,
+            num_boost_round:=num_boost_round,
+            num_thread:=num_thread,
+            scale_pos_weight:=scale_pos_weight,
+            rowsample:=rowsample,
+            lambda:=lambda,
+            gamma:=gamma,
+            colsample:=colsample,
+            max_depth:=max_depth,
+            min_child_weight:=min_child_weight,
+            min_sample_split:=min_sample_split
+        )
 
         Return model
     End Function
 
+    ''' <summary>
+    ''' do predictions
+    ''' </summary>
+    ''' <param name="gbm"></param>
+    ''' <param name="data"></param>
+    ''' <returns></returns>
     <ExportAPI("predict")>
     Public Function predict(gbm As GBM, data As TestData) As Double()
         Return gbm.predict(data.origin_feature)
     End Function
 
+    ''' <summary>
+    ''' save model
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <returns></returns>
     <ExportAPI("serialize")>
     Public Function serialize(model As GBM) As String()
         Return ModelSerializer.save_model(model).ToArray
     End Function
 
+    ''' <summary>
+    ''' load model
+    ''' </summary>
+    ''' <param name="modelLines"></param>
+    ''' <returns></returns>
     <ExportAPI("parseTree")>
     Public Function tree(modelLines As String()) As GBM
         Return ModelSerializer.load_model(modelLines)
@@ -132,7 +166,9 @@ Public Module xgboost
     ''' a matrix object (either numeric or integer), a dgCMatrix 
     ''' object, or a character string representing a filename.
     ''' </param>
-    ''' <param name="label"></param>
+    ''' <param name="label">
+    ''' labels for training data should be integer value
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("xgb.DMatrix")>
     <RApiReturn(GetType(TrainData), GetType(TestData), GetType(ValidationData))>
