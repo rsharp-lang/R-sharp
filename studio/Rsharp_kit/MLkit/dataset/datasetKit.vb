@@ -130,6 +130,32 @@ Module datasetKit
         }
     End Function
 
+    <ExportAPI("description")>
+    Public Function dataDescription(x As Object, Optional env As Environment = Nothing) As Object
+        If x Is Nothing Then
+            Return Nothing
+        ElseIf TypeOf x Is Rdataframe Then
+            x = datasetKit.toFeatureSet(x, env)
+        End If
+
+        If TypeOf x Is Message Then
+            Return x
+        ElseIf Not TypeOf x Is FeatureFrame Then
+            Return Message.InCompatibleType(GetType(FeatureFrame), x.GetType, env)
+        End If
+
+        Return New Rdataframe With {
+            .rownames = FeatureDescription _
+                .GetDescriptions _
+                .ToArray,
+            .columns = DirectCast(x, FeatureFrame).features _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return FeatureDescription.DescribFeature(a.Value)
+                              End Function)
+        }
+    End Function
+
     Friend Function EmbeddingRender(input As IDataEmbedding, args As list, env As Environment) As GraphicsData
         Dim size$ = InteropArgumentHelper.getSize(args!size, env)
         Dim pointSize# = args.getValue("point_size", env, 15.0)
