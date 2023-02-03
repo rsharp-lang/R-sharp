@@ -106,22 +106,45 @@ Public Module xgboost
             early_stopping_rounds:=early_stopping_round,
             maximize:=maximize,
             eval_metric:=eval_metric,
-            loss:=loss
+            loss:=loss,
+            eta:=eta,
+            num_boost_round:=num_boost_round,
+            num_thread:=num_thread,
+            scale_pos_weight:=scale_pos_weight,
+            rowsample:=rowsample,
+            lambda:=lambda,
+            gamma:=gamma
         )
 
         Return model
     End Function
 
+    ''' <summary>
+    ''' do predictions
+    ''' </summary>
+    ''' <param name="gbm"></param>
+    ''' <param name="data"></param>
+    ''' <returns></returns>
     <ExportAPI("predict")>
     Public Function predict(gbm As GBM, data As TestData) As Double()
         Return gbm.predict(data.origin_feature)
     End Function
 
+    ''' <summary>
+    ''' save model
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <returns></returns>
     <ExportAPI("serialize")>
     Public Function serialize(model As GBM) As String()
         Return ModelSerializer.save_model(model).ToArray
     End Function
 
+    ''' <summary>
+    ''' load model
+    ''' </summary>
+    ''' <param name="modelLines"></param>
+    ''' <returns></returns>
     <ExportAPI("parseTree")>
     Public Function tree(modelLines As String()) As GBM
         Return ModelSerializer.load_model(modelLines)
