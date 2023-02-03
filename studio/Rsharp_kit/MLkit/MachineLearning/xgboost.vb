@@ -100,7 +100,14 @@ Public Module xgboost
         Dim num_thread = params.getValue("num_thread", env, -1)
         Dim model As New GBM
 
-        Call model.fit(data, validates)
+        Call model.fit(
+            trainset:=data,
+            valset:=validates,
+            early_stopping_rounds:=early_stopping_round,
+            maximize:=maximize,
+            eval_metric:=eval_metric,
+            loss:=loss
+        )
 
         Return model
     End Function
