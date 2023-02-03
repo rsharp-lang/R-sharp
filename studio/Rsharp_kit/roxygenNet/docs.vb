@@ -99,7 +99,7 @@ Module docs
                        <meta name="keywords" content="R#; {$packageName}; {$base_dll}"/>
                        <meta name="generator" content="https://github.com/rsharp-lang"/>
                        <meta name="theme-color" content="#333"/>
-                       <meta name="description" content="{$packageDescription}"/>
+                       <meta name="description" content="{$shortDescription}"/>
 
                        <meta class="foundation-data-attribute-namespace"/>
                        <meta class="foundation-mq-xxlarge"/>
@@ -108,6 +108,37 @@ Module docs
                        <meta class="foundation-mq-medium"/>
                        <meta class="foundation-mq-small"/>
                        <meta class="foundation-mq-topbar"/>
+
+                       <style>
+
+.table-three-line {
+border-collapse:collapse; /* 关键属性：合并表格内外边框(其实表格边框有2px，外面1px，里面还有1px哦) */
+border:solid #000000; /* 设置边框属性；样式(solid=实线)、颜色(#999=灰) */
+border-width:2px 0 2px 0px; /* 设置边框状粗细：上 右 下 左 = 对应：1px 0 0 1px */
+}
+.left-1{
+    border:solid #000000;border-width:1px 1px 2px 0px;padding:2px;
+    font-weight:bolder;
+}
+.right-1{
+    border:solid #000000;border-width:1px 0px 2px 1px;padding:2px;
+    font-weight:bolder;
+}
+.mid-1{
+    border:solid #000000;border-width:1px 1px 2px 1px;padding:2px;
+    font-weight:bolder;
+}
+.left{
+    border:solid #000000;border-width:1px 1px 1px 0px;padding:2px;
+}
+.right{
+    border:solid #000000;border-width:1px 0px 1px 1px;padding:2px;
+}
+.mid{
+    border:solid #000000;border-width:1px 1px 1px 1px;padding:2px;
+}
+table caption {font-size:14px;font-weight:bolder;}
+</style>
                    </head>
                    <body>
                        <table width="100%" summary=<%= "page for {{$packageName}}" %>>
@@ -120,7 +151,13 @@ Module docs
 
                        <h1>{$packageName}</h1>
                        <hr/>
-                       <p>
+                       <p style="
+    font-size: 1.125em;
+    line-height: .8em;
+    margin-left: 0.5%;
+    background-color: #fbfbfb;
+    padding: 24px;
+">
                            <code>
                                <span style="color: blue;">require</span>(<span style="color: black; font-weight: bold;">{$package}</span>);
                                <br/>
@@ -129,12 +166,17 @@ Module docs
                                <span style="color: blue;">imports</span><span style="color: brown"> "{$packageName}"</span><span style="color: blue;"> from</span><span style="color: brown"> "{$base_dll}"</span>;
                            </code>
                        </p>
-                       <br/>
+
                        <p>{$packageDescription}</p>
-                       <p style="font-style: italic; font-size: 0.9em;">{$packageRemarks}</p>
+
+                       <blockquote>
+                           <p style="font-style: italic; font-size: 0.9em;">
+                           {$packageRemarks}
+                           </p>
+                       </blockquote>
 
                        <div id="main-wrapper">
-                           <table>
+                           <table class="table-three-line">
                                <tbody>{$apiList}</tbody>
                            </table>
                        </div>
@@ -238,14 +280,11 @@ Module docs
             End With
         End If
 
-        If Not desc.StringEmpty Then
-            desc = desc _
-                .StringSplit("[<]br\s*/?>", True) _
-                .Select(Function(html)
-                            Return "#' " & html.StripHTMLTags
-                        End Function) _
-                .JoinBy(vbCrLf)
+        docs!shortDescription = Mid(desc.StripHTMLTags.TrimNewLine, 1, 64) & "..."
 
+        If Not desc.StringEmpty Then
+            desc = desc.LineTokens.FirstOrDefault
+            desc = "#' " & desc.StripHTMLTags.TrimNewLine.Trim
             docs!desc_comments = desc
         End If
 

@@ -3,7 +3,7 @@
     "Rscript.NET5": {
       "commandName": "Project",
       "commandLineArgs": "--build /src ../ /save ./biodeepdbkit.zip --skip-src-build",
-      "workingDirectory": "E:\\biodeep\\biodeepdb_v3\\biodeepdb_v3\\.pkg"
+      "workingDirectory": "D:\\GCModeller\\src\\runtime\\enigma\\.pkg"
     }
   }
 }
