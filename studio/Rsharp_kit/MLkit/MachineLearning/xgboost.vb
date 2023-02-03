@@ -85,8 +85,8 @@ Public Module xgboost
 
         Dim early_stopping_round = params.getValue("early_stopping_rounds", env, 10)
         Dim maximize = params.getValue("maximize", env, True)
-        Dim eval_metric As Metrics = Metric.Parse(params.getValue("eval_metric", env, "auc"))
-        Dim loss = params.getValue("loss", env, "logloss")
+        Dim eval_metric As Metrics = Metric.Parse(params.getValue("eval_metric", env, "auc"))  ' mse for regression
+        Dim loss = params.getValue("loss", env, "logloss") ' squareloss for regression?
         Dim eta = params.getValue("eta", env, 0.3)
         Dim num_boost_round = params.getValue("num_boost_round", env, 20)
         Dim max_depth = params.getValue("max_depth", env, 7)
