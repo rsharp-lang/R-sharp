@@ -67,7 +67,7 @@ Module xgboostDataSet
                         }
                     End Function) _
             .ToArray
-        Dim colnames As String() = data.colnames
+        Dim colnames As String() = If(featureNames.IsNullOrEmpty, data.colnames, featureNames)
         Dim train As TrainData = matrix.ToTrainingSet(colnames, If(categorical_features, colnames))
 
         Return train
