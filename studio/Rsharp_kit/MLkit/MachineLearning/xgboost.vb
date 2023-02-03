@@ -92,7 +92,7 @@ Public Module xgboost
         Dim max_depth = params.getValue("max_depth", env, 7)
         Dim scale_pos_weight = params.getValue("scale_pos_weight", env, 1.0)
         Dim rowsample = params.getValue("subsample", env, 0.8)
-        Dim colample = params.getValue("colsample", env, 0.8)
+        Dim colsample = params.getValue("colsample", env, 0.8)
         Dim min_child_weight = params.getValue("min_child_weight", env, 1.0)
         Dim min_sample_split = params.getValue("min_sample_split", env, 5)
         Dim lambda = params.getValue("reg_lambda", env, 1.0)
@@ -113,7 +113,11 @@ Public Module xgboost
             scale_pos_weight:=scale_pos_weight,
             rowsample:=rowsample,
             lambda:=lambda,
-            gamma:=gamma
+            gamma:=gamma,
+            colsample:=colsample,
+            max_depth:=max_depth,
+            min_child_weight:=min_child_weight,
+            min_sample_split:=min_sample_split
         )
 
         Return model
