@@ -166,7 +166,9 @@ Public Module xgboost
     ''' a matrix object (either numeric or integer), a dgCMatrix 
     ''' object, or a character string representing a filename.
     ''' </param>
-    ''' <param name="label"></param>
+    ''' <param name="label">
+    ''' labels for training data should be integer value
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("xgb.DMatrix")>
     <RApiReturn(GetType(TrainData), GetType(TestData), GetType(ValidationData))>
