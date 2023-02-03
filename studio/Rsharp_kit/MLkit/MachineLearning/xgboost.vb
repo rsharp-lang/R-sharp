@@ -50,15 +50,12 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.ComponentModel.TagData
 Imports Microsoft.VisualBasic.DataMining.Evaluation
-Imports Microsoft.VisualBasic.MachineLearning.XGBoost.DataSet
 Imports Microsoft.VisualBasic.MachineLearning.XGBoost.train
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' Extreme Gradient Boosting
@@ -176,48 +173,22 @@ Public Module xgboost
                             Optional label As Double() = Nothing,
                             Optional validate_set As Boolean = False,
                             Optional categorical_features As String() = Nothing,
+                            Optional feature_names As String() = Nothing,
                             Optional env As Environment = Nothing) As Object
 
         If label.IsNullOrEmpty Then
             ' test data set
-            Dim matrix As Single()() = data _
-                .forEachRow _
-                .Select(Function(v)
-                            Return DirectCast(REnv.asVector(Of Single)(v.value), Single())
-                        End Function) _
-                .ToArray
-            Dim test As TestData = matrix.ToTestDataSet
-
-            Return test
+            Return data.testDataSet(featureNames:=feature_names)
         ElseIf validate_set Then
             ' validation dataset
-            Dim matrix As DoubleTagged(Of Single())() = data _
-                .forEachRow() _
-                .Select(Function(v, i)
-                            Return New DoubleTagged(Of Single()) With {
-                                .Tag = label(i),
-                                .Value = DirectCast(REnv.asVector(Of Single)(v.value), Single())
-                            }
-                        End Function) _
-                .ToArray
-            Dim train As ValidationData = matrix.ToValidateSet()
-
-            Return train
+            Return data.validationDataSet(label, featureNames:=feature_names)
         Else
             ' training dataset
-            Dim matrix As DoubleTagged(Of Single())() = data _
-                .forEachRow() _
-                .Select(Function(v, i)
-                            Return New DoubleTagged(Of Single()) With {
-                                .Tag = label(i),
-                                .Value = DirectCast(REnv.asVector(Of Single)(v.value), Single())
-                            }
-                        End Function) _
-                .ToArray
-            Dim colnames As String() = data.colnames
-            Dim train As TrainData = matrix.ToTrainingSet(colnames, If(categorical_features, colnames))
-
-            Return train
+            Return data.trainingDataSet(
+                label:=label,
+                categorical_features:=categorical_features,
+                featureNames:=feature_names
+            )
         End If
     End Function
 
