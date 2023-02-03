@@ -340,57 +340,6 @@ Module SVMkit
         Return labels
     End Function
 
-    Private Function getDataLambda(dimNames As String(), tag As String(), data As Object, env As Environment,
-                                   ByRef err As Message,
-                                   ByRef n As Integer) As Func(Of Integer, (label As String, data As Node()))
-
-        Dim vectors As New Dictionary(Of String, Double())
-
-        If data Is Nothing Then
-            err = Internal.debug.stop("no problem data was provided!", env)
-            Return Nothing
-        ElseIf TypeOf data Is list Then
-            With DirectCast(data, list)
-                For Each name As String In dimNames
-                    If Not .hasName(name) Then
-                        err = Internal.debug.stop($"missing dimension {name}!", env)
-                        Return Nothing
-                    End If
-
-                    vectors(name) = .getValue(Of Double())(name, env)
-                Next
-            End With
-        ElseIf TypeOf data Is dataframe Then
-            With DirectCast(data, dataframe)
-                For Each name As String In dimNames
-                    If Not .hasName(name) Then
-                        err = Internal.debug.stop($"missing dimension {name}!", env)
-                        Return Nothing
-                    End If
-
-                    vectors(name) = REnv.asVector(Of Double)(.columns(name))
-                Next
-            End With
-        Else
-            err = Message.InCompatibleType(GetType(Object), data.GetType, env)
-            Return Nothing
-        End If
-
-        Dim getTag As Func(Of Integer, String)
-
-        n = vectors.Values.First.Length
-
-        If tag.Length = 1 Then
-            getTag = Function() tag(Scan0)
-        Else
-            getTag = Function(i) tag(i)
-        End If
-
-        Return Function(i)
-                   Return (getTag(i), dimNames.Select(Function([dim], j) New Node(j + 1, vectors([dim])(i))).ToArray)
-               End Function
-    End Function
-
     ''' <summary>
     ''' train SVM model
     ''' </summary>
@@ -759,7 +708,7 @@ Module SVMkit
         Dim row As (label As String, data As Node())
         Dim n As Integer
         Dim err As Message = Nothing
-        Dim getData = SVMkit.getDataLambda(svm.dimensionNames, {"n/a"}, data, env, err, n)
+        Dim getData = svmDataSet.getDataLambda(svm.dimensionNames, {"n/a"}, data, env, err, n)
         Dim datum As Node()
 
         If Not err Is Nothing Then

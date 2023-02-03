@@ -9,6 +9,7 @@
     <Import_RootNamespace>xgboostDataSet_helper</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)svmDataSet.vb" />
     <Compile Include="$(MSBuildThisFileDirectory)xgboostDataSet.vb" />
   </ItemGroup>
 </Project>

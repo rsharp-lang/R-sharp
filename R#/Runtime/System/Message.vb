@@ -110,6 +110,13 @@ Namespace Runtime.Components
         End Function
 
         ''' <summary>
+        ''' throw the <see cref="Exception"/> data that cast from <see cref="ToException()"/>
+        ''' </summary>
+        Public Sub ThrowCLRError()
+            Throw ToException()
+        End Sub
+
+        ''' <summary>
         ''' create a symbol not found error message
         ''' </summary>
         ''' <param name="envir"></param>
