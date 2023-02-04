@@ -21,6 +21,7 @@ Module solveSVM
         Dim err As Message = Nothing
         Dim getData = svmDataSet.getDataLambda(svm.dimensionNames, {"n/a"}, data, env, err, n)
         Dim datum As Node()
+        Dim label As SVMPrediction
 
         If Not err Is Nothing Then
             Return err
@@ -35,34 +36,48 @@ Module solveSVM
             names = DirectCast(data, list).getNames
         End If
 
-        Dim label As SVMPrediction
-        Dim factor As ColorClass
-        Dim color = New String(n - 1) {}
-        Dim enums = New Integer(n - 1) {}
-        Dim tags = New String(n - 1) {}
-        Dim sums = New Double(n - 1) {}
-
-        For i As Integer = 0 To n - 1
-            row = getData(i)
-            datum = transform.Transform(row.data)
-            label = svm.model.Predict(datum)
-            factor = svm.factors.GetColor(label.class)
-
-            color(i) = factor.color
-            enums(i) = factor.factor
-            tags(i) = factor.name
-            sums(i) = label.vote(label.class - 1)
-        Next
-
-        Return New dataframe With {
-            .rownames = names,
-            .columns = New Dictionary(Of String, Array) From {
-                {NameOf(color), color},
-                {NameOf(enums), enums},
-                {NameOf(tags), tags},
-                {"scores", sums}
+        If svm.SVR Then
+            Dim predicts As New list With {
+                .slots = New Dictionary(Of String, Object)
             }
-        }
+
+            For i As Integer = 0 To n - 1
+                row = getData(i)
+                datum = transform.Transform(row.data)
+                label = svm.model.Predict(datum)
+                predicts.add(names(i), label.unifyValue)
+            Next
+
+            Return predicts
+        Else
+            Dim factor As ColorClass
+            Dim color = New String(n - 1) {}
+            Dim enums = New Integer(n - 1) {}
+            Dim tags = New String(n - 1) {}
+            Dim sums = New Double(n - 1) {}
+
+            For i As Integer = 0 To n - 1
+                row = getData(i)
+                datum = transform.Transform(row.data)
+                label = svm.model.Predict(datum)
+                factor = svm.factors.GetColor(label.class)
+
+                color(i) = factor.color
+                enums(i) = factor.factor
+                tags(i) = factor.name
+                sums(i) = label.vote(label.class - 1)
+            Next
+
+            Return New dataframe With {
+                .rownames = names,
+                .columns = New Dictionary(Of String, Array) From {
+                    {NameOf(color), color},
+                    {NameOf(enums), enums},
+                    {NameOf(tags), tags},
+                    {"scores", sums}
+                }
+            }
+        End If
     End Function
 
     <Extension>
