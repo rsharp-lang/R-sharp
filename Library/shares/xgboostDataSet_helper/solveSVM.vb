@@ -49,7 +49,7 @@ Module solveSVM
             factor = svm.factors.GetColor(label.class)
 
             color(i) = factor.color
-            enums(i) = factor.enumInt
+            enums(i) = factor.factor
             tags(i) = factor.name
             sums(i) = label.vote(label.class - 1)
         Next
