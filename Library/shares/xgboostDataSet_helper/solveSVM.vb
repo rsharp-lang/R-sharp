@@ -27,7 +27,6 @@ Module solveSVM
         End If
 
         Dim transform As IRangeTransform = svm.transform
-        Dim labels As New Dictionary(Of String, Object)
         Dim names As String()
 
         If TypeOf data Is dataframe Then
@@ -38,16 +37,32 @@ Module solveSVM
 
         Dim label As SVMPrediction
         Dim factor As ColorClass
+        Dim color = New String(n - 1) {}
+        Dim enums = New Integer(n - 1) {}
+        Dim tags = New String(n - 1) {}
+        Dim sums = New Double(n - 1) {}
 
         For i As Integer = 0 To n - 1
             row = getData(i)
             datum = transform.Transform(row.data)
             label = svm.model.Predict(datum)
             factor = svm.factors.GetColor(label.class)
-            labels.Add(names(i), factor)
+
+            color(i) = factor.color
+            enums(i) = factor.enumInt
+            tags(i) = factor.name
+            sums(i) = label.vote(label.class - 1)
         Next
 
-        Return New list With {.slots = labels}
+        Return New dataframe With {
+            .rownames = names,
+            .columns = New Dictionary(Of String, Array) From {
+                {NameOf(color), color},
+                {NameOf(enums), enums},
+                {NameOf(tags), tags},
+                {"scores", sums}
+            }
+        }
     End Function
 
     <Extension>
