@@ -12,7 +12,11 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Module svmDataSet
 
-    Public Function svmProblem(dimensionNames As String(), tag As String(), data As Object, env As Environment) As [Variant](Of Message, SVM.Problem)
+    Public Function svmProblem(dimensionNames As String(),
+                               tag As String(),
+                               data As Object,
+                               env As Environment) As [Variant](Of Message, SVM.Problem)
+
         Dim part As New List(Of Node())()
         Dim labels As New List(Of String)()
         Dim row As (label As String, data As Node())
