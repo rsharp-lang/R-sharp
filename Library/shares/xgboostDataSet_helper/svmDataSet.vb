@@ -12,6 +12,39 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Module svmDataSet
 
+    Public Function svrProblem(dimensionNames As String(), label As String, data As dataframe, env As Environment) As [Variant](Of Message, SVM.Problem)
+        Dim y As Double() = REnv.asVector(Of Double)(data(label))
+        Dim n As Integer
+        Dim err As Message = Nothing
+        Dim getData = getDataLambda(dimensionNames, New String(y.Length - 1) {}, data, env, err, n)
+        Dim row As (label As String, data As Node())
+        Dim part As New List(Of Node())()
+
+        If Not err Is Nothing Then
+            Return err
+        End If
+
+        For i As Integer = 0 To n - 1
+            row = getData(i)
+            part.Add(row.data)
+        Next
+
+        Return New SVM.Problem With {
+            .dimensionNames = dimensionNames,
+            .maxIndex = .dimensionNames.Length,
+            .Y = y _
+                .Select(Function(yi)
+                            Return New ColorClass With {
+                                .color = "#000000",
+                                .factor = yi,
+                                .name = yi.ToString
+                            }
+                        End Function) _
+                .ToArray,
+            .X = part.ToArray
+        }
+    End Function
+
     Public Function svmProblem(dimensionNames As String(),
                                tag As String(),
                                data As Object,
