@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -68,6 +69,7 @@ Namespace Runtime.Internal.Object
     ''' The R# pipeline
     ''' </summary>
     Public Class pipeline : Inherits RsharpDataObject
+        Implements RPipeline
 
         Friend ReadOnly pipeline As IEnumerable
 
@@ -83,7 +85,7 @@ Namespace Runtime.Internal.Object
         ''' the pipeline data is an error message
         ''' </summary>
         ''' <returns></returns>
-        Public ReadOnly Property isError As Boolean
+        Public ReadOnly Property isError As Boolean Implements RPipeline.isError
             Get
                 If Not populatorFirstErr Is Nothing Then
                     Return True
@@ -113,7 +115,7 @@ Namespace Runtime.Internal.Object
             elementType = type
         End Sub
 
-        Public Function getError() As Message
+        Public Function getError() As Message Implements RPipeline.getError
             If Not populatorFirstErr Is Nothing Then
                 Return populatorFirstErr
             ElseIf isError Then
