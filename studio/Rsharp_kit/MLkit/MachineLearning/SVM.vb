@@ -422,7 +422,7 @@ Module SVMkit
         Logging.IsVerbose = verbose
 
         If TypeOf problem Is Problem Then
-            Return getSvmModel(DirectCast(problem, Problem), param)
+            Return LibSVM.getSvmModel(DirectCast(problem, Problem), param)
         Else
             Return getSvmModel(DirectCast(problem, ProblemTable), param)
         End If
@@ -435,7 +435,7 @@ Module SVMkit
             .Select(Function(topic) table.packCache(topic, param)) _
             .AsParallel _
             .Select(Function(subTopic)
-                        Dim model As SVMModel = subTopic.topicProblem.getSvmModel(subTopic.args)
+                        Dim model As SVMModel = LibSVM.getSvmModel(subTopic.topicProblem, subTopic.args)
                         Return (model, subTopic.topic)
                     End Function)
 
@@ -466,21 +466,6 @@ Module SVMkit
         Next
 
         Return (args, topicProblem, topic)
-    End Function
-
-    <Extension>
-    Private Function getSvmModel(problem As Problem, par As Parameter) As SVMModel
-        Dim transform As RangeTransform = RangeTransform.Compute(problem)
-        Dim scale = transform.Scale(problem)
-        Dim model As SVM.Model = Training.Train(scale, par)
-
-        Call Logging.flush()
-
-        Return New SVMModel With {
-            .transform = transform,
-            .model = model,
-            .factors = New ClassEncoder(problem.Y)
-        }
     End Function
 
     <ExportAPI("parse.SVM_json")>
