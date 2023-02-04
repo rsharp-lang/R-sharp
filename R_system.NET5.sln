@@ -195,7 +195,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mime", "mime", "{E410DD05-D
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "symbolic", "Library\shares\symbolic\symbolic.shproj", "{011B5BA6-B4B1-4858-B59A-9BA2E90DB990}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "xgboostDataSet_helper", "Library\shares\xgboostDataSet_helper\xgboostDataSet_helper.shproj", "{78C60F4E-50F9-4A84-8290-2886728A4B34}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "machineLearning_common", "Library\shares\xgboostDataSet_helper\machineLearning_common.shproj", "{78C60F4E-50F9-4A84-8290-2886728A4B34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
