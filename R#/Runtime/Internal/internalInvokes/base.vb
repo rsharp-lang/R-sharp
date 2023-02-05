@@ -805,20 +805,28 @@ Namespace Runtime.Internal.Invokes
             Dim df_rows = df.forEachRow(df_names).ToDictionary
             Dim y_rows = y.forEachRow(y_names).ToArray
 
-            For Each row In y_rows
-                Dim a As Object()
+            For Each row As NamedCollection(Of Object) In y_rows
+                Dim a As Object() = Nothing
                 Dim b As Object() = row.value
                 Dim v As Object() = Replicate([default], union_names.Length).ToArray
 
                 If df_rows.ContainsKey(row.name) Then
                     a = df_rows(row.name).value
+
+                    If a.Length = v.Length AndAlso b.Length > 0 Then
+                        ' the duplicated name cause this problem
+                        ' ignores?
+                        Call env.AddMessage($"Found a duplicated key('{row.name}') while do dataframe cbind!")
+
+                        GoTo SKIP
+                    End If
                 Else
                     a = Replicate([default], df_names.Length).ToArray
                 End If
 
                 Call Array.ConstrainedCopy(a, Scan0, v, Scan0, a.Length)
                 Call Array.ConstrainedCopy(b, Scan0, v, a.Length, b.Length)
-
+SKIP:
                 df_rows(row.name) = New NamedCollection(Of Object) With {
                     .name = row.name,
                     .value = v.ToArray
