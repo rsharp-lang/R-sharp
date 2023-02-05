@@ -822,6 +822,8 @@ Namespace Runtime.Internal.Invokes
                     End If
                 Else
                     a = Replicate([default], df_names.Length).ToArray
+
+                    Call env.AddMessage($"Missing key('{row.name}') while do dataframe cbind!")
                 End If
 
                 Call Array.ConstrainedCopy(a, Scan0, v, Scan0, a.Length)
