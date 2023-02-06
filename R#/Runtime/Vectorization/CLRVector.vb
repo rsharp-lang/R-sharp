@@ -1,6 +1,8 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Vectorization
@@ -26,7 +28,15 @@ Namespace Runtime.Vectorization
         End Function
 
         Public Shared Function asNumeric(x As Object) As Double()
-            Throw New NotImplementedException
+            If TypeOf x Is Double() Then
+                Return x
+            ElseIf TypeOf x Is Integer() OrElse TypeOf x Is Long() OrElse TypeOf x Is Single() OrElse TypeOf x Is Short() Then
+                Return DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray
+            ElseIf TypeOf x Is vector AndAlso DirectCast(x, vector).elementType Like RType.floats Then
+                Return DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray
+            Else
+                Throw New InvalidCastException(x.GetType.FullName)
+            End If
         End Function
 
         ''' <summary>
