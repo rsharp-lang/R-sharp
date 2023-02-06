@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::1cfe4be0c58a343a44fb3dc719f5b35e, R-sharp\Library\igraph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1253
-    '    Code Lines: 818
-    ' Comment Lines: 281
-    '   Blank Lines: 154
-    '     File Size: 48.28 KB
+' Summaries:
 
 
-    ' Module NetworkModule
-    ' 
-    '     Function: addEdge, addEdges, addNode, addNodeData, addNodes
-    '               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
-    '               degree, deleteNode, E, edgeAttributes, emptyNetwork
-    '               eval, extractAdjacenciesSubNetwork, extractSubGraph, getByGroup, getClass
-    '               getEdges, getElementByID, getNodes, graph, hasEdge
-    '               LoadNetwork, LouvainCluster, metaData, nodeAttributes, nodeClass
-    '               nodeMass, nodeNames, printGraph, printNode, SaveNetwork
-    '               setAttributes, summaryNodes, trimEdges, typeGroupOfNodes, V
-    '               weights, xref
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1253
+'    Code Lines: 818
+' Comment Lines: 281
+'   Blank Lines: 154
+'     File Size: 48.28 KB
+
+
+' Module NetworkModule
+' 
+'     Function: addEdge, addEdges, addNode, addNodeData, addNodes
+'               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
+'               degree, deleteNode, E, edgeAttributes, emptyNetwork
+'               eval, extractAdjacenciesSubNetwork, extractSubGraph, getByGroup, getClass
+'               getEdges, getElementByID, getNodes, graph, hasEdge
+'               LoadNetwork, LouvainCluster, metaData, nodeAttributes, nodeClass
+'               nodeMass, nodeNames, printGraph, printNode, SaveNetwork
+'               setAttributes, summaryNodes, trimEdges, typeGroupOfNodes, V
+'               weights, xref
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -87,6 +87,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
 Imports rDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
@@ -1218,7 +1219,7 @@ Public Module NetworkModule
                 .Where(Function(n)
                            Dim test As Object = selector.Invoke(env, InvokeParameter.CreateLiterals(n))
                            ' get test result
-                           Return Vectorization _
+                           Return CLRVector _
                                .asLogical(test) _
                                .FirstOrDefault
                        End Function) _
