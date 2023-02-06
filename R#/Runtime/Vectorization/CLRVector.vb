@@ -34,6 +34,8 @@ Namespace Runtime.Vectorization
                 Return DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray
             ElseIf TypeOf x Is vector AndAlso DirectCast(x, vector).elementType Like RType.floats Then
                 Return DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray
+            ElseIf TypeOf x Is Object() Then
+                Return DirectCast(x, Object()).Select(Function(d) CDbl(d)).ToArray
             Else
                 Throw New InvalidCastException(x.GetType.FullName)
             End If
