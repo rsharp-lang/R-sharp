@@ -243,12 +243,15 @@ Namespace Runtime.Internal.Object
         ''' 这个下标值应该是从1开始的
         ''' </param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' 这个函数是一个安全的函数，下表越界的时候按照R语言的处理规则，不会抛出错误，而是返回空值
+        ''' </remarks>
         Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
             If i < 0 Then
                 i = data.Length + i
             End If
 
-            If i > data.Length OrElse i <= 0 Then
+            If data.Length = 0 OrElse i > data.Length OrElse i <= 0 Then
                 Return Nothing
             Else
                 ' 下标是从1开始的

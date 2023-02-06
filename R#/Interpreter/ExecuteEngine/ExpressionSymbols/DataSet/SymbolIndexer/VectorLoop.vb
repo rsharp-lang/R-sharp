@@ -158,6 +158,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim source As Object() = datalist.data.ToArray
             Dim item As Object
 
+            ' for each element item in the source data list
             For i As Integer = 0 To vec.Length - 1
                 item = source(i)
 
@@ -171,6 +172,27 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Return Message.InCompatibleType(GetType(list), item.GetType, envir)
                 End If
             Next
+
+            ' 20230206
+            ' handling of the vector bugs
+            If vec.All(Function(vi)
+                           If vi Is Nothing Then
+                               Return True
+                           Else
+                               Return TypeOf vi Is vector AndAlso DirectCast(vi, vector).length = 1
+                           End If
+                       End Function) Then
+
+                vec = vec _
+                    .Select(Function(vi)
+                                If vi Is Nothing Then
+                                    Return Nothing
+                                Else
+                                    Return DirectCast(vi, vector).getByIndex(1)
+                                End If
+                            End Function) _
+                    .ToArray
+            End If
 
             Return REnv.TryCastGenericArray(vec, env:=envir)
         End Function
