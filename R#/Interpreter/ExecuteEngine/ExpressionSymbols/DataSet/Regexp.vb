@@ -125,7 +125,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 }, env)
             End If
 
-            Dim inputs As String() = REnv.asVector(Of String)(strData)
+            Dim inputs As String()
+
+            Try
+                inputs = REnv.asVector(Of String)(strData)
+            Catch ex As Exception
+                Return Internal.debug.stop(ex, env)
+            End Try
 
             If inputs.Length = 1 Then
                 Return r.Matches(inputs(Scan0)).ToArray
