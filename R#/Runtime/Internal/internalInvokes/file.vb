@@ -607,7 +607,7 @@ Namespace Runtime.Internal.Invokes
             If withExtensionName Then
                 ' get fileName
                 Return fileNames _
-                    .Select(AddressOf CLRVector) _
+                    .Select(Function(path) path.FileName) _
                     .ToArray
             Else
                 Return fileNames _

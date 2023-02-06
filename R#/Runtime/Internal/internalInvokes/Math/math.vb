@@ -1,59 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::1a83cc9aa1bfc8825685347109a77a99, R-sharp\R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 819
-    '    Code Lines: 362
-    ' Comment Lines: 383
-    '   Blank Lines: 74
-    '     File Size: 35.64 KB
+' Summaries:
 
 
-    '     Module math
-    ' 
-    '         Function: abs, cluster1D, cos, diff, exp
-    '                   getRandom, isFinite, isInfinite, isNaN, log
-    '                   log10, log2, max, mean, median
-    '                   min, numericClassTags, pearson, pow, rnorm
-    '                   round, rsd, runif, sample, sample_int
-    '                   sd, sin, sqrt, sum, var
-    ' 
-    '         Sub: set_seed
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 819
+'    Code Lines: 362
+' Comment Lines: 383
+'   Blank Lines: 74
+'     File Size: 35.64 KB
+
+
+'     Module math
+' 
+'         Function: abs, cluster1D, cos, diff, exp
+'                   getRandom, isFinite, isInfinite, isNaN, log
+'                   log10, log2, max, mean, median
+'                   min, numericClassTags, pearson, pow, rnorm
+'                   round, rsd, runif, sample, sample_int
+'                   sd, sin, sqrt, sum, var
+' 
+'         Sub: set_seed
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -67,6 +67,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports stdNum = System.Math
@@ -298,7 +299,7 @@ Namespace Runtime.Internal.Invokes
 
             Select Case elementType
                 Case GetType(Boolean)
-                    Return Vectorization.asLogical(array).Select(Function(b) If(b, 1, 0)).Sum
+                    Return CLRVector.asLogical(array).Select(Function(b) If(b, 1, 0)).Sum
                 Case GetType(Integer), GetType(Long), GetType(Short), GetType(Byte)
                     Return Runtime.asVector(Of Long)(x).AsObjectEnumerator(Of Long).Sum
                 Case Else

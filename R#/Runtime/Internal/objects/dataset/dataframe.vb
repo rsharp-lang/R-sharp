@@ -66,6 +66,7 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object
@@ -386,7 +387,7 @@ Namespace Runtime.Internal.Object
 
             If indexType Like RType.logicals Then
                 ' which is true is zero-based by default
-                Return GetByRowIndex(index:=which.IsTrue(Vectorization.asLogical(selector)), env) ' checked
+                Return GetByRowIndex(index:=which.IsTrue(CLRVector.asLogical(selector)), env) ' checked
             ElseIf indexType Like RType.integers Then
                 Dim i_raw As Integer() = DirectCast(asVector(Of Integer)(selector), Integer())
                 Dim i_offset As Integer()

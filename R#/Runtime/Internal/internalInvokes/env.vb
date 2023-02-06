@@ -268,7 +268,7 @@ Namespace Runtime.Internal.Invokes
                 ' list dir?
                 Return opt.Value _
                     .ListFiles _
-                    .Select(AddressOf CLRVector) _
+                    .Select(Function(path) path.FileName) _
                     .ToArray
             ElseIf pkgMgr.hasLibFile(name.FileName) Then
                 ' list all of the package names in current dll module

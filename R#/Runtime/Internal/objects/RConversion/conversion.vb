@@ -75,6 +75,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
@@ -1113,7 +1114,7 @@ RE0:
             ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Return Runtime.CTypeOfList(Of Boolean)(obj, env)
             Else
-                Return Vectorization.asLogical(obj)
+                Return CLRVector.asLogical(obj)
             End If
         End Function
 

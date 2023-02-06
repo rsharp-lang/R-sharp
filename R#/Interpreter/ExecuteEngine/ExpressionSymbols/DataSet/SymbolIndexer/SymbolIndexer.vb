@@ -192,7 +192,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Dim opt As ValueAssignExpression = indexVec(1)
 
                     If TypeOf opt.targetSymbols(Scan0) Is Literal AndAlso DirectCast(opt.targetSymbols(Scan0), Literal) = "drop" Then
-                        Dim drop As Boolean = asLogical(opt.value.Evaluate(env))(Scan0)
+                        Dim drop As Boolean = CLRVector.asLogical(opt.value.Evaluate(env))(Scan0)
                         Dim rowIndex = data.getRowIndex(indexVec.values(Scan0).Evaluate(env))
                         Dim result = data.getRowList(rowIndex, drop:=drop)
 
@@ -636,7 +636,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim vec As Array
 
             If REnv.isVector(Of Boolean)(indexer) Then
-                vec = Rarray.getByIndex(which.IsTrue(Vectorization.asLogical(indexer), offset:=1))
+                vec = Rarray.getByIndex(which.IsTrue(CLRVector.asLogical(indexer), offset:=1))
             ElseIf indexer.Length = 1 Then
                 Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
             Else
