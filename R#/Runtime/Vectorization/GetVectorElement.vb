@@ -69,14 +69,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 
 Namespace Runtime.Vectorization
 
-    Public Enum VectorTypes
-        None
-        Scalar
-        Vector
-
-        [Error]
-    End Enum
-
     ''' <summary>
     ''' helper class object for make a safe vector element visiting
     ''' </summary>
