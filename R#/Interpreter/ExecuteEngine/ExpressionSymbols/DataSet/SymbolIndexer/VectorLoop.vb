@@ -179,7 +179,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                            If vi Is Nothing Then
                                Return True
                            Else
-                               Return TypeOf vi Is vector AndAlso DirectCast(vi, vector).length = 1
+                               ' vector length = 0: means nothing
+                               ' vector length = 1: means scalar
+                               Return TypeOf vi Is vector AndAlso DirectCast(vi, vector).length <= 1
                            End If
                        End Function) Then
 
