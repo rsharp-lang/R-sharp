@@ -191,7 +191,7 @@ Namespace Development.Package.File
             Using file As New StreamWriter(zip.CreateEntry("lib/assembly/readme.txt").Open)
                 text = $".NET assembly files [{assembly.framework}]"
                 text = text & vbCrLf & vbCrLf
-                text = text & assembly.assembly.Select(AddressOf FileName).JoinBy(vbCrLf)
+                text = text & assembly.assembly.Select(AddressOf CLRVector).JoinBy(vbCrLf)
                 checksum = checksum & md5.GetMd5Hash(text)
 
                 Call file.WriteLine(text)
