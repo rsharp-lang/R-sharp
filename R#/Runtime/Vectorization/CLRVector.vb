@@ -5,6 +5,9 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Vectorization
 
+    ''' <summary>
+    ''' Data cast type helper for the primitive array in CLR function code
+    ''' </summary>
     Public NotInheritable Class CLRVector
 
         Private Sub New()
