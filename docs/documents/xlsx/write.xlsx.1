@@ -1,5 +1,5 @@
 .\" man page create by R# package system.
-.TH XLSX 4 2000-01-01 "write.xlsx" "write.xlsx"
+.TH XLSX 4 2000-Jan "write.xlsx" "write.xlsx"
 .SH NAME
 write.xlsx \- 
 .SH SYNOPSIS
@@ -8,6 +8,7 @@ write.xlsx \-
 \fBsheetName\fR as string = "Sheet1", 
 \fBrow_names\fR as boolean = TRUE, 
 \fBfileEncoding\fR as any = "", 
+\fBnumber_format\fR as any = "" & CALL "GETOPTION"("F64.FORMAT") & "" & CALL "GETOPTION"("DIGITS"), 
 [\fB<Environment>\fR]);\fR
 .SH SEE ALSO
 xlsx

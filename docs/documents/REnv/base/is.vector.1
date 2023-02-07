@@ -1,0 +1,50 @@
+.\" man page create by R# package system.
+.TH BASE 1 2002-May "is.vector" "is.vector"
+.SH NAME
+is.vector \- ‘is.vector’ returns ‘TRUE’ if ‘x’ is a vector of the specified
+.SH SYNOPSIS
+\fIis.vector(\fBx\fR as any, 
+\fBmode\fR as any = "any");\fR
+.SH DESCRIPTION
+.PP
+‘is.vector’ returns ‘TRUE’ if ‘x’ is a vector of the specified
+ mode having no attributes _other than names_.  It returns 'FALSE’
+ otherwise.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- an R object.. 
+.PP
+.PP
+\fBmode\fB \fR\- 
+ character string naming an atomic mode or ‘"list"’ or
+ '"expression"’ or (except for ‘vector’) ‘"any"’.  Currently,
+ 'is.vector()’ allows any type (see ‘typeof’) for ‘mode’, and
+ when mode Is Not '"any"’, ‘is.vector(x, mode)’ is almost the
+ same as 'typeof(x) == mode’.
+. 
+.PP
+.SH DETAILS
+.PP
+The atomic modes are ‘"logical"’, ‘"integer"’, ‘"numeric"’
+ (synonym '"double"’), ‘"complex"’, ‘"character"’ and ‘"raw"’.
+
+ If 'mode = "any"’, ‘is.vector’ may return ‘TRUE’ for the atomic
+ modes, 'list’ and ‘expression’.  For any ‘mode’, it will return
+ 'FALSE’ if ‘x’ has any attributes except names.  (This is
+ incompatible with S.)  On the other hand, 'as.vector’ removes
+ _all_ attributes including names For results Of atomic mode (but
+ Not those of mode '"list"’ nor ‘"expression"’).
+
+ Note that factors are _not_ vectors; 'is.vector’ returns ‘FALSE’
+ And 'as.vector’ converts a factor to a character vector for ‘mode
+ = "any"'.
+.PP
+.SH SEE ALSO
+base
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

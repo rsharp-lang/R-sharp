@@ -1,0 +1,74 @@
+.\" man page create by R# package system.
+.TH UTILS 1 2002-May "zip" "zip"
+.SH NAME
+zip \- Create Zip Archives
+.SH SYNOPSIS
+\fIzip(\fBzipfile\fR as string, 
+\fBfiles\fR as any, 
+\fBflags\fR as string = "-r9X", 
+\fBextras\fR as string = "", 
+\fBzip\fR as any = "Sys.getenv("R_ZIPCMD", "zip")", 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Create Zip Archives
+ 
+ A wrapper for an external zip command to create zip archives.
+.PP
+.SH OPTIONS
+.PP
+\fBzipfile\fB \fR\- 
+ The pathname of the zip file: tilde expansion (see path.expand) will be performed.
+. 
+.PP
+.PP
+\fBfiles\fB \fR\- 
+ A character vector of recorded filepaths to be included.
+. 
+.PP
+.PP
+\fBflags\fB \fR\- 
+ A character string of flags to be passed to the command: see ‘Details’.
+. 
+.PP
+.PP
+\fBextras\fB \fR\- 
+ An optional character vector: see ‘Details’.
+. 
+.PP
+.PP
+\fBzip\fB \fR\- 
+ A character string specifying the external command to be used.
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+The status value returned by the external command, invisibly.
+.PP
+.SH DETAILS
+.PP
+On a Unix-alike, the default for zip will by default use the value of 
+ R_ZIPCMD, which is set in ‘etc/Renviron’ if an unzip command was found
+ during configuration. On Windows, the default relies on a zip program
+ (for example that from Rtools) being in the path.
+ 
+ The default for flags is that appropriate for zipping up a directory
+ tree in a portable way: see the system-specific help for the zip command 
+ for other possibilities.
+ 
+ Argument extras can be used to specify -x or -i followed by a list of 
+ filepaths to exclude or include. Since extras will be treated as if 
+ passed to system, if the filepaths contain spaces they must be quoted 
+ e.g. by shQuote.
+.PP
+.SH SEE ALSO
+utils
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

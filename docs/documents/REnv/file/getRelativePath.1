@@ -1,0 +1,36 @@
+.\" man page create by R# package system.
+.TH FILE 1 2002-May "getRelativePath" "getRelativePath"
+.SH NAME
+getRelativePath \- Gets the relative pathname relative to a directory.
+.SH SYNOPSIS
+\fIgetRelativePath(\fBpathname\fR as string, 
+\fBrelativeTo\fR as any = CALL "GETWD"());\fR
+.SH DESCRIPTION
+.PP
+Gets the relative pathname relative to a directory.
+.PP
+.SH OPTIONS
+.PP
+\fBpathname\fB \fR\- A character String Of the pathname To be converted into an relative pathname.. 
+.PP
+.PP
+\fBrelativeTo\fB \fR\- A character string of the reference pathname.. 
+.PP
+.SH VALUE
+.PP
+Returns a character string of the relative pathname.
+.PP
+.SH DETAILS
+.PP
+In case the two paths are on different file systems, 
+ for instance, C:/foo/bar/ and D:/foo/, the method 
+ returns pathname as is.
+.PP
+.SH SEE ALSO
+file
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

@@ -12,6 +12,7 @@ The sciBASIC.NET dataframe api
 + [open.csv](dataframe/open.csv.1) 
 + [as.dataframe.raw](dataframe/as.dataframe.raw.1) 
 + [row](dataframe/row.1) 
++ [parseRow](dataframe/parseRow.1) parse text line as csv row.
 + [append.cells](dataframe/append.cells.1) 
 + [append.row](dataframe/append.row.1) 
 + [dataset.colnames](dataframe/dataset.colnames.1) Get/Set column names of the given **`dataset`**
@@ -20,3 +21,4 @@ The sciBASIC.NET dataframe api
 + [dataset.transpose](dataframe/dataset.transpose.1) 
 + [as.index](dataframe/as.index.1) 
 + [read.dataframe](dataframe/read.dataframe.1) Read dataframe
++ [entityRow](dataframe/entityRow.1) 

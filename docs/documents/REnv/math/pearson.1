@@ -1,0 +1,60 @@
+.\" man page create by R# package system.
+.TH MATH 1 2002-May "pearson" "pearson"
+.SH NAME
+pearson \- Pearson Correlation Testing in R Programming
+.SH SYNOPSIS
+\fIpearson(\fBx\fR as <generic> Array, 
+\fBy\fR as <generic> Array, 
+\fBMAXIT\fR as integer = 5000, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Pearson Correlation Testing in R Programming
+ 
+ Correlation is a statistical measure that indicates 
+ how strongly two variables are related. It involves 
+ the relationship between multiple variables as well. 
+ For instance, if one is interested to know whether 
+ there is a relationship between the heights of fathers 
+ and sons, a correlation coefficient can be calculated 
+ to answer this question. Generally, it lies between 
+ -1 and +1. It is a scaled version of covariance and 
+ provides the direction and strength of a relationship. 
+ 
+ this function measure a Parametric Correlation – Pearson correlation(r): 
+ It measures a linear dependence between two variables (x and y) 
+ is known as a parametric correlation test because it depends on 
+ the distribution of the data.
+ 
+ Pearson Rank Correlation is a parametric correlation. 
+ The Pearson correlation coefficient is probably the most
+ widely used measure for linear relationships between two 
+ normal distributed variables and thus often just called 
+ "correlation coefficient".
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- -. 
+.PP
+.PP
+\fBy\fB \fR\- -. 
+.PP
+.PP
+\fBMAXIT\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+1. r takes a value between -1 (negative correlation) and 1 (positive correlation).
+ 2. r = 0 means no correlation.
+ 3. Can Not be applied to ordinal variables.
+ 4. The sample size should be moderate (20-30) For good estimation.
+ 5. Outliers can lead To misleading values means Not robust With outliers.
+.PP
+.SH SEE ALSO
+math
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

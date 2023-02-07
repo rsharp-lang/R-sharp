@@ -1,0 +1,42 @@
+.\" man page create by R# package system.
+.TH APPLYS 1 2002-May "lapply" "lapply"
+.SH NAME
+lapply \- Apply a Function over a List or Vector
+.SH SYNOPSIS
+\fIlapply(\fBX\fR as any, 
+\fBFUN\fR as any, 
+\fBnames\fR as any = \fB<NULL>\fR, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Apply a Function over a List or Vector
+ 
+ lapply returns a list of the same length as X, each element of 
+ which is the result of applying FUN to the corresponding 
+ element of X.
+.PP
+.SH OPTIONS
+.PP
+\fBX\fB \fR\- 
+ a vector (atomic or list) or an expression object. Other objects 
+ (including classed objects) will be coerced by \fBbase::as.list\fR.
+. 
+.PP
+.PP
+\fBFUN\fB \fR\- 
+ the Function to be applied To Each element Of X: see 'Details’. 
+ In the case of functions like +, %*%, the function name must be 
+ backquoted or quoted.
+. 
+.PP
+.PP
+\fBenvir\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+applys
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

@@ -1,0 +1,107 @@
+.\" man page create by R# package system.
+.TH MATRIX 1 2000-Jan "eigen" "eigen"
+.SH NAME
+eigen \- Spectral Decomposition of a Matrix
+.SH SYNOPSIS
+\fIeigen(\fBx\fR as any, 
+\fBsymmetric\fR as boolean = FALSE, 
+\fBonly_values\fR as boolean = FALSE, 
+\fBEISPACK\fR as boolean = FALSE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Spectral Decomposition of a Matrix
+ 
+ Computes eigenvalues and eigenvectors of numeric 
+ (double, integer, logical) or complex matrices.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- 
+ a numeric Or complex matrix whose spectral
+ decomposition Is To be computed. Logical matrices 
+ are coerced To numeric.
+. 
+.PP
+.PP
+\fBsymmetric\fB \fR\- 
+ If True, the matrix Is assumed To be symmetric 
+ (Or Hermitian If complex) And only its lower
+ triangle (diagonal included) Is used. If symmetric
+ Is Not specified, isSymmetric(x) Is used.
+. 
+.PP
+.PP
+\fBonly_values\fB \fR\- 
+ If True, only the eigenvalues are computed And 
+ returned, otherwise both eigenvalues And 
+ eigenvectors are returned.
+. 
+.PP
+.PP
+\fBEISPACK\fB \fR\- 
+ logical. Defunct And ignored.
+. 
+.PP
+.SH VALUE
+.PP
+The spectral decomposition of x is returned as a list 
+ with components
+
+ 1. values: a vector containing the p eigenvalues Of x, sorted
+            In decreasing order, according To Mod(values) In 
+            the asymmetric Case When they might be complex (even 
+            For real matrices). For real asymmetric matrices 
+            the vector will be complex only If complex conjugate
+            pairs Of eigenvalues are detected.
+ 2. vectors: either a p * p matrix whose columns contain the
+             eigenvectors Of x, Or NULL If only.values Is True. 
+             The vectors are normalized To unit length.
+
+ Recall that the eigenvectors are only defined up To a constant: 
+ even when the length Is specified they are still only defined
+ up to a scalar of modulus one (the sign for real matrices).
+
+ When only.values Is Not true, as by default, the result Is of 
+ S3 class "eigen".
+
+ If r <- eigen(A), And V <- r$vectors; lam <- r$values, Then
+
+ \fB
+ A = V Lmbd V^(-1)
+ \fR`
+
+ (up to numerical fuzz), where Lmbd = diag(lam).
+.PP
+.SH DETAILS
+.PP
+If symmetric is unspecified, isSymmetric(x) determines
+ if the matrix is symmetric up to plausible numerical 
+ inaccuracies. It is surer and typically much faster to
+ set the value yourself.
+ 
+ Computing the eigenvectors Is the slow part For large 
+ matrices.
+ 
+ Computing the eigendecomposition Of a matrix Is subject 
+ To errors On a real-world computer: the definitive 
+ analysis Is Wilkinson (1965). All you can hope For Is a 
+ solution To a problem suitably close To x. So even 
+ though a real asymmetric x may have an algebraic solution
+ With repeated real eigenvalues, the computed solution 
+ may be Of a similar matrix With complex conjugate pairs
+ Of eigenvalues.
+ 
+ Unsuccessful results from the underlying LAPACK code will 
+ result In an Error giving a positive Error code (most 
+ often 1): these can only be interpreted by detailed study
+ Of the FORTRAN code.
+.PP
+.SH SEE ALSO
+Matrix
+.SH FILES
+.PP
+Rlapack.dll
+.PP
+.SH COPYRIGHT
+GPL3

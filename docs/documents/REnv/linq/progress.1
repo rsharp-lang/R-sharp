@@ -1,0 +1,42 @@
+.\" man page create by R# package system.
+.TH LINQ 1 2002-May "progress" "progress"
+.SH NAME
+progress \- apply for the pipeline progress report
+.SH SYNOPSIS
+\fIprogress(\fBx\fR as any, 
+\fBmsgFunc\fR as any = \fB<NULL>\fR, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+apply for the pipeline progress report
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- 
+ the pipeline object or a progress number if 
+ current function invoke is occurs in a parallel 
+ task.
+. 
+.PP
+.PP
+\fBmsgFunc\fB \fR\- a text message to display or function for show message. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH DETAILS
+.PP
+value range of parameter **`x`** should be in numeric 
+ range \fB[0,100]\fR if the progress function is invoked in a parallel 
+ stack environment.
+.PP
+.SH SEE ALSO
+linq
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@live.com\fR
+.SH COPYRIGHT
+GPL3

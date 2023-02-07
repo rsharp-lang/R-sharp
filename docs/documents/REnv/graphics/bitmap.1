@@ -1,0 +1,57 @@
+.\" man page create by R# package system.
+.TH GRAPHICS 1 2002-May "bitmap" "bitmap"
+.SH NAME
+bitmap \- Graphics Device for Bitmap Files via Ghostscript
+.SH SYNOPSIS
+\fIbitmap(\fBimage\fR as any = \fB<NULL>\fR, 
+\fBfile\fR as any = \fB<NULL>\fR, 
+\fBformat\fR as <integer> ImageFormats = [Png], 
+..., 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Graphics Device for Bitmap Files via Ghostscript
+ 
+ save image data as bitmap image file, bitmap generates 
+ a graphics file. dev2bitmap copies the current graphics 
+ device to a file in a graphics format.
+.PP
+.SH OPTIONS
+.PP
+\fBimage\fB \fR\- -. 
+.PP
+.PP
+\fBfile\fB \fR\- The output file name, with an appropriate extension.. 
+.PP
+.PP
+\fBargs\fB \fR\- 
+ additional arguments for the bitmap device:
+ 
+ 1. size, width, height: Dimensions of the display region.
+ 2. res, dpi: Resolution, in dots per inch.
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH DETAILS
+.PP
+This section describes the implementation of the conventions for 
+ graphics devices set out in the “R Internals Manual”. These devices 
+ follow the underlying device, so when viewed at the stated res:
+ 
+ 1. The Default device size Is 7 inches square.
+ 2. Font sizes are In big points.
+ 3. The Default font family Is (For the standard Ghostscript setup) URW Nimbus Sans.
+ 4. Line widths are As a multiple Of 1/96 inch, With no minimum.
+ 5. Circle of any radius are allowed.
+ 6. Colours are interpreted by the viewing/printing application.
+.PP
+.SH SEE ALSO
+graphics
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

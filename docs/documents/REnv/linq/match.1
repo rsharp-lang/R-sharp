@@ -1,0 +1,86 @@
+.\" man page create by R# package system.
+.TH LINQ 1 2002-May "match" "match"
+.SH NAME
+match \- Value Matching
+.SH SYNOPSIS
+\fImatch(\fBx\fR as <generic> Array, 
+\fBtable\fR as <generic> Array, 
+\fBnomatch\fR as integer = -1, 
+\fBincomparables\fR as integer = 0);\fR
+.SH DESCRIPTION
+.PP
+Value Matching
+ 
+ match returns a vector of the positions of 
+ (first) matches of its first argument in 
+ its second.
+ 
+ find the index of the elements in input sequence
+ **`x`** in the source target sequence
+ **`table`**
+ 
+ find the index of (where x in table)
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- 
+ vector or NULL: the values to be matched. Long 
+ vectors are supported.
+. 
+.PP
+.PP
+\fBtable\fB \fR\- 
+ vector or NULL: the values to be matched against. 
+ Long vectors are not supported. (using as index 
+ object.)
+. 
+.PP
+.PP
+\fBnomatch\fB \fR\- 
+ the value to be returned in the case when no 
+ match is found. Note that it is coerced to 
+ integer.
+. 
+.PP
+.PP
+\fBincomparables\fB \fR\- 
+ a vector of values that cannot be matched. 
+ Any value in x matching a value in this vector 
+ is assigned the nomatch value. For historical 
+ reasons, FALSE is equivalent to NULL.
+. 
+.PP
+.SH VALUE
+.PP
+A vector of the same length as x.
+ An integer vector giving the position in table of 
+ the first match if there Is a match, otherwise 
+ nomatch.
+ If x[i] Is found To equal table[j] Then the value 
+ returned In the i-th position Of the Return value 
+ Is j, For the smallest possible j. If no match Is 
+ found, the value Is nomatch.
+.PP
+.SH DETAILS
+.PP
+https://stackoverflow.com/questions/7530765/get-the-index-of-the-values-of-one-vector-in-another
+ 
+ \fBr
+ first  = c("a", "c", "b");
+ second = c("c", "b", "a");
+ match(second, first);
+ 
+ #   c b a  <-second 
+ [1] 2 3 1
+ \fR`
+.PP
+.SH SEE ALSO
+linq
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@live.com\fR
+.SH COPYRIGHT
+GPL3

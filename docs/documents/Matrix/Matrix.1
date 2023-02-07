@@ -1,32 +1,66 @@
 .\" man page create by R# package system.
-.TH MATRIX 1 2000-01-02 "Matrix" "Matrix"
+.TH MATRIX 1 2000-Jan "matrix" "matrix"
 .SH NAME
-Matrix \- 
+matrix \- Matrices
 .SH SYNOPSIS
-\fIMatrix(\fBdata\fR as any = \fB<NULL>\fR, 
+\fImatrix(\fBdata\fR as any = \fB<NULL>\fR, 
 \fBnrow\fR as integer = 1, 
 \fBncol\fR as integer = 1, 
 \fBbyrow\fR as boolean = FALSE, 
 \fBdimnames\fR as string = \fB<NULL>\fR, 
 \fBsparse\fR as boolean = FALSE);\fR
+.SH DESCRIPTION
+.PP
+Matrices
+ 
+ matrix creates a matrix from the given set of values.
+.PP
 .SH OPTIONS
 .PP
-\fBdata\fB \fR\- -. 
+\fBdata\fB \fR\- 
+ an optional data vector (including a list or expression vector).
+ Non-atomic classed R objects are coerced by as.vector and all
+ attributes discarded.
+. 
 .PP
 .PP
-\fBnrow\fB \fR\- -. 
+\fBnrow\fB \fR\- 
+ the desired number of rows.
+. 
 .PP
 .PP
-\fBncol\fB \fR\- -. 
+\fBncol\fB \fR\- 
+ the desired number of columns.
+. 
 .PP
 .PP
-\fBbyrow\fB \fR\- -. 
+\fBbyrow\fB \fR\- 
+ logical. If FALSE (the default) the matrix Is filled by columns, 
+ otherwise the matrix Is filled by rows.
+. 
 .PP
 .PP
-\fBdimnames\fB \fR\- -. 
+\fBdimnames\fB \fR\- 
+ A dimnames attribute For the matrix: NULL Or a list of length 2 
+ giving the row And column names respectively. An empty list Is
+ treated as NULL, And a list of length one as row names. The 
+ list can be named, And the list names will be used as names for
+ the dimensions.
+. 
 .PP
 .PP
 \fBsparse\fB \fR\- -. 
+.PP
+.SH DETAILS
+.PP
+If one of nrow or ncol is not given, an attempt is made to infer
+ it from the length of data and the other parameter. If neither 
+ is given, a one-column matrix is returned.
+ 
+ If there are too few elements In data To fill the matrix, Then 
+ the elements In data are recycled. If data has length zero, NA 
+ Of an appropriate type Is used For atomic vectors (0 For raw 
+ vectors) And NULL For lists.
 .PP
 .SH SEE ALSO
 Matrix

@@ -1,0 +1,35 @@
+.\" man page create by R# package system.
+.TH RCONVERSION 1 2002-May "as.list" "as.list"
+.SH NAME
+as.list \- Cast the raw dictionary object to R# list object
+.SH SYNOPSIS
+\fIas.list(\fBobj\fR as any, 
+..., 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Cast the raw dictionary object to R# list object
+.PP
+.SH OPTIONS
+.PP
+\fBobj\fB \fR\- 
+ this function will make a data copy if the input data is already a @\fBT:SMRUCC.Rsharp.Runtime.Internal.Object.list\fR
+. 
+.PP
+.PP
+\fBargs\fB \fR\- 
+ for dataframe type:
+ 
+ + \fBbyrow\fR: logical, default is FALSE, means cast dataframe to list directly by column hash table values
+ + \fBnames\fR: character, the column names that will be used as the list names
+ 
+. 
+.PP
+.SH SEE ALSO
+RConversion
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

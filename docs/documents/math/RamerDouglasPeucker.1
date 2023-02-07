@@ -1,0 +1,55 @@
+.\" man page create by R# package system.
+.TH MATH 2 2000-Jan "RamerDouglasPeucker" "RamerDouglasPeucker"
+.SH NAME
+RamerDouglasPeucker \- Ramer-Douglas-Peucker algorithm for curve fitting with a PolyLine
+.SH SYNOPSIS
+\fIRamerDouglasPeucker(\fBx\fR as double, 
+\fBy\fR as double, 
+\fBepsilon\fR as double = 0.1, 
+\fBmethod\fR as any = ["RDPsd","RDPppd"], 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Ramer-Douglas-Peucker algorithm for curve fitting with a PolyLine
+ 
+ The [Ramer-Douglas-Peucker algorithm](https://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm) 
+ for reducing the number of points on a curve.
+ 
+ If there are no more than two points it does not make sense to simplify.
+ In this case the input is returned without further checks of `x` and `y`.
+ In particular, the input is not checked for `NA` values.
+ 
+ \fBr
+ RamerDouglasPeucker(x = c(0, 1, 3, 5), y = c(2, 1, 0, 1), epsilon = 0.5)
+ \fR`
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- The `x` values of the curve as a vector without `NA` values.. 
+.PP
+.PP
+\fBy\fB \fR\- The `y` values of the curve as a vector without `NA` values.. 
+.PP
+.PP
+\fBepsilon\fB \fR\- The threshold for filtering outliers from the simplified curve. an number between 0 and 1. Recomended 0.01.. 
+.PP
+.PP
+\fBmethod\fB \fR\- -. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+A `data.frame` with `x` and `y` values of the simplified curve.
+.PP
+.SH SEE ALSO
+math
+.SH FILES
+.PP
+Rlapack.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@live.com\fR
+.SH COPYRIGHT
+GPL3

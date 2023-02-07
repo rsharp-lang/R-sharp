@@ -1,0 +1,35 @@
+.\" man page create by R# package system.
+.TH MATH 1 2002-May "cor.test" "cor.test"
+.SH NAME
+cor.test \- Test for Association/Correlation Between Paired Samples
+.SH SYNOPSIS
+\fIcor.test(\fBx\fR as double, 
+\fBy\fR as double, 
+\fBmethod\fR as any = ["pearson","kendall","spearman"], 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Test for Association/Correlation Between Paired Samples
+ 
+ Test for association between paired samples, using one of 
+ Pearson's product moment correlation coefficient, Kendall's 
+ \tauτ or Spearman's \rhoρ.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- numeric vectors of data values. x and y must have the same length.. 
+.PP
+.PP
+\fBy\fB \fR\- numeric vectors of data values. x and y must have the same length.. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+math
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

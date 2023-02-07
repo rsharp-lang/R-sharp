@@ -1,0 +1,33 @@
+.\" man page create by R# package system.
+.TH GRAPHICS 1 2002-May "readImage" "readImage"
+.SH NAME
+readImage \- readImage: this function reads various types of images
+.SH SYNOPSIS
+\fIreadImage(\fBfile\fR as any, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+readImage: this function reads various types of images
+ 
+ Reads images of type .png, .jpeg, .jpg, .tiff
+ 
+ This function takes as input a string-path and returns the image in a matrix or array form. 
+ Supported types of images are .png, .jpeg, .jpg, .tiff. Extension types similar to .tiff 
+ such as .tif, .TIFF, .TIF are also supported
+.PP
+.SH OPTIONS
+.PP
+\fBfile\fB \fR\- a string specifying the path to the saved image. 
+.PP
+.SH VALUE
+.PP
+the image in a matrix or array form
+.PP
+.SH SEE ALSO
+graphics
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

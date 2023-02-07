@@ -24,4 +24,4 @@ JSON (JavaScript Object Notation) is a lightweight data-interchange format.
 + [parseJSON](JSON/parseJSON.1) parse JSON string into the raw JSON model or R data object
 + [parseBSON](JSON/parseBSON.1) parse the binary JSON data into the raw JSON model or R data object
 + [object](JSON/object.1) Convert the raw json model into R data object
-+ [write.bson](JSON/write.bson.1) save any R object into BSON stream data
++ [writeBSON](JSON/writeBSON.1) save any R object into BSON stream data

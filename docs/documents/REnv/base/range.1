@@ -1,0 +1,56 @@
+.\" man page create by R# package system.
+.TH BASE 1 2002-May "range" "range"
+.SH NAME
+range \- Range of Values
+.SH SYNOPSIS
+\fIrange(\fBx\fR as any, 
+\fBna_rm\fR as boolean = FALSE, 
+\fBfinite\fR as boolean = FALSE);\fR
+.SH DESCRIPTION
+.PP
+Range of Values
+ 
+ range returns a vector containing the minimum and maximum 
+ of all the given arguments.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- 
+ any numeric or character objects.
+. 
+.PP
+.PP
+\fBna_rm\fB \fR\- 
+ logical, indicating if NA's should be omitted.
+. 
+.PP
+.PP
+\fBfinite\fB \fR\- 
+ logical, indicating if all non-finite elements should be 
+ omitted.
+. 
+.PP
+.SH DETAILS
+.PP
+range is a generic function: methods can be defined for it 
+ directly or via the Summary group generic. For this to work 
+ properly, the arguments ... should be unnamed, and dispatch 
+ is on the first argument.
+ 
+ If na.rm Is False, NA And NaN values In any Of the arguments 
+ will cause NA values To be returned, otherwise NA values are 
+ ignored.
+ If finite Is True, the minimum And maximum Of all finite 
+ values Is computed, i.e., finite = True includes na.rm = True.
+ 
+ A special situation occurs When there Is no (after omission 
+ Of NAs) nonempty argument left, see min.
+.PP
+.SH SEE ALSO
+base
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

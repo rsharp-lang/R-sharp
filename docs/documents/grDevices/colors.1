@@ -1,5 +1,5 @@
 .\" man page create by R# package system.
-.TH GRDEVICES 4 2000-01-01 "colors" "colors"
+.TH GRDEVICES 4 2000-Jan "colors" "colors"
 .SH NAME
 colors \- get color set
 .SH SYNOPSIS
@@ -16,11 +16,17 @@ get color set
 \fBterm\fB \fR\- the color set name. 
 .PP
 .PP
-\fBn\fB \fR\- number of colors from the given color set. 
+\fBn\fB \fR\- 
+ number of colors from the given color set(apply cubic 
+ spline for the color sequence), negative value or 
+ ZERO means no cubic spline on the color sequence.
+. 
 .PP
 .PP
-\fBcharacter\fB \fR\- function returns a color object sequence 
- or html color code string vector if this parameter value is set to \fBTRUE\fR
+\fBcharacter\fB \fR\- 
+ function returns a color object sequence 
+ or html color code string vector if this parameter 
+ value is set to \fBTRUE\fR
 . 
 .PP
 .PP

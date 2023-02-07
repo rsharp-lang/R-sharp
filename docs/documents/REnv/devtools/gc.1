@@ -1,0 +1,52 @@
+.\" man page create by R# package system.
+.TH DEVTOOLS 1 2002-May "gc" "gc"
+.SH NAME
+gc \- Garbage Collection
+.SH SYNOPSIS
+\fIgc();\fR
+.SH DESCRIPTION
+.PP
+Garbage Collection
+ 
+ A call of gc causes a garbage collection to take place. 
+ gcinfo sets a flag so that automatic collection is 
+ either silent (verbose = FALSE) or prints memory usage 
+ statistics (verbose = TRUE).
+.PP
+.SH DETAILS
+.PP
+A call of gc causes a garbage collection to take place. 
+ This will also take place automatically without user 
+ intervention, and the primary purpose of calling gc is 
+ for the report on memory usage. For an accurate report 
+ full = TRUE should be used.
+ It can be useful To Call gc after a large Object has 
+ been removed, As this may prompt R To Return memory To 
+ the operating system.
+ R allocates space For vectors In multiples Of 8 bytes: 
+ hence the report Of "Vcells", a relic Of an earlier 
+ allocator (that used a vector heap).
+ When gcinfo(TRUE) Is in force, messages are sent to the 
+ message connection at each garbage collection of the 
+ form:
+ 
+ \fB
+     Garbage collection 12 = 10+0+2 (level 0) ...
+     6.4 Mbytes of cons cells used (58%)
+     2.0 Mbytes of vectors used (32%)
+ \fR`
+ 
+ Here the last two lines give the current memory usage 
+ rounded up To the Next 0.1Mb And As a percentage Of the 
+ current trigger value. The first line gives a breakdown 
+ Of the number Of garbage collections at various levels 
+ (For an explanation see the 'R Internals’ manual).
+.PP
+.SH SEE ALSO
+devtools
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

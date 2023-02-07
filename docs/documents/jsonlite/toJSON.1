@@ -1,0 +1,126 @@
+.\" man page create by R# package system.
+.TH JSONLITE 4 2000-Jan "toJSON" "toJSON"
+.SH NAME
+toJSON \- Convert R objects to/from JSON
+.SH SYNOPSIS
+\fItoJSON(\fBx\fR as any, 
+\fBdataframe\fR as any = ["rows","columns","values"], 
+\fBmatrix\fR as any = ["rowmajor","columnmajor"], 
+\fBDate\fR as any = ["ISO8601","epoch"], 
+\fBPOSIXt\fR as any = ["string","ISO8601","epoch","mongo"], 
+\fBfactor\fR as any = ["string","integer"], 
+\fBcomplex\fR as any = ["string","list"], 
+\fBraw\fR as any = ["base64","hex","mongo","int","js"], 
+\fBnull\fR as any = ["list","null"], 
+\fBna\fR as any = ["null","string"], 
+\fBauto_unbox\fR as boolean = FALSE, 
+\fBdigits\fR as integer = 4, 
+\fBpretty\fR as boolean = FALSE, 
+\fBforce\fR as boolean = FALSE, 
+\fBargs\fR as list = \fB<NULL>\fR, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Convert R objects to/from JSON
+ 
+ These functions are used to convert between JSON data and R 
+ objects. The toJSON and fromJSON functions use a class based
+ mapping, which follows conventions outlined in this paper: 
+ https://arxiv.org/abs/1403.2805 (also available as vignette).
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- the object to be encoded. 
+.PP
+.PP
+\fBdataframe\fB \fR\- how to encode data.frame objects: must
+ be one of 'rows', 'columns' or 'values'. 
+.PP
+.PP
+\fBmatrix\fB \fR\- how to encode matrices and higher dimensional 
+ arrays: must be one of 'rowmajor' or 'columnmajor'.. 
+.PP
+.PP
+\fBDate\fB \fR\- how to encode Date objects: must be one of 
+ 'ISO8601' or 'epoch'. 
+.PP
+.PP
+\fBPOSIXt\fB \fR\- how to encode POSIXt (datetime) objects: 
+ must be one of 'string', 'ISO8601', 'epoch' or 'mongo'. 
+.PP
+.PP
+\fBfactor\fB \fR\- how to encode factor objects: must be one 
+ of 'string' or 'integer'. 
+.PP
+.PP
+\fBcomplex\fB \fR\- how to encode complex numbers: must be 
+ one of 'string' or 'list'. 
+.PP
+.PP
+\fBraw\fB \fR\- how to encode raw objects: must be one of 
+ 'base64', 'hex' or 'mongo'. 
+.PP
+.PP
+\fBnull\fB \fR\- how to encode NULL values within a list:
+ must be one of 'null' or 'list'. 
+.PP
+.PP
+\fBna\fB \fR\- how to print NA values: must be one of 'null' 
+ or 'string'. Defaults are class specific. 
+.PP
+.PP
+\fBauto_unbox\fB \fR\- automatically unbox all atomic vectors 
+ of length 1. It is usually safer to avoid this and instead use 
+ the unbox function to unbox individual elements. An exception is 
+ that objects of class AsIs (i.e. wrapped in I()) are not 
+ automatically unboxed. This is a way to mark single values as
+ length-1 arrays.
+. 
+.PP
+.PP
+\fBdigits\fB \fR\- max number of decimal digits to print for 
+ numeric values. Use I() to specify significant digits. Use NA 
+ for max precision.. 
+.PP
+.PP
+\fBpretty\fB \fR\- adds indentation whitespace to JSON output.
+ Can be TRUE/FALSE or a number specifying the number of spaces 
+ to indent. See prettify. 
+.PP
+.PP
+\fBforce\fB \fR\- unclass/skip objects of classes with no 
+ defined JSON mapping. 
+.PP
+.PP
+\fBargs\fB \fR\- arguments passed on to class specific print 
+ methods. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH DETAILS
+.PP
+The toJSON and fromJSON functions are drop-in replacements for 
+ the identically named functions in packages rjson and RJSONIO. 
+ Our implementation uses an alternative, somewhat more
+ consistent mapping between R objects and JSON strings.
+ The serializeJSON and unserializeJSON functions in this package
+ use an alternative system to convert between R objects and JSON,
+ which supports more classes but is much more verbose.
+ A JSON string is always unicode, using UTF-8 by default, hence 
+ there is usually no need to escape any characters. However, 
+ the JSON format does support escaping of unicode characters,
+ which are encoded using a backslash followed by a lower case 
+ "u" and 4 hex characters, for example: "Z\u00FCrich". The 
+ fromJSON function will parse such escape sequences but it is 
+ usually preferable to encode unicode characters in JSON using 
+ native UTF-8 rather than escape sequences.
+.PP
+.SH SEE ALSO
+jsonlite
+.SH FILES
+.PP
+base.dll
+.PP
+.SH AUTHOR
+Written by \fBJeroen Ooms <jeroen@berkeley.edu>\fR

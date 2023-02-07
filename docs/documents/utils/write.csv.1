@@ -1,13 +1,14 @@
 .\" man page create by R# package system.
-.TH UTILS 4 2000-01-01 "write.csv" "write.csv"
+.TH UTILS 4 2000-Jan "write.csv" "write.csv"
 .SH NAME
 write.csv \- Data Output
 .SH SYNOPSIS
 \fIwrite.csv(\fBx\fR as any, 
-\fBfile\fR as string = \fB<NULL>\fR, 
+\fBfile\fR as any = \fB<NULL>\fR, 
 \fBrow_names\fR as any = TRUE, 
 \fBfileEncoding\fR as any = "", 
 \fBtsv\fR as boolean = FALSE, 
+\fBnumber_format\fR as any = "" & CALL "GETOPTION"("F64.FORMAT") & "" & CALL "GETOPTION"("DIGITS"), 
 [\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP

@@ -1,0 +1,47 @@
+.\" man page create by R# package system.
+.TH BASE 1 2002-May "getOption" "getOption"
+.SH NAME
+getOption \- Options Settings
+.SH SYNOPSIS
+\fIgetOption(\fBx\fR as string, 
+\fBdefault\fR as string = \fB<NULL>\fR, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Options Settings
+ 
+ Allow the user to set and examine a variety of global options which affect the way in 
+ which R computes and displays its results.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- a character string holding an option name.. 
+.PP
+.PP
+\fBdefault\fB \fR\- if the specified option is not set in the options list, this 
+ value is returned. This facilitates retrieving an option and checking whether it is 
+ set and setting it separately if not.. 
+.PP
+.PP
+\fBenvir\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+For getOption, the current value set for option x, or default (which defaults 
+ to NULL) if the option is unset.
+.PP
+.SH DETAILS
+.PP
+Invoking options() with no arguments returns a list with the current values of the options. 
+ Note that not all options listed below are set initially. To access the value of a single 
+ option, one should use, e.g., getOption("width") rather than options("width") which is a 
+ list of length one.
+.PP
+.SH SEE ALSO
+base
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

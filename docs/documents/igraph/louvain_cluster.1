@@ -1,9 +1,21 @@
 .\" man page create by R# package system.
-.TH IGRAPH 2 2000-01-01 "louvain_cluster" "louvain_cluster"
+.TH IGRAPH 2 2000-Jan "louvain_cluster" "louvain_cluster"
 .SH NAME
 louvain_cluster \- 
 .SH SYNOPSIS
-\fIlouvain_cluster(\fBg\fR as <generic> NetworkGraph);\fR
+\fIlouvain_cluster(\fBg\fR as <generic> NetworkGraph, 
+\fBeps\fR as double = 1E-05, 
+\fBprefix\fR as string = \fB<NULL>\fR);\fR
+.SH OPTIONS
+.PP
+\fBg\fB \fR\- -. 
+.PP
+.PP
+\fBeps\fB \fR\- 
+ tolerance value for check member is in 
+ a stable cluster community?
+. 
+.PP
 .SH SEE ALSO
 igraph
 .SH FILES

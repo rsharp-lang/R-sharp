@@ -1,0 +1,39 @@
+.\" man page create by R# package system.
+.TH FILE 1 2002-May "list.files" "list.files"
+.SH NAME
+list.files \- List the Files in a Directory/Folder
+.SH SYNOPSIS
+\fIlist.files(\fBdir\fR as any = "./", 
+\fBpattern\fR as string = \fB<NULL>\fR, 
+\fBrecursive\fR as boolean = FALSE, 
+\fBwildcard\fR as boolean = TRUE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+List the Files in a Directory/Folder
+.PP
+.SH OPTIONS
+.PP
+\fBdir\fB \fR\- 
+ a character vector of full path names; the default corresponds to the 
+ working directory, \fBgetwd()\fR. 
+ Tilde expansion (see path.expand) is performed. Missing values will be 
+ ignored.
+ 
+ or zip folder object if this parameter is a file stream r zip file path.
+. 
+.PP
+.PP
+\fBpattern\fB \fR\- 
+ an optional regular expression/wildcard expression. Only file names which 
+ match the regular expression will be returned.
+. 
+.PP
+.SH SEE ALSO
+file
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

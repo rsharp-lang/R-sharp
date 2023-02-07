@@ -1,0 +1,40 @@
+.\" man page create by R# package system.
+.TH RCURL 1 2002-May "guessMIMEType" "guessMIMEType"
+.SH NAME
+guessMIMEType \- Infer the MIME type from a file name
+.SH SYNOPSIS
+\fIguessMIMEType(\fBname\fR as any, 
+\fBdefault\fR as string = "application/octet-stream", 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Infer the MIME type from a file name
+ 
+ This function returns the MIME type, i.e. part of the value 
+ used in the Content-Type for an HTTP request/response or in
+ email to identify the nature of the content. This is a string
+ such as "text/plain" or "text/xml" or "image/png".
+ 
+ The Function consults an R Object constructed by reading a 
+ Web site Of known MIME types (Not necessarily all) And 
+ matching the extension Of the file name To the names Of that 
+ table.
+.PP
+.SH OPTIONS
+.PP
+\fBname\fB \fR\- character vector of file names. 
+.PP
+.PP
+\fB[default]\fB \fR\- 
+ the value to use if no MIME type is found in the table for 
+ the given file name/extension.
+. 
+.PP
+.SH SEE ALSO
+RCurl
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3
