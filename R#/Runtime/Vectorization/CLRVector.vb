@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Vectorization
@@ -16,11 +17,36 @@ Namespace Runtime.Vectorization
         End Sub
 
         Public Shared Function asLong(x As Object) As Long()
+            If x Is Nothing Then
+                Return Nothing
+            End If
+            If TypeOf x Is vector Then
+                x = DirectCast(x, vector).data
+            End If
+
             Throw New NotImplementedException
         End Function
 
         Public Shared Function asCharacter(x As Object) As String()
-            Throw New NotImplementedException
+            If x Is Nothing Then
+                Return Nothing
+            End If
+            If TypeOf x Is vector Then
+                x = DirectCast(x, vector).data
+            End If
+
+            If TypeOf x Is String() Then
+                Return x
+            ElseIf TypeOf x Is List(Of String) Then
+                Return DirectCast(x, List(Of String)).ToArray
+            ElseIf x.GetType.IsArray Then
+                Return DirectCast(x, Array) _
+                    .AsObjectEnumerator _
+                    .Select(Function(a) any.ToString(a)) _
+                    .ToArray
+            Else
+                Throw New NotImplementedException
+            End If
         End Function
 
         Public Shared Function asInteger(x As Object) As Integer()
