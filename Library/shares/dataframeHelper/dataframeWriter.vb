@@ -39,7 +39,7 @@ Public Module dataframeWriter
             row_names = False
         End If
 
-        If inputRowNames.Length <> x.nrows Then
+        If inputRowNames IsNot Nothing AndAlso inputRowNames.Length <> x.nrows Then
             Return Internal.debug.stop({
                 $"The given row.names size({inputRowNames.Length}) from the function parameter is not matched with the dataframe row counts({x.nrows})!",
                 $"Please check of the dataframe value object or the row.names parameter!",
@@ -70,6 +70,10 @@ Public Module dataframeWriter
             x.columns(name) = v
         Next
 
+        ' 20230209
+        ' row.names = TRUE
+        ' then row names generates from this helper function
+        ' and the inputRowNames is set to nothing
         Dim matrix As String()() = TableFormatter _
             .GetTable(
                 df:=x,
@@ -80,6 +84,8 @@ Public Module dataframeWriter
         Dim rows As IEnumerable(Of RowObject) = matrix _
             .Select(Function(r, i)
                         If inputRowNames Is Nothing Then
+                            ' row name is already includes in r!
+                            ' the table formatter handing the row names value
                             Return New RowObject(r)
                         ElseIf i = 0 Then
                             ' header row
