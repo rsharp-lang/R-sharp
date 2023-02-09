@@ -1,7 +1,9 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports File = Microsoft.VisualBasic.Data.csv.IO.File
@@ -18,7 +20,7 @@ Public Module dataframeWriter
     ''' <param name="env"></param>
     ''' <returns></returns>
     <Extension>
-    Friend Function DataFrameRows(x As Rdataframe, row_names As Object, formatNumber As String, env As Environment) As File
+    Friend Function DataFrameRows(x As Rdataframe, row_names As Object, formatNumber As String, env As Environment) As [Variant](Of Message, File)
         Dim inputRowNames As String() = Nothing
 
         If row_names Is Nothing Then
@@ -35,6 +37,15 @@ Public Module dataframeWriter
         If Not TypeOf row_names Is Boolean Then
             inputRowNames = REnv.asVector(Of String)(row_names)
             row_names = False
+        End If
+
+        If inputRowNames.Length <> x.nrows Then
+            Return Internal.debug.stop({
+                $"The given row.names size({inputRowNames.Length}) from the function parameter is not matched with the dataframe row counts({x.nrows})!",
+                $"Please check of the dataframe value object or the row.names parameter!",
+                $"input_rownames_size: {inputRowNames.Length}",
+                $"nrows_dataframe: {x.nrows}"
+            }, env)
         End If
 
         x = New Rdataframe(x)

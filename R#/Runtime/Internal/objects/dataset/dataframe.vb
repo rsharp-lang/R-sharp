@@ -611,6 +611,10 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' get max length of the column vectors
+        ''' </summary>
+        ''' <returns></returns>
         Public Function GetRowNumbers() As Integer
             If columns.Count = 0 Then
                 Return 0

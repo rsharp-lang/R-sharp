@@ -129,6 +129,11 @@ Module RCallbackMessage
                 Dim document = DirectCast(check_x, Rdataframe).DataFrameRows(row_names, formatNumber, env)
                 Dim ms As New MemoryStream
 
+                If document Like GetType(Message) Then
+                    Call sendRStudioErrDebugMessage(document.TryCast(Of Message), response, showErr)
+                    Return
+                End If
+
                 Call StreamIO.SaveDataFrame(
                     csv:=document,
                     file:=ms,
