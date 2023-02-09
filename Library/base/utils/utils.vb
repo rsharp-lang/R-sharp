@@ -402,6 +402,10 @@ Public Module utils
             Dim ms As New MemoryStream
             Dim text As String
 
+            If document Like GetType(Message) Then
+                Return document.TryCast(Of Message)
+            End If
+
             StreamIO.SaveDataFrame(document, ms, Encoding.UTF8, tsv:=tsv, silent:=False)
             ms.Flush()
             text = Encoding.UTF8.GetString(ms.ToArray)
@@ -446,15 +450,18 @@ Public Module utils
                 Return x
             End If
 
-            Return DirectCast(x, Rdataframe) _
-                .DataFrameRows(row_names, formatNumber, env) _
-                .Save(
+            Dim value = DirectCast(x, Rdataframe).DataFrameRows(row_names, formatNumber, env)
+
+            If value Like GetType(Message) Then
+                Return value.TryCast(Of Message)
+            Else
+                Return value.TryCast(Of csv).Save(
                     path:=file,
                     encoding:=encoding,
                     silent:=True,
                     tsv:=tsv
                 )
-
+            End If
         ElseIf type Is GetType(file) Then
             Return DirectCast(x, file).Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf type Is GetType(IO.DataFrame) Then

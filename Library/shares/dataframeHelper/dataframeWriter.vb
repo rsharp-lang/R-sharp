@@ -1,7 +1,9 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports File = Microsoft.VisualBasic.Data.csv.IO.File
@@ -18,7 +20,7 @@ Public Module dataframeWriter
     ''' <param name="env"></param>
     ''' <returns></returns>
     <Extension>
-    Friend Function DataFrameRows(x As Rdataframe, row_names As Object, formatNumber As String, env As Environment) As File
+    Friend Function DataFrameRows(x As Rdataframe, row_names As Object, formatNumber As String, env As Environment) As [Variant](Of Message, File)
         Dim inputRowNames As String() = Nothing
 
         If row_names Is Nothing Then
@@ -35,6 +37,15 @@ Public Module dataframeWriter
         If Not TypeOf row_names Is Boolean Then
             inputRowNames = REnv.asVector(Of String)(row_names)
             row_names = False
+        End If
+
+        If inputRowNames IsNot Nothing AndAlso inputRowNames.Length <> x.nrows Then
+            Return Internal.debug.stop({
+                $"The given row.names size({inputRowNames.Length}) from the function parameter is not matched with the dataframe row counts({x.nrows})!",
+                $"Please check of the dataframe value object or the row.names parameter!",
+                $"input_rownames_size: {inputRowNames.Length}",
+                $"nrows_dataframe: {x.nrows}"
+            }, env)
         End If
 
         x = New Rdataframe(x)
@@ -59,6 +70,10 @@ Public Module dataframeWriter
             x.columns(name) = v
         Next
 
+        ' 20230209
+        ' row.names = TRUE
+        ' then row names generates from this helper function
+        ' and the inputRowNames is set to nothing
         Dim matrix As String()() = TableFormatter _
             .GetTable(
                 df:=x,
@@ -69,6 +84,8 @@ Public Module dataframeWriter
         Dim rows As IEnumerable(Of RowObject) = matrix _
             .Select(Function(r, i)
                         If inputRowNames Is Nothing Then
+                            ' row name is already includes in r!
+                            ' the table formatter handing the row names value
                             Return New RowObject(r)
                         ElseIf i = 0 Then
                             ' header row
