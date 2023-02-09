@@ -65,6 +65,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -666,6 +667,43 @@ Namespace Runtime.Internal.Object
                                   Function(a)
                                       Return DirectCast(a.Value, Array)
                                   End Function)
+            }
+        End Function
+
+        ''' <summary>
+        ''' Create dataframe from row data
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="rows"></param>
+        ''' <param name="colNames"></param>
+        ''' <returns></returns>
+        Public Shared Function CreateDataFrame(Of T)(rows As NamedCollection(Of T)(), colNames As IEnumerable(Of String)) As dataframe
+            Dim rowNames = rows.Select(Function(r) r.name).ToArray
+            Dim cols As New List(Of Array)
+            Dim row As NamedCollection(Of T)
+            Dim keys As String() = colNames.ToArray
+
+            For Each key As String In keys
+                Call cols.Add(New T(rows.Length - 1) {})
+            Next
+
+            For i As Integer = 0 To rows.Length - 1
+                row = rows(i)
+
+                For j As Integer = 0 To cols.Count - 1
+                    cols(j).SetValue(row(j), i)
+                Next
+            Next
+
+            Dim fields As New Dictionary(Of String, Array)
+
+            For i As Integer = 0 To keys.Length - 1
+                Call fields.Add(keys(i), cols(i))
+            Next
+
+            Return New dataframe With {
+                .rownames = rowNames,
+                .columns = fields
             }
         End Function
 
