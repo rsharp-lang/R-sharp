@@ -65,6 +65,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -626,6 +627,15 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' Cast a vector of CLR object to a dataframe
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="data"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' the class object property used as the dataframe column data
+        ''' </remarks>
         Public Shared Function CreateDataFrame(Of T)(data As IEnumerable(Of T)) As dataframe
             Dim vec As T() = data.ToArray
             Dim type As Type = GetType(T)
@@ -635,7 +645,7 @@ Namespace Runtime.Internal.Object
             }
             Dim values As Array
 
-            For Each field In schema
+            For Each field As KeyValuePair(Of String, PropertyInfo) In schema
                 values = vec _
                     .Select(Function(obj)
                                 Return field.Value.GetValue(obj)
@@ -646,6 +656,17 @@ Namespace Runtime.Internal.Object
             Next
 
             Return dataframe
+        End Function
+
+        Public Shared Function CreateDataFrame(Of T)(data As Dictionary(Of String, T()), Optional rownames As IEnumerable(Of String) = Nothing) As dataframe
+            Return New dataframe With {
+                .rownames = rownames,
+                .columns = data _
+                    .ToDictionary(Function(a) a.Key,
+                                  Function(a)
+                                      Return DirectCast(a.Value, Array)
+                                  End Function)
+            }
         End Function
 
         Public Function setNames(names() As String, envir As Environment) As Object Implements RNames.setNames
