@@ -660,7 +660,7 @@ Namespace Runtime.Internal.Object
 
         Public Shared Function CreateDataFrame(Of T)(data As Dictionary(Of String, T()), Optional rownames As IEnumerable(Of String) = Nothing) As dataframe
             Return New dataframe With {
-                .rownames = rownames,
+                .rownames = rownames.ToArray,
                 .columns = data _
                     .ToDictionary(Function(a) a.Key,
                                   Function(a)
