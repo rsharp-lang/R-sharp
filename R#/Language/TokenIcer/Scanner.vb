@@ -231,7 +231,14 @@ Namespace Language.TokenIcer
             "+=", "-=", "*=", "/=",
             "|>", ":>", "::"
         }
-        Shared ReadOnly RshortOperators As Char() = {"$"c, "@"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
+        Shared ReadOnly RshortOperators As Char() = {
+            "$"c, ' member getter/setter if found between two symbol, regexp symbol if found it before a string literal value
+            "@"c, ' array loop getter if found between two symbol, commandline shell if found it before a string expression
+            "+"c, "*"c, "/"c, "%"c, ' math operators
+            "^"c, ' math power
+            "!"c, ' factorial symbol if this operator is found after an expression, or the logical not if found it before an expression
+            "→"c  ' a special character for represents the pipeline forward operator(:> or |>)
+        }
 
         Friend Shared ReadOnly Rkeywords As Index(Of String) = {
             "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
