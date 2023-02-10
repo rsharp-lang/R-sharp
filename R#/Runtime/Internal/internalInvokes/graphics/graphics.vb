@@ -1,58 +1,58 @@
-﻿#Region "Microsoft.VisualBasic::0fdfe3dc4d662995ccb21e5154145de4, R-sharp\R#\Runtime\Internal\internalInvokes\graphics\graphics.vb"
+﻿#Region "Microsoft.VisualBasic::d9b4c4c6b03772693c4385d1ac9999de, R-sharp\R#\Runtime\Internal\internalInvokes\graphics\graphics.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 461
-'    Code Lines: 282
-' Comment Lines: 122
-'   Blank Lines: 57
-'     File Size: 18.93 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module graphics
-' 
-'         Properties: curDev
-' 
-'         Function: bitmap, devCur, devOff, drawText, isBase64StringOrFile
-'                   plot, rasterFont, rasterImage, readImage, resizeImage
-'                   setCurrentDev, wmf
-' 
-'         Sub: openNew
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 503
+    '    Code Lines: 310
+    ' Comment Lines: 130
+    '   Blank Lines: 63
+    '     File Size: 20.62 KB
+
+
+    '     Module graphics
+    ' 
+    '         Properties: curDev
+    ' 
+    '         Function: bitmap, devCur, devOff, drawText, getImageObject
+    '                   isBase64StringOrFile, plot, rasterFont, rasterImage, readImage
+    '                   resizeImage, setCurrentDev, thumbnail, wmf
+    ' 
+    '         Sub: openNew
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

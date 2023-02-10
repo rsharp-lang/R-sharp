@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8e2806acda5e448502da226fd91ba845, R-sharp\studio\Rsharp_kit\MLkit\activation.vb"
+﻿#Region "Microsoft.VisualBasic::1542ca2855fb0ae21bd9bc7eb71936d8, R-sharp\studio\Rsharp_kit\MLkit\MachineLearning\activation.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 36
-    '    Code Lines: 29
+    '   Total Lines: 35
+    '    Code Lines: 28
     ' Comment Lines: 0
     '   Blank Lines: 7
-    '     File Size: 1.51 KB
+    '     File Size: 1.45 KB
 
 
     ' Class activation

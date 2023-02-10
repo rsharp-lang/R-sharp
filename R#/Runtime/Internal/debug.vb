@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7f99c102c812de35d98ba8bd78c14da3, R-sharp\R#\Runtime\Internal\debug.vb"
+﻿#Region "Microsoft.VisualBasic::493933c3a7b82b45b8798e53b2e11be9, R-sharp\R#\Runtime\Internal\debug.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 335
-    '    Code Lines: 211
-    ' Comment Lines: 75
+    '   Total Lines: 337
+    '    Code Lines: 212
+    ' Comment Lines: 76
     '   Blank Lines: 49
-    '     File Size: 13.21 KB
+    '     File Size: 13.27 KB
 
 
     '     Class debug
@@ -47,7 +47,7 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: [stop], createDotNetExceptionMessage, CreateMessageInternal, getEnvironmentStack, getMessageColor
+    '         Function: [stop], CastCLRExceptionMessage, CreateMessageInternal, getEnvironmentStack, getMessageColor
     '                   getMessagePrefix, PrintMessageInternal, PrintRExceptionStackTrace, PrintRStackTrace, PrintWarningMessages
     ' 
     '         Sub: write, writeErrMessage

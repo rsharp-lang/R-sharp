@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6188c2551af772f709225a290410572c, R-sharp\studio\Rserver\Rserver.vb"
+﻿#Region "Microsoft.VisualBasic::a02b09dd26c36c7996ced52d9346eab9, R-sharp\studio\Rserver\Rserver.vb"
 
     ' Author:
     ' 
@@ -34,10 +34,10 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 151
+    '   Total Lines: 148
     '    Code Lines: 78
     ' Comment Lines: 54
-    '   Blank Lines: 19
+    '   Blank Lines: 16
     '     File Size: 5.54 KB
 
 
@@ -199,7 +199,3 @@ Return CLI.ToString()
 End Function
 End Class
 End Namespace
-
-
-
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6a6d47836388bf720dca79363611d783, R-sharp\R#\System\Package\PackageManager.vb"
+﻿#Region "Microsoft.VisualBasic::5a066aca8d7deab8cd2c98b773d671d1, R-sharp\R#\System\Package\PackageManager.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 393
+    '   Total Lines: 404
     '    Code Lines: 205
-    ' Comment Lines: 126
+    ' Comment Lines: 137
     '   Blank Lines: 62
-    '     File Size: 18.71 KB
+    '     File Size: 19.17 KB
 
 
     '     Class PackageManager

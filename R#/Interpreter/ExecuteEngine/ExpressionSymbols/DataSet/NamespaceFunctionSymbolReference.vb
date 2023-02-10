@@ -1,55 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::d7a924838a22df83b3b0fc7ec3e9d70c, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\NamespaceFunctionSymbolReference.vb"
+﻿#Region "Microsoft.VisualBasic::7f5db2162ad415f5e46f0ffac188f3dc, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\NamespaceFunctionSymbolReference.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 120
-'    Code Lines: 84
-' Comment Lines: 15
-'   Blank Lines: 21
-'     File Size: 4.82 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class NamespaceFunctionSymbolReference
-' 
-'         Properties: [namespace], expressionName, stackFrame, symbol, type
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: Evaluate, getFuncNameSymbolText, getPackageApiImpl, ToString
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 137
+    '    Code Lines: 100
+    ' Comment Lines: 15
+    '   Blank Lines: 22
+    '     File Size: 5.50 KB
+
+
+    '     Class NamespaceFunctionSymbolReference
+    ' 
+    '         Properties: [namespace], expressionName, stackFrame, symbol, type
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: Evaluate, getFuncNameSymbolText, getPackageApiImpl, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

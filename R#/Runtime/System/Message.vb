@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::765d96b534cfa445950dc542a1e0714a, R-sharp\R#\Runtime\System\Message.vb"
+﻿#Region "Microsoft.VisualBasic::b339770f23dda4480f75e5d4367564fb, R-sharp\R#\Runtime\System\Message.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 124
-    '    Code Lines: 72
-    ' Comment Lines: 35
-    '   Blank Lines: 17
-    '     File Size: 4.88 KB
+    '   Total Lines: 131
+    '    Code Lines: 75
+    ' Comment Lines: 38
+    '   Blank Lines: 18
+    '     File Size: 5.11 KB
 
 
     '     Class Message
@@ -47,6 +47,8 @@
     ' 
     '         Function: GetEnumerator, IEnumerable_GetEnumerator, InCompatibleType, SymbolNotFound, SyntaxNotImplemented
     '                   ToException, ToString
+    ' 
+    '         Sub: ThrowCLRError
     ' 
     ' 
     ' /********************************************************************************/

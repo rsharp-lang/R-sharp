@@ -1,53 +1,53 @@
-﻿#Region "Microsoft.VisualBasic::d1262293d005fbad4c928c5bc8f0f055, R-sharp\R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
+﻿#Region "Microsoft.VisualBasic::037b7e34c3017a0d1550907ffc79eece, R-sharp\R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 406
-'    Code Lines: 306
-' Comment Lines: 35
-'   Blank Lines: 65
-'     File Size: 18.21 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module BinaryExpressionTree
-' 
-'         Function: CreateBinary, joinNegatives, joinRemaining, MeasureCurrentLine, ParseBinaryExpression
-'                   processOperators
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 406
+    '    Code Lines: 306
+    ' Comment Lines: 35
+    '   Blank Lines: 65
+    '     File Size: 18.23 KB
+
+
+    '     Module BinaryExpressionTree
+    ' 
+    '         Function: CreateBinary, joinNegatives, joinRemaining, MeasureCurrentLine, ParseBinaryExpression
+    '                   processOperators
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

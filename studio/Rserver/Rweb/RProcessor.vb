@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::066a27f772c19c8bd806420ad2228eda, R-sharp\studio\Rserver\Rweb\RProcessor.vb"
+﻿#Region "Microsoft.VisualBasic::c18dbc94b6003dadbbc41e70ca3d43ac, R-sharp\studio\Rserver\Rweb\RProcessor.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 194
-    '    Code Lines: 131
-    ' Comment Lines: 36
-    '   Blank Lines: 27
-    '     File Size: 7.60 KB
+    '   Total Lines: 228
+    '    Code Lines: 166
+    ' Comment Lines: 27
+    '   Blank Lines: 35
+    '     File Size: 8.11 KB
 
 
     ' Class RProcessor
@@ -48,6 +48,11 @@
     '     Function: RscriptRouter, WithStartups
     ' 
     '     Sub: pushBackResult, RscriptHttpGet, RscriptHttpPost, runRweb, SaveResponse
+    '     Class WebTask
+    ' 
+    '         Function: callInternal, ToString
+    ' 
+    ' 
     ' 
     ' /********************************************************************************/
 

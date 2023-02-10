@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a9bff2c6c1fbb09fb7035b756237c991, R-sharp\studio\Rsharp_kit\MLkit\CNN.vb"
+﻿#Region "Microsoft.VisualBasic::a9bff2c6c1fbb09fb7035b756237c991, R-sharp\studio\Rsharp_kit\MLkit\MachineLearning\CNN.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::62fec5157ee61711cfc859c593bfd8dc, R-sharp\Rscript\Program.vb"
+﻿#Region "Microsoft.VisualBasic::cfb04b39d260dea21375eca4d198d4ef, R-sharp\Rscript\Program.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 142
-    '    Code Lines: 101
+    '   Total Lines: 151
+    '    Code Lines: 109
     ' Comment Lines: 18
-    '   Blank Lines: 23
-    '     File Size: 5.67 KB
+    '   Blank Lines: 24
+    '     File Size: 5.79 KB
 
 
     ' Module Program
     ' 
     '     Function: Main, Run, RunRscriptFile
+    ' 
+    '     Sub: LoadLibrary
     ' 
     ' /********************************************************************************/
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b43bbe6b2de7d60f8a7fc991ca87e97a, R-sharp\R#\System\Package\PackageFile\PackageModel.vb"
+﻿#Region "Microsoft.VisualBasic::582519aad580ff80fae3da039631c95c, R-sharp\R#\System\Package\PackageFile\PackageModel.vb"
 
     ' Author:
     ' 
@@ -34,22 +34,22 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 386
-    '    Code Lines: 294
-    ' Comment Lines: 25
-    '   Blank Lines: 67
-    '     File Size: 16.18 KB
+    '   Total Lines: 402
+    '    Code Lines: 304
+    ' Comment Lines: 30
+    '   Blank Lines: 68
+    '     File Size: 16.79 KB
 
 
     '     Class PackageModel
     ' 
-    '         Properties: assembly, dataSymbols, info, loading, pkg_dir
-    '                     symbols, unixman, vignettes
+    '         Properties: assembly, clr, dataSymbols, info, loading
+    '                     pkg_dir, symbols, unixman, vignettes
     ' 
     '         Function: ToString, writeSymbols
     ' 
-    '         Sub: copyAssembly, Flush, saveDataSymbols, saveDependency, saveSymbols
-    '              saveUnixManIndex, writeIndex, writeRuntime
+    '         Sub: copyAssembly, Flush, saveClrDcouments, saveDataSymbols, saveDependency
+    '              saveSymbols, saveUnixManIndex, writeIndex, writeRuntime
     ' 
     ' 
     ' /********************************************************************************/

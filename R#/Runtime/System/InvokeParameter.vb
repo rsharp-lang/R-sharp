@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::16252d6692366e3b5f36868d13fedae9, R-sharp\R#\Runtime\System\InvokeParameter.vb"
+﻿#Region "Microsoft.VisualBasic::1768055196e7b1e22b734be6fe0816ec, R-sharp\R#\Runtime\System\InvokeParameter.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 228
-    '    Code Lines: 161
+    '   Total Lines: 238
+    '    Code Lines: 170
     ' Comment Lines: 38
-    '   Blank Lines: 29
-    '     File Size: 8.66 KB
+    '   Blank Lines: 30
+    '     File Size: 8.99 KB
 
 
     '     Class InvokeParameter
     ' 
-    '         Properties: haveSymbolName, index, isAcceptor, isProbablyVectorNameTuple, isSymbolAssign
-    '                     name, value
+    '         Properties: haveSymbolName, index, isAcceptor, isFormula, isProbablyVectorNameTuple
+    '                     isSymbolAssign, name, value
     ' 
     '         Constructor: (+3 Overloads) Sub New
     '         Function: Create, CreateArguments, CreateLiterals, Evaluate, GetSymbolName

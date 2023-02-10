@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a09eedd9eb7700a5fcfcd4091ee074fb, R-sharp\Library\Rlapack\symbolic.vb"
+﻿#Region "Microsoft.VisualBasic::b4746d1993d8022740fbe0d805eb0536, R-sharp\Library\Rlapack\symbolic.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 48
-    '    Code Lines: 33
-    ' Comment Lines: 9
-    '   Blank Lines: 6
-    '     File Size: 1.82 KB
+    '   Total Lines: 70
+    '    Code Lines: 49
+    ' Comment Lines: 14
+    '   Blank Lines: 7
+    '     File Size: 2.90 KB
 
 
     ' Module symbolic
     ' 
-    '     Function: ParseExpression, ParseMathML, PolynomialParse
+    '     Function: lambda, ParseExpression, ParseMathML, PolynomialParse
     ' 
     ' /********************************************************************************/
 

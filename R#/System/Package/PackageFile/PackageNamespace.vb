@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::680638cba22638287c5a47d8974eee67, R-sharp\R#\System\Package\PackageFile\PackageNamespace.vb"
+﻿#Region "Microsoft.VisualBasic::03e679296c8d10a5040938ba6cafc5c8, R-sharp\R#\System\Package\PackageFile\PackageNamespace.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 103
-    '    Code Lines: 69
-    ' Comment Lines: 19
-    '   Blank Lines: 15
-    '     File Size: 4.10 KB
+    '   Total Lines: 121
+    '    Code Lines: 81
+    ' Comment Lines: 23
+    '   Blank Lines: 17
+    '     File Size: 4.91 KB
 
 
     '     Class PackageNamespace
@@ -46,7 +46,7 @@
     '         Properties: assembly, checksum, datafiles, dependency, framework
     '                     libPath, meta, packageName, runtime, symbols
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+3 Overloads) Sub New
     '         Function: Check, EnumerateSymbols, FindAssemblyPath, ToString
     ' 
     ' 

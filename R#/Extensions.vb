@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a31b695d30aeb32f501745082a680d49, R-sharp\R#\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::d5d7848f6aa59c913d356ab3fb5fab07, R-sharp\R#\Extensions.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 225
-    '    Code Lines: 162
-    ' Comment Lines: 35
+    '   Total Lines: 236
+    '    Code Lines: 167
+    ' Comment Lines: 41
     '   Blank Lines: 28
-    '     File Size: 7.92 KB
+    '     File Size: 8.31 KB
 
 
     ' Module Extensions

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ceb3aef372679cd4673fd4521839f31a, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::309ac31db9c469ed7ac5c70805a9cfb7, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 471
     ' Comment Lines: 56
     '   Blank Lines: 76
-    '     File Size: 26.38 KB
+    '     File Size: 26.44 KB
 
 
     '     Class SymbolIndexer

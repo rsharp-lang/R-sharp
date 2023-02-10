@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d4399432604f49b2d47392ed6872eb27, R-sharp\studio\Rsharp_kit\MLkit\SVM.vb"
+﻿#Region "Microsoft.VisualBasic::63e8e97eb30224dd97d82772af42b900, R-sharp\studio\Rsharp_kit\MLkit\MachineLearning\SVM.vb"
 
     ' Author:
     ' 
@@ -34,21 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 736
-    '    Code Lines: 543
+    '   Total Lines: 584
+    '    Code Lines: 419
     ' Comment Lines: 83
-    '   Blank Lines: 110
-    '     File Size: 28.26 KB
+    '   Blank Lines: 82
+    '     File Size: 23.52 KB
 
 
     ' Module SVMkit
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: expandProblem, getDataLambda, (+2 Overloads) getSvmModel, joinTable, NewProblem
-    '               packCache, ParseProblemTableJSON, parseSVMJSON, plotROC, problemDataframe
-    '               problemsDataframe, problemValidateLabels, svmClassify, svmClassify1, svmClassify2
-    '               SVMJSON, svmModelTrimNULL, svmValidates, trainSVMModel, trimSingleProblem
-    '               validateMultipleSvmModel, validateSingleSvmModel
+    '     Function: expandProblem, getSvmModel, joinTable, NewProblem, packCache
+    '               ParseProblemTableJSON, parseSVMJSON, plotROC, problemDataframe, problemsDataframe
+    '               problemValidateLabels, svmClassify, SVMJSON, svmModelTrimNULL, svmValidates
+    '               trainSVMModel, trimSingleProblem, validateMultipleSvmModel, validateSingleSvmModel
     ' 
     ' /********************************************************************************/
 

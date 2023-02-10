@@ -1,55 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::1869117494c62cd749e7de91aa2c9a72, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb"
+﻿#Region "Microsoft.VisualBasic::cd691e8c0c40a1dfb7af534159cdd6a2, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 51
-'    Code Lines: 40
-' Comment Lines: 0
-'   Blank Lines: 11
-'     File Size: 1.56 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class UnaryNot
-' 
-'         Properties: expressionName, type
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: [Not], Evaluate, ToString
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 51
+    '    Code Lines: 40
+    ' Comment Lines: 0
+    '   Blank Lines: 11
+    '     File Size: 1.56 KB
+
+
+    '     Class UnaryNot
+    ' 
+    '         Properties: expressionName, type
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: [Not], Evaluate, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

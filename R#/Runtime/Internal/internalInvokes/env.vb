@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2f6b91c31e82f4b1098f3cc926e5ee8f, R-sharp\R#\Runtime\Internal\internalInvokes\env.vb"
+﻿#Region "Microsoft.VisualBasic::88cb70ef656ef85fd196dde092d852e2, R-sharp\R#\Runtime\Internal\internalInvokes\env.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 479
-    '    Code Lines: 250
+    '   Total Lines: 484
+    '    Code Lines: 254
     ' Comment Lines: 184
-    '   Blank Lines: 45
-    '     File Size: 21.37 KB
+    '   Blank Lines: 46
+    '     File Size: 21.59 KB
 
 
     '     Module env
     ' 
     '         Function: [get], [gettype], [set], [typeof], CallInternal
-    '                   doCall, environment, getCurrentTrace, getOutputDevice, globalenv
-    '                   listOptionItems, lockBinding, ls, objects, objectSize
-    '                   traceback, unlockBinding
+    '                   doCall, environment, exists, getCurrentTrace, getOutputDevice
+    '                   globalenv, listOptionItems, lockBinding, ls, objects
+    '                   objectSize, traceback, unlockBinding
     ' 
     ' 
     ' /********************************************************************************/

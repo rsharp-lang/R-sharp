@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1e2b287461b06cb349886860924c8d49, R-sharp\R#\Runtime\System\Symbol.vb"
+﻿#Region "Microsoft.VisualBasic::276db9ea8fd5f5d46c0848badd134675, R-sharp\R#\Runtime\System\Symbol.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 204
+    '   Total Lines: 214
     '    Code Lines: 130
-    ' Comment Lines: 47
+    ' Comment Lines: 57
     '   Blank Lines: 27
-    '     File Size: 7.11 KB
+    '     File Size: 7.50 KB
 
 
     '     Class Symbol

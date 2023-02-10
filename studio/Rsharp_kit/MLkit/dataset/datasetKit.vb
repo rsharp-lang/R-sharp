@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::93e1d98fb4ad416d25fdd25c5b776528, R-sharp\studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
+﻿#Region "Microsoft.VisualBasic::0d9be21a14b9ea2dfd1b3298bc65170a, R-sharp\studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 335
-    '    Code Lines: 257
+    '   Total Lines: 361
+    '    Code Lines: 280
     ' Comment Lines: 37
-    '   Blank Lines: 41
-    '     File Size: 13.54 KB
+    '   Blank Lines: 44
+    '     File Size: 14.85 KB
 
 
     ' Module datasetKit
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: binEncoder, boolEncoder, demoMatrix, dimensionRange, EmbeddingRender
-    '               Encoding, factorEncoder, getNormalizeMatrix, mapEncoder, mapLambda
-    '               readMNISTLabelledVector, readModelDataset, Tabular, toDataframe, toFeatureSet
+    '     Function: binEncoder, boolEncoder, dataDescription, demoMatrix, dimensionRange
+    '               EmbeddingRender, Encoding, factorEncoder, getNormalizeMatrix, mapEncoder
+    '               mapLambda, readMNISTLabelledVector, readModelDataset, Tabular, toDataframe
+    '               toFeatureSet
     ' 
     ' /********************************************************************************/
 

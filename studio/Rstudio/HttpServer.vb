@@ -1,45 +1,54 @@
-﻿#Region "Microsoft.VisualBasic::5652935de1d8a5a435af648e5c897c2f, src\HttpServer.vb"
+﻿#Region "Microsoft.VisualBasic::9a81c9dc88f0e5c3300bb3c84ecf81e8, R-sharp\studio\Rstudio\HttpServer.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Module HttpServer
-' 
-'     Function: createDriver, customResponseHeader, getHeaders, getHttpRaw, getUrl
-'               httpMethod, serve
-' 
-'     Sub: httpError
-' 
-' 
-' /********************************************************************************/
+
+    ' Code Statistics:
+
+    '   Total Lines: 185
+    '    Code Lines: 116
+    ' Comment Lines: 48
+    '   Blank Lines: 21
+    '     File Size: 6.43 KB
+
+
+    ' Module HttpServer
+    ' 
+    '     Function: createDriver, customResponseHeader, getHeaders, getHttpRaw, getUrl
+    '               httpMethod, parseUrl, serve, urlList
+    ' 
+    '     Sub: httpError, pushDownload
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
