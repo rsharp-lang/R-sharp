@@ -1,64 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::46d000e577d391231928c4b79b07ce61, R-sharp\R#\Language\Syntax\SyntaxBuilderOptions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 107
-    '    Code Lines: 78
-    ' Comment Lines: 11
-    '   Blank Lines: 18
-    '     File Size: 3.89 KB
+' Summaries:
 
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Class SyntaxBuilderOptions
-    ' 
-    '         Properties: fromSpan, haveSyntaxErr, isPythonPipelineSymbol, toSpan
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Clone, GetStackTrace, SetCurrentRange, UsingVectorBuilder
-    ' 
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 107
+'    Code Lines: 78
+' Comment Lines: 11
+'   Blank Lines: 18
+'     File Size: 3.89 KB
+
+
+'     Delegate Function
+' 
+' 
+'     Delegate Function
+' 
+' 
+'     Class SyntaxBuilderOptions
+' 
+'         Properties: fromSpan, haveSyntaxErr, isPythonPipelineSymbol, toSpan
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Clone, GetStackTrace, SetCurrentRange, UsingVectorBuilder
+' 
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -88,7 +88,7 @@ Namespace Language.Syntax.SyntaxParser
         Public currentLine As Integer
         Public annotations As New List(Of NamedValue(Of String))
 
-        Public pipelineSymbols As String() = {"|>", ":>"}
+        Public pipelineSymbols As String() = {"|>", ":>", "→"}
 
         Public ReadOnly ParseExpression As ParseExpression
         Public ReadOnly NewScanner As GetLanguageScanner
