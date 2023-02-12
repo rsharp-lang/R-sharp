@@ -54,6 +54,7 @@
 
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -231,10 +232,13 @@ Namespace Runtime.Interop
                         listArgsSlotKey = $"${val.index}"
                     End If
 
-                    ' Else
                     value = val.Evaluate(env)
-                    list.slots.Add(val.name, value)
-                    ' End If
+
+                    If Program.isException(value) Then
+                        Return New Object() {value}
+                    Else
+                        list.slots.Add(listArgsSlotKey, value)
+                    End If
                 Next
 
                 parameterVals(listIndex) = list
