@@ -73,34 +73,12 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
-
-Public Class JSONContent : Inherits StringContent
-
-    Public Sub New(obj As Object, env As Environment)
-        MyBase.New(json_encode(obj, env), Encodings.UTF8WithoutBOM.CodePage, "application/json")
-    End Sub
-
-    Private Shared Function json_encode(obj As Object, env As Environment) As String
-        If TypeOf obj Is String Then
-            Return obj
-        ElseIf TypeOf obj Is vector AndAlso
-            DirectCast(obj, vector).length = 1 AndAlso
-            DirectCast(obj, vector).elementType Is RType.GetRSharpType(GetType(String)) Then
-
-            Return any.ToString(DirectCast(obj, vector).data.GetValue(Scan0))
-        Else
-            Return jsonlite.toJSON(obj, env)
-        End If
-    End Function
-End Class
 
 ''' <summary>
 ''' the R# http utils
@@ -439,52 +417,3 @@ uploadbyfiles:
         Return Http.wget.Download(url, saveAs)
     End Function
 End Module
-
-Public Class WebTextQuery : Inherits WebQueryModule(Of String)
-    Implements IHttpGet
-
-    Public ReadOnly Property fs As IFileSystemEnvironment
-        Get
-            Return cache
-        End Get
-    End Property
-
-    Sub New(dir As String)
-        Call MyBase.New(dir)
-    End Sub
-
-    Sub New(fs As IFileSystemEnvironment)
-        Call MyBase.New(fs)
-    End Sub
-
-    Public Function GetText(url As String) As String Implements IHttpGet.GetText
-        Return QueryCacheText(url, cacheType:=".txt")
-    End Function
-
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="context">The query context is the url string</param>
-    ''' <returns></returns>
-    Protected Overrides Function doParseUrl(context As String) As String
-        Return context
-    End Function
-
-    ''' <summary>
-    ''' a general method just used for get html text
-    ''' </summary>
-    ''' <param name="html"></param>
-    ''' <param name="schema"></param>
-    ''' <returns></returns>
-    Protected Overrides Function doParseObject(html As String, schema As Type) As Object
-        Return html
-    End Function
-
-    Protected Overrides Function doParseGuid(context As String) As String
-        Return MD5(context)
-    End Function
-
-    Protected Overrides Function contextPrefix(guid As String) As String
-        Return guid.Substring(2, 2)
-    End Function
-End Class
