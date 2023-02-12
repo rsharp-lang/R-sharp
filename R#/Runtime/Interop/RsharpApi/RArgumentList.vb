@@ -194,6 +194,18 @@ Namespace Runtime.Interop
             Return parameterVals
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="parameterVals"></param>
+        ''' <param name="listIndex"></param>
+        ''' <param name="argument"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' error message could be put into this return array, and the callee 
+        ''' function will check the error message and then populate out to the
+        ''' upper environment context
+        ''' </returns>
         Private Shared Function TryCastListObjects(parameterVals As Object(), listIndex As Integer, argument As RMethodArgument, env As Environment) As Object()
             Dim values = parameterVals(listIndex)
 
@@ -204,8 +216,17 @@ Namespace Runtime.Interop
                 Dim value As Object
 
                 For Each val As InvokeParameter In DirectCast(values, InvokeParameter())
-                    value = val.Evaluate(env)
-                    list.slots.Add(val.name, value)
+                    If val.name.StringEmpty Then
+                        Return New Object() {
+                            Internal.debug.stop({
+                                $"invalid parameter name, name value could not be nothing!",
+                                $"exp: {val.ToString}"
+                            }, env)
+                        }
+                    Else
+                        value = val.Evaluate(env)
+                        list.slots.Add(val.name, value)
+                    End If
                 Next
 
                 parameterVals(listIndex) = list
