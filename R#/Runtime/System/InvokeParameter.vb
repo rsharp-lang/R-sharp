@@ -172,6 +172,8 @@ Namespace Runtime.Components
                         Return .ToString
                     End If
                 End With
+            ElseIf TypeOf expr Is DeclareLambdaFunction Then
+                Return DirectCast(expr, DeclareLambdaFunction).parameterNames.ElementAtOrDefault(Scan0)
             Else
                 Return ValueAssignExpression.GetSymbol(expr)
             End If
