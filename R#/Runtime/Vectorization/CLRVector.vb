@@ -78,6 +78,8 @@ Namespace Runtime.Vectorization
                 x = DirectCast(x, vector).data
             ElseIf TypeOf x Is Long() Then
                 Return x
+            ElseIf DataFramework.IsNumericType(x.GetType) Then
+                Return New Long() {CLng(x)}
             ElseIf x.GetType.ImplementInterface(GetType(IEnumerable(Of Long))) Then
                 Return DirectCast(x, IEnumerable(Of Long)).ToArray
             ElseIf TypeOf x Is Integer() OrElse TypeOf x Is List(Of Integer) Then
@@ -97,7 +99,9 @@ Namespace Runtime.Vectorization
                 x = DirectCast(x, vector).data
             End If
 
-            If TypeOf x Is String() Then
+            If TypeOf x Is String Then
+                Return New String() {DirectCast(x, String)}
+            ElseIf TypeOf x Is String() Then
                 Return x
             ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of String)) Then
                 Return DirectCast(x, IEnumerable(Of String)).ToArray
@@ -125,6 +129,8 @@ Namespace Runtime.Vectorization
             End If
             If TypeOf x Is Integer() Then
                 Return x
+            ElseIf DataFramework.IsNumericType(x.GetType) Then
+                Return New Integer() {CInt(x)}
             ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of Integer)) Then
                 Return DirectCast(x, IEnumerable(Of Integer)).ToArray
             End If
@@ -137,6 +143,8 @@ Namespace Runtime.Vectorization
                 Return x
             ElseIf TypeOf x Is Integer() OrElse TypeOf x Is Long() OrElse TypeOf x Is Single() OrElse TypeOf x Is Short() Then
                 Return DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray
+            ElseIf DataFramework.IsNumericType(x.GetType) Then
+                Return New Double() {CDbl(x)}
             ElseIf TypeOf x Is vector AndAlso DirectCast(x, vector).elementType Like RType.floats Then
                 Return DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray
             ElseIf TypeOf x Is Object() Then
@@ -154,6 +162,10 @@ Namespace Runtime.Vectorization
         Public Shared Function asLogical(x As Object) As Boolean()
             If x Is Nothing Then
                 Return {False}
+            ElseIf TypeOf x Is Boolean Then
+                Return New Boolean() {CBool(x)}
+            ElseIf TypeOf x Is Boolean() Then
+                Return x
             End If
 
             Dim vector As Array = REnv.asVector(Of Object)(x)
