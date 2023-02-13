@@ -90,7 +90,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     If TypeOf flagsObj Is Message Then
                         Return flagsObj
                     Else
-                        Return DirectCast(flagsObj, Boolean()).Select(Function(t) Not t).ToArray
+                        Return UnaryNot.Not(flagsObj)
                     End If
                 Case "like"
                     Dim text As String() = CLRVector.asCharacter(a)

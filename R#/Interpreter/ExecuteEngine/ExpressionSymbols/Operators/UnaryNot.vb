@@ -60,6 +60,9 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
     Public Class UnaryNot : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
@@ -92,9 +95,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
         Public Shared Function [Not](logical As Object) As Boolean()
             Dim logicals As Boolean() = CLRVector.asLogical(logical)
-            Dim nots As Boolean() = logicals _
-                .Select(Function(b) Not b) _
-                .ToArray
+            Dim nots As Boolean() = (
+                From b As Boolean
+                In logicals
+                Select Not b).ToArray
 
             Return nots
         End Function
