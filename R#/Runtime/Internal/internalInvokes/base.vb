@@ -405,17 +405,29 @@ Namespace Runtime.Internal.Invokes
         ''' Missing values In test give missing values In the result.
         ''' </remarks>
         <ExportAPI("ifelse")>
-        Public Function ifelse(test As Boolean(),
+        Public Function ifelse(<RRawVectorArgument> <RLazyExpression> test As Object,
                                <RRawVectorArgument> <RLazyExpression> yes As Object,
                                <RRawVectorArgument> <RLazyExpression> no As Object,
                                Optional env As Environment = Nothing) As Object
 
-            If test.Length = 0 Then
-                Return {}
-            ElseIf test.Length = 1 Then
-                Return ifelseScalar(test(Scan0), yes, no, env)
+            Dim testVals As Object = Nothing
+
+            If TypeOf test Is Expression Then
+                testVals = DirectCast(test, Expression).Evaluate(env)
+
+                If Program.isException(testVals) Then
+                    Return testVals
+                End If
             Else
-                Return ifelseVector(test, yes, no, env)
+                testVals = CLRVector.asLogical(test)
+            End If
+
+            If DirectCast(testVals, Boolean()).Length = 0 Then
+                Return {}
+            ElseIf DirectCast(testVals, Boolean()).Length = 1 Then
+                Return ifelseScalar(DirectCast(testVals, Boolean())(Scan0), yes, no, env)
+            Else
+                Return ifelseVector(DirectCast(testVals, Boolean()), yes, no, env)
             End If
         End Function
 
