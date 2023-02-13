@@ -566,7 +566,7 @@ Namespace Runtime.Internal.Invokes
                     std_out = PipelineProcess.Call(executative, arguments, inputStr.JoinBy(vbLf))
 
                     If show_output_on_console Then
-                        Call Console.WriteLine(StdOut)
+                        Call Console.WriteLine(std_out)
                     End If
                 End If
             ElseIf clr Then

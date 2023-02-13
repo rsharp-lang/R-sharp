@@ -75,6 +75,7 @@ Namespace Development.Package.File.Expressions
                 Call outfile.Write(CByte(x.type))
 
                 Call outfile.Write(shell.ioRedirect)
+                Call outfile.Write(shell.silent)
                 Call outfile.Write(context.GetBuffer(shell.cli))
 
                 Call outfile.Flush()
@@ -84,11 +85,13 @@ Namespace Development.Package.File.Expressions
 
         Public Overrides Function GetExpression(buffer As IO.MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
             Using bin As New BinaryReader(buffer)
-                Dim flag As Boolean = bin.ReadBoolean
+                Dim flag1 As Boolean = bin.ReadBoolean
+                Dim flag2 As Boolean = bin.ReadBoolean
                 Dim literal As Expression = BlockReader.ParseBlock(bin).Parse(desc)
 
                 Return New ExternalCommandLine(literal) With {
-                    .ioRedirect = flag
+                    .ioRedirect = flag1,
+                    .silent = flag2
                 }
             End Using
         End Function

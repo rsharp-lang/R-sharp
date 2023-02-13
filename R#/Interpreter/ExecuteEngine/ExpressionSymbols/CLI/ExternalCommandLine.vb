@@ -97,6 +97,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
         Friend cli As Expression
         Friend ioRedirect As Boolean = True
+        Friend silent As Boolean = False
 
         Sub New(shell As Expression)
             cli = shell
@@ -107,9 +108,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Function
 
         Public Sub SetAttribute(data As NamedValue(Of String))
+            Dim flag As Boolean = data.Value.ParseBoolean
+
             Select Case data.Name.ToLower
-                Case "ioredirect"
-                    ioRedirect = data.Value.ParseBoolean
+                Case "ioredirect" : ioRedirect = flag
+                Case "silent" : silent = flag
             End Select
         End Sub
 
@@ -136,7 +139,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                     .DoCall(AddressOf envir.globalEnvironment.messages.Add)
             End If
 
-            Return Internal.Invokes.utils.system(commandlineStr, env:=envir)
+            Return Internal.Invokes.utils.system(
+                command:=commandlineStr,
+                show_output_on_console:=Not silent,
+                env:=envir
+            )
         End Function
 
         Private Shared Function possibleInterpolationFailure(commandline As String, envir As Environment) As Message
