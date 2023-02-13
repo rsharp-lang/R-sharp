@@ -229,6 +229,13 @@ Namespace Runtime.Interop
                         '        $"exp: {val.ToString}"
                         '    }, env)
                         '}
+
+                        ' 20230214 the missing name should not crash
+                        ' the scripting environment when construct a
+                        ' new argument list object parameter
+                        '
+                        ' so we create an temp name by its list index
+                        ' value at here
                         listArgsSlotKey = $"${val.index}"
                     End If
 
