@@ -116,7 +116,8 @@ Namespace Runtime.Vectorization
                     .Select(Function(a) any.ToString(a)) _
                     .ToArray
             Else
-                Throw New NotImplementedException
+                ' is a single value
+                Return New String() {any.ToString(x)}
             End If
         End Function
 
