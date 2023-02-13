@@ -417,6 +417,8 @@ Namespace Runtime.Internal.Invokes
 
                 If Program.isException(testVals) Then
                     Return testVals
+                Else
+                    testVals = CLRVector.asLogical(testVals)
                 End If
             Else
                 testVals = CLRVector.asLogical(test)
