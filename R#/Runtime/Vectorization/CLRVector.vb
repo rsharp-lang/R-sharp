@@ -53,6 +53,7 @@
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -75,6 +76,14 @@ Namespace Runtime.Vectorization
             End If
             If TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
+            ElseIf TypeOf x Is Long() Then
+                Return x
+            ElseIf x.GetType.ImplementInterface(GetType(IEnumerable(Of Long))) Then
+                Return DirectCast(x, IEnumerable(Of Long)).ToArray
+            ElseIf TypeOf x Is Integer() OrElse TypeOf x Is List(Of Integer) Then
+                Return DirectCast(x, IEnumerable(Of Integer)) _
+                    .Select(Function(i) CLng(i)) _
+                    .ToArray
             End If
 
             Throw New NotImplementedException
@@ -90,9 +99,14 @@ Namespace Runtime.Vectorization
 
             If TypeOf x Is String() Then
                 Return x
-            ElseIf TypeOf x Is List(Of String) Then
-                Return DirectCast(x, List(Of String)).ToArray
+            ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of String)) Then
+                Return DirectCast(x, IEnumerable(Of String)).ToArray
+            ElseIf TypeOf x Is String()() Then
+                Return DirectCast(x, String()()) _
+                    .Select(Function(r) r(Scan0)) _
+                    .ToArray
             ElseIf x.GetType.IsArray Then
+                ' force cast any object to string
                 Return DirectCast(x, Array) _
                     .AsObjectEnumerator _
                     .Select(Function(a) any.ToString(a)) _
@@ -103,6 +117,18 @@ Namespace Runtime.Vectorization
         End Function
 
         Public Shared Function asInteger(x As Object) As Integer()
+            If x Is Nothing Then
+                Return Nothing
+            End If
+            If TypeOf x Is vector Then
+                x = DirectCast(x, vector).data
+            End If
+            If TypeOf x Is Integer() Then
+                Return x
+            ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of Integer)) Then
+                Return DirectCast(x, IEnumerable(Of Integer)).ToArray
+            End If
+
             Throw New NotImplementedException
         End Function
 
