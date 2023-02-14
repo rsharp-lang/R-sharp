@@ -55,6 +55,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -86,13 +87,31 @@ Namespace Runtime
                 End If
             Else
                 Dim type As Type = x.GetType
+                Dim array As Array = x
 
                 If type Is GetType(T()) OrElse type.ImplementInterface(GetType(IEnumerable(Of T))) Then
                     Return True
-                ElseIf DirectCast(x, Array).Length = 0 Then
+                ElseIf array.Length = 0 Then
                     Return False
+                ElseIf array _
+                    .AsObjectEnumerator _
+                    .All(Function(ti)
+                             If ti Is Nothing Then
+                                 Return True
+                             ElseIf ti Is GetType(T) Then
+                                 Return True
+                             ElseIf ti.GetType.IsArray Then
+                                 Dim first = DirectCast(ti, Array).GetValueOrDefault(Scan0)
+                                 Return first Is Nothing OrElse TypeOf first Is T
+                             Else
+                                 Return False
+                             End If
+                         End Function) Then
+
+                    Return True
                 Else
-                    Return DirectCast(x, Array).GetValue(Scan0).GetType Is GetType(T)
+                    Dim first As Object = array.GetValue(Scan0)
+                    Return first IsNot Nothing AndAlso first.GetType Is GetType(T)
                 End If
             End If
         End Function
