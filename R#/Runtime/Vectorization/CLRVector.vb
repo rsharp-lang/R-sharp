@@ -119,10 +119,19 @@ Namespace Runtime.Vectorization
                     .ToArray
             ElseIf x.GetType.IsArray Then
                 ' force cast any object to string
-                Return DirectCast(x, Array) _
+                Dim objs = DirectCast(x, Array) _
                     .AsObjectEnumerator _
-                    .Select(Function(a) any.ToString(a)) _
                     .ToArray
+
+                If objs.All(Function(o) o Is Nothing OrElse o.GetType.IsArray) Then
+                    Return objs _
+                        .Select(Function(a) any.ToString(DirectCast(a, Array).GetValueOrDefault(Scan0))) _
+                        .ToArray
+                Else
+                    Return objs _
+                        .Select(Function(a) any.ToString(a)) _
+                        .ToArray
+                End If
             Else
                 ' is a single value
                 Return New String() {any.ToString(x)}
