@@ -74,6 +74,11 @@ Namespace Runtime.Vectorization
             If x Is Nothing Then
                 Return Nothing
             End If
+
+            If TypeOf x Is list Then
+                x = DirectCast(x, list).slots.Values.ToArray
+            End If
+
             If TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
             ElseIf TypeOf x Is Long() Then
@@ -97,6 +102,9 @@ Namespace Runtime.Vectorization
             End If
             If TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
+            End If
+            If TypeOf x Is list Then
+                x = DirectCast(x, list).slots.Values.ToArray
             End If
 
             If TypeOf x Is String Then
@@ -128,6 +136,9 @@ Namespace Runtime.Vectorization
             If TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
             End If
+            If TypeOf x Is list Then
+                x = DirectCast(x, list).slots.Values.ToArray
+            End If
             If TypeOf x Is Integer() Then
                 Return x
             ElseIf DataFramework.IsNumericType(x.GetType) Then
@@ -140,6 +151,10 @@ Namespace Runtime.Vectorization
         End Function
 
         Public Shared Function asNumeric(x As Object) As Double()
+            If TypeOf x Is list Then
+                x = DirectCast(x, list).slots.Values.ToArray
+            End If
+
             If TypeOf x Is Double() Then
                 Return x
             ElseIf TypeOf x Is Integer() OrElse TypeOf x Is Long() OrElse TypeOf x Is Single() OrElse TypeOf x Is Short() Then
@@ -167,6 +182,10 @@ Namespace Runtime.Vectorization
                 Return New Boolean() {CBool(x)}
             ElseIf TypeOf x Is Boolean() Then
                 Return x
+            End If
+
+            If TypeOf x Is list Then
+                x = DirectCast(x, list).slots.Values.ToArray
             End If
 
             Dim vector As Array = REnv.asVector(Of Object)(x)
