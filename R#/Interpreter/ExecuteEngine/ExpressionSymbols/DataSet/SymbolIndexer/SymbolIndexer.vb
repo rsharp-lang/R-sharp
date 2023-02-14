@@ -404,7 +404,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 If TypeOf indexer Is Boolean() OrElse MeasureArrayElementType(indexer) Is GetType(Boolean) Then
                     subsetKeys = translateLogical2keys(indexer, allKeys)
                 Else
-                    subsetKeys = translateInteger2keys(indexer, allKeys)
+                    Try
+                        subsetKeys = translateInteger2keys(indexer, allKeys)
+                    Catch ex As Exception
+                        Return Internal.debug.stop(ex, env)
+                    End Try
                 End If
             End If
 
