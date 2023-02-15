@@ -1,56 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::1ad8522d3e42e14097fdc08e9bedcbc8, R-sharp\R#\Runtime\Vectorization\CLRVector.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 127
-    '    Code Lines: 104
-    ' Comment Lines: 9
-    '   Blank Lines: 14
-    '     File Size: 4.86 KB
+' Summaries:
 
 
-    '     Class CLRVector
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: asCharacter, asInteger, asLogical, asLong, asNumeric
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 127
+'    Code Lines: 104
+' Comment Lines: 9
+'   Blank Lines: 14
+'     File Size: 4.86 KB
+
+
+'     Class CLRVector
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: asCharacter, asInteger, asLogical, asLong, asNumeric
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -65,12 +66,9 @@ Namespace Runtime.Vectorization
     ''' <summary>
     ''' Data cast type helper for the primitive array in CLR function code
     ''' </summary>
-    Public NotInheritable Class CLRVector
+    Public Module CLRVector
 
-        Private Sub New()
-        End Sub
-
-        Public Shared Function asLong(x As Object) As Long()
+        Public Function asLong(x As Object) As Long()
             If x Is Nothing Then
                 Return Nothing
             End If
@@ -96,7 +94,16 @@ Namespace Runtime.Vectorization
             Throw New NotImplementedException
         End Function
 
-        Public Shared Function asCharacter(x As Object) As String()
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function safeCharacters(x As Object) As String()
+            Return asCharacter(x) _
+                .Select(Function(i)
+                            Return If(i Is Nothing, "", any.ToString(i))
+                        End Function) _
+                .ToArray
+        End Function
+
+        Public Function asCharacter(x As Object) As String()
             If x Is Nothing Then
                 Return Nothing
             End If
@@ -138,7 +145,7 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
-        Public Shared Function asInteger(x As Object) As Integer()
+        Public Function asInteger(x As Object) As Integer()
             If x Is Nothing Then
                 Return Nothing
             End If
@@ -159,7 +166,7 @@ Namespace Runtime.Vectorization
             Throw New NotImplementedException
         End Function
 
-        Public Shared Function asNumeric(x As Object) As Double()
+        Public Function asNumeric(x As Object) As Double()
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
             End If
@@ -186,12 +193,17 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
+        <Extension>
+        Public Function asLogical(v As vector) As Boolean()
+            Return asLogical(x:=CObj(v))
+        End Function
+
         ''' <summary>
         ''' NULL -> false
         ''' </summary>
         ''' <param name="x"></param>
         ''' <returns></returns>
-        Public Shared Function asLogical(x As Object) As Boolean()
+        Public Function asLogical(x As Object) As Boolean()
             If x Is Nothing Then
                 Return {False}
             ElseIf TypeOf x Is Boolean Then
@@ -250,5 +262,5 @@ Namespace Runtime.Vectorization
                     .ToArray
             End If
         End Function
-    End Class
+    End Module
 End Namespace

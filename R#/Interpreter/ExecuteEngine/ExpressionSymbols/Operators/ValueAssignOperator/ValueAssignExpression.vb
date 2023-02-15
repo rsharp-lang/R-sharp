@@ -56,10 +56,14 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
@@ -67,13 +71,10 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Package.File
-Imports any = Microsoft.VisualBasic.Scripting
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
-Imports Microsoft.VisualBasic.ComponentModel
-Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -527,16 +528,29 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End If
 
             Dim elementType As Type = Runtime.MeasureArrayElementType(targetVector)
+            Dim val As Object
 
             For Each i As Integer In DirectCast(index, Integer())
+                val = getValue()
+
+                If elementType IsNot GetType(Object) Then
+                    ' generic array should do type cast for the
+                    ' value
+                    val = RCType.CTypeDynamic(val, elementType, env)
+                End If
+
+                If Program.isException(val) Then
+                    Return val
+                End If
+
                 ' 动态调整数组的大小
                 If targetVector.Length >= i Then
-                    targetVector.SetValue(getValue(), i - 1)
+                    targetVector.SetValue(val, i - 1)
                 Else
                     Dim newVec As Array = Array.CreateInstance(elementType, i - 1)
 
                     Array.ConstrainedCopy(targetVector, Scan0, newVec, Scan0, targetVector.Length)
-                    newVec.SetValue(getValue(), i - 1)
+                    newVec.SetValue(val, i - 1)
                     targetVector = newVec
                 End If
             Next
