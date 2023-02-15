@@ -299,19 +299,27 @@ Namespace Runtime
             Return ofList
         End Function
 
-        ''' <summary>
-        ''' This function make sure the return array is not a generic type array
-        ''' 
-        ''' (返回错误消息或者结果向量)
-        ''' </summary>
-        ''' <param name="vec"></param>
-        ''' <param name="env"></param>
-        ''' <returns>
-        ''' A class variant type: error message or a generic array
-        ''' </returns>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        <Extension>
-        Public Function TryCastGenericArray(vec As Array, env As Environment) As Object
+        Public Function UnsafeTryCastGenericArray(vec As Array) As Array
+            Dim elementType As Type
+            Dim generic As Array
+
+            vec = MeltArray(vec)
+            elementType = MeasureRealElementType(vec)
+
+            If elementType Is Nothing OrElse elementType Is GetType(Object) Then
+                Return vec
+            Else
+                generic = Array.CreateInstance(elementType, vec.Length)
+            End If
+
+            For i As Integer = 0 To vec.Length - 1
+                Call generic.SetValue(CTypeDynamic(vec.GetValue(i), elementType), i)
+            Next
+
+            Return generic
+        End Function
+
+        Private Function MeltArray(vec As Array) As Array
             Dim elementType As Type = vec.GetType.GetElementType
 
             If elementType IsNot Nothing AndAlso
@@ -336,6 +344,23 @@ Namespace Runtime
                     .ToArray
             End If
 
+            Return vec
+        End Function
+
+        ''' <summary>
+        ''' This function make sure the return array is not a generic type array
+        ''' 
+        ''' (返回错误消息或者结果向量)
+        ''' </summary>
+        ''' <param name="vec"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' A class variant type: error message or a generic array
+        ''' </returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <Extension>
+        Public Function TryCastGenericArray(vec As Array, env As Environment) As Object
+            vec = MeltArray(vec)
             Return asVector(vec, MeasureRealElementType(vec), env)
         End Function
 

@@ -76,10 +76,15 @@ Namespace Runtime.Vectorization
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
             End If
-
             If TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
-            ElseIf TypeOf x Is Long() Then
+            End If
+
+            If x.GetType.IsArray Then
+                x = REnv.UnsafeTryCastGenericArray(x)
+            End If
+
+            If TypeOf x Is Long() Then
                 Return x
             ElseIf DataFramework.IsNumericType(x.GetType) Then
                 Return New Long() {CLng(x)}
@@ -91,7 +96,7 @@ Namespace Runtime.Vectorization
                     .ToArray
             End If
 
-            Throw New NotImplementedException
+            Throw New NotImplementedException(x.GetType.FullName)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -112,6 +117,10 @@ Namespace Runtime.Vectorization
             End If
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
+            End If
+
+            If x.GetType.IsArray Then
+                x = REnv.UnsafeTryCastGenericArray(x)
             End If
 
             If TypeOf x Is String Then
@@ -155,20 +164,35 @@ Namespace Runtime.Vectorization
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
             End If
+
+            If x.GetType.IsArray Then
+                x = REnv.UnsafeTryCastGenericArray(x)
+            End If
+
             If TypeOf x Is Integer() Then
                 Return x
             ElseIf DataFramework.IsNumericType(x.GetType) Then
                 Return New Integer() {CInt(x)}
             ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of Integer)) Then
                 Return DirectCast(x, IEnumerable(Of Integer)).ToArray
+            ElseIf TypeOf x Is String Then
+                Return New Integer() {CInt(Val(x))}
+            ElseIf TypeOf x Is String() Then
+                Return DirectCast(x, String()) _
+                    .Select(Function(str) CInt(Val(str))) _
+                    .ToArray
             End If
 
-            Throw New NotImplementedException
+            Throw New NotImplementedException(x.GetType.FullName)
         End Function
 
         Public Function asNumeric(x As Object) As Double()
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
+            End If
+
+            If x.GetType.IsArray Then
+                x = REnv.UnsafeTryCastGenericArray(x)
             End If
 
             If TypeOf x Is Double() Then
@@ -196,6 +220,7 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Public Function asLogical(v As vector) As Boolean()
             Return asLogical(x:=CObj(v))
@@ -219,8 +244,14 @@ Namespace Runtime.Vectorization
                 x = DirectCast(x, list).slots.Values.ToArray
             End If
 
-            Dim vector As Array = REnv.asVector(Of Object)(x)
+            Dim vector As Array
             Dim type As Type
+
+            If x.GetType.IsArray Then
+                vector = REnv.UnsafeTryCastGenericArray(x)
+            Else
+                vector = REnv.asVector(Of Object)(x)
+            End If
 
             If vector.Length = 0 Then
                 Return {}
