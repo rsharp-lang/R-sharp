@@ -191,7 +191,7 @@ RE0:
                     Return Conversion.CTypeDynamic(obj, type)
                 End If
             Catch ex As Exception
-                Return Internal.debug.stop(ex, env)
+                Return Internal.debug.stop(ex, env, suppress:=True)
             End Try
         End Function
 

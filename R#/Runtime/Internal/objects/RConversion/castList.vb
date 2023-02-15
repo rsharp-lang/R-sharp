@@ -90,7 +90,7 @@ Namespace Runtime.Internal.Object.Converts
 
         <Extension>
         Private Function listElementNames(vec As Array, args As list, env As Environment) As String()
-            Dim names As String() = args.getValue(Of String())("names", env)
+            Dim names As String() = CLRVector.asCharacter(args.getByName("names"))
 
             If names.IsNullOrEmpty Then
                 Return vec.Length _

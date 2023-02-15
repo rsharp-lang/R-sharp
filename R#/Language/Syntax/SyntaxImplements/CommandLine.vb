@@ -66,11 +66,13 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
-Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
+    ''' <summary>
+    ''' Commandline shell syntax tree parser
+    ''' </summary>
     Module CommandLineSyntax
 
         Const InterpolatePattern$ = "[$]\{.+?\}"
@@ -101,6 +103,13 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
             End If
         End Function
 
+        ''' <summary>
+        ''' Does the given text string contains the syntax of string interpolation?
+        ''' </summary>
+        ''' <param name="text"></param>
+        ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Friend Function isInterpolation(text As String) As Boolean
             Return Not text.Match(InterpolatePattern, RegexOptions.Singleline).StringEmpty
