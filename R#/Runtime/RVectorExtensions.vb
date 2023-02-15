@@ -55,7 +55,6 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -71,7 +70,9 @@ Namespace Runtime
         ''' </summary>
         ''' <typeparam name="T"></typeparam>
         ''' <param name="x"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' returns a logical value of this type test operation
+        ''' </returns>
         Public Function isVector(Of T)(x As Object) As Boolean
             If x Is Nothing Then
                 Return False

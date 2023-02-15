@@ -169,7 +169,14 @@ Namespace Runtime.Vectorization
             ElseIf TypeOf x Is Integer() OrElse TypeOf x Is Long() OrElse TypeOf x Is Single() OrElse TypeOf x Is Short() Then
                 Return DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray
             ElseIf DataFramework.IsNumericType(x.GetType) Then
+                ' is a single scalr value
                 Return New Double() {CDbl(x)}
+            ElseIf TypeOf x Is String Then
+                ' parse string
+                Return New Double() {Val(x)}
+            ElseIf isVector(Of String)(x) Then
+                ' parse string
+                Return CLRVector.asCharacter(x).Select(AddressOf Val).ToArray
             ElseIf TypeOf x Is vector AndAlso DirectCast(x, vector).elementType Like RType.floats Then
                 Return DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray
             ElseIf TypeOf x Is Object() Then
