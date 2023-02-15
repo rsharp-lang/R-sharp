@@ -86,6 +86,10 @@ Namespace Runtime.Vectorization
 
             If TypeOf x Is Long() Then
                 Return x
+            ElseIf DataFramework.IsNumericCollection(x.GetType) Then
+                Return (From xi As Object
+                        In DirectCast(x, IEnumerable).AsQueryable
+                        Select CLng(xi)).ToArray
             ElseIf DataFramework.IsNumericType(x.GetType) Then
                 Return New Long() {CLng(x)}
             ElseIf x.GetType.ImplementInterface(GetType(IEnumerable(Of Long))) Then
@@ -171,6 +175,10 @@ Namespace Runtime.Vectorization
 
             If TypeOf x Is Integer() Then
                 Return x
+            ElseIf DataFramework.IsNumericCollection(x.GetType) Then
+                Return (From xi As Object
+                        In DirectCast(x, IEnumerable).AsQueryable
+                        Select CInt(xi)).ToArray
             ElseIf DataFramework.IsNumericType(x.GetType) Then
                 Return New Integer() {CInt(x)}
             ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of Integer)) Then
@@ -197,8 +205,10 @@ Namespace Runtime.Vectorization
 
             If TypeOf x Is Double() Then
                 Return x
-            ElseIf TypeOf x Is Integer() OrElse TypeOf x Is Long() OrElse TypeOf x Is Single() OrElse TypeOf x Is Short() Then
-                Return DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray
+            ElseIf DataFramework.IsNumericCollection(x.GetType) Then
+                Return (From xi As Object
+                        In DirectCast(x, IEnumerable).AsQueryable
+                        Select CDbl(xi)).ToArray
             ElseIf DataFramework.IsNumericType(x.GetType) Then
                 ' is a single scalr value
                 Return New Double() {CDbl(x)}
