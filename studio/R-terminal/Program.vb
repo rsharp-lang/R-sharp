@@ -160,6 +160,21 @@ Module Program
             ' query commandline arguments
             ' show commandline help
             Return Program.QueryCommandLineArgvs(script:=filepath, dev:=App.StdOut)
+        ElseIf filepath.ExtensionSuffix("csv") Then
+            ' andalso this app could be used as a utils for print table file
+            Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(
+                configs:=ConfigFile.localConfigs
+            )
+
+            Call R.LoadLibrary(
+                packageName:="utils",
+                silent:=True,
+                ignoreMissingStartupPackages:=True
+            )
+
+            Dim result = R.Evaluate($"print(read.csv('{filepath}', row.names = 1, check.names = FALSE));")
+
+            Return Rscript.handleResult(result, R.globalEnvir, Nothing)
         Else
             ' run Rscript file
             Return Program.RunRScriptFile(filepath, args)
