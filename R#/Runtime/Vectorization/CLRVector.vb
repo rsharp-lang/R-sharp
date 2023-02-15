@@ -185,7 +185,10 @@ Namespace Runtime.Vectorization
                 ' parse string
                 Return CLRVector.asCharacter(x).Select(AddressOf Val).ToArray
             ElseIf TypeOf x Is vector AndAlso DirectCast(x, vector).elementType Like RType.floats Then
-                Return DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray
+                Return DirectCast(x, vector).data _
+                    .AsObjectEnumerator _
+                    .Select(Function(d) CDbl(d)) _
+                    .ToArray
             ElseIf TypeOf x Is Object() Then
                 Return DirectCast(x, Object()).Select(Function(d) CDbl(d)).ToArray
             Else
