@@ -133,6 +133,17 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Return Internal.debug.stop(New NotImplementedException($"[{left}] {[operator]} [{right}]"), env)
         End Function
 
+        ''' <summary>
+        ''' string binary operator
+        ''' </summary>
+        ''' <typeparam name="Out"></typeparam>
+        ''' <param name="a"></param>
+        ''' <param name="b"></param>
+        ''' <param name="op"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' this function returns a string array or error message
+        ''' </returns>
         Public Function DoStringBinary(Of Out)(a As Object, b As Object, op As op_evaluator, env As Environment) As Object
             Dim va = CLRVector.asCharacter(a)
             Dim vb = CLRVector.asCharacter(b)
