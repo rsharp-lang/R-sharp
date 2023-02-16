@@ -219,6 +219,14 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
+        ''' <summary>
+        ''' if the target input object <paramref name="x"/>is nothing, then this function
+        ''' will returns an instance of <see cref="GetVectorElement"/> with wrap a null
+        ''' value
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         Public Shared Function Create(Of T)(x As Object) As GetVectorElement
             If x Is Nothing Then
                 Return New GetVectorElement(vec:=Nothing, GetType(T))
@@ -229,32 +237,41 @@ Namespace Runtime.Vectorization
                     x = DirectCast(x, vector).data
                 End If
 
-                Dim type As Type = x.GetType
-
-                If type Is typedefine(Of T).baseType Then
-                    ' is a scalar
-                    Return New GetVectorElement(scalar:=x, type:=type)
-                ElseIf type.ImplementInterface(typedefine(Of T).enumerable) Then
-                    ' is a generic collection
-                    If type.IsArray Then
-                        Return New GetVectorElement(DirectCast(x, Array), GetType(T))
-                    Else
-                        ' cast collection to array
-                        Dim list As New List(Of Object)
-
-                        For Each item As Object In DirectCast(x, IEnumerable)
-                            Call list.Add(item)
-                        Next
-
-                        Return New GetVectorElement(list.ToArray, GetType(T))
-                    End If
-                Else
-                    ' do type cast?
-                    Return New GetVectorElement(ex:=New InvalidCastException($"Do we require a type cast for {type} -> {GetType(T)}?"))
-                End If
+                Return CreateVectorInternal(Of T)(x)
             End If
         End Function
 
+        Private Shared Function CreateVectorInternal(Of T)(x As Object) As GetVectorElement
+            Dim type As Type = x.GetType
+
+            If type Is typedefine(Of T).baseType Then
+                ' is a scalar
+                Return New GetVectorElement(scalar:=x, type:=type)
+            ElseIf type.ImplementInterface(typedefine(Of T).enumerable) Then
+                ' is a generic collection
+                If type.IsArray Then
+                    Return New GetVectorElement(DirectCast(x, Array), GetType(T))
+                Else
+                    ' cast collection to array
+                    Dim list As New List(Of Object)
+
+                    For Each item As Object In DirectCast(x, IEnumerable)
+                        Call list.Add(item)
+                    Next
+
+                    Return New GetVectorElement(list.ToArray, GetType(T))
+                End If
+            Else
+                ' do type cast?
+                Return New GetVectorElement(ex:=New InvalidCastException($"Do we require a type cast for {type} -> {GetType(T)}?"))
+            End If
+        End Function
+
+        ''' <summary>
+        ''' test the given <paramref name="obj"/> is a single scalar value?
+        ''' </summary>
+        ''' <param name="obj"></param>
+        ''' <returns></returns>
         Public Shared Function IsScalar(obj As Object) As Boolean
             If obj Is Nothing Then
                 Return True
