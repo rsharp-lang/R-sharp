@@ -183,6 +183,16 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
+        Private Function CreateScalarVectorInternal(Of TOut)(x As Object, y As Object, [do] As op_evaluator, env As Environment) As Object
+            Dim result As Object = [do](x, y, env)
+
+            If Program.isException(result) Then
+                Return result
+            Else
+                Return New TOut() {DirectCast(result, TOut)}
+            End If
+        End Function
+
         ''' <summary>
         ''' this function just apply for the custom operator
         ''' 
@@ -203,14 +213,16 @@ Namespace Runtime.Vectorization
             Dim result As Object
 
             If vx.Mode = VectorTypes.Scalar AndAlso vy.Mode = VectorTypes.Scalar Then
-                result = [do](vx.single, vy.single, env)
-
-                If Program.isException(result) Then
-                    Return result
-                Else
-                    Return New TOut() {DirectCast(result, TOut)}
-                End If
+                Return CreateScalarVectorInternal(Of TOut)(vx.single, vy.single, [do], env)
+            ElseIf vx.Mode = VectorTypes.Scalar AndAlso vy.Mode = VectorTypes.None Then
+                Return CreateScalarVectorInternal(Of TOut)(vx.single, Nothing, [do], env)
+            ElseIf vx.Mode = VectorTypes.None AndAlso vy.Mode = VectorTypes.Scalar Then
+                Return CreateScalarVectorInternal(Of TOut)(Nothing, vy.single, [do], env)
+            ElseIf vx.Mode = VectorTypes.None AndAlso vy.Mode = VectorTypes.None Then
+                Return CreateScalarVectorInternal(Of TOut)(Nothing, Nothing, [do], env)
             End If
+
+            ' 20230216 the vx and vy has been ensure that not nothing
 
             Dim populater As New List(Of TOut)
 
