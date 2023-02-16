@@ -182,6 +182,10 @@ Namespace Runtime.Vectorization
         End Function
 
         Public Iterator Function Populate(Of T)(unary As Func(Of Object, Object)) As IEnumerable(Of T)
+            If vector Is Nothing Then
+                Return
+            End If
+
             For i As Integer = 0 To vector.Length - 1
                 Yield DirectCast(unary(vector.GetValue(i)), T)
             Next
