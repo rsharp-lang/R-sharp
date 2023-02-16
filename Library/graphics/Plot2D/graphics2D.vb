@@ -442,7 +442,7 @@ Module graphics2D
     ''' <summary>
     ''' 
     ''' </summary>
-    ''' <param name="heatmap"></param>
+    ''' <param name="x"></param>
     ''' <param name="region"></param>
     ''' <param name="dimSize"></param>
     ''' <param name="colorName"></param>
@@ -451,7 +451,7 @@ Module graphics2D
     ''' <returns></returns>
     <ExportAPI("rasterHeatmap")>
     Public Function rasterHeatmap(<RRawVectorArgument>
-                                  heatmap As Object,
+                                  x As Object,
                                   Optional region As Rectangle = Nothing,
                                   <RRawVectorArgument>
                                   Optional dimSize As Object = Nothing,
@@ -466,13 +466,13 @@ Module graphics2D
 
         Dim dev As graphicsDevice = curDev
         Dim canvas As Size = InteropArgumentHelper.getSize(dev!size, env).SizeParser
-        Dim pixels As pipeline = pipeline.TryCreatePipeline(Of Pixel)(heatmap, env)
+        Dim pixels As pipeline = pipeline.TryCreatePipeline(Of Pixel)(x, env)
         Dim dimensionStr As String = InteropArgumentHelper.getSize(dimSize, env, Nothing)
         Dim dimension As Size
 
         If pixels.isError Then
-            If heatmap IsNot Nothing AndAlso heatmap.GetType.ImplementInterface(Of IRasterGrayscaleHeatmap) Then
-                pixels = pipeline.CreateFromPopulator(DirectCast(heatmap, IRasterGrayscaleHeatmap).GetRasterPixels)
+            If x IsNot Nothing AndAlso x.GetType.ImplementInterface(Of IRasterGrayscaleHeatmap) Then
+                pixels = pipeline.CreateFromPopulator(DirectCast(x, IRasterGrayscaleHeatmap).GetRasterPixels)
             Else
                 Return pixels.getError
             End If
