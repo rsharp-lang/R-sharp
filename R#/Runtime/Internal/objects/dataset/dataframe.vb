@@ -250,7 +250,10 @@ Namespace Runtime.Internal.Object
         ''' <typeparam name="T"></typeparam>
         ''' <param name="synonym">同意名列表</param>
         ''' <returns>
-        ''' 这个函数只会返回碰见的第一个同意名的列数据
+        ''' function may returns nothing if all of the given name 
+        ''' is missing from the dataframe object.
+        ''' 
+        ''' (这个函数只会返回碰见的第一个同意名的列数据)
         ''' </returns>
         ''' <remarks>
         ''' this function returns a vector in full size always
