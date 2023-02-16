@@ -79,6 +79,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
@@ -148,10 +149,22 @@ Namespace Runtime.Internal.Invokes
         ''' Of NAs) nonempty argument left, see min.
         ''' </remarks>
         <ExportAPI("range")>
+        <RApiReturn(GetType(Double))>
         Public Function range(<RRawVectorArgument>
                               x As Object,
-                              Optional na_rm As Boolean = False,
-                              Optional finite As Boolean = False) As Double()
+                              Optional na_rm As Object = False,
+                              Optional finite As Boolean = False,
+                              Optional env As Environment = Nothing) As Object
+
+            If RType.TypeOf(x).mode.IsNumeric AndAlso RType.TypeOf(na_rm).mode.IsNumeric Then
+                ' range(min, max) for in operator
+                ' example as:   x in range(1, 5)
+                ' the given vector x element in numeric range 1..5
+                Dim minMax As Double() = REnv.asVector(Of Double)(base.append(x, na_rm, env))
+                Dim rangeVal As New DoubleRange(minMax)
+
+                Return rangeVal
+            End If
 
             Dim data As Double() = REnv.asVector(Of Double)(x)
 
