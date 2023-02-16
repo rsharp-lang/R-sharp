@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e1897aea4c29c1686a8a38a2d2885a19, R-sharp\snowFall\Context\RPC\BootstrapSocket.vb"
+﻿#Region "Microsoft.VisualBasic::9562a1e5bb68f713015d45c1b4f4ba4b, E:/GCModeller/src/R-sharp/snowFall//Context/RPC/BootstrapSocket.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 142
     ' Comment Lines: 67
     '   Blank Lines: 38
-    '     File Size: 8.76 KB
+    '     File Size: 9.00 KB
 
 
     '     Class BootstrapSocket

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::27461b9a529df88e9463d241ab45967e, R-sharp\studio\Rstudio\Diagnostics.vb"
+﻿#Region "Microsoft.VisualBasic::27461b9a529df88e9463d241ab45967e, E:/GCModeller/src/R-sharp/studio/Rstudio//Diagnostics.vb"
 
     ' Author:
     ' 

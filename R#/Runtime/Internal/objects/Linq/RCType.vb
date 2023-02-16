@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::401a1dd466b35297075b9114ca4c3a02, R-sharp\R#\Runtime\Internal\objects\Linq\RCType.vb"
+﻿#Region "Microsoft.VisualBasic::a0eb20dd021e5d1b2c56e9302d5f1d6c, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/Linq/RCType.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 36
-    '    Code Lines: 28
+    '   Total Lines: 10
+    '    Code Lines: 6
     ' Comment Lines: 0
-    '   Blank Lines: 8
-    '     File Size: 1.17 KB
+    '   Blank Lines: 4
+    '     File Size: 179 B
 
 
     '     Module RCType
     ' 
-    '         Function: ascharacter, asinteger, aslogical, asnumeric, safeCharacters
+    ' 
     ' 
     ' 
     ' /********************************************************************************/

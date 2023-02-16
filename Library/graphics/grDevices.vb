@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f604bd9ab1ef13427eb8ceef93847747, R-sharp\Library\graphics\grDevices.vb"
+﻿#Region "Microsoft.VisualBasic::f604bd9ab1ef13427eb8ceef93847747, E:/GCModeller/src/R-sharp/Library/graphics//grDevices.vb"
 
     ' Author:
     ' 

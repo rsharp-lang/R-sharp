@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e470880f7f54fe9e5cb2af8aaefe7274, R-sharp\R#\System\Components\RSessionInfo.vb"
+﻿#Region "Microsoft.VisualBasic::e470880f7f54fe9e5cb2af8aaefe7274, E:/GCModeller/src/R-sharp/R#//System/Components/RSessionInfo.vb"
 
     ' Author:
     ' 

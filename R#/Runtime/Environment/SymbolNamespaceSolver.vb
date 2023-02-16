@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::71b5423c4728ed9a547a40dcb99cb6c6, R-sharp\R#\Runtime\Environment\SymbolNamespaceSolver.vb"
+﻿#Region "Microsoft.VisualBasic::527f79ef2596002a7dd24d352ecd39fb, E:/GCModeller/src/R-sharp/R#//Runtime/Environment/SymbolNamespaceSolver.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 109
     ' Comment Lines: 35
     '   Blank Lines: 27
-    '     File Size: 7.13 KB
+    '     File Size: 7.30 KB
 
 
     '     Class SymbolNamespaceSolver

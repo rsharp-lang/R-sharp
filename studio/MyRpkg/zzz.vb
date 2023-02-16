@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c2414cd48534a3141d2b35312e2d65f2, R-sharp\studio\MyRpkg\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::f1fa76808054f4eba21951292dc4571f, E:/GCModeller/src/R-sharp/studio/MyRpkg//zzz.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 4
     ' Comment Lines: 2
     '   Blank Lines: 1
-    '     File Size: 161 B
+    '     File Size: 167 B
 
 
     ' Class zzz

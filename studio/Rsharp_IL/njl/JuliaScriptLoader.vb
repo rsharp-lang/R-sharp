@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::04e60021c18149c072004f59ec382796, R-sharp\studio\Rsharp_IL\njl\JuliaScriptLoader.vb"
+﻿#Region "Microsoft.VisualBasic::04e60021c18149c072004f59ec382796, E:/GCModeller/src/R-sharp/studio/Rsharp_IL/njl//JuliaScriptLoader.vb"
 
     ' Author:
     ' 

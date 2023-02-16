@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::053b1ea4014831de4aa56c99383835e6, R-sharp\R#\Runtime\Vectorization\Arithmetic\Exponent.vb"
+﻿#Region "Microsoft.VisualBasic::bcaa27ace8f6df76b4ca2546daee7c58, E:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/Arithmetic/Exponent.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 29
     ' Comment Lines: 3
     '   Blank Lines: 5
-    '     File Size: 1.53 KB
+    '     File Size: 1.57 KB
 
 
     '     Class Exponent

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::527e619b610615bca81f281399b5ac19, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\TryCatchExpression.vb"
+﻿#Region "Microsoft.VisualBasic::527e619b610615bca81f281399b5ac19, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/Closure/TryCatchExpression.vb"
 
     ' Author:
     ' 

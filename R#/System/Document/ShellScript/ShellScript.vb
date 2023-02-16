@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d0d39ff5e9d51a570ce73a883c9efd0b, R-sharp\R#\System\Document\ShellScript\ShellScript.vb"
+﻿#Region "Microsoft.VisualBasic::2a7057f432c84a476466503064af6604, E:/GCModeller/src/R-sharp/R#//System/Document/ShellScript/ShellScript.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 374
     ' Comment Lines: 16
     '   Blank Lines: 85
-    '     File Size: 20.21 KB
+    '     File Size: 20.68 KB
 
 
     '     Class ShellScript

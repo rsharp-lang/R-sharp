@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ae169039e6e5df7f3c37ce875fe7054d, R-sharp\R#\Runtime\Vectorization\Arithmetic\Modulo.vb"
+﻿#Region "Microsoft.VisualBasic::095882ccdf3acbc9c01fcb5700ad1944, E:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/Arithmetic/Modulo.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 29
     ' Comment Lines: 3
     '   Blank Lines: 5
-    '     File Size: 1.52 KB
+    '     File Size: 1.55 KB
 
 
     '     Class Modulo

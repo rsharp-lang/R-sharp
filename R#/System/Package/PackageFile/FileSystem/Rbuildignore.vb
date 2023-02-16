@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dcbdedab7efc30b39f09cfd6877413c5, R-sharp\R#\System\Package\PackageFile\FileSystem\Rbuildignore.vb"
+﻿#Region "Microsoft.VisualBasic::0a6f5a3ce587f868f8a9ee7ed9d3ad9a, E:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/FileSystem/Rbuildignore.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 36
     ' Comment Lines: 22
     '   Blank Lines: 11
-    '     File Size: 2.31 KB
+    '     File Size: 2.38 KB
 
 
     '     Interface IFilePredicate

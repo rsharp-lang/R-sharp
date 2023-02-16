@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::973c6627a33a9dc079081dd0ef3f5381, R-sharp\Library\igraph\Models\E.vb"
+﻿#Region "Microsoft.VisualBasic::244afe9bf1d3615eafd5b3c8dc2b0a70, E:/GCModeller/src/R-sharp/Library/igraph//Models/E.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 93
     ' Comment Lines: 8
     '   Blank Lines: 21
-    '     File Size: 4.25 KB
+    '     File Size: 4.37 KB
 
 
     ' Class E

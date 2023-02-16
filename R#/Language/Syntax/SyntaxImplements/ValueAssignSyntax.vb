@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bd7dfab18d07e70e49174d5cd9594342, R-sharp\R#\Language\Syntax\SyntaxImplements\ValueAssignSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::bd7dfab18d07e70e49174d5cd9594342, E:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/ValueAssignSyntax.vb"
 
     ' Author:
     ' 

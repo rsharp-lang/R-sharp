@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ad1250b1969048b0c5bfdec5b64620aa, R-sharp\R#\Runtime\Interop\RsharpOperator\BinaryOperatorEngine.vb"
+﻿#Region "Microsoft.VisualBasic::ad1250b1969048b0c5bfdec5b64620aa, E:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpOperator/BinaryOperatorEngine.vb"
 
     ' Author:
     ' 

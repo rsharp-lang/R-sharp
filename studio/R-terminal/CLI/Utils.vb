@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ea05ba96fe3b02e7d7e392e3f49fce72, R-sharp\studio\R-terminal\CLI\Utils.vb"
+﻿#Region "Microsoft.VisualBasic::2915cff546e3b2e954ebd616aeb94c83, E:/GCModeller/src/R-sharp/studio/R-terminal//CLI/Utils.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 222
     ' Comment Lines: 5
     '   Blank Lines: 42
-    '     File Size: 10.29 KB
+    '     File Size: 10.55 KB
 
 
     ' Module CLI

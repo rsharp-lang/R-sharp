@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b0cff8b68cdf14f0c299e0a0d69d64c4, R-sharp\R#\Runtime\Environment\ClosureEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::9b484824cf93708decd6f244c5c6fd6a, E:/GCModeller/src/R-sharp/R#//Runtime/Environment/ClosureEnvironment.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 49
     ' Comment Lines: 22
     '   Blank Lines: 14
-    '     File Size: 3.16 KB
+    '     File Size: 3.25 KB
 
 
     '     Class ClosureEnvironment

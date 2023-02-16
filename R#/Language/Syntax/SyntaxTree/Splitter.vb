@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f27df6a06b3c74be50270dd4c7d27a7a, R-sharp\R#\Language\Syntax\SyntaxTree\Splitter.vb"
+﻿#Region "Microsoft.VisualBasic::f27df6a06b3c74be50270dd4c7d27a7a, E:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/Splitter.vb"
 
     ' Author:
     ' 

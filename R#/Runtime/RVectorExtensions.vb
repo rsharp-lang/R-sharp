@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f4ee91c35b2ed9e6fac4cf56e5e931cd, R-sharp\R#\Runtime\RVectorExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::69f140b31dfbc40c29c061feb4dcbdc8, E:/GCModeller/src/R-sharp/R#//Runtime/RVectorExtensions.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 436
-    '    Code Lines: 304
-    ' Comment Lines: 80
-    '   Blank Lines: 52
-    '     File Size: 16.89 KB
+    '   Total Lines: 481
+    '    Code Lines: 340
+    ' Comment Lines: 82
+    '   Blank Lines: 59
+    '     File Size: 19.05 KB
 
 
     '     Module RVectorExtensions
     ' 
     '         Function: [single], (+2 Overloads) asVector, castSingle, createArray, CTypeOfList
-    '                   fromArray, getFirst, isVector, TryCastGenericArray
+    '                   fromArray, getFirst, isVector, MeltArray, TryCastGenericArray
+    '                   UnsafeTryCastGenericArray
     ' 
     ' 
     ' /********************************************************************************/

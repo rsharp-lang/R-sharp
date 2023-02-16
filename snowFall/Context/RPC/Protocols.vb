@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9136a51ea62ea39270dd807b1d436dc7, R-sharp\snowFall\Context\RPC\Protocols.vb"
+﻿#Region "Microsoft.VisualBasic::9136a51ea62ea39270dd807b1d436dc7, E:/GCModeller/src/R-sharp/snowFall//Context/RPC/Protocols.vb"
 
     ' Author:
     ' 

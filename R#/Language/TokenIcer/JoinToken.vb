@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6aa3c8bb2ef6b7170dda353905c46df0, R-sharp\R#\Language\TokenIcer\JoinToken.vb"
+﻿#Region "Microsoft.VisualBasic::6aa3c8bb2ef6b7170dda353905c46df0, E:/GCModeller/src/R-sharp/R#//Language/TokenIcer/JoinToken.vb"
 
     ' Author:
     ' 

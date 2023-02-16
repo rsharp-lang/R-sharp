@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9d58d3601dc9531224de0b98cd754c9e, R-sharp\studio\Rsharp_kit\devkit\CLR.vb"
+﻿#Region "Microsoft.VisualBasic::e36c0293097a2bcab7ba573b185e96df, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//CLR.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 20
     ' Comment Lines: 3
     '   Blank Lines: 2
-    '     File Size: 810 B
+    '     File Size: 833 B
 
 
     ' Module CLRTool
@@ -74,4 +74,3 @@ Public Module CLRTool
         End If
     End Function
 End Module
-

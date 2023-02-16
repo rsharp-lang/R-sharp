@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::309ac31db9c469ed7ac5c70805a9cfb7, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::5ade93e3f7acada5f5bb3f4fb3bb0298, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/SymbolIndexer/SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 603
-    '    Code Lines: 471
-    ' Comment Lines: 56
-    '   Blank Lines: 76
-    '     File Size: 26.44 KB
+    '   Total Lines: 627
+    '    Code Lines: 485
+    ' Comment Lines: 61
+    '   Blank Lines: 81
+    '     File Size: 27.79 KB
 
 
     '     Class SymbolIndexer
@@ -48,7 +48,7 @@
     '         Constructor: (+2 Overloads) Sub New
     '         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
     '                   getColumn, getDataframeRowRange, groupSubset, listSubset, streamView
-    '                   ToString, vectorSubset
+    '                   ToString, translateInteger2keys, translateLogical2keys, vectorSubset
     ' 
     ' 
     ' /********************************************************************************/

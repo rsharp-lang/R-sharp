@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d6ea24935960507d68d336753832d106, R-sharp\R#\Runtime\Interop\RsharpOperator\BinaryIndex.vb"
+﻿#Region "Microsoft.VisualBasic::bfb6d1af0d1a454b07dfa04903223377, E:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpOperator/BinaryIndex.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 153
     ' Comment Lines: 41
     '   Blank Lines: 30
-    '     File Size: 8.72 KB
+    '     File Size: 8.94 KB
 
 
     '     Class BinaryIndex

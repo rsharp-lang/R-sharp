@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b576addb8520072c5afa491d65afa4fe, R-sharp\studio\Rsharp_IL\nsas\Outputs\Report.vb"
+﻿#Region "Microsoft.VisualBasic::44e3a5ea483c8aa0b662986162e84f69, E:/GCModeller/src/R-sharp/studio/Rsharp_IL/nsas//Outputs/Report.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 2
     ' Comment Lines: 3
     '   Blank Lines: 1
-    '     File Size: 105 B
+    '     File Size: 103 B
 
 
     ' Class Report
@@ -55,4 +55,3 @@
 Public Class Report
 
 End Class
-

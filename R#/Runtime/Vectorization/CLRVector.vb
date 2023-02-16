@@ -1,53 +1,53 @@
-﻿#Region "Microsoft.VisualBasic::1ad8522d3e42e14097fdc08e9bedcbc8, R-sharp\R#\Runtime\Vectorization\CLRVector.vb"
+﻿#Region "Microsoft.VisualBasic::ddf1637056472ff75488d6dd7b6c959b, E:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/CLRVector.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 127
-'    Code Lines: 104
-' Comment Lines: 9
-'   Blank Lines: 14
-'     File Size: 4.86 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class CLRVector
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: asCharacter, asInteger, asLogical, asLong, asNumeric
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 257
+    '    Code Lines: 216
+    ' Comment Lines: 14
+    '   Blank Lines: 27
+    '     File Size: 10.06 KB
+
+
+    '     Module CLRVector
+    ' 
+    '         Function: asCharacter, asInteger, (+2 Overloads) asLogical, asLong, asNumeric
+    '                   safeCharacters
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::53c0f304f910aa475582b67ca52b6101, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\RcodeParser.vb"
+﻿#Region "Microsoft.VisualBasic::3e6393c402a13e85c25e8ad5a4b0e9c9, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//Rd/RcodeParser.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 37
     ' Comment Lines: 10
     '   Blank Lines: 6
-    '     File Size: 1.62 KB
+    '     File Size: 1.67 KB
 
 
     ' Class RcodeParser

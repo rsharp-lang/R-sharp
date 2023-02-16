@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0a0e4c9440e6f5428d2f615f64dabbf4, R-sharp\R#\Language\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::0a0e4c9440e6f5428d2f615f64dabbf4, E:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/DeclareNewFunctionSyntax.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c6e014eeeff857f849577c2caf2b121, R-sharp\studio\Rstudio\httpHelp.vb"
+﻿#Region "Microsoft.VisualBasic::920bab013cdb378665179aff14dff93e, E:/GCModeller/src/R-sharp/studio/Rstudio//httpHelp.vb"
 
     ' Author:
     ' 
@@ -180,4 +180,3 @@ Public Module httpHelp
     End Function
 
 End Module
-

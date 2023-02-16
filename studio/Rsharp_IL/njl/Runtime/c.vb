@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7dbcd8799bd31a404ab9ca7d841a1025, R-sharp\studio\Rsharp_IL\njl\Runtime\c.vb"
+﻿#Region "Microsoft.VisualBasic::7dbcd8799bd31a404ab9ca7d841a1025, E:/GCModeller/src/R-sharp/studio/Rsharp_IL/njl//Runtime/c.vb"
 
     ' Author:
     ' 

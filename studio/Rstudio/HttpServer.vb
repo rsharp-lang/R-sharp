@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9a81c9dc88f0e5c3300bb3c84ecf81e8, R-sharp\studio\Rstudio\HttpServer.vb"
+﻿#Region "Microsoft.VisualBasic::9a81c9dc88f0e5c3300bb3c84ecf81e8, E:/GCModeller/src/R-sharp/studio/Rstudio//HttpServer.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6341535d789926d4fe3bad40cad02e23, R-sharp\R#\System\Package\PackageFile\FileSystem\PatternMatch.vb"
+﻿#Region "Microsoft.VisualBasic::a4bcf138c5573eaf6c7b48040858b036, E:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/FileSystem/PatternMatch.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 20
     ' Comment Lines: 7
     '   Blank Lines: 6
-    '     File Size: 1.11 KB
+    '     File Size: 1.14 KB
 
 
     '     Class PatternMatch

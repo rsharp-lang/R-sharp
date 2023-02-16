@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::294ae0d9214e155cd69f8c7a57c2efb0, R-sharp\Library\base\base\HDSutils.vb"
+﻿#Region "Microsoft.VisualBasic::be2833b6ce88336d0107792c38778983, E:/GCModeller/src/R-sharp/Library/base//base/HDSutils.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 110
     ' Comment Lines: 0
     '   Blank Lines: 24
-    '     File Size: 4.59 KB
+    '     File Size: 4.71 KB
 
 
     ' Module HDSutils

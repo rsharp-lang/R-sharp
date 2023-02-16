@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b09bb545d24bdf405287ebdf9e26b32b, R-sharp\studio\Rsharp_kit\MLkit\ROC.vb"
+﻿#Region "Microsoft.VisualBasic::52f593ee3bf01d8774e665e1ba6bbe32, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//ROC.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 51
     ' Comment Lines: 4
     '   Blank Lines: 7
-    '     File Size: 2.19 KB
+    '     File Size: 2.25 KB
 
 
     ' Class ROC

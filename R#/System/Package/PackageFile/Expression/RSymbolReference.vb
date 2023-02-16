@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::78b5d5ee92647ee9bb2ef458f52ddb9f, R-sharp\R#\System\Package\PackageFile\Expression\RSymbolReference.vb"
+﻿#Region "Microsoft.VisualBasic::78b5d5ee92647ee9bb2ef458f52ddb9f, E:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Expression/RSymbolReference.vb"
 
     ' Author:
     ' 

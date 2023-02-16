@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7894811669d32cdde9e6ea8f07496adc, R-sharp\R#\System\Config\Defaults.vb"
+﻿#Region "Microsoft.VisualBasic::7894811669d32cdde9e6ea8f07496adc, E:/GCModeller/src/R-sharp/R#//System/Config/Defaults.vb"
 
     ' Author:
     ' 

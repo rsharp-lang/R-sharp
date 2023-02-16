@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f4e03aa11d4b266d27bec12d67dfba17, R-sharp\R#\Runtime\System\TypeCode.vb"
+﻿#Region "Microsoft.VisualBasic::f4e03aa11d4b266d27bec12d67dfba17, E:/GCModeller/src/R-sharp/R#//Runtime/System/TypeCode.vb"
 
     ' Author:
     ' 

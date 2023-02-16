@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::39c8ec8a3bd9abeeaddf7799574693c9, R-sharp\R#\Runtime\Vectorization\Core.vb"
+﻿#Region "Microsoft.VisualBasic::4472441d1e6bff11ea92b88bf1cbc7d4, E:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/Core.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 243
-    '    Code Lines: 154
-    ' Comment Lines: 50
-    '   Blank Lines: 39
-    '     File Size: 9.10 KB
+    '   Total Lines: 255
+    '    Code Lines: 163
+    ' Comment Lines: 51
+    '   Blank Lines: 41
+    '     File Size: 10.18 KB
 
 
     '     Delegate Function
@@ -46,8 +46,8 @@
     ' 
     '     Module Core
     ' 
-    '         Function: BinaryCoreInternal, op_In, safeDivided, safeModule, safeMultiply
-    '                   UnaryCoreInternal, VectorAlignment
+    '         Function: BinaryCoreInternal, CreateScalarVectorInternal, op_In, safeDivided, safeModule
+    '                   safeMultiply, UnaryCoreInternal, VectorAlignment
     ' 
     ' 
     ' 

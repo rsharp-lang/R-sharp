@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d574825f86e87de6dca9b9d1bc1e651c, R-sharp\studio\R-terminal\CLI\CLI.vb"
+﻿#Region "Microsoft.VisualBasic::d574825f86e87de6dca9b9d1bc1e651c, E:/GCModeller/src/R-sharp/studio/R-terminal//CLI/CLI.vb"
 
     ' Author:
     ' 

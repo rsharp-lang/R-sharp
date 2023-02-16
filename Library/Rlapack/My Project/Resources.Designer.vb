@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c7fb717f927552f8cdc1f6dc63eab780, R-sharp\Library\Rlapack\My Project\Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::81a9b76217d735961af538a097ffcfc6, E:/GCModeller/src/R-sharp/Library/Rlapack//My Project/Resources.Designer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 32
     ' Comment Lines: 23
     '   Blank Lines: 8
-    '     File Size: 2.74 KB
+    '     File Size: 2.80 KB
 
 
     '     Module Resources

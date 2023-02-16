@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3cc8f5bcfcc1ebad6809c45cc2206d05, R-sharp\R#\System\Package\PackageFile\Serialization\BlockReader.vb"
+﻿#Region "Microsoft.VisualBasic::9468051fa99016d3273dfa1aff52020d, E:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Serialization/BlockReader.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 100
     ' Comment Lines: 6
     '   Blank Lines: 28
-    '     File Size: 6.55 KB
+    '     File Size: 6.68 KB
 
 
     '     Class BlockReader

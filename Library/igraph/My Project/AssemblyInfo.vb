@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4ba85c629ae961f58c0af564f2b2a948, R-sharp\Library\igraph\My Project\AssemblyInfo.vb"
+﻿#Region "Microsoft.VisualBasic::9bae3c7a0fc4b7d856ce638430983050, E:/GCModeller/src/R-sharp/Library/igraph//My Project/AssemblyInfo.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 17
     ' Comment Lines: 15
     '   Blank Lines: 6
-    '     File Size: 1.29 KB
+    '     File Size: 1.33 KB
 
 
     ' 

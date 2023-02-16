@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ea62b61b3df62432e5bad2fdc999dc7c, R-sharp\studio\Rsharp_kit\roxygenNet\My Project\Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::52f2dc3ec781b5d766f43d5ebe49995a, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//My Project/Resources.Designer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 31
     ' Comment Lines: 23
     '   Blank Lines: 8
-    '     File Size: 2.71 KB
+    '     File Size: 2.77 KB
 
 
     '     Module Resources

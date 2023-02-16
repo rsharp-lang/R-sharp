@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9e2e2bc8ee80daca741e09eae5efb443, R-sharp\R#\Test\tokenlicerTest.vb"
+﻿#Region "Microsoft.VisualBasic::e04a7a38dd9370f7aba3e6e3d3369d11, E:/GCModeller/src/R-sharp/R#/Test//tokenlicerTest.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 131
     ' Comment Lines: 4
     '   Blank Lines: 60
-    '     File Size: 4.63 KB
+    '     File Size: 4.83 KB
 
 
     ' Module tokenlicerTest

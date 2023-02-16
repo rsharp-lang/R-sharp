@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2b9010b037fef8a3474c96e8e14aa7cb, R-sharp\R#\System\Package\PackageFile\AssemblyPack.vb"
+﻿#Region "Microsoft.VisualBasic::a66b3b1bbb1f5ee3ebae6ebd052e6497, E:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/AssemblyPack.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 41
     ' Comment Lines: 19
     '   Blank Lines: 9
-    '     File Size: 2.59 KB
+    '     File Size: 2.65 KB
 
 
     '     Class AssemblyPack

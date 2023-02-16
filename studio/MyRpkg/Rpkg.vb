@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f05ad95a394f70e5abc9da221fa1f91c, R-sharp\studio\MyRpkg\Rpkg.vb"
+﻿#Region "Microsoft.VisualBasic::295a23f5bf3d991b287a4e773a81443b, E:/GCModeller/src/R-sharp/studio/MyRpkg//Rpkg.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 13
     ' Comment Lines: 0
     '   Blank Lines: 4
-    '     File Size: 418 B
+    '     File Size: 434 B
 
 
     ' Module Rpkg

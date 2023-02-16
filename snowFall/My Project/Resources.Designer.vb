@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a529c26f2f0d24e13e4aac939a16ae41, R-sharp\snowFall\My Project\Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::2f4526626982ec9ad68b622577b6df90, E:/GCModeller/src/R-sharp/snowFall//My Project/Resources.Designer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 31
     ' Comment Lines: 23
     '   Blank Lines: 8
-    '     File Size: 2.71 KB
+    '     File Size: 2.77 KB
 
 
     '     Module Resources

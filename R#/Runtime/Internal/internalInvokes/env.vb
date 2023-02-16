@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::88cb70ef656ef85fd196dde092d852e2, R-sharp\R#\Runtime\Internal\internalInvokes\env.vb"
+﻿#Region "Microsoft.VisualBasic::378294f29960fcbbdb6e0f2d67c39a8b, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/env.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 254
     ' Comment Lines: 184
     '   Blank Lines: 46
-    '     File Size: 21.59 KB
+    '     File Size: 22.07 KB
 
 
     '     Module env

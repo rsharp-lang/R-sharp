@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f9274f9550a36402f497baa039e0a18a, R-sharp\Library\Rlapack\math.vb"
+﻿#Region "Microsoft.VisualBasic::8b1591b28c568ce34f7825220118091e, E:/GCModeller/src/R-sharp/Library/Rlapack//math.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 486
     ' Comment Lines: 201
     '   Blank Lines: 95
-    '     File Size: 30.99 KB
+    '     File Size: 31.77 KB
 
 
     ' Module math

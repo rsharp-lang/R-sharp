@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6caef6aef437a8048d08693d327f308d, R-sharp\Library\base\utils\buffer.vb"
+﻿#Region "Microsoft.VisualBasic::6caef6aef437a8048d08693d327f308d, E:/GCModeller/src/R-sharp/Library/base//utils/buffer.vb"
 
     ' Author:
     ' 

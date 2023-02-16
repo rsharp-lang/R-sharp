@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5f4bc97553bba82470369f510ed640d5, R-sharp\studio\Rsharp_kit\roxygenNet\docs.vb"
+﻿#Region "Microsoft.VisualBasic::8e192fbdd4d0acb5ba132401eb5869da, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//docs.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 258
     ' Comment Lines: 21
     '   Blank Lines: 44
-    '     File Size: 12.19 KB
+    '     File Size: 12.47 KB
 
 
     ' Module docs

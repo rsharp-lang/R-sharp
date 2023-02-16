@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::53a1754a72731cd5e0cada1eddf806b4, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DeclareNewSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::53a1754a72731cd5e0cada1eddf806b4, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/DeclareNewSymbol.vb"
 
     ' Author:
     ' 

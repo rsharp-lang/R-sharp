@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9adf9990b18273bdcd4656d3f996d1b6, R-sharp\R#\System\Document\FunctionDeclare.vb"
+﻿#Region "Microsoft.VisualBasic::9adf9990b18273bdcd4656d3f996d1b6, E:/GCModeller/src/R-sharp/R#//System/Document/FunctionDeclare.vb"
 
     ' Author:
     ' 

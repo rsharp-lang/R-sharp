@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8cc50f6ae760386d47c401533bdd3844, R-sharp\R#\Runtime\Vectorization\GetVectorElement.vb"
+﻿#Region "Microsoft.VisualBasic::934b0447d506dd8d01a51a16a4541973, E:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/GetVectorElement.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 212
-    '    Code Lines: 152
-    ' Comment Lines: 32
-    '   Blank Lines: 28
-    '     File Size: 7.53 KB
+    '   Total Lines: 233
+    '    Code Lines: 158
+    ' Comment Lines: 45
+    '   Blank Lines: 30
+    '     File Size: 8.48 KB
 
 
     '     Class GetVectorElement
@@ -46,8 +46,8 @@
     '         Properties: [Error], elementType, isNullOrEmpty, Mode, size
     ' 
     '         Constructor: (+3 Overloads) Sub New
-    '         Function: CastTo, Create, DoesSizeMatch, (+2 Overloads) Getter, IsScalar
-    '                   Populate
+    '         Function: CastTo, Create, CreateVectorInternal, DoesSizeMatch, (+2 Overloads) Getter
+    '                   IsScalar, Populate
     ' 
     ' 
     ' /********************************************************************************/

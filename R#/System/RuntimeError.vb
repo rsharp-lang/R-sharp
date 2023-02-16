@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::759ccb1ad166d471b160bda51e9e794f, R-sharp\R#\System\RuntimeError.vb"
+﻿#Region "Microsoft.VisualBasic::759ccb1ad166d471b160bda51e9e794f, E:/GCModeller/src/R-sharp/R#//System/RuntimeError.vb"
 
     ' Author:
     ' 

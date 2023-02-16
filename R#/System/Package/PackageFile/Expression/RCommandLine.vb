@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fbb76e26937aa9225053c560c7b05c9f, R-sharp\R#\System\Package\PackageFile\Expression\RCommandLine.vb"
+﻿#Region "Microsoft.VisualBasic::35e7d8914ecbd5b4a760261a928f060e, E:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Expression/RCommandLine.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 40
-    '    Code Lines: 31
+    '   Total Lines: 43
+    '    Code Lines: 34
     ' Comment Lines: 0
     '   Blank Lines: 9
-    '     File Size: 1.48 KB
+    '     File Size: 1.62 KB
 
 
     '     Class RCommandLine

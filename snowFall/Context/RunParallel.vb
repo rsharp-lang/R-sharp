@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e58b44904da8fd80b3b1388347bad529, R-sharp\snowFall\Context\RunParallel.vb"
+﻿#Region "Microsoft.VisualBasic::f42a5df3ea5eadf64ffda7bfc3393513, E:/GCModeller/src/R-sharp/snowFall//Context/RunParallel.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 226
     ' Comment Lines: 33
     '   Blank Lines: 38
-    '     File Size: 11.57 KB
+    '     File Size: 11.86 KB
 
 
     ' Class RunParallel

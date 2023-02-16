@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::89efd94550174bb370d41833b290467d, R-sharp\studio\Rsharp_kit\MLkit\validation.vb"
+﻿#Region "Microsoft.VisualBasic::9c4b61cf09440b7ff4f8a5176913dd87, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//validation.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 124
     ' Comment Lines: 0
     '   Blank Lines: 15
-    '     File Size: 6.62 KB
+    '     File Size: 6.75 KB
 
 
     ' Module validation

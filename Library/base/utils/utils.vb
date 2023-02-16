@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bfd4816a01fd2da3fd4db042faad7dd4, R-sharp\Library\base\utils\utils.vb"
+﻿#Region "Microsoft.VisualBasic::c72e89213b805d4c21f6605431cd45c1, E:/GCModeller/src/R-sharp/Library/base//utils/utils.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 328
     ' Comment Lines: 110
     '   Blank Lines: 42
-    '     File Size: 20.46 KB
+    '     File Size: 20.94 KB
 
 
     ' Module utils

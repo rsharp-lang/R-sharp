@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5f5a30c7860d42e419336cf3606e8da3, R-sharp\R#\Runtime\Vectorization\Arithmetic\Divide.vb"
+﻿#Region "Microsoft.VisualBasic::44f3a69c379c478d3aa67c573b46b387, E:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/Arithmetic/Divide.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 29
     ' Comment Lines: 3
     '   Blank Lines: 5
-    '     File Size: 1.51 KB
+    '     File Size: 1.55 KB
 
 
     '     Class Divide

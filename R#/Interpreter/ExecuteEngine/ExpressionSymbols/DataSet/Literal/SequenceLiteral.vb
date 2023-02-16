@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5df0df7baa0a9e6f04afc8840005cfdb, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\SequenceLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::5df0df7baa0a9e6f04afc8840005cfdb, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/Literal/SequenceLiteral.vb"
 
     ' Author:
     ' 

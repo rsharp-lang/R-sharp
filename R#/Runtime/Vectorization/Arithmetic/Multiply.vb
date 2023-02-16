@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::87116cb76928c23acfde1f23604463c5, R-sharp\R#\Runtime\Vectorization\Arithmetic\Multiply.vb"
+﻿#Region "Microsoft.VisualBasic::c4b587e751ef2d1a03c5b9bae28e5e67, E:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/Arithmetic/Multiply.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 29
     ' Comment Lines: 3
     '   Blank Lines: 5
-    '     File Size: 1.53 KB
+    '     File Size: 1.57 KB
 
 
     '     Class Multiply

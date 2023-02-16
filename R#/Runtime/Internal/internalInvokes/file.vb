@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::67677cee848d6cf938dceff85a18d017, R-sharp\R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::e9c7851ebd934629830ff9487a87d7a0, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/file.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 818
     ' Comment Lines: 508
     '   Blank Lines: 136
-    '     File Size: 64.47 KB
+    '     File Size: 65.89 KB
 
 
     '     Module file

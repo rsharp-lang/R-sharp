@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::46b1434e1312d0d8b84cf0aaa1a7dd62, R-sharp\R#\Runtime\Serialize\bufferObjects\vectorBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::1d1bde7a3e8555614610e32830dfa74f, E:/GCModeller/src/R-sharp/R#//Runtime/Serialize/bufferObjects/vectorBuffer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 169
     ' Comment Lines: 10
     '   Blank Lines: 47
-    '     File Size: 7.88 KB
+    '     File Size: 8.10 KB
 
 
     '     Class vectorBuffer

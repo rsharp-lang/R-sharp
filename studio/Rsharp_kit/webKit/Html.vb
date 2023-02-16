@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::af2c6655070dbfe238afd6fb92ff6e53, R-sharp\studio\Rsharp_kit\webKit\Html.vb"
+﻿#Region "Microsoft.VisualBasic::af2c6655070dbfe238afd6fb92ff6e53, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//Html.vb"
 
     ' Author:
     ' 

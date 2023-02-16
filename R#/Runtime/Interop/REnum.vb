@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::547a3c2b52018c756a7eba0e28cc5a90, R-sharp\R#\Runtime\Interop\REnum.vb"
+﻿#Region "Microsoft.VisualBasic::547a3c2b52018c756a7eba0e28cc5a90, E:/GCModeller/src/R-sharp/R#//Runtime/Interop/REnum.vb"
 
     ' Author:
     ' 

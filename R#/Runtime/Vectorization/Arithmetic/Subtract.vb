@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::25b6c60c1b1af5c3541cc7fc3d70ffdd, R-sharp\R#\Runtime\Vectorization\Arithmetic\Subtract.vb"
+﻿#Region "Microsoft.VisualBasic::abd120220b78e77154d2aa1a9d73619e, E:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/Arithmetic/Subtract.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 29
     ' Comment Lines: 3
     '   Blank Lines: 5
-    '     File Size: 1.53 KB
+    '     File Size: 1.57 KB
 
 
     '     Class Subtract

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ba624add670843524ad814a9d878ce72, R-sharp\studio\Rsharp_kit\MLkit\Manifold.vb"
+﻿#Region "Microsoft.VisualBasic::ba624add670843524ad814a9d878ce72, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//Manifold.vb"
 
     ' Author:
     ' 

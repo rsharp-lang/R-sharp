@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5d59ae24875ed53888381b728a5ee0d1, R-sharp\R#\Runtime\Internal\internalInvokes\graphics\graphicsDevice.vb"
+﻿#Region "Microsoft.VisualBasic::8864d2b7f705e21d2b4bd60af5c13725, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/graphics/graphicsDevice.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 42
     ' Comment Lines: 33
     '   Blank Lines: 9
-    '     File Size: 2.76 KB
+    '     File Size: 2.84 KB
 
 
     '     Structure graphicsDevice

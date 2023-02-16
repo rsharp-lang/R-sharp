@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d6a468f225e1da483ea411eab6ea99aa, R-sharp\R#\Runtime\Internal\internalInvokes\Math\ranking.vb"
+﻿#Region "Microsoft.VisualBasic::d6a468f225e1da483ea411eab6ea99aa, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Math/ranking.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ac6da844177faf6e168cf1a98a2f0f0b, R-sharp\studio\Rserver\Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::ac6da844177faf6e168cf1a98a2f0f0b, E:/GCModeller/src/R-sharp/studio/Rserver//Rscript.vb"
 
     ' Author:
     ' 

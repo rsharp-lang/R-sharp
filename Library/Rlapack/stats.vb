@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::621483f103896da435e19193f569de63, R-sharp\Library\Rlapack\stats.vb"
+﻿#Region "Microsoft.VisualBasic::2705c5f731bfdf2737f4151ff49babd1, E:/GCModeller/src/R-sharp/Library/Rlapack//stats.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 655
     ' Comment Lines: 408
     '   Blank Lines: 122
-    '     File Size: 47.43 KB
+    '     File Size: 48.61 KB
 
 
     ' Module stats

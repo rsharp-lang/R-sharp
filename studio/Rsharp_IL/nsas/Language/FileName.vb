@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9174a1e6f5fd5b37f61b5173430ae923, R-sharp\studio\Rsharp_IL\nsas\Language\FileName.vb"
+﻿#Region "Microsoft.VisualBasic::b8481b42593e07677a00be8e89a454c6, E:/GCModeller/src/R-sharp/studio/Rsharp_IL/nsas//Language/FileName.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 2
     ' Comment Lines: 0
     '   Blank Lines: 1
-    '     File Size: 36 B
+    '     File Size: 34 B
 
 
     ' Class FileName
@@ -52,4 +52,3 @@
 Public Class FileName
 
 End Class
-

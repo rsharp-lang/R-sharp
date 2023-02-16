@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9ba827881d2a845843018044c3c1be44, R-sharp\R#\System\Package\PackageFile\FileSystem\RegularMatch.vb"
+﻿#Region "Microsoft.VisualBasic::b88567479e0bc86aa5af6a93f0faabe8, E:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/FileSystem/RegularMatch.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 17
     ' Comment Lines: 6
     '   Blank Lines: 6
-    '     File Size: 892 B
+    '     File Size: 920 B
 
 
     '     Class RegularMatch

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5d838d85e4e797bc2dc1cdc3e0af9c2b, R-sharp\R#\System\Package\NuGet\metadata\coreProperties.vb"
+﻿#Region "Microsoft.VisualBasic::5d838d85e4e797bc2dc1cdc3e0af9c2b, E:/GCModeller/src/R-sharp/R#//System/Package/NuGet/metadata/coreProperties.vb"
 
     ' Author:
     ' 

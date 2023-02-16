@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6d5426c7977f6be128d98d29db5a043e, R-sharp\R#\Runtime\Internal\objects\reflector.vb"
+﻿#Region "Microsoft.VisualBasic::1640c78c688b71b6e96f69231944c017, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/reflector.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 159
     ' Comment Lines: 22
     '   Blank Lines: 40
-    '     File Size: 8.13 KB
+    '     File Size: 8.35 KB
 
 
     '     Module reflector

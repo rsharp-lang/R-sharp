@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0b651564b004985a890db3bd029b07d4, R-sharp\Library\igraph\My Project\Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::c98a21aee0910ce1035bd42683b5039b, E:/GCModeller/src/R-sharp/Library/igraph//My Project/Resources.Designer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 32
     ' Comment Lines: 23
     '   Blank Lines: 8
-    '     File Size: 2.74 KB
+    '     File Size: 2.80 KB
 
 
     '     Module Resources

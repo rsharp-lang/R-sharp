@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a65839e4989e14a4f10c8b6e550e06c4, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DotNetObject.vb"
+﻿#Region "Microsoft.VisualBasic::81400af510d0dd089b5c50ea0f751e3f, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/DotNetObject.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 92
     ' Comment Lines: 7
     '   Blank Lines: 19
-    '     File Size: 4.60 KB
+    '     File Size: 4.71 KB
 
 
     '     Class DotNetObject

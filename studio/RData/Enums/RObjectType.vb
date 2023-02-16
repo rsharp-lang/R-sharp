@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ba5a00817ae4cf54bbb3ead0bf87ac86, R-sharp\studio\RData\Enums\RObjectType.vb"
+﻿#Region "Microsoft.VisualBasic::ba5a00817ae4cf54bbb3ead0bf87ac86, E:/GCModeller/src/R-sharp/studio/RData//Enums/RObjectType.vb"
 
     ' Author:
     ' 

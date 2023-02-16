@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1017958c80e837a8400955a577fe034f, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\Profiler.vb"
+﻿#Region "Microsoft.VisualBasic::5009f5a938c1a04a4171ab5753a3f4de, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Annotation/Profiler.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 46
     ' Comment Lines: 14
     '   Blank Lines: 10
-    '     File Size: 2.36 KB
+    '     File Size: 2.42 KB
 
 
     '     Class Profiler

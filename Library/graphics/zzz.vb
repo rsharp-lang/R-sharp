@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::14d6c454824d04b7edb40e4dc76a5817, R-sharp\Library\graphics\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::14d6c454824d04b7edb40e4dc76a5817, E:/GCModeller/src/R-sharp/Library/graphics//zzz.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9d5002536ca1a3bbd3bfc147e7188499, R-sharp\R#\Language\Syntax\SyntaxError.vb"
+﻿#Region "Microsoft.VisualBasic::9d5002536ca1a3bbd3bfc147e7188499, E:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxError.vb"
 
     ' Author:
     ' 

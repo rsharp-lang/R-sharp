@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f45b532fdedad1b0e37a344175e3fa70, R-sharp\R#\Runtime\Internal\objects\dataset\list.vb"
+﻿#Region "Microsoft.VisualBasic::868304c15f19ba9f6809b2a8908da628, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/list.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 273
     ' Comment Lines: 116
     '   Blank Lines: 63
-    '     File Size: 15.90 KB
+    '     File Size: 16.36 KB
 
 
     '     Class list

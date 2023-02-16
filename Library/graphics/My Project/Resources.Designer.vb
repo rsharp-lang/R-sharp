@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9325ea13e5d5454ac7be9618c35b82b0, R-sharp\Library\graphics\My Project\Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::53bb88659f195c2d30b0d514a2283c3e, E:/GCModeller/src/R-sharp/Library/graphics//My Project/Resources.Designer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 43
     ' Comment Lines: 48
     '   Blank Lines: 10
-    '     File Size: 4.12 KB
+    '     File Size: 4.22 KB
 
 
     '     Module Resources

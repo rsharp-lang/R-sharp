@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e2d42b98a00ef77b1689e7f98e547e8c, R-sharp\R#\Language\Syntax\SyntaxResult.vb"
+﻿#Region "Microsoft.VisualBasic::e2d42b98a00ef77b1689e7f98e547e8c, E:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxResult.vb"
 
     ' Author:
     ' 

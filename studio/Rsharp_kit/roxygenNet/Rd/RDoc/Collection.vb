@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::63b72c99ec114eada62e74377a9a6610, R-sharp\studio\Rsharp_kit\roxygenNet\Rd\RDoc\Collection.vb"
+﻿#Region "Microsoft.VisualBasic::2b1cf73859d154c522e738445d250e46, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//Rd/RDoc/Collection.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 9
     ' Comment Lines: 0
     '   Blank Lines: 6
-    '     File Size: 375 B
+    '     File Size: 389 B
 
 
     ' Class Item

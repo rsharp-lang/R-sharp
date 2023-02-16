@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::123a08e893fc3fedf6bfc14b82b28278, R-sharp\studio\Rsharp_kit\MLkit\hiddenMarkov.vb"
+﻿#Region "Microsoft.VisualBasic::123a08e893fc3fedf6bfc14b82b28278, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//hiddenMarkov.vb"
 
     ' Author:
     ' 
