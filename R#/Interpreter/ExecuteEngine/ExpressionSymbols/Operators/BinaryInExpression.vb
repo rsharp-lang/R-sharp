@@ -1,59 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::7fc6285d66233420a233fedcbcde24b2, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 182
-    '    Code Lines: 133
-    ' Comment Lines: 24
-    '   Blank Lines: 25
-    '     File Size: 7.29 KB
+' Summaries:
 
 
-    '     Class BinaryInExpression
-    ' 
-    '         Properties: [operator], expressionName, left, right, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, findTest, getIndex, testListIndex, testVectorIndexOf
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 182
+'    Code Lines: 133
+' Comment Lines: 24
+'   Blank Lines: 25
+'     File Size: 7.29 KB
+
+
+'     Class BinaryInExpression
+' 
+'         Properties: [operator], expressionName, left, right, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, findTest, getIndex, testListIndex, testVectorIndexOf
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -80,12 +81,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         Implements IBinaryExpression
 
         Public Overrides ReadOnly Property type As TypeCodes
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return TypeCodes.boolean
             End Get
         End Property
 
         Public Overrides ReadOnly Property expressionName As ExpressionTypes
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return ExpressionTypes.Binary
             End Get
@@ -95,6 +98,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         Public ReadOnly Property right As Expression Implements IBinaryExpression.right
 
         Public ReadOnly Property [operator] As String Implements IBinaryExpression.operator
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return "in"
             End Get

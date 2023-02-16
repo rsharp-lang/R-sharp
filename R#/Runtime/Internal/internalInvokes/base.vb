@@ -160,13 +160,13 @@ Namespace Runtime.Internal.Invokes
                 ' range(min, max) for in operator
                 ' example as:   x in range(1, 5)
                 ' the given vector x element in numeric range 1..5
-                Dim minMax As Double() = REnv.asVector(Of Double)(base.append(x, na_rm, env))
+                Dim minMax As Double() = CLRVector.asNumeric(base.append(x, na_rm, env))
                 Dim rangeVal As New DoubleRange(minMax)
 
                 Return rangeVal
             End If
 
-            Dim data As Double() = REnv.asVector(Of Double)(x)
+            Dim data As Double() = CLRVector.asNumeric(x)
 
             If na_rm Then
                 data = data.Where(Function(d) Not Double.IsNaN(d)).ToArray
@@ -285,8 +285,8 @@ Namespace Runtime.Internal.Invokes
                             Optional by As Object = 1.0,
                             Optional env As Environment = Nothing) As Object
 
-            Dim t1 As RType = RType.GetRSharpType(from.GetType)
-            Dim t2 As RType = RType.GetRSharpType([to].GetType)
+            Dim t1 As RType = RType.TypeOf(from)
+            Dim t2 As RType = RType.TypeOf([to])
 
             If t1.mode.IsNumeric AndAlso t2.mode.IsNumeric Then
                 Return Microsoft.VisualBasic.Math _
