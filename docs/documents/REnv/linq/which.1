@@ -1,0 +1,48 @@
+.\" man page create by R# package system.
+.TH LINQ 1 2002-May "which" "which"
+.SH NAME
+which \- Which indices are TRUE?
+.SH SYNOPSIS
+\fIwhich(\fBx\fR as any, 
+\fBtest\fR as any = \fB<NULL>\fR, 
+\fBpipelineFilter\fR as boolean = TRUE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Which indices are TRUE?
+ 
+ The which test filter, Give the TRUE indices of a logical 
+ object, allowing for array indices.
+.PP
+.SH OPTIONS
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.PP
+\fBx\fB \fR\- 
+ a logical vector or array. NAs are allowed and omitted
+ (treated as if FALSE).
+. 
+.PP
+.SH VALUE
+.PP
+an integer vector with length equal to sum(x), i.e., to 
+ the number of TRUEs in x; Basically, the result is 
+ \fB(1:length(x))[x]\fR.
+.PP
+.SH DETAILS
+.PP
+Unlike most other base R functions this does not coerce to 
+ x to logical: only arguments with typeof logical are 
+ accepted and others give an error.
+.PP
+.SH SEE ALSO
+linq
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@live.com\fR
+.SH COPYRIGHT
+GPL3

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e2a178ca16cf447ec8221230fb18d3d6, R-sharp\R#\Runtime\Internal\objects\dataset\vector.vb"
+﻿#Region "Microsoft.VisualBasic::bf832588e8fe029d01c8e2aaeb3c3ea5, R-sharp\R#\Runtime\Internal\objects\dataset\vector.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 320
+    '   Total Lines: 323
     '    Code Lines: 220
-    ' Comment Lines: 47
+    ' Comment Lines: 50
     '   Blank Lines: 53
-    '     File Size: 11.47 KB
+    '     File Size: 11.68 KB
 
 
     '     Class vector
@@ -243,12 +243,15 @@ Namespace Runtime.Internal.Object
         ''' 这个下标值应该是从1开始的
         ''' </param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' 这个函数是一个安全的函数，下表越界的时候按照R语言的处理规则，不会抛出错误，而是返回空值
+        ''' </remarks>
         Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
             If i < 0 Then
                 i = data.Length + i
             End If
 
-            If i > data.Length OrElse i <= 0 Then
+            If data.Length = 0 OrElse i > data.Length OrElse i <= 0 Then
                 Return Nothing
             Else
                 ' 下标是从1开始的

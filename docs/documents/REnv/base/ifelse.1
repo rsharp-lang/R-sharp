@@ -1,0 +1,50 @@
+.\" man page create by R# package system.
+.TH BASE 1 2002-May "ifelse" "ifelse"
+.SH NAME
+ifelse \- Conditional Element Selection
+.SH SYNOPSIS
+\fIifelse(\fBtest\fR as boolean, 
+\fByes\fR as any, 
+\fBno\fR as any, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Conditional Element Selection
+ 
+ ifelse returns a value with the same shape as test which is filled with 
+ elements selected from either yes or no depending on whether the 
+ element of test is \fBTRUE\fR or \fBFALSE\fR.
+.PP
+.SH OPTIONS
+.PP
+\fBtest\fB \fR\- an object which can be coerced to logical mode.. 
+.PP
+.PP
+\fByes\fB \fR\- return values for true elements of test.. 
+.PP
+.PP
+\fBno\fB \fR\- return values for false elements of test.. 
+.PP
+.SH VALUE
+.PP
+A vector of the same length and attributes (including dimensions and "class") 
+ as test and data values from the values of yes or no. The mode of the answer 
+ will be coerced from logical to accommodate first any values taken from yes 
+ and then any values taken from no.
+.PP
+.SH DETAILS
+.PP
+If yes or no are too short, their elements are recycled. yes will 
+ be evaluated if and only if any element of test is true, and 
+ analogously for no.
+ 
+ Missing values In test give missing values In the result.
+.PP
+.SH SEE ALSO
+base
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

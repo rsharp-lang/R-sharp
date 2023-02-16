@@ -168,4 +168,8 @@
 
   <Import Project="..\shares\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
 
+
+
+  <Import Project="..\shares\symbolic\symbolic.projitems" Label="Shared" />
+
 </Project>

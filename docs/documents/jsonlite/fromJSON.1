@@ -1,0 +1,72 @@
+.\" man page create by R# package system.
+.TH JSONLITE 4 2000-Jan "fromJSON" "fromJSON"
+.SH NAME
+fromJSON \- Convert R objects to/from JSON
+.SH SYNOPSIS
+\fIfromJSON(\fBtxt\fR as string, 
+\fBsimplifyVector\fR as boolean = TRUE, 
+\fBsimplifyDataFrame\fR as boolean = TRUE, 
+\fBsimplifyMatrix\fR as boolean = TRUE, 
+\fBflatten\fR as boolean = FALSE, 
+..., 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Convert R objects to/from JSON
+ 
+ These functions are used to convert between JSON data 
+ and R objects. The toJSON and fromJSON functions use a 
+ class based mapping, which follows conventions outlined 
+ in this paper: https://arxiv.org/abs/1403.2805 (also
+ available as vignette).
+.PP
+.SH OPTIONS
+.PP
+\fBtxt\fB \fR\- a JSON string, URL or file. 
+.PP
+.PP
+\fBsimplifyVector\fB \fR\- coerce JSON arrays containing only primitives into an atomic vector. 
+.PP
+.PP
+\fBsimplifyDataFrame\fB \fR\- coerce JSON arrays containing only records (JSON objects) into a data frame. 
+.PP
+.PP
+\fBsimplifyMatrix\fB \fR\- coerce JSON arrays containing vectors of equal mode and dimension into matrix or array. 
+.PP
+.PP
+\fBflatten\fB \fR\- automatically flatten nested data frames into a single non-nested data frame. 
+.PP
+.PP
+\fBargs\fB \fR\- arguments passed on to class specific print methods. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH DETAILS
+.PP
+The toJSON and fromJSON functions are drop-in replacements 
+ for the identically named functions in packages rjson and 
+ RJSONIO. Our implementation uses an alternative, somewhat 
+ more consistent mapping between R objects and JSON strings.
+ 
+ The serializeJSON and unserializeJSON functions in this 
+ package use an alternative system to convert between R objects 
+ and JSON, which supports more classes but is much more verbose.
+ A JSON string is always unicode, using UTF-8 by default, 
+ hence there is usually no need to escape any characters. 
+ However, the JSON format does support escaping of unicode 
+ characters, which are encoded using a backslash followed 
+ by a lower case "u" and 4 hex characters, for example: 
+ "Z\u00FCrich". The fromJSON function will parse such escape 
+ sequences but it is usually preferable to encode unicode 
+ characters in JSON using native UTF-8 rather than escape 
+ sequences.
+.PP
+.SH SEE ALSO
+jsonlite
+.SH FILES
+.PP
+base.dll
+.PP
+.SH AUTHOR
+Written by \fBJeroen Ooms <jeroen@berkeley.edu>\fR

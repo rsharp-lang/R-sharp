@@ -1,0 +1,62 @@
+.\" man page create by R# package system.
+.TH FILE 1 2002-May "dir.create" "dir.create"
+.SH NAME
+dir.create \- dir.create creates the last element of the path, unless recursive = TRUE.
+.SH SYNOPSIS
+\fIdir.create(\fBpath\fR as string, 
+\fBshowWarnings\fR as boolean = TRUE, 
+\fBrecursive\fR as boolean = FALSE, 
+\fBmode\fR as string = "0777");\fR
+.SH DESCRIPTION
+.PP
+dir.create creates the last element of the path, unless recursive = TRUE. 
+ Trailing path separators are discarded. On Windows drives are allowed in 
+ the path specification and unless the path is rooted, it will be interpreted 
+ relative to the current directory on that drive. mode is ignored on Windows.
+ 
+ One of the idiosyncrasies of Windows Is that directory creation may report 
+ success but create a directory with a different name, for example dir.create("G.S.") 
+ creates '"G.S"’. This is undocumented, and what are the precise circumstances 
+ is unknown (and might depend on the version of Windows). Also avoid directory 
+ names with a trailing space.
+.PP
+.SH OPTIONS
+.PP
+\fBpath\fB \fR\- a character vector containing a single path name.. 
+.PP
+.PP
+\fBshowWarnings\fB \fR\- logical; should the warnings on failure be shown?. 
+.PP
+.PP
+\fBrecursive\fB \fR\- logical. Should elements of the path other than the last be created? 
+ If true, Like the Unix command mkdir -p.. 
+.PP
+.PP
+\fBmode\fB \fR\- the mode To be used On Unix-alikes: it will be coerced by as.octmode. 
+ For Sys.chmod it Is recycled along paths.. 
+.PP
+.SH VALUE
+.PP
+dir.create and Sys.chmod return invisibly a logical vector indicating if 
+ the operation succeeded for each of the files attempted. Using a missing 
+ value for a path name will always be regarded as a failure. dir.create 
+ indicates failure if the directory already exists. If showWarnings = TRUE, 
+ dir.create will give a warning for an unexpected failure (e.g., not for a 
+ missing value nor for an already existing component for recursive = TRUE).
+.PP
+.SH DETAILS
+.PP
+There is no guarantee that these functions will handle Windows relative paths 
+ of the form ‘d:path’: try ‘d:./path’ instead. In particular, ‘d:’ is 
+ not recognized as a directory. Nor are \\?\ prefixes (and similar) supported.
+ 
+ UTF-8-encoded dirnames Not valid in the current locale can be used.
+.PP
+.SH SEE ALSO
+file
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

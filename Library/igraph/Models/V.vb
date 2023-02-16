@@ -67,7 +67,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Runtime.Internal.Object.Linq
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -92,6 +92,7 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property size As Integer Implements RIndex.length
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Get
             Return vertex.Length
         End Get
@@ -103,11 +104,13 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
     ''' <param name="id"></param>
     ''' <returns></returns>
     Default Public ReadOnly Property GetVertex(id As String) As Node
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Get
             Return vertexIndex.TryGetValue(id)
         End Get
     End Property
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Sub New(g As NetworkGraph, Optional allConnected As Boolean = False)
         Call Me.New(If(allConnected, g.connectedNodes, g.vertex))
     End Sub
@@ -125,6 +128,7 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
         i = vertex.Select(Function(v) v.label).Indexing
     End Sub
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function index(vlabs As IEnumerable(Of String), Optional base As Integer = 1) As Integer()
         Return vlabs _
             .Select(Function(lab)
@@ -135,14 +139,17 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
 
 #Region "Node Attribute Data"
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function setNames(names() As String, envir As Environment) As Object Implements RNames.setNames
         Throw New NotImplementedException()
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function hasName(name As String) As Boolean Implements RNames.hasName
         Return name Like dataNames
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function getNames() As String() Implements IReflector.getNames
         Return dataNames.Objects
     End Function
@@ -164,6 +171,7 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
         Return (From v As Node In vertex Select v.data(name)).ToArray
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function getByName(names() As String) As Object Implements RNameIndex.getByName
         Return New list With {
             .slots = names _
@@ -175,7 +183,7 @@ Public Class V : Implements RNames, RNameIndex, RIndex, RIndexer
     End Function
 
     Public Function setByName(name As String, value As Object, envir As Environment) As Object Implements RNameIndex.setByName
-        Dim data As String() = RCType.safeCharacters(value)
+        Dim data As String() = CLRVector.safeCharacters(value)
 
         If name = "label" Then
             For i As Integer = 0 To vertex.Length - 1

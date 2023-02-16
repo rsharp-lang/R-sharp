@@ -41,7 +41,7 @@ const platformName = function() {
 #' @param outputdir the output directory path for 
 #'    save the html documents.
 #' 
-const Rdocuments = function(pkgName, outputdir = "./") {
+const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
 	const template as string = "templates/Rdocumentation.html" 
 	|> system.file(package = "REnv") 
 	|> readText()
@@ -63,7 +63,7 @@ const Rdocuments = function(pkgName, outputdir = "./") {
 	}
 	
 	pkgName
-	|> makehtml.docs()
+	|> makehtml.docs(package = package)
 	|> writeLines(con = `${outputdir}/../${docs_dir}.html`)
 	;
 }

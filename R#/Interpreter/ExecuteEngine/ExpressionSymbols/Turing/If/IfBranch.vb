@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b4151ff64f649f8c10c6ee38ebe94a76, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfBranch.vb"
+﻿#Region "Microsoft.VisualBasic::0bf0b41b9ee5d67436286f99c22504a8, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfBranch.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 100
-    '    Code Lines: 85
+    '   Total Lines: 101
+    '    Code Lines: 86
     ' Comment Lines: 0
     '   Blank Lines: 15
-    '     File Size: 3.80 KB
+    '     File Size: 3.84 KB
 
 
     '     Class IfBranch
@@ -61,6 +61,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -121,7 +122,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 Return test
             End If
 
-            Dim flags As Boolean() = Vectorization.asLogical(test)
+            Dim flags As Boolean() = CLRVector.asLogical(test)
 
             If flags.Length = 0 Then
                 Return Internal.debug.stop({

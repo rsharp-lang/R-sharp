@@ -1,0 +1,45 @@
+.\" man page create by R# package system.
+.TH STATS 1 2000-Jan "var.test" "var.test"
+.SH NAME
+var.test \- F Test to Compare Two Variances
+.SH SYNOPSIS
+\fIvar.test(\fBx\fR as any, 
+\fBy\fR as any, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+F Test to Compare Two Variances
+ 
+ Performs an F test to compare the variances of
+ two samples from normal populations.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- 
+ numeric vectors of data values, or fitted linear model objects 
+ (inheriting from class "lm").
+. 
+.PP
+.PP
+\fBy\fB \fR\- 
+ numeric vectors of data values, or fitted linear model objects 
+ (inheriting from class "lm").
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH DETAILS
+.PP
+The null hypothesis is that the ratio of the variances of the 
+ populations from which x and y were drawn, or in the data to 
+ which the linear models x and y were fitted, is equal to ratio.
+.PP
+.SH SEE ALSO
+stats
+.SH FILES
+.PP
+Rlapack.dll
+.PP
+.SH COPYRIGHT
+GPL3

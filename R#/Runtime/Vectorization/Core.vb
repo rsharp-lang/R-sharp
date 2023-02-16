@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::407a003d7d02cf200c5b350867c8a847, R-sharp\R#\Runtime\Vectorization\Core.vb"
+﻿#Region "Microsoft.VisualBasic::39c8ec8a3bd9abeeaddf7799574693c9, R-sharp\R#\Runtime\Vectorization\Core.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 300
-    '    Code Lines: 199
-    ' Comment Lines: 56
-    '   Blank Lines: 45
-    '     File Size: 11.19 KB
+    '   Total Lines: 243
+    '    Code Lines: 154
+    ' Comment Lines: 50
+    '   Blank Lines: 39
+    '     File Size: 9.10 KB
 
 
     '     Delegate Function
@@ -46,8 +46,8 @@
     ' 
     '     Module Core
     ' 
-    '         Function: asLogical, BinaryCoreInternal, op_In, safeDivided, safeModule
-    '                   safeMultiply, UnaryCoreInternal, VectorAlignment
+    '         Function: BinaryCoreInternal, op_In, safeDivided, safeModule, safeMultiply
+    '                   UnaryCoreInternal, VectorAlignment
     ' 
     ' 
     ' 
@@ -61,7 +61,6 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Vectorization
 
@@ -78,65 +77,6 @@ Namespace Runtime.Vectorization
     ''' Operator impl core
     ''' </summary>
     Public Module Core
-
-        ReadOnly numericTypes As Index(Of Type) = {GetType(Integer), GetType(Long), GetType(Double), GetType(Single)}
-
-        ''' <summary>
-        ''' NULL -> false
-        ''' </summary>
-        ''' <param name="x"></param>
-        ''' <returns></returns>
-        Public Function asLogical(x As Object) As Boolean()
-            If x Is Nothing Then
-                Return {False}
-            End If
-
-            Dim vector As Array = REnv.asVector(Of Object)(x)
-            Dim type As Type
-
-            If vector.Length = 0 Then
-                Return {}
-            Else
-                Dim test As Object = (From obj As Object
-                                      In vector.AsQueryable
-                                      Where Not obj Is Nothing).FirstOrDefault
-
-                If Not test Is Nothing Then
-                    type = test.GetType
-                Else
-                    ' all is nothing?
-                    Return (From obj As Object
-                            In vector.AsQueryable
-                            Select False).ToArray
-                End If
-            End If
-
-            If type Is GetType(Boolean) Then
-                Return vector.AsObjectEnumerator _
-                    .Select(Function(b)
-                                If b Is Nothing Then
-                                    Return False
-                                Else
-                                    Return DirectCast(b, Boolean)
-                                End If
-                            End Function) _
-                    .ToArray
-            ElseIf type Like numericTypes Then
-                Return vector.AsObjectEnumerator _
-                    .Select(Function(num) CDbl(num) <> 0) _
-                    .ToArray
-            ElseIf type Is GetType(String) Then
-                Return vector.AsObjectEnumerator _
-                    .Select(Function(o)
-                                Return DirectCast(o, String).ParseBoolean
-                            End Function) _
-                    .ToArray
-            Else
-                Return vector.AsObjectEnumerator _
-                    .Select(Function(o) Not o Is Nothing) _
-                    .ToArray
-            End If
-        End Function
 
         ''' <summary>
         ''' The ``In`` operator
@@ -194,6 +134,7 @@ Namespace Runtime.Vectorization
         Public ReadOnly op_Mod As Func(Of Object, Object, Object) = AddressOf safeModule
         Public ReadOnly op_Power As Func(Of Object, Object, Object) = Function(x, y) CDbl(x) ^ CDbl(y)
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Function safeModule(x As Object, y As Object) As Object
             If x = 0.0 OrElse x = 0 Then
                 Return 0
@@ -202,6 +143,7 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Function safeDivided(x As Object, y As Object) As Object
             If x = 0.0 OrElse x = 0 Then
                 Return 0
@@ -210,6 +152,7 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Function safeMultiply(x As Object, y As Object) As Object
             If x = 0.0 OrElse y = 0.0 OrElse x = 0 OrElse y = 0 Then
                 Return 0
@@ -240,6 +183,16 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
+        Private Function CreateScalarVectorInternal(Of TOut)(x As Object, y As Object, [do] As op_evaluator, env As Environment) As Object
+            Dim result As Object = [do](x, y, env)
+
+            If Program.isException(result) Then
+                Return result
+            Else
+                Return New TOut() {DirectCast(result, TOut)}
+            End If
+        End Function
+
         ''' <summary>
         ''' this function just apply for the custom operator
         ''' 
@@ -260,14 +213,16 @@ Namespace Runtime.Vectorization
             Dim result As Object
 
             If vx.Mode = VectorTypes.Scalar AndAlso vy.Mode = VectorTypes.Scalar Then
-                result = [do](vx.single, vy.single, env)
-
-                If Program.isException(result) Then
-                    Return result
-                Else
-                    Return New TOut() {DirectCast(result, TOut)}
-                End If
+                Return CreateScalarVectorInternal(Of TOut)(vx.single, vy.single, [do], env)
+            ElseIf vx.Mode = VectorTypes.Scalar AndAlso vy.Mode = VectorTypes.None Then
+                Return CreateScalarVectorInternal(Of TOut)(vx.single, Nothing, [do], env)
+            ElseIf vx.Mode = VectorTypes.None AndAlso vy.Mode = VectorTypes.Scalar Then
+                Return CreateScalarVectorInternal(Of TOut)(Nothing, vy.single, [do], env)
+            ElseIf vx.Mode = VectorTypes.None AndAlso vy.Mode = VectorTypes.None Then
+                Return CreateScalarVectorInternal(Of TOut)(Nothing, Nothing, [do], env)
             End If
+
+            ' 20230216 the vx and vy has been ensure that not nothing
 
             Dim populater As New List(Of TOut)
 

@@ -1,0 +1,39 @@
+.\" man page create by R# package system.
+.TH SET 1 2002-May "rev" "rev"
+.SH NAME
+rev \- Reverse Elements
+.SH SYNOPSIS
+\fIrev(\fBx\fR as any, 
+..., 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Reverse Elements
+ 
+ rev provides a reversed version of its argument. 
+ It is generic function with a default method for 
+ vectors and one for dendrograms.
+ 
+ Note that this Is no longer needed (nor efficient) 
+ For obtaining vectors sorted into descending order,
+ since that Is now rather more directly achievable 
+ by sort(x, decreasing = True).
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- 
+ a vector Or another Object For which reversal Is 
+ defined.
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+set
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1a83cc9aa1bfc8825685347109a77a99, R-sharp\R#\Runtime\Internal\internalInvokes\Math\math.vb"
+﻿#Region "Microsoft.VisualBasic::d3191dadcddfb9f7680f0ce3d9eb22dd, R-sharp\R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
     ' Author:
     ' 
@@ -34,23 +34,32 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 819
-    '    Code Lines: 362
-    ' Comment Lines: 383
-    '   Blank Lines: 74
-    '     File Size: 35.64 KB
+    '   Total Lines: 885
+    '    Code Lines: 408
+    ' Comment Lines: 394
+    '   Blank Lines: 83
+    '     File Size: 37.31 KB
 
 
     '     Module math
     ' 
-    '         Function: abs, cluster1D, cos, diff, exp
-    '                   getRandom, isFinite, isInfinite, isNaN, log
-    '                   log10, log2, max, mean, median
-    '                   min, numericClassTags, pearson, pow, rnorm
-    '                   round, rsd, runif, sample, sample_int
-    '                   sd, sin, sqrt, sum, var
+    '         Function: abs, cluster1D, cor_test, cos, diff
+    '                   exp, getRandom, isFinite, isInfinite, isNaN
+    '                   log, log10, log2, max, mean
+    '                   median, min, numericClassTags, pearson, pow
+    '                   rnorm, round, rsd, runif, sample
+    '                   sample_int, sd, sin, sqrt, sum
+    '                   var
     ' 
     '         Sub: set_seed
+    '         Class corTestResult
+    ' 
+    '             Properties: cor, df, prob2, pvalue, t
+    '                         z
+    ' 
+    '             Function: ToString
+    ' 
+    ' 
     ' 
     ' 
     ' /********************************************************************************/
@@ -67,6 +76,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports stdNum = System.Math
@@ -298,7 +308,7 @@ Namespace Runtime.Internal.Invokes
 
             Select Case elementType
                 Case GetType(Boolean)
-                    Return Vectorization.asLogical(array).Select(Function(b) If(b, 1, 0)).Sum
+                    Return CLRVector.asLogical(array).Select(Function(b) If(b, 1, 0)).Sum
                 Case GetType(Integer), GetType(Long), GetType(Short), GetType(Byte)
                     Return Runtime.asVector(Of Long)(x).AsObjectEnumerator(Of Long).Sum
                 Case Else

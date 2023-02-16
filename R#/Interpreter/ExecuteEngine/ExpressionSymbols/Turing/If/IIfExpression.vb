@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::eaafe12f5bab59e462009ce74b1163cf, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IIfExpression.vb"
+﻿#Region "Microsoft.VisualBasic::608f64539d413747299281c738077f1e, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IIfExpression.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 43
     ' Comment Lines: 3
     '   Blank Lines: 10
-    '     File Size: 1.97 KB
+    '     File Size: 1.98 KB
 
 
     '     Class IIfExpression
@@ -58,7 +58,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -95,7 +95,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim ifTestResult = ifTest.Evaluate(envir)
-            Dim test As Boolean = Vectorization.asLogical(ifTestResult)(Scan0)
+            Dim test As Boolean = CLRVector.asLogical(ifTestResult)(Scan0)
 
             If test = True Then
                 Return trueResult.Evaluate(envir)

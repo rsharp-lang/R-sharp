@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2109a413c6e4473e335473ddbc660861, R-sharp\Library\base\utils\utils.vb"
+﻿#Region "Microsoft.VisualBasic::bfd4816a01fd2da3fd4db042faad7dd4, R-sharp\Library\base\utils\utils.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 429
-    '    Code Lines: 298
-    ' Comment Lines: 95
-    '   Blank Lines: 36
-    '     File Size: 18.90 KB
+    '   Total Lines: 480
+    '    Code Lines: 328
+    ' Comment Lines: 110
+    '   Blank Lines: 42
+    '     File Size: 20.46 KB
 
 
     ' Module utils
     ' 
-    '     Function: ensureRowNames, MeasureGenericType, parseRData, printRawTable, read_csv
-    '               saveGeneric, saveTextFile, setRowNames, write_csv
+    '     Function: ensureRowNames, loadCsv, MeasureGenericType, parseRData, printRawTable
+    '               read_csv, saveGeneric, saveTextFile, setRowNames, write_csv
     ' 
     '     Sub: Main
     ' 
@@ -83,6 +83,8 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports Rsharp = SMRUCC.Rsharp
 Imports textStream = System.IO.StreamReader
+Imports csvData = Microsoft.VisualBasic.Data.csv.IO.DataFrame
+Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
 
 ''' <summary>
 ''' The R Utils Package 
@@ -128,6 +130,48 @@ Public Module utils
         Next
 
         Return matrix.Print(False)
+    End Function
+
+    ''' <summary>
+    ''' load csv as a .NET CLR object vector
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="type">
+    ''' the object type value, and it should be one of the:
+    ''' 
+    ''' 1. class name from the <see cref="RTypeExportAttribute"/>
+    ''' 2. .NET CLR <see cref="Type"/> value
+    ''' 3. R-sharp <see cref="RType"/> value
+    ''' 4. R-sharp primitive <see cref="TypeCodes"/> value
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("load.csv")>
+    Public Function loadCsv(<RRawVectorArgument> file As Object, type As Object,
+                            Optional encoding As Object = "unknown",
+                            Optional tsv As Boolean = False,
+                            Optional env As Environment = Nothing) As Object
+
+        Dim textEncoding As Encoding = Rsharp.GetEncoding(encoding)
+        Dim typeinfo As Type = env.globalEnvironment.GetType([typeof]:=type)
+        Dim buffer = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
+
+        If buffer Like GetType(Message) Then
+            Return buffer.TryCast(Of Message)
+        End If
+
+        ' read csv data
+        Dim reader As csvData = csvData.Load(
+            stream:=buffer.TryCast(Of Stream),
+            encoding:=textEncoding,
+            isTsv:=tsv
+        )
+        Dim seq As Array = reader _
+            .LoadDataToObject(typeinfo, strict:=False, metaBlank:="", silent:=True) _
+            .ToArray
+        Dim generic As Array = REnv.TryCastGenericArray(seq, env)
+
+        Return generic
     End Function
 
     ''' <summary>
@@ -358,6 +402,10 @@ Public Module utils
             Dim ms As New MemoryStream
             Dim text As String
 
+            If document Like GetType(Message) Then
+                Return document.TryCast(Of Message)
+            End If
+
             StreamIO.SaveDataFrame(document, ms, Encoding.UTF8, tsv:=tsv, silent:=False)
             ms.Flush()
             text = Encoding.UTF8.GetString(ms.ToArray)
@@ -402,15 +450,18 @@ Public Module utils
                 Return x
             End If
 
-            Return DirectCast(x, Rdataframe) _
-                .DataFrameRows(row_names, formatNumber, env) _
-                .Save(
+            Dim value = DirectCast(x, Rdataframe).DataFrameRows(row_names, formatNumber, env)
+
+            If value Like GetType(Message) Then
+                Return value.TryCast(Of Message)
+            Else
+                Return value.TryCast(Of csv).Save(
                     path:=file,
                     encoding:=encoding,
                     silent:=True,
                     tsv:=tsv
                 )
-
+            End If
         ElseIf type Is GetType(file) Then
             Return DirectCast(x, file).Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf type Is GetType(IO.DataFrame) Then

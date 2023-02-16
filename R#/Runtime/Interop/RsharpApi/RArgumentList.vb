@@ -1,59 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::139f2aabd6d722ddb8539e3c122624a3, R-sharp\R#\Runtime\Interop\RsharpApi\RArgumentList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 363
-    '    Code Lines: 253
-    ' Comment Lines: 65
-    '   Blank Lines: 45
-    '     File Size: 15.88 KB
+' Summaries:
 
 
-    '     Class RArgumentList
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: CreateLeftMarginArguments, CreateObjectListArguments, CreateRightMarginArguments, fillOptionalArguments, objectListArgumentIndex
-    '                   objectListArgumentMargin, TryCastListObjects
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 363
+'    Code Lines: 253
+' Comment Lines: 65
+'   Blank Lines: 45
+'     File Size: 15.88 KB
+
+
+'     Class RArgumentList
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: CreateLeftMarginArguments, CreateObjectListArguments, CreateRightMarginArguments, fillOptionalArguments, objectListArgumentIndex
+'                   objectListArgumentMargin, TryCastListObjects
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -194,6 +195,18 @@ Namespace Runtime.Interop
             Return parameterVals
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="parameterVals"></param>
+        ''' <param name="listIndex"></param>
+        ''' <param name="argument"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' error message could be put into this return array, and the callee 
+        ''' function will check the error message and then populate out to the
+        ''' upper environment context
+        ''' </returns>
         Private Shared Function TryCastListObjects(parameterVals As Object(), listIndex As Integer, argument As RMethodArgument, env As Environment) As Object()
             Dim values = parameterVals(listIndex)
 
@@ -202,10 +215,37 @@ Namespace Runtime.Interop
                     .slots = New Dictionary(Of String, Object)
                 }
                 Dim value As Object
+                Dim listArgsSlotKey As String
 
+                ' push arguments to the list at here
+                ' the symbol name is not so importants?
                 For Each val As InvokeParameter In DirectCast(values, InvokeParameter())
+                    listArgsSlotKey = val.name
+
+                    If val.name.StringEmpty Then
+                        'Return New Object() {
+                        '    Internal.debug.stop({
+                        '        $"invalid parameter name, name value could not be nothing!",
+                        '        $"exp: {val.ToString}"
+                        '    }, env)
+                        '}
+
+                        ' 20230214 the missing name should not crash
+                        ' the scripting environment when construct a
+                        ' new argument list object parameter
+                        '
+                        ' so we create an temp name by its list index
+                        ' value at here
+                        listArgsSlotKey = $"${val.index}"
+                    End If
+
                     value = val.Evaluate(env)
-                    list.slots.Add(val.name, value)
+
+                    If Program.isException(value) Then
+                        Return New Object() {value}
+                    Else
+                        list.slots.Add(listArgsSlotKey, value)
+                    End If
                 Next
 
                 parameterVals(listIndex) = list

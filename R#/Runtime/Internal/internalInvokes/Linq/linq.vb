@@ -1,59 +1,59 @@
-﻿#Region "Microsoft.VisualBasic::0bc665c7102a3228bf242da7925a2219, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::a5c4716e538c7507bbff0e1f5eaf1814, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 1250
-'    Code Lines: 705
-' Comment Lines: 405
-'   Blank Lines: 140
-'     File Size: 56.15 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module linq
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: all, any, doWhile, fastIndexing, first
-'                   getPredicate, groupBy, groupsSummary, groupSummary, last
-'                   left_join, match, orderBy, produceKeyedSequence, progress
-'                   projectAs, reverse, rotate_left, rotate_right, runFilterPipeline
-'                   runWhichFilter, skip, sort, split, splitByPartitionSize
-'                   take, tryKeyBy, unique, where, whichMax
-'                   whichMin
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 1357
+    '    Code Lines: 779
+    ' Comment Lines: 428
+    '   Blank Lines: 150
+    '     File Size: 60.81 KB
+
+
+    '     Module linq
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: all, any, doWhile, fastIndexing, first
+    '                   getPredicate, groupBy, groupsSummary, groupSummary, last
+    '                   left_join, match, orderBy, produceKeyedSequence, progress
+    '                   projectAs, reverse, rotate_left, rotate_right, runFilterPipeline
+    '                   runWhichFilter, skip, sort, sortByKeyFunction, sortByKeyValue
+    '                   split, splitByPartitionSize, take, tryKeyBy, unique
+    '                   where, whichMax, whichMin
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -74,6 +74,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports obj = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
@@ -493,7 +494,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             If test Is Nothing Then
                 ' test for which index
-                Return which.IsTrue(Vectorization.asLogical(x), offset:=1)
+                Return which.IsTrue(CLRVector.asLogical(x), offset:=1)
             ElseIf TypeOf x Is pipeline Then
                 ' run in pipeline mode
                 Return runFilterPipeline(x, test, pipelineFilter, env)
@@ -611,7 +612,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                 Dim arg = InvokeParameter.CreateLiterals(item)
                                 Dim result = DirectCast(test, RFunction).Invoke(env, arg)
 
-                                Return Vectorization.asLogical(result)(Scan0)
+                                Return CLRVector.asLogical(result)(Scan0)
                             End Function
             ElseIf TypeOf test Is Predicate(Of Object) Then
                 predicate = DirectCast(test, Predicate(Of Object))
@@ -778,7 +779,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             For Each item As Object In Rset.getObjectSet(sequence, envir)
                 arg = InvokeParameter.CreateLiterals(item)
-                pass = Vectorization.asLogical(test.Invoke(envir, arg))(Scan0)
+                pass = CLRVector.asLogical(test.Invoke(envir, arg))(Scan0)
 
                 If pass Then
                     Return item
@@ -817,7 +818,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             For Each item As Object In Rset.getObjectSet(sequence, envir)
                 arg = InvokeParameter.CreateLiterals(item)
-                pass = Vectorization.asLogical(test.Invoke(envir, arg))(Scan0)
+                pass = CLRVector.asLogical(test.Invoke(envir, arg))(Scan0)
 
                 If pass Then
                     lastVal = item
@@ -1261,7 +1262,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("any")>
         Public Function any(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
-            Return Vectorization.asLogical(test).Any(Function(b) b = True)
+            Return CLRVector.asLogical(test).Any(Function(b) b = True)
         End Function
 
         ''' <summary>
@@ -1290,7 +1291,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("all")>
         Public Function all(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
-            Return Vectorization.asLogical(test).All(Function(b) b = True)
+            Return CLRVector.asLogical(test).All(Function(b) b = True)
         End Function
 
         <ExportAPI("while")>

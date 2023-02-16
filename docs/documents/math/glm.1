@@ -1,0 +1,56 @@
+.\" man page create by R# package system.
+.TH MATH 2 2000-Jan "glm" "glm"
+.SH NAME
+glm \- Fitting Generalized Linear Models
+.SH SYNOPSIS
+\fIglm(\fBformula\fR as <generic> FormulaExpression, 
+\fBfamily\fR as any, 
+\fBdata\fR as any, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Fitting Generalized Linear Models
+ 
+ glm is used to fit generalized linear models, specified by 
+ giving a symbolic description of the linear predictor and
+ a description of the error distribution.
+.PP
+.SH OPTIONS
+.PP
+\fBformula\fB \fR\- 
+ an object of class "formula" (Or one that can be coerced to
+ that class): a symbolic description Of the model To be fitted.
+ The details Of model specification are given under 'Details’.
+. 
+.PP
+.PP
+\fBfamily\fB \fR\- 
+ a description of the error distribution and link function to 
+ be used in the model. For glm this can be a character string 
+ naming a family function, a family function or the result of 
+ a call to a family function. For glm.fit only the third option 
+ is supported. (See family for details of family functions.)
+. 
+.PP
+.PP
+\fBdata\fB \fR\- 
+ an optional data frame, list or environment (or object coercible
+ by as.data.frame to a data frame) containing the variables in 
+ the model. If not found in data, the variables are taken from 
+ environment(formula), typically the environment from which glm 
+ is called.
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+math
+.SH FILES
+.PP
+Rlapack.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@live.com\fR
+.SH COPYRIGHT
+GPL3

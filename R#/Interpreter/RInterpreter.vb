@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::28956229c596335b8a2359c93ee56f58, R-sharp\R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::5cdbad1369f37b574fc672ffe5a63a9b, R-sharp\R#\Interpreter\RInterpreter.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 621
+    '   Total Lines: 628
     '    Code Lines: 382
-    ' Comment Lines: 144
+    ' Comment Lines: 151
     '   Blank Lines: 95
-    '     File Size: 24.90 KB
+    '     File Size: 25.73 KB
 
 
     '     Class RInterpreter
@@ -641,6 +641,13 @@ Namespace Interpreter
             End SyncLock
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="configs">
+        ''' the filepath of the configuration file
+        ''' </param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Shared Function FromEnvironmentConfiguration(configs As String) As RInterpreter

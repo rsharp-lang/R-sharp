@@ -1,0 +1,54 @@
+.\" man page create by R# package system.
+.TH FILE 1 2002-May "file.path" "file.path"
+.SH NAME
+file.path \- Construct Path to File
+.SH SYNOPSIS
+\fIfile.path(..., 
+\fBfsep\fR as string = "/", 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Construct Path to File
+ 
+ Construct the path to a file from components in a
+ platform-independent way.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- character vectors.  Long vectors are not supported.. 
+.PP
+.PP
+\fBfsep\fB \fR\- the path separator to use (assumed to be ASCII).
+ The components are by default separated by ‘/’ (not ‘\’) on
+ Windows.
+. 
+.PP
+.SH VALUE
+.PP
+A character vector of the arguments concatenated term-by-term and
+ separated by 'fsep’ if all arguments have positive length;
+ otherwise, an empty character vector (unlike 'paste’).
+
+ An element Of the result will be marked (see 'Encoding’ as UTF-8
+ If run In a UTF-8 locale (When marked inputs are converted To
+ UTF-8) Or if an component of the result Is marked as UTF-8, Or as
+ Latin-1 in a non-Latin-1 locale.
+.PP
+.SH DETAILS
+.PP
+The implementation is designed to be fast (faster than ‘paste’) as
+ this Function is() used extensively In R itself.
+ It can also be used for environment paths such as 'PATH’ and
+ 'R_LIBS’ with ‘fsep = .Platform$path.sep’.
+ Trailing Path separators are invalid For Windows file paths apart
+ from '/’ and ‘d:/’ (although some functions/utilities do accept
+ them), so a trailing '/’ or ‘\’ is removed there.
+.PP
+.SH SEE ALSO
+file
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

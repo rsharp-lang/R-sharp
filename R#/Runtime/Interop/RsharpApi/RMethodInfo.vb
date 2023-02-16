@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f0d75a3faaa93d3c022a88ec52306f26, R-sharp\R#\Runtime\Interop\RsharpApi\RMethodInfo.vb"
+﻿#Region "Microsoft.VisualBasic::358044940fcbfa8bbd7a4d2dad2d7db4, R-sharp\R#\Runtime\Interop\RsharpApi\RMethodInfo.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 410
-    '    Code Lines: 274
-    ' Comment Lines: 88
-    '   Blank Lines: 48
-    '     File Size: 16.64 KB
+    '   Total Lines: 449
+    '    Code Lines: 298
+    ' Comment Lines: 97
+    '   Blank Lines: 54
+    '     File Size: 18.23 KB
 
 
     '     Class RMethodInfo
@@ -47,8 +47,8 @@
     ' 
     '         Constructor: (+3 Overloads) Sub New
     '         Function: createNormalArguments, CreateParameterArrayFromListArgument, getArguments, GetPackageInfo, GetPrintContent
-    '                   GetRawDeclares, getReturns, getValue, (+2 Overloads) Invoke, missingParameter
-    '                   parseParameters, ToString
+    '                   GetRawDeclares, getReturns, GetUnionTypes, getValue, (+2 Overloads) Invoke
+    '                   missingParameter, parseParameters, ToString
     ' 
     ' 
     ' /********************************************************************************/

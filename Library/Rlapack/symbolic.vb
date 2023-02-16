@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a09eedd9eb7700a5fcfcd4091ee074fb, R-sharp\Library\Rlapack\symbolic.vb"
+﻿#Region "Microsoft.VisualBasic::b4746d1993d8022740fbe0d805eb0536, R-sharp\Library\Rlapack\symbolic.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 48
-    '    Code Lines: 33
-    ' Comment Lines: 9
-    '   Blank Lines: 6
-    '     File Size: 1.82 KB
+    '   Total Lines: 70
+    '    Code Lines: 49
+    ' Comment Lines: 14
+    '   Blank Lines: 7
+    '     File Size: 2.90 KB
 
 
     ' Module symbolic
     ' 
-    '     Function: ParseExpression, ParseMathML, PolynomialParse
+    '     Function: lambda, ParseExpression, ParseMathML, PolynomialParse
     ' 
     ' /********************************************************************************/
 
@@ -56,7 +56,10 @@ Imports Microsoft.VisualBasic.Math.Scripting
 Imports Microsoft.VisualBasic.Math.Scripting.MathExpression.Impl
 Imports Microsoft.VisualBasic.MIME.application.xml.MathML
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -90,6 +93,25 @@ Module symbolic
     <ExportAPI("parse.mathml")>
     Public Function ParseMathML(mathml As String) As LambdaExpression
         Return LambdaExpression.FromMathML(mathml)
+    End Function
+
+    ''' <summary>
+    ''' convert the formula expression to the mathml lambda expression model
+    ''' </summary>
+    ''' <param name="formula"></param>
+    ''' <returns></returns>
+    <ExportAPI("lambda")>
+    <RApiReturn(GetType(LambdaExpression))>
+    Public Function lambda(formula As Object, Optional env As Environment = Nothing) As Object
+        If TypeOf formula Is FormulaExpression Then
+            Return Compiler.GetLambda(DirectCast(formula, FormulaExpression))
+        ElseIf TypeOf formula Is DeclareLambdaFunction Then
+            Return Compiler.GetLambda(DirectCast(formula, DeclareLambdaFunction))
+        ElseIf TypeOf formula Is String Then
+            Return Compiler.GetLambda(DirectCast(formula, String))
+        Else
+            Return Message.InCompatibleType(GetType(DeclareLambdaFunction), formula.GetType, env)
+        End If
     End Function
 
     <ExportAPI("as.polynomial")>

@@ -1,5 +1,5 @@
 .\" man page create by R# package system.
-.TH DATAFRAME 4 2000-01-01 "as.objects" "as.objects"
+.TH DATAFRAME 4 2000-Jan "as.objects" "as.objects"
 .SH NAME
 as.objects \- Load .NET objects from a given dataframe data object.
 .SH SYNOPSIS
@@ -18,7 +18,14 @@ Load .NET objects from a given dataframe data object.
 \fBdata\fB \fR\- -. 
 .PP
 .PP
-\fBtype\fB \fR\- -. 
+\fBtype\fB \fR\- 
+ the object type value, and it should be one of the:
+ 
+ 1. class name from the @\fBT:SMRUCC.Rsharp.Runtime.Interop.RTypeExportAttribute\fR
+ 2. .NET CLR @\fBT:System.Type\fR value
+ 3. R-sharp @\fBT:SMRUCC.Rsharp.Runtime.Interop.RType\fR value
+ 4. R-sharp primitive @\fBT:SMRUCC.Rsharp.Runtime.Components.TypeCodes\fR value
+. 
 .PP
 .PP
 \fBenv\fB \fR\- -. 

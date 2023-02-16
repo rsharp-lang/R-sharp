@@ -1,0 +1,96 @@
+.\" man page create by R# package system.
+.TH BASE 1 2002-May "seq" "seq"
+.SH NAME
+seq \- Sequence Generation
+.SH SYNOPSIS
+\fIseq(\fBfrom\fR as any, 
+\fBto\fR as any, 
+\fBby\fR as any = 1, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Sequence Generation
+ 
+ Generate regular sequences. seq is a standard generic with a default method. 
+ seq.int is a primitive which can be much faster but has a few restrictions. 
+ seq_along and seq_len are very fast primitives for two common cases.
+.PP
+.SH OPTIONS
+.PP
+\fBfrom\fB \fR\- the starting And (maximal) End values Of the sequence. 
+ Of length 1 unless just from Is supplied As an unnamed argument.. 
+.PP
+.PP
+\fB[to]\fB \fR\- the starting And (maximal) End values Of the sequence. 
+ Of length 1 unless just from Is supplied As an unnamed argument.. 
+.PP
+.PP
+\fBby\fB \fR\- number: increment of the sequence.. 
+.PP
+.SH DETAILS
+.PP
+Numerical inputs should all be finite (that is, not infinite, NaN or NA).
+ The interpretation Of the unnamed arguments Of seq And seq.int Is Not standard, 
+ And it Is recommended always To name the arguments When programming.
+ 
+ seq Is generic, And only the default method Is described here. Note that it 
+ dispatches on the class of the first argument irrespective of argument names. 
+ This can have unintended consequences if it Is called with just one argument 
+ intending this to be taken as along.with it Is much better to use seq_along 
+ in that case.
+ 
+ seq.int Is an internal generic which dispatches on methods for "seq" based on 
+ the class of the first supplied argument (before argument matching).
+ 
+ Typical usages are
+ 
+ + seq(from, to)
+ + seq(from, to, by= )
+ + seq(from, to, length.out= )
+ + seq(along.with= )
+ + seq(from)
+ + seq(length.out= )
+ 
+ The first form generates the sequence from, from+/-1, ..., To (identical To 
+ from:to).
+
+ The second form generates from, from+by, ..., up To the sequence value less 
+ than Or equal To To. Specifying To - from And by Of opposite signs Is an Error. 
+ Note that the computed final value can go just beyond To To allow For rounding 
+ Error, but Is truncated To To. ('Just beyond’ is by up to 1e-10 times
+ abs(from - to).)
+
+ The third generates a sequence Of length.out equally spaced values from from To 
+ To. (length.out Is usually abbreviated To length Or len, And seq_len Is much 
+ faster.)
+
+ The fourth form generates the Integer sequence 1, 2, ..., length(along.With). 
+ (along.With Is usually abbreviated To along, And seq_along Is much faster.)
+
+ The fifth form generates the sequence 1, 2, ..., length(from) (As If argument 
+ along.With had been specified), unless the argument Is numeric Of length 1 When 
+ it Is interpreted As 1:from (even for seq(0) for compatibility with S). Using 
+ either seq_along Or seq_len Is much preferred (unless strict S compatibility 
+ Is essential).
+
+ The final form generates the Integer sequence 1, 2, ..., length.out unless 
+ length.out = 0, When it generates Integer(0).
+
+ Very small sequences (With from - To Of the order Of 10^{-14} times the larger 
+ Of the ends) will Return from.
+
+ For seq(only), up To two Of from, To And by can be supplied As complex values 
+ provided length.out Or along.With Is specified. More generally, the Default 
+ method Of seq will handle classed objects With methods For the Math, Ops 
+ And Summary group generics.
+
+ seq.int, seq_along And seq_len are primitive.
+.PP
+.SH SEE ALSO
+base
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

@@ -1,0 +1,70 @@
+.\" man page create by R# package system.
+.TH BASE 1 2002-May "library" "library"
+.SH NAME
+library \- Loading/Attaching and Listing of Packages
+.SH SYNOPSIS
+\fIlibrary(\fBpackage\fR as string, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Loading/Attaching and Listing of Packages
+ 
+ library and require load and attach add-on packages.
+.PP
+.SH OPTIONS
+.PP
+\fBpackage\fB \fR\- the name Of a package, given As a name Or 
+ literal character String, Or a character String, depending On 
+ whether character.only Is False (Default) Or True.. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+Normally library returns (invisibly) the list of attached 
+ packages, but TRUE or FALSE if logical.return is TRUE. When 
+ called as library() it returns an object of class "libraryIQR", 
+ and for library(help=), one of class "packageInfo".
+ 
+ require returns(invisibly) a logical indicating whether the required 
+ package Is available.
+.PP
+.SH DETAILS
+.PP
+library(package) and require(package) both load the namespace of 
+ the package with name package and attach it on the search list. 
+ require is designed for use inside other functions; it returns 
+ FALSE and gives a warning (rather than an error as library() does 
+ by default) if the package does not exist. Both functions check 
+ and update the list of currently attached packages and do not 
+ reload a namespace which is already loaded. (If you want to 
+ reload such a package, call detach(unload = TRUE) or unloadNamespace 
+ first.) If you want to load a package without attaching it on 
+ the search list, see requireNamespace.
+ 
+ To suppress messages during the loading of packages use 
+ suppressPackageStartupMessages: this will suppress all messages from 
+ R itself but Not necessarily all those from package authors.
+ 
+ If library Is called With no package Or help argument, it lists all 
+ available packages In the libraries specified by Lib.loc, And returns 
+ the corresponding information In an Object Of Class "libraryIQR". 
+ (The Structure Of this Class may change In future versions.) Use 
+ .packages(all = True) To obtain just the names Of all available packages, 
+ And installed.packages() For even more information.
+ 
+ library(help = somename) computes basic information about the package 
+ somename, And returns this in an object of class "packageInfo". 
+ (The structure of this class may change in future versions.) When 
+ used with the default value (NULL) for lib.loc, the attached packages 
+ are searched before the libraries.
+.PP
+.SH SEE ALSO
+base
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

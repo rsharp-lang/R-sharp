@@ -1,0 +1,40 @@
+.\" man page create by R# package system.
+.TH STATS 1 2000-Jan "mantel.test" "mantel.test"
+.SH NAME
+mantel.test \- The Mantel test, named after Nathan Mantel, is a statistical test of
+.SH SYNOPSIS
+\fImantel.test(\fBx\fR as any, 
+\fBy\fR as any, 
+\fBc\fR as any = \fB<NULL>\fR, 
+\fBexact\fR as boolean = FALSE, 
+\fBraw\fR as boolean = FALSE, 
+\fBpermutation\fR as integer = 1000, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+The Mantel test, named after Nathan Mantel, is a statistical test of 
+ the correlation between two matrices. The matrices must be of the same
+ dimension; in most applications, they are matrices of interrelations 
+ between the same vectors of objects. The test was first published by 
+ Nathan Mantel, a biostatistician at the National Institutes of Health, 
+ in 1967.[1] Accounts of it can be found in advanced statistics books 
+ (e.g., Sokal & Rohlf 1995[2]).
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- -. 
+.PP
+.PP
+\fBy\fB \fR\- -. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+stats
+.SH FILES
+.PP
+Rlapack.dll
+.PP
+.SH COPYRIGHT
+GPL3

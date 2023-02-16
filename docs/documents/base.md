@@ -9,9 +9,3 @@
  For a complete list of functions, use ``ls("base")``.
 
 + [impute](base/impute.1) impute for missing values
-+ [readRData](base/readRData.1) read ``*.rda`` data file which is saved from R environment.
-+ [load](base/load.1) ### Reload Saved Datasets
-+ [save](base/save.1) ### Save R Objects
-+ [saveRDS](base/saveRDS.1) Serialization Interface for Single Objects
-+ [readRDS](base/readRDS.1) Serialization Interface for Single Objects
-+ [save.image](base/save.image.1) ### Save R Objects

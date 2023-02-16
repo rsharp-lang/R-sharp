@@ -1,0 +1,42 @@
+.\" man page create by R# package system.
+.TH UTILS 1 2002-May "system.file" "system.file"
+.SH NAME
+system.file \- Find Names of R System Files
+.SH SYNOPSIS
+\fIsystem.file(\fBfileName\fR as string, 
+\fBpackage\fR as string = \fB<NULL>\fR, 
+\fBmustWork\fR as boolean = FALSE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Find Names of R System Files
+ 
+ Finds the full file names of files in packages etc.
+.PP
+.SH OPTIONS
+.PP
+\fBfileName\fB \fR\- -. 
+.PP
+.PP
+\fBpackage\fB \fR\- a character String With the name Of a Single package.
+ An Error occurs If more than one package name Is given.
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH DETAILS
+.PP
+do not add extension suffix name for csv data set due to 
+ the reason of csv file extension suffix will be removed
+ automatically in the progress of R compile the data file 
+ into package file.
+.PP
+.SH SEE ALSO
+utils
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

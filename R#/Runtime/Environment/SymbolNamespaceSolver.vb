@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e3eb902d4bc584db03a684fc2b1a4b30, R-sharp\R#\Runtime\Environment\SymbolNamespaceSolver.vb"
+﻿#Region "Microsoft.VisualBasic::71b5423c4728ed9a547a40dcb99cb6c6, R-sharp\R#\Runtime\Environment\SymbolNamespaceSolver.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 104
-    '    Code Lines: 76
-    ' Comment Lines: 10
-    '   Blank Lines: 18
-    '     File Size: 4.42 KB
+    '   Total Lines: 171
+    '    Code Lines: 109
+    ' Comment Lines: 35
+    '   Blank Lines: 27
+    '     File Size: 7.13 KB
 
 
     '     Class SymbolNamespaceSolver
     ' 
-    '         Properties: attachedNamespace, packageNames
+    '         Properties: attachedNamespace, env, packageNames
     ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: (+2 Overloads) Add, FindPackageSymbol, FindSymbol, GetEnumerator, hasNamespace
     '                   IEnumerable_GetEnumerator, ToString
     ' 

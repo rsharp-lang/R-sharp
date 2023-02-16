@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0b7f93708d2ce258259fc9c36e271edb, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryOrExpression.vb"
+﻿#Region "Microsoft.VisualBasic::349fc351cde463f351ea6d4009482fe6, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryOrExpression.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 76
-    '    Code Lines: 58
+    '   Total Lines: 77
+    '    Code Lines: 59
     ' Comment Lines: 5
     '   Blank Lines: 13
-    '     File Size: 2.65 KB
+    '     File Size: 2.68 KB
 
 
     '     Class BinaryOrExpression
@@ -57,6 +57,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -108,8 +109,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Else
                     Return Vectorization _
                         .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
-                            x:=Vectorization.asLogical(a),
-                            y:=Vectorization.asLogical(b),
+                            x:=CLRVector.asLogical(a),
+                            y:=CLRVector.asLogical(b),
                             [do]:=Function(x, y, env2) x OrElse y,
                             env:=envir
                         )

@@ -1,58 +1,58 @@
-﻿#Region "Microsoft.VisualBasic::ff27ab8a366de7201972b107271d3b48, R-sharp\R#\Runtime\Internal\objects\dataset\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::3bd5793848c9b55cd984d6f5d9c77fc2, R-sharp\R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 585
-'    Code Lines: 323
-' Comment Lines: 199
-'   Blank Lines: 63
-'     File Size: 22.96 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class dataframe
-' 
-'         Properties: colnames, columns, ncols, nrows, rownames
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: (+3 Overloads) add, checkColumnNames, CreateDataFrame, forEachRow, GetByRowIndex
-'                   getKeyByIndex, getNames, getRowIndex, getRowList, getRowNames
-'                   (+2 Overloads) getVector, hasName, projectByColumn, setNames, sliceByRow
-'                   subsetColData, ToString
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 693
+    '    Code Lines: 384
+    ' Comment Lines: 232
+    '   Blank Lines: 77
+    '     File Size: 27.29 KB
+
+
+    '     Class dataframe
+    ' 
+    '         Properties: colnames, columns, ncols, nrows, rownames
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: (+3 Overloads) add, checkColumnNames, (+3 Overloads) CreateDataFrame, forEachRow, GetByRowIndex
+    '                   getKeyByIndex, getNames, getRowIndex, getRowList, getRowNames
+    '                   GetRowNumbers, (+2 Overloads) getVector, hasName, projectByColumn, setNames
+    '                   sliceByRow, subsetColData, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -65,7 +65,10 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object
@@ -247,7 +250,10 @@ Namespace Runtime.Internal.Object
         ''' <typeparam name="T"></typeparam>
         ''' <param name="synonym">同意名列表</param>
         ''' <returns>
-        ''' 这个函数只会返回碰见的第一个同意名的列数据
+        ''' function may returns nothing if all of the given name 
+        ''' is missing from the dataframe object.
+        ''' 
+        ''' (这个函数只会返回碰见的第一个同意名的列数据)
         ''' </returns>
         ''' <remarks>
         ''' this function returns a vector in full size always
@@ -386,7 +392,7 @@ Namespace Runtime.Internal.Object
 
             If indexType Like RType.logicals Then
                 ' which is true is zero-based by default
-                Return GetByRowIndex(index:=which.IsTrue(Vectorization.asLogical(selector)), env) ' checked
+                Return GetByRowIndex(index:=which.IsTrue(CLRVector.asLogical(selector)), env) ' checked
             ElseIf indexType Like RType.integers Then
                 Dim i_raw As Integer() = DirectCast(asVector(Of Integer)(selector), Integer())
                 Dim i_offset As Integer()
@@ -610,6 +616,10 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' get max length of the column vectors
+        ''' </summary>
+        ''' <returns></returns>
         Public Function GetRowNumbers() As Integer
             If columns.Count = 0 Then
                 Return 0
@@ -621,6 +631,15 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' Cast a vector of CLR object to a dataframe
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="data"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' the class object property used as the dataframe column data
+        ''' </remarks>
         Public Shared Function CreateDataFrame(Of T)(data As IEnumerable(Of T)) As dataframe
             Dim vec As T() = data.ToArray
             Dim type As Type = GetType(T)
@@ -630,7 +649,7 @@ Namespace Runtime.Internal.Object
             }
             Dim values As Array
 
-            For Each field In schema
+            For Each field As KeyValuePair(Of String, PropertyInfo) In schema
                 values = vec _
                     .Select(Function(obj)
                                 Return field.Value.GetValue(obj)
@@ -641,6 +660,54 @@ Namespace Runtime.Internal.Object
             Next
 
             Return dataframe
+        End Function
+
+        Public Shared Function CreateDataFrame(Of T)(data As Dictionary(Of String, T()), Optional rownames As IEnumerable(Of String) = Nothing) As dataframe
+            Return New dataframe With {
+                .rownames = rownames.ToArray,
+                .columns = data _
+                    .ToDictionary(Function(a) a.Key,
+                                  Function(a)
+                                      Return DirectCast(a.Value, Array)
+                                  End Function)
+            }
+        End Function
+
+        ''' <summary>
+        ''' Create dataframe from row data
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="rows"></param>
+        ''' <param name="colNames"></param>
+        ''' <returns></returns>
+        Public Shared Function CreateDataFrame(Of T)(rows As NamedCollection(Of T)(), colNames As IEnumerable(Of String)) As dataframe
+            Dim rowNames = rows.Select(Function(r) r.name).ToArray
+            Dim cols As New List(Of Array)
+            Dim row As NamedCollection(Of T)
+            Dim keys As String() = colNames.ToArray
+
+            For Each key As String In keys
+                Call cols.Add(New T(rows.Length - 1) {})
+            Next
+
+            For i As Integer = 0 To rows.Length - 1
+                row = rows(i)
+
+                For j As Integer = 0 To cols.Count - 1
+                    cols(j).SetValue(row(j), i)
+                Next
+            Next
+
+            Dim fields As New Dictionary(Of String, Array)
+
+            For i As Integer = 0 To keys.Length - 1
+                Call fields.Add(keys(i), cols(i))
+            Next
+
+            Return New dataframe With {
+                .rownames = rowNames,
+                .columns = fields
+            }
         End Function
 
         Public Function setNames(names() As String, envir As Environment) As Object Implements RNames.setNames

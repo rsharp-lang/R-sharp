@@ -1,0 +1,57 @@
+.\" man page create by R# package system.
+.TH STATS 1 2000-Jan "corr.test" "corr.test"
+.SH NAME
+corr.test \- Find the correlations, sample sizes, and probability
+.SH SYNOPSIS
+\fIcorr.test(\fBx\fR as <generic> dataframe, 
+\fBy\fR as <generic> dataframe = \fB<NULL>\fR, 
+\fBuse\fR as string = "pairwise", 
+\fBmethod\fR as string = "pearson");\fR
+.SH DESCRIPTION
+.PP
+Find the correlations, sample sizes, and probability 
+ values between elements of a matrix or data.frame.
+ 
+ Although the cor function finds the correlations for 
+ a matrix, it does not report probability values. cor.test 
+ does, but for only one pair of variables at a time. 
+ corr.test uses cor to find the correlations for either 
+ complete or pairwise data and reports the sample sizes 
+ and probability values as well. For symmetric matrices, 
+ raw probabilites are reported below the diagonal and 
+ correlations adjusted for multiple comparisons above the 
+ diagonal. In the case of different x and ys, the default 
+ is to adjust the probabilities for multiple tests. Both 
+ corr.test and corr.p return raw and adjusted confidence 
+ intervals for each correlation.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- A matrix or dataframe. 
+.PP
+.PP
+\fBy\fB \fR\- 
+ A second matrix or dataframe with the same number of rows as x
+. 
+.PP
+.PP
+\fBuse\fB \fR\- 
+ use="pairwise" is the default value and will do pairwise 
+ deletion of cases. use="complete" will select just complete 
+ cases.. 
+.PP
+.PP
+\fBmethod\fB \fR\- 
+ method="pearson" is the default value. The alternatives to 
+ be passed to cor are "spearman" and "kendall". These last 
+ two are much slower, particularly for big data sets.
+. 
+.PP
+.SH SEE ALSO
+stats
+.SH FILES
+.PP
+Rlapack.dll
+.PP
+.SH COPYRIGHT
+GPL3

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5e99304b0a84953f8cd7bfaec9299c43, R-sharp\R#\System\Package\PackageFile\CreatePackage.vb"
+﻿#Region "Microsoft.VisualBasic::82921836592f8ec6249fcdc243673577, R-sharp\R#\System\Package\PackageFile\CreatePackage.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 501
-    '    Code Lines: 373
-    ' Comment Lines: 53
-    '   Blank Lines: 75
-    '     File Size: 20.38 KB
+    '   Total Lines: 505
+    '    Code Lines: 370
+    ' Comment Lines: 63
+    '   Blank Lines: 72
+    '     File Size: 20.69 KB
 
 
     '     Module CreatePackage
@@ -347,7 +347,7 @@ Namespace Development.Package.File
                         ' create unix man page
                         ' and then create html documents
                         Call REngine.Invoke("unixMan", pkg, out, REngine.globalEnvir)
-                        Call REngine.Invoke("REnv::Rdocuments", pkg, outputHtml, REngine.globalEnvir)
+                        Call REngine.Invoke("REnv::Rdocuments", pkg, outputHtml, file.info.Package, REngine.globalEnvir)
                     Catch ex As Exception
 
                     End Try
@@ -536,9 +536,17 @@ Namespace Development.Package.File
                               End Function)
         End Function
 
+        ''' <summary>
+        ''' + ``%s``, means the <paramref name="path"/> parameter value
+        ''' + ``1%``, means integer value 1
+        ''' + ``1#``, means float value 1
+        ''' + ``$``, means the <see cref="Environment"/> parameter reference
+        ''' </summary>
+        ''' <param name="path"></param>
+        ''' <returns></returns>
         Private Function getFileReader(path As String) As String
             Select Case path.ExtensionSuffix.ToLower
-                Case "csv" : Return "read.csv,%s,1%,TRUE,TRUE,utf8,#,FALSE,$"
+                Case "csv" : Return "read.csv,%s,1%,TRUE,TRUE,utf8,#,FALSE,-1%,$"
                 Case "txt" : Return "readLines,%s,NULL"
                 Case "rda" : Return "load,%s,$,FALSE"
                 Case "rds" : Return "readRDS,%s,NULL,$"

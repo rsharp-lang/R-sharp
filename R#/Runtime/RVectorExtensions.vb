@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0f7a85af5cb9bf9759b1eb72dadd77e6, R-sharp\R#\Runtime\RVectorExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::f4ee91c35b2ed9e6fac4cf56e5e931cd, R-sharp\R#\Runtime\RVectorExtensions.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 304
     ' Comment Lines: 80
     '   Blank Lines: 52
-    '     File Size: 16.88 KB
+    '     File Size: 16.89 KB
 
 
     '     Module RVectorExtensions
@@ -70,7 +70,9 @@ Namespace Runtime
         ''' </summary>
         ''' <typeparam name="T"></typeparam>
         ''' <param name="x"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' returns a logical value of this type test operation
+        ''' </returns>
         Public Function isVector(Of T)(x As Object) As Boolean
             If x Is Nothing Then
                 Return False
@@ -86,13 +88,31 @@ Namespace Runtime
                 End If
             Else
                 Dim type As Type = x.GetType
+                Dim array As Array = x
 
                 If type Is GetType(T()) OrElse type.ImplementInterface(GetType(IEnumerable(Of T))) Then
                     Return True
-                ElseIf DirectCast(x, Array).Length = 0 Then
+                ElseIf array.Length = 0 Then
                     Return False
+                ElseIf array _
+                    .AsObjectEnumerator _
+                    .All(Function(ti)
+                             If ti Is Nothing Then
+                                 Return True
+                             ElseIf ti Is GetType(T) Then
+                                 Return True
+                             ElseIf ti.GetType.IsArray Then
+                                 Dim first = DirectCast(ti, Array).GetValueOrDefault(Scan0)
+                                 Return first Is Nothing OrElse TypeOf first Is T
+                             Else
+                                 Return False
+                             End If
+                         End Function) Then
+
+                    Return True
                 Else
-                    Return DirectCast(x, Array).GetValue(Scan0).GetType Is GetType(T)
+                    Dim first As Object = array.GetValue(Scan0)
+                    Return first IsNot Nothing AndAlso first.GetType Is GetType(T)
                 End If
             End If
         End Function
@@ -279,19 +299,27 @@ Namespace Runtime
             Return ofList
         End Function
 
-        ''' <summary>
-        ''' This function make sure the return array is not a generic type array
-        ''' 
-        ''' (返回错误消息或者结果向量)
-        ''' </summary>
-        ''' <param name="vec"></param>
-        ''' <param name="env"></param>
-        ''' <returns>
-        ''' A class variant type: error message or a generic array
-        ''' </returns>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        <Extension>
-        Public Function TryCastGenericArray(vec As Array, env As Environment) As Object
+        Public Function UnsafeTryCastGenericArray(vec As Array) As Array
+            Dim elementType As Type
+            Dim generic As Array
+
+            vec = MeltArray(vec)
+            elementType = MeasureRealElementType(vec)
+
+            If elementType Is Nothing OrElse elementType Is GetType(Object) Then
+                Return vec
+            Else
+                generic = Array.CreateInstance(elementType, vec.Length)
+            End If
+
+            For i As Integer = 0 To vec.Length - 1
+                Call generic.SetValue(CTypeDynamic(vec.GetValue(i), elementType), i)
+            Next
+
+            Return generic
+        End Function
+
+        Private Function MeltArray(vec As Array) As Array
             Dim elementType As Type = vec.GetType.GetElementType
 
             If elementType IsNot Nothing AndAlso
@@ -316,6 +344,23 @@ Namespace Runtime
                     .ToArray
             End If
 
+            Return vec
+        End Function
+
+        ''' <summary>
+        ''' This function make sure the return array is not a generic type array
+        ''' 
+        ''' (返回错误消息或者结果向量)
+        ''' </summary>
+        ''' <param name="vec"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' A class variant type: error message or a generic array
+        ''' </returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <Extension>
+        Public Function TryCastGenericArray(vec As Array, env As Environment) As Object
+            vec = MeltArray(vec)
             Return asVector(vec, MeasureRealElementType(vec), env)
         End Function
 

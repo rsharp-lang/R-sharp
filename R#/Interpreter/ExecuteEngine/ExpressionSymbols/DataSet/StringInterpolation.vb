@@ -1,59 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::0eee57e2a60422f245efd9459ec5a737, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\StringInterpolation.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 78
-    '    Code Lines: 58
-    ' Comment Lines: 5
-    '   Blank Lines: 15
-    '     File Size: 2.73 KB
+' Summaries:
 
 
-    '     Class StringInterpolation
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 78
+'    Code Lines: 58
+' Comment Lines: 5
+'   Blank Lines: 15
+'     File Size: 2.73 KB
+
+
+'     Class StringInterpolation
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports Microsoft.VisualBasic.Language.C
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
@@ -64,6 +64,9 @@ Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
+    ''' <summary>
+    ''' A typescript liked string interpolation syntax
+    ''' </summary>
     Public Class StringInterpolation : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
@@ -90,6 +93,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim current As Array = REnv.asVector(Of String)(stringParts(Scan0).Evaluate(envir))
             Dim [next] As Object
+            Dim str_concatenate As New Vectorization.op_evaluator(AddressOf r_string_concatenate)
 
             For Each part As Expression In stringParts.Skip(1)
                 [next] = part.Evaluate(envir)
@@ -107,7 +111,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 [next] = StringBinaryExpression.DoStringBinary(Of String)(
                     a:=current,
                     b:=[next],
-                    op:=Function(x, y, env2) x & y,
+                    op:=str_concatenate,
                     env:=envir
                 )
 
@@ -124,6 +128,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim strVec As New vector(currentStrings, RType.GetRSharpType(GetType(String)))
 
             Return strVec
+        End Function
+
+        Friend Shared Function r_string_concatenate(x As Object, y As Object, env As Environment) As Object
+            If x Is Nothing OrElse y Is Nothing Then
+                Call env.AddMessage("One of the string value is nothing!", MSG_TYPES.WRN)
+            End If
+
+            Return CStr(x) & CStr(y)
         End Function
 
         Public Overrides Function ToString() As String

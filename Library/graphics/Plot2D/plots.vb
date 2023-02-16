@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::60991e07ec8dcd966083aa5ca2c6d522, R-sharp\Library\graphics\Plot2D\plots.vb"
+﻿#Region "Microsoft.VisualBasic::71d774dd6a539c4c1e0a83e1382fa052, R-sharp\Library\graphics\Plot2D\plots.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 988
-    '    Code Lines: 762
+    '   Total Lines: 989
+    '    Code Lines: 763
     ' Comment Lines: 130
     '   Blank Lines: 96
-    '     File Size: 45.24 KB
+    '     File Size: 45.27 KB
 
 
     ' Module plots
@@ -107,6 +107,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -751,7 +752,7 @@ Module plots
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
 
         If args.hasName("showLegend") Then
-            showLegend = getFirst(Vectorization.asLogical(args!showLegend))
+            showLegend = getFirst(CLRVector.asLogical(args!showLegend))
         Else
             showLegend = True
         End If
@@ -766,7 +767,7 @@ Module plots
                 serials, dev.g, canvas,
                 Xlabel:=args.getValue("x.lab", env, "X"),
                 Ylabel:=args.getValue("y.lab", env, "Y"),
-                drawLine:=getFirst(Vectorization.asLogical(args!line)),
+                drawLine:=getFirst(CLRVector.asLogical(args!line)),
                 legendBgFill:=RColorPalette.getColor(args!legendBgFill, Nothing),
                 legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
                 showLegend:=showLegend,
@@ -792,7 +793,7 @@ Module plots
                 size:=size, padding:=margin,
                 Xlabel:=args.getValue("x.lab", env, "X"),
                 Ylabel:=args.getValue("y.lab", env, "Y"),
-                drawLine:=getFirst(Vectorization.asLogical(args!line)),
+                drawLine:=getFirst(CLRVector.asLogical(args!line)),
                 legendBgFill:=RColorPalette.getColor(args!legendBgFill, Nothing),
                 legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
                 showLegend:=showLegend,

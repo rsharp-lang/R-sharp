@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2d56b1a55eb6e4e97b008bd66a3dc781, R-sharp\Library\base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::5c40600b46a280803df6459cc437481a, R-sharp\Library\base\utils\dataframe.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 662
+    '   Total Lines: 669
     '    Code Lines: 504
-    ' Comment Lines: 75
+    ' Comment Lines: 82
     '   Blank Lines: 83
-    '     File Size: 24.72 KB
+    '     File Size: 25.00 KB
 
 
     ' Module dataframe
@@ -188,7 +188,14 @@ Module dataframe
     ''' Load .NET objects from a given dataframe data object.
     ''' </summary>
     ''' <param name="data"></param>
-    ''' <param name="type"></param>
+    ''' <param name="type">
+    ''' the object type value, and it should be one of the:
+    ''' 
+    ''' 1. class name from the <see cref="RTypeExportAttribute"/>
+    ''' 2. .NET CLR <see cref="Type"/> value
+    ''' 3. R-sharp <see cref="RType"/> value
+    ''' 4. R-sharp primitive <see cref="TypeCodes"/> value
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("as.objects")>

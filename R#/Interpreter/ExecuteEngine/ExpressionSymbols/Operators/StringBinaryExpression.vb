@@ -1,62 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::65e6aa5a218e0fe736107faa3a7590d7, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\StringBinaryExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 102
-    '    Code Lines: 82
-    ' Comment Lines: 2
-    '   Blank Lines: 18
-    '     File Size: 4.22 KB
+' Summaries:
 
 
-    '     Module StringBinaryExpression
-    ' 
-    '         Function: DoStringBinary, getStringArray, StringBinaryOperator, TextEquivalency
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 102
+'    Code Lines: 82
+' Comment Lines: 2
+'   Blank Lines: 18
+'     File Size: 4.22 KB
+
+
+'     Module StringBinaryExpression
+' 
+'         Function: DoStringBinary, getStringArray, StringBinaryOperator, TextEquivalency
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports System.Runtime.CompilerServices
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.Text.Patterns
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports any = Microsoft.VisualBasic.Scripting
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -68,10 +67,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
             If TypeOf a Is Regex Then
                 r = DirectCast(a, Regex)
-                text = getStringArray(b).ToArray
+                text = CLRVector.asCharacter(b)
             ElseIf TypeOf b Is Regex Then
                 r = DirectCast(b, Regex)
-                text = getStringArray(a).ToArray
+                text = CLRVector.asCharacter(a)
             Else
                 Return DoStringBinary(Of Boolean)(a, b, Function(x, y, env2) x = y, env)
             End If
@@ -91,14 +90,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     If TypeOf flagsObj Is Message Then
                         Return flagsObj
                     Else
-                        Return DirectCast(flagsObj, Boolean()).Select(Function(t) Not t).ToArray
+                        Return UnaryNot.Not(flagsObj)
                     End If
                 Case "like"
-                    Dim text As String() = getStringArray(a).ToArray
+                    Dim text As String() = CLRVector.asCharacter(a)
 
                     If Runtime.isVector(Of String)(b) Then
                         ' <string-for-test> like wildcard_patterns
-                        Dim patterns As String() = getStringArray(b).ToArray
+                        Dim patterns As String() = CLRVector.asCharacter(b)
                         Dim likePattern = Function(txt, wildcard, env2)
                                               Return DirectCast(wildcard, String).WildcardMatch(DirectCast(txt, String))
                                           End Function
@@ -134,21 +133,22 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Return Internal.debug.stop(New NotImplementedException($"[{left}] {[operator]} [{right}]"), env)
         End Function
 
-        Public Function DoStringBinary(Of Out)(a As Object, b As Object, op As Vectorization.op_evaluator, env As Environment) As Object
-            Dim va = getStringArray(a).ToArray
-            Dim vb = getStringArray(b).ToArray
+        ''' <summary>
+        ''' string binary operator
+        ''' </summary>
+        ''' <typeparam name="Out"></typeparam>
+        ''' <param name="a"></param>
+        ''' <param name="b"></param>
+        ''' <param name="op"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' this function returns a string array or error message
+        ''' </returns>
+        Public Function DoStringBinary(Of Out)(a As Object, b As Object, op As op_evaluator, env As Environment) As Object
+            Dim va = CLRVector.asCharacter(a)
+            Dim vb = CLRVector.asCharacter(b)
 
             Return Vectorization.BinaryCoreInternal(Of String, String, Out)(va, vb, op, env)
-        End Function
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Private Function getStringArray(a As Object) As IEnumerable(Of String)
-            Return From element As Object
-                   In Runtime _
-                       .asVector(Of Object)(a) _
-                       .AsQueryable
-                   Let str As String = any.ToString(element, "NULL")
-                   Select str
         End Function
     End Module
 End Namespace

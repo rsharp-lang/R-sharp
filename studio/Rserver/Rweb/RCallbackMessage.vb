@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::be470679d424233781cc1466bf2af420, R-sharp\studio\Rserver\Rweb\RCallbackMessage.vb"
+﻿#Region "Microsoft.VisualBasic::9a72cfcda566fbe26887fb467e6e1c0b, R-sharp\studio\Rserver\Rweb\RCallbackMessage.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 101
-    '    Code Lines: 86
+    '   Total Lines: 106
+    '    Code Lines: 90
     ' Comment Lines: 0
-    '   Blank Lines: 15
-    '     File Size: 4.08 KB
+    '   Blank Lines: 16
+    '     File Size: 4.19 KB
 
 
     ' Module RCallbackMessage
@@ -128,6 +128,11 @@ Module RCallbackMessage
             Else
                 Dim document = DirectCast(check_x, Rdataframe).DataFrameRows(row_names, formatNumber, env)
                 Dim ms As New MemoryStream
+
+                If document Like GetType(Message) Then
+                    Call sendRStudioErrDebugMessage(document.TryCast(Of Message), response, showErr)
+                    Return
+                End If
 
                 Call StreamIO.SaveDataFrame(
                     csv:=document,

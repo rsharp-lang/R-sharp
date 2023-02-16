@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::496e8da59746c8fafda62a99fe0031f1, R-sharp\R#\Runtime\Interop\RsharpApi\RMethodArgument.vb"
+﻿#Region "Microsoft.VisualBasic::07834f489a228ea28cce6f9753a3ec7b, R-sharp\R#\Runtime\Interop\RsharpApi\RMethodArgument.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 161
-    '    Code Lines: 87
+    '   Total Lines: 177
+    '    Code Lines: 101
     ' Comment Lines: 60
-    '   Blank Lines: 14
-    '     File Size: 6.55 KB
+    '   Blank Lines: 16
+    '     File Size: 7.11 KB
 
 
     '     Class RMethodArgument
     ' 
-    '         Properties: [default], isByrefValueParameter, isObjectList, isOptional, isRequireRawVector
-    '                     name, requireRawExpression, type
+    '         Properties: [default], acceptFormula, isByrefValueParameter, isObjectList, isOptional
+    '                     isRequireRawVector, name, requireRawExpression, type
     ' 
     '         Function: getDefaultValue, getDefaultVector, GetRawVectorElementType, ParseArgument, ToString
     ' 

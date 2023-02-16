@@ -1,0 +1,35 @@
+.\" man page create by R# package system.
+.TH FILE 1 2002-May "readLines" "readLines"
+.SH NAME
+readLines \- Read Text Lines from a Connection
+.SH SYNOPSIS
+\fIreadLines(\fBcon\fR as any, 
+\fBencoding\fR as <integer> Encodings = [UTF8], 
+\fBstream\fR as boolean = FALSE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Read Text Lines from a Connection
+ 
+ Read some or all text lines from a connection.
+.PP
+.SH OPTIONS
+.PP
+\fBcon\fB \fR\- a connection object or a character string.. 
+.PP
+.PP
+\fBstream\fB \fR\- 
+ if this options is config as TRUE, means this function will returns 
+ a lazy load data pipeline. default value of this option is FALSE, which
+ means this function will returns a character vector which contains all 
+ data content lines directly.
+. 
+.PP
+.SH SEE ALSO
+file
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

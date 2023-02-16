@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f7a4a7ac69662f3d27d00f7feb77e9a3, R-sharp\R#\Language\Syntax\SyntaxImplements\IfBranchSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::a22f93335cc20ede3d420c65a0c86a50, R-sharp\R#\Language\Syntax\SyntaxImplements\IfBranchSyntax.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 162
-    '    Code Lines: 126
+    '   Total Lines: 160
+    '    Code Lines: 124
     ' Comment Lines: 12
     '   Blank Lines: 24
-    '     File Size: 6.81 KB
+    '     File Size: 6.57 KB
 
 
     '     Module IfBranchSyntax

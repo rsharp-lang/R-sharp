@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::86616f24a634776b5b909d3f4b8a91a7, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::2e866573d2499b6dd5bcd339c102ce91, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 153
-    '    Code Lines: 127
+    '   Total Lines: 154
+    '    Code Lines: 128
     ' Comment Lines: 3
     '   Blank Lines: 23
-    '     File Size: 6.17 KB
+    '     File Size: 6.23 KB
 
 
     '     Interface IBinaryExpression
@@ -65,6 +65,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Interop.Operator
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports Core = SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -169,15 +170,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     Case "&&"
                         Return Core _
                             .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
-                                x:=Core.asLogical(a),
-                                y:=Core.asLogical(b),
+                                x:=CLRVector.asLogical(a),
+                                y:=CLRVector.asLogical(b),
                                 [do]:=Function(x, y, env2) x AndAlso y,
                                 env:=envir
                             )
                 End Select
             ElseIf [operator] = "&&" AndAlso (tleft?.raw Like RType.logicals OrElse tright?.raw Like RType.logicals) Then
-                Dim xi = Core.asLogical(a)
-                Dim yi = Core.asLogical(b)
+                Dim xi = CLRVector.asLogical(a)
+                Dim yi = CLRVector.asLogical(b)
 
                 Return Core _
                     .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(

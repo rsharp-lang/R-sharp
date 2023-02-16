@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c454f2eb62b1ac3436cf640aa275fed3, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb"
+﻿#Region "Microsoft.VisualBasic::9e9f2832036321705bc77cce2600ab0e, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 197
-    '    Code Lines: 151
+    '   Total Lines: 198
+    '    Code Lines: 152
     ' Comment Lines: 19
     '   Blank Lines: 27
-    '     File Size: 6.14 KB
+    '     File Size: 6.22 KB
 
 
     '     Class Literal

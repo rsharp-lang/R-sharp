@@ -1,14 +1,16 @@
 .\" man page create by R# package system.
-.TH IGRAPH 2 2000-01-01 "decompose" "decompose"
+.TH IGRAPH 2 2000-Jan "decompose" "decompose"
 .SH NAME
-decompose \- Decompose a graph into components, Creates a separate graph for each component of a graph.
+decompose \- Decompose a graph into components, Creates a separate graph
 .SH SYNOPSIS
 \fIdecompose(\fBgraph\fR as <generic> NetworkGraph, 
 \fBweakMode\fR as boolean = TRUE, 
+\fBby_group\fR as boolean = FALSE, 
 \fBminVertices\fR as integer = 5);\fR
 .SH DESCRIPTION
 .PP
-Decompose a graph into components, Creates a separate graph for each component of a graph.
+Decompose a graph into components, Creates a separate graph 
+ for each component of a graph.
 .PP
 .SH OPTIONS
 .PP
@@ -16,13 +18,21 @@ Decompose a graph into components, Creates a separate graph for each component o
 .PP
 .PP
 \fBweakMode\fB \fR\- 
- Character constant giving the type of the components, wither weak for weakly connected 
- components or strong for strongly connected components.
+ Character constant giving the type of the components, 
+ wither weak for weakly connected components or strong 
+ for strongly connected components.
 . 
 .PP
 .PP
-\fBminVertices\fB \fR\- The minimum number of vertices a component should contain in 
- order to place it in the result list. Eg. supply 2 here to ignore isolate vertices.
+\fBminVertices\fB \fR\- 
+ The minimum number of vertices a component should contain in 
+ order to place it in the result list. Eg. supply 2 here to 
+ ignore isolate vertices.
+. 
+.PP
+.PP
+\fBby_group\fB \fR\- 
+ split of the graph data by node type.
 . 
 .PP
 .SH VALUE

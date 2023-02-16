@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1cfe4be0c58a343a44fb3dc719f5b35e, R-sharp\Library\igraph\NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::343dc1b2b2dad5399768942566a22148, R-sharp\Library\igraph\NetworkModule.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1253
-    '    Code Lines: 818
+    '   Total Lines: 1254
+    '    Code Lines: 819
     ' Comment Lines: 281
     '   Blank Lines: 154
-    '     File Size: 48.28 KB
+    '     File Size: 48.33 KB
 
 
     ' Module NetworkModule
@@ -87,6 +87,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
 Imports rDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
@@ -1218,7 +1219,7 @@ Public Module NetworkModule
                 .Where(Function(n)
                            Dim test As Object = selector.Invoke(env, InvokeParameter.CreateLiterals(n))
                            ' get test result
-                           Return Vectorization _
+                           Return CLRVector _
                                .asLogical(test) _
                                .FirstOrDefault
                        End Function) _

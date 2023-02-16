@@ -1,0 +1,105 @@
+.\" man page create by R# package system.
+.TH UTILS 1 2002-May "unzip" "unzip"
+.SH NAME
+unzip \- Extract or List Zip Archives
+.SH SYNOPSIS
+\fIunzip(\fBzipfile\fR as string, 
+\fBfiles\fR as any = \fB<NULL>\fR, 
+\fBlist\fR as boolean = FALSE, 
+\fBoverwrite\fR as boolean = TRUE, 
+\fBjunkpaths\fR as boolean = FALSE, 
+\fBexdir\fR as string = ".", 
+\fBunzip\fR as string = "internal", 
+\fBsetTimes\fR as boolean = FALSE);\fR
+.SH DESCRIPTION
+.PP
+Extract or List Zip Archives
+ 
+ Extract files from or list a zip archive.
+.PP
+.SH OPTIONS
+.PP
+\fBzipfile\fB \fR\- 
+ The pathname of the zip file: tilde expansion (see 
+ path.expand) will be performed.
+. 
+.PP
+.PP
+\fBfiles\fB \fR\- 
+ A character vector of recorded filepaths to be extracted: 
+ the default is to extract all files.
+. 
+.PP
+.PP
+\fBlist\fB \fR\- 
+ If TRUE, list the files and extract none. The 
+ equivalent of unzip -l.
+. 
+.PP
+.PP
+\fBoverwrite\fB \fR\- 
+ If TRUE, overwrite existing files (the equivalent of unzip -o),
+ otherwise ignore such files (the equivalent of unzip -n).
+. 
+.PP
+.PP
+\fBjunkpaths\fB \fR\- 
+ If TRUE, use only the basename of the stored filepath when 
+ extracting. The equivalent of unzip -j.
+. 
+.PP
+.PP
+\fBexdir\fB \fR\- 
+ The directory to extract files to (the equivalent of unzip -d). 
+ It will be created if necessary.
+. 
+.PP
+.PP
+\fBunzip\fB \fR\- 
+ The method to be used. An alternative is to use getOption("unzip"),
+ which on a Unix-alike may be set to the path to a unzip program.
+. 
+.PP
+.PP
+\fBsetTimes\fB \fR\- 
+ logical. For the internal method only, should the file times be set 
+ based on the times in the zip file? (NB: this applies to included 
+ files, not to directories.)
+. 
+.PP
+.SH VALUE
+.PP
+If list = TRUE, a data frame with columns Name (character) Length 
+ (the size of the uncompressed file, numeric) and Date (of class
+ "POSIXct").
+ Otherwise for the "internal" method, a character vector of the 
+ filepaths extracted to, invisibly.
+.PP
+.SH DETAILS
+.PP
+The default internal method is a minimal implementation, principally 
+ designed for Windows' users to be able to unpack Windows binary 
+ packages without external software. It does not (for example) support 
+ Unicode filenames as introduced in zip 3.0: for that use unzip = 
+ "unzip" with unzip 6.00 or later. It does have some support for bzip2 
+ compression and > 2GB zip files (but not >= 4GB files pre-compression 
+ contained in a zip file: like many builds of unzip it may truncate 
+ these, in R's case with a warning if possible).
+ If unzip specifies a program, the format of the dates listed with 
+ list = TRUE is unknown (on Windows it can even depend on the current
+ locale) and the return values could be NA or expressed in the wrong 
+ time zone or misinterpreted (the latter being far less likely as from 
+ unzip 6.00).
+ File times in zip files are stored in the style of MS-DOS, as local 
+ times to an accuracy of 2 seconds. This is not very useful when transferring 
+ zip files between machines (even across continents), so we chose not 
+ to restore them by default.
+.PP
+.SH SEE ALSO
+utils
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

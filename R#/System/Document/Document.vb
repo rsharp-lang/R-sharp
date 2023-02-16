@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2ddbfcbaf2ce23db8cd13fefccacda2a, R-sharp\R#\System\Document\Document.vb"
+﻿#Region "Microsoft.VisualBasic::d09b5bd65be65fa8c9591491dbd682ef, R-sharp\R#\System\Document\Document.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 55
     ' Comment Lines: 0
     '   Blank Lines: 8
-    '     File Size: 2.38 KB
+    '     File Size: 2.41 KB
 
 
     '     Class Document
@@ -106,7 +106,7 @@ Namespace Development
                     .category = 1,
                     .keyword = keywords.JoinBy(", "),
                     .index = declares.name,
-                    .[date] = Now,
+                    .[date] = New Date(Now.Year, Now.Month, 1),
                     .title = title
                 }
             }

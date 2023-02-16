@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::46d000e577d391231928c4b79b07ce61, R-sharp\R#\Language\Syntax\SyntaxBuilderOptions.vb"
+﻿#Region "Microsoft.VisualBasic::9a45a28cb8d6f607aa5edd388e7a1607, R-sharp\R#\Language\Syntax\SyntaxBuilderOptions.vb"
 
     ' Author:
     ' 
@@ -88,7 +88,7 @@ Namespace Language.Syntax.SyntaxParser
         Public currentLine As Integer
         Public annotations As New List(Of NamedValue(Of String))
 
-        Public pipelineSymbols As String() = {"|>", ":>"}
+        Public pipelineSymbols As String() = {"|>", ":>", "→"}
 
         Public ReadOnly ParseExpression As ParseExpression
         Public ReadOnly NewScanner As GetLanguageScanner

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::63fed2bb8fbd6fca34693c1be34ccbdd, R-sharp\R#\System\Package\Package.vb"
+﻿#Region "Microsoft.VisualBasic::67dec06c3db6a40bb0bcf60013d1a7e8, R-sharp\R#\System\Package\Package.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 145
-    '    Code Lines: 97
-    ' Comment Lines: 25
-    '   Blank Lines: 23
-    '     File Size: 4.80 KB
+    '   Total Lines: 165
+    '    Code Lines: 108
+    ' Comment Lines: 31
+    '   Blank Lines: 26
+    '     File Size: 5.42 KB
 
 
     '     Class Package
     ' 
-    '         Properties: [namespace], info, is_basePackage, isMissing, libPath
-    '                     ls, package
+    '         Properties: [namespace], dllName, info, is_basePackage, isMissing
+    '                     libPath, ls, package
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: GetFunction, GetFunctionInternal, GetPackageDescription, GetPackageModuleInfo, ToString
@@ -189,12 +189,26 @@ Namespace Development.Package
             End If
         End Function
 
-        Public Function GetPackageDescription(env As Environment) As String
+        Public Function GetPackageDescription(env As Environment, Optional remarks As Boolean = False) As String
             If isMissing Then
                 Return Nothing
             Else
                 Dim pkgMgr As PackageManager = env.globalEnvironment.packages
                 Dim docs As String = pkgMgr.GetPackageDocuments([namespace])
+
+                ' 20230201
+                '
+                ' if the package module is not a registered dll file
+                ' inside the local package repository, then
+                ' we should find the package document from the external
+                ' location at here
+                If docs Is Nothing Then
+                    Dim xml = pkgMgr.packageDocs.GetAnnotations(package)
+
+                    If Not xml Is Nothing Then
+                        docs = If(remarks, xml.Remarks, xml.Summary)
+                    End If
+                End If
 
                 Return docs
             End If

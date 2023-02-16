@@ -2,7 +2,8 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "\"E:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\"  --debug=33361 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host"
+      "commandLineArgs": "--build /src ../ /save ./biodeepdbkit.zip --skip-src-build",
+      "workingDirectory": "D:\\GCModeller\\src\\runtime\\enigma\\.pkg"
     }
   }
 }

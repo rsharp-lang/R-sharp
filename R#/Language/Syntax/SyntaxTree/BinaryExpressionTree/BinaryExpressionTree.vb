@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d1262293d005fbad4c928c5bc8f0f055, R-sharp\R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
+﻿#Region "Microsoft.VisualBasic::037b7e34c3017a0d1550907ffc79eece, R-sharp\R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 306
     ' Comment Lines: 35
     '   Blank Lines: 65
-    '     File Size: 18.21 KB
+    '     File Size: 18.23 KB
 
 
     '     Module BinaryExpressionTree
@@ -436,7 +436,7 @@ Namespace Language.Syntax.SyntaxParser
                 Return New BinaryBetweenExpression(a, b)
             ElseIf opToken = "||" Then
                 Return New BinaryOrExpression(a, b)
-            ElseIf opToken = "|>" OrElse opToken = ":>" Then
+            ElseIf opToken = "|>" OrElse opToken = ":>" OrElse opToken = "→" Then
                 Return PipelineProcessor.buildPipeline(a, b, opts)
             ElseIf opToken = "->" AndAlso TypeOf a Is Literal Then
                 ' is a lambda expression?

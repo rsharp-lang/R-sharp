@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a9391c1fac5f3410eb794e2d63b353a2, R-sharp\R#\Runtime\Internal\internalInvokes\string\strings.vb"
+﻿#Region "Microsoft.VisualBasic::df8745a29b94f78fb8c4d57c77fc1139, R-sharp\R#\Runtime\Internal\internalInvokes\string\strings.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 310
-    '    Code Lines: 162
+    '   Total Lines: 314
+    '    Code Lines: 166
     ' Comment Lines: 123
     '   Blank Lines: 25
-    '     File Size: 14.01 KB
+    '     File Size: 14.21 KB
 
 
     '     Module strings
     ' 
-    '         Function: AscW, endsWith, GetStackValue, InStr, LCase
+    '         Function: AscW, endsWith, GetStackValue, InStr, LCaseStrings
     '                   ltrim, MidString, rtrim, startsWith, textLines
     '                   Trim, UCase
     ' 

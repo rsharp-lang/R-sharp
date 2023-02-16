@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3a9947ab4fb6ef409e3360115a02a770, R-sharp\R#\Language\TokenIcer\Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::8bcbeba2dec3d88cd4bd46db2f985ae2, R-sharp\R#\Language\TokenIcer\Scanner.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 519
-    '    Code Lines: 377
+    '   Total Lines: 527
+    '    Code Lines: 385
     ' Comment Lines: 72
     '   Blank Lines: 70
-    '     File Size: 21.75 KB
+    '     File Size: 22.34 KB
 
 
     '     Class Scanner
@@ -231,7 +231,14 @@ Namespace Language.TokenIcer
             "+=", "-=", "*=", "/=",
             "|>", ":>", "::"
         }
-        Shared ReadOnly RshortOperators As Char() = {"$"c, "@"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
+        Shared ReadOnly RshortOperators As Char() = {
+            "$"c, ' member getter/setter if found between two symbol, regexp symbol if found it before a string literal value
+            "@"c, ' array loop getter if found between two symbol, commandline shell if found it before a string expression
+            "+"c, "*"c, "/"c, "%"c, ' math operators
+            "^"c, ' math power
+            "!"c, ' factorial symbol if this operator is found after an expression, or the logical not if found it before an expression
+            "→"c  ' a special character for represents the pipeline forward operator(:> or |>)
+        }
 
         Friend Shared ReadOnly Rkeywords As Index(Of String) = {
             "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
@@ -537,7 +544,7 @@ Namespace Language.TokenIcer
             Select Case text
                 'Case RInterpreter.lastVariableName
                 '    Return New Token With {.name = TokenType.identifier, .text = text}
-                Case "|>", ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||", "$", "@"
+                Case "|>", ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||", "$", "@", "→"
                     Return New Token With {.name = TokenType.operator, .text = text}
                 Case ":"
                     Return New Token With {.name = TokenType.sequence, .text = text}

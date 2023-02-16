@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6a6d47836388bf720dca79363611d783, R-sharp\R#\System\Package\PackageManager.vb"
+﻿#Region "Microsoft.VisualBasic::5a066aca8d7deab8cd2c98b773d671d1, R-sharp\R#\System\Package\PackageManager.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 393
+    '   Total Lines: 404
     '    Code Lines: 205
-    ' Comment Lines: 126
+    ' Comment Lines: 137
     '   Blank Lines: 62
-    '     File Size: 18.71 KB
+    '     File Size: 19.17 KB
 
 
     '     Class PackageManager
@@ -134,7 +134,16 @@ Namespace Development.Package
             Return PackageLoader2.GetPackageDirectory(config, pkgName)
         End Function
 
-        Public Function GetPackageDocuments(pkgName As String) As String
+        ''' <summary>
+        ''' Handling the document reading for the CLR module which
+        ''' has been registered inside the local package repository
+        ''' </summary>
+        ''' <param name="pkgName"></param>
+        ''' <param name="remarks">
+        ''' get the remarks text?
+        ''' </param>
+        ''' <returns></returns>
+        Public Function GetPackageDocuments(pkgName As String, Optional remarks As Boolean = False) As String
             Dim type As Type = Me.FindPackage(pkgName, Nothing)?.package
             Dim docs As ProjectType
 
@@ -147,7 +156,7 @@ Namespace Development.Package
             If docs Is Nothing Then
                 Return Nothing
             Else
-                Return docs.Summary
+                Return If(remarks, docs.Remarks, docs.Summary)
             End If
         End Function
 

@@ -162,10 +162,16 @@ Namespace Development.CodeAnalysis
                 Case GetType(ForLoop) : Call GetSymbols(DirectCast(code, ForLoop), context)
                 Case GetType(SequenceLiteral) : GetSymbols(DirectCast(code, SequenceLiteral), context)
                 Case GetType(VectorLiteral) : GetSymbols(DirectCast(code, VectorLiteral), context)
+                Case GetType([Imports]) : GetSymbols(DirectCast(code, [Imports]), context)
 
                 Case Else
                     Throw New NotImplementedException(code.GetType.FullName)
             End Select
+        End Sub
+
+        Private Shared Sub GetSymbols(code As [Imports], context As Context)
+            Call GetSymbolReferenceList(code.packages, context)
+            Call GetSymbolReferenceList(code.library, context)
         End Sub
 
         Private Shared Sub GetSymbols(code As VectorLiteral, context As Context)

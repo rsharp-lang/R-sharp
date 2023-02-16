@@ -1,0 +1,37 @@
+.\" man page create by R# package system.
+.TH BASE 1 2002-May "c" "c"
+.SH NAME
+c \- Combine Values into a Vector or List
+.SH SYNOPSIS
+\fIc(..., 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Combine Values into a Vector or List
+ 
+ This is a generic function which combines its arguments.
+ The Default method combines its arguments To form a vector. 
+ All arguments are coerced To a common type which Is the 
+ type Of the returned value, And all attributes except 
+ names are removed.
+.PP
+.SH OPTIONS
+.PP
+\fBvalues\fB \fR\- objects to be concatenated.. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+NULL or an expression or a vector of an appropriate mode. 
+ (With no arguments the value is NULL.)
+.PP
+.SH SEE ALSO
+base
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

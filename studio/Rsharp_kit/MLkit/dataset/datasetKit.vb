@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::93e1d98fb4ad416d25fdd25c5b776528, R-sharp\studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
+﻿#Region "Microsoft.VisualBasic::0d9be21a14b9ea2dfd1b3298bc65170a, R-sharp\studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 335
-    '    Code Lines: 257
+    '   Total Lines: 361
+    '    Code Lines: 280
     ' Comment Lines: 37
-    '   Blank Lines: 41
-    '     File Size: 13.54 KB
+    '   Blank Lines: 44
+    '     File Size: 14.85 KB
 
 
     ' Module datasetKit
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: binEncoder, boolEncoder, demoMatrix, dimensionRange, EmbeddingRender
-    '               Encoding, factorEncoder, getNormalizeMatrix, mapEncoder, mapLambda
-    '               readMNISTLabelledVector, readModelDataset, Tabular, toDataframe, toFeatureSet
+    '     Function: binEncoder, boolEncoder, dataDescription, demoMatrix, dimensionRange
+    '               EmbeddingRender, Encoding, factorEncoder, getNormalizeMatrix, mapEncoder
+    '               mapLambda, readMNISTLabelledVector, readModelDataset, Tabular, toDataframe
+    '               toFeatureSet
     ' 
     ' /********************************************************************************/
 
@@ -127,6 +128,32 @@ Module datasetKit
         Return New FeatureFrame With {
             .rownames = x.getRowNames,
             .features = featureSet
+        }
+    End Function
+
+    <ExportAPI("description")>
+    Public Function dataDescription(x As Object, Optional env As Environment = Nothing) As Object
+        If x Is Nothing Then
+            Return Nothing
+        ElseIf TypeOf x Is Rdataframe Then
+            x = datasetKit.toFeatureSet(x, env)
+        End If
+
+        If TypeOf x Is Message Then
+            Return x
+        ElseIf Not TypeOf x Is FeatureFrame Then
+            Return Message.InCompatibleType(GetType(FeatureFrame), x.GetType, env)
+        End If
+
+        Return New Rdataframe With {
+            .rownames = FeatureDescription _
+                .GetDescriptions _
+                .ToArray,
+            .columns = DirectCast(x, FeatureFrame).features _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return FeatureDescription.DescribFeature(a.Value)
+                              End Function)
         }
     End Function
 

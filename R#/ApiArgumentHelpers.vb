@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::95d2ab01c430ce8a9ad546f27b7e1b5c, R-sharp\R#\ApiArgumentHelpers.vb"
+﻿#Region "Microsoft.VisualBasic::bee1392d2c7703c2f767fdc66042789b, R-sharp\R#\ApiArgumentHelpers.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 186
-    '    Code Lines: 146
-    ' Comment Lines: 19
+    '   Total Lines: 204
+    '    Code Lines: 149
+    ' Comment Lines: 34
     '   Blank Lines: 21
-    '     File Size: 7.21 KB
+    '     File Size: 7.75 KB
 
 
     ' Module ApiArgumentHelpers
@@ -211,6 +211,21 @@ Public Module ApiArgumentHelpers
         Return True
     End Function
 
+    ''' <summary>
+    ''' get a file stream object
+    ''' </summary>
+    ''' <param name="file">
+    ''' the file resource could be one of the:
+    ''' 
+    ''' 1. a valid file path to a filesystem location
+    ''' 2. a stream object that can be read/write based on the <paramref name="mode"/> context
+    ''' 3. a raw bytes array for construct a memory stream in this function(readonly)
+    ''' 
+    ''' </param>
+    ''' <param name="mode"></param>
+    ''' <param name="env"></param>
+    ''' <param name="suppress"></param>
+    ''' <returns></returns>
     Public Function GetFileStream(file As Object, mode As FileAccess, env As Environment, Optional suppress As Boolean = False) As [Variant](Of Stream, Message)
         If TypeOf file Is vector Then
             file = DirectCast(file, vector).data

@@ -1,9 +1,25 @@
 .\" man page create by R# package system.
-.TH GRAPHICS2D 1 2000-01-01 "axis.ticks" "axis.ticks"
+.TH GRAPHICS2D 1 2000-Jan "axis.ticks" "axis.ticks"
 .SH NAME
-axis.ticks \- 
+axis.ticks \- create axis tick vector data based on a given data range value
 .SH SYNOPSIS
-\fIaxis.ticks(\fBx\fR as any);\fR
+\fIaxis.ticks(\fBx\fR as any, 
+\fBticks\fR as integer = 10);\fR
+.SH DESCRIPTION
+.PP
+create axis tick vector data based on a given data range value
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- 
+ a numeric vector data for specific the data range.
+. 
+.PP
+.PP
+\fBticks\fB \fR\- 
+ the number of the ticks in the generated output axis tick vector
+. 
+.PP
 .SH SEE ALSO
 graphics2D
 .SH FILES

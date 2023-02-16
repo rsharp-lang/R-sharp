@@ -1,0 +1,80 @@
+.\" man page create by R# package system.
+.TH SET 1 2002-May "duplicated" "duplicated"
+.SH NAME
+duplicated \- Determine Duplicate Elements
+.SH SYNOPSIS
+\fIduplicated(\fBx\fR as any, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Determine Duplicate Elements
+ 
+ \fBduplicated()\fR determines which elements of a vector or data frame 
+ are duplicates of elements with smaller subscripts, and returns a 
+ logical vector indicating which elements (rows) are duplicates.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- a vector Or a data frame Or an array Or NULL.. 
+.PP
+.SH VALUE
+.PP
+duplicated(): For a vector input, a logical vector of the 
+ same length as x. For a data frame, a logical vector with one element 
+ for each row. For a matrix or array, and when MARGIN = 0, a logical 
+ array with the same dimensions and dimnames.
+.PP
+.SH DETAILS
+.PP
+These are generic functions with methods for vectors (including lists), data frames 
+ and arrays (including matrices).
+
+ For the default methods, And whenever there are equivalent method definitions for 
+ duplicated And anyDuplicated, anyDuplicated(x, ...) Is a “generalized” shortcut 
+ for any(duplicated(x, ...)), in the sense that it returns the index i of the first 
+ duplicated entry x[i] if there Is one, And 0 otherwise. Their behaviours may be 
+ different when at least one of duplicated And anyDuplicated has a relevant method.
+
+ duplicated(x, fromLast = TRUE) Is equivalent to but faster than rev(duplicated(rev(x))).
+
+ The data frame method works by pasting together a character representation Of the 
+ rows separated by \r, so may be imperfect If the data frame has characters With 
+ embedded carriage returns Or columns which Do Not reliably map To characters.
+
+ The array method calculates For Each element Of the Sub-array specified by MARGIN 
+ If the remaining dimensions are identical To those For an earlier (Or later, When 
+ fromLast = True) element (In row-major order). This would most commonly be used 
+ To find duplicated rows (the Default) Or columns (With MARGIN = 2). Note that 
+ MARGIN = 0 returns an array Of the same dimensionality attributes As x.
+
+ Missing values("NA") are regarded As equal, numeric And complex ones differing from 
+ NaN; character strings will be compared In a “common encoding”; For details, see 
+ match (And unique) which use the same concept.
+
+ Values in incomparables will never be marked as duplicated. This Is intended to be 
+ used for a fairly small set of values And will Not be efficient for a very large 
+ set.
+
+ When used on a data frame with more than one column, Or an array Or matrix when 
+ comparing dimensions of length greater than one, this tests for identity of character 
+ representations. This will catch people who unwisely rely on exact equality of 
+ floating-point numbers!
+
+ Except for factors, logical And raw vectors the default nmax = NA Is equivalent 
+ to nmax = length(x). Since a hash table of size 8*nmax bytes Is allocated, setting 
+ nmax suitably can save large amounts of memory. For factors it Is automatically 
+ set to the smaller of length(x) And the number of levels plus one (for NA). 
+ If nmax Is set too small there Is liable to be an error nmax = 1 Is silently 
+ ignored.
+
+ Long vectors are supported For the Default method Of duplicated, but may only be 
+ usable if nmax Is supplied.
+.PP
+.SH SEE ALSO
+set
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

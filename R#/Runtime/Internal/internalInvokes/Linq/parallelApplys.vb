@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::14216b95621bc850994c7241eaada71a, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\parallelApplys.vb"
+﻿#Region "Microsoft.VisualBasic::061deaf24c8cd81311185a0dfbb82922, R-sharp\R#\Runtime\Internal\internalInvokes\Linq\parallelApplys.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 250
-    '    Code Lines: 173
-    ' Comment Lines: 44
-    '   Blank Lines: 33
-    '     File Size: 10.53 KB
+    '   Total Lines: 259
+    '    Code Lines: 175
+    ' Comment Lines: 48
+    '   Blank Lines: 36
+    '     File Size: 10.92 KB
 
 
     '     Module parallelApplys

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::24bb9c7e7da58d0be6f02f8c9828fbbb, R-sharp\R#\Runtime\Internal\objects\dataset\matrix.vb"
+﻿#Region "Microsoft.VisualBasic::af200f5c535dca996077a7232538ebfd, R-sharp\R#\Runtime\Internal\objects\dataset\matrix.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 8
-    '    Code Lines: 5
+    '   Total Lines: 10
+    '    Code Lines: 6
     ' Comment Lines: 0
-    '   Blank Lines: 3
-    '     File Size: 164 B
+    '   Blank Lines: 4
+    '     File Size: 204 B
 
 
     '     Class matrix
     ' 
-    ' 
+    '         Properties: mat
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::df3b696d18e02816b840f3a13b172062, R-sharp\R#\Runtime\Vectorization\GetVectorElement.vb"
+﻿#Region "Microsoft.VisualBasic::8cc50f6ae760386d47c401533bdd3844, R-sharp\R#\Runtime\Vectorization\GetVectorElement.vb"
 
     ' Author:
     ' 
@@ -34,27 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 189
-    '    Code Lines: 132
+    '   Total Lines: 212
+    '    Code Lines: 152
     ' Comment Lines: 32
-    '   Blank Lines: 25
-    '     File Size: 6.54 KB
+    '   Blank Lines: 28
+    '     File Size: 7.53 KB
 
 
-    '     Enum VectorTypes
-    ' 
-    '         [Error], None, Scalar, Vector
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
     '     Class GetVectorElement
     ' 
     '         Properties: [Error], elementType, isNullOrEmpty, Mode, size
     ' 
     '         Constructor: (+3 Overloads) Sub New
-    '         Function: CastTo, Create, DoesSizeMatch, Getter, Populate
+    '         Function: CastTo, Create, DoesSizeMatch, (+2 Overloads) Getter, IsScalar
+    '                   Populate
     ' 
     ' 
     ' /********************************************************************************/
@@ -68,14 +61,6 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 
 Namespace Runtime.Vectorization
-
-    Public Enum VectorTypes
-        None
-        Scalar
-        Vector
-
-        [Error]
-    End Enum
 
     ''' <summary>
     ''' helper class object for make a safe vector element visiting
@@ -197,6 +182,10 @@ Namespace Runtime.Vectorization
         End Function
 
         Public Iterator Function Populate(Of T)(unary As Func(Of Object, Object)) As IEnumerable(Of T)
+            If vector Is Nothing Then
+                Return
+            End If
+
             For i As Integer = 0 To vector.Length - 1
                 Yield DirectCast(unary(vector.GetValue(i)), T)
             Next
@@ -234,6 +223,14 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
+        ''' <summary>
+        ''' if the target input object <paramref name="x"/>is nothing, then this function
+        ''' will returns an instance of <see cref="GetVectorElement"/> with wrap a null
+        ''' value
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         Public Shared Function Create(Of T)(x As Object) As GetVectorElement
             If x Is Nothing Then
                 Return New GetVectorElement(vec:=Nothing, GetType(T))
@@ -244,32 +241,41 @@ Namespace Runtime.Vectorization
                     x = DirectCast(x, vector).data
                 End If
 
-                Dim type As Type = x.GetType
-
-                If type Is typedefine(Of T).baseType Then
-                    ' is a scalar
-                    Return New GetVectorElement(scalar:=x, type:=type)
-                ElseIf type.ImplementInterface(typedefine(Of T).enumerable) Then
-                    ' is a generic collection
-                    If type.IsArray Then
-                        Return New GetVectorElement(DirectCast(x, Array), GetType(T))
-                    Else
-                        ' cast collection to array
-                        Dim list As New List(Of Object)
-
-                        For Each item As Object In DirectCast(x, IEnumerable)
-                            Call list.Add(item)
-                        Next
-
-                        Return New GetVectorElement(list.ToArray, GetType(T))
-                    End If
-                Else
-                    ' do type cast?
-                    Return New GetVectorElement(ex:=New InvalidCastException($"Do we require a type cast for {type} -> {GetType(T)}?"))
-                End If
+                Return CreateVectorInternal(Of T)(x)
             End If
         End Function
 
+        Private Shared Function CreateVectorInternal(Of T)(x As Object) As GetVectorElement
+            Dim type As Type = x.GetType
+
+            If type Is typedefine(Of T).baseType Then
+                ' is a scalar
+                Return New GetVectorElement(scalar:=x, type:=type)
+            ElseIf type.ImplementInterface(typedefine(Of T).enumerable) Then
+                ' is a generic collection
+                If type.IsArray Then
+                    Return New GetVectorElement(DirectCast(x, Array), GetType(T))
+                Else
+                    ' cast collection to array
+                    Dim list As New List(Of Object)
+
+                    For Each item As Object In DirectCast(x, IEnumerable)
+                        Call list.Add(item)
+                    Next
+
+                    Return New GetVectorElement(list.ToArray, GetType(T))
+                End If
+            Else
+                ' do type cast?
+                Return New GetVectorElement(ex:=New InvalidCastException($"Do we require a type cast for {type} -> {GetType(T)}?"))
+            End If
+        End Function
+
+        ''' <summary>
+        ''' test the given <paramref name="obj"/> is a single scalar value?
+        ''' </summary>
+        ''' <param name="obj"></param>
+        ''' <returns></returns>
         Public Shared Function IsScalar(obj As Object) As Boolean
             If obj Is Nothing Then
                 Return True

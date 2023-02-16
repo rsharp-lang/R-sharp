@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ceb3aef372679cd4673fd4521839f31a, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::309ac31db9c469ed7ac5c70805a9cfb7, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 471
     ' Comment Lines: 56
     '   Blank Lines: 76
-    '     File Size: 26.38 KB
+    '     File Size: 26.44 KB
 
 
     '     Class SymbolIndexer
@@ -192,7 +192,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Dim opt As ValueAssignExpression = indexVec(1)
 
                     If TypeOf opt.targetSymbols(Scan0) Is Literal AndAlso DirectCast(opt.targetSymbols(Scan0), Literal) = "drop" Then
-                        Dim drop As Boolean = asLogical(opt.value.Evaluate(env))(Scan0)
+                        Dim drop As Boolean = CLRVector.asLogical(opt.value.Evaluate(env))(Scan0)
                         Dim rowIndex = data.getRowIndex(indexVec.values(Scan0).Evaluate(env))
                         Dim result = data.getRowList(rowIndex, drop:=drop)
 
@@ -389,41 +389,65 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
         Private Shared Function listSubset(list As IDictionary, indexer As Array, env As Environment) As Object
             Dim allKeys = (From x In list.Keys).ToArray
+            Dim subsetKeys As Array
 
             If REnv.isVector(Of String)(indexer) Then
                 ' get by names
-                Return doListSubset(list, names:=REnv.asVector(Of String)(indexer))
+                subsetKeys = CLRVector.asCharacter(indexer)
             Else
-                Dim i As New List(Of Object)
-
                 If indexer.Length >= list.Count Then
                     env.AddMessage($"the index size({indexer.Length}) is greater than the size({list.Count}) of the target list!", MSG_TYPES.WRN)
                 End If
 
+                ' translate the bool vector or integer vector 
+                ' to the subset of list all keys character vector
                 If TypeOf indexer Is Boolean() OrElse MeasureArrayElementType(indexer) Is GetType(Boolean) Then
-                    For Each flag As SeqValue(Of Boolean) In DirectCast(REnv.asVector(Of Boolean)(indexer), Boolean()).SeqIterator
-                        If flag.value Then
-                            ' get by index
-                            If flag.i >= allKeys.Length Then
-                                Call i.Add(Nothing)
-                            Else
-                                Call i.Add(allKeys(flag.i))
-                            End If
-                        End If
-                    Next
+                    subsetKeys = translateLogical2keys(indexer, allKeys)
                 Else
-                    ' get by index
-                    For Each flag As Integer In DirectCast(REnv.asVector(Of Integer)(indexer), Integer())
-                        If flag >= allKeys.Length Then
-                            Call i.Add(Nothing)
-                        Else
-                            Call i.Add(allKeys(flag - 1))
-                        End If
-                    Next
+                    Try
+                        subsetKeys = translateInteger2keys(indexer, allKeys)
+                    Catch ex As Exception
+                        Return Internal.debug.stop(ex, env)
+                    End Try
                 End If
-
-                Return doListSubset(list, i.ToArray)
             End If
+
+            Return doListSubset(list, subsetKeys)
+        End Function
+
+        Private Shared Function translateInteger2keys(indexer As Array, allkeys As Object()) As Array
+            Dim i As New List(Of Object)
+
+            ' get by index
+            ' the string index key is already handling
+            ' at the code above
+            ' so make the index to integer at here
+            For Each flag As Integer In CLRVector.asInteger(indexer)
+                If flag >= allkeys.Length Then
+                    Call i.Add(Nothing)
+                Else
+                    Call i.Add(allkeys(flag - 1))
+                End If
+            Next
+
+            Return i.ToArray
+        End Function
+
+        Private Shared Function translateLogical2keys(indexer As Array, allkeys As Object()) As Array
+            Dim i As New List(Of Object)
+
+            For Each flag As SeqValue(Of Boolean) In CLRVector.asLogical(indexer).SeqIterator
+                If flag.value Then
+                    ' get by index
+                    If flag.i >= allkeys.Length Then
+                        Call i.Add(Nothing)
+                    Else
+                        Call i.Add(allkeys(flag.i))
+                    End If
+                End If
+            Next
+
+            Return i.ToArray
         End Function
 
         Private Shared Function doListSubset(list As IDictionary, names As Array) As Object
@@ -636,7 +660,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim vec As Array
 
             If REnv.isVector(Of Boolean)(indexer) Then
-                vec = Rarray.getByIndex(which.IsTrue(Vectorization.asLogical(indexer), offset:=1))
+                vec = Rarray.getByIndex(which.IsTrue(CLRVector.asLogical(indexer), offset:=1))
             ElseIf indexer.Length = 1 Then
                 Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
             Else

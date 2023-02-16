@@ -1,0 +1,39 @@
+.\" man page create by R# package system.
+.TH FILE 1 2002-May "normalizeFileName" "normalizeFileName"
+.SH NAME
+normalizeFileName \- removes all of the invalid character for the windows file name
+.SH SYNOPSIS
+\fInormalizeFileName(\fBstrings\fR as any, 
+\fBalphabetOnly\fR as boolean = TRUE, 
+\fBreplacement\fR as string = "_", 
+\fBshrink\fR as boolean = TRUE, 
+\fBmaxchars\fR as integer = 32, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+removes all of the invalid character for the windows file name
+.PP
+.SH OPTIONS
+.PP
+\fBstrings\fB \fR\- -. 
+.PP
+.PP
+\fBalphabetOnly\fB \fR\- -. 
+.PP
+.PP
+\fBreplacement\fB \fR\- 
+ all of the invalid character for the windows file name 
+ will be replaced as this placeholder character
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+file
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

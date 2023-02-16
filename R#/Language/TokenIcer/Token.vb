@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2574cf7e175ca0df7d572cb45a94f780, R-sharp\R#\Language\TokenIcer\Token.vb"
+﻿#Region "Microsoft.VisualBasic::6304332aa88ea1f62875190084b197f7, R-sharp\R#\Language\TokenIcer\Token.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 65
-    '    Code Lines: 44
+    '   Total Lines: 74
+    '    Code Lines: 53
     ' Comment Lines: 11
     '   Blank Lines: 10
-    '     File Size: 2.19 KB
+    '     File Size: 2.69 KB
 
 
     '     Class Token
@@ -53,6 +53,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 
 Namespace Language.TokenIcer
@@ -67,6 +68,7 @@ Namespace Language.TokenIcer
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property literal As Object
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Select Case name
                     Case TokenType.stringLiteral
@@ -89,6 +91,7 @@ Namespace Language.TokenIcer
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property isLiteral As Boolean
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return name = TokenType.booleanLiteral OrElse
                        name = TokenType.integerLiteral OrElse
@@ -98,21 +101,27 @@ Namespace Language.TokenIcer
             End Get
         End Property
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Sub New()
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub New(name As TokenType, Optional value$ = Nothing)
             Call MyBase.New(name, value)
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Widening Operator CType(type As TokenType) As Token
             Return New Token(type)
         End Operator
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overloads Shared Operator =(token As Token, type As TokenType) As Boolean
             Return token.name = type
         End Operator
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overloads Shared Operator <>(token As Token, type As TokenType) As Boolean
             Return Not token = type
         End Operator

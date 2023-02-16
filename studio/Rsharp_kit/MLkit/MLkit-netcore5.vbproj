@@ -137,4 +137,7 @@
  
   <Import Project="..\..\..\Library\shares\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
 
+ 
+  <Import Project="..\..\..\Library\shares\xgboostDataSet_helper\xgboostDataSet_helper.projitems" Label="Shared" />
+
 </Project>

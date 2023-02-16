@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dbbc054bb5f8b7952c0621bc0e4974e4, R-sharp\snowFall\Parallel.vb"
+﻿#Region "Microsoft.VisualBasic::7289286f15ce4b40e2bc88d54916d94e, R-sharp\snowFall\Parallel.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 282
-    '    Code Lines: 187
-    ' Comment Lines: 61
-    '   Blank Lines: 34
-    '     File Size: 10.48 KB
+    '   Total Lines: 319
+    '    Code Lines: 213
+    ' Comment Lines: 65
+    '   Blank Lines: 41
+    '     File Size: 11.60 KB
 
 
     ' Module Parallel

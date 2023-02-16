@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1ea329357548f54e0be0c0b1f13ea448, R-sharp\studio\Rserver\Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::ac6da844177faf6e168cf1a98a2f0f0b, R-sharp\studio\Rserver\Rscript.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 257
+    '   Total Lines: 254
     '    Code Lines: 139
     ' Comment Lines: 94
-    '   Blank Lines: 24
-    '     File Size: 11.44 KB
+    '   Blank Lines: 21
+    '     File Size: 11.43 KB
 
 
     ' Class Rscript
@@ -305,7 +305,3 @@ Return CLI.ToString()
 End Function
 End Class
 End Namespace
-
-
-
-

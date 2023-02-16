@@ -1,70 +1,71 @@
-﻿#Region "Microsoft.VisualBasic::02a0983202c28e17767c3c43ce22d86f, R-sharp\R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::31df3f9952d31ba8d46ad26d3fe16253, R-sharp\R#\Runtime\Internal\internalInvokes\base.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 2747
-'    Code Lines: 1198
-' Comment Lines: 1325
-'   Blank Lines: 224
-'     File Size: 122.78 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module base
-' 
-'         Function: [date], [stop], allocate, append, appendFinal
-'                   appendOfList, appendOfVector, attachPackageFile, autoDispose, c
-'                   cat, cbind, colnames, columnVector, days
-'                   doPrintInternal, factor, factors, getOption, ifelse
-'                   invisible, isDataframe, isEmpty, isEmptyArray, isList
-'                   isNA, isNull, isRVector, length, library
-'                   makeNames, names, ncol, neg, nrow
-'                   objectAddInvoke, options, options_flush, print, range
-'                   rbind, Rdataframe, rep, replace, Rlist
-'                   Robj_dimension, rowBindDataFrame, rownames, seq, sink
-'                   source, str, summary, t, uniqueNames
-'                   unitOfT, warning, year
-' 
-'         Sub: safeAddColumn, warnings
-'         Class PrinterOptions
-' 
-'             Properties: fields, maxPrint, quot
-' 
-' 
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 2915
+    '    Code Lines: 1322
+    ' Comment Lines: 1349
+    '   Blank Lines: 244
+    '     File Size: 130.13 KB
+
+
+    '     Module base
+    ' 
+    '         Function: [date], [stop], allocate, append, appendFinal
+    '                   appendOfList, appendOfVector, attachPackageFile, autoDispose, c
+    '                   cat, (+2 Overloads) cbind, colnames, columnCombine01, columnCombine11
+    '                   columnVector, days, doPrintInternal, factor, factors
+    '                   getOption, ifelse, ifelseScalar, ifelseVector, invisible
+    '                   isDataframe, isEmpty, isEmptyArray, isList, isNA
+    '                   isNull, isRVector, length, library, makeNames
+    '                   names, ncol, neg, nrow, objectAddInvoke
+    '                   options, options_flush, print, range, rbind
+    '                   Rdataframe, rep, replace, Rlist, Robj_dimension
+    '                   rowBindDataFrame, rownames, seq, sink, source
+    '                   str, strictColumnAppend, summary, t, uniqueNames
+    '                   unitOfT, warning, year
+    ' 
+    '         Sub: safeAddColumn, warnings
+    '         Class PrinterOptions
+    ' 
+    '             Properties: fields, maxPrint, quot
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -417,17 +418,31 @@ Namespace Runtime.Internal.Invokes
         ''' Missing values In test give missing values In the result.
         ''' </remarks>
         <ExportAPI("ifelse")>
-        Public Function ifelse(test As Boolean(),
+        Public Function ifelse(<RRawVectorArgument> <RLazyExpression> test As Object,
                                <RRawVectorArgument> <RLazyExpression> yes As Object,
                                <RRawVectorArgument> <RLazyExpression> no As Object,
                                Optional env As Environment = Nothing) As Object
 
-            If test.Length = 0 Then
-                Return {}
-            ElseIf test.Length = 1 Then
-                Return ifelseScalar(test(Scan0), yes, no, env)
+            Dim testVals As Object = Nothing
+
+            If TypeOf test Is Expression Then
+                testVals = DirectCast(test, Expression).Evaluate(env)
+
+                If Program.isException(testVals) Then
+                    Return testVals
+                Else
+                    testVals = CLRVector.asLogical(testVals)
+                End If
             Else
-                Return ifelseVector(test, yes, no, env)
+                testVals = CLRVector.asLogical(test)
+            End If
+
+            If DirectCast(testVals, Boolean()).Length = 0 Then
+                Return {}
+            ElseIf DirectCast(testVals, Boolean()).Length = 1 Then
+                Return ifelseScalar(DirectCast(testVals, Boolean())(Scan0), yes, no, env)
+            Else
+                Return ifelseVector(DirectCast(testVals, Boolean()), yes, no, env)
             End If
         End Function
 
@@ -818,20 +833,30 @@ Namespace Runtime.Internal.Invokes
             Dim df_rows = df.forEachRow(df_names).ToDictionary
             Dim y_rows = y.forEachRow(y_names).ToArray
 
-            For Each row In y_rows
-                Dim a As Object()
+            For Each row As NamedCollection(Of Object) In y_rows
+                Dim a As Object() = Nothing
                 Dim b As Object() = row.value
                 Dim v As Object() = Replicate([default], union_names.Length).ToArray
 
                 If df_rows.ContainsKey(row.name) Then
                     a = df_rows(row.name).value
+
+                    If a.Length = v.Length AndAlso b.Length > 0 Then
+                        ' the duplicated name cause this problem
+                        ' ignores?
+                        Call env.AddMessage($"Found a duplicated key('{row.name}') while do dataframe cbind!")
+
+                        GoTo SKIP
+                    End If
                 Else
                     a = Replicate([default], df_names.Length).ToArray
+
+                    Call env.AddMessage($"Missing key('{row.name}') while do dataframe cbind!")
                 End If
 
                 Call Array.ConstrainedCopy(a, Scan0, v, Scan0, a.Length)
                 Call Array.ConstrainedCopy(b, Scan0, v, a.Length, b.Length)
-
+SKIP:
                 df_rows(row.name) = New NamedCollection(Of Object) With {
                     .name = row.name,
                     .value = v.ToArray

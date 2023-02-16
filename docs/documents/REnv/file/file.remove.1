@@ -1,0 +1,32 @@
+.\" man page create by R# package system.
+.TH FILE 1 2002-May "file.remove" "file.remove"
+.SH NAME
+file.remove \- Delete files or directories
+.SH SYNOPSIS
+\fIfile.remove(\fBx\fR as string, 
+\fBverbose\fR as boolean = \fB<NULL>\fR, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Delete files or directories
+ 
+ \fBfile.remove\fR attempts to remove the files named 
+ in its argument. On most Unix platforms ‘file’ 
+ includes empty directories, symbolic links, fifos 
+ and sockets. On Windows, ‘file’ means a regular file 
+ and not, say, an empty directory.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- 
+ character vectors, containing file names or paths.
+. 
+.PP
+.SH SEE ALSO
+file
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

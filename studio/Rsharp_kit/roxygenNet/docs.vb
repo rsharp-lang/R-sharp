@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2877ea3899ddba233732fc039d97ab65, R-sharp\studio\Rsharp_kit\roxygenNet\docs.vb"
+﻿#Region "Microsoft.VisualBasic::5f4bc97553bba82470369f510ed640d5, R-sharp\studio\Rsharp_kit\roxygenNet\docs.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 235
-    '    Code Lines: 185
-    ' Comment Lines: 13
-    '   Blank Lines: 37
-    '     File Size: 9.11 KB
+    '   Total Lines: 323
+    '    Code Lines: 258
+    ' Comment Lines: 21
+    '   Blank Lines: 44
+    '     File Size: 12.19 KB
 
 
     ' Module docs
@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.text.markdown
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
+Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
@@ -75,6 +76,14 @@ Imports any = Microsoft.VisualBasic.Scripting
 <Package("utils.docs", Category:=APICategories.SoftwareTools, Publisher:="I@xieguigang.me")>
 Module docs
 
+    ''' <summary>
+    ''' default template for the package module in a dll assembly file:
+    ''' 
+    ''' ```
+    ''' imports name from dll
+    ''' ```
+    ''' </summary>
+    ''' <returns></returns>
     Private Function getDefaultTemplate() As XElement
         Return <html lang="zh-CN">
                    <head>
@@ -86,12 +95,11 @@ Module docs
                        <title>{$packageName}</title>
 
                        <meta name="author" content="xie.guigang@gcmodeller.org"/>
-                       <meta name="copyright" content="SMRUCC genomics Copyright (c) 2020"/>
-                       <meta name="keywords" content="GCModeller; Xanthomonas; Artificial Life"/>
-                       <meta name="generator" content="https://github.com/xieguigang/xDoc"/>
+                       <meta name="copyright" content="SMRUCC genomics Copyright (c) 2022"/>
+                       <meta name="keywords" content="R#; {$packageName}; {$base_dll}"/>
+                       <meta name="generator" content="https://github.com/rsharp-lang"/>
                        <meta name="theme-color" content="#333"/>
-                       <meta name="last-update" content=<%= Now.ToString(format:="yyyy-MM-dd") %>/>
-                       <meta name="description" content="{$packageDescription}"/>
+                       <meta name="description" content="{$shortDescription}"/>
 
                        <meta class="foundation-data-attribute-namespace"/>
                        <meta class="foundation-mq-xxlarge"/>
@@ -100,6 +108,37 @@ Module docs
                        <meta class="foundation-mq-medium"/>
                        <meta class="foundation-mq-small"/>
                        <meta class="foundation-mq-topbar"/>
+
+                       <style>
+
+.table-three-line {
+border-collapse:collapse; /* 关键属性：合并表格内外边框(其实表格边框有2px，外面1px，里面还有1px哦) */
+border:solid #000000; /* 设置边框属性；样式(solid=实线)、颜色(#999=灰) */
+border-width:2px 0 2px 0px; /* 设置边框状粗细：上 右 下 左 = 对应：1px 0 0 1px */
+}
+.left-1{
+    border:solid #000000;border-width:1px 1px 2px 0px;padding:2px;
+    font-weight:bolder;
+}
+.right-1{
+    border:solid #000000;border-width:1px 0px 2px 1px;padding:2px;
+    font-weight:bolder;
+}
+.mid-1{
+    border:solid #000000;border-width:1px 1px 2px 1px;padding:2px;
+    font-weight:bolder;
+}
+.left{
+    border:solid #000000;border-width:1px 1px 1px 0px;padding:2px;
+}
+.right{
+    border:solid #000000;border-width:1px 0px 1px 1px;padding:2px;
+}
+.mid{
+    border:solid #000000;border-width:1px 1px 1px 1px;padding:2px;
+}
+table caption {font-size:14px;font-weight:bolder;}
+</style>
                    </head>
                    <body>
                        <table width="100%" summary=<%= "page for {{$packageName}}" %>>
@@ -112,15 +151,32 @@ Module docs
 
                        <h1>{$packageName}</h1>
                        <hr/>
-                       <p>
+                       <p style="
+    font-size: 1.125em;
+    line-height: .8em;
+    margin-left: 0.5%;
+    background-color: #fbfbfb;
+    padding: 24px;
+">
                            <code>
+                               <span style="color: blue;">require</span>(<span style="color: black; font-weight: bold;">{$package}</span>);
+                               <br/>
+                               <br/>
+                               <span style="color: green;">{$desc_comments}</span><br/>
                                <span style="color: blue;">imports</span><span style="color: brown"> "{$packageName}"</span><span style="color: blue;"> from</span><span style="color: brown"> "{$base_dll}"</span>;
                            </code>
                        </p>
+
                        <p>{$packageDescription}</p>
 
+                       <blockquote>
+                           <p style="font-style: italic; font-size: 0.9em;">
+                           {$packageRemarks}
+                           </p>
+                       </blockquote>
+
                        <div id="main-wrapper">
-                           <table>
+                           <table class="table-three-line">
                                <tbody>{$apiList}</tbody>
                            </table>
                        </div>
@@ -157,7 +213,7 @@ Module docs
     ''' <summary>
     ''' Create html help document for the specific package module
     ''' </summary>
-    ''' <param name="package">The package name</param>
+    ''' <param name="pkgName">The package name</param>
     ''' <param name="globalEnv"></param>
     ''' <returns></returns>
     ''' <remarks>
@@ -165,11 +221,12 @@ Module docs
     ''' pdf help manual file.
     ''' </remarks>
     <ExportAPI("makehtml.docs")>
-    Public Function makeHtmlDocs(package As Object,
+    Public Function makeHtmlDocs(pkgName As Object,
                                  Optional template$ = Nothing,
+                                 Optional package As String = Nothing,
                                  Optional globalEnv As GlobalEnvironment = Nothing) As String
 
-        Dim apis = rdocumentation.getPkgApisList(package, globalEnv)
+        Dim apis = rdocumentation.getPkgApisList(pkgName, globalEnv)
 
         Static defaultTemplate As [Default](Of String) = "<!DOCTYPE html>" & getDefaultTemplate().ToString
 
@@ -185,22 +242,50 @@ Module docs
                 .DoCall(AddressOf Rapi.apiDocsHtml)
         Next
 
-        If TypeOf package Is String Then
+        Dim desc As String = ""
+
+        If TypeOf pkgName Is String Then
+            package = If(package, any.ToString(pkgName))
+            desc = globalEnv.packages _
+                .GetPackageDocuments(any.ToString(pkgName)) _
+                .DoCall(AddressOf markdown.Transform)
+
             With docs
-                !packageName = any.ToString(package)
-                !packageDescription = globalEnv.packages _
-                    .GetPackageDocuments(any.ToString(package)) _
+                !packageName = any.ToString(pkgName)
+                !packageDescription = desc
+                !packageRemarks = globalEnv.packages _
+                    .GetPackageDocuments(any.ToString(pkgName), remarks:=True) _
                     .DoCall(AddressOf markdown.Transform)
                 !apiList = apiList.JoinBy(vbCrLf)
                 !base_dll = "*"
+                !package = package
             End With
         Else
+            Dim remakrs As String = DirectCast(pkgName, Development.Package.Package) _
+                .GetPackageDescription(globalEnv, remarks:=True) _
+                .DoCall(AddressOf markdown.Transform)
+
+            desc = DirectCast(pkgName, Development.Package.Package) _
+                .GetPackageDescription(globalEnv) _
+                .DoCall(AddressOf markdown.Transform)
+            package = If(package, DirectCast(pkgName, Development.Package.Package).namespace)
+
             With docs
-                !packageName = DirectCast(package, Development.Package.Package).namespace
-                !packageDescription = DirectCast(package, Development.Package.Package).GetPackageDescription(globalEnv)
+                !packageName = DirectCast(pkgName, Development.Package.Package).namespace
+                !packageDescription = desc
+                !packageRemarks = remakrs
                 !apiList = apiList.JoinBy(vbCrLf)
-                !base_dll = DirectCast(package, Development.Package.Package).dllName
+                !base_dll = DirectCast(pkgName, Development.Package.Package).dllName
+                !package = package
             End With
+        End If
+
+        docs!shortDescription = Mid(desc.StripHTMLTags.TrimNewLine, 1, 64) & "..."
+
+        If Not desc.StringEmpty Then
+            desc = desc.LineTokens.FirstOrDefault
+            desc = "#' " & desc.StripHTMLTags.TrimNewLine.Trim
+            docs!desc_comments = desc
         End If
 
         Return docs.ToString

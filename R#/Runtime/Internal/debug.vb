@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7f99c102c812de35d98ba8bd78c14da3, R-sharp\R#\Runtime\Internal\debug.vb"
+﻿#Region "Microsoft.VisualBasic::493933c3a7b82b45b8798e53b2e11be9, R-sharp\R#\Runtime\Internal\debug.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 335
-    '    Code Lines: 211
-    ' Comment Lines: 75
+    '   Total Lines: 337
+    '    Code Lines: 212
+    ' Comment Lines: 76
     '   Blank Lines: 49
-    '     File Size: 13.21 KB
+    '     File Size: 13.27 KB
 
 
     '     Class debug
@@ -47,7 +47,7 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: [stop], createDotNetExceptionMessage, CreateMessageInternal, getEnvironmentStack, getMessageColor
+    '         Function: [stop], CastCLRExceptionMessage, CreateMessageInternal, getEnvironmentStack, getMessageColor
     '                   getMessagePrefix, PrintMessageInternal, PrintRExceptionStackTrace, PrintRStackTrace, PrintWarningMessages
     ' 
     '         Sub: write, writeErrMessage
@@ -122,7 +122,7 @@ Namespace Runtime.Internal
                 If debugMode Then
                     Throw DirectCast(message, Exception)
                 Else
-                    Return createDotNetExceptionMessage(DirectCast(message, Exception), envir)
+                    Return CastCLRExceptionMessage(DirectCast(message, Exception), envir)
                 End If
             ElseIf message.GetType Is GetType(Message) Then
                 If debugMode Then
@@ -192,7 +192,7 @@ Namespace Runtime.Internal
         ''' <param name="ex"></param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
-        Private Shared Function createDotNetExceptionMessage(ex As Exception, envir As Environment) As Message
+        Private Shared Function CastCLRExceptionMessage(ex As Exception, envir As Environment) As Message
             Dim messages As New List(Of String)
             Dim exception As Exception = ex
 
@@ -221,6 +221,8 @@ Namespace Runtime.Internal
         ''' </summary>
         ''' <param name="err"></param>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function PrintRExceptionStackTrace(err As ExceptionData) As String
             Return PrintRStackTrace(err.StackTrace)
         End Function

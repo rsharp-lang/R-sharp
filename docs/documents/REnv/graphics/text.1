@@ -1,0 +1,44 @@
+.\" man page create by R# package system.
+.TH GRAPHICS 1 2002-May "text" "text"
+.SH NAME
+text \- Add Text to a Plot
+.SH SYNOPSIS
+\fItext(\fBx\fR as double, 
+\fBy\fR as double, 
+\fBlabels\fR as string, 
+\fBcol\fR as any = "black", 
+\fBfont\fR as <generic> Font = \fB<NULL>\fR, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Add Text to a Plot
+ 
+ text draws the strings given in the vector labels at 
+ the coordinates given by x and y. y may be missing 
+ since xy.coords(x, y) is used for construction of the 
+ coordinates.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- numeric vectors of coordinates where 
+ the text labels should be written. If the length of 
+ x and y differs, the shorter one is recycled.
+. 
+.PP
+.PP
+\fBy\fB \fR\- numeric vectors of coordinates where 
+ the text labels should be written. If the length of 
+ x and y differs, the shorter one is recycled.
+. 
+.PP
+.PP
+\fBlabels\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+graphics
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

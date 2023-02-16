@@ -1,0 +1,22 @@
+.\" man page create by R# package system.
+.TH GRAPHICS 1 2002-May "dev.set" "dev.set"
+.SH NAME
+dev.set \- dev.set makes the specified device the active device. If there
+.SH SYNOPSIS
+\fIdev.set(\fBdev\fR as <generic> IGraphics = \fB<NULL>\fR, 
+\fBwhich\fR as integer = -1, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+dev.set makes the specified device the active device. If there 
+ is no device with that number, it is equivalent to dev.next. 
+ If which = 1 it opens a new device and selects that.
+.PP
+.SH SEE ALSO
+graphics
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

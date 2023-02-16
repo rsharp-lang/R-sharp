@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cf0918dff3f1ecb37385c16ebf30fcbd, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\WhileLoop.vb"
+﻿#Region "Microsoft.VisualBasic::85742b606a5a0358983f5f3ea5d61388, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\WhileLoop.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 69
-    '    Code Lines: 56
+    '   Total Lines: 70
+    '    Code Lines: 57
     ' Comment Lines: 0
     '   Blank Lines: 13
-    '     File Size: 2.28 KB
+    '     File Size: 2.32 KB
 
 
     '     Class WhileLoop
@@ -59,6 +59,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -99,7 +100,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
                 If Program.isException(test) Then
                     Return test
-                ElseIf False = Vectorization.asLogical(test)(Scan0) Then
+                ElseIf False = CLRVector.asLogical(test)(Scan0) Then
                     Exit Do
                 Else
                     value = Me.loopBody.Evaluate(env)

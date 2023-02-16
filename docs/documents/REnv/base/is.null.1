@@ -1,0 +1,48 @@
+.\" man page create by R# package system.
+.TH BASE 1 2002-May "is.null" "is.null"
+.SH NAME
+is.null \- The Null Object
+.SH SYNOPSIS
+\fIis.null(\fBx\fR as any);\fR
+.SH DESCRIPTION
+.PP
+The Null Object
+ 
+ \fBNULL\fR represents the null object in R: it is a reserved word. 
+ \fBNULL\fR is often returned by expressions and functions whose 
+ value is undefined.
+ 
+ is.null is a primitive function.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- an object to be tested or coerced.. 
+.PP
+.SH VALUE
+.PP
+is.null returns TRUE if its argument's value is NULL and FALSE otherwise.
+.PP
+.SH DETAILS
+.PP
+\fBNULL\fR can be indexed (see Extract) in just about any syntactically 
+ legal way: whether it makes sense or not, the result is always \fBNULL\fR. 
+ Objects with value \fBNULL\fR can be changed by replacement operators 
+ and will be coerced to the type of the right-hand side.
+ 
+ \fBNULL\fR Is also used as the empty pairlist: see the examples. Because 
+ pairlists are often promoted To lists, you may encounter \fBNULL\fR being 
+ promoted To an empty list.
+ 
+ Objects with value \fBNULL\fR cannot have attributes as there Is only 
+ one null object attempts to assign them are either an error (attr) 
+ Or promote the object to an empty list with attribute(s) (attributes 
+ And structure).
+.PP
+.SH SEE ALSO
+base
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

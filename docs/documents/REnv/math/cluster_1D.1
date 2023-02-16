@@ -1,0 +1,40 @@
+.\" man page create by R# package system.
+.TH MATH 1 2002-May "cluster_1D" "cluster_1D"
+.SH NAME
+cluster_1D \- grouping data input by given numeric tolerance
+.SH SYNOPSIS
+\fIcluster_1D(\fBsequence\fR as any, 
+\fBeval\fR as any, 
+\fBoffset\fR as double = 0, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+grouping data input by given numeric tolerance
+.PP
+.SH OPTIONS
+.PP
+\fBsequence\fB \fR\- -. 
+.PP
+.PP
+\fBeval\fB \fR\- 
+ this parameter should be a lambda function which 
+ evaluate a numeric value for each elements in 
+ the given sequence data.
+. 
+.PP
+.PP
+\fBoffset\fB \fR\- 
+ the max tolerance error of the cluster data
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+math
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

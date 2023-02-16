@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1869117494c62cd749e7de91aa2c9a72, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb"
+﻿#Region "Microsoft.VisualBasic::cd691e8c0c40a1dfb7af534159cdd6a2, R-sharp\R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb"
 
     ' Author:
     ' 
@@ -56,10 +56,13 @@
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
     Public Class UnaryNot : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
@@ -91,10 +94,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Function
 
         Public Shared Function [Not](logical As Object) As Boolean()
-            Dim logicals As Boolean() = Vectorization.asLogical(logical)
-            Dim nots As Boolean() = logicals _
-                .Select(Function(b) Not b) _
-                .ToArray
+            Dim logicals As Boolean() = CLRVector.asLogical(logical)
+            Dim nots As Boolean() = (
+                From b As Boolean
+                In logicals
+                Select Not b).ToArray
 
             Return nots
         End Function
