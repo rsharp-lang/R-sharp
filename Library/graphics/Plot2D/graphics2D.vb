@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Axis
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
@@ -470,8 +471,13 @@ Module graphics2D
         Dim dimension As Size
 
         If pixels.isError Then
-            Return pixels.getError
+            If heatmap IsNot Nothing AndAlso heatmap.GetType.ImplementInterface(Of IRasterGrayscaleHeatmap) Then
+                pixels = pipeline.CreateFromPopulator(DirectCast(heatmap, IRasterGrayscaleHeatmap).GetRasterPixels)
+            Else
+                Return pixels.getError
+            End If
         End If
+
         If region.IsEmpty Then
             region = New Rectangle(New Point, canvas)
         End If
