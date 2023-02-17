@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fa275c8abfb2d4ed36d4d92d0d94be86, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/ValueAssignOperator/ValueAssignExpression.vb"
+﻿#Region "Microsoft.VisualBasic::f4ade857a286e54e06dafb05c936b704, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/ValueAssignOperator/ValueAssignExpression.vb"
 
     ' Author:
     ' 
@@ -34,9 +34,9 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 510
+    '   Total Lines: 522
     '    Code Lines: 386
-    ' Comment Lines: 41
+    ' Comment Lines: 53
     '   Blank Lines: 83
     '     File Size: 21.80 KB
 

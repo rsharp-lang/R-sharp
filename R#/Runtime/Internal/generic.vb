@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2e8f2a6d6f46602c1c7b83a8f7d0901b, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/generic.vb"
+﻿#Region "Microsoft.VisualBasic::ffd9b166addd9d0caa134fc2fe9af603, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/generic.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 150
-    '    Code Lines: 101
-    ' Comment Lines: 26
+    '   Total Lines: 163
+    '    Code Lines: 103
+    ' Comment Lines: 37
     '   Blank Lines: 23
-    '     File Size: 6.07 KB
+    '     File Size: 6.41 KB
 
 
     '     Delegate Function

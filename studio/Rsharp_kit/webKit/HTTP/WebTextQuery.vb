@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::994ffaa4234c477580f26d71df8359ed, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//HTTP/WebTextQuery.vb"
+﻿#Region "Microsoft.VisualBasic::d1613bbd23d7e7471dcad35a87ee449a, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//HTTP/WebTextQuery.vb"
 
     ' Author:
     ' 
@@ -108,4 +108,3 @@ Public Class WebTextQuery : Inherits WebQueryModule(Of String)
         End If
     End Function
 End Class
-

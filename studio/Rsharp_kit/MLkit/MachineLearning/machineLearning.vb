@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ec4c913109cc9195aafda2537dab0bd3, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/machineLearning.vb"
+﻿#Region "Microsoft.VisualBasic::ec4c913109cc9195aafda2537dab0bd3, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/machineLearning.vb"
 
     ' Author:
     ' 

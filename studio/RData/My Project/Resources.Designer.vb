@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5f9a06e5989eabddbdecdbbc3dc5e60c, E:/GCModeller/src/R-sharp/studio/RData//My Project/Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::5f9a06e5989eabddbdecdbbc3dc5e60c, D:/GCModeller/src/R-sharp/studio/RData//My Project/Resources.Designer.vb"
 
     ' Author:
     ' 

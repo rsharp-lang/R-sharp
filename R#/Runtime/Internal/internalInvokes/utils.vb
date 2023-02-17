@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4c52e7220f65bf0ff759491f62884305, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/utils.vb"
+﻿#Region "Microsoft.VisualBasic::23c16466f9bea2906b47a8bf59ca533c, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/utils.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1210
-    '    Code Lines: 614
+    '   Total Lines: 1250
+    '    Code Lines: 649
     ' Comment Lines: 491
-    '   Blank Lines: 105
-    '     File Size: 58.15 KB
+    '   Blank Lines: 110
+    '     File Size: 58.65 KB
 
 
     '     Module utils
     ' 
     '         Function: create_zip, createAlternativeName, createCommandLine, createTimespan, data
     '                   dataSearchByPackageDir, debugTool, description, FindSystemFile, GetInstalledPackages
-    '                   head, installPackages, keyGroups, md5, memorySize
-    '                   now, package_skeleton, readFile, system, systemFile
-    '                   unzipFile, wget, workdir
+    '                   head, installPackages, keyGroups, loadByName, md5
+    '                   memorySize, now, package_skeleton, readFile, system
+    '                   systemFile, unzipFile, wget, workdir
     ' 
     '         Sub: cls, pause, sleep
     ' 

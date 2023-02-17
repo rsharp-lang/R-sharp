@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::00118d078c2697c3155f4d05fddcda68, E:/GCModeller/src/R-sharp/R#//Language/TokenType.vb"
+﻿#Region "Microsoft.VisualBasic::00118d078c2697c3155f4d05fddcda68, D:/GCModeller/src/R-sharp/R#//Language/TokenType.vb"
 
     ' Author:
     ' 

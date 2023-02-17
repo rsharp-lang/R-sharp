@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::64575f4cf74c58c67b7766be20d9ad6b, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//HTTP/JSONContent.vb"
+﻿#Region "Microsoft.VisualBasic::f374fa31a7d702a18950c55661d25b4c, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//HTTP/JSONContent.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 23
     ' Comment Lines: 0
     '   Blank Lines: 4
-    '     File Size: 1017 B
+    '     File Size: 1015 B
 
 
     ' Class JSONContent
@@ -77,4 +77,3 @@ Public Class JSONContent : Inherits StringContent
         End If
     End Function
 End Class
-

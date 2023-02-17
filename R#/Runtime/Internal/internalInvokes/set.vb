@@ -1,50 +1,54 @@
-﻿#Region "Microsoft.VisualBasic::f2f7b672dba21fe96fc573ec202ae75d, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/set.vb"
+﻿#Region "Microsoft.VisualBasic::2b594d2a2004ff1d25dc8f7210d5b65e, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/set.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
-
-
-' Code Statistics:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
+    ' /********************************************************************************/
 
-'     Module [set]
-' 
-'         Function: combn, count, createLoop, crossing, duplicated
-'                   getObjectSet, indexOf, intersect, jaccard, rev
-'                   setdiff, union
-' 
-' 
-' /********************************************************************************/
+    ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 505
+    '    Code Lines: 282
+    ' Comment Lines: 165
+    '   Blank Lines: 58
+    '     File Size: 21.95 KB
+
+
+    '     Module [set]
+    ' 
+    '         Function: combn, count, createLoop, crossing, duplicated
+    '                   getObjectSet, indexOf, intersect, jaccard, rev
+    '                   setdiff, table, union
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
