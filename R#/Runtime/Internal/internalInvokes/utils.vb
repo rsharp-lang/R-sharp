@@ -80,11 +80,14 @@ Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
@@ -675,7 +678,7 @@ Namespace Runtime.Internal.Invokes
         ''' 
         ''' Loads specified data sets, or list the available data sets.
         ''' </summary>
-        ''' <param name="name">literal character strings Or names.</param>
+        ''' <param name="x">literal character strings Or names.</param>
         ''' <param name="package">
         ''' a character vector giving the package(s) to look in for data sets, or NULL.
         ''' By Default, all packages in the search path are used, then the 'data’ 
@@ -736,11 +739,48 @@ Namespace Runtime.Internal.Invokes
         ''' (and lib.loc = NULL, the default).
         ''' </remarks>
         <ExportAPI("data")>
-        Public Function data(name As String,
+        Public Function data(<RLazyExpression> x As Object,
                              Optional package As String() = Nothing,
                              Optional lib_loc$ = Nothing,
                              Optional env As Environment = Nothing) As Object
 
+            If x Is Nothing Then
+                Return Internal.debug.stop("the given symbol could not be nothing!", env)
+            ElseIf TypeOf x Is SymbolReference OrElse TypeOf x Is Literal Then
+                Return env.loadByName(
+                    name:=ValueAssignExpression.GetSymbol(DirectCast(x, Expression)),
+                    package:=package,
+                    lib_loc:=lib_loc
+                )
+            ElseIf TypeOf x Is VectorLiteral Then
+                For Each exp As Expression In DirectCast(x, VectorLiteral)
+                    Dim eval As Message = data(exp, package, lib_loc, env)
+
+                    If TypeOf eval Is Message Then
+                        Return eval
+                    End If
+                Next
+            ElseIf TypeOf x Is Expression Then
+                Return data(DirectCast(x, Expression).Evaluate(env), package, lib_loc, env)
+            ElseIf TypeOf x Is Message Then
+                Return x
+            Else
+                Dim names As String() = CLRVector.asCharacter(x)
+
+                For Each name As String In names
+                    Dim eval As Message = env.loadByName(name, package, lib_loc)
+
+                    If TypeOf eval Is Message Then
+                        Return eval
+                    End If
+                Next
+            End If
+
+            Return Nothing
+        End Function
+
+        <Extension>
+        Private Function loadByName(env As Environment, name$, package$(), lib_loc$) As Message
             Dim hit As Boolean = False
             Dim err As New Value(Of Message)
 
