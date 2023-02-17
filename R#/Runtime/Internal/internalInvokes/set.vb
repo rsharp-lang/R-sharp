@@ -74,7 +74,11 @@ Namespace Runtime.Internal.Invokes
     Module [set]
 
         ''' <summary>
+        ''' ### Cross Tabulation and Table Creation
         ''' 
+        ''' table uses the cross-classifying factors to build
+        ''' a contingency table of the counts at each combination 
+        ''' of factor levels.
         ''' </summary>
         ''' <param name="x"></param>
         ''' <returns></returns>

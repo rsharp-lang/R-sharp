@@ -137,8 +137,21 @@ Namespace Runtime.Internal
             Return debug.stop({$"missing loader entry for generic function '{funcName}'!", "consider load required package at first!"}, env)
         End Function
 
+        ''' <summary>
+        ''' invoke a generic R# function
+        ''' 
+        ''' The function name is comes from the compiler 
+        ''' options <see cref="CallerMemberNameAttribute"/>
+        ''' </summary>
+        ''' <param name="args"></param>
+        ''' <param name="x"></param>
+        ''' <param name="env"></param>
+        ''' <param name="funcName"></param>
+        ''' <returns></returns>
         <Extension>
-        Friend Function invokeGeneric(args As list, x As Object, env As Environment, <CallerMemberName> Optional funcName$ = Nothing) As Object
+        Friend Function invokeGeneric(args As list, x As Object, env As Environment,
+                                      <CallerMemberName>
+                                      Optional funcName$ = Nothing) As Object
             Dim type As Type
 
             If x Is Nothing Then
