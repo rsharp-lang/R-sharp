@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataStructures
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math.SIMD
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -78,12 +79,28 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="x"></param>
         ''' <returns></returns>
         <ExportAPI("table")>
-        Public Function table(x As String()) As Object
+        Public Function table(x As String(), Optional desc As Boolean? = Nothing) As Object
             Dim factors = x.GroupBy(Function(str) If(str, "")).ToArray
+
+            If Not desc Is Nothing Then
+                If CBool(desc) Then
+                    factors = factors _
+                        .OrderByDescending(Function(c) c.Count) _
+                        .ToArray
+                Else
+                    factors = factors _
+                        .OrderBy(Function(c) c.Count) _
+                        .ToArray
+                End If
+            End If
+
+            Dim total As Integer = x.Length
+            Dim size As Integer() = factors.Select(Function(c) c.Count).ToArray
             Dim summary As New dataframe With {
                 .columns = New Dictionary(Of String, Array) From {
                     {"factors", factors.Select(Function(c) c.Key).ToArray},
-                    {"size", factors.Select(Function(c) c.Count).ToArray}
+                    {"size", size},
+                    {"prop", Divide.int32_op_divide_int32_scalar(size, total)}
                 }
             }
 
