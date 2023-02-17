@@ -1,71 +1,66 @@
 ﻿#Region "Microsoft.VisualBasic::397a9726f243677866ab7262cd8d6486, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 2942
-    '    Code Lines: 1341
-    ' Comment Lines: 1352
-    '   Blank Lines: 249
-    '     File Size: 134.24 KB
+' Summaries:
 
 
-    '     Module base
-    ' 
-    '         Function: [date], [stop], allocate, append, appendFinal
-    '                   appendOfList, appendOfVector, attachPackageFile, autoDispose, c
-    '                   cat, (+2 Overloads) cbind, colnames, columnCombine01, columnCombine11
-    '                   columnVector, days, doPrintInternal, factor, factors
-    '                   getOption, ifelse, ifelseScalar, ifelseVector, invisible
-    '                   isDataframe, isEmpty, isEmptyArray, isList, isNA
-    '                   isNull, isRVector, length, library, makeNames
-    '                   names, ncol, neg, nrow, objectAddInvoke
-    '                   options, options_flush, print, range, rbind
-    '                   Rdataframe, rep, replace, Rlist, Robj_dimension
-    '                   rowBindDataFrame, rownames, seq, sink, source
-    '                   str, strictColumnAppend, summary, t, uniqueNames
-    '                   unitOfT, warning, year
-    ' 
-    '         Sub: safeAddColumn, warnings
-    '         Class PrinterOptions
-    ' 
-    '             Properties: fields, maxPrint, quot
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+
+
+'     Module base
+' 
+'         Function: [date], [stop], allocate, append, appendFinal
+'                   appendOfList, appendOfVector, attachPackageFile, autoDispose, c
+'                   cat, (+2 Overloads) cbind, colnames, columnCombine01, columnCombine11
+'                   columnVector, days, doPrintInternal, factor, factors
+'                   getOption, ifelse, ifelseScalar, ifelseVector, invisible
+'                   isDataframe, isEmpty, isEmptyArray, isList, isNA
+'                   isNull, isRVector, length, library, makeNames
+'                   names, ncol, neg, nrow, objectAddInvoke
+'                   options, options_flush, print, range, rbind
+'                   Rdataframe, rep, replace, Rlist, Robj_dimension
+'                   rowBindDataFrame, rownames, seq, sink, source
+'                   str, strictColumnAppend, summary, t, uniqueNames
+'                   unitOfT, warning, year
+' 
+'         Sub: safeAddColumn, warnings
+'         Class PrinterOptions
+' 
+'             Properties: fields, maxPrint, quot
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -84,7 +79,6 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.My.JavaScript
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.Components
@@ -107,6 +101,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
+Imports stdNum = System.Math
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 Namespace Runtime.Internal.Invokes
@@ -1474,6 +1469,25 @@ RE0:
 
             If Program.isException(argumentsVal) Then
                 Return argumentsVal
+            ElseIf DataFramework.IsNumericCollection([object].GetType) Then
+                Dim vals As Double() = CLRVector.asNumeric([object])
+                Dim min As Double = vals.Min
+                Dim q = vals.OrderBy(Function(xi) xi).ToArray
+                Dim q1 As Integer() = getPosition(vals.Length, 1 / 4)
+                Dim median As Integer() = getPosition(vals.Length, 1 / 2)
+                Dim q3 As Integer() = getPosition(vals.Length, 3 / 4)
+                Dim max As Double = vals.Max
+
+                Return New list With {
+                    .slots = New Dictionary(Of String, Object) From {
+                        {"Min.", min},
+                        {"1st Qu.", ValueAt(vals, q1)},
+                        {"Median", ValueAt(vals, median)},
+                        {"Mean", vals.Average},
+                        {"3rd Qu.", ValueAt(vals, q3)},
+                        {"Max.", max}
+                    }
+                }
             Else
                 ' summary is similar to str or print function
                 ' but summary just returns simple data summary information
@@ -1481,6 +1495,28 @@ RE0:
                 ' about the given dataset object.
                 ' the print function is print the data details
                 Return DirectCast(argumentsVal, list).invokeGeneric([object], env)
+            End If
+        End Function
+
+        Private Function ValueAt(x As Double(), i As Integer()) As Double
+            If i.Length = 1 Then
+                Return x(i(Scan0))
+            Else
+                Return i.Select(Function(idx) x(idx)).Average
+            End If
+        End Function
+
+        Private Function getPosition(len As Integer, q As Double) As Integer()
+            Dim offset = len * q
+            Dim m = len Mod offset
+
+            If m < 0.00001 Then
+                Return New Integer() {CInt(offset)}
+            Else
+                Return New Integer() {
+                    stdNum.Floor(offset) - 1,
+                    stdNum.Floor(offset) + 1
+                }
             End If
         End Function
 

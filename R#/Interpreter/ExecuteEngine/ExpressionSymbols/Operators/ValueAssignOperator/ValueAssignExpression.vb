@@ -327,6 +327,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' handling get symbol from the given expression types:
+        ''' 
+        ''' 1. <see cref="Literal"/>: get string literal value as symbol text
+        ''' 2. <see cref="SymbolReference"/>: get symbol name as the symbol text
+        ''' 
+        ''' </summary>
+        ''' <param name="symbolName"></param>
+        ''' <returns>
+        ''' this function returns nothing if the given expression type 
+        ''' is not implements for get symbol text
+        ''' </returns>
         Friend Shared Function GetSymbol(symbolName As Expression) As String
             Select Case symbolName.GetType
                 Case GetType(Literal)

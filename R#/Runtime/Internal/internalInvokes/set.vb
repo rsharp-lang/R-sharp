@@ -1,54 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::f2f7b672dba21fe96fc573ec202ae75d, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/set.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 466
-    '    Code Lines: 256
-    ' Comment Lines: 156
-    '   Blank Lines: 54
-    '     File Size: 20.92 KB
+' Summaries:
 
 
-    '     Module [set]
-    ' 
-    '         Function: combn, count, createLoop, crossing, duplicated
-    '                   getObjectSet, indexOf, intersect, jaccard, rev
-    '                   setdiff, union
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+
+
+
+'     Module [set]
+' 
+'         Function: combn, count, createLoop, crossing, duplicated
+'                   getObjectSet, indexOf, intersect, jaccard, rev
+'                   setdiff, union
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -60,6 +56,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataStructures
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math.SIMD
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -71,6 +68,44 @@ Namespace Runtime.Internal.Invokes
     ''' Set Operations
     ''' </summary>
     Module [set]
+
+        ''' <summary>
+        ''' ### Cross Tabulation and Table Creation
+        ''' 
+        ''' table uses the cross-classifying factors to build
+        ''' a contingency table of the counts at each combination 
+        ''' of factor levels.
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("table")>
+        Public Function table(x As String(), Optional desc As Boolean? = Nothing) As Object
+            Dim factors = x.GroupBy(Function(str) If(str, "")).ToArray
+
+            If Not desc Is Nothing Then
+                If CBool(desc) Then
+                    factors = factors _
+                        .OrderByDescending(Function(c) c.Count) _
+                        .ToArray
+                Else
+                    factors = factors _
+                        .OrderBy(Function(c) c.Count) _
+                        .ToArray
+                End If
+            End If
+
+            Dim total As Integer = x.Length
+            Dim size As Integer() = factors.Select(Function(c) c.Count).ToArray
+            Dim summary As New dataframe With {
+                .columns = New Dictionary(Of String, Array) From {
+                    {"factors", factors.Select(Function(c) c.Key).ToArray},
+                    {"size", size},
+                    {"prop", Divide.int32_op_divide_int32_scalar(size, total)}
+                }
+            }
+
+            Return summary
+        End Function
 
         ''' <summary>
         ''' ### setdiff: Set Difference of Subsets
