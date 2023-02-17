@@ -83,7 +83,6 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.My.JavaScript
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.Components
@@ -106,6 +105,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
+Imports stdNum = System.Math
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 Namespace Runtime.Internal.Invokes
@@ -1465,18 +1465,18 @@ RE0:
                 Dim vals As Double() = CLRVector.asNumeric([object])
                 Dim min As Double = vals.Min
                 Dim q = vals.OrderBy(Function(xi) xi).ToArray
-                Dim q1 As Double = q(CInt(vals.Length / 4))
-                Dim median As Double = q(CInt(vals.Length / 2))
-                Dim q3 As Double = q(CInt(3 / 4 * vals.Length))
+                Dim q1 As Integer() = getPosition(vals.Length, 1 / 4)
+                Dim median As Integer() = getPosition(vals.Length, 1 / 2)
+                Dim q3 As Integer() = getPosition(vals.Length, 3 / 4)
                 Dim max As Double = vals.Max
 
                 Return New list With {
                     .slots = New Dictionary(Of String, Object) From {
                         {"Min.", min},
-                        {"1st Qu.", q1},
-                        {"Median", median},
+                        {"1st Qu.", ValueAt(vals, q1)},
+                        {"Median", ValueAt(vals, median)},
                         {"Mean", vals.Average},
-                        {"3rd Qu.", q3},
+                        {"3rd Qu.", ValueAt(vals, q3)},
                         {"Max.", max}
                     }
                 }
@@ -1487,6 +1487,28 @@ RE0:
                 ' about the given dataset object.
                 ' the print function is print the data details
                 Return DirectCast(argumentsVal, list).invokeGeneric([object], env)
+            End If
+        End Function
+
+        Private Function ValueAt(x As Double(), i As Integer()) As Double
+            If i.Length = 1 Then
+                Return x(i(Scan0))
+            Else
+                Return i.Select(Function(idx) x(idx)).Average
+            End If
+        End Function
+
+        Private Function getPosition(len As Integer, q As Double) As Integer()
+            Dim offset = len * q
+            Dim m = len Mod offset
+
+            If m < 0.00001 Then
+                Return New Integer() {CInt(offset)}
+            Else
+                Return New Integer() {
+                    stdNum.Floor(offset) - 1,
+                    stdNum.Floor(offset) + 1
+                }
             End If
         End Function
 
