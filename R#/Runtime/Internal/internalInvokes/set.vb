@@ -72,6 +72,11 @@ Namespace Runtime.Internal.Invokes
     ''' </summary>
     Module [set]
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         <ExportAPI("table")>
         Public Function table(x As String()) As Object
             Dim factors = x.GroupBy(Function(str) If(str, "")).ToArray
