@@ -3,7 +3,7 @@ from MLkit import umap
 
 setwd(@dir)
 
-MNIST_LabelledVectorArray = "../../../Library/demo/machineLearning/umap/MNIST-LabelledVectorArray-60000x100.msgpack"
+MNIST_LabelledVectorArray = "../../../test/demo/machineLearning/umap/MNIST-LabelledVectorArray-60000x100.msgpack"
 MNIST_LabelledVectorArray = MNIST_LabelledVectorArray.read.mnist.labelledvector(takes = 10000)
 
 tags                                = `class_${rownames(MNIST_LabelledVectorArray)}`
