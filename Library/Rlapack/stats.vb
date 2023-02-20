@@ -1,80 +1,80 @@
 ﻿#Region "Microsoft.VisualBasic::2705c5f731bfdf2737f4151ff49babd1, D:/GCModeller/src/R-sharp/Library/Rlapack//stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1185
-    '    Code Lines: 655
-    ' Comment Lines: 408
-    '   Blank Lines: 122
-    '     File Size: 48.61 KB
+' Summaries:
 
 
-    ' Module stats
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: matrixDataFrame, PCATable, printMatrix, printTtest, printTwoSampleTTest
-    '     Enum p_adjust_methods
-    ' 
-    '         BH, bonferroni, BY, fdr, hochberg
-    '         holm, hommel, none
-    ' 
-    ' 
-    ' 
-    '     Class PCAcalls
-    ' 
-    '         Properties: labels, pca
-    ' 
-    '         Function: ECDF, p_adjust, prcomp, spline, tabulateMode
-    ' 
-    '  
-    ' 
-    '     Function: aov, asDist, corr, corr_sign, corrTest
-    '               dataframeRow, dist, dnorm, filterMissing, fisher_test
-    '               getMatrix, getQuantileLevels, mantel_test, median, mul
-    '               (+2 Overloads) pow, quantile, ttest, varTest, z_score
-    '               z_scoreByColumn, z_scoreByRow
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1185
+'    Code Lines: 655
+' Comment Lines: 408
+'   Blank Lines: 122
+'     File Size: 48.61 KB
+
+
+' Module stats
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: matrixDataFrame, PCATable, printMatrix, printTtest, printTwoSampleTTest
+'     Enum p_adjust_methods
+' 
+'         BH, bonferroni, BY, fdr, hochberg
+'         holm, hommel, none
+' 
+' 
+' 
+'     Class PCAcalls
+' 
+'         Properties: labels, pca
+' 
+'         Function: ECDF, p_adjust, prcomp, spline, tabulateMode
+' 
+'  
+' 
+'     Function: aov, asDist, corr, corr_sign, corrTest
+'               dataframeRow, dist, dnorm, filterMissing, fisher_test
+'               getMatrix, getQuantileLevels, mantel_test, median, mul
+'               (+2 Overloads) pow, quantile, ttest, varTest, z_score
+'               z_scoreByColumn, z_scoreByRow
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -89,18 +89,20 @@ Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Calculus
-Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Math.Statistics
+Imports Microsoft.VisualBasic.Math.Statistics.Distributions
+Imports Microsoft.VisualBasic.Math.Statistics.Distributions.MethodOfMoments
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.ANOVA
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.FishersExact
 Imports Microsoft.VisualBasic.Math.Statistics.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -108,6 +110,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports stdNum = System.Math
@@ -1193,7 +1196,7 @@ Module stats
                 Return filterMissing(d.z_scoreByColumn, [default]:=0.0, env:=env)
             End If
         Else
-            Dim v As Double() = REnv.asVector(Of Double)(x)
+            Dim v As Double() = CLRVector.asNumeric(x)
             Dim z As Double() = New stdVector(v) _
                 .Z _
                 .ToArray
@@ -1209,7 +1212,7 @@ Module stats
             .columns = d.columns _
                 .ToDictionary(Function(c) c.Key,
                                 Function(c)
-                                    Dim dz As Double() = REnv.asVector(Of Double)(c.Value)
+                                    Dim dz As Double() = CLRVector.asNumeric(c.Value)
                                     Dim zz As Double() = New stdVector(dz) _
                                         .Z _
                                         .ToArray
@@ -1226,7 +1229,7 @@ Module stats
         Dim col As String() = d.colnames
         Dim rows = d.forEachRow(col) _
             .Select(Function(r)
-                        Return New NamedCollection(Of Double)(r.name, value:=REnv.asVector(Of Double)(r.value))
+                        Return New NamedCollection(Of Double)(r.name, value:=CLRVector.asNumeric(r.value))
                     End Function) _
             .ToArray
         Dim z = rows _
@@ -1254,6 +1257,34 @@ Module stats
         Next
 
         Return dz
+    End Function
+
+    ''' <summary>The chiSquare method is used to determine whether there is a significant difference between the expected
+    ''' frequencies and the observed frequencies in one or more categories. It takes a double input x and an integer freedom
+    ''' for degrees of freedom as inputs. It returns the Chi Squared result.</summary>
+    ''' <param name="x">a numeric input.</param>
+    ''' <param name="freedom">integer input for degrees of freedom.</param>
+    ''' <returns>the Chi Squared result.</returns>
+    ''' <remarks>
+    ''' ```r
+    ''' #' Evaluates the cumulative distribution function (CDF) for a chi-squared 
+    ''' #' distribution with degrees of freedom `k` at a value `x`.
+    ''' chisquared.cdf = function( x, k ) {
+    '''    return gammaCDF(x, k / 2.0, 0.5);
+    ''' }
+    ''' ```
+    ''' </remarks>
+    <ExportAPI("chi_square")>
+    Public Function ChiSquare(<RRawVectorArgument> x As Object, freedom As Integer, Optional env As Environment = Nothing) As Object
+        Return env.EvaluateFramework(Of Double, Double)(x, Function(xi) Distribution.ChiSquare(xi, freedom))
+    End Function
+
+    <ExportAPI("gamma.cdf")>
+    Public Function gammaCDF(<RRawVectorArgument> x As Object, alpha As Double, beta As Double, Optional env As Environment = Nothing) As Object
+        Dim gamma As New Gamma(alpha, beta)
+        Dim result = env.EvaluateFramework(Of Double, Double)(x, Function(xi) gamma.GetCDF(xi))
+
+        Return result
     End Function
 End Module
 
