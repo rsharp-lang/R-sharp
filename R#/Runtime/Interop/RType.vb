@@ -77,7 +77,7 @@ Namespace Runtime.Interop
     Public Class RType : Implements IReflector
 
         ''' <summary>
-        ''' <see cref="Type.FullName"/>
+        ''' the raw CLR <see cref="Type.FullName"/>
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property fullName As String
@@ -88,6 +88,10 @@ Namespace Runtime.Interop
             End Get
         End Property
 
+        ''' <summary>
+        ''' the raw CLR type name
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property name As String
             Get
                 Return raw.Name

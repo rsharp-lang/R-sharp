@@ -65,20 +65,20 @@ Namespace Runtime
         ''' <summary>
         ''' Converts the input string text to value <see cref="TypeCodes"/>
         ''' </summary>
-        ReadOnly parseTypecode As Dictionary(Of String, TypeCodes)
+        ReadOnly parseTypeCode As Dictionary(Of String, TypeCodes)
 
         Sub New()
-            parseTypecode = Enums(Of TypeCodes) _
+            parseTypeCode = Enums(Of TypeCodes) _
                 .ToDictionary(Function(e) e.Description.ToLower,
                               Function(code)
                                   Return code
                               End Function)
 
             ' add string type alias
-            parseTypecode("character") = TypeCodes.string
-            parseTypecode("logical") = TypeCodes.boolean
-            parseTypecode("numeric") = TypeCodes.double
-            parseTypecode("data.frame") = TypeCodes.dataframe
+            parseTypeCode("character") = TypeCodes.string
+            parseTypeCode("logical") = TypeCodes.boolean
+            parseTypeCode("numeric") = TypeCodes.double
+            parseTypeCode("data.frame") = TypeCodes.dataframe
         End Sub
 
         ''' <summary>
@@ -90,8 +90,8 @@ Namespace Runtime
         Public Function GetRTypeCode(type As String) As TypeCodes
             If type.StringEmpty Then
                 Return TypeCodes.generic
-            ElseIf parseTypecode.ContainsKey(type) Then
-                Return parseTypecode(type)
+            ElseIf parseTypeCode.ContainsKey(type) Then
+                Return parseTypeCode(type)
             ElseIf type = "any" Then
                 Return TypeCodes.generic
             Else
@@ -160,10 +160,14 @@ Namespace Runtime
                     Return TypeCodes.boolean
                 Case GetType(Dictionary(Of String, Object)), GetType(Dictionary(Of String, Object)()), GetType(list)
                     Return TypeCodes.list
-                Case GetType(RMethodInfo), GetType(DeclareNewFunction) ', GetType(envir)
+                Case GetType(RMethodInfo), GetType(DeclareNewFunction)
                     Return TypeCodes.closure
                 Case Else
-                    Return TypeCodes.generic
+                    If type.IsInheritsFrom(GetType(Environment)) Then
+                        Return TypeCodes.environment
+                    Else
+                        Return TypeCodes.generic
+                    End If
             End Select
         End Function
 
@@ -182,6 +186,7 @@ Namespace Runtime
                 Case TypeCodes.closure : Return GetType([Delegate])
                 Case TypeCodes.generic : Return GetType(Object)
                 Case TypeCodes.dataframe : Return GetType(dataframe)
+                Case TypeCodes.environment : Return GetType(Environment)
                 Case Else
                     Throw New InvalidCastException(type.Description)
             End Select

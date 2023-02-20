@@ -68,7 +68,7 @@ Namespace Runtime.Components
         NA = 0
 
         ''' <summary>
-        ''' Object type in R#.(使用这个类型来表示没有类型约束)
+        ''' Object type in R#, any other CLR type.(使用这个类型来表示没有类型约束)
         ''' </summary>
         [generic] = 1
         ''' <summary>
@@ -110,6 +110,9 @@ Namespace Runtime.Components
         ''' <see cref="Boolean"/> vector
         ''' </summary>
         [boolean]
+        ''' <summary>
+        ''' A data table liked compound type
+        ''' </summary>
         [dataframe]
 #End Region
     End Enum
