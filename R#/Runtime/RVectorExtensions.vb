@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::69f140b31dfbc40c29c061feb4dcbdc8, D:/GCModeller/src/R-sharp/R#//Runtime/RVectorExtensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 481
-    '    Code Lines: 340
-    ' Comment Lines: 82
-    '   Blank Lines: 59
-    '     File Size: 19.05 KB
+' Summaries:
 
 
-    '     Module RVectorExtensions
-    ' 
-    '         Function: [single], (+2 Overloads) asVector, castSingle, createArray, CTypeOfList
-    '                   fromArray, getFirst, isVector, MeltArray, TryCastGenericArray
-    '                   UnsafeTryCastGenericArray
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 481
+'    Code Lines: 340
+' Comment Lines: 82
+'   Blank Lines: 59
+'     File Size: 19.05 KB
+
+
+'     Module RVectorExtensions
+' 
+'         Function: [single], (+2 Overloads) asVector, castSingle, createArray, CTypeOfList
+'                   fromArray, getFirst, isVector, MeltArray, TryCastGenericArray
+'                   UnsafeTryCastGenericArray
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime
@@ -378,7 +379,12 @@ Namespace Runtime
         ''' 
         ''' 所以假若仅仅只需要转换数据对象为数组的话，请避免使用这个函数
         ''' 应该手动编写代码以提升性能
+        ''' 
+        ''' 在进行.NET语言编写相应的包的时候，尽量使用<see cref="CLRVector"/>模块之中
+        ''' 的类型转换函数以减少性能损失
         ''' </remarks>
+        ''' 
+        <Obsolete>
         Public Function asVector(Of T)(value As Object) As Array
             Dim valueType As Type
             Dim typeofT As Type = GetType(T)
