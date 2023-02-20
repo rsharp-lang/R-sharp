@@ -163,7 +163,10 @@ Namespace Runtime
                 Case GetType(RMethodInfo), GetType(DeclareNewFunction)
                     Return TypeCodes.closure
                 Case Else
-                    If type.IsInheritsFrom(GetType(Environment)) Then
+                    ' if strict, then the envrionment type comes from the
+                    ' different build version of the R# runtime assembly
+                    ' will not be equals
+                    If type.IsInheritsFrom(GetType(Environment), strict:=False) Then
                         Return TypeCodes.environment
                     Else
                         Return TypeCodes.generic
