@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::c698125c62da70177bc52c8ef82cd8e7, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//signalProcessing.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 147
-    '    Code Lines: 114
-    ' Comment Lines: 12
-    '   Blank Lines: 21
-    '     File Size: 6.24 KB
+' Summaries:
 
 
-    ' Module signalProcessing
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asGeneral, asMatrix, FindAllSignalPeaks, peakTable, printSignal
-    '               writeCDF
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 147
+'    Code Lines: 114
+' Comment Lines: 12
+'   Blank Lines: 21
+'     File Size: 6.24 KB
+
+
+' Module signalProcessing
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asGeneral, asMatrix, FindAllSignalPeaks, peakTable, printSignal
+'               writeCDF
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -63,6 +63,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -113,11 +114,11 @@ Module signalProcessing
 
         Return New GeneralSignal With {
             .description = title,
-            .Measures = DirectCast(REnv.asVector(Of Double)(measure), Double()),
+            .Measures = CLRVector.asNumeric(measure),
             .measureUnit = "n/a",
             .meta = meta.AsGeneric(Of String)(env),
             .reference = App.NextTempName,
-            .Strength = DirectCast(REnv.asVector(Of Double)(signals), Double())
+            .Strength = CLRVector.asNumeric(signals)
         }
     End Function
 

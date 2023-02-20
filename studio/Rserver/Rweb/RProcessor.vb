@@ -67,6 +67,7 @@ Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Serialize
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -132,7 +133,7 @@ Public Class RProcessor
 
         If Not request.POSTData.Objects.IsNullOrEmpty Then
             For Each obj In request.POSTData.Objects
-                args(obj.Key) = REnv.asVector(Of String)(obj.Value)
+                args(obj.Key) = CLRVector.asCharacter(obj.Value)
             Next
         End If
 

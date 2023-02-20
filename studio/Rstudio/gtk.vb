@@ -55,6 +55,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -136,7 +137,7 @@ Module gtk
                                 Optional throwCancel As Boolean = True,
                                 Optional env As Environment = Nothing) As Object
 
-        Dim filters As String() = REnv.asVector(Of String)(filter)
+        Dim filters As String() = CLRVector.asCharacter(filter)
 
         If forSave Then
             Using file As New SaveFileDialog With {

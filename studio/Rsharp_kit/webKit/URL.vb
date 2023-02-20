@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -168,7 +169,7 @@ Public Module URL
         If TypeOf data Is String Then
             Return DirectCast(data, String).UrlEncode
         ElseIf data.GetType.IsArray Then
-            Dim vec As String() = REnv.asVector(Of String)(data)
+            Dim vec As String() = CLRVector.asCharacter(data)
             Dim tokens = vec _
                 .Select(Function(str) str.UrlEncode) _
                 .ToArray
@@ -360,7 +361,7 @@ Public Module URL
             If TypeOf files Is vector Then
                 With DirectCast(files, vector)
                     If .getNames.IsNullOrEmpty Then
-                        files = REnv.asVector(Of String)(.data)
+                        files = CLRVector.asCharacter(.data)
                         GoTo uploadbyfiles
                     Else
                         Dim filepath As String

@@ -6,6 +6,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports File = Microsoft.VisualBasic.Data.csv.IO.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.[Object].dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -35,7 +36,7 @@ Public Module dataframeWriter
             End If
         End If
         If Not TypeOf row_names Is Boolean Then
-            inputRowNames = REnv.asVector(Of String)(row_names)
+            inputRowNames = CLRVector.asCharacter(row_names)
             row_names = False
         End If
 
