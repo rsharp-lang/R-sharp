@@ -362,8 +362,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                               Optional nomatch As Integer = -1,
                               Optional incomparables As Integer = Nothing) As Integer()
 
-            Dim index As Index(Of String) = DirectCast(REnv.asVector(Of String)(table), String())
-            Dim values As String() = REnv.asVector(Of String)(x)
+            Dim index As Index(Of String) = CLRVector.asCharacter(table)
+            Dim values As String() = CLRVector.asCharacter(x)
             Dim ordinal As Integer() = (From str As String
                                         In values
                                         Let i As Integer = If(str Like index, index(str) + 1, nomatch)
@@ -687,7 +687,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If x Is Nothing Then
                     Return New Integer() {}
                 Else
-                    Dim dbl As Double() = DirectCast(asVector(Of Double)(Rset.getObjectSet(x, env).ToArray), Double())
+                    Dim dbl As Double() = CLRVector.asNumeric(Rset.getObjectSet(x, env).ToArray)
 
                     If dbl.Length = 0 Then
                         Return New Integer() {}
@@ -744,7 +744,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If x Is Nothing Then
                     Return New Integer() {}
                 Else
-                    Dim dbl As Double() = DirectCast(asVector(Of Double)(Rset.getObjectSet(x, env)), Double())
+                    Dim dbl As Double() = CLRVector.asNumeric(Rset.getObjectSet(x, env))
 
                     If dbl.Length = 0 Then
                         Return New Integer() {}
@@ -844,7 +844,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             If TypeOf sequence Is dataframe Then
                 Dim table As dataframe = DirectCast(sequence, dataframe)
-                Dim colName As String = DirectCast(REnv.asVector(Of String)(getKey), String()).GetValue(Scan0)
+                Dim colName As String = CLRVector.asCharacter(getKey).FirstOrDefault
+
+                If colName Is Nothing Then
+                    Return Internal.debug.stop("the dataframe group field key name could not be nothing!", env)
+                End If
 
                 Return New list(GetType(dataframe)) With {
                     .slots = table _
