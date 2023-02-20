@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::e01eb9b833fc7d1cedaa02d76d9d3fac, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/makeDataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 313
-    '    Code Lines: 226
-    ' Comment Lines: 41
-    '   Blank Lines: 46
-    '     File Size: 12.56 KB
+' Summaries:
 
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Module makeDataframe
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: CheckDimension, createColumnVector, createDataframe, fromList, is_ableConverts
-    '                   PopulateDataSet, (+2 Overloads) RDataframe, TracebackDataFrmae, tryTypeLineage
-    ' 
-    '         Sub: [addHandler]
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 313
+'    Code Lines: 226
+' Comment Lines: 41
+'   Blank Lines: 46
+'     File Size: 12.56 KB
+
+
+'     Delegate Function
+' 
+' 
+'     Module makeDataframe
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: CheckDimension, createColumnVector, createDataframe, fromList, is_ableConverts
+'                   PopulateDataSet, (+2 Overloads) RDataframe, TracebackDataFrmae, tryTypeLineage
+' 
+'         Sub: [addHandler]
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -68,6 +68,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -247,52 +248,52 @@ Namespace Runtime.Internal.Object.Converts
         ''' <returns></returns>
         <Extension>
         Public Function RDataframe(values As IEnumerable(Of NamedValue(Of Object)), env As Environment) As Object
-            Dim columns As New List(Of NamedValue(Of Object))
-
-            For Each item In values
-                If Program.isException(item.Value) Then
-                    Return item.Value
-                Else
-                    columns.Add(item)
-                End If
-            Next
+            Dim columns As New List(Of NamedValue(Of Object))(values)
 
             If columns.Count > 1 Then
-                Dim rownames As NamedValue(Of Object) = columns.Where(Function(d) d.Name = "row.names").FirstOrDefault
-                Dim nameStr As String() = REnv.asVector(Of String)(rownames.Value)
-
-                If Not nameStr.IsNullOrEmpty Then
-                    columns = columns _
-                        .Where(Function(d) d.Name <> "row.names") _
-                        .AsList
-                End If
-
-                Return New dataframe With {
-                    .columns = columns _
-                        .ToDictionary(Function(a) a.Name,
-                                      Function(a)
-                                          Return env.createColumnVector(a.Value)
-                                      End Function),
-                    .rownames = nameStr
-                }.CheckDimension(env)
+                Return env.castMultipleColumnsToDataframe(columns)
             ElseIf columns.Count = 1 Then
-                Dim first As NamedValue(Of Object) = columns.First
-
-                If first.IsEmpty Then
-                    Return Nothing
-                ElseIf TypeOf first.Value Is list Then
-                    Return DirectCast(first.Value, list).fromList(env)
-                Else
-                    Return New dataframe With {
-                        .columns = New Dictionary(Of String, Array) From {
-                            {first.Name, env.createColumnVector(first.Value)}
-                        }
-                    }
-                End If
+                Return env.castSingleToDataframe(columns.First)
             Else
                 ' create a new empty dataframe object
                 Return New dataframe With {
                     .columns = New Dictionary(Of String, Array)
+                }
+            End If
+        End Function
+
+        <Extension>
+        Private Function castMultipleColumnsToDataframe(env As Environment, columns As List(Of NamedValue(Of Object))) As Object
+            Dim rownames As NamedValue(Of Object) = columns.Where(Function(d) d.Name = "row.names").FirstOrDefault
+            Dim nameStr As String() = CLRVector.asCharacter(rownames.Value)
+
+            If Not nameStr.IsNullOrEmpty Then
+                columns = columns _
+                    .Where(Function(d) d.Name <> "row.names") _
+                    .AsList
+            End If
+
+            Return New dataframe With {
+                .columns = columns _
+                    .ToDictionary(Function(a) a.Name,
+                                  Function(a)
+                                      Return env.createColumnVector(a.Value)
+                                  End Function),
+                .rownames = nameStr
+            }.CheckDimension(env)
+        End Function
+
+        <Extension>
+        Private Function castSingleToDataframe(env As Environment, first As NamedValue(Of Object)) As Object
+            If first.IsEmpty Then
+                Return Nothing
+            ElseIf TypeOf first.Value Is list Then
+                Return DirectCast(first.Value, list).fromList(env)
+            Else
+                Return New dataframe With {
+                    .columns = New Dictionary(Of String, Array) From {
+                        {first.Name, env.createColumnVector(first.Value)}
+                    }
                 }
             End If
         End Function

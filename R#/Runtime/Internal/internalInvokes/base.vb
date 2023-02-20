@@ -1310,20 +1310,68 @@ RE0:
         ''' </returns>
         <ExportAPI("data.frame")>
         <RApiReturn(GetType(dataframe))>
-        Public Function Rdataframe(<RListObjectArgument>
-                                   <RRawVectorArgument> columns As Object,
-                                   <RRawVectorArgument> Optional row_names As Object = Nothing,
-                                   Optional env As Environment = Nothing) As Object
-
+        Public Function Rdataframe(<RListObjectArgument> columns As Object, Optional env As Environment = Nothing) As Object
             ' data.frame(a = 1, b = ["g","h","eee"], c = T)
             Dim parameters As InvokeParameter() = columns
-            Dim values As IEnumerable(Of NamedValue(Of Object)) = parameters _
+            Dim popEvals As IEnumerable(Of NamedValue(Of Object)) = parameters _
                 .SeqIterator _
                 .Select(Function(a)
                             Return columnVector(a, env)
                         End Function)
+            Dim values As New List(Of NamedValue(Of Object))
+
+            For Each item As NamedValue(Of Object) In popEvals
+                If Program.isException(item.Value) Then
+                    Return item.Value
+                Else
+                    values.Add(item)
+                End If
+            Next
 
             Return values.RDataframe(env)
+        End Function
+
+        ''' <summary>
+        ''' Utils function for check for dataframe object construction
+        ''' </summary>
+        ''' <param name="columns"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' false means the data has some column fields that do not matched 
+        ''' with others to create a valid dataframe object
+        ''' </returns>
+        <ExportAPI("check.dimensions_agree")>
+        <RApiReturn(GetType(Boolean))>
+        Public Function checkDimensionsAgree(<RListObjectArgument> columns As Object, Optional env As Environment = Nothing) As Object
+            Dim parameters As InvokeParameter() = columns
+            Dim popEvals As IEnumerable(Of NamedValue(Of Object)) = parameters _
+                .SeqIterator _
+                .Select(Function(a)
+                            Return columnVector(a, env)
+                        End Function)
+            Dim values As New List(Of NamedValue(Of Array))
+
+            For Each item As NamedValue(Of Object) In popEvals
+                If Program.isException(item.Value) Then
+                    Return item.Value
+                Else
+                    values.Add(New NamedValue(Of Array)(item.Name, REnv.asVector(Of Object)(item.Value)))
+                End If
+            Next
+
+            If values.Count = 0 Then
+                Return True
+            End If
+
+            Dim max As Integer = values.Select(Function(v) v.Value.Length).Max
+            Dim noneAgree As String() = values _
+                .Where(Function(col)
+                           Return col.Value.Length <> max AndAlso col.Value.Length <> 1
+                       End Function) _
+                .Select(Function(col) col.Name) _
+                .ToArray
+
+            Return noneAgree.IsNullOrEmpty
         End Function
 
         Private Function columnVector(a As SeqValue(Of InvokeParameter), envir As Environment) As NamedValue(Of Object)
