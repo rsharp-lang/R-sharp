@@ -80,6 +80,7 @@ Namespace Runtime.Components
         ''' </summary>
         [ref]
         [formula]
+        environment
 
 #Region "PrimitiveTypes"
 

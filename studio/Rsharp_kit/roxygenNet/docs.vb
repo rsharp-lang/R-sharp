@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::8e192fbdd4d0acb5ba132401eb5869da, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//docs.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 323
-    '    Code Lines: 258
-    ' Comment Lines: 21
-    '   Blank Lines: 44
-    '     File Size: 12.47 KB
+' Summaries:
 
 
-    ' Module docs
-    ' 
-    '     Function: apiDocsHtml, getDefaultTemplate, makeHtmlDocs, makeMarkdownDocs, PackageIndex
-    '               parameterTable
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 323
+'    Code Lines: 258
+' Comment Lines: 21
+'   Blank Lines: 44
+'     File Size: 12.47 KB
+
+
+' Module docs
+' 
+'     Function: apiDocsHtml, getDefaultTemplate, makeHtmlDocs, makeMarkdownDocs, PackageIndex
+'               parameterTable
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -54,6 +54,7 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
@@ -67,6 +68,7 @@ Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 
@@ -304,7 +306,7 @@ table caption {font-size:14px;font-weight:bolder;}
         Dim parameters$ = ""
 
         If api.parameters.Length > 0 Then
-            parameters = apiDocs.parameterTable
+            parameters = apiDocs.parameterTable(api)
         End If
 
         With html
@@ -332,7 +334,7 @@ table caption {font-size:14px;font-weight:bolder;}
     End Function
 
     <Extension>
-    Private Function parameterTable(docs As ProjectMember) As String
+    Private Function parameterTable(docs As ProjectMember, api As RMethodInfo) As String
         Dim list As New ScriptBuilder(
             <div>
                 <h4>Arguments</h4>
@@ -342,12 +344,22 @@ table caption {font-size:14px;font-weight:bolder;}
                 </ul>
             </div>)
         Dim args As New List(Of XElement)
+        Dim paramIndex = api.parameters.ToDictionary(Function(a) a.name)
 
         If docs.Params.IsNullOrEmpty Then
             Return ""
         End If
 
+        Static env_names As Index(Of String) = {"env", "envir"}
+
         For Each arg In docs.Params.SafeQuery
+            ' skip of the default environment parameter
+            If arg.name Like env_names AndAlso paramIndex.ContainsKey(arg.name) Then
+                If paramIndex(arg.name).type.mode = TypeCodes.environment Then
+                    Continue For
+                End If
+            End If
+
             args +=
                 <li>
                     <code><%= arg.name %></code>: {$info}
