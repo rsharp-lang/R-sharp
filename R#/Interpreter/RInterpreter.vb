@@ -445,7 +445,13 @@ Namespace Interpreter
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Function Evaluate(script As String) As Object
-            Return RunInternal(Rscript.FromText(script), {}, Nothing)
+            Return RunInternal(Rscript.FromText(script), {})
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
+        Public Function Evaluate(script$, ParamArray args As (param As String, value As Object)()) As Object
+            Return RunInternal(Rscript.FromText(script), args.Select(Function(i) New NamedValue(Of Object)(i.param, i.value)).ToArray)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -545,7 +551,16 @@ Namespace Interpreter
             Return program
         End Function
 
-        Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)(), ByRef globalEnvir As Environment) As Object
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="Rscript"></param>
+        ''' <param name="arguments">
+        ''' symbol values that will be pushed into the runtime environment context
+        ''' </param>
+        ''' <param name="globalEnvir"></param>
+        ''' <returns></returns>
+        Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)(), Optional ByRef globalEnvir As Environment = Nothing) As Object
             Dim error$ = Nothing
             Dim program As Program = Program.CreateProgram(Rscript, debug:=debug, [error]:=[error])
             Dim result As Object
