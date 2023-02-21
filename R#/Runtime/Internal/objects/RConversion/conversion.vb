@@ -481,6 +481,11 @@ RE0:
         Private Function castListToDataframe(listData As Dictionary(Of String, Object), env As Environment) As Object
             Dim hasNames As Boolean = TypeOf listData.First.Value Is list
             Dim allNames As String() = Nothing
+            Dim isListMatrix = listData.Values.All(Function(o) TypeOf o Is list)
+            Dim table As dataframe
+            ' all of the element key name is integer
+            ' or integer index key name
+            Dim t As Boolean = listData.Keys.All(Function(k) k.IsPattern("\d+") OrElse k.IsPattern("\[+\d+\]+"))
 
             If hasNames Then
                 allNames = listData _
@@ -492,24 +497,44 @@ RE0:
                     .ToArray
             End If
 
-            Dim table As New dataframe With {
-                .columns = New Dictionary(Of String, Array),
-                .rownames = allNames
-            }
+            If isListMatrix AndAlso t Then
+                Dim rows = listData.ToArray
+                Dim row As list
 
-            For Each field As String In listData.Keys
-                Dim raw As Object = listData(field)
-                Dim v As Array
+                ' each item in listdata is a row?
+                table = New dataframe With {.columns = New Dictionary(Of String, Array)}
 
-                If hasNames Then
-                    v = allNames.Select(Function(d) DirectCast(raw, list)(d)).ToArray
-                    v = REnv.TryCastGenericArray(v, env)
-                Else
-                    v = REnv.TryCastGenericArray(REnv.asVector(Of Object)(raw), env)
-                End If
+                For Each name As String In allNames
+                    table.add(name, Array.CreateInstance(GetType(Object), listData.Count))
+                Next
 
-                Call table.add(field, v)
-            Next
+                For i As Integer = 0 To rows.Length - 1
+                    row = rows(i).Value
+
+                    For Each name As String In row.getNames
+                        table.columns(name).SetValue(row.getByName(name), i)
+                    Next
+                Next
+            Else
+                table = New dataframe With {
+                    .columns = New Dictionary(Of String, Array),
+                    .rownames = allNames
+                }
+
+                For Each field As String In listData.Keys
+                    Dim raw As Object = listData(field)
+                    Dim v As Array
+
+                    If hasNames Then
+                        v = allNames.Select(Function(d) DirectCast(raw, list)(d)).ToArray
+                        v = REnv.TryCastGenericArray(v, env)
+                    Else
+                        v = REnv.TryCastGenericArray(REnv.asVector(Of Object)(raw), env)
+                    End If
+
+                    Call table.add(field, v)
+                Next
+            End If
 
             Return table
         End Function
