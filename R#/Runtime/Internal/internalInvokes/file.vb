@@ -358,10 +358,9 @@ Namespace Runtime.Internal.Invokes
         ''' value will be returned.
         ''' </returns>
         <ExportAPI("file.ext")>
-        Public Function fileExt(<RRawVectorArgument> path As Object) As String()
-            Return (From filepath As String
-                    In DirectCast(REnv.asVector(Of String)(path), String())
-                    Select ExtensionSuffix(filepath)).ToArray
+        <RApiReturn(GetType(String))>
+        Public Function fileExt(<RRawVectorArgument> path As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of String, String)(path, AddressOf ExtensionSuffix)
         End Function
 
         ''' <summary>
@@ -382,6 +381,22 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' Open an interface to a specific local filesystem location
+        ''' </summary>
+        ''' <param name="dir"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("dir.open")>
+        Public Function openDir(dir As String, Optional env As Environment = Nothing) As FileIO.Directory
+            If Not dir.DirectoryExists Then
+                Call env.AddMessage($"target directory: {dir.GetDirectoryFullPath} is not found on the file system...")
+                Call dir.MakeDir
+            End If
+
+            Return FileIO.Directory.FromLocalFileSystem(dir)
+        End Function
+
+        ''' <summary>
         ''' Express File Paths in Canonical Form
         ''' 
         ''' Convert file paths to canonical form for the platform, to display them in a 
@@ -392,7 +407,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("normalizePath")>
-        <RApiReturn(GetType(String()))>
+        <RApiReturn(GetType(String))>
         Public Function normalizePath(fileNames$(), envir As Environment) As Object
             If fileNames.IsNullOrEmpty Then
                 Return Internal.debug.stop("no file names provided!", envir)
