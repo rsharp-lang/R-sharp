@@ -53,6 +53,7 @@
 
 Imports System.IO
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.DataStorage.HDSPack
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
@@ -77,6 +78,20 @@ Module HDSutils
         Return pack
     End Function
 
+    <ExportAPI("extract_files")>
+    Public Function ExtractFiles(pack As StreamPack, fs As IFileSystemEnvironment) As Object
+        For Each file As StreamBlock In pack.files
+            Dim data = pack.OpenBlock(file)
+            Dim newfile = fs.OpenFile(file.referencePath.ToString, FileMode.OpenOrCreate, FileAccess.Write)
+
+            Call data.CopyTo(newfile)
+            Call newfile.Flush()
+            Call newfile.Dispose()
+        Next
+
+        Return True
+    End Function
+
     <ExportAPI("disk_defragment")>
     Public Function DiskDefragmentation(pack As StreamPack) As Object
         Dim buffer As New MemoryStream
@@ -94,6 +109,8 @@ Module HDSutils
 
             Next
         Next
+
+        Return newPack
     End Function
 
     <ExportAPI("openStream")>
