@@ -515,6 +515,10 @@ RE0:
                         table.columns(name).SetValue(row.getByName(name), i)
                     Next
                 Next
+
+                For Each name As String In allNames
+                    table.columns(name) = REnv.TryCastGenericArray(table.columns(name), env)
+                Next
             Else
                 table = New dataframe With {
                     .columns = New Dictionary(Of String, Array),
