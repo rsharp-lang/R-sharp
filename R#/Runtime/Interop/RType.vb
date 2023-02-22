@@ -302,10 +302,25 @@ Namespace Runtime.Interop
         ''' <param name="type"></param>
         ''' <returns></returns>
         Public Overloads Shared Function [GetType](type As MetaData.TypeInfo, runtime As GlobalEnvironment) As RType
+            Dim key As String = type.ToString
+
+            Static cache As New Dictionary(Of String, RType)
+
+            SyncLock cache
+                If cache.ContainsKey(key) Then
+                    Return cache(key)
+                End If
+            End SyncLock
+
             Dim dirs As String() = runtime.attachedNamespace.GetDllDirectories.Distinct.ToArray
             Dim model As Type = type.GetType(knownFirst:=True, searchPath:=dirs)
-            Call deps.TryHandleNetCore5AssemblyBugs(model)
-            Return GetRSharpType(model)
+            Dim rtype As RType = GetRSharpType(model)
+
+            SyncLock cache
+                cache(key) = rtype
+            End SyncLock
+
+            Return rtype
         End Function
 
         ''' <summary>
