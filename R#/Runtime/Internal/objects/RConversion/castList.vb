@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::bb9c8f2229c8818ed46c2b6d3ac610e9, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/castList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 222
-    '    Code Lines: 176
-    ' Comment Lines: 12
-    '   Blank Lines: 34
-    '     File Size: 8.74 KB
+' Summaries:
 
 
-    '     Module castList
-    ' 
-    '         Function: CTypeList, dataframe_castList, dictionaryToRList, listElementNames, listInternal
-    '                   objCastList, vector_castList
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 222
+'    Code Lines: 176
+' Comment Lines: 12
+'   Blank Lines: 34
+'     File Size: 8.74 KB
+
+
+'     Module castList
+' 
+'         Function: CTypeList, dataframe_castList, dictionaryToRList, listElementNames, listInternal
+'                   objCastList, vector_castList
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -206,7 +206,7 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         ''' <summary>
-        ''' cast .NET object to R# list object
+        ''' cast .NET CLR object to R# list object
         ''' </summary>
         ''' <param name="vbobj"></param>
         ''' <param name="args"></param>
@@ -215,11 +215,23 @@ Namespace Runtime.Internal.Object.Converts
         <Extension>
         Private Function objCastList(vbobj As vbObject, args As list, env As Environment) As Object
             Dim list As New Dictionary(Of String, Object)
+            Dim metadata As PropertyInfo = Nothing
+
+            If vbobj.type.haveDynamicsProperty Then
+                metadata = DynamicMetadataAttribute.GetMetadata(vbobj.type.raw)
+            End If
 
             For Each p As KeyValuePair(Of String, PropertyInfo) In vbobj.properties
                 Dim value As Object = p.Value.GetValue(vbobj.target)
                 Dim name As String
                 Dim ref As Field = p.Value.GetCustomAttribute(Of Field)
+                Dim isEnums As Boolean = p.Value.PropertyType.IsEnum OrElse (p.Value.PropertyType Is GetType(Object) AndAlso value IsNot Nothing AndAlso value.GetType.IsEnum)
+
+                If Not metadata Is Nothing Then
+                    If metadata Is p.Value Then
+                        Continue For
+                    End If
+                End If
 
                 If Not ref Is Nothing Then
                     name = ref.Name
@@ -229,6 +241,8 @@ Namespace Runtime.Internal.Object.Converts
 
                 If value Is Nothing Then
                     list.Add(name, Nothing)
+                ElseIf isEnums Then
+                    list.Add(name, value.ToString)
                 ElseIf TypeOf value Is Array OrElse TypeOf value Is vector Then
                     Dim v As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(value), env)
                     Dim type As Type = v.GetType.GetElementType
