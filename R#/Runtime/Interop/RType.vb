@@ -301,8 +301,9 @@ Namespace Runtime.Interop
         ''' </summary>
         ''' <param name="type"></param>
         ''' <returns></returns>
-        Public Overloads Shared Function [GetType](type As MetaData.TypeInfo) As RType
-            Dim model As Type = type.GetType
+        Public Overloads Shared Function [GetType](type As MetaData.TypeInfo, runtime As GlobalEnvironment) As RType
+            Dim dirs As String() = runtime.attachedNamespace.GetDllDirectories.Distinct.ToArray
+            Dim model As Type = type.GetType(knownFirst:=True, searchPath:=dirs)
             Call deps.TryHandleNetCore5AssemblyBugs(model)
             Return GetRSharpType(model)
         End Function

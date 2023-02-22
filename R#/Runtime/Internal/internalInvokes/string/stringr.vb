@@ -250,7 +250,7 @@ Namespace Runtime.Internal.Invokes
                     Return Internal.debug.stop(New NotImplementedException(), env)
                 End If
             Else
-                model = RType.GetType(type)
+                model = RType.GetType(type, env.globalEnvironment)
             End If
 
             If text.isFilePath(includeWindowsFs:=winOpt) Then

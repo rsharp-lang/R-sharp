@@ -233,7 +233,7 @@ Namespace Runtime
             ElseIf TypeOf [typeof] Is TypeCodes Then
                 Return RType.GetType(DirectCast([typeof], TypeCodes))
             ElseIf TypeOf [typeof] Is TypeInfo Then
-                Return RType.GetType(DirectCast([typeof], TypeInfo))
+                Return RType.GetType(DirectCast([typeof], TypeInfo), Me)
             End If
 
             Dim className As String = anything.ToString([typeof], "any")

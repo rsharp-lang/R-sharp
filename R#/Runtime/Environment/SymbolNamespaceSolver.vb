@@ -164,6 +164,12 @@ Namespace Runtime
             End If
         End Function
 
+        Public Iterator Function GetDllDirectories() As IEnumerable(Of String)
+            For Each pkg As PackageEnvironment In Me.attachedNamespace.Values
+                Yield $"{pkg.libpath}/lib/assembly"
+            Next
+        End Function
+
         ''' <summary>
         ''' load symbol via search of the manifest in package 
         ''' </summary>
