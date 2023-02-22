@@ -1,59 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::be2833b6ce88336d0107792c38778983, D:/GCModeller/src/R-sharp/Library/base//base/HDSutils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 134
-    '    Code Lines: 110
-    ' Comment Lines: 0
-    '   Blank Lines: 24
-    '     File Size: 4.71 KB
+' Summaries:
 
 
-    ' Module HDSutils
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: createStream, DiskDefragmentation, listFiles, openStream, readText
-    '               saveFile, Tree
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 134
+'    Code Lines: 110
+' Comment Lines: 0
+'   Blank Lines: 24
+'     File Size: 4.71 KB
+
+
+' Module HDSutils
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: createStream, DiskDefragmentation, listFiles, openStream, readText
+'               saveFile, Tree
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.DataStorage.HDSPack
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
@@ -150,9 +151,49 @@ Module HDSutils
         End If
     End Function
 
+    ''' <summary>
+    ''' Get files in a specific directory
+    ''' </summary>
+    ''' <param name="pack"></param>
+    ''' <param name="dir">the default directory path is root, for get all data files</param>
+    ''' <returns></returns>
     <ExportAPI("files")>
-    Public Function listFiles(pack As StreamPack) As Object
-        Return pack.ListFiles.ToArray
+    Public Function listFiles(pack As StreamPack,
+                              Optional dir As String = "/",
+                              Optional excludes_dir As Boolean = False,
+                              Optional env As Environment = Nothing) As Object
+
+        Dim objs As StreamObject()
+
+        If dir.StringEmpty OrElse dir = "/" OrElse dir = "\" Then
+            objs = pack.ListFiles.ToArray
+        Else
+            Dim folder As StreamGroup = pack.GetObject(dir & "/")
+
+            If folder Is Nothing Then
+                Dim msg As String() = {
+                    $"the given required directory path({dir}) is missing from the data pack!",
+                    $"dir: {dir}"
+                }
+
+                If env.globalEnvironment.options.strict Then
+                    Return Internal.debug.stop(msg, env)
+                Else
+                    env.AddMessage(msg, MSG_TYPES.WRN)
+                    Return Nothing
+                End If
+            Else
+                objs = folder.ListFiles.ToArray
+            End If
+        End If
+
+        If excludes_dir Then
+            objs = objs _
+                .Where(Function(o) TypeOf o Is StreamBlock) _
+                .ToArray
+        End If
+
+        Return objs
     End Function
 
     <ExportAPI("tree")>
