@@ -152,7 +152,7 @@ Namespace Runtime.Internal.Object.Converts
 
             Select Case type
                 Case GetType(Dictionary(Of String, Object))
-                    Return New list With {.slots = obj}
+                    Return DirectCast(obj, IDictionary).dictionaryToRList(args, env)
                 Case GetType(list)
                     Return obj
                 Case GetType(vbObject)
@@ -163,7 +163,7 @@ Namespace Runtime.Internal.Object.Converts
                 Case Else
                     ' 将字典对象转换为列表对象
                     If type.ImplementInterface(GetType(IDictionary)) Then
-                        Return DirectCast(obj, IDictionary).dictionaryToRList
+                        Return DirectCast(obj, IDictionary).dictionaryToRList(args, env)
                     Else
                         Return New vbObject(obj).objCastList(args, env)
                     End If
@@ -171,14 +171,14 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         <Extension>
-        Friend Function dictionaryToRList(dict As IDictionary) As list
+        Friend Function dictionaryToRList(dict As IDictionary, args As list, env As Environment) As list
             Dim objList As New Dictionary(Of String, Object)
             Dim eleType As RType = RType.any
             Dim type As Type = dict.GetType
 
             With dict
                 For Each key As Object In .Keys
-                    Call objList.Add(any.ToString(key), .Item(key))
+                    Call objList.Add(any.ToString(key), listInternal(.Item(key), args, env))
                 Next
             End With
 
