@@ -1,69 +1,71 @@
 ﻿#Region "Microsoft.VisualBasic::683c51f28c40268375e666b79927f1c9, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RType.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 301
-    '    Code Lines: 195
-    ' Comment Lines: 75
-    '   Blank Lines: 31
-    '     File Size: 11.68 KB
+' Summaries:
 
 
-    '     Class RType
-    ' 
-    '         Properties: any, characters, floats, fullName, getCount
-    '                     getItem, haveDynamicsProperty, integers, isArray, isCollection
-    '                     isEnvironment, isGenericListObject, list, logicals, mode
-    '                     name, raw
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: [GetType], [TypeOf], getNames, GetRawElementType, GetRSharpType
-    '                   populateNames, ToString
-    '         Operators: (+4 Overloads) Like
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 301
+'    Code Lines: 195
+' Comment Lines: 75
+'   Blank Lines: 31
+'     File Size: 11.68 KB
+
+
+'     Class RType
+' 
+'         Properties: any, characters, floats, fullName, getCount
+'                     getItem, haveDynamicsProperty, integers, isArray, isCollection
+'                     isEnvironment, isGenericListObject, list, logicals, mode
+'                     name, raw
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: [GetType], [TypeOf], getNames, GetRawElementType, GetRSharpType
+'                   populateNames, ToString
+'         Operators: (+4 Overloads) Like
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -295,6 +297,17 @@ Namespace Runtime.Interop
         End Function
 
         ''' <summary>
+        ''' Convert the type information model to R# type
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
+        Public Overloads Shared Function [GetType](type As MetaData.TypeInfo) As RType
+            Dim model As Type = type.GetType
+            Call deps.TryHandleNetCore5AssemblyBugs(model)
+            Return GetRSharpType(model)
+        End Function
+
+        ''' <summary>
         ''' get R# type value of the given VB.NET object value
         ''' </summary>
         ''' <param name="x"></param>
@@ -324,6 +337,11 @@ Namespace Runtime.Interop
             End If
         End Function
 
+        ''' <summary>
+        ''' Enable conversion from R# type data to CLR type information
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Shared Narrowing Operator CType(type As RType) As Type

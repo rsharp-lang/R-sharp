@@ -63,7 +63,9 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Configuration
@@ -75,9 +77,8 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
 Imports anything = Microsoft.VisualBasic.Scripting
-Imports Microsoft.VisualBasic.Language.Default
+Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
 
 <Assembly: InternalsVisibleTo("Rnotebook")>
 
@@ -221,6 +222,7 @@ Namespace Runtime
         ''' 2. .NET CLR <see cref="Type"/> value
         ''' 3. R-sharp <see cref="RType"/> value
         ''' 4. R-sharp primitive <see cref="TypeCodes"/> value
+        ''' 5. <see cref="TypeInfo"/> metadata
         ''' </param>
         ''' <returns></returns>
         Public Overloads Function [GetType]([typeof] As Object) As RType
@@ -230,6 +232,8 @@ Namespace Runtime
                 Return DirectCast([typeof], RType)
             ElseIf TypeOf [typeof] Is TypeCodes Then
                 Return RType.GetType(DirectCast([typeof], TypeCodes))
+            ElseIf TypeOf [typeof] Is TypeInfo Then
+                Return RType.GetType(DirectCast([typeof], TypeInfo))
             End If
 
             Dim className As String = anything.ToString([typeof], "any")

@@ -63,7 +63,6 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports System.Text.RegularExpressions
-Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -207,15 +206,34 @@ Namespace Runtime.Internal.Invokes
         ''' from the meta data in the xml data file
         ''' </remarks>
         <ExportAPI("loadXml")>
-        Public Function loadXml(file As String, Optional env As Environment = Nothing) As Object
-            Dim type = DigitalSignature.GetModelInfo(file)
+        Public Function loadXml(file As String,
+                                Optional [typeof] As Object = Nothing,
+                                Optional env As Environment = Nothing) As Object
+
+            Dim type As MetaData.TypeInfo = DigitalSignature.GetModelInfo(file)
+            Dim model As Type
+            Dim winOpt As Boolean
+
+#If WINDOWS Then
+            winOpt = True
+#Else
+            winOpt = False 
+#End If
 
             If type Is Nothing Then
-                Return Internal.debug.stop(New NotImplementedException(), env)
+                If Not [typeof] Is Nothing Then
+                    model = env.globalEnvironment.GetType([typeof])
+                Else
+                    Return Internal.debug.stop(New NotImplementedException(), env)
+                End If
             Else
-                Dim model As Type = type.GetType
-                Call deps.TryHandleNetCore5AssemblyBugs(model)
+                model = RType.GetType(type)
+            End If
+
+            If file.isFilePath(includeWindowsFs:=winOpt) Then
                 Return file.LoadXml(model)
+            Else
+                Return file.LoadFromXml(model)
             End If
         End Function
 
