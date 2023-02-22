@@ -810,7 +810,7 @@ RE0:
                     .slots = New Dictionary(Of String, Object)(DirectCast(obj, list).slots)
                 }
             ElseIf obj.GetType.ImplementInterface(Of IDictionary) Then
-                Return DirectCast(obj, IDictionary).dictionaryToRList
+                Return DirectCast(obj, IDictionary).dictionaryToRList(args, env)
             ElseIf TypeOf obj Is Size OrElse TypeOf obj Is SizeF Then
                 Dim size As SizeF = If(TypeOf obj Is Size, DirectCast(obj, Size).SizeF, DirectCast(obj, SizeF))
                 Dim listdata As New list With {
@@ -861,14 +861,14 @@ RE0:
                     ' SMRUCC/R#.call_function.str_pad at renderMap_CLI.R:line 17
                     ' SMRUCC/R#.n/a.InitializeEnvironment at renderMap_CLI.R:line 0
                     ' SMRUCC/R#.global.<globalEnvironment> at <globalEnvironment>:line n/a
-                    Return DirectCast(REnv.asVector(Of String)(obj), String()) _
+                    Return CLRVector.asCharacter(obj) _
                         .Select(AddressOf Long.Parse) _
                         .ToArray
                 Else
-                    Return REnv.asVector(Of Long)(obj)
+                    Return CLRVector.asLong(obj)
                 End If
             Else
-                Return REnv.asVector(Of Long)(obj)
+                Return CLRVector.asLong(obj)
             End If
         End Function
 
@@ -1068,7 +1068,7 @@ RE0:
                     End If
                 End If
 
-                Return REnv.asVector(Of String)(vec)
+                Return CLRVector.asCharacter(vec)
             End If
         End Function
 
