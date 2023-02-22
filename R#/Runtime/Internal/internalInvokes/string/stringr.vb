@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::53b4c076d6a7666b2ac9bf08c044fab9, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/stringr.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 983
-    '    Code Lines: 619
-    ' Comment Lines: 271
-    '   Blank Lines: 93
-    '     File Size: 41.16 KB
+' Summaries:
 
 
-    '     Module stringr
-    ' 
-    '         Function: [objToString], base64Decode, base64Str, bencode, charAt
-    '                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
-    '                   fromBstring, grep, html, json, loadXml
-    '                   match, nchar, paste, randomAsciiStr, rawBufferBase64
-    '                   regexp, splitSingleStrAuto, sprintfSingle, str_empty, str_pad
-    '                   (+2 Overloads) str_replace, strPad_internal, strsplit, substr, tagvalue
-    '                   text_equals, tolower, toupper, urldecode, xml
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 983
+'    Code Lines: 619
+' Comment Lines: 271
+'   Blank Lines: 93
+'     File Size: 41.16 KB
+
+
+'     Module stringr
+' 
+'         Function: [objToString], base64Decode, base64Str, bencode, charAt
+'                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
+'                   fromBstring, grep, html, json, loadXml
+'                   match, nchar, paste, randomAsciiStr, rawBufferBase64
+'                   regexp, splitSingleStrAuto, sprintfSingle, str_empty, str_pad
+'                   (+2 Overloads) str_replace, strPad_internal, strsplit, substr, tagvalue
+'                   text_equals, tolower, toupper, urldecode, xml
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -198,7 +198,13 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' load a .NET object from the xml data file
         ''' </summary>
-        ''' <param name="file"></param>
+        ''' <param name="file">
+        ''' any kind of data value inputs:
+        ''' 
+        ''' 1. file path to the xml document file
+        ''' 2. the xml document content text
+        ''' 3. a stream object that contains the xml document text data
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         ''' <remarks>
@@ -206,11 +212,28 @@ Namespace Runtime.Internal.Invokes
         ''' from the meta data in the xml data file
         ''' </remarks>
         <ExportAPI("loadXml")>
-        Public Function loadXml(file As String,
+        Public Function loadXml(file As Object,
                                 Optional [typeof] As Object = Nothing,
                                 Optional env As Environment = Nothing) As Object
 
-            Dim type As MetaData.TypeInfo = DigitalSignature.GetModelInfo(file)
+            Dim text As String = Nothing
+
+            If file Is Nothing Then
+                Return Nothing
+            End If
+
+            If TypeOf file Is String Then
+                text = file
+            ElseIf TypeOf file Is Stream Then
+                Using buf As Stream = DirectCast(file, Stream)
+                    Dim reader As New StreamReader(buf)
+                    text = reader.ReadToEnd
+                End Using
+            Else
+                Return Message.InCompatibleType(GetType(String), file.GetType, env)
+            End If
+
+            Dim type As MetaData.TypeInfo = DigitalSignature.GetModelInfo(text)
             Dim model As Type
             Dim winOpt As Boolean
 
@@ -230,10 +253,10 @@ Namespace Runtime.Internal.Invokes
                 model = RType.GetType(type)
             End If
 
-            If file.isFilePath(includeWindowsFs:=winOpt) Then
-                Return file.LoadXml(model)
+            If text.isFilePath(includeWindowsFs:=winOpt) Then
+                Return text.LoadXml(model)
             Else
-                Return file.LoadFromXml(model)
+                Return text.LoadFromXml(model)
             End If
         End Function
 
@@ -597,14 +620,13 @@ Namespace Runtime.Internal.Invokes
 
             If regexp Is Nothing Then
                 Return Internal.debug.stop("regular expression object can not be null!", env)
+            Else
+                Return env.EvaluateFramework(Of String, String)(
+                    x:=strings,
+                    eval:=Function(str)
+                              Return regexp.Match(str).Value
+                          End Function)
             End If
-
-            Return asVector(Of String)(strings) _
-                .AsObjectEnumerator(Of String) _
-                .Select(Function(str)
-                            Return regexp.Match(str).Value
-                        End Function) _
-                .ToArray
         End Function
 
         ''' <summary>

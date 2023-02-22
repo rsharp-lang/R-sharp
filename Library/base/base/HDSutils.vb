@@ -211,6 +211,17 @@ Module HDSutils
         Return sb.ToString
     End Function
 
+    ''' <summary>
+    ''' get a stream in readonly mode for parse data
+    ''' </summary>
+    ''' <param name="pack"></param>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
+    <ExportAPI("getData")>
+    Public Function getData(pack As StreamPack, file As StreamBlock) As Stream
+        Return pack.OpenBlock(file)
+    End Function
+
     <ExportAPI("getText")>
     Public Function readText(pack As StreamPack, fileName As String) As String
         Dim file As StreamBlock = pack.GetObject(fileName)
