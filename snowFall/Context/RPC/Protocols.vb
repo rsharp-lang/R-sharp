@@ -78,6 +78,10 @@ Namespace Context.RPC
     Public Enum Protocols As Long
         Initialize
         GetSymbol
+
+        ''' <summary>
+        ''' the slave node push the result back to the master node
+        ''' </summary>
         PushResult
         [Stop]
     End Enum

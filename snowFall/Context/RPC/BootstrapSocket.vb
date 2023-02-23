@@ -184,8 +184,14 @@ Namespace Context.RPC
                 Call App.Pause()
             End If
 
+            Try
+                Call socket.Dispose()
+            Catch ex As Exception
+            Finally
+                Call Thread.Sleep(5000)
+            End Try
+
             ' wait job done of running slave task
-            Call socket.Dispose()
             Call task.wait()
 
             Return process
@@ -224,7 +230,11 @@ Namespace Context.RPC
 
                     Try
                         Do While Not task.HasExited
-                            Call Thread.Sleep(100)
+                            If Me.stop Then
+                                Exit Do
+                            Else
+                                Call Thread.Sleep(100)
+                            End If
                         Loop
                     Catch ex As Exception
                         ' 20221024
@@ -239,6 +249,16 @@ Namespace Context.RPC
             Return (thread, wait, task)
         End Function
 
+        Public Sub Kill()
+            Me.stop = True
+
+            Try
+                Me.socket.Dispose()
+            Catch ex As Exception
+
+            End Try
+        End Sub
+
         ''' <summary>
         ''' 2. and then send signal to notify this socket that 
         ''' slave node has been initialized, and then shutdown
@@ -252,7 +272,7 @@ Namespace Context.RPC
         ''' <returns></returns>
         <Protocol(Protocols.Stop)>
         Public Function stopSocket(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
-            Me.stop = True
+            Call Me.Kill()
             Return New DataPipe("OK")
         End Function
 

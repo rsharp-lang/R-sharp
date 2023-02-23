@@ -71,7 +71,6 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports snowFall.Context.RPC
 Imports R = Rserver.RscriptCommandLine.Rscript
@@ -137,6 +136,7 @@ Public Class RunParallel
             )
 
             Call Thread.Sleep(500)
+            Call master.Register(index, slave:=bootstrap)
 
             ' 20221024 try to handling of the socket binding error
             ' System.Net.Sockets.SocketException (98): Address already in use
@@ -147,14 +147,18 @@ Public Class RunParallel
             End If
         Loop
 
-        Dim tempfile As String = If(debug, TempFileSystem.GetAppSysTempFile(".log", $"{App.PID}.{bootstrap.GetHashCode}.{index}", $"task_{index}___-"), Nothing)
+        Dim tempfile As String = If(debug,
+            TempFileSystem.GetAppSysTempFile(".log", $"{App.PID}.{bootstrap.GetHashCode}.{index}", $"task_{index}___-"),
+            Nothing
+        )
         Dim task As String = worker.GetparallelModeCommandLine(
             master:=bootstrap.port,
             [delegate]:="Parallel::slave",
             redirect_stdout:=tempfile
         )
         Dim SetDllDirectory As String = master.env.globalEnvironment.options.getOption("SetDllDirectory") Or App.HOME.AsDefault
-        Dim process As RunSlavePipeline = worker.CreateSlave($"{task} {If(taskNames.IsNullOrEmpty, "", $"--task ""{taskNames(index)}""")} --SetDllDirectory {SetDllDirectory.CLIPath}")
+        Dim SetTaskName As String = If(taskNames.IsNullOrEmpty, "", $"--task ""{taskNames(index)}""")
+        Dim process As RunSlavePipeline = worker.CreateSlave($"{task} {SetTaskName} --SetDllDirectory {SetDllDirectory.CLIPath}")
 
         If debug Then
             Call println(process.ToString)

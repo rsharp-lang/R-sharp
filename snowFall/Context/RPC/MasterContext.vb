@@ -97,6 +97,7 @@ Namespace Context.RPC
 
         ReadOnly socket As TcpServicesSocket
         ReadOnly result As New Dictionary(Of String, Object)
+        ReadOnly bootstrap As New Dictionary(Of String, BootstrapSocket)
 
         Dim getLoopSymbol As Func(Of GetSymbol, (hit As Boolean, val As Object))
         Dim disposedValue As Boolean
@@ -124,6 +125,12 @@ Namespace Context.RPC
             Me.socket.Run()
         End Sub
 
+        Public Sub Register(uuid As Integer, slave As BootstrapSocket)
+            SyncLock bootstrap
+                bootstrap(uuid.ToString) = slave
+            End SyncLock
+        End Sub
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub push(name As String, value As Object)
             Call env.Push(name, value, [readonly]:=True)
@@ -141,9 +148,19 @@ Namespace Context.RPC
             Dim payload As New ResultPayload(request.ChunkBuffer, env)
             Dim value As Object = payload.value
             Dim uuid As Integer = payload.uuid
+            Dim uuidKey As String = uuid.ToString
 
             SyncLock result
-                result(uuid.ToString) = value
+                result(uuidKey) = value
+            End SyncLock
+            SyncLock bootstrap
+                If bootstrap.ContainsKey(uuidKey) Then
+                    Try
+                        Call bootstrap(uuidKey).Kill()
+                    Catch ex As Exception
+
+                    End Try
+                End If
             End SyncLock
 
             Return New DataPipe("OK")
