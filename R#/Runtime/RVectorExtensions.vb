@@ -321,7 +321,43 @@ Namespace Runtime
             Return generic
         End Function
 
-        Private Function MeltArray(vec As Array) As Array
+        Public Function isScalarVector(xi As Object) As Boolean
+            If xi Is Nothing Then
+                Return True
+            ElseIf TypeOf xi Is vector Then
+                Return DirectCast(xi, vector).length <= 1
+            ElseIf xi.GetType.IsArray Then
+                Return DirectCast(xi, Array).Length <= 1
+            Else
+                Return False
+            End If
+        End Function
+
+        Private Function getScalar(xi As Object) As Object
+            If xi Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf xi Is vector Then
+                Dim v As vector = DirectCast(xi, vector)
+
+                If v.length = 1 Then
+                    Return v.data.GetValue(Scan0)
+                Else
+                    Return Nothing
+                End If
+            ElseIf xi.GetType.IsArray Then
+                Dim v As Array = DirectCast(xi, Array)
+
+                If v.Length = 1 Then
+                    Return v.GetValue(Scan0)
+                Else
+                    Return Nothing
+                End If
+            Else
+                Return xi
+            End If
+        End Function
+
+        Public Function MeltArray(vec As Array) As Array
             Dim elementType As Type = vec.GetType.GetElementType
 
             If elementType IsNot Nothing AndAlso
@@ -334,15 +370,11 @@ Namespace Runtime
             If vec _
                 .AsObjectEnumerator _
                 .Take(100) _
-                .All(Function(xi)
-                         Return TypeOf xi Is vector AndAlso DirectCast(xi, vector).length = 1
-                     End Function) Then
+                .All(AddressOf isScalarVector) Then
 
                 vec = vec _
                     .AsObjectEnumerator _
-                    .Select(Function(xi)
-                                Return DirectCast(xi, vector).data.GetValue(Scan0)
-                            End Function) _
+                    .Select(AddressOf getScalar) _
                     .ToArray
             End If
 
