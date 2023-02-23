@@ -854,7 +854,7 @@ Namespace Runtime.Internal.Invokes
         ''' 
         ''' Write text lines to a connection.
         ''' </summary>
-        ''' <param name="text">A character vector</param>
+        ''' <param name="text">A character vector, or a serials of compatible interface for get text contents.</param>
         ''' <param name="con">A connection Object Or a character String.</param>
         ''' <param name="sep">
         ''' character string. A string to be written to the connection after each line of text.
@@ -887,8 +887,12 @@ Namespace Runtime.Internal.Invokes
                                    Optional fs As IFileSystemEnvironment = Nothing,
                                    Optional env As Environment = Nothing) As Object
 
-            If TypeOf text Is vector Then
+            If text Is Nothing Then
+                text = ""
+            ElseIf TypeOf text Is vector Then
                 text = DirectCast(text, vector).data
+            ElseIf TypeOf text Is WebResponseResult Then
+                text = DirectCast(text, WebResponseResult).html
             End If
 
             If TypeOf text Is pipeline Then
