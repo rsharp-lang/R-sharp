@@ -1,56 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::107786c5b60a3300f166778643e9e368, D:/GCModeller/src/R-sharp/snowFall//Context/RPC/RemoteEnvironment.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 131
-    '    Code Lines: 79
-    ' Comment Lines: 32
-    '   Blank Lines: 20
-    '     File Size: 4.81 KB
+' Summaries:
 
 
-    '     Class RemoteEnvironment
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: buffer404, FindSymbol, getRemoteSymbol, loadRemoteSymbol
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 131
+'    Code Lines: 79
+' Comment Lines: 32
+'   Blank Lines: 20
+'     File Size: 4.81 KB
+
+
+'     Class RemoteEnvironment
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: buffer404, FindSymbol, getRemoteSymbol, loadRemoteSymbol
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Data
 Imports System.IO
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Net
@@ -126,19 +127,35 @@ Namespace Context.RPC
         Private Function getRemoteSymbol(name As String) As Symbol
             Dim msg As New GetSymbol With {.name = name, .uuid = uuid}
             Dim req As New RequestStream(MasterContext.Protocol, Protocols.GetSymbol, msg)
-            Dim resp = New TcpRequest(master).SendMessage(req)
+            Dim resp As RequestStream
+            Dim [error] As Exception = Nothing
 
             If verbose Then
                 Call Console.WriteLine($"[get_symbol] {msg.GetJson}")
             End If
 
-            Using buffer As New MemoryStream(resp.ChunkBuffer)
-                If buffer.Length = 0 OrElse resp.Protocol = 404 Then
-                    Return buffer404(name)
-                Else
-                    Return loadRemoteSymbol(name, buffer)
-                End If
-            End Using
+            ' error retry
+            For i As Integer = 0 To 5
+                resp = New TcpRequest(master).SendMessage(req)
+
+                Try
+                    Using buffer As New MemoryStream(resp.ChunkBuffer)
+                        If resp.Protocol = 404 Then
+                            Return buffer404(name)
+                        Else
+                            Return loadRemoteSymbol(name, buffer)
+                        End If
+                    End Using
+                Catch ex As Exception
+                    [error] = ex
+                End Try
+            Next
+
+            If [error] Is Nothing Then
+                Throw New InvalidExpressionException($"error while get remote symbol: '{name}'")
+            Else
+                Throw [error]
+            End If
         End Function
 
         ''' <summary>
