@@ -140,7 +140,7 @@ Namespace Runtime
         End Function
 
         ''' <summary>
-        ''' VB.NET type to R type code mapping
+        ''' VB.NET CLR object type to R type code mapping
         ''' </summary>
         ''' <param name="type"></param>
         ''' <returns></returns>
@@ -175,7 +175,7 @@ Namespace Runtime
         End Function
 
         ''' <summary>
-        ''' Mapping R# <see cref="TypeCodes"/> to VB.NET type
+        ''' Mapping R# <see cref="TypeCodes"/> to VB.NET CLR object type
         ''' </summary>
         ''' <param name="type"></param>
         ''' <returns></returns>

@@ -190,7 +190,17 @@ Namespace Context.RPC
                 Dim [loop] = getLoopSymbol(payload)
 
                 If [loop].hit Then
-                    Dim vec As New vector({[loop].val}, RType.GetRSharpType([loop].val.GetType))
+                    Dim type = RType.GetRSharpType([loop].val.GetType)
+                    Dim isArray As Boolean = Not [loop].val Is Nothing AndAlso [loop].val.GetType.IsArray
+                    Dim valLoop As Array
+
+                    If isArray Then
+                        valLoop = [loop].val
+                    Else
+                        valLoop = {[loop].val}
+                    End If
+
+                    Dim vec As New vector(valLoop, type)
 
                     target = New Symbol(name, vec, TypeCodes.generic, [readonly]:=True) With {
                         .stacktrace = env.stackTrace
