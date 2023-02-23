@@ -200,9 +200,12 @@ Namespace Context.RPC
                         valLoop = {[loop].val}
                     End If
 
+                    valLoop = REnv.TryCastGenericArray(valLoop, env)
+                    type = RType.GetRSharpType(valLoop.GetType)
+
                     Dim vec As New vector(valLoop, type)
 
-                    target = New Symbol(name, vec, TypeCodes.generic, [readonly]:=True) With {
+                    target = New Symbol(name, vec, type.mode, [readonly]:=True) With {
                         .stacktrace = env.stackTrace
                     }
                     data = Serialization.GetBytes(target, env:=env)

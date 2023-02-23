@@ -109,12 +109,7 @@ Partial Module CLI
             Dim argv = New Object() {masterPort, REngine.globalEnvir}
 
             ' load primary base libraries
-            Call REngine.LoadLibrary("base", silent:=False, ignoreMissingStartupPackages:=False)
-            Call REngine.LoadLibrary("utils", silent:=False, ignoreMissingStartupPackages:=False)
-            Call REngine.LoadLibrary("grDevices", silent:=False, ignoreMissingStartupPackages:=False)
-            Call REngine.LoadLibrary("math", silent:=False, ignoreMissingStartupPackages:=False)
-            Call REngine.LoadLibrary("stats", silent:=False, ignoreMissingStartupPackages:=False)
-
+            Call LoadLibrary(REngine, ignoreMissingStartupPackages:=False, "base", "utils", "grDevices", "math", "stats")
             Call Console.WriteLine()
 
             Call PackageLoader.ParsePackages(plugin) _

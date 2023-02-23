@@ -272,7 +272,7 @@ Namespace Runtime.Serialize
                     ' all vector content is null
                     vector = Array.CreateInstance(type, vector_size)
                 Else
-                    vector = RawStream.GetData(ms, type.PrimitiveTypeCode)
+                    vector = RawStream.GetData(ms, type.PrimitiveTypeCode(meltVector:=True))
                 End If
 
                 Me.type = type.FullName

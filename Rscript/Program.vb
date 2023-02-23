@@ -131,7 +131,7 @@ Module Program
         End Using
     End Function
 
-    Private Sub LoadLibrary(REnv As RInterpreter, ignoreMissingStartupPackages As Boolean, ParamArray names As String())
+    Friend Sub LoadLibrary(REnv As RInterpreter, ignoreMissingStartupPackages As Boolean, ParamArray names As String())
         For Each pkgName As String In names
             Call REnv.LoadLibrary(
                 packageName:=pkgName,

@@ -250,6 +250,8 @@ Namespace Context.RPC
         End Function
 
         Public Sub Kill()
+            ' Call App.Pause()
+
             Me.stop = True
 
             Try
@@ -299,8 +301,7 @@ Namespace Context.RPC
             If Not disposedValue Then
                 If disposing Then
                     ' TODO: dispose managed state (managed objects)
-                    Me.stop = True
-                    Me.socket.Dispose()
+                    Call Me.Kill()
                 End If
 
                 ' TODO: free unmanaged resources (unmanaged objects) and override finalizer
