@@ -128,6 +128,8 @@ Namespace Runtime.Internal.Invokes
                                       Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return ""
+            ElseIf TypeOf x Is WebResponseResult Then
+                Return DirectCast(x, WebResponseResult).html
             End If
 
             ' NULL will be translate to empty string in R

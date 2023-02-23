@@ -86,8 +86,10 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Serialize
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports BASICString = Microsoft.VisualBasic.Strings
+Imports Clang = Microsoft.VisualBasic.Language.C
 Imports fsOptions = Microsoft.VisualBasic.FileIO.SearchOption
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -242,7 +244,7 @@ Namespace Runtime.Internal.Invokes
         ''' </returns>
         <ExportAPI("file.info")>
         Public Function fileinfo(<RRawVectorArgument> files As Object, Optional env As Environment = Nothing) As Object
-            Dim fileList As String() = REnv.asVector(Of String)(files)
+            Dim fileList As String() = CLRVector.asCharacter(files)
 
             If fileList.IsNullOrEmpty Then
                 Return Nothing
@@ -744,7 +746,11 @@ Namespace Runtime.Internal.Invokes
         ''' UTF-8-encoded dirnames Not valid in the current locale can be used.
         ''' </remarks>
         <ExportAPI("dir.create")>
-        Public Function dirCreate(path$, Optional showWarnings As Boolean = True, Optional recursive As Boolean = False, Optional mode$ = "0777") As Boolean
+        Public Function dirCreate(path$,
+                                  Optional showWarnings As Boolean = True,
+                                  Optional recursive As Boolean = False,
+                                  Optional mode$ = "0777") As Boolean
+
             If showWarnings AndAlso path.DirectoryExists Then
                 Call $"in dir.create(""{path}"") : '{path}' already exists".Warning
             End If
@@ -895,6 +901,12 @@ Namespace Runtime.Internal.Invokes
                 text = DirectCast(text, WebResponseResult).html
             End If
 
+            If sep Is Nothing Then
+                sep = ""
+            Else
+                sep = Clang.sprintf(sep)
+            End If
+
             If TypeOf text Is pipeline Then
                 Return DirectCast(text, pipeline) _
                     .populates(Of String)(env) _
@@ -1025,7 +1037,10 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="file$"></param>
         ''' <returns></returns>
         <ExportAPI("save.list")>
-        Public Function saveList(list As Object, file$, Optional encodings As Encodings = Encodings.UTF8, Optional envir As Environment = Nothing) As Object
+        Public Function saveList(list As Object, file$,
+                                 Optional encodings As Encodings = Encodings.UTF8,
+                                 Optional envir As Environment = Nothing) As Object
+
             If list Is Nothing Then
                 Return False
             End If
@@ -1326,8 +1341,8 @@ Namespace Runtime.Internal.Invokes
                                  Optional fileext As Object = ".tmp",
                                  Optional env As Environment = Nothing) As Object
 
-            Dim patterns As String() = REnv.asVector(Of String)(pattern)
-            Dim exts As String() = REnv.asVector(Of String)(fileext)
+            Dim patterns As String() = CLRVector.asCharacter(pattern)
+            Dim exts As String() = CLRVector.asCharacter(fileext)
             Dim files As New List(Of String)
 
             If patterns.Length = 1 Then
