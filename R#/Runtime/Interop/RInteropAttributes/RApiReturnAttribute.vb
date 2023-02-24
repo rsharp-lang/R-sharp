@@ -55,6 +55,7 @@
 
 Imports System.Reflection
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime.Interop
 
@@ -80,6 +81,16 @@ Namespace Runtime.Interop
         End Property
 
         ''' <summary>
+        ''' Do we can create a <see cref="RS4ClassGraph"/> from the attribute values?
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property isClassGraph As Boolean
+            Get
+                Return returnTypes(Scan0) Is GetType(list) AndAlso Not fields.IsNullOrEmpty
+            End Get
+        End Property
+
+        ''' <summary>
         ''' this function returns a typescript language liked union type
         ''' </summary>
         ''' <param name="type"></param>
@@ -95,6 +106,24 @@ Namespace Runtime.Interop
             fields = slots
             returnTypes = {GetType(list)}
         End Sub
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <returns>
+        ''' this function returns nothing if not <see cref="isClassGraph"/>.
+        ''' </returns>
+        Public Function GetClass() As RS4ClassGraph
+            If Not isClassGraph Then
+                Return Nothing
+            Else
+                Dim uuid As String = any.ToString(
+                    obj:=MyBase.TypeId,
+                    null:=$"anonymous_{Me.GetHashCode.ToHexString}"
+                )
+                Return New RS4ClassGraph(uuid, fields)
+            End If
+        End Function
 
         Public Overrides Function ToString() As String
             Return $"fun() -> {unionType}"

@@ -69,6 +69,25 @@ Namespace Runtime.Internal.Invokes
     Module reflections
 
         ''' <summary>
+        ''' ### Object Classes
+        ''' 
+        ''' R possesses a simple generic function mechanism which 
+        ''' can be used for an object-oriented style of programming. 
+        ''' Method dispatch takes place based on the class of the 
+        ''' first argument to the generic function.
+        ''' </summary>
+        ''' <param name="x">a R object</param>
+        ''' <returns></returns>
+        <ExportAPI("class")>
+        Public Function getClass(x As Object) As Object
+            If x Is Nothing Then
+                Return Nothing
+            Else
+                Return RType.TypeOf(x).mode
+            End If
+        End Function
+
+        ''' <summary>
         ''' ### Access to and Manipulation of the Formal Arguments
         ''' 
         ''' Get or set the formal arguments of a function.
