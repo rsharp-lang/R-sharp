@@ -58,6 +58,7 @@ Imports System.Drawing.Drawing2D
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.SchemaMaps
 Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
@@ -483,7 +484,10 @@ Module SVMkit
             Return Message.InCompatibleType(GetType(JsonObject), x.GetType, env)
         End If
 
-        If jsonObj.Score(GetType(SVMMultipleSetJSON)) > jsonObj.Score(GetType(SvmModelJSON)) Then
+        Dim multipleJSON As SoapGraph = SoapGraph.GetSchema(Of SVMMultipleSetJSON)
+        Dim singleJSON As SoapGraph = SoapGraph.GetSchema(Of SvmModelJSON)
+
+        If multipleJSON.Score(jsonObj.ObjectKeys) > singleJSON.Score(jsonObj.ObjectKeys) Then
             Return jsonObj.CreateObject(Of SVMMultipleSetJSON)(decodeMetachar:=True).CreateSVMModel
         Else
             Return jsonObj.CreateObject(Of SvmModelJSON)(decodeMetachar:=True).CreateSVMModel
