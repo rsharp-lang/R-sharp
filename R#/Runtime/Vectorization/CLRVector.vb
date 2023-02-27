@@ -83,6 +83,11 @@ Namespace Runtime.Vectorization
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
             End If
+            If TypeOf x Is String Then
+                Return New Long() {Long.Parse(CStr(x))}
+            ElseIf REnv.isVector(Of String)(x) Then
+                Return asCharacter(x).Select(AddressOf Long.Parse).ToArray
+            End If
 
             If TypeOf x Is Long() Then
                 Return x
@@ -201,6 +206,10 @@ Namespace Runtime.Vectorization
 
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
+            End If
+
+            If TypeOf x Is String Then
+                Return New Double() {Double.Parse(CStr(x))}
             End If
 
             If TypeOf x Is Double() Then

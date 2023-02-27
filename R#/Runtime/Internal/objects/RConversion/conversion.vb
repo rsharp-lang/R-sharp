@@ -576,7 +576,7 @@ RE0:
                 Call df.columns.Add(name, fields(name).ToArray)
             Next
 
-            df.rownames = REnv.asVector(Of String)(rowNames.ToArray)
+            df.rownames = CLRVector.asCharacter(rowNames.ToArray)
 
             Return df
         End Function
