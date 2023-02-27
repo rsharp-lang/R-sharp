@@ -194,7 +194,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
                 If Not worker Is Nothing Then
                     worker.progress = REnv.single(
-                        x:=REnv.asVector(Of Double)(x),
+                        x:=CLRVector.asNumeric(x),
                         forceSingle:=True
                     )
                 Else
@@ -231,11 +231,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                      Optional mode As Object = "any|character|numeric|integer",
                                      Optional env As Environment = Nothing) As Object
 
-            Select Case obj.ToString(REnv.asVector(Of String)(mode).AsObjectEnumerator.DefaultFirst("any")).ToLower
+            Select Case obj.ToString(CLRVector.asCharacter(mode).DefaultFirst("any")).ToLower
                 Case "any"
                     Throw New NotImplementedException
                 Case "character"
-                    Return REnv.asVector(Of String)(x).AsObjectEnumerator(Of String).Indexing
+                    Return CLRVector.asCharacter(x).Indexing
                 Case Else
                     Throw New NotImplementedException
             End Select
@@ -687,7 +687,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If x Is Nothing Then
                     Return New Integer() {}
                 Else
-                    Dim dbl As Double() = CLRVector.asNumeric(Rset.getObjectSet(x, env).ToArray)
+                    Dim dbl As Double() = CLRVector.asNumeric(x)
 
                     If dbl.Length = 0 Then
                         Return New Integer() {}
@@ -744,7 +744,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If x Is Nothing Then
                     Return New Integer() {}
                 Else
-                    Dim dbl As Double() = CLRVector.asNumeric(Rset.getObjectSet(x, env))
+                    Dim dbl As Double() = CLRVector.asNumeric(x)
 
                     If dbl.Length = 0 Then
                         Return New Integer() {}
@@ -764,6 +764,21 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
         End Function
 
+        ''' <summary>
+        ''' Returns the first element of a sequence.
+        ''' </summary>
+        ''' <param name="sequence">
+        ''' The System.Collections.Generic.IEnumerable`1 to return 
+        ''' the first element of.
+        ''' </param>
+        ''' <param name="test">An element test assert lambda function
+        ''' for find the first element which matched with this test 
+        ''' condition</param>
+        ''' <param name="envir"></param>
+        ''' <returns>The first element in the specified sequence. NULL
+        ''' value will be returned if there is no element could be found
+        ''' in the given seuqnece or under the given <paramref name="test"/>
+        ''' condition.</returns>
         <ExportAPI("first")>
         Private Function first(<RRawVectorArgument>
                                sequence As Object,
