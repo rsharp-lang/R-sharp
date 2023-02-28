@@ -1,65 +1,66 @@
 ﻿#Region "Microsoft.VisualBasic::1d1bde7a3e8555614610e32830dfa74f, D:/GCModeller/src/R-sharp/R#//Runtime/Serialize/bufferObjects/vectorBuffer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 226
-    '    Code Lines: 169
-    ' Comment Lines: 10
-    '   Blank Lines: 47
-    '     File Size: 8.10 KB
+' Summaries:
 
 
-    '     Class vectorBuffer
-    ' 
-    '         Properties: code, names, type, underlyingType, unit
-    '                     vector
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    ' 
-    '         Function: CreateBuffer, getValue, getVector
-    ' 
-    '         Sub: loadBuffer, Serialize
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 226
+'    Code Lines: 169
+' Comment Lines: 10
+'   Blank Lines: 47
+'     File Size: 8.10 KB
+
+
+'     Class vectorBuffer
+' 
+'         Properties: code, names, type, underlyingType, unit
+'                     vector
+' 
+'         Constructor: (+3 Overloads) Sub New
+' 
+'         Function: CreateBuffer, getValue, getVector
+' 
+'         Sub: loadBuffer, Serialize
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Text
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Microsoft.VisualBasic.Serialization
@@ -118,7 +119,7 @@ Namespace Runtime.Serialize
             Return vec
         End Function
 
-        Public Shared Function CreateBuffer(vector As vector, env As Environment) As Object
+        Public Shared Function CreateBuffer(vector As vector, env As Environment) As vectorBuffer
             Dim buffer As New vectorBuffer With {
                 .names = If(vector.getNames, {}),
                 .type = vector.elementType.raw.FullName,
@@ -133,7 +134,9 @@ Namespace Runtime.Serialize
                 buffer.vector = generic
             End If
 
-            If buffer.type = "System.Object" Then
+            Static NULL As Index(Of String) = {"System.Object", "System.Void"}
+
+            If buffer.type Is Nothing OrElse buffer.type Like NULL Then
                 buffer.type = buffer.vector _
                     .GetType _
                     .GetElementType _
@@ -149,6 +152,13 @@ Namespace Runtime.Serialize
             Dim text As Encoding = Encodings.UTF8.CodePage
             Dim raw As Byte()
             Dim sizeof As Byte()
+
+            If names Is Nothing Then
+                names = New String() {}
+            End If
+            If vector Is Nothing Then
+                vector = New String() {}
+            End If
 
             buffer.Write(BitConverter.GetBytes(names.Length), Scan0, 4)
             buffer.Write(BitConverter.GetBytes(vector.Length), Scan0, 4)

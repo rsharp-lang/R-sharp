@@ -163,16 +163,16 @@ Namespace Runtime.Internal.Invokes
         ''' the data will be saved (when tilde expansion is done). Must be a 
         ''' file name for save.image or version = 1.
         ''' </param>
-        ''' <param name="envir">environment to search for objects to be saved.</param>
+        ''' <param name="env">environment to search for objects to be saved.</param>
         ''' <returns></returns>
         ''' 
         <ExportAPI("save")>
-        Public Function save(<RListObjectArgument> objects As Object, file$, Optional envir As Environment = Nothing) As Object
+        Public Function save(<RListObjectArgument> objects As Object, file$, Optional env As Environment = Nothing) As Object
             ' 数据将会被保存为netCDF文件然后进行zip压缩保存
             If file.StringEmpty Then
-                Return Internal.debug.stop("'file' must be specified!", envir)
+                Return Internal.debug.stop("'file' must be specified!", env)
             ElseIf objects Is Nothing Then
-                Return Internal.debug.stop("'object' is nothing!", envir)
+                Return Internal.debug.stop("'object' is nothing!", env)
             End If
 
             If TypeOf objects Is InvokeParameter() Then
@@ -180,7 +180,7 @@ Namespace Runtime.Internal.Invokes
 
                 For Each arg As InvokeParameter In DirectCast(objects, InvokeParameter())
                     Dim name As String = arg.name
-                    Dim value As Object = arg.Evaluate(envir)
+                    Dim value As Object = arg.Evaluate(env)
 
                     If Program.isException(value) Then
                         Return value
@@ -192,7 +192,7 @@ Namespace Runtime.Internal.Invokes
                 objects = tmpList
             End If
 
-            Dim buffer As Buffer = BufferHandler.getBuffer(objects, env:=envir)
+            Dim buffer As Buffer = BufferHandler.getBuffer(objects, env:=env)
 
             Using buf As Stream = file.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
                 Call buffer.Serialize(buf)
