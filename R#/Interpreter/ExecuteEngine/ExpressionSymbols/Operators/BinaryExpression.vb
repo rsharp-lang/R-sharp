@@ -155,15 +155,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Select Case [operator]
                     Case "=="
                         Return Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
-                            x:=REnv.asVector(Of Boolean)(a),
-                            y:=REnv.asVector(Of Boolean)(b),
+                            x:=CLRVector.asLogical(a),
+                            y:=CLRVector.asLogical(b),
                             [do]:=Function(x, y, env2) x = y,
                             env:=envir
                         )
                     Case "!="
                         Return Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
-                            x:=REnv.asVector(Of Boolean)(a),
-                            y:=REnv.asVector(Of Boolean)(b),
+                            x:=CLRVector.asLogical(a),
+                            y:=CLRVector.asLogical(b),
                             [do]:=Function(x, y, env2) x <> y,
                             env:=envir
                         )

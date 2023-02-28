@@ -996,7 +996,7 @@ Namespace Runtime.Internal.Invokes
         ''' </returns>
         <ExportAPI("substr")>
         Public Function substr(<RRawVectorArgument> x As Object, start%, stop%, Optional env As Environment = Nothing) As String()
-            Dim strs As String() = REnv.asVector(Of String)(x)
+            Dim strs As String() = CLRVector.asCharacter(x)
             Dim substrs As String() = strs _
                 .Select(Function(str)
                             Return VBStr.Mid(str, start, [stop] - start + 1)

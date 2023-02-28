@@ -166,6 +166,8 @@ Namespace Runtime.Vectorization
         Public Function asInteger(x As Object) As Integer()
             If x Is Nothing Then
                 Return Nothing
+            ElseIf TypeOf x Is String Then
+                Return New Integer() {CInt(Val(x))}
             End If
             If TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
@@ -188,8 +190,6 @@ Namespace Runtime.Vectorization
                 Return New Integer() {CInt(x)}
             ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of Integer)) Then
                 Return DirectCast(x, IEnumerable(Of Integer)).ToArray
-            ElseIf TypeOf x Is String Then
-                Return New Integer() {CInt(Val(x))}
             ElseIf TypeOf x Is String() Then
                 Return DirectCast(x, String()) _
                     .Select(Function(str) CInt(Val(str))) _
@@ -202,14 +202,12 @@ Namespace Runtime.Vectorization
         Public Function asNumeric(x As Object) As Double()
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
+            ElseIf TypeOf x Is String Then
+                Return New Double() {Double.Parse(CStr(x))}
             End If
 
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
-            End If
-
-            If TypeOf x Is String Then
-                Return New Double() {Double.Parse(CStr(x))}
             End If
 
             If TypeOf x Is Double() Then
@@ -257,6 +255,8 @@ Namespace Runtime.Vectorization
                 Return New Boolean() {CBool(x)}
             ElseIf TypeOf x Is Boolean() Then
                 Return x
+            ElseIf TypeOf x Is String Then
+                Return New Boolean() {CStr(x)}
             End If
 
             If TypeOf x Is list Then
