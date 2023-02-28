@@ -59,6 +59,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
@@ -91,7 +92,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim current As Array = REnv.asVector(Of String)(stringParts(Scan0).Evaluate(envir))
+            Dim current As Array = CLRVector.asCharacter(stringParts(Scan0).Evaluate(envir))
             Dim [next] As Object
             Dim str_concatenate As New Vectorization.op_evaluator(AddressOf r_string_concatenate)
 
@@ -122,7 +123,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 End If
             Next
 
-            Dim currentStrings As String() = DirectCast(REnv.asVector(Of String)(current), String())
+            Dim currentStrings As String() = CLRVector.asCharacter(current)
             ' .Select(Function(str) sprintf(str)) _
             ' .ToArray
             Dim strVec As New vector(currentStrings, RType.GetRSharpType(GetType(String)))

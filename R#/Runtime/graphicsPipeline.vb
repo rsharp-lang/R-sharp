@@ -61,6 +61,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime
@@ -119,9 +120,9 @@ Namespace Runtime
             End If
 
             If TypeOf raw Is InvokeParameter Then
-                Return REnv.single(REnv.asVector(Of Integer)(eval(raw, env)))
+                Return REnv.single(CLRVector.asInteger(eval(raw, env)))
             Else
-                Return REnv.single(REnv.asVector(Of Integer)(raw))
+                Return REnv.single(CLRVector.asInteger(raw))
             End If
         End Function
 

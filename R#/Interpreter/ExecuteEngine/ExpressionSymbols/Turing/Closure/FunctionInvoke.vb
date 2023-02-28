@@ -73,6 +73,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -471,7 +472,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 ElseIf Program.isException(firstInput) Then
                     Return firstInput
                 Else
-                    names = Runtime.asVector(Of String)(firstInput)
+                    names = CLRVector.asCharacter(firstInput)
                 End If
             Else
                 Dim vector As Object() = parameters _
@@ -486,7 +487,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     End If
                 Next
 
-                names = Runtime.asVector(Of String)(vector)
+                names = CLRVector.asCharacter(vector)
             End If
 
             Return base.options(names, env)
