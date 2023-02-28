@@ -134,20 +134,43 @@ Namespace Runtime.Serialize
                 buffer.vector = generic
             End If
 
-            Static NULL As Index(Of String) = {"System.Object", "System.Void"}
-
-            If buffer.type Is Nothing OrElse buffer.type Like NULL Then
-                buffer.type = buffer.vector _
-                    .GetType _
-                    .GetElementType _
-                    .FullName
-            End If
+            buffer.type = buffer.safeGetType.FullName
 
             Return buffer
         End Function
 
+        ''' <summary>
+        ''' get the array element type
+        ''' </summary>
+        ''' <returns></returns>
+        Private Function safeGetType() As Type
+            Static NULL As Index(Of String) = {"System.Object", "System.Void"}
+
+            If type.StringEmpty OrElse type Like NULL Then
+                vector = REnv.UnsafeTryCastGenericArray(vector)
+
+                If vector.AllNothing Then
+                    vector = New String(vector.Length - 1) {}
+                    type = GetType(String).FullName
+                Else
+                    type = vector _
+                       .GetType _
+                       .GetElementType _
+                       .FullName
+                End If
+            End If
+
+            Dim typeinfo As Type = System.Type.GetType(type)
+
+            If typeinfo Is Nothing Then
+                Throw New InvalidCastException($"error type: '{type}'!")
+            Else
+                Return typeinfo
+            End If
+        End Function
+
         Public Overrides Sub Serialize(buffer As Stream)
-            Dim type As Type = Type.GetType(Me.type)
+            Dim type As Type = safeGetType()
             Dim bytes As Byte()
             Dim text As Encoding = Encodings.UTF8.CodePage
             Dim raw As Byte()

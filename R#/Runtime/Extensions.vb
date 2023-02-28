@@ -112,7 +112,10 @@ Namespace Runtime
         ''' 这个会遵循类型缩放的原则返回最大的类型
         ''' </summary>
         ''' <param name="array"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' if all of the element in the given <paramref name="array"/> is nothing
+        ''' then function returns the <paramref name="defaultType"/> value
+        ''' </returns>
         Public Function MeasureRealElementType(array As Array, Optional defaultType As Type = Nothing) As Type
             Dim arrayType As Type = array.GetType
             Dim x As Object
@@ -174,7 +177,9 @@ Namespace Runtime
                 ' 则返回最末尾的类型
                 If allTypes(Scan0).IsInheritsFrom(allTypes.Last) Then
                     Return allTypes.Last
-                ElseIf allTypes.Any(Function(t) t Is GetType(Double)) AndAlso allTypes.All(Function(t) DataFramework.IsNumericType(t)) Then
+                ElseIf allTypes.Any(Function(t) t Is GetType(Double)) AndAlso
+                    allTypes.All(Function(t) DataFramework.IsNumericType(t)) Then
+
                     Return GetType(Double)
                 ElseIf allTypes.All(Function(t) DataFramework.IsIntegerType(t)) Then
                     Return GetType(Long)

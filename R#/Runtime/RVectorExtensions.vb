@@ -67,6 +67,21 @@ Namespace Runtime
 
     <HideModuleName> Public Module RVectorExtensions
 
+        <Extension>
+        Public Function AllNothing(v As Array) As Boolean
+            If v Is Nothing Then
+                Return True
+            End If
+
+            For i As Integer = 0 To v.Length - 1
+                If v(i) IsNot Nothing Then
+                    Return False
+                End If
+            Next
+
+            Return True
+        End Function
+
         ''' <summary>
         ''' Object ``x`` is an array of <typeparamref name="T"/>?
         ''' </summary>
@@ -301,6 +316,13 @@ Namespace Runtime
             Return ofList
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="vec"></param>
+        ''' <returns>
+        ''' propably returns an array with all element value is nothing
+        ''' </returns>
         Public Function UnsafeTryCastGenericArray(vec As Array) As Array
             Dim elementType As Type
             Dim generic As Array
@@ -321,6 +343,11 @@ Namespace Runtime
             Return generic
         End Function
 
+        ''' <summary>
+        ''' target value is nothing orelse is array with less than or equals to one element?
+        ''' </summary>
+        ''' <param name="xi"></param>
+        ''' <returns></returns>
         Public Function isScalarVector(xi As Object) As Boolean
             If xi Is Nothing Then
                 Return True
