@@ -330,7 +330,10 @@ Namespace Runtime
             vec = MeltArray(vec)
             elementType = MeasureRealElementType(vec)
 
-            If elementType Is Nothing OrElse elementType Is GetType(Object) Then
+            ' all is nothing or else empty array
+            If elementType Is GetType(Void) Then
+                Return vec
+            ElseIf elementType Is Nothing OrElse elementType Is GetType(Object) Then
                 Return vec
             Else
                 generic = Array.CreateInstance(elementType, vec.Length)

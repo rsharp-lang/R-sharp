@@ -149,7 +149,7 @@ Namespace Runtime.Serialize
             If type.StringEmpty OrElse type Like NULL Then
                 vector = REnv.UnsafeTryCastGenericArray(vector)
 
-                If vector.AllNothing Then
+                If vector.AllNothing OrElse vector.Length = 0 Then
                     vector = New String(vector.Length - 1) {}
                     type = GetType(String).FullName
                 Else
