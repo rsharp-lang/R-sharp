@@ -162,6 +162,7 @@ Namespace Runtime.Serialize
 
             Dim typeinfo As Type = System.Type.GetType(type)
 
+            ' not working well with the clr object???
             If typeinfo Is Nothing Then
                 Throw New InvalidCastException($"error type: '{type}'!")
             Else
