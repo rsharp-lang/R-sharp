@@ -68,7 +68,7 @@ Namespace Runtime.Components
     ''' <summary>
     ''' The warning message and exception message
     ''' </summary>
-    Public Class Message : Implements IEnumerable(Of String)
+    Public Class Message : Implements Enumeration(Of String)
 
         ''' <summary>
         ''' the message content about this error or warning
@@ -175,14 +175,14 @@ Namespace Runtime.Components
             Return $"[{level.Description}] {message(Scan0)}"
         End Function
 
-        Public Iterator Function GetEnumerator() As IEnumerator(Of String) Implements IEnumerable(Of String).GetEnumerator
+        Public Iterator Function GenericEnumerator() As IEnumerator(Of String) Implements Enumeration(Of String).GenericEnumerator
             For Each msg As String In message
                 Yield msg
             Next
         End Function
 
-        Private Iterator Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Yield GetEnumerator()
+        Public Iterator Function GetEnumerator() As IEnumerator Implements Enumeration(Of String).GetEnumerator
+            Yield GenericEnumerator()
         End Function
     End Class
 End Namespace

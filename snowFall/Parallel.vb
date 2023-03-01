@@ -349,13 +349,8 @@ Public Module Parallel
             j += 1
 
             If Program.isException(i) Then
-                If Not ignoreError Then
-                    Call host.master.Dispose()
-                    Return i
-                Else
-                    Call output.Add(Nothing)
-                    Call errors.Add((j, DirectCast(i, Message)))
-                End If
+                Call output.Add(Nothing)
+                Call errors.Add((j, DirectCast(i, Message)))
             Else
                 Call output.Add(i)
             End If
@@ -371,9 +366,21 @@ Public Module Parallel
         If errors.Any Then
             Call println("error was found during the parallel work process...")
 
-            For Each taskResult In errors
-                Call env.AddMessage($"[task_{taskResult.i}] {taskResult.ex.ToString}")
-            Next
+            If Not ignoreError Then
+                If ___argvSet_____.hasName("log_tmp") Then
+                    Dim log_tmp As String = ___argvSet_____.getValue(Of String)("log_tmp", env, [default]:=Nothing)
+
+                    For Each err As (i As Integer, ex As Message) In errors
+
+                    Next
+                End If
+
+                Return errors.First.ex
+            Else
+                For Each taskResult In errors
+                    Call env.AddMessage($"[task_{taskResult.i}] {taskResult.ex.ToString}")
+                Next
+            End If
         End If
 
         Return REnv.TryCastGenericArray(output.ToArray, env)
