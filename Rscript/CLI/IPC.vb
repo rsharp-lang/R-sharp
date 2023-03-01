@@ -305,10 +305,19 @@ Partial Module CLI
         Dim packageData As Byte() = New IPCBuffer(request_id, buffer).Serialize
         Dim request As New RequestStream(0, 0, packageData)
         Dim timeout As Boolean = False
+        Dim data As RequestStream
 
         For i As Integer = 0 To retryTimes
             Call $"push callback data '{buffer.code.Description}' to [{master}] [{packageData.Length} bytes]".__INFO_ECHO
-            Call New Tcp.TcpRequest(master).SendMessage(request, timeout:=timeoutMS, Sub() timeout = True)
+
+            data = New Tcp.TcpRequest(master).SetTimeOut(TimeSpan.FromMilliseconds(timeoutMS)).SendMessage(request)
+
+            If data.ProtocolCategory < 0 AndAlso data.Protocol = 500 Then
+                Call data.GetUTF8String.Warning
+                timeout = True
+            Else
+                timeout = False
+            End If
 
             If Not timeout Then
                 Exit For

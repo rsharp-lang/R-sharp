@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--parallel --master 46112 --host localhost --delegate Parallel::slave"
+      "commandLineArgs": "--parallel --master 5260 --host localhost --delegate Parallel::slave"
     }
   }
 }

@@ -343,7 +343,7 @@ Public Module Parallel
             Call println("close master node services!")
         End If
 
-        ' Call Pause()
+        Call Pause()
         Call host.master.Dispose()
 
         If errors.Any Then

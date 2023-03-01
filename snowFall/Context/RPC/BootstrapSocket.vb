@@ -180,12 +180,12 @@ Namespace Context.RPC
                 End Try
             Loop
 
-            If slave_debug Then
-                Call App.Pause()
-            End If
+            ' If slave_debug Then
+            ' Call App.Pause()
+            ' End If
 
             Try
-                Call socket.Dispose()
+                ' Call socket.Dispose()
             Catch ex As Exception
             Finally
                 Call Thread.Sleep(5000)
@@ -250,7 +250,7 @@ Namespace Context.RPC
         End Function
 
         Public Sub Kill()
-            ' Call App.Pause()
+            Call App.Pause()
 
             Me.stop = True
 
