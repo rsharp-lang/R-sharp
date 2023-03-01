@@ -1,13 +1,15 @@
-# ``R#`` language
+<div align="center" style="display:grid;place-items:center;">
+<p>
+    <a href="http://www.clipartbest.com/clipart-di85MqodT" target="_blank"><img width="80" src="docs/images/R-sharp.png" alt="R# logo"></a>
+</p>
+<h1>The R# Programming Language</h1>
+
+</div>
 
 R# language is a kind of R liked language implements on .NET environment for GCModeller scripting.
 
 > [WARNING] This project is a work in progress and is not recommended for production use.
-
-<img src="docs/images/R-sharp.png" width="450px" />
-
-> Art work: http://www.clipartbest.com/clipart-di85MqodT
-
+>
 > The latest [sciBASIC.NET Framework](https://github.com/xieguigang/sciBASIC) runtime is also required
 
 The ``R#`` language its syntax is original derived from the ``R`` language, but with more modernized programming styles. The ``R#`` language its interpreter and .NET compiler is original writen in VisualBasic language, with native support for the .NET runtime.
