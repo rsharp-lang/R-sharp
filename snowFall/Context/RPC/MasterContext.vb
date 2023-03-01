@@ -67,10 +67,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 
-#If netcore5 = 1 Then
-Imports Microsoft.VisualBasic.ComponentModel.Collection
-#End If
-
 Namespace Context.RPC
 
     ''' <summary>
@@ -101,6 +97,7 @@ Namespace Context.RPC
 
         Dim getLoopSymbol As Func(Of GetSymbol, (hit As Boolean, val As Object))
         Dim disposedValue As Boolean
+        Dim log_getsymbol_temp As String = Nothing
 
         Public Shared ReadOnly Property Protocol As Long = New ProtocolAttribute(GetType(Protocols)).EntryPoint
 
@@ -119,6 +116,11 @@ Namespace Context.RPC
             Me.socket = New TcpServicesSocket(Me.port, debug:=verbose OrElse port > 0)
             Me.socket.ResponseHandler = AddressOf New ProtocolHandler(Me).HandleRequest
         End Sub
+
+        Public Function SetSymbolLogTempDir(dir As String) As MasterContext
+            log_getsymbol_temp = dir
+            Return Me
+        End Function
 
         Public Sub Run(getLoopSymbol As Func(Of GetSymbol, (hit As Boolean, val As Object)))
             Me.getLoopSymbol = getLoopSymbol
@@ -166,6 +168,58 @@ Namespace Context.RPC
             Return New DataPipe("OK")
         End Function
 
+        ''' <summary>
+        ''' get context symbol that not from the loop
+        ''' </summary>
+        ''' <param name="target"></param>
+        ''' <returns></returns>
+        Private Function popSymbol(target As Symbol) As Byte()
+            If TypeOf target.value Is RMethodInfo Then
+                Return New Byte() {}
+            Else
+                'Dim vec As Object = target.ToVector.GetValue(payload.uuid)
+
+                'vec = REnv.TryCastGenericArray({vec}, env)
+                'target = New Symbol(name, vec, target.constraint, target.readonly) With {
+                '    .stacktrace = target.stacktrace
+                '}
+                Return Serialization.GetBytes(target, env:=env)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' get loop symbol
+        ''' </summary>
+        ''' <param name="payload"></param>
+        ''' <returns></returns>
+        Private Function popSymbol(payload As GetSymbol) As Byte()
+            Dim [loop] = getLoopSymbol(payload)
+
+            If [loop].hit Then
+                Dim type = RType.GetRSharpType([loop].val.GetType)
+                Dim isArray As Boolean = Not [loop].val Is Nothing AndAlso [loop].val.GetType.IsArray
+                Dim valLoop As Array
+
+                If isArray Then
+                    valLoop = [loop].val
+                Else
+                    valLoop = {[loop].val}
+                End If
+
+                valLoop = REnv.TryCastGenericArray(valLoop, env)
+                type = RType.GetRSharpType(valLoop.GetType)
+
+                Dim vec As New vector(valLoop, type)
+                Dim target As New Symbol(payload.name, vec, type.mode, [readonly]:=True) With {
+                    .stacktrace = env.stackTrace
+                }
+
+                Return Serialization.GetBytes(target, env:=env)
+            Else
+                Return New Byte() {}
+            End If
+        End Function
+
         <Protocol(Protocols.GetSymbol)>
         Public Function GetSymbol(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
             Dim payload As New GetSymbol(request.ChunkBuffer)
@@ -173,52 +227,28 @@ Namespace Context.RPC
             Dim target As Symbol = env.FindSymbol(name)
             Dim data As Byte()
 
-            ' 
+            ' target symbol is not a loop symbol
             If Not target Is Nothing Then
-                If TypeOf target.value Is RMethodInfo Then
-                    data = {}
-                Else
-                    'Dim vec As Object = target.ToVector.GetValue(payload.uuid)
-
-                    'vec = REnv.TryCastGenericArray({vec}, env)
-                    'target = New Symbol(name, vec, target.constraint, target.readonly) With {
-                    '    .stacktrace = target.stacktrace
-                    '}
-                    data = Serialization.GetBytes(target, env:=env)
-                End If
+                data = popSymbol(target)
             Else
-                Dim [loop] = getLoopSymbol(payload)
+                ' is a symbol from the loop sequence
+                data = popSymbol(payload)
+            End If
 
-                If [loop].hit Then
-                    Dim type = RType.GetRSharpType([loop].val.GetType)
-                    Dim isArray As Boolean = Not [loop].val Is Nothing AndAlso [loop].val.GetType.IsArray
-                    Dim valLoop As Array
-
-                    If isArray Then
-                        valLoop = [loop].val
-                    Else
-                        valLoop = {[loop].val}
-                    End If
-
-                    valLoop = REnv.TryCastGenericArray(valLoop, env)
-                    type = RType.GetRSharpType(valLoop.GetType)
-
-                    Dim vec As New vector(valLoop, type)
-
-                    target = New Symbol(name, vec, type.mode, [readonly]:=True) With {
-                        .stacktrace = env.stackTrace
-                    }
-                    data = Serialization.GetBytes(target, env:=env)
-                Else
-                    data = {}
-                End If
+            ' save data for run debug of the slave node
+            If Not log_getsymbol_temp.StringEmpty Then
+                Call data.FlushStream($"{log_getsymbol_temp}/{payload.uuid}/{payload.name}.cache")
             End If
 
             Return New DataPipe(data)
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"localhost::{port}"
+            If log_getsymbol_temp.StringEmpty Then
+                Return $"localhost::{port}"
+            Else
+                Return $"localhost::{port} [{log_getsymbol_temp}]"
+            End If
         End Function
 
         Protected Overridable Sub Dispose(disposing As Boolean)

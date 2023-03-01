@@ -77,6 +77,9 @@ Namespace Context.RPC
 
     Public Enum Protocols As Long
         Initialize
+        ''' <summary>
+        ''' get symbol value
+        ''' </summary>
         GetSymbol
 
         ''' <summary>

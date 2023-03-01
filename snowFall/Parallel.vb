@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::7a569d9a0cda4b4a1074da7c3b82e908, D:/GCModeller/src/R-sharp/snowFall//Parallel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 319
-    '    Code Lines: 213
-    ' Comment Lines: 65
-    '   Blank Lines: 41
-    '     File Size: 11.91 KB
+' Summaries:
 
 
-    ' Module Parallel
-    ' 
-    '     Function: detectCores, makeCluster, parallel, produceTask, runSlaveNode
-    '               snowFall, worker
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 319
+'    Code Lines: 213
+' Comment Lines: 65
+'   Blank Lines: 41
+'     File Size: 11.91 KB
+
+
+' Module Parallel
+' 
+'     Function: detectCores, makeCluster, parallel, produceTask, runSlaveNode
+'               snowFall, worker
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -244,6 +244,7 @@ Public Module Parallel
     ''' 2. ``master``: set the tcp port of the master node
     ''' 3. ``bootstrap``: set the bootstrap tcp port of the slave node
     ''' 4. ``slaveDebug``: set this option to pause will make the master node pause when run a new salve node for run debug
+    ''' 5. ``log_tmp``: set the temp directory for log the getsymbol request data payloads
     ''' 
     ''' due to the reason of some short parameter name may 
     ''' conflict with the symbol name in script code, so 
@@ -297,6 +298,10 @@ Public Module Parallel
             debugMode:=debug,
             verbose:=env.globalEnvironment.debugMode
         )
+
+        If ___argvSet_____.hasName("log_tmp") Then
+            Call host.master.SetSymbolLogTempDir(___argvSet_____.getValue(Of String)("log_tmp", env, [default]:=Nothing))
+        End If
 
         If verbose Then
             Call println("start host services!")
