@@ -69,6 +69,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports snowFall.Context
 Imports snowFall.Context.RPC
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -133,6 +134,20 @@ Public Module Parallel
         }
     End Function
 
+    <ExportAPI("parseSymbolPayload")>
+    Public Function testParseSymbol(<RRawVectorArgument> payload As Object, Optional env As Environment = Nothing) As Object
+#Disable Warning
+        Dim bytes As Byte() = REnv.asVector(Of Byte)(payload)
+        Dim value As Symbol
+
+        Using buffer As New MemoryStream(bytes)
+            value = Serialization.GetValue(buffer)
+        End Using
+
+        Return value
+#Enable Warning
+    End Function
+
     ''' <summary>
     ''' run slave pipeline task on this new folked sub-process
     ''' </summary>
@@ -148,18 +163,18 @@ Public Module Parallel
         Dim localMaster As String = env.globalEnvironment.options.getOption("localMaster", LANTools.GetIPAddress.ToString, env)
         Dim resp As RequestStream
 
-        Call Console.WriteLine($"[slave_task] master_host={localMaster}")
-        Call Console.WriteLine($"[bootstrapping] bootstrap_port={port}!")
+        Call VBDebugger.EchoLine($"[slave_task] master_host={localMaster}")
+        Call VBDebugger.EchoLine($"[bootstrapping] bootstrap_port={port}!")
 
-        resp = New TcpRequest(hostName:=localMaster, remotePort:=port).SendMessage(req)
+        resp = New TcpRequest(hostName:=localMaster, remotePort:=CInt(port)).SendMessage(req)
 
         Dim uuid As Integer = BitConverter.ToInt32(resp.ChunkBuffer, Scan0)
         Dim masterPort As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 4)
         Dim size As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 8)
 
-        Call Console.WriteLine($"uuid={uuid}")
-        Call Console.WriteLine($"remote_environment={masterPort}")
-        Call Console.WriteLine($"task_body_size={size}")
+        Call VBDebugger.EchoLine($"uuid={uuid}")
+        Call VBDebugger.EchoLine($"remote_environment={masterPort}")
+        Call VBDebugger.EchoLine($"task_body_size={size}")
 
         Dim buffer As Byte() = New Byte(size - 1) {}
         Dim closure As Expression = Nothing
@@ -170,8 +185,8 @@ Public Module Parallel
             parent:=env
         )
 
-        Call Console.WriteLine("create root environment:")
-        Call Console.WriteLine(root.ToString)
+        Call VBDebugger.EchoLine("create root environment:")
+        Call VBDebugger.EchoLine(root.ToString)
 
         Dim fake As New DESCRIPTION With {
             .Author = "xieguigang",
@@ -191,12 +206,12 @@ Public Module Parallel
             Call BlockReader.Read(reader).Parse(fake, expr:=closure)
         End Using
 
-        Call Console.WriteLine("get task:")
-        Call Console.WriteLine("::")
-        Call Console.WriteLine(closure.ToString)
-        Call Console.WriteLine("::")
-        Call Console.WriteLine(" --> run!")
-        Call Console.WriteLine()
+        Call VBDebugger.EchoLine("get task:")
+        Call VBDebugger.EchoLine("::")
+        Call VBDebugger.EchoLine(closure.ToString)
+        Call VBDebugger.EchoLine("::")
+        Call VBDebugger.EchoLine(" --> run!")
+        Call VBDebugger.EchoLine("")
 
         Try
             ' run task closure at here
@@ -214,21 +229,20 @@ Public Module Parallel
 
         req = New RequestStream(MasterContext.Protocol, RPC.Protocols.PushResult, result)
 
-        ' Call Console.WriteLine()
-        Call Console.WriteLine()
-        Call Console.WriteLine("~job done!")
+        Call VBDebugger.EchoLine("")
+        Call VBDebugger.EchoLine("~job done!")
 
         If TypeOf result.value Is Message Then
-            Call Console.WriteLine()
-            Call Console.WriteLine("exception:")
-            Call Console.WriteLine(result.value.ToString)
-            Call Console.WriteLine()
+            Call VBDebugger.EchoLine("")
+            Call VBDebugger.EchoLine("exception:")
+            Call VBDebugger.EchoLine(result.value.ToString)
+            Call VBDebugger.EchoLine("")
         End If
 
         ' sync work on tcp request
         Call New TcpRequest(localMaster, masterPort).SendMessage(req)
         Call New TcpRequest(localMaster, port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
-        Call Console.WriteLine("exit!")
+        Call VBDebugger.EchoLine("exit!")
 
         Return App.Exit(0)
     End Function
