@@ -63,11 +63,8 @@ Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports IPEndPoint = Microsoft.VisualBasic.Net.IPEndPoint
 
@@ -186,13 +183,13 @@ Partial Module CLI
                 Dim name As String = CLITools.TrimParamPrefix(arg.Name)
 
                 If Not arguments.ContainsKey(name) Then
-                    arguments.Add(name, {arg.Value})
+                    Call arguments.Add(name, {arg.Value})
                 End If
             Next
 
             ' set request id to function parameters
             If Not arguments.ContainsKey("web_request_id") Then
-                arguments.Add("web_request_id", {request_id})
+                Call arguments.Add("web_request_id", {request_id})
             End If
 
             ' and also set to the runtime environments
