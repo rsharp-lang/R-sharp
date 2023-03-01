@@ -168,13 +168,13 @@ Partial Module CLI
             )
         Else
             If isDebugMode Then
-                Call Console.WriteLine($"found script at location: {script.GetFullPath}")
+                Call VBDebugger.EchoLine($"found script at location: {script.GetFullPath}")
             End If
 
             ' add variable values into environment for debug used
             For Each arg In arguments
                 If isDebugMode Then
-                    Call Console.WriteLine($"[init] {arg.Key} => {arg.Value.GetJson}")
+                    Call VBDebugger.EchoLine($"[init] {arg.Key} => {arg.Value.GetJson}")
                 End If
 
                 Call App.JoinVariable(arg.Key, arg.Value.JoinBy("; "))
@@ -215,7 +215,7 @@ Partial Module CLI
         R.debug = isDebugMode
 
         If isDebugMode Then
-            Call Console.WriteLine("[init] load startup packages")
+            Call VBDebugger.EchoLine("[init] load startup packages")
         End If
 
         For Each pkgName As String In R.configFile _
@@ -226,18 +226,18 @@ Partial Module CLI
         Next
 
         If Not pkg_attach.StringEmpty AndAlso pkg_attach.DirectoryExists Then
-            Call Console.WriteLine($"load required packages from alternative repository: '{pkg_attach.GetDirectoryFullPath}'...")
+            Call VBDebugger.EchoLine($"load required packages from alternative repository: '{pkg_attach.GetDirectoryFullPath}'...")
             Call PackageLoader2.Hotload(pkg_attach, R.globalEnvir)
         End If
         If isDebugMode Then
-            Call Console.WriteLine("[load] source target script...")
+            Call VBDebugger.EchoLine("[load] source target script...")
         End If
 
         result = R.Source(script, parameters.ToArray)
 
         If TypeOf result Is Message Then
             If isDebugMode Then
-                Call Console.WriteLine("[end] script text contains invalid syntax?")
+                Call VBDebugger.EchoLine("[end] script text contains invalid syntax?")
             End If
 
             Return R.globalEnvir.postResult(
@@ -250,7 +250,7 @@ Partial Module CLI
             )
         ElseIf Not entry.StringEmpty Then
             If isDebugMode Then
-                Call Console.WriteLine($"[call] {entry}")
+                Call VBDebugger.EchoLine($"[call] {entry}")
             End If
 
             result = R.Invoke(entry, parameters.ToArray)
@@ -258,7 +258,7 @@ Partial Module CLI
         End If
 
         If isDebugMode Then
-            Call Console.WriteLine("[end] finalized")
+            Call VBDebugger.EchoLine("[end] finalized")
         End If
 
         ' post result data back to the master node
@@ -296,9 +296,9 @@ Partial Module CLI
 
         If isDebugMode AndAlso TypeOf buffer.data Is textBuffer Then
 #Disable Warning
-            Call Console.WriteLine(vbNewLine)
-            Call Console.WriteLine(DirectCast(buffer.data, textBuffer).text)
-            Call Console.WriteLine(vbNewLine)
+            Call VBDebugger.EchoLine(vbNewLine)
+            Call VBDebugger.EchoLine(DirectCast(buffer.data, textBuffer).text)
+            Call VBDebugger.EchoLine(vbNewLine)
 #Enable Warning
         End If
 
