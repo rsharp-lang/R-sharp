@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -99,7 +100,7 @@ Public Module InteropArgumentHelper
         ElseIf TypeOf obj Is Point3D Then
             Return DirectCast(obj, Point3D)
         ElseIf TypeOf obj Is Double() OrElse TypeOf obj Is Integer() OrElse TypeOf obj Is Long() Then
-            With DirectCast(REnv.asVector(Of Double)(obj), Double())
+            With CLRVector.asNumeric(obj)
                 If .Length >= 3 Then
                     Return New Point3D(.GetValue(0), .GetValue(1), .GetValue(2))
                 ElseIf .Length = 2 Then
