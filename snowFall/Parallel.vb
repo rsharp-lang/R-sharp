@@ -144,7 +144,7 @@ Public Module Parallel
             value = Serialization.GetValue(buffer)
         End Using
 
-        Return value
+        Return value.value
 #Enable Warning
     End Function
 
