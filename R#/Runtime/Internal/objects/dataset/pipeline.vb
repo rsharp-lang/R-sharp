@@ -101,13 +101,20 @@ Namespace Runtime.Internal.Object
         ''' <returns></returns>
         Public ReadOnly Property isMessage As Boolean
             Get
-                Return TypeOf pipeline Is Message AndAlso GetType(Message) Is elementType
+                Return populatorFirstErr IsNot Nothing AndAlso
+                    pipeline Is Nothing AndAlso
+                    GetType(Message) Is elementType
             End Get
         End Property
 
         Sub New(input As IEnumerable, type As Type)
             pipeline = input
             elementType = RType.GetRSharpType(type)
+        End Sub
+
+        Sub New(message As Message)
+            elementType = RType.GetRSharpType(GetType(Message))
+            populatorFirstErr = message
         End Sub
 
         Sub New(input As IEnumerable, type As RType)
@@ -320,7 +327,7 @@ Namespace Runtime.Internal.Object
         End Function
 
         Public Shared Widening Operator CType([error] As Message) As pipeline
-            Return New pipeline([error], GetType(Message))
+            Return New pipeline([error])
         End Operator
 
     End Class
