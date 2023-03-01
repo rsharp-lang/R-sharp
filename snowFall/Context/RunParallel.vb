@@ -87,6 +87,10 @@ Public Class RunParallel
     Public Property taskNames As String()
     Public Property size As Integer
     Public ReadOnly Property worker As R
+    ''' <summary>
+    ''' the task expression serialization bytes result
+    ''' </summary>
+    ''' <returns></returns>
     Public Property task As Byte()
     ''' <summary>
     ''' set port number for slave node bootstrap socket

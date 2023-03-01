@@ -300,7 +300,10 @@ Public Module Parallel
         )
 
         If ___argvSet_____.hasName("log_tmp") Then
-            Call host.master.SetSymbolLogTempDir(___argvSet_____.getValue(Of String)("log_tmp", env, [default]:=Nothing))
+            Dim log_tmp As String = ___argvSet_____.getValue(Of String)("log_tmp", env, [default]:=Nothing)
+
+            Call host.master.SetSymbolLogTempDir(log_tmp)
+            Call host.task.FlushStream($"{log_tmp}/slave_task.dump")
         End If
 
         If verbose Then
