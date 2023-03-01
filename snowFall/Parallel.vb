@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::7a569d9a0cda4b4a1074da7c3b82e908, D:/GCModeller/src/R-sharp/snowFall//Parallel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 319
-    '    Code Lines: 213
-    ' Comment Lines: 65
-    '   Blank Lines: 41
-    '     File Size: 11.91 KB
+' Summaries:
 
 
-    ' Module Parallel
-    ' 
-    '     Function: detectCores, makeCluster, parallel, produceTask, runSlaveNode
-    '               snowFall, worker
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 319
+'    Code Lines: 213
+' Comment Lines: 65
+'   Blank Lines: 41
+'     File Size: 11.91 KB
+
+
+' Module Parallel
+' 
+'     Function: detectCores, makeCluster, parallel, produceTask, runSlaveNode
+'               snowFall, worker
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Parallel
 Imports Parallel.ThreadTask
 Imports SMRUCC.Rsharp.Development.Package.File
@@ -69,6 +70,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports snowFall.Context
 Imports snowFall.Context.RPC
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -133,6 +135,20 @@ Public Module Parallel
         }
     End Function
 
+    <ExportAPI("parseSymbolPayload")>
+    Public Function testParseSymbol(<RRawVectorArgument> payload As Object, Optional env As Environment = Nothing) As Object
+#Disable Warning
+        Dim bytes As Byte() = REnv.asVector(Of Byte)(payload)
+        Dim value As Symbol
+
+        Using buffer As New MemoryStream(bytes)
+            value = Serialization.GetValue(buffer)
+        End Using
+
+        Return value.value
+#Enable Warning
+    End Function
+
     ''' <summary>
     ''' run slave pipeline task on this new folked sub-process
     ''' </summary>
@@ -148,18 +164,18 @@ Public Module Parallel
         Dim localMaster As String = env.globalEnvironment.options.getOption("localMaster", LANTools.GetIPAddress.ToString, env)
         Dim resp As RequestStream
 
-        Call Console.WriteLine($"[slave_task] master_host={localMaster}")
-        Call Console.WriteLine($"[bootstrapping] bootstrap_port={port}!")
+        Call VBDebugger.EchoLine($"[slave_task] master_host={localMaster}")
+        Call VBDebugger.EchoLine($"[bootstrapping] bootstrap_port={port}!")
 
-        resp = New TcpRequest(hostName:=localMaster, remotePort:=port).SendMessage(req)
+        resp = New TcpRequest(hostName:=localMaster, remotePort:=CInt(port)).SendMessage(req)
 
         Dim uuid As Integer = BitConverter.ToInt32(resp.ChunkBuffer, Scan0)
         Dim masterPort As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 4)
         Dim size As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 8)
 
-        Call Console.WriteLine($"uuid={uuid}")
-        Call Console.WriteLine($"remote_environment={masterPort}")
-        Call Console.WriteLine($"task_body_size={size}")
+        Call VBDebugger.EchoLine($"uuid={uuid}")
+        Call VBDebugger.EchoLine($"remote_environment={masterPort}")
+        Call VBDebugger.EchoLine($"task_body_size={size}")
 
         Dim buffer As Byte() = New Byte(size - 1) {}
         Dim closure As Expression = Nothing
@@ -170,8 +186,8 @@ Public Module Parallel
             parent:=env
         )
 
-        Call Console.WriteLine("create root environment:")
-        Call Console.WriteLine(root.ToString)
+        Call VBDebugger.EchoLine("create root environment:")
+        Call VBDebugger.EchoLine(root.ToString)
 
         Dim fake As New DESCRIPTION With {
             .Author = "xieguigang",
@@ -191,12 +207,12 @@ Public Module Parallel
             Call BlockReader.Read(reader).Parse(fake, expr:=closure)
         End Using
 
-        Call Console.WriteLine("get task:")
-        Call Console.WriteLine("::")
-        Call Console.WriteLine(closure.ToString)
-        Call Console.WriteLine("::")
-        Call Console.WriteLine(" --> run!")
-        Call Console.WriteLine()
+        Call VBDebugger.EchoLine("get task:")
+        Call VBDebugger.EchoLine("::")
+        Call VBDebugger.EchoLine(closure.ToString)
+        Call VBDebugger.EchoLine("::")
+        Call VBDebugger.EchoLine(" --> run!")
+        Call VBDebugger.EchoLine("")
 
         Try
             ' run task closure at here
@@ -214,21 +230,20 @@ Public Module Parallel
 
         req = New RequestStream(MasterContext.Protocol, RPC.Protocols.PushResult, result)
 
-        ' Call Console.WriteLine()
-        Call Console.WriteLine()
-        Call Console.WriteLine("~job done!")
+        Call VBDebugger.EchoLine("")
+        Call VBDebugger.EchoLine("~job done!")
 
         If TypeOf result.value Is Message Then
-            Call Console.WriteLine()
-            Call Console.WriteLine("exception:")
-            Call Console.WriteLine(result.value.ToString)
-            Call Console.WriteLine()
+            Call VBDebugger.EchoLine("")
+            Call VBDebugger.EchoLine("exception:")
+            Call VBDebugger.EchoLine(result.value.ToString)
+            Call VBDebugger.EchoLine("")
         End If
 
         ' sync work on tcp request
         Call New TcpRequest(localMaster, masterPort).SendMessage(req)
         Call New TcpRequest(localMaster, port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
-        Call Console.WriteLine("exit!")
+        Call VBDebugger.EchoLine("exit!")
 
         Return App.Exit(0)
     End Function
@@ -244,6 +259,7 @@ Public Module Parallel
     ''' 2. ``master``: set the tcp port of the master node
     ''' 3. ``bootstrap``: set the bootstrap tcp port of the slave node
     ''' 4. ``slaveDebug``: set this option to pause will make the master node pause when run a new salve node for run debug
+    ''' 5. ``log_tmp``: set the temp directory for log the getsymbol request data payloads
     ''' 
     ''' due to the reason of some short parameter name may 
     ''' conflict with the symbol name in script code, so 
@@ -298,6 +314,13 @@ Public Module Parallel
             verbose:=env.globalEnvironment.debugMode
         )
 
+        If ___argvSet_____.hasName("log_tmp") Then
+            Dim log_tmp As String = ___argvSet_____.getValue(Of String)("log_tmp", env, [default]:=Nothing)
+
+            Call host.master.SetSymbolLogTempDir(log_tmp)
+            Call host.task.FlushStream($"{log_tmp}/slave_task.dump")
+        End If
+
         If verbose Then
             Call println("start host services!")
             Call println(host.master.ToString)
@@ -327,13 +350,8 @@ Public Module Parallel
             j += 1
 
             If Program.isException(i) Then
-                If Not ignoreError Then
-                    Call host.master.Dispose()
-                    Return i
-                Else
-                    Call output.Add(Nothing)
-                    Call errors.Add((j, DirectCast(i, Message)))
-                End If
+                Call output.Add(Nothing)
+                Call errors.Add((j, DirectCast(i, Message)))
             Else
                 Call output.Add(i)
             End If
@@ -343,15 +361,29 @@ Public Module Parallel
             Call println("close master node services!")
         End If
 
-        ' Call Pause()
+        ' Call App.Pause()
         Call host.master.Dispose()
 
         If errors.Any Then
             Call println("error was found during the parallel work process...")
 
-            For Each taskResult In errors
-                Call env.AddMessage($"[task_{taskResult.i}] {taskResult.ex.ToString}")
-            Next
+            If Not ignoreError Then
+                If ___argvSet_____.hasName("log_tmp") Then
+                    Dim log_tmp As String = ___argvSet_____.getValue(Of String)("log_tmp", env, [default]:=Nothing)
+
+                    For Each err As (i As Integer, ex As Message) In errors
+                        Call err.ex _
+                            .GetJson _
+                            .SaveTo($"{log_tmp}/{err.i}/error_message.json")
+                    Next
+                End If
+
+                Return errors.First.ex
+            Else
+                For Each taskResult In errors
+                    Call env.AddMessage($"[task_{taskResult.i}] {taskResult.ex.ToString}")
+                Next
+            End If
         End If
 
         Return REnv.TryCastGenericArray(output.ToArray, env)

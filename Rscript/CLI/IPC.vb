@@ -63,11 +63,8 @@ Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports IPEndPoint = Microsoft.VisualBasic.Net.IPEndPoint
 
@@ -168,13 +165,13 @@ Partial Module CLI
             )
         Else
             If isDebugMode Then
-                Call Console.WriteLine($"found script at location: {script.GetFullPath}")
+                Call VBDebugger.EchoLine($"found script at location: {script.GetFullPath}")
             End If
 
             ' add variable values into environment for debug used
             For Each arg In arguments
                 If isDebugMode Then
-                    Call Console.WriteLine($"[init] {arg.Key} => {arg.Value.GetJson}")
+                    Call VBDebugger.EchoLine($"[init] {arg.Key} => {arg.Value.GetJson}")
                 End If
 
                 Call App.JoinVariable(arg.Key, arg.Value.JoinBy("; "))
@@ -186,13 +183,13 @@ Partial Module CLI
                 Dim name As String = CLITools.TrimParamPrefix(arg.Name)
 
                 If Not arguments.ContainsKey(name) Then
-                    arguments.Add(name, {arg.Value})
+                    Call arguments.Add(name, {arg.Value})
                 End If
             Next
 
             ' set request id to function parameters
             If Not arguments.ContainsKey("web_request_id") Then
-                arguments.Add("web_request_id", {request_id})
+                Call arguments.Add("web_request_id", {request_id})
             End If
 
             ' and also set to the runtime environments
@@ -215,7 +212,7 @@ Partial Module CLI
         R.debug = isDebugMode
 
         If isDebugMode Then
-            Call Console.WriteLine("[init] load startup packages")
+            Call VBDebugger.EchoLine("[init] load startup packages")
         End If
 
         For Each pkgName As String In R.configFile _
@@ -226,18 +223,18 @@ Partial Module CLI
         Next
 
         If Not pkg_attach.StringEmpty AndAlso pkg_attach.DirectoryExists Then
-            Call Console.WriteLine($"load required packages from alternative repository: '{pkg_attach.GetDirectoryFullPath}'...")
+            Call VBDebugger.EchoLine($"load required packages from alternative repository: '{pkg_attach.GetDirectoryFullPath}'...")
             Call PackageLoader2.Hotload(pkg_attach, R.globalEnvir)
         End If
         If isDebugMode Then
-            Call Console.WriteLine("[load] source target script...")
+            Call VBDebugger.EchoLine("[load] source target script...")
         End If
 
         result = R.Source(script, parameters.ToArray)
 
         If TypeOf result Is Message Then
             If isDebugMode Then
-                Call Console.WriteLine("[end] script text contains invalid syntax?")
+                Call VBDebugger.EchoLine("[end] script text contains invalid syntax?")
             End If
 
             Return R.globalEnvir.postResult(
@@ -250,7 +247,7 @@ Partial Module CLI
             )
         ElseIf Not entry.StringEmpty Then
             If isDebugMode Then
-                Call Console.WriteLine($"[call] {entry}")
+                Call VBDebugger.EchoLine($"[call] {entry}")
             End If
 
             result = R.Invoke(entry, parameters.ToArray)
@@ -258,7 +255,7 @@ Partial Module CLI
         End If
 
         If isDebugMode Then
-            Call Console.WriteLine("[end] finalized")
+            Call VBDebugger.EchoLine("[end] finalized")
         End If
 
         ' post result data back to the master node
@@ -296,19 +293,28 @@ Partial Module CLI
 
         If isDebugMode AndAlso TypeOf buffer.data Is textBuffer Then
 #Disable Warning
-            Call Console.WriteLine(vbNewLine)
-            Call Console.WriteLine(DirectCast(buffer.data, textBuffer).text)
-            Call Console.WriteLine(vbNewLine)
+            Call VBDebugger.EchoLine(vbNewLine)
+            Call VBDebugger.EchoLine(DirectCast(buffer.data, textBuffer).text)
+            Call VBDebugger.EchoLine(vbNewLine)
 #Enable Warning
         End If
 
         Dim packageData As Byte() = New IPCBuffer(request_id, buffer).Serialize
         Dim request As New RequestStream(0, 0, packageData)
         Dim timeout As Boolean = False
+        Dim data As RequestStream
 
         For i As Integer = 0 To retryTimes
             Call $"push callback data '{buffer.code.Description}' to [{master}] [{packageData.Length} bytes]".__INFO_ECHO
-            Call New Tcp.TcpRequest(master).SendMessage(request, timeout:=timeoutMS, Sub() timeout = True)
+
+            data = New Tcp.TcpRequest(master).SetTimeOut(TimeSpan.FromMilliseconds(timeoutMS)).SendMessage(request)
+
+            If data.ProtocolCategory < 0 AndAlso data.Protocol = 500 Then
+                Call data.GetUTF8String.Warning
+                timeout = True
+            Else
+                timeout = False
+            End If
 
             If Not timeout Then
                 Exit For

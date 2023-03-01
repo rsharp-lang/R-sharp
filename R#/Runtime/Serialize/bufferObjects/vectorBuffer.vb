@@ -134,20 +134,44 @@ Namespace Runtime.Serialize
                 buffer.vector = generic
             End If
 
-            Static NULL As Index(Of String) = {"System.Object", "System.Void"}
-
-            If buffer.type Is Nothing OrElse buffer.type Like NULL Then
-                buffer.type = buffer.vector _
-                    .GetType _
-                    .GetElementType _
-                    .FullName
-            End If
+            buffer.type = buffer.safeGetType.FullName
 
             Return buffer
         End Function
 
+        ''' <summary>
+        ''' get the array element type
+        ''' </summary>
+        ''' <returns></returns>
+        Private Function safeGetType() As Type
+            Static NULL As Index(Of String) = {"System.Object", "System.Void"}
+
+            If type.StringEmpty OrElse type Like NULL Then
+                vector = REnv.UnsafeTryCastGenericArray(vector)
+
+                If vector.AllNothing OrElse vector.Length = 0 Then
+                    vector = New String(vector.Length - 1) {}
+                    type = GetType(String).FullName
+                Else
+                    type = vector _
+                       .GetType _
+                       .GetElementType _
+                       .FullName
+                End If
+            End If
+
+            Dim typeinfo As Type = System.Type.GetType(type)
+
+            ' not working well with the clr object???
+            If typeinfo Is Nothing Then
+                Throw New InvalidCastException($"error type: '{type}'!")
+            Else
+                Return typeinfo
+            End If
+        End Function
+
         Public Overrides Sub Serialize(buffer As Stream)
-            Dim type As Type = Type.GetType(Me.type)
+            Dim type As Type = safeGetType()
             Dim bytes As Byte()
             Dim text As Encoding = Encodings.UTF8.CodePage
             Dim raw As Byte()
@@ -260,29 +284,24 @@ Namespace Runtime.Serialize
                 Dim vector As Array
 
                 If type Is GetType(list) Then
-                    Dim list As New List(Of list)
-                    Dim nsize As Integer
-                    Dim temp As listBuffer
-
-                    raw = New Byte(3) {}
-                    ms.Read(raw, Scan0, raw.Length)
-                    nsize = BitConverter.ToInt32(raw, Scan0)
-
-                    For i As Integer = 0 To nsize - 1
-                        raw = New Byte(3) {}
-                        ms.Read(raw, Scan0, raw.Length)
-                        raw = New Byte(BitConverter.ToInt32(raw, Scan0) - 1) {}
-                        ms.Read(raw, Scan0, raw.Length)
-                        temp = New listBuffer(New MemoryStream(raw))
-                        list.Add(temp.getValue)
-                    Next
-
-                    vector = list.ToArray
+                    vector = ParseListArray(ms).ToArray
                 ElseIf ms.Length = 0 AndAlso vector_size > 0 AndAlso type Is GetType(Object) Then
                     ' all vector content is null
                     vector = Array.CreateInstance(type, vector_size)
                 Else
-                    vector = RawStream.GetData(ms, type.PrimitiveTypeCode(meltVector:=True))
+                    Dim code As TypeCode = type.PrimitiveTypeCode(meltVector:=True)
+
+                    If code <> TypeCode.Object Then
+                        vector = RawStream.GetData(ms, code)
+                    Else
+                        type = type.GetElementType
+
+                        If type Is GetType(list) Then
+                            vector = ParseListArray(ms).ToArray
+                        Else
+                            Throw New NotImplementedException(type.FullName)
+                        End If
+                    End If
                 End If
 
                 Me.type = type.FullName
@@ -291,5 +310,24 @@ Namespace Runtime.Serialize
                 Me.vector = vector
             End Using
         End Sub
+
+        Private Shared Iterator Function ParseListArray(ms As MemoryStream) As IEnumerable(Of list)
+            Dim nsize As Integer
+            Dim temp As listBuffer
+            Dim raw = New Byte(3) {}
+
+            ms.Read(raw, Scan0, raw.Length)
+            nsize = BitConverter.ToInt32(raw, Scan0)
+
+            For i As Integer = 0 To nsize - 1
+                raw = New Byte(3) {}
+                ms.Read(raw, Scan0, raw.Length)
+                raw = New Byte(BitConverter.ToInt32(raw, Scan0) - 1) {}
+                ms.Read(raw, Scan0, raw.Length)
+                temp = New listBuffer(New MemoryStream(raw))
+
+                Yield temp.getList
+            Next
+        End Function
     End Class
 End Namespace
