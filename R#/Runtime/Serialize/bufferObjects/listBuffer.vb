@@ -121,6 +121,10 @@ Namespace Runtime.Serialize
             Next
         End Sub
 
+        ''' <summary>
+        ''' a wrapper to the <see cref="getList"/> function
+        ''' </summary>
+        ''' <returns></returns>
         Public Overrides Function getValue() As Object
             Return getList()
         End Function
