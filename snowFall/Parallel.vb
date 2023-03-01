@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Parallel
 Imports Parallel.ThreadTask
 Imports SMRUCC.Rsharp.Development.Package.File
@@ -371,7 +372,9 @@ Public Module Parallel
                     Dim log_tmp As String = ___argvSet_____.getValue(Of String)("log_tmp", env, [default]:=Nothing)
 
                     For Each err As (i As Integer, ex As Message) In errors
-
+                        Call err.ex _
+                            .GetJson _
+                            .SaveTo($"{log_tmp}/{err.i}/error_message.json")
                     Next
                 End If
 
