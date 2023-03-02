@@ -1,62 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::e9c7851ebd934629830ff9487a87d7a0, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1462
-    '    Code Lines: 818
-    ' Comment Lines: 508
-    '   Blank Lines: 136
-    '     File Size: 65.89 KB
+' Summaries:
 
 
-    '     Module file
-    ' 
-    '         Function: [erase], basename, buffer, bytes, close
-    '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
-    '                   exists, file, file_ext, filecopy, fileExt
-    '                   fileinfo, fileInfoByFile, filepath, filesize, getRelativePath
-    '                   GetSha1Hash, getwd, handleWriteLargeTextStream, handleWriteTextArray, isSystemDir
-    '                   listDirs, listFiles, loadListInternal, NextTempToken, normalizeFileName
-    '                   normalizePath, openGzip, openZip, readBin, readLines
-    '                   readList, readText, Rhome, saveList, scanZipFiles
-    '                   setwd, tempdir, tempfile, writeLines
-    ' 
-    '         Sub: fileRemove, fileRename, unlinks
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1462
+'    Code Lines: 818
+' Comment Lines: 508
+'   Blank Lines: 136
+'     File Size: 65.89 KB
+
+
+'     Module file
+' 
+'         Function: [erase], basename, buffer, bytes, close
+'                   dataUri, dir_exists, dirCopy, dirCreate, dirname
+'                   exists, file, file_ext, filecopy, fileExt
+'                   fileinfo, fileInfoByFile, filepath, filesize, getRelativePath
+'                   GetSha1Hash, getwd, handleWriteLargeTextStream, handleWriteTextArray, isSystemDir
+'                   listDirs, listFiles, loadListInternal, NextTempToken, normalizeFileName
+'                   normalizePath, openGzip, openZip, readBin, readLines
+'                   readList, readText, Rhome, saveList, scanZipFiles
+'                   setwd, tempdir, tempfile, writeLines
+' 
+'         Sub: fileRemove, fileRename, unlinks
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -787,46 +787,63 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("readLines")>
+        <RApiReturn(GetType(String))>
         Public Function readLines(con As Object,
                                   Optional encoding As Encodings = Encodings.UTF8,
                                   Optional stream As Boolean = False,
                                   Optional env As Environment = Nothing) As Object
 
             If TypeOf con Is Stream Then
-                Dim text As New StreamReader(DirectCast(con, Stream))
-                Dim line As Value(Of String) = ""
-
-                If stream Then
-                    Return Iterator Function() As IEnumerable(Of String)
-                               Do While True
-                                   If Not (line = text.ReadLine) Is Nothing Then
-                                       Yield CType(line, String)
-                                   End If
-                               Loop
-                           End Function() _
-                                          _
-                        .DoCall(AddressOf pipeline.CreateFromPopulator)
-                Else
-                    Dim lines As New List(Of String)
-
-                    Do While True
-                        If Not (line = text.ReadLine) Is Nothing Then
-                            Call lines.Add(line)
-                        End If
-                    Loop
-
-                    Return lines.ToArray
-                End If
+                Return readFromStream(DirectCast(con, Stream), stream)
+            ElseIf TypeOf con Is WebResponseResult Then
+                ' read web result html text into multuple text lines
+                Return DirectCast(con, WebResponseResult).html.LineTokens
             Else
-                Dim filepath As String = any.ToString(con)
+                Dim str = CLRVector.asCharacter(con)
+                Dim filepath As String = str.ElementAtOrDefault(Scan0)
 
-                If Not filepath.FileExists Then
-                    If env.globalEnvironment.options.strict Then
-                        Return Internal.debug.stop($"the given file '{filepath}' is missing!", env)
-                    End If
+                If str.IsNullOrEmpty Then
+                    Return Internal.debug.stop("no file is specified for read data!", env)
                 End If
 
-                Return filepath.ReadAllLines(encoding.CodePage)
+                Return readFromFile(filepath, encoding, env)
+            End If
+        End Function
+
+        Private Function readFromFile(filepath As String, encoding As Encodings, env As Environment) As Object
+            If Not filepath.FileExists Then
+                If env.globalEnvironment.options.strict Then
+                    Return Internal.debug.stop($"the given file '{filepath}' is missing!", env)
+                End If
+            End If
+
+            Return filepath.ReadAllLines(encoding.CodePage)
+        End Function
+
+        Private Function readFromStream(con As Stream, stream As Boolean) As Object
+            Dim text As New StreamReader(con)
+            Dim line As Value(Of String) = ""
+
+            If stream Then
+                Return Iterator Function() As IEnumerable(Of String)
+                           Do While True
+                               If Not (line = text.ReadLine) Is Nothing Then
+                                   Yield CType(line, String)
+                               End If
+                           Loop
+                       End Function() _
+                                      _
+                    .DoCall(AddressOf pipeline.CreateFromPopulator)
+            Else
+                Dim lines As New List(Of String)
+
+                Do While True
+                    If Not (line = text.ReadLine) Is Nothing Then
+                        Call lines.Add(line)
+                    End If
+                Loop
+
+                Return lines.ToArray
             End If
         End Function
 
