@@ -176,7 +176,7 @@ Namespace Runtime.Components
         End Function
 
         Public Iterator Function GenericEnumerator() As IEnumerator(Of String) Implements Enumeration(Of String).GenericEnumerator
-            For Each msg As String In message
+            For Each msg As String In message.SafeQuery
                 Yield msg
             Next
         End Function

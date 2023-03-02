@@ -100,7 +100,7 @@ Namespace Development
         Private Shared Iterator Function GetMessages(msg As Message) As IEnumerable(Of String)
             Dim i As i32 = 1
 
-            For Each line As String In msg
+            For Each line As String In msg.AsEnumerable
                 Yield $"{++i}. {line}"
             Next
         End Function

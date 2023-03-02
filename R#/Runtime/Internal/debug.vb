@@ -311,6 +311,12 @@ Namespace Runtime.Internal
             Return 500
         End Function
 
+        ''' <summary>
+        ''' write error message to the output printer device
+        ''' </summary>
+        ''' <param name="message"></param>
+        ''' <param name="stdout">the output printer device</param>
+        ''' <param name="redirectError2stdout"></param>
         Public Shared Sub writeErrMessage(message As Message,
                                           Optional stdout As TextWriter = Nothing,
                                           Optional redirectError2stdout As Boolean = False)
@@ -340,7 +346,7 @@ Namespace Runtime.Internal
 
             dev.WriteLine($" {message.DoCall(AddressOf getMessagePrefix)} in {execRoutine}")
 
-            For Each msg As String In message
+            For Each msg As String In message.AsEnumerable
                 dev.WriteLine($"  {++i}. {msg}")
             Next
 
@@ -371,6 +377,11 @@ Namespace Runtime.Internal
             End If
         End Sub
 
+        ''' <summary>
+        ''' get message prefix based on the <see cref="Message.level"/>
+        ''' </summary>
+        ''' <param name="message"></param>
+        ''' <returns></returns>
         Private Shared Function getMessagePrefix(message As Message) As String
             Select Case message.level
                 Case MSG_TYPES.ERR : Return "Error"
@@ -382,6 +393,11 @@ Namespace Runtime.Internal
             End Select
         End Function
 
+        ''' <summary>
+        ''' get message color based on the <see cref="Message.level"/>
+        ''' </summary>
+        ''' <param name="message"></param>
+        ''' <returns></returns>
         Private Shared Function getMessageColor(message As Message) As ConsoleColor
             Select Case message.level
                 Case MSG_TYPES.ERR : Return ConsoleColor.Red
