@@ -316,7 +316,10 @@ Namespace Runtime.Internal
         ''' </summary>
         ''' <param name="message"></param>
         ''' <param name="stdout">the output printer device</param>
-        ''' <param name="redirectError2stdout"></param>
+        ''' <param name="redirectError2stdout">
+        ''' message data will be print to the <see cref="App.StdErr"/> autoamtically
+        ''' if this parameter value is set to TRUE 
+        ''' </param>
         Public Shared Sub writeErrMessage(message As Message,
                                           Optional stdout As TextWriter = Nothing,
                                           Optional redirectError2stdout As Boolean = False)

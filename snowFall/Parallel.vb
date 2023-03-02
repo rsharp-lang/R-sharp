@@ -60,11 +60,9 @@ Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Parallel
 Imports Parallel.ThreadTask
 Imports SMRUCC.Rsharp.Development.Package.File
-Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -382,9 +380,10 @@ Public Module Parallel
                 Dim log_tmp As String = ___argvSet_____.getValue(Of String)("log_tmp", env, [default]:=Nothing)
 
                 For Each err As (i As Integer, ex As Message) In errors
-                    Call err.ex _
-                            .GetJson _
-                            .SaveTo($"{log_tmp}/{err.i}/error_message.json")
+                    Using file As StreamWriter = $"{log_tmp}/{err.i}/slave_message.err".OpenWriter
+                        Call Internal.debug.writeErrMessage(err.ex, stdout:=file)
+                        Call file.Flush()
+                    End Using
                 Next
             End If
 
