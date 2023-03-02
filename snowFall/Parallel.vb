@@ -70,13 +70,17 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports snowFall.Context
 Imports snowFall.Context.RPC
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' # Support for Parallel computation in ``R#`` 
+''' 
+''' this package module implements two kinds of the parallel client:
+''' 
+''' 1. ``Parallel::snowFall(port)`` works for the clr assembly function parallel
+''' 2. ``Parallel::slave(port)`` works for the R# expression parallel
 ''' </summary>
 <Package("Parallel")>
 Public Module Parallel
@@ -86,6 +90,9 @@ Public Module Parallel
     ''' </summary>
     ''' <param name="port"></param>
     ''' <returns></returns>
+    ''' <remarks>
+    ''' A client of the clr assembly function slave parallel task
+    ''' </remarks>
     <ExportAPI("snowFall")>
     Public Function snowFall(port As Integer, Optional env As Environment = Nothing) As Object
         Return New TaskBuilder(port).Run
@@ -156,6 +163,8 @@ Public Module Parallel
     ''' <param name="env"></param>
     ''' <returns></returns>
     ''' <remarks>
+    ''' A client of the R# expression slave parallel task.
+    ''' 
     ''' this function will break the rscript process when its job done!
     ''' </remarks>
     <ExportAPI("slave")>
@@ -349,7 +358,8 @@ Public Module Parallel
         For Each i As Object In result
             j += 1
 
-            If Program.isException(i) Then
+            ' task i throw an exception
+            If TypeOf i Is Message Then
                 Call output.Add(Nothing)
                 Call errors.Add((j, DirectCast(i, Message)))
             Else
@@ -367,25 +377,32 @@ Public Module Parallel
         If errors.Any Then
             Call println("error was found during the parallel work process...")
 
-            If Not ignoreError Then
-                If ___argvSet_____.hasName("log_tmp") Then
-                    Dim log_tmp As String = ___argvSet_____.getValue(Of String)("log_tmp", env, [default]:=Nothing)
+            ' log errors to files at first!
+            If ___argvSet_____.hasName("log_tmp") Then
+                Dim log_tmp As String = ___argvSet_____.getValue(Of String)("log_tmp", env, [default]:=Nothing)
 
-                    For Each err As (i As Integer, ex As Message) In errors
-                        Call err.ex _
+                For Each err As (i As Integer, ex As Message) In errors
+                    Call err.ex _
                             .GetJson _
                             .SaveTo($"{log_tmp}/{err.i}/error_message.json")
-                    Next
-                End If
+                Next
+            End If
 
+            If Not ignoreError Then
+                ' returns the first error message
+                ' and the caller environment will throw
+                ' this error
                 Return errors.First.ex
             Else
+                ' treated the errors as the wraning message when
+                ' do ignores of the errors
                 For Each taskResult In errors
                     Call env.AddMessage($"[task_{taskResult.i}] {taskResult.ex.ToString}")
                 Next
             End If
         End If
 
+        ' finally returns the output result dataset
         Return REnv.TryCastGenericArray(output.ToArray, env)
     End Function
 
