@@ -445,9 +445,16 @@ Namespace Runtime.Internal.Invokes
 
             If TypeOf args Is list Then
                 Dim i As i32 = Scan0
+                Dim name As String
 
                 For Each item In DirectCast(args, list).slots
-                    Call New InvokeParameter(name:=item.Key, item.Value, ++i).DoCall(AddressOf arguments.Add)
+                    name = item.Key
+
+                    If name.IsPattern("\d+") Then
+                        name = $"${CInt(i)}"
+                    End If
+
+                    Call New InvokeParameter(name, item.Value, ++i).DoCall(AddressOf arguments.Add)
                 Next
             ElseIf TypeOf args Is InvokeParameter() Then
                 arguments.AddRange(DirectCast(args, InvokeParameter()))

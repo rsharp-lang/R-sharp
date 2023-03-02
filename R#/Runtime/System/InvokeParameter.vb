@@ -144,6 +144,15 @@ Namespace Runtime.Components
         Friend Sub New()
         End Sub
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="name">
+        ''' the index name pattern number should be keeps the same order with the <paramref name="index"/>.
+        ''' example as: name = $1, and the index must be 1
+        ''' </param>
+        ''' <param name="runtimeValue"></param>
+        ''' <param name="index"></param>
         Sub New(name As String, runtimeValue As Object, index As Integer)
             Me.index = index
             Me.value = New ValueAssignExpression({name}, New RuntimeValueLiteral(runtimeValue))
