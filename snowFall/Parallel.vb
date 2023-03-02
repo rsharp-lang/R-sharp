@@ -381,7 +381,7 @@ Public Module Parallel
 
                 For Each err As (i As Integer, ex As Message) In errors
                     Using file As StreamWriter = $"{log_tmp}/{err.i}/slave_message.err".OpenWriter
-                        Call Internal.debug.writeErrMessage(err.ex, stdout:=file)
+                        Call Internal.debug.writeErrMessage(err.ex, stdout:=file, redirectError2stdout:=True)
                         Call file.Flush()
                     End Using
                 Next
