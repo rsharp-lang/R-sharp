@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Package
@@ -361,16 +362,18 @@ Namespace Runtime.Internal.Invokes
                                Optional args As Object = Nothing,
                                Optional envir As Environment = Nothing) As Object
 
+            If what Is Nothing AndAlso calls.StringEmpty Then
+                Return Internal.debug.stop("Nothing to call!", envir)
+            End If
+
             ' call a static R# function
             ' do.call("round", args = list(1.0008));
             '
             ' call a instance clr object member function
             ' do.call(clr_obj, "method_name", args = list(xxx));
-            If TypeOf what Is String AndAlso calls.StringEmpty Then
+            If TypeOf what Is String OrElse what.GetType.ImplementInterface(Of RFunction) Then
                 ' call static api by name
                 Return CallInternal(what, args, envir)
-            ElseIf what Is Nothing AndAlso calls.StringEmpty Then
-                Return Internal.debug.stop("Nothing to call!", envir)
             Else
                 Return CallMemberFunction(what, calls, args, envir)
             End If
@@ -415,11 +418,23 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
-        Public Function CallInternal(call$, args As Object, envir As Environment) As Object
-            Dim ref As NamedValue(Of String) = [call].GetTagValue("::")
-            Dim callName As String = ref.Value
-            Dim [namespace] As String = ref.Name
-            Dim func As Object = FunctionInvoke.GetFunctionVar(New Literal(callName), envir, [namespace]:=[namespace])
+        Private Function getCallLambda([call] As Object, envir As Environment) As Object
+            If TypeOf [call] Is String Then
+                Dim ref As NamedValue(Of String) = DirectCast([call], String).GetTagValue("::")
+                Dim callName As String = ref.Value
+                Dim [namespace] As String = ref.Name
+                Dim func As Object = FunctionInvoke.GetFunctionVar(New Literal(callName), envir, [namespace]:=[namespace])
+
+                Return func
+            ElseIf [call].GetType.ImplementInterface(Of RFunction) Then
+                Return [call]
+            Else
+                Return Message.InCompatibleType(GetType(RFunction), [call].GetType, envir)
+            End If
+        End Function
+
+        Public Function CallInternal([call] As Object, args As Object, envir As Environment) As Object
+            Dim func As Object = getCallLambda([call], envir)
 
             If Program.isException(func) Then
                 Return func
