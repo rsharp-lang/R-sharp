@@ -145,41 +145,60 @@ Namespace Runtime.Internal.Invokes
             ElseIf seqData.GetType.GetElementType Is Nothing Then
                 toString = Function(xi) If(xi Is Nothing, "", xi.ToString)
             Else
-                Dim type As Type = seqData.GetType.GetElementType
-                Dim toStringF As MethodInfo = type _
-                    .GetMethods(PublicProperty) _
-                    .Where(Function(f)
-                               Return findToStringWithFormat(f)
-                           End Function) _
-                    .FirstOrDefault
-
-                If toStringF Is Nothing Then
-                    toString = Function(xi) If(xi Is Nothing, "", xi.ToString)
-                    env.AddMessage($"a format text '{format}' is given, but typeof '{type.Name}' is not accept such format parameter...")
-                Else
-                    toString = Function(xi)
-                                   If xi Is Nothing Then
-                                       Return ""
-                                   ElseIf TypeOf xi Is Date Then
-                                       If culture Is Nothing Then
-                                           Return DirectCast(xi, Date).ToString(format)
-                                       Else
-                                           Return DirectCast(xi, Date).ToString(format, culture)
-                                       End If
-                                   Else
-                                       ' Call 1.0.ToString(format:="")
-                                       ' Call #2022-04-25#.ToString(format:="d MMM yyyy")
-
-                                       Return DirectCast(toStringF.Invoke(xi, {format}), String)
-                                   End If
-                               End Function
-                End If
+                toString = seqData _
+                    .GetType _
+                    .GetElementType _
+                    .getElementFormat(
+                        format:=format,
+                        culture:=culture,
+                        env:=env
+                     )
             End If
 
             Return seqData _
                 .AsObjectEnumerator _
                 .Select(toString) _
                 .ToArray
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="type">
+        ''' the element type
+        ''' </param>
+        ''' <returns></returns>
+        ''' 
+        <Extension>
+        Private Function getElementFormat(type As Type, format As String, culture As CultureInfo, env As Environment) As Func(Of Object, String)
+            Dim toStringF As MethodInfo = type _
+                .GetMethods(PublicProperty) _
+                .Where(Function(f)
+                           Return findToStringWithFormat(f)
+                       End Function) _
+                .FirstOrDefault
+
+            If toStringF Is Nothing Then
+                env.AddMessage($"a format text '{format}' is given, but typeof '{type.Name}' is not accept such format parameter...")
+                Return Function(xi) If(xi Is Nothing, "", xi.ToString)
+            Else
+                Return Function(xi)
+                           If xi Is Nothing Then
+                               Return ""
+                           ElseIf TypeOf xi Is Date Then
+                               If culture Is Nothing Then
+                                   Return DirectCast(xi, Date).ToString(format)
+                               Else
+                                   Return DirectCast(xi, Date).ToString(format, culture)
+                               End If
+                           Else
+                               ' Call 1.0.ToString(format:="")
+                               ' Call #2022-04-25#.ToString(format:="d MMM yyyy")
+
+                               Return DirectCast(toStringF.Invoke(xi, {format}), String)
+                           End If
+                       End Function
+            End If
         End Function
 
         <Extension>
