@@ -1566,7 +1566,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("bytes")>
         Public Function bytes(<RRawVectorArgument> byts As Object, Optional env As Environment = Nothing) As MemoryStream
-            Dim stream As Byte() = REnv.asVector(Of Byte)(byts)
+            Dim stream As Byte() = CLRVector.asRawByte(byts)
             Dim ms As New MemoryStream(stream)
 
             Return ms

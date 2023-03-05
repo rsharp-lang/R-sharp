@@ -163,6 +163,25 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
+        Public Function asRawByte(x As Object) As Byte()
+            If TypeOf x Is vector Then
+                x = DirectCast(x, vector).data
+            End If
+            If TypeOf x Is Byte Then
+                Return New Byte() {DirectCast(x, Byte)}
+            End If
+
+            x = REnv.UnsafeTryCastGenericArray(x)
+
+            If TypeOf x Is Byte() Then
+                Return DirectCast(x, Byte())
+            End If
+
+            Return asInteger(x) _
+                .Select(Function(i8) CByte(i8)) _
+                .ToArray
+        End Function
+
         Public Function asInteger(x As Object) As Integer()
             If x Is Nothing Then
                 Return Nothing
