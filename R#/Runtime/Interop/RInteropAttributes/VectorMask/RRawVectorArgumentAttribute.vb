@@ -1,57 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::108b6d8c5c78889dcb628343dee7112a, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RInteropAttributes/VectorMask/RRawVectorArgumentAttribute.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 56
-    '    Code Lines: 21
-    ' Comment Lines: 28
-    '   Blank Lines: 7
-    '     File Size: 2.24 KB
+' Summaries:
 
 
-    '     Class RRawVectorArgumentAttribute
-    ' 
-    '         Properties: containsLiteral, parser, vector
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: GetVector
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 56
+'    Code Lines: 21
+' Comment Lines: 28
+'   Blank Lines: 7
+'     File Size: 2.24 KB
+
+
+'     Class RRawVectorArgumentAttribute
+' 
+'         Properties: containsLiteral, parser, vector
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: GetVector
+' 
+' 
+' /********************************************************************************/
 
 #End Region
+
+Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Interop
 
@@ -81,6 +84,7 @@ Namespace Runtime.Interop
         Public ReadOnly Property parser As Type
 
         Public ReadOnly Property containsLiteral As Boolean
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return Not (vector Is Nothing OrElse parser Is Nothing)
             End Get
@@ -95,9 +99,19 @@ Namespace Runtime.Interop
         ''' 
         ''' use <see cref="DefaultVectorParser"/> by default.
         ''' </param>
-        Sub New(Optional vector As Type = Nothing, Optional parser As Type = Nothing)
+        Sub New(vector As Type, Optional parser As Type = Nothing)
             Me.vector = vector
             Me.parser = If(parser, GetType(DefaultVectorParser))
+        End Sub
+
+        Sub New()
+            Me.vector = Nothing
+            Me.parser = GetType(DefaultVectorParser)
+        End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Sub New(vector As TypeCodes, Optional parser As Type = Nothing)
+            Call Me.New(RType.GetType(vector), parser)
         End Sub
 
         Public Function GetVector([default] As String) As Array
@@ -105,6 +119,10 @@ Namespace Runtime.Interop
             Dim vector As Array = literal.ParseVector([default], schema:=Me.vector)
 
             Return vector
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return MyBase.ToString()
         End Function
     End Class
 
