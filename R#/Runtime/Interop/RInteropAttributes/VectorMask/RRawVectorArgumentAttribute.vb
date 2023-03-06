@@ -111,7 +111,7 @@ Namespace Runtime.Interop
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(vector As TypeCodes, Optional parser As Type = Nothing)
-            Call Me.New(RType.GetType(vector), parser)
+            Call Me.New(RType.GetType(vector).GetRawElementType, parser)
         End Sub
 
         Public Function GetVector([default] As String) As Array

@@ -233,7 +233,7 @@ Namespace Runtime.Interop
         End Sub
 
         Public Function GetRawElementType() As Type
-            If raw Is GetType(Array) Then
+            If raw Is GetType(Array) OrElse raw.GetElementType Is Nothing Then
                 Return GetType(Object)
             Else
                 Return raw.GetElementType
