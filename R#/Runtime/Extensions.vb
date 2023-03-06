@@ -231,7 +231,7 @@ Namespace Runtime
         ''' <param name="opt"></param>
         ''' <returns></returns>
         <Extension>
-        Public Function verboseOption(env As Environment, opt As Boolean?) As Boolean
+        Public Function verboseOption(env As Environment, Optional opt As Boolean? = Nothing) As Boolean
             ' is the parameter value is nothing, then
             ' use the config from the runtime configuration
             If opt Is Nothing Then

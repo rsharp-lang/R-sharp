@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::a45288e5a5c07cb61787d749ae6faef0, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/graphics/graphics.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 503
-    '    Code Lines: 310
-    ' Comment Lines: 130
-    '   Blank Lines: 63
-    '     File Size: 21.08 KB
+' Summaries:
 
 
-    '     Module graphics
-    ' 
-    '         Properties: curDev
-    ' 
-    '         Function: bitmap, devCur, devOff, drawText, getImageObject
-    '                   isBase64StringOrFile, plot, rasterFont, rasterImage, readImage
-    '                   resizeImage, setCurrentDev, thumbnail, wmf
-    ' 
-    '         Sub: openNew
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 503
+'    Code Lines: 310
+' Comment Lines: 130
+'   Blank Lines: 63
+'     File Size: 21.08 KB
+
+
+'     Module graphics
+' 
+'         Properties: curDev
+' 
+'         Function: bitmap, devCur, devOff, drawText, getImageObject
+'                   isBase64StringOrFile, plot, rasterFont, rasterImage, readImage
+'                   resizeImage, setCurrentDev, thumbnail, wmf
+' 
+'         Sub: openNew
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -396,35 +396,7 @@ Namespace Runtime.Internal.Invokes
                                Optional env As Environment = Nothing) As Object
 
             If image Is Nothing Then
-                ' just open a new device
-                Dim size As SizeF = args.getSize(env, [default]:=New SizeF(2700, 2000))
-                Dim backColor As Object = args.getValue(Of Object)({"fill", "color", "background"}, env)
-                Dim fill As Color = graphicsPipeline.GetRawColor(backColor, [default]:=NameOf(Color.Transparent))
-                Dim dpi As Integer = args.getValue(Of Integer)({"dpi", "res"}, env, [default]:=100)
-
-                If file Is Nothing Then
-                    ' just open a new canvas object and returns to user?
-                    Dim println As Action(Of Object) = env.WriteLineHandler
-
-                    Call println($"open a new bitmap canvas devices:")
-                    Call println($"  (width={size.Width}, height={size.Height})")
-
-                    Return New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill, dpi:=$"{dpi},{dpi}")
-                Else
-                    Dim buffer = GetFileStream(file, FileAccess.Write, env)
-
-                    If buffer Like GetType(Message) Then
-                        Return buffer.TryCast(Of Message)
-                    Else
-                        Call openNew(
-                            dev:=New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill, dpi:=$"{dpi},{dpi}"),
-                            buffer:=buffer.TryCast(Of Stream),
-                            args:=args
-                        )
-                    End If
-
-                    Return Nothing
-                End If
+                Return OpenNewBitmapDevice(file, args, env)
             Else
                 Return FileStreamWriter(
                     env:=env,
@@ -438,6 +410,41 @@ Namespace Runtime.Internal.Invokes
 #Enable Warning
                                End If
                            End Sub)
+            End If
+        End Function
+
+        Private Function OpenNewBitmapDevice(file As Object, args As list, env As Environment) As Object
+            ' just open a new device
+            Dim size As SizeF = args.getSize(env, [default]:=New SizeF(2700, 2000))
+            Dim backColor As Object = args.getValue(Of Object)({"fill", "color", "background"}, env)
+            Dim fill As Color = graphicsPipeline.GetRawColor(backColor, [default]:=NameOf(Color.Transparent))
+            Dim dpi As Integer = args.getValue(Of Integer)({"dpi", "res"}, env, [default]:=100)
+
+            If file Is Nothing Then
+                ' just open a new canvas object and returns to user?
+                Dim println As Action(Of Object) = env.WriteLineHandler
+                Dim verbose As Boolean = env.verboseOption
+
+                If verbose Then
+                    Call println($"open a new bitmap canvas devices:")
+                    Call println($"  (width={size.Width}, height={size.Height})")
+                End If
+
+                Return New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill, dpi:=$"{dpi},{dpi}")
+            Else
+                Dim buffer = GetFileStream(file, FileAccess.Write, env)
+
+                If buffer Like GetType(Message) Then
+                    Return buffer.TryCast(Of Message)
+                Else
+                    Call openNew(
+                        dev:=New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill, dpi:=$"{dpi},{dpi}"),
+                        buffer:=buffer.TryCast(Of Stream),
+                        args:=args
+                    )
+                End If
+
+                Return Nothing
             End If
         End Function
 
