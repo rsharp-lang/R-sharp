@@ -706,10 +706,20 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="files">
         ''' character vectors, containing file names or paths.
         ''' </param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function returns FALSE if the given files value is NULL
+        ''' </returns>
         <ExportAPI("file.exists")>
-        Public Function exists(files$()) As Boolean()
-            Return files.Select(AddressOf FileExists).ToArray
+        <RApiReturn(GetType(Boolean))>
+        Public Function exists(<RRawVectorArgument> files As Object,
+                               Optional ZERO_Nonexists As Boolean = False,
+                               Optional env As Environment = Nothing) As Object
+
+            If files Is Nothing Then
+                Return False
+            End If
+
+            Return env.EvaluateFramework(Of String, Boolean)(files, Function(path) path.FileExists(ZERO_Nonexists))
         End Function
 
         ''' <summary>
