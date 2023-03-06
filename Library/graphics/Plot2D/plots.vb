@@ -196,7 +196,7 @@ Module plots
     End Function
 
     Public Function plotArray(vec As Array, args As list, env As Environment) As Object
-        Dim x As Double() = REnv.asVector(Of Double)(vec)
+        Dim x As Double() = CLRVector.asNumeric(vec)
         Dim y As Double() = args.findNumberVector(size:=x.Length, env)
         Dim ptSize As Single = args.getValue({"point_size", "point.size"}, env, 15)
         Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
@@ -334,7 +334,7 @@ Module plots
                                     In args.data
                                     Where Not TypeOf obj Is String
 
-            value = REnv.asVector(Of Double)(value)
+            value = CLRVector.asNumeric(value)
 
             If TypeOf value Is Double() AndAlso DirectCast(value, Double()).Length = size Then
                 Return value

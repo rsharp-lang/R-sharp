@@ -433,7 +433,9 @@ Namespace Runtime.Internal.Invokes
                                If image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
                                    Call DirectCast(image, SaveGdiBitmap).Save(stream, format.GetFormat)
                                Else
+#Disable Warning
                                    Call DirectCast(image, Image).Save(stream, format.GetFormat)
+#Enable Warning
                                End If
                            End Sub)
             End If
