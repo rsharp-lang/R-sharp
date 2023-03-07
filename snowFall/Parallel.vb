@@ -91,6 +91,7 @@ Public Module Parallel
     ''' <remarks>
     ''' A client of the clr assembly function slave parallel task
     ''' </remarks>
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <ExportAPI("snowFall")>
     Public Function snowFall(port As Integer, Optional env As Environment = Nothing) As Object
         Return New TaskBuilder(port).Run
@@ -111,6 +112,8 @@ Public Module Parallel
     ''' Irix And Windows. detectCores(True) could be tried On other Unix-alike 
     ''' systems.
     ''' </remarks>
+    ''' 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <ExportAPI("detectCores")>
     Public Function detectCores() As Integer
         Return App.CPUCoreNumbers
@@ -131,6 +134,7 @@ Public Module Parallel
         Throw New NotImplementedException
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <ExportAPI("worker")>
     Public Function worker(host$, port%, outfile$) As workerList
         Return New workerList With {
@@ -380,7 +384,10 @@ Public Module Parallel
                 Dim log_tmp As String = ___argvSet_____.getValue(Of String)("log_tmp", env, [default]:=Nothing)
 
                 For Each err As (i As Integer, ex As Message) In errors
-                    Using file As StreamWriter = $"{log_tmp}/{err.i}/slave_message.err".OpenWriter
+                    ' index offset start from base 1 in Rscript
+                    ' needs -1 for matched with the input argument
+                    ' folder
+                    Using file As StreamWriter = $"{log_tmp}/{err.i - 1}/slave_message.err".OpenWriter
                         Call Internal.debug.writeErrMessage(err.ex, stdout:=file, redirectError2stdout:=True)
                         Call file.Flush()
                     End Using

@@ -153,7 +153,7 @@ Namespace Context.RPC
             status2 = text
 
             If is_debug Then
-                Call Console.WriteLine(ToString)
+                Call VBDebugger.EchoLine(ToString)
             End If
         End Sub
 
@@ -217,7 +217,7 @@ Namespace Context.RPC
                 End Sub)
 
             If is_debug Then
-                Call Console.WriteLine($" -> [{process}]")
+                Call VBDebugger.EchoLine($" -> [{process}]")
             End If
 
             Call setStatus("folk and wait slave node initializing")
