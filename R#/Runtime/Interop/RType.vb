@@ -291,6 +291,11 @@ Namespace Runtime.Interop
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Overloads Shared Function [GetType](code As TypeCode) As RType
+            Return GetRSharpType(Runtime.GetType(code))
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overloads Shared Function [GetType](code As TypeCodes) As RType
             Return GetRSharpType(Runtime.GetType(code))
         End Function
