@@ -350,7 +350,9 @@ Namespace Runtime
         ''' target value is nothing orelse is array with less than or equals to one element?
         ''' </summary>
         ''' <param name="xi"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' Does the input test object <paramref name="xi"/> not contains multiple value?
+        ''' </returns>
         Public Function isScalarVector(xi As Object) As Boolean
             If xi Is Nothing Then
                 Return True
@@ -387,12 +389,19 @@ Namespace Runtime
             End If
         End Function
 
+        ''' <summary>
+        ''' vector length = 0: means nothing
+        ''' vector length = 1: means scalar
+        ''' </summary>
+        ''' <param name="vec"></param>
+        ''' <returns></returns>
         Public Function MeltArray(vec As Array) As Array
             Dim elementType As Type = vec.GetType.GetElementType
 
             If elementType IsNot Nothing AndAlso
                 elementType IsNot GetType(Object) AndAlso
-                Not elementType.IsArray Then
+                (Not elementType.IsArray) AndAlso
+                (Not elementType Is GetType(vector)) Then
 
                 Return vec
             End If
