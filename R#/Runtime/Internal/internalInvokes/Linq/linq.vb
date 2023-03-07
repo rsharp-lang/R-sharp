@@ -1,59 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::b20cb4ab84527fd1e608a63f36cd7336, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1357
-    '    Code Lines: 779
-    ' Comment Lines: 428
-    '   Blank Lines: 150
-    '     File Size: 62.12 KB
+' Summaries:
 
 
-    '     Module linq
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: all, any, doWhile, fastIndexing, first
-    '                   getPredicate, groupBy, groupsSummary, groupSummary, last
-    '                   left_join, match, orderBy, produceKeyedSequence, progress
-    '                   projectAs, reverse, rotate_left, rotate_right, runFilterPipeline
-    '                   runWhichFilter, skip, sort, sortByKeyFunction, sortByKeyValue
-    '                   split, splitByPartitionSize, take, tryKeyBy, unique
-    '                   where, whichMax, whichMin
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1357
+'    Code Lines: 779
+' Comment Lines: 428
+'   Blank Lines: 150
+'     File Size: 62.12 KB
+
+
+'     Module linq
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: all, any, doWhile, fastIndexing, first
+'                   getPredicate, groupBy, groupsSummary, groupSummary, last
+'                   left_join, match, orderBy, produceKeyedSequence, progress
+'                   projectAs, reverse, rotate_left, rotate_right, runFilterPipeline
+'                   runWhichFilter, skip, sort, sortByKeyFunction, sortByKeyValue
+'                   split, splitByPartitionSize, take, tryKeyBy, unique
+'                   where, whichMax, whichMin
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -1324,8 +1324,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         <Extension>
-        Private Function splitByPartitionSize(seq As pipeline, argv As list, env As Environment) As Object
-            Dim vec As Object() = seq.populates(Of Object)(env).ToArray
+        Private Function splitByPartitionSize(env As Environment, x As Object, argv As list) As Object
+            Dim vecSize As Integer = base.length(x)
             Dim size As Integer
 
             If argv.hasName("parts") Then
@@ -1334,7 +1334,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If parts = 0 Then
                     Return Internal.debug.stop("invalid parameter value parts!", env)
                 Else
-                    size = vec.Length / parts
+                    size = vecSize / parts
                 End If
             Else
                 size = argv.getValue("size", env, [default]:=0)
@@ -1344,6 +1344,19 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 End If
             End If
 
+            If TypeOf x Is list Then
+                ' split key set and then break the list into multiple parts
+                Return DirectCast(x, list).splitList(size)
+            Else
+                Return pipeline _
+                    .TryCreatePipeline(Of Object)(x, env) _
+                    .splitVector(size, env)
+            End If
+        End Function
+
+        <Extension>
+        Private Function splitVector(x As pipeline, size As Integer, env As Environment) As Object
+            Dim vec As Object() = x.populates(Of Object)(env).ToArray
             Dim matrix As Object()() = vec.Split(partitionSize:=size)
             Dim list As New list With {.slots = New Dictionary(Of String, Object)}
 
@@ -1354,17 +1367,76 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return list
         End Function
 
+        <Extension>
+        Private Function splitList(x As list, size As Integer) As Object
+            Dim keys As String()() = x.getNames.Split(partitionSize:=size)
+            Dim list As New list With {.slots = New Dictionary(Of String, Object)}
+
+            For i As Integer = 0 To keys.Length - 1
+                Call list.add($"`{i + 1}`", x.getByName(keys(i)))
+            Next
+
+            Return list
+        End Function
+
+        Private Class SplitPredicateFunction
+
+            Public _error As Message = Nothing
+            Public delimiter As RFunction
+            Public env As Environment
+            Public testObject As Object
+
+            Public Function GetPredicate() As Predicate(Of Object)
+                If delimiter Is Nothing Then
+                    Return AddressOf AssertEquals
+                Else
+                    Return AddressOf AssertThat
+                End If
+            End Function
+
+            Public Function AssertThat(obj As Object) As Boolean
+                If Not _error Is Nothing Then
+                    Return False
+                End If
+
+                Dim out As Object = DirectCast(delimiter, RFunction).Invoke(env, invokeArgument(obj))
+
+                If TypeOf out Is Message Then
+                    _error = out
+                    Return False
+                End If
+
+                Dim sng As Object = REnv.single(out)
+                Dim flag As Object = Converts.RCType.CTypeDynamic(sng, GetType(Boolean), env)
+
+                Return DirectCast(flag, Boolean)
+            End Function
+
+            Public Function AssertEquals(obj As Object) As Boolean
+                Return obj Is testObject
+            End Function
+        End Class
+
         ''' <summary>
         ''' split content sequence with a given condition as element delimiter.
         ''' </summary>
         ''' <param name="x">a given data sequence</param>
-        ''' <param name="delimiter">an element test function to determine that element is a delimiter object</param>
+        ''' <param name="delimiter">
+        ''' an element test function to determine that element is a delimiter object
+        ''' </param>
         ''' <param name="argv">
         ''' + parts: will split the input sequence into n(parts = n) multiple parts
         ''' + size: will split the input sequence into m multiple parts, and each part size is n(size=n)
         ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' the generated result is different between the vector/list:
+        ''' 
+        ''' + for vector data: split the value array directly
+        ''' + for list data: split the list keys array and then break the input list 
+        '''       data into multiple parts by keys
+        ''' </remarks>
         <ExportAPI("split")>
         Public Function split(<RRawVectorArgument> x As Object,
                               Optional delimiter As Object = Nothing,
@@ -1372,47 +1444,30 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                               Optional argv As list = Nothing,
                               Optional env As Environment = Nothing) As Object
 
-            Dim seq As pipeline = pipeline.TryCreatePipeline(Of Object)(x, env)
-            Dim _split As Predicate(Of Object)
-            Dim _error As Message = Nothing
+            Dim _split As SplitPredicateFunction
 
             If delimiter Is Nothing Then
                 If argv.hasName("parts") OrElse argv.hasName("size") Then
-                    Return seq.splitByPartitionSize(argv, env)
+                    Return env.splitByPartitionSize(x, argv)
                 Else
                     Return Internal.debug.stop("the required delimiter value can not be nothing!", env)
                 End If
             ElseIf delimiter.GetType.ImplementInterface(Of RFunction) Then
-                _split = Function(obj)
-                             If Not _error Is Nothing Then
-                                 Return False
-                             End If
-
-                             Dim out As Object = DirectCast(delimiter, RFunction).Invoke(env, invokeArgument(obj))
-
-                             If TypeOf out Is Message Then
-                                 _error = out
-                                 Return False
-                             End If
-
-                             Dim sng As Object = REnv.single(out)
-                             Dim flag As Object = Converts.RCType.CTypeDynamic(sng, GetType(Boolean), env)
-
-                             Return DirectCast(flag, Boolean)
-                         End Function
+                _split = New SplitPredicateFunction With {.delimiter = delimiter, .env = env}
             Else
-                _split = Function(obj) obj Is delimiter
+                _split = New SplitPredicateFunction With {.testObject = delimiter}
             End If
 
+            Dim seq As pipeline = pipeline.TryCreatePipeline(Of Object)(x, env)
             Dim blocks() = seq.populates(Of Object)(env) _
-                .Split(_split) _
+                .Split(_split.GetPredicate) _
                 .Select(Function(block, i)
                             Return New Group With {.group = block, .key = i + 1}
                         End Function) _
                 .ToArray
 
-            If Not _error Is Nothing Then
-                Return _error
+            If Not _split._error Is Nothing Then
+                Return _split._error
             Else
                 Return blocks
             End If
