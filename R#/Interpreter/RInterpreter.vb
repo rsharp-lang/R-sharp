@@ -567,9 +567,9 @@ Namespace Interpreter
 
             If debug Then
 #Disable Warning
-                Call Console.WriteLine(vbNewLine)
-                Call Console.WriteLine(program.ToString)
-                Call Console.WriteLine(vbNewLine)
+                Call VBDebugger.WriteLine(vbNewLine)
+                Call VBDebugger.WriteLine(program.ToString)
+                Call VBDebugger.WriteLine(vbNewLine)
 #Enable Warning
             End If
 

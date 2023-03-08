@@ -204,7 +204,7 @@ Namespace Development.Package.File
             Dim loading As New List(Of Expression)
             Dim pkgEnv As PackageEnvironment = env.attachedNamespace.Add(pkg)
 
-            Call Console.WriteLine($"R# package '{meta.Package}' hot load:")
+            Call VBDebugger.EchoLine($"R# package '{meta.Package}' hot load:")
 
             ' 1. load R symbols
             For Each script As String In $"{projDir}/R".ListFiles("*.R")
@@ -212,7 +212,7 @@ Namespace Development.Package.File
                     Return [error]
                 End If
 
-                Call Console.WriteLine($"   {script.FileName}... done")
+                Call VBDebugger.EchoLine($"   {script.FileName}... done")
             Next
 
             onload = temp.symbols.TryGetValue(".onLoad")
@@ -283,12 +283,12 @@ Namespace Development.Package.File
             Dim pkgEnv As PackageEnvironment = env.attachedNamespace.Add([namespace])
 
             If debugEcho Then
-                Call Console.WriteLine($"load package from directory: '{dir}'.")
+                Call VBDebugger.EchoLine($"load package from directory: '{dir}'.")
             End If
 
             ' 1. load R symbols
             For Each symbol As NamedValue(Of String) In [namespace].EnumerateSymbols
-                Using bin As New BinaryReader($"{dir}/lib/src/{symbol.Value}".Open)
+                Using bin As New BinaryReader($"{dir}/lib/src/{symbol.Value}".OpenReadonly(retryOpen:=3))
                     symbolExpression = BlockReader _
                         .Read(bin) _
                         .Parse(desc:=[namespace].meta)
@@ -363,7 +363,7 @@ Namespace Development.Package.File
             Dim result As Object = Nothing
 
             If onLoad.FileExists Then
-                Using bin As New BinaryReader(onLoad.Open)
+                Using bin As New BinaryReader(onLoad.OpenReadonly(retryOpen:=5))
                     result = BlockReader.Read(bin) _
                         .Parse(desc:=pkg.meta) _
                         .DoCall(Function(func)

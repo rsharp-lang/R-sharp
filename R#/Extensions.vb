@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 
 <HideModuleName>
@@ -83,6 +84,7 @@ Public Module Extensions
         End If
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function ParseDebugLevel(argVal As String) As DebugLevels
         Return debugLevels.TryGetValue(Strings.LCase(argVal), [default]:=Interpreter.DebugLevels.All)
     End Function
@@ -100,6 +102,8 @@ Public Module Extensions
     ''' <typeparam name="T"></typeparam>
     ''' <param name="list">the object property data value collection.</param>
     ''' <returns></returns>
+    ''' 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <Extension>
     Public Function GetObject(Of T As {New, Class})(list As list) As T
         Return RListObjectArgumentAttribute.CreateArgumentModel(Of T)(list.slots)
@@ -124,7 +128,7 @@ Public Module Extensions
         ElseIf TypeOf val Is Encodings Then
             Return DirectCast(val, Encodings).CodePage
         ElseIf val.GetType Like RType.characters Then
-            Dim encodingName$ = any.ToString(Runtime.asVector(Of String)(val).AsObjectEnumerator.First)
+            Dim encodingName$ = any.ToString(CLRVector.asCharacter(val).SafeQuery.FirstOrDefault, null:="utf8")
             Dim encodingVal As Encoding = TextEncodings _
                 .ParseEncodingsName(
                     encoding:=encodingName,
