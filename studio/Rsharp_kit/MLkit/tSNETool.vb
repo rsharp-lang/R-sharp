@@ -64,7 +64,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 <Package("t-SNE")>
 Module tSNETool
@@ -109,7 +109,7 @@ Module tSNETool
                 labels = .getRowNames
 
                 For Each row In .forEachRow
-                    matrix.Add(REnv.asVector(Of Double)(row.ToArray))
+                    matrix.Add(CLRVector.asNumeric(row.ToArray))
                 Next
             End With
         Else

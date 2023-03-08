@@ -78,6 +78,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports dataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports Parameter = Microsoft.VisualBasic.MachineLearning.SVM.Parameter
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -556,7 +557,7 @@ Module SVMkit
     ''' </returns>
     Private Function validateSingleSvmModel(svm As SVMModel, validateSet As Object, labels As Object, env As Environment) As Object
         Dim result As Object = DirectCast(svm, SVMModel).svmClassify1(validateSet, env)
-        Dim labelsList As String() = REnv.asVector(Of String)(labels)
+        Dim labelsList As String() = CLRVector.asCharacter(labels)
 
         If Program.isException(result) Then
             Return result
@@ -592,7 +593,7 @@ Module SVMkit
         Dim resultList As New Dictionary(Of String, Object)
 
         For Each dimension As String In validates.columns.Keys
-            Dim validateVector As String() = REnv.asVector(Of String)(validates.columns(dimension))
+            Dim validateVector As String() = CLRVector.asCharacter(validates.columns(dimension))
             Dim points As New List(Of RankPair)
 
             For i As Integer = 0 To classifyResult.Length - 1

@@ -75,6 +75,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataSet
 Imports MLDataSet = Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure.DataSet
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
@@ -111,7 +112,7 @@ Module machineLearning
 
     <ExportAPI("softmax")>
     Public Function Softmax(<RRawVectorArgument> V As Object) As Object
-        Return SoftmaxLayer.Softmax(REnv.asVector(Of Double)(V)).DoCall(AddressOf vector.asVector)
+        Return SoftmaxLayer.Softmax(CLRVector.asNumeric(V)).DoCall(AddressOf vector.asVector)
     End Function
 
     <ExportAPI("raw_samples")>
@@ -389,12 +390,12 @@ Module machineLearning
                                      Optional truncate As Double = -1,
                                      Optional split As Boolean = False) As ANNTrainer
         Dim w0 As Func(Of Double)
-        Dim sizeVec As Integer() = REnv.asVector(Of Integer)(hiddenSize)
+        Dim sizeVec As Integer() = CLRVector.asInteger(hiddenSize)
 
         If weight0 Is Nothing OrElse Scripting.ToString(REnv.getFirst(weight0)) = "random" Then
             w0 = Helpers.RandomWeightInitializer
         Else
-            w0 = Helpers.UnifyWeightInitializer(REnv.asVector(Of Double)(weight0).GetValue(Scan0))
+            w0 = Helpers.UnifyWeightInitializer(CLRVector.asNumeric(weight0).GetValue(Scan0))
         End If
 
         Dim trainingHelper As ANNTrainer

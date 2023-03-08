@@ -7,13 +7,14 @@ Imports Microsoft.VisualBasic.MachineLearning.SVM
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports dataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Module svmDataSet
 
     Public Function svrProblem(dimensionNames As String(), label As String, data As dataframe, env As Environment) As [Variant](Of Message, SVM.Problem)
-        Dim y As Double() = REnv.asVector(Of Double)(data(label))
+        Dim y As Double() = CLRVector.asNumeric(data(label))
         Dim n As Integer
         Dim err As Message = Nothing
         Dim getData = getDataLambda(dimensionNames, New String(y.Length - 1) {}, data, env, err, n)
@@ -115,7 +116,7 @@ Module svmDataSet
                         Return Nothing
                     End If
 
-                    vectors(name) = REnv.asVector(Of Double)(.columns(name))
+                    vectors(name) = CLRVector.asNumeric(.columns(name))
                 Next
             End With
         Else

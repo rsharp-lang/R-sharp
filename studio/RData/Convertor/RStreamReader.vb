@@ -54,6 +54,7 @@
 Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.RDataSet.Flags
 Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Convertor
@@ -67,17 +68,17 @@ Namespace Convertor
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function ReadNumbers(robj As RObject) As Double()
-            Return REnv.asVector(Of Double)(robj.value.data)
+            Return CLRVector.asNumeric(robj.value.data)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function ReadIntegers(robj As RObject) As Long()
-            Return REnv.asVector(Of Long)(robj.value.data)
+            Return CLRVector.asLong(robj.value.data)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function ReadLogicals(robj As RObject) As Boolean()
-            Return REnv.asVector(Of Boolean)(robj.value.data)
+            Return CLRVector.asLogical(robj.value.data)
         End Function
 
         ''' <summary>

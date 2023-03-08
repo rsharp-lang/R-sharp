@@ -77,6 +77,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports Idataframe = Microsoft.VisualBasic.Data.csv.IO.DataFrame
@@ -484,7 +485,7 @@ ReturnTable:
                 Return Internal.debug.stop(New InvalidProgramException, envir)
             End If
         Else
-            Dim names As String() = DirectCast(REnv.asVector(Of String)(values), String())
+            Dim names As String() = CLRVector.asCharacter(values)
 
             If baseElement Is GetType(EntityObject) Then
                 Return dataset.AsObjectEnumerator(Of EntityObject) _

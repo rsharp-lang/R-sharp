@@ -83,6 +83,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Distance = Microsoft.VisualBasic.DataMining.HierarchicalClustering.Hierarchy.Distance
 Imports Point2D = System.Drawing.Point
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
@@ -536,7 +537,7 @@ Module clustering
             }
         End If
 
-        Dim labelList As String() = REnv.asVector(Of String)(labels)
+        Dim labelList As String() = CLRVector.asCharacter(labels)
 
         If labelList.IsNullOrEmpty Then
             Dim groups As New list With {

@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports CMD = System.Console
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -98,7 +99,7 @@ Module console
             CMD.BackgroundColor = back_color
         End If
 
-        Dim strings As String() = REnv.asVector(Of String)(message)
+        Dim strings As String() = CLRVector.asCharacter(message)
 
         If strings.Length = 0 Then
             Call CMD.Write("")

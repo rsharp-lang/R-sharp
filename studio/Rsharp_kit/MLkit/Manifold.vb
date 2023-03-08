@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -78,8 +79,8 @@ Module Manifold
     End Sub
 
     Private Function exportUmapTable(umap As Umap, args As list, env As Environment) As Rdataframe
-        Dim labels As String() = REnv.asVector(Of String)(args.getByName("labels"))
-        Dim colNames As String() = REnv.asVector(Of String)(args.getByName("dimension"))
+        Dim labels As String() = CLRVector.asCharacter(args.getByName("labels"))
+        Dim colNames As String() = CLRVector.asCharacter(args.getByName("dimension"))
         Dim table As New Rdataframe With {
             .columns = New Dictionary(Of String, Array)
         }
@@ -206,6 +207,15 @@ Module Manifold
         }
     End Function
 
+    ''' <summary>
+    ''' Extract the umap graph
+    ''' </summary>
+    ''' <param name="umap"></param>
+    ''' <param name="labels"></param>
+    ''' <param name="groups"></param>
+    ''' <param name="threshold"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("as.graph")>
     <RApiReturn(GetType(NetworkGraph))>
     Public Function asGraph(umap As Umap,
@@ -216,12 +226,12 @@ Module Manifold
                             Optional threshold As Double = 0,
                             Optional env As Environment = Nothing) As Object
 
-        Dim labelList As String() = REnv.asVector(Of String)(labels)
+        Dim labelList As String() = CLRVector.asCharacter(labels)
         Dim uniqueLabels As String() = labelList.makeNames(unique:=True)
         Dim g As NetworkGraph = umap.CreateGraph(uniqueLabels, labelList, threshold:=threshold)
 
         If Not groups Is Nothing Then
-            labelList = REnv.asVector(Of String)(groups)
+            labelList = CLRVector.asCharacter(groups)
 
             Call base.print("cluster groups that you defined for the nodes:", , env)
             Call base.print(labelList.Distinct.OrderBy(Function(str) str).ToArray, , env)

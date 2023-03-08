@@ -654,7 +654,7 @@ Namespace Runtime.Internal.Invokes
                 If v.Length <> colnames.Length Then
                     Return Internal.debug.stop({
                         $"mismatch column size between dataframe and vector row!",
-                        $"({v.Length}) columns: {DirectCast(REnv.asVector(Of String)(v), String()).GetJson}",
+                        $"({v.Length}) columns: {CLRVector.asCharacter(v).GetJson}",
                         $"({colnames.Length}) columns: {d.colnames.GetJson}"
                     }, env)
                 End If

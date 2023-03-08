@@ -53,6 +53,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object.Converts
@@ -119,7 +120,7 @@ Namespace Runtime.Internal.Object.Converts
 
             If Not names.StringEmpty Then
                 If df.hasName(names) Then
-                    nameVec = REnv.asVector(Of String)(df.columns(names))
+                    nameVec = CLRVector.asCharacter(df.columns(names))
                     nameVec = nameVec.uniqueNames
                     obj = list.setNames(nameVec, env)
 
