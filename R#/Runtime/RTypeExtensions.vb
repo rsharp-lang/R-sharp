@@ -175,7 +175,26 @@ Namespace Runtime
         End Function
 
         ''' <summary>
-        ''' Mapping R# <see cref="TypeCodes"/> to VB.NET CLR object type
+        ''' Mapping CLR <see cref="TypeCode"/> to .net CLR object type
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
+        Public Function [GetType](type As TypeCode) As Type
+            Select Case type
+                Case TypeCode.Boolean : Return GetType(Boolean())
+                Case TypeCode.Double, TypeCode.Single, TypeCode.Decimal
+                    Return GetType(Double())
+                Case TypeCode.Int32, TypeCode.Byte, TypeCode.Int16, TypeCode.Int64, TypeCode.SByte, TypeCode.UInt16, TypeCode.UInt32, TypeCode.UInt64
+                    Return GetType(Long())
+                Case TypeCode.String, TypeCode.Char : Return GetType(String())
+                Case TypeCode.Object : Return GetType(Object)
+                Case Else
+                    Throw New InvalidCastException(type.Description)
+            End Select
+        End Function
+
+        ''' <summary>
+        ''' Mapping R# <see cref="TypeCodes"/> to .net CLR object type
         ''' </summary>
         ''' <param name="type"></param>
         ''' <returns></returns>

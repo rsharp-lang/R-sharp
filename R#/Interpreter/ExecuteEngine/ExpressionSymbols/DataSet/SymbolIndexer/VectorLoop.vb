@@ -132,7 +132,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Return Message.InCompatibleType(GetType(list), data.GetType, envir)
         End Function
 
-        Private Shared Function getVectorList(data As Array, memberName As String, envir As Environment)
+        ''' <summary>
+        ''' extract the specific element value from [list, list, list] vector data
+        ''' </summary>
+        ''' <param name="data"></param>
+        ''' <param name="memberName"></param>
+        ''' <param name="envir"></param>
+        ''' <returns>
+        ''' this function ensure that the generated vector keeps 
+        ''' the same size and the element order with the input 
+        ''' data vector.
+        ''' </returns>
+        Private Shared Function getVectorList(data As Array, memberName As String, envir As Environment) As Object
             Dim vec As Object() = New Object(data.Length - 1) {}
             Dim item As Object
 
@@ -150,7 +161,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 End If
             Next
 
-            Return REnv.TryCastGenericArray(vec, env:=envir)
+            Return REnv.TryCastGenericArray(REnv.MeltArray(vec), env:=envir)
         End Function
 
         Private Shared Function getListVector(datalist As list, memberName As String, envir As Environment)
@@ -175,28 +186,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
             ' 20230206
             ' handling of the vector bugs
-            If vec.All(Function(vi)
-                           If vi Is Nothing Then
-                               Return True
-                           Else
-                               ' vector length = 0: means nothing
-                               ' vector length = 1: means scalar
-                               Return TypeOf vi Is vector AndAlso DirectCast(vi, vector).length <= 1
-                           End If
-                       End Function) Then
-
-                vec = vec _
-                    .Select(Function(vi)
-                                If vi Is Nothing Then
-                                    Return Nothing
-                                Else
-                                    Return DirectCast(vi, vector).getByIndex(1)
-                                End If
-                            End Function) _
-                    .ToArray
-            End If
-
-            Return REnv.TryCastGenericArray(vec, env:=envir)
+            Return REnv.TryCastGenericArray(REnv.MeltArray(vec), env:=envir)
         End Function
     End Class
 End Namespace

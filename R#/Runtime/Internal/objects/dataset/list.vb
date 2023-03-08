@@ -410,7 +410,10 @@ Namespace Runtime.Internal.Object
         ''' <summary>
         ''' Create a list subset
         ''' </summary>
-        ''' <param name="names"></param>
+        ''' <param name="names">
+        ''' A specific list keys that will be used for extract the subset 
+        ''' elements from the original list to create a new list object.
+        ''' </param>
         ''' <returns></returns>
         Public Function getByName(names() As String) As Object Implements RNameIndex.getByName
             Dim subset As Dictionary(Of String, Object) = names _

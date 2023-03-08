@@ -54,6 +54,8 @@
 #End Region
 
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports any = Microsoft.VisualBasic.Scripting
 
@@ -96,6 +98,15 @@ Namespace Runtime.Interop
         ''' <param name="type"></param>
         Sub New(ParamArray type As Type())
             returnTypes = type
+        End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Sub New(type As TypeCodes)
+            Call Me.New(New Type() {RType.GetType(type).GetRawElementType})
+        End Sub
+
+        Sub New(type As TypeCode)
+            Call Me.New(New Type() {RType.GetType(type).GetRawElementType})
         End Sub
 
         ''' <summary>
