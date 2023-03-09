@@ -1,63 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::71d774dd6a539c4c1e0a83e1382fa052, D:/GCModeller/src/R-sharp/Library/graphics//Plot2D/plots.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 989
-    '    Code Lines: 763
-    ' Comment Lines: 130
-    '   Blank Lines: 96
-    '     File Size: 45.27 KB
+' Summaries:
 
 
-    ' Module plots
-    ' 
-    '     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
-    '               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
-    '               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotArray, plotContourLayers
-    '               plotFormula, plotLinearYFit, plotLmCall, plotODEResult, plotPieChart
-    '               PlotPolygon, plotSerials, plotVector, UpSetPlot
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 989
+'    Code Lines: 763
+' Comment Lines: 130
+'   Blank Lines: 96
+'     File Size: 45.27 KB
+
+
+' Module plots
+' 
+'     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
+'               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
+'               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotArray, plotContourLayers
+'               plotFormula, plotLinearYFit, plotLmCall, plotODEResult, plotPieChart
+'               PlotPolygon, plotSerials, plotVector, UpSetPlot
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -123,6 +124,7 @@ Module plots
     <RInitialize>
     Sub Main()
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of SerialData)(Function(line) line.ToString)
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of GraphicsData)(AddressOf printImage)
 
         Call REnv.Internal.generic.add("plot", GetType(DeclareLambdaFunction), AddressOf plotFormula)
         Call REnv.Internal.generic.add("plot", GetType(ODEOutput), AddressOf plotODEResult)
@@ -146,6 +148,21 @@ Module plots
 
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(MeasureData()), AddressOf measureDataTable)
     End Sub
+
+    Private Function printImage(img As GraphicsData) As String
+        Dim sb As New StringBuilder
+
+        If img.Driver = Drivers.GDI Then
+            Call sb.AppendLine("Raster image data:")
+        Else
+            Call sb.AppendLine("Vector image data:")
+        End If
+
+        Call sb.AppendLine($" -> driver: {img.Driver.Description}")
+        Call sb.AppendLine($" -> size: [{img.Width}x{img.Height}]")
+
+        Return sb.ToString
+    End Function
 
     Public Function plotLmCall(lm As lmCall, args As list, env As Environment) As Object
         Return plotLinearYFit(lm.lm, args, env)
@@ -350,9 +367,45 @@ Module plots
         If TypeOf array Is SerialData() Then
             Return plotSerials(array, args, env)
         Else
-            Return plotArray(REnv.asVector(Of Double)(array), args, env)
+            Return plotArray(CLRVector.asNumeric(array), args, env)
         End If
     End Function
+
+    Private Sub TryGetClassData(list As Object, ByRef classes As ColorClass(), ByRef classinfo As Dictionary(Of String, String))
+        If TypeOf list Is list Then
+            classinfo = DirectCast(list, list).slots _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return any.ToString(a.Value)
+                              End Function)
+        ElseIf TypeOf list Is Dictionary(Of String, String) Then
+            classinfo = list
+        ElseIf list.GetType.ImplementInterface(GetType(IDictionary)) Then
+            Dim hash = DirectCast(list, IDictionary)
+
+            classinfo = New Dictionary(Of String, String)
+
+            For Each key As Object In hash.Keys
+                classinfo(key.ToString) = any.ToString(hash(key))
+            Next
+        End If
+
+        classinfo = classinfo _
+            .ToDictionary(Function(a) a.Key,
+                          Function(a)
+                              Return a.Value.TranslateColor.ToHtmlColor
+                          End Function)
+        classes = classinfo.Values _
+            .Distinct _
+            .Select(Function(colorName, i)
+                        Return New ColorClass With {
+                            .color = colorName,
+                            .factor = i,
+                            .name = colorName
+                        }
+                    End Function) _
+            .ToArray
+    End Sub
 
     Public Function plot_hclust(cluster As Cluster, args As list, env As Environment) As Object
         Dim size$ = InteropArgumentHelper.getSize(args.getByName("size"), env)
@@ -369,37 +422,7 @@ Module plots
         Dim classinfo As Dictionary(Of String, String) = Nothing
 
         If args.hasName("class") Then
-            Dim list As Object = args!class
-
-            If TypeOf list Is list Then
-                classinfo = DirectCast(list, list).slots _
-                    .ToDictionary(Function(a) a.Key,
-                                  Function(a)
-                                      Return any.ToString(a.Value)
-                                  End Function)
-            ElseIf TypeOf list Is Dictionary(Of String, String) Then
-                classinfo = list
-            ElseIf list.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Dim hash = DirectCast(list, IDictionary)
-
-                classinfo = New Dictionary(Of String, String)
-
-                For Each key As Object In hash.Keys
-                    classinfo(key.ToString) = any.ToString(hash(key))
-                Next
-            End If
-
-            classinfo = classinfo.ToDictionary(Function(a) a.Key, Function(a) a.Value.TranslateColor.ToHtmlColor)
-            classes = classinfo.Values _
-                .Distinct _
-                .Select(Function(colorName, i)
-                            Return New ColorClass With {
-                                .color = colorName,
-                                .factor = i,
-                                .name = colorName
-                            }
-                        End Function) _
-                .ToArray
+            Call TryGetClassData(args!class, classes, classinfo)
         End If
 
         Dim theme As New Theme With {
@@ -540,13 +563,13 @@ Module plots
             For Each tag As NamedValue(Of Object) In DirectCast(x, list).namedValues
                 data += New FractionData With {
                     .Name = tag.Name,
-                    .Value = REnv.asVector(Of Double)(tag.Value).GetValue(Scan0),
+                    .Value = CLRVector.asNumeric(tag.Value).GetValue(Scan0),
                     .Color = ++colors
                 }
             Next
         ElseIf TypeOf x Is vector Then
             Dim names As String() = DirectCast(x, vector).getNames
-            Dim vec As Double() = REnv.asVector(Of Double)(x)
+            Dim vec As Double() = CLRVector.asNumeric(x)
 
             For i As Integer = 0 To names.Length - 1
                 data += New FractionData With {
@@ -625,10 +648,13 @@ Module plots
                             Optional env As Environment = Nothing) As Object
 
         Dim items As String() = height.columns(category)
-        Dim values As Double() = REnv.asVector(Of Double)(height.columns(value))
-        Dim colors As String() = height.columns(color).AsObjectEnumerator.Select(AddressOf RColorPalette.getColor).ToArray
-        Dim minX As Double() = REnv.asVector(Of Double)(height.columns(min))
-        Dim maxX As Double() = REnv.asVector(Of Double)(height.columns(max))
+        Dim values As Double() = CLRVector.asNumeric(height.columns(value))
+        Dim minX As Double() = CLRVector.asNumeric(height.columns(min))
+        Dim maxX As Double() = CLRVector.asNumeric(height.columns(max))
+        Dim colors As String() = height.columns(color) _
+            .AsObjectEnumerator _
+            .Select(AddressOf RColorPalette.getColor) _
+            .ToArray
         Dim s As HistProfile() = items _
             .SeqIterator _
             .Select(Function(i)
@@ -715,7 +741,7 @@ Module plots
         End If
 
         Dim fx As Func(Of Double, Double) = math.CreateLambda(Of Double, Double)(env)
-        Dim x As Double() = REnv.asVector(Of Double)(args!x)
+        Dim x As Double() = CLRVector.asNumeric(args!x)
         Dim points As PointF() = x.Select(Function(xi) New PointF(xi, fx(xi))).ToArray
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
 
@@ -834,8 +860,8 @@ Module plots
                                  Optional alpha As Integer = 255,
                                  Optional ptSize As Integer = 5) As SerialData
 
-        Dim px As Double() = REnv.asVector(Of Double)(x)
-        Dim py As Double() = REnv.asVector(Of Double)(y)
+        Dim px As Double() = CLRVector.asNumeric(x)
+        Dim py As Double() = CLRVector.asNumeric(y)
         Dim points As PointData() = px _
             .Select(Function(xi, i)
                         Return New PointData With {
@@ -930,7 +956,7 @@ Module plots
         Else
             Dim dataSet As New NamedCollection(Of Double) With {
                 .name = title,
-                .value = REnv.asVector(Of Double)(data)
+                .value = CLRVector.asNumeric(data)
             }
 
             Return ViolinPlot.Plot(
@@ -965,7 +991,8 @@ Module plots
             Return Internal.debug.stop("polygon data can not be nothing!", env)
         ElseIf TypeOf polygon Is list Then
             Dim names As String() = DirectCast(polygon, list).getNames
-            Dim poly As pipeline = pipeline.TryCreatePipeline(Of GeneralPath)(names.Select(AddressOf DirectCast(polygon, list).getByName).ToArray, env)
+            Dim pathData = names.Select(AddressOf DirectCast(polygon, list).getByName).ToArray
+            Dim poly As pipeline = pipeline.TryCreatePipeline(Of GeneralPath)(pathData, env)
 
             If Not poly.isError Then
                 Return New PolygonPlot2D(poly.populates(Of GeneralPath)(env), theme, names, reverse).Plot
@@ -996,6 +1023,7 @@ Module plots
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("contourPlot")>
+    <RApiReturn(GetType(GraphicsData))>
     Public Function ContourPlot(<RRawVectorArgument> data As Object,
                                 <RRawVectorArgument>
                                 Optional colorSet As Object = "Spectral:c10",
@@ -1009,9 +1037,9 @@ Module plots
         If data Is Nothing Then
             Return Internal.debug.stop("object 'data' can not be nothing!", env)
         ElseIf TypeOf data Is Rdataframe Then
-            Dim x As Double() = REnv.asVector(Of Double)(DirectCast(data, Rdataframe).columns("x"))
-            Dim y As Double() = REnv.asVector(Of Double)(DirectCast(data, Rdataframe).columns("y"))
-            Dim vals As Double() = REnv.asVector(Of Double)(DirectCast(data, Rdataframe).columns("data"))
+            Dim x As Double() = CLRVector.asNumeric(DirectCast(data, Rdataframe).columns("x"))
+            Dim y As Double() = CLRVector.asNumeric(DirectCast(data, Rdataframe).columns("y"))
+            Dim vals As Double() = CLRVector.asNumeric(DirectCast(data, Rdataframe).columns("data"))
             Dim measures As MeasureData() = x.Select(Function(xi, i) New MeasureData(xi, y(i), vals(i))).ToArray
 
             Return PlotContour.Plot(measures, colorSet:=RColorPalette.getColorSet(colorSet))
