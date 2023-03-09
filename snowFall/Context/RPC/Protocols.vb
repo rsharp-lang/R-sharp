@@ -107,6 +107,10 @@ Namespace Context.RPC
             Call buffer.Write(name, Encoding.UTF8)
             Call buffer.Flush()
         End Sub
+
+        Public Overrides Function ToString() As String
+            Return $"&Hx00{uuid} get symbol '{name}'"
+        End Function
     End Class
 
     Public Class ResultPayload : Inherits RawStream

@@ -223,25 +223,39 @@ Namespace Context.RPC
 
         <Protocol(Protocols.GetSymbol)>
         Public Function GetSymbol(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
+            Dim log As New List(Of String)
             Dim payload As New GetSymbol(request.ChunkBuffer)
             Dim name As String = payload.name
             Dim target As Symbol = env.FindSymbol(name)
             Dim data As Byte()
 
+            Call log.Add(payload.ToString)
+            Call log.Add("try to find in runtime environment...")
+
             ' target symbol is not a loop symbol
             If Not target Is Nothing Then
+                Call log.Add("found object!")
                 data = popSymbol(target)
             Else
-                ' is a symbol from the loop sequence
+                Call log.Add("is a symbol from the loop sequence probably?")
                 data = popSymbol(payload)
             End If
 
             ' save data for run debug of the slave node
             If Not log_getsymbol_temp.StringEmpty Then
-                Call data.FlushStream($"{log_getsymbol_temp}/{payload.uuid}/{payload.name}.cache")
+                Dim dmpfile As String = $"{log_getsymbol_temp}/{payload.uuid}/{payload.name}.cache".GetFullPath
+
+                Call log.Add($"dump result at '{dmpfile}'")
+                Call data.FlushStream(dmpfile)
             End If
 
             If data.IsNullOrEmpty Then
+                If Not log_getsymbol_temp.StringEmpty Then
+                    Call log.Add("is empty?")
+                    Call log.Add("404 not found!")
+                    Call log.FlushAllLines($"{log_getsymbol_temp}/{payload.uuid}/{payload.name}.log")
+                End If
+
                 Return New DataPipe(NetResponse.RFC_NOT_FOUND)
             Else
                 Return New DataPipe(data)
