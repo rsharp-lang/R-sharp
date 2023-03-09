@@ -57,6 +57,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Net.Protocols.Reflection
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
@@ -240,7 +241,11 @@ Namespace Context.RPC
                 Call data.FlushStream($"{log_getsymbol_temp}/{payload.uuid}/{payload.name}.cache")
             End If
 
-            Return New DataPipe(data)
+            If data.IsNullOrEmpty Then
+                Return New DataPipe(NetResponse.RFC_NOT_FOUND)
+            Else
+                Return New DataPipe(data)
+            End If
         End Function
 
         Public Overrides Function ToString() As String

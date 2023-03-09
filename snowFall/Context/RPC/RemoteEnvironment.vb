@@ -55,6 +55,7 @@ Imports System.Data
 Imports System.IO
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Net
+Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -141,7 +142,7 @@ Namespace Context.RPC
 
                 Try
                     Using buffer As New MemoryStream(resp.ChunkBuffer)
-                        If resp.Protocol = 404 Then
+                        If resp.Protocol = HTTP_RFC.RFC_NOT_FOUND Then
                             Return buffer404(name)
                         Else
                             Return loadRemoteSymbol(name, buffer)
