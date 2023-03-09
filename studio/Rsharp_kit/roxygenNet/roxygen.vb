@@ -167,7 +167,7 @@ Public Module roxygen
 
         For Each ref As String In pkg.ls
             Dim symbol As RMethodInfo = pkg.GetFunction(apiName:=ref)
-            Dim docs As ProjectMember = xmldocs.GetAnnotations(symbol.GetRawDeclares)
+            Dim docs As ProjectMember = xmldocs.GetAnnotations(symbol.GetNetCoreCLRDeclaration)
             Dim help As UnixManPage = UnixManPagePrinter.CreateManPage(symbol, docs)
 
             links += New NamedValue(Of String) With {

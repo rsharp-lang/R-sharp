@@ -60,12 +60,12 @@ Namespace Runtime.Interop
     Module ApiDocumentHelper
 
         <Extension> Public Function markdown(api As RMethodInfo) As String
-            Dim raw As Type = api.GetRawDeclares().DeclaringType
+            Dim raw As Type = api.GetNetCoreCLRDeclaration().DeclaringType
             Dim rawDeclare$ = raw.FullName
             Dim packageName$ = raw.NamespaceEntry(True).Namespace
             Dim params$
             Dim returns As RType() = RApiReturnAttribute _
-                .GetActualReturnType(api.GetRawDeclares) _
+                .GetActualReturnType(api.GetNetCoreCLRDeclaration) _
                 .Select(AddressOf RType.GetRSharpType) _
                 .ToArray
 
@@ -84,7 +84,7 @@ Namespace Runtime.Interop
     # library: {raw.Assembly.Location.FileName}
     # package: ""{packageName}""
     #
-    return call ``R#.interop_[{raw.Name}::{api.GetRawDeclares().Name}]``(...);
+    return call ``R#.interop_[{raw.Name}::{api.GetNetCoreCLRDeclaration().Name}]``(...);
 }}"
         End Function
 

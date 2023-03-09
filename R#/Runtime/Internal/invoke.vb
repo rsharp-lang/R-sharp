@@ -87,7 +87,7 @@ Namespace Runtime.Internal
             Get
                 Return index.Values _
                     .GroupBy(Function(api)
-                                 Return api.GetRawDeclares _
+                                 Return api.GetNetCoreCLRDeclaration _
                                     .DeclaringType _
                                     .NamespaceEntry _
                                     .Namespace

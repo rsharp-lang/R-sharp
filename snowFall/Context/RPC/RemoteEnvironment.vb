@@ -55,6 +55,7 @@ Imports System.Data
 Imports System.IO
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Net
+Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -113,9 +114,9 @@ Namespace Context.RPC
 
             If local Is Nothing AndAlso Not missingOnMaster Then
                 If verbose Then
-                    Call Console.WriteLine($"try find symbol: {name}")
-                    Call Console.WriteLine($"but not exists on local or cache...")
-                    Call Console.WriteLine($"request symbol '{name}' from master!")
+                    Call VBDebugger.EchoLine($"try find symbol: {name}")
+                    Call VBDebugger.EchoLine($"but not exists on local or cache...")
+                    Call VBDebugger.EchoLine($"request symbol '{name}' from master!")
                 End If
 
                 Return getRemoteSymbol(name)
@@ -127,11 +128,12 @@ Namespace Context.RPC
         Private Function getRemoteSymbol(name As String) As Symbol
             Dim msg As New GetSymbol With {.name = name, .uuid = uuid}
             Dim req As New RequestStream(MasterContext.Protocol, Protocols.GetSymbol, msg)
-            Dim resp As RequestStream
+            Dim resp As RequestStream = Nothing
             Dim [error] As Exception = Nothing
+            Dim errorDumpfile As String = $"./.local_debug/&H00x{uuid}_{name.NormalizePathString(alphabetOnly:=False)}.dmp".GetFullPath
 
             If verbose Then
-                Call Console.WriteLine($"[get_symbol] {msg.GetJson}")
+                Call VBDebugger.EchoLine($"[get_symbol] {msg.GetJson}")
             End If
 
             ' error retry
@@ -140,7 +142,7 @@ Namespace Context.RPC
 
                 Try
                     Using buffer As New MemoryStream(resp.ChunkBuffer)
-                        If resp.Protocol = 404 Then
+                        If resp.Protocol = HTTP_RFC.RFC_NOT_FOUND Then
                             Return buffer404(name)
                         Else
                             Return loadRemoteSymbol(name, buffer)
@@ -148,13 +150,25 @@ Namespace Context.RPC
                     End Using
                 Catch ex As Exception
                     [error] = ex
+
+                    If verbose Then
+                        Call VBDebugger.EchoLine($"retry get remote symbol!<{ex.Message}>")
+                    End If
                 End Try
             Next
 
+            If verbose Then
+                Call VBDebugger.EchoLine($"error while get remote symbol: '{name}'")
+            End If
+
+            If Not resp Is Nothing Then
+                Call resp.ChunkBuffer.FlushStream(errorDumpfile)
+            End If
+
             If [error] Is Nothing Then
-                Throw New InvalidExpressionException($"error while get remote symbol: '{name}'")
+                Throw New InvalidExpressionException($"error while get remote symbol: '{name}'. ({errorDumpfile})")
             Else
-                Throw [error]
+                Throw New InvalidProgramException($"ERROR_DUMP_FILE: {errorDumpfile}", [error])
             End If
         End Function
 
@@ -174,7 +188,7 @@ Namespace Context.RPC
             End Try
 
             If verbose Then
-                Call Console.WriteLine($"[symbol::{name}] {value.ToString}")
+                Call VBDebugger.EchoLine($"[symbol::{name}] {value.ToString}")
             End If
 
             ' and then push/cache to local environment
@@ -185,7 +199,7 @@ Namespace Context.RPC
 
         Private Function buffer404(name As String) As Symbol
             If verbose Then
-                Call Console.WriteLine($"[404/NOT FOUND] target symbol is also not find on master environment!")
+                Call VBDebugger.EchoLine($"[404/NOT FOUND] target symbol is also not find on master environment!")
             End If
 
             ' this symbol will not query in the master

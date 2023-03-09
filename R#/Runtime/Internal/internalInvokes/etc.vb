@@ -106,7 +106,7 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Dim xmldocs = env.globalEnvironment.packages.packageDocs
-            Dim docs = xmldocs.GetAnnotations(DirectCast(symbol, RMethodInfo).GetRawDeclares)
+            Dim docs = xmldocs.GetAnnotations(DirectCast(symbol, RMethodInfo).GetNetCoreCLRDeclaration)
             Dim help As UnixManPage = UnixManPagePrinter.CreateManPage(symbol, docs)
 
             Return UnixManPage.ToString(help, "man page create by R# package system.")

@@ -75,7 +75,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Namespace Runtime.Interop
 
     ''' <summary>
-    ''' Use for R# package method
+    ''' Use for R# package method, a wrapper for the .NET clr function <see cref="MethodInfo"/>.
     ''' </summary>
     Public Class RMethodInfo : Implements RFunction, RPrint, INamespaceReferenceSymbol
 
@@ -178,12 +178,28 @@ Namespace Runtime.Interop
         ''' Gets the <see cref="MethodInfo"/> represented by the delegate.
         ''' </summary>
         ''' <returns></returns>
-        Public Function GetRawDeclares() As MethodInfo
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
+        Public Function GetNetCoreCLRDeclaration() As MethodInfo
             Return api.method
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <returns>
+        ''' this function will returns nothing if the attribute is not found
+        ''' </returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
+        Public Function GetRApiReturns() As RApiReturnAttribute
+            Return GetNetCoreCLRDeclaration.GetCustomAttribute(Of RApiReturnAttribute)()
+        End Function
+
         Public Iterator Function GetUnionTypes() As IEnumerable(Of Type)
-            Dim method As MethodInfo = GetRawDeclares()
+            Dim method As MethodInfo = GetNetCoreCLRDeclaration()
 
             If method.ReturnType Is Nothing OrElse method.ReturnType Is GetType(Void) Then
                 Return
@@ -205,7 +221,7 @@ Namespace Runtime.Interop
         End Function
 
         Public Function GetPackageInfo() As Package
-            Return GetRawDeclares.DeclaringType.ParsePackage(strict:=False)
+            Return GetNetCoreCLRDeclaration.DeclaringType.ParsePackage(strict:=False)
         End Function
 
         Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
@@ -284,7 +300,7 @@ Namespace Runtime.Interop
         Public Function Invoke(envir As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
             Dim parameters As New List(Of Object)
             Dim apiStackFrame As New StackFrame With {
-                .File = GetRawDeclares.DeclaringType.Assembly.Location.FileName,
+                .File = GetNetCoreCLRDeclaration.DeclaringType.Assembly.Location.FileName,
                 .Line = "<unknown>",
                 .Method = New Method With {
                     .Method = name,

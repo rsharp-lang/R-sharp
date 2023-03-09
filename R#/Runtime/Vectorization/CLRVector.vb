@@ -223,6 +223,8 @@ Namespace Runtime.Vectorization
                 x = DirectCast(x, list).slots.Values.ToArray
             ElseIf TypeOf x Is String Then
                 Return New Double() {Double.Parse(CStr(x))}
+            ElseIf TypeOf x Is vector Then
+                x = DirectCast(x, vector).data
             End If
 
             If x.GetType.IsArray Then
@@ -231,6 +233,8 @@ Namespace Runtime.Vectorization
 
             If TypeOf x Is Double() Then
                 Return x
+            ElseIf TypeOf x Is Single() Then
+                Return DirectCast(x, Single()).Select(Function(s) CDbl(s)).ToArray
             ElseIf DataFramework.IsNumericCollection(x.GetType) Then
                 Return (From xi As Object
                         In DirectCast(x, IEnumerable).AsQueryable
@@ -244,11 +248,6 @@ Namespace Runtime.Vectorization
             ElseIf isVector(Of String)(x) Then
                 ' parse string
                 Return CLRVector.asCharacter(x).Select(AddressOf Val).ToArray
-            ElseIf TypeOf x Is vector AndAlso DirectCast(x, vector).elementType Like RType.floats Then
-                Return DirectCast(x, vector).data _
-                    .AsObjectEnumerator _
-                    .Select(Function(d) CDbl(d)) _
-                    .ToArray
             ElseIf TypeOf x Is Object() Then
                 Return DirectCast(x, Object()).Select(Function(d) CDbl(d)).ToArray
             Else

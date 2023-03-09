@@ -121,7 +121,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Return value
                 ElseIf value.GetType Is GetType(RMethodInfo) Then
                     Return DirectCast(value, RMethodInfo) _
-                        .GetRawDeclares _
+                        .GetNetCoreCLRDeclaration _
                         .DoCall(AddressOf RApiReturnAttribute.GetActualReturnType) _
                         .Select(AddressOf RType.GetRSharpType) _
                         .ToArray
