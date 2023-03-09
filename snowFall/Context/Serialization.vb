@@ -1,61 +1,67 @@
 ﻿#Region "Microsoft.VisualBasic::e4a52cc480caa47a3bf553092b0805fa, D:/GCModeller/src/R-sharp/snowFall//Context/Serialization.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 100
-    '    Code Lines: 60
-    ' Comment Lines: 27
-    '   Blank Lines: 13
-    '     File Size: 3.67 KB
+' Summaries:
 
 
-    ' Module Serialization
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: GetBuffer, GetBytes, GetValue, ParseBuffer
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 100
+'    Code Lines: 60
+' Comment Lines: 27
+'   Blank Lines: 13
+'     File Size: 3.67 KB
+
+
+' Module Serialization
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: GetBuffer, GetBytes, GetValue, ParseBuffer
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
+Imports System.Reflection
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Data.IO.MessagePack
+Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Parallel
+Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Serialize
 
 ''' <summary>
@@ -100,6 +106,9 @@ Public Module Serialization
     ''' <param name="symbol"></param>
     ''' <returns></returns>
     Public Function GetBytes(symbol As Symbol, env As Environment) As Byte()
+        Dim value As Byte()
+        Dim stackTrace As Byte() = MsgPackSerializer.SerializeObject(symbol.stacktrace)
+
         If env.globalEnvironment.Rscript.debug Then
             Call Console.WriteLine($"[found symbol::{symbol.name}] {symbol.ToString}")
         End If
@@ -107,10 +116,17 @@ Public Module Serialization
         Using buffer As New MemoryStream, writer As New BinaryDataWriter(buffer)
             Call writer.Write(symbol.name, BinaryStringFormat.ZeroTerminated)
             Call writer.Write(symbol.readonly)
-            Call writer.Write(symbol.constraint)
 
-            Dim stackTrace As Byte() = MsgPackSerializer.SerializeObject(symbol.stacktrace)
-            Dim value As Byte() = GetBuffer(symbol.value, env)
+            If TypeOf symbol.value Is RMethodInfo Then
+                Dim del As New IDelegate(DirectCast(symbol.value, RMethodInfo).GetNetCoreCLRDeclaration)
+                Dim json As String = del.GetJson
+
+                writer.Write(TypeCodes.clr_delegate)
+                value = Encoding.UTF8.GetBytes(json)
+            Else
+                writer.Write(symbol.constraint)
+                value = GetBuffer(symbol.value, env)
+            End If
 
             Call writer.Write(stackTrace.Length)
             Call writer.Write(stackTrace)
@@ -133,6 +149,8 @@ Public Module Serialization
     ''' master node. decode at slave node.
     ''' </returns>
     Public Function GetValue(buffer As Stream) As Symbol
+        Dim value As Object
+
         Using reader As New BinaryDataReader(buffer)
             Dim name As String = reader.ReadString(BinaryStringFormat.ZeroTerminated)
             Dim is_readonly As Boolean = reader.ReadBoolean
@@ -142,7 +160,18 @@ Public Module Serialization
             Dim n2 As Integer = reader.ReadInt32
             Dim valueBuf As Byte() = reader.ReadBytes(n2)
             Dim stackframes As StackFrame() = MsgPackSerializer.Deserialize(Of StackFrame())(stackBuf)
-            Dim value As Object = ParseBuffer(valueBuf)
+
+            ' A little hack about the .NET clr function serialization
+            If type = TypeCodes.clr_delegate Then
+                Dim json As String = Encoding.UTF8.GetString(valueBuf)
+                Dim del As IDelegate = json.LoadJSON(Of IDelegate)
+                Dim clr_func As MethodInfo = del.GetMethod
+                Dim r_func As New RMethodInfo(ImportsPackage.TryParse(clr_func, strict:=False))
+
+                value = r_func
+            Else
+                value = ParseBuffer(valueBuf)
+            End If
 
             Return New Symbol(name, value, type, is_readonly) With {
                 .stacktrace = stackframes

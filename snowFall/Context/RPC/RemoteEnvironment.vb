@@ -129,7 +129,7 @@ Namespace Context.RPC
             Dim req As New RequestStream(MasterContext.Protocol, Protocols.GetSymbol, msg)
             Dim resp As RequestStream = Nothing
             Dim [error] As Exception = Nothing
-            Dim errorDumpfile As String = $"./{name.NormalizePathString(alphabetOnly:=False)}.dump".GetFullPath
+            Dim errorDumpfile As String = $"./.local_debug/&H00x{uuid}_{name.NormalizePathString(alphabetOnly:=False)}.dmp".GetFullPath
 
             If verbose Then
                 Call VBDebugger.EchoLine($"[get_symbol] {msg.GetJson}")

@@ -174,17 +174,13 @@ Namespace Context.RPC
         ''' <param name="target"></param>
         ''' <returns></returns>
         Private Function popSymbol(target As Symbol) As Byte()
-            If TypeOf target.value Is RMethodInfo Then
-                Return New Byte() {}
-            Else
-                'Dim vec As Object = target.ToVector.GetValue(payload.uuid)
+            'Dim vec As Object = target.ToVector.GetValue(payload.uuid)
 
-                'vec = REnv.TryCastGenericArray({vec}, env)
-                'target = New Symbol(name, vec, target.constraint, target.readonly) With {
-                '    .stacktrace = target.stacktrace
-                '}
-                Return Serialization.GetBytes(target, env:=env)
-            End If
+            'vec = REnv.TryCastGenericArray({vec}, env)
+            'target = New Symbol(name, vec, target.constraint, target.readonly) With {
+            '    .stacktrace = target.stacktrace
+            '}
+            Return Serialization.GetBytes(target, env:=env)
         End Function
 
         Private Function popLoopSymbol(name As String, loopVal As Object) As Byte()

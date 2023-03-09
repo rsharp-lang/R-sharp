@@ -75,7 +75,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Namespace Runtime.Interop
 
     ''' <summary>
-    ''' Use for R# package method
+    ''' Use for R# package method, a wrapper for the .NET clr function <see cref="MethodInfo"/>.
     ''' </summary>
     Public Class RMethodInfo : Implements RFunction, RPrint, INamespaceReferenceSymbol
 
