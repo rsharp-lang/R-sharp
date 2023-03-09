@@ -288,7 +288,7 @@ Namespace Development.Package.File
 
             ' 1. load R symbols
             For Each symbol As NamedValue(Of String) In [namespace].EnumerateSymbols
-                Using bin As New BinaryReader($"{dir}/lib/src/{symbol.Value}".OpenReadonly(retryOpen:=3))
+                Using bin As New BinaryReader($"{dir}/lib/src/{symbol.Value}".OpenReadonly(retryOpen:=3, verbose:=env.verboseOption))
                     symbolExpression = BlockReader _
                         .Read(bin) _
                         .Parse(desc:=[namespace].meta)
@@ -363,7 +363,7 @@ Namespace Development.Package.File
             Dim result As Object = Nothing
 
             If onLoad.FileExists Then
-                Using bin As New BinaryReader(onLoad.OpenReadonly(retryOpen:=5))
+                Using bin As New BinaryReader(onLoad.OpenReadonly(retryOpen:=5, verbose:=env.verboseOption))
                     result = BlockReader.Read(bin) _
                         .Parse(desc:=pkg.meta) _
                         .DoCall(Function(func)
