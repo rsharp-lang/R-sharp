@@ -155,7 +155,7 @@ Module devkit
     <ExportAPI("il")>
     <RApiReturn(GetType(ILInstruction))>
     Public Function showIL(api As RMethodInfo) As Object
-        Dim il As New IL.MethodBodyReader(api.GetRawDeclares)
+        Dim il As New IL.MethodBodyReader(api.GetNetCoreCLRDeclaration)
         Dim msil As ILInstruction() = il.ToArray
 
         Return msil

@@ -344,7 +344,7 @@ Module datasetKit
             Dim err As Message = Nothing
 
             If TypeOf code Is RMethodInfo Then
-                err = mapEncoder(DirectCast(code, RMethodInfo).GetRawDeclares.Name, fieldName, encoderMaps, env)
+                err = mapEncoder(DirectCast(code, RMethodInfo).GetNetCoreCLRDeclaration.Name, fieldName, encoderMaps, env)
             ElseIf TypeOf code Is DeclareLambdaFunction Then
                 err = encoderMaps.mapLambda(DirectCast(code, DeclareLambdaFunction), env)
             Else
@@ -374,7 +374,7 @@ Module datasetKit
             code = DirectCast(code, NamespaceFunctionSymbolReference).symbol
             Return mapEncoder(DirectCast(code, SymbolReference).symbol, fieldName, encoderMaps, env)
         ElseIf TypeOf code Is RMethodInfo Then
-            Return mapEncoder(DirectCast(code, RMethodInfo).GetRawDeclares.Name, fieldName, encoderMaps, env)
+            Return mapEncoder(DirectCast(code, RMethodInfo).GetNetCoreCLRDeclaration.Name, fieldName, encoderMaps, env)
         ElseIf TypeOf code Is FeatureEncoder Then
             encoderMaps.AddEncodingRule(fieldName, DirectCast(code, FeatureEncoder))
         Else

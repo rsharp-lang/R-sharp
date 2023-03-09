@@ -77,9 +77,9 @@ Namespace Development
 
         <Extension>
         Public Function CreateManPage(api As RMethodInfo, docs As ProjectMember) As UnixManPage
-            Dim targetModule As Type = api.GetRawDeclares.DeclaringType
+            Dim targetModule As Type = api.GetNetCoreCLRDeclaration.DeclaringType
             Dim package As PackageAttribute = targetModule.GetCustomAttribute(Of PackageAttribute)
-            Dim info = api.GetRawDeclares.DeclaringType.Assembly.FromAssembly
+            Dim info = api.GetNetCoreCLRDeclaration.DeclaringType.Assembly.FromAssembly
 
             If package Is Nothing Then
                 package = New PackageAttribute(targetModule.NamespaceEntry)

@@ -135,7 +135,7 @@ Namespace Development
         ''' </summary>
         ''' <param name="api"></param>
         Public Sub PrintHelp(api As RMethodInfo, out As RContentOutput)
-            Dim docs As ProjectMember = GetAnnotations(api.GetRawDeclares)
+            Dim docs As ProjectMember = GetAnnotations(api.GetNetCoreCLRDeclaration)
 
             If out.env <> OutputEnvironments.Html Then
                 Call printConsole(api, docs)
