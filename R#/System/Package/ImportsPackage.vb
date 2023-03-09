@@ -53,7 +53,7 @@
 
 #End Region
 
-Imports System.ComponentModel.Composition
+Imports System.Composition
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
