@@ -87,7 +87,7 @@ Module Program
                 .ToArray
         End If
 
-        Call Utils.BindToMaster(parentId:=parent, kill:=localhost)
+        Call BackgroundTaskUtils.BindToMaster(parentId:=parent, kill:=localhost)
 
         If Not Tcp.PortIsAvailable(port) Then
             Call Console.WriteLine($"local tcp port(={port}) is in used!")
@@ -120,7 +120,7 @@ Module Program
 
         Using http As New Rweb(Rweb, port, tcp, show_error, threads:=n_threads)
             Call http.Processor.WithStartups(startups)
-            Call Utils.BindToMaster(parent, http)
+            Call BackgroundTaskUtils.BindToMaster(parent, http)
 
             Return http.Run()
         End Using
@@ -135,7 +135,7 @@ Module Program
         Dim parent As String = args("--parent")
 
         Using http As New RSession(port, workspace)
-            Call Utils.BindToMaster(parent, http)
+            Call BackgroundTaskUtils.BindToMaster(parent, http)
             Return http.Run
         End Using
     End Function
