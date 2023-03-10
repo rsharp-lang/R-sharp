@@ -52,7 +52,6 @@
 Imports System.ComponentModel
 Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices
-Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine
@@ -115,7 +114,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         End Using
     End Function
 
-#If netcore5 = 1 Then
+#If NETCOREAPP Then
     Private Function runMSBuild(src As String) As Boolean
         If MSBuild.version Is Nothing Then
             Return False
