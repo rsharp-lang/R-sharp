@@ -52,7 +52,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.Language
-Imports SMRUCC.Rsharp.Development.Hybrids
+Imports SMRUCC.Rsharp.Development.Polyglot
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components

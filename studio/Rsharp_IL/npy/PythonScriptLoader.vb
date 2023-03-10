@@ -55,7 +55,7 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Text
-Imports SMRUCC.Rsharp.Development.Hybrids
+Imports SMRUCC.Rsharp.Development.Polyglot
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
