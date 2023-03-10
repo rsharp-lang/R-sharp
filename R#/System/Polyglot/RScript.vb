@@ -9,7 +9,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Development.Polyglot
 
-    Public Class HybridsREngine : Inherits ScriptLoader
+    Public Class RScript : Inherits ScriptLoader
 
         Public Overrides ReadOnly Property SuffixName As String
             Get
@@ -23,7 +23,7 @@ Namespace Development.Polyglot
             ' 所以函数无法被导入到全局环境之中
             ' 在这里imports关键词操作则是使用全局环境
             Dim script As MagicScriptSymbol = CreateMagicScriptSymbol(scriptfile, R)
-            Dim Rscript As Rscript = Rscript.FromFile(scriptfile)
+            Dim Rscript As Runtime.Components.Rscript = Runtime.Components.Rscript.FromFile(scriptfile)
             Dim stackframe As New StackFrame With {
                 .File = Rscript.fileName,
                 .Line = 0,
@@ -52,7 +52,7 @@ Namespace Development.Polyglot
         End Function
 
         Public Overrides Function ParseScript(scriptfile As String, env As Environment) As [Variant](Of Message, Program)
-            Dim Rscript As Rscript = Rscript.FromFile(scriptfile)
+            Dim Rscript As Runtime.Components.Rscript = Runtime.Components.Rscript.FromFile(scriptfile)
             Dim R As RInterpreter = env.globalEnvironment.Rscript
             Dim error$ = Nothing
             Dim program As Program = program.CreateProgram(Rscript, R.debug, [error]:=[error])
