@@ -69,7 +69,6 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Configuration
-Imports SMRUCC.Rsharp.Development.Hybrids
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
@@ -92,7 +91,7 @@ Namespace Runtime
         Public ReadOnly Property options As Options
         Public ReadOnly Property packages As PackageManager
         Public ReadOnly Property attachedNamespace As SymbolNamespaceSolver
-        Public ReadOnly Property hybridsEngine As New HybridsEngine
+        Public ReadOnly Property hybridsEngine As New Polyglot.Platform
         Public ReadOnly Property profiler2 As New Stack(Of ProfilerFrames)
 
         ''' <summary>

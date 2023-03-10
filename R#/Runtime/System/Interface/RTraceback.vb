@@ -1,4 +1,6 @@
-﻿Namespace Runtime.Components.Interface
+﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+
+Namespace Runtime.Components.Interface
 
     Public Interface IRuntimeTrace
 

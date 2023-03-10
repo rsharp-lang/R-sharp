@@ -58,7 +58,6 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -95,7 +94,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Dim ta As Type = RType.TypeOf(a)
 
             If ta Like RType.logicals Then
-                Dim flags As Boolean() = REnv.asVector(Of Boolean)(a)
+                Dim flags As Boolean() = CLRVector.asLogical(a)
 
                 If flags.Length = 1 AndAlso flags(Scan0) = True Then
                     Return True
