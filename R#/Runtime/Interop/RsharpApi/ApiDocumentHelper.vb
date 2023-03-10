@@ -59,7 +59,8 @@ Namespace Runtime.Interop
 
     Module ApiDocumentHelper
 
-        <Extension> Public Function markdown(api As RMethodInfo) As String
+        <Extension>
+        Public Function markdown(api As RMethodInfo) As String
             Dim raw As Type = api.GetNetCoreCLRDeclaration().DeclaringType
             Dim rawDeclare$ = raw.FullName
             Dim packageName$ = raw.NamespaceEntry(True).Namespace
@@ -88,7 +89,8 @@ Namespace Runtime.Interop
 }}"
         End Function
 
-        <Extension> Public Function markdown(arg As RMethodArgument) As String
+        <Extension>
+        Public Function markdown(arg As RMethodArgument) As String
             Dim defaultValue As String = "``<NULL>``"
             Dim arg_default As Object = arg.default
 

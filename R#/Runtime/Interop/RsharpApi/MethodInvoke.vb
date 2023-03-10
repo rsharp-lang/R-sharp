@@ -65,12 +65,14 @@ Namespace Runtime.Interop
         Public target As Object
 
         Public ReadOnly Property isStatic As Boolean
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return target Is Nothing
             End Get
         End Property
 
         Public ReadOnly Property moduleNamespace As String
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return method.DeclaringType.NamespaceEntry(nullWrapper:=True).Namespace
             End Get
