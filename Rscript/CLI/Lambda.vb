@@ -5,9 +5,11 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 
 Partial Module CLI
 
@@ -15,11 +17,12 @@ Partial Module CLI
 
     <ExportAPI("--lambda")>
     <Description("Execute R# function with parameters")>
-    <Usage("--lambda <delegate_name> [--SetDllDirectory <dll_directory>]")>
+    <Usage("--lambda <delegate_name> [--request </path/to/del_func_parameters.json, default=""./.r_env/run.json""> --SetDllDirectory <dll_directory>]")>
     Public Function execLambda(args As CommandLine) As Integer
         Dim SetDllDirectory As String = args("--SetDllDirectory")
         Dim renv As New RInterpreter
         Dim del_func As String = args.SingleValue
+        Dim request_argv As String = args("--request") Or "./.r_env/run.json".GetFullPath
 
         If Not SetDllDirectory.StringEmpty Then
             Call renv.globalEnvir.options.setOption("SetDllDirectory", SetDllDirectory)
@@ -33,6 +36,7 @@ Partial Module CLI
 
         Dim callable As Symbol = renv.globalEnvir.FindFunction(del_func)
         Dim result As Object
+        Dim run As Object = renv.getLambdaArguments(file:=request_argv)
 
         If callable Is Nothing OrElse callable.value Is Nothing Then
             result = Internal.debug.stop({
@@ -45,15 +49,46 @@ Partial Module CLI
                 given:=callable.value.GetType,
                 envir:=renv.globalEnvir
             )
+        ElseIf TypeOf run Is Message Then
+            result = run
         Else
-            result = renv.globalEnvir.invokeLambda(callable.value)
+            result = renv.globalEnvir.invokeLambda(run, callable.value)
         End If
 
         Return handleResult(result, renv.globalEnvir)
     End Function
 
+    ''' <summary>
+    ''' this function will ensure that the parameter value is a list
+    ''' </summary>
+    ''' <param name="renv"></param>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
     <Extension>
-    Private Function invokeLambda(env As Environment, del_func As RFunction) As Object
+    Private Function getLambdaArguments(renv As RInterpreter, file As String) As Object
+        Call renv.LoadLibrary("JSON", silent:=False)
+
+        If Not file.FileExists Then
+            ' returns empty list, means the target function has no parameter inputs
+            Return New list With {.slots = New Dictionary(Of String, Object)}
+        Else
+            Dim val As Object = renv.Evaluate($"JSON::json_decode(readText('{file}'));")
+
+            If TypeOf val Is Message Then
+                Return val
+            End If
+
+            If val Is Nothing OrElse Not TypeOf val Is list Then
+                Return New list With {.slots = New Dictionary(Of String, Object) From {{"$0", val}}}
+            Else
+                Return val
+            End If
+        End If
+    End Function
+
+    <Extension>
+    Private Function invokeLambda(env As Environment, argv As list, del_func As RFunction) As Object
+        Dim args As NamedValue(Of Expression)() = del_func.getArguments.ToArray
 
     End Function
 End Module
