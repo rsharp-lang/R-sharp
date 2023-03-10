@@ -89,6 +89,28 @@ Partial Module CLI
     <Extension>
     Private Function invokeLambda(env As Environment, argv As list, del_func As RFunction) As Object
         Dim args As NamedValue(Of Expression)() = del_func.getArguments.ToArray
+        Dim run As InvokeParameter() = New InvokeParameter(args.Length - 1) {}
 
+        For i As Integer = 0 To args.Length - 1
+            Dim name As String = args(i).Name
+            Dim isOptional As Boolean = Not args(i).Value Is Nothing
+            Dim index As String = $"${i}"
+
+            If argv.hasName(name) Then
+                run(i) = New InvokeParameter(name, argv.getByName(name), i)
+            ElseIf isOptional Then
+                run(i) = New InvokeParameter(name, args(i).Value.Evaluate(env), i)
+            ElseIf argv.hasName(index) Then
+                run(i) = New InvokeParameter(index, argv.getByName(index), i)
+            Else
+                ' missing the required parameter
+                Return Internal.debug.stop({
+                    $"missing the required parameter({name}) with no default value!",
+                    $"parameter: {name}"
+                }, env)
+            End If
+        Next
+
+        Return del_func.Invoke(env, run)
     End Function
 End Module

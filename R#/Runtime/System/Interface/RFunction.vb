@@ -88,6 +88,16 @@ Namespace Runtime.Components.Interface
         ''' </summary>
         ''' <returns></returns>
         Function getReturns(env As Environment) As RType
+
+        ''' <summary>
+        ''' get the parameter list of current function
+        ''' </summary>
+        ''' <returns>
+        ''' please note that:
+        ''' 
+        ''' + if the value of the item is nothing, then it means the parameter is required!
+        ''' + if the value of the item is a literal expression of NULL, then it means the parameter is optional and the default value is NULL
+        ''' </returns>
         Function getArguments() As IEnumerable(Of NamedValue(Of Expression))
 
         ''' <summary>
