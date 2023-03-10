@@ -1,58 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::48cf01a12263af6393c2c9e2bd973f7b, D:/GCModeller/src/R-sharp/R#//Runtime/RTypeExtensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 137
-    '    Code Lines: 88
-    ' Comment Lines: 38
-    '   Blank Lines: 11
-    '     File Size: 5.87 KB
+' Summaries:
 
 
-    '     Module RTypeExtensions
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: [GetType], (+2 Overloads) GetRTypeCode, IsNumeric, (+2 Overloads) IsPrimitive
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 137
+'    Code Lines: 88
+' Comment Lines: 38
+'   Blank Lines: 11
+'     File Size: 5.87 KB
+
+
+'     Module RTypeExtensions
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: [GetType], (+2 Overloads) GetRTypeCode, IsNumeric, (+2 Overloads) IsPrimitive
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -134,6 +133,8 @@ Namespace Runtime
         ''' this function returns true if the <paramref name="type"/> is 
         ''' <see cref="TypeCodes.double"/> or <see cref="TypeCodes.integer"/>
         ''' </returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Public Function IsNumeric(type As TypeCodes) As Boolean
             Return type = TypeCodes.double OrElse type = TypeCodes.integer
@@ -163,7 +164,7 @@ Namespace Runtime
                 Case GetType(RMethodInfo), GetType(DeclareNewFunction)
                     Return TypeCodes.closure
                 Case Else
-                    ' if strict, then the envrionment type comes from the
+                    ' if strict, then the environment type comes from the
                     ' different build version of the R# runtime assembly
                     ' will not be equals
                     If type.IsInheritsFrom(GetType(Environment), strict:=False) Then
@@ -184,7 +185,14 @@ Namespace Runtime
                 Case TypeCode.Boolean : Return GetType(Boolean())
                 Case TypeCode.Double, TypeCode.Single, TypeCode.Decimal
                     Return GetType(Double())
-                Case TypeCode.Int32, TypeCode.Byte, TypeCode.Int16, TypeCode.Int64, TypeCode.SByte, TypeCode.UInt16, TypeCode.UInt32, TypeCode.UInt64
+                Case TypeCode.Int32,
+                     TypeCode.Byte,
+                     TypeCode.Int16,
+                     TypeCode.Int64,
+                     TypeCode.SByte,
+                     TypeCode.UInt16,
+                     TypeCode.UInt32,
+                     TypeCode.UInt64
                     Return GetType(Long())
                 Case TypeCode.String, TypeCode.Char : Return GetType(String())
                 Case TypeCode.Object : Return GetType(Object)

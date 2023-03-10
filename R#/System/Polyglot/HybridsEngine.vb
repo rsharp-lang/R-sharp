@@ -72,7 +72,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
-Namespace Development.Hybrids
+Namespace Development.Polyglot
 
     Public Class HybridsEngine
 
