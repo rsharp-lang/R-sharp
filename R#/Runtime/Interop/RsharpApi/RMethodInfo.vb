@@ -515,6 +515,7 @@ opt:                    If arg.isOptional Then
             Return $"Dim {name} As {api.ToString}"
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getReturns(env As Environment) As RType Implements RFunction.getReturns
             Return returns
         End Function

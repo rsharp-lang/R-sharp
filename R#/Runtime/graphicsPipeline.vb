@@ -138,8 +138,8 @@ Namespace Runtime
                 height = eval(height, env)
             End If
 
-            w = REnv.single(REnv.asVector(Of Double)(width))
-            h = REnv.single(REnv.asVector(Of Double)(height))
+            w = REnv.single(CLRVector.asNumeric(width))
+            h = REnv.single(CLRVector.asNumeric(height))
         End Sub
 
         <Extension>

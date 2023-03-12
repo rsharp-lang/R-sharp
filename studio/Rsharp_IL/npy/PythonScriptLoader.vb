@@ -55,7 +55,7 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Text
-Imports SMRUCC.Rsharp.Development.Hybrids
+Imports SMRUCC.Rsharp.Development.Polyglot
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -75,7 +75,7 @@ Public Class PythonScriptLoader : Inherits ScriptLoader
         ' 所以函数无法被导入到全局环境之中
         ' 在这里imports关键词操作则是使用全局环境
         Dim script As MagicScriptSymbol = CreateMagicScriptSymbol(scriptfile, R)
-        Dim Rscript As Rscript = Rscript.FromFile(scriptfile)
+        Dim Rscript As Components.Rscript = Components.Rscript.FromFile(scriptfile)
         Dim stackframe As New StackFrame With {
             .File = Rscript.fileName,
             .Line = 0,
@@ -106,7 +106,7 @@ Public Class PythonScriptLoader : Inherits ScriptLoader
     End Function
 
     Public Overrides Function ParseScript(scriptfile As String, env As Environment) As [Variant](Of Message, Program)
-        Dim Rscript As Rscript = Rscript.FromFile(scriptfile)
+        Dim Rscript As Components.Rscript = Components.Rscript.FromFile(scriptfile)
         Dim program As Program = Rscript.ParsePyScript(debug:=env.globalEnvironment.debugMode)
 
         Return program

@@ -74,6 +74,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -374,10 +375,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
             If symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like RType.integers Then
                 ' integer index
-                Return setVectorElements(targetObj, DirectCast(Runtime.asVector(Of Integer)(index), Integer()), value, envir)
+                Return setVectorElements(targetObj, CLRVector.asInteger(index), value, envir)
                 ' logical index
             ElseIf symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like RType.logicals Then
-                Dim flags As Boolean() = DirectCast(Runtime.asVector(Of Boolean)(index), Boolean())
+                Dim flags As Boolean() = CLRVector.asLogical(index)
                 Dim indexVals As Integer() = flags _
                     .Select(Function(b, i) (b, i + 1)) _
                     .Where(Function(flag) flag.b) _
@@ -388,7 +389,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End If
 
             ' character name index
-            Dim indexStr As String() = DirectCast(Runtime.asVector(Of String)(index), String())
+            Dim indexStr As String() = CLRVector.asCharacter(index)
             Dim result As Object
 
             If Not targetObj.GetType.ImplementInterface(GetType(RNameIndex)) Then

@@ -145,7 +145,7 @@ Namespace Runtime.Components
         End Sub
 
         ''' <summary>
-        ''' 
+        ''' Create a new parameter with given symbol name
         ''' </summary>
         ''' <param name="name">
         ''' the index name pattern number should be keeps the same order with the <paramref name="index"/>.
@@ -153,6 +153,10 @@ Namespace Runtime.Components
         ''' </param>
         ''' <param name="runtimeValue"></param>
         ''' <param name="index"></param>
+        ''' <remarks>
+        ''' combine <paramref name="name"/> and <paramref name="runtimeValue"/> for 
+        ''' create an expressin of <see cref="ValueAssignExpression"/>.
+        ''' </remarks>
         Sub New(name As String, runtimeValue As Object, index As Integer)
             Me.index = index
             Me.value = New ValueAssignExpression({name}, New RuntimeValueLiteral(runtimeValue))

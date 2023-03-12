@@ -60,7 +60,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Namespace Runtime.Interop
 
     ''' <summary>
-    ''' Literal of any .NET runtime value object
+    ''' Literal of any .NET clr runtime value object
     ''' </summary>
     Public Class RuntimeValueLiteral : Inherits Expression
 
@@ -80,8 +80,16 @@ Namespace Runtime.Interop
             End Get
         End Property
 
+        ''' <summary>
+        ''' Any .NET clr runtime object
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property value As Object
 
+        ''' <summary>
+        ''' Create a new .NET clr object literal value
+        ''' </summary>
+        ''' <param name="value"></param>
         Sub New(value As Object)
             Me.value = value
         End Sub
