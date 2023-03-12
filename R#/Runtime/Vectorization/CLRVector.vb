@@ -68,6 +68,35 @@ Namespace Runtime.Vectorization
     ''' </summary>
     Public Module CLRVector
 
+        Public Function asDate(x As Object) As Date()
+            If x Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf x Is list Then
+                x = DirectCast(x, list).data.ToArray
+            End If
+            If TypeOf x Is vector Then
+                x = DirectCast(x, vector).data
+            End If
+            If x.GetType.IsArray Then
+                x = REnv.UnsafeTryCastGenericArray(x)
+            End If
+
+            If TypeOf x Is Date() Then
+                Return x
+            ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of Date)) Then
+                Return DirectCast(x, IEnumerable(Of Date)).ToArray
+            End If
+            If TypeOf x Is String Then
+                Return New Date() {Date.Parse(CStr(x))}
+            ElseIf REnv.isVector(Of String)(x) Then
+                Return asCharacter(x).Select(AddressOf Date.Parse).ToArray
+            End If
+
+            Return asNumeric(x) _
+                .Select(Function(d) ValueTypes.FromUnixTimeStamp(d)) _
+                .ToArray
+        End Function
+
         Public Function asLong(x As Object) As Long()
             If x Is Nothing Then
                 Return Nothing
