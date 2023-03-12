@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::ddf1637056472ff75488d6dd7b6c959b, D:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/CLRVector.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 257
-    '    Code Lines: 216
-    ' Comment Lines: 14
-    '   Blank Lines: 27
-    '     File Size: 10.06 KB
+' Summaries:
 
 
-    '     Module CLRVector
-    ' 
-    '         Function: asCharacter, asInteger, (+2 Overloads) asLogical, asLong, asNumeric
-    '                   safeCharacters
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 257
+'    Code Lines: 216
+' Comment Lines: 14
+'   Blank Lines: 27
+'     File Size: 10.06 KB
+
+
+'     Module CLRVector
+' 
+'         Function: asCharacter, asInteger, (+2 Overloads) asLogical, asLong, asNumeric
+'                   safeCharacters
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -67,6 +67,35 @@ Namespace Runtime.Vectorization
     ''' Data cast type helper for the primitive array in CLR function code
     ''' </summary>
     Public Module CLRVector
+
+        Public Function asDate(x As Object) As Date()
+            If x Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf x Is list Then
+                x = DirectCast(x, list).data.ToArray
+            End If
+            If TypeOf x Is vector Then
+                x = DirectCast(x, vector).data
+            End If
+            If x.GetType.IsArray Then
+                x = REnv.UnsafeTryCastGenericArray(x)
+            End If
+
+            If TypeOf x Is Date() Then
+                Return x
+            ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of Date)) Then
+                Return DirectCast(x, IEnumerable(Of Date)).ToArray
+            End If
+            If TypeOf x Is String Then
+                Return New Date() {Date.Parse(CStr(x))}
+            ElseIf REnv.isVector(Of String)(x) Then
+                Return asCharacter(x).Select(AddressOf Date.Parse).ToArray
+            End If
+
+            Return asNumeric(x) _
+                .Select(Function(d) ValueTypes.FromUnixTimeStamp(d)) _
+                .ToArray
+        End Function
 
         Public Function asLong(x As Object) As Long()
             If x Is Nothing Then
