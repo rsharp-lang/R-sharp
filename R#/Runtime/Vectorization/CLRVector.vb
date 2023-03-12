@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::ddf1637056472ff75488d6dd7b6c959b, D:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/CLRVector.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 257
-    '    Code Lines: 216
-    ' Comment Lines: 14
-    '   Blank Lines: 27
-    '     File Size: 10.06 KB
+' Summaries:
 
 
-    '     Module CLRVector
-    ' 
-    '         Function: asCharacter, asInteger, (+2 Overloads) asLogical, asLong, asNumeric
-    '                   safeCharacters
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 257
+'    Code Lines: 216
+' Comment Lines: 14
+'   Blank Lines: 27
+'     File Size: 10.06 KB
+
+
+'     Module CLRVector
+' 
+'         Function: asCharacter, asInteger, (+2 Overloads) asLogical, asLong, asNumeric
+'                   safeCharacters
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -274,7 +274,7 @@ Namespace Runtime.Vectorization
             ElseIf TypeOf x Is Boolean() Then
                 Return x
             ElseIf TypeOf x Is String Then
-                Return New Boolean() {CStr(x)}
+                Return New Boolean() {CStr(x).ParseBoolean}
             End If
 
             If TypeOf x Is list Then
@@ -288,50 +288,74 @@ Namespace Runtime.Vectorization
                 vector = REnv.UnsafeTryCastGenericArray(x)
             Else
                 vector = REnv.asVector(Of Object)(x)
+                ' vector = REnv.UnsafeTryCastGenericArray(x)
             End If
 
             If vector.Length = 0 Then
                 Return {}
-            Else
-                Dim test As Object = (From obj As Object
-                                      In vector.AsQueryable
-                                      Where Not obj Is Nothing).FirstOrDefault
+            End If
 
-                If Not test Is Nothing Then
-                    type = test.GetType
-                Else
-                    ' all is nothing?
-                    Return (From obj As Object
-                            In vector.AsQueryable
-                            Select False).ToArray
-                End If
+            Dim test As Object = (From obj As Object
+                                  In vector.AsQueryable
+                                  Where Not obj Is Nothing).FirstOrDefault
+
+            If Not test Is Nothing Then
+                type = test.GetType
+            Else
+                ' all is nothing?
+                Return (From obj As Object
+                        In vector.AsQueryable
+                        Select False).ToArray
             End If
 
             If type Is GetType(Boolean) Then
-                Return vector.AsObjectEnumerator _
-                    .Select(Function(b)
-                                If b Is Nothing Then
-                                    Return False
-                                Else
-                                    Return DirectCast(b, Boolean)
-                                End If
-                            End Function) _
-                    .ToArray
+                Return castVector(vector)
             ElseIf DataFramework.IsNumericType(type) Then
                 Return vector.AsObjectEnumerator _
                     .Select(Function(num) CDbl(num) <> 0) _
                     .ToArray
             ElseIf type Is GetType(String) Then
-                Return vector.AsObjectEnumerator _
-                    .Select(Function(o)
-                                Return DirectCast(o, String).ParseBoolean
-                            End Function) _
-                    .ToArray
+                Return parseString(vector)
             Else
-                Return vector.AsObjectEnumerator _
-                    .Select(Function(o) Not o Is Nothing) _
-                    .ToArray
+                Return testNull(vector)
             End If
+        End Function
+
+        Private Function castVector(vector As Array) As Boolean()
+            Return vector.AsObjectEnumerator _
+                .Select(Function(b)
+                            If b Is Nothing Then
+                                Return False
+                                'ElseIf TypeOf b Is String Then
+                                '    Return CStr(b).ParseBoolean
+                                'ElseIf TypeOf b Is Boolean Then
+                            Else
+                                Return DirectCast(b, Boolean)
+                                'Else
+                                '    Return CBool(b)
+                            End If
+                        End Function) _
+                .ToArray
+        End Function
+
+        Private Function parseString(vector As Array) As Boolean()
+            Return vector.AsObjectEnumerator _
+                .Select(Function(o)
+                            Return DirectCast(o, String).ParseBoolean
+                        End Function) _
+                .ToArray
+        End Function
+
+        Private Function testNull(vector As Array) As Boolean()
+            Return vector.AsObjectEnumerator _
+                .Select(Function(o)
+                            If TypeOf o Is Boolean Then
+                                Return CBool(o)
+                            End If
+
+                            Return Not o Is Nothing
+                        End Function) _
+                .ToArray
         End Function
     End Module
 End Namespace
