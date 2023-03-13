@@ -69,6 +69,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -1002,6 +1003,10 @@ RE0:
                     Yield Val(DirectCast(item, String))
                 ElseIf TypeOf item Is Double Then
                     Yield DirectCast(item, Double)
+                ElseIf TypeOf item Is TimeSpan Then
+                    Yield DirectCast(item, TimeSpan).TotalMilliseconds
+                ElseIf TypeOf item Is Date Then
+                    Yield DirectCast(item, Date).UnixTimeStamp
                 Else
                     Yield RCType.CTypeDynamic(item, GetType(Double), env)
                 End If

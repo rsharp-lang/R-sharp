@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
@@ -252,6 +253,10 @@ Namespace Runtime.Vectorization
                 x = DirectCast(x, list).slots.Values.ToArray
             ElseIf TypeOf x Is String Then
                 Return New Double() {Double.Parse(CStr(x))}
+            ElseIf TypeOf x Is TimeSpan Then
+                Return New Double() {DirectCast(x, TimeSpan).TotalMilliseconds}
+            ElseIf TypeOf x Is Date Then
+                Return New Double() {DirectCast(x, Date).UnixTimeStamp}
             ElseIf TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
             End If
@@ -277,6 +282,10 @@ Namespace Runtime.Vectorization
             ElseIf isVector(Of String)(x) Then
                 ' parse string
                 Return CLRVector.asCharacter(x).Select(AddressOf Val).ToArray
+            ElseIf TypeOf x Is Date() Then
+                Return DirectCast(x, Date()).Select(Function(d) d.UnixTimeStamp).ToArray
+            ElseIf TypeOf x Is TimeSpan() Then
+                Return DirectCast(x, TimeSpan()).Select(Function(d) d.TotalMilliseconds).ToArray
             ElseIf TypeOf x Is Object() Then
                 Return DirectCast(x, Object()).Select(Function(d) CDbl(d)).ToArray
             Else
