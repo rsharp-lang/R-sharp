@@ -99,21 +99,23 @@ Module JSON
     <ExportAPI("json_decode")>
     Public Function json_decode(str As String,
                                 Optional throwEx As Boolean = True,
-                                Optional schema As Type = Nothing,
+                                Optional [typeof] As Object = Nothing,
                                 Optional env As Environment = Nothing) As Object
 
+        Dim schema As Type = env.globalEnvironment.GetType([typeof])
+
         If env.globalEnvironment.debugMode Then
-            If schema Is Nothing Then
+            If Schema Is Nothing Then
                 Return fromJSON(str, raw:=False, env:=env)
             Else
-                Return str.LoadObject(schema)
+                Return str.LoadObject(Schema)
             End If
         Else
             Try
-                If schema Is Nothing Then
+                If Schema Is Nothing Then
                     Return fromJSON(str, raw:=False, env:=env)
                 Else
-                    Return str.LoadObject(schema)
+                    Return str.LoadObject(Schema)
                 End If
             Catch ex As Exception When throwEx
                 Throw

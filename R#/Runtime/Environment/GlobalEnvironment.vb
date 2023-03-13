@@ -223,8 +223,15 @@ Namespace Runtime
         ''' 4. R-sharp primitive <see cref="TypeCodes"/> value
         ''' 5. <see cref="TypeInfo"/> metadata
         ''' </param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function returns nothing if the given
+        ''' <paramref name="typeof"/> type information is nothing 
+        ''' </returns>
         Public Overloads Function [GetType]([typeof] As Object) As RType
+            If [typeof] Is Nothing Then
+                Return Nothing
+            End If
+
             If TypeOf [typeof] Is Type Then
                 Return RType.GetRSharpType(DirectCast([typeof], Type))
             ElseIf TypeOf [typeof] Is RType Then

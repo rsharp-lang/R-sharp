@@ -365,7 +365,11 @@ Namespace Runtime.Interop
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Shared Narrowing Operator CType(type As RType) As Type
-            Return type.raw
+            If type Is Nothing Then
+                Return Nothing
+            Else
+                Return type.raw
+            End If
         End Operator
 
         ''' <summary>
