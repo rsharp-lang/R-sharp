@@ -10,6 +10,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
+Imports any = Microsoft.VisualBasic.Scripting
 
 Partial Module CLI
 
@@ -23,12 +24,23 @@ Partial Module CLI
         Dim renv As New RInterpreter
         Dim del_func As String = args.SingleValue
         Dim request_argv As String = args("--request") Or "./.r_env/run.json".GetFullPath
+        Dim options_argv As String = args("--options") Or "./.r_env/options.json".GetFullPath
 
         If Not SetDllDirectory.StringEmpty Then
             Call renv.globalEnvir.options.setOption("SetDllDirectory", SetDllDirectory)
         End If
 
         Dim func As NamedValue(Of String) = del_func.GetTagValue("::", trim:=True, failureNoName:=True)
+
+        ' load primary base libraries
+        Call LoadLibrary(renv, ignoreMissingStartupPackages:=True, "base", "utils", "grDevices", "math", "stats")
+
+        ' set options
+        Dim opts As list = renv.getLambdaArguments(file:=options_argv)
+
+        For Each name As String In opts.getNames
+            Call renv.globalEnvir.options.setOption(name, any.ToString(opts.getByName(name)), env:=renv.globalEnvir)
+        Next
 
         If Not func.Name.StringEmpty Then
             Call renv.LoadLibrary(func.Name, silent:=False)
