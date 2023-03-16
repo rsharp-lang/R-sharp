@@ -460,3 +460,4 @@ REnv/REnv.zip
 studio/R-terminal/My Project/launchSettings.json
 *.cab
 REnv/REnv.nupkg
+test/unitTest/environment/demo_lambda/REnv.zip
