@@ -565,19 +565,19 @@ Namespace Interpreter
             Dim program As Program = Program.CreateProgram(Rscript, debug:=debug, [error]:=[error])
             Dim result As Object
 
-            If debug Then
-#Disable Warning
-                Call VBDebugger.WriteLine(vbNewLine)
-                Call VBDebugger.WriteLine(program.ToString)
-                Call VBDebugger.WriteLine(vbNewLine)
-#Enable Warning
-            End If
-
             globalEnvir = InitializeEnvironment(Rscript.fileName, arguments)
 
             If Not [error].StringEmpty Then
                 result = Internal.debug.stop([error], globalEnvir)
             Else
+                If debug Then
+#Disable Warning
+                    Call VBDebugger.WriteLine(vbNewLine)
+                    Call VBDebugger.WriteLine(program.ToString)
+                    Call VBDebugger.WriteLine(vbNewLine)
+#Enable Warning
+                End If
+
                 result = program.Execute(globalEnvir)
             End If
 
