@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
@@ -326,13 +327,48 @@ Public Module URL
     End Function
 
     ''' <summary>
-    ''' get content string from the http request result
+    ''' get content data from the http request result
     ''' </summary>
     ''' <param name="data"></param>
+    ''' <param name="typeof">
+    ''' will try to parse json if this typeof parameter is not nothing
+    ''' </param>
+    ''' <param name="plain_text">
+    ''' treat the content data as html/plaintext data. if not then this 
+    ''' function will try to parse the content data as
+    ''' 
+    ''' 1. list: application/json
+    ''' 2. dataframe: text/csv
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("content")>
-    Public Function content(data As WebResponseResult) As String
-        Return data?.html
+    Public Function content(data As WebResponseResult,
+                            Optional [typeof] As Object = Nothing,
+                            Optional plain_text As Boolean = False,
+                            Optional env As Environment = Nothing) As Object
+
+        Dim text As String = data?.html
+
+        If plain_text Then
+            Return text
+        End If
+
+        Dim type = data.headers.headers.Item(HttpHeaderName.ContentType)
+        Dim tmp As String = Now.ToString.MD5
+
+        If type = "plain/text" Then
+            Return text
+        ElseIf type = "application/json" Then
+            Dim jsonlib As New [Imports]("JSON", "base")
+            ' imports JSON from base
+            Call jsonlib.Evaluate(env)
+            Dim json As Object = env.globalEnvironment.Rscript.Invoke("JSON::json_decode", text, env.globalEnvironment.Rscript.strict, [typeof], env)
+            Return json
+        ElseIf type = "text/csv" Then
+            Return text
+        Else
+            Return text
+        End If
     End Function
 
     ''' <summary>
