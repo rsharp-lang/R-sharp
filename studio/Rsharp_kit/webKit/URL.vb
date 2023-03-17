@@ -87,14 +87,13 @@ Public Module URL
 
         Dim httpContent As New JSONContent(data, env)
         Dim response = httpClient.PostAsync(url, httpContent).Result
+        Dim t As Task(Of String) = response.Content.ReadAsStringAsync
 
-        If response.IsSuccessStatusCode Then
-            Dim t As Task(Of String) = response.Content.ReadAsStringAsync
-
-            If t IsNot Nothing Then
+        If t IsNot Nothing Then
+            If response.IsSuccessStatusCode Then
                 Return t.Result
             Else
-                Return ""
+                Return Internal.debug.stop(t.Result, env)
             End If
         Else
             Return ""
