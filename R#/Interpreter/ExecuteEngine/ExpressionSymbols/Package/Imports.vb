@@ -71,6 +71,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -176,7 +177,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Function
 
         Private Function importsLibrary(env As Environment) As Object
-            Dim files$() = Runtime.asVector(Of String)(library.Evaluate(env))
+            Dim files$() = CLRVector.asCharacter(library.Evaluate(env))
             Dim result As Object
             Dim oldScript As Object = env.FindSymbol("!script")?.value
             Dim oldStackFrame As StackFrame = env.stackFrame
@@ -188,14 +189,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                     ' imports * from lib_dll
                     ' 简写形式
                     result = LoadLibrary(GetDllFile(libFile, env), env, {"*"})
-                ElseIf globalEnv.hybridsEngine.CanHandle(libFile) Then
+                ElseIf globalEnv.polyglot.CanHandle(libFile) Then
                     ' source外部的R#脚本
                     result = GetExternalScriptFile(libFile, scriptSource, env)
 
                     If Program.isException(result) Then
                         Return result
                     Else
-                        result = globalEnv.hybridsEngine.LoadScript(result, env)
+                        result = globalEnv.polyglot.LoadScript(result, env)
                     End If
 
                     If Program.isException(result) Then
@@ -219,9 +220,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         ''' <param name="env"></param>
         ''' <returns></returns>
         Private Function importsPackages(env As Environment) As Object
-            Dim names As Index(Of String) = Runtime _
-                .asVector(Of String)(Me.packages.Evaluate(env)) _
-                .AsObjectEnumerator _
+            Dim names As Index(Of String) = CLRVector.asCharacter(Me.packages.Evaluate(env)) _
                 .Select(Function(o)
                             Return any.ToString(o, Nothing)
                         End Function) _

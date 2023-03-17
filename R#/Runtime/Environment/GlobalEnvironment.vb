@@ -91,7 +91,11 @@ Namespace Runtime
         Public ReadOnly Property options As Options
         Public ReadOnly Property packages As PackageManager
         Public ReadOnly Property attachedNamespace As SymbolNamespaceSolver
-        Public ReadOnly Property hybridsEngine As New Polyglot.Platform
+        ''' <summary>
+        ''' Enable programming in multiple kind of programming language
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property polyglot As New Polyglot.Platform
         Public ReadOnly Property profiler2 As New Stack(Of ProfilerFrames)
 
         ''' <summary>

@@ -186,9 +186,9 @@ Module devkit
     Public Function inspect(script As String, Optional env As Environment = Nothing) As Object
         Dim globalEnv As GlobalEnvironment = env.globalEnvironment
 
-        If globalEnv.hybridsEngine.CanHandle(script) Then
+        If globalEnv.polyglot.CanHandle(script) Then
             Dim parsed = globalEnv _
-                .hybridsEngine _
+                .polyglot _
                 .ParseScript(script, globalEnv)
 
             If parsed Like GetType(Message) Then
