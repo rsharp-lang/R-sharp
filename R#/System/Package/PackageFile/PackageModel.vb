@@ -58,6 +58,7 @@
 
 Imports System.IO
 Imports System.IO.Compression
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
@@ -240,17 +241,33 @@ Namespace Development.Package.File
             End Using
         End Sub
 
+        Private Function getDataSymbolName(dirRoot As String, filepath As String) As String
+            If filepath.ExtensionSuffix("csv", "txt", "rda", "rds") Then
+                Return filepath.BaseName
+            Else
+                filepath = normPath(filepath.GetFullPath)
+                filepath = filepath.Replace(dirRoot, "")
+
+                Return filepath
+            End If
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Private Shared Function normPath(path As String) As String
+            Return path.Replace("\", "/").Replace("//", "/")
+        End Function
+
         Private Sub saveDataSymbols(zip As ZipArchive, ByRef checksum$)
             Dim md5 As New Md5HashProvider
             Dim text As String
             Dim dirBase As String = (pkg_dir & "/data") _
                 .GetDirectoryFullPath _
-                .Replace("\", "/") _
-                .Replace("//", "/")
+                .DoCall(AddressOf normPath)
+            Dim dirRoot As String = pkg_dir.GetDirectoryFullPath.DoCall(AddressOf normPath)
 
             Using file As New StreamWriter(zip.CreateEntry("package/manifest/data.json").Open)
                 text = dataSymbols _
-                    .ToDictionary(Function(d) d.Key.BaseName,
+                    .ToDictionary(Function(d) getDataSymbolName(dirRoot, d.Key),
                                   Function(d)
                                       Return New NamedValue(d.Key.FileName, d.Value)
                                   End Function) _
@@ -264,8 +281,7 @@ Namespace Development.Package.File
             For Each ref As KeyValuePair(Of String, String) In dataSymbols
                 Dim relpath As String = ref.Key _
                     .GetFullPath _
-                    .Replace("\", "/") _
-                    .Replace("//", "/") _
+                    .DoCall(AddressOf normPath) _
                     .Replace(dirBase, "") _
                     .Replace("\", "/")
                 Dim dataKey As String = $"data/{relpath}".Replace("//", "/")
