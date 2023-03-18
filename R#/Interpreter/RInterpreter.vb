@@ -170,7 +170,7 @@ Namespace Interpreter
 
                 If dllfile.FileExists Then
                     Try
-                        Call env.hybridsEngine.Register(dllpath:=dllfile)
+                        Call env.polyglot.Register(dllpath:=dllfile)
                     Catch ex As Exception
                         Call env.AddMessage({$"can not load assembly: {dllfile}!", ex.ToString}, MSG_TYPES.WRN)
                     End Try
