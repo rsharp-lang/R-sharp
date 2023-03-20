@@ -77,6 +77,10 @@ Call R.Add("echo",
 Call R.Invoke("echo", R!word)
 ```
 
+## High Performance Computing on Unix .NET 6 
+
+![](./docs/images/htop.png)
+
 ## Graphics Library
 
 ![](./docs/demo/scatter/scatter.png)
@@ -133,9 +137,9 @@ ggplot(myeloma, aes(x = "molecular_group", y = "DEPDC1"))
 ;
 ```
 
-## Language Hybrids Programming Feature
+## Polyglot programming Feature
 
-The ``R#`` system is not only supports of the R liked language, it also includes a python language scripting and Julia language scripting engine which is running upon the ``R#`` runtime.
+The ``R#`` system is not only supports of the R# language, it also includes a python language scripting and Julia language scripting engine which is running upon the ``R#`` runtime.
 
 Reference of the python script or julia script in ``R#`` language just like imports other ``R#`` script:
 
