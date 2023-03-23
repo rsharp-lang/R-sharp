@@ -356,8 +356,7 @@ Module stats
     ''' <returns></returns>
     <ExportAPI("tabulate.mode")>
     Public Function tabulateMode(<RRawVectorArgument> x As Object) As Double
-        Return REnv _
-            .asVector(Of Double)(x) _
+        Return CLRVector.asNumeric(x) _
             .DoCall(Function(vec)
                         Return Bootstraping.TabulateMode(DirectCast(vec, Double()))
                     End Function)
@@ -421,7 +420,7 @@ Module stats
                 matrix = .nrows _
                     .Sequence _
                     .Select(Function(i)
-                                Return REnv.asVector(Of Double)(.getRowList(i, drop:=False))
+                                Return CLRVector.asNumeric(.getRowList(i, drop:=False))
                             End Function) _
                     .Select(Function(v) DirectCast(v, Double())) _
                     .ToArray
@@ -653,7 +652,7 @@ Module stats
                              Optional probs As Object = "0,0.25,0.5,0.75,1",
                              Optional env As Environment = Nothing) As Object
 
-        Dim probList As Double() = REnv.asVector(Of Double)(probs)
+        Dim probList As Double() = CLRVector.asNumeric(probs)
         Dim q As QuantileEstimationGK = x.GKQuantile
 
         If probList.IsNullOrEmpty Then
@@ -685,8 +684,12 @@ Module stats
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("level")>
-    Public Function getQuantileLevels(q As QuantileQuery, <RRawVectorArgument> level As Object, Optional env As Environment = Nothing) As Object
-        Dim levels As Double() = REnv.asVector(Of Double)(level)
+    Public Function getQuantileLevels(q As QuantileQuery,
+                                      <RRawVectorArgument>
+                                      level As Object,
+                                      Optional env As Environment = Nothing) As Object
+
+        Dim levels As Double() = CLRVector.asNumeric(level)
         Dim result As Double() = levels.Select(AddressOf q.Query).ToArray
 
         Return result
@@ -833,66 +836,87 @@ Module stats
                           Optional env As Environment = Nothing) As Object
 
         If Not t Is Nothing AndAlso TypeOf x Is Rdataframe Then
-            Dim symbols As String() = FormulaExpression.GetSymbols(t.formula)
-            Dim v As New Dictionary(Of String, Double())
-            Dim table As Rdataframe = x
-            Dim ref As Symbol
-
-            For Each name As String In symbols
-                If table.hasName(name) Then
-                    v.Add(name, REnv.asVector(Of Double)(table.getColumnVector(name)))
-                Else
-                    ref = env.FindSymbol(name)
-
-                    If ref Is Nothing Then
-                        Return Internal.debug.stop($"missing required symbol '{name}' for evaluate formula!", env)
-                    Else
-                        v.Add(name, REnv.asVector(Of Double)(ref.value))
-                    End If
-                End If
-            Next
-
-            Dim test As Object() = New Object(table.nrows - 1) {}
-            Dim idx As Integer
-
-            For i As Integer = 0 To table.nrows - 1
-                idx = i
-                x = symbols.Select(Function(r) v(r)(idx)).ToArray
-                x = ttest(x, y, alternative, mu, paired, var_equal, conf_level,, env)
-
-                If Program.isException(x) Then
-                    Return x
-                Else
-                    test(i) = x
-                End If
-            Next
-
-            Return test
+            Return DirectCast(x, Rdataframe).ttestBatch(t, alternative, y, mu, conf_level, var_equal, env)
         Else
-            Dim test As Object
-            Dim vx As Double() = REnv.asVector(Of Double)(x)
-            Dim vy As Double()
-
-            If vx.Length > 0 Then
-                vx(Scan0) += 0.00001
-            End If
-
-            If y Is Nothing Then
-                test = Statistics.Hypothesis.t.Test(vx, alternative, mu, alpha:=1 - conf_level)
-            Else
-                vy = REnv.asVector(Of Double)(y)
-                test = Statistics.Hypothesis.t.Test(
-                    a:=vx,
-                    b:=vy,
-                    alternative:=alternative,
-                    mu:=mu,
-                    alpha:=1 - conf_level,
-                    varEqual:=var_equal
-                )
-            End If
-
-            Return test
+            Return alternative.ttestImpl(x, y, mu, conf_level, var_equal)
         End If
+    End Function
+
+    <Extension>
+    Private Function ttestBatch(table As Rdataframe, t As FormulaExpression,
+                                alternative As Hypothesis,
+                                y As Object,
+                                mu As Double,
+                                conf_level As Double,
+                                var_equal As Boolean,
+                                env As Environment) As Object
+
+        Dim symbols As String() = FormulaExpression.GetSymbols(t.formula)
+        Dim v As New Dictionary(Of String, Double())
+        Dim ref As Symbol
+
+        For Each name As String In symbols
+            If table.hasName(name) Then
+                v.Add(name, CLRVector.asNumeric(table.getColumnVector(name)))
+            Else
+                ref = env.FindSymbol(name)
+
+                If ref Is Nothing Then
+                    Return Internal.debug.stop($"missing required symbol '{name}' for evaluate formula!", env)
+                Else
+                    v.Add(name, CLRVector.asNumeric(ref.value))
+                End If
+            End If
+        Next
+
+        Dim test As Object() = New Object(table.nrows - 1) {}
+        Dim idx As Integer
+        Dim x As Object
+
+        For i As Integer = 0 To table.nrows - 1
+            idx = i
+            x = symbols.Select(Function(r) v(r)(idx)).ToArray
+            x = alternative.ttestImpl(x, y, mu, conf_level, var_equal)
+
+            If Program.isException(x) Then
+                Return x
+            Else
+                test(i) = x
+            End If
+        Next
+
+        Return test
+    End Function
+
+    <Extension>
+    Private Function ttestImpl(alternative As Hypothesis,
+                               x As Object, y As Object,
+                               mu As Double,
+                               conf_level As Double,
+                               var_equal As Boolean) As Object
+        Dim test As Object
+        Dim vx As Double() = CLRVector.asNumeric(x)
+        Dim vy As Double()
+
+        If vx.Length > 0 Then
+            vx(Scan0) += 0.00001
+        End If
+
+        If y Is Nothing Then
+            test = Statistics.Hypothesis.t.Test(vx, alternative, mu, alpha:=1 - conf_level)
+        Else
+            vy = CLRVector.asNumeric(y)
+            test = Statistics.Hypothesis.t.Test(
+                a:=vx,
+                b:=vy,
+                alternative:=alternative,
+                mu:=mu,
+                alpha:=1 - conf_level,
+                varEqual:=var_equal
+            )
+        End If
+
+        Return test
     End Function
 
     ''' <summary>
@@ -1030,8 +1054,8 @@ Module stats
                             <RRawVectorArgument> y As Object,
                             Optional env As Environment = Nothing) As Object
 
-        Dim vx As Double() = REnv.asVector(Of Double)(x)
-        Dim vy As Double() = REnv.asVector(Of Double)(y)
+        Dim vx As Double() = CLRVector.asNumeric(x)
+        Dim vy As Double() = CLRVector.asNumeric(y)
         Dim ftest As New FTest(vx, vy)
 
         Return ftest
@@ -1053,7 +1077,7 @@ Module stats
 
         If formula Is Nothing Then
             For Each name As String In x.colnames
-                Dim v As Double() = REnv.asVector(Of Double)(x.getColumnVector(name))
+                Dim v As Double() = CLRVector.asNumeric(x.getColumnVector(name))
                 Call observations.Add(v)
             Next
         Else
@@ -1062,8 +1086,8 @@ Module stats
 
             If TypeOf factor Is SymbolReference Then
                 Dim factorName As String = DirectCast(factor, SymbolReference).symbol
-                Dim factors As String() = REnv.asVector(Of String)(x.getColumnVector(factorName))
-                Dim data As Double() = REnv.asVector(Of Double)(x.getColumnVector(vec))
+                Dim factors As String() = CLRVector.asCharacter(x.getColumnVector(factorName))
+                Dim data As Double() = CLRVector.asNumeric(x.getColumnVector(vec))
                 Dim groups = factors.Select(Function(k, i) (k, data(i))).GroupBy(Function(i) i.k).ToArray
 
                 For Each group In groups
@@ -1131,7 +1155,7 @@ Module stats
             Dim cols = d.columns _
                 .ToDictionary(Function(c) c.Key,
                                 Function(c)
-                                    Dim v As Double() = REnv.asVector(Of Double)(c.Value)
+                                    Dim v As Double() = CLRVector.asNumeric(c.Value)
                                     Dim m As Double() = v _
                                         .Select(Function(xi) If(xi.IsNaNImaginary, [default], xi)) _
                                         .ToArray
@@ -1144,7 +1168,7 @@ Module stats
                 .columns = cols
             }
         Else
-            Dim v As Double() = REnv.asVector(Of Double)(x)
+            Dim v As Double() = CLRVector.asNumeric(x)
             Dim m As Double() = v _
                 .Select(Function(xi) If(xi.IsNaNImaginary, [default], xi)) _
                 .ToArray
@@ -1280,7 +1304,12 @@ Module stats
     End Function
 
     <ExportAPI("gamma.cdf")>
-    Public Function gammaCDF(<RRawVectorArgument> x As Object, alpha As Double, beta As Double, Optional env As Environment = Nothing) As Object
+    Public Function gammaCDF(<RRawVectorArgument>
+                             x As Object,
+                             alpha As Double,
+                             beta As Double,
+                             Optional env As Environment = Nothing) As Object
+
         Dim gamma As New Gamma(alpha, beta)
         Dim result = env.EvaluateFramework(Of Double, Double)(x, Function(xi) gamma.GetCDF(xi))
 
