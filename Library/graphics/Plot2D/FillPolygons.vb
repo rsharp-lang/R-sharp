@@ -13,13 +13,26 @@ Imports Microsoft.VisualBasic.Math
 
 Public Class FillPolygons : Inherits Plot
 
-    Dim polygons As Polygon2D()
+    Dim polygons As (color As Color, regions As Polygon2D())()
     Dim dims As SizeF
     Dim union As Polygon2D
 
+    Public Sub New(polygonGroups As PolygonGroup(), theme As Theme)
+        Call MyBase.New(theme)
+
+        Dim colors As New LoopArray(Of Color)(Designer.GetColors(theme.colorSet))
+
+        Me.polygons = polygonGroups.Select(Function(r) (++colors, r.subregions)).ToArray
+        Me.union = New Polygon2D(polygons.Select(Function(r) r.regions).IteratesALL.ToArray)
+        Me.dims = union.GetRectangle.Size
+    End Sub
+
     Public Sub New(polygons As Polygon2D(), theme As Theme)
         MyBase.New(theme)
-        Me.polygons = polygons
+
+        Dim colors As New LoopArray(Of Color)(Designer.GetColors(theme.colorSet))
+
+        Me.polygons = polygons.Select(Function(r) (++colors, {r})).ToArray
         Me.union = New Polygon2D(polygons)
         Me.dims = union.GetRectangle.Size
     End Sub
@@ -40,21 +53,21 @@ Public Class FillPolygons : Inherits Plot
             Call Axis.DrawAxis(g, canvas, scaler, xlabel, ylabel, theme)
         End If
 
-        Dim colors As New LoopArray(Of Color)(Designer.GetColors(theme.colorSet))
+        For Each tuple As (color As Color, regions As Polygon2D()) In polygons
+            For Each polygon In tuple.regions
+                Dim fill As Color = tuple.color
+                Dim path As New GraphicsPath
+                Dim start = scaler.Translate(polygon.AsEnumerable.First)
 
-        For Each polygon As Polygon2D In polygons
-            Dim fill As Color = ++colors
-            Dim path As New GraphicsPath
-            Dim start = scaler.Translate(polygon.AsEnumerable.First)
+                For Each pt As PointF In polygon.AsEnumerable.Skip(1).Select(AddressOf scaler.Translate)
+                    path.AddLine(start, pt)
+                    start = pt
+                Next
 
-            For Each pt As PointF In polygon.AsEnumerable.Skip(1).Select(AddressOf scaler.Translate)
-                path.AddLine(start, pt)
-                start = pt
+                Call path.AddLine(start, scaler.Translate(polygon.AsEnumerable.First))
+                Call path.CloseFigure()
+                Call g.FillPath(New SolidBrush(fill), path)
             Next
-
-            Call path.AddLine(start, scaler.Translate(polygon.AsEnumerable.First))
-            Call path.CloseFigure()
-            Call g.FillPath(New SolidBrush(fill), path)
         Next
     End Sub
 End Class

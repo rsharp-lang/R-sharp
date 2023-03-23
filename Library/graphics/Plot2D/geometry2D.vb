@@ -75,13 +75,37 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 
+Public Class PolygonGroup
+
+    Public Property label As String
+    Public Property subregions As Polygon2D()
+
+    Public ReadOnly Property size As Integer
+        Get
+            Return subregions.TryCount
+        End Get
+    End Property
+
+End Class
+
 <Package("geometry2D")>
+<RTypeExport("polygon_group", GetType(PolygonGroup))>
 Module geometry2D
 
     Public Sub Main()
         Call Internal.generic.add("plot", GetType(Polygon2D), Function(polygon, args, env) fillPolygons({DirectCast(polygon, Polygon2D)}, args, env))
         Call Internal.generic.add("plot", GetType(Polygon2D()), AddressOf fillPolygons)
+        Call Internal.generic.add("plot", GetType(PolygonGroup), AddressOf fillPolygonGroups)
     End Sub
+
+    Private Function fillPolygonGroups(polygons As PolygonGroup(), args As list, env As Environment) As Object
+        Dim colors = RColorPalette.getColorSet(args.getBySynonyms("colors", "colorset", "colorSet"), "paper")
+        Dim size = InteropArgumentHelper.getSize(args.getBySynonyms("size"), env)
+        Dim theme As New Theme With {.colorSet = colors}
+        Dim app As New FillPolygons(polygons, theme)
+
+        Return app.Plot(size)
+    End Function
 
     Private Function fillPolygons(polygons As Polygon2D(), args As list, env As Environment) As Object
         Dim colors = RColorPalette.getColorSet(args.getBySynonyms("colors", "colorset", "colorSet"), "paper")
