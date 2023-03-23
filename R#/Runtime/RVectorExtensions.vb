@@ -340,7 +340,7 @@ Namespace Runtime
             End If
 
             For i As Integer = 0 To vec.Length - 1
-                Call generic.SetValue(CTypeDynamic(vec.GetValue(i), elementType), i)
+                Call generic.SetValue(RCType.CTypeDynamic(vec.GetValue(i), elementType, Nothing), i)
             Next
 
             Return generic

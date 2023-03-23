@@ -95,7 +95,7 @@ Module geometry2D
     Public Sub Main()
         Call Internal.generic.add("plot", GetType(Polygon2D), Function(polygon, args, env) fillPolygons({DirectCast(polygon, Polygon2D)}, args, env))
         Call Internal.generic.add("plot", GetType(Polygon2D()), AddressOf fillPolygons)
-        Call Internal.generic.add("plot", GetType(PolygonGroup), AddressOf fillPolygonGroups)
+        Call Internal.generic.add("plot", GetType(PolygonGroup()), AddressOf fillPolygonGroups)
     End Sub
 
     Private Function fillPolygonGroups(polygons As PolygonGroup(), args As list, env As Environment) As Object
