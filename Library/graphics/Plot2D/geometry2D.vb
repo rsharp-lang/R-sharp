@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::ddf8fbe6f218446c5ce841a57efddfd7, D:/GCModeller/src/R-sharp/Library/graphics//Plot2D/geometry2D.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 124
-    '    Code Lines: 92
-    ' Comment Lines: 16
-    '   Blank Lines: 16
-    '     File Size: 4.87 KB
+' Summaries:
 
 
-    ' Module geometry2D
-    ' 
-    '     Function: density2D, Kdtest
-    ' 
-    ' Class PointAccess
-    ' 
-    '     Function: activate, getByDimension, GetDimensions, metric, nodeIs
-    ' 
-    '     Sub: setByDimensin
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 124
+'    Code Lines: 92
+' Comment Lines: 16
+'   Blank Lines: 16
+'     File Size: 4.87 KB
+
+
+' Module geometry2D
+' 
+'     Function: density2D, Kdtest
+' 
+' Class PointAccess
+' 
+'     Function: activate, getByDimension, GetDimensions, metric, nodeIs
+' 
+'     Sub: setByDimensin
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,15 +61,61 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.DataMining.DensityQuery
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Math2D.ConcaveHull
 Imports Microsoft.VisualBasic.Imaging.LayoutModel
+Imports Microsoft.VisualBasic.Imaging.Math2D
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 
 <Package("geometry2D")>
 Module geometry2D
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="pts">
+    ''' + for dataframe object, data fields x and y should be exists
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' A set of point data which could be used for build a polygon object
+    ''' </returns>
+    <ExportAPI("concaveHull")>
+    Public Function ConcaveHull(<RRawVectorArgument>
+                                pts As Object,
+                                Optional as_polygon As Boolean = False,
+                                Optional env As Environment = Nothing) As Object
+        If pts Is Nothing Then
+            Return Nothing
+        End If
+        If TypeOf pts Is dataframe Then
+            Dim df As dataframe = pts
+            Dim x As Double() = CLRVector.asNumeric(df.getVector("x"))
+            Dim y As Double() = CLRVector.asNumeric(df.getVector("y"))
+            Dim points As PointF() = x.Select(Function(xi, i) New PointF(xi, y(i))).ToArray
+            Dim polygon As PointF() = points.ConcaveHull
+
+            If as_polygon Then
+                Return New Polygon2D(polygon)
+            Else
+                Return New dataframe With {
+                    .columns = New Dictionary(Of String, Array) From {
+                        {"x", points.X.ToArray},
+                        {"y", points.Y.ToArray}
+                    }
+                }
+            End If
+        Else
+            Return Message.InCompatibleType(GetType(dataframe), pts.GetType, env)
+        End If
+    End Function
 
     ''' <summary>
     ''' Evaluate the density value of a set of 2d points.
