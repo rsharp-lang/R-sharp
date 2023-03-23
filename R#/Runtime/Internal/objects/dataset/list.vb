@@ -409,6 +409,21 @@ Namespace Runtime.Internal.Object
         End Function
 
         ''' <summary>
+        ''' get raw value by a set of given synonyms.
+        ''' </summary>
+        ''' <param name="synonym"></param>
+        ''' <returns></returns>
+        Public Function getBySynonyms(ParamArray synonym As String()) As Object
+            For Each name As String In synonym
+                If slots.ContainsKey(name) Then
+                    Return slots(name)
+                End If
+            Next
+
+            Return Nothing
+        End Function
+
+        ''' <summary>
         ''' Create a list subset
         ''' </summary>
         ''' <param name="names">

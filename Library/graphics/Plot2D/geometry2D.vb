@@ -58,6 +58,7 @@
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Canvas
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.DataMining.DensityQuery
@@ -76,6 +77,20 @@ Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 
 <Package("geometry2D")>
 Module geometry2D
+
+    Public Sub Main()
+        Call Internal.generic.add("plot", GetType(Polygon2D), Function(polygon, args, env) fillPolygons({DirectCast(polygon, Polygon2D)}, args, env))
+        Call Internal.generic.add("plot", GetType(Polygon2D()), AddressOf fillPolygons)
+    End Sub
+
+    Private Function fillPolygons(polygons As Polygon2D(), args As list, env As Environment) As Object
+        Dim colors = RColorPalette.getColorSet(args.getBySynonyms("colors", "colorset", "colorSet"), "paper")
+        Dim size = InteropArgumentHelper.getSize(args.getBySynonyms("size"), env)
+        Dim theme As New Theme With {.colorSet = colors}
+        Dim app As New FillPolygons(polygons, theme)
+
+        Return app.Plot(size)
+    End Function
 
     ''' <summary>
     ''' 
