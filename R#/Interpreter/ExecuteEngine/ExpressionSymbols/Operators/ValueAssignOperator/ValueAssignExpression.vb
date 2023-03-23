@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::f4ade857a286e54e06dafb05c936b704, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/ValueAssignOperator/ValueAssignExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 522
-    '    Code Lines: 386
-    ' Comment Lines: 53
-    '   Blank Lines: 83
-    '     File Size: 21.80 KB
+' Summaries:
 
 
-    '     Class ValueAssignExpression
-    ' 
-    '         Properties: expressionName, symbolSize, targetSymbols, type, value
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
-    '                   GetSymbol, getSymbols, setByNameIndex, setFromDataFrame, setFromObjectList
-    '                   setFromVector, setVectorElements, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 522
+'    Code Lines: 386
+' Comment Lines: 53
+'   Blank Lines: 83
+'     File Size: 21.80 KB
+
+
+'     Class ValueAssignExpression
+' 
+'         Properties: expressionName, symbolSize, targetSymbols, type, value
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
+'                   GetSymbol, getSymbols, setByNameIndex, setFromDataFrame, setFromObjectList
+'                   setFromVector, setVectorElements, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -373,6 +373,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 index = DirectCast(index, vector).data
             End If
 
+            Dim targetType As Type = targetObj.GetType
+
             If symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like RType.integers Then
                 ' integer index
                 Return setVectorElements(targetObj, CLRVector.asInteger(index), value, envir)
@@ -386,16 +388,24 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     .ToArray
 
                 Return setVectorElements(targetObj, indexVals, value, envir)
+            ElseIf symbolIndex.indexType = SymbolIndexers.dataframeColumns Then
+                If targetType IsNot GetType(dataframe) Then
+                    Return Internal.debug.stop({
+                        $"Error in {symbolIndex.symbol}[, ""{symbolIndex.index}""] = *value: incorrect number of subscripts on matrix",
+                        $"typeof_symbol: {targetType.FullName}",
+                        $"symbol: {symbolIndex.symbol.ToString}"
+                    }, envir)
+                End If
             End If
 
             ' character name index
             Dim indexStr As String() = CLRVector.asCharacter(index)
             Dim result As Object
 
-            If Not targetObj.GetType.ImplementInterface(GetType(RNameIndex)) Then
-                If targetObj.GetType Is GetType(dataframe) Then
+            If Not targetType.ImplementInterface(GetType(RNameIndex)) Then
+                If targetType Is GetType(dataframe) Then
                     Return dataframeValueAssign.ValueAssign(symbolIndex, indexStr, DirectCast(targetObj, dataframe), value, envir)
-                ElseIf targetObj.GetType.ImplementInterface(Of IDataIndex) Then
+                ElseIf targetType.ImplementInterface(Of IDataIndex) Then
                     ' 优先单个元素值？
                     If Not value Is Nothing Then
                         If TypeOf value Is vector AndAlso DirectCast(value, vector).length = 1 Then
