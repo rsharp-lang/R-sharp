@@ -185,9 +185,14 @@ Namespace Runtime.Internal
                 x = DirectCast(x, vbObject).target
                 type = x.GetType
             End If
-            If type Is GetType(vector) AndAlso Not generics(funcName).ContainsKey(type) Then
-                x = DirectCast(x, vector).data
-                type = x.GetType
+            If type Is GetType(vector) Then
+                Dim vec = UnsafeTryCastGenericArray(DirectCast(x, vector).data)
+                Dim vec_type As Type = vec.GetType
+
+                If generics(funcName).ContainsKey(vec_type) Then
+                    x = vec
+                    type = vec_type
+                End If
             End If
 
             If x IsNot Nothing AndAlso x.GetType.IsArray Then

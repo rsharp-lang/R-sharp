@@ -52,13 +52,14 @@
 #End Region
 
 Imports System.Drawing
-Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports PdfImage = Microsoft.VisualBasic.Imaging.PDF
 
 Public Class zzz
 
     Public Shared Sub onLoad()
         Call plots.Main()
+        Call geometry2D.Main()
+
         Call RegisterDriver()
     End Sub
 
