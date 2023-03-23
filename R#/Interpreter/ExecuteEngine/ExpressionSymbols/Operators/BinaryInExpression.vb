@@ -68,6 +68,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Interop.Operator
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
@@ -158,7 +159,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Function
 
         Private Shared Function testInNumericRange(left As Array, range As DoubleRange) As Boolean()
-            Dim x As Double() = REnv.asVector(Of Double)(left)
+            Dim x As Double() = CLRVector.asNumeric(left)
             Dim test = From xi As Double
                        In x
                        Select range.IsInside(xi)

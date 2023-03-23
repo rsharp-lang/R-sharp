@@ -54,6 +54,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.DataFrame
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Public Module FeatureDescription
@@ -69,7 +70,7 @@ Public Module FeatureDescription
         If feature.type Is GetType(Boolean) Then
             Return DescribLogical(feature.vector)
         ElseIf DataFramework.IsNumericType(feature.type) Then
-            Return DescribNumeric(REnv.asVector(Of Double)(feature.vector))
+            Return DescribNumeric(CLRVector.asNumeric(feature.vector))
         ElseIf feature.type Is GetType(String) Then
             Return DescribCharacter(feature.vector)
         Else

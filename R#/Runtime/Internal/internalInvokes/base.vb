@@ -1065,13 +1065,17 @@ SKIP:
             Return New invisible With {.value = x}
         End Function
 
+        ''' <summary>
+        ''' A function to make the numeric value negative
+        ''' </summary>
+        ''' <param name="o"></param>
+        ''' <returns></returns>
         <ExportAPI("neg")>
         Public Function neg(<RRawVectorArgument> o As Object) As Object
             If o Is Nothing Then
                 Return Nothing
             Else
-                Return REnv.asVector(Of Double)(o) _
-                    .AsObjectEnumerator _
+                Return CLRVector.asNumeric(o) _
                     .Select(Function(d) -CDbl(d)) _
                     .ToArray
             End If

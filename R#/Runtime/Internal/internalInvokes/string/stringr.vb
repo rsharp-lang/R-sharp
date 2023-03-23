@@ -580,8 +580,7 @@ Namespace Runtime.Internal.Invokes
             If strs.GetType Is GetType(String) Then
                 Return DirectCast(strs, String).Length
             Else
-                Return Runtime.asVector(Of String)(strs) _
-                    .AsObjectEnumerator(Of String) _
+                Return CLRVector.asCharacter(strs) _
                     .Select(AddressOf VBStr.Len) _
                     .DoCall(AddressOf vector.asVector)
             End If

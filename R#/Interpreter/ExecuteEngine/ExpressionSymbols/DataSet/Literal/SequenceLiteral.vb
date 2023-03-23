@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -190,7 +191,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Function
 
         Private Shared Function getChar(o As Object) As Char
-            Dim s As String() = REnv.asVector(Of String)(o)
+            Dim s As String() = CLRVector.asCharacter(o)
             Dim c As Char = s.First.FirstOrDefault
 
             Return c

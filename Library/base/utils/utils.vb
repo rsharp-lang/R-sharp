@@ -74,6 +74,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Serialize
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports csvData = Microsoft.VisualBasic.Data.csv.IO.DataFrame
@@ -440,7 +441,7 @@ Public Module utils
 
         Dim type As Type = x.GetType
         Dim encoding As Encodings = TextEncodings.GetEncodings(Rsharp.GetEncoding(fileEncoding))
-        Dim formatNumber As String = DirectCast(REnv.asVector(Of String)(number_format), String()).ElementAtOrDefault(Scan0, [default]:="G6")
+        Dim formatNumber As String = CLRVector.asCharacter(number_format).ElementAtOrDefault(Scan0, [default]:="G6")
 
         If type Is GetType(Rdataframe) Then
             x = DirectCast(x, Rdataframe).CheckDimension(env)

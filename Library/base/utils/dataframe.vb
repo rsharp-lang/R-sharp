@@ -423,7 +423,7 @@ ReturnTable:
         If colnames Is Nothing Then
             Return New csv(rowCols)
         Else
-            Dim names As String() = REnv.asVector(Of String)(colnames)
+            Dim names As String() = CLRVector.asCharacter(colnames)
             Dim headers As New RowObject(names)
 
             Return New csv().AppendLine(headers).AppendLines(rowCols)

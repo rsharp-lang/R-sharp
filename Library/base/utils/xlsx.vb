@@ -67,6 +67,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataFrame
@@ -187,7 +188,7 @@ Module xlsx
         End If
 
         Dim encoding As Encodings = TextEncodings.GetEncodings(Rsharp.GetEncoding(fileEncoding))
-        Dim formatNumber As String = DirectCast(REnv.asVector(Of String)(number_format), String()).ElementAtOrDefault(Scan0, [default]:="G6")
+        Dim formatNumber As String = CLRVector.asCharacter(number_format).ElementAtOrDefault(Scan0, [default]:="G6")
         Dim table As csv
 
         If x.GetType Is GetType(list) AndAlso file.ExtensionSuffix("xlsx") Then

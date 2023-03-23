@@ -1,71 +1,72 @@
 ﻿#Region "Microsoft.VisualBasic::72ef532e80ccd2f2fb64bc328ff537e5, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Math/math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 885
-    '    Code Lines: 408
-    ' Comment Lines: 394
-    '   Blank Lines: 83
-    '     File Size: 38.16 KB
+' Summaries:
 
 
-    '     Module math
-    ' 
-    '         Function: abs, cluster1D, cor_test, cos, diff
-    '                   exp, getRandom, isFinite, isInfinite, isNaN
-    '                   log, log10, log2, max, mean
-    '                   median, min, numericClassTags, pearson, pow
-    '                   rnorm, round, rsd, runif, sample
-    '                   sample_int, sd, sin, sqrt, sum
-    '                   var
-    ' 
-    '         Sub: set_seed
-    '         Class corTestResult
-    ' 
-    '             Properties: cor, df, prob2, pvalue, t
-    '                         z
-    ' 
-    '             Function: ToString
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 885
+'    Code Lines: 408
+' Comment Lines: 394
+'   Blank Lines: 83
+'     File Size: 38.16 KB
+
+
+'     Module math
+' 
+'         Function: abs, cluster1D, cor_test, cos, diff
+'                   exp, getRandom, isFinite, isInfinite, isNaN
+'                   log, log10, log2, max, mean
+'                   median, min, numericClassTags, pearson, pow
+'                   rnorm, round, rsd, runif, sample
+'                   sample_int, sd, sin, sqrt, sum
+'                   var
+' 
+'         Sub: set_seed
+'         Class corTestResult
+' 
+'             Properties: cor, df, prob2, pvalue, t
+'                         z
+' 
+'             Function: ToString
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
@@ -218,7 +219,7 @@ Namespace Runtime.Internal.Invokes
                 Return Nothing
             Else
                 Dim rounds = From element As Double
-                             In REnv.asVector(Of Double)(x)
+                             In CLRVector.asNumeric(x)
                              Select stdNum.Round(element, decimals)
 
                 Return rounds.ToArray
@@ -238,8 +239,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("log")>
         Public Function log(x As Array, Optional newBase As Double = stdNum.E) As Double()
-            Return REnv.asVector(Of Double)(x) _
-                .AsObjectEnumerator(Of Double) _
+            Return CLRVector.asNumeric(x) _
                 .Select(Function(d) stdNum.Log(d, newBase)) _
                 .ToArray
         End Function
@@ -253,8 +253,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("log2")>
         Public Function log2(x As Array) As Double()
-            Return REnv.asVector(Of Double)(x) _
-                .AsObjectEnumerator(Of Double) _
+            Return CLRVector.asNumeric(x) _
                 .Select(Function(d) stdNum.Log(d, 2)) _
                 .ToArray
         End Function
@@ -268,24 +267,21 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("log10")>
         Public Function log10(x As Array) As Double()
-            Return REnv.asVector(Of Double)(x) _
-                .AsObjectEnumerator(Of Double) _
+            Return CLRVector.asNumeric(x) _
                 .Select(Function(d) stdNum.Log(d, 10)) _
                 .ToArray
         End Function
 
         <ExportAPI("sin")>
         Public Function sin(x As Array) As Double()
-            Return REnv.asVector(Of Double)(x) _
-                .AsObjectEnumerator(Of Double) _
+            Return CLRVector.asNumeric(x) _
                 .Select(Function(d) stdNum.Sin(d)) _
                 .ToArray
         End Function
 
         <ExportAPI("cos")>
         Public Function cos(x As Array) As Double()
-            Return REnv.asVector(Of Double)(x) _
-                .AsObjectEnumerator(Of Double) _
+            Return CLRVector.asNumeric(x) _
                 .Select(Function(d) stdNum.Cos(d)) _
                 .ToArray
         End Function
@@ -310,24 +306,23 @@ Namespace Runtime.Internal.Invokes
                 Case GetType(Boolean)
                     Return CLRVector.asLogical(array).Select(Function(b) If(b, 1, 0)).Sum
                 Case GetType(Integer), GetType(Long), GetType(Short), GetType(Byte)
-                    Return Runtime.asVector(Of Long)(x).AsObjectEnumerator(Of Long).Sum
+                    Return CLRVector.asLong(x).Sum
                 Case Else
-                    Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Sum
+                    Return CLRVector.asNumeric(x).Sum
             End Select
         End Function
 
         <ExportAPI("pow")>
         Public Function pow(x As Array, y As Array, Optional env As Environment = Nothing) As Object
-            x = Runtime.asVector(Of Double)(x)
-            y = Runtime.asVector(Of Double)(y)
+            x = CLRVector.asNumeric(x)
+            y = CLRVector.asNumeric(y)
 
             Return Vectorization.Exponent.f64_op_exponent_f64(x, y, env)
         End Function
 
         <ExportAPI("sqrt")>
         Public Function sqrt(x As Array) As Double()
-            Return Runtime.asVector(Of Double)(x) _
-                .AsObjectEnumerator(Of Double) _
+            Return CLRVector.asNumeric(x) _
                 .Select(AddressOf stdNum.Sqrt) _
                 .ToArray
         End Function
@@ -341,8 +336,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("exp")>
         Public Function exp(x As Array) As Double()
-            Return Runtime.asVector(Of Double)(x) _
-                .AsObjectEnumerator(Of Double) _
+            Return CLRVector.asNumeric(x) _
                 .Select(AddressOf stdNum.Exp) _
                 .ToArray
         End Function
@@ -363,9 +357,7 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop("Error in max(x) : invalid 'type' (list) of argument", env)
             End If
 
-            Dim dbl = REnv.asVector(Of Double)(x) _
-                .AsObjectEnumerator(Of Double) _
-                .ToArray
+            Dim dbl = CLRVector.asNumeric(x)
 
             If dbl.Length = 0 Then
                 Call env.AddMessage({"no non-missing arguments to max; returning -Inf"}, MSG_TYPES.WRN)
@@ -392,9 +384,7 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop("Error in min(x) : invalid 'type' (list) of argument", env)
             End If
 
-            Dim dbl = REnv.asVector(Of Double)(x) _
-                .AsObjectEnumerator(Of Double) _
-                .ToArray
+            Dim dbl = CLRVector.asNumeric(x)
 
             If dbl.Length = 0 Then
                 Call env.AddMessage({"no non-missing arguments to min; returning Inf"}, MSG_TYPES.WRN)
@@ -416,9 +406,7 @@ Namespace Runtime.Internal.Invokes
             If x Is Nothing OrElse x.Length = 0 Then
                 Return 0
             Else
-                Dim array As Double() = REnv.asVector(Of Double)(x) _
-                    .AsObjectEnumerator(Of Double) _
-                    .ToArray
+                Dim array As Double() = CLRVector.asNumeric(x)
 
                 If na_rm Then
                     Return array.Where(Function(a) Not a.IsNaNImaginary).Average
@@ -461,7 +449,7 @@ Namespace Runtime.Internal.Invokes
             If x Is Nothing OrElse x.Length = 0 Then
                 Return 0
             Else
-                Dim array As Double() = REnv.asVector(Of Double)(x).AsObjectEnumerator(Of Double).ToArray
+                Dim array As Double() = CLRVector.asNumeric(x)
 
                 If na_rm Then
                     Return array.Where(Function(a) Not a.IsNaNImaginary).Median
@@ -478,8 +466,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("abs")>
         Public Function abs(x As Array) As Double()
-            Return asVector(Of Double)(x) _
-                .AsObjectEnumerator(Of Double) _
+            Return CLRVector.asNumeric(x) _
                 .Select(AddressOf stdNum.Abs) _
                 .ToArray
         End Function
@@ -515,12 +502,11 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="x"></param>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("rsd")>
         Public Function rsd(x As Array) As Double
-            Return REnv _
-                .asVector(Of Double)(x) _
-                .AsObjectEnumerator(Of Double) _
-                .RSD
+            Return CLRVector.asNumeric(x).RSD
         End Function
 
         ''' <summary>
@@ -542,7 +528,7 @@ Namespace Runtime.Internal.Invokes
             If x Is Nothing OrElse x.Length = 0 Then
                 Return 0
             Else
-                Return DirectCast(asVector(Of Double)(x), Double()).SD(isSample:=sample)
+                Return CLRVector.asNumeric(x).SD(isSample:=sample)
             End If
         End Function
 
@@ -585,8 +571,8 @@ Namespace Runtime.Internal.Invokes
                                 Optional MAXIT As Integer = 5000,
                                 Optional env As Environment = Nothing) As Object
 
-            Dim data1 As Double() = REnv.asVector(Of Double)(x)
-            Dim data2 As Double() = REnv.asVector(Of Double)(y)
+            Dim data1 As Double() = CLRVector.asNumeric(x)
+            Dim data2 As Double() = CLRVector.asNumeric(y)
             Dim p1#
             Dim p2#
             Dim z#
@@ -891,7 +877,7 @@ sample estimates:
 
         <ExportAPI("numeric_tags")>
         Public Function numericClassTags(<RRawVectorArgument> x As Object, offset As Double) As Integer()
-            Dim data As Double() = DirectCast(REnv.asVector(Of Double)(x), Double())
+            Dim data As Double() = CLRVector.asNumeric(x)
             Dim groups = data.GroupBy(offset).ToArray
             Dim tags As New List(Of Integer)
             Dim means As Double() = groups.Select(Function(a) a.Average).ToArray
@@ -933,13 +919,13 @@ sample estimates:
                             Optional na_rm As Boolean = False,
                             Optional use As varUseMethods = varUseMethods.everything) As Object
 
-            Dim vx As Double() = REnv.asVector(Of Double)(x)
+            Dim vx As Double() = CLRVector.asNumeric(x)
             Dim vy As Double()
 
             If y Is Nothing Then
                 vy = vx
             Else
-                vy = REnv.asVector(Of Double)(y)
+                vy = CLRVector.asNumeric(y)
             End If
 
             If na_rm Then

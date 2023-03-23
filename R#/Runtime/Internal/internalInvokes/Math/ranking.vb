@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.Correlations.Ranking
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Invokes
@@ -172,7 +173,7 @@ Namespace Runtime.Internal.Invokes
             If TypeOf generic Is String() Then
                 Return DirectCast(generic, String()).orderNumbers(decreasing)
             Else
-                Return DirectCast(REnv.asVector(Of Double)(generic), Double()).orderNumbers(decreasing)
+                Return CLRVector.asNumeric(generic).orderNumbers(decreasing)
             End If
         End Function
 

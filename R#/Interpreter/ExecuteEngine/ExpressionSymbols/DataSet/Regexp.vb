@@ -61,6 +61,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports r = System.Text.RegularExpressions.Regex
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -128,7 +129,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim inputs As String()
 
             Try
-                inputs = REnv.asVector(Of String)(strData)
+                inputs = CLRVector.asCharacter(strData)
             Catch ex As Exception
                 Return Internal.debug.stop(ex, env)
             End Try

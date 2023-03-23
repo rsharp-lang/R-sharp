@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("hiddenMarkov")>
@@ -135,7 +136,7 @@ Module hiddenMarkov
                 .Select(Function(row)
                             Return New StatesObject With {
                                 .state = row.name,
-                                .prob = REnv.asVector(Of Double)(row.value)
+                                .prob = CLRVector.asNumeric(row.value)
                             }
                         End Function) _
                 .ToArray
@@ -170,7 +171,7 @@ Module hiddenMarkov
             Return DirectCast(seq, Chain)
         Else
             Return New Chain() With {
-                .obSequence = REnv.asVector(Of String)(seq)
+                .obSequence = CLRVector.asCharacter(seq)
             }
         End If
     End Function

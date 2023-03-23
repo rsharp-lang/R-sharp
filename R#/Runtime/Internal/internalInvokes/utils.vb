@@ -174,8 +174,8 @@ Namespace Runtime.Internal.Invokes
             Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
             Dim packages As RPkg() = pkgMgr _
                 .AsEnumerable _
-.OrderBy(Function(pkg) pkg.namespace) _
-.ToArray
+                .OrderBy(Function(pkg) pkg.namespace) _
+                .ToArray
             Dim Package As Array = packages.Select(Function(pkg) pkg.namespace).ToArray
             Dim LibPath As Array = packages.Select(Function(pkg) If(pkg.isMissing, "<missing>", pkg.libPath.FileName)).ToArray
             Dim Version As Array = packages.Select(Function(pkg) pkg.info.Revision).ToArray
@@ -189,9 +189,9 @@ Namespace Runtime.Internal.Invokes
             Dim Description As Array = packages _
                 .Select(Function(pkg)
                             Return pkg.GetPackageDescription(envir) _
-.LineTokens _
-.DefaultFirst("n/a") _
-.TrimStart("#"c, " "c)
+                                      .LineTokens _
+                                      .DefaultFirst("n/a") _
+                                      .TrimStart("#"c, " "c)
                         End Function) _
                 .ToArray
             Dim summary As New dataframe With {
@@ -633,8 +633,7 @@ Namespace Runtime.Internal.Invokes
                     Return Message.InCompatibleType(GetType(Byte), x.GetType, env)
                 End If
             ElseIf x.GetType.IsArray Then
-                Return REnv.asVector(Of String)(DirectCast(x, vector).data) _
-                    .AsObjectEnumerator(Of String) _
+                Return CLRVector.asCharacter(x) _
                     .Select(Function(str) str.MD5) _
                     .ToArray
             Else
@@ -1287,7 +1286,7 @@ Read ""Writing R Extensions"" for more information.".SaveTo($"{root}/Read-and-de
                     Next
                 End Using
             Else
-                Dim filepaths As String() = REnv.asVector(Of String)(files)
+                Dim filepaths As String() = CLRVector.asCharacter(files)
 
                 filepaths = filepaths _
                     .Where(Function(file) file.FileExists) _

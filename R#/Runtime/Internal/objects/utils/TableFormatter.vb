@@ -54,6 +54,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object.Utils
@@ -128,7 +129,7 @@ Namespace Runtime.Internal.Object.Utils
                     table(1) = {"<mode>"}.JoinIterates(typeRow).ToArray
                 End If
             ElseIf TypeOf showRowNames Is Array Then
-                rownames = REnv.asVector(Of String)(showRowNames)
+                rownames = CLRVector.asCharacter(showRowNames)
                 showRowNames = True
                 table(Scan0) = row.ToArray
 

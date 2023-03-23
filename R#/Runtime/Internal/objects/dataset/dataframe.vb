@@ -65,8 +65,6 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
-Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -345,7 +343,7 @@ Namespace Runtime.Internal.Object
             Dim projections As New Dictionary(Of String, Array)
 
             If indexType Like RType.characters Then
-                For Each key As String In DirectCast(asVector(Of String)(selector), String())
+                For Each key As String In CLRVector.asCharacter(selector)
                     projections(key) = getVector(key, fullSize)
 
                     If projections(key) Is Nothing Then
@@ -359,7 +357,7 @@ Namespace Runtime.Internal.Object
                 Dim colnames As String() = Me.colnames
                 Dim key As String
 
-                For Each i As Integer In DirectCast(asVector(Of Integer)(selector), Integer())
+                For Each i As Integer In CLRVector.asInteger(selector)
                     key = colnames(i - 1)
                     projections(key) = getVector(key, fullSize)
                 Next
@@ -394,7 +392,7 @@ Namespace Runtime.Internal.Object
                 ' which is true is zero-based by default
                 Return GetByRowIndex(index:=which.IsTrue(CLRVector.asLogical(selector)), env) ' checked
             ElseIf indexType Like RType.integers Then
-                Dim i_raw As Integer() = DirectCast(asVector(Of Integer)(selector), Integer())
+                Dim i_raw As Integer() = CLRVector.asInteger(selector)
                 Dim i_offset As Integer()
 
                 If i_raw.Any(Function(i) i <= 0) Then
@@ -410,7 +408,7 @@ Namespace Runtime.Internal.Object
                 ' questinable
                 Return GetByRowIndex(index:=i_offset, env)
             ElseIf indexType Like RType.characters Then
-                Dim indexNames As String() = asVector(Of String)(selector)
+                Dim indexNames As String() = CLRVector.asCharacter(selector)
                 Dim rowNames As Index(Of String) = Me.getRowNames
                 Dim index As New List(Of Integer)
                 Dim i As i32 = 0

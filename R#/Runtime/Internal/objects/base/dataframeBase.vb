@@ -56,6 +56,7 @@ Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports expr = SMRUCC.Rsharp.Interpreter.ExecuteEngine.Expression
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -83,7 +84,7 @@ Namespace Runtime.Internal.Object
             Dim names As String() = x.colnames
             Dim vec As Double() = names _
                 .Select(Function(v)
-                            Return DirectCast(REnv.asVector(Of Double)(x.columns(v)), Double()).Sum
+                            Return CLRVector.asNumeric(x.columns(v)).Sum
                         End Function) _
                 .ToArray
 

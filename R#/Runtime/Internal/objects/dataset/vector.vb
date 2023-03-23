@@ -1,70 +1,70 @@
 ﻿#Region "Microsoft.VisualBasic::90c23936b58f3f44b7b8984880a6209e, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vector.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 323
-    '    Code Lines: 220
-    ' Comment Lines: 50
-    '   Blank Lines: 53
-    '     File Size: 12.00 KB
+' Summaries:
 
 
-    '     Class vector
-    ' 
-    '         Properties: data, factor, length, unit
-    ' 
-    '         Constructor: (+7 Overloads) Sub New
-    '         Function: asVector, fromScalar, (+2 Overloads) getByIndex, getByName, getNames
-    '                   hasName, isVectorOf, setByindex, setByIndex, setNames
-    '                   ToString
-    '         Operators: <>, =
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 323
+'    Code Lines: 220
+' Comment Lines: 50
+'   Blank Lines: 53
+'     File Size: 12.00 KB
+
+
+'     Class vector
+' 
+'         Properties: data, factor, length, unit
+' 
+'         Constructor: (+7 Overloads) Sub New
+'         Function: asVector, fromScalar, (+2 Overloads) getByIndex, getByName, getNames
+'                   hasName, isVectorOf, setByindex, setByIndex, setNames
+'                   ToString
+'         Operators: <>, =
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Runtime.Internal.Object
 
@@ -368,14 +368,14 @@ Namespace Runtime.Internal.Object
         End Function
 
         Public Overloads Shared Operator =(v As vector, value As String) As vector
-            Dim str As String() = REnv.asVector(Of String)(v.data)
+            Dim str As String() = CLRVector.asCharacter(v.data)
             Dim bools As Boolean() = str.Select(Function(s) s = value).ToArray
 
             Return vector.asVector(Of Boolean)(bools)
         End Operator
 
         Public Overloads Shared Operator <>(v As vector, value As String) As vector
-            Return vector.asVector(Of Boolean)(UnaryNot.Not(v = value))
+            Return vector.asVector(Of Boolean)(Operators.UnaryNot.Not(v = value))
         End Operator
     End Class
 End Namespace

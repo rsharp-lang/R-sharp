@@ -56,6 +56,7 @@
 Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object
@@ -167,7 +168,7 @@ Namespace Runtime.Internal.Object
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function asCharacter(data As vector) As String()
             Return asCharacter(
-                levels:=REnv.asVector(Of Integer)(data.data),
+                levels:=CLRVector.asInteger(data.data),
                 factor:=data.factor
             )
         End Function

@@ -134,51 +134,55 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Return getDataframeRowRange(data:=DirectCast(obj, dataframe), envir)
                 End If
             Else
-                Dim indexerRaw As Object = index.Evaluate(envir)
-                Dim indexer As Array
+                Return getBySymbolIndex(obj, envir)
+            End If
+        End Function
 
-                If Program.isException(indexerRaw) Then
-                    Return indexerRaw
-                ElseIf obj.GetType.ImplementInterface(Of RIndexer) AndAlso TypeOf indexerRaw Is Expression Then
-                    Return DirectCast(obj, RIndexer).EvaluateIndexer(indexerRaw, env:=envir)
+        Private Function getBySymbolIndex(obj As Object, envir As Environment) As Object
+            Dim indexerRaw As Object = index.Evaluate(envir)
+            Dim indexer As Array
+
+            If Program.isException(indexerRaw) Then
+                Return indexerRaw
+            ElseIf obj.GetType.ImplementInterface(Of RIndexer) AndAlso TypeOf indexerRaw Is Expression Then
+                Return DirectCast(obj, RIndexer).EvaluateIndexer(indexerRaw, env:=envir)
+            Else
+                indexer = REnv.asVector(Of Object)(indexerRaw)
+            End If
+
+            If indexer.Length = 0 Then
+                If (indexType = SymbolIndexers.nameIndex OrElse indexType = SymbolIndexers.dataframeRanges) Then
+                    Return emptyIndexError(Me, envir)
                 Else
-                    indexer = REnv.asVector(Of Object)(indexerRaw)
+                    Return Nothing
                 End If
+            End If
 
-                If indexer.Length = 0 Then
-                    If (indexType = SymbolIndexers.nameIndex OrElse indexType = SymbolIndexers.dataframeRanges) Then
-                        Return emptyIndexError(Me, envir)
-                    Else
-                        Return Nothing
-                    End If
-                End If
-
-                ' now obj is always have values:
-                If indexType = SymbolIndexers.nameIndex Then
-                    ' a[[name]]
-                    ' a$name
-                    Return getByName(obj, indexer, envir)
-                ElseIf indexType = SymbolIndexers.vectorIndex Then
-                    ' a[name]
-                    ' a[index]
-                    Return getByIndex(obj, indexer, envir)
-                ElseIf indexType = SymbolIndexers.dataframeColumns Then
-                    If Not TypeOf obj Is dataframe Then
-                        Return Message.InCompatibleType(GetType(dataframe), obj.GetType, envir)
-                    Else
-                        Return getColumn(obj, indexer, envir)
-                    End If
-                ElseIf indexType = SymbolIndexers.dataframeRows Then
-                    If Not TypeOf obj Is dataframe Then
-                        Return Message.InCompatibleType(GetType(dataframe), obj.GetType, envir)
-                    Else
-                        Return DirectCast(obj, dataframe) _
-                            .sliceByRow(indexer, envir) _
-                            .Value
-                    End If
+            ' now obj is always have values:
+            If indexType = SymbolIndexers.nameIndex Then
+                ' a[[name]]
+                ' a$name
+                Return getByName(obj, indexer, envir)
+            ElseIf indexType = SymbolIndexers.vectorIndex Then
+                ' a[name]
+                ' a[index]
+                Return getByIndex(obj, indexer, envir)
+            ElseIf indexType = SymbolIndexers.dataframeColumns Then
+                If Not TypeOf obj Is dataframe Then
+                    Return Message.InCompatibleType(GetType(dataframe), obj.GetType, envir)
                 Else
-                    Return Internal.debug.stop(New NotImplementedException(indexType.ToString), envir)
+                    Return getColumn(obj, indexer, envir)
                 End If
+            ElseIf indexType = SymbolIndexers.dataframeRows Then
+                If Not TypeOf obj Is dataframe Then
+                    Return Message.InCompatibleType(GetType(dataframe), obj.GetType, envir)
+                Else
+                    Return DirectCast(obj, dataframe) _
+                        .sliceByRow(indexer, envir) _
+                        .Value
+                End If
+            Else
+                Return Internal.debug.stop(New NotImplementedException(indexType.ToString), envir)
             End If
         End Function
 
@@ -287,7 +291,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 End If
             ElseIf Not objType.ImplementInterface(GetType(RNameIndex)) Then
                 If objType.ImplementInterface(Of IDictionary) AndAlso objType.GenericTypeArguments(Scan0) Is GetType(String) Then
-                    Dim keys As String() = REnv.asVector(Of String)(indexer)
+                    Dim keys As String() = CLRVector.asCharacter(indexer)
                     Dim table As IDictionary = DirectCast(obj, IDictionary)
 
                     If indexer.Length = 1 Then
@@ -320,7 +324,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         .FirstOrDefault
 
                     If Not readDefault Is Nothing Then
-                        Dim keys As String() = REnv.asVector(Of String)(indexer)
+                        Dim keys As String() = CLRVector.asCharacter(indexer)
 
                         If indexer.Length = 1 Then
                             Return readDefault.GetValue(obj, {keys(Scan0)})
@@ -363,7 +367,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Return DirectCast(obj, RNameIndex).getByName(any.ToString(i))
                 End If
             Else
-                Return DirectCast(obj, RNameIndex).getByName(REnv.asVector(Of String)(indexer))
+                Return DirectCast(obj, RNameIndex).getByName(CLRVector.asCharacter(indexer))
             End If
         End Function
 

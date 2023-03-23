@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports baseString = Microsoft.VisualBasic.Strings
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -70,7 +71,7 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("stack_str")>
         Public Function GetStackValue(<RRawVectorArgument> str As Object, left$, right$) As String()
-            Return DirectCast(REnv.asVector(Of String)(str), String()) _
+            Return CLRVector.asCharacter(str) _
                 .Select(Function(s)
                             Return s.GetStackValue(left, right)
                         End Function) _
@@ -162,7 +163,7 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop("characters component part for trimmed could not be NULL!", env)
             End If
 
-            Dim rawChars As String() = REnv.asVector(Of String)(characters)
+            Dim rawChars As String() = CLRVector.asCharacter(characters)
             Dim chars As Char() = rawChars _
                 .Select(Function(str)
                             Return CLangStringFormatProvider.ReplaceMetaChars(str).ToArray

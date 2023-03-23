@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object
@@ -201,7 +202,7 @@ RE0:
         ''' <param name="env"></param>
         ''' <returns></returns>
         Public Function setNames([object] As Object, namelist As Array, env As Environment) As Object
-            namelist = REnv.asVector(Of String)(namelist)
+            namelist = CLRVector.asCharacter(namelist)
 
             ' set names
             Select Case [object].GetType
@@ -257,7 +258,7 @@ RE0:
                         "given rownames size: " & namelist.Length
                     }, envir)
                 Else
-                    data.rownames = REnv.asVector(Of String)(namelist)
+                    data.rownames = CLRVector.asCharacter(namelist)
                     Return data.rownames
                 End If
             Else
@@ -278,7 +279,7 @@ RE0:
                 With DirectCast([object], dataframe)
                     Dim [raw] = .columns.ToArray
                     Dim [new] As New Dictionary(Of String, Array)
-                    Dim names As String() = asVector(Of String)(namelist)
+                    Dim names As String() = CLRVector.asCharacter(namelist)
 
                     If raw.Length <> names.Length Then
                         Return Internal.debug.stop(

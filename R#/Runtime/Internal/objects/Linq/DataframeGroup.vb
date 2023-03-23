@@ -64,7 +64,7 @@ Namespace Runtime.Internal.Object.Linq
         Public Function orderBy(data As dataframe, key As String, Optional desc As Boolean = False) As dataframe
             Static env As Environment = GlobalEnvironment.defaultEmpty
 
-            Dim i As Double() = REnv.asVector(Of Double)(data.getColumnVector(key))
+            Dim i As Double() = CLRVector.asNumeric(data.getColumnVector(key))
             Dim order As Integer() = ranking.order(i, desc, env)
 
             Return data.sliceByRow(order, env)
@@ -78,8 +78,7 @@ Namespace Runtime.Internal.Object.Linq
         ''' <returns></returns>
         <Extension>
         Public Function groupBy(data As dataframe, key As String) As Dictionary(Of String, dataframe)
-            Dim values As vector = REnv _
-                .asVector(Of String)(data.getColumnVector(columnName:=key)) _
+            Dim values As vector = CLRVector.asCharacter(data.getColumnVector(columnName:=key)) _
                 .DoCall(Function(v)
                             Return vector.asVector(Of String)(v)
                         End Function)
