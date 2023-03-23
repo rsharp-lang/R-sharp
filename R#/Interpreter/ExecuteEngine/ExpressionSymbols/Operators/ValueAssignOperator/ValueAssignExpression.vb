@@ -434,7 +434,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     envir.AddMessage($"'{symbolIndex.index}' contains multiple index, only use first index key value...")
                 End If
             Else
-                If value.GetType.IsArray Then
+                ' set null to a specific list slot element
+                If value Is Nothing OrElse value.GetType.IsArray Then
                     result = DirectCast(targetObj, RNameIndex).setByName(
                         names:=indexStr,
                         value:=DirectCast(value, Array),

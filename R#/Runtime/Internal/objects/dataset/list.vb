@@ -63,6 +63,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -453,7 +454,9 @@ Namespace Runtime.Internal.Object
         Public Function setByName(names() As String, value As Array, envir As Environment) As Object Implements RNameIndex.setByName
             Dim getValue As Func(Of Integer, Object)
 
-            If value.Length = 1 Then
+            If value Is Nothing AndAlso names.Length = 1 Then
+                getValue = Function(i) Nothing
+            ElseIf value.Length = 1 Then
                 Dim val As Object = value.GetValue(Scan0)
 
                 getValue = Function(i)
@@ -477,9 +480,9 @@ Namespace Runtime.Internal.Object
             Dim message As Object
 
             For index As Integer = 0 To names.Length - 1
-                message = setByIndex(names(index), getValue(index), envir)
+                message = setByName(names(index), getValue(index), envir)
 
-                If Not message Is Nothing AndAlso message.GetType Is GetType(Runtime.Components.Message) Then
+                If Program.isException(message) Then
                     Return message
                 Else
                     result += message
