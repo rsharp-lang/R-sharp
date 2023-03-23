@@ -485,7 +485,7 @@ Namespace Runtime.Internal.Object
                 If Program.isException(message) Then
                     Return message
                 Else
-                    result += message
+                    result.Add(message)
                 End If
             Next
 
