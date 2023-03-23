@@ -1179,6 +1179,7 @@ Namespace Runtime.Internal.Invokes
                         Dim exists_file As New FileStream(description, open)
                         ' seek to end of file for append mode
                         exists_file.Seek(exists_file.Length, SeekOrigin.Begin)
+                        Return exists_file
                     Else
                         ' create new file
                         Return description.Open(FileMode.OpenOrCreate, doClear:=truncate)
