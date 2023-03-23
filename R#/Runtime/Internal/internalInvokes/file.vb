@@ -1015,6 +1015,10 @@ Namespace Runtime.Internal.Invokes
                 Else
                     Call fs.WriteText(text, con)
                 End If
+            ElseIf TypeOf con Is Stream Then
+                Dim writer As New StreamWriter(DirectCast(con, Stream))
+                Call writer.WriteLine(text)
+                Call writer.Flush()
             ElseIf TypeOf con Is textBuffer Then
                 DirectCast(con, textBuffer).text = text
                 Return con
@@ -1172,7 +1176,9 @@ Namespace Runtime.Internal.Invokes
                     Return description.Open(open, doClear:=truncate)
                 ElseIf open = FileMode.Append Then
                     If description.FileExists Then
-                        Return New FileStream(description, open)
+                        Dim exists_file As New FileStream(description, open)
+                        ' seek to end of file for append mode
+                        exists_file.Seek(exists_file.Length, SeekOrigin.Begin)
                     Else
                         ' create new file
                         Return description.Open(FileMode.OpenOrCreate, doClear:=truncate)
