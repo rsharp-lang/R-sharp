@@ -1170,6 +1170,13 @@ Namespace Runtime.Internal.Invokes
             Else
                 If open = FileMode.Truncate OrElse open = FileMode.CreateNew Then
                     Return description.Open(open, doClear:=truncate)
+                ElseIf open = FileMode.Append Then
+                    If description.FileExists Then
+                        Return New FileStream(description, open)
+                    Else
+                        ' create new file
+                        Return description.Open(FileMode.OpenOrCreate, doClear:=truncate)
+                    End If
                 Else
                     Return description.Open(open, doClear:=False)
                 End If
