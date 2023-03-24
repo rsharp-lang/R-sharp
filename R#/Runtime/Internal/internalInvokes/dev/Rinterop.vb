@@ -165,13 +165,16 @@ Namespace Runtime.Internal.Invokes
 
         Private Function getDelegate(params As Type(), returnVal As Type) As Type
             Dim tdelegate As TypeBuilder = DynamicType.GetTypeBuilder("native_delegate_func", GetType(MulticastDelegate), isAbstract:=True, sealed:=True)
-            Dim new_fp = tdelegate.DefineConstructor(
-                MethodAttributes.RTSpecialName Or MethodAttributes.HideBySig Or MethodAttributes.Public,
-                CallingConventions.Standard, {GetType(Object), GetType(IntPtr)})
-            Dim native_calls = tdelegate.DefineMethod(external_native_call_name, MethodAttributes.RTSpecialName Or MethodAttributes.Public Or
-    MethodAttributes.HideBySig Or
-    MethodAttributes.NewSlot Or MethodAttributes.Virtual, CallingConventions.Standard,
-                   returnVal, params)
+            Dim new_fp = tdelegate.DefineConstructor(MethodAttributes.RTSpecialName Or
+                                                     MethodAttributes.HideBySig Or
+                                                     MethodAttributes.Public,
+                                                     CallingConventions.Standard, {GetType(Object), GetType(IntPtr)})
+            Dim native_calls = tdelegate.DefineMethod(external_native_call_name,
+                                                      MethodAttributes.RTSpecialName Or
+                                                      MethodAttributes.Public Or
+                                                      MethodAttributes.HideBySig Or
+                                                      MethodAttributes.NewSlot Or
+                                                      MethodAttributes.Virtual, CallingConventions.Standard, returnVal, params)
 
             new_fp.SetImplementationFlags(MethodImplAttributes.CodeTypeMask)
             native_calls.SetImplementationFlags(MethodImplAttributes.CodeTypeMask)
