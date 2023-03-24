@@ -151,8 +151,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Private Function getDelegate(params As Type()) As Type
-            Dim outerClass As TypeBuilder = DynamicType.GetTypeBuilder
-            Dim tdelegate As TypeBuilder = outerClass.DefineNestedType("", TypeAttributes.AutoClass Or TypeAttributes.AnsiClass Or TypeAttributes.Sealed Or TypeAttributes.Public, GetType(MulticastDelegate))
+            Dim tdelegate As TypeBuilder = DynamicType.GetTypeBuilder("native_delegate_func", GetType(MulticastDelegate), isAbstract:=True)
             Dim methodBeginInvoke = tdelegate.DefineMethod("BeginInvoke",
     MethodAttributes.Public Or
     MethodAttributes.HideBySig Or
@@ -171,6 +170,10 @@ Namespace Runtime.Internal.Invokes
     MethodAttributes.HideBySig Or
     MethodAttributes.NewSlot Or MethodAttributes.Virtual, CallingConventions.Standard,
                    Nothing, params)
+
+            'Call tdelegate.DefineDefaultConstructor(MethodAttributes.Public Or
+            '                                      MethodAttributes.SpecialName Or
+            '                                      MethodAttributes.RTSpecialName)
 
             Return tdelegate.CreateType
         End Function
