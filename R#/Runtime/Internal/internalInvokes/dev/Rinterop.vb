@@ -54,7 +54,6 @@ Imports System.Reflection
 Imports System.Reflection.Emit
 Imports Microsoft.VisualBasic.ApplicationServices.DynamicInterop
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Emit
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop

@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.DynamicInterop
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Runtime.Internal.Invokes
 
@@ -27,6 +28,16 @@ Namespace Runtime.Internal.Invokes
             Call globalEnv.nativeLibraries.Add(x.BaseName, dll)
 
             Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' create an integer scalar value
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("i32")>
+        Public Function i32(x As Object) As Integer
+            Return CLRVector.asInteger(x).First
         End Function
     End Module
 End Namespace
