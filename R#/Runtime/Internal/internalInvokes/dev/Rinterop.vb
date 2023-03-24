@@ -107,11 +107,11 @@ Namespace Runtime.Internal.Invokes
                 }, env)
             End If
 
-            Static getFunction As MethodInfo = GetType(UnmanagedDll) _
+            Static get_native_function As MethodInfo = GetType(UnmanagedDll) _
                 .GetMethods _
                 .Where(Function(m)
                            Return m.Name = NameOf(UnmanagedDll.GetFunction) AndAlso
-                                  m.GetGenericArguments.TryCount = 1
+                                  m.GetParameters.Length = 2
                        End Function) _
                 .First
 
@@ -144,14 +144,14 @@ Namespace Runtime.Internal.Invokes
             Next
             Dim del As Type = getDelegate(params)
             ' run function with reflection
-            Dim native_func As [Delegate] = getFunction.MakeGenericMethod(del).Invoke(dll, {NAME})
+            Dim native_func As [Delegate] = get_native_function.Invoke(dll, parameters:=New Object() {NAME, del})
             Dim result = native_func.DynamicInvoke(argv)
 
             Return result
         End Function
 
         Private Function getDelegate(params As Type()) As Type
-            Dim tdelegate As TypeBuilder = DynamicType.GetTypeBuilder("native_delegate_func", GetType(MulticastDelegate), isAbstract:=True)
+            Dim tdelegate As TypeBuilder = DynamicType.GetTypeBuilder("native_delegate_func", GetType(MulticastDelegate), isAbstract:=True, sealed:=True)
             Dim methodBeginInvoke = tdelegate.DefineMethod("BeginInvoke",
     MethodAttributes.Public Or
     MethodAttributes.HideBySig Or
@@ -166,14 +166,17 @@ Namespace Runtime.Internal.Invokes
     MethodAttributes.NewSlot Or
     MethodAttributes.Virtual, Nothing, New Type() {GetType(IAsyncResult)})
             methodEndInvoke.SetImplementationFlags(MethodImplAttributes.Runtime Or MethodImplAttributes.Managed)
-            Dim methodInvoke = tdelegate.DefineMethod("Invoke", MethodAttributes.Public Or
+            Dim methodInvoke = tdelegate.DefineMethod("Invoke", MethodAttributes.RTSpecialName Or MethodAttributes.Public Or
     MethodAttributes.HideBySig Or
     MethodAttributes.NewSlot Or MethodAttributes.Virtual, CallingConventions.Standard,
                    Nothing, params)
 
-            'Call tdelegate.DefineDefaultConstructor(MethodAttributes.Public Or
-            '                                      MethodAttributes.SpecialName Or
-            '                                      MethodAttributes.RTSpecialName)
+            methodInvoke.SetImplementationFlags(MethodImplAttributes.CodeTypeMask)
+
+            Dim constructor = tdelegate.DefineConstructor(
+                MethodAttributes.RTSpecialName Or MethodAttributes.HideBySig Or MethodAttributes.Public,
+                CallingConventions.Standard, {GetType(Object), GetType(IntPtr)})
+            constructor.SetImplementationFlags(MethodImplAttributes.CodeTypeMask)
 
             Return tdelegate.CreateType
         End Function
