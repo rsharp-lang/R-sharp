@@ -50,6 +50,7 @@
 
 #End Region
 
+Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.DynamicInterop
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -104,6 +105,8 @@ Namespace Runtime.Internal.Invokes
                 }, env)
             End If
 
+            Static getFunction As MethodInfo
+
             ' C native library
             ' MY_C_API_MARKER void Play(void* simulation, const char* variableIdentifier, double* values, TimeSeriesGeometry* geom);
             '
@@ -123,8 +126,11 @@ Namespace Runtime.Internal.Invokes
             ' make a delegate type at here
             ' the parameter type is generated from the arguments
             ' and also then parameter order is generated from the argument order in the list
+            Dim del As Type
 
             ' run function with reflection
+            Dim native_func = getFunction.MakeGenericMethod(del).Invoke(dll, {NAME})
+
         End Function
 
         ''' <summary>
