@@ -154,6 +154,11 @@ Namespace Runtime.Internal.Invokes
             For i As Integer = 0 To keys.Length - 1
                 argv(i) = args.getByName(keys(i))
                 params(i) = argv(i).GetType
+
+                If params(i) Is GetType(String) Then
+                    argv(i) = CStr(argv(i)).ToArray
+                    params(i) = GetType(Char())
+                End If
             Next
             Dim del As Type = getDelegate(params, returnVal:=returnType)
             ' run function with reflection

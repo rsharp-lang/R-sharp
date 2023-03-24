@@ -39,5 +39,10 @@ Namespace Runtime.Internal.Invokes
         Public Function i32(x As Object) As Integer
             Return CLRVector.asInteger(x).First
         End Function
+
+        <ExportAPI("string")>
+        Public Function [string](s As Object) As String
+            Return CLRVector.asCharacter(s).First
+        End Function
     End Module
 End Namespace
