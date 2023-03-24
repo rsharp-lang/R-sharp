@@ -129,7 +129,7 @@ Namespace Runtime.Internal.Invokes
             Dim del As Type
 
             ' run function with reflection
-            Dim native_func = getFunction.MakeGenericMethod(del).Invoke(dll, {NAME})
+            Dim native_func As [Delegate] = getFunction.MakeGenericMethod(del).Invoke(dll, {NAME})
 
         End Function
 
