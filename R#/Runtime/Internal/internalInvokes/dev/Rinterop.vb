@@ -51,8 +51,11 @@
 #End Region
 
 Imports System.Reflection
+Imports System.Reflection.Emit
 Imports Microsoft.VisualBasic.ApplicationServices.DynamicInterop
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Emit
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -105,7 +108,13 @@ Namespace Runtime.Internal.Invokes
                 }, env)
             End If
 
-            Static getFunction As MethodInfo
+            Static getFunction As MethodInfo = GetType(UnmanagedDll) _
+                .GetMethods _
+                .Where(Function(m)
+                           Return m.Name = NameOf(UnmanagedDll.GetFunction) AndAlso
+                                  m.GetGenericArguments.TryCount = 1
+                       End Function) _
+                .First
 
             ' C native library
             ' MY_C_API_MARKER void Play(void* simulation, const char* variableIdentifier, double* values, TimeSeriesGeometry* geom);
@@ -126,12 +135,47 @@ Namespace Runtime.Internal.Invokes
             ' make a delegate type at here
             ' the parameter type is generated from the arguments
             ' and also then parameter order is generated from the argument order in the list
-            Dim del As Type
+            Dim keys As String() = arguments.getNames
+            Dim argv As Object() = New Object(keys.Length - 1) {}
+            Dim params As Type() = New Type(keys.Length - 1) {}
 
+            For i As Integer = 0 To keys.Length - 1
+                argv(i) = arguments.getByName(keys(i))
+                params(i) = argv(i).GetType
+            Next
+            Dim del As Type = getDelegate(params)
             ' run function with reflection
             Dim native_func As [Delegate] = getFunction.MakeGenericMethod(del).Invoke(dll, {NAME})
+            Dim result = native_func.DynamicInvoke(argv)
 
+            Return result
         End Function
+
+        Private Function getDelegate(params As Type()) As Type
+            Dim outerClass As TypeBuilder = DynamicType.GetTypeBuilder
+            Dim tdelegate As TypeBuilder = outerClass.DefineNestedType("", TypeAttributes.AutoClass Or TypeAttributes.AnsiClass Or TypeAttributes.Sealed Or TypeAttributes.Public, GetType(MulticastDelegate))
+            Dim methodBeginInvoke = tdelegate.DefineMethod("BeginInvoke",
+    MethodAttributes.Public Or
+    MethodAttributes.HideBySig Or
+    MethodAttributes.NewSlot Or
+    MethodAttributes.Virtual,
+     GetType(IAsyncResult), params.JoinIterates({GetType(AsyncCallback),
+      GetType(Object)}).ToArray)
+            methodBeginInvoke.SetImplementationFlags(MethodImplAttributes.Runtime Or MethodImplAttributes.Managed)
+            Dim methodEndInvoke = tdelegate.DefineMethod("EndInvoke",
+ MethodAttributes.Public Or
+    MethodAttributes.HideBySig Or
+    MethodAttributes.NewSlot Or
+    MethodAttributes.Virtual, Nothing, New Type() {GetType(IAsyncResult)})
+            methodEndInvoke.SetImplementationFlags(MethodImplAttributes.Runtime Or MethodImplAttributes.Managed)
+            Dim methodInvoke = tdelegate.DefineMethod("Invoke", MethodAttributes.Public Or
+    MethodAttributes.HideBySig Or
+    MethodAttributes.NewSlot Or MethodAttributes.Virtual, CallingConventions.Standard,
+                   Nothing, params)
+
+            Return tdelegate.CreateType
+        End Function
+
 
         ''' <summary>
         ''' imports VB.NET namespace
