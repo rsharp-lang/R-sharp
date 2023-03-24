@@ -61,6 +61,7 @@
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.DynamicInterop
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language.Default
@@ -162,6 +163,7 @@ Namespace Runtime
         End Property
 
         Friend ReadOnly dotnetCoreWarning As New List(Of Message)
+        Friend ReadOnly nativeLibraries As New Dictionary(Of String, UnmanagedDll)
 
         Friend Sub New(scriptHost As RInterpreter, options As Options)
             Me.options = options
