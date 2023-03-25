@@ -52,15 +52,11 @@
 
 Imports System.Reflection
 Imports System.Reflection.Emit
-Imports System.Text
-Imports Microsoft.VisualBasic.ApplicationServices.DynamicInterop
-Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports Microsoft.VisualBasic.Language
 
 Namespace Runtime.Internal.Invokes
 
