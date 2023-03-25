@@ -52,6 +52,8 @@
 
 Imports System.Reflection
 Imports System.Reflection.Emit
+Imports System.Runtime.InteropServices
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.DynamicInterop
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
@@ -148,6 +150,7 @@ Namespace Runtime.Internal.Invokes
             Else
                 Select Case [return]
                     Case "i32" : returnType = GetType(Integer)
+                    Case "string" : returnType = GetType(String)
                 End Select
             End If
 
@@ -155,10 +158,10 @@ Namespace Runtime.Internal.Invokes
                 argv(i) = args.getByName(keys(i))
                 params(i) = argv(i).GetType
 
-                If params(i) Is GetType(String) Then
-                    argv(i) = CStr(argv(i)).ToArray
-                    params(i) = GetType(Char())
-                End If
+                'If params(i) Is GetType(String) Then
+                '    argv(i) = CStr(argv(i)).ToArray
+                '    params(i) = GetType(Char())
+                'End If
             Next
             Dim del As Type = getDelegate(params, returnVal:=returnType)
             ' run function with reflection
