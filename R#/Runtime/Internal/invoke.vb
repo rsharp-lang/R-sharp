@@ -127,7 +127,6 @@ Namespace Runtime.Internal
             Call GetType(devtools).DoCall(AddressOf pushEnvir)
             Call GetType(ranking).DoCall(AddressOf pushEnvir)
             Call GetType(TableJoint).DoCall(AddressOf pushEnvir)
-            Call GetType(Rinterop).DoCall(AddressOf pushEnvir)
             Call GetType(rust).DoCall(AddressOf pushEnvir)
             Call GetType(dataframeBase).DoCall(AddressOf pushEnvir)
             Call GetType(bitView).DoCall(AddressOf pushEnvir)
