@@ -172,5 +172,20 @@ FIND_RENV:
         Public Function [string](s As Object) As String
             Return CLRVector.asCharacter(s).First
         End Function
+
+        <ExportAPI("i64")>
+        Public Function i64(x As Object) As Long
+            Return CLRVector.asLong(x).First
+        End Function
+
+        <ExportAPI("f32")>
+        Public Function f32(x As Object) As Single
+            Return CLRVector.asNumeric(x).First
+        End Function
+
+        <ExportAPI("f64")>
+        Public Function f64(x As Object) As Double
+            Return CLRVector.asNumeric(x).First
+        End Function
     End Module
 End Namespace
