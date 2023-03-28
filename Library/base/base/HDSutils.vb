@@ -73,8 +73,8 @@ Module HDSutils
     End Sub
 
     <ExportAPI("createStream")>
-    Public Function createStream(file As String) As Object
-        Dim pack As New StreamPack(file)
+    Public Function createStream(file As String, Optional meta_size As Long = 4 * 1024 * 1024) As Object
+        Dim pack As New StreamPack(file, meta_size:=meta_size)
         Call pack.Clear()
         Return pack
     End Function
@@ -119,6 +119,7 @@ Module HDSutils
     Public Function openStream(<RRawVectorArgument> file As Object,
                                Optional [readonly] As Boolean = False,
                                Optional allowCreate As Boolean = False,
+                               Optional meta_size As Long = 8 * 1024 * 1024,
                                Optional env As Environment = Nothing) As Object
 
         If file Is Nothing Then
@@ -138,14 +139,14 @@ Module HDSutils
 
         If TypeOf file Is String Then
             If DirectCast(file, String).FileExists Then
-                Return New StreamPack(DirectCast(file, String), [readonly]:=[readonly])
+                Return New StreamPack(DirectCast(file, String), [readonly]:=[readonly], meta_size:=meta_size)
             ElseIf allowCreate Then
-                Return HDSutils.createStream(DirectCast(file, String))
+                Return HDSutils.createStream(DirectCast(file, String), meta_size:=meta_size)
             Else
                 Return Internal.debug.stop("the given file is not found on your filesystem!", env)
             End If
         ElseIf TypeOf file Is Stream Then
-            Return New StreamPack(DirectCast(file, Stream), [readonly]:=[readonly])
+            Return New StreamPack(DirectCast(file, Stream), [readonly]:=[readonly], meta_size:=meta_size)
         Else
             Return Internal.debug.stop(Message.InCompatibleType(GetType(String), file.GetType, env), env)
         End If

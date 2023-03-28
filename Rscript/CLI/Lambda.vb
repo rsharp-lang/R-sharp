@@ -39,7 +39,11 @@ Partial Module CLI
         Dim opts As list = renv.getLambdaArguments(file:=options_argv)
 
         For Each name As String In opts.getNames
-            Call renv.globalEnvir.options.setOption(name, any.ToString(opts.getByName(name)), env:=renv.globalEnvir)
+            Call renv.globalEnvir.options.setOption(
+                opt:=name,
+                value:=any.ToString(opts.getByName(name)),
+                env:=renv.globalEnvir
+            )
         Next
 
         If Not func.Name.StringEmpty Then
@@ -64,6 +68,16 @@ Partial Module CLI
         ElseIf TypeOf run Is Message Then
             result = run
         Else
+            opts = DirectCast(run, list)
+
+            For Each arg As NamedValue(Of String) In args
+                Dim name As String = CommandLine.TrimNamePrefix(arg.Name)
+
+                If Not opts.hasName(name) Then
+                    Call opts.add(name, arg.Value)
+                End If
+            Next
+
             result = renv.globalEnvir.invokeLambda(run, callable.value)
         End If
 
