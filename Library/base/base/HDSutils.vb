@@ -75,7 +75,7 @@ Module HDSutils
     <ExportAPI("createStream")>
     Public Function createStream(file As String, Optional meta_size As Long = 4 * 1024 * 1024) As Object
         Dim pack As New StreamPack(file, meta_size:=meta_size)
-        Call pack.Clear()
+        Call pack.Clear(meta_size)
         Return pack
     End Function
 
