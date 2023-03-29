@@ -64,17 +64,23 @@ Namespace Runtime.Components
     ''' </summary>
     Public Class TryError
 
-        Public ReadOnly Property [error] As Message
+        Public ReadOnly Property [error] As String()
+        ''' <summary>
+        ''' the error location
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property stackframe As StackFrame
+        Public ReadOnly Property stacktrace As StackFrame()
 
         Sub New(err As Message, stackframe As StackFrame)
-            Me.error = err
+            Me.error = err.message
             Me.stackframe = stackframe
+            Me.stacktrace = err.environmentStack
         End Sub
 
         Public Function traceback() As vector
             Return New vector With {
-                .data = [error].environmentStack _
+                .data = stacktrace _
                     .Select(Function(line) line.ToString) _
                     .ToArray,
                 .elementType = RType.GetRSharpType(GetType(String))
@@ -82,7 +88,7 @@ Namespace Runtime.Components
         End Function
 
         Public Overrides Function ToString() As String
-            Return [error].message.JoinBy("; ")
+            Return [error].JoinBy("; ")
         End Function
     End Class
 End Namespace
