@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::5ade93e3f7acada5f5bb3f4fb3bb0298, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/SymbolIndexer/SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 627
-    '    Code Lines: 485
-    ' Comment Lines: 61
-    '   Blank Lines: 81
-    '     File Size: 27.79 KB
+' Summaries:
 
 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
-    '                   getColumn, getDataframeRowRange, groupSubset, listSubset, streamView
-    '                   ToString, translateInteger2keys, translateLogical2keys, vectorSubset
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 627
+'    Code Lines: 485
+' Comment Lines: 61
+'   Blank Lines: 81
+'     File Size: 27.79 KB
+
+
+'     Class SymbolIndexer
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
+'                   getColumn, getDataframeRowRange, groupSubset, listSubset, streamView
+'                   ToString, translateInteger2keys, translateLogical2keys, vectorSubset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -608,6 +608,27 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     ElseIf TypeOf idx Is String Then
                         If TypeOf tmp Is list Then
                             Return DirectCast(tmp, list).getByName(CStr(idx))
+                        ElseIf TypeOf tmp Is dataframe Then
+                            ' do field projection
+                            '
+                            ' a = data.frame(x = 1:5, d = 2:6)
+                            ' > a["x"]
+                            '   x
+                            ' 1 1
+                            ' 2 2
+                            ' 3 3
+                            ' 4 4
+                            ' 5 5
+                            '
+                            Dim v As Array = DirectCast(tmp, dataframe)(CStr(idx))
+                            Dim newDf As New dataframe With {
+                                .columns = New Dictionary(Of String, Array) From {
+                                    {idx, v}
+                                },
+                                .rownames = DirectCast(tmp, dataframe).rownames
+                            }
+
+                            Return newDf
                         Else
                             Return Internal.debug.stop(New NotImplementedException, env)
                         End If
