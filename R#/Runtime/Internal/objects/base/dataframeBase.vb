@@ -92,14 +92,16 @@ Namespace Runtime.Internal.Object
         End Function
 
         ''' <summary>
-        ''' 
+        ''' renames the dataframe object its specific column fields
         ''' </summary>
         ''' <param name="x"></param>
         ''' <param name="renames">
         ''' a collection of name mapping lambda, liked: ``a -> b``
         ''' </param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function will returns nothing if the given dataframe object is nothing
+        ''' </returns>
         <ExportAPI("rename")>
         Public Function rename(x As dataframe,
                                <RListObjectArgument>
