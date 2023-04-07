@@ -1,0 +1,43 @@
+.\" man page create by R# package system.
+.TH STATS 1 2000-Jan "chi_square" "chi_square"
+.SH NAME
+chi_square \- The chiSquare method is used to determine whether there is a significant difference between the expected
+.SH SYNOPSIS
+\fIchi_square(\fBx\fR as any, 
+\fBfreedom\fR as integer, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+The chiSquare method is used to determine whether there is a significant difference between the expected
+ frequencies and the observed frequencies in one or more categories. It takes a double input x and an integer freedom
+ for degrees of freedom as inputs. It returns the Chi Squared result.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- a numeric input.. 
+.PP
+.PP
+\fBfreedom\fB \fR\- integer input for degrees of freedom.. 
+.PP
+.SH VALUE
+.PP
+the Chi Squared result.
+.PP
+.SH DETAILS
+.PP
+\fBr
+ #' Evaluates the cumulative distribution function (CDF) for a chi-squared 
+ #' distribution with degrees of freedom `k` at a value `x`.
+ chisquared.cdf = function( x, k ) {
+    return gammaCDF(x, k / 2.0, 0.5);
+ }
+ \fR`
+.PP
+.SH SEE ALSO
+stats
+.SH FILES
+.PP
+Rlapack.dll
+.PP
+.SH COPYRIGHT
+GPL3
