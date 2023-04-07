@@ -378,6 +378,10 @@ Namespace Runtime
             Internal.debug _
                 .CreateMessageInternal(message, Me, level) _
                 .DoCall(AddressOf messages.Add)
+
+            If globalEnvironment.verboseOption Then
+                Call base.print(message,, Me)
+            End If
         End Sub
 
         <DebuggerStepThrough>
