@@ -205,6 +205,18 @@ Namespace Runtime.Internal.Object.Converts
             End If
         End Function
 
+        Private Function isEnumType(p As PropertyInfo, value As Object) As Boolean
+            If p.PropertyType.IsEnum Then
+                Return True
+            End If
+
+            If Not p.PropertyType Is GetType(Object) Then
+                Return False
+            End If
+
+            Return value IsNot Nothing AndAlso value.GetType.IsEnum
+        End Function
+
         ''' <summary>
         ''' cast .NET CLR object to R# list object
         ''' </summary>
@@ -222,10 +234,17 @@ Namespace Runtime.Internal.Object.Converts
             End If
 
             For Each p As KeyValuePair(Of String, PropertyInfo) In vbobj.properties
-                Dim value As Object = p.Value.GetValue(vbobj.target)
+                Dim value As Object
+
+                Try
+                    value = p.Value.GetValue(vbobj.target)
+                Catch ex As Exception
+                    Return Internal.debug.stop(New Exception($"data reader: {p.Key} [{p.Value.Name} As {p.Value.PropertyType.FullName}]", ex), env)
+                End Try
+
                 Dim name As String
                 Dim ref As Field = p.Value.GetCustomAttribute(Of Field)
-                Dim isEnums As Boolean = p.Value.PropertyType.IsEnum OrElse (p.Value.PropertyType Is GetType(Object) AndAlso value IsNot Nothing AndAlso value.GetType.IsEnum)
+                Dim isEnums As Boolean = isEnumType(p.Value, value)
 
                 If Not metadata Is Nothing Then
                     If metadata Is p.Value Then
@@ -259,7 +278,7 @@ Namespace Runtime.Internal.Object.Converts
                     list.Add(name, v)
                 ElseIf DataFramework.IsPrimitive(value.GetType) Then
                     list.Add(name, value)
-                Else
+                ElseIf Not value.GetType Is GetType(System.Xml.XmlComment) Then
                     value = listInternal(value, args, env)
 
                     If TypeOf value Is Message Then
