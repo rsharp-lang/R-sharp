@@ -278,7 +278,7 @@ Namespace Runtime.Internal.Object.Converts
                     list.Add(name, v)
                 ElseIf DataFramework.IsPrimitive(value.GetType) Then
                     list.Add(name, value)
-                Else
+                ElseIf Not value.GetType Is GetType(System.Xml.XmlComment) Then
                     value = listInternal(value, args, env)
 
                     If TypeOf value Is Message Then
