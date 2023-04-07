@@ -77,7 +77,6 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports any = Microsoft.VisualBasic.Scripting
 Imports bitmapBuffer = SMRUCC.Rsharp.Runtime.Serialize.bitmapBuffer
-Imports debug = SMRUCC.Rsharp.Runtime.Internal.debug
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
@@ -505,7 +504,9 @@ break:
         End If
 
         If TypeOf term Is Image OrElse TypeOf term Is Bitmap Then
-            list = CustomDesigns.ExtractThemeColors(CType(term, Bitmap), topN:=n).ToArray
+            list = CustomDesigns.ExtractThemeColors(CType(term, Bitmap), topN:=n) _
+                .DoCall(AddressOf CustomDesigns.Order) _
+                .ToArray
         ElseIf term.GetType.IsArray Then
             With DirectCast(term, Array) _
                 .AsObjectEnumerator _
