@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::10a00a2335155b2299fcbef7daf9b4b4, D:/GCModeller/src/R-sharp/Rscript//CLI/Parallel.vb"
+﻿#Region "Microsoft.VisualBasic::fa4736b060fae6237ed0a8906903cbf8, E:/GCModeller/src/R-sharp/Rscript//CLI/Parallel.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 87
-    '    Code Lines: 64
+    '   Total Lines: 82
+    '    Code Lines: 60
     ' Comment Lines: 9
-    '   Blank Lines: 14
-    '     File Size: 3.68 KB
+    '   Blank Lines: 13
+    '     File Size: 3.30 KB
 
 
     ' Module CLI

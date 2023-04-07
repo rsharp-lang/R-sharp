@@ -1,55 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::378294f29960fcbbdb6e0f2d67c39a8b, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/env.vb"
+﻿#Region "Microsoft.VisualBasic::f4207ade930f77b58b28078bc1f4b81c, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/env.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 484
-'    Code Lines: 254
-' Comment Lines: 184
-'   Blank Lines: 46
-'     File Size: 22.07 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module env
-' 
-'         Function: [get], [gettype], [set], [typeof], CallInternal
-'                   doCall, environment, exists, getCurrentTrace, getOutputDevice
-'                   globalenv, listOptionItems, lockBinding, ls, objects
-'                   objectSize, traceback, unlockBinding
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 523
+    '    Code Lines: 282
+    ' Comment Lines: 189
+    '   Blank Lines: 52
+    '     File Size: 23.57 KB
+
+
+    '     Module env
+    ' 
+    '         Function: [get], [gettype], [set], [typeof], CallClrMemberFunction
+    '                   CallInternal, CallMemberFunction, doCall, environment, exists
+    '                   getCallLambda, getCurrentTrace, getOutputDevice, globalenv, listOptionItems
+    '                   lockBinding, ls, objects, objectSize, traceback
+    '                   unlockBinding
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

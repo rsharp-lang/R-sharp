@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b191210357ee7c4d9c99f964f19bd833, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/factor.vb"
+﻿#Region "Microsoft.VisualBasic::10facfe01ba82d198bfd15d522e5ea4b, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/factor.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 120
-    '    Code Lines: 83
+    '   Total Lines: 121
+    '    Code Lines: 84
     ' Comment Lines: 19
     '   Blank Lines: 18
-    '     File Size: 4.04 KB
+    '     File Size: 4.08 KB
 
 
     '     Class factor

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b083da047ccee66c6e2cd0b2888d0030, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/RuntimeValueLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::f0c4c4c57a048af4992757b11163c707, E:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/RuntimeValueLiteral.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 47
+    '   Total Lines: 55
     '    Code Lines: 36
-    ' Comment Lines: 3
+    ' Comment Lines: 11
     '   Blank Lines: 8
-    '     File Size: 1.36 KB
+    '     File Size: 1.63 KB
 
 
     '     Class RuntimeValueLiteral

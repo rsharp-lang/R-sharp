@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dc33da3c0d162cc3778945175f8646a7, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/makeList.vb"
+﻿#Region "Microsoft.VisualBasic::af884931a3d164412fd67554919f88d2, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/makeList.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 96
-    '    Code Lines: 75
+    '   Total Lines: 97
+    '    Code Lines: 76
     ' Comment Lines: 7
     '   Blank Lines: 14
-    '     File Size: 3.50 KB
+    '     File Size: 3.54 KB
 
 
     '     Module makeList

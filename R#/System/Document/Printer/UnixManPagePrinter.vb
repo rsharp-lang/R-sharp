@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c8af01c20bec89108dbb838354c2103, D:/GCModeller/src/R-sharp/R#//System/Document/Printer/UnixManPagePrinter.vb"
+﻿#Region "Microsoft.VisualBasic::8a347cbfac8019f2e60337ddd5f83340, E:/GCModeller/src/R-sharp/R#//System/Document/Printer/UnixManPagePrinter.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 78
     ' Comment Lines: 0
     '   Blank Lines: 11
-    '     File Size: 3.68 KB
+    '     File Size: 3.70 KB
 
 
     '     Module UnixManPagePrinter

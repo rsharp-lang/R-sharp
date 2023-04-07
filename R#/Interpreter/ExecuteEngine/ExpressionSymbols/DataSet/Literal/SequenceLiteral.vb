@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5df0df7baa0a9e6f04afc8840005cfdb, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/Literal/SequenceLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::db76c24006f67e4465bd8723c0210f7f, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/Literal/SequenceLiteral.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 204
-    '    Code Lines: 147
+    '   Total Lines: 205
+    '    Code Lines: 148
     ' Comment Lines: 26
     '   Blank Lines: 31
-    '     File Size: 7.44 KB
+    '     File Size: 7.48 KB
 
 
     '     Class SequenceLiteral

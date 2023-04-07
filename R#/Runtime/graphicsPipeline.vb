@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cf3b62915a8ea7663a6638a93395a06f, D:/GCModeller/src/R-sharp/R#//Runtime/graphicsPipeline.vb"
+﻿#Region "Microsoft.VisualBasic::4b4440edcb2eb7b6af79413b7941d767, E:/GCModeller/src/R-sharp/R#//Runtime/graphicsPipeline.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 185
-    '    Code Lines: 154
+    '   Total Lines: 186
+    '    Code Lines: 155
     ' Comment Lines: 7
     '   Blank Lines: 24
-    '     File Size: 7.81 KB
+    '     File Size: 7.83 KB
 
 
     '     Module graphicsPipeline

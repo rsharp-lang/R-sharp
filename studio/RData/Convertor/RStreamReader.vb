@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e370d28263fe2b4ca9c7e82971dfef1b, D:/GCModeller/src/R-sharp/studio/RData//Convertor/RStreamReader.vb"
+﻿#Region "Microsoft.VisualBasic::02c327b565cc318d70a61e4cc61dfb37, E:/GCModeller/src/R-sharp/studio/RData//Convertor/RStreamReader.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 58
     ' Comment Lines: 5
     '   Blank Lines: 11
-    '     File Size: 2.96 KB
+    '     File Size: 2.95 KB
 
 
     '     Class RStreamReader

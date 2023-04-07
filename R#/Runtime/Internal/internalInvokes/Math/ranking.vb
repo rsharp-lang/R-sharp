@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d6a468f225e1da483ea411eab6ea99aa, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Math/ranking.vb"
+﻿#Region "Microsoft.VisualBasic::980db0c02f75f5e891bd0fe90b6792ce, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Math/ranking.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 137
-    '    Code Lines: 41
+    '   Total Lines: 138
+    '    Code Lines: 42
     ' Comment Lines: 88
     '   Blank Lines: 8
-    '     File Size: 7.18 KB
+    '     File Size: 7.20 KB
 
 
     '     Module ranking

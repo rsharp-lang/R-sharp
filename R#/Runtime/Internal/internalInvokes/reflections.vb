@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::33f6b80d2b41b993e3c59d6ab1246c8e, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/reflections.vb"
+﻿#Region "Microsoft.VisualBasic::c3278146d6c8f54009507e1f94e0bf91, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/reflections.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 167
-    '    Code Lines: 78
-    ' Comment Lines: 74
-    '   Blank Lines: 15
-    '     File Size: 7.56 KB
+    '   Total Lines: 186
+    '    Code Lines: 86
+    ' Comment Lines: 84
+    '   Blank Lines: 16
+    '     File Size: 8.25 KB
 
 
     '     Module reflections
     ' 
-    '         Function: eval, formals, parse
+    '         Function: eval, formals, getClass, parse
     ' 
     ' 
     ' /********************************************************************************/

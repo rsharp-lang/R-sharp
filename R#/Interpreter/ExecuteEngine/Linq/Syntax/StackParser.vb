@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f92ffed09e9590711104f5d59e309ef6, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/Linq/Syntax/StackParser.vb"
+﻿#Region "Microsoft.VisualBasic::f92ffed09e9590711104f5d59e309ef6, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/Linq/Syntax/StackParser.vb"
 
     ' Author:
     ' 

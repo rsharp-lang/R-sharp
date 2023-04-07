@@ -1,58 +1,58 @@
-﻿#Region "Microsoft.VisualBasic::ffd9b166addd9d0caa134fc2fe9af603, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/generic.vb"
+﻿#Region "Microsoft.VisualBasic::02946b8fe95aabe97843e2d11021fe24, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/generic.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 163
-'    Code Lines: 103
-' Comment Lines: 37
-'   Blank Lines: 23
-'     File Size: 6.41 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Delegate Function
-' 
-' 
-'     Module generic
-' 
-'         Function: exists, (+3 Overloads) invokeGeneric, missingGenericSymbol, parseGeneric
-' 
-'         Sub: add
-' 
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 169
+    '    Code Lines: 107
+    ' Comment Lines: 37
+    '   Blank Lines: 25
+    '     File Size: 6.70 KB
+
+
+    '     Delegate Function
+    ' 
+    ' 
+    '     Module generic
+    ' 
+    '         Function: exists, (+3 Overloads) invokeGeneric, missingGenericSymbol, parseGeneric
+    ' 
+    '         Sub: add
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

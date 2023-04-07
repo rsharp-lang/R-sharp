@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d7e2504cea541ccf01c21cb885986218, D:/GCModeller/src/R-sharp/R#//Runtime/Serialize/bufferObjects/listBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::7c93b5bff3c415a023e3ce42569badfa, E:/GCModeller/src/R-sharp/R#//Runtime/Serialize/bufferObjects/listBuffer.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 106
+    '   Total Lines: 110
     '    Code Lines: 83
-    ' Comment Lines: 0
+    ' Comment Lines: 4
     '   Blank Lines: 23
-    '     File Size: 3.54 KB
+    '     File Size: 3.68 KB
 
 
     '     Class listBuffer

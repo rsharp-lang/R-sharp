@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e755127d31d33ee96010b58d8df5636b, D:/GCModeller/src/R-sharp/Library/base//base/IO.vb"
+﻿#Region "Microsoft.VisualBasic::2461646b7f9df6912f12e808df694773, E:/GCModeller/src/R-sharp/Library/base//base/IO.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 126
     ' Comment Lines: 20
     '   Blank Lines: 15
-    '     File Size: 6.61 KB
+    '     File Size: 6.62 KB
 
 
     ' Module RawIO

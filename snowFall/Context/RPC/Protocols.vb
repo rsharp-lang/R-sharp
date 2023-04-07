@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9136a51ea62ea39270dd807b1d436dc7, D:/GCModeller/src/R-sharp/snowFall//Context/RPC/Protocols.vb"
+﻿#Region "Microsoft.VisualBasic::43e366a08b8da6d1aac5e2b881c36a20, E:/GCModeller/src/R-sharp/snowFall//Context/RPC/Protocols.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 60
-    '    Code Lines: 46
-    ' Comment Lines: 0
-    '   Blank Lines: 14
-    '     File Size: 1.70 KB
+    '   Total Lines: 71
+    '    Code Lines: 49
+    ' Comment Lines: 6
+    '   Blank Lines: 16
+    '     File Size: 2.03 KB
 
 
     '     Enum Protocols
@@ -54,6 +54,9 @@
     '         Properties: name, uuid
     ' 
     '         Constructor: (+2 Overloads) Sub New
+    ' 
+    '         Function: ToString
+    ' 
     '         Sub: Serialize
     ' 
     '     Class ResultPayload

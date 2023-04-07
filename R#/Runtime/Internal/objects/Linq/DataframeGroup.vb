@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2a1377d1155b0c9d7e1ab327bd672f5c, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/Linq/DataframeGroup.vb"
+﻿#Region "Microsoft.VisualBasic::aa7c6b8ffb51d59c59ead58acab00ef0, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/Linq/DataframeGroup.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 84
-    '    Code Lines: 63
+    '   Total Lines: 83
+    '    Code Lines: 62
     ' Comment Lines: 6
     '   Blank Lines: 15
-    '     File Size: 3.04 KB
+    '     File Size: 3.01 KB
 
 
     '     Module DataframeGroup

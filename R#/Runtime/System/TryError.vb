@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::08425c7bc9fec3f8e5b84b40280edc07, D:/GCModeller/src/R-sharp/R#//Runtime/System/TryError.vb"
+﻿#Region "Microsoft.VisualBasic::4a6834ed9351ba3a67fe6d3552802d04, E:/GCModeller/src/R-sharp/R#//Runtime/System/TryError.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 33
-    '    Code Lines: 24
-    ' Comment Lines: 3
+    '   Total Lines: 39
+    '    Code Lines: 26
+    ' Comment Lines: 7
     '   Blank Lines: 6
-    '     File Size: 1.03 KB
+    '     File Size: 1.24 KB
 
 
     '     Class TryError
     ' 
-    '         Properties: [error], stackframe
+    '         Properties: [error], stackframe, stacktrace
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: ToString, traceback

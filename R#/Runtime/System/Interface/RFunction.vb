@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4be6fe6c4e6332505ca55a4c909895e7, D:/GCModeller/src/R-sharp/R#//Runtime/System/Interface/RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::396ddfa6709ee3199590b5ae49490a7b, E:/GCModeller/src/R-sharp/R#//Runtime/System/Interface/RFunction.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 59
-    '    Code Lines: 20
-    ' Comment Lines: 27
-    '   Blank Lines: 12
-    '     File Size: 2.04 KB
+    '   Total Lines: 57
+    '    Code Lines: 14
+    ' Comment Lines: 36
+    '   Blank Lines: 7
+    '     File Size: 2.24 KB
 
 
     '     Interface RFunction
@@ -46,14 +46,6 @@
     '         Properties: name
     ' 
     '         Function: getArguments, getReturns, (+2 Overloads) Invoke
-    ' 
-    '     Interface IRuntimeTrace
-    ' 
-    '         Properties: stackFrame
-    ' 
-    '     Interface INamespaceReferenceSymbol
-    ' 
-    '         Properties: [namespace]
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4b7204e9b179bfb000c4f2838aabc992, D:/GCModeller/src/R-sharp/R#//Runtime/Environment/GlobalEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::7823103eb8e07f45aaf5d7b6c73ea068, E:/GCModeller/src/R-sharp/R#//Runtime/Environment/GlobalEnvironment.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 289
-    '    Code Lines: 187
-    ' Comment Lines: 60
-    '   Blank Lines: 42
-    '     File Size: 11.88 KB
+    '   Total Lines: 305
+    '    Code Lines: 194
+    ' Comment Lines: 68
+    '   Blank Lines: 43
+    '     File Size: 12.59 KB
 
 
     '     Class GlobalEnvironment
     ' 
-    '         Properties: attachedNamespace, debugLevel, debugMode, factors, hybridsEngine
-    '                     lastException, log4vb_redirect, options, packages, profiler2
+    '         Properties: attachedNamespace, debugLevel, debugMode, factors, lastException
+    '                     log4vb_redirect, options, packages, polyglot, profiler2
     '                     Rscript, scriptDir, stdout, symbolLanguages, types
     ' 
     '         Constructor: (+2 Overloads) Sub New

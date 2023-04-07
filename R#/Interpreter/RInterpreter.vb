@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5cdbad1369f37b574fc672ffe5a63a9b, D:/GCModeller/src/R-sharp/R#//Interpreter/RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::9e2b63ade25e22d007446c6791dcea19, E:/GCModeller/src/R-sharp/R#//Interpreter/RInterpreter.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 628
-    '    Code Lines: 382
-    ' Comment Lines: 151
-    '   Blank Lines: 95
-    '     File Size: 25.73 KB
+    '   Total Lines: 643
+    '    Code Lines: 387
+    ' Comment Lines: 160
+    '   Blank Lines: 96
+    '     File Size: 26.45 KB
 
 
     '     Class RInterpreter
@@ -48,7 +48,7 @@
     ' 
     '         Constructor: (+2 Overloads) Sub New
     ' 
-    '         Function: [Imports], [Set], (+2 Overloads) Evaluate, FromEnvironmentConfiguration, getDataStream
+    '         Function: [Imports], [Set], (+3 Overloads) Evaluate, FromEnvironmentConfiguration, getDataStream
     '                   InitializeEnvironment, (+3 Overloads) Invoke, (+2 Overloads) LoadLibrary, options, Parse
     '                   RedirectOutput, Run, RunInternal, Source
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::14d6c454824d04b7edb40e4dc76a5817, D:/GCModeller/src/R-sharp/Library/graphics//zzz.vb"
+﻿#Region "Microsoft.VisualBasic::e0d33867653e0a00c03cd4bbeb76e1ce, E:/GCModeller/src/R-sharp/Library/graphics//zzz.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 34
+    '   Total Lines: 35
     '    Code Lines: 27
     ' Comment Lines: 1
-    '   Blank Lines: 6
-    '     File Size: 1.22 KB
+    '   Blank Lines: 7
+    '     File Size: 1.20 KB
 
 
     ' Class zzz

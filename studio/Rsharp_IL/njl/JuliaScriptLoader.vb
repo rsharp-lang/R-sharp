@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::04e60021c18149c072004f59ec382796, D:/GCModeller/src/R-sharp/studio/Rsharp_IL/njl//JuliaScriptLoader.vb"
+﻿#Region "Microsoft.VisualBasic::20b2cc7e4a45c323c654e5e51d0f73fb, E:/GCModeller/src/R-sharp/studio/Rsharp_IL/njl//JuliaScriptLoader.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 52
     ' Comment Lines: 5
     '   Blank Lines: 10
-    '     File Size: 2.56 KB
+    '     File Size: 2.60 KB
 
 
     ' Class JuliaScriptLoader

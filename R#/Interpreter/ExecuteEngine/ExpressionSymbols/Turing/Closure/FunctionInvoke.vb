@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b206736613bc3e0728e3a82f2ff7744f, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/Closure/FunctionInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::793af60f77fa32ce058140a8340c6326, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/Closure/FunctionInvoke.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 442
-    '    Code Lines: 274
+    '   Total Lines: 443
+    '    Code Lines: 275
     ' Comment Lines: 119
     '   Blank Lines: 49
-    '     File Size: 18.26 KB
+    '     File Size: 18.30 KB
 
 
     '     Class FunctionInvoke

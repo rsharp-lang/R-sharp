@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::54ac5d67a880bddbf6ac62f888f46451, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/SymbolIndexer/VectorLoop.vb"
+﻿#Region "Microsoft.VisualBasic::6766b9a677df73880c24886339f13814, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/SymbolIndexer/VectorLoop.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 147
-    '    Code Lines: 102
-    ' Comment Lines: 22
-    '   Blank Lines: 23
-    '     File Size: 5.60 KB
+    '   Total Lines: 137
+    '    Code Lines: 85
+    ' Comment Lines: 31
+    '   Blank Lines: 21
+    '     File Size: 5.20 KB
 
 
     '     Class VectorLoop

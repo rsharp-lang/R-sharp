@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::797622b9a24ade2c9ceea3a4ece44203, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/MethodInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::f6db8d2ff882eb8ac3aa78e5eae5e6e8, E:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/MethodInvoke.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 46
-    '    Code Lines: 36
+    '   Total Lines: 48
+    '    Code Lines: 38
     ' Comment Lines: 0
     '   Blank Lines: 10
-    '     File Size: 1.52 KB
+    '     File Size: 1.65 KB
 
 
     '     Class MethodInvoke
