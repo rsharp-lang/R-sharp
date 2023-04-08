@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::5c45c40b693ea7234048758e13cffb5c, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/graphics/graphics.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 511
-    '    Code Lines: 317
-    ' Comment Lines: 130
-    '   Blank Lines: 64
-    '     File Size: 21.31 KB
+' Summaries:
 
 
-    '     Module graphics
-    ' 
-    '         Properties: curDev
-    ' 
-    '         Function: bitmap, devCur, devOff, drawText, getImageObject
-    '                   isBase64StringOrFile, OpenNewBitmapDevice, plot, rasterFont, rasterImage
-    '                   readImage, resizeImage, setCurrentDev, thumbnail, wmf
-    ' 
-    '         Sub: openNew
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 511
+'    Code Lines: 317
+' Comment Lines: 130
+'   Blank Lines: 64
+'     File Size: 21.31 KB
+
+
+'     Module graphics
+' 
+'         Properties: curDev
+' 
+'         Function: bitmap, devCur, devOff, drawText, getImageObject
+'                   isBase64StringOrFile, OpenNewBitmapDevice, plot, rasterFont, rasterImage
+'                   readImage, resizeImage, setCurrentDev, thumbnail, wmf
+' 
+'         Sub: openNew
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -88,6 +88,23 @@ Namespace Runtime.Internal.Invokes
                 Return devlist.LastOrDefault
             End Get
         End Property
+
+        Sub New()
+            Internal.Object.Converts.makeDataframe.addHandler(GetType(Color()), AddressOf colorTable)
+        End Sub
+
+        Private Function colorTable(raster As Color(), args As list, env As Environment) As dataframe
+            Dim df As New dataframe With {
+                .columns = New Dictionary(Of String, Array)
+            }
+
+            df.add("a", raster.Select(Function(c) CDbl(c.A)))
+            df.add("r", raster.Select(Function(c) CDbl(c.R)))
+            df.add("g", raster.Select(Function(c) CDbl(c.G)))
+            df.add("b", raster.Select(Function(c) CDbl(c.B)))
+
+            Return df
+        End Function
 
         Friend Sub openNew(dev As IGraphics, buffer As Stream, args As list)
             Dim curDev = New graphicsDevice With {
@@ -228,6 +245,26 @@ Namespace Runtime.Internal.Invokes
                                    Optional style As FontStyle = FontStyle.Regular) As Font
 
             Return New Font(name, size, style)
+        End Function
+
+        ''' <summary>
+        ''' convert the image to a collection of raster pixels
+        ''' </summary>
+        ''' <param name="image"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' A dataframe object that contains the raster pixel data
+        ''' </returns>
+        <ExportAPI("rasterPixels")>
+        <RApiReturn(GetType(dataframe))>
+        Public Function rasterPixels(image As Object, Optional env As Environment = Nothing) As Object
+            If image Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf image Is Image OrElse TypeOf image Is Bitmap Then
+                Return graphics.colorTable(BitmapBuffer.FromImage(CType(image, Image)).GetPixelsAll.ToArray, New list, env)
+            Else
+                Return Message.InCompatibleType(GetType(Image), image.GetType, env)
+            End If
         End Function
 
         ''' <summary>
