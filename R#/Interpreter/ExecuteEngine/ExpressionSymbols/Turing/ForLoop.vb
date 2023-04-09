@@ -1,60 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::95f53621961a2a991f3e4a97e49308f6, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/ForLoop.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 194
-    '    Code Lines: 126
-    ' Comment Lines: 39
-    '   Blank Lines: 29
-    '     File Size: 7.07 KB
+' Summaries:
 
 
-    '     Class ForLoop
-    ' 
-    '         Properties: body, expressionName, sequence, stackFrame, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, exec, execParallel, getSequence, RunLoop
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 194
+'    Code Lines: 126
+' Comment Lines: 39
+'   Blank Lines: 29
+'     File Size: 7.07 KB
+
+
+'     Class ForLoop
+' 
+'         Properties: body, expressionName, sequence, stackFrame, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, exec, execParallel, getSequence, RunLoop
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -169,11 +170,24 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 .AsParallel _
                 .Select(Function(value, i)
                             Dim stackframe As New StackFrame(Me.stackFrame)
-                            stackframe.Method.Method = $"parallel_for_loop_[{i}]"
+                            Dim label As String = GetLoopTagLabel(i, value)
+                            stackframe.Method.Method = $"parallel_for_loop_[{label}]"
                             Return RunLoop(value, stackframe, envir)
                         End Function)
 
             Return result
+        End Function
+
+        Private Shared Function GetLoopTagLabel(i As Integer, value As Object) As String
+            If value Is Nothing Then
+                Return $"[{i}] <NULL>"
+            ElseIf TypeOf value Is String Then
+                Return $"[{i}]: ""{Mid(CStr(value), 1, 64)}{If(CStr(value).Length > 64, "...", "")}"""
+            ElseIf DataFramework.IsPrimitive(value) Then
+                Return $"[{i}]: {value}"
+            Else
+                Return i.ToString
+            End If
         End Function
 
         ''' <summary>
@@ -240,7 +254,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
             Dim stackframe As New StackFrame(Me.stackFrame)
 
             For Each value As Object In getSequence(envir)
-                stackframe.Method.Method = $"for_loop_[{++i}]"
+                stackframe.Method.Method = $"for_loop_[{GetLoopTagLabel(++i, value)}]"
                 value = RunLoop(value, stackframe, envir)
 
                 Yield value
