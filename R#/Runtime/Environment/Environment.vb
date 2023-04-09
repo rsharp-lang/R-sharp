@@ -344,6 +344,23 @@ Namespace Runtime
         End Function
 
         ''' <summary>
+        ''' Try to get value of the specific symbol
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns>
+        ''' this function returns nothing by default if the symbol is missing in the environment context
+        ''' </returns>
+        Public Function GetValue(name As String, Optional [default] As Object = Nothing) As Object
+            Dim symbol As Symbol = FindSymbol(name)
+
+            If symbol Is Nothing Then
+                Return [default]
+            Else
+                Return symbol.value
+            End If
+        End Function
+
+        ''' <summary>
         ''' a shortcut wrapper function pointer for 
         ''' <see cref="base.print(Object, list, Environment)"/> 
         ''' </summary>

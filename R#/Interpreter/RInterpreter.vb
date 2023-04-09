@@ -349,6 +349,12 @@ Namespace Interpreter
             Return Me
         End Function
 
+        ''' <summary>
+        ''' Create a new symbol inside the R# runtime environment
+        ''' </summary>
+        ''' <param name="name$"></param>
+        ''' <param name="value"></param>
+        ''' <param name="type"></param>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Sub Add(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic)

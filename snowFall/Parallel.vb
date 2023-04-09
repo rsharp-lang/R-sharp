@@ -174,9 +174,14 @@ Public Module Parallel
         Dim req As New RequestStream(MasterContext.Protocol, RPC.Protocols.Initialize)
         Dim localMaster As String = env.globalEnvironment.options.getOption("localMaster", LANTools.GetIPAddress.ToString, env)
         Dim resp As RequestStream
+        Dim current_taskName As String = env.globalEnvironment.GetValue("@task")
 
-        Call VBDebugger.EchoLine($"[slave_task] master_host={localMaster}")
-        Call VBDebugger.EchoLine($"[bootstrapping] bootstrap_port={port}!")
+        If Not current_taskName.StringEmpty Then
+            current_taskName = $"<{current_taskName}>: "
+        End If
+
+        Call VBDebugger.EchoLine($"{current_taskName}[slave_task] master_host={localMaster}")
+        Call VBDebugger.EchoLine($"{current_taskName}[bootstrapping] bootstrap_port={port}!")
 
         resp = New TcpRequest(hostName:=localMaster, remotePort:=CInt(port)).SendMessage(req)
 
@@ -184,9 +189,9 @@ Public Module Parallel
         Dim masterPort As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 4)
         Dim size As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 8)
 
-        Call VBDebugger.EchoLine($"uuid={uuid}")
-        Call VBDebugger.EchoLine($"remote_environment={masterPort}")
-        Call VBDebugger.EchoLine($"task_body_size={size}")
+        Call VBDebugger.EchoLine($"{current_taskName}uuid={uuid}")
+        Call VBDebugger.EchoLine($"{current_taskName}remote_environment={masterPort}")
+        Call VBDebugger.EchoLine($"{current_taskName}task_body_size={size}")
 
         Dim buffer As Byte() = New Byte(size - 1) {}
         Dim closure As Expression = Nothing
@@ -197,7 +202,7 @@ Public Module Parallel
             parent:=env
         )
 
-        Call VBDebugger.EchoLine("create root environment:")
+        Call VBDebugger.EchoLine($"{current_taskName}create root environment:")
         Call VBDebugger.EchoLine(root.ToString)
 
         Dim fake As New DESCRIPTION With {
@@ -218,11 +223,11 @@ Public Module Parallel
             Call BlockReader.Read(reader).Parse(fake, expr:=closure)
         End Using
 
-        Call VBDebugger.EchoLine("get task:")
+        Call VBDebugger.EchoLine($"{current_taskName}get task:")
         Call VBDebugger.EchoLine("::")
         Call VBDebugger.EchoLine(closure.ToString)
         Call VBDebugger.EchoLine("::")
-        Call VBDebugger.EchoLine(" --> run!")
+        Call VBDebugger.EchoLine($"{current_taskName} --> run!")
         Call VBDebugger.EchoLine("")
 
         Try
@@ -242,7 +247,7 @@ Public Module Parallel
         req = New RequestStream(MasterContext.Protocol, RPC.Protocols.PushResult, result)
 
         Call VBDebugger.EchoLine("")
-        Call VBDebugger.EchoLine("~job done!")
+        Call VBDebugger.EchoLine($"{current_taskName}~job done!")
 
         If TypeOf result.value Is Message Then
             Call VBDebugger.EchoLine("")
@@ -254,7 +259,7 @@ Public Module Parallel
         ' sync work on tcp request
         Call New TcpRequest(localMaster, masterPort).SendMessage(req)
         Call New TcpRequest(localMaster, port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
-        Call VBDebugger.EchoLine("exit!")
+        Call VBDebugger.EchoLine($"{current_taskName}exit!")
 
         Return App.Exit(0)
     End Function
