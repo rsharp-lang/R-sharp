@@ -25,7 +25,7 @@ print(x |> common_compute("sqrt"));
 # like throw error message
 const catch = try(error -> x |> common_compute("err")) {
 	# catch ex if this catch block is defined
-	print(error);
+	print([error]::error);
 }
 
 common_compute(x, "blabla");
