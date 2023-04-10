@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7482e1bae6004784bae653ea5f362580, E:/GCModeller/src/R-sharp/R#//LegacyRHelper.vb"
+﻿#Region "Microsoft.VisualBasic::f6f7f67197fd83fcd0b1887696fd57ce, D:/GCModeller/src/R-sharp/R#//LegacyRHelper.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 35
     ' Comment Lines: 2
     '   Blank Lines: 7
-    '     File Size: 1.85 KB
+    '     File Size: 1.84 KB
 
 
     ' Module LegacyRHelper
@@ -93,4 +93,3 @@ Public Module LegacyRHelper
         Return RlangInterop.ProcessingRUniCode(document.ToString).DoCall(AddressOf RlangInterop.ProcessingRRawUniCode)
     End Function
 End Module
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::70e30b5d6748a1490d3ee75d45e8a803, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//sqlite.vb"
+﻿#Region "Microsoft.VisualBasic::70e30b5d6748a1490d3ee75d45e8a803, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//sqlite.vb"
 
     ' Author:
     ' 

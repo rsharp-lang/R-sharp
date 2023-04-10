@@ -1,59 +1,51 @@
-﻿#Region "Microsoft.VisualBasic::fa4736b060fae6237ed0a8906903cbf8, E:/GCModeller/src/R-sharp/Rscript//CLI/Parallel.vb"
+﻿#Region "Microsoft.VisualBasic::47ff40f0239797ace1999df4823cafbb, D:/GCModeller/src/R-sharp/Rscript//CLI/Parallel.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-<<<<<<< HEAD
-'   Total Lines: 87
-'    Code Lines: 64
-' Comment Lines: 9
-'   Blank Lines: 14
-'     File Size: 3.68 KB
-=======
-    '   Total Lines: 82
-    '    Code Lines: 60
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 85
+    '    Code Lines: 62
     ' Comment Lines: 9
-    '   Blank Lines: 13
-    '     File Size: 3.30 KB
->>>>>>> f55c66a0da8cf24511c3f4b63173431c2c1ce70d
+    '   Blank Lines: 14
+    '     File Size: 3.36 KB
 
 
-' Module CLI
-' 
-'     Function: parallelMode
-' 
-' /********************************************************************************/
+    ' Module CLI
+    ' 
+    '     Function: parallelMode
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

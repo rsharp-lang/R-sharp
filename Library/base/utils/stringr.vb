@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c1f297005e015d23afc46f31f575057, E:/GCModeller/src/R-sharp/Library/base//utils/stringr.vb"
+﻿#Region "Microsoft.VisualBasic::6c1f297005e015d23afc46f31f575057, D:/GCModeller/src/R-sharp/Library/base//utils/stringr.vb"
 
     ' Author:
     ' 

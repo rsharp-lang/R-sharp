@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::965bd7e5c87cc2f3821659aaf83496a7, E:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//TypeScriptLoader.vb"
+﻿#Region "Microsoft.VisualBasic::965bd7e5c87cc2f3821659aaf83496a7, D:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//TypeScriptLoader.vb"
 
     ' Author:
     ' 

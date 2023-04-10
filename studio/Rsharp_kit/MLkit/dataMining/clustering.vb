@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3c1bcd7297e00441f5090a73844018ce, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataMining/clustering.vb"
+﻿#Region "Microsoft.VisualBasic::3c1bcd7297e00441f5090a73844018ce, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataMining/clustering.vb"
 
     ' Author:
     ' 
