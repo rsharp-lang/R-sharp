@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::eb48301136cf771ed6de3973ffce4740, D:/GCModeller/src/R-sharp/studio/Rstudio//gtk.vb"
+﻿#Region "Microsoft.VisualBasic::04dd12e76fd9d378dd63e5ce6610d580, E:/GCModeller/src/R-sharp/studio/Rstudio//gtk.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 119
-    '    Code Lines: 80
+    '   Total Lines: 120
+    '    Code Lines: 81
     ' Comment Lines: 31
     '   Blank Lines: 8
-    '     File Size: 4.59 KB
+    '     File Size: 4.63 KB
 
 
     ' Module gtk

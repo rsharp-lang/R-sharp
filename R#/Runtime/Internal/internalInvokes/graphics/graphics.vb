@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a45288e5a5c07cb61787d749ae6faef0, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/graphics/graphics.vb"
+﻿#Region "Microsoft.VisualBasic::5c45c40b693ea7234048758e13cffb5c, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/graphics/graphics.vb"
 
 ' Author:
 ' 
@@ -34,11 +34,11 @@
 
 ' Code Statistics:
 
-'   Total Lines: 503
-'    Code Lines: 310
+'   Total Lines: 511
+'    Code Lines: 317
 ' Comment Lines: 130
-'   Blank Lines: 63
-'     File Size: 21.08 KB
+'   Blank Lines: 64
+'     File Size: 21.31 KB
 
 
 '     Module graphics
@@ -46,8 +46,8 @@
 '         Properties: curDev
 ' 
 '         Function: bitmap, devCur, devOff, drawText, getImageObject
-'                   isBase64StringOrFile, plot, rasterFont, rasterImage, readImage
-'                   resizeImage, setCurrentDev, thumbnail, wmf
+'                   isBase64StringOrFile, OpenNewBitmapDevice, plot, rasterFont, rasterImage
+'                   readImage, resizeImage, setCurrentDev, thumbnail, wmf
 ' 
 '         Sub: openNew
 ' 
@@ -88,6 +88,23 @@ Namespace Runtime.Internal.Invokes
                 Return devlist.LastOrDefault
             End Get
         End Property
+
+        Sub New()
+            Internal.Object.Converts.makeDataframe.addHandler(GetType(Color()), AddressOf colorTable)
+        End Sub
+
+        Private Function colorTable(raster As Color(), args As list, env As Environment) As dataframe
+            Dim df As New dataframe With {
+                .columns = New Dictionary(Of String, Array)
+            }
+
+            df.add("a", raster.Select(Function(c) CDbl(c.A)))
+            df.add("r", raster.Select(Function(c) CDbl(c.R)))
+            df.add("g", raster.Select(Function(c) CDbl(c.G)))
+            df.add("b", raster.Select(Function(c) CDbl(c.B)))
+
+            Return df
+        End Function
 
         Friend Sub openNew(dev As IGraphics, buffer As Stream, args As list)
             Dim curDev = New graphicsDevice With {
@@ -228,6 +245,26 @@ Namespace Runtime.Internal.Invokes
                                    Optional style As FontStyle = FontStyle.Regular) As Font
 
             Return New Font(name, size, style)
+        End Function
+
+        ''' <summary>
+        ''' convert the image to a collection of raster pixels
+        ''' </summary>
+        ''' <param name="image"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' A dataframe object that contains the raster pixel data
+        ''' </returns>
+        <ExportAPI("rasterPixels")>
+        <RApiReturn(GetType(dataframe))>
+        Public Function rasterPixels(image As Object, Optional env As Environment = Nothing) As Object
+            If image Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf image Is Image OrElse TypeOf image Is Bitmap Then
+                Return graphics.colorTable(BitmapBuffer.FromImage(CType(image, Image)).GetPixelsAll.ToArray, New list, env)
+            Else
+                Return Message.InCompatibleType(GetType(Image), image.GetType, env)
+            End If
         End Function
 
         ''' <summary>
@@ -557,13 +594,19 @@ Namespace Runtime.Internal.Invokes
                 Dim scaleI As Double = factor(Scan0)
                 Dim oldSize As Size = bitmap.Size
 
+                ' scale image size by a fiven factor
                 newSize = New Size(oldSize.Width * scaleI, oldSize.Height * scaleI)
+                Dim resize As Image = bitmap.Resize(newSize.Width, onlyResizeIfWider:=newSize.Width > bitmap.Size.Width)
+                Return resize
             Else
+                ' resize the image to a given size
                 newSize = New Size(factor(0), factor(1))
-            End If
 
-            Dim resize As Image = bitmap.Resize(newSize.Width, onlyResizeIfWider:=newSize.Width > bitmap.Size.Width)
-            Return resize
+                Using g As Graphics2D = newSize.CreateGDIDevice(filled:=Color.Transparent)
+                    Call g.DrawImage(bitmapVal.TryCast(Of Bitmap), 0, 0, newSize.Width, newSize.Height)
+                    Return g.ImageResource
+                End Using
+            End If
         End Function
     End Module
 End Namespace

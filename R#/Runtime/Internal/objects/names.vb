@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dd887cc3921f34353d652948636197d1, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/names.vb"
+﻿#Region "Microsoft.VisualBasic::5745a310fae6a58e68a2ecee708cc1c8, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/names.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 252
-    '    Code Lines: 200
+    '   Total Lines: 253
+    '    Code Lines: 201
     ' Comment Lines: 14
     '   Blank Lines: 38
-    '     File Size: 9.93 KB
+    '     File Size: 9.97 KB
 
 
     '     Module names

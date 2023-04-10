@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::854d41b2584ca74809b61148333a047d, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RInteropAttributes/RApiReturnAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::4ed4d64e75adf6a17fd4e95a578d6406, E:/GCModeller/src/R-sharp/R#//Runtime/Interop/RInteropAttributes/RApiReturnAttribute.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 58
-    '    Code Lines: 36
-    ' Comment Lines: 13
-    '   Blank Lines: 9
-    '     File Size: 2.17 KB
+    '   Total Lines: 98
+    '    Code Lines: 62
+    ' Comment Lines: 23
+    '   Blank Lines: 13
+    '     File Size: 3.61 KB
 
 
     '     Class RApiReturnAttribute
     ' 
-    '         Properties: fields, returnTypes, unionType
+    '         Properties: fields, isClassGraph, returnTypes, unionType
     ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: GetActualReturnType, ToString
+    '         Constructor: (+4 Overloads) Sub New
+    '         Function: GetActualReturnType, GetClass, ToString
     ' 
     ' 
     ' /********************************************************************************/

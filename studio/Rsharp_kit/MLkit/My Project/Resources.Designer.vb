@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2d4a330eed05850bad7c16a506a3b770, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//My Project/Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::2d4a330eed05850bad7c16a506a3b770, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//My Project/Resources.Designer.vb"
 
     ' Author:
     ' 

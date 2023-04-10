@@ -1,9 +1,23 @@
 .\" man page create by R# package system.
 .TH HDS 1 2000-Jan "files" "files"
 .SH NAME
-files \- 
+files \- Get files in a specific directory
 .SH SYNOPSIS
-\fIfiles(\fBpack\fR as <generic> StreamPack);\fR
+\fIfiles(\fBpack\fR as <generic> StreamPack, 
+\fBdir\fR as string = "/", 
+\fBexcludes_dir\fR as boolean = FALSE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Get files in a specific directory
+.PP
+.SH OPTIONS
+.PP
+\fBpack\fB \fR\- -. 
+.PP
+.PP
+\fBdir\fB \fR\- the default directory path is root, for get all data files. 
+.PP
 .SH SEE ALSO
 HDS
 .SH FILES

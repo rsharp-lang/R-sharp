@@ -1,59 +1,64 @@
-﻿#Region "Microsoft.VisualBasic::b20cb4ab84527fd1e608a63f36cd7336, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/linq.vb"
+﻿#Region "Microsoft.VisualBasic::ba659c6ad77c9d475a938b3d7f21584f, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/linq.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 1357
-'    Code Lines: 779
-' Comment Lines: 428
-'   Blank Lines: 150
-'     File Size: 62.12 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module linq
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: all, any, doWhile, fastIndexing, first
-'                   getPredicate, groupBy, groupsSummary, groupSummary, last
-'                   left_join, match, orderBy, produceKeyedSequence, progress
-'                   projectAs, reverse, rotate_left, rotate_right, runFilterPipeline
-'                   runWhichFilter, skip, sort, sortByKeyFunction, sortByKeyValue
-'                   split, splitByPartitionSize, take, tryKeyBy, unique
-'                   where, whichMax, whichMin
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 1431
+    '    Code Lines: 818
+    ' Comment Lines: 453
+    '   Blank Lines: 160
+    '     File Size: 64.82 KB
+
+
+    '     Module linq
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: all, any, doWhile, fastIndexing, first
+    '                   getPredicate, groupBy, groupsSummary, groupSummary, last
+    '                   left_join, match, orderBy, produceKeyedSequence, progress
+    '                   projectAs, reverse, rotate_left, rotate_right, runFilterPipeline
+    '                   runWhichFilter, skip, sort, sortByKeyFunction, sortByKeyValue
+    '                   split, splitByPartitionSize, splitList, splitVector, take
+    '                   tryKeyBy, unique, where, whichMax, whichMin
+    '         Class SplitPredicateFunction
+    ' 
+    '             Function: AssertEquals, AssertThat, GetPredicate
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

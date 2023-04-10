@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8e1340c2f29fe784ed4d0c2a37f5409a, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataset/FeatureDescription.vb"
+﻿#Region "Microsoft.VisualBasic::afb07ce7b3de0766bc2d070d0e1c64c0, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataset/FeatureDescription.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 54
-    '    Code Lines: 46
+    '   Total Lines: 55
+    '    Code Lines: 47
     ' Comment Lines: 0
     '   Blank Lines: 8
-    '     File Size: 1.91 KB
+    '     File Size: 1.95 KB
 
 
     ' Module FeatureDescription

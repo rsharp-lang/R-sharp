@@ -1,54 +1,54 @@
-﻿#Region "Microsoft.VisualBasic::69f140b31dfbc40c29c061feb4dcbdc8, D:/GCModeller/src/R-sharp/R#//Runtime/RVectorExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::17cf973543b9198c76e2f457741e6d4a, E:/GCModeller/src/R-sharp/R#//Runtime/RVectorExtensions.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 481
-'    Code Lines: 340
-' Comment Lines: 82
-'   Blank Lines: 59
-'     File Size: 19.05 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module RVectorExtensions
-' 
-'         Function: [single], (+2 Overloads) asVector, castSingle, createArray, CTypeOfList
-'                   fromArray, getFirst, isVector, MeltArray, TryCastGenericArray
-'                   UnsafeTryCastGenericArray
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 558
+    '    Code Lines: 385
+    ' Comment Lines: 107
+    '   Blank Lines: 66
+    '     File Size: 21.61 KB
+
+
+    '     Module RVectorExtensions
+    ' 
+    '         Function: [single], AllNothing, (+2 Overloads) asVector, castSingle, createArray
+    '                   CTypeOfList, fromArray, getFirst, getScalar, isScalarVector
+    '                   isVector, MeltArray, TryCastGenericArray, UnsafeTryCastGenericArray
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

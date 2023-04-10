@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0080e67c13446dfe57a660dd14c77054, D:/GCModeller/src/R-sharp/R#//GlobalSuppressions.vb"
+﻿#Region "Microsoft.VisualBasic::a89b53e515b101678522530008910121, E:/GCModeller/src/R-sharp/R#//GlobalSuppressions.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 12
-    '    Code Lines: 6
+    '   Total Lines: 14
+    '    Code Lines: 8
     ' Comment Lines: 4
     '   Blank Lines: 2
-    '     File Size: 1.54 KB
+    '     File Size: 2.15 KB
 
 
     ' 

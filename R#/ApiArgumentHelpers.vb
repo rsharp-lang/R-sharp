@@ -1,51 +1,51 @@
-﻿#Region "Microsoft.VisualBasic::3a344397f4590ea2c8387bc0f67b0ba4, D:/GCModeller/src/R-sharp/R#//ApiArgumentHelpers.vb"
+﻿#Region "Microsoft.VisualBasic::e06c0bf287c78e0dfefd88c254006818, E:/GCModeller/src/R-sharp/R#//ApiArgumentHelpers.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 204
-'    Code Lines: 149
-' Comment Lines: 34
-'   Blank Lines: 21
-'     File Size: 7.95 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module ApiArgumentHelpers
-' 
-'     Function: FileStreamWriter, GetDoubleRange, GetFileStream, GetNamedValueTuple, rangeFromVector
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 204
+    '    Code Lines: 149
+    ' Comment Lines: 34
+    '   Blank Lines: 21
+    '     File Size: 7.95 KB
+
+
+    ' Module ApiArgumentHelpers
+    ' 
+    '     Function: FileStreamWriter, GetDoubleRange, GetFileStream, GetNamedValueTuple, rangeFromVector
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

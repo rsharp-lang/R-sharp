@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f604bd9ab1ef13427eb8ceef93847747, D:/GCModeller/src/R-sharp/Library/graphics//grDevices.vb"
+﻿#Region "Microsoft.VisualBasic::b94ae2a963b338e36ec46481d2b4881a, E:/GCModeller/src/R-sharp/Library/graphics//grDevices.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 488
-    '    Code Lines: 333
-    ' Comment Lines: 107
+    '   Total Lines: 493
+    '    Code Lines: 336
+    ' Comment Lines: 109
     '   Blank Lines: 48
-    '     File Size: 20.66 KB
+    '     File Size: 20.98 KB
 
 
     ' Module grDevices
@@ -77,7 +77,6 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports any = Microsoft.VisualBasic.Scripting
 Imports bitmapBuffer = SMRUCC.Rsharp.Runtime.Serialize.bitmapBuffer
-Imports debug = SMRUCC.Rsharp.Runtime.Internal.debug
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
@@ -458,7 +457,9 @@ break:
     ''' <summary>
     ''' get color set
     ''' </summary>
-    ''' <param name="term">the color set name</param>
+    ''' <param name="term">the color set name, if the parameter value 
+    ''' is an image data, then this function will try to extract the
+    ''' theme colors from it.</param>
     ''' <param name="n">
     ''' number of colors from the given color set(apply cubic 
     ''' spline for the color sequence), negative value or 
@@ -502,7 +503,11 @@ break:
             term = DirectCast(term, vector).data
         End If
 
-        If term.GetType.IsArray Then
+        If TypeOf term Is Image OrElse TypeOf term Is Bitmap Then
+            list = CustomDesigns.ExtractThemeColors(CType(term, Bitmap), topN:=n) _
+                .DoCall(AddressOf CustomDesigns.Order) _
+                .ToArray
+        ElseIf term.GetType.IsArray Then
             With DirectCast(term, Array) _
                 .AsObjectEnumerator _
                 .Select(Function(a) any.ToString(a)) _

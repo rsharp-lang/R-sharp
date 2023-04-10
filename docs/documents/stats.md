@@ -29,3 +29,5 @@
 + [aov](stats/aov.1) ## Fit an Analysis of Variance Model
 + [filterMissing](stats/filterMissing.1) set the NA, NaN, Inf value to the default value
 + [z](stats/z.1) z-score
++ [chi_square](stats/chi_square.1) The chiSquare method is used to determine whether there is a significant difference between the expected
++ [gamma.cdf](stats/gamma.cdf.1) 

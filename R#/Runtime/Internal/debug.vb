@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::493933c3a7b82b45b8798e53b2e11be9, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/debug.vb"
+﻿#Region "Microsoft.VisualBasic::77593e1a35adec0ccf3f26c973a28dd2, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/debug.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 337
+    '   Total Lines: 358
     '    Code Lines: 212
-    ' Comment Lines: 76
+    ' Comment Lines: 97
     '   Blank Lines: 49
-    '     File Size: 13.27 KB
+    '     File Size: 14.25 KB
 
 
     '     Class debug

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d5118f24905e4d708366ea5932234b38, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/BinaryExpressionTree/NameMemberReference.vb"
+﻿#Region "Microsoft.VisualBasic::d5118f24905e4d708366ea5932234b38, E:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/BinaryExpressionTree/NameMemberReference.vb"
 
     ' Author:
     ' 

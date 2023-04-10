@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::155baba58814d2bb199a67c776885b75, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/pipeline.vb"
+﻿#Region "Microsoft.VisualBasic::bfd7a2f5b5e5612c4b5e4b33d5c681a7, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/pipeline.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 271
-    '    Code Lines: 179
+    '   Total Lines: 278
+    '    Code Lines: 185
     ' Comment Lines: 51
-    '   Blank Lines: 41
-    '     File Size: 11.75 KB
+    '   Blank Lines: 42
+    '     File Size: 11.97 KB
 
 
     '     Class pipeline
     ' 
     '         Properties: [pipeFinalize], isError, isMessage
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+3 Overloads) Sub New
     '         Function: CreateFromPopulator, createVector, fromVector, getError, populates
     '                   ToString, TryCastGroupStream, TryCastObjectVector, TryCreatePipeline
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ea46a67acc133f59a6243008e933ee61, D:/GCModeller/src/R-sharp/Library/graphics//ColorBrewer.vb"
+﻿#Region "Microsoft.VisualBasic::ea46a67acc133f59a6243008e933ee61, E:/GCModeller/src/R-sharp/Library/graphics//ColorBrewer.vb"
 
     ' Author:
     ' 

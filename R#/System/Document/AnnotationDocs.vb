@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::edeeb96bdd471bfafa826b0b80ae7bdd, D:/GCModeller/src/R-sharp/R#//System/Document/AnnotationDocs.vb"
+﻿#Region "Microsoft.VisualBasic::3824de13a225cf9592d3e5d570688458, E:/GCModeller/src/R-sharp/R#//System/Document/AnnotationDocs.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 57
     ' Comment Lines: 21
     '   Blank Lines: 15
-    '     File Size: 3.46 KB
+    '     File Size: 3.47 KB
 
 
     '     Class AnnotationDocs

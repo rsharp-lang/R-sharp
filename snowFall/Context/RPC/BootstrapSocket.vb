@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9562a1e5bb68f713015d45c1b4f4ba4b, D:/GCModeller/src/R-sharp/snowFall//Context/RPC/BootstrapSocket.vb"
+﻿#Region "Microsoft.VisualBasic::c3b7dacad745db4cbe41d9e27cd53c94, E:/GCModeller/src/R-sharp/snowFall//Context/RPC/BootstrapSocket.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 247
-    '    Code Lines: 142
-    ' Comment Lines: 67
-    '   Blank Lines: 38
-    '     File Size: 9.00 KB
+    '   Total Lines: 268
+    '    Code Lines: 157
+    ' Comment Lines: 68
+    '   Blank Lines: 43
+    '     File Size: 9.49 KB
 
 
     '     Class BootstrapSocket
@@ -49,7 +49,7 @@
     ' 
     '         Function: folk, NodeSetup, Run, stopSocket, ToString
     ' 
-    '         Sub: (+2 Overloads) Dispose, setStatus, startAsync
+    '         Sub: (+2 Overloads) Dispose, Kill, setStatus, startAsync
     ' 
     ' 
     ' /********************************************************************************/

@@ -9,3 +9,4 @@
  For a complete list of functions, use ``ls("base")``.
 
 + [impute](base/impute.1) impute for missing values
++ [parseTtl](base/parseTtl.1) parse the RDF Turtle document

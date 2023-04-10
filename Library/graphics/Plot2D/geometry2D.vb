@@ -1,57 +1,63 @@
-﻿#Region "Microsoft.VisualBasic::ddf8fbe6f218446c5ce841a57efddfd7, D:/GCModeller/src/R-sharp/Library/graphics//Plot2D/geometry2D.vb"
+﻿#Region "Microsoft.VisualBasic::9b5a0bd20dc4419d216dd6edfcfb26ee, E:/GCModeller/src/R-sharp/Library/graphics//Plot2D/geometry2D.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 124
-'    Code Lines: 92
-' Comment Lines: 16
-'   Blank Lines: 16
-'     File Size: 4.87 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module geometry2D
-' 
-'     Function: density2D, Kdtest
-' 
-' Class PointAccess
-' 
-'     Function: activate, getByDimension, GetDimensions, metric, nodeIs
-' 
-'     Sub: setByDimensin
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 209
+    '    Code Lines: 156
+    ' Comment Lines: 26
+    '   Blank Lines: 27
+    '     File Size: 8.42 KB
+
+
+    ' Class PolygonGroup
+    ' 
+    '     Properties: label, size, subregions
+    ' 
+    ' Module geometry2D
+    ' 
+    '     Function: ConcaveHull, density2D, fillPolygonGroups, fillPolygons, Kdtest
+    ' 
+    '     Sub: Main
+    ' 
+    ' Class PointAccess
+    ' 
+    '     Function: activate, getByDimension, GetDimensions, metric, nodeIs
+    ' 
+    '     Sub: setByDimensin
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

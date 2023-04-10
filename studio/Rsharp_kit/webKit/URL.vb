@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e902fcc8ac907760cbfad367c0419b34, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//URL.vb"
+﻿#Region "Microsoft.VisualBasic::69ddd87f766de0ad7427ad5ab7809c71, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//URL.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 354
-    '    Code Lines: 239
-    ' Comment Lines: 79
-    '   Blank Lines: 36
-    '     File Size: 14.05 KB
+    '   Total Lines: 390
+    '    Code Lines: 261
+    ' Comment Lines: 90
+    '   Blank Lines: 39
+    '     File Size: 15.52 KB
 
 
     ' Module URL

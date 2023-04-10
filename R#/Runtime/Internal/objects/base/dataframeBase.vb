@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c694bc98e19fcc634dec9f0258f482e0, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/base/dataframeBase.vb"
+﻿#Region "Microsoft.VisualBasic::37747acb205c4eee2b027ec1b2590ab6, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/base/dataframeBase.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 92
-    '    Code Lines: 63
-    ' Comment Lines: 14
+    '   Total Lines: 95
+    '    Code Lines: 64
+    ' Comment Lines: 16
     '   Blank Lines: 15
-    '     File Size: 3.53 KB
+    '     File Size: 3.70 KB
 
 
     '     Module dataframeBase

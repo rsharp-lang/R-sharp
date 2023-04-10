@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::63e8e97eb30224dd97d82772af42b900, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/SVM.vb"
+﻿#Region "Microsoft.VisualBasic::07516dc041b03b2e0b1de4d067e9a28e, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/SVM.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 584
-    '    Code Lines: 419
+    '   Total Lines: 589
+    '    Code Lines: 423
     ' Comment Lines: 83
-    '   Blank Lines: 82
-    '     File Size: 23.52 KB
+    '   Blank Lines: 83
+    '     File Size: 23.79 KB
 
 
     ' Module SVMkit

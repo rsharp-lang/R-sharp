@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::31b1ab1f406fc312fe59431fe53dda41, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/base.vb"
+﻿#Region "Microsoft.VisualBasic::f8f93269915a598163b4a93ed7cfe74d, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/base.vb"
 
     ' Author:
     ' 
@@ -34,28 +34,29 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 2983
-    '    Code Lines: 1378
-    ' Comment Lines: 1352
-    '   Blank Lines: 253
-    '     File Size: 132.94 KB
+    '   Total Lines: 3035
+    '    Code Lines: 1411
+    ' Comment Lines: 1366
+    '   Blank Lines: 258
+    '     File Size: 138.00 KB
 
 
     '     Module base
     ' 
     '         Function: [date], [stop], allocate, append, appendFinal
     '                   appendOfList, appendOfVector, attachPackageFile, autoDispose, c
-    '                   cat, (+2 Overloads) cbind, colnames, columnCombine01, columnCombine11
-    '                   columnVector, days, doPrintInternal, factor, factors
-    '                   getOption, getPosition, ifelse, ifelseScalar, ifelseVector
-    '                   invisible, isDataframe, isEmpty, isEmptyArray, isList
-    '                   isNA, isNull, isRVector, length, library
-    '                   makeNames, names, ncol, neg, nrow
-    '                   objectAddInvoke, options, options_flush, print, range
-    '                   rbind, Rdataframe, rep, replace, Rlist
-    '                   Robj_dimension, rowBindDataFrame, rownames, seq, sink
-    '                   source, str, strictColumnAppend, summary, t
-    '                   uniqueNames, unitOfT, ValueAt, warning, year
+    '                   cat, (+2 Overloads) cbind, checkDimensionsAgree, colnames, columnCombine01
+    '                   columnCombine11, columnVector, days, doPrintInternal, factor
+    '                   factors, getOption, getPosition, ifelse, ifelseScalar
+    '                   ifelseVector, invisible, isDataframe, isEmpty, isEmptyArray
+    '                   isList, isNA, isNull, isRVector, length
+    '                   library, makeNames, names, ncol, neg
+    '                   nrow, objectAddInvoke, options, options_flush, print
+    '                   range, rbind, Rdataframe, rep, replace
+    '                   Rlist, Robj_dimension, rowBindDataFrame, rownames, seq
+    '                   sink, source, str, strictColumnAppend, summary
+    '                   t, uniqueNames, unitOfT, ValueAt, warning
+    '                   year
     ' 
     '         Sub: safeAddColumn, warnings
     '         Class PrinterOptions

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::001c149c5e74d5cad3318da62266ea2d, D:/GCModeller/src/R-sharp/Library/base//utils/JSON.vb"
+﻿#Region "Microsoft.VisualBasic::9b444f95b6bf085ffd6c2d3fd2cd8076, E:/GCModeller/src/R-sharp/Library/base//utils/JSON.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 255
-    '    Code Lines: 155
+    '   Total Lines: 257
+    '    Code Lines: 156
     ' Comment Lines: 74
-    '   Blank Lines: 26
-    '     File Size: 10.10 KB
+    '   Blank Lines: 27
+    '     File Size: 10.18 KB
 
 
     ' Module JSON

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::759ccb1ad166d471b160bda51e9e794f, D:/GCModeller/src/R-sharp/R#//System/RuntimeError.vb"
+﻿#Region "Microsoft.VisualBasic::66e81cbf4f9bf3c65d2d2490ebd6efed, E:/GCModeller/src/R-sharp/R#//System/RuntimeError.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 39
     ' Comment Lines: 3
     '   Blank Lines: 11
-    '     File Size: 1.68 KB
+    '     File Size: 1.70 KB
 
 
     '     Class RuntimeError
