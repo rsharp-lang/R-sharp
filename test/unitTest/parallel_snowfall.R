@@ -1,6 +1,6 @@
 imports "Parallel" from "snowFall";
 
-parallel(x = [1,3,5,7,9], n_threads = 2) {
+parallel(x = 1:10000, n_threads = 2, verbose = TRUE, debug = TRUE) {
 	print(x);
 	sleep(100);
 	pause();

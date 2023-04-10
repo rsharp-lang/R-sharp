@@ -68,6 +68,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports snowFall.Context
 Imports snowFall.Context.RPC
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -174,7 +175,7 @@ Public Module Parallel
         Dim req As New RequestStream(MasterContext.Protocol, RPC.Protocols.Initialize)
         Dim localMaster As String = env.globalEnvironment.options.getOption("localMaster", LANTools.GetIPAddress.ToString, env)
         Dim resp As RequestStream
-        Dim current_taskName As String = env.globalEnvironment.GetValue("@task")
+        Dim current_taskName As String = CLRVector.asCharacter(env.globalEnvironment.GetValue("@task")).FirstOrDefault
 
         If Not current_taskName.StringEmpty Then
             current_taskName = $"<{current_taskName}>: "
