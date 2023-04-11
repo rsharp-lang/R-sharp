@@ -848,6 +848,24 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return lastVal
         End Function
 
+        <Extension>
+        Private Function groupDataframeRows(table As dataframe, getKey As Object, env As Environment) As Object
+            Dim colName As String = CLRVector.asCharacter(getKey).FirstOrDefault
+
+            If colName Is Nothing Then
+                Return Internal.debug.stop("the dataframe group field key name could not be nothing!", env)
+            End If
+
+            Return New list(GetType(dataframe)) With {
+                .slots = table _
+                    .groupBy(colName) _
+                    .ToDictionary(Function(d) d.Key,
+                                  Function(d)
+                                      Return CObj(d.Value)
+                                  End Function)
+            }
+        End Function
+
         ''' <summary>
         ''' group vector/list by a given evaluator or group a dataframe rows
         ''' by the cell values of a specific column.
@@ -863,21 +881,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                  Optional env As Environment = Nothing) As Object
 
             If TypeOf sequence Is dataframe Then
-                Dim table As dataframe = DirectCast(sequence, dataframe)
-                Dim colName As String = CLRVector.asCharacter(getKey).FirstOrDefault
-
-                If colName Is Nothing Then
-                    Return Internal.debug.stop("the dataframe group field key name could not be nothing!", env)
-                End If
-
-                Return New list(GetType(dataframe)) With {
-                    .slots = table _
-                        .groupBy(colName) _
-                        .ToDictionary(Function(d) d.Key,
-                                      Function(d)
-                                          Return CObj(d.Value)
-                                      End Function)
-                }
+                Return DirectCast(sequence, dataframe).groupDataframeRows(getKey, env)
             ElseIf TypeOf sequence Is Group Then
                 sequence = DirectCast(sequence, Group).group
             End If

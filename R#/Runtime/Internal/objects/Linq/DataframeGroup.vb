@@ -90,7 +90,7 @@ Namespace Runtime.Internal.Object.Linq
                 Dim i As Boolean() = (values = factor).asLogical
                 Dim partRows As dataframe = data.sliceByRow(i, env)
 
-                groups.Add(factor, partRows)
+                Call groups.Add(factor, partRows)
             Next
 
             Return groups

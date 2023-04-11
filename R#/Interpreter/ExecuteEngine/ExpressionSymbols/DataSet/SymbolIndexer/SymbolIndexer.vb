@@ -57,6 +57,7 @@
 
 Imports System.IO
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
@@ -209,9 +210,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         Return Internal.debug.stop("invalid options for slice dataframe", env)
                     End If
                 Else
-                    Dim x = indexVec.values(Scan0).Evaluate(env)
+                    Dim x = REnv.asVector(Of Object)(indexVec.values(Scan0).Evaluate(env))
                     Dim y = REnv.asVector(Of Object)(indexVec.values(1).Evaluate(env))
-                    Dim result = data.sliceByRow(x, env)
+                    Dim result = data.sliceByRow(selector:=x, env)
 
                     If result Like GetType(Message) Then
                         Return result.TryCast(Of Message)
@@ -258,6 +259,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
         End Function
 
+        ''' <summary>
+        ''' generate the empty index error message for ``R#``
+        ''' </summary>
+        ''' <param name="symbol"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Friend Shared Function emptyIndexError(symbol As SymbolIndexer, env As Environment) As Message
             Return Internal.debug.stop({
                 $"attempt to select less than one element in OneIndex!",
