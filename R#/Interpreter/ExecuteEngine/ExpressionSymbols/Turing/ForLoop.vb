@@ -183,7 +183,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 Return $"[{i}] <NULL>"
             ElseIf TypeOf value Is String Then
                 Return $"[{i}]: ""{Mid(CStr(value), 1, 64)}{If(CStr(value).Length > 64, "...", "")}"""
-            ElseIf DataFramework.IsPrimitive(value) Then
+            ElseIf DataFramework.IsPrimitive(type:=value.GetType) Then
                 Return $"[{i}]: {value}"
             Else
                 Return i.ToString
