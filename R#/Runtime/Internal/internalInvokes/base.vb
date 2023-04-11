@@ -2825,7 +2825,11 @@ RE0:
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("str")>
-        Public Function str(<RRawVectorArgument> [object] As Object, Optional list_len% = 99, Optional env As Environment = Nothing) As Object
+        Public Function str(<RRawVectorArgument>
+                            [object] As Object,
+                            Optional list_len% = 99,
+                            Optional env As Environment = Nothing) As Object
+
             Dim structure$ = reflector.GetStructure([object], env.globalEnvironment, " ", list_len)
             Call env.globalEnvironment.stdout.WriteLine([structure])
             Return Nothing
