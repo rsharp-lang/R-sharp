@@ -440,6 +440,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
         End Function
 
+        ''' <summary>
+        ''' A lapply/sapply liked mapping function
+        ''' </summary>
+        ''' <param name="sequence"></param>
+        ''' <param name="project"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <ExportAPI("projectAs")>
         Private Function projectAs(<RRawVectorArgument>
                                    sequence As Object,
@@ -1495,5 +1502,50 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             vec.RotateLeft(i)
             Return REnv.TryCastGenericArray(vec, env)
         End Function
+
+        ''' <summary>
+        ''' ### Keep or drop columns using their names and types
+        ''' 
+        ''' Select (and optionally rename) variables in a data frame, using a 
+        ''' concise mini-language that makes it easy to refer to variables 
+        ''' based on their name (e.g. a:f selects all columns from a on the 
+        ''' left to f on the right) or type (e.g. where(is.numeric) selects all
+        ''' numeric columns).
+        ''' </summary>
+        ''' <param name="_data">
+        ''' A data frame, data frame extension (e.g. a tibble), or a lazy data 
+        ''' frame (e.g. from dbplyr or dtplyr). See Methods, below, for more 
+        ''' details.
+        ''' </param>
+        ''' <param name="selectors">
+        ''' &lt;tidy-select> One or more unquoted expressions separated by commas. 
+        ''' Variable names can be used as if they were positions in the data frame, 
+        ''' so expressions like x:y can be used to select a range of variables.
+        ''' 
+        ''' syntax for the selectors:
+        ''' 
+        ''' 1. select by name: ``select(name1, name2)``
+        ''' 2. field renames: ``select(name1 -> data1)``
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' An object of the same type as .data. The output has the following properties:
+        '''
+        ''' 1. Rows are Not affected.
+        ''' 2. Output columns are a subset Of input columns, potentially With a 
+        '''    different order. Columns will be renamed If new_name = old_name 
+        '''    form Is used.
+        ''' 3. Data frame attributes are preserved.
+        ''' 4. Groups are maintained; you can't select off grouping variables.
+        ''' </returns>
+        <ExportAPI("select")>
+        Public Function [select](_data As dataframe,
+                                 <RListObjectArgument>
+                                 Optional selectors As list = Nothing,
+                                 Optional env As Environment = Nothing) As Object
+
+
+        End Function
+
     End Module
 End Namespace
