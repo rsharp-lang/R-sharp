@@ -275,7 +275,13 @@ Namespace Language.Syntax.SyntaxParser
 
         <Extension>
         Public Function isStackOf(tokens As Token(), open$, close$) As Boolean
-            Return (tokens(Scan0) = (TokenType.open, open)) AndAlso (tokens.Last = (TokenType.close, close))
+            If tokens.IsNullOrEmpty Then
+                Return False
+            ElseIf tokens(Scan0) = (TokenType.open, open) Then
+                Return tokens.Last = (TokenType.close, close)
+            Else
+                Return False
+            End If
         End Function
 
         ''' <summary>
