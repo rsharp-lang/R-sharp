@@ -66,12 +66,17 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Parallel.Tasks.TaskQueue(Of Long)
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -1539,12 +1544,51 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' 4. Groups are maintained; you can't select off grouping variables.
         ''' </returns>
         <ExportAPI("select")>
+        <RApiReturn(GetType(dataframe))>
         Public Function [select](_data As dataframe,
                                  <RListObjectArgument>
                                  Optional selectors As list = Nothing,
                                  Optional env As Environment = Nothing) As Object
 
+            If _data Is Nothing Then
+                Return Nothing
+            End If
 
+            Dim newDf As New dataframe With {
+                .columns = New Dictionary(Of String, Array),
+                .rownames = _data.rownames
+            }
+            Dim src_name As String
+            Dim rename As String
+
+            For Each f As NamedValue(Of Object) In selectors.namedValues
+                If TypeOf f.Value Is String Then
+                    src_name = CStr(f.Value)
+                    rename = Nothing
+                ElseIf TypeOf f.Value Is DeclareLambdaFunction Then
+                    Dim lambda As DeclareLambdaFunction = DirectCast(f.Value, DeclareLambdaFunction)
+
+                    rename = ValueAssignExpression.GetSymbol(lambda.closure)
+                    src_name = lambda.parameterNames(Scan0)
+                Else
+                    Return Message.InCompatibleType(
+                        require:=GetType(String),
+                        given:=f.ValueType,
+                        envir:=env,
+                        message:=$"the data selector '{f.Name}' can not be interpreted!"
+                    )
+                End If
+
+                If Not _data.hasName(src_name) Then
+                    Return Internal.debug.stop($"missing data field '{src_name}' in your dataframe!", env)
+                ElseIf rename.StringEmpty Then
+                    rename = src_name
+                End If
+
+                Call newDf.columns.Add(rename, _data(src_name))
+            Next
+
+            Return newDf
         End Function
 
     End Module

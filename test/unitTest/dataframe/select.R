@@ -10,4 +10,4 @@ df <- data.frame(
 
 print(df);
 
-print(df |> select('name','gender'));
+print(df |> select('name','gender', id -> people_id));
