@@ -396,7 +396,13 @@ Namespace Runtime
         ''' <param name="vec"></param>
         ''' <returns></returns>
         Public Function MeltArray(vec As Array) As Array
-            Dim elementType As Type = vec.GetType.GetElementType
+            Dim elementType As Type
+
+            If vec.IsNullOrEmpty Then
+                Return vec
+            Else
+                elementType = vec.GetType.GetElementType
+            End If
 
             If elementType IsNot Nothing AndAlso
                 elementType IsNot GetType(Object) AndAlso
@@ -429,6 +435,9 @@ Namespace Runtime
         ''' <param name="env"></param>
         ''' <returns>
         ''' A class variant type: error message or a generic array
+        ''' 
+        ''' Andalso this function will returns nothing if the input <paramref name="vec"/>
+        ''' is nothing.
         ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
