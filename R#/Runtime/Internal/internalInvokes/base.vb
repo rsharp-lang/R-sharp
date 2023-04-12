@@ -2570,7 +2570,7 @@ RE0:
                                   Optional unique As Boolean = False,
                                   Optional allow_ As Boolean = True) As String()
 
-            Dim nameList As String() = asVector(Of String)(names)
+            Dim nameList As String() = CLRVector.asCharacter(names)
             Dim resultNames As String() = nameList.makeNames(unique, allow_)
 
             Return resultNames
@@ -2578,7 +2578,7 @@ RE0:
 
         <ExportAPI("unique.names")>
         Public Function uniqueNames(<RRawVectorArgument(GetType(String))> names As Object) As String()
-            Dim nameList As String() = asVector(Of String)(names)
+            Dim nameList As String() = CLRVector.asCharacter(names)
             Dim resultNames As String() = nameList.uniqueNames
 
             Return resultNames
@@ -2627,7 +2627,7 @@ RE0:
             If namelist Is Nothing OrElse namelist.Length = 0 Then
                 Return RObj.names.getRowNames([object], envir)
             Else
-                Return RObj.names.setRowNames([object], REnv.asVector(Of String)(namelist), envir)
+                Return RObj.names.setRowNames([object], CLRVector.asCharacter(namelist), envir)
             End If
         End Function
 

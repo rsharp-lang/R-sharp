@@ -535,9 +535,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 End If
             Else
                 If indexer.Length = 1 Then
-                    Return group(DirectCast(REnv.asVector(Of Integer)(indexer), Integer())(Scan0) - 1)
+                    Return group(CLRVector.asInteger(indexer)(Scan0) - 1)
                 Else
-                    Return DirectCast(REnv.asVector(Of Integer)(indexer), Integer()) _
+                    Return CLRVector.asInteger(indexer) _
                         .Select(Function(i) group(i - 1)) _
                         .ToArray
                 End If
@@ -552,7 +552,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return groupSubset(group, indexer, genericIndex)
             ElseIf TypeOf obj Is Stream Then
                 Dim read As Stream = DirectCast(obj, Stream)
-                Dim offset As Long() = DirectCast(REnv.asVector(Of Long)(indexer), Long())
+                Dim offset As Long() = CLRVector.asLong(indexer)
 
                 Return streamView(read, offset)
             End If
@@ -670,7 +670,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                                    Return type.getItem.GetValue(tmp, {i - 1})
                                End Function
 
-                        Return DirectCast(REnv.asVector(Of Integer)(indexer), Integer()) _
+                        Return CLRVector.asInteger(indexer) _
                             .Select(item) _
                             .ToArray
                     Else
@@ -697,7 +697,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             ElseIf indexer.Length = 1 Then
                 Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
             Else
-                vec = Rarray.getByIndex(REnv.asVector(Of Integer)(indexer))
+                vec = Rarray.getByIndex(CLRVector.asInteger(indexer))
             End If
 
             If vec.Length = 0 Then

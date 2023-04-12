@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
@@ -542,7 +543,7 @@ Namespace Runtime.Internal.Invokes
                            Return getFirst(namesVec)
                        End Function
             Else
-                Dim vec As String() = REnv.asVector(Of String)(names)
+                Dim vec As String() = CLRVector.asCharacter(names)
 
                 Return Function(i)
                            Return vec(i)

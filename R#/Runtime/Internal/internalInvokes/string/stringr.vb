@@ -972,8 +972,7 @@ Namespace Runtime.Internal.Invokes
                                     Optional joinSpace As Boolean = True,
                                     Optional enUS As Boolean = False) As String
 
-            Return DirectCast(REnv.asVector(Of String)(data), String()) _
-                .Concatenate(comma, [andalso], etc, joinSpace, enUS)
+            Return CLRVector.asCharacter(data).Concatenate(comma, [andalso], etc, joinSpace, enUS)
         End Function
 
         ''' <summary>
