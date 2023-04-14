@@ -68,6 +68,6 @@ Module docTest
     Sub GetDocs()
         Dim doc As New AnnotationDocs
         Dim testApi As RMethodInfo = r.Evaluate("log")
-        Dim result = doc.GetAnnotations(testApi.GetRawDeclares)
+        Dim result = doc.GetAnnotations(testApi.GetNetCoreCLRDeclaration)
     End Sub
 End Module
