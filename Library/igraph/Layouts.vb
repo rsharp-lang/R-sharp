@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -155,7 +156,7 @@ Module Layouts
         Dim distStr = InteropArgumentHelper.getSize(dist, env, "30,256")
         Dim physics As Planner
 
-        algorithm = DirectCast(REnv.asVector(Of String)(algorithm), String()).FirstOrDefault.Split("|"c).First
+        algorithm = CLRVector.asCharacter(algorithm).FirstOrDefault.Split("|"c).First
 
         Select Case any.ToString(algorithm)
             Case "force_directed"

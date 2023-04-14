@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("Matrix")>
@@ -220,7 +221,7 @@ Module RMatrix
             Dim df As dataframe = DirectCast(x, dataframe)
 
             For Each name As String In df.colnames
-                cols.Add(REnv.asVector(Of Double)(df.getColumnVector(name)))
+                cols.Add(CLRVector.asNumeric(df.getColumnVector(name)))
             Next
 
             data = New NumericMatrix(cols)
