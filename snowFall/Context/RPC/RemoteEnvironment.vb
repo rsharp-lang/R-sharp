@@ -53,6 +53,7 @@
 
 Imports System.Data
 Imports System.IO
+Imports System.Threading
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.HTTP
@@ -137,8 +138,9 @@ Namespace Context.RPC
             End If
 
             ' error retry
-            For i As Integer = 0 To 5
+            For i As Integer = 0 To 32
                 resp = New TcpRequest(master).SendMessage(req)
+                Thread.Sleep(10)
 
                 Try
                     Using buffer As New MemoryStream(resp.ChunkBuffer)

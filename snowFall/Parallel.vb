@@ -260,7 +260,12 @@ Public Module Parallel
         ' sync work on tcp request
         Call New TcpRequest(localMaster, masterPort).SendMessage(req)
         Call New TcpRequest(localMaster, port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
-        Call VBDebugger.EchoLine($"{current_taskName}exit!")
+
+        If TypeOf result.value Is Message Then
+            Call VBDebugger.EchoLine($"{current_taskName}exit with task error.")
+        Else
+            Call VBDebugger.EchoLine($"{current_taskName}exit with no error.")
+        End If
 
         Return App.Exit(0)
     End Function
