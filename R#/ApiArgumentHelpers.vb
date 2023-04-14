@@ -226,7 +226,11 @@ Public Module ApiArgumentHelpers
     ''' <param name="env"></param>
     ''' <param name="suppress"></param>
     ''' <returns></returns>
-    Public Function GetFileStream(file As Object, mode As FileAccess, env As Environment, Optional suppress As Boolean = False) As [Variant](Of Stream, Message)
+    Public Function GetFileStream(file As Object,
+                                  mode As FileAccess,
+                                  env As Environment,
+                                  Optional suppress As Boolean = False) As [Variant](Of Stream, Message)
+
         If TypeOf file Is vector Then
             file = DirectCast(file, vector).data
         End If
