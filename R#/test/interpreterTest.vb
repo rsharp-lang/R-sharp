@@ -242,6 +242,9 @@ bitmap(file = `./network.png`) %do% {
     End Sub
 
     Sub Main()
+        Call convertTest.Main()
+
+
         Call pipelineBuilder2()
         Call index2222()
         Call simpleSymbolIndexTest()
