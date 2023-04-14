@@ -55,3 +55,7 @@ pub fn WriteLines(x: Vec<&str>, mut con: File) {
         con.write_all(val.chars().as_str().as_bytes());
     }
 }
+
+pub fn WriteLine(x: &str, mut con: File) {
+    con.write_all(x.as_bytes());
+}
