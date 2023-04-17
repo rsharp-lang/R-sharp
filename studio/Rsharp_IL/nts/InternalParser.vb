@@ -24,12 +24,21 @@ Public Module InternalParser
     End Function
 
     <Extension>
-    Private Function ParseCommaList(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As ExpressionCollection
-        Dim blocks = tokens.Split(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.comma, DelimiterLocation.NotIncludes).ToArray
+    Private Function ParseCommaList(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
+        Dim blocks = tokens _
+            .Split(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.comma, DelimiterLocation.NotIncludes) _
+            .ToArray
         Dim parse As Expression() = New Expression(blocks.Length - 1) {}
+        Dim syntax As SyntaxResult
 
         For i As Integer = 0 To blocks.Length - 1
-            parse(i) = blocks(i).ParseValueExpression(opts)
+            syntax = blocks(i).ParseValueExpression(opts)
+
+            If syntax.isException Then
+                Return syntax
+            Else
+                parse(i) = syntax.expression
+            End If
         Next
 
         Return New ExpressionCollection With {
@@ -44,15 +53,22 @@ Public Module InternalParser
     ''' <param name="opts"></param>
     ''' <returns></returns>
     <Extension>
-    Private Function ParseClosure(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As ClosureExpression
+    Private Function ParseClosure(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
         Dim lines = tokens _
             .Split(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.terminator) _
             .ToArray
         Dim exps As Expression() = New Expression(lines.Length - 1) {}
+        Dim syntax As SyntaxResult
 
         For i As Integer = 0 To lines.Length - 1
             tokens = lines(i)
-            exps(i) = tokens.ParseValueExpression(opts)
+            syntax = tokens.ParseValueExpression(opts)
+
+            If syntax.isException Then
+                Return syntax
+            Else
+                exps(i) = syntax.expression
+            End If
         Next
 
         Return New ClosureExpression(exps)
@@ -63,17 +79,24 @@ Public Module InternalParser
         Dim list = paramTokens _
             .Split(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.comma, DelimiterLocation.NotIncludes) _
             .ToArray
+        Dim exp As Expression
 
         For Each block As SyntaxToken() In list
             Dim val = block.ParseValueExpression(opts)
 
-            If TypeOf val Is ValueAssignExpression Then
+            If val.isException Then
+                Throw New Exception(val.error.ToString)
+            Else
+                exp = val.expression
+            End If
+
+            If TypeOf exp Is ValueAssignExpression Then
                 ' optional parameter
-                Dim assign As ValueAssignExpression = DirectCast(val, ValueAssignExpression)
+                Dim assign As ValueAssignExpression = DirectCast(exp, ValueAssignExpression)
 
                 ' Yield New DeclareNewSymbol ( )
-            ElseIf TypeOf val Is SymbolReference Then
-                Dim symbol As SymbolReference = DirectCast(val, SymbolReference)
+            ElseIf TypeOf exp Is SymbolReference Then
+                Dim symbol As SymbolReference = DirectCast(exp, SymbolReference)
 
                 Yield New DeclareNewSymbol(symbol.symbol, Nothing)
             Else
@@ -95,7 +118,7 @@ Public Module InternalParser
     ''' token list is comes from the stack range get, just split into multiple parts via operator
     ''' </remarks>
     <Extension>
-    Public Function GetExpression(tokens As SyntaxToken(), fromComma As Boolean, opts As SyntaxBuilderOptions) As Expression
+    Public Function GetExpression(tokens As SyntaxToken(), fromComma As Boolean, opts As SyntaxBuilderOptions) As SyntaxResult
         If fromComma Then
             If tokens.First Like GetType(Token) AndAlso tokens.First.TryCast(Of Token).isKeyword("function") Then
                 If tokens.Last Like GetType(Token) AndAlso tokens.Last.TryCast(Of Token) = (TokenType.close, "}") Then
@@ -134,7 +157,7 @@ Public Module InternalParser
     End Function
 
     <Extension>
-    Private Function ParseValueExpression(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As Expression
+    Private Function ParseValueExpression(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
         Dim blocks = tokens _
             .Split(
                 delimiter:=Function(t)
@@ -172,6 +195,6 @@ Public Module InternalParser
             syntax = New SyntaxResult(parse(Scan0).TryCast(Of Expression))
         End If
 
-        Return syntax.expression
+        Return syntax
     End Function
 End Module
