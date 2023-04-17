@@ -104,10 +104,16 @@ Public Class SyntaxTree
                     Throw New SyntaxErrorException
                 Else
                     Dim range = state.Value.GetRange(buffer).ToArray
-                    Dim exp = range.GetExpression(opts)
+                    Dim exp = range.GetExpression(fromComma:=False, opts)
 
                     Yield exp
                 End If
+            ElseIf t.name = TokenType.comma Then
+                Dim index = Traceback(buffer)
+                Dim range = buffer.Skip(index).Take(buffer.Count - index).ToArray
+                Dim exp = range.GetExpression(fromComma:=True, opts)
+
+                Yield exp
             ElseIf isTerminator(t) Then
                 If stack.isEmpty Then
                     ' get an expression scope with max stack close range
@@ -131,6 +137,25 @@ Public Class SyntaxTree
         If buffer > 0 Then
             Yield ParseTypeScriptLine(buffer.PopAll, opts)
         End If
+    End Function
+
+    ''' <summary>
+    ''' traceback the index to the last comma or open token
+    ''' </summary>
+    ''' <returns></returns>
+    Private Shared Function Traceback(buffer As List(Of SyntaxToken)) As Integer
+        For i As Integer = buffer.Count - 2 To 0 Step -1
+            If buffer(i) Like GetType(Token) Then
+                Select Case buffer(i).TryCast(Of Token).name
+                    Case TokenType.comma, TokenType.open
+                        Return i + 1
+                    Case Else
+                        ' do nothing
+                End Select
+            End If
+        Next
+
+        Return 0
     End Function
 
     Private Shared Function isNotDelimiter(ByRef t As Token) As Boolean

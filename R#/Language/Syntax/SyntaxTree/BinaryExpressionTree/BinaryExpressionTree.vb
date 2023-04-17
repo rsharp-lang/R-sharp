@@ -65,7 +65,11 @@ Namespace Language.Syntax.SyntaxParser
 
     Module BinaryExpressionTree
 
-        ReadOnly operatorPriority As String() = {"^", "*/%", "+-"}
+        ''' <summary>
+        ''' the math operators
+        ''' </summary>
+        Friend ReadOnly operatorPriority As String() = {"^", "*/%", "+-"}
+
         ReadOnly comparisonOperators As String() = {"<", ">", "<=", ">=", "==", "!=", "in", "like", "between"}
         ReadOnly logicalOperators As String() = {"&&", "||", "!"}
 
@@ -387,10 +391,14 @@ Namespace Language.Syntax.SyntaxParser
         ''' </summary>
         ''' <param name="buf"></param>
         ''' <param name="oplist"></param>
-        ''' <param name="operators$"></param>
+        ''' <param name="operators">A set of the operators</param>
         ''' <param name="test">test(op, o)</param>
         <Extension>
-        Private Function processOperators(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String), operators$(), test As Func(Of String, String, Boolean), opts As SyntaxBuilderOptions) As SyntaxResult
+        Private Function processOperators(buf As List(Of [Variant](Of SyntaxResult, String)),
+                                          oplist As List(Of String),
+                                          operators$(),
+                                          test As Func(Of String, String, Boolean),
+                                          opts As SyntaxBuilderOptions) As SyntaxResult
             If buf = 1 Then
                 Return Nothing
             End If
@@ -405,8 +413,16 @@ Namespace Language.Syntax.SyntaxParser
                     For j As Integer = 0 To buf.Count - 1
                         If buf(j) Like GetType(String) AndAlso test(op, buf(j).VB) Then
                             ' j-1 and j+1
-                            Dim a As SyntaxResult = If(j - 1 < 0, SyntaxResult.CreateError(New SyntaxErrorException, opts), buf(j - 1).TryCast(Of SyntaxResult))
-                            Dim b As SyntaxResult = If(j + 1 >= buf.Count, SyntaxResult.CreateError(New SyntaxErrorException, opts), buf(j + 1).TryCast(Of SyntaxResult))
+                            Dim a As SyntaxResult = If(
+                                j - 1 < 0,
+                                SyntaxResult.CreateError(New SyntaxErrorException, opts),
+                                buf(j - 1).TryCast(Of SyntaxResult)
+                            )
+                            Dim b As SyntaxResult = If(
+                                j + 1 >= buf.Count,
+                                SyntaxResult.CreateError(New SyntaxErrorException, opts),
+                                buf(j + 1).TryCast(Of SyntaxResult)
+                            )
 
                             If a.isException Then
                                 Return a
