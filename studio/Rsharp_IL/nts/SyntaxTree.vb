@@ -1,15 +1,14 @@
-﻿Imports System.Runtime.CompilerServices
+﻿Imports System.Data
+Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Emit.Marshal
+Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports Microsoft.VisualBasic.Scripting.TokenIcer
-Imports System.Data
-Imports Microsoft.VisualBasic.Language
-Imports Microsoft.VisualBasic.Text
-Imports Microsoft.VisualBasic.Emit.Marshal
 
 Public Class SyntaxToken
 
@@ -29,6 +28,10 @@ Public Class SyntaxToken
         index = i
         value = exp
     End Sub
+
+    Public Overrides Function ToString() As String
+        Return $"<{index}> {value.ToString}"
+    End Function
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function [TryCast](Of T As Class)() As T
