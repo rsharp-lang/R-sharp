@@ -10,6 +10,7 @@ Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 
 Public Module InternalParser
 
@@ -158,6 +159,33 @@ Public Module InternalParser
 
     <Extension>
     Private Function ParseValueExpression(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
+        If tokens.IsNullOrEmpty Then
+            Return New SyntaxResult(Literal.NULL)
+        End If
+        If tokens(Scan0) Like GetType(Token) AndAlso tokens(Scan0).TryCast(Of Token) = (TokenType.keyword, {"var", "let", "const"}) Then
+            Dim symbol = tokens(1)
+            Dim value As SyntaxResult
+            Dim type As String
+
+            If tokens(2) Like GetType(Token) AndAlso tokens(2).TryCast(Of Token) = (TokenType.operator, "=") Then
+                '   0 1 2 ...
+                ' var x = xxx
+                value = tokens.Skip(3).ToArray.ParseValueExpression(opts)
+                type = "any"
+            Else
+                '     0 123      4 ...
+                ' const x:string = xxx
+                type = tokens(3).GetSymbol
+                value = tokens.Skip(5).ToArray.ParseValueExpression(opts)
+            End If
+
+            If value.isException Then
+                Return value
+            Else
+                Return New DeclareNewSymbol(symbol.GetSymbol, opts.GetStackTrace(tokens(Scan0).TryCast(Of Token)), value.expression)
+            End If
+        End If
+
         Dim blocks = tokens _
             .Split(
                 delimiter:=Function(t)

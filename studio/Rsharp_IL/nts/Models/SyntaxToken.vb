@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Public Class SyntaxToken
@@ -29,6 +30,14 @@ Public Class SyntaxToken
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function [TryCast](Of T As Class)() As T
         Return TryCast(value, T)
+    End Function
+
+    Public Function GetSymbol() As String
+        If TypeOf value Is Token Then
+            Return DirectCast(value, Token).text
+        Else
+            Return ValueAssignExpression.GetSymbol(DirectCast(value, Expression))
+        End If
     End Function
 
     Public Shared Operator Like(t As SyntaxToken, type As Type) As Boolean
