@@ -70,6 +70,9 @@ Namespace Language
         ''' </summary>
         invalid
 
+        ''' <summary>
+        ''' cr/lf
+        ''' </summary>
         newLine
         ''' <summary>
         ''' &lt;whitespace> and &lt;TAB> as delimiter

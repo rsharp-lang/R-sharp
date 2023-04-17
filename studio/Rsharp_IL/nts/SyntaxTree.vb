@@ -3,6 +3,8 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Language
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
 Public Class SyntaxTree
 
@@ -24,5 +26,17 @@ Public Class SyntaxTree
 
     Friend Function ParseTsScript() As Program
         Dim tokens As Token() = scanner.GetTokens.ToArray
+        Dim lines = tokens.Split(Function(t) t.name = TokenType.newLine) _
+            .Where(Function(t) t.Length > 0) _
+            .ToArray
+        Dim prog As New Program(GetExpressions(lines))
+
+        Return prog
+    End Function
+
+    Private Iterator Function GetExpressions(lines As Token()()) As IEnumerable(Of Expression)
+        For Each line As Token() In lines
+
+        Next
     End Function
 End Class
