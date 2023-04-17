@@ -172,6 +172,7 @@ Public Class SyntaxTree
                         ' needs add more token into the buffer list
                         ' do no action
                     Else
+                        buffer.Clear()
                         Yield exp.expression
                     End If
                 Else
