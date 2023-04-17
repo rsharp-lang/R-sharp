@@ -7,29 +7,6 @@ Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
-''' <summary>
-''' A temp expression collection for the function invoke parameters
-''' </summary>
-Public Class ExpressionCollecton : Inherits Expression
-
-    Public Overrides ReadOnly Property type As TypeCodes
-    Public Overrides ReadOnly Property expressionName As Rsharp.Development.Package.File.ExpressionTypes
-
-    Public Property expressions As Expression()
-
-    Public Shared Function GetExpressions(exp As Expression) As Expression()
-        If TypeOf exp Is ExpressionCollecton Then
-            Return DirectCast(exp, ExpressionCollecton).expressions
-        Else
-            Return {exp}
-        End If
-    End Function
-
-    Public Overrides Function Evaluate(envir As Rsharp.Runtime.Environment) As Object
-        Throw New NotImplementedException()
-    End Function
-End Class
-
 Public Module InternalParser
 
     <Extension>
@@ -43,7 +20,7 @@ Public Module InternalParser
     End Function
 
     <Extension>
-    Private Function ParseCommaList(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As ExpressionCollecton
+    Private Function ParseCommaList(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As ExpressionCollection
         Dim blocks = tokens.Split(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.comma, DelimiterLocation.NotIncludes).ToArray
         Dim parse As Expression() = New Expression(blocks.Length - 1) {}
 
@@ -51,7 +28,7 @@ Public Module InternalParser
             parse(i) = blocks(i).ParseValueExpression(opts)
         Next
 
-        Return New ExpressionCollecton With {
+        Return New ExpressionCollection With {
             .expressions = parse
         }
     End Function

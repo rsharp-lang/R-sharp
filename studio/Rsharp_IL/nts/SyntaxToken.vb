@@ -1,0 +1,52 @@
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Language.TokenIcer
+
+Public Class SyntaxToken
+
+    ''' <summary>
+    ''' <see cref="Token"/> or <see cref="Expression"/>
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property value As Object
+    Public Property index As Integer
+
+    Sub New(i As Integer, t As Token)
+        index = i
+        value = t
+    End Sub
+
+    Sub New(i As Integer, exp As Expression)
+        index = i
+        value = exp
+    End Sub
+
+    Public Overrides Function ToString() As String
+        Return $"<{index}> {value.ToString}"
+    End Function
+
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function [TryCast](Of T As Class)() As T
+        Return TryCast(value, T)
+    End Function
+
+    Public Shared Operator Like(t As SyntaxToken, type As Type) As Boolean
+        If t Is Nothing OrElse t.value Is Nothing Then
+            Return False
+        Else
+            Return t.value.GetType Is type
+        End If
+    End Operator
+
+    Public Shared Iterator Function Cast(list As IEnumerable(Of SyntaxToken)) As IEnumerable(Of [Variant](Of Expression, String))
+        For Each item In list
+            If item Like GetType(Token) Then
+                Yield New [Variant](Of Expression, String)(item.TryCast(Of Token).text)
+            Else
+                Yield New [Variant](Of Expression, String)(item.TryCast(Of Expression))
+            End If
+        Next
+    End Function
+
+End Class

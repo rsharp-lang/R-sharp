@@ -1,5 +1,4 @@
 ﻿Imports System.Data
-Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
@@ -9,57 +8,8 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
-Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
-
-Public Class SyntaxToken
-
-    ''' <summary>
-    ''' <see cref="Token"/> or <see cref="Expression"/>
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property value As Object
-    Public Property index As Integer
-
-    Sub New(i As Integer, t As Token)
-        index = i
-        value = t
-    End Sub
-
-    Sub New(i As Integer, exp As Expression)
-        index = i
-        value = exp
-    End Sub
-
-    Public Overrides Function ToString() As String
-        Return $"<{index}> {value.ToString}"
-    End Function
-
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Public Function [TryCast](Of T As Class)() As T
-        Return TryCast(value, T)
-    End Function
-
-    Public Shared Operator Like(t As SyntaxToken, type As Type) As Boolean
-        If t Is Nothing OrElse t.value Is Nothing Then
-            Return False
-        Else
-            Return t.value.GetType Is type
-        End If
-    End Operator
-
-    Public Shared Iterator Function Cast(list As IEnumerable(Of SyntaxToken)) As IEnumerable(Of [Variant](Of Expression, String))
-        For Each item In list
-            If item Like GetType(Token) Then
-                Yield New [Variant](Of Expression, String)(item.TryCast(Of Token).text)
-            Else
-                Yield New [Variant](Of Expression, String)(item.TryCast(Of Expression))
-            End If
-        Next
-    End Function
-
-End Class
 
 Public Class SyntaxTree
 
@@ -144,7 +94,7 @@ Public Class SyntaxTree
                                         ' invoke function
                                         ' func(...)
                                         buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
-                                        exp = New FunctionInvoke(target.expression, opts.GetStackTrace(t), ExpressionCollecton.GetExpressions(exp))
+                                        exp = New FunctionInvoke(target.expression, opts.GetStackTrace(t), ExpressionCollection.GetExpressions(exp))
                                         buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, exp))
                                         Reindex(buffer)
                                     ElseIf target.isException Then
@@ -159,7 +109,7 @@ Public Class SyntaxTree
                                         ' invoke function
                                         ' func(...)
                                         state.Value.RemoveRange(buffer)
-                                        exp = New FunctionInvoke(target, Nothing, ExpressionCollecton.GetExpressions(exp))
+                                        exp = New FunctionInvoke(target, Nothing, ExpressionCollection.GetExpressions(exp))
                                         buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp))
                                         Reindex(buffer)
                                     Else
@@ -215,57 +165,4 @@ Public Class SyntaxTree
         End If
     End Function
 
-    Private Shared Sub Reindex(ByRef buffer As List(Of SyntaxToken))
-        For i As Integer = 0 To buffer.Count - 1
-            buffer(i).index = i
-        Next
-    End Sub
-
-    ''' <summary>
-    ''' traceback the index to the last comma or open token
-    ''' </summary>
-    ''' <returns></returns>
-    Private Shared Function Traceback(buffer As List(Of SyntaxToken)) As Integer
-        For i As Integer = buffer.Count - 2 To 0 Step -1
-            If buffer(i) Like GetType(Token) Then
-                Select Case buffer(i).TryCast(Of Token).name
-                    Case TokenType.comma, TokenType.open
-                        Return i + 1
-                    Case Else
-                        ' do nothing
-                End Select
-            End If
-        Next
-
-        Return 0
-    End Function
-
-    Private Shared Function isNotDelimiter(ByRef t As Token) As Boolean
-        If t.name <> TokenType.delimiter Then
-            Return True
-        Else
-            If t.text = vbCr OrElse t.text = vbLf Then
-                t = New Token(TokenType.newLine, vbCr)
-                Return True
-            End If
-
-            Return False
-        End If
-    End Function
-
-    Private Shared Function isTerminator(t As Token) As Boolean
-        If t.name = TokenType.terminator Then
-            Return True
-        ElseIf t.name = TokenType.newLine Then
-            Return True
-        ElseIf t.name = TokenType.delimiter Then
-            If t.text = vbCr OrElse t.text = vbLf Then
-                Return True
-            Else
-                Return False
-            End If
-        Else
-            Return False
-        End If
-    End Function
 End Class
