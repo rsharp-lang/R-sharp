@@ -8,6 +8,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports System.Data
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Text
 
 Public Class SyntaxTree
 
@@ -29,10 +30,7 @@ Public Class SyntaxTree
 
     Friend Function ParseTsScript() As Program
         Dim tokens As Token() = scanner.GetTokens.ToArray
-        Dim lines = tokens.Split(Function(t) t.name = TokenType.newLine) _
-            .Where(Function(t) t.Length > 0) _
-            .ToArray
-        Dim syntax = GetExpressions(lines).ToArray
+        Dim syntax = GetExpressions(tokens).ToArray
 
         For Each exp In syntax
             If exp.isException Then
@@ -45,35 +43,65 @@ Public Class SyntaxTree
         Return prog
     End Function
 
-    Private Iterator Function GetExpressions(lines As Token()()) As IEnumerable(Of SyntaxResult)
+    Private Iterator Function GetExpressions(lines As Token()) As IEnumerable(Of SyntaxResult)
         ' {} () []
         Dim stack As New TokenStack(Of TokenType)
         Dim buffer As New List(Of Token)
 
-        For Each line As Token() In lines
-            ' find the max stack closed scope
-            For Each t As Token In line
-                If t.name <> TokenType.delimiter Then
-                    buffer.Add(t)
-                End If
+        ' find the max stack closed scope
+        For Each t As Token In lines
+            If isNotDelimiter(t) Then
+                buffer.Add(t)
+            End If
 
-                If t.name = TokenType.open Then
-                    stack.Push(t)
-                ElseIf t.name = TokenType.close Then
-                    If stack.Pop(t) = StackStates.MisMatched Then
-                        Throw New SyntaxErrorException
-                    End If
-                ElseIf t.name = TokenType.terminator Then
-                    If stack.isEmpty Then
-                        ' get an expression scope with max stack close range
-                        Yield ParseTypeScriptLine(buffer.PopAll, opts)
+            If t.name = TokenType.open Then
+                stack.Push(t)
+            ElseIf t.name = TokenType.close Then
+                If stack.Pop(t) = StackStates.MisMatched Then
+                    Throw New SyntaxErrorException
+                End If
+            ElseIf isTerminator(t) Then
+                If stack.isEmpty Then
+                    ' get an expression scope with max stack close range
+                    Dim exp = ParseTypeScriptLine(buffer.ToArray, opts)
+
+                    If exp.isException Then
+                        ' needs add more token into the buffer list
+                        ' do no action
+                    Else
+                        Yield exp.expression
                     End If
                 End If
-            Next
+            End If
         Next
     End Function
 
-    Private Shared Function isTerminator()
+    Private Shared Function isNotDelimiter(ByRef t As Token) As Boolean
+        If t.name <> TokenType.delimiter Then
+            Return True
+        Else
+            If t.text = vbCr OrElse t.text = vbLf Then
+                t = New Token(TokenType.newLine, vbCr)
+                Return True
+            End If
 
+            Return False
+        End If
+    End Function
+
+    Private Shared Function isTerminator(t As Token) As Boolean
+        If t.name = TokenType.terminator Then
+            Return True
+        ElseIf t.name = TokenType.newLine Then
+            Return True
+        ElseIf t.name = TokenType.delimiter Then
+            If t.text = vbCr OrElse t.text = vbLf Then
+                Return True
+            Else
+                Return False
+            End If
+        Else
+            Return False
+        End If
     End Function
 End Class
