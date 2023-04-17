@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::74937f4da12a3001037688f37638a5ee, E:/GCModeller/src/R-sharp/R#//Runtime/Environment/EnvironmentExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::74937f4da12a3001037688f37638a5ee, D:/GCModeller/src/R-sharp/R#//Runtime/Environment/EnvironmentExtensions.vb"
 
     ' Author:
     ' 
@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Interpreter
 
 <Assembly: InternalsVisibleTo("njl")>
+<Assembly: InternalsVisibleTo("nts")>
 
 Namespace Runtime
 

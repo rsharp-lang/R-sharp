@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::12b3c7b951b226b9873eb2153b6dbc90, E:/GCModeller/src/R-sharp/Library/igraph//My Project/Settings.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::12b3c7b951b226b9873eb2153b6dbc90, D:/GCModeller/src/R-sharp/Library/igraph//My Project/Settings.Designer.vb"
 
     ' Author:
     ' 

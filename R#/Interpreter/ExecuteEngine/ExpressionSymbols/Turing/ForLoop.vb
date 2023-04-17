@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::95f53621961a2a991f3e4a97e49308f6, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/ForLoop.vb"
+﻿#Region "Microsoft.VisualBasic::b6398e732de86608f45cf0e682563652, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/ForLoop.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 194
-    '    Code Lines: 126
+    '   Total Lines: 208
+    '    Code Lines: 139
     ' Comment Lines: 39
-    '   Blank Lines: 29
-    '     File Size: 7.07 KB
+    '   Blank Lines: 30
+    '     File Size: 7.75 KB
 
 
     '     Class ForLoop
@@ -46,8 +46,8 @@
     '         Properties: body, expressionName, sequence, stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, exec, execParallel, getSequence, RunLoop
-    '                   ToString
+    '         Function: Evaluate, exec, execParallel, GetLoopTagLabel, getSequence
+    '                   RunLoop, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -55,6 +55,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -169,11 +170,24 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 .AsParallel _
                 .Select(Function(value, i)
                             Dim stackframe As New StackFrame(Me.stackFrame)
-                            stackframe.Method.Method = $"parallel_for_loop_[{i}]"
+                            Dim label As String = GetLoopTagLabel(i, value)
+                            stackframe.Method.Method = $"parallel_for_loop_[{label}]"
                             Return RunLoop(value, stackframe, envir)
                         End Function)
 
             Return result
+        End Function
+
+        Private Shared Function GetLoopTagLabel(i As Integer, value As Object) As String
+            If value Is Nothing Then
+                Return $"[{i}] <NULL>"
+            ElseIf TypeOf value Is String Then
+                Return $"[{i}]: ""{Mid(CStr(value), 1, 64)}{If(CStr(value).Length > 64, "...", "")}"""
+            ElseIf DataFramework.IsPrimitive(type:=value.GetType) Then
+                Return $"[{i}]: {value}"
+            Else
+                Return i.ToString
+            End If
         End Function
 
         ''' <summary>
@@ -240,7 +254,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
             Dim stackframe As New StackFrame(Me.stackFrame)
 
             For Each value As Object In getSequence(envir)
-                stackframe.Method.Method = $"for_loop_[{++i}]"
+                stackframe.Method.Method = $"for_loop_[{GetLoopTagLabel(++i, value)}]"
                 value = RunLoop(value, stackframe, envir)
 
                 Yield value

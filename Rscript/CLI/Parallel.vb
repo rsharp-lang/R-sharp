@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fa4736b060fae6237ed0a8906903cbf8, E:/GCModeller/src/R-sharp/Rscript//CLI/Parallel.vb"
+﻿#Region "Microsoft.VisualBasic::47ff40f0239797ace1999df4823cafbb, D:/GCModeller/src/R-sharp/Rscript//CLI/Parallel.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 82
-    '    Code Lines: 60
+    '   Total Lines: 85
+    '    Code Lines: 62
     ' Comment Lines: 9
-    '   Blank Lines: 13
-    '     File Size: 3.30 KB
+    '   Blank Lines: 14
+    '     File Size: 3.36 KB
 
 
     ' Module CLI
@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Partial Module CLI
 
@@ -73,6 +74,7 @@ Partial Module CLI
         Dim masterPort As Integer = args <= "--master"
         Dim logfile As String = args <= "--redirect_stdout"
         Dim hostName As String = args("--host")
+        Dim taskName As String = args("--task")
 
         If Not logfile.StringEmpty Then
             Dim stdout As StreamWriter = App.RedirectLogging(logfile)
@@ -96,37 +98,38 @@ Partial Module CLI
             Call REngine.globalEnvir.options.setOption("localMaster", hostName)
         End If
 
-        If plugin.FileExists Then
-            Dim reference As NamedValue(Of String)
-
-            If delegateName.StringEmpty Then
-                reference = "Parallel::snowFall".GetTagValue("::")
-            Else
-                reference = delegateName.GetTagValue("::")
-            End If
-
-            Dim parallelFunc As String = reference.Description
-            Dim argv = New Object() {masterPort, REngine.globalEnvir}
-
-            ' load primary base libraries
-            Call LoadLibrary(REngine, ignoreMissingStartupPackages:=False, "base", "utils", "grDevices", "math", "stats")
-            Call Console.WriteLine()
-
-            Call PackageLoader.ParsePackages(plugin) _
-                .Where(Function(pkg) pkg.namespace = reference.Name) _
-                .FirstOrDefault _
-                .DoCall(Sub(pkg)
-                            Call REngine.globalEnvir.ImportsStatic(pkg.package)
-                        End Sub)
-            Call REngine.Invoke(parallelFunc, argv)
-
-            ' 20221103 unsure for the bug that some working thread
-            ' is not exit from current parallel slave process?
-            ' try to end current process directly!
-            End
-        Else
+        If Not plugin.FileExists Then
             Return 500
         End If
+
+        Dim reference As NamedValue(Of String)
+
+        If delegateName.StringEmpty Then
+            reference = "Parallel::snowFall".GetTagValue("::")
+        Else
+            reference = delegateName.GetTagValue("::")
+        End If
+
+        Dim parallelFunc As String = reference.Description
+        Dim argv = New Object() {masterPort, REngine.globalEnvir}
+
+        ' load primary base libraries
+        Call LoadLibrary(REngine, ignoreMissingStartupPackages:=False, "base", "utils", "grDevices", "math", "stats")
+        Call Console.WriteLine()
+
+        Call REngine.Add("@task", taskName, TypeCodes.string)
+        Call PackageLoader.ParsePackages(plugin) _
+            .Where(Function(pkg) pkg.namespace = reference.Name) _
+            .FirstOrDefault _
+            .DoCall(Sub(pkg)
+                        Call REngine.globalEnvir.ImportsStatic(pkg.package)
+                    End Sub)
+        Call REngine.Invoke(parallelFunc, argv)
+
+        ' 20221103 unsure for the bug that some working thread
+        ' is not exit from current parallel slave process?
+        ' try to end current process directly!
+        End
 
         Return 0
     End Function

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::be51fdd26ad696db988fec612d5e2e5d, E:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/CLRVector.vb"
+﻿#Region "Microsoft.VisualBasic::be51fdd26ad696db988fec612d5e2e5d, D:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/CLRVector.vb"
 
     ' Author:
     ' 
@@ -249,6 +249,51 @@ Namespace Runtime.Vectorization
             Throw New NotImplementedException(x.GetType.FullName)
         End Function
 
+        Public Function asFloat(x As Object) As Single()
+            If TypeOf x Is list Then
+                x = DirectCast(x, list).slots.Values.ToArray
+            ElseIf TypeOf x Is String Then
+                Return New Single() {Single.Parse(CStr(x))}
+            ElseIf TypeOf x Is TimeSpan Then
+                Return New Single() {DirectCast(x, TimeSpan).TotalMilliseconds}
+            ElseIf TypeOf x Is Date Then
+                Return New Single() {DirectCast(x, Date).UnixTimeStamp}
+            ElseIf TypeOf x Is vector Then
+                x = DirectCast(x, vector).data
+            End If
+
+            If x.GetType.IsArray Then
+                x = REnv.UnsafeTryCastGenericArray(x)
+            End If
+
+            If TypeOf x Is Double() Then
+                Return x
+            ElseIf TypeOf x Is Single() Then
+                Return DirectCast(x, Single())
+            ElseIf DataFramework.IsNumericCollection(x.GetType) Then
+                Return (From xi As Object
+                        In DirectCast(x, IEnumerable).AsQueryable
+                        Select CSng(xi)).ToArray
+            ElseIf DataFramework.IsNumericType(x.GetType) Then
+                ' is a single scalar value
+                Return New Single() {CSng(x)}
+            ElseIf TypeOf x Is String Then
+                ' parse string
+                Return New Single() {Val(x)}
+            ElseIf isVector(Of String)(x) Then
+                ' parse string
+                Return CLRVector.asCharacter(x).Select(AddressOf Single.Parse).ToArray
+            ElseIf TypeOf x Is Date() Then
+                Return DirectCast(x, Date()).Select(Function(d) CSng(d.UnixTimeStamp)).ToArray
+            ElseIf TypeOf x Is TimeSpan() Then
+                Return DirectCast(x, TimeSpan()).Select(Function(d) CSng(d.TotalMilliseconds)).ToArray
+            ElseIf TypeOf x Is Object() Then
+                Return DirectCast(x, Object()).Select(Function(d) CSng(d)).ToArray
+            Else
+                Throw New InvalidCastException(x.GetType.FullName)
+            End If
+        End Function
+
         Public Function asNumeric(x As Object) As Double()
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
@@ -275,7 +320,7 @@ Namespace Runtime.Vectorization
                         In DirectCast(x, IEnumerable).AsQueryable
                         Select CDbl(xi)).ToArray
             ElseIf DataFramework.IsNumericType(x.GetType) Then
-                ' is a single scalr value
+                ' is a single scalar value
                 Return New Double() {CDbl(x)}
             ElseIf TypeOf x Is String Then
                 ' parse string

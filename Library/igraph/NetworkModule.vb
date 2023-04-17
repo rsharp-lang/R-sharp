@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::343dc1b2b2dad5399768942566a22148, E:/GCModeller/src/R-sharp/Library/igraph//NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::343dc1b2b2dad5399768942566a22148, D:/GCModeller/src/R-sharp/Library/igraph//NetworkModule.vb"
 
     ' Author:
     ' 
@@ -710,11 +710,7 @@ Public Module NetworkModule
                     End If
                 Next
             ElseIf Not labelID.StringEmpty Then
-                g.GetElementByID(labelID).data.mass = REnv _
-                    .asVector(Of Double)(mass) _
-                    .AsObjectEnumerator(Of Double) _
-                    .DefaultFirst
-
+                g.GetElementByID(labelID).data.mass = CLRVector.asNumeric(mass).DefaultFirst
                 Return g.GetElementByID(labelID).data.mass
             End If
         ElseIf Not labelID.StringEmpty Then
@@ -854,8 +850,8 @@ Public Module NetworkModule
         Dim nodeLabels As String()
         Dim edge As Edge
         Dim i As i32 = 1
-        Dim weights As Double() = REnv.asVector(Of Double)(weight)
-        Dim types As String() = REnv.asVector(Of String)(type)
+        Dim weights As Double() = CLRVector.asNumeric(weight)
+        Dim types As String() = CLRVector.asCharacter(type)
         Dim w As Double
         Dim err As New Value(Of Message)
         Dim checkNode As Func(Of String, Message) =
@@ -918,7 +914,7 @@ Public Module NetworkModule
 
         ' list(tag = [from, to])
         For Each tuple As NamedValue(Of Object) In tuplesData
-            nodeLabels = REnv.asVector(Of String)(tuple.Value)
+            nodeLabels = CLRVector.asCharacter(tuple.Value)
             w = weights.ElementAtOrDefault(CInt(i) - 1)
             type = types.ElementAtOrDefault(CInt(i) - 1)
 
@@ -974,15 +970,13 @@ Public Module NetworkModule
         ElseIf idtype Is GetType(String) Then
             Return g.GetElementByID(DirectCast(id, String))
         ElseIf REnv.isVector(Of Integer)(id) Then
-            array = REnv.asVector(Of Integer)(id) _
-                .AsObjectEnumerator _
+            array = CLRVector.asInteger(id) _
                 .Select(Function(i)
                             Return g.GetElementByID(DirectCast(i, Integer))
                         End Function) _
                 .ToArray
         ElseIf REnv.isVector(Of String)(id) Then
-            array = REnv.asVector(Of String)(id) _
-                .AsObjectEnumerator _
+            array = CLRVector.asCharacter(id) _
                 .Select(Function(i)
                             Return g.GetElementByID(DirectCast(i, String))
                         End Function) _
@@ -1188,7 +1182,7 @@ Public Module NetworkModule
     ''' <param name="g"></param>
     ''' <param name="typeSelector"></param>
     ''' <returns></returns>
-    <ExportAPI("select")>
+    <ExportAPI("selects")>
     <RApiReturn(GetType(node))>
     Public Function getByGroup(g As NetworkGraph, typeSelector As Object, Optional env As Environment = Nothing) As Object
         If typeSelector Is Nothing Then
@@ -1202,10 +1196,7 @@ Public Module NetworkModule
                        End Function) _
                 .ToArray
         ElseIf REnv.isVector(Of String)(typeSelector) Then
-            Dim typeIndex As Index(Of String) = REnv _
-                .asVector(Of String)(typeSelector) _
-                .AsObjectEnumerator(Of String) _
-                .ToArray
+            Dim typeIndex As Index(Of String) = CLRVector.asCharacter(typeSelector).Indexing
 
             Return g.vertex _
                 .Where(Function(n)

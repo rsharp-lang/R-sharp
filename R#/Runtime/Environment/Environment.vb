@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::06490662352a26205060e6cdaf69f79f, E:/GCModeller/src/R-sharp/R#//Runtime/Environment/Environment.vb"
+﻿#Region "Microsoft.VisualBasic::508ff8b1479a8d7af3dd212d4beac37a, D:/GCModeller/src/R-sharp/R#//Runtime/Environment/Environment.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 788
-    '    Code Lines: 405
-    ' Comment Lines: 286
-    '   Blank Lines: 97
-    '     File Size: 34.26 KB
+    '   Total Lines: 805
+    '    Code Lines: 413
+    ' Comment Lines: 293
+    '   Blank Lines: 99
+    '     File Size: 34.88 KB
 
 
     '     Class Environment
@@ -50,7 +50,8 @@
     ' 
     '         Function: asRVector, AssignSymbol, EnumerateAllFunctions, EnumerateAllSymbols, Evaluate
     '                   FindFunction, FindFunctionWithNamespaceRestrict, FindSymbol, GetAcceptorArguments, GetEnumerator
-    '                   GetSymbolsNames, IEnumerable_GetEnumerator, Push, ToString, WriteLineHandler
+    '                   GetSymbolsNames, GetValue, IEnumerable_GetEnumerator, Push, ToString
+    '                   WriteLineHandler
     ' 
     '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, PushEnvironmentContext
     '              redirectError, redirectWarning, setStackInfo
@@ -341,6 +342,23 @@ Namespace Runtime
         <DebuggerStepThrough>
         Public Function GetSymbolsNames() As IEnumerable(Of String)
             Return symbols.Keys
+        End Function
+
+        ''' <summary>
+        ''' Try to get value of the specific symbol
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns>
+        ''' this function returns nothing by default if the symbol is missing in the environment context
+        ''' </returns>
+        Public Function GetValue(name As String, Optional [default] As Object = Nothing) As Object
+            Dim symbol As Symbol = FindSymbol(name)
+
+            If symbol Is Nothing Then
+                Return [default]
+            Else
+                Return symbol.value
+            End If
         End Function
 
         ''' <summary>

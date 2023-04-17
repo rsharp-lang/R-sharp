@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::282894ac5a2276e245b84b3323d2c811, E:/GCModeller/src/R-sharp/Library/igraph//Styler.vb"
+﻿#Region "Microsoft.VisualBasic::282894ac5a2276e245b84b3323d2c811, D:/GCModeller/src/R-sharp/Library/igraph//Styler.vb"
 
     ' Author:
     ' 
@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("styler")>
@@ -94,7 +95,7 @@ Module Styler
         Dim valType As RType = RType.GetRSharpType(val.GetType)
 
         If valType.mode = TypeCodes.double OrElse valType.mode = TypeCodes.integer Then
-            Dim vec As Double() = REnv.asVector(Of Double)(val)
+            Dim vec As Double() = CLRVector.asNumeric(val)
 
             If vec.Length = 1 Then
                 Dim w As Single = vec(Scan0)
@@ -111,7 +112,7 @@ Module Styler
             End If
         ElseIf valType Is RType.list Then
             For Each attr In DirectCast(val, list).slots
-                Call e(attr.Key).SetPenWidth(CSng(REnv.single(REnv.asVector(Of Double)(attr.Value))))
+                Call e(attr.Key).SetPenWidth(REnv.single(CLRVector.asFloat(attr.Value)))
             Next
         End If
 
@@ -181,7 +182,7 @@ Module Styler
         Dim valType As RType = RType.GetRSharpType(val.GetType)
 
         If valType.mode = TypeCodes.string Then
-            Dim vec As String() = REnv.asVector(Of String)(val)
+            Dim vec As String() = CLRVector.asCharacter(val)
 
             If vec.Length = 1 Then
                 Dim w As Color = vec(Scan0).TranslateColor
@@ -213,14 +214,14 @@ Module Styler
         ElseIf valType Is RType.list Then
             If TypeOf g Is E Then
                 For Each attr In DirectCast(val, list).slots
-                    Call DirectCast(g, E)(attr.Key).SetPenColor(CStr(REnv.single(REnv.asVector(Of String)(attr.Value))).TranslateColor)
+                    Call DirectCast(g, E)(attr.Key).SetPenColor(CStr(REnv.single(CLRVector.asCharacter(attr.Value))).TranslateColor)
                 Next
             Else
                 For Each attr In DirectCast(val, list).slots
                     Dim vex As Node = DirectCast(g, V)(attr.Key)
 
                     If Not vex Is Nothing Then
-                        vex.data.color = CStr(REnv.single(REnv.asVector(Of String)(attr.Value))).GetBrush
+                        vex.data.color = CStr(REnv.single(CLRVector.asCharacter(attr.Value))).GetBrush
                     End If
                 Next
             End If
@@ -255,7 +256,7 @@ Module Styler
         Dim valType As RType = RType.GetRSharpType(val.GetType)
 
         If valType.mode = TypeCodes.double OrElse valType.mode = TypeCodes.integer Then
-            Dim vec As Double() = REnv.asVector(Of Double)(val)
+            Dim vec As Double() = CLRVector.asNumeric(val)
 
             If vec.Length = 1 Then
                 ' set unify size
@@ -279,7 +280,7 @@ Module Styler
                 Dim vex As Node = v(attr.Key)
 
                 If Not vex Is Nothing Then
-                    vex.data.size = REnv.asVector(Of Double)(attr.Value)
+                    vex.data.size = CLRVector.asNumeric(attr.Value)
                 End If
             Next
         End If

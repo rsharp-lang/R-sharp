@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c8c2b14778b585a0c71f5970f2b46ca, E:/GCModeller/src/R-sharp/R#//System/Polyglot/Platform.vb"
+﻿#Region "Microsoft.VisualBasic::6c8c2b14778b585a0c71f5970f2b46ca, D:/GCModeller/src/R-sharp/R#//System/Polyglot/Platform.vb"
 
     ' Author:
     ' 

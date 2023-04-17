@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1f379f37c416497a193914603e16468d, E:/GCModeller/src/R-sharp/snowFall//Context/RPC/RemoteEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::1f379f37c416497a193914603e16468d, D:/GCModeller/src/R-sharp/snowFall//Context/RPC/RemoteEnvironment.vb"
 
     ' Author:
     ' 
@@ -53,6 +53,7 @@
 
 Imports System.Data
 Imports System.IO
+Imports System.Threading
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.HTTP
@@ -137,8 +138,9 @@ Namespace Context.RPC
             End If
 
             ' error retry
-            For i As Integer = 0 To 5
+            For i As Integer = 0 To 32
                 resp = New TcpRequest(master).SendMessage(req)
+                Thread.Sleep(10)
 
                 Try
                     Using buffer As New MemoryStream(resp.ChunkBuffer)

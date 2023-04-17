@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8b1591b28c568ce34f7825220118091e, E:/GCModeller/src/R-sharp/Library/Rlapack//math.vb"
+﻿#Region "Microsoft.VisualBasic::8b1591b28c568ce34f7825220118091e, D:/GCModeller/src/R-sharp/Library/Rlapack//math.vb"
 
     ' Author:
     ' 
@@ -85,6 +85,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports baseMath = Microsoft.VisualBasic.Math
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -251,7 +252,7 @@ Module math
         Dim names As New Dictionary(Of String, Symbol)
 
         For Each v As NamedValue(Of Object) In y0.namedValues
-            Call env.Push(v.Name, REnv.asVector(Of Double)(v.Value), [readonly]:=False, mode:=TypeCodes.double)
+            Call env.Push(v.Name, CLRVector.asNumeric(v.Value), [readonly]:=False, mode:=TypeCodes.double)
             Call names.Add(v.Name, env.FindSymbol(v.Name, [inherits]:=False))
         Next
 
@@ -298,14 +299,14 @@ Module math
     ''' <returns></returns>
     <ExportAPI("hist")>
     Public Function Hist(<RRawVectorArgument> data As Object, Optional step! = 1) As DataBinBox(Of Double)()
-        Return DirectCast(REnv.asVector(Of Double)(data), Double()) _
+        Return CLRVector.asNumeric(data) _
             .Hist([step]) _
             .ToArray
     End Function
 
     <ExportAPI("gini")>
     Public Function Gini(<RRawVectorArgument> data As Object) As Double
-        Dim raw As Double() = DirectCast(REnv.asVector(Of Double)(data), Double())
+        Dim raw As Double() = CLRVector.asNumeric(data)
         Dim prob As Double() = raw.AsVector / raw.Max
 
         Return prob.Gini
@@ -498,7 +499,7 @@ Module math
                 Dim vars = SymbolAnalysis.GetSymbolReferenceList(formula.formula).ToArray
 
                 df = New Rdataframe With {.columns = New Dictionary(Of String, Array)}
-                df.add(formula.var, REnv.asVector(Of Double)(symbol.value))
+                df.add(formula.var, CLRVector.asNumeric(symbol.value))
 
                 For Each v In vars
                     symbol = env.FindSymbol(v.Name)
@@ -507,7 +508,7 @@ Module math
                         df = Nothing
                         Exit For
                     Else
-                        df.add(v.Name, REnv.asVector(Of Double)(symbol.value))
+                        df.add(v.Name, CLRVector.asNumeric(symbol.value))
                     End If
                 Next
             End If
@@ -532,7 +533,7 @@ Module math
         Dim w As Double()
 
         If Not base.isEmpty(weights) Then
-            w = REnv.asVector(Of Double)(weights)
+            w = CLRVector.asNumeric(weights)
         Else
             w = Nothing
         End If
@@ -665,7 +666,7 @@ Module math
             Return lm.lm.GetY(CDbl(x))
         ElseIf TypeOf x Is Double() OrElse TypeOf x Is vector Then
             input = New Dictionary(Of String, Double()) From {
-                {lm.variables(Scan0), REnv.asVector(Of Double)(x)}
+                {lm.variables(Scan0), CLRVector.asNumeric(x)}
             }
 
             If TypeOf x Is Double() Then
@@ -677,13 +678,13 @@ Module math
             End If
         ElseIf TypeOf x Is list Then
             For Each name As String In lm.variables
-                input(name) = REnv.asVector(Of Double)(DirectCast(x, list).getByName(name))
+                input(name) = CLRVector.asNumeric(DirectCast(x, list).getByName(name))
             Next
 
             names = Nothing
         ElseIf TypeOf x Is Rdataframe Then
             For Each name As String In lm.variables
-                input(name) = REnv.asVector(Of Double)(DirectCast(x, Rdataframe).getColumnVector(name))
+                input(name) = CLRVector.asNumeric(DirectCast(x, Rdataframe).getColumnVector(name))
             Next
 
             names = DirectCast(x, Rdataframe).rownames
@@ -733,8 +734,8 @@ Module math
     ''' <returns></returns>
     <ExportAPI("dot_product")>
     Public Function ssm(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Double
-        Dim vx As Double() = DirectCast(REnv.asVector(Of Double)(x), Double())
-        Dim vy As Double() = DirectCast(REnv.asVector(Of Double)(y), Double())
+        Dim vx As Double() = CLRVector.asNumeric(x)
+        Dim vy As Double() = CLRVector.asNumeric(y)
 
         Return baseMath.SSM(vx.AsVector, vy.AsVector)
     End Function
@@ -813,7 +814,7 @@ Module math
         ElseIf x.Length <> y.Length Then
             Return Internal.debug.stop($"the given input vector size x({x.Length}) is not equals to y({y.Length})!", env)
         Else
-            Dim methods As String() = REnv.asVector(Of String)(method)
+            Dim methods As String() = CLRVector.asCharacter(method)
             Dim data As PointF() = x _
                 .Select(Function(xi, i) New PointF(xi, y(i))) _
                 .ToArray

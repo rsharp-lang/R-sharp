@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aa7c6b8ffb51d59c59ead58acab00ef0, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/Linq/DataframeGroup.vb"
+﻿#Region "Microsoft.VisualBasic::aa7c6b8ffb51d59c59ead58acab00ef0, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/Linq/DataframeGroup.vb"
 
     ' Author:
     ' 
@@ -90,7 +90,7 @@ Namespace Runtime.Internal.Object.Linq
                 Dim i As Boolean() = (values = factor).asLogical
                 Dim partRows As dataframe = data.sliceByRow(i, env)
 
-                groups.Add(factor, partRows)
+                Call groups.Add(factor, partRows)
             Next
 
             Return groups

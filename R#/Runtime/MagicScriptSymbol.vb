@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cdbc604d81a063d3776320521a0f96b9, E:/GCModeller/src/R-sharp/R#//Runtime/MagicScriptSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::cdbc604d81a063d3776320521a0f96b9, D:/GCModeller/src/R-sharp/R#//Runtime/MagicScriptSymbol.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::10e72768fcace5021095baf9209a526e, E:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpOperator/BinaryOperatorEngine.vb"
+﻿#Region "Microsoft.VisualBasic::10e72768fcace5021095baf9209a526e, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpOperator/BinaryOperatorEngine.vb"
 
     ' Author:
     ' 
@@ -101,8 +101,8 @@ Namespace Runtime.Interop.Operator
             Dim equalsTo As IBinaryOperator =
                 Function(a, b, env)
                     Return BinaryCoreInternal(Of Date, Date, Boolean)(
-                            x:=asVector(Of Date)(a),
-                            y:=asVector(Of Date)(b),
+                            x:=CLRVector.asDate(a),
+                            y:=CLRVector.asDate(b),
                             [do]:=Function(x, y, env2)
                                       Dim dx = DirectCast(x, Date)
                                       Dim dy = DirectCast(y, Date)
@@ -150,18 +150,18 @@ Namespace Runtime.Interop.Operator
             Dim left As RType = RType.GetRSharpType(GetType(Long))
             Dim right As RType = RType.GetRSharpType(GetType(Long))
 
-            Call addBinary(left, right, "+", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y, env2) DirectCast(x, Long) + DirectCast(y, Long), env), Nothing)
-            Call addBinary(left, right, "-", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y, env2) DirectCast(x, Long) - DirectCast(y, Long), env), Nothing)
-            Call addBinary(left, right, "*", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y, env2) DirectCast(x, Long) * DirectCast(y, Long), env), Nothing)
-            Call addBinary(left, right, "/", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Double)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y, env2) DirectCast(x, Long) / DirectCast(y, Long), env), Nothing)
-            Call addBinary(left, right, "%", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y, env2) DirectCast(x, Long) Mod DirectCast(y, Long), env), Nothing)
-            Call addBinary(left, right, "^", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Double)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y, env2) DirectCast(x, Long) ^ DirectCast(y, Long), env), Nothing)
-            Call addBinary(left, right, "<", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y, env2) DirectCast(x, Long) < DirectCast(y, Long), env), Nothing)
-            Call addBinary(left, right, ">", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y, env2) DirectCast(x, Long) > DirectCast(y, Long), env), Nothing)
-            Call addBinary(left, right, "<=", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y, env2) DirectCast(x, Long) <= DirectCast(y, Long), env), Nothing)
-            Call addBinary(left, right, ">=", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y, env2) DirectCast(x, Long) >= DirectCast(y, Long), env), Nothing)
-            Call addBinary(left, right, "==", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y, env2) DirectCast(x, Long) = DirectCast(y, Long), env), Nothing)
-            Call addBinary(left, right, "!=", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y, env2) DirectCast(x, Long) <> DirectCast(y, Long), env), Nothing)
+            Call addBinary(left, right, "+", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(CLRVector.asLong(a), CLRVector.asLong(b), Function(x, y, env2) DirectCast(x, Long) + DirectCast(y, Long), env), Nothing)
+            Call addBinary(left, right, "-", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(CLRVector.asLong(a), CLRVector.asLong(b), Function(x, y, env2) DirectCast(x, Long) - DirectCast(y, Long), env), Nothing)
+            Call addBinary(left, right, "*", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(CLRVector.asLong(a), CLRVector.asLong(b), Function(x, y, env2) DirectCast(x, Long) * DirectCast(y, Long), env), Nothing)
+            Call addBinary(left, right, "/", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Double)(CLRVector.asLong(a), CLRVector.asLong(b), Function(x, y, env2) DirectCast(x, Long) / DirectCast(y, Long), env), Nothing)
+            Call addBinary(left, right, "%", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(CLRVector.asLong(a), CLRVector.asLong(b), Function(x, y, env2) DirectCast(x, Long) Mod DirectCast(y, Long), env), Nothing)
+            Call addBinary(left, right, "^", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Double)(CLRVector.asLong(a), CLRVector.asLong(b), Function(x, y, env2) DirectCast(x, Long) ^ DirectCast(y, Long), env), Nothing)
+            Call addBinary(left, right, "<", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(CLRVector.asLong(a), CLRVector.asLong(b), Function(x, y, env2) DirectCast(x, Long) < DirectCast(y, Long), env), Nothing)
+            Call addBinary(left, right, ">", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(CLRVector.asLong(a), CLRVector.asLong(b), Function(x, y, env2) DirectCast(x, Long) > DirectCast(y, Long), env), Nothing)
+            Call addBinary(left, right, "<=", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(CLRVector.asLong(a), CLRVector.asLong(b), Function(x, y, env2) DirectCast(x, Long) <= DirectCast(y, Long), env), Nothing)
+            Call addBinary(left, right, ">=", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(CLRVector.asLong(a), CLRVector.asLong(b), Function(x, y, env2) DirectCast(x, Long) >= DirectCast(y, Long), env), Nothing)
+            Call addBinary(left, right, "==", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(CLRVector.asLong(a), CLRVector.asLong(b), Function(x, y, env2) DirectCast(x, Long) = DirectCast(y, Long), env), Nothing)
+            Call addBinary(left, right, "!=", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(CLRVector.asLong(a), CLRVector.asLong(b), Function(x, y, env2) DirectCast(x, Long) <> DirectCast(y, Long), env), Nothing)
         End Sub
 
         ''' <summary>
@@ -188,9 +188,9 @@ Namespace Runtime.Interop.Operator
             Dim time As RType = RType.GetRSharpType(GetType(Date))
             Dim span As RType = RType.GetRSharpType(GetType(TimeSpan))
 
-            Call addBinary(time, span, "+", Function(a, b, env) BinaryCoreInternal(Of Date, TimeSpan, Date)(asVector(Of Date)(a), asVector(Of TimeSpan)(b), Function(x, y, env2) DirectCast(x, Date) + DirectCast(y, TimeSpan), env), Nothing, [overrides]:=False)
-            Call addBinary(time, span, "-", Function(a, b, env) BinaryCoreInternal(Of Date, TimeSpan, Date)(asVector(Of Date)(a), asVector(Of TimeSpan)(b), Function(x, y, env2) DirectCast(x, Date) - DirectCast(y, TimeSpan), env), Nothing, [overrides]:=False)
-            Call addBinary(time, time, "-", Function(a, b, env) BinaryCoreInternal(Of Date, Date, TimeSpan)(asVector(Of Date)(a), asVector(Of Date)(b), Function(x, y, env2) DirectCast(x, Date) - DirectCast(y, Date), env), Nothing, [overrides]:=False)
+            Call addBinary(time, span, "+", Function(a, b, env) BinaryCoreInternal(Of Date, TimeSpan, Date)(CLRVector.asDate(a), asVector(Of TimeSpan)(b), Function(x, y, env2) DirectCast(x, Date) + DirectCast(y, TimeSpan), env), Nothing, [overrides]:=False)
+            Call addBinary(time, span, "-", Function(a, b, env) BinaryCoreInternal(Of Date, TimeSpan, Date)(CLRVector.asDate(a), asVector(Of TimeSpan)(b), Function(x, y, env2) DirectCast(x, Date) - DirectCast(y, TimeSpan), env), Nothing, [overrides]:=False)
+            Call addBinary(time, time, "-", Function(a, b, env) BinaryCoreInternal(Of Date, Date, TimeSpan)(CLRVector.asDate(a), CLRVector.asDate(b), Function(x, y, env2) DirectCast(x, Date) - DirectCast(y, Date), env), Nothing, [overrides]:=False)
         End Sub
 
         Public Function getOperator(symbol As String, env As Environment, Optional suppress As Boolean = False) As [Variant](Of BinaryIndex, Message)

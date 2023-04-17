@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a8fda844ff29f9b8e7fef84f4bd1fbe8, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/SymbolIndexer/SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::a8fda844ff29f9b8e7fef84f4bd1fbe8, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/SymbolIndexer/SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -57,6 +57,7 @@
 
 Imports System.IO
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
@@ -209,9 +210,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         Return Internal.debug.stop("invalid options for slice dataframe", env)
                     End If
                 Else
-                    Dim x = indexVec.values(Scan0).Evaluate(env)
+                    Dim x = REnv.asVector(Of Object)(indexVec.values(Scan0).Evaluate(env))
                     Dim y = REnv.asVector(Of Object)(indexVec.values(1).Evaluate(env))
-                    Dim result = data.sliceByRow(x, env)
+                    Dim result = data.sliceByRow(selector:=x, env)
 
                     If result Like GetType(Message) Then
                         Return result.TryCast(Of Message)
@@ -258,6 +259,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
         End Function
 
+        ''' <summary>
+        ''' generate the empty index error message for ``R#``
+        ''' </summary>
+        ''' <param name="symbol"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Friend Shared Function emptyIndexError(symbol As SymbolIndexer, env As Environment) As Message
             Return Internal.debug.stop({
                 $"attempt to select less than one element in OneIndex!",
@@ -527,9 +535,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 End If
             Else
                 If indexer.Length = 1 Then
-                    Return group(DirectCast(REnv.asVector(Of Integer)(indexer), Integer())(Scan0) - 1)
+                    Return group(CLRVector.asInteger(indexer)(Scan0) - 1)
                 Else
-                    Return DirectCast(REnv.asVector(Of Integer)(indexer), Integer()) _
+                    Return CLRVector.asInteger(indexer) _
                         .Select(Function(i) group(i - 1)) _
                         .ToArray
                 End If
@@ -544,7 +552,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return groupSubset(group, indexer, genericIndex)
             ElseIf TypeOf obj Is Stream Then
                 Dim read As Stream = DirectCast(obj, Stream)
-                Dim offset As Long() = DirectCast(REnv.asVector(Of Long)(indexer), Long())
+                Dim offset As Long() = CLRVector.asLong(indexer)
 
                 Return streamView(read, offset)
             End If
@@ -662,7 +670,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                                    Return type.getItem.GetValue(tmp, {i - 1})
                                End Function
 
-                        Return DirectCast(REnv.asVector(Of Integer)(indexer), Integer()) _
+                        Return CLRVector.asInteger(indexer) _
                             .Select(item) _
                             .ToArray
                     Else
@@ -689,7 +697,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             ElseIf indexer.Length = 1 Then
                 Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
             Else
-                vec = Rarray.getByIndex(REnv.asVector(Of Integer)(indexer))
+                vec = Rarray.getByIndex(CLRVector.asInteger(indexer))
             End If
 
             If vec.Length = 0 Then

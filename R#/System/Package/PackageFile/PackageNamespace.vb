@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::03e679296c8d10a5040938ba6cafc5c8, E:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/PackageNamespace.vb"
+﻿#Region "Microsoft.VisualBasic::03e679296c8d10a5040938ba6cafc5c8, D:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/PackageNamespace.vb"
 
     ' Author:
     ' 

@@ -1,58 +1,58 @@
-﻿#Region "Microsoft.VisualBasic::dcd9ecb1a9be45abbf6bb4940693a655, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::dcd9ecb1a9be45abbf6bb4940693a655, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    ' /********************************************************************************/
-
-    ' Summaries:
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-    ' Code Statistics:
 
-    '   Total Lines: 694
-    '    Code Lines: 382
-    ' Comment Lines: 235
-    '   Blank Lines: 77
-    '     File Size: 27.95 KB
+' /********************************************************************************/
+
+' Summaries:
 
 
-    '     Class dataframe
-    ' 
-    '         Properties: colnames, columns, ncols, nrows, rownames
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: (+3 Overloads) add, checkColumnNames, (+3 Overloads) CreateDataFrame, forEachRow, GetByRowIndex
-    '                   getKeyByIndex, getNames, getRowIndex, getRowList, getRowNames
-    '                   GetRowNumbers, (+2 Overloads) getVector, hasName, projectByColumn, setNames
-    '                   sliceByRow, subsetColData, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 694
+'    Code Lines: 382
+' Comment Lines: 235
+'   Blank Lines: 77
+'     File Size: 27.95 KB
+
+
+'     Class dataframe
+' 
+'         Properties: colnames, columns, ncols, nrows, rownames
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: (+3 Overloads) add, checkColumnNames, (+3 Overloads) CreateDataFrame, forEachRow, GetByRowIndex
+'                   getKeyByIndex, getNames, getRowIndex, getRowList, getRowNames
+'                   GetRowNumbers, (+2 Overloads) getVector, hasName, projectByColumn, setNames
+'                   sliceByRow, subsetColData, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -374,6 +374,20 @@ Namespace Runtime.Internal.Object
         End Function
 
         ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="flags"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' which is true is zero-based by default
+        ''' </remarks>
+        Public Function sliceByRow(flags As Boolean(), env As Environment) As [Variant](Of dataframe, Message)
+            ' checked
+            Return GetByRowIndex(index:=which.IsTrue(flags), env)
+        End Function
+
+        ''' <summary>
         ''' ``data[selector, ]``
         ''' </summary>
         ''' <param name="selector">
@@ -572,29 +586,31 @@ Namespace Runtime.Internal.Object
             ElseIf c.Length = 1 Then
                 ' single value
                 Call V.SetValue(c.GetValue(Scan0), Scan0)
-            Else
-                For Each i As SeqValue(Of Integer) In index.SeqIterator
-                    If i.value = -1 Then
-                        Call V.SetValue(Nothing, i)
-                    Else
-                        If i.value >= c.Length OrElse c.Length = 0 OrElse i.value < 0 Then
-                            ' 20221207
-                            '
-                            ' System.IndexOutOfRangeException: index was outside the bounds of the array.
-                            '   at System.Array.GetFlattenedIndex(ReadOnlySpan`1 indices)
-                            '   at System.Array.GetValue(Int32 index)
-                            Return Internal.debug.stop({
-                                $"index({i.value}) was outside the bounds of the target column vector size({c.Length}).",
-                                $"index offset: {i.value}",
-                                $"column size: {c.Length}",
-                                $"index: {If(index.Length < 80, index.GetJson, index.Take(80).ToArray.GetJson.Trim("]"c) & "...") }"
-                            }, env)
-                        Else
-                            Call V.SetValue(c.GetValue(i.value), i)
-                        End If
-                    End If
-                Next
+                Return V
             End If
+
+            For Each i As SeqValue(Of Integer) In index.SeqIterator
+                If i.value = -1 Then
+                    Call V.SetValue(Nothing, i)
+                Else
+                    If i.value >= c.Length OrElse c.Length = 0 OrElse i.value < 0 Then
+                        ' 20221207
+                        '
+                        ' System.IndexOutOfRangeException: index was outside the bounds of the array.
+                        '   at System.Array.GetFlattenedIndex(ReadOnlySpan`1 indices)
+                        '   at System.Array.GetValue(Int32 index)
+                        '
+                        Return Internal.debug.stop({
+                            $"index({i.value}) was outside the bounds of the target column vector size({c.Length}).",
+                            $"index offset: {i.value}",
+                            $"column size: {c.Length}",
+                            $"index: {If(index.Length < 80, index.GetJson, index.Take(80).ToArray.GetJson.Trim("]"c) & "...") }"
+                        }, env)
+                    Else
+                        Call V.SetValue(c.GetValue(i.value), i)
+                    End If
+                End If
+            Next
 
             Return V
         End Function

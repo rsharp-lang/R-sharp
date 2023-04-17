@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e06c0bf287c78e0dfefd88c254006818, E:/GCModeller/src/R-sharp/R#//ApiArgumentHelpers.vb"
+﻿#Region "Microsoft.VisualBasic::e06c0bf287c78e0dfefd88c254006818, D:/GCModeller/src/R-sharp/R#//ApiArgumentHelpers.vb"
 
     ' Author:
     ' 
@@ -226,7 +226,11 @@ Public Module ApiArgumentHelpers
     ''' <param name="env"></param>
     ''' <param name="suppress"></param>
     ''' <returns></returns>
-    Public Function GetFileStream(file As Object, mode As FileAccess, env As Environment, Optional suppress As Boolean = False) As [Variant](Of Stream, Message)
+    Public Function GetFileStream(file As Object,
+                                  mode As FileAccess,
+                                  env As Environment,
+                                  Optional suppress As Boolean = False) As [Variant](Of Stream, Message)
+
         If TypeOf file Is vector Then
             file = DirectCast(file, vector).data
         End If

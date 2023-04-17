@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0c506c97f1fe131a22bd4cd59fc83d74, E:/GCModeller/src/R-sharp/R#/Test//interpreterTest.vb"
+﻿#Region "Microsoft.VisualBasic::0c506c97f1fe131a22bd4cd59fc83d74, D:/GCModeller/src/R-sharp/R#/Test//interpreterTest.vb"
 
     ' Author:
     ' 
@@ -242,6 +242,9 @@ bitmap(file = `./network.png`) %do% {
     End Sub
 
     Sub Main()
+        Call convertTest.Main()
+
+
         Call pipelineBuilder2()
         Call index2222()
         Call simpleSymbolIndexTest()

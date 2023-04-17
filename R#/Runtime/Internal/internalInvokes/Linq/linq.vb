@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ba659c6ad77c9d475a938b3d7f21584f, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/linq.vb"
+﻿#Region "Microsoft.VisualBasic::ba659c6ad77c9d475a938b3d7f21584f, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/linq.vb"
 
     ' Author:
     ' 
@@ -66,12 +66,17 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Parallel.Tasks.TaskQueue(Of Long)
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -440,6 +445,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
         End Function
 
+        ''' <summary>
+        ''' A lapply/sapply liked mapping function
+        ''' </summary>
+        ''' <param name="sequence"></param>
+        ''' <param name="project"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <ExportAPI("projectAs")>
         Private Function projectAs(<RRawVectorArgument>
                                    sequence As Object,
@@ -848,6 +860,24 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return lastVal
         End Function
 
+        <Extension>
+        Private Function groupDataframeRows(table As dataframe, getKey As Object, env As Environment) As Object
+            Dim colName As String = CLRVector.asCharacter(getKey).FirstOrDefault
+
+            If colName Is Nothing Then
+                Return Internal.debug.stop("the dataframe group field key name could not be nothing!", env)
+            End If
+
+            Return New list(GetType(dataframe)) With {
+                .slots = table _
+                    .groupBy(colName) _
+                    .ToDictionary(Function(d) d.Key,
+                                  Function(d)
+                                      Return CObj(d.Value)
+                                  End Function)
+            }
+        End Function
+
         ''' <summary>
         ''' group vector/list by a given evaluator or group a dataframe rows
         ''' by the cell values of a specific column.
@@ -863,21 +893,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                  Optional env As Environment = Nothing) As Object
 
             If TypeOf sequence Is dataframe Then
-                Dim table As dataframe = DirectCast(sequence, dataframe)
-                Dim colName As String = CLRVector.asCharacter(getKey).FirstOrDefault
-
-                If colName Is Nothing Then
-                    Return Internal.debug.stop("the dataframe group field key name could not be nothing!", env)
-                End If
-
-                Return New list(GetType(dataframe)) With {
-                    .slots = table _
-                        .groupBy(colName) _
-                        .ToDictionary(Function(d) d.Key,
-                                      Function(d)
-                                          Return CObj(d.Value)
-                                      End Function)
-                }
+                Return DirectCast(sequence, dataframe).groupDataframeRows(getKey, env)
             ElseIf TypeOf sequence Is Group Then
                 sequence = DirectCast(sequence, Group).group
             End If
@@ -1491,5 +1507,89 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             vec.RotateLeft(i)
             Return REnv.TryCastGenericArray(vec, env)
         End Function
+
+        ''' <summary>
+        ''' ### Keep or drop columns using their names and types
+        ''' 
+        ''' Select (and optionally rename) variables in a data frame, using a 
+        ''' concise mini-language that makes it easy to refer to variables 
+        ''' based on their name (e.g. a:f selects all columns from a on the 
+        ''' left to f on the right) or type (e.g. where(is.numeric) selects all
+        ''' numeric columns).
+        ''' </summary>
+        ''' <param name="_data">
+        ''' A data frame, data frame extension (e.g. a tibble), or a lazy data 
+        ''' frame (e.g. from dbplyr or dtplyr). See Methods, below, for more 
+        ''' details.
+        ''' </param>
+        ''' <param name="selectors">
+        ''' &lt;tidy-select> One or more unquoted expressions separated by commas. 
+        ''' Variable names can be used as if they were positions in the data frame, 
+        ''' so expressions like x:y can be used to select a range of variables.
+        ''' 
+        ''' syntax for the selectors:
+        ''' 
+        ''' 1. select by name: ``select(name1, name2)``
+        ''' 2. field renames: ``select(name1 -> data1)``
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' An object of the same type as .data. The output has the following properties:
+        '''
+        ''' 1. Rows are Not affected.
+        ''' 2. Output columns are a subset Of input columns, potentially With a 
+        '''    different order. Columns will be renamed If new_name = old_name 
+        '''    form Is used.
+        ''' 3. Data frame attributes are preserved.
+        ''' 4. Groups are maintained; you can't select off grouping variables.
+        ''' </returns>
+        <ExportAPI("select")>
+        <RApiReturn(GetType(dataframe))>
+        Public Function [select](_data As dataframe,
+                                 <RListObjectArgument>
+                                 Optional selectors As list = Nothing,
+                                 Optional env As Environment = Nothing) As Object
+
+            If _data Is Nothing Then
+                Return Nothing
+            End If
+
+            Dim newDf As New dataframe With {
+                .columns = New Dictionary(Of String, Array),
+                .rownames = _data.rownames
+            }
+            Dim src_name As String
+            Dim rename As String
+
+            For Each f As NamedValue(Of Object) In selectors.namedValues
+                If TypeOf f.Value Is String Then
+                    src_name = CStr(f.Value)
+                    rename = Nothing
+                ElseIf TypeOf f.Value Is DeclareLambdaFunction Then
+                    Dim lambda As DeclareLambdaFunction = DirectCast(f.Value, DeclareLambdaFunction)
+
+                    rename = ValueAssignExpression.GetSymbol(lambda.closure)
+                    src_name = lambda.parameterNames(Scan0)
+                Else
+                    Return Message.InCompatibleType(
+                        require:=GetType(String),
+                        given:=f.ValueType,
+                        envir:=env,
+                        message:=$"the data selector '{f.Name}' can not be interpreted!"
+                    )
+                End If
+
+                If Not _data.hasName(src_name) Then
+                    Return Internal.debug.stop($"missing data field '{src_name}' in your dataframe!", env)
+                ElseIf rename.StringEmpty Then
+                    rename = src_name
+                End If
+
+                Call newDf.columns.Add(rename, _data(src_name))
+            Next
+
+            Return newDf
+        End Function
+
     End Module
 End Namespace

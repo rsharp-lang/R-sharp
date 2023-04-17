@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f4a8016ec65336f0ff8b5a7511cbd414, E:/GCModeller/src/R-sharp/studio/Rserver//My Project/AssemblyInfo.vb"
+﻿#Region "Microsoft.VisualBasic::f4a8016ec65336f0ff8b5a7511cbd414, D:/GCModeller/src/R-sharp/studio/Rserver//My Project/AssemblyInfo.vb"
 
     ' Author:
     ' 

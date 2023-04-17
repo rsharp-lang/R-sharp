@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fd8884e72f621388e5108867a7ba1878, E:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/ExpressionSignature.vb"
+﻿#Region "Microsoft.VisualBasic::fd8884e72f621388e5108867a7ba1878, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/ExpressionSignature.vb"
 
     ' Author:
     ' 
@@ -275,7 +275,13 @@ Namespace Language.Syntax.SyntaxParser
 
         <Extension>
         Public Function isStackOf(tokens As Token(), open$, close$) As Boolean
-            Return (tokens(Scan0) = (TokenType.open, open)) AndAlso (tokens.Last = (TokenType.close, close))
+            If tokens.IsNullOrEmpty Then
+                Return False
+            ElseIf tokens(Scan0) = (TokenType.open, open) Then
+                Return tokens.Last = (TokenType.close, close)
+            Else
+                Return False
+            End If
         End Function
 
         ''' <summary>

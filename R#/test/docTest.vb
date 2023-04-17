@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::92079b242cdf57892a1b1da582aee259, E:/GCModeller/src/R-sharp/R#/Test//docTest.vb"
+﻿#Region "Microsoft.VisualBasic::92079b242cdf57892a1b1da582aee259, D:/GCModeller/src/R-sharp/R#/Test//docTest.vb"
 
     ' Author:
     ' 
@@ -68,6 +68,6 @@ Module docTest
     Sub GetDocs()
         Dim doc As New AnnotationDocs
         Dim testApi As RMethodInfo = r.Evaluate("log")
-        Dim result = doc.GetAnnotations(testApi.GetRawDeclares)
+        Dim result = doc.GetAnnotations(testApi.GetNetCoreCLRDeclaration)
     End Sub
 End Module

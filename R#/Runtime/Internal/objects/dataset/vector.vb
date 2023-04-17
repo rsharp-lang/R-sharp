@@ -1,61 +1,62 @@
-﻿#Region "Microsoft.VisualBasic::0961b7171a6adf103e173742beb6934e, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vector.vb"
+﻿#Region "Microsoft.VisualBasic::0961b7171a6adf103e173742beb6934e, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vector.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    ' /********************************************************************************/
-
-    ' Summaries:
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-    ' Code Statistics:
 
-    '   Total Lines: 323
-    '    Code Lines: 220
-    ' Comment Lines: 50
-    '   Blank Lines: 53
-    '     File Size: 12.00 KB
+' /********************************************************************************/
+
+' Summaries:
 
 
-    '     Class vector
-    ' 
-    '         Properties: data, factor, length, unit
-    ' 
-    '         Constructor: (+7 Overloads) Sub New
-    '         Function: asVector, fromScalar, (+2 Overloads) getByIndex, getByName, getNames
-    '                   hasName, isVectorOf, setByindex, setByIndex, setNames
-    '                   ToString
-    '         Operators: <>, =
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 323
+'    Code Lines: 220
+' Comment Lines: 50
+'   Blank Lines: 53
+'     File Size: 12.00 KB
+
+
+'     Class vector
+' 
+'         Properties: data, factor, length, unit
+' 
+'         Constructor: (+7 Overloads) Sub New
+'         Function: asVector, fromScalar, (+2 Overloads) getByIndex, getByName, getNames
+'                   hasName, isVectorOf, setByindex, setByIndex, setNames
+'                   ToString
+'         Operators: <>, =
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -346,6 +347,7 @@ Namespace Runtime.Internal.Object
             Return $"[{length}] vec<{m_type.ToString}>"
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function asVector(Of T)(x As IEnumerable(Of T), Optional unit As unit = Nothing) As vector
             Return New vector With {
                 .data = x.ToArray,
@@ -369,9 +371,16 @@ Namespace Runtime.Internal.Object
 
         Public Overloads Shared Operator =(v As vector, value As String) As vector
             Dim str As String() = CLRVector.asCharacter(v.data)
-            Dim bools As Boolean() = str.Select(Function(s) s = value).ToArray
+            Dim bools As Boolean() = New Boolean(str.Length - 1) {}
 
-            Return vector.asVector(Of Boolean)(bools)
+            For i As Integer = 0 To bools.Length - 1
+                bools(i) = str(i) = value
+            Next
+
+            Return New vector With {
+                .data = bools,
+                .elementType = RType.GetRSharpType(GetType(Boolean))
+            }
         End Operator
 
         Public Overloads Shared Operator <>(v As vector, value As String) As vector
