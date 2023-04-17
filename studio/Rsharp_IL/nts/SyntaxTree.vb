@@ -123,8 +123,19 @@ Public Class SyntaxTree
                                     state.Value.RemoveRange(buffer)
                                     buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp))
                                 ElseIf leftToken Like GetType(Token) Then
-                                    Dim lt = leftToken.TryCast(Of Token)
+                                    If leftToken.TryCast(Of Token) = (TokenType.close, ")") Then
+                                        ' is a possible function declare
+                                        Dim index = Traceback(buffer, {TokenType.keyword})
 
+                                        buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
+                                        buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, exp))
+                                        Reindex(buffer)
+
+                                        range = buffer.Skip(index).Take(buffer.Count - index).ToArray
+                                        exp = range.GetExpression(fromComma:=True, opts)
+
+
+                                    End If
                                 Else
 
                                 End If
@@ -135,7 +146,7 @@ Public Class SyntaxTree
                     Yield exp
                 End If
             ElseIf t.name = TokenType.comma Then
-                Dim index = Traceback(buffer)
+                Dim index = Traceback(buffer, {TokenType.comma, TokenType.open})
                 Dim range = buffer.Skip(index).Take(buffer.Count - index).ToArray
                 Dim exp = range.GetExpression(fromComma:=True, opts)
 

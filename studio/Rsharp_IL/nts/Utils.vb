@@ -21,15 +21,15 @@ Public Module Utils
     ''' traceback the index to the last comma or open token
     ''' </summary>
     ''' <returns></returns>
-    Friend Function Traceback(buffer As List(Of SyntaxToken)) As Integer
+    Friend Function Traceback(buffer As List(Of SyntaxToken), match As TokenType()) As Integer
         For i As Integer = buffer.Count - 2 To 0 Step -1
             If buffer(i) Like GetType(Token) Then
-                Select Case buffer(i).TryCast(Of Token).name
-                    Case TokenType.comma, TokenType.open
-                        Return i + 1
-                    Case Else
-                        ' do nothing
-                End Select
+                Dim type As TokenType = buffer(i).TryCast(Of Token).name
+                Dim assert As Boolean = match.Any(Function(f) f = type)
+
+                If assert Then
+                    Return i + 1
+                End If
             End If
         Next
 
