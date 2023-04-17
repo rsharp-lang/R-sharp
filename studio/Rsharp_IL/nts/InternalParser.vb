@@ -6,6 +6,29 @@ Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
+''' <summary>
+''' A temp expression collection for the function invoke parameters
+''' </summary>
+Public Class ExpressionCollecton : Inherits Expression
+
+    Public Overrides ReadOnly Property type As TypeCodes
+    Public Overrides ReadOnly Property expressionName As Rsharp.Development.Package.File.ExpressionTypes
+
+    Public Property expressions As Expression()
+
+    Public Shared Function GetExpressions(exp As Expression) As Expression()
+        If TypeOf exp Is ExpressionCollecton Then
+            Return DirectCast(exp, ExpressionCollecton).expressions
+        Else
+            Return {exp}
+        End If
+    End Function
+
+    Public Overrides Function Evaluate(envir As Rsharp.Runtime.Environment) As Object
+        Throw New NotImplementedException()
+    End Function
+End Class
+
 Public Module InternalParser
 
     <Extension>
@@ -79,18 +102,6 @@ Public Module InternalParser
             syntax = New SyntaxResult(parse(Scan0).TryCast(Of Expression))
         End If
 
-        Select Case tokens(Scan0).TryCast(Of Token).text
-            Case "("
-            Case "{"
-            Case "["
-                ' is a vector
-
-            Case Else
-                If fromComma Then
-
-                Else
-                    Throw New NotImplementedException
-                End If
-        End Select
+        Return syntax.expression
     End Function
 End Module

@@ -143,6 +143,12 @@ Namespace Language.Syntax.SyntaxParser
             Return New SyntaxResult(syntax)
         End Operator
 
+        ''' <summary>
+        ''' check of the <see cref="SyntaxResult.expression"/> type
+        ''' </summary>
+        ''' <param name="syntax"></param>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
         Public Shared Operator Like(syntax As SyntaxResult, type As Type) As Boolean
             If syntax Is Nothing OrElse syntax.expression Is Nothing Then
                 Return False

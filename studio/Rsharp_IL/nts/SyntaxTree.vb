@@ -5,8 +5,11 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
+Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -115,6 +118,44 @@ Public Class SyntaxTree
                 Else
                     Dim range = state.Value.GetRange(buffer).ToArray
                     Dim exp = range.GetExpression(fromComma:=False, opts)
+
+                    If range.First Like GetType(Token) Then
+                        Dim left = range.First.TryCast(Of Token)
+
+                        If left.name = TokenType.open AndAlso left.text = "(" Then
+                            Dim leftToken As SyntaxToken = state.Value.Left(buffer)
+
+                            If leftToken Is Nothing Then
+                                ' (...)
+                                state.Value.RemoveRange(buffer)
+                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp))
+                            ElseIf leftToken Like GetType(Token) Then
+                                Dim target = Expression.CreateExpression({leftToken.TryCast(Of Token)}, opts)
+
+                                If target Like GetType(SymbolReference) Then
+                                    ' invoke function
+                                    ' func(...)
+                                    state.Value.RemoveRange(buffer)
+                                    exp = New FunctionInvoke(target.expression, Nothing, ExpressionCollecton.GetExpressions(exp))
+                                    buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp))
+                                Else
+                                    Throw New NotImplementedException
+                                End If
+                            Else
+                                Dim target = leftToken.TryCast(Of Expression)
+
+                                If TypeOf target Is SymbolReference Then
+                                    ' invoke function
+                                    ' func(...)
+                                    state.Value.RemoveRange(buffer)
+                                    exp = New FunctionInvoke(target, Nothing, ExpressionCollecton.GetExpressions(exp))
+                                    buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp))
+                                Else
+                                    Throw New NotImplementedException
+                                End If
+                            End If
+                        End If
+                    End If
 
                     Yield exp
                 End If
