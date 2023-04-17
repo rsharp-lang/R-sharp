@@ -127,11 +127,11 @@ Public Class SyntaxTree
                                         ' is a possible function declare
                                         Dim index = Traceback(buffer, {TokenType.keyword})
 
-                                        buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
-                                        buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, exp))
+                                        buffer.RemoveRange(state.Value.Range.Min + 1, state.Value.Range.Length - 1)
+                                        buffer.Insert(state.Value.Range.Min + 1, New SyntaxToken(-1, exp))
                                         Reindex(buffer)
 
-                                        range = buffer.Skip(index).Take(buffer.Count - index).ToArray
+                                        range = buffer.Skip(index - 1).Take(buffer.Count - index + 1).ToArray
                                         exp = range.GetExpression(fromComma:=True, opts)
 
 
