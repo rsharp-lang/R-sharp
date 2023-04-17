@@ -93,6 +93,13 @@ Namespace Language.TokenIcer
         ''' could be used for parse the typescript,javascript,python
         ''' </summary>
         Protected keepsDelimiter As Boolean = False
+        ''' <summary>
+        ''' use the dollar symbol $ as symbol name?
+        ''' 
+        ''' set false for R# language by default, and should turn on this option for 
+        ''' javascript/typescript language parser.
+        ''' </summary>
+        Protected dollarAsSymbol As Boolean = False
         Protected ReadOnly keywords As New Index(Of String)(Rkeywords.Objects)
         Protected ReadOnly nullLiteral As New Index(Of String)(RNullLiteral)
         Protected ReadOnly shortOperators As New Index(Of Char)(RshortOperators)
@@ -498,8 +505,17 @@ Namespace Language.TokenIcer
                         text = New String(buffer.PopAllChars)
                         buffer += bufferNext.Value
                     End If
-                ElseIf buffer = 1 AndAlso buffer(Scan0) = "@"c OrElse buffer(Scan0) = "$"c Then
+                ElseIf buffer = "@"c Then
                     Return Nothing
+                ElseIf buffer = "$"c Then
+                    If dollarAsSymbol Then
+                        Return New Token With {
+                            .name = TokenType.identifier,
+                            .text = New String(buffer.PopAllChars)
+                        }
+                    Else
+                        Return Nothing
+                    End If
                 Else
                     text = New String(buffer.PopAllChars)
                 End If

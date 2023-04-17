@@ -20,5 +20,6 @@ Public Class TsScanner : Inherits Scanner
         Call shortOperators.AddList("."c, "+"c, "-"c, "*"c, "/"c, "\"c, "!"c, "|"c, "&"c)
 
         keepsDelimiter = True
+        dollarAsSymbol = True
     End Sub
 End Class
