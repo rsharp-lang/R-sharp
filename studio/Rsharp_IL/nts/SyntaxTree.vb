@@ -35,8 +35,21 @@ Public Class SyntaxTree
     End Function
 
     Private Iterator Function GetExpressions(lines As Token()()) As IEnumerable(Of Expression)
-        For Each line As Token() In lines
+        ' {} () []
+        Dim stack As New Stack(Of Char)
+        Dim buffer As New List(Of Token)
 
+        For Each line As Token() In lines
+            ' find the max stack closed scope
+            For Each t As Token In line
+                If t.name = TokenType.open Then
+                    stack.Push(t.text)
+                ElseIf t.name = TokenType.close Then
+
+                End If
+            Next
         Next
     End Function
+
+
 End Class
