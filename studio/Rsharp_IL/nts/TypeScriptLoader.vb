@@ -70,6 +70,13 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
     End Property
 
     Public Overrides Function ParseScript(scriptfile As String, env As Environment) As [Variant](Of Message, Program)
+        Dim Rscript As Components.Rscript = Components.Rscript.FromFile(scriptfile)
+        Dim program As Program = Rscript.ParseTsScript(debug:=env.globalEnvironment.debugMode)
+
+        Return program
+    End Function
+
+    Public Overrides Function LoadScript(scriptfile As String, env As Environment) As Object
         Dim R As RInterpreter = env.globalEnvironment.Rscript
         ' 20200213 因为source函数是创建了一个新的环境容器
         ' 所以函数无法被导入到全局环境之中
@@ -103,12 +110,5 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
         Else
             Return program.Execute(env)
         End If
-    End Function
-
-    Public Overrides Function LoadScript(scriptfile As String, env As Environment) As Object
-        Dim Rscript As Components.Rscript = Components.Rscript.FromFile(scriptfile)
-        Dim program As Program = Rscript.ParsePyScript(debug:=env.globalEnvironment.debugMode)
-
-        Return program
     End Function
 End Class
