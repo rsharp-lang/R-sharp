@@ -69,8 +69,15 @@ Public Module InternalParser
                 End If
             Else
                 syntax = part.Select(Function(t) t.TryCast(Of Token)).ParseTypeScriptLine(opts)
+                parse(i) = New SyntaxToken(-1, syntax.expression)
             End If
         Next
+
+        If parse.Length > 1 Then
+            syntax = SyntaxToken.Cast(parse).CreateMathExpression(opts)
+        Else
+            syntax = New SyntaxResult(parse(Scan0).TryCast(Of Expression))
+        End If
 
         Select Case tokens(Scan0).TryCast(Of Token).text
             Case "("

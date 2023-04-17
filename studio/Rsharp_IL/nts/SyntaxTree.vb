@@ -46,6 +46,16 @@ Public Class SyntaxToken
         End If
     End Operator
 
+    Public Shared Iterator Function Cast(list As IEnumerable(Of SyntaxToken)) As IEnumerable(Of [Variant](Of Expression, String))
+        For Each item In list
+            If item Like GetType(Token) Then
+                Yield New [Variant](Of Expression, String)(item.TryCast(Of Token).text)
+            Else
+                Yield New [Variant](Of Expression, String)(item.TryCast(Of Expression))
+            End If
+        Next
+    End Function
+
 End Class
 
 Public Class SyntaxTree

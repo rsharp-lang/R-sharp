@@ -101,8 +101,8 @@ Namespace Runtime.Interop.Operator
             Dim equalsTo As IBinaryOperator =
                 Function(a, b, env)
                     Return BinaryCoreInternal(Of Date, Date, Boolean)(
-                            x:=asVector(Of Date)(a),
-                            y:=asVector(Of Date)(b),
+                            x:=CLRVector.asDate(a),
+                            y:=CLRVector.asDate(b),
                             [do]:=Function(x, y, env2)
                                       Dim dx = DirectCast(x, Date)
                                       Dim dy = DirectCast(y, Date)
@@ -188,9 +188,9 @@ Namespace Runtime.Interop.Operator
             Dim time As RType = RType.GetRSharpType(GetType(Date))
             Dim span As RType = RType.GetRSharpType(GetType(TimeSpan))
 
-            Call addBinary(time, span, "+", Function(a, b, env) BinaryCoreInternal(Of Date, TimeSpan, Date)(asVector(Of Date)(a), asVector(Of TimeSpan)(b), Function(x, y, env2) DirectCast(x, Date) + DirectCast(y, TimeSpan), env), Nothing, [overrides]:=False)
-            Call addBinary(time, span, "-", Function(a, b, env) BinaryCoreInternal(Of Date, TimeSpan, Date)(asVector(Of Date)(a), asVector(Of TimeSpan)(b), Function(x, y, env2) DirectCast(x, Date) - DirectCast(y, TimeSpan), env), Nothing, [overrides]:=False)
-            Call addBinary(time, time, "-", Function(a, b, env) BinaryCoreInternal(Of Date, Date, TimeSpan)(asVector(Of Date)(a), asVector(Of Date)(b), Function(x, y, env2) DirectCast(x, Date) - DirectCast(y, Date), env), Nothing, [overrides]:=False)
+            Call addBinary(time, span, "+", Function(a, b, env) BinaryCoreInternal(Of Date, TimeSpan, Date)(CLRVector.asDate(a), asVector(Of TimeSpan)(b), Function(x, y, env2) DirectCast(x, Date) + DirectCast(y, TimeSpan), env), Nothing, [overrides]:=False)
+            Call addBinary(time, span, "-", Function(a, b, env) BinaryCoreInternal(Of Date, TimeSpan, Date)(CLRVector.asDate(a), asVector(Of TimeSpan)(b), Function(x, y, env2) DirectCast(x, Date) - DirectCast(y, TimeSpan), env), Nothing, [overrides]:=False)
+            Call addBinary(time, time, "-", Function(a, b, env) BinaryCoreInternal(Of Date, Date, TimeSpan)(CLRVector.asDate(a), CLRVector.asDate(b), Function(x, y, env2) DirectCast(x, Date) - DirectCast(y, Date), env), Nothing, [overrides]:=False)
         End Sub
 
         Public Function getOperator(symbol As String, env As Environment, Optional suppress As Boolean = False) As [Variant](Of BinaryIndex, Message)

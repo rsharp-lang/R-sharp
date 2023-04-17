@@ -386,6 +386,25 @@ Namespace Language.Syntax.SyntaxParser
             Return SyntaxResult.CreateError(New SyntaxErrorException, opts)
         End Function
 
+        <Extension>
+        Public Function CreateMathExpression(buf As IEnumerable(Of [Variant](Of Expression, String)), opts As SyntaxBuilderOptions) As SyntaxResult
+            Return buf _
+                .Select(Function(a)
+                            If a Like GetType(String) Then
+                                Return New [Variant](Of SyntaxResult, String)(a.TryCast(Of String))
+                            Else
+                                Return New [Variant](Of SyntaxResult, String)(New SyntaxResult(a.TryCast(Of Expression)))
+                            End If
+                        End Function) _
+                .AsList _
+                .processOperators(
+                    oplist:=New List(Of String),
+                    operators:=operatorPriority,
+                    test:=Function(op, o) op.IndexOf(o) > -1,
+                    opts:=opts
+                )
+        End Function
+
         ''' <summary>
         ''' 
         ''' </summary>
