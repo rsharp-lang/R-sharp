@@ -9,6 +9,41 @@ Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports System.Data
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.Emit.Marshal
+
+Public Class SyntaxToken
+
+    ''' <summary>
+    ''' <see cref="Token"/> or <see cref="Expression"/>
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property value As Object
+    Public Property index As Integer
+
+    Sub New(i As Integer, t As Token)
+        index = i
+        value = t
+    End Sub
+
+    Sub New(i As Integer, exp As Expression)
+        index = i
+        value = exp
+    End Sub
+
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function [TryCast](Of T As Class)() As T
+        Return TryCast(value, T)
+    End Function
+
+    Public Shared Operator Like(t As SyntaxToken, type As Type) As Boolean
+        If t Is Nothing OrElse t.value Is Nothing Then
+            Return False
+        Else
+            Return t.value.GetType Is type
+        End If
+    End Operator
+
+End Class
 
 Public Class SyntaxTree
 
@@ -43,15 +78,19 @@ Public Class SyntaxTree
         Return prog
     End Function
 
-    Private Iterator Function GetExpressions(lines As Token()) As IEnumerable(Of SyntaxResult)
+    Private Iterator Function GetExpressions(lines As Pointer(Of Token)) As IEnumerable(Of SyntaxResult)
         ' {} () []
         Dim stack As New TokenStack(Of TokenType)
-        Dim buffer As New List(Of Token)
+        Dim buffer As New List(Of SyntaxToken)
+        Dim i As New Value(Of Token)
+        Dim t As Token
 
         ' find the max stack closed scope
-        For Each t As Token In lines
+        Do While (i = ++lines) IsNot Nothing
+            t = i
+
             If isNotDelimiter(t) Then
-                buffer.Add(t)
+                buffer.Add(New SyntaxToken(buffer.Count, t))
             End If
 
             If t.name = TokenType.open Then
@@ -59,6 +98,8 @@ Public Class SyntaxTree
             ElseIf t.name = TokenType.close Then
                 If stack.Pop(t) = StackStates.MisMatched Then
                     Throw New SyntaxErrorException
+                Else
+
                 End If
             ElseIf isTerminator(t) Then
                 If stack.isEmpty Then
@@ -71,9 +112,18 @@ Public Class SyntaxTree
                     Else
                         Yield exp.expression
                     End If
+                Else
+                    If t.name = TokenType.newLine Then
+                        ' remove current newline token
+                        buffer.Pop()
+                    End If
                 End If
             End If
-        Next
+        Loop
+
+        If buffer > 0 Then
+            Yield ParseTypeScriptLine(buffer.PopAll, opts)
+        End If
     End Function
 
     Private Shared Function isNotDelimiter(ByRef t As Token) As Boolean
