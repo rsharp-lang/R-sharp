@@ -1,9 +1,13 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
+Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -54,6 +58,30 @@ Public Module InternalParser
         Return New ClosureExpression(exps)
     End Function
 
+    <Extension>
+    Private Iterator Function GetParameters(paramTokens As SyntaxToken(), opts As SyntaxBuilderOptions) As IEnumerable(Of DeclareNewSymbol)
+        Dim list = paramTokens _
+            .Split(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.comma, DelimiterLocation.NotIncludes) _
+            .ToArray
+
+        For Each block As SyntaxToken() In list
+            Dim val = block.ParseValueExpression(opts)
+
+            If TypeOf val Is ValueAssignExpression Then
+                ' optional parameter
+                Dim assign As ValueAssignExpression = DirectCast(val, ValueAssignExpression)
+
+                ' Yield New DeclareNewSymbol ( )
+            ElseIf TypeOf val Is SymbolReference Then
+                Dim symbol As SymbolReference = DirectCast(val, SymbolReference)
+
+                Yield New DeclareNewSymbol(symbol.symbol, Nothing)
+            Else
+                Throw New NotImplementedException
+            End If
+        Next
+    End Function
+
     ''' <summary>
     ''' 
     ''' </summary>
@@ -69,6 +97,26 @@ Public Module InternalParser
     <Extension>
     Public Function GetExpression(tokens As SyntaxToken(), fromComma As Boolean, opts As SyntaxBuilderOptions) As Expression
         If fromComma Then
+            If tokens.First Like GetType(Token) AndAlso tokens.First.TryCast(Of Token).isKeyword("function") Then
+                If tokens.Last Like GetType(Token) AndAlso tokens.Last.TryCast(Of Token) = (TokenType.close, "}") Then
+                    Dim body As SyntaxToken = tokens(tokens.Length - 2)
+                    Dim paramTokens As SyntaxToken() = tokens.Skip(1).Take(tokens.Length - 1 - 3).ToArray
+                    Dim stack As StackFrame = opts.GetStackTrace(tokens(Scan0).TryCast(Of Token))
+
+                    paramTokens = paramTokens _
+                        .Skip(1) _
+                        .Take(paramTokens.Length - 2) _
+                        .ToArray
+
+                    Return New DeclareNewFunction(
+                        funcName:=$"<${App.GetNextUniqueName("anonymous_")}>",
+                        parameters:=paramTokens.GetParameters(opts).ToArray,
+                        body:=body.TryCast(Of ClosureExpression),
+                        stackframe:=stack
+                    )
+                End If
+            End If
+
             Return tokens.ParseValueExpression(opts)
         Else
             Dim source As IEnumerable(Of SyntaxToken) = tokens _
