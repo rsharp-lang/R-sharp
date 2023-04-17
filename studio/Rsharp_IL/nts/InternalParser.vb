@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -47,12 +48,33 @@ Public Module InternalParser
         Dim parse As Expression() = New Expression(blocks.Length - 1) {}
 
         For i As Integer = 0 To blocks.Length - 1
-            parse(i) = blocks(i).GetExpression(fromComma:=True, opts)
+            parse(i) = blocks(i).ParseValueExpression(opts)
         Next
 
         Return New ExpressionCollecton With {
             .expressions = parse
         }
+    End Function
+
+    ''' <summary>
+    ''' multiple lines expression
+    ''' </summary>
+    ''' <param name="tokens"></param>
+    ''' <param name="opts"></param>
+    ''' <returns></returns>
+    <Extension>
+    Private Function ParseClosure(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As ClosureExpression
+        Dim lines = tokens _
+            .Split(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.terminator) _
+            .ToArray
+        Dim exps As Expression() = New Expression(lines.Length - 1) {}
+
+        For i As Integer = 0 To lines.Length - 1
+            tokens = lines(i)
+            exps(i) = tokens.ParseValueExpression(opts)
+        Next
+
+        Return New ClosureExpression(exps)
     End Function
 
     ''' <summary>
@@ -69,20 +91,26 @@ Public Module InternalParser
     ''' </remarks>
     <Extension>
     Public Function GetExpression(tokens As SyntaxToken(), fromComma As Boolean, opts As SyntaxBuilderOptions) As Expression
-        Dim source As IEnumerable(Of SyntaxToken)
-
         If fromComma Then
-            source = tokens
+            Return tokens.ParseValueExpression(opts)
         Else
-            source = tokens _
+            Dim source As IEnumerable(Of SyntaxToken) = tokens _
                 .Skip(1) _
                 .Take(tokens.Length - 2) _
                 .ToArray
 
-            Return DirectCast(source, SyntaxToken()).ParseCommaList(opts)
+            If tokens(Scan0) Like GetType(Token) AndAlso tokens(Scan0).TryCast(Of Token).text = "{" Then
+                ' closure
+                Return DirectCast(source, SyntaxToken()).ParseClosure(opts)
+            Else
+                Return DirectCast(source, SyntaxToken()).ParseCommaList(opts)
+            End If
         End If
+    End Function
 
-        Dim blocks = source _
+    <Extension>
+    Private Function ParseValueExpression(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As Expression
+        Dim blocks = tokens _
             .Split(
                 delimiter:=Function(t)
                                Return t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.operator
