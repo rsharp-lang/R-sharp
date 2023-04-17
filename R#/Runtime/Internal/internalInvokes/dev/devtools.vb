@@ -73,7 +73,14 @@ Namespace Runtime.Internal.Invokes
 
         Sub New()
             Call Internal.Object.Converts.addHandler(GetType(ProfilerFrames), AddressOf profilerFrames)
+            Call Internal.Object.Converts.addHandler(GetType(Program), AddressOf scriptTable)
         End Sub
+
+        Private Function scriptTable(prog As Program, args As list, env As Environment) As dataframe
+            Dim df As New dataframe With {.columns = New Dictionary(Of String, Array)}
+
+            Return df
+        End Function
 
         Private Function profilerFrames(data As ProfilerFrames, args As list, env As Environment) As dataframe
             Dim frames As New dataframe With {
