@@ -88,6 +88,10 @@ Namespace Language.TokenIcer
         Dim tokenStringMode As Boolean
         Dim isStringInterpolateClose As Boolean = False
 
+        ''' <summary>
+        ''' keeps the blankspace, cr, lf, tab as the delimiter/expression terminator
+        ''' could be used for parse the typescript,javascript,python
+        ''' </summary>
         Protected keepsDelimiter As Boolean = False
         Protected ReadOnly keywords As New Index(Of String)(Rkeywords.Objects)
         Protected ReadOnly nullLiteral As New Index(Of String)(RNullLiteral)

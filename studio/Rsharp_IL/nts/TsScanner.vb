@@ -16,7 +16,8 @@ Public Class TsScanner : Inherits Scanner
         Call keywords.Add(tsKeywords).ToArray
         Call nullLiteral.Clear()
         Call nullLiteral.Add("null")
-        Call shortOperators.Add("."c)
+        Call shortOperators.Clear()
+        Call shortOperators.AddList("."c, "+"c, "-"c, "*"c, "/"c, "\"c, "!"c, "|"c, "&"c)
 
         keepsDelimiter = True
     End Sub

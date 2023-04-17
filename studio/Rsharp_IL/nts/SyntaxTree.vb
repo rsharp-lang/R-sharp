@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
+Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
 Public Class SyntaxTree
@@ -22,6 +23,6 @@ Public Class SyntaxTree
     End Sub
 
     Friend Function ParseTsScript() As Program
-
+        Dim tokens As Token() = scanner.GetTokens.ToArray
     End Function
 End Class
