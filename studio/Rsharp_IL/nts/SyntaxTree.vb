@@ -84,6 +84,7 @@ Public Class SyntaxTree
         Dim buffer As New List(Of SyntaxToken)
         Dim i As New Value(Of Token)
         Dim t As Token
+        Dim state As New Value(Of StackStates)
 
         ' find the max stack closed scope
         Do While (i = ++lines) IsNot Nothing
@@ -94,12 +95,15 @@ Public Class SyntaxTree
             End If
 
             If t.name = TokenType.open Then
-                stack.Push(t)
+                stack.Push(t, buffer.Count - 1)
             ElseIf t.name = TokenType.close Then
-                If stack.Pop(t) = StackStates.MisMatched Then
+                If (state = stack.Pop(t, buffer.Count - 1)).MisMatched Then
                     Throw New SyntaxErrorException
                 Else
+                    Dim range = state.Value.GetRange(buffer).ToArray
+                    Dim exp = range.GetExpression(opts)
 
+                    Yield exp
                 End If
             ElseIf isTerminator(t) Then
                 If stack.isEmpty Then
