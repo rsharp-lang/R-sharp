@@ -142,7 +142,7 @@ Public Module InternalParser
         Next
 
         If parse.Length > 1 Then
-            syntax = SyntaxToken.Cast(parse).CreateMathExpression(opts)
+            syntax = SyntaxToken.Cast(parse).CreateBinaryExpression(opts)
         Else
             syntax = New SyntaxResult(parse(Scan0).TryCast(Of Expression))
         End If

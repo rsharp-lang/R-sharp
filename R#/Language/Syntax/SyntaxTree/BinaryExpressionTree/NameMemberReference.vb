@@ -100,7 +100,9 @@ Namespace Language.Syntax.SyntaxParser
     Friend Class NameMemberReferenceProcessor : Inherits GenericSymbolOperatorProcessor
 
         Sub New()
-            Call MyBase.New("$")
+            ' $ -> R# language
+            ' . -> js/ts language
+            Call MyBase.New("$", ".")
         End Sub
 
         Protected Overrides Function view() As String
