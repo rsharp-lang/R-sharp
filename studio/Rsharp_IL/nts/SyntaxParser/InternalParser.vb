@@ -120,6 +120,9 @@ Public Module InternalParser
     ''' </remarks>
     <Extension>
     Public Function GetExpression(tokens As SyntaxToken(), fromComma As Boolean, opts As SyntaxBuilderOptions) As SyntaxResult
+        If tokens.IsNullOrEmpty Then
+            Return Nothing
+        End If
         If fromComma Then
             If tokens.First Like GetType(Token) AndAlso tokens.First.TryCast(Of Token).isKeyword("function") Then
                 If tokens.Last Like GetType(Token) AndAlso tokens.Last.TryCast(Of Token) = (TokenType.close, "}") Then

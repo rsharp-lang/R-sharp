@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Language
@@ -151,6 +152,26 @@ Public Class SyntaxTree
                                 Else
 
                                 End If
+                            ElseIf left.text = "[" Then
+                                If leftToken Is Nothing Then
+                                    ' json vector literal
+                                    buffer.PopAll()
+                                    Yield exp
+                                ElseIf lefttoken Like GetType(Token) Then
+                                    Dim tl As Token = leftToken.TryCast(Of Token)
+
+                                    If tl = (TokenType.operator, "=") Then
+                                        ' create new symbol with initial value
+                                        Dim index = Traceback(buffer, {TokenType.keyword})
+
+                                        exp = New VectorLiteral(ExpressionCollection.GetExpressions(exp.expression))
+                                        buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                                        buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                                        Reindex(buffer)
+                                    Else
+                                        Throw New NotImplementedException
+                                    End If
+                                End If
                             End If
                         End If
                     End If
@@ -168,7 +189,7 @@ Public Class SyntaxTree
                     ' get an expression scope with max stack close range
                     Dim exp = buffer.ToArray.GetExpression(fromComma:=True, opts)
 
-                    If exp.isException Then
+                    If exp Is Nothing OrElse exp.isException Then
                         ' needs add more token into the buffer list
                         ' do no action
                     Else
