@@ -412,8 +412,12 @@ Namespace Language.Syntax.SyntaxParser
                             End If
                         End Function) _
                 .AsList
+            Dim oplist As New List(Of String)(From t
+                                              In raw
+                                              Where t Like GetType(String)
+                                              Select t.TryCast(Of String))
 
-            Return raw.ParseBinaryExpression(opts,, 1)
+            Return raw.ParseBinaryExpression(opts, oplist, 1)
         End Function
 
         ''' <summary>
