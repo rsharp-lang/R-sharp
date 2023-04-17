@@ -130,14 +130,25 @@ Public Class SyntaxTree
                                 state.Value.RemoveRange(buffer)
                                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp))
                             ElseIf leftToken Like GetType(Token) Then
-                                Dim target = Expression.CreateExpression({leftToken.TryCast(Of Token)}, opts)
+                                Dim lt = leftToken.TryCast(Of Token)
+
+                                If lt.name = TokenType.keyword AndAlso lt.text = "function" Then
+                                    ' is function declare
+                                    ' do nothing
+                                    Continue Do
+                                End If
+
+                                Dim target = Expression.CreateExpression({lt}, opts)
 
                                 If target Like GetType(SymbolReference) Then
                                     ' invoke function
                                     ' func(...)
-                                    state.Value.RemoveRange(buffer)
-                                    exp = New FunctionInvoke(target.expression, Nothing, ExpressionCollecton.GetExpressions(exp))
-                                    buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp))
+                                    buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
+                                    exp = New FunctionInvoke(target.expression, opts.GetStackTrace(t), ExpressionCollecton.GetExpressions(exp))
+                                    buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, exp))
+                                    Reindex(buffer)
+                                ElseIf target.isException Then
+                                    Yield target
                                 Else
                                     Throw New NotImplementedException
                                 End If
@@ -150,6 +161,7 @@ Public Class SyntaxTree
                                     state.Value.RemoveRange(buffer)
                                     exp = New FunctionInvoke(target, Nothing, ExpressionCollecton.GetExpressions(exp))
                                     buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp))
+                                    Reindex(buffer)
                                 Else
                                     Throw New NotImplementedException
                                 End If
@@ -189,6 +201,12 @@ Public Class SyntaxTree
             Yield ParseTypeScriptLine(buffer.PopAll, opts)
         End If
     End Function
+
+    Private Shared Sub Reindex(ByRef buffer As List(Of SyntaxToken))
+        For i As Integer = 0 To buffer.Count - 1
+            buffer(i).index = i
+        Next
+    End Sub
 
     ''' <summary>
     ''' traceback the index to the last comma or open token

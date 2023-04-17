@@ -41,6 +41,20 @@ Public Module InternalParser
         Return Expression.CreateExpression(tokens, opts)
     End Function
 
+    <Extension>
+    Private Function ParseCommaList(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As ExpressionCollecton
+        Dim blocks = tokens.Split(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.comma, DelimiterLocation.NotIncludes).ToArray
+        Dim parse As Expression() = New Expression(blocks.Length - 1) {}
+
+        For i As Integer = 0 To blocks.Length - 1
+            parse(i) = blocks(i).GetExpression(fromComma:=True, opts)
+        Next
+
+        Return New ExpressionCollecton With {
+            .expressions = parse
+        }
+    End Function
+
     ''' <summary>
     ''' 
     ''' </summary>
@@ -62,7 +76,10 @@ Public Module InternalParser
         Else
             source = tokens _
                 .Skip(1) _
-                .Take(tokens.Length - 2)
+                .Take(tokens.Length - 2) _
+                .ToArray
+
+            Return DirectCast(source, SyntaxToken()).ParseCommaList(opts)
         End If
 
         Dim blocks = source _

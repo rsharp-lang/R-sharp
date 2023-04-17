@@ -128,7 +128,10 @@ Namespace Language.Syntax.SyntaxParser
         End Property
 
         Public Function SetCurrentRange(range As Token()) As SyntaxBuilderOptions
-            currentRange = range
+            currentRange = range _
+                .Where(Function(t) Not t.span Is Nothing) _
+                .ToArray
+
             Return Me
         End Function
 

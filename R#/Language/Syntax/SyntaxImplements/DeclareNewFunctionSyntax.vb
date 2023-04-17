@@ -111,6 +111,12 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
         Public Function DeclareNewFunction(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim [declare] As Token() = code.Skip(4).IteratesALL.ToArray
             Dim parts As List(Of Token()) = [declare].SplitByTopLevelDelimiter(TokenType.close)
+
+            If parts = 0 Then
+                opts.SetCurrentRange(code.IteratesALL.ToArray)
+                Return New SyntaxResult(SyntaxError.CreateError(opts, New Exception("no function body to declared!")))
+            End If
+
             Dim paramPart As Token() = parts(Scan0).Skip(1).ToArray
             Dim bodyPart As SyntaxResult
             ' test if is an inline function
