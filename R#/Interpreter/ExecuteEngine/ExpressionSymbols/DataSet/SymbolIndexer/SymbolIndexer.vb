@@ -87,6 +87,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
     Public Class SymbolIndexer : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                If TypeOf symbol Is VectorLiteral Then
+                    Return symbol.type
+                Else
+                    Return TypeCodes.generic
+                End If
+            End Get
+        End Property
 
         Friend ReadOnly index As Expression
         Friend symbol As Expression

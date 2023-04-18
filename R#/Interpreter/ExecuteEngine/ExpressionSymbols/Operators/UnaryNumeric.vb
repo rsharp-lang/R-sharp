@@ -67,7 +67,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         Public Overrides ReadOnly Property type As TypeCodes
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
-                Return TypeCodes.double
+                If numeric.type = TypeCodes.generic Then
+                    Return TypeCodes.double
+                Else
+                    Return numeric.type
+                End If
             End Get
         End Property
 

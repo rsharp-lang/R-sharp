@@ -75,6 +75,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Implements IRuntimeTrace
 
         Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                If TypeOf from Is Literal Then
+                    Return from.type
+                ElseIf TypeOf [to] Is Literal Then
+                    Return [to].type
+                ElseIf TypeOf steps Is Literal Then
+                    Return steps.type
+                Else
+                    Return TypeCodes.integer
+                End If
+            End Get
+        End Property
 
         Public Overrides ReadOnly Property expressionName As ExpressionTypes
             Get

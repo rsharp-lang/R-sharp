@@ -67,6 +67,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
     Public Class MemberValueAssign : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                Return value.type
+            End Get
+        End Property
 
         Public ReadOnly Property memberReference As SymbolIndexer
         Public ReadOnly Property value As Expression
