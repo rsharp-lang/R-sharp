@@ -80,7 +80,7 @@ Public Class SyntaxTree
                         ElseIf leftToken Like GetType(Token) Then
                             Dim lt = leftToken.TryCast(Of Token)
 
-                            If lt.name = TokenType.keyword AndAlso lt.text = "function" Then
+                            If lt.isAnyKeyword("function", "if", "for") Then
                                 ' is function declare
                                 ' do nothing
                                 Return Nothing
@@ -186,9 +186,16 @@ Public Class SyntaxTree
                 Yield PopOut()
             ElseIf t.name = TokenType.comma Then
                 Dim index = Traceback(buffer, {TokenType.comma, TokenType.open})
-                Dim range = buffer.Skip(index).Take(buffer.Count - index).ToArray
+                Dim range = buffer.Skip(index - 1).Take(buffer.Count - index).ToArray
                 Dim exp = range.GetExpression(fromComma:=True, opts)
 
+                If exp.isException Then
+                    Continue Do
+                End If
+
+                buffer.RemoveRange(index - 1, range.Length)
+                buffer.Insert(index - 1, New SyntaxToken(-1, exp.expression))
+                Reindex(buffer)
 
             ElseIf isTerminator(t) Then
                 If stack.isEmpty Then

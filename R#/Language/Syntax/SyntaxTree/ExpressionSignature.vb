@@ -370,6 +370,19 @@ Namespace Language.Syntax.SyntaxParser
             End If
         End Function
 
+        <Extension>
+        Public Function isAnyKeyword(token As Token, ParamArray keywords As String()) As Boolean
+            If token.name = TokenType.keyword Then
+                If Not keywords.IsNullOrEmpty Then
+                    Return keywords.Any(Function(kw) token.text = kw)
+                Else
+                    Return True
+                End If
+            Else
+                Return False
+            End If
+        End Function
+
         ''' <summary>
         ''' XXX
         ''' </summary>
