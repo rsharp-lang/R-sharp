@@ -1,8 +1,10 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -158,6 +160,10 @@ Public Module InternalParser
                 .Take(tokens.Length - 2) _
                 .ToArray
 
+            If source.Length = 1 AndAlso Not source(Scan0) Like GetType(Token) Then
+                Return source(Scan0).TryCast(Of Expression)
+            End If
+
             If tokens(Scan0) Like GetType(Token) AndAlso tokens(Scan0).TryCast(Of Token).text = "{" Then
                 If (Not tokens.Any(Function(t) t.isTerminator)) AndAlso tokens.Any(Function(t) t.isComma) AndAlso tokens.Any(Function(t) t.isSequenceSymbol) Then
                     ' is json literal
@@ -192,11 +198,10 @@ Public Module InternalParser
     End Function
 
     <Extension>
-    Private Function ParseValueExpression(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
-        If tokens.IsNullOrEmpty Then
-            Return New SyntaxResult(Literal.NULL)
-        End If
-        If tokens(Scan0) Like GetType(Token) AndAlso tokens(Scan0).TryCast(Of Token) = (TokenType.keyword, {"var", "let", "const"}) Then
+    Private Function ParseKeywordExpression(tokens As SyntaxToken(), keyword As String, opts As SyntaxBuilderOptions) As SyntaxResult
+        Static declare_keywords As Index(Of String) = {"var", "let", "const"}
+
+        If keyword Like declare_keywords Then
             Dim symbol = tokens(1)
             Dim value As SyntaxResult
             Dim type As String
@@ -218,6 +223,35 @@ Public Module InternalParser
             Else
                 Return New DeclareNewSymbol(symbol.GetSymbol, opts.GetStackTrace(tokens(Scan0).TryCast(Of Token)), value.expression)
             End If
+        ElseIf keyword = "if" Then
+            Dim stack = opts.GetStackTrace(tokens(0).TryCast(Of Token))
+
+            If tokens.Last.IsToken(TokenType.close, "}") Then
+                ' if(...) {...}
+                Dim body = tokens.Skip(tokens.Length - 3).ToArray
+                Dim test = tokens.Skip(1).Take(tokens.Length - 1 - body.Length).ToArray
+                Dim test_exp = test.GetExpression(fromComma:=False, opts)
+                Dim body_exp = body.GetExpression(fromComma:=False, opts)
+                Dim [if] As New IfBranch(
+                    ifTest:=ExpressionCollection.GetExpressions(test_exp.expression).First,
+                    trueClosure:=DirectCast(body_exp.expression, ClosureExpression),
+                    stackframe:=stack
+                )
+
+                Return New SyntaxResult([if])
+            Else
+                ' if (...) ...
+            End If
+        End If
+    End Function
+
+    <Extension>
+    Private Function ParseValueExpression(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
+        If tokens.IsNullOrEmpty Then
+            Return New SyntaxResult(Literal.NULL)
+        End If
+        If tokens(Scan0) Like GetType(Token) AndAlso tokens(Scan0).TryCast(Of Token).name = TokenType.keyword Then
+            Return tokens.ParseKeywordExpression(tokens(0).TryCast(Of Token).text, opts)
         End If
 
         Dim blocks = tokens _

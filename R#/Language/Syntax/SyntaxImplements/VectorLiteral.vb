@@ -60,7 +60,6 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
-Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -83,7 +82,8 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     Dim value As Object
 
                     Select Case token.text
-                        Case "NULL", "None" : value = Nothing
+                        ' null literal for R/python/javascript
+                        Case "NULL", "None", "null" : value = Nothing
                         Case "NA" : value = GetType(Void)
                         Case "Inf" : value = Double.PositiveInfinity
                         Case Else

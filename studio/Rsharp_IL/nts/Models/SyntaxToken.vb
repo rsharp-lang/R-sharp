@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Public Class SyntaxToken
@@ -31,6 +32,21 @@ Public Class SyntaxToken
     <DebuggerStepThrough>
     Public Function [TryCast](Of T As Class)() As T
         Return TryCast(value, T)
+    End Function
+
+    Public Function IsToken(token As TokenType, Optional text As String = Nothing) As Boolean
+        If Not TypeOf value Is Token Then
+            Return False
+        End If
+        If DirectCast(value, Token).name <> token Then
+            Return False
+        End If
+
+        If text Is Nothing Then
+            Return True
+        Else
+            Return text = DirectCast(value, Token).text
+        End If
     End Function
 
     Public Function GetSymbol() As String
