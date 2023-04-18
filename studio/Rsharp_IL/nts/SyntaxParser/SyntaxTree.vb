@@ -19,6 +19,13 @@ Public Class SyntaxTree
     ReadOnly scanner As TsScanner
     ReadOnly opts As SyntaxBuilderOptions
 
+    ' {} () []
+    Dim stack As New TokenStack(Of TokenType)
+    Dim buffer As New List(Of SyntaxToken)
+    Dim i As New Value(Of Token)
+    Dim t As Token
+    Dim state As New Value(Of StackStates)
+
     Sub New(script As Rscript, Optional debug As Boolean = False)
         Me.debug = debug
         Me.script = script
@@ -32,9 +39,11 @@ Public Class SyntaxTree
 
     Friend Function ParseTsScript() As Program
         Dim tokens As Token() = scanner.GetTokens.ToArray
-        Dim syntax = GetExpressions(tokens).ToArray
+        Dim syntax = GetExpressions(tokens) _
+            .Where(Function(exp) Not exp Is Nothing) _
+            .ToArray
 
-        For Each exp In syntax
+        For Each exp As SyntaxResult In syntax
             If exp.isException Then
                 Throw New Exception(exp.error.ToString)
             End If
@@ -45,14 +54,122 @@ Public Class SyntaxTree
         Return prog
     End Function
 
-    Private Iterator Function GetExpressions(lines As Pointer(Of Token)) As IEnumerable(Of SyntaxResult)
-        ' {} () []
-        Dim stack As New TokenStack(Of TokenType)
-        Dim buffer As New List(Of SyntaxToken)
-        Dim i As New Value(Of Token)
-        Dim t As Token
-        Dim state As New Value(Of StackStates)
+    Private Function PopOut() As SyntaxResult
+        If (state = stack.Pop(t, buffer.Count - 1)).MisMatched Then
+            Throw New SyntaxErrorException
+        Else
+            Dim range = state.Value.GetRange(buffer).ToArray
+            Dim exp = range.GetExpression(fromComma:=False, opts)
 
+            If exp.isException Then
+                Return exp
+            End If
+
+            If range.First Like GetType(Token) Then
+                Dim left = range.First.TryCast(Of Token)
+                Dim leftToken As SyntaxToken = state.Value.Left(buffer)
+
+                If left.name = TokenType.open Then
+                    If left.text = "(" Then
+                        If leftToken Is Nothing Then
+                            ' (...)
+                            state.Value.RemoveRange(buffer)
+                            buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                        ElseIf leftToken Like GetType(Token) Then
+                            Dim lt = leftToken.TryCast(Of Token)
+
+                            If lt.name = TokenType.keyword AndAlso lt.text = "function" Then
+                                ' is function declare
+                                ' do nothing
+                                Return Nothing
+                            End If
+
+                            Dim target = Expression.CreateExpression({lt}, opts)
+
+                            If target Like GetType(SymbolReference) Then
+                                ' invoke function
+                                ' func(...)
+                                buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
+                                exp = New FunctionInvoke(target.expression, opts.GetStackTrace(t), ExpressionCollection.GetExpressions(exp.expression))
+                                buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, exp.expression))
+                                Reindex(buffer)
+                            ElseIf target.isException Then
+                                Return target
+                            Else
+                                Throw New NotImplementedException
+                            End If
+                        Else
+                            Dim target = leftToken.TryCast(Of Expression)
+
+                            If TypeOf target Is SymbolReference Then
+                                ' invoke function
+                                ' func(...)
+                                state.Value.RemoveRange(buffer)
+                                exp = New FunctionInvoke(target, Nothing, ExpressionCollection.GetExpressions(exp.expression))
+                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                                Reindex(buffer)
+                            Else
+                                Throw New NotImplementedException
+                            End If
+                        End If
+                    ElseIf left.text = "{" Then
+                        If leftToken Is Nothing Then
+                            ' is a multiple line closure expression
+                            ' {...}
+                            state.Value.RemoveRange(buffer)
+                            buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                        ElseIf leftToken Like GetType(Token) Then
+                            If leftToken.TryCast(Of Token) = (TokenType.close, ")") Then
+                                ' is a possible function declare
+                                Dim index = Traceback(buffer, {TokenType.keyword})
+
+                                buffer.RemoveRange(state.Value.Range.Min + 1, state.Value.Range.Length - 1)
+                                buffer.Insert(state.Value.Range.Min + 1, New SyntaxToken(-1, exp.expression))
+                                Reindex(buffer)
+
+                                range = buffer.Skip(index - 1).Take(buffer.Count - index + 1).ToArray
+                                exp = range.GetExpression(fromComma:=True, opts)
+
+                                If exp.isException Then
+                                    Return exp
+                                End If
+
+                                buffer.RemoveRange(index - 1, range.Length)
+                                buffer.Insert(index - 1, New SyntaxToken(-1, exp.expression))
+                                Reindex(buffer)
+                            End If
+                        Else
+
+                        End If
+                    ElseIf left.text = "[" Then
+                        If leftToken Is Nothing Then
+                            ' json vector literal
+                            buffer.PopAll()
+                            Return exp
+                        ElseIf leftToken Like GetType(Token) Then
+                            Dim tl As Token = leftToken.TryCast(Of Token)
+
+                            If tl = (TokenType.operator, "=") Then
+                                ' create new symbol with initial value
+                                Dim index = Traceback(buffer, {TokenType.keyword})
+
+                                exp = New VectorLiteral(ExpressionCollection.GetExpressions(exp.expression))
+                                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                                Reindex(buffer)
+                            Else
+                                Throw New NotImplementedException
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+        End If
+
+        Return Nothing
+    End Function
+
+    Private Iterator Function GetExpressions(lines As Pointer(Of Token)) As IEnumerable(Of SyntaxResult)
         ' find the max stack closed scope
         Do While (i = ++lines) IsNot Nothing
             t = i
@@ -64,118 +181,7 @@ Public Class SyntaxTree
             If t.name = TokenType.open Then
                 stack.Push(t, buffer.Count - 1)
             ElseIf t.name = TokenType.close Then
-                If (state = stack.Pop(t, buffer.Count - 1)).MisMatched Then
-                    Throw New SyntaxErrorException
-                Else
-                    Dim range = state.Value.GetRange(buffer).ToArray
-                    Dim exp = range.GetExpression(fromComma:=False, opts)
-
-                    If exp.isException Then
-                        Yield exp
-                        Return
-                    End If
-
-                    If range.First Like GetType(Token) Then
-                        Dim left = range.First.TryCast(Of Token)
-                        Dim leftToken As SyntaxToken = state.Value.Left(buffer)
-
-                        If left.name = TokenType.open Then
-                            If left.text = "(" Then
-                                If leftToken Is Nothing Then
-                                    ' (...)
-                                    state.Value.RemoveRange(buffer)
-                                    buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
-                                ElseIf leftToken Like GetType(Token) Then
-                                    Dim lt = leftToken.TryCast(Of Token)
-
-                                    If lt.name = TokenType.keyword AndAlso lt.text = "function" Then
-                                        ' is function declare
-                                        ' do nothing
-                                        Continue Do
-                                    End If
-
-                                    Dim target = Expression.CreateExpression({lt}, opts)
-
-                                    If target Like GetType(SymbolReference) Then
-                                        ' invoke function
-                                        ' func(...)
-                                        buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
-                                        exp = New FunctionInvoke(target.expression, opts.GetStackTrace(t), ExpressionCollection.GetExpressions(exp.expression))
-                                        buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, exp.expression))
-                                        Reindex(buffer)
-                                    ElseIf target.isException Then
-                                        Yield target
-                                    Else
-                                        Throw New NotImplementedException
-                                    End If
-                                Else
-                                    Dim target = leftToken.TryCast(Of Expression)
-
-                                    If TypeOf target Is SymbolReference Then
-                                        ' invoke function
-                                        ' func(...)
-                                        state.Value.RemoveRange(buffer)
-                                        exp = New FunctionInvoke(target, Nothing, ExpressionCollection.GetExpressions(exp.expression))
-                                        buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
-                                        Reindex(buffer)
-                                    Else
-                                        Throw New NotImplementedException
-                                    End If
-                                End If
-                            ElseIf left.text = "{" Then
-                                If leftToken Is Nothing Then
-                                    ' is a multiple line closure expression
-                                    ' {...}
-                                    state.Value.RemoveRange(buffer)
-                                    buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
-                                ElseIf leftToken Like GetType(Token) Then
-                                    If leftToken.TryCast(Of Token) = (TokenType.close, ")") Then
-                                        ' is a possible function declare
-                                        Dim index = Traceback(buffer, {TokenType.keyword})
-
-                                        buffer.RemoveRange(state.Value.Range.Min + 1, state.Value.Range.Length - 1)
-                                        buffer.Insert(state.Value.Range.Min + 1, New SyntaxToken(-1, exp.expression))
-                                        Reindex(buffer)
-
-                                        range = buffer.Skip(index - 1).Take(buffer.Count - index + 1).ToArray
-                                        exp = range.GetExpression(fromComma:=True, opts)
-
-                                        If exp.isException Then
-                                            Yield exp
-                                            Return
-                                        End If
-
-                                        buffer.RemoveRange(index - 1, range.Length)
-                                        buffer.Insert(index - 1, New SyntaxToken(-1, exp.expression))
-                                        Reindex(buffer)
-                                    End If
-                                Else
-
-                                End If
-                            ElseIf left.text = "[" Then
-                                If leftToken Is Nothing Then
-                                    ' json vector literal
-                                    buffer.PopAll()
-                                    Yield exp
-                                ElseIf lefttoken Like GetType(Token) Then
-                                    Dim tl As Token = leftToken.TryCast(Of Token)
-
-                                    If tl = (TokenType.operator, "=") Then
-                                        ' create new symbol with initial value
-                                        Dim index = Traceback(buffer, {TokenType.keyword})
-
-                                        exp = New VectorLiteral(ExpressionCollection.GetExpressions(exp.expression))
-                                        buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
-                                        buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
-                                        Reindex(buffer)
-                                    Else
-                                        Throw New NotImplementedException
-                                    End If
-                                End If
-                            End If
-                        End If
-                    End If
-                End If
+                Yield PopOut()
             ElseIf t.name = TokenType.comma Then
                 Dim index = Traceback(buffer, {TokenType.comma, TokenType.open})
                 Dim range = buffer.Skip(index).Take(buffer.Count - index).ToArray
@@ -206,7 +212,7 @@ Public Class SyntaxTree
         Loop
 
         If buffer > 0 Then
-            Yield ParseTypeScriptLine(buffer.PopAll, opts)
+            Yield buffer.PopAll.GetExpression(fromComma:=True, opts)
         End If
     End Function
 
