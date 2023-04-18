@@ -139,6 +139,11 @@ Public Class SyntaxTree
                                 buffer.RemoveRange(index - 1, range.Length)
                                 buffer.Insert(index - 1, New SyntaxToken(-1, exp.expression))
                                 Reindex(buffer)
+                            ElseIf leftToken.TryCast(Of Token) = (TokenType.sequence, ":") Then
+                                ' is json value
+                                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                                Reindex(buffer)
                             End If
                         Else
 
@@ -189,7 +194,7 @@ Public Class SyntaxTree
                 Dim range = buffer.Skip(index - 1).Take(buffer.Count - index).ToArray
                 Dim exp = range.GetExpression(fromComma:=True, opts)
 
-                If exp.isException Then
+                If exp.isException OrElse exp.expression Is Nothing Then
                     Continue Do
                 End If
 

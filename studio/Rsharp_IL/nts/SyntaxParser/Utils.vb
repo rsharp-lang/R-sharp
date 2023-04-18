@@ -49,6 +49,34 @@ Public Module Utils
         End If
     End Function
 
+    <Extension>
+    Public Function isSequenceSymbol(t As SyntaxToken) As Boolean
+        If t Like GetType(Token) Then
+            Return t.TryCast(Of Token).name = TokenType.sequence
+        Else
+            Return False
+        End If
+    End Function
+
+    <Extension>
+    Public Function isComma(t As SyntaxToken) As Boolean
+        If t Like GetType(Token) Then
+            Return t.TryCast(Of Token).name = TokenType.comma
+        Else
+            Return False
+        End If
+    End Function
+
+    <Extension>
+    Friend Function isTerminator(t As SyntaxToken) As Boolean
+        If t Like GetType(Token) Then
+            Return t.TryCast(Of Token).isTerminator
+        Else
+            Return False
+        End If
+    End Function
+
+    <Extension>
     Friend Function isTerminator(t As Token) As Boolean
         If t.name = TokenType.terminator Then
             Return True

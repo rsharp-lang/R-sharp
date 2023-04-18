@@ -122,23 +122,31 @@ Public Module InternalParser
             Return Nothing
         End If
         If fromComma Then
-            If tokens.First Like GetType(Token) AndAlso tokens.First.TryCast(Of Token).isKeyword("function") Then
-                If tokens.Last Like GetType(Token) AndAlso tokens.Last.TryCast(Of Token) = (TokenType.close, "}") Then
-                    Dim body As SyntaxToken = tokens(tokens.Length - 2)
-                    Dim paramTokens As SyntaxToken() = tokens.Skip(1).Take(tokens.Length - 1 - 3).ToArray
-                    Dim stack As StackFrame = opts.GetStackTrace(tokens(Scan0).TryCast(Of Token))
+            If tokens.First Like GetType(Token) Then
+                Dim tk As Token = tokens.First.TryCast(Of Token)
 
-                    paramTokens = paramTokens _
-                        .Skip(1) _
-                        .Take(paramTokens.Length - 2) _
-                        .ToArray
+                If tk.isKeyword("function") Then
+                    If tokens.Last Like GetType(Token) AndAlso tokens.Last.TryCast(Of Token) = (TokenType.close, "}") Then
+                        Dim body As SyntaxToken = tokens(tokens.Length - 2)
+                        Dim paramTokens As SyntaxToken() = tokens.Skip(1).Take(tokens.Length - 1 - 3).ToArray
+                        Dim stack As StackFrame = opts.GetStackTrace(tokens(Scan0).TryCast(Of Token))
 
-                    Return New DeclareNewFunction(
-                        funcName:=$"<${App.GetNextUniqueName("anonymous_")}>",
-                        parameters:=paramTokens.GetParameters(opts).ToArray,
-                        body:=body.TryCast(Of ClosureExpression),
-                        stackframe:=stack
-                    )
+                        paramTokens = paramTokens _
+                            .Skip(1) _
+                            .Take(paramTokens.Length - 2) _
+                            .ToArray
+
+                        Return New DeclareNewFunction(
+                            funcName:=$"<${App.GetNextUniqueName("anonymous_")}>",
+                            parameters:=paramTokens.GetParameters(opts).ToArray,
+                            body:=body.TryCast(Of ClosureExpression),
+                            stackframe:=stack
+                        )
+                    End If
+                ElseIf tk.name = TokenType.open Then
+                    If Not tokens.Any(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.close) Then
+                        Return New SyntaxResult(New SyntaxError())
+                    End If
                 End If
             End If
 
@@ -150,6 +158,11 @@ Public Module InternalParser
                 .ToArray
 
             If tokens(Scan0) Like GetType(Token) AndAlso tokens(Scan0).TryCast(Of Token).text = "{" Then
+                If (Not tokens.Any(Function(t) t.isTerminator)) AndAlso tokens.Any(Function(t) t.isComma) AndAlso tokens.Any(Function(t) t.isSequenceSymbol) Then
+                    ' is json literal
+                    Return tokens.ParseValueExpression(opts)
+                End If
+
                 ' closure
                 Return DirectCast(source, SyntaxToken()).ParseClosure(opts)
             Else
