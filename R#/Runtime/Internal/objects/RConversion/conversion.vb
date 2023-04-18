@@ -220,6 +220,8 @@ Namespace Runtime.Internal.Object.Converts
 
             If x Is Nothing Then
                 Return Nothing
+            ElseIf TypeOf x Is NoInspector Then
+                Return DirectCast(x, NoInspector).obj
             End If
 
             If Not [typeof] Is Nothing Then

@@ -126,8 +126,14 @@ Namespace Runtime.Internal.ConsolePrinter
 
         <Extension>
         Private Function getMemberValueString([property] As PropertyInfo, obj As Object) As String
-            Dim value As Object = [property].GetValue(obj, Nothing)
+            Dim value As Object = Nothing
             Dim type As Type = [property].PropertyType
+
+            Try
+                value = [property].GetValue(obj, Nothing)
+            Catch ex As Exception
+                value = $"<Error> {ex.Message}"
+            End Try
 
             If value Is Nothing Then
                 Return "NULL"

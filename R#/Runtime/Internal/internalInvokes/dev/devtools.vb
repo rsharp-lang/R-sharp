@@ -68,6 +68,20 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes
 
+    Public Class NoInspector
+
+        Public Property obj As Object
+
+        Public Overrides Function ToString() As String
+            Return $"<&H0_{obj.GetHashCode.ToHexString}> {StringFormats.Lanudry(objectSize(obj))}"
+        End Function
+
+        Public Shared Function Wrap(any As Object) As NoInspector
+            Return New NoInspector With {.obj = any}
+        End Function
+
+    End Class
+
     Module devtools
 
         Sub Main()
@@ -79,11 +93,12 @@ Namespace Runtime.Internal.Invokes
             Dim df As New dataframe With {.columns = New Dictionary(Of String, Array)}
 
             Call df.add("name", prog.Select(Function(exp) exp.expressionName))
-            Call df.add("type", prog.Select(Function(exp) exp.GetType.Name))
+            Call df.add("clr_type", prog.Select(Function(exp) exp.GetType.Name))
             Call df.add("is_callable", prog.Select(Function(exp) exp.isCallable))
             Call df.add("symbol", prog.Select(Function(exp) InvokeParameter.GetSymbolName(exp)))
-            Call df.add("value", prog.Select(Function(exp) exp.type))
-            Call df.add("expr", prog.ToArray)
+            Call df.add("mode", prog.Select(Function(exp) exp.type))
+            Call df.add("expr_str", prog.Select(Function(exp) exp.ToString.TrimNewLine))
+            Call df.add("expr_raw", prog.Select(Function(exp) NoInspector.Wrap(exp)))
 
             Return df
         End Function
