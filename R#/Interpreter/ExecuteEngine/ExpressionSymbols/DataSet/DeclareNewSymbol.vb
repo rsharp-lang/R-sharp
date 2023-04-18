@@ -104,9 +104,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Get
         End Property
 
+        ''' <summary>
+        ''' get object value type for current new symbol
+        ''' </summary>
+        ''' <returns></returns>
         Public Overrides ReadOnly Property type As TypeCodes
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
+                If m_type = TypeCodes.generic Then
+                    If Not value Is Nothing Then
+                        Return value.type
+                    End If
+                End If
+
                 Return m_type
             End Get
         End Property
