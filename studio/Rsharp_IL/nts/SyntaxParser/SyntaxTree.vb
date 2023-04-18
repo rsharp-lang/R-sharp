@@ -56,6 +56,31 @@ Public Class SyntaxTree
         Return prog
     End Function
 
+    Private Function ParseFuncInvoke(lt As Token, exp As SyntaxResult) As SyntaxResult
+        If lt.isAnyKeyword("function", "if", "for") Then
+            ' is function declare
+            ' do nothing
+            Return Nothing
+        End If
+
+        Dim target = Expression.CreateExpression({lt}, opts)
+
+        If target Like GetType(SymbolReference) Then
+            ' invoke function
+            ' func(...)
+            buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
+            exp = New FunctionInvoke(target.expression, opts.GetStackTrace(t), ExpressionCollection.GetExpressions(exp.expression))
+            buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, exp.expression))
+            Reindex(buffer)
+        ElseIf target.isException Then
+            Return target
+        Else
+            Throw New NotImplementedException
+        End If
+
+        Return Nothing
+    End Function
+
     Private Function PopOut() As SyntaxResult
         If (state = stack.Pop(t, buffer.Count - 1)).MisMatched Then
             Throw New SyntaxErrorException
@@ -78,28 +103,7 @@ Public Class SyntaxTree
                             state.Value.RemoveRange(buffer)
                             buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                         ElseIf leftToken Like GetType(Token) Then
-                            Dim lt = leftToken.TryCast(Of Token)
-
-                            If lt.isAnyKeyword("function", "if", "for") Then
-                                ' is function declare
-                                ' do nothing
-                                Return Nothing
-                            End If
-
-                            Dim target = Expression.CreateExpression({lt}, opts)
-
-                            If target Like GetType(SymbolReference) Then
-                                ' invoke function
-                                ' func(...)
-                                buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
-                                exp = New FunctionInvoke(target.expression, opts.GetStackTrace(t), ExpressionCollection.GetExpressions(exp.expression))
-                                buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, exp.expression))
-                                Reindex(buffer)
-                            ElseIf target.isException Then
-                                Return target
-                            Else
-                                Throw New NotImplementedException
-                            End If
+                            Return ParseFuncInvoke(lt:=leftToken.TryCast(Of Token), exp)
                         Else
                             Dim target = leftToken.TryCast(Of Expression)
 
@@ -144,6 +148,11 @@ Public Class SyntaxTree
                                 buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
                                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                                 Reindex(buffer)
+                            ElseIf lefttoken.TryCast(Of Token) = (TokenType.open, "[") Then
+                                ' json array [{...}]
+                                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                                Reindex(buffer)
                             End If
                         Else
 
@@ -156,7 +165,7 @@ Public Class SyntaxTree
                         ElseIf leftToken Like GetType(Token) Then
                             Dim tl As Token = leftToken.TryCast(Of Token)
 
-                            If tl = (TokenType.operator, "=") Then
+                            If tl = (TokenType.operator, "=") OrElse tl.name = TokenType.sequence Then
                                 ' create new symbol with initial value
                                 Dim index = Traceback(buffer, {TokenType.keyword})
 

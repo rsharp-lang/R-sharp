@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -152,7 +153,7 @@ Public Module InternalParser
 
             Return tokens.ParseValueExpression(opts)
         Else
-            Dim source As IEnumerable(Of SyntaxToken) = tokens _
+            Dim source As SyntaxToken() = tokens _
                 .Skip(1) _
                 .Take(tokens.Length - 2) _
                 .ToArray
@@ -160,15 +161,34 @@ Public Module InternalParser
             If tokens(Scan0) Like GetType(Token) AndAlso tokens(Scan0).TryCast(Of Token).text = "{" Then
                 If (Not tokens.Any(Function(t) t.isTerminator)) AndAlso tokens.Any(Function(t) t.isComma) AndAlso tokens.Any(Function(t) t.isSequenceSymbol) Then
                     ' is json literal
-                    Return tokens.ParseValueExpression(opts)
+                    Return source.ParseJSONliteral(opts)
+                ElseIf tokens.Any(Function(t) t.isSequenceSymbol) Then
+                    ' is json literal
+                    ' {x:b}
+                    Return source.ParseJSONliteral(opts)
                 End If
 
                 ' closure
-                Return DirectCast(source, SyntaxToken()).ParseClosure(opts)
+                Return source.ParseClosure(opts)
             Else
-                Return DirectCast(source, SyntaxToken()).ParseCommaList(opts)
+                Return source.ParseCommaList(opts)
             End If
         End If
+    End Function
+
+    <Extension>
+    Private Function ParseJSONliteral(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
+        Dim blocks = tokens.Split(Function(t) t.isComma, DelimiterLocation.NotIncludes)
+        Dim json As New List(Of NamedValue(Of Expression))
+
+        For Each part In blocks
+            Dim name = {part(0)}.ParseValueExpression(opts)
+            Dim value = part.Skip(2).ToArray.ParseValueExpression(opts)
+
+            json.Add(New NamedValue(Of Expression)(InvokeParameter.GetSymbolName(name.expression), value.expression))
+        Next
+
+        Return New SyntaxResult(New JSONLiteral(json))
     End Function
 
     <Extension>
