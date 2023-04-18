@@ -62,6 +62,9 @@ Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -87,7 +90,12 @@ Namespace Runtime.Internal.Invokes
         Sub Main()
             Call Internal.Object.Converts.addHandler(GetType(ProfilerFrames), AddressOf profilerFrames)
             Call Internal.Object.Converts.addHandler(GetType(Program), AddressOf scriptTable)
+            Call Internal.Object.Converts.addHandler(GetType(ClosureExpression), AddressOf scriptTable1)
         End Sub
+
+        Private Function scriptTable1(closure As ClosureExpression, args As list, env As Environment) As dataframe
+            Return scriptTable(closure.program, args, env)
+        End Function
 
         Private Function scriptTable(prog As Program, args As list, env As Environment) As dataframe
             Dim df As New dataframe With {.columns = New Dictionary(Of String, Array)}
@@ -125,6 +133,15 @@ Namespace Runtime.Internal.Invokes
             frames.columns("line") = data.profiles.Select(Function(f) f.stackframe.Line).ToArray
 
             Return frames
+        End Function
+
+        <ExportAPI("invoke_parameters")>
+        Public Function getInvokeParameters(exp As Expression) As Object
+            If TypeOf exp Is FunctionInvoke Then
+                Return DirectCast(exp, FunctionInvoke).parameters
+            Else
+                Return Nothing
+            End If
         End Function
 
         <ExportAPI("strHashcode")>
