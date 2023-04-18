@@ -65,6 +65,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -152,6 +153,15 @@ Namespace Runtime.Internal.Invokes
                 Return DirectCast(exp, DeclareNewSymbol).value
             Else
                 Return Nothing
+            End If
+        End Function
+
+        <ExportAPI("symbol_name")>
+        Public Function getSymbolName(exp As Expression) As Object
+            If TypeOf exp Is DeclareNewSymbol Then
+                Return DirectCast(exp, DeclareNewSymbol).names.ToArray
+            Else
+                Return ValueAssignExpression.GetSymbol(exp)
             End If
         End Function
 
