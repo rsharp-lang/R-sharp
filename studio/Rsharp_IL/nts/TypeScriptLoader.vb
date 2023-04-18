@@ -53,14 +53,16 @@
 
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Polyglot
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.TypeScript.jsstd
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Public Class TypeScriptLoader : Inherits ScriptLoader
 
@@ -69,10 +71,6 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
             Return "ts"
         End Get
     End Property
-
-    Shared Sub New()
-        Call Internal.invoke.pushEnvir(GetType(console))
-    End Sub
 
     Public Overrides Function ParseScript(scriptfile As String, env As Environment) As [Variant](Of Message, Program)
         Dim Rscript As Rscript = Rscript.AutoHandleScript(scriptfile)
@@ -98,6 +96,7 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
         }
 
         Call env.setStackInfo(stackframe)
+        Call setup_jsEnv(env.globalEnvironment)
 
         If env.FindSymbol("!script") Is Nothing Then
             env.Push("!script", New vbObject(script), [readonly]:=False)
@@ -115,4 +114,15 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
             Return program.Execute(env)
         End If
     End Function
+
+    Private Sub setup_jsEnv(env As GlobalEnvironment)
+        Dim console As New list With {.slots = New Dictionary(Of String, Object)}
+        Dim stdlib As Type = GetType(jsstd.console)
+
+        For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(stdlib)
+            Call console.add(func.Name, New RMethodInfo(func))
+        Next
+
+        Call env.Push("console", console, [readonly]:=True, TypeCodes.list)
+    End Sub
 End Class

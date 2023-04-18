@@ -93,7 +93,11 @@ Namespace Development.Package
         ''' <param name="package"></param>
         ''' <param name="strict"></param>
         ''' <param name="includesInternal"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' a collection of the tuple list:
+        ''' 
+        ''' [exportapi_name => function]
+        ''' </returns>
         Public Iterator Function GetAllApi(package As Type,
                                            Optional strict As Boolean = True,
                                            Optional includesInternal As Boolean = False) As IEnumerable(Of NamedValue(Of MethodInfo))
@@ -163,6 +167,12 @@ Namespace Development.Package
             Return name
         End Function
 
+        ''' <summary>
+        ''' parse the clr function export api name and the function body
+        ''' </summary>
+        ''' <param name="method"></param>
+        ''' <param name="strict"></param>
+        ''' <returns></returns>
         Public Function TryParse(method As MethodInfo, strict As Boolean) As NamedValue(Of MethodInfo)
             Dim name As String = method.GetExportName(strict)
 

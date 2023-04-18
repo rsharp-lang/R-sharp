@@ -12,12 +12,16 @@ Namespace jsstd
 
         <ExportAPI("log")>
         Public Function log(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing)
-            Dim json As Object = jsonlite.toJSON(x, env)
-
-            If Program.isException(json) Then
-                Return json
+            If TypeOf x Is String Then
+                Call base.cat(CStr(x) & vbCrLf, env:=env)
             Else
-                Call base.cat(CStr(json) & vbCrLf)
+                Dim json As Object = jsonlite.toJSON(x, env)
+
+                If Program.isException(json) Then
+                    Return json
+                Else
+                    Call base.cat(CStr(json) & vbCrLf, env:=env)
+                End If
             End If
 
             Return Nothing
