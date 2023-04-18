@@ -136,7 +136,7 @@ Public Class SyntaxTree
                                 range = buffer.Skip(index - 1).Take(buffer.Count - index + 1).ToArray
                                 exp = range.GetExpression(fromComma:=True, opts)
 
-                                If exp.isException Then
+                                If exp Is Nothing OrElse exp.isException Then
                                     Return exp
                                 End If
 

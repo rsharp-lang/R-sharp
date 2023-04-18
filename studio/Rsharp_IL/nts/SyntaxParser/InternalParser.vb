@@ -107,6 +107,25 @@ Public Module InternalParser
         Next
     End Function
 
+    <Extension>
+    Private Function ParseFunctionValue(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
+        Dim body As SyntaxToken = tokens(tokens.Length - 2)
+        Dim paramTokens As SyntaxToken() = tokens.Skip(1).Take(tokens.Length - 1 - 3).ToArray
+        Dim stack As StackFrame = opts.GetStackTrace(tokens(Scan0).TryCast(Of Token))
+
+        paramTokens = paramTokens _
+            .Skip(1) _
+            .Take(paramTokens.Length - 2) _
+            .ToArray
+
+        Return New DeclareNewFunction(
+            funcName:=$"<${App.GetNextUniqueName("anonymous_")}>",
+            parameters:=paramTokens.GetParameters(opts).ToArray,
+            body:=body.TryCast(Of ClosureExpression),
+            stackframe:=stack
+        )
+    End Function
+
     ''' <summary>
     ''' 
     ''' </summary>
@@ -130,21 +149,7 @@ Public Module InternalParser
 
                 If tk.isKeyword("function") Then
                     If tokens.Last Like GetType(Token) AndAlso tokens.Last.TryCast(Of Token) = (TokenType.close, "}") Then
-                        Dim body As SyntaxToken = tokens(tokens.Length - 2)
-                        Dim paramTokens As SyntaxToken() = tokens.Skip(1).Take(tokens.Length - 1 - 3).ToArray
-                        Dim stack As StackFrame = opts.GetStackTrace(tokens(Scan0).TryCast(Of Token))
-
-                        paramTokens = paramTokens _
-                            .Skip(1) _
-                            .Take(paramTokens.Length - 2) _
-                            .ToArray
-
-                        Return New DeclareNewFunction(
-                            funcName:=$"<${App.GetNextUniqueName("anonymous_")}>",
-                            parameters:=paramTokens.GetParameters(opts).ToArray,
-                            body:=body.TryCast(Of ClosureExpression),
-                            stackframe:=stack
-                        )
+                        Return tokens.ParseFunctionValue(opts)
                     End If
                 ElseIf tk.name = TokenType.open Then
                     If Not tokens.Any(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.close) Then
@@ -162,6 +167,10 @@ Public Module InternalParser
 
             If source.Length = 1 AndAlso Not source(Scan0) Like GetType(Token) Then
                 Return source(Scan0).TryCast(Of Expression)
+            ElseIf source.Length = 0 Then
+                Return New ExpressionCollection With {
+                    .expressions = {}
+                }
             End If
 
             If tokens(Scan0) Like GetType(Token) AndAlso tokens(Scan0).TryCast(Of Token).text = "{" Then
@@ -176,6 +185,8 @@ Public Module InternalParser
 
                 ' closure
                 Return source.ParseClosure(opts)
+            ElseIf source(Scan0).IsToken(TokenType.keyword) Then
+                Return source.ParseKeywordExpression(source(Scan0).TryCast(Of Token).text, opts)
             Else
                 Return source.ParseCommaList(opts)
             End If
@@ -242,6 +253,8 @@ Public Module InternalParser
             Else
                 ' if (...) ...
             End If
+        ElseIf keyword = "function" Then
+            Return tokens.ParseFunctionValue(opts)
         End If
     End Function
 
