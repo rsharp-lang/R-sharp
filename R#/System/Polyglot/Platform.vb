@@ -93,7 +93,7 @@ Namespace Development.Polyglot
         ReadOnly suffix As New List(Of String)
 
         Sub New()
-            Call Register(New RScript)
+            Call Register(New RScriptLoader)
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

@@ -82,8 +82,8 @@ Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Canvas = Microsoft.VisualBasic.Imaging.Graphics2D
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' 2D graphics
@@ -341,15 +341,15 @@ Module graphics2D
 
         If y Is Nothing OrElse y.Length = 0 Then
             Return (From t As String
-                    In DirectCast(REnv.asVector(Of String)(x), String())
+                    In CLRVector.asCharacter(x)
                     Let p As Double() = t _
                         .Split(","c) _
                         .Select(AddressOf Val) _
                         .ToArray
                     Select New PointF(p(0), p(1))).ToArray
         Else
-            Dim px As Double() = REnv.asVector(Of Double)(x)
-            Dim py As Double() = REnv.asVector(Of Double)(y)
+            Dim px As Double() = CLRVector.asNumeric(x)
+            Dim py As Double() = CLRVector.asNumeric(y)
 
             Return px _
                 .Select(Function(xi, i)
@@ -402,7 +402,7 @@ Module graphics2D
             TypeOf offset Is Single() OrElse
             TypeOf offset Is Double() Then
 
-            With REnv.asVector(Of Double)(offset)
+            With CLRVector.asNumeric(offset)
                 offsetPt = New PointF(.GetValue(Scan0), .GetValue(1))
             End With
         ElseIf TypeOf offset Is list Then
@@ -574,7 +574,7 @@ Module graphics2D
     ''' <returns></returns>
     <ExportAPI("axis.ticks")>
     Public Function axisTicks(<RRawVectorArgument> x As Object, Optional ticks As Integer = 10) As Double()
-        Return DirectCast(REnv.asVector(Of Double)(x), Double()) _
+        Return CLRVector.asNumeric(x) _
             .Range _
             .CreateAxisTicks(ticks)
     End Function
@@ -655,8 +655,8 @@ Module graphics2D
                                    Optional fillDots As Integer = 1,
                                    Optional env As Environment = Nothing) As GeneralPath
 
-        Dim xi As Double() = REnv.asVector(Of Double)(x)
-        Dim yi As Double() = REnv.asVector(Of Double)(y)
+        Dim xi As Double() = CLRVector.asNumeric(x)
+        Dim yi As Double() = CLRVector.asNumeric(y)
 
         Return ContourLayer.GetOutline(xi, yi, fillDots)
     End Function

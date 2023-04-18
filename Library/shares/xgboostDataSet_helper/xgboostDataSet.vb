@@ -3,7 +3,7 @@ Imports Microsoft.VisualBasic.ComponentModel.TagData
 Imports Microsoft.VisualBasic.MachineLearning.XGBoost.DataSet
 Imports Microsoft.VisualBasic.MachineLearning.XGBoost.train
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Module xgboostDataSet
 
@@ -18,7 +18,7 @@ Module xgboostDataSet
         Dim matrix As Single()() = data _
             .forEachRow(featureNames) _
             .Select(Function(v)
-                        Return DirectCast(REnv.asVector(Of Single)(v.value), Single())
+                        Return CLRVector.asFloat(v.value)
                     End Function) _
             .ToArray
         Dim test As TestData = matrix.ToTestDataSet
@@ -39,7 +39,7 @@ Module xgboostDataSet
             .Select(Function(v, i)
                         Return New DoubleTagged(Of Single()) With {
                             .Tag = label(i),
-                            .Value = DirectCast(REnv.asVector(Of Single)(v.value), Single())
+                            .Value = CLRVector.asFloat(v.value)
                         }
                     End Function) _
             .ToArray
@@ -63,7 +63,7 @@ Module xgboostDataSet
             .Select(Function(v, i)
                         Return New DoubleTagged(Of Single()) With {
                             .Tag = label(i),
-                            .Value = DirectCast(REnv.asVector(Of Single)(v.value), Single())
+                            .Value = CLRVector.asFloat(v.value)
                         }
                     End Function) _
             .ToArray
