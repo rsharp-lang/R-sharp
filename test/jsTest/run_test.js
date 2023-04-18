@@ -4,3 +4,8 @@ console.log({
 	data: "world",
 	suffix: "!"
 })
+
+console.table([
+	{title: "aaaa", dat: "vvvvv"},
+	{title:"bbbbbbb", dat:"xxxxxxx"}
+])
