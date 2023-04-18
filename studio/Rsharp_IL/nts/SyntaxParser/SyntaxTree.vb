@@ -69,7 +69,7 @@ Public Class SyntaxTree
             ' invoke function
             ' func(...)
             buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
-            exp = New FunctionInvoke(target.expression, opts.GetStackTrace(t), ExpressionCollection.GetExpressions(exp.expression))
+            exp = New FunctionInvoke(DirectCast(target.expression, SymbolReference).symbol, opts.GetStackTrace(t), ExpressionCollection.GetExpressions(exp.expression))
             buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, exp.expression))
             Reindex(buffer)
         ElseIf target.isException Then
