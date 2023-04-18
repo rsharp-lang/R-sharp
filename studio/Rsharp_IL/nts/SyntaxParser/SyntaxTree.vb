@@ -210,6 +210,13 @@ Public Class SyntaxTree
             ElseIf t.name = TokenType.close Then
                 Yield PopOut()
             ElseIf t.name = TokenType.comma Then
+                If Not stack.isEmpty Then
+                    If stack.PeekLast.token.text = "{" Then
+                        ' skip for parse part of value in json literal
+                        Continue Do
+                    End If
+                End If
+
                 Dim index = Traceback(buffer, {TokenType.comma, TokenType.open})
                 Dim range = buffer.Skip(index - 1).Take(buffer.Count - index).ToArray
                 Dim exp As SyntaxResult
