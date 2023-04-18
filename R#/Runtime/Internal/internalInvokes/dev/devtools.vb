@@ -99,15 +99,26 @@ Namespace Runtime.Internal.Invokes
 
         Private Function scriptTable(prog As Program, args As list, env As Environment) As dataframe
             Dim df As New dataframe With {.columns = New Dictionary(Of String, Array)}
+            Dim str_width As Integer = 81
 
             Call df.add("name", prog.Select(Function(exp) exp.expressionName))
             Call df.add("clr_type", prog.Select(Function(exp) exp.GetType.Name))
             Call df.add("is_callable", prog.Select(Function(exp) exp.isCallable))
             Call df.add("symbol", prog.Select(Function(exp) InvokeParameter.GetSymbolName(exp)))
             Call df.add("mode", prog.Select(Function(exp) exp.type))
-            Call df.add("expr_str", prog.Select(Function(exp) exp.ToString.TrimNewLine))
             Call df.add("expr_raw", prog.Select(Function(exp) NoInspector.Wrap(exp)))
+            Call df.add(
+                key:="expr_str",
+                value:=prog _
+                    .Select(Function(exp)
+                                Dim str = exp.ToString.TrimNewLine
 
+                                If str.Length > str_width Then
+                                    Return str.Substring(0, str_width) & "..."
+                                Else
+                                    Return str
+                                End If
+                            End Function))
             Return df
         End Function
 
@@ -133,6 +144,15 @@ Namespace Runtime.Internal.Invokes
             frames.columns("line") = data.profiles.Select(Function(f) f.stackframe.Line).ToArray
 
             Return frames
+        End Function
+
+        <ExportAPI("symbol_value")>
+        Public Function getSymbolvalue(exp As Expression) As Object
+            If TypeOf exp Is DeclareNewSymbol Then
+                Return DirectCast(exp, DeclareNewSymbol).value
+            Else
+                Return Nothing
+            End If
         End Function
 
         <ExportAPI("invoke_parameters")>
