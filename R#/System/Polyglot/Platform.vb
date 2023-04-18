@@ -136,8 +136,10 @@ Namespace Development.Polyglot
         End Function
 
         Public Function Register(loader As ScriptLoader) As Platform
-            engine(loader.SuffixName.ToLower) = loader
-            suffix.Add(loader.SuffixName.ToLower)
+            For Each name As String In loader.SuffixNames.Select(Function(si) si.ToLower)
+                engine(name) = loader
+                suffix.Add(name)
+            Next
 
             Return Me
         End Function

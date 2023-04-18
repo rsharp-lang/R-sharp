@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::af8beb698a9f0a3899237059ffdd71e8, D:/GCModeller/src/R-sharp/studio/Rsharp_IL/npy//PythonScriptLoader.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 61
-    '    Code Lines: 47
-    ' Comment Lines: 5
-    '   Blank Lines: 9
-    '     File Size: 2.44 KB
+' Summaries:
 
 
-    ' Class PythonScriptLoader
-    ' 
-    '     Properties: SuffixName
-    ' 
-    '     Function: LoadScript, ParseScript
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 61
+'    Code Lines: 47
+' Comment Lines: 5
+'   Blank Lines: 9
+'     File Size: 2.44 KB
+
+
+' Class PythonScriptLoader
+' 
+'     Properties: SuffixName
+' 
+'     Function: LoadScript, ParseScript
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -63,9 +63,9 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Public Class PythonScriptLoader : Inherits ScriptLoader
 
-    Public Overrides ReadOnly Property SuffixName As String
+    Public Overrides ReadOnly Iterator Property SuffixNames As IEnumerable(Of String)
         Get
-            Return "py"
+            Yield "py"
         End Get
     End Property
 
@@ -75,7 +75,7 @@ Public Class PythonScriptLoader : Inherits ScriptLoader
         ' 所以函数无法被导入到全局环境之中
         ' 在这里imports关键词操作则是使用全局环境
         Dim script As MagicScriptSymbol = CreateMagicScriptSymbol(scriptfile, R)
-        Dim Rscript As Components.Rscript = Components.Rscript.FromFile(scriptfile)
+        Dim Rscript As Rscript = Rscript.FromFile(scriptfile)
         Dim stackframe As New StackFrame With {
             .File = Rscript.fileName,
             .Line = 0,
@@ -106,7 +106,7 @@ Public Class PythonScriptLoader : Inherits ScriptLoader
     End Function
 
     Public Overrides Function ParseScript(scriptfile As String, env As Environment) As [Variant](Of Message, Program)
-        Dim Rscript As Components.Rscript = Components.Rscript.FromFile(scriptfile)
+        Dim Rscript As Rscript = Rscript.FromFile(scriptfile)
         Dim program As Program = Rscript.ParsePyScript(debug:=env.globalEnvironment.debugMode)
 
         Return program

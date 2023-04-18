@@ -59,7 +59,7 @@ Namespace Development.Polyglot
 
     Public MustInherit Class ScriptLoader
 
-        Public MustOverride ReadOnly Property SuffixName As String
+        Public MustOverride ReadOnly Property SuffixNames As IEnumerable(Of String)
 
         Public MustOverride Function ParseScript(scriptfile As String, env As Environment) As [Variant](Of Message, Program)
         Public MustOverride Function LoadScript(scriptfile As String, env As Environment) As Object

@@ -66,9 +66,10 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Public Class TypeScriptLoader : Inherits ScriptLoader
 
-    Public Overrides ReadOnly Property SuffixName As String
+    Public Overrides ReadOnly Iterator Property SuffixNames As IEnumerable(Of String)
         Get
-            Return "ts"
+            Yield "ts"
+            Yield "js"
         End Get
     End Property
 
