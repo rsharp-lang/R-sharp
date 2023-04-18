@@ -28,6 +28,7 @@ Public Class SyntaxToken
     End Function
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    <DebuggerStepThrough>
     Public Function [TryCast](Of T As Class)() As T
         Return TryCast(value, T)
     End Function

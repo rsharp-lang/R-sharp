@@ -153,6 +153,10 @@ Public Class SyntaxTree
                                 buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
                                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                                 Reindex(buffer)
+                            ElseIf lefttoken.TryCast(Of Token) = (TokenType.open, "(") Then
+                                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                                Reindex(buffer)
                             End If
                         Else
 
