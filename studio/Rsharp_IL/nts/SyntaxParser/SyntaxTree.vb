@@ -157,6 +157,13 @@ Public Class SyntaxTree
                                 buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
                                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                                 Reindex(buffer)
+                            ElseIf leftToken.IsToken(TokenType.keyword) Then
+                                ' else {}
+                                ' else if {}
+                                ' try {}
+                                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                                Reindex(buffer)
                             End If
                         Else
 
@@ -205,7 +212,16 @@ Public Class SyntaxTree
             ElseIf t.name = TokenType.comma Then
                 Dim index = Traceback(buffer, {TokenType.comma, TokenType.open})
                 Dim range = buffer.Skip(index - 1).Take(buffer.Count - index).ToArray
-                Dim exp = range.GetExpression(fromComma:=True, opts)
+                Dim exp As SyntaxResult
+
+                If range.Last.IsToken(TokenType.close, "}") Then
+                    ' usually be a json literal
+                    index = Traceback(buffer, {TokenType.open})
+                    range = buffer.Skip(index - 1).Take(buffer.Count - index).ToArray
+                    exp = range.GetExpression(fromComma:=True, opts)
+                Else
+                    exp = range.GetExpression(fromComma:=True, opts)
+                End If
 
                 If exp.isException OrElse exp.expression Is Nothing Then
                     Continue Do
