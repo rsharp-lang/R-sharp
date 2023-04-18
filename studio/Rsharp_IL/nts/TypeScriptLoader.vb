@@ -70,7 +70,7 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
     End Property
 
     Public Overrides Function ParseScript(scriptfile As String, env As Environment) As [Variant](Of Message, Program)
-        Dim Rscript As Components.Rscript = Components.Rscript.FromFile(scriptfile)
+        Dim Rscript As Rscript = Rscript.AutoHandleScript(scriptfile)
         Dim program As Program = Rscript.ParseTsScript(debug:=env.globalEnvironment.debugMode)
 
         Return program
@@ -82,9 +82,8 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
         ' 所以函数无法被导入到全局环境之中
         ' 在这里imports关键词操作则是使用全局环境
         Dim script As MagicScriptSymbol = CreateMagicScriptSymbol(scriptfile, R)
-        Dim Rscript As Components.Rscript = Components.Rscript.FromFile(scriptfile)
         Dim stackframe As New StackFrame With {
-            .File = Rscript.fileName,
+            .File = Rscript.GetFileNameDisplay(scriptfile),
             .Line = 0,
             .Method = New Method With {
                 .Method = MethodBase.GetCurrentMethod.Name,

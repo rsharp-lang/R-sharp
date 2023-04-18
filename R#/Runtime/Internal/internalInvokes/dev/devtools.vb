@@ -58,7 +58,6 @@
 Imports System.Threading
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.Repository
-Imports Microsoft.VisualBasic.Parallel.Threads
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Package
@@ -78,6 +77,13 @@ Namespace Runtime.Internal.Invokes
 
         Private Function scriptTable(prog As Program, args As list, env As Environment) As dataframe
             Dim df As New dataframe With {.columns = New Dictionary(Of String, Array)}
+
+            Call df.add("name", prog.Select(Function(exp) exp.expressionName))
+            Call df.add("type", prog.Select(Function(exp) exp.GetType.Name))
+            Call df.add("is_callable", prog.Select(Function(exp) exp.isCallable))
+            Call df.add("symbol", prog.Select(Function(exp) InvokeParameter.GetSymbolName(exp)))
+            Call df.add("value", prog.Select(Function(exp) exp.type))
+            Call df.add("expr", prog.ToArray)
 
             Return df
         End Function

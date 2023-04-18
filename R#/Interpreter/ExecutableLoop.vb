@@ -75,13 +75,6 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter
 
-    Public Enum DebugLevels As Byte
-        None
-        Memory
-        Stack
-        All = Memory Or Stack
-    End Enum
-
     ''' <summary>
     ''' 使用for循环执行脚本语句
     ''' </summary>

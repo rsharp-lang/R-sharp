@@ -49,7 +49,9 @@ Public Class SyntaxTree
             End If
         Next
 
-        Dim prog As New Program(syntax.Select(Function(s) s.expression))
+        Dim prog As New Program(syntax.Select(Function(s) s.expression)) With {
+            .Rscript = script
+        }
 
         Return prog
     End Function

@@ -128,6 +128,14 @@ Namespace Runtime.Components
             }
         End Function
 
+        Public Shared Function GetFileNameDisplay(handle As String) As String
+            If Not handle.FileExists Then
+                Return $"<in_memory_&{handle.GetHashCode.ToHexString}>"
+            Else
+                Return handle.FileName
+            End If
+        End Function
+
         ''' <summary>
         ''' auto handle Rscript text from:
         ''' 

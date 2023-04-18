@@ -176,6 +176,8 @@ Namespace Runtime.Components
                 Return DirectCast(expr, ValueAssignExpression) _
                     .targetSymbols(Scan0) _
                     .DoCall(AddressOf ValueAssignExpression.GetSymbol)
+            ElseIf TypeOf expr Is DeclareNewSymbol Then
+                Return DirectCast(expr, DeclareNewSymbol).names.First
             ElseIf TypeOf expr Is VectorLiteral Then
                 With DirectCast(expr, VectorLiteral)
                     If .length = 1 AndAlso TypeOf .First Is ValueAssignExpression Then

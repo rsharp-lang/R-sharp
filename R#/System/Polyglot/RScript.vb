@@ -63,7 +63,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Development.Polyglot
 
-    Public Class RScript : Inherits ScriptLoader
+    Public Class RScriptLoader : Inherits ScriptLoader
 
         Public Overrides ReadOnly Property SuffixName As String
             Get
@@ -109,7 +109,7 @@ Namespace Development.Polyglot
             Dim Rscript As Runtime.Components.Rscript = Runtime.Components.Rscript.FromFile(scriptfile)
             Dim R As RInterpreter = env.globalEnvironment.Rscript
             Dim error$ = Nothing
-            Dim program As Program = program.CreateProgram(Rscript, R.debug, [error]:=[error])
+            Dim program As Program = Program.CreateProgram(Rscript, R.debug, [error]:=[error])
 
             If program Is Nothing Then
                 ' there are syntax error in the external script
