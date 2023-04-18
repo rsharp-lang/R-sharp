@@ -93,6 +93,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
             Me.stackFrame = stackFrame
         End Sub
 
+        ''' <summary>
+        ''' if test true, then returns true part else returns false part
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim ifTestResult = ifTest.Evaluate(envir)
             Dim test As Boolean = CLRVector.asLogical(ifTestResult)(Scan0)
@@ -104,6 +109,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
             End If
         End Function
 
+        ''' <summary>
+        ''' javascript ifelse syntax
+        ''' </summary>
+        ''' <returns></returns>
         Public Overrides Function ToString() As String
             Return $"({ifTest} ? {trueResult} : {falseResult})"
         End Function

@@ -249,6 +249,20 @@ Public Module InternalParser
     Private Function ParseValueExpression(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
         If tokens.IsNullOrEmpty Then
             Return New SyntaxResult(Literal.NULL)
+        ElseIf tokens.Length = 3 Then
+            Dim test1 = tokens(0) Like GetType(IfBranch)
+            Dim test2 = tokens(1).IsToken(TokenType.keyword, "else")
+            Dim test3 = tokens(2) Like GetType(Expression)
+            Dim iftest As IfBranch = tokens(0).TryCast(Of IfBranch)
+
+            If test1 AndAlso test2 AndAlso test3 Then
+                Return New SyntaxResult(New IIfExpression(
+                    iftest:=iftest.ifTest,
+                    trueResult:=iftest.trueClosure.body,
+                    falseResult:=tokens(2).TryCast(Of Expression),
+                    stackFrame:=iftest.stackFrame
+                ))
+            End If
         End If
         If tokens(Scan0) Like GetType(Token) AndAlso tokens(Scan0).TryCast(Of Token).name = TokenType.keyword Then
             Return tokens.ParseKeywordExpression(tokens(0).TryCast(Of Token).text, opts)

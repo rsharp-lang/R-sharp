@@ -61,7 +61,7 @@ Public Class SyntaxToken
         If t Is Nothing OrElse t.value Is Nothing Then
             Return False
         Else
-            Return t.value.GetType Is type
+            Return t.value.GetType Is type OrElse t.value.GetType.IsInheritsFrom(type, strict:=False)
         End If
     End Operator
 
