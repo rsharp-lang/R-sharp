@@ -70,7 +70,7 @@ Namespace Runtime.Internal.Invokes
 
     Module devtools
 
-        Sub New()
+        Sub Main()
             Call Internal.Object.Converts.addHandler(GetType(ProfilerFrames), AddressOf profilerFrames)
             Call Internal.Object.Converts.addHandler(GetType(Program), AddressOf scriptTable)
         End Sub
