@@ -53,7 +53,6 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports SMRUCC.Rsharp.Development.Components
-Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -61,6 +60,18 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Module jsonlite
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="env"></param>
+    ''' <param name="maskReadonly"></param>
+    ''' <param name="indent"></param>
+    ''' <param name="enumToStr"></param>
+    ''' <param name="unixTimestamp"></param>
+    ''' <returns>
+    ''' the generated json string or error message
+    ''' </returns>
     Public Function toJSON(x As Object, env As Environment,
                            Optional maskReadonly As Boolean = False,
                            Optional indent As Boolean = False,

@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\mime\application%json\JSON-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\R#\Rsharp-netcore5.vbproj" />
     <ProjectReference Include="..\IronCodeDom\IronCodeDom.vbproj" />
   </ItemGroup>
@@ -77,5 +78,7 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
+
+  <Import Project="..\..\..\Library\shares\JsonHelper\JsonHelper.projitems" Label="Shared" />
 
 </Project>

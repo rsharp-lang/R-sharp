@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.TypeScript.jsstd
 
 Public Class TypeScriptLoader : Inherits ScriptLoader
 
@@ -68,6 +69,10 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
             Return "ts"
         End Get
     End Property
+
+    Shared Sub New()
+        Call Internal.invoke.pushEnvir(GetType(console))
+    End Sub
 
     Public Overrides Function ParseScript(scriptfile As String, env As Environment) As [Variant](Of Message, Program)
         Dim Rscript As Rscript = Rscript.AutoHandleScript(scriptfile)
