@@ -164,6 +164,13 @@ Public Class SyntaxTree
                                 buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
                                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                                 Reindex(buffer)
+                            ElseIf leftToken.isComma Then
+                                ' last element in json literal
+                                ' 
+                                ' {...,...}
+                                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                                Reindex(buffer)
                             End If
                         Else
 
@@ -211,7 +218,7 @@ Public Class SyntaxTree
                 Yield PopOut()
             ElseIf t.name = TokenType.comma Then
                 If Not stack.isEmpty Then
-                    If stack.PeekLast.token.text = "{" Then
+                    If stack.PeekLast.token.text <> "(" Then
                         ' skip for parse part of value in json literal
                         Continue Do
                     End If
