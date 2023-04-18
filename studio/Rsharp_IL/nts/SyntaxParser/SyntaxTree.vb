@@ -208,6 +208,10 @@ Public Class SyntaxTree
         Do While (i = ++lines) IsNot Nothing
             t = i
 
+            If t.name = TokenType.comment Then
+                Continue Do
+            End If
+
             If isNotDelimiter(t) Then
                 buffer.Add(New SyntaxToken(buffer.Count, t))
             End If

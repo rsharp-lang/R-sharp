@@ -18,8 +18,10 @@ Public Class TsScanner : Inherits Scanner
         Call nullLiteral.Add("null")
         Call shortOperators.Clear()
         Call shortOperators.AddList("."c, "+"c, "-"c, "*"c, "/"c, "\"c, "!"c, "|"c, "&"c)
+        Call longOperatorParts.Add("/"c)
 
         keepsDelimiter = True
         dollarAsSymbol = True
+        commentFlag = "//"
     End Sub
 End Class

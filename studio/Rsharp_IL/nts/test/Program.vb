@@ -7,7 +7,8 @@ Module Program
         Dim ts = New TypeScriptLoader
         ' Dim script1 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\test1.js", GlobalEnvironment.defaultEmpty)
         ' Dim script3 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\test3.js", GlobalEnvironment.defaultEmpty)
-        Dim script4 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\test4.js", GlobalEnvironment.defaultEmpty)
+        ' Dim script4 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\test4.js", GlobalEnvironment.defaultEmpty)
+        Dim script5 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\test5.js", GlobalEnvironment.defaultEmpty)
 
         Console.WriteLine("Hello World!")
     End Sub

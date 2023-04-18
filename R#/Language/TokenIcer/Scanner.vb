@@ -88,6 +88,7 @@ Namespace Language.TokenIcer
         Dim tokenStringMode As Boolean
         Dim isStringInterpolateClose As Boolean = False
 
+        Protected commentFlag As String = "#"
         ''' <summary>
         ''' keeps the blankspace, cr, lf, tab as the delimiter/expression terminator
         ''' could be used for parse the typescript,javascript,python
@@ -233,7 +234,8 @@ Namespace Language.TokenIcer
         ''' + ||
         ''' + ==
         ''' </summary>
-        Shared ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c, "!"}
+        Protected ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c, "!"}
+
         Shared ReadOnly longOperators As Index(Of String) = {
             "<=", ">=", "==", "!=",
             "&&", "||",
@@ -497,6 +499,12 @@ Namespace Language.TokenIcer
                                     .name = TokenType.operator,
                                     .text = text
                                 }
+                            ElseIf text = commentFlag Then
+                                ' handling comment for javascript language parser
+                                escape.comment = True
+                                buffer += c
+
+                                Return Nothing
                             Else
 
                             End If
@@ -535,7 +543,7 @@ Namespace Language.TokenIcer
                 Else
                     Return Nothing
                 End If
-            ElseIf escape.comment AndAlso text.First = "#"c Then
+            ElseIf escape.comment AndAlso text.StartsWith(commentFlag) Then
                 Return New Token With {.name = TokenType.comment, .text = text}
             Else
                 Return MeasureToken(text, keywords, nullLiteral, AddressOf isLINQKeyword)
