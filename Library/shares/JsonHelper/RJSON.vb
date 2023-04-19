@@ -110,7 +110,7 @@ Module RJSON
             If array.All(Function(a) TypeOf a Is JsonValue) OrElse array.SchemaIdentical(strictSchemaCheck) Then
                 ' is a element vector
                 Return array _
-                    .Select(Function(a) a.createRObj(env, strictSchemaCheck)) _
+                    .Select(Function(a) a.createRObj(env, strictSchemaCheck, decodeMetachar:=decodeMetachar)) _
                     .ToArray
             Else
                 Dim list As New list With {
@@ -119,7 +119,7 @@ Module RJSON
                 Dim i As i32 = 1
 
                 For Each item As JsonElement In array
-                    list.slots.Add(++i, item.createRObj(env, strictSchemaCheck))
+                    list.slots.Add(++i, item.createRObj(env, strictSchemaCheck, decodeMetachar:=decodeMetachar))
                 Next
 
                 Return list
