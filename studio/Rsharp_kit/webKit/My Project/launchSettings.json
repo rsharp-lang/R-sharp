@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "webKit.NET5": {
+      "commandName": "Project"
+    },
+    "run_dll": {
+      "commandName": "Executable",
+      "executablePath": "E:\\GCModeller\\src\\R-sharp\\App\\net6.0\\R#.exe",
+      "commandLineArgs": "E:\\biodeep\\tcmsp-e\\R\\pull_herbs_tree.R --debug"
+    }
+  }
+}
