@@ -6,7 +6,7 @@
     "run_dll": {
       "commandName": "Executable",
       "executablePath": "E:\\GCModeller\\src\\R-sharp\\App\\net6.0\\R#.exe",
-      "commandLineArgs": "E:\\GCModeller\\src\\R-sharp\\test\\demo\\text\\parse_error_html.R --debug"
+      "commandLineArgs": "E:\\GCModeller\\src\\R-sharp\\test\\demo\\text\\graph_text.R --debug"
     }
   }
 }
