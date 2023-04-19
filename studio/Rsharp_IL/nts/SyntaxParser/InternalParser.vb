@@ -22,7 +22,15 @@ Public Module InternalParser
 
     <Extension>
     Public Function ParseTypeScriptLine(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
+#If DEBUG Then
         Return Expression.CreateExpression(tokens, opts)
+#Else
+        Try
+            Return Expression.CreateExpression(tokens, opts)
+        Catch ex As Exception
+            Return New SyntaxResult(SyntaxError.CreateError(opts, ex))
+        End Try
+#End If
     End Function
 
     <Extension>

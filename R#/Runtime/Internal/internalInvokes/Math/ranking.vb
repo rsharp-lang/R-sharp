@@ -163,9 +163,15 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("order")>
         <RApiReturn(GetType(Integer))>
-        Public Function order(x As Array, Optional decreasing As Boolean = False, Optional env As Environment = Nothing) As Object
-            Dim generic = REnv.TryCastGenericArray(x, env)
+        Public Function order(x As Array,
+                              Optional decreasing As Boolean = False,
+                              Optional env As Environment = Nothing) As Object
 
+            Dim generic As Object = REnv.TryCastGenericArray(x, env)
+
+            If generic Is Nothing Then
+                Return Internal.debug.stop("Error in order(NULL) : argument 1 is not a vector.", env)
+            End If
             If Program.isException(generic) Then
                 Return Internal.debug.stop("the input vector should be generic!", env)
             End If

@@ -175,7 +175,7 @@ Namespace Runtime.Components
                 If value Is Nothing Then
                     ' nothing 可以转换为任意数据类型
                     Return True
-                ElseIf constraint = TypeCodes.generic Then
+                ElseIf constraint = TypeCodes.generic OrElse constraint = TypeCodes.NA Then
                     ' 没有类型约束，则肯定是有效的
                     Return True
                 Else

@@ -214,9 +214,10 @@ Namespace Runtime
                 Case TypeCodes.list : Return GetType(Dictionary(Of String, Object))
                 Case TypeCodes.string : Return GetType(String())
                 Case TypeCodes.closure : Return GetType([Delegate])
-                Case TypeCodes.generic : Return GetType(Object)
+                Case TypeCodes.generic, TypeCodes.NA : Return GetType(Object)
                 Case TypeCodes.dataframe : Return GetType(dataframe)
                 Case TypeCodes.environment : Return GetType(Environment)
+
                 Case Else
                     Throw New InvalidCastException(type.Description)
             End Select
