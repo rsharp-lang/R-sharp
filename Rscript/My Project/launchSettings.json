@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--parallel --master \"59040\" --delegate \"Parallel::slave\" /@set --internal_pipeline=TRUE   --SetDllDirectory E:/GCModeller/src/R-sharp/App/net6.0"
+      "commandLineArgs": "\"E:\\GCModeller\\src\\R-sharp\\test\\unitTest\\operators\\assign.R\" --debug"
     },
     "mzkit_debug": {
       "commandName": "Project",

@@ -614,6 +614,9 @@ Namespace Runtime
         ''' </param>
         ''' <returns></returns>
         Friend Shared Function asRVector(type As TypeCodes, value As Object) As Object
+            If value Is Nothing Then
+                Return Nothing
+            End If
             If (TypeOf value Is list) OrElse (TypeOf value Is dataframe) Then
                 Return value
             End If
@@ -622,6 +625,8 @@ Namespace Runtime
                 ' 没有定义as type做类型约束的时候
                 ' 会需要通过值来推断
                 type = RType.TypeOf(value).mode
+            Else
+
             End If
 
             If vector.isVectorOf(value, type) Then

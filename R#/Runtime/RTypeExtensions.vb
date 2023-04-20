@@ -205,7 +205,9 @@ Namespace Runtime
         ''' Mapping R# <see cref="TypeCodes"/> to .net CLR object type
         ''' </summary>
         ''' <param name="type"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' the function will returns nothing if the type mapping is not valid
+        ''' </returns>
         Public Function [GetType](type As TypeCodes) As Type
             Select Case type
                 Case TypeCodes.boolean : Return GetType(Boolean())
@@ -213,13 +215,14 @@ Namespace Runtime
                 Case TypeCodes.integer : Return GetType(Long())
                 Case TypeCodes.list : Return GetType(Dictionary(Of String, Object))
                 Case TypeCodes.string : Return GetType(String())
-                Case TypeCodes.closure : Return GetType([Delegate])
+                Case TypeCodes.closure, TypeCodes.clr_delegate : Return GetType([Delegate])
                 Case TypeCodes.generic, TypeCodes.NA : Return GetType(Object)
                 Case TypeCodes.dataframe : Return GetType(dataframe)
                 Case TypeCodes.environment : Return GetType(Environment)
 
                 Case Else
-                    Throw New InvalidCastException(type.Description)
+                    Call ("The clr type mapping is not supported for the R# type mode: " & type.Description).Warning
+                    Return Nothing
             End Select
         End Function
     End Module
