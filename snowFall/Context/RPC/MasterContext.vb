@@ -276,6 +276,14 @@ Namespace Context.RPC
                 If disposing Then
                     ' TODO: dispose managed state (managed objects)
                     Call socket.Dispose()
+
+                    For Each worker As BootstrapSocket In bootstrap.Values
+                        Try
+                            Call worker.Dispose()
+                        Catch ex As Exception
+
+                        End Try
+                    Next
                 End If
 
                 ' TODO: free unmanaged resources (unmanaged objects) and override finalizer
