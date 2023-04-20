@@ -348,7 +348,7 @@ Public Module Parallel
             Call println(host.master.ToString)
         End If
 
-        Call New Thread(Sub() host.master.Run(AddressOf host.getSymbol)).Start()
+        Call RunTask(Sub() host.master.Run(AddressOf host.getSymbol), "snowFall_host_master")
 
         If verbose Then
             Call println("run parallel!")

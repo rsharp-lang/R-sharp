@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--parallel --master \"45661\" --delegate \"Parallel::slave\" --redirect_stdout \"F:/Temp/R#/18216.10523083.0/task_0___-554786.log\" /@set --internal_pipeline=TRUE   --SetDllDirectory D:/GCModeller/src/R-sharp/App/net6.0"
+      "commandLineArgs": "--parallel --master \"59040\" --delegate \"Parallel::slave\" /@set --internal_pipeline=TRUE   --SetDllDirectory E:/GCModeller/src/R-sharp/App/net6.0"
     },
     "mzkit_debug": {
       "commandName": "Project",
