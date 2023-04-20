@@ -95,7 +95,7 @@ Namespace Runtime
                 Return TypeCodes.generic
             Else
                 ' .NET type
-                Return TypeCodes.ref
+                Return TypeCodes.NA
             End If
         End Function
 
@@ -222,7 +222,7 @@ Namespace Runtime
 
                 Case Else
                     Call ("The clr type mapping is not supported for the R# type mode: " & type.Description).Warning
-                    Return Nothing
+                    Return GetType(Object)
             End Select
         End Function
     End Module
