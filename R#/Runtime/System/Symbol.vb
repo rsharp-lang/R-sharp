@@ -193,9 +193,14 @@ Namespace Runtime.Components
             Me.m_val = Nothing
         End Sub
 
-        Sub New(value As Object, Optional constraint As TypeCodes = TypeCodes.generic)
+        Sub New(value As Object,
+                Optional constraint As TypeCodes = TypeCodes.generic,
+                Optional is_readonly As Boolean = False)
+
             Me.New(constraint)
+
             Me.m_val = value
+            Me.readonly = is_readonly
         End Sub
 
         Sub New(name As String, value As Object,
@@ -229,6 +234,15 @@ Namespace Runtime.Components
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' set current symbol its lock binding status
+        ''' </summary>
+        ''' <param name="readonly">
+        ''' + true for const and lock binding
+        ''' + false for mutable and un-lock binding
+        ''' </param>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub setMutable([readonly] As Boolean)
             _readonly = [readonly]
         End Sub

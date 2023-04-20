@@ -531,7 +531,7 @@ Namespace Runtime.Internal.Invokes
                 If symbolObj Is Nothing Then
                     Return Message.SymbolNotFound(env, name, TypeCodes.NA)
                 Else
-                    symbolObj.readonly = True
+                    Call symbolObj.setMutable([readonly]:=True)
                 End If
             Next
 
@@ -548,7 +548,7 @@ Namespace Runtime.Internal.Invokes
                 If symbolObj Is Nothing Then
                     Return Message.SymbolNotFound(env, name, TypeCodes.NA)
                 Else
-                    symbolObj.readonly = False
+                    Call symbolObj.setMutable([readonly]:=False)
                 End If
             Next
 

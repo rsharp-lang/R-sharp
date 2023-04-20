@@ -252,9 +252,8 @@ Namespace Development.Package
 
                 If symbol Is Nothing Then
                     ' add new
-                    symbol = New Symbol(api, TypeCodes.closure) With {
-                        .name = api.name,
-                        .[readonly] = False
+                    symbol = New Symbol(api, TypeCodes.closure, is_readonly:=False) With {
+                        .name = api.name
                     }
 
                     [global].funcSymbols.Add(symbol)
