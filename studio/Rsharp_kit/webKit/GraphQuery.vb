@@ -105,7 +105,7 @@ Public Module HtmlGraphQuery
         If raw Then
             Return data
         Else
-            Return data.createRObj(env)
+            Return data.createRObj(env, decodeMetachar:=False)
         End If
     End Function
 End Module
