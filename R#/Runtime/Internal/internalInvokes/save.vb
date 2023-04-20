@@ -140,7 +140,7 @@ Namespace Runtime.Internal.Invokes
                             var = envir.FindSymbol(name)
                         End If
 
-                        Call var.SetValue(dataList.getByName(name), envir)
+                        Call var.setValue(dataList.getByName(name), envir)
                     Next
 
                     Return dataList.getNames

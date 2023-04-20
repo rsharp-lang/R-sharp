@@ -231,7 +231,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
         Private Shared Function setValueHandler(Of T)(v As Symbol(), env As Environment) As Action(Of T)
             If v.Length = 1 Then
-                Return Sub(x) Call v(Scan0).SetValue(x, env)
+                Return Sub(x) Call v(Scan0).setValue(x, env)
             ElseIf v.Length > 1 Then
                 Dim typeTest As Type = GetType(T)
 
@@ -240,7 +240,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                                Dim tuple As ITuple = DirectCast(CObj(x), ITuple)
 
                                For i As Integer = 0 To v.Length - 1
-                                   Call v(i).SetValue(tuple(i), env)
+                                   Call v(i).setValue(tuple(i), env)
                                Next
                            End Sub
                 Else

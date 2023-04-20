@@ -263,7 +263,7 @@ Namespace Development.Package
                     ' overrides and masked by current package
                     ' while in the progress of package
                     ' imports
-                    symbol.SetValue(api, envir, [overrides]:=True)
+                    symbol.setValue(api, envir, [overrides]:=True)
                     masked += symbol.name
                 End If
             Next

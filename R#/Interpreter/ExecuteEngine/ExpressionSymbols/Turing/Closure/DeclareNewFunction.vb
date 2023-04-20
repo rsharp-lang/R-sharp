@@ -406,7 +406,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     .[readonly] = False
                 }
             Else
-                symbol.SetValue(Me, envir)
+                symbol.setValue(Me, envir)
             End If
 
             ' initialize of the internal closure environment

@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::276db9ea8fd5f5d46c0848badd134675, D:/GCModeller/src/R-sharp/R#//Runtime/System/Symbol.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 214
-    '    Code Lines: 130
-    ' Comment Lines: 57
-    '   Blank Lines: 27
-    '     File Size: 7.50 KB
+' Summaries:
 
 
-    '     Class Symbol
-    ' 
-    '         Properties: [readonly], [typeof], constraint, constraintValid, isCallable
-    '                     length, name, stacktrace, typeCode, typeId
-    '                     value
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: GetValueViewString, SetValue, ToString, ToVector
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 214
+'    Code Lines: 130
+' Comment Lines: 57
+'   Blank Lines: 27
+'     File Size: 7.50 KB
+
+
+'     Class Symbol
+' 
+'         Properties: [readonly], [typeof], constraint, constraintValid, isCallable
+'                     length, name, stacktrace, typeCode, typeId
+'                     value
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: GetValueViewString, SetValue, ToString, ToVector
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -99,8 +99,7 @@ Namespace Runtime.Components
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property constraint As TypeCodes
-
-        Public Property [readonly] As Boolean
+        Public ReadOnly Property [readonly] As Boolean
 
         ''' <summary>
         ''' <see cref="RType.fullName"/>, key for <see cref="GlobalEnvironment.types"/>
@@ -220,7 +219,7 @@ Namespace Runtime.Components
         ''' script symbol imports
         ''' </param>
         ''' <returns></returns>
-        Public Function SetValue(x As Object, env As Environment, Optional [overrides] As Boolean = False) As Message
+        Public Function setValue(x As Object, env As Environment, Optional [overrides] As Boolean = False) As Message
             If [readonly] AndAlso Not [overrides] Then
                 Return Internal.debug.stop($"cannot change value of locked binding for '{name}'", env)
             Else
@@ -229,6 +228,10 @@ Namespace Runtime.Components
 
             Return Nothing
         End Function
+
+        Public Sub setMutable([readonly] As Boolean)
+            _readonly = [readonly]
+        End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String

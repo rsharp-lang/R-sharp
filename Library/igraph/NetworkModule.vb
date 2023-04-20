@@ -607,7 +607,7 @@ Public Module NetworkModule
                     If var Is Nothing Then
                         closure.Push(symbol.Key, value, [readonly]:=False)
                     Else
-                        var.SetValue(value, env)
+                        var.setValue(value, env)
                     End If
                 Next
 

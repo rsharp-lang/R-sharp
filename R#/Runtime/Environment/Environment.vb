@@ -546,7 +546,7 @@ Namespace Runtime
         ''' <returns></returns>
         Public Function AssignSymbol(name As String, value As Object, Optional [strict] As Boolean = False) As Object
             If symbols.ContainsKey(name) Then
-                Return symbols(name).SetValue(value, Me)
+                Return symbols(name).setValue(value, Me)
             ElseIf strict Then
                 Return Message.SymbolNotFound(Me, name, TypeCodes.generic)
             Else
@@ -578,7 +578,7 @@ Namespace Runtime
                          End Sub)
 
                 ' 只需要设置值就可以了
-                Return symbols(name).SetValue(value, Me)
+                Return symbols(name).setValue(value, Me)
 
             ElseIf (Not value Is Nothing) Then
                 value = asRVector(mode, value)
@@ -588,16 +588,17 @@ Namespace Runtime
                 .name = name,
                 .stacktrace = Me.stackTrace
             }
-                Call .SetValue(value, Me)
-
+                ' write value to the pool object that associated with current symbol object
+                Call .setValue(value, Me)
                 ' 只读开关应该在设置了初始值之后
                 ' 再进行设置，否则会无法设置初始值的
-                .[readonly] = [readonly]
+                Call .setMutable([readonly])
+                ' add new symbol into current runtime environment 
+                Call .DoCall(AddressOf symbols.Add)
 
                 If Not .constraintValid Then
-                    Return Internal.debug.stop(New Exception(String.Format(ConstraintInvalid, .typeCode, mode)), Me)
-                Else
-                    Call .DoCall(AddressOf symbols.Add)
+                    ' show warning message about data type mis-matched
+                    Call AddMessage(String.Format(ConstraintInvalid, .typeCode, mode))
                 End If
 
                 Return value
