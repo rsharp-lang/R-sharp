@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("graphics2D.labeler", Category:=APICategories.SoftwareTools)>
@@ -123,9 +124,9 @@ Module gr2DLabeler
         ElseIf TypeOf anchor Is Anchor() Then
             Return labeler.Anchors(DirectCast(anchor, Anchor()))
         ElseIf RType.TypeOf(anchor).mode = TypeCodes.integer Then
-            Return labeler.Anchors(labeler.GetLabelAnchors(CSng(REnv.asVector(Of Long)(anchor).GetValue(Scan0))))
+            Return labeler.Anchors(labeler.GetLabelAnchors(CLRVector.asFloat(anchor)(Scan0)))
         ElseIf RType.TypeOf(anchor).mode = TypeCodes.double Then
-            Return labeler.Anchors(labeler.GetLabelAnchors(CSng(REnv.asVector(Of Double)(anchor).GetValue(Scan0))))
+            Return labeler.Anchors(labeler.GetLabelAnchors(CLRVector.asFloat(anchor)(Scan0)))
         Else
             Return Internal.debug.stop(Message.InCompatibleType(GetType(Anchor()), anchor.GetType, env), env)
         End If

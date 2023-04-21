@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports scatter3D = Microsoft.VisualBasic.Data.ChartPlots.Plot3D.Scatter
 
@@ -100,9 +101,9 @@ Module plot3D
                              Optional alpha As Integer = 255,
                              Optional ptSize As Integer = 5) As Serial3D
 
-        Dim cx As Double() = REnv.asVector(Of Double)(x)
-        Dim cy As Double() = REnv.asVector(Of Double)(y)
-        Dim cz As Double() = REnv.asVector(Of Double)(z)
+        Dim cx As Double() = CLRVector.asNumeric(x)
+        Dim cy As Double() = CLRVector.asNumeric(y)
+        Dim cz As Double() = CLRVector.asNumeric(z)
         Dim aligns As Array() = Vectorization.VectorAlignment(cx, cy, cz).ToArray
         Dim points As New List(Of NamedValue(Of Point3D))
 
