@@ -159,6 +159,14 @@ Public Module InternalParser
                     If tokens.Last Like GetType(Token) AndAlso tokens.Last.TryCast(Of Token) = (TokenType.close, "}") Then
                         Return tokens.ParseFunctionValue(opts)
                     End If
+                ElseIf tk.isKeyword("for") Then
+                    Dim var = tokens(2).TryCast(Of DeclareNewSymbol)
+                    Dim closure = tokens(5).TryCast(Of ClosureExpression)
+                    Dim stacktrace = opts.GetStackTrace(tokens(0).TryCast(Of Token))
+                    Dim loopBody As New DeclareNewFunction("for_loop", {New DeclareNewSymbol(var.m_names(0), stacktrace)}, closure, stacktrace)
+                    Dim forloop As New ForLoop(var.m_names, var.value, loopBody, False, stacktrace)
+
+                    Return New SyntaxResult(forloop)
                 ElseIf tk.name = TokenType.open Then
                     If Not tokens.Any(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.close) Then
                         Return New SyntaxResult(New SyntaxError())

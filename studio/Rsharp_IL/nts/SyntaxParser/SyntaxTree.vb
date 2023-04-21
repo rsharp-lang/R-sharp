@@ -57,9 +57,16 @@ Public Class SyntaxTree
     End Function
 
     Private Function ParseFuncInvoke(lt As Token, exp As SyntaxResult) As SyntaxResult
-        If lt.isAnyKeyword("function", "if", "for") Then
+        If lt.isAnyKeyword("function", "if") Then
             ' is function declare
             ' do nothing
+            Return Nothing
+        ElseIf lt.isAnyKeyword("for") Then
+            ' for loop
+            buffer.RemoveRange(state.Value.Range.Min + 1, state.Value.Range.Length - 1)
+            buffer.Insert(state.Value.Range.Min + 1, New SyntaxToken(-1, exp.expression))
+            Reindex(buffer)
+
             Return Nothing
         End If
 
