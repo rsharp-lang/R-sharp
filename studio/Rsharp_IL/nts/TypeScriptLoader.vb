@@ -118,12 +118,18 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
 
     Private Sub setup_jsEnv(env As GlobalEnvironment)
         Dim console As New list With {.slots = New Dictionary(Of String, Object)}
+        Dim JSON As New list With {.slots = New Dictionary(Of String, Object)}
         Dim stdlib As Type = GetType(jsstd.console)
+        Dim jsonlib As Type = GetType(jsstd.JSON)
 
         For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(stdlib)
             Call console.add(func.Name, New RMethodInfo(func))
         Next
+        For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(jsonlib)
+            Call JSON.add(func.Name, New RMethodInfo(func))
+        Next
 
         Call env.Push("console", console, [readonly]:=True, TypeCodes.list)
+        Call env.Push("JSON", JSON, [readonly]:=True, TypeCodes.list)
     End Sub
 End Class
