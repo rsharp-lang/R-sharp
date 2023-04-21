@@ -53,6 +53,7 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -84,6 +85,21 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ''' </summary>
 <Package("JSON", Category:=APICategories.UtilityTools, Publisher:="i@xieguigang.me")>
 Module JSON
+
+    ''' <summary>
+    ''' do string unescape
+    ''' </summary>
+    ''' <param name="str"></param>
+    ''' <returns></returns>
+    <ExportAPI("unescape")>
+    Public Function unescape(str As String()) As String()
+        Return str _
+            .SafeQuery _
+            .Select(Function(si)
+                        Return JsonParser.StripString(si, decodeMetaChar:=True)
+                    End Function) _
+            .ToArray
+    End Function
 
     ''' <summary>
     ''' ### Decodes a JSON string

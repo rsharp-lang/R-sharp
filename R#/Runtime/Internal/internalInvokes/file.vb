@@ -616,7 +616,11 @@ Namespace Runtime.Internal.Invokes
         <RApiReturn(GetType(String))>
         Public Function basename(fileNames$(),
                                  Optional withExtensionName As Boolean = False,
+                                 <RDefaultExpression>
+                                 Optional strict As Object = "~as.logical(getOption('strict'))",
                                  Optional env As Environment = Nothing) As Object
+
+            Dim strictFlag As Boolean = CLRVector.asLogical(strict).FirstOrDefault([default]:=True)
 
             If fileNames Is Nothing Then
                 Return Internal.debug.stop("the given file name can not be nothing!", env)
@@ -633,7 +637,7 @@ Namespace Runtime.Internal.Invokes
                                 If file.DirectoryExists Then
                                     Return file.DirectoryName
                                 Else
-                                    Return file.BaseName
+                                    Return file.BaseName(allowEmpty:=Not strictFlag)
                                 End If
                             End Function) _
                     .ToArray
