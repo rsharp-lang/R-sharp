@@ -67,6 +67,18 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <Package("sqlite")>
 Module sqlite
 
+    ''' <summary>
+    ''' Open a connection to a local sqlite database file
+    ''' </summary>
+    ''' <param name="file">
+    ''' the file path to the target sqlite database file or the stream 
+    ''' data of the sqlite file itself.
+    ''' </param>
+    ''' <param name="blobAsBase64">
+    ''' 
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("open")>
     <RApiReturn(GetType(Sqlite3Database))>
     Public Function open(<RRawVectorArgument> file As Object,
@@ -91,8 +103,10 @@ Module sqlite
     ''' <summary>
     ''' get all data object that stored in the target sqlite database.
     ''' </summary>
-    ''' <param name="con"></param>
-    ''' <param name="type"></param>
+    ''' <param name="con">a connection to the sqlite database</param>
+    ''' <param name="type">
+    ''' the object type in the sqlite database
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("ls")>
     Public Function list(con As Sqlite3Database, Optional type As String = "table") As dataframe
@@ -117,8 +131,10 @@ Module sqlite
     ''' <summary>
     ''' export target table data
     ''' </summary>
-    ''' <param name="con"></param>
-    ''' <param name="tableName"></param>
+    ''' <param name="con">a connection to the sqlite database</param>
+    ''' <param name="tableName">
+    ''' the data table name
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("load")>
