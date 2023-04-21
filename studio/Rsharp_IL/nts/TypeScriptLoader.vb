@@ -55,7 +55,6 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
-Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Polyglot
@@ -63,7 +62,6 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -75,6 +73,10 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
             Yield "js"
         End Get
     End Property
+
+    Sub New()
+        Call Internal.invoke.pushEnvir(GetType(jsstd.system))
+    End Sub
 
     Public Overrides Function ParseScript(scriptfile As String, env As Environment) As [Variant](Of Message, Program)
         Dim Rscript As Rscript = Rscript.AutoHandleScript(scriptfile)
@@ -120,27 +122,21 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
     End Function
 
     Private Sub setup_jsEnv(env As GlobalEnvironment)
-        Dim console As New list With {.slots = New Dictionary(Of String, Object)}
-        Dim JSON As New list With {.slots = New Dictionary(Of String, Object)}
-        Dim Math As New list With {.slots = New Dictionary(Of String, Object)}
-
-        Dim stdlib As Type = GetType(jsstd.console)
-        Dim jsonlib As Type = GetType(jsstd.JSON)
-        Dim mathlib As Type = GetType(Invokes.math)
-        Dim mathjslib As Type = GetType(jsstd.Math)
-
-        For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(stdlib)
-            Call console.add(func.Name, New RMethodInfo(func))
-        Next
-        For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(jsonlib)
-            Call JSON.add(func.Name, New RMethodInfo(func))
-        Next
-        For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(mathlib).JoinIterates(ImportsPackage.GetAllApi(mathjslib))
-            Call Math.add(func.Name, New RMethodInfo(func))
-        Next
-
-        Call env.Push("Math", mathlib, [readonly]:=True, TypeCodes.list)
-        Call env.Push("console", console, [readonly]:=True, TypeCodes.list)
-        Call env.Push("JSON", JSON, [readonly]:=True, TypeCodes.list)
+        Call env.Push("localStorage", hook_jsEnv(GetType(jsstd.localStorage)), [readonly]:=True, TypeCodes.list)
+        Call env.Push("Math", hook_jsEnv(GetType(Invokes.math), GetType(jsstd.Math)), [readonly]:=True, TypeCodes.list)
+        Call env.Push("console", hook_jsEnv(GetType(jsstd.console)), [readonly]:=True, TypeCodes.list)
+        Call env.Push("JSON", hook_jsEnv(GetType(jsstd.JSON)), [readonly]:=True, TypeCodes.list)
     End Sub
+
+    Public Shared Function hook_jsEnv(ParamArray libs As Type()) As list
+        Dim env As New list With {.slots = New Dictionary(Of String, Object)}
+
+        For Each type As Type In libs
+            For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(type)
+                Call env.add(func.Name, New RMethodInfo(func))
+            Next
+        Next
+
+        Return env
+    End Function
 End Class
