@@ -69,14 +69,23 @@ Module sqlite
 
     <ExportAPI("open")>
     <RApiReturn(GetType(Sqlite3Database))>
-    Public Function open(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
+    Public Function open(<RRawVectorArgument> file As Object,
+                         Optional blobAsBase64 As Boolean = True,
+                         Optional env As Environment = Nothing) As Object
+
         Dim con = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
+        Dim configs As New Sqlite3Settings With {
+            .blobAsBase64 = blobAsBase64
+        }
 
         If con Like GetType(Message) Then
             Return con.TryCast(Of Message)
         End If
 
-        Return New Sqlite3Database(con.TryCast(Of Stream))
+        Return New Sqlite3Database(
+            file:=con.TryCast(Of Stream),
+            settings:=configs
+        )
     End Function
 
     ''' <summary>
@@ -117,7 +126,9 @@ Module sqlite
         Dim rawRef As Sqlite3Table = con.GetTable(tableName)
         Dim rows As Sqlite3Row() = rawRef.EnumerateRows.ToArray
         Dim schema As Schema = rawRef.SchemaDefinition.ParseSchema
-        Dim colnames As String() = schema.columns.Select(Function(c) c.Name).ToArray
+        Dim colnames As String() = schema.columns _
+            .Select(Function(c) c.Name) _
+            .ToArray
         Dim table As New dataframe With {
             .columns = New Dictionary(Of String, Array)
         }
