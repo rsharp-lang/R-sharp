@@ -61,6 +61,8 @@ Imports SMRUCC.Rsharp.Development.Polyglot
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -119,8 +121,11 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
     Private Sub setup_jsEnv(env As GlobalEnvironment)
         Dim console As New list With {.slots = New Dictionary(Of String, Object)}
         Dim JSON As New list With {.slots = New Dictionary(Of String, Object)}
+        Dim Math As New list With {.slots = New Dictionary(Of String, Object)}
+
         Dim stdlib As Type = GetType(jsstd.console)
         Dim jsonlib As Type = GetType(jsstd.JSON)
+        Dim mathlib As Type = GetType(Invokes.math)
 
         For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(stdlib)
             Call console.add(func.Name, New RMethodInfo(func))
@@ -128,7 +133,11 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
         For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(jsonlib)
             Call JSON.add(func.Name, New RMethodInfo(func))
         Next
+        For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(mathlib)
+            Call Math.add(func.Name, New RMethodInfo(func))
+        Next
 
+        Call env.Push("Math", mathlib, [readonly]:=True, TypeCodes.list)
         Call env.Push("console", console, [readonly]:=True, TypeCodes.list)
         Call env.Push("JSON", JSON, [readonly]:=True, TypeCodes.list)
     End Sub

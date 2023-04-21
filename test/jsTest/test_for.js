@@ -14,3 +14,4 @@ var f = v1 * 5
 console.log(v1);
 console.log(f);
 console.log(f / 2.3257);
+console.log(Math.exp(f+1));
