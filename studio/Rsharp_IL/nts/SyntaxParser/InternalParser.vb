@@ -225,9 +225,12 @@ Public Module InternalParser
             Dim value As SyntaxResult
             Dim type As String
 
-            If tokens(2) Like GetType(Token) AndAlso tokens(2).TryCast(Of Token) = (TokenType.operator, "=") Then
+            If tokens(2).IsToken(TokenType.operator, "=") OrElse tokens(2).IsToken(TokenType.keyword, {"in", "of"}) Then
                 '   0 1 2 ...
                 ' var x = xxx
+                ' let x in ...  for loop
+                ' let x of ...  for loop
+                '
                 value = tokens.Skip(3).ToArray.ParseValueExpression(opts)
                 type = "any"
             Else

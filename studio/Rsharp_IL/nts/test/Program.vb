@@ -10,7 +10,8 @@ Module Program
         ' Dim script4 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\test4.js", GlobalEnvironment.defaultEmpty)
         ' Dim script5 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\test5.js", GlobalEnvironment.defaultEmpty)
         ' Dim script6 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\test6.js", GlobalEnvironment.defaultEmpty)
-        Dim script7 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\run_test.js", GlobalEnvironment.defaultEmpty)
+        ' Dim script7 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\run_test.js", GlobalEnvironment.defaultEmpty)
+        Dim script8 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\test_for.js", GlobalEnvironment.defaultEmpty)
 
         Console.WriteLine("Hello World!")
     End Sub

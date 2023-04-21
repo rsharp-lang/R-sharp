@@ -183,7 +183,11 @@ Public Class SyntaxTree
                         ElseIf leftToken Like GetType(Token) Then
                             Dim tl As Token = leftToken.TryCast(Of Token)
 
-                            If tl = (TokenType.operator, "=") OrElse tl = (TokenType.open, "(") OrElse tl.name = TokenType.sequence Then
+                            If tl = (TokenType.operator, "=") OrElse
+                                tl = (TokenType.open, "(") OrElse
+                                tl.name = TokenType.sequence OrElse
+                                tl = (TokenType.keyword, {"of", "in"}) Then
+
                                 ' create new symbol with initial value
                                 Dim index = Traceback(buffer, {TokenType.keyword})
 

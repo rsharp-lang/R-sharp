@@ -34,6 +34,17 @@ Public Class SyntaxToken
         Return TryCast(value, T)
     End Function
 
+    Public Function IsToken(token As TokenType, text As String()) As Boolean
+        If Not TypeOf value Is Token Then
+            Return False
+        End If
+        If DirectCast(value, Token).name <> token Then
+            Return False
+        End If
+
+        Return text.Any(Function(si) si = DirectCast(value, Token).text)
+    End Function
+
     Public Function IsToken(token As TokenType, Optional text As String = Nothing) As Boolean
         If Not TypeOf value Is Token Then
             Return False
