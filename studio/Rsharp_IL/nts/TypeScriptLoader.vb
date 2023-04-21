@@ -55,6 +55,7 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Polyglot
@@ -126,6 +127,7 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
         Dim stdlib As Type = GetType(jsstd.console)
         Dim jsonlib As Type = GetType(jsstd.JSON)
         Dim mathlib As Type = GetType(Invokes.math)
+        Dim mathjslib As Type = GetType(jsstd.Math)
 
         For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(stdlib)
             Call console.add(func.Name, New RMethodInfo(func))
@@ -133,7 +135,7 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
         For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(jsonlib)
             Call JSON.add(func.Name, New RMethodInfo(func))
         Next
-        For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(mathlib)
+        For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(mathlib).JoinIterates(ImportsPackage.GetAllApi(mathjslib))
             Call Math.add(func.Name, New RMethodInfo(func))
         Next
 
