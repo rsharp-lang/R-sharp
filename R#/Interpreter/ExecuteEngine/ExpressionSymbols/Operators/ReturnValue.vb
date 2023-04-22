@@ -61,6 +61,9 @@ Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
+    ''' <summary>
+    ''' returns the value from the function stack and break the executation loop of the function
+    ''' </summary>
     Public Class ReturnValue : Inherits Expression
 
         Friend ReadOnly value As Expression
@@ -87,6 +90,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Get
         End Property
 
+        ''' <summary>
+        ''' create a new function return expression
+        ''' </summary>
+        ''' <param name="value"></param>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Sub New(value As Expression)

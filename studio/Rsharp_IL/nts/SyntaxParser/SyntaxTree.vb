@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Dynamic
 Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
@@ -155,12 +156,12 @@ Public Class SyntaxTree
                                 buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
                                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                                 Reindex(buffer)
-                            ElseIf lefttoken.TryCast(Of Token) = (TokenType.open, "[") Then
+                            ElseIf leftToken.TryCast(Of Token) = (TokenType.open, "[") Then
                                 ' json array [{...}]
                                 buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
                                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                                 Reindex(buffer)
-                            ElseIf lefttoken.TryCast(Of Token) = (TokenType.open, "(") Then
+                            ElseIf leftToken.TryCast(Of Token) = (TokenType.open, "(") Then
                                 buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
                                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                                 Reindex(buffer)
@@ -276,8 +277,21 @@ Public Class SyntaxTree
                     End If
                 Else
                     If t.name = TokenType.newLine Then
+                        Dim index = Traceback(buffer, {TokenType.comma, TokenType.open})
+                        Dim range = buffer.Skip(index).Take(buffer.Count - index - 1).ToArray
+                        Dim exp As SyntaxResult = range.GetExpression(fromComma:=True, opts)
+
                         ' remove current newline token
-                        buffer.Pop()
+                        Call buffer.Pop()
+
+                        If exp Is Nothing OrElse exp.isException OrElse exp.expression Is Nothing Then
+                            Continue Do
+                        End If
+
+                        buffer.RemoveRange(index, range.Length)
+                        buffer.Insert(index, New SyntaxToken(-1, exp.expression))
+                        buffer.Insert(index + 1, New SyntaxToken(-1, New Token(TokenType.terminator, ";")))
+                        Reindex(buffer)
                     End If
                 End If
             End If

@@ -150,6 +150,8 @@ Public Module InternalParser
     Public Function GetExpression(tokens As SyntaxToken(), fromComma As Boolean, opts As SyntaxBuilderOptions) As SyntaxResult
         If tokens.IsNullOrEmpty Then
             Return Nothing
+        ElseIf tokens.Last.IsToken(TokenType.terminator) Then
+            tokens = tokens.Take(tokens.Length - 1).ToArray
         End If
         If fromComma Then
             If tokens.First Like GetType(Token) Then
@@ -172,6 +174,10 @@ Public Module InternalParser
                         Return New SyntaxResult(New SyntaxError())
                     End If
                 End If
+            ElseIf tokens.Any(Function(t) t.IsToken(TokenType.terminator)) Then
+                ' is multiple line closure expression
+                ' due to the reason of terminator symbol inside the expression tokens
+                Return tokens.ParseClosure(opts)
             End If
 
             Return tokens.ParseValueExpression(opts)
@@ -274,6 +280,14 @@ Public Module InternalParser
             End If
         ElseIf keyword = "function" Then
             Return tokens.ParseFunctionValue(opts)
+        ElseIf keyword = "return" Then
+            Dim exp = tokens.Skip(1).ToArray.ParseValueExpression(opts)
+
+            If exp.isException Then
+                Return exp
+            Else
+                Return New ReturnValue(exp.expression)
+            End If
         End If
     End Function
 
@@ -281,6 +295,8 @@ Public Module InternalParser
     Private Function ParseValueExpression(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
         If tokens.IsNullOrEmpty Then
             Return New SyntaxResult(Literal.NULL)
+        ElseIf tokens.Length = 1 AndAlso tokens(Scan0) Like GetType(Expression) Then
+            Return New SyntaxResult(DirectCast(tokens(0).value, Expression))
         ElseIf tokens.Length = 3 Then
             Dim test1 = tokens(0) Like GetType(IfBranch)
             Dim test2 = tokens(1).IsToken(TokenType.keyword, "else")
@@ -300,14 +316,19 @@ Public Module InternalParser
             Return tokens.ParseKeywordExpression(tokens(0).TryCast(Of Token).text, opts)
         End If
 
+        Return tokens.ParseBinaryTree(opts)
+    End Function
+
+    <Extension>
+    Private Function ParseBinaryTree(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
         Dim blocks = tokens _
-            .Split(
-                delimiter:=Function(t)
-                               Return t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.operator
-                           End Function,
-                deliPosition:=DelimiterLocation.Individual
-            ) _
-            .ToArray
+          .Split(
+              delimiter:=Function(t)
+                             Return t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.operator
+                         End Function,
+              deliPosition:=DelimiterLocation.Individual
+          ) _
+          .ToArray
         Dim parse As SyntaxToken() = New SyntaxToken(blocks.Length - 1) {}
         Dim syntax As SyntaxResult
 
