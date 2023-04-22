@@ -63,6 +63,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Runtime
@@ -167,6 +168,38 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Property
 
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
+
+        ''' <summary>
+        ''' create new symbol with a specific initial value
+        ''' </summary>
+        ''' <param name="assign"></param>
+        ''' <param name="stack"></param>
+        Sub New(assign As ValueAssignExpression, stack As StackFrame)
+            Call Me.New(
+                names:=assign.targetSymbols _
+                    .Select(Function(xi) ValueAssignExpression.GetSymbol(xi)) _
+                    .ToArray,
+                value:=assign.value,
+                type:=assign.value.type,
+                [readonly]:=False,
+                stackFrame:=stack
+            )
+        End Sub
+
+        ''' <summary>
+        ''' create new symbol without initial value
+        ''' </summary>
+        ''' <param name="symbol"></param>
+        ''' <param name="stack"></param>
+        Sub New(symbol As SymbolReference, stack As StackFrame)
+            Call Me.New(
+                names:={symbol.symbol},
+                value:=Nothing,
+                type:=TypeCodes.generic,
+                [readonly]:=False,
+                stackFrame:=stack
+            )
+        End Sub
 
         Sub New(names$(), value As Expression, type As TypeCodes, [readonly] As Boolean, stackFrame As StackFrame)
             Me.m_names = names.ToArray

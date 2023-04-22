@@ -122,21 +122,51 @@ Public Module InternalParser
 
     <Extension>
     Private Function ParseFunctionValue(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
-        Dim body As SyntaxToken = tokens(tokens.Length - 2)
-        Dim paramTokens As SyntaxToken() = tokens.Skip(1).Take(tokens.Length - 1 - 3).ToArray
-        Dim stack As StackFrame = opts.GetStackTrace(tokens(Scan0).TryCast(Of Token))
+        Dim stack As StackFrame = opts.GetStackTrace(tokens(0).TryCast(Of Token))
 
-        paramTokens = paramTokens _
-            .Skip(1) _
-            .Take(paramTokens.Length - 2) _
-            .ToArray
+        If (tokens(1) Like GetType(FunctionInvoke)) Then
+            Dim funcDef As FunctionInvoke = tokens(1).TryCast(Of Expression)
+            Dim body = tokens.Skip(2).ToArray.GetExpression(fromComma:=False, opts)
 
-        Return New DeclareNewFunction(
-            funcName:=$"<${App.GetNextUniqueName("anonymous_")}>",
-            parameters:=paramTokens.GetParameters(opts).ToArray,
-            body:=body.TryCast(Of ClosureExpression),
-            stackframe:=stack
-        )
+            If body.isException Then
+                Return body
+            End If
+
+            Dim paramTokens = funcDef.parameters _
+                .Select(Function(p)
+                            If TypeOf p Is SymbolReference Then
+                                Return New DeclareNewSymbol(DirectCast(p, SymbolReference), stack)
+                            ElseIf TypeOf p Is ValueAssignExpression Then
+                                Return New DeclareNewSymbol(DirectCast(p, ValueAssignExpression), stack)
+                            Else
+                                Throw New NotImplementedException
+                            End If
+                        End Function) _
+                .ToArray
+            Dim name = ValueAssignExpression.GetSymbol(funcDef.funcName)
+
+            Return New DeclareNewFunction(
+                funcName:=name,
+                parameters:=paramTokens,
+                body:=body.expression,
+                stackframe:=stack
+            )
+        Else
+            Dim body As SyntaxToken = tokens(tokens.Length - 2)
+            Dim paramTokens As SyntaxToken() = tokens.Skip(1).Take(tokens.Length - 1 - 3).ToArray
+
+            paramTokens = paramTokens _
+                .Skip(1) _
+                .Take(paramTokens.Length - 2) _
+                .ToArray
+
+            Return New DeclareNewFunction(
+                funcName:=$"<${App.GetNextUniqueName("anonymous_")}>",
+                parameters:=paramTokens.GetParameters(opts).ToArray,
+                body:=body.TryCast(Of ClosureExpression),
+                stackframe:=stack
+            )
+        End If
     End Function
 
     ''' <summary>
