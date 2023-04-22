@@ -122,7 +122,8 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
     End Function
 
     Public Shared Sub setup_jsEnv(env As GlobalEnvironment)
-        Call env.Push("localStorage", hook_jsEnv(GetType(jsstd.localStorage)), [readonly]:=True, TypeCodes.list)
+        Call env.Push("localStorage", hook_jsEnv(GetType(jsstd.isolationFs.localStorage)), [readonly]:=True, TypeCodes.list)
+        Call env.Push("sessionStorage", hook_jsEnv(GetType(jsstd.isolationFs.sessionStorage)), [readonly]:=True, TypeCodes.list)
         Call env.Push("Math", hook_jsEnv(GetType(Invokes.math), GetType(jsstd.Math)), [readonly]:=True, TypeCodes.list)
         Call env.Push("console", hook_jsEnv(GetType(jsstd.console)), [readonly]:=True, TypeCodes.list)
         Call env.Push("JSON", hook_jsEnv(GetType(jsstd.JSON)), [readonly]:=True, TypeCodes.list)

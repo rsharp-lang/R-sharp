@@ -4,34 +4,37 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 
-Namespace jsstd
+Namespace jsstd.isolationFs
 
     <Package("localStorage")>
     Public Module localStorage
 
-        ReadOnly session_storage As String
+        ReadOnly fs As Storage
 
         Sub New()
-            session_storage = TempFileSystem.GetAppSysTempFile("_session", sessionID:=App.PID.ToHexString, prefix:="localStorage_")
+            fs = New Storage(TempFileSystem.TempDir & "/js_env_localStorage/")
+            App.JoinVariable("js.localStorage", fs.ToString)
         End Sub
+
+        <ExportAPI("clear")>
+        Public Function clear() As Object
+            Return fs.clear
+        End Function
+
+        <ExportAPI("removeItem")>
+        Public Function removeItem(keyname As String) As Object
+            Return fs.removeItem(keyname)
+        End Function
 
         <ExportAPI("setItem")>
         Public Function setItem(key As String, <RRawVectorArgument> value As Object,
                                 Optional env As Environment = Nothing) As Object
-
-            Dim fileName As String = $"{session_storage}/{key.NormalizePathString(False)}.json"
-            Dim json As String = jsonlite.toJSON(value, env)
-
-            Return json.SaveTo(fileName)
+            Return fs.setItem(key, value, env)
         End Function
 
         <ExportAPI("getItem")>
         Public Function getItem(key As String, Optional env As Environment = Nothing) As Object
-            Dim fileName As String = $"{session_storage}/{key.NormalizePathString(False)}.json"
-            Dim json As String = fileName.ReadAllText
-            Dim obj = jsstd.JSON.parse(json, env)
-
-            Return obj
+            Return fs.getItem(key, env)
         End Function
     End Module
 End Namespace
