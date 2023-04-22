@@ -74,7 +74,7 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
         End Get
     End Property
 
-    Sub New()
+    Shared Sub New()
         Call Internal.invoke.pushEnvir(GetType(jsstd.system))
     End Sub
 
@@ -121,7 +121,7 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
         End If
     End Function
 
-    Private Sub setup_jsEnv(env As GlobalEnvironment)
+    Public Shared Sub setup_jsEnv(env As GlobalEnvironment)
         Call env.Push("localStorage", hook_jsEnv(GetType(jsstd.localStorage)), [readonly]:=True, TypeCodes.list)
         Call env.Push("Math", hook_jsEnv(GetType(Invokes.math), GetType(jsstd.Math)), [readonly]:=True, TypeCodes.list)
         Call env.Push("console", hook_jsEnv(GetType(jsstd.console)), [readonly]:=True, TypeCodes.list)
