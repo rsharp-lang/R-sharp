@@ -4,4 +4,4 @@ const run = function(x) {
 }
 
 console.log("test vector and function declares")
-console.log(run([2,34,568,623,15,67,7,5,5]))
+console.log(run([2.366,34,568,623,15,67,7,5,5.3256]))
