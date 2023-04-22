@@ -67,6 +67,11 @@ Public Module InternalParser
         Dim lines = tokens _
             .Split(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.terminator) _
             .ToArray
+
+        If lines.Length = 1 AndAlso lines(0).Length = 1 AndAlso lines(0)(0) Like GetType(ClosureExpression) Then
+            Return New SyntaxResult(lines(0)(0).TryCast(Of ClosureExpression))
+        End If
+
         Dim exps As Expression() = New Expression(lines.Length - 1) {}
         Dim syntax As SyntaxResult
 
