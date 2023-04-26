@@ -209,7 +209,7 @@ Module stringr
     End Function
 
     <ExportAPI("multiple_text_alignment")>
-    <RApiReturn("cost", "alignments")>
+    <RApiReturn("cost", "alignments", "motif", "score")>
     Public Function multipleTextAlignment(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
         Dim centerStar As New CenterStar(CLRVector.asCharacter(x))
         Dim alignments As String() = Nothing
@@ -220,6 +220,33 @@ Module stringr
                 {"alignments", alignments}
             }
         }
+        Dim var As Double() = New Double(alignments(Scan0).Length - 1) {}
+        Dim motif As Char() = New Char(var.Length - 1) {}
+
+        For i As Integer = 0 To var.Length - 1
+            Dim index As Integer = i
+            Dim c As Char() = alignments.Select(Function(si) si(index)).ToArray
+            Dim cgroup = c _
+                .GroupBy(Function(ci) ci) _
+                .OrderByDescending(Function(a) a.Count) _
+                .ToArray
+
+            motif(i) = cgroup(0).Key
+
+            If cgroup.Length = 1 Then
+                ' is conserved
+                If motif(i) = "-"c Then
+                    var(i) = 0
+                Else
+                    var(i) = Double.MaxValue
+                End If
+            Else
+                var(i) = cgroup(0).Count / c.Length
+            End If
+        Next
+
+        Call output.add("score", var)
+        Call output.add("motif", New String(motif))
 
         Return output
     End Function
@@ -227,7 +254,7 @@ Module stringr
     Private Structure CharCompare : Implements IScore(Of Char)
 
         Public Function GetSimilarityScore(a As Char, b As Char) As Double Implements IScore(Of Char).GetSimilarityScore
-            If a = b Then
+            If Char.ToLower(a) = Char.ToLower(b) Then
                 Return 0
             Else
                 Return 1
