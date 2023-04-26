@@ -1,58 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::6c1f297005e015d23afc46f31f575057, D:/GCModeller/src/R-sharp/Library/base//utils/stringr.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 145
-    '    Code Lines: 84
-    ' Comment Lines: 41
-    '   Blank Lines: 20
-    '     File Size: 5.30 KB
+' Summaries:
 
 
-    ' Module stringr
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asciiString, createRObj, fromXML, Levenshtein, unescapeRRawstring
-    '               unescapeRUnicode
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 145
+'    Code Lines: 84
+' Comment Lines: 41
+'   Blank Lines: 20
+'     File Size: 5.30 KB
+
+
+' Module stringr
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asciiString, createRObj, fromXML, Levenshtein, unescapeRRawstring
+'               unescapeRUnicode
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Algorithm.DynamicProgramming
 Imports Microsoft.VisualBasic.ComponentModel.Algorithm.DynamicProgramming.Levenshtein
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.xml
@@ -61,6 +62,8 @@ Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports RHtml = SMRUCC.Rsharp.Runtime.Internal.htmlPrinter
 Imports Rlang = Microsoft.VisualBasic.My.RlangInterop
 
@@ -194,5 +197,13 @@ Module stringr
                     End Function) _
             .Where(Function(c) Not c = ASCII.NUL) _
             .CharString
+    End Function
+
+    <ExportAPI("shortest_common_superstring")>
+    Public Function shortest_common_superstring(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Dim strs As String() = CLRVector.asCharacter(x)
+        Dim scs_str = SCS.ShortestCommonSuperString(strs)
+
+        Return scs_str
     End Function
 End Module
