@@ -231,8 +231,6 @@ Module stringr
                 .OrderByDescending(Function(a) a.Count) _
                 .ToArray
 
-            motif(i) = cgroup(0).Key
-
             If cgroup.Length = 1 Then
                 ' is conserved
                 If motif(i) = "-"c Then
@@ -240,8 +238,16 @@ Module stringr
                 Else
                     var(i) = Double.MaxValue
                 End If
+
+                motif(i) = cgroup(0).Key
             Else
                 var(i) = cgroup(0).Count / c.Length
+
+                If var(0) > 0.85 Then
+                    motif(i) = cgroup(0).Key
+                Else
+                    motif(i) = "-"c
+                End If
             End If
         Next
 
