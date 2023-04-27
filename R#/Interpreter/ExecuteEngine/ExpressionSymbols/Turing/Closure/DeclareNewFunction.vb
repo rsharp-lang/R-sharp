@@ -401,12 +401,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Dim symbol As Symbol = envir.funcSymbols.TryGetValue(funcName)
 
             If symbol Is Nothing Then
-                envir.funcSymbols(funcName) = New Symbol(Me, TypeCodes.closure) With {
-                    .name = funcName,
-                    .[readonly] = False
+                envir.funcSymbols(funcName) = New Symbol(Me, TypeCodes.closure, is_readonly:=False) With {
+                    .name = funcName
                 }
             Else
-                symbol.SetValue(Me, envir)
+                symbol.setValue(Me, envir)
             End If
 
             ' initialize of the internal closure environment

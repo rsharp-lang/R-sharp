@@ -513,12 +513,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End If
 
             If isByRef Then
-                Return target.SetValue(value, envir)
+                Return target.setValue(value, envir)
             Else
                 If Not value Is Nothing AndAlso value.GetType.IsInheritsFrom(GetType(Array)) Then
-                    Return target.SetValue(DirectCast(value, Array).Clone, envir)
+                    Return target.setValue(DirectCast(value, Array).Clone, envir)
                 Else
-                    Return target.SetValue(value, envir)
+                    Return target.setValue(value, envir)
                 End If
             End If
         End Function

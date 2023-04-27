@@ -107,7 +107,7 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
         If env.FindSymbol("!script") Is Nothing Then
             env.Push("!script", New vbObject(script), [readonly]:=False)
         Else
-            env.FindSymbol("!script").SetValue(New vbObject(script), env)
+            env.FindSymbol("!script").setValue(New vbObject(script), env)
         End If
 
         Dim program As Program = ParseScript(scriptfile, env)

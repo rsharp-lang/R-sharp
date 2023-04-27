@@ -70,7 +70,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
-                Return TypeCodes.ref
+                Return TypeCodes.generic
             End Get
         End Property
 

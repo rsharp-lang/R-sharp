@@ -202,7 +202,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     Dim types As TypeCodes() = .Select(Function(exp)
                                                            Dim t = exp.type
 
-                                                           If t = TypeCodes.NA OrElse t = TypeCodes.ref Then
+                                                           If t = TypeCodes.NA Then
                                                                t = TypeCodes.generic
                                                            End If
 

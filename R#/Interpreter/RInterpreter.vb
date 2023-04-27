@@ -467,7 +467,7 @@ Namespace Interpreter
             Dim result As Object = program.Execute(globalEnvir)
 
             ' set last variable in current environment
-            Call last.SetValue(result, globalEnvir)
+            Call last.setValue(result, globalEnvir)
 
             Return result
         End Function
@@ -594,7 +594,7 @@ Namespace Interpreter
             End If
 
             ' set last variable in current environment
-            Call Me.globalEnvir(lastVariableName).SetValue(result, globalEnvir)
+            Call Me.globalEnvir(lastVariableName).setValue(result, globalEnvir)
 
             Return result
         End Function

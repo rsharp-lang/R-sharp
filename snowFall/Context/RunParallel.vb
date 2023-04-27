@@ -347,7 +347,7 @@ Public Class RunParallel
                     Continue For
                 End If
 
-                Yield New NamedCollection(Of Object)(Nothing, {Message.SymbolNotFound(env, symbol.Name, TypeCodes.ref)})
+                Yield New NamedCollection(Of Object)(Nothing, {Message.SymbolNotFound(env, symbol.Name, TypeCodes.generic)})
             Else
                 value = argv.getByName(symbol.Name)
                 seq = Rset.getObjectSet(value, env)

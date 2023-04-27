@@ -106,7 +106,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub SetSymbol(name As String, value As Object)
-            Call environment.FindSymbol(name).SetValue(value, Me)
+            Call environment.FindSymbol(name).setValue(value, Me)
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
