@@ -305,7 +305,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     ' of the target function invoke context
                     Call DeclareNewSymbol.PushNames(var.names, value, var.type, False, envir, err:=err)
                 Catch ex As Exception
-                    Return Internal.debug.stop(New Exception($"create parameter symbol error: {var.m_names.FirstOrDefault}(value = {any.ToString(value)})!", ex), envir)
+                    Return Internal.debug.stop(New Exception($"unknown create parameter symbol error: {var.m_names.FirstOrDefault}(value = {any.ToString(value)})!", ex), envir)
                 End Try
 
                 If Not err Is Nothing Then
