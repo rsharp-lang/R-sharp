@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::9f105552de35f8bb48b12a41a88a875d, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/Closure/DeclareNewFunction.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 371
-    '    Code Lines: 205
-    ' Comment Lines: 122
-    '   Blank Lines: 44
-    '     File Size: 16.31 KB
+' Summaries:
 
 
-    '     Class DeclareNewFunction
-    ' 
-    '         Properties: [Namespace], body, expressionName, funcName, parameters
-    '                     stackFrame, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: Evaluate, getArguments, getReturns, InitializeEnvironment, (+2 Overloads) Invoke
-    '                   MissingParameters, ToString
-    ' 
-    '         Sub: SetSymbol
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 371
+'    Code Lines: 205
+' Comment Lines: 122
+'   Blank Lines: 44
+'     File Size: 16.31 KB
+
+
+'     Class DeclareNewFunction
+' 
+'         Properties: [Namespace], body, expressionName, funcName, parameters
+'                     stackFrame, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: Evaluate, getArguments, getReturns, InitializeEnvironment, (+2 Overloads) Invoke
+'                   MissingParameters, ToString
+' 
+'         Sub: SetSymbol
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -72,6 +72,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -299,9 +300,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 'Else
                 Dim err As Message = Nothing
 
-                ' add parameter symbol into the environment context
-                ' of the target function invoke context
-                Call DeclareNewSymbol.PushNames(var.names, value, var.type, False, envir, err:=err)
+                Try
+                    ' add parameter symbol into the environment context
+                    ' of the target function invoke context
+                    Call DeclareNewSymbol.PushNames(var.names, value, var.type, False, envir, err:=err)
+                Catch ex As Exception
+                    Return Internal.debug.stop(New Exception($"create parameter symbol error: {var.m_names.FirstOrDefault}(value = {any.ToString(value)})!", ex), envir)
+                End Try
 
                 If Not err Is Nothing Then
                     Return err
