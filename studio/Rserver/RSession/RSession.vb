@@ -54,6 +54,7 @@
 #End Region
 
 Imports System.Net.Sockets
+Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
@@ -86,6 +87,8 @@ Public Class RSession : Inherits HttpServer
             Case "inspect"
                 ' 获取指定uid对象的json数据用于前端查看
                 Call R.InspectObject(request.URL.getArgumentVal("guid"), p.openResponseStream)
+            Case Else
+                Call p.writeFailure(500, "Method is not implemented!")
 
         End Select
     End Sub
@@ -99,13 +102,17 @@ Public Class RSession : Inherits HttpServer
                 Dim output As HttpResponse = p.openResponseStream
 
                 Call R.RunCode(script, output)
+            Case Else
+                Call p.writeFailure(500, "Method is not implemented!")
         End Select
     End Sub
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Overrides Sub handleOtherMethod(p As HttpProcessor)
         Call p.writeFailure(404, "method not found")
     End Sub
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Protected Overrides Function getHttpProcessor(client As TcpClient, bufferSize As Integer) As HttpProcessor
         Return New HttpProcessor(client, Me, bufferSize)
     End Function
