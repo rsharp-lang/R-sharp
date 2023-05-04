@@ -7,6 +7,10 @@
     "mzkit_debug": {
       "commandName": "Project",
       "commandLineArgs": "\"E:/mzkit/src/mzkit/rstudio/pipeline/Mummichog.R\" --biodeep_ssid \"docker-20230313152509-3c7f51c3e51f7ac233bce954cbbfabc9\" --raw \"F:/TEMP/mzkit_win32/10772/mz_peaklist72542j.txt\" --argv \"F:/TEMP/mzkit_win32/10772/arguments72542k.json\" --mz-peaks --save \"F:/TEMP/mzkit_win32/142a0000/Mummichog_72542l__save\" --SetDllDirectory E:/mzkit/dist/bin/Rstudio/host --debug"
+    },
+    "mzkit_desktop_debug": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=33361 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host"
     }
   }
 }
