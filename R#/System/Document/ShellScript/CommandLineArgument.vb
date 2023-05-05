@@ -74,9 +74,15 @@ Namespace Development.CommandLine
         End Property
 
         Public Function GetLiteralValue() As Object
+            Dim defaultValue As String = Me.defaultValue
+
             If defaultValue.StringEmpty Then
                 Return ""
-            ElseIf defaultValue.TextEquals("null") Then
+            Else
+                defaultValue = defaultValue.Trim(""""c)
+            End If
+
+            If defaultValue.TextEquals("null") Then
                 Return Nothing
             End If
 
