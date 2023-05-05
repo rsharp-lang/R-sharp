@@ -6,7 +6,8 @@ Public Class TsScanner : Inherits Scanner
 
     Shared ReadOnly tsKeywords As String() = {
         "if", "for", "let", "const", "super", "class", "var", "in", "of", "continue",
-        "module", "namespace", "function", "return", "typeof", "instanceof", "extends"
+        "module", "namespace", "function", "return", "typeof", "instanceof", "extends",
+        "import", "from"
     }
 
     Public Sub New(source As [Variant](Of String, CharPtr), Optional tokenStringMode As Boolean = False)
