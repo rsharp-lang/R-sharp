@@ -74,6 +74,12 @@ Namespace Development.CommandLine
         End Property
 
         Public Function GetLiteralValue() As Object
+            If defaultValue.StringEmpty Then
+                Return ""
+            ElseIf defaultValue.TextEquals("null") Then
+                Return Nothing
+            End If
+
             Select Case type
                 Case "integer" : Return CLRVector.asInteger(defaultValue)
                 Case "numeric", "double" : Return CLRVector.asNumeric(defaultValue)
