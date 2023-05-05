@@ -146,6 +146,16 @@ Namespace Interpreter
         End Property
 
         ''' <summary>
+        ''' get all symbols inside the global environment
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property globalSymbols As Symbol()
+            Get
+                Return globalEnvir.ToArray
+            End Get
+        End Property
+
+        ''' <summary>
         ''' 直接无参数调用这个构造函数，则会使用默认的配置文件创建R#脚本解释器引擎实例
         ''' </summary>
         ''' <param name="envirConf"></param>
