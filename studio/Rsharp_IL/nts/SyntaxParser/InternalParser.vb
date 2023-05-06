@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -169,6 +170,77 @@ Public Module InternalParser
         End If
     End Function
 
+    <Extension>
+    Private Function GetCommaExpression(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
+        If tokens.First Like GetType(Token) Then
+            Dim tk As Token = tokens.First.TryCast(Of Token)
+
+            If tk.isKeyword("function") Then
+                If tokens.Last Like GetType(Token) AndAlso tokens.Last.TryCast(Of Token) = (TokenType.close, "}") Then
+                    Return tokens.ParseFunctionValue(opts)
+                End If
+            ElseIf tk.isKeyword("for") Then
+                Dim var = tokens(2).TryCast(Of DeclareNewSymbol)
+                Dim closure = tokens(5).TryCast(Of ClosureExpression)
+                Dim stacktrace = opts.GetStackTrace(tokens(0).TryCast(Of Token))
+                Dim loopBody As New DeclareNewFunction("for_loop", {New DeclareNewSymbol(var.m_names(0), stacktrace)}, closure, stacktrace)
+                Dim forloop As New ForLoop(var.m_names, var.value, loopBody, False, stacktrace)
+
+                Return New SyntaxResult(forloop)
+            ElseIf tk.isKeyword("import") Then
+                Dim mods = {tokens(1)}.ParseValueExpression(opts)
+                Dim pkg = {tokens(3)}.ParseValueExpression(opts)
+                Dim exp As New [Imports](ExpressionUtils.GetPackageModules(mods.expression), pkg.expression)
+
+                Return New SyntaxResult(exp)
+            ElseIf tk.name = TokenType.open Then
+                If Not tokens.Any(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.close) Then
+                    Return New SyntaxResult(New SyntaxError())
+                End If
+            End If
+        ElseIf tokens.Any(Function(t) t.IsToken(TokenType.terminator)) Then
+            ' is multiple line closure expression
+            ' due to the reason of terminator symbol inside the expression tokens
+            Return tokens.ParseClosure(opts)
+        End If
+
+        Return tokens.ParseValueExpression(opts)
+    End Function
+
+    <Extension>
+    Private Function GetStackExpression(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
+        Dim source As SyntaxToken() = tokens _
+            .Skip(1) _
+            .Take(tokens.Length - 2) _
+            .ToArray
+
+        If source.Length = 1 AndAlso Not source(Scan0) Like GetType(Token) Then
+            Return source(Scan0).TryCast(Of Expression)
+        ElseIf source.Length = 0 Then
+            Return New ExpressionCollection With {
+                .expressions = {}
+            }
+        End If
+
+        If tokens(Scan0) Like GetType(Token) AndAlso tokens(Scan0).TryCast(Of Token).text = "{" Then
+            If (Not tokens.Any(Function(t) t.isTerminator)) AndAlso tokens.Any(Function(t) t.isComma) AndAlso tokens.Any(Function(t) t.isSequenceSymbol) Then
+                ' is json literal
+                Return source.ParseJSONliteral(opts)
+            ElseIf tokens.Any(Function(t) t.isSequenceSymbol) Then
+                ' is json literal
+                ' {x:b}
+                Return source.ParseJSONliteral(opts)
+            End If
+
+            ' closure
+            Return source.ParseClosure(opts)
+        ElseIf source(Scan0).IsToken(TokenType.keyword) Then
+            Return source.ParseKeywordExpression(source(Scan0).TryCast(Of Token).text, opts)
+        Else
+            Return source.ParseCommaList(opts)
+        End If
+    End Function
+
     ''' <summary>
     ''' 
     ''' </summary>
@@ -189,64 +261,9 @@ Public Module InternalParser
             tokens = tokens.Take(tokens.Length - 1).ToArray
         End If
         If fromComma Then
-            If tokens.First Like GetType(Token) Then
-                Dim tk As Token = tokens.First.TryCast(Of Token)
-
-                If tk.isKeyword("function") Then
-                    If tokens.Last Like GetType(Token) AndAlso tokens.Last.TryCast(Of Token) = (TokenType.close, "}") Then
-                        Return tokens.ParseFunctionValue(opts)
-                    End If
-                ElseIf tk.isKeyword("for") Then
-                    Dim var = tokens(2).TryCast(Of DeclareNewSymbol)
-                    Dim closure = tokens(5).TryCast(Of ClosureExpression)
-                    Dim stacktrace = opts.GetStackTrace(tokens(0).TryCast(Of Token))
-                    Dim loopBody As New DeclareNewFunction("for_loop", {New DeclareNewSymbol(var.m_names(0), stacktrace)}, closure, stacktrace)
-                    Dim forloop As New ForLoop(var.m_names, var.value, loopBody, False, stacktrace)
-
-                    Return New SyntaxResult(forloop)
-                ElseIf tk.name = TokenType.open Then
-                    If Not tokens.Any(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.close) Then
-                        Return New SyntaxResult(New SyntaxError())
-                    End If
-                End If
-            ElseIf tokens.Any(Function(t) t.IsToken(TokenType.terminator)) Then
-                ' is multiple line closure expression
-                ' due to the reason of terminator symbol inside the expression tokens
-                Return tokens.ParseClosure(opts)
-            End If
-
-            Return tokens.ParseValueExpression(opts)
+            Return tokens.GetCommaExpression(opts)
         Else
-            Dim source As SyntaxToken() = tokens _
-                .Skip(1) _
-                .Take(tokens.Length - 2) _
-                .ToArray
-
-            If source.Length = 1 AndAlso Not source(Scan0) Like GetType(Token) Then
-                Return source(Scan0).TryCast(Of Expression)
-            ElseIf source.Length = 0 Then
-                Return New ExpressionCollection With {
-                    .expressions = {}
-                }
-            End If
-
-            If tokens(Scan0) Like GetType(Token) AndAlso tokens(Scan0).TryCast(Of Token).text = "{" Then
-                If (Not tokens.Any(Function(t) t.isTerminator)) AndAlso tokens.Any(Function(t) t.isComma) AndAlso tokens.Any(Function(t) t.isSequenceSymbol) Then
-                    ' is json literal
-                    Return source.ParseJSONliteral(opts)
-                ElseIf tokens.Any(Function(t) t.isSequenceSymbol) Then
-                    ' is json literal
-                    ' {x:b}
-                    Return source.ParseJSONliteral(opts)
-                End If
-
-                ' closure
-                Return source.ParseClosure(opts)
-            ElseIf source(Scan0).IsToken(TokenType.keyword) Then
-                Return source.ParseKeywordExpression(source(Scan0).TryCast(Of Token).text, opts)
-            Else
-                Return source.ParseCommaList(opts)
-            End If
+            Return tokens.GetStackExpression(opts)
         End If
     End Function
 
