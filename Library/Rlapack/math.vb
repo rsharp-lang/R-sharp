@@ -261,7 +261,7 @@ Module math
             Dim name As String = formula.parameterNames(Scan0)
             Dim ref As Symbol = names(name)
 
-            ref.SetValue(REnv.getFirst(y0.getByName(name)), env)
+            ref.setValue(REnv.getFirst(y0.getByName(name)), env)
             solve = Function() lambda(CDbl(ref.value))
             vector(++i) = New NonlinearVar(solve) With {
                 .Name = name,
@@ -272,7 +272,7 @@ Module math
         Dim df = Sub(dx#, ByRef dy As stdVec)
                      For Each x As NonlinearVar In vector
                          dy(x) = x.Evaluate()
-                         names(x.Name).SetValue(x.Value, env)
+                         names(x.Name).setValue(x.Value, env)
                      Next
                  End Sub
         Dim ODEs As New GenericODEs(vector, df)

@@ -208,7 +208,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             Call env.setStackInfo(oldStackFrame)
 
             If Not env.FindSymbol("!script") Is Nothing Then
-                env.FindSymbol("!script").SetValue(oldScript, env)
+                env.FindSymbol("!script").setValue(oldScript, env)
             End If
 
             Return Nothing

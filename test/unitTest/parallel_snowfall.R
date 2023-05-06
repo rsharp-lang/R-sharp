@@ -1,7 +1,11 @@
 imports "Parallel" from "snowFall";
 
-parallel(x = 1:10000, n_threads = 2, verbose = TRUE, debug = TRUE) {
+oks = parallel(x = 1:8, n_threads = 10, verbose = TRUE, debug = FALSE) {
 	print(x);
-	sleep(100);
-	pause();
+	sleep(6);
+	# pause();
+	"OK!"
 }
+
+print(oks);
+print(length(oks));

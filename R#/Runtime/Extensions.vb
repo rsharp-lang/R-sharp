@@ -223,6 +223,21 @@ Namespace Runtime
         End Function
 
         ''' <summary>
+        ''' get strict options value
+        ''' </summary>
+        ''' <param name="env">The runtime context</param>
+        ''' <param name="opt"></param>
+        ''' <returns></returns>
+        <Extension>
+        Public Function strictOption(env As Environment, Optional opt As Boolean? = Nothing) As Boolean
+            If opt Is Nothing Then
+                Return env.globalEnvironment.options.strict
+            Else
+                Return opt
+            End If
+        End Function
+
+        ''' <summary>
         ''' get verbose options value
         ''' </summary>
         ''' <param name="env">

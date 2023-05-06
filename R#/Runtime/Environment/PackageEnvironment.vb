@@ -98,9 +98,10 @@ Namespace Runtime
             For Each callable As RFunction In symbols
                 Dim symbol As New Symbol(callable) With {
                     .name = callable.name,
-                    .[readonly] = True,
                     .stacktrace = Me.stackTrace
                 }
+
+                Call symbol.setMutable([readonly]:=True)
 
                 Me.symbols(callable.name) = symbol
                 Me.globalEnvironment.funcSymbols(callable.name) = symbol

@@ -1,63 +1,63 @@
 ﻿#Region "Microsoft.VisualBasic::508ff8b1479a8d7af3dd212d4beac37a, D:/GCModeller/src/R-sharp/R#//Runtime/Environment/Environment.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 805
-    '    Code Lines: 413
-    ' Comment Lines: 293
-    '   Blank Lines: 99
-    '     File Size: 34.88 KB
+' Summaries:
 
 
-    '     Class Environment
-    ' 
-    '         Properties: funcSymbols, globalEnvironment, isGlobal, isLINQContext, last
-    '                     messages, parent, stackFrame, stackTrace
-    ' 
-    '         Constructor: (+5 Overloads) Sub New
-    ' 
-    '         Function: asRVector, AssignSymbol, EnumerateAllFunctions, EnumerateAllSymbols, Evaluate
-    '                   FindFunction, FindFunctionWithNamespaceRestrict, FindSymbol, GetAcceptorArguments, GetEnumerator
-    '                   GetSymbolsNames, GetValue, IEnumerable_GetEnumerator, Push, ToString
-    '                   WriteLineHandler
-    ' 
-    '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, PushEnvironmentContext
-    '              redirectError, redirectWarning, setStackInfo
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 805
+'    Code Lines: 413
+' Comment Lines: 293
+'   Blank Lines: 99
+'     File Size: 34.88 KB
+
+
+'     Class Environment
+' 
+'         Properties: funcSymbols, globalEnvironment, isGlobal, isLINQContext, last
+'                     messages, parent, stackFrame, stackTrace
+' 
+'         Constructor: (+5 Overloads) Sub New
+' 
+'         Function: asRVector, AssignSymbol, EnumerateAllFunctions, EnumerateAllSymbols, Evaluate
+'                   FindFunction, FindFunctionWithNamespaceRestrict, FindSymbol, GetAcceptorArguments, GetEnumerator
+'                   GetSymbolsNames, GetValue, IEnumerable_GetEnumerator, Push, ToString
+'                   WriteLineHandler
+' 
+'         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, PushEnvironmentContext
+'              redirectError, redirectWarning, setStackInfo
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -80,6 +80,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports anyObj = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime
 
@@ -129,6 +130,9 @@ Namespace Runtime
         ''' 主要是存储警告消息
         ''' </summary>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' A collection of the warning message
+        ''' </remarks>
         Public ReadOnly Property messages As New List(Of Message)
 
         ''' <summary>
@@ -546,7 +550,7 @@ Namespace Runtime
         ''' <returns></returns>
         Public Function AssignSymbol(name As String, value As Object, Optional [strict] As Boolean = False) As Object
             If symbols.ContainsKey(name) Then
-                Return symbols(name).SetValue(value, Me)
+                Return symbols(name).setValue(value, Me)
             ElseIf strict Then
                 Return Message.SymbolNotFound(Me, name, TypeCodes.generic)
             Else
@@ -578,26 +582,40 @@ Namespace Runtime
                          End Sub)
 
                 ' 只需要设置值就可以了
-                Return symbols(name).SetValue(value, Me)
+                Return symbols(name).setValue(value, Me)
 
             ElseIf (Not value Is Nothing) Then
-                value = asRVector(mode, value)
+                Try
+                    value = asRVector(mode, value)
+                Catch ex As Exception
+                    Dim msg As String = $"Cast data type error for symbol '{name}'(value={anyObj.ToString(value)})"
+
+                    If strictOption Then
+                        Return Internal.debug.stop(New Exception(msg, ex), Me)
+                    Else
+                        ' just do nothing for ignore the type cast error
+                        ' when run the script code in config mode: 
+                        ' strict = FALSE
+                        Call Me.AddMessage(msg)
+                    End If
+                End Try
             End If
 
             With New Symbol(mode) With {
                 .name = name,
                 .stacktrace = Me.stackTrace
             }
-                Call .SetValue(value, Me)
-
+                ' write value to the pool object that associated with current symbol object
+                Call .setValue(value, Me)
                 ' 只读开关应该在设置了初始值之后
                 ' 再进行设置，否则会无法设置初始值的
-                .[readonly] = [readonly]
+                Call .setMutable([readonly])
+                ' add new symbol into current runtime environment 
+                Call .DoCall(AddressOf symbols.Add)
 
                 If Not .constraintValid Then
-                    Return Internal.debug.stop(New Exception(String.Format(ConstraintInvalid, .typeCode, mode)), Me)
-                Else
-                    Call .DoCall(AddressOf symbols.Add)
+                    ' show warning message about data type mis-matched
+                    Call AddMessage(String.Format(ConstraintInvalid, .typeCode, mode))
                 End If
 
                 Return value
@@ -613,6 +631,9 @@ Namespace Runtime
         ''' </param>
         ''' <returns></returns>
         Friend Shared Function asRVector(type As TypeCodes, value As Object) As Object
+            If value Is Nothing Then
+                Return Nothing
+            End If
             If (TypeOf value Is list) OrElse (TypeOf value Is dataframe) Then
                 Return value
             End If
@@ -621,6 +642,8 @@ Namespace Runtime
                 ' 没有定义as type做类型约束的时候
                 ' 会需要通过值来推断
                 type = RType.TypeOf(value).mode
+            Else
+
             End If
 
             If vector.isVectorOf(value, type) Then

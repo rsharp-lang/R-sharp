@@ -78,11 +78,11 @@ Namespace Runtime.Components
         ''' 函数类型
         ''' </summary>
         [closure]
+        [formula] = 4
+
         ''' <summary>
-        ''' Object reference/pointer
+        ''' the runtime environment
         ''' </summary>
-        [ref]
-        [formula]
         environment
 
         ''' <summary>
