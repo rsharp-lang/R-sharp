@@ -118,6 +118,46 @@ Namespace Runtime.Internal.Invokes
     Public Module base
 
         ''' <summary>
+        ''' ##### commandArgs: Extract Command Line Arguments
+        ''' 
+        ''' Provides access to a copy of the command line arguments supplied when this R session was invoked.
+        ''' </summary>
+        ''' <param name="trailingOnly">
+        ''' logical. Should only arguments after --args be returned?
+        ''' </param>
+        ''' <returns>
+        ''' A character vector containing the name of the executable and the user-supplied command 
+        ''' line arguments. The first element is the name of the executable by which R was invoked. 
+        ''' The exact form of this element is platform dependent: it may be the fully qualified name,
+        ''' or simply the last component (or basename) of the application, or for an embedded R it 
+        ''' can be anything the programmer supplied.
+        ''' 
+        ''' if ``trailingOnly = TRUE``, a character vector Of those arguments (If any) supplied 
+        ''' after ``--args``.
+        ''' </returns>
+        ''' <remarks>
+        ''' These arguments are captured before the standard R command line processing takes place. 
+        ''' This means that they are the unmodified values. This is especially useful with the --args 
+        ''' command-line flag to R, as all of the command line after that flag is skipped.
+        ''' </remarks>
+        <ExportAPI("commandArgs")>
+        Public Function commandArgs(Optional trailingOnly As Boolean = False, Optional parse_args As Boolean = False) As Object
+            Dim args = App.CommandLine
+
+            If parse_args Then
+                Return New list With {
+                    .slots = New Dictionary(Of String, Object) From {
+                        {"command", args.Name},
+                        {"commandLine", App.Command},
+                        {"opts", New list With {.slots = args.ToArgumentVector.ToDictionary(Function(a) a.Name, Function(a) CObj(a.Value))}}
+                    }
+                }
+            Else
+                Return args.Tokens
+            End If
+        End Function
+
+        ''' <summary>
         ''' ## Range of Values
         ''' 
         ''' range returns a vector containing the minimum and maximum 
