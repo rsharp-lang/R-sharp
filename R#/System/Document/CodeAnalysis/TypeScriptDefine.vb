@@ -115,7 +115,7 @@ Namespace Development.CodeAnalysis
 
                         If Not pi.optVal Is Nothing Then
                             pdocs = pdocs _
-                                .JoinIterates({"", $"default value Is ``{pi.optVal}``."}) _
+                                .JoinIterates({"", $"+ default value Is ``{pi.optVal}``."}) _
                                 .ToArray
                         End If
 
@@ -127,6 +127,16 @@ Namespace Development.CodeAnalysis
                             Next
                         End If
                     Next
+
+                    Dim rdocs = docs.Returns.LineTokens
+
+                    If Not rdocs.IsNullOrEmpty Then
+                        Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* @return {rdocs(0)}")
+
+                        For Each line As String In rdocs.Skip(1)
+                            Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* {line}")
+                        Next
+                    End If
                 Else
                     If params.Any(Function(pi) Not pi.optVal Is Nothing) Then
                         For Each pi In params
@@ -139,7 +149,7 @@ Namespace Development.CodeAnalysis
 
                 Call ts.WriteLine($"{New String(" "c, level * 3)}*/")
 
-                Call ts.WriteLine($"{New String(" "c, level * 3)}function {tree.Name}({params.Select(Function(pi) pi.define).JoinBy(", ")}): any;")
+                Call ts.WriteLine($"{New String(" "c, level * 3)}function {tree.Name}({params.Select(Function(pi) pi.define).JoinBy(", ")}): {rfunc.GetUnionTypes.Select(Function(ti) RType.GetRSharpType(ti).MapTypeScriptType).JoinBy("|")};")
             Else
                 Call ts.WriteLine($"{New String(" "c, level * 3)}{prefix} {tree.Name.Replace("+", "_")} {{")
 
