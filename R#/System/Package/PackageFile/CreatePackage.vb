@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
@@ -284,6 +285,7 @@ Namespace Development.Package.File
 
             file.unixman = New List(Of String)
             file.vignettes = New List(Of String)
+            file.tsd = New Dictionary(Of String, String)
 
             If Not plugin.FileExists Then
                 Return Nothing
@@ -304,6 +306,7 @@ Namespace Development.Package.File
             Dim out As String
             Dim outputHtml As String
             Dim runtime As String = getRuntimeTags()
+            Dim pkgModList As New List(Of Package)
 
             Call Console.WriteLine($"       ==> build package for .NET runtime [{runtime}].")
 
@@ -341,6 +344,7 @@ Namespace Development.Package.File
                     out = $"{package_dir}/man/{dll.BaseName}/{pkg.namespace}"
                     outputHtml = $"{package_dir}/vignettes/{dll.BaseName}/{pkg.namespace}"
 
+                    Call pkgModList.Add(pkg)
                     Call Console.WriteLine($"         -> load: {pkg.info.Namespace}")
 
                     Try
@@ -352,6 +356,11 @@ Namespace Development.Package.File
 
                     End Try
                 Next
+            Next
+
+            ' generate the typescript definition header files
+            For Each group As IGrouping(Of String, Package) In pkgModList.GroupBy(Function(m) m.namespace)
+                Call file.tsd.Add(group.Key, TypeScriptDefine.ExtractModule(group.ToArray))
             Next
 
             If Not err Is Nothing Then
