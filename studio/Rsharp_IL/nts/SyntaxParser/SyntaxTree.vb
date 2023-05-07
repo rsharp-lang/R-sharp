@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -283,6 +284,10 @@ Public Class SyntaxTree
                         Call buffer.Pop()
 
                         If exp Is Nothing OrElse exp.isException OrElse exp.expression Is Nothing Then
+                            Continue Do
+                        ElseIf exp.expression.expressionName = ExpressionTypes.SequenceLiteral Then
+                            ' handling of the syntax parser error for a:b
+                            ' which is confused with the json literal in javascript
                             Continue Do
                         End If
 

@@ -9,4 +9,5 @@ var assem = stringr.shortest_common_superstring([
 	"CTGTGCAATTGCTGAGTACCGTAGGTAG"
 ])
 
+console.log(assem)
 console.table(assem)
