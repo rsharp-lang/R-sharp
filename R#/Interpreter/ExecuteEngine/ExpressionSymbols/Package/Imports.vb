@@ -1,76 +1,78 @@
 ﻿#Region "Microsoft.VisualBasic::30f8d1270605a16d9407c54b067aee96, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Package/Imports.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 313
-    '    Code Lines: 204
-    ' Comment Lines: 72
-    '   Blank Lines: 37
-    '     File Size: 12.97 KB
+' Summaries:
 
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Class [Imports]
-    ' 
-    '         Properties: expressionName, isImportsScript, library, packages, scriptSource
-    '                     type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsLibrary, importsPackages
-    '                   isImportsAllPackages, LoadLibrary, ToString
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 313
+'    Code Lines: 204
+' Comment Lines: 72
+'   Blank Lines: 37
+'     File Size: 12.97 KB
+
+
+'     Delegate Function
+' 
+' 
+'     Class [Imports]
+' 
+'         Properties: expressionName, isImportsScript, library, packages, scriptSource
+'                     type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsLibrary, importsPackages
+'                   isImportsAllPackages, LoadLibrary, ToString
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -96,6 +98,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
     ''' 
     ''' + ``source``函数要求脚本文件必须是一个正确的绝对路径或者相对路径
     ''' + ``imports``关键词则无此要求，因为imports关键词会自动进行脚本文件的搜索操作
+    ''' 
+    ''' 为了兼容javascript的调用，在导入模块成功的时候还会在全局环境中生成模块的变量
     ''' </remarks>
     Public Class [Imports] : Inherits Expression
 
@@ -176,6 +180,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             End If
         End Function
 
+        ''' <summary>
+        ''' ```js
+        ''' import "library-name"
+        ''' ```
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Function importsLibrary(env As Environment) As Object
             Dim files$() = CLRVector.asCharacter(library.Evaluate(env))
             Dim result As Object
@@ -215,7 +226,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Function
 
         ''' <summary>
-        ''' imports packages from dll file
+        ''' ```js
+        ''' import packages from "dll-file"
+        ''' ```
         ''' </summary>
         ''' <param name="env"></param>
         ''' <returns></returns>
@@ -328,6 +341,7 @@ load:       Return LoadLibrary(filepath, env, names)
         ''' <param name="names">a list of package module in target assembly file <paramref name="libDll"/></param>
         ''' <returns></returns>
         Public Shared Function LoadLibrary(libDll$, envir As Environment, names As Index(Of String)) As Object
+            ' test if it is imports all modules code
             Dim importsAll As Boolean = names.DoCall(AddressOf isImportsAllPackages)
             Dim packages As Dictionary(Of String, Package)
             Dim globalEnv As GlobalEnvironment = envir.globalEnvironment
@@ -336,6 +350,7 @@ load:       Return LoadLibrary(filepath, env, names)
                 Call base.print(libDll, , envir)
             End If
 
+            ' get packages modules
             packages = PackageLoader.ParsePackages(libDll) _
                 .Where(Function(pkg)
                            If importsAll Then
@@ -353,11 +368,13 @@ load:       Return LoadLibrary(filepath, env, names)
             If importsAll Then
                 For Each [namespace] As Package In packages.Values
                     Call ImportsPackage.ImportsStatic(globalEnv, [namespace].package)
+                    Call hook_jsEnv(globalEnv, [namespace].namespace, [namespace].package)
                 Next
             Else
                 For Each required In names.Objects
                     If packages.ContainsKey(required) Then
                         Call ImportsPackage.ImportsStatic(globalEnv, packages(required).package)
+                        Call hook_jsEnv(globalEnv, required, packages(required).package)
                     Else
                         Return Internal.debug.stop({
                             $"There is no package named '{required}' in given module!",
@@ -369,6 +386,45 @@ load:       Return LoadLibrary(filepath, env, names)
             End If
 
             Return Nothing
+        End Function
+
+        Const pkg_ref_libs = "$_pkg_ref@-<libs!!!!!>*"
+
+        Public Shared Sub hook_jsEnv(globalEnv As GlobalEnvironment, symbolName As String, ParamArray libs As Type())
+            Dim symbol As Symbol = globalEnv.FindSymbol(symbolName)
+
+            If symbol IsNot Nothing AndAlso
+                symbol.typeCode = TypeCodes.list AndAlso
+                DirectCast(symbol.value, list).hasName(pkg_ref_libs) Then
+
+                libs = DirectCast(DirectCast(symbol.value, list).getByName(pkg_ref_libs), Type()) _
+                    .JoinIterates(libs) _
+                    .Distinct _
+                    .ToArray
+            End If
+
+            Call globalEnv.Push(
+                name:=symbolName,
+                value:=[Imports].hook_jsEnv(libs),
+                [readonly]:=True,
+                mode:=TypeCodes.list
+            )
+        End Sub
+
+        Public Shared Function hook_jsEnv(ParamArray libs As Type()) As list
+            Dim env As New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {pkg_ref_libs, libs}
+                }
+            }
+
+            For Each type As Type In libs
+                For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(type)
+                    Call env.add(func.Name, New RMethodInfo(func))
+                Next
+            Next
+
+            Return env
         End Function
     End Class
 End Namespace

@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Polyglot
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
@@ -122,22 +123,10 @@ Public Class TypeScriptLoader : Inherits ScriptLoader
     End Function
 
     Public Shared Sub setup_jsEnv(env As GlobalEnvironment)
-        Call env.Push("localStorage", hook_jsEnv(GetType(jsstd.isolationFs.localStorage)), [readonly]:=True, TypeCodes.list)
-        Call env.Push("sessionStorage", hook_jsEnv(GetType(jsstd.isolationFs.sessionStorage)), [readonly]:=True, TypeCodes.list)
-        Call env.Push("Math", hook_jsEnv(GetType(Invokes.math), GetType(jsstd.Math)), [readonly]:=True, TypeCodes.list)
-        Call env.Push("console", hook_jsEnv(GetType(jsstd.console)), [readonly]:=True, TypeCodes.list)
-        Call env.Push("JSON", hook_jsEnv(GetType(jsstd.JSON)), [readonly]:=True, TypeCodes.list)
+        Call [Imports].hook_jsEnv(env, "localStorage", GetType(jsstd.isolationFs.localStorage))
+        Call [Imports].hook_jsEnv(env, "sessionStorage", GetType(jsstd.isolationFs.sessionStorage))
+        Call [Imports].hook_jsEnv(env, "Math", GetType(Invokes.math), GetType(jsstd.Math))
+        Call [Imports].hook_jsEnv(env, "console", GetType(jsstd.console))
+        Call [Imports].hook_jsEnv(env, "JSON", GetType(jsstd.JSON))
     End Sub
-
-    Public Shared Function hook_jsEnv(ParamArray libs As Type()) As list
-        Dim env As New list With {.slots = New Dictionary(Of String, Object)}
-
-        For Each type As Type In libs
-            For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(type)
-                Call env.add(func.Name, New RMethodInfo(func))
-            Next
-        Next
-
-        Return env
-    End Function
 End Class
