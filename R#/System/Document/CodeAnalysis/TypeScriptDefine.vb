@@ -3,10 +3,13 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataStructures.Tree
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports pkg = SMRUCC.Rsharp.Development.Package.Package
@@ -40,26 +43,97 @@ Namespace Development.CodeAnalysis
         ''' </param>
         ''' <param name="ts"></param>
         Public Sub ExtractModule(pkg As pkg(), ts As TextWriter)
-            Call ts.WriteLine($"declare namespace {pkg(0).namespace} {{")
+            Dim tree = BuildNamespaceTree(pkg(0).namespace, pkg)
 
-            For Each api As NamedValue(Of MethodInfo) In pkg _
-                .Select(AddressOf ImportsPackage.GetAllApi) _
-                .IteratesALL
-
-                Dim rfunc As New RMethodInfo(api)
-                Dim returns = rfunc.returns.MapTypeScriptType
-                Dim params As String() = rfunc.parameters _
-                    .Select(AddressOf MapTypeScriptParameter) _
-                    .ToArray
-
-                Call ts.WriteLine($"  function {api.Name}({params.JoinBy(", ")}): any;")
-            Next
-
-            Call ts.WriteLine("}")
+            Call WriteNamespaceTree(tree, ts, 0)
             Call ts.Flush()
         End Sub
 
-        Private Function MapTypeScriptParameter(p As RMethodArgument) As String
+        Private Sub WriteNamespaceTree(tree As FunctionTree, ts As TextWriter, level As Integer)
+            Dim prefix As String = If(level = 0, "declare namespace", "module")
+
+            If tree.IsLeaf Then
+                Dim rfunc As RMethodInfo = tree.Method
+                Dim returns = rfunc.returns.MapTypeScriptType
+                Dim params = rfunc.parameters _
+                    .Select(AddressOf MapTypeScriptParameter) _
+                    .ToArray
+
+                Call ts.WriteLine($"{New String(" "c, level * 3)}function {tree.Name}({params.Select(Function(pi) pi.define).JoinBy(", ")}): any;")
+            Else
+                Call ts.WriteLine($"{New String(" "c, level * 3)}{prefix} {tree.Name} {{")
+
+                For Each child In tree.ChildNodes
+                    Call WriteNamespaceTree(child, ts, level + 1)
+                Next
+
+                Call ts.WriteLine($"{New String(" "c, level * 3)}}}")
+            End If
+        End Sub
+
+        Private Class FunctionTree : Inherits TreeNodeBase(Of FunctionTree)
+
+            Public Overrides ReadOnly Property MySelf As FunctionTree
+                Get
+                    Return Me
+                End Get
+            End Property
+
+            Public Property Method As RMethodInfo
+
+            Public Sub New(name As String)
+                MyBase.New(name)
+            End Sub
+
+            ''' <summary>
+            ''' 
+            ''' </summary>
+            ''' <param name="name"></param>
+            ''' <returns>
+            ''' the return value always not null
+            ''' </returns>
+            Public Function GetNode(name As String) As FunctionTree
+                Dim find = ChildNodes.Where(Function(t) t.Name = name).FirstOrDefault
+
+                If find Is Nothing Then
+                    find = New FunctionTree(name)
+                    AddChild(find)
+                End If
+
+                Return find
+            End Function
+
+        End Class
+
+        ''' <summary>
+        ''' due to the reason of R symbol name may contains the ``dot`` symbol
+        ''' and this may confuse the javascript/python syntax, so needs the 
+        ''' tree structure to solve this problem
+        ''' </summary>
+        ''' <param name="root"></param>
+        ''' <param name="pkg"></param>
+        ''' <returns></returns>
+        Private Function BuildNamespaceTree(root As String, pkg As pkg()) As FunctionTree
+            Dim tree As New FunctionTree(root)
+
+            For Each api As NamedValue(Of MethodInfo) In pkg _
+               .Select(AddressOf ImportsPackage.GetAllApi) _
+               .IteratesALL
+
+                Dim t = api.Name.Split("."c)
+                Dim func As FunctionTree = tree
+
+                For Each ti As String In t
+                    func = func.GetNode(name:=ti)
+                Next
+
+                func.Method = New RMethodInfo(api)
+            Next
+
+            Return tree
+        End Function
+
+        Private Function MapTypeScriptParameter(p As RMethodArgument) As (define As String, optVal As String)
             Dim name As String = p.name
             Dim type As String = p.type.MapTypeScriptType
             Dim optVal As String
@@ -88,9 +162,9 @@ Namespace Development.CodeAnalysis
                     End Select
                 End If
 
-                Return $"{name}?:{type} = {optVal}"
+                Return ($"{name}?:{type}", optVal)
             Else
-                Return $"{name}:{type}"
+                Return ($"{name}:{type}", Nothing)
             End If
         End Function
 
