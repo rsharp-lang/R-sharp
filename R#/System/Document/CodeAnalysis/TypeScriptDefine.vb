@@ -59,6 +59,18 @@ Namespace Development.CodeAnalysis
                     .Select(AddressOf MapTypeScriptParameter) _
                     .ToArray
 
+                Call ts.WriteLine($"{New String(" "c, level * 3)}/**")
+
+                If params.Any(Function(pi) Not pi.optVal Is Nothing) Then
+                    For Each pi In params
+                        If Not pi.optVal Is Nothing Then
+                            Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* @param {pi.define.Split(":"c).First.Trim("?"c)} default value is ``{pi.optVal}``.")
+                        End If
+                    Next
+                End If
+
+                Call ts.WriteLine($"{New String(" "c, level * 3)}*/")
+
                 Call ts.WriteLine($"{New String(" "c, level * 3)}function {tree.Name}({params.Select(Function(pi) pi.define).JoinBy(", ")}): any;")
             Else
                 Call ts.WriteLine($"{New String(" "c, level * 3)}{prefix} {tree.Name} {{")
