@@ -85,6 +85,8 @@ Public Class SyntaxTree
             exp = New Require(ExpressionCollection.GetExpressions(exp.expression))
             buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, exp.expression))
             Reindex(buffer)
+
+            Return Nothing
         End If
 
         Dim target = Expression.CreateExpression({lt}, opts)

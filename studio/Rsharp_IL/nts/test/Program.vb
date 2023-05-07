@@ -22,7 +22,8 @@ Module Program
         ' Dim script9 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\create_function.js", _global)
         ' Dim script11 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\function2.js", _global)
         'Dim script12 As RProgram = ts.ParseScript("\GCModeller\src\R-sharp\test\jsTest\imports.js", _global)
-        Dim script13 = ts.ParseScript("require(GCModeller);", _global)
+        ' Dim script13 = ts.ParseScript("require(GCModeller);", _global)
+        Dim script14 As RProgram = ts.ParseScript("\GCModeller\src\interops\RNA-Seq\test.js", _global)
 
         ' Call println(script9.Execute(_global))
 
