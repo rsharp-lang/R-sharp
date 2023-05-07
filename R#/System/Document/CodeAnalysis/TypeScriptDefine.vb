@@ -8,8 +8,6 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
-Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports pkg = SMRUCC.Rsharp.Development.Package.Package
@@ -38,12 +36,21 @@ Namespace Development.CodeAnalysis
         ''' <summary>
         ''' 
         ''' </summary>
-        ''' <param name="pkg">
+        ''' <param name="pkgs">
         ''' modules with the same namespace reference
         ''' </param>
         ''' <param name="ts"></param>
-        Public Sub ExtractModule(pkg As pkg(), ts As TextWriter)
-            Dim tree = BuildNamespaceTree(pkg(0).namespace, pkg)
+        Public Sub ExtractModule(pkgs As pkg(), ts As TextWriter)
+            Dim tree = BuildNamespaceTree(pkgs(0).namespace, pkgs)
+
+            Call ts.WriteLine("// export package module type define for javascript/typescript language")
+            Call ts.WriteLine("//")
+
+            For Each type As pkg In pkgs
+                Call ts.WriteLine($"// ref={type.package.FullName}")
+            Next
+
+            Call ts.WriteLine()
 
             Call WriteNamespaceTree(tree, ts, 0)
             Call ts.Flush()
