@@ -360,7 +360,7 @@ Namespace Development.Package.File
 
             ' generate the typescript definition header files
             For Each group As IGrouping(Of String, Package) In pkgModList.GroupBy(Function(m) m.namespace)
-                Dim ts As String = TypeScriptDefine.ExtractModule(group.ToArray)
+                Dim ts As String = TypeScriptDefine.ExtractModule(REngine.globalEnvir, group.ToArray)
 
                 Call file.tsd.Add(group.Key, ts)
                 Call ts.SaveTo($"{package_dir}/@export/{group.Key}.d.ts")

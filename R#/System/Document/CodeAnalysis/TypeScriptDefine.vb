@@ -2,11 +2,13 @@
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataStructures.Tree
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -24,11 +26,11 @@ Namespace Development.CodeAnalysis
         ''' </summary>
         ''' <param name="pkg"></param>
         ''' <returns></returns>
-        Public Function ExtractModule(ParamArray pkg As pkg()) As String
+        Public Function ExtractModule(context As GlobalEnvironment, ParamArray pkg As pkg()) As String
             Dim ts As New StringBuilder
             Dim file As New StringWriter(ts)
 
-            Call ExtractModule(pkg, ts:=file)
+            Call ExtractModule(pkg, ts:=file, context)
 
             Return ts.ToString
         End Function
@@ -40,10 +42,10 @@ Namespace Development.CodeAnalysis
         ''' modules with the same namespace reference
         ''' </param>
         ''' <param name="ts"></param>
-        Public Sub ExtractModule(pkgs As pkg(), ts As TextWriter)
+        Public Sub ExtractModule(pkgs As pkg(), ts As TextWriter, context As GlobalEnvironment)
             Dim tree = BuildNamespaceTree(pkgs(0).namespace, pkgs)
 
-            Call ts.WriteLine("// export package module type define for javascript/typescript language")
+            Call ts.WriteLine("// export R# package module type define for javascript/typescript language")
             Call ts.WriteLine("//")
 
             For Each type As pkg In pkgs
@@ -51,6 +53,26 @@ Namespace Development.CodeAnalysis
             Next
 
             Call ts.WriteLine()
+
+            Call ts.WriteLine("/**")
+
+            For Each type As pkg In pkgs
+                Dim docs As ProjectType = context.packages.packageDocs.GetAnnotations(type.package)
+
+                If Not docs Is Nothing Then
+                    For Each line As String In docs.Summary.LineTokens
+                        Call ts.WriteLine($" * {line}")
+                    Next
+
+                    Call ts.WriteLine(" * ")
+
+                    For Each line As String In docs.Remarks.LineTokens
+                        Call ts.WriteLine($" * > {line}")
+                    Next
+                End If
+            Next
+
+            Call ts.WriteLine("*/")
 
             Call WriteNamespaceTree(tree, ts, 0)
             Call ts.Flush()
@@ -80,7 +102,7 @@ Namespace Development.CodeAnalysis
 
                 Call ts.WriteLine($"{New String(" "c, level * 3)}function {tree.Name}({params.Select(Function(pi) pi.define).JoinBy(", ")}): any;")
             Else
-                Call ts.WriteLine($"{New String(" "c, level * 3)}{prefix} {tree.Name} {{")
+                Call ts.WriteLine($"{New String(" "c, level * 3)}{prefix} {tree.Name.Replace("+", "_")} {{")
 
                 For Each child In tree.ChildNodes
                     Call WriteNamespaceTree(child, ts, level + 1)
