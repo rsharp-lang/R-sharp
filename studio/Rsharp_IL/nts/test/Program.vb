@@ -16,12 +16,13 @@ Module Program
         ' Dim script5 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\test5.js", GlobalEnvironment.defaultEmpty)
         ' Dim script6 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\test6.js", GlobalEnvironment.defaultEmpty)
         ' Dim script7 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\run_test.js", _global)
-        Dim script71 As RProgram = ts.ParseScript("\GCModeller\src\R-sharp\test\jsTest\json_test.js", _global)
+        'Dim script71 As RProgram = ts.ParseScript("\GCModeller\src\R-sharp\test\jsTest\json_test.js", _global)
         'Dim script8 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\test_for.js", GlobalEnvironment.defaultEmpty)
         ' Dim script9 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\invoke_test.js", _global)
         ' Dim script9 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\create_function.js", _global)
         ' Dim script11 As RProgram = ts.ParseScript("/GCModeller\src\R-sharp\test\jsTest\function2.js", _global)
-        Dim script12 As RProgram = ts.ParseScript("\GCModeller\src\R-sharp\test\jsTest\imports.js", _global)
+        'Dim script12 As RProgram = ts.ParseScript("\GCModeller\src\R-sharp\test\jsTest\imports.js", _global)
+        Dim script13 = ts.ParseScript("require(GCModeller);", _global)
 
         ' Call println(script9.Execute(_global))
 

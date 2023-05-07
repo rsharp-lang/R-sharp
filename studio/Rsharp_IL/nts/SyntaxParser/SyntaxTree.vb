@@ -5,6 +5,7 @@ Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Language
@@ -56,6 +57,16 @@ Public Class SyntaxTree
         Return prog
     End Function
 
+    ''' <summary>
+    ''' func(...)
+    ''' </summary>
+    ''' <param name="lt">
+    ''' probably the function name
+    ''' </param>
+    ''' <param name="exp">
+    ''' probably the function argument list
+    ''' </param>
+    ''' <returns></returns>
     Private Function ParseFuncInvoke(lt As Token, exp As SyntaxResult) As SyntaxResult
         If lt.isAnyKeyword("function", "if") Then
             ' is function declare
@@ -68,6 +79,12 @@ Public Class SyntaxTree
             Reindex(buffer)
 
             Return Nothing
+        ElseIf lt.isAnyKeyword("require") Then
+            ' javascript require
+            buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
+            exp = New Require(ExpressionCollection.GetExpressions(exp.expression))
+            buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, exp.expression))
+            Reindex(buffer)
         End If
 
         Dim target = Expression.CreateExpression({lt}, opts)
