@@ -114,7 +114,9 @@ Namespace Development.CodeAnalysis
                         Dim pdocs = docs.GetParameterDocument(pname).LineTokens
 
                         If Not pi.optVal Is Nothing Then
-                            pdocs = pdocs.JoinIterates({"", $"default value is ``{pi.optVal}``."})
+                            pdocs = pdocs _
+                                .JoinIterates({"", $"default value Is ``{pi.optVal}``."}) _
+                                .ToArray
                         End If
 
                         If pdocs.Length > 0 AndAlso Not pdocs.All(Function(si) si.StringEmpty) Then
@@ -129,7 +131,7 @@ Namespace Development.CodeAnalysis
                     If params.Any(Function(pi) Not pi.optVal Is Nothing) Then
                         For Each pi In params
                             If Not pi.optVal Is Nothing Then
-                                Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* @param {pi.define.Split(":"c).First.Trim("?"c)} default value is ``{pi.optVal}``.")
+                                Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* @param {pi.define.Split(":"c).First.Trim("?"c)} default value Is ``{pi.optVal}``.")
                             End If
                         Next
                     End If
