@@ -1,3 +1,12 @@
-import {sqlite} from "devkit";
+import {stringr} from "base";
 
-sqlite.
+var assem = stringr.shortest_common_superstring([
+	"AACAAATGAGACGCTGTGCAATTGCTGA",
+	"AACAAATGAGACGCTGTGCAATTGCTGA",
+	"CAAATGAGACGCTGTGCAATTGCTGAGT",
+	"ATGAGACGCTGTGCAATTGCTGAGTACC",
+	"CTGTGCAATTGCTGAGTACCGTAGGTAG",
+	"CTGTGCAATTGCTGAGTACCGTAGGTAG"
+])
+
+console.table(assem)

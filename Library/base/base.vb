@@ -82,7 +82,10 @@ Public Module base
     ''' <returns></returns>
     ''' 
     <ExportAPI("impute")>
-    Public Function impute(rawMatrix As DataSet(), Optional byRow As Boolean = True, Optional infer As InferMethods = InferMethods.Average) As DataSet()
+    Public Function impute(rawMatrix As DataSet(),
+                           Optional byRow As Boolean = True,
+                           Optional infer As InferMethods = InferMethods.Average) As DataSet()
+
         Return rawMatrix.SimulateMissingValues(byRow, infer).ToArray
     End Function
 

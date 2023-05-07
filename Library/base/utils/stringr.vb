@@ -158,7 +158,10 @@ Module stringr
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("decode.R_rawstring")>
-    Public Function unescapeRRawstring(input As Object, Optional encoding As Encodings = Encodings.Unicode, Optional env As Environment = Nothing) As Object
+    Public Function unescapeRRawstring(input As Object,
+                                       Optional encoding As Encodings = Encodings.Unicode,
+                                       Optional env As Environment = Nothing) As Object
+
         Return env.EvaluateFramework(Of String, String)(input, Function(str) Rlang.ProcessingRRawUniCode(str, encoding))
     End Function
 

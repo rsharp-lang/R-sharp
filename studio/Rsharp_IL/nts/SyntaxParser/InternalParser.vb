@@ -345,6 +345,10 @@ Public Module InternalParser
 
     <Extension>
     Private Function ParseValueExpression(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
+        If tokens.Last.isTerminator Then
+            tokens = tokens.Take(tokens.Length - 1).ToArray
+        End If
+
         If tokens.IsNullOrEmpty Then
             Return New SyntaxResult(Literal.NULL)
         ElseIf tokens.Length = 1 AndAlso tokens(Scan0) Like GetType(Expression) Then
