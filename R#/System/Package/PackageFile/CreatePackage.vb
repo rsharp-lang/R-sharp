@@ -115,7 +115,7 @@ Namespace Development.Package.File
                 }
             End If
 
-#If netcore5 = 0 Then
+#If NET48 Then
             Dim dlls As String() = dir.EnumerateFiles("*.dll").ToArray
             
             If Not dlls.IsNullOrEmpty Then

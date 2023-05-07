@@ -1,7 +1,9 @@
-﻿Imports System.Reflection
+﻿Imports System.IO
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -21,26 +23,41 @@ Namespace Development.CodeAnalysis
         ''' </summary>
         ''' <param name="pkg"></param>
         ''' <returns></returns>
-        <Extension>
-        Public Function ExtractModule(pkg As pkg) As String
+        Public Function ExtractModule(ParamArray pkg As pkg()) As String
             Dim ts As New StringBuilder
+            Dim file As New StringWriter(ts)
 
-            Call ts.AppendLine($"declare namespace {pkg.namespace} {{")
+            Call ExtractModule(pkg, ts:=file)
 
-            For Each api As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(pkg)
+            Return ts.ToString
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="pkg">
+        ''' modules with the same namespace reference
+        ''' </param>
+        ''' <param name="ts"></param>
+        Public Sub ExtractModule(pkg As pkg(), ts As TextWriter)
+            Call ts.WriteLine($"declare namespace {pkg(0).namespace} {{")
+
+            For Each api As NamedValue(Of MethodInfo) In pkg _
+                .Select(AddressOf ImportsPackage.GetAllApi) _
+                .IteratesALL
+
                 Dim rfunc As New RMethodInfo(api)
                 Dim returns = rfunc.returns.MapTypeScriptType
                 Dim params As String() = rfunc.parameters _
                     .Select(AddressOf MapTypeScriptParameter) _
                     .ToArray
 
-                Call ts.AppendLine($"   function {api.Name}({params.JoinBy(", ")}): any;")
+                Call ts.WriteLine($"  function {api.Name}({params.JoinBy(", ")}): any;")
             Next
 
-            Call ts.AppendLine("}")
-
-            Return ts.ToString
-        End Function
+            Call ts.WriteLine("}")
+            Call ts.Flush()
+        End Sub
 
         Private Function MapTypeScriptParameter(p As RMethodArgument) As String
             Dim name As String = p.name

@@ -70,6 +70,7 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports Microsoft.VisualBasic.Text.Xml.OpenXml
+Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Development.Package.NuGet.metadata
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -95,6 +96,7 @@ Namespace Development.Package.File
         Public Property assembly As AssemblyPack
         Public Property unixman As List(Of String)
         Public Property vignettes As List(Of String)
+        Public Property tsd As New Dictionary(Of String, String)
         ''' <summary>
         ''' documents about the clr data types
         ''' </summary>
@@ -136,6 +138,13 @@ Namespace Development.Package.File
 
                     Call symbols.Add(symbol.Name, symbolRef)
                 End If
+            Next
+
+            For Each modPkg In tsd
+                Using file As New StreamWriter(zip.CreateEntry($"lib/exports/{modPkg.Key}.d.ts").Open)
+                    checksum = checksum & modPkg.Value
+                    file.WriteLine(modPkg.Value)
+                End Using
             Next
 
             Dim REngine As New RInterpreter
