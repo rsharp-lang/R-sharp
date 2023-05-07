@@ -49,7 +49,7 @@ Namespace Development.CodeAnalysis
             Call ts.WriteLine("//")
 
             For Each type As pkg In pkgs
-                Call ts.WriteLine($"// ref={type.package.FullName}")
+                Call ts.WriteLine($"// ref={type.package.FullName}@{type.package.Assembly.ToString}")
             Next
 
             Call ts.WriteLine()
@@ -74,11 +74,11 @@ Namespace Development.CodeAnalysis
 
             Call ts.WriteLine("*/")
 
-            Call WriteNamespaceTree(tree, ts, 0)
+            Call WriteNamespaceTree(tree, ts, 0, context)
             Call ts.Flush()
         End Sub
 
-        Private Sub WriteNamespaceTree(tree As FunctionTree, ts As TextWriter, level As Integer)
+        Private Sub WriteNamespaceTree(tree As FunctionTree, ts As TextWriter, level As Integer, context As GlobalEnvironment)
             Dim prefix As String = If(level = 0, "declare namespace", "module")
 
             If tree.IsLeaf Then
@@ -87,15 +87,52 @@ Namespace Development.CodeAnalysis
                 Dim params = rfunc.parameters _
                     .Select(AddressOf MapTypeScriptParameter) _
                     .ToArray
+                Dim type As ProjectType = context.packages.packageDocs.GetAnnotations(rfunc.GetNetCoreCLRDeclaration.DeclaringType)
+                Dim docs As ProjectMember = Nothing
+
+                If Not type Is Nothing Then
+                    docs = type.GetMethods(rfunc.GetNetCoreCLRDeclaration.Name).FirstOrDefault
+                End If
 
                 Call ts.WriteLine($"{New String(" "c, level * 3)}/**")
 
-                If params.Any(Function(pi) Not pi.optVal Is Nothing) Then
+                If Not docs Is Nothing Then
+                    For Each line As String In docs.Summary.LineTokens
+                        Call ts.WriteLine($"{New String(" "c, level * 3)} * {line}")
+                    Next
+
+                    Call ts.WriteLine($"{New String(" "c, level * 3)} * ")
+
+                    For Each line As String In docs.Remarks.LineTokens
+                        Call ts.WriteLine($"{New String(" "c, level * 3)} * > {line}")
+                    Next
+
+                    Call ts.WriteLine($"{New String(" "c, level * 3)} * ")
+
                     For Each pi In params
+                        Dim pname As String = pi.define.Split(":"c).First.Trim("?"c)
+                        Dim pdocs = docs.GetParameterDocument(pname).LineTokens
+
                         If Not pi.optVal Is Nothing Then
-                            Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* @param {pi.define.Split(":"c).First.Trim("?"c)} default value is ``{pi.optVal}``.")
+                            pdocs = pdocs.JoinIterates({"", $"default value is ``{pi.optVal}``."})
+                        End If
+
+                        If pdocs.Length > 0 AndAlso Not pdocs.All(Function(si) si.StringEmpty) Then
+                            Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* @param {pname} {pdocs.First}")
+
+                            For Each line As String In pdocs.Skip(1)
+                                Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* {line}")
+                            Next
                         End If
                     Next
+                Else
+                    If params.Any(Function(pi) Not pi.optVal Is Nothing) Then
+                        For Each pi In params
+                            If Not pi.optVal Is Nothing Then
+                                Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* @param {pi.define.Split(":"c).First.Trim("?"c)} default value is ``{pi.optVal}``.")
+                            End If
+                        Next
+                    End If
                 End If
 
                 Call ts.WriteLine($"{New String(" "c, level * 3)}*/")
@@ -105,7 +142,7 @@ Namespace Development.CodeAnalysis
                 Call ts.WriteLine($"{New String(" "c, level * 3)}{prefix} {tree.Name.Replace("+", "_")} {{")
 
                 For Each child In tree.ChildNodes
-                    Call WriteNamespaceTree(child, ts, level + 1)
+                    Call WriteNamespaceTree(child, ts, level + 1, context)
                 Next
 
                 Call ts.WriteLine($"{New String(" "c, level * 3)}}}")
