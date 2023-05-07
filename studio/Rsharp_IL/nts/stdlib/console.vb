@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
@@ -7,6 +8,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Interop.[CType]
 
 Namespace jsstd
 
@@ -47,6 +49,8 @@ Namespace jsstd
                     }
 
                     Return base.print(df, env:=env)
+                ElseIf x.GetType.ImplementInterface(Of ICTypeDataframe) Then
+                    Return base.print(DirectCast(x, ICTypeDataframe).toDataframe, env:=env)
                 End If
 
                 Return data.getError

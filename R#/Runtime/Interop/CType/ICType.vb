@@ -55,15 +55,28 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Namespace Runtime.Interop.CType
 
     ''' <summary>
-    ''' An interface for cast current object to R# list object.
+    ''' An interface for cast current .NET clr object to R# list object.
     ''' </summary>
     Public Interface ICTypeList
 
         ''' <summary>
-        ''' cast current object to R# list object.
+        ''' cast current .NET clr object to R# list object.
         ''' </summary>
         ''' <returns></returns>
         Function toList() As list
+
+    End Interface
+
+    ''' <summary>
+    ''' An interface for cast current .NET clr object to R# dataframe object.
+    ''' </summary>
+    Public Interface ICTypeDataframe
+
+        ''' <summary>
+        ''' cast current .NET clr object to R# dataframe object.
+        ''' </summary>
+        ''' <returns></returns>
+        Function toDataframe() As dataframe
 
     End Interface
 

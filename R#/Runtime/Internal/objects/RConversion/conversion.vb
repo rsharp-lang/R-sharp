@@ -76,6 +76,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Interop.[CType]
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -424,6 +425,8 @@ RE0:
                         GoTo RE0
                     End If
                 End If
+            ElseIf type.ImplementInterface(Of ICTypeDataframe) Then
+                Return DirectCast(x, ICTypeDataframe).toDataframe
             Else
                 ' generic overloads method for .NET object
                 ' <base type>
