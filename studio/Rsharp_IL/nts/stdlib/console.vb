@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
@@ -34,11 +35,35 @@ Namespace jsstd
             Dim data = pipeline.TryCreatePipeline(Of list)(x, env)
 
             If data.isError Then
+                If TypeOf x Is vector Then
+                    x = DirectCast(x, vector).data
+                End If
+
+                If x.GetType.IsArray Then
+                    Dim df As New dataframe With {
+                        .columns = New Dictionary(Of String, Array) From {
+                            {"x", x}
+                        }
+                    }
+
+                    Return base.print(df, env:=env)
+                End If
+
                 Return data.getError
             End If
 
-            Dim listArray As list() = data.populates(Of list)(env).ToArray
-            Dim union_names As String() = listArray.Select(Function(l) l.getNames).IteratesALL.Distinct.ToArray
+            Return data.populates(Of list)(env) _
+                .ToArray _
+                .df_from_list_array(env)
+        End Function
+
+        <Extension>
+        Private Function df_from_list_array(listArray As list(), env As Environment) As Object
+            Dim union_names As String() = listArray _
+                .Select(Function(l) l.getNames) _
+                .IteratesALL _
+                .Distinct _
+                .ToArray
             Dim df As New dataframe With {
                 .columns = New Dictionary(Of String, Array),
                 .rownames = Enumerable _
