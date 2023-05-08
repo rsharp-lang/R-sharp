@@ -174,6 +174,7 @@ Public Module InternalParser
     Private Function GetCommaExpression(tokens As SyntaxToken(), opts As SyntaxBuilderOptions) As SyntaxResult
         If tokens.First Like GetType(Token) Then
             Dim tk As Token = tokens.First.TryCast(Of Token)
+            Dim stacktrace = opts.GetStackTrace(tokens(0).TryCast(Of Token))
 
             If tk.isKeyword("function") Then
                 If tokens.Last Like GetType(Token) AndAlso tokens.Last.TryCast(Of Token) = (TokenType.close, "}") Then
@@ -182,7 +183,6 @@ Public Module InternalParser
             ElseIf tk.isKeyword("for") Then
                 Dim var = tokens(2).TryCast(Of DeclareNewSymbol)
                 Dim closure = tokens(5).TryCast(Of ClosureExpression)
-                Dim stacktrace = opts.GetStackTrace(tokens(0).TryCast(Of Token))
                 Dim loopBody As New DeclareNewFunction("for_loop", {New DeclareNewSymbol(var.m_names(0), stacktrace)}, closure, stacktrace)
                 Dim forloop As New ForLoop(var.m_names, var.value, loopBody, False, stacktrace)
 
@@ -193,6 +193,17 @@ Public Module InternalParser
                 Dim exp As New [Imports](ExpressionUtils.GetPackageModules(mods.expression), pkg.expression)
 
                 Return New SyntaxResult(exp)
+            ElseIf tk.isKeyword("throw") Then
+                Dim msg As SyntaxResult = tokens.Skip(1).ToArray.ParseValueExpression(opts)
+                Dim stop_err As FunctionInvoke
+
+                If msg.isException Then
+                    Return msg
+                Else
+                    stop_err = New FunctionInvoke("stop", stacktrace, msg.expression)
+                End If
+
+                Return New SyntaxResult(stop_err)
             ElseIf tk.name = TokenType.open Then
                 If Not tokens.Any(Function(t) t Like GetType(Token) AndAlso t.TryCast(Of Token).name = TokenType.close) Then
                     Return New SyntaxResult(New SyntaxError())
