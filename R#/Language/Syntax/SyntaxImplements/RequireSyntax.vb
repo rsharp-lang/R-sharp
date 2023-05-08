@@ -97,6 +97,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     ElseIf library.isException Then
                         Return library
                     Else
+                        ' imports packages from library
                         Return New [Imports](
                             packages:=packages.expression,
                             library:=library.expression,
@@ -119,6 +120,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     If files.isException Then
                         Return files
                     Else
+                        ' imports file
                         Return New [Imports](
                             packages:=Nothing,
                             library:=files.expression,

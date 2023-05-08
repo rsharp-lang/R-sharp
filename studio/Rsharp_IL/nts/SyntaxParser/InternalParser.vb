@@ -189,8 +189,19 @@ Public Module InternalParser
                 Return New SyntaxResult(forloop)
             ElseIf tk.isKeyword("import") Then
                 Dim mods = {tokens(1)}.ParseValueExpression(opts)
-                Dim pkg = {tokens(3)}.ParseValueExpression(opts)
-                Dim exp As New [Imports](ExpressionUtils.GetPackageModules(mods.expression), pkg.expression)
+                Dim pkg As SyntaxResult
+                Dim exp As [Imports]
+
+                If tokens.Length = 2 Then
+                    exp = New [Imports](
+                        packages:=Nothing,
+                        library:=mods.expression,
+                        source:=opts.source.source
+                    )
+                Else
+                    pkg = {tokens(3)}.ParseValueExpression(opts)
+                    exp = New [Imports](ExpressionUtils.GetPackageModules(mods.expression), pkg.expression)
+                End If
 
                 Return New SyntaxResult(exp)
             ElseIf tk.isKeyword("throw") Then
