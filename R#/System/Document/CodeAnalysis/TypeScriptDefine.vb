@@ -9,6 +9,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -47,7 +48,14 @@ Namespace Development.CodeAnalysis
         End Function
 
         Public Sub ExtractPackage(symbols As SymbolExpression(), [namespace] As String, ts As TextWriter)
+            Dim tree = BuildNamespaceTree([namespace], symbols)
 
+            Call ts.WriteLine("// export R# source type define for javascript/typescript language")
+            Call ts.WriteLine("//")
+            Call ts.WriteLine($"// package_source={[namespace]}")
+            Call ts.WriteLine()
+
+            Call WriteSourceTree(tree, ts, level:=0)
         End Sub
 
         ''' <summary>
@@ -91,6 +99,60 @@ Namespace Development.CodeAnalysis
 
             Call WriteNamespaceTree(tree, ts, 0, context)
             Call ts.Flush()
+        End Sub
+
+        Private Sub WriteSourceTree(tree As FunctionTree, ts As TextWriter, level As Integer)
+            Dim prefix As String = If(level = 0, "declare namespace", "module")
+            Dim indent As String = New String(" "c, level * 3)
+
+            If tree.IsLeaf Then
+                Call tree.Symbol1.WriteSymbol(tree.Name, ts, level)
+            Else
+                Call ts.WriteLine($"{indent}{prefix} {tree.Name.Replace("+", "_")} {{")
+
+                For Each child In tree.ChildNodes
+                    Call WriteSourceTree(child, ts, level + 1)
+                Next
+
+                Call ts.WriteLine($"{indent}}}")
+            End If
+        End Sub
+
+        <Extension>
+        Private Sub WriteSymbol(symbol As SymbolExpression, treeName As String, ts As TextWriter, level As Integer)
+            If TypeOf symbol Is DeclareNewFunction Then
+                Call DirectCast(symbol, DeclareNewFunction).WriteSymbol(treeName, ts, level)
+            Else
+                Call $"not implements ts writer for {symbol.GetType.FullName}".Warning
+            End If
+        End Sub
+
+        <Extension>
+        Private Sub WriteSymbol(func As DeclareNewFunction, treeName As String, ts As TextWriter, level As Integer)
+            Dim valueType As String = RType.GetType(func.type).MapTypeScriptType
+            Dim params = func.parameters _
+                .Select(Function(a)
+                            Return $"{a.GetSymbolName}:{RType.GetType(a.type).MapTypeScriptType}"
+                        End Function) _
+                .ToArray
+            Dim indent As String = New String(" "c, level * 3)
+            Dim indent_comment As String = New String(" "c, level * 3 + 2)
+
+            Call ts.WriteLine($"{indent}/**")
+
+            For Each par As DeclareNewSymbol In func.parameters
+                Dim pname As String = par.GetSymbolName
+                Dim pdocs As String() = $"default value Is ``{par.value.ToString}``.".LineTokens
+
+                Call ts.WriteLine($"{indent_comment}* @param {pname} {pdocs.First}")
+
+                For Each line As String In pdocs.Skip(1)
+                    Call ts.WriteLine($"{indent_comment}* {line}")
+                Next
+            Next
+
+            Call ts.WriteLine($"{indent}*/")
+            Call ts.WriteLine($"{indent}function {treeName}({params.JoinBy(", ")}): {valueType};")
         End Sub
 
         Private Sub WriteNamespaceTree(tree As FunctionTree, ts As TextWriter, level As Integer, context As GlobalEnvironment)

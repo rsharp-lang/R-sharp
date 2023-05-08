@@ -281,7 +281,7 @@ Namespace Runtime.Interop
         End Function
 
         ''' <summary>
-        ''' Get VB.NET to R# type wrapper
+        ''' Get VB.NET clr type to R# type wrapper <see cref="RType"/>
         ''' </summary>
         ''' <param name="type"></param>
         ''' <returns></returns>
@@ -290,11 +290,21 @@ Namespace Runtime.Interop
             Return cache.ComputeIfAbsent(type, Function(t) New RType(t))
         End Function
 
+        ''' <summary>
+        ''' create <see cref="RType"/> based on the .NET clr <see cref="TypeCode"/> enumeration value
+        ''' </summary>
+        ''' <param name="code"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overloads Shared Function [GetType](code As TypeCode) As RType
             Return GetRSharpType(Runtime.GetType(code))
         End Function
 
+        ''' <summary>
+        ''' create <see cref="RType"/> based on the R# <see cref="TypeCodes"/> enumeration value
+        ''' </summary>
+        ''' <param name="code"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overloads Shared Function [GetType](code As TypeCodes) As RType
             Return GetRSharpType(Runtime.GetType(code))
