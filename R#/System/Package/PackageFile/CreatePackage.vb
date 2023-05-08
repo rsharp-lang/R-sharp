@@ -221,12 +221,15 @@ Namespace Development.Package.File
 
             Dim R_src_tsd As String = TypeScriptDefine.ExtractPackage(file.GetSymbols, file.info.Package)
 
+            Call R_src_tsd.SaveTo($"{target}/@export/index.d.ts")
 
             Call Console.WriteLine($"     compile unix man pages...")
 
             If Not [error] = file.buildUnixMan(package_dir:=target) Is Nothing Then
                 Call Console.WriteLine("Failed!")
                 Return [error]
+            Else
+                file.tsd!index = R_src_tsd
             End If
 
             Call Console.WriteLine($"     query data items for lazy loading...")
