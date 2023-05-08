@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors.Scaler
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -111,13 +112,20 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <Package("ColorBrewer")>
 Public Module ColorBrewerSystem
 
+    ''' <summary>
+    ''' get cutoff threshold value via TrIQ algorithm
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="q"></param>
+    ''' <param name="levels"></param>
+    ''' <returns></returns>
     <ExportAPI("TrIQ")>
     Public Function TrIQ(<RRawVectorArgument>
                          data As Object,
                          Optional q As Double = 0.65,
                          Optional levels As Integer = 30) As Double
 
-        Return DirectCast(REnv.asVector(Of Double)(data), Double()).FindThreshold(q, levels)
+        Return CLRVector.asNumeric(data).FindThreshold(q, levels)
     End Function
 
 #Region "Sequential"

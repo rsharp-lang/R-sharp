@@ -164,6 +164,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Me.hasObjectList = parameters.Any(Function(p) p.m_names(0) = "...")
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Overrides Function GetSymbolName() As String
+            Return funcName
+        End Function
+
         ''' <summary>
         ''' renames current function object its symbol name
         ''' </summary>
@@ -420,6 +425,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Return Me
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
             Return $"declare function '${funcName}'({parameters.Select(AddressOf DeclareNewSymbol.getParameterView).JoinBy(", ")}) {{
     # function_internal

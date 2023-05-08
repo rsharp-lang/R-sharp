@@ -972,7 +972,7 @@ Public Module NetworkModule
         ElseIf REnv.isVector(Of Integer)(id) Then
             array = CLRVector.asInteger(id) _
                 .Select(Function(i)
-                            Return g.GetElementByID(DirectCast(i, Integer))
+                            Return g.GetElementByID(i)
                         End Function) _
                 .ToArray
         ElseIf REnv.isVector(Of String)(id) Then

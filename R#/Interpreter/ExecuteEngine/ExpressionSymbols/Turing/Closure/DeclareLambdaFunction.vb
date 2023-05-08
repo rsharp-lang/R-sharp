@@ -113,6 +113,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Me.stackFrame = stackframe
         End Sub
 
+        Public Overrides Function GetSymbolName() As String
+            Return name
+        End Function
+
         ''' <summary>
         ''' lambda函数是不存在可选默认参数值的
         ''' </summary>

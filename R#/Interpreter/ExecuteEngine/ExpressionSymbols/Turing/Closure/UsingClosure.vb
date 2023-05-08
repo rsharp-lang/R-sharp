@@ -59,6 +59,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports System.Runtime.CompilerServices
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -100,6 +101,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Me.closure = closure
             Me.stackFrame = stackframe
         End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Overrides Function GetSymbolName() As String
+            Return params.GetSymbolName
+        End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Using env As New Environment(envir, stackFrame, isInherits:=False)

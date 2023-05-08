@@ -221,6 +221,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Call Me.New({symbol}, value, type, [readonly], stackFrame)
         End Sub
 
+        Public Overrides Function GetSymbolName() As String
+            If m_names.Length = 1 Then
+                Return m_names(0)
+            Else
+                Return names.ToArray.GetJson
+            End If
+        End Function
+
         Protected Friend Overrides Sub AddCustomAttributes(attrs As IEnumerable(Of NamedValue(Of String())))
             Call MyBase.AddCustomAttributes(attrs)
 
