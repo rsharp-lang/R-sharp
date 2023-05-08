@@ -8,6 +8,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataStructures.Tree
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -34,6 +35,20 @@ Namespace Development.CodeAnalysis
 
             Return ts.ToString
         End Function
+
+        Public Function ExtractPackage(symbols As SymbolExpression(), [namespace] As String) As String
+            Dim ts As New StringBuilder
+            Dim file As New StringWriter(ts)
+
+            Call ExtractPackage(symbols, [namespace], ts:=file)
+            Call file.Flush()
+
+            Return ts.ToString
+        End Function
+
+        Public Sub ExtractPackage(symbols As SymbolExpression(), [namespace] As String, ts As TextWriter)
+
+        End Sub
 
         ''' <summary>
         ''' 
@@ -82,74 +97,7 @@ Namespace Development.CodeAnalysis
             Dim prefix As String = If(level = 0, "declare namespace", "module")
 
             If tree.IsLeaf Then
-                Dim rfunc As RMethodInfo = tree.Method
-                Dim returns = rfunc.returns.MapTypeScriptType
-                Dim params = rfunc.parameters _
-                    .Select(AddressOf MapTypeScriptParameter) _
-                    .ToArray
-                Dim type As ProjectType = context.packages.packageDocs.GetAnnotations(rfunc.GetNetCoreCLRDeclaration.DeclaringType)
-                Dim docs As ProjectMember = Nothing
-
-                If Not type Is Nothing Then
-                    docs = type.GetMethods(rfunc.GetNetCoreCLRDeclaration.Name).FirstOrDefault
-                End If
-
-                Call ts.WriteLine($"{New String(" "c, level * 3)}/**")
-
-                If Not docs Is Nothing Then
-                    For Each line As String In docs.Summary.LineTokens
-                        Call ts.WriteLine($"{New String(" "c, level * 3)} * {line}")
-                    Next
-
-                    Call ts.WriteLine($"{New String(" "c, level * 3)} * ")
-
-                    For Each line As String In docs.Remarks.LineTokens
-                        Call ts.WriteLine($"{New String(" "c, level * 3)} * > {line}")
-                    Next
-
-                    Call ts.WriteLine($"{New String(" "c, level * 3)} * ")
-
-                    For Each pi In params
-                        Dim pname As String = pi.define.Split(":"c).First.Trim("?"c)
-                        Dim pdocs = docs.GetParameterDocument(pname).LineTokens
-
-                        If Not pi.optVal Is Nothing Then
-                            pdocs = pdocs _
-                                .JoinIterates({"", $"+ default value Is ``{pi.optVal}``."}) _
-                                .ToArray
-                        End If
-
-                        If pdocs.Length > 0 AndAlso Not pdocs.All(Function(si) si.StringEmpty) Then
-                            Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* @param {pname} {pdocs.First}")
-
-                            For Each line As String In pdocs.Skip(1)
-                                Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* {line}")
-                            Next
-                        End If
-                    Next
-
-                    Dim rdocs = docs.Returns.LineTokens
-
-                    If Not rdocs.IsNullOrEmpty Then
-                        Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* @return {rdocs(0)}")
-
-                        For Each line As String In rdocs.Skip(1)
-                            Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* {line}")
-                        Next
-                    End If
-                Else
-                    If params.Any(Function(pi) Not pi.optVal Is Nothing) Then
-                        For Each pi In params
-                            If Not pi.optVal Is Nothing Then
-                                Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* @param {pi.define.Split(":"c).First.Trim("?"c)} default value Is ``{pi.optVal}``.")
-                            End If
-                        Next
-                    End If
-                End If
-
-                Call ts.WriteLine($"{New String(" "c, level * 3)}*/")
-
-                Call ts.WriteLine($"{New String(" "c, level * 3)}function {tree.Name}({params.Select(Function(pi) pi.define).JoinBy(", ")}): {rfunc.GetUnionTypes.Select(Function(ti) RType.GetRSharpType(ti).MapTypeScriptType).JoinBy("|")};")
+                Call tree.Method1.WriteFunction(tree.Name, ts, level, context)
             Else
                 Call ts.WriteLine($"{New String(" "c, level * 3)}{prefix} {tree.Name.Replace("+", "_")} {{")
 
@@ -161,6 +109,79 @@ Namespace Development.CodeAnalysis
             End If
         End Sub
 
+        <Extension>
+        Private Sub WriteFunction(rfunc As RMethodInfo, treeName As String, ts As TextWriter, level As Integer, context As GlobalEnvironment)
+            Dim returns = rfunc.returns.MapTypeScriptType
+            Dim params = rfunc.parameters _
+                .Select(AddressOf MapTypeScriptParameter) _
+                .ToArray
+            Dim type As ProjectType = context.packages.packageDocs.GetAnnotations(rfunc.GetNetCoreCLRDeclaration.DeclaringType)
+            Dim docs As ProjectMember = Nothing
+            Dim unionType As String = rfunc.GetUnionTypes _
+                .Select(Function(ti) RType.GetRSharpType(ti).MapTypeScriptType) _
+                .JoinBy("|")
+
+            If Not type Is Nothing Then
+                docs = type.GetMethods(rfunc.GetNetCoreCLRDeclaration.Name).FirstOrDefault
+            End If
+
+            Call ts.WriteLine($"{New String(" "c, level * 3)}/**")
+
+            If Not docs Is Nothing Then
+                For Each line As String In docs.Summary.LineTokens
+                    Call ts.WriteLine($"{New String(" "c, level * 3)} * {line}")
+                Next
+
+                Call ts.WriteLine($"{New String(" "c, level * 3)} * ")
+
+                For Each line As String In docs.Remarks.LineTokens
+                    Call ts.WriteLine($"{New String(" "c, level * 3)} * > {line}")
+                Next
+
+                Call ts.WriteLine($"{New String(" "c, level * 3)} * ")
+
+                For Each pi In params
+                    Dim pname As String = pi.define.Split(":"c).First.Trim("?"c)
+                    Dim pdocs = docs.GetParameterDocument(pname).LineTokens
+
+                    If Not pi.optVal Is Nothing Then
+                        pdocs = pdocs _
+                            .JoinIterates({"", $"+ default value Is ``{pi.optVal}``."}) _
+                            .ToArray
+                    End If
+
+                    If pdocs.Length > 0 AndAlso Not pdocs.All(Function(si) si.StringEmpty) Then
+                        Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* @param {pname} {pdocs.First}")
+
+                        For Each line As String In pdocs.Skip(1)
+                            Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* {line}")
+                        Next
+                    End If
+                Next
+
+                Dim rdocs = docs.Returns.LineTokens
+
+                If Not rdocs.IsNullOrEmpty Then
+                    Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* @return {rdocs(0)}")
+
+                    For Each line As String In rdocs.Skip(1)
+                        Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* {line}")
+                    Next
+                End If
+            Else
+                If params.Any(Function(pi) Not pi.optVal Is Nothing) Then
+                    For Each pi In params
+                        If Not pi.optVal Is Nothing Then
+                            Call ts.WriteLine($"{New String(" "c, level * 3 + 2)}* @param {pi.define.Split(":"c).First.Trim("?"c)} default value Is ``{pi.optVal}``.")
+                        End If
+                    Next
+                End If
+            End If
+
+            Call ts.WriteLine($"{New String(" "c, level * 3)}*/")
+            Call ts.WriteLine($"{New String(" "c, level * 3)}function {treeName}({params.Select(Function(pi) pi.define).JoinBy(", ")}): {unionType};")
+        End Sub
+
         Private Class FunctionTree : Inherits TreeNodeBase(Of FunctionTree)
 
             Public Overrides ReadOnly Property MySelf As FunctionTree
@@ -169,7 +190,7 @@ Namespace Development.CodeAnalysis
                 End Get
             End Property
 
-            Public Property Method As RMethodInfo
+            Public Property Method1 As RMethodInfo
 
             Public Sub New(name As String)
                 MyBase.New(name)
@@ -195,6 +216,10 @@ Namespace Development.CodeAnalysis
 
         End Class
 
+        Private Function BuildNamespaceTree(pkgName As String, symbols As SymbolExpression())
+
+        End Function
+
         ''' <summary>
         ''' due to the reason of R symbol name may contains the ``dot`` symbol
         ''' and this may confuse the javascript/python syntax, so needs the 
@@ -217,7 +242,7 @@ Namespace Development.CodeAnalysis
                     func = func.GetNode(name:=ti)
                 Next
 
-                func.Method = New RMethodInfo(api)
+                func.Method1 = New RMethodInfo(api)
             Next
 
             Return tree
