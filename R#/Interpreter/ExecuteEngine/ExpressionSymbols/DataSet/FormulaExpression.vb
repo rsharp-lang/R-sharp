@@ -88,6 +88,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' </summary>
         Public ReadOnly Property formula As Expression
 
+        ''' <summary>
+        ''' create a new formula expression, example like:
+        ''' 
+        ''' ```
+        ''' y ~ x
+        ''' ```
+        ''' </summary>
+        ''' <param name="y"></param>
+        ''' <param name="formula">x factor variable in the formula expression</param>
         Sub New(y As String, formula As Expression)
             Me.var = y
             Me.formula = formula

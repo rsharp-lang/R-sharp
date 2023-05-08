@@ -1,4 +1,5 @@
 ﻿Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
 ''' <summary>
@@ -19,7 +20,11 @@ Public Class ExpressionCollection : Inherits Expression
         End If
     End Function
 
-    Public Overrides Function Evaluate(envir As Rsharp.Runtime.Environment) As Object
+    Public Overrides Function Evaluate(envir As Environment) As Object
         Throw New NotImplementedException()
+    End Function
+
+    Public Overrides Function ToString() As String
+        Return "( " & expressions.JoinBy(", ") & " )"
     End Function
 End Class
