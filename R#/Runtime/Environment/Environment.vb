@@ -168,7 +168,8 @@ Namespace Runtime
         Protected hiddenFunctions As Dictionary(Of Symbol)
 
         ''' <summary>
-        ''' 当前的环境是否为最顶层的全局环境？
+        ''' It is the top level global environment?
+        ''' (当前的环境是否为最顶层的全局环境？)
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property isGlobal As Boolean
@@ -452,6 +453,8 @@ Namespace Runtime
                 Return parent.FindSymbol(name)
             ElseIf name.IndexOf("::") > 0 Then
                 Return FindFunctionWithNamespaceRestrict(name)
+            ElseIf isGlobal Then
+                Return DirectCast(Me, GlobalEnvironment).polyglot.interop.FindSymbol(name, [inherits]:=False)
             Else
                 Return Nothing
             End If
@@ -485,9 +488,7 @@ Namespace Runtime
         ''' returns nothing if symbol not found
         ''' </returns>
         Public Overridable Function FindFunction(name As String, Optional [inherits] As Boolean = True) As Symbol
-            If (name.First = "["c AndAlso name.Last = "]"c) Then
-                Return globalEnvironment.FindFunction(name.GetStackValue("[", "]"))
-            ElseIf name.IndexOf("::") > 0 Then
+            If name.IndexOf("::") > 0 Then
                 Return FindFunctionWithNamespaceRestrict(name)
             End If
 
@@ -501,6 +502,9 @@ Namespace Runtime
 
             If [inherits] AndAlso Not parent Is Nothing Then
                 Return parent.FindFunction(name)
+            ElseIf isGlobal Then
+                ' find in polyglot interop environment
+                Return DirectCast(Me, GlobalEnvironment).polyglot.interop.FindFunction(name, [inherits]:=False)
             Else
                 Return Nothing
             End If
