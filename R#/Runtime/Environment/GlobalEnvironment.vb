@@ -96,7 +96,7 @@ Namespace Runtime
         ''' Enable programming in multiple kind of programming language
         ''' </summary>
         ''' <returns></returns>
-        Public ReadOnly Property polyglot As New Polyglot.Platform
+        Public ReadOnly Property polyglot As Polyglot.Platform
         Public ReadOnly Property profiler2 As New Stack(Of ProfilerFrames)
 
         ''' <summary>
@@ -174,6 +174,7 @@ Namespace Runtime
             Me.log4vb_redirect = options.log4vb_redirect
             Me.symbolLanguages = New SymbolLanguageProcessor(Me)
             Me.attachedNamespace = New SymbolNamespaceSolver(Me)
+            Me.polyglot = New Polyglot.Platform(Me)
 
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub

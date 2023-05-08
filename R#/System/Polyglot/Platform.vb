@@ -91,9 +91,14 @@ Namespace Development.Polyglot
 
         ReadOnly engine As New Dictionary(Of String, ScriptLoader)
         ReadOnly suffix As New List(Of String)
+        ReadOnly interop As PolyglotInteropEnvironment
 
-        Sub New()
+        Sub New(_global As GlobalEnvironment)
             Call Register(New RScriptLoader)
+
+            ' 20230508
+            ' initialize the R# symbols query helper
+            interop = New PolyglotInteropEnvironment(_global)
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
