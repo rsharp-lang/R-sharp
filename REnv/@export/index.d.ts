@@ -45,7 +45,7 @@ declare namespace REnv {
      * @param package default value Is ``NULL``.
    */
    function Rdocuments(pkgName:any, outputdir:string, package:any): object;
-   module  {
+   module _ {
       /**
       */
       function onLoad(): object;
