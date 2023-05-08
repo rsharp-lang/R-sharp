@@ -55,6 +55,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Development.Polyglot
 
@@ -106,6 +107,15 @@ Namespace Development.Polyglot
             ' 20230508
             ' initialize the R# symbols query helper
             interop = New PolyglotInteropEnvironment(_global)
+
+            ' add internal methods to polyglot environment
+            Call __init_load_base_internals()
+        End Sub
+
+        Private Sub __init_load_base_internals()
+            For Each rfunc As RMethodInfo In Internal.invoke.getAllInternals
+                Call interop.AddInteropSymbol(rfunc.name, rfunc)
+            Next
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

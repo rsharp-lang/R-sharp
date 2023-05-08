@@ -39,8 +39,65 @@ Namespace Runtime
             )
         End Sub
 
+        Public Sub AddInteropSymbol(symbol As String, func As RMethodInfo)
+            Dim t As String() = symbol.Split("."c)
+
+            If t.Length = 1 Then
+                funcSymbols(symbol) = New Symbol(func)
+            Else
+                ' add to symbols
+                Call AddInteropSymbol(t, func)
+            End If
+        End Sub
+
+        Private Function TryGetInteropSymbol(s0 As String) As list
+            If Not symbols.ContainsKey(s0) Then
+                Dim empty_list As New list With {.slots = New Dictionary(Of String, Object)}
+                Dim interop_symbol As New Symbol(s0, empty_list, TypeCodes.list, [readonly]:=True)
+
+                Call symbols.Add(interop_symbol)
+            End If
+
+            Return symbols(s0).value
+        End Function
+
+        Private Sub AddInteropSymbol(ref As String(), rfunc As RMethodInfo)
+            Dim tree As list = TryGetInteropSymbol(ref(Scan0))
+            Dim walk = ref.Skip(1).ToArray
+
+            Call hook_interop_tree(env:=tree, t:=walk, target_obj:=rfunc)
+        End Sub
+
         Public Const pkg_ref_libs = "$_pkg_ref@-<libs!!!!!>*"
         Public Const js_special_call = "$_js_special_calls?*"
+
+        Private Shared Sub hook_interop_tree(env As list, t As String(), target_obj As Object)
+            Dim modObj As list = env
+            Dim interop_target As String = t.Last
+
+            ' 20230508 the last token in the R# name is the 
+            ' function object itself, do not include into the
+            ' tree path
+            For Each ti As String In t.Take(t.Length - 1)
+                If Not modObj.hasName(ti) Then
+                    Call modObj.add(ti, New list With {
+                       .slots = New Dictionary(Of String, Object)
+                    })
+                End If
+
+                Dim value = modObj.getByName(ti)
+
+                If Not TypeOf value Is list Then
+                    modObj.slots(ti) = New list With {.slots = New Dictionary(Of String, Object)}
+                    modObj = modObj.slots(ti)
+                    modObj.add(js_special_call, value)
+                Else
+                    modObj = value
+                End If
+            Next
+
+            modObj.slots(interop_target) = target_obj
+        End Sub
 
         ''' <summary>
         ''' construct the interop object for javascript/python
@@ -57,30 +114,9 @@ Namespace Runtime
             For Each type As Type In libs
                 For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(type)
                     Dim t As String() = func.Name.Split("."c)
-                    Dim modObj As list = env
+                    Dim target_obj As New RMethodInfo(func)
 
-                    ' 20230508 the last token in the R# name is the 
-                    ' function object itself, do not include into the
-                    ' tree path
-                    For Each ti As String In t.Take(t.Length - 1)
-                        If Not modObj.hasName(ti) Then
-                            Call modObj.add(ti, New list With {
-                               .slots = New Dictionary(Of String, Object)
-                            })
-                        End If
-
-                        Dim value = modObj.getByName(ti)
-
-                        If Not TypeOf value Is list Then
-                            modObj.slots(ti) = New list With {.slots = New Dictionary(Of String, Object)}
-                            modObj = modObj.slots(ti)
-                            modObj.add(js_special_call, value)
-                        Else
-                            modObj = value
-                        End If
-                    Next
-
-                    modObj.slots(t.Last) = New RMethodInfo(func)
+                    Call hook_interop_tree(env, t, target_obj)
                 Next
             Next
 

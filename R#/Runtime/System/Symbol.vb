@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -200,6 +201,14 @@ Namespace Runtime.Components
             Me.New(constraint)
 
             Me.m_val = value
+            Me.readonly = is_readonly
+        End Sub
+
+        Sub New(rfunc As RFunction, Optional is_readonly As Boolean = False)
+            Call Me.New(TypeCodes.closure)
+
+            Me.name = rfunc.name
+            Me.m_val = rfunc
             Me.readonly = is_readonly
         End Sub
 
