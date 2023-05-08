@@ -19,7 +19,7 @@ Namespace Runtime
 
             ' set stack frame for current polyglot interop environment
             Call setStackInfo(New StackFrame With {
-                .File = "runtime_polyglot_interop.vb",
+                .File = "runtime_polyglot_interop.vbs",
                 .Line = "999",
                 .Method = New Method With {
                     .Method = "interop_call",
@@ -58,7 +58,7 @@ Namespace Runtime
                     Dim t As String() = func.Name.Split("."c)
                     Dim modObj As list = env
 
-                    For Each ti As String In t
+                    For Each ti As String In t.Take(t.Length - 1)
                         If Not modObj.hasName(ti) Then
                             Call modObj.add(ti, New list With {
                                .slots = New Dictionary(Of String, Object)
