@@ -92,6 +92,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Get
         End Property
 
+        ''' <summary>
+        ''' true for if the <see cref="value"/> expression is not nothing
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property hasInitializeExpression As Boolean = False
 
         Friend m_names As String()

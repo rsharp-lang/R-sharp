@@ -142,13 +142,17 @@ Namespace Development.CodeAnalysis
 
             For Each par As DeclareNewSymbol In func.parameters
                 Dim pname As String = par.GetSymbolName
-                Dim pdocs As String() = $"default value Is ``{par.value.ToString}``.".LineTokens
+                Dim pdocs As String()
 
-                Call ts.WriteLine($"{indent_comment}* @param {pname} {pdocs.First}")
+                If par.hasInitializeExpression Then
+                    pdocs = $"default value Is ``{par.value.ToString}``.".LineTokens
 
-                For Each line As String In pdocs.Skip(1)
-                    Call ts.WriteLine($"{indent_comment}* {line}")
-                Next
+                    Call ts.WriteLine($"{indent_comment}* @param {pname} {pdocs.First}")
+
+                    For Each line As String In pdocs.Skip(1)
+                        Call ts.WriteLine($"{indent_comment}* {line}")
+                    Next
+                End If
             Next
 
             Call ts.WriteLine($"{indent}*/")
