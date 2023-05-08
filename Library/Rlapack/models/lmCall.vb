@@ -95,6 +95,7 @@ Public Class lmCall
     Public Overrides Function ToString() As String
         If TypeOf lm Is WeightedFit Then
             Dim formula = DirectCast(DirectCast(lm, WeightedFit).Polynomial, Polynomial)
+            Dim wf As WeightedFit = lm
 
             Return $"
 Call:
@@ -104,6 +105,8 @@ Coefficients:
 (Intercept)            {variables(Scan0)}  
   {formula.Factors(Scan0).ToString("G4")}    {formula.Factors(1).ToString("G4")}
 
+R2: {lm.R2}
+F-statistic: {wf.FisherF}
 "
         ElseIf TypeOf lm Is FitResult Then
             Dim formula = DirectCast(DirectCast(lm, FitResult).Polynomial, Polynomial)

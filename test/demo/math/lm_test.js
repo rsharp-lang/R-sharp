@@ -1,8 +1,8 @@
 var Ct = [1,2,3,4,5]
-var At = Ct ^ 2
+var At = Ct ^ 2.5
 var linear = lm(Ct ~ At, data = data.frame(Ct, At), weights = 1 / (At ^ 2))
 
-summary(linear);
+print(linear);
 
 // Call:
 // lm(formula = Ct ~ At, data = data.frame(Ct, At), weights = 1/(At^2))
