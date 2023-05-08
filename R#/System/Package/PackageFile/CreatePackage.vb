@@ -207,6 +207,8 @@ Namespace Development.Package.File
             Call Console.WriteLine($"* building '{desc.Package}_{desc.Version}.zip'")
             Call Console.WriteLine($"     compile binary script...")
 
+            ' all of the symbol from the R source files will be 
+            ' parsed at here
             For Each script As String In srcR.ListFiles("*.R")
                 If Not ([error] = file.buildRscript(script, loading)) Is Nothing Then
                     Return [error]
@@ -214,6 +216,11 @@ Namespace Development.Package.File
 
                 Call Console.WriteLine($"        {script.FileName}... done")
             Next
+
+            Call Console.WriteLine($"       * create export definition header file from R source...")
+
+            Dim R_src_tsd As String = TypeScriptDefine.ExtractPackage(file.GetSymbols, file.info.Package)
+
 
             Call Console.WriteLine($"     compile unix man pages...")
 
@@ -444,6 +451,14 @@ Namespace Development.Package.File
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' fix for the function name
+        ''' </summary>
+        ''' <param name="line"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' this function will rename the function with anomoymous name
+        ''' </remarks>
         <Extension>
         Public Function MakeFunction(line As Expression) As DeclareNewFunction
             If TypeOf line Is DeclareNewFunction Then

@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::04178aa6cc1b65561e89e124418e80aa, D:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/PackageModel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 418
-    '    Code Lines: 317
-    ' Comment Lines: 30
-    '   Blank Lines: 71
-    '     File Size: 17.92 KB
+' Summaries:
 
 
-    '     Class PackageModel
-    ' 
-    '         Properties: assembly, clr, dataSymbols, info, loading
-    '                     pkg_dir, symbols, unixman, vignettes
-    ' 
-    '         Function: getDataSymbolName, normPath, ToString, writeSymbols
-    ' 
-    '         Sub: copyAssembly, Flush, saveClrDcouments, saveDataSymbols, saveDependency
-    '              saveSymbols, saveUnixManIndex, writeIndex, writeRuntime
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 418
+'    Code Lines: 317
+' Comment Lines: 30
+'   Blank Lines: 71
+'     File Size: 17.92 KB
+
+
+'     Class PackageModel
+' 
+'         Properties: assembly, clr, dataSymbols, info, loading
+'                     pkg_dir, symbols, unixman, vignettes
+' 
+'         Function: getDataSymbolName, normPath, ToString, writeSymbols
+' 
+'         Sub: copyAssembly, Flush, saveClrDcouments, saveDataSymbols, saveDependency
+'              saveSymbols, saveUnixManIndex, writeIndex, writeRuntime
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -70,7 +70,6 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports Microsoft.VisualBasic.Text.Xml.OpenXml
-Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Development.Package.NuGet.metadata
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -103,6 +102,17 @@ Namespace Development.Package.File
         ''' <returns></returns>
         Public Property clr As New Dictionary(Of String, String)
         Public Property pkg_dir As String
+
+        ''' <summary>
+        ''' get all <see cref="SymbolExpression"/> from <see cref="symbols"/>
+        ''' </summary>
+        ''' <returns></returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function GetSymbols() As SymbolExpression()
+            Return symbols.Values _
+                .Select(Function(si) DirectCast(si, SymbolExpression)) _
+                .ToArray
+        End Function
 
         Public Overrides Function ToString() As String
             Return info.ToString
