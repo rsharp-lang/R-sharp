@@ -59,7 +59,7 @@
 
 #End Region
 
-Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -72,7 +72,6 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -329,6 +328,7 @@ load:       Return LoadLibrary(filepath, env, names)
             Return libDll
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Shared Function isImportsAllPackages(names As Index(Of String)) As Boolean
             Return names.Objects.Length = 1 AndAlso names.Objects(Scan0) = "*"
         End Function
@@ -388,43 +388,21 @@ load:       Return LoadLibrary(filepath, env, names)
             Return Nothing
         End Function
 
-        Const pkg_ref_libs = "$_pkg_ref@-<libs!!!!!>*"
-
         Public Shared Sub hook_jsEnv(globalEnv As GlobalEnvironment, symbolName As String, ParamArray libs As Type())
-            Dim symbol As Symbol = globalEnv.FindSymbol(symbolName)
+            Dim symbol As Symbol = globalEnv.polyglot.interop.FindSymbol(symbolName)
 
-            If symbol IsNot Nothing AndAlso
-                symbol.typeCode = TypeCodes.list AndAlso
-                DirectCast(symbol.value, list).hasName(pkg_ref_libs) Then
+            If symbol IsNot Nothing AndAlso symbol.typeCode = TypeCodes.list Then
+                Dim interopTarget As list = DirectCast(symbol.value, list)
 
-                libs = DirectCast(DirectCast(symbol.value, list).getByName(pkg_ref_libs), Type()) _
-                    .JoinIterates(libs) _
-                    .Distinct _
-                    .ToArray
+                If interopTarget.hasName(PolyglotInteropEnvironment.pkg_ref_libs) Then
+                    libs = DirectCast(interopTarget.getByName(PolyglotInteropEnvironment.pkg_ref_libs), Type()) _
+                        .JoinIterates(libs) _
+                        .Distinct _
+                        .ToArray
+                End If
             End If
 
-            Call globalEnv.Push(
-                name:=symbolName,
-                value:=[Imports].hook_jsEnv(libs),
-                [readonly]:=True,
-                mode:=TypeCodes.list
-            )
+            Call globalEnv.polyglot.interop.AddInteropSymbol(symbolName, libs)
         End Sub
-
-        Public Shared Function hook_jsEnv(ParamArray libs As Type()) As list
-            Dim env As New list With {
-                .slots = New Dictionary(Of String, Object) From {
-                    {pkg_ref_libs, libs}
-                }
-            }
-
-            For Each type As Type In libs
-                For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(type)
-                    Call env.add(func.Name, New RMethodInfo(func))
-                Next
-            Next
-
-            Return env
-        End Function
     End Class
 End Namespace

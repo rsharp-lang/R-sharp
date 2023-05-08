@@ -88,10 +88,17 @@ Namespace Development.Polyglot
     ''' </summary>
     Public Class Platform
 
-
         ReadOnly engine As New Dictionary(Of String, ScriptLoader)
         ReadOnly suffix As New List(Of String)
-        ReadOnly interop As PolyglotInteropEnvironment
+
+        ''' <summary>
+        ''' symbols solver for javascript/python reference to R# object
+        ''' </summary>
+        ''' <remarks>
+        ''' use this interop environment for the external function closure
+        ''' initialization
+        ''' </remarks>
+        Friend ReadOnly interop As PolyglotInteropEnvironment
 
         Sub New(_global As GlobalEnvironment)
             Call Register(New RScriptLoader)
@@ -111,14 +118,14 @@ Namespace Development.Polyglot
             Dim key As String = scriptfile.ExtensionSuffix.ToLower
             Dim loader As ScriptLoader = engine(key)
 
-            Return loader.LoadScript(scriptfile, env)
+            Return loader.LoadScript(scriptfile, If(key = "r", env, interop))
         End Function
 
         Public Function ParseScript(scriptfile As String, env As Environment) As Object
             Dim key As String = scriptfile.ExtensionSuffix.ToLower
             Dim loader As ScriptLoader = engine(key)
 
-            Return loader.ParseScript(scriptfile, env)
+            Return loader.ParseScript(scriptfile, If(key = "r", env, interop))
         End Function
 
         ''' <summary>
