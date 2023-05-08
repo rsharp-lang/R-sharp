@@ -83,6 +83,9 @@ Namespace Runtime.Internal
         ''' <summary>
         ''' 内部函数索引
         ''' </summary>
+        ''' <remarks>
+        ''' a mapping of [R function name => function body]
+        ''' </remarks>
         Shared ReadOnly index As New Dictionary(Of String, RMethodInfo)
 
         Public Shared ReadOnly Property ls As list
@@ -165,6 +168,23 @@ Namespace Runtime.Internal
             Return name = "options" OrElse index.ContainsKey(name)
         End Function
 
+        ''' <summary>
+        ''' get all internal functions from the R# runtime environment base module
+        ''' </summary>
+        ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function getAllInternals() As IEnumerable(Of RMethodInfo)
+            Return index.Values
+        End Function
+
+        ''' <summary>
+        ''' get function by name
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns>
+        ''' this query function will returns nothing if the target symbol is not found
+        ''' </returns>
         Friend Shared Function getFunction(name As String) As RMethodInfo
             If index.ContainsKey(name) Then
                 Return index(name)
