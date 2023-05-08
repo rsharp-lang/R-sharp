@@ -294,6 +294,10 @@ Namespace Development.CodeAnalysis
                 Dim t = symbol.GetSymbolName.Split("."c)
                 Dim func As FunctionTree = tree
 
+                If t(0) = "" Then
+                    t(0) = "_"
+                End If
+
                 For Each ti As String In t
                     func = func.GetNode(name:=ti)
                     func.FunctionTrace.Add(symbol.GetSymbolName)
