@@ -40,6 +40,7 @@ Namespace Runtime
         End Sub
 
         Public Const pkg_ref_libs = "$_pkg_ref@-<libs!!!!!>*"
+        Public Const js_special_call = "$_js_special_calls?*"
 
         ''' <summary>
         ''' construct the interop object for javascript/python
@@ -58,6 +59,9 @@ Namespace Runtime
                     Dim t As String() = func.Name.Split("."c)
                     Dim modObj As list = env
 
+                    ' 20230508 the last token in the R# name is the 
+                    ' function object itself, do not include into the
+                    ' tree path
                     For Each ti As String In t.Take(t.Length - 1)
                         If Not modObj.hasName(ti) Then
                             Call modObj.add(ti, New list With {
@@ -65,7 +69,15 @@ Namespace Runtime
                             })
                         End If
 
-                        modObj = modObj.getByName(ti)
+                        Dim value = modObj.getByName(ti)
+
+                        If Not TypeOf value Is list Then
+                            modObj.slots(ti) = New list With {.slots = New Dictionary(Of String, Object)}
+                            modObj = modObj.slots(ti)
+                            modObj.add(js_special_call, value)
+                        Else
+                            modObj = value
+                        End If
                     Next
 
                     modObj.slots(t.Last) = New RMethodInfo(func)
