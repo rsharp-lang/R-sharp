@@ -419,7 +419,10 @@ Namespace Language.Syntax.SyntaxParser
 
             If raw = 3 AndAlso raw(1).TryCast(Of String) = "~" Then
                 ' formula expression: a ~ b
-                Return New FormulaExpression(ValueAssignExpression.GetSymbol(raw(0).TryCast(Of Expression)), raw(2).TryCast(Of Expression))
+                Return New FormulaExpression(
+                    y:=ValueAssignExpression.GetSymbol(raw(0).TryCast(Of SyntaxResult).expression),
+                    formula:=raw(2).TryCast(Of SyntaxResult).expression
+                )
             End If
 
             Return raw.ParseBinaryExpression(opts, oplist, 1)
