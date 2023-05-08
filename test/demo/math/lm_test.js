@@ -4,6 +4,8 @@ var linear = lm(Ct ~ At, data = data.frame(Ct, At), weights = 1 / (At ^ 2))
 
 print(linear);
 
+// linear-fitting is checked in Rstudio
+
 // Call:
 // lm(formula = Ct ~ At, data = data.frame(Ct, At), weights = 1/(At^2))
 //
