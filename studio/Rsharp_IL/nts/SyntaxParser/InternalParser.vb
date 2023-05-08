@@ -407,6 +407,10 @@ Public Module InternalParser
             Else
                 syntax = part.Select(Function(t) t.TryCast(Of Token)).ParseTypeScriptLine(opts)
                 parse(i) = New SyntaxToken(-1, syntax.expression)
+
+                If syntax.isException Then
+                    Return syntax
+                End If
             End If
         Next
 

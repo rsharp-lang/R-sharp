@@ -111,126 +111,140 @@ Public Class SyntaxTree
         If (state = stack.Pop(t, buffer.Count - 1)).MisMatched Then
             Throw New SyntaxErrorException
         Else
-            Dim range = state.Value.GetRange(buffer).ToArray
-            Dim exp = range.GetExpression(fromComma:=False, opts)
+            Return PopOutStack()
+        End If
+    End Function
 
-            If exp.isException Then
-                Return exp
-            End If
+    Private Function PopOutStack() As SyntaxResult
+        Dim range = state.Value.GetRange(buffer).ToArray
+        Dim exp = range.GetExpression(fromComma:=False, opts)
 
-            If range.First Like GetType(Token) Then
-                Dim left = range.First.TryCast(Of Token)
-                Dim leftToken As SyntaxToken = state.Value.Left(buffer)
+        If exp.isException Then
+            Return exp
+        End If
 
-                If left.name = TokenType.open Then
-                    If left.text = "(" Then
-                        If leftToken Is Nothing Then
-                            ' (...)
-                            state.Value.RemoveRange(buffer)
-                            buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
-                        ElseIf leftToken Like GetType(Token) Then
-                            Return ParseFuncInvoke(lt:=leftToken.TryCast(Of Token), exp)
-                        Else
-                            Dim target = leftToken.TryCast(Of Expression)
+        If Not range.First Like GetType(Token) Then
+            Return Nothing
+        End If
 
-                            If TypeOf target Is SymbolReference Then
-                                ' invoke function
-                                ' func(...)
-                                state.Value.RemoveRange(buffer)
-                                exp = New FunctionInvoke(target, Nothing, ExpressionCollection.GetExpressions(exp.expression))
-                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
-                                Reindex(buffer)
-                            Else
-                                Throw New NotImplementedException
-                            End If
-                        End If
-                    ElseIf left.text = "{" Then
-                        If leftToken Is Nothing Then
-                            ' is a multiple line closure expression
-                            ' {...}
-                            state.Value.RemoveRange(buffer)
-                            buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
-                        ElseIf leftToken Like GetType(Token) Then
-                            If leftToken.TryCast(Of Token) = (TokenType.close, ")") Then
-                                ' is a possible function declare
-                                Dim index = Traceback(buffer, {TokenType.keyword})
+        Dim left = range.First.TryCast(Of Token)
+        Dim leftToken As SyntaxToken = state.Value.Left(buffer)
 
-                                buffer.RemoveRange(state.Value.Range.Min + 1, state.Value.Range.Length - 1)
-                                buffer.Insert(state.Value.Range.Min + 1, New SyntaxToken(-1, exp.expression))
-                                Reindex(buffer)
+        If left.name = TokenType.open Then
+            If left.text = "(" Then
+                If leftToken Is Nothing Then
+                    ' (...)
+                    state.Value.RemoveRange(buffer)
+                    buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                ElseIf leftToken Like GetType(Token) Then
+                    If leftToken.IsToken(TokenType.operator) Then
+                        ' operator for binary expression, example like:
+                        ' 1 / (...)
+                        buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                        buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, ExpressionCollection.GetExpressions(exp.expression).First))
+                        Reindex(buffer)
 
-                                range = buffer.Skip(index - 1).Take(buffer.Count - index + 1).ToArray
-                                exp = range.GetExpression(fromComma:=True, opts)
+                        Return Nothing
+                    Else
+                        Return ParseFuncInvoke(lt:=leftToken.TryCast(Of Token), exp)
+                    End If
+                Else
+                    Dim target = leftToken.TryCast(Of Expression)
 
-                                If exp Is Nothing OrElse exp.isException Then
-                                    Return exp
-                                End If
+                    If TypeOf target Is SymbolReference Then
+                        ' invoke function
+                        ' func(...)
+                        state.Value.RemoveRange(buffer)
+                        exp = New FunctionInvoke(target, Nothing, ExpressionCollection.GetExpressions(exp.expression))
+                        buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                        Reindex(buffer)
+                    Else
+                        Throw New NotImplementedException
+                    End If
+                End If
+            ElseIf left.text = "{" Then
+                If leftToken Is Nothing Then
+                    ' is a multiple line closure expression
+                    ' {...}
+                    state.Value.RemoveRange(buffer)
+                    buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                ElseIf leftToken Like GetType(Token) Then
+                    If leftToken.TryCast(Of Token) = (TokenType.close, ")") Then
+                        ' is a possible function declare
+                        Dim index = Traceback(buffer, {TokenType.keyword})
 
-                                buffer.RemoveRange(index - 1, range.Length)
-                                buffer.Insert(index - 1, New SyntaxToken(-1, exp.expression))
-                                Reindex(buffer)
-                            ElseIf leftToken.TryCast(Of Token) = (TokenType.sequence, ":") Then
-                                ' is json value
-                                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
-                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
-                                Reindex(buffer)
-                            ElseIf leftToken.TryCast(Of Token) = (TokenType.open, "[") Then
-                                ' json array [{...}]
-                                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
-                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
-                                Reindex(buffer)
-                            ElseIf leftToken.TryCast(Of Token) = (TokenType.open, "(") Then
-                                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
-                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
-                                Reindex(buffer)
-                            ElseIf leftToken.IsToken(TokenType.keyword) Then
-                                ' else {}
-                                ' else if {}
-                                ' try {}
-                                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
-                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
-                                Reindex(buffer)
-                            ElseIf leftToken.isComma Then
-                                ' last element in json literal
-                                ' 
-                                ' {...,...}
-                                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
-                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
-                                Reindex(buffer)
-                            End If
-                        Else
+                        buffer.RemoveRange(state.Value.Range.Min + 1, state.Value.Range.Length - 1)
+                        buffer.Insert(state.Value.Range.Min + 1, New SyntaxToken(-1, exp.expression))
+                        Reindex(buffer)
 
-                        End If
-                    ElseIf left.text = "[" Then
-                        If leftToken Is Nothing Then
-                            ' json vector literal
-                            buffer.PopAll()
+                        range = buffer.Skip(index - 1).Take(buffer.Count - index + 1).ToArray
+                        exp = range.GetExpression(fromComma:=True, opts)
+
+                        If exp Is Nothing OrElse exp.isException Then
                             Return exp
-                        ElseIf leftToken Like GetType(Token) Then
-                            Dim tl As Token = leftToken.TryCast(Of Token)
-
-                            If tl = (TokenType.operator, "=") OrElse
-                                tl = (TokenType.open, "(") OrElse
-                                tl.name = TokenType.sequence OrElse
-                                tl = (TokenType.keyword, {"of", "in"}) Then
-
-                                ' create new symbol with initial value
-                                Dim index = Traceback(buffer, {TokenType.keyword})
-
-                                exp = New VectorLiteral(ExpressionCollection.GetExpressions(exp.expression))
-                                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
-                                buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
-                                Reindex(buffer)
-                            Else
-                                Throw New NotImplementedException
-                            End If
                         End If
+
+                        buffer.RemoveRange(index - 1, range.Length)
+                        buffer.Insert(index - 1, New SyntaxToken(-1, exp.expression))
+                        Reindex(buffer)
+                    ElseIf leftToken.TryCast(Of Token) = (TokenType.sequence, ":") Then
+                        ' is json value
+                        buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                        buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                        Reindex(buffer)
+                    ElseIf leftToken.TryCast(Of Token) = (TokenType.open, "[") Then
+                        ' json array [{...}]
+                        buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                        buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                        Reindex(buffer)
+                    ElseIf leftToken.TryCast(Of Token) = (TokenType.open, "(") Then
+                        buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                        buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                        Reindex(buffer)
+                    ElseIf leftToken.IsToken(TokenType.keyword) Then
+                        ' else {}
+                        ' else if {}
+                        ' try {}
+                        buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                        buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                        Reindex(buffer)
+                    ElseIf leftToken.isComma Then
+                        ' last element in json literal
+                        ' 
+                        ' {...,...}
+                        buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                        buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                        Reindex(buffer)
+                    End If
+                Else
+
+                End If
+            ElseIf left.text = "[" Then
+                If leftToken Is Nothing Then
+                    ' json vector literal
+                    buffer.PopAll()
+                    Return exp
+                ElseIf leftToken Like GetType(Token) Then
+                    Dim tl As Token = leftToken.TryCast(Of Token)
+
+                    If tl = (TokenType.operator, "=") OrElse
+                        tl = (TokenType.open, "(") OrElse
+                        tl.name = TokenType.sequence OrElse
+                        tl = (TokenType.keyword, {"of", "in"}) Then
+
+                        ' create new symbol with initial value
+                        Dim index = Traceback(buffer, {TokenType.keyword})
+
+                        exp = New VectorLiteral(ExpressionCollection.GetExpressions(exp.expression))
+                        buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                        buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                        Reindex(buffer)
+                    Else
+                        Throw New NotImplementedException
                     End If
                 End If
             End If
         End If
-
-        Return Nothing
     End Function
 
     Private Iterator Function GetExpressions(lines As Pointer(Of Token)) As IEnumerable(Of SyntaxResult)
