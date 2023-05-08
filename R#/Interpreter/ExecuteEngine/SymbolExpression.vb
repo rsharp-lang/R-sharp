@@ -78,6 +78,8 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         Protected Friend ReadOnly attributes As New Dictionary(Of String, String())
 
+        Public MustOverride Function GetSymbolName() As String
+
         Protected Friend Overridable Sub AddCustomAttributes(attrs As IEnumerable(Of NamedValue(Of String())))
             For Each attr As NamedValue(Of String()) In attrs
                 If attributes.ContainsKey(attr.Name) Then

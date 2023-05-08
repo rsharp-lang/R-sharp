@@ -191,6 +191,8 @@ Namespace Development.CodeAnalysis
             End Property
 
             Public Property Method1 As RMethodInfo
+            Public Property Symbol1 As SymbolExpression
+            Public Property FunctionTrace As New List(Of String)
 
             Public Sub New(name As String)
                 MyBase.New(name)
@@ -217,7 +219,21 @@ Namespace Development.CodeAnalysis
         End Class
 
         Private Function BuildNamespaceTree(pkgName As String, symbols As SymbolExpression())
+            Dim tree As New FunctionTree(pkgName)
 
+            For Each symbol As SymbolExpression In symbols
+                Dim t = symbol.GetSymbolName.Split("."c)
+                Dim func As FunctionTree = tree
+
+                For Each ti As String In t
+                    func = func.GetNode(name:=ti)
+                    func.FunctionTrace.Add(symbol.GetSymbolName)
+                Next
+
+                func.Symbol1 = symbol
+            Next
+
+            Return tree
         End Function
 
         ''' <summary>
@@ -240,6 +256,7 @@ Namespace Development.CodeAnalysis
 
                 For Each ti As String In t
                     func = func.GetNode(name:=ti)
+                    func.FunctionTrace.Add(api.Name)
                 Next
 
                 func.Method1 = New RMethodInfo(api)
