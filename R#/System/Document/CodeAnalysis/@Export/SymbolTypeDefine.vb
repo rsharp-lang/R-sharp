@@ -29,6 +29,8 @@ Namespace Development.CodeAnalysis
             End Get
         End Property
 
+        Public Property source As Object
+
         Sub New(method As RMethodInfo)
             name = method.name
             value = method.GetUnionTypes _
@@ -37,6 +39,7 @@ Namespace Development.CodeAnalysis
             parameters = method.parameters _
                 .Select(Function(a) a.MapTypeScriptParameter) _
                 .ToArray
+            source = method
         End Sub
 
         Sub New(method As MethodInfo)
@@ -46,12 +49,14 @@ Namespace Development.CodeAnalysis
                 .GetParameters _
                 .Select(AddressOf ParseParameter) _
                 .ToArray
+            source = method
         End Sub
 
         Sub New(symbol As SymbolExpression)
             name = symbol.GetSymbolName
             value = RType.GetType(symbol.type).MapTypeScriptType
             parameters = Nothing
+            source = symbol
         End Sub
 
         Private Shared Function ParseParameter(a As ParameterInfo) As NamedValue(Of String)

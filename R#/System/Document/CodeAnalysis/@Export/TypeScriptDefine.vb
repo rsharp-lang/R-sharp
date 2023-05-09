@@ -164,7 +164,7 @@ Namespace Development.CodeAnalysis
             Dim indent As String = New String(" "c, level * 3)
 
             If tree.IsLeaf Then
-                Call tree.Method1.WriteFunction(tree.Name, ts, level, context)
+                Call New TypeWriter(level, tree.Symbol1, ts).Flush(context)
             Else
                 Call ts.WriteLine($"{indent}{prefix} {tree.Name.Replace("+", "_")} {{")
 
@@ -250,41 +250,6 @@ Namespace Development.CodeAnalysis
             Call ts.WriteLine($"{indent}*/")
             Call ts.WriteLine($"{indent}function {treeName}({params.Select(Function(pi) pi.define).JoinBy(", ")}): {unionType};")
         End Sub
-
-        Private Class FunctionTree : Inherits TreeNodeBase(Of FunctionTree)
-
-            Public Overrides ReadOnly Property MySelf As FunctionTree
-                Get
-                    Return Me
-                End Get
-            End Property
-
-            Public Property Symbol1 As SymbolTypeDefine
-            Public Property FunctionTrace As New List(Of String)
-
-            Public Sub New(name As String)
-                MyBase.New(name)
-            End Sub
-
-            ''' <summary>
-            ''' 
-            ''' </summary>
-            ''' <param name="name"></param>
-            ''' <returns>
-            ''' the return value always not null
-            ''' </returns>
-            Public Function GetNode(name As String) As FunctionTree
-                Dim find = ChildNodes.Where(Function(t) t.Name = name).FirstOrDefault
-
-                If find Is Nothing Then
-                    find = New FunctionTree(name)
-                    AddChild(find)
-                End If
-
-                Return find
-            End Function
-
-        End Class
 
         Private Function BuildNamespaceTree(pkgName As String, symbols As SymbolExpression())
             Dim tree As New FunctionTree(pkgName)
