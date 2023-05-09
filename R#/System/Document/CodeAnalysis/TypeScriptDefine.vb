@@ -285,9 +285,18 @@ Namespace Development.CodeAnalysis
                 Return find
             End Function
 
+            Public Function SortName() As FunctionTree
+                ChildNodes = ChildNodes _
+                    .OrderBy(Function(a) a.Name) _
+                    .Select(Function(a) a.SortName) _
+                    .AsList
+
+                Return Me
+            End Function
+
         End Class
 
-        Private Function BuildNamespaceTree(pkgName As String, symbols As SymbolExpression())
+        Private Function BuildNamespaceTree(pkgName As String, symbols As SymbolExpression()) As FunctionTree
             Dim tree As New FunctionTree(pkgName)
 
             For Each symbol As SymbolExpression In symbols
@@ -306,7 +315,7 @@ Namespace Development.CodeAnalysis
                 func.Symbol1 = symbol
             Next
 
-            Return tree
+            Return tree.SortName
         End Function
 
         ''' <summary>
@@ -335,7 +344,7 @@ Namespace Development.CodeAnalysis
                 func.Method1 = New RMethodInfo(api)
             Next
 
-            Return tree
+            Return tree.SortName
         End Function
 
         Private Function MapTypeScriptParameter(p As RMethodArgument) As (define As String, optVal As String)
