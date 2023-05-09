@@ -70,6 +70,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
+Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -113,6 +114,7 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(complex)) = Function(c) printComplex(DirectCast(c, complex))
             RtoString(GetType(corTestResult)) = Function(o) o.ToString
             RtoString(GetType(NoInspector)) = Function(o) o.ToString
+            RtoString(GetType(SymbolTypeDefine)) = Function(o) o.ToString
 
             ' Rscript expression to string
             RtoString(GetType(Literal)) = Function(o) DirectCast(o, Literal).ToString
