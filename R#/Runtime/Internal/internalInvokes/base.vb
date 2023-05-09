@@ -118,6 +118,61 @@ Namespace Runtime.Internal.Invokes
     Public Module base
 
         ''' <summary>
+        ''' ### Argument List of a Function
+        ''' 
+        ''' Displays the argument names and corresponding default values of a 
+        ''' (non-primitive or primitive) function.
+        ''' </summary>
+        ''' <param name="name">
+        ''' a function (a primitive or a closure, i.e., “non-primitive”). If name 
+        ''' is a character string then the function with that name is found and 
+        ''' used.
+        ''' </param>
+        ''' <returns>
+        ''' + For a closure, a closure with identical formal argument list but an empty (NULL) body.
+        ''' + For a primitive (function), a closure with the documented usage And NULL body. 
+        '''    Note that some primitives do Not make use of named arguments And match by position 
+        '''    rather than name.
+        ''' + NULL in case of a non-function.
+        ''' </returns>
+        ''' <remarks>
+        ''' This function is mainly used interactively to print the argument list 
+        ''' of a function. For programming, consider using formals instead.
+        ''' </remarks>
+        <ExportAPI("args")>
+        Public Function argumentList(name As Object, Optional env As Environment = Nothing) As Object
+            If name Is Nothing Then
+                Return Nothing
+            End If
+
+            If name.GetType.ImplementInterface(Of RFunction) Then
+                Return DirectCast(name, RFunction).argumentList
+            ElseIf TypeOf name Is MethodInfo Then
+                Return DirectCast(name, MethodInfo).argumentList
+            ElseIf TypeOf name Is String Then
+                Dim func = env.FindFunction(name)?.value
+
+                If func Is Nothing Then
+                    Return Nothing
+                Else
+                    Return argumentList(func, env)
+                End If
+            Else
+                Return Nothing
+            End If
+        End Function
+
+        <Extension>
+        Private Function argumentList(func As MethodInfo) As Object
+
+        End Function
+
+        <Extension>
+        Private Function argumentList(func As RFunction) As Object
+
+        End Function
+
+        ''' <summary>
         ''' ##### commandArgs: Extract Command Line Arguments
         ''' 
         ''' Provides access to a copy of the command line arguments supplied when this R session was invoked.
