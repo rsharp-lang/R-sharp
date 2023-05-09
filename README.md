@@ -6,7 +6,7 @@
 
 </div>
 
-R# language is a kind of R liked language implements on .NET environment for GCModeller scripting.
+R# language is a kind of R liked language implements on .NET environment for the general bioinformatics data analysis
 
 > [WARNING] This project is a work in progress and is not recommended for production use.
 >
