@@ -3,6 +3,11 @@
 // package_source=REnv
 
 declare namespace REnv {
+   module _ {
+      /**
+      */
+      function onLoad(): object;
+   }
    /**
    */
    function classify_cancer(): object;
@@ -16,38 +21,33 @@ declare namespace REnv {
      * @param interval default value Is ``3``.
      * @param filetype default value Is ``"html"``.
    */
-   function http_get(url:any, streamTo:any, interval:object, filetype:string): object;
+   function getHtml(url:any, interval:object, filetype:string): object;
    /**
      * @param interval default value Is ``3``.
    */
    function getImage(url:any, interval:object): object;
    /**
      * @param interval default value Is ``3``.
-     * @param filetype default value Is ``"html"``.
-   */
-   function getHtml(url:any, interval:object, filetype:string): object;
-   /**
-     * @param interval default value Is ``3``.
      * @param raw_text default value Is ``False``.
    */
    function getJSON(url:any, interval:object, raw_text:boolean): object;
    /**
+     * @param interval default value Is ``3``.
+     * @param filetype default value Is ``"html"``.
    */
-   function scale0_1(x:any): object;
-   /**
-   */
-   function queryWeb(url:any, graphquery:any): object;
+   function http_get(url:any, streamTo:any, interval:object, filetype:string): object;
    /**
    */
    function platformName(): object;
+   /**
+   */
+   function queryWeb(url:any, graphquery:any): object;
    /**
      * @param outputdir default value Is ``"./"``.
      * @param package default value Is ``NULL``.
    */
    function Rdocuments(pkgName:any, outputdir:string, package:any): object;
-   module _ {
-      /**
-      */
-      function onLoad(): object;
-   }
+   /**
+   */
+   function scale0_1(x:any): object;
 }
