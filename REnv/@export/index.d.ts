@@ -11,40 +11,41 @@ declare namespace REnv {
      * @param qcut default value Is ``0.1``.
      * @param f default value Is ``10``.
    */
-   function density2DCut(data:any, k:object, qcut:number, f:object): object;
+   function density2DCut(data: any, k?: object, qcut?: number, f?: object): object;
    /**
      * @param interval default value Is ``3``.
-     * @param filetype default value Is ``"html"``.
+     * @param filetype default value Is ``html``.
    */
-   function http_get(url:any, streamTo:any, interval:object, filetype:string): object;
+   function http_get(url: any, streamTo: any, interval?: object, filetype?: string): object;
    /**
      * @param interval default value Is ``3``.
    */
-   function getImage(url:any, interval:object): object;
+   function getImage(url: any, interval?: object): object;
    /**
      * @param interval default value Is ``3``.
-     * @param filetype default value Is ``"html"``.
+     * @param filetype default value Is ``html``.
    */
-   function getHtml(url:any, interval:object, filetype:string): object;
+   function getHtml(url: any, interval?: object, filetype?: string): object;
    /**
      * @param interval default value Is ``3``.
-     * @param raw_text default value Is ``False``.
+     * @param raw_text default value Is ``false``.
    */
-   function getJSON(url:any, interval:object, raw_text:boolean): object;
+   function getJSON(url: any, interval?: object, raw_text?: boolean): object;
    /**
    */
-   function scale0_1(x:any): object;
+   function scale0_1(x: any): object;
    /**
    */
-   function queryWeb(url:any, graphquery:any): object;
+   function queryWeb(url: any, graphquery: any): object;
    /**
    */
    function platformName(): object;
    /**
-     * @param outputdir default value Is ``"./"``.
-     * @param package default value Is ``NULL``.
+     * @param outputdir default value Is ``./``.
+     * @param package default value Is ``null``.
    */
-   function Rdocuments(pkgName:any, outputdir:string, package:any): object;
+   function Rdocuments(pkgName: any, outputdir?: string, package?: any): object;
+   github_url: string;
    module _ {
       /**
       */
