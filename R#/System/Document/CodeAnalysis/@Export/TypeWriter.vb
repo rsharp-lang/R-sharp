@@ -21,6 +21,18 @@ Namespace Development.CodeAnalysis
         End Sub
 
         Public Sub Flush()
+            If symbol.isSymbol Then
+                Call WriteSymbol()
+            Else
+                Call WriteFunction()
+            End If
+        End Sub
+
+        Private Sub WriteSymbol()
+            Call ts.WriteLine($"{New String(" "c, level * 3)}{symbol.GetTypeScriptDeclare};")
+        End Sub
+
+        Private Sub WriteFunction()
             Dim indent As String = New String(" "c, level * 3)
             Dim indent_comment As String = New String(" "c, level * 3 + 2)
 
