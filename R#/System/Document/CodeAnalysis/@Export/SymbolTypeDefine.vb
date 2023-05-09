@@ -2,6 +2,9 @@
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Interop.[CType]
@@ -55,9 +58,53 @@ Namespace Development.CodeAnalysis
         Sub New(symbol As SymbolExpression)
             name = symbol.GetSymbolName
             value = RType.GetType(symbol.type).MapTypeScriptType
-            parameters = Nothing
             source = symbol
+
+            If TypeOf symbol Is DeclareNewFunction Then
+                parameters = DirectCast(symbol, DeclareNewFunction).parameters _
+                    .Select(AddressOf ParseParameter) _
+                    .ToArray
+            ElseIf TypeOf symbol Is DeclareLambdaFunction Then
+                parameters = DirectCast(symbol, DeclareLambdaFunction).parameterNames _
+                    .Select(Function(a) New NamedValue(Of String)(a, Nothing, "any")) _
+                    .ToArray
+            Else
+                parameters = Nothing
+            End If
         End Sub
+
+        Private Shared Function ParseParameter(a As DeclareNewSymbol) As NamedValue(Of String)
+            Dim ts As String = RType.GetType(a.type).MapTypeScriptType
+
+            If a.hasInitializeExpression Then
+                Dim optVal As String = Nothing
+
+                If TypeOf a.value Is Literal Then
+                    Dim literal As Literal = DirectCast(a.value, Literal)
+
+                    If literal.isNull OrElse literal.isNA Then
+                        optVal = "null"
+                        ts = "any"
+                    Else
+                        Select Case literal.type
+                            Case TypeCodes.boolean : optVal = literal.value.ToString.ToLower
+                            Case TypeCodes.double, TypeCodes.integer : optVal = literal.value.ToString
+                            Case TypeCodes.string : optVal = literal.value.ToString
+                            Case Else
+                                ts = "any"
+                                optVal = literal.value.ToString
+                        End Select
+                    End If
+                Else
+                    ts = "any"
+                    optVal = a.value.ToString
+                End If
+
+                Return New NamedValue(Of String)(a.GetSymbolName, optVal, ts)
+            Else
+                Return New NamedValue(Of String)(a.GetSymbolName, Nothing, ts)
+            End If
+        End Function
 
         Private Shared Function ParseParameter(a As ParameterInfo) As NamedValue(Of String)
             Dim ts As String = RType.GetRSharpType(a.ParameterType).MapTypeScriptType
