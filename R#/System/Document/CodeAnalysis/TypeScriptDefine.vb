@@ -259,8 +259,7 @@ Namespace Development.CodeAnalysis
                 End Get
             End Property
 
-            Public Property Method1 As RMethodInfo
-            Public Property Symbol1 As SymbolExpression
+            Public Property Symbol1 As SymbolTypeDefine
             Public Property FunctionTrace As New List(Of String)
 
             Public Sub New(name As String)
@@ -303,7 +302,7 @@ Namespace Development.CodeAnalysis
                     func.FunctionTrace.Add(symbol.GetSymbolName)
                 Next
 
-                func.Symbol1 = symbol
+                func.Symbol1 = New SymbolTypeDefine(symbol)
             Next
 
             Return tree
@@ -332,49 +331,55 @@ Namespace Development.CodeAnalysis
                     func.FunctionTrace.Add(api.Name)
                 Next
 
-                func.Method1 = New RMethodInfo(api)
+                func.Symbol1 = New SymbolTypeDefine(New RMethodInfo(api))
             Next
 
             Return tree
         End Function
 
-        Private Function MapTypeScriptParameter(p As RMethodArgument) As (define As String, optVal As String)
+        <Extension>
+        Friend Function MapTypeScriptParameter(p As RMethodArgument) As NamedValue(Of String)
             Dim name As String = p.name
             Dim type As String = p.type.MapTypeScriptType
             Dim optVal As String
 
-            If p.isOptional Then
-                Dim def = p.default
-
-                If def Is Nothing Then
-                    optVal = "null"
-                Else
-                    Select Case RType.TypeOf(def).mode
-                        Case TypeCodes.boolean
-                            Dim b = CLRVector.asLogical(def)
-                            optVal = If(b.Length = 1, b(0).ToString.ToLower, b.GetJson)
-                        Case TypeCodes.integer
-                            Dim i = CLRVector.asInteger(def)
-                            optVal = If(i.Length = 1, i(0).ToString, i.GetJson)
-                        Case TypeCodes.double
-                            Dim d = CLRVector.asNumeric(def)
-                            optVal = If(d.Length = 1, d(0).ToString, d.GetJson)
-                        Case TypeCodes.string
-                            Dim s = CLRVector.asCharacter(def)
-                            optVal = If(s.Length = 1, $"'{s(0)}'", s.GetJson)
-                        Case Else
-                            optVal = "null"
-                    End Select
-                End If
-
-                Return ($"{name}?:{type}", optVal)
-            Else
-                Return ($"{name}:{type}", Nothing)
+            If Not p.isOptional Then
+                Return New NamedValue(Of String)(name, Nothing, type)
             End If
+
+            Dim def As Object = p.default
+
+            If def Is Nothing Then
+                optVal = "null"
+            Else
+                Select Case RType.TypeOf(def).mode
+                    Case TypeCodes.boolean
+                        Dim b = CLRVector.asLogical(def)
+                        optVal = If(b.Length = 1, b(0).ToString.ToLower, b.GetJson)
+                    Case TypeCodes.integer
+                        Dim i = CLRVector.asInteger(def)
+                        optVal = If(i.Length = 1, i(0).ToString, i.GetJson)
+                    Case TypeCodes.double
+                        Dim d = CLRVector.asNumeric(def)
+                        optVal = If(d.Length = 1, d(0).ToString, d.GetJson)
+                    Case TypeCodes.string
+                        Dim s = CLRVector.asCharacter(def)
+                        optVal = If(s.Length = 1, $"'{s(0)}'", s.GetJson)
+                    Case Else
+                        optVal = "null"
+                End Select
+            End If
+
+            Return New NamedValue(Of String)(name, optVal, type)
         End Function
 
+        ''' <summary>
+        ''' mapping R# clr type to typescript type mark string
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
         <Extension>
-        Private Function MapTypeScriptType(type As RType) As String
+        Friend Function MapTypeScriptType(type As RType) As String
             If type Is RType.any Then
                 Return "any"
             ElseIf type Is RType.list Then
