@@ -80,13 +80,40 @@ Namespace Runtime.Components.Interface
         Function hasName(name As String) As Boolean
     End Interface
 
+    ''' <summary>
+    ''' index start from base 1
+    ''' </summary>
     Public Interface RIndex
 
         ReadOnly Property length As Integer
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="i">index i should be start from base 1</param>
+        ''' <returns></returns>
         Function getByIndex(i As Integer) As Object
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="i">index i should be start from base 1</param>
+        ''' <returns></returns>
         Function getByIndex(i As Integer()) As Array
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="i">index i should be start from base 1</param>
+        ''' <param name="value"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Function setByIndex(i As Integer, value As Object, envir As Environment) As Object
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="i">index i should be start from base 1</param>
+        ''' <param name="value"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Function setByindex(i As Integer(), value As Array, envir As Environment) As Object
 
     End Interface

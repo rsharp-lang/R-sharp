@@ -60,6 +60,7 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
@@ -157,12 +158,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             ElseIf objType.ImplementInterface(Of RIndexer) Then
                 If TypeOf indexerRaw Is Expression Then
                     Return DirectCast(obj, RIndexer).EvaluateIndexer(indexerRaw, env:=envir)
-                Else
+                ElseIf TypeOf indexerRaw Is String Then
                     Return DirectCast(obj, RIndexer).EvaluateIndexer(New RuntimeValueLiteral(indexerRaw), env:=envir)
                 End If
-            Else
-                indexer = REnv.asVector(Of Object)(indexerRaw)
             End If
+
+#Disable Warning
+            indexer = REnv.TryCastGenericArray(REnv.asVector(Of Object)(indexerRaw), env:=envir)
+#Enable Warning
 
             If indexer.Length = 0 Then
                 If (indexType = SymbolIndexers.nameIndex OrElse indexType = SymbolIndexers.dataframeRanges) Then
@@ -174,9 +177,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
             ' now obj is always have values:
             If indexType = SymbolIndexers.nameIndex Then
-                ' a[[name]]
-                ' a$name
-                Return getByName(obj, indexer, envir)
+                If RType.GetRSharpType(indexer.GetType).mode = TypeCodes.integer Then
+                    ' a[xxx]
+                    Return getByIndex(obj, indexer, envir)
+                Else
+                    ' a[[name]]
+                    ' a$name
+                    Return getByName(obj, indexer, envir)
+                End If
             ElseIf indexType = SymbolIndexers.vectorIndex Then
                 ' a[name]
                 ' a[index]
