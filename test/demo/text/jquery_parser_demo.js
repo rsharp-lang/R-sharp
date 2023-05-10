@@ -15,9 +15,10 @@ var taxonomics = lapply(rows, function(r) {
 	
 	name = Html.plainText(name);
 	
-	return list(
-		id= id, name= name
-	)
+	return {
+		id: id, 
+		name: name
+	}
 });
 
 console.log(taxonomics)
