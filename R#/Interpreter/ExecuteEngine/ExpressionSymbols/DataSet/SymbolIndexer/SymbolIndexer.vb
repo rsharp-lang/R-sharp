@@ -150,11 +150,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Private Function getBySymbolIndex(obj As Object, envir As Environment) As Object
             Dim indexerRaw As Object = index.Evaluate(envir)
             Dim indexer As Array
+            Dim objType As Type = obj.GetType
 
             If Program.isException(indexerRaw) Then
                 Return indexerRaw
-            ElseIf obj.GetType.ImplementInterface(Of RIndexer) AndAlso TypeOf indexerRaw Is Expression Then
-                Return DirectCast(obj, RIndexer).EvaluateIndexer(indexerRaw, env:=envir)
+            ElseIf objType.ImplementInterface(Of RIndexer) Then
+                If TypeOf indexerRaw Is Expression Then
+                    Return DirectCast(obj, RIndexer).EvaluateIndexer(indexerRaw, env:=envir)
+                Else
+                    Return DirectCast(obj, RIndexer).EvaluateIndexer(New RuntimeValueLiteral(indexerRaw), env:=envir)
+                End If
             Else
                 indexer = REnv.asVector(Of Object)(indexerRaw)
             End If
