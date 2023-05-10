@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::69ddd87f766de0ad7427ad5ab7809c71, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//URL.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 390
-    '    Code Lines: 261
-    ' Comment Lines: 90
-    '   Blank Lines: 39
-    '     File Size: 15.52 KB
+' Summaries:
 
 
-    ' Module URL
-    ' 
-    '     Function: [get], content, encodeTokenPart, httpCache, HttpClientPost
-    '               HttpCookies, post, upload, urlcomponent, urlencode
-    '               wget
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 390
+'    Code Lines: 261
+' Comment Lines: 90
+'   Blank Lines: 39
+'     File Size: 15.52 KB
+
+
+' Module URL
+' 
+'     Function: [get], content, encodeTokenPart, httpCache, HttpClientPost
+'               HttpCookies, post, upload, urlcomponent, urlencode
+'               wget
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -356,7 +356,7 @@ Public Module URL
         Dim type = data.headers.headers.Item(HttpHeaderName.ContentType)
         Dim tmp As String = Now.ToString.MD5
 
-        If type = "plain/text" Then
+        If type = "plain/text" OrElse type = "text/html" Then
             Return text
         ElseIf type = "application/json" Then
             Dim jsonlib As New [Imports]("JSON", "base")
@@ -364,8 +364,12 @@ Public Module URL
             Call jsonlib.Evaluate(env)
             Dim json As Object = env.globalEnvironment.Rscript.Invoke("JSON::json_decode", text, env.globalEnvironment.Rscript.strict, [typeof], env)
             Return json
-        ElseIf type = "text/csv" Then
-            Return text
+        ElseIf type = "text/csv" OrElse type = "text/tsv" Then
+            ' parse dataframe 
+            Dim dataframeUtils As New [Imports]("dataframe", "base")
+            Call dataframeUtils.Evaluate(env)
+            Dim df = env.globalEnvironment.Rscript.Invoke("dataframe::parseDataframe", text, Nothing, False, True, "#", type = "text/tsv", -1, env)
+            Return df
         Else
             Return text
         End If

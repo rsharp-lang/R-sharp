@@ -210,7 +210,7 @@ Namespace Runtime.Internal.Object.Converts
         ''' elements such As names, formulas And calls) are Not coerced, And so a list 
         ''' containing one Or more Of these remains a list. (The effect Of unlisting an lm 
         ''' fit Is a list which has individual residuals As components.) Note that 
-        ''' ``unlist(x)`` now returns x unchanged also For non-vector x, instead Of signalling 
+        ''' ``unlist(x)`` now returns x unchanged also For non-vector x, instead Of signaling 
         ''' an Error In that Case.
         ''' </remarks>
         <ExportAPI("unlist")>

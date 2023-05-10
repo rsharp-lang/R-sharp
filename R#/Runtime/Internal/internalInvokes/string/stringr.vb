@@ -496,6 +496,7 @@ Namespace Runtime.Internal.Invokes
         <RApiReturn(GetType(String), GetType(Byte))>
         Public Function base64Decode(base64 As String,
                                      Optional asText_encoding As Object = Nothing,
+                                     Optional wrap As Boolean = True,
                                      Optional env As Environment = Nothing) As Object
 
             If Not asText_encoding Is Nothing Then
@@ -504,8 +505,10 @@ Namespace Runtime.Internal.Invokes
                 Dim raw As Byte() = base64.Base64RawBytes
 
                 Return encoding.GetString(raw)
-            Else
+            ElseIf wrap Then
                 Return New MemoryStream(base64.Base64RawBytes)
+            Else
+                Return base64.Base64RawBytes
             End If
         End Function
 
