@@ -265,6 +265,23 @@ Public Class SyntaxTree
                 buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                 Reindex(buffer)
+            ElseIf tl.name = TokenType.identifier OrElse tl.name = TokenType.keyword Then
+                ' x['xxx'] symbol indexer
+                Dim symbol As New SymbolReference(tl)
+                Dim index As Expression
+                Dim col As ExpressionCollection = exp.expression
+
+                If col.expressions.Length > 1 Then
+                    index = New VectorLiteral(col.expressions)
+                Else
+                    index = col.expressions.First
+                End If
+
+                Dim indexer As New SymbolIndexer(symbol, index)
+
+                buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
+                buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, indexer))
+                Reindex(buffer)
             Else
                 Throw New NotImplementedException
             End If
