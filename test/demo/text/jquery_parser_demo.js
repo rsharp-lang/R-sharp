@@ -21,4 +21,12 @@ var taxonomics = lapply(rows, function(r) {
 	}
 });
 
+// taxonomics = lapply(taxonomics, function(a) {
+	// return a;	
+// }, names = function(a) {
+	// return a.name;	
+// })
+
 console.log(taxonomics)
+
+writeLines(JSON.stringify(taxonomics), con = "./taxonomics_group.json");
