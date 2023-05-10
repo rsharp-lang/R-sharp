@@ -139,6 +139,11 @@ Module Html
         Return result
     End Function
 
+    <ExportAPI("link")>
+    Public Function links(html As String) As String
+        Return html.href
+    End Function
+
     ''' <summary>
     ''' get all internal document text from the given html document text. 
     ''' </summary>

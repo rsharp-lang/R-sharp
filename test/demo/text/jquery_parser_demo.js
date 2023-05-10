@@ -1,4 +1,4 @@
-import "jQuery" from "webKit";
+import {jQuery, Html} from "webKit";
 
 var doc = jQuery.load("./html_demo.html");
 var tbl = doc[".stattbl"]
@@ -9,7 +9,15 @@ var taxonomics = lapply(rows, function(r) {
 	var cells = r["td"]
 	var name = cells[1]
 	
-	return name.innerHTML;
+	name = name.innerHTML;
+	
+	var id = Html.link(name);
+	
+	name = Html.plainText(name);
+	
+	return list(
+		id= id, name= name
+	)
 });
 
 console.log(taxonomics)
