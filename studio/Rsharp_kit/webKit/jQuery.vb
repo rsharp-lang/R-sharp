@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.GraphQuery
 Imports Microsoft.VisualBasic.MIME.Html.Document
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
@@ -36,7 +37,9 @@ Public Class jQuery : Implements RIndexer, RIndex
         Dim q As String = CLRVector.asCharacter(expr.Evaluate(env)).First
 
         If q = "innerHTML" Then
-            Return page.GetHtmlText
+            Return page.GetHtmlText.Trim.GetValue.Trim
+        ElseIf q = "innerText" Then
+            Return page.GetPlantText.Trim
         Else
             Dim sel As New CSSSelector(q)
             Dim parse = sel.Parse(page, isArray:=q.First <> "#"c, New Engine)

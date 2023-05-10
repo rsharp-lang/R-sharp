@@ -497,8 +497,8 @@ Namespace Runtime.Internal.Invokes
 
                 For i As Integer = 1 To size
                     d = vec.getByIndex(i)
-                    keyName = getName(New SeqValue(Of Object)(i, d))
-                    value = apply.Invoke(envir, invokeArgument(d, i))
+                    keyName = getName(New SeqValue(Of Object)(i - 1, d))
+                    value = apply.Invoke(envir, invokeArgument(d, i - 1))
 
                     If TypeOf value Is ReturnValue Then
                         value = DirectCast(value, ReturnValue).Evaluate(envir)
