@@ -56,6 +56,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
@@ -275,6 +276,10 @@ Public Module Extensions
 
         If stream Is Nothing Then
             Return Nothing
+        ElseIf TypeOf stream Is MemoryStream Then
+            Return DirectCast(stream, MemoryStream).ToArray
+        ElseIf stream.GetType.IsInheritsFrom(GetType(RawStream)) Then
+            Return DirectCast(stream, RawStream).Serialize
         End If
 
         If bytes.isError Then
