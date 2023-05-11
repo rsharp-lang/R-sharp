@@ -37,5 +37,13 @@ Namespace Development.CodeAnalysis
             Return find
         End Function
 
+        Public Function SortName() As FunctionTree
+            ChildNodes = ChildNodes _
+                .OrderBy(Function(a) a.Name) _
+                .Select(Function(a) a.SortName) _
+                .AsList
+
+            Return Me
+        End Function
     End Class
 End Namespace
