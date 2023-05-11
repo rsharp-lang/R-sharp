@@ -47,6 +47,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|AnyCPU'">
     <DocumentationFile>webKit.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|AnyCPU'">

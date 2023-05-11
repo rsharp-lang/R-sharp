@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::36687835b6eee348d66f0940596032d2, D:/GCModeller/src/R-sharp/Library/base//utils/dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 670
-    '    Code Lines: 505
-    ' Comment Lines: 82
-    '   Blank Lines: 83
-    '     File Size: 25.68 KB
+' Summaries:
 
 
-    ' Module dataframe
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
-    '               colnames, column, createEntityRow, CreateRowObject, dataframeTable
-    '               deserialize, measureColumnVector, openCsv, parseRow, printRowVector
-    '               printTable, project, rawToDataFrame, readCsvRaw, readDataSet
-    '               rows, rowToString, RowToString, stripCommentRows, transpose
-    '               vector
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 670
+'    Code Lines: 505
+' Comment Lines: 82
+'   Blank Lines: 83
+'     File Size: 25.68 KB
+
+
+' Module dataframe
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
+'               colnames, column, createEntityRow, CreateRowObject, dataframeTable
+'               deserialize, measureColumnVector, openCsv, parseRow, printRowVector
+'               printTable, project, rawToDataFrame, readCsvRaw, readDataSet
+'               rows, rowToString, RowToString, stripCommentRows, transpose
+'               vector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -443,6 +443,36 @@ ReturnTable:
     <ExportAPI("parseRow")>
     Public Function parseRow(line As String, Optional delimiter As Char = ","c, Optional quot As Char = ASCII.Quot) As String()
         Return Tokenizer.CharsParser(line, delimiter, quot).ToArray
+    End Function
+
+    ''' <summary>
+    ''' parse the text data as the dataframe
+    ''' </summary>
+    ''' <param name="text"></param>
+    ''' <returns></returns>
+    ''' 
+    <ExportAPI("parseDataframe")>
+    Public Function parseDataframe(text As String,
+                                   <RRawVectorArgument>
+                                   Optional row_names As Object = Nothing,
+                                   Optional check_names As Boolean = True,
+                                   Optional check_modes As Boolean = True,
+                                   Optional comment_char As String = "#",
+                                   Optional tsv As Boolean = False,
+                                   Optional skip_rows As Integer = -1,
+                                   Optional env As Environment = Nothing) As Rdataframe
+
+        Dim table As csv = csv.Parse(text, tsv:=tsv)
+        Dim df = table.rawToDataFrame(
+            row_names:=row_names,
+            check_names:=check_names,
+            check_modes:=check_modes,
+            comment_char:=comment_char,
+            skip_rows:=skip_rows,
+            env:=env
+        )
+
+        Return df
     End Function
 
     <ExportAPI("append.cells")>

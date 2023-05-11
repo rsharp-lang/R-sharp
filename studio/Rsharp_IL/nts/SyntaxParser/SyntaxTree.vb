@@ -120,6 +120,27 @@ Public Class SyntaxTree
         Dim exp = range.GetExpression(fromComma:=False, opts)
 
         If exp.isException Then
+            If state.Value.Range.Min > 0 Then
+                ' try to deal with a special syntax
+                '
+                ' import {...,...,...} from 'xxx'
+                '
+                If range(0).IsToken(TokenType.open, "{") AndAlso range.Last.IsToken(TokenType.close, "}") Then
+                    ' is vector
+                    If (buffer(state.Value.Range.Min - 1).IsToken(TokenType.keyword, "import")) Then
+                        range(0) = New SyntaxToken(-1, New Token(TokenType.open, "[") With {.span = range(0).TryCast(Of Token).span})
+                        range(range.Length - 1) = New SyntaxToken(-1, New Token(TokenType.close, "]") With {.span = range.Last.TryCast(Of Token).span})
+                        exp = range.GetExpression(fromComma:=True, opts)
+
+                        buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                        buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, ExpressionCollection.GetExpressions(exp.expression).First))
+                        Reindex(buffer)
+
+                        Return Nothing
+                    End If
+                End If
+            End If
+
             Return exp
         End If
 
@@ -264,6 +285,23 @@ Public Class SyntaxTree
                 exp = New VectorLiteral(ExpressionCollection.GetExpressions(exp.expression))
                 buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
+                Reindex(buffer)
+            ElseIf tl.name = TokenType.identifier OrElse tl.name = TokenType.keyword Then
+                ' x['xxx'] symbol indexer
+                Dim symbol As New SymbolReference(tl)
+                Dim index As Expression
+                Dim col As ExpressionCollection = exp.expression
+
+                If col.expressions.Length > 1 Then
+                    index = New VectorLiteral(col.expressions)
+                Else
+                    index = col.expressions.First
+                End If
+
+                Dim indexer As New SymbolIndexer(symbol, index)
+
+                buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
+                buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, indexer))
                 Reindex(buffer)
             Else
                 Throw New NotImplementedException

@@ -26,7 +26,9 @@ Module Program
         ' Dim script14 As RProgram = ts.ParseScript("\GCModeller\src\interops\RNA-Seq\test.js", _global)
         ' Dim script15 As RProgram = ts.ParseScript("var linear = lm(Ct ~ At, data = data.frame(Ct, At), weights = 1 / (At ^ 2))", _global)
         ' Dim script16 As RProgram = ts.ParseScript("throw 'error message!'; var x= [1,2,3]", _global)
-        Dim script17 As RProgram = ts.ParseScript("\GCModeller\src\R-sharp\test\jsTest\polyglot_stack\stack_test.js", _global)
+        ' Dim script17 As RProgram = ts.ParseScript("\GCModeller\src\R-sharp\test\jsTest\polyglot_stack\stack_test.js", _global)
+        ' Dim script18 As RProgram = ts.ParseScript("doc['.stattbl']", _global)
+        Dim script19 As RProgram = ts.ParseScript("import {jQuery, Html} from 'webKit'; 'strict'", _global)
 
         ' Call println(script9.Execute(_global))
 

@@ -1,72 +1,72 @@
 ﻿#Region "Microsoft.VisualBasic::f8f93269915a598163b4a93ed7cfe74d, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 3035
-    '    Code Lines: 1411
-    ' Comment Lines: 1366
-    '   Blank Lines: 258
-    '     File Size: 138.00 KB
+' Summaries:
 
 
-    '     Module base
-    ' 
-    '         Function: [date], [stop], allocate, append, appendFinal
-    '                   appendOfList, appendOfVector, attachPackageFile, autoDispose, c
-    '                   cat, (+2 Overloads) cbind, checkDimensionsAgree, colnames, columnCombine01
-    '                   columnCombine11, columnVector, days, doPrintInternal, factor
-    '                   factors, getOption, getPosition, ifelse, ifelseScalar
-    '                   ifelseVector, invisible, isDataframe, isEmpty, isEmptyArray
-    '                   isList, isNA, isNull, isRVector, length
-    '                   library, makeNames, names, ncol, neg
-    '                   nrow, objectAddInvoke, options, options_flush, print
-    '                   range, rbind, Rdataframe, rep, replace
-    '                   Rlist, Robj_dimension, rowBindDataFrame, rownames, seq
-    '                   sink, source, str, strictColumnAppend, summary
-    '                   t, uniqueNames, unitOfT, ValueAt, warning
-    '                   year
-    ' 
-    '         Sub: safeAddColumn, warnings
-    '         Class PrinterOptions
-    ' 
-    '             Properties: fields, maxPrint, quot
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 3035
+'    Code Lines: 1411
+' Comment Lines: 1366
+'   Blank Lines: 258
+'     File Size: 138.00 KB
+
+
+'     Module base
+' 
+'         Function: [date], [stop], allocate, append, appendFinal
+'                   appendOfList, appendOfVector, attachPackageFile, autoDispose, c
+'                   cat, (+2 Overloads) cbind, checkDimensionsAgree, colnames, columnCombine01
+'                   columnCombine11, columnVector, days, doPrintInternal, factor
+'                   factors, getOption, getPosition, ifelse, ifelseScalar
+'                   ifelseVector, invisible, isDataframe, isEmpty, isEmptyArray
+'                   isList, isNA, isNull, isRVector, length
+'                   library, makeNames, names, ncol, neg
+'                   nrow, objectAddInvoke, options, options_flush, print
+'                   range, rbind, Rdataframe, rep, replace
+'                   Rlist, Robj_dimension, rowBindDataFrame, rownames, seq
+'                   sink, source, str, strictColumnAppend, summary
+'                   t, uniqueNames, unitOfT, ValueAt, warning
+'                   year
+' 
+'         Sub: safeAddColumn, warnings
+'         Class PrinterOptions
+' 
+'             Properties: fields, maxPrint, quot
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -87,6 +87,7 @@ Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.ValueTypes
+Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package.File
@@ -116,6 +117,69 @@ Namespace Runtime.Internal.Invokes
     ''' 在这个模块之中仅包含有最基本的数据操作函数
     ''' </summary>
     Public Module base
+
+        ''' <summary>
+        ''' ### Argument List of a Function
+        ''' 
+        ''' Displays the argument names and corresponding default values of a 
+        ''' (non-primitive or primitive) function.
+        ''' </summary>
+        ''' <param name="name">
+        ''' a function (a primitive or a closure, i.e., “non-primitive”). If name 
+        ''' is a character string then the function with that name is found and 
+        ''' used.
+        ''' </param>
+        ''' <returns>
+        ''' + For a closure, a closure with identical formal argument list but an empty (NULL) body.
+        ''' + For a primitive (function), a closure with the documented usage And NULL body. 
+        '''    Note that some primitives do Not make use of named arguments And match by position 
+        '''    rather than name.
+        ''' + NULL in case of a non-function.
+        ''' </returns>
+        ''' <remarks>
+        ''' This function is mainly used interactively to print the argument list 
+        ''' of a function. For programming, consider using formals instead.
+        ''' </remarks>
+        <ExportAPI("args")>
+        Public Function argumentList(name As Object, Optional env As Environment = Nothing) As Object
+            If name Is Nothing Then
+                Return Nothing
+            End If
+
+            If name.GetType.ImplementInterface(Of RFunction) Then
+                Return DirectCast(name, RFunction).argumentList
+            ElseIf TypeOf name Is MethodInfo Then
+                Return DirectCast(name, MethodInfo).argumentList
+            ElseIf TypeOf name Is String Then
+                Dim func = env.FindFunction(name)?.value
+
+                If func Is Nothing Then
+                    Return Nothing
+                Else
+                    Return argumentList(func, env)
+                End If
+            Else
+                Return Nothing
+            End If
+        End Function
+
+        <Extension>
+        Private Function argumentList(func As MethodInfo) As Object
+            Return New SymbolTypeDefine(func)
+        End Function
+
+        <Extension>
+        Private Function argumentList(func As RFunction) As Object
+            If TypeOf func Is DeclareNewFunction Then
+                Return New SymbolTypeDefine(DirectCast(func, DeclareNewFunction))
+            ElseIf TypeOf func Is DeclareLambdaFunction Then
+                Return New SymbolTypeDefine(DirectCast(func, DeclareLambdaFunction))
+            ElseIf TypeOf func Is RMethodInfo Then
+                Return New SymbolTypeDefine(DirectCast(func, RMethodInfo))
+            Else
+                Throw New NotImplementedException(func.GetType.FullName)
+            End If
+        End Function
 
         ''' <summary>
         ''' ##### commandArgs: Extract Command Line Arguments

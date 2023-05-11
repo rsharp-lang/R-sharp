@@ -139,6 +139,11 @@ Module Html
         Return result
     End Function
 
+    <ExportAPI("link")>
+    Public Function links(html As String) As String
+        Return html.href
+    End Function
+
     ''' <summary>
     ''' get all internal document text from the given html document text. 
     ''' </summary>
@@ -146,11 +151,17 @@ Module Html
     ''' <returns></returns>
     <ExportAPI("plainText")>
     <Extension>
-    Public Function getPlainText(html As String) As String
-        Return html _
+    Public Function getPlainText(html As String, Optional strip_inner As Boolean = True) As String
+        Dim text As String = html _
             .StripHTMLTags _
             .UnescapeHTML _
             .TrimNull _
             .Trim(" "c, ASCII.CR, ASCII.LF, ASCII.TAB, " "c, ASCII.NUL)
+
+        If strip_inner Then
+            text = text.TrimNewLine.StringReplace("\s+", " ")
+        End If
+
+        Return text
     End Function
 End Module

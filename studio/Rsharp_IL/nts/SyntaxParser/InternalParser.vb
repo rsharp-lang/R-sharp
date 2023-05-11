@@ -188,7 +188,7 @@ Public Module InternalParser
 
                 Return New SyntaxResult(forloop)
             ElseIf tk.isKeyword("import") Then
-                Dim mods = {tokens(1)}.ParseValueExpression(opts)
+                Dim mods As SyntaxResult = {tokens(1)}.ParseValueExpression(opts)
                 Dim pkg As SyntaxResult
                 Dim exp As [Imports]
 

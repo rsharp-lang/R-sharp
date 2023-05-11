@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
@@ -459,10 +460,16 @@ Namespace Runtime.Internal.Invokes
                         keyName = getName(New SeqValue(Of Object)(++i, value))
                     End If
 
-                    list(keyName) = apply.Invoke(envir, invokeArgument(value, ++idx))
+                    value = apply.Invoke(envir, invokeArgument(value, ++idx))
 
-                    If Program.isException(list(keyName)) Then
-                        Return list(keyName)
+                    If TypeOf value Is ReturnValue Then
+                        value = DirectCast(value, ReturnValue).Evaluate(envir)
+                    End If
+
+                    If Program.isException(value) Then
+                        Return value
+                    Else
+                        list(keyName) = value
                     End If
                 Next
             ElseIf TypeOf X Is pipeline Then
@@ -472,6 +479,30 @@ Namespace Runtime.Internal.Invokes
 
                     keyName = getName(obj)
                     value = apply.Invoke(envir, invokeArgument(obj.value, ++idx))
+
+                    If TypeOf value Is ReturnValue Then
+                        value = DirectCast(value, ReturnValue).Evaluate(envir)
+                    End If
+
+                    If Program.isException(value) Then
+                        Return value
+                    Else
+                        list(keyName) = value
+                    End If
+                Next
+            ElseIf X.GetType.ImplementInterface(Of RIndex) Then
+                Dim vec As RIndex = X
+                Dim size As Integer = vec.length
+                Dim d As Object
+
+                For i As Integer = 1 To size
+                    d = vec.getByIndex(i)
+                    keyName = getName(New SeqValue(Of Object)(i - 1, d))
+                    value = apply.Invoke(envir, invokeArgument(d, i - 1))
+
+                    If TypeOf value Is ReturnValue Then
+                        value = DirectCast(value, ReturnValue).Evaluate(envir)
+                    End If
 
                     If Program.isException(value) Then
                         Return value
@@ -486,6 +517,10 @@ Namespace Runtime.Internal.Invokes
 
                     keyName = getName(d)
                     value = apply.Invoke(envir, invokeArgument(d.value, ++idx))
+
+                    If TypeOf value Is ReturnValue Then
+                        value = DirectCast(value, ReturnValue).Evaluate(envir)
+                    End If
 
                     If Program.isException(value) Then
                         Return value
