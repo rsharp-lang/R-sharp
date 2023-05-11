@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Serialization.BinaryDumping
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -71,6 +72,18 @@ Imports Rsharp = SMRUCC.Rsharp
 ''' </summary>
 <Package("buffer", Category:=APICategories.UtilityTools)>
 Module buffer
+
+    ''' <summary>
+    ''' cast a numeric vector as bytes data in network byte order
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <returns></returns>
+    <ExportAPI("packBuffer")>
+    Public Function asBuffer(x As Double()) As Byte()
+        Dim encoder As New NetworkByteOrderBuffer
+        Dim bytes As Byte() = encoder.encode(x)
+        Return bytes
+    End Function
 
     ''' <summary>
     ''' apply bit convert of the bytes stream data as floats numbers
@@ -162,10 +175,7 @@ Module buffer
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("zlib_stream")>
-    Public Function zlibStream(<RRawVectorArgument>
-                               stream As Object,
-                               Optional env As Environment = Nothing) As Object
-
+    Public Function zlibStream(<RRawVectorArgument> stream As Object, Optional env As Environment = Nothing) As Object
         Dim buffer As [Variant](Of Byte(), Message) = Rsharp.Buffer(stream, env)
 
         If buffer Is Nothing Then
