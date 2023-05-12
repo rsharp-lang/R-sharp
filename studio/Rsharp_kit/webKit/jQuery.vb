@@ -7,9 +7,11 @@ Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 <Package("jQuery")>
+<RPolyglotSymbol("$")>
 Public Class jQuery : Implements RIndexer, RIndex
 
     Dim page As InnerPlantText

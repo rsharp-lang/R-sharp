@@ -72,6 +72,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -389,6 +390,18 @@ load:       Return LoadLibrary(filepath, env, names)
         End Function
 
         Public Shared Sub hook_jsEnv(globalEnv As GlobalEnvironment, symbolName As String, ParamArray libs As Type())
+            Call hook_jsEnv_Internal(globalEnv, symbolName, libs)
+
+            For Each type As Type In libs
+                Dim aliases As String() = RPolyglotSymbolAttribute.GetAlternativeNames(type).ToArray
+
+                For Each name As String In aliases
+                    Call hook_jsEnv_Internal(globalEnv, name, libs)
+                Next
+            Next
+        End Sub
+
+        Private Shared Sub hook_jsEnv_Internal(globalEnv As GlobalEnvironment, symbolName As String, ParamArray libs As Type())
             Dim symbol As Symbol = globalEnv.polyglot.interop.FindSymbol(symbolName)
 
             If symbol IsNot Nothing AndAlso symbol.typeCode = TypeCodes.list Then
