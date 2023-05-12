@@ -110,7 +110,7 @@ Public Class UnionMatrix
         For Each name As String In allFeatures
             Dim v As Object() = records _
                 .Select(Function(a)
-                            Return If(a.Value.hasName(name), a.Value.getByName(name), 0.0)
+                            Return If(a.Value.hasName(name), REnv.single(a.Value.getByName(name)), 0.0)
                         End Function) _
                 .ToArray
 
