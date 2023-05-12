@@ -243,6 +243,7 @@ Public Module URL
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("http.cache")>
+    <RApiReturn(GetType(WebTextQuery))>
     Public Function httpCache(fs As Object, Optional env As Environment = Nothing) As Object
         If fs Is Nothing Then
             Return Internal.debug.stop("the required cache context can not be nothing!", env)

@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.GraphQuery
 Imports Microsoft.VisualBasic.MIME.Html.Document
+Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -51,8 +52,16 @@ Public Class jQuery : Implements RIndexer, RIndex
     End Function
 
     <ExportAPI("load")>
-    Public Shared Function load(url As String) As jQuery
-        Return New jQuery With {.page = HtmlDocument.LoadDocument(url.GET)}
+    Public Shared Function load(url As String, Optional proxy As IHttpGet = Nothing) As jQuery
+        Dim doc As String
+
+        If proxy Is Nothing Then
+            doc = url.GET
+        Else
+            doc = proxy.GetText(url)
+        End If
+
+        Return New jQuery With {.page = HtmlDocument.LoadDocument(doc)}
     End Function
 
     Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
