@@ -208,50 +208,63 @@ Namespace Runtime.Interop
         ''' upper environment context
         ''' </returns>
         Private Shared Function TryCastListObjects(parameterVals As Object(), listIndex As Integer, argument As RMethodArgument, env As Environment) As Object()
-            Dim values = parameterVals(listIndex)
+            If parameterVals.Length = 1 AndAlso Program.isException(parameterVals(Scan0)) Then
+                Return parameterVals
+            End If
 
             If argument.type.mode = TypeCodes.list Then
-                Dim list As New list With {
-                    .slots = New Dictionary(Of String, Object)
-                }
-                Dim value As Object
-                Dim listArgsSlotKey As String
+                Dim values = parameterVals(listIndex)
+                Dim result = TryCastListObjectsInternal(values, env)
 
-                ' push arguments to the list at here
-                ' the symbol name is not so importants?
-                For Each val As InvokeParameter In DirectCast(values, InvokeParameter())
-                    listArgsSlotKey = val.name
-
-                    If val.name.StringEmpty Then
-                        'Return New Object() {
-                        '    Internal.debug.stop({
-                        '        $"invalid parameter name, name value could not be nothing!",
-                        '        $"exp: {val.ToString}"
-                        '    }, env)
-                        '}
-
-                        ' 20230214 the missing name should not crash
-                        ' the scripting environment when construct a
-                        ' new argument list object parameter
-                        '
-                        ' so we create an temp name by its list index
-                        ' value at here
-                        listArgsSlotKey = $"${val.index}"
-                    End If
-
-                    value = val.Evaluate(env)
-
-                    If Program.isException(value) Then
-                        Return New Object() {value}
-                    Else
-                        list.slots.Add(listArgsSlotKey, value)
-                    End If
-                Next
-
-                parameterVals(listIndex) = list
+                If Program.isException(result) Then
+                    Return New Object() {result}
+                Else
+                    parameterVals(listIndex) = DirectCast(values, list)
+                End If
             End If
 
             Return parameterVals
+        End Function
+
+        Private Shared Function TryCastListObjectsInternal(values As Object, env As Environment) As Object
+            Dim list As New list With {
+                .slots = New Dictionary(Of String, Object)
+            }
+            Dim value As Object
+            Dim listArgsSlotKey As String
+
+            ' push arguments to the list at here
+            ' the symbol name is not so importants?
+            For Each val As InvokeParameter In DirectCast(values, InvokeParameter())
+                listArgsSlotKey = val.name
+
+                If val.name.StringEmpty Then
+                    'Return New Object() {
+                    '    Internal.debug.stop({
+                    '        $"invalid parameter name, name value could not be nothing!",
+                    '        $"exp: {val.ToString}"
+                    '    }, env)
+                    '}
+
+                    ' 20230214 the missing name should not crash
+                    ' the scripting environment when construct a
+                    ' new argument list object parameter
+                    '
+                    ' so we create an temp name by its list index
+                    ' value at here
+                    listArgsSlotKey = $"${val.index}"
+                End If
+
+                value = val.Evaluate(env)
+
+                If Program.isException(value) Then
+                    Return value
+                Else
+                    list.slots.Add(listArgsSlotKey, value)
+                End If
+            Next
+
+            Return list
         End Function
 
         Private Shared Function fillOptionalArguments(parameterVals As Object(),
