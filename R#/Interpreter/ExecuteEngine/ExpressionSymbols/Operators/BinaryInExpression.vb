@@ -215,7 +215,9 @@ Generic:
         End Function
 
         Private Shared Function findTest(x As Object, isComparable As Boolean, index As Index(Of Object), rawIndexObjects As Object()) As Boolean
-            If x Like index Then
+            If x Is Nothing Then
+                Return False
+            ElseIf x Like index Then
                 Return True
             ElseIf isComparable AndAlso x.GetType.ImplementInterface(GetType(IComparable)) Then
                 For Each y As Object In rawIndexObjects

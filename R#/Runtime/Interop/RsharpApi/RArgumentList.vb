@@ -219,7 +219,7 @@ Namespace Runtime.Interop
                 If Program.isException(result) Then
                     Return New Object() {result}
                 Else
-                    parameterVals(listIndex) = DirectCast(values, list)
+                    parameterVals(listIndex) = result
                 End If
             End If
 
