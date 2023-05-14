@@ -150,8 +150,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 If Not op Like GetType(Message) AndAlso op.TryCast(Of BinaryIndex).hasOperator(left, right) Then
                     Return op.TryCast(Of BinaryIndex).Evaluate(testLeft, sequence, Me.ToString, envir)
                 Else
+                    Dim err As Exception = Nothing
+
                     ' and then try index hash
-                    flags = testVectorIndexOf(getIndex(sequence).AsObjectEnumerator.Indexing, testLeft)
+                    flags = testVectorIndexOf(getIndex(sequence).AsObjectEnumerator.Indexing, testLeft, err)
+
+                    If Not err Is Nothing Then
+                        Return Internal.debug.stop(err, envir)
+                    End If
                 End If
             End If
 
@@ -185,7 +191,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 .ToArray
         End Function
 
-        Private Shared Function testVectorIndexOf(index As Index(Of Object), testLeft As Array) As Boolean()
+        Private Shared Function testVectorIndexOf(index As Index(Of Object), testLeft As Array, ByRef err As Exception) As Boolean()
             Dim rawIndexObjects As Object() = index.Objects
             Dim typeLeft = REnv.MeasureRealElementType(testLeft)
             Dim typeRight = REnv.MeasureRealElementType(rawIndexObjects)
@@ -204,17 +210,26 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
 Generic:
             Dim isComparable As Boolean = rawIndexObjects.All(Function(a) a.GetType.ImplementInterface(GetType(IComparable)))
-            Dim findTest As Boolean() = testLeft _
-                .AsObjectEnumerator _
-                .Select(Function(x)
-                            Return BinaryInExpression.findTest(x, isComparable, index, rawIndexObjects)
-                        End Function) _
-                .ToArray
+            Dim findTest As Boolean() = New Boolean(testLeft.Length - 1) {}
+
+            For i As Integer = 0 To testLeft.Length - 1
+                Dim x As Object = testLeft(i)
+                Dim test = BinaryInExpression.findTest(x, isComparable, index, rawIndexObjects)
+
+                If Not test Like GetType(Boolean) Then
+                    err = test
+                    Return Nothing
+                Else
+                    findTest(i) = test
+                End If
+            Next
+
+            err = Nothing
 
             Return findTest
         End Function
 
-        Private Shared Function findTest(x As Object, isComparable As Boolean, index As Index(Of Object), rawIndexObjects As Object()) As Boolean
+        Private Shared Function findTest(x As Object, isComparable As Boolean, index As Index(Of Object), rawIndexObjects As Object()) As [Variant](Of Exception, Boolean)
             If x Is Nothing Then
                 Return False
             ElseIf x Like index Then
@@ -223,9 +238,10 @@ Generic:
                 For Each y As Object In rawIndexObjects
                     Dim test = BinaryBetweenExpression.compareOf(x, y)
 
-                    If test Like GetType(Exception) Then
+                    If Not test Like GetType(Integer) Then
                         ' can not compare between different type!
                         ' ignore
+                        Return test.TryCast(Of Exception)
                     ElseIf test.TryCast(Of Integer) = 0 Then
                         Return True
                     End If

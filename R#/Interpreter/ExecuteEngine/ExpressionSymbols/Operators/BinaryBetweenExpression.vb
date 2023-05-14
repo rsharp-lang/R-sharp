@@ -58,6 +58,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -136,27 +137,29 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Dim t1 As Type = a.GetType
             Dim t2 As Type = b.GetType
 
-            If t1 Is GetType(Decimal) OrElse t2 Is GetType(Decimal) Then
-                Return CType(a, Decimal).CompareTo(CType(b, Decimal))
-            ElseIf t1 Is GetType(Double) OrElse t2 Is GetType(Double) Then
-                Return CType(a, Double).CompareTo(CType(b, Double))
-            ElseIf t1 Is GetType(Single) OrElse t2 Is GetType(Single) Then
-                Return CType(a, Single).CompareTo(CType(b, Single))
-            ElseIf t1 Is GetType(Long) OrElse t2 Is GetType(Long) Then
-                Return CType(a, Long).CompareTo(CType(b, Long))
-            ElseIf t1 Is GetType(Integer) OrElse t2 Is GetType(Integer) Then
-                Return CType(a, Integer).CompareTo(CType(b, Integer))
-            ElseIf t1 Is GetType(Short) OrElse t2 Is GetType(Short) Then
-                Return CType(a, Short).CompareTo(CType(b, Short))
-            ElseIf t1 Is GetType(Byte) OrElse t2 Is GetType(Byte) Then
-                Return CType(a, Byte).CompareTo(CType(b, Byte))
-            ElseIf t1 Is GetType(Date) OrElse t2 Is GetType(Date) Then
-                Return CType(a, Date).CompareTo(CType(b, Date))
-            ElseIf t1 Is GetType(String) OrElse t2 Is GetType(String) Then
-                Return CType(a, String).CompareTo(CType(b, String))
+            If DataFramework.IsNumericType(t1) AndAlso DataFramework.IsNumericType(t2) Then
+                If t1 Is GetType(Decimal) OrElse t2 Is GetType(Decimal) Then
+                    Return CType(a, Decimal).CompareTo(CType(b, Decimal))
+                ElseIf t1 Is GetType(Double) OrElse t2 Is GetType(Double) Then
+                    Return CType(a, Double).CompareTo(CType(b, Double))
+                ElseIf t1 Is GetType(Single) OrElse t2 Is GetType(Single) Then
+                    Return CType(a, Single).CompareTo(CType(b, Single))
+                ElseIf t1 Is GetType(Long) OrElse t2 Is GetType(Long) Then
+                    Return CType(a, Long).CompareTo(CType(b, Long))
+                ElseIf t1 Is GetType(Integer) OrElse t2 Is GetType(Integer) Then
+                    Return CType(a, Integer).CompareTo(CType(b, Integer))
+                ElseIf t1 Is GetType(Short) OrElse t2 Is GetType(Short) Then
+                    Return CType(a, Short).CompareTo(CType(b, Short))
+                ElseIf t1 Is GetType(Byte) OrElse t2 Is GetType(Byte) Then
+                    Return CType(a, Byte).CompareTo(CType(b, Byte))
+                ElseIf t1 Is GetType(Date) OrElse t2 Is GetType(Date) Then
+                    Return CType(a, Date).CompareTo(CType(b, Date))
+                Else
+                    Return New NotImplementedException($"[compareOf] unsure how to compare between {t1.FullName} and {t2.FullName}!")
+                End If
+            Else
+                Return New NotImplementedException($"[compareOf] unsure how to compare between {t1.FullName} and {t2.FullName}!")
             End If
-
-            Throw New NotImplementedException($"unsure how to compare between {t1.FullName} and {t2.FullName}!")
         End Function
     End Class
 End Namespace
