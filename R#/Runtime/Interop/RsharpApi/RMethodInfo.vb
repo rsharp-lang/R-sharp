@@ -433,8 +433,9 @@ opt:                    If arg.isOptional Then
                 $"function: {funcName}",
                 $"environment: {envir.ToString}"
             }
+            Dim debug As Boolean = envir.globalEnvironment.debugMode
 
-            Return Internal.debug.stop(messages, envir)
+            Return Internal.debug.stop(messages, envir, suppress:=Not debug)
         End Function
 
         ''' <summary>
