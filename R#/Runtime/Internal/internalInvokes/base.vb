@@ -1806,6 +1806,29 @@ RE0:
         End Function
 
         ''' <summary>
+        ''' ### Is an Object of Type (Primitive) Function?
+        ''' 
+        ''' Checks whether its argument is a (primitive) function.
+        ''' </summary>
+        ''' <param name="x">an R object.</param>
+        ''' <returns>
+        ''' TRUE if x is a (primitive) function, and FALSE otherwise.
+        ''' </returns>
+        ''' <remarks>
+        ''' is.primitive(x) tests if x is a primitive function, i.e, if typeof(x) is either "builtin" or "special".
+        ''' </remarks>
+        <ExportAPI("is.function")>
+        Public Function isFunction(x As Object) As Boolean
+            If x Is Nothing Then
+                Return False
+            ElseIf x.GetType.ImplementInterface(Of RFunction) Then
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
+        ''' <summary>
         ''' ‘is.vector’ returns ‘TRUE’ if ‘x’ is a vector of the specified
         ''' mode having no attributes _other than names_.  It returns 'FALSE’
         ''' otherwise.
