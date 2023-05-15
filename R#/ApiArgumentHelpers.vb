@@ -220,12 +220,18 @@ Public Module ApiArgumentHelpers
     ''' 1. a valid file path to a filesystem location
     ''' 2. a stream object that can be read/write based on the <paramref name="mode"/> context
     ''' 3. a raw bytes array for construct a memory stream in this function(readonly)
-    ''' 
     ''' </param>
     ''' <param name="mode"></param>
     ''' <param name="env"></param>
     ''' <param name="suppress"></param>
     ''' <returns></returns>
+    ''' <remarks>
+    ''' base on the value of <paramref name="mode"/>, this function has different behaviour:
+    ''' 
+    ''' 1. <see cref="FileAccess.Read"/> for a readonly stream
+    ''' 2. <see cref="FileAccess.ReadWrite"/> for create a stream could be used for write data
+    ''' 3. <see cref="FileAccess.Write"/> will truncate the stream at first!
+    ''' </remarks>
     Public Function GetFileStream(file As Object,
                                   mode As FileAccess,
                                   env As Environment,
@@ -243,13 +249,19 @@ Public Module ApiArgumentHelpers
         ElseIf TypeOf file Is String Then
             If mode = FileAccess.Read Then
                 Return DirectCast(file, String).Open(FileMode.Open, doClear:=False, [readOnly]:=True)
-            Else
+            ElseIf mode = FileAccess.Write Then
                 Return DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+            Else
+                Return DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=False, [readOnly]:=False)
             End If
         ElseIf TypeOf file Is Stream Then
             Return DirectCast(file, Stream)
         ElseIf TypeOf file Is Byte() Then
-            Return New MemoryStream(DirectCast(file, Byte()))
+            If mode = FileAccess.Read Then
+                Return New MemoryStream(DirectCast(file, Byte()))
+            Else
+                Return Internal.debug.stop("the file open mode should be readonly when the input file data is a byte data collection.", env, suppress)
+            End If
         ElseIf TypeOf file Is StreamWriter AndAlso mode = FileAccess.Write Then
             Return DirectCast(file, StreamWriter).BaseStream
         Else
