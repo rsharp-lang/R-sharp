@@ -225,4 +225,16 @@ Public Module InteropArgumentHelper
                 Return [default]
         End Select
     End Function
+
+    Public Function getRasterImage(raster As Object) As Bitmap
+        If raster Is Nothing Then
+            Return Nothing
+        ElseIf TypeOf raster Is Bitmap Then
+            Return raster
+        ElseIf TypeOf raster Is Image Then
+            Return DirectCast(raster, Image)
+        Else
+            Return Nothing
+        End If
+    End Function
 End Module
