@@ -101,11 +101,15 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("html")>
-        Public Function html(<RRawVectorArgument> x As Object, env As Environment) As Object
+        Public Function html(<RRawVectorArgument> x As Object,
+                             <RListObjectArgument>
+                             Optional args As list = Nothing,
+                             Optional env As Environment = Nothing) As Object
+
             If x Is Nothing Then
                 Return Nothing
             Else
-                Return htmlPrinter.GetHtml(x, env)
+                Return htmlPrinter.GetHtml(x, args, env)
             End If
         End Function
 

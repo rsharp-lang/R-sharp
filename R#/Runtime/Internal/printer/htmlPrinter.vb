@@ -57,28 +57,30 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Internal
 
+    Public Delegate Function IHtmlBuilder(x As Object, args As list, env As Environment) As String
+
     Public Module htmlPrinter
 
-        ReadOnly RtoHtml As New Dictionary(Of Type, IStringBuilder)
+        ReadOnly RtoHtml As New Dictionary(Of Type, IHtmlBuilder)
 
         ''' <summary>
         ''' Create html document from given object. (<see cref="Object"/> -> html <see cref="String"/>)
         ''' </summary>
         ''' <typeparam name="T"></typeparam>
         ''' <param name="formatter"></param>
-        Public Sub AttachHtmlFormatter(Of T)(formatter As IStringBuilder)
+        Public Sub AttachHtmlFormatter(Of T)(formatter As IHtmlBuilder)
             RtoHtml(GetType(T)) = formatter
         End Sub
 
-        Friend Function GetHtml(x As Object, env As Environment) As Object
+        Friend Function GetHtml(x As Object, args As list, env As Environment) As Object
             Dim keyType As Type = x.GetType
 
             If keyType Is GetType(vbObject) Then
-                Return GetHtml(DirectCast(x, vbObject).target, env)
+                Return GetHtml(DirectCast(x, vbObject).target, args, env)
             End If
 
             If RtoHtml.ContainsKey(keyType) Then
-                Return RtoHtml(keyType)(x)
+                Return RtoHtml(keyType)(x, args, env)
             Else
                 Return debug.stop(New InvalidProgramException(keyType.FullName), env)
             End If

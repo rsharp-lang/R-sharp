@@ -80,7 +80,7 @@ Imports Rlang = Microsoft.VisualBasic.My.RlangInterop
 Module stringr
 
     Sub New()
-        RHtml.AttachHtmlFormatter(Of DistResult)(AddressOf ResultVisualize.HTMLVisualize)
+        RHtml.AttachHtmlFormatter(Of DistResult)(Function(x, args, env) ResultVisualize.HTMLVisualize(x))
     End Sub
 
     ''' <summary>
