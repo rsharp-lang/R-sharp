@@ -2,8 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "run.R --attach task --SetDllDirectory D:/mzkit/dist/bin/Rstudio/host",
-      "workingDirectory": "C:\\Users\\lipidsearch\\AppData\\Local\\Temp\\2\\mzkit_win32\\b6f1202a-1c72-4b8a-9754-1e5d5393b62b"
+      "commandLineArgs": "\"D:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=12345 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host"
     },
     "mzkit_debug": {
       "commandName": "Project",
@@ -11,7 +10,7 @@
     },
     "mzkit_desktop_debug": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=33361 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host"
+      "commandLineArgs": "\"D:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=12345 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host"
     }
   }
 }
