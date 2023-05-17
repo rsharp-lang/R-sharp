@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::9f237146964e7055e2f2542c7a8b6acf, D:/GCModeller/src/R-sharp/Rscript//Program.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 147
-    '    Code Lines: 106
-    ' Comment Lines: 18
-    '   Blank Lines: 23
-    '     File Size: 5.42 KB
+' Summaries:
 
 
-    ' Module Program
-    ' 
-    '     Function: Main, Run, RunRscriptFile
-    ' 
-    '     Sub: LoadLibrary
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 147
+'    Code Lines: 106
+' Comment Lines: 18
+'   Blank Lines: 23
+'     File Size: 5.42 KB
+
+
+' Module Program
+' 
+'     Function: Main, Run, RunRscriptFile
+' 
+'     Sub: LoadLibrary
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -56,6 +56,7 @@ Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Development.Configuration
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -106,11 +107,29 @@ Module Program
 
             Dim args As CommandLine = App.CommandLine
             Dim vanillaMode As Boolean = args("--vanilla")
+            Dim attach As String = args("--attach")
             Dim Rscript As RscriptText = RscriptText.AutoHandleScript(script.ToString)
             Dim [error] As String = Nothing
             Dim program As RProgram = RProgram.CreateProgram(Rscript, debug:=False, [error]:=[error])
             Dim ignoreMissingStartupPackages As Boolean = False
             Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+
+            If Not attach.StringEmpty Then
+                ' loading package list
+                ' --attach GCModeller,mzkit,REnv
+                ' --attach GCModeller.zip;mzkit.zip;/root/REnv/
+                Dim packageList As String() = attach.Split(";"c, ","c)
+
+                For Each packageRef As String In packageList
+                    If packageRef.DirectoryExists Then
+                        Dim err As Message = PackageLoader2.LoadPackage(packageRef.GetDirectoryFullPath, R.globalEnvir)
+
+                        If Not err Is Nothing Then
+                            Return handleResult(err, R.globalEnvir, Nothing)
+                        End If
+                    End If
+                Next
+            End If
 
             If Not [error].StringEmpty Then
                 Call App.LogException([error])
