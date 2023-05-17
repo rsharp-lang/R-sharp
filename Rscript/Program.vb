@@ -105,49 +105,52 @@ Module Program
                 End If
             Loop
 
-            Dim args As CommandLine = App.CommandLine
-            Dim vanillaMode As Boolean = args("--vanilla")
-            Dim attach As String = args("--attach")
-            Dim Rscript As RscriptText = RscriptText.AutoHandleScript(script.ToString)
-            Dim [error] As String = Nothing
-            Dim program As RProgram = RProgram.CreateProgram(Rscript, debug:=False, [error]:=[error])
-            Dim ignoreMissingStartupPackages As Boolean = False
-            Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
-
-            If Not attach.StringEmpty Then
-                ' loading package list
-                ' --attach GCModeller,mzkit,REnv
-                ' --attach GCModeller.zip;mzkit.zip;/root/REnv/
-                Dim packageList As String() = attach.Split(";"c, ","c)
-
-                For Each packageRef As String In packageList
-                    If packageRef.DirectoryExists Then
-                        Dim err As Message = PackageLoader2.LoadPackage(packageRef.GetDirectoryFullPath, R.globalEnvir)
-
-                        If Not err Is Nothing Then
-                            Return handleResult(err, R.globalEnvir, Nothing)
-                        End If
-                    End If
-                Next
-            End If
-
-            If Not [error].StringEmpty Then
-                Call App.LogException([error])
-                Call handleResult(Internal.debug.stop([error], R.globalEnvir), R.globalEnvir, Nothing)
-
-                Return 500
-            Else
-                Call LoadLibrary(R, ignoreMissingStartupPackages, "base", "utils", "grDevices", "math")
-            End If
-
-            Dim result As Object = R.Run(program)
-
-            If (Not result Is Nothing) AndAlso result.GetType Is GetType(Message) Then
-                Return DirectCast(result, Message).level
-            Else
-                Return 0
-            End If
+            Return RunScript(Rscript:=RscriptText.AutoHandleScript(script.ToString))
         End Using
+    End Function
+
+    Private Function RunScript(Rscript As RscriptText)
+        Dim args As CommandLine = App.CommandLine
+        Dim vanillaMode As Boolean = args("--vanilla")
+        Dim attach As String = args("--attach")
+        Dim [error] As String = Nothing
+        Dim program As RProgram = RProgram.CreateProgram(Rscript, debug:=False, [error]:=[error])
+        Dim ignoreMissingStartupPackages As Boolean = False
+        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+
+        If Not attach.StringEmpty Then
+            ' loading package list
+            ' --attach GCModeller,mzkit,REnv
+            ' --attach GCModeller.zip;mzkit.zip;/root/REnv/
+            Dim packageList As String() = attach.Split(";"c, ","c)
+
+            For Each packageRef As String In packageList
+                If packageRef.DirectoryExists Then
+                    Dim err As Message = PackageLoader2.LoadPackage(packageRef.GetDirectoryFullPath, R.globalEnvir)
+
+                    If Not err Is Nothing Then
+                        Return handleResult(err, R.globalEnvir, Nothing)
+                    End If
+                End If
+            Next
+        End If
+
+        If Not [error].StringEmpty Then
+            Call App.LogException([error])
+            Call handleResult(Internal.debug.stop([error], R.globalEnvir), R.globalEnvir, Nothing)
+
+            Return 500
+        Else
+            Call LoadLibrary(R, ignoreMissingStartupPackages, "base", "utils", "grDevices", "math")
+        End If
+
+        Dim result As Object = R.Run(program)
+
+        If (Not result Is Nothing) AndAlso result.GetType Is GetType(Message) Then
+            Return DirectCast(result, Message).level
+        Else
+            Return 0
+        End If
     End Function
 
     Friend Sub LoadLibrary(REnv As RInterpreter, ignoreMissingStartupPackages As Boolean, ParamArray names As String())
@@ -168,6 +171,7 @@ Module Program
         Dim SetDllDirectory As String = args("--SetDllDirectory")
         Dim redirectConsoleLog As String = args("--redirect_stdout")
         Dim redirectErrorLog As String = args("--redirect_stderr")
+        Dim attach As String = args("--attach")
 
         If Not redirectConsoleLog.StringEmpty Then
             Dim text = App.RedirectLogging(redirectConsoleLog)
@@ -190,6 +194,23 @@ Module Program
 
         If args("--debug") Then
             R.debug = True
+        End If
+
+        If Not attach.StringEmpty Then
+            ' loading package list
+            ' --attach GCModeller,mzkit,REnv
+            ' --attach GCModeller.zip;mzkit.zip;/root/REnv/
+            Dim packageList As String() = attach.Split(";"c, ","c)
+
+            For Each packageRef As String In packageList
+                If packageRef.DirectoryExists Then
+                    Dim err As Message = PackageLoader2.LoadPackage(packageRef.GetDirectoryFullPath, R.globalEnvir)
+
+                    If Not err Is Nothing Then
+                        Return handleResult(err, R.globalEnvir, Nothing)
+                    End If
+                End If
+            Next
         End If
 
         If Not SetDllDirectory.StringEmpty Then
