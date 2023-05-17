@@ -3,7 +3,7 @@
     "Rscript.NET5": {
       "commandName": "Project",
       "commandLineArgs": "run.R --attach task --SetDllDirectory D:/mzkit/dist/bin/Rstudio/host",
-      "workingDirectory": "C:\\Users\\lipidsearch\\AppData\\Local\\Temp\\2\\mzkit_win32\\27301577-dc8e-46ff-9085-7b97f2b47a61"
+      "workingDirectory": "C:\\Users\\lipidsearch\\AppData\\Local\\Temp\\2\\mzkit_win32\\b6f1202a-1c72-4b8a-9754-1e5d5393b62b"
     },
     "mzkit_debug": {
       "commandName": "Project",
