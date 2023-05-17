@@ -67,6 +67,9 @@
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
     <BaseAddress>4194304</BaseAddress>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data\BinaryData\BinaryData\binarydata-netcore5.vbproj" />

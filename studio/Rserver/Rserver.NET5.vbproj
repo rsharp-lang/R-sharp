@@ -151,6 +151,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
+  </ItemGroup>
+
   <Import Project="..\..\Library\shares\dataframeHelper\dataframeHelper.projitems" Label="Shared" />
 
 </Project>
