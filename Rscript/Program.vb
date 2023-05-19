@@ -111,12 +111,15 @@ Module Program
 
     Private Function RunScript(Rscript As RscriptText)
         Dim args As CommandLine = App.CommandLine
+        Dim engineConfig As String = (args("--R_LIBS_USER") Or System.Environment.GetEnvironmentVariable("R_LIBS_USER"))
         Dim vanillaMode As Boolean = args("--vanilla")
         Dim attach As String = args("--attach")
         Dim [error] As String = Nothing
         Dim program As RProgram = RProgram.CreateProgram(Rscript, debug:=False, [error]:=[error])
         Dim ignoreMissingStartupPackages As Boolean = False
-        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(
+            configs:=If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
+        )
 
         If Not attach.StringEmpty Then
             ' loading package list
@@ -166,12 +169,15 @@ Module Program
     End Sub
 
     Private Function RunRscriptFile(filepath As String, args As CommandLine) As Integer
-        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
+        Dim engineConfig As String = (args("--R_LIBS_USER") Or System.Environment.GetEnvironmentVariable("R_LIBS_USER"))
         Dim SetDllDirectory As String = args("--SetDllDirectory")
         Dim redirectConsoleLog As String = args("--redirect_stdout")
         Dim redirectErrorLog As String = args("--redirect_stderr")
         Dim attach As String = args("--attach")
+        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(
+            configs:=If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
+        )
 
         If Not redirectConsoleLog.StringEmpty Then
             Dim text = App.RedirectLogging(redirectConsoleLog)

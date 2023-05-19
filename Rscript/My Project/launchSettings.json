@@ -2,7 +2,8 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=12345 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host"
+      "commandLineArgs": " run.R --attach task --SetDllDirectory \"C:\\Program Files\\BioNovoGene\\mzkit_win32\\Rstudio\\host\" --R_LIBS_USER \"C:\\etc\\r_env\\.settings\\R#.configs.xml\"",
+      "workingDirectory": "F:\\Temp\\mzkit_win32\\d3dac3d5-c633-48ad-bf24-e2ea915d17b4"
     },
     "mzkit_debug": {
       "commandName": "Project",
@@ -10,7 +11,8 @@
     },
     "mzkit_desktop_debug": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=12345 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host"
+      "commandLineArgs": " run.R --attach task --SetDllDirectory \"C:\\Program Files\\BioNovoGene\\mzkit_win32\\Rstudio\\host\" --R_LIBS_USER \"C:\\etc\\r_env\\.settings\\R#.configs.xml\"",
+      "workingDirectory": "F:\\Temp\\mzkit_win32\\d3dac3d5-c633-48ad-bf24-e2ea915d17b4"
     }
   }
 }
