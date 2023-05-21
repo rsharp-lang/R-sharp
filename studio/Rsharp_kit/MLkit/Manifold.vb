@@ -113,7 +113,7 @@ Module Manifold
     ''' <summary>
     ''' UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction
     ''' </summary>
-    ''' <param name="data"></param>
+    ''' <param name="data">data must be normalized!</param>
     ''' <param name="dimension"></param>
     ''' <param name="customMapCutoff">
     ''' cutoff value in range ``[0,1]``
