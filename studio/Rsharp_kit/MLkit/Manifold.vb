@@ -191,13 +191,7 @@ Module Manifold
         Console.WriteLine()
         Console.WriteLine("Calculating..")
 
-        For i As Integer = 0 To nEpochs - 1
-            Call umap.Step()
-
-            If (100 * i / nEpochs) Mod 5 = 0 Then
-                Console.WriteLine($"- Completed {i + 1} of {nEpochs} [{CInt(100 * i / nEpochs)}%]")
-            End If
-        Next
+        Call umap.Step(nEpochs)
 
         Return New list With {
             .slots = New Dictionary(Of String, Object) From {
