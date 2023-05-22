@@ -273,7 +273,11 @@ Namespace Runtime.Internal
             Call dev.WriteLine("Warning messages:")
 
             For Each msg As Message In If(all, warningList, warningList.Take(topn))
-                dev.WriteLine($"  {++i}. {msg.message.JoinBy("; ")}")
+                If msg.environmentStack.IsNullOrEmpty Then
+                    Call dev.WriteLine($"  {++i}. {msg.message.JoinBy("; ")}")
+                Else
+                    Call dev.WriteLine($"  {++i}. {msg.message.JoinBy("; ")} [{msg.environmentStack.First}]")
+                End If
             Next
 
             Call dev.Flush()
