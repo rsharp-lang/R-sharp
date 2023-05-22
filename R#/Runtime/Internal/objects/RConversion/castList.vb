@@ -67,9 +67,18 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Namespace Runtime.Internal.Object.Converts
 
     ''' <summary>
+    ''' delegate function interface for export object list from a given general object
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    Public Delegate Function DelegateCTypeList(x As Object, args As list, env As Environment) As Object
+
+    ''' <summary>
     ''' cast ``R#`` <see cref="list"/> to <see cref="Dictionary(Of String, TValue)"/>
     ''' </summary>
-    Module castList
+    Public Module castList
 
         <Extension>
         Public Function CTypeList(list As list, type As Type, env As Environment) As Object
