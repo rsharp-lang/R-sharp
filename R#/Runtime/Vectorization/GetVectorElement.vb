@@ -275,7 +275,10 @@ Namespace Runtime.Vectorization
         ''' test the given <paramref name="obj"/> is a single scalar value?
         ''' </summary>
         ''' <param name="obj"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function return true if the given <paramref name="obj"/> is nothing
+        ''' orelse is primitive type
+        ''' </returns>
         Public Shared Function IsScalar(obj As Object) As Boolean
             If obj Is Nothing Then
                 Return True

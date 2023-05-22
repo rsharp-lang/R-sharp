@@ -1,64 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::02946b8fe95aabe97843e2d11021fe24, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/generic.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 169
-    '    Code Lines: 107
-    ' Comment Lines: 37
-    '   Blank Lines: 25
-    '     File Size: 6.70 KB
+' Summaries:
 
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Module generic
-    ' 
-    '         Function: exists, (+3 Overloads) invokeGeneric, missingGenericSymbol, parseGeneric
-    ' 
-    '         Sub: add
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 169
+'    Code Lines: 107
+' Comment Lines: 37
+'   Blank Lines: 25
+'     File Size: 6.70 KB
+
+
+'     Delegate Function
+' 
+' 
+'     Module generic
+' 
+'         Function: exists, (+3 Overloads) invokeGeneric, missingGenericSymbol, parseGeneric
+' 
+'         Sub: add
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
@@ -79,12 +79,23 @@ Namespace Runtime.Internal
     ''' <summary>
     ''' Typped generic function invoke
     ''' </summary>
+    ''' <remarks>
+    ''' supports call primitive functions:
+    ''' 
+    ''' 1. plot(...)
+    ''' 2. as.list(...)
+    ''' 3. summary(...)
+    ''' </remarks>
     Public Module generic
 
         ReadOnly generics As New Dictionary(Of String, Dictionary(Of Type, GenericFunction))
 
         ''' <summary>
-        ''' overloads <paramref name="name"/> = (x As <see cref="Object"/>, args As <see cref="list"/>, env As <see cref="Environment"/>) As <see cref="Object"/>
+        ''' overloads <paramref name="name"/> = (
+        '''    x As <see cref="Object"/>, 
+        '''    args As <see cref="list"/>, 
+        '''    env As <see cref="Environment"/>
+        ''' ) As <see cref="Object"/>
         ''' </summary>
         ''' <param name="name"></param>
         ''' <param name="x"></param>
@@ -100,6 +111,34 @@ Namespace Runtime.Internal
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function exists(funcName As String) As Boolean
             Return generics.ContainsKey(funcName)
+        End Function
+
+        ''' <summary>
+        ''' check target generic function is exists in the runtime index or not
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="funcName"></param>
+        ''' <param name="type"></param>
+        ''' <param name="env"></param>
+        ''' <param name="callable"></param>
+        ''' <returns></returns>
+        Public Function exists(ByRef x As Object,
+                               funcName As String,
+                               type As Type,
+                               env As Environment,
+                               Optional ByRef callable As GenericFunction = Nothing) As Boolean
+
+            Dim fetch = getGenericCallable(x, type, funcName, env)
+
+            callable = Nothing
+
+            If fetch Like GetType(Message) Then
+                Return False
+            Else
+                callable = fetch.TryCast(Of GenericFunction)
+            End If
+
+            Return True
         End Function
 
         ''' <summary>
@@ -134,6 +173,7 @@ Namespace Runtime.Internal
             End If
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Function missingGenericSymbol(funcName As String, env As Environment) As Message
             Return debug.stop({$"missing loader entry for generic function '{funcName}'!", "consider load required package at first!"}, env)
         End Function
@@ -177,10 +217,7 @@ Namespace Runtime.Internal
             End If
         End Function
 
-        <Extension>
-        Friend Function invokeGeneric(args As list, x As Object, env As Environment, funcName$, type As Type) As Object
-            Dim apiCalls As GenericFunction
-
+        Public Function getGenericCallable(ByRef x As Object, type As Type, funcName As String, env As Environment) As [Variant](Of Message, GenericFunction)
             If type Is GetType(vbObject) AndAlso Not generics(funcName).ContainsKey(type) Then
                 x = DirectCast(x, vbObject).target
                 type = x.GetType
@@ -205,8 +242,7 @@ Namespace Runtime.Internal
                     type = x.GetType
 
                     If generics(funcName).ContainsKey(type) Then
-                        apiCalls = generics(funcName)(type)
-                        GoTo RUN_GENERIC
+                        Return generics(funcName)(type)
                     End If
                 End If
 
@@ -216,12 +252,21 @@ Namespace Runtime.Internal
                     $"consider load required package at first!"
                 }, env)
             Else
-                apiCalls = generics(funcName)(type)
+                Return generics(funcName)(type)
             End If
-RUN_GENERIC:
-            Dim result As Object = apiCalls(x, args, env)
+        End Function
 
-            Return result
+        <Extension>
+        Friend Function invokeGeneric(args As list, x As Object, env As Environment, funcName$, type As Type) As Object
+            Dim apiCalls = getGenericCallable(x, type, funcName, env)
+
+            If apiCalls Like GetType(Message) Then
+                Return apiCalls.TryCast(Of Message)
+            Else
+RUN_GENERIC:
+                Dim result As Object = apiCalls.TryCast(Of GenericFunction)(x, args, env)
+                Return result
+            End If
         End Function
     End Module
 End Namespace

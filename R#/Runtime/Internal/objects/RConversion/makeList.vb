@@ -54,7 +54,6 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object.Converts
 
