@@ -857,12 +857,13 @@ Namespace Runtime
         Protected Overridable Sub Dispose(disposing As Boolean)
             If Not disposedValue Then
                 If disposing Then
+                    ' 将当前环境中所产生的诸如警告消息之类的信息
+                    ' 传递到顶层的全局环境之中
+                    Call globalEnvironment.messages.AddRange(messages)
+                    Call messages.Clear()
+
                     ' TODO: dispose managed state (managed objects).
                     If Not parent Is Nothing Then
-                        ' 将当前环境中所产生的诸如警告消息之类的信息
-                        ' 传递到顶层的全局环境之中
-                        Call parent.messages.AddRange(messages)
-
                         Log4VB.redirectError = AddressOf parent.redirectError
                         Log4VB.redirectWarning = AddressOf parent.redirectWarning
                     End If

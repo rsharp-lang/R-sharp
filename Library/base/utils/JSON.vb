@@ -134,7 +134,7 @@ Module JSON
                     Return str.LoadObject(Schema)
                 End If
             Catch ex As Exception When throwEx
-                Throw
+                Return Internal.debug.stop(ex, env)
             Catch ex As Exception
                 Call env.AddMessage(ex.ToString, MSG_TYPES.WRN)
                 Return Nothing

@@ -202,7 +202,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     result = doInvokeFuncVar(target, env)
                 End If
 
-                Return HandleResult(result, envir)
+                Return HandleResult(result, env)
             End Using
         End Function
 
