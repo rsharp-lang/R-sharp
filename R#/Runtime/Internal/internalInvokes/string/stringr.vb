@@ -100,7 +100,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="x"></param>
         ''' <param name="env"></param>
         ''' <returns></returns>
-        <ExportAPI("html")>
+        <ExportAPI(htmlPrinter.toHtml_apiName)>
         Public Function html(<RRawVectorArgument> x As Object,
                              <RListObjectArgument>
                              Optional args As list = Nothing,
