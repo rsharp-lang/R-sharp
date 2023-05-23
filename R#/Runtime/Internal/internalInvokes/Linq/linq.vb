@@ -1494,13 +1494,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim obj_type As Type = x.GetType
             Dim generic_split As GenericFunction = Nothing
 
-            If obj_type.IsArray OrElse obj_type Is GetType(pipeline) OrElse obj_type.ImplementInterface(Of RIndex) Then
-                ' is a collection
-                Return splitCollection(x, delimiter, argv, env)
-            ElseIf generic.exists(x, "split", obj_type, env, generic_split) Then
+            If generic.exists(x, "split", obj_type, env, generic_split) Then
                 Return generic_split(x, argv, env)
             Else
-                Return splitCollection({x}, delimiter, argv, env)
+                ' is a collection
+                Return splitCollection(x, delimiter, argv, env)
             End If
         End Function
 
