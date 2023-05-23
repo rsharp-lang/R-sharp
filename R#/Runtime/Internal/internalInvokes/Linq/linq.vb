@@ -1486,6 +1486,25 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                               Optional argv As list = Nothing,
                               Optional env As Environment = Nothing) As Object
 
+            If x Is Nothing Then
+                Call env.AddMessage("the given object x to split can not be nothing")
+                Return Nothing
+            End If
+
+            Dim obj_type As Type = x.GetType
+            Dim generic_split As GenericFunction = Nothing
+
+            If obj_type.IsArray OrElse obj_type Is GetType(pipeline) OrElse obj_type.ImplementInterface(Of RIndex) Then
+                ' is a collection
+                Return splitCollection(x, delimiter, argv, env)
+            ElseIf generic.exists(x, "split", obj_type, env, generic_split) Then
+                Return generic_split(x, argv, env)
+            Else
+                Return splitCollection({x}, delimiter, argv, env)
+            End If
+        End Function
+
+        Private Function splitCollection(x As Object, delimiter As Object, argv As list, env As Environment) As Object
             Dim _split As SplitPredicateFunction
 
             If delimiter Is Nothing Then
