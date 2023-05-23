@@ -130,6 +130,10 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        Public Shared Function GetCurrentDevice() As graphicsDevice
+            Return graphics.curDev
+        End Function
+
         Public Overrides Function ToString() As String
             Return $"[{g.ToString}] {args.getNames.GetJson}"
         End Function
