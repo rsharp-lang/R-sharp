@@ -982,19 +982,22 @@ RE0:
                         .Select(Function(obj) CStr(obj).ParseDouble) _
                         .ToArray
                 Else
-                    Dim dbls As Double() = New Double(data.Length - 1) {}
+                    Dim dbls As New List(Of Double)
                     Dim i As Integer = 0
 
                     For Each item As Object In data.populateNumeric(env)
                         If Program.isException(item) Then
                             Return item
                         Else
-                            dbls(i) = CDbl(item)
-                            i += 1
+                            ' due to the reason of gdi+ size contains two number after the
+                            ' ``populateNumeric`` data converson, so the original dbls size
+                            ' will not equals to the result vector
+                            ' change from the vector array to type list of double
+                            Call dbls.Add(CDbl(item))
                         End If
                     Next
 
-                    Return dbls
+                    Return dbls.ToArray
                 End If
             End If
         End Function
