@@ -177,8 +177,8 @@ Namespace Runtime.Interop
         Private Sub setRuntimeTraceback()
             Dim asm As Assembly = GetNetCoreCLRDeclaration.DeclaringType.Assembly
             Dim clr_func_stackFrame As New StackFrame With {
-                .File = asm.Location.FileName & "!" & asm.ToString,
-                .Line = "&H0" & api.method.GetHashCode.ToHexString,
+                .File = $"[{asm.ToString}]",
+                .Line = "&Hx0" & api.method.GetHashCode.ToHexString,
                 .Method = New Method With {
                     .Method = name,
                     .[Module] = "R#_clr_interop::",
