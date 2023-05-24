@@ -107,6 +107,7 @@ Namespace Runtime.Interop
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property [namespace] As String Implements INamespaceReferenceSymbol.namespace
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return GetPackageInfo.namespace
             End Get
@@ -148,6 +149,8 @@ Namespace Runtime.Interop
         ''' Static method
         ''' </summary>
         ''' <param name="api"></param>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(api As NamedValue(Of MethodInfo))
             Call Me.New(api.Name, api.Value, Nothing)
         End Sub
@@ -241,10 +244,12 @@ Namespace Runtime.Interop
             End If
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function GetPackageInfo() As Package
             Return GetNetCoreCLRDeclaration.DeclaringType.ParsePackage(strict:=False)
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
             Return markdown
         End Function
@@ -524,6 +529,7 @@ opt:                    If arg.isOptional Then
             End Try
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
             Return $"Dim {name} As {api.ToString}"
         End Function
