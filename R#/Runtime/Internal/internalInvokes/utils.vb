@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::cb112e558f60c9ea1074e7ba57de80ba, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1249
-    '    Code Lines: 648
-    ' Comment Lines: 491
-    '   Blank Lines: 110
-    '     File Size: 59.96 KB
+' Summaries:
 
 
-    '     Module utils
-    ' 
-    '         Function: create_zip, createAlternativeName, createCommandLine, createTimespan, data
-    '                   dataSearchByPackageDir, debugTool, description, FindSystemFile, GetInstalledPackages
-    '                   head, installPackages, keyGroups, loadByName, md5
-    '                   memorySize, now, package_skeleton, readFile, system
-    '                   systemFile, unzipFile, wget, workdir
-    ' 
-    '         Sub: cls, pause, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1249
+'    Code Lines: 648
+' Comment Lines: 491
+'   Blank Lines: 110
+'     File Size: 59.96 KB
+
+
+'     Module utils
+' 
+'         Function: create_zip, createAlternativeName, createCommandLine, createTimespan, data
+'                   dataSearchByPackageDir, debugTool, description, FindSystemFile, GetInstalledPackages
+'                   head, installPackages, keyGroups, loadByName, md5
+'                   memorySize, now, package_skeleton, readFile, system
+'                   systemFile, unzipFile, wget, workdir
+' 
+'         Sub: cls, pause, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -63,6 +63,7 @@ Imports System.Threading
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine
+Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.CommandLine.Parsers
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -1300,6 +1301,28 @@ Read ""Writing R Extensions"" for more information.".SaveTo($"{root}/Read-and-de
                     compression:=CompressionLevel.Optimal
                 )
             End If
+
+            Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' send task message to the parent node
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("sendMessage")>
+        Public Function sendMessage(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Dim msg As String() = CLRVector.asCharacter(x)
+
+            Call VBDebugger.WaitOutput()
+            Call Console.WriteLine()
+
+            For Each line As String In msg.SafeQuery
+                For Each str As String In line.LineTokens
+                    Call RunSlavePipeline.SendMessage(str)
+                Next
+            Next
 
             Return Nothing
         End Function
