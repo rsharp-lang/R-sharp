@@ -299,12 +299,13 @@ Namespace Runtime.Interop
 
         Public Function Invoke(envir As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
             Dim parameters As New List(Of Object)
+            Dim asm As Assembly = GetNetCoreCLRDeclaration.DeclaringType.Assembly
             Dim apiStackFrame As New StackFrame With {
-                .File = GetNetCoreCLRDeclaration.DeclaringType.Assembly.Location.FileName,
-                .Line = "<unknown>",
+                .File = asm.Location.FileName & "!" & asm.ToString,
+                .Line = "&H0" & api.method.GetHashCode.ToHexString,
                 .Method = New Method With {
                     .Method = name,
-                    .[Module] = "R#_interop::",
+                    .[Module] = "R#_clr_interop::",
                     .[Namespace] = GetPackageInfo.namespace
                 }
             }
