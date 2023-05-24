@@ -113,6 +113,7 @@ Imports any = Microsoft.VisualBasic.Scripting
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
+Imports RgraphicsDev = SMRUCC.Rsharp.Runtime.Internal.Invokes.graphics
 
 ''' <summary>
 ''' chartting plots for R#
@@ -785,7 +786,7 @@ Module plots
 
         If args.CheckGraphicsDeviceExists Then
             ' draw on current graphics context
-            Dim dev As graphicsDevice = curDev
+            Dim dev As graphicsDevice = RgraphicsDev.curDev
             Dim padding As Padding = InteropArgumentHelper.getPadding(dev.getArgumentValue("padding", args))
             Dim canvas As New GraphicsRegion(dev.g.Size, padding)
 

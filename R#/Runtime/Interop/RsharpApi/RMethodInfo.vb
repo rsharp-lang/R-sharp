@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::e687f79fced7a69bbd8b0d6a3d789c3f, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/RMethodInfo.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 466
-    '    Code Lines: 306
-    ' Comment Lines: 105
-    '   Blank Lines: 55
-    '     File Size: 19.37 KB
+' Summaries:
 
 
-    '     Class RMethodInfo
-    ' 
-    '         Properties: [namespace], invisible, name, parameters, returns
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: createNormalArguments, CreateParameterArrayFromListArgument, getArguments, GetNetCoreCLRDeclaration, GetPackageInfo
-    '                   GetPrintContent, GetRApiReturns, getReturns, GetUnionTypes, getValue
-    '                   (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 466
+'    Code Lines: 306
+' Comment Lines: 105
+'   Blank Lines: 55
+'     File Size: 19.37 KB
+
+
+'     Class RMethodInfo
+' 
+'         Properties: [namespace], invisible, name, parameters, returns
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: createNormalArguments, CreateParameterArrayFromListArgument, getArguments, GetNetCoreCLRDeclaration, GetPackageInfo
+'                   GetPrintContent, GetRApiReturns, getReturns, GetUnionTypes, getValue
+'                   (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -77,7 +77,7 @@ Namespace Runtime.Interop
     ''' <summary>
     ''' Use for R# package method, a wrapper for the .NET clr function <see cref="MethodInfo"/>.
     ''' </summary>
-    Public Class RMethodInfo : Implements RFunction, RPrint, INamespaceReferenceSymbol
+    Public Class RMethodInfo : Implements RFunction, RPrint, INamespaceReferenceSymbol, IRuntimeTrace
 
         ''' <summary>
         ''' The function name
@@ -107,10 +107,13 @@ Namespace Runtime.Interop
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property [namespace] As String Implements INamespaceReferenceSymbol.namespace
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return GetPackageInfo.namespace
             End Get
         End Property
+
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
         ''' <summary>
         ''' <see cref="MethodInfo"/>
@@ -138,12 +141,16 @@ Namespace Runtime.Interop
             Me.returns = RType.GetRSharpType(closure.Method.ReturnType)
             Me.parameters = closure.Method.DoCall(AddressOf parseParameters)
             Me.listObjectMargin = RArgumentList.objectListArgumentMargin(Me)
+
+            Call setRuntimeTraceback()
         End Sub
 
         ''' <summary>
         ''' Static method
         ''' </summary>
         ''' <param name="api"></param>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(api As NamedValue(Of MethodInfo))
             Call Me.New(api.Name, api.Value, Nothing)
         End Sub
@@ -163,6 +170,23 @@ Namespace Runtime.Interop
             Me.parameters = closure.DoCall(AddressOf parseParameters)
             Me.invisible = RSuppressPrintAttribute.IsPrintInvisible(closure)
             Me.listObjectMargin = RArgumentList.objectListArgumentMargin(Me)
+
+            Call setRuntimeTraceback()
+        End Sub
+
+        Private Sub setRuntimeTraceback()
+            Dim asm As Assembly = GetNetCoreCLRDeclaration.DeclaringType.Assembly
+            Dim clr_func_stackFrame As New StackFrame With {
+                .File = $"[{asm.ToString}]",
+                .Line = "&Hx0" & api.method.GetHashCode.ToHexString,
+                .Method = New Method With {
+                    .Method = name,
+                    .[Module] = "R#_clr_interop::",
+                    .[Namespace] = GetPackageInfo.namespace
+                }
+            }
+
+            _stackFrame = clr_func_stackFrame
         End Sub
 
         Public Iterator Function getArguments() As IEnumerable(Of NamedValue(Of Expression)) Implements RFunction.getArguments
@@ -220,10 +244,12 @@ Namespace Runtime.Interop
             End If
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function GetPackageInfo() As Package
             Return GetNetCoreCLRDeclaration.DeclaringType.ParsePackage(strict:=False)
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
             Return markdown
         End Function
@@ -299,17 +325,8 @@ Namespace Runtime.Interop
 
         Public Function Invoke(envir As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
             Dim parameters As New List(Of Object)
-            Dim apiStackFrame As New StackFrame With {
-                .File = GetNetCoreCLRDeclaration.DeclaringType.Assembly.Location.FileName,
-                .Line = "<unknown>",
-                .Method = New Method With {
-                    .Method = name,
-                    .[Module] = "R#_interop::",
-                    .[Namespace] = GetPackageInfo.namespace
-                }
-            }
 
-            Using env As New Environment(envir, apiStackFrame, isInherits:=True)
+            Using env As New Environment(envir, stackFrame, isInherits:=True)
                 If listObjectMargin <> ListObjectArgumentMargin.none Then
                     For Each value As Object In RArgumentList.CreateObjectListArguments(Me, env, params)
                         If Program.isException(value) Then
@@ -512,6 +529,7 @@ opt:                    If arg.isOptional Then
             End Try
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
             Return $"Dim {name} As {api.ToString}"
         End Function
