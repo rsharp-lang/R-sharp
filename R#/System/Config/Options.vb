@@ -338,7 +338,11 @@ Namespace Development.Configuration
                     Case "system_tempdir" : Return App.SysTemp
 
                     Case Else
-                        Return setOption(opt, [default], env)
+                        If [default].StringEmpty Then
+                            Return [default]
+                        Else
+                            Return setOption(opt, [default], env)
+                        End If
                 End Select
             End If
         End Function
