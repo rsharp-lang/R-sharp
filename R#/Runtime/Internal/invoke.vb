@@ -139,6 +139,7 @@ Namespace Runtime.Internal
             Call GetType(humanReadableFormatter).DoCall(AddressOf pushEnvir)
             Call GetType(time).DoCall(AddressOf pushEnvir)
             Call GetType(RCurl).DoCall(AddressOf pushEnvir)
+            Call GetType(reshape2).DoCall(AddressOf pushEnvir)
         End Sub
 
         Friend Shared Sub pushEnvir(baseModule As Type)
