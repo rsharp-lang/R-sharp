@@ -59,7 +59,6 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -195,6 +194,10 @@ Namespace Runtime.Vectorization
         End Function
 
         Public Function asRawByte(x As Object) As Byte()
+            If x Is Nothing Then
+                Return {}
+            End If
+
             If TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
             End If
@@ -250,6 +253,10 @@ Namespace Runtime.Vectorization
         End Function
 
         Public Function asFloat(x As Object) As Single()
+            If x Is Nothing Then
+                Return {}
+            End If
+
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
             ElseIf TypeOf x Is String Then
@@ -295,6 +302,10 @@ Namespace Runtime.Vectorization
         End Function
 
         Public Function asNumeric(x As Object) As Double()
+            If x Is Nothing Then
+                Return {}
+            End If
+
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
             ElseIf TypeOf x Is String Then
