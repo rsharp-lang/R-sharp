@@ -228,11 +228,14 @@ Public Module URL
                               End If
                           End Function
 
-            Return runHttpRequest(url, request, CLRVector.asCharacter(default404))
+            Return runHttpRequest(url, request, CLRVector.asCharacter(default404), jsonlite.toJSON(headers, env))
         End If
     End Function
 
-    Private Function runHttpRequest(url As String, request As Func(Of String, WebResponseResult), default404 As String()) As WebResponseResult
+    Private Function runHttpRequest(url As String,
+                                    request As Func(Of String, WebResponseResult),
+                                    default404 As String(),
+                                    payload As String) As WebResponseResult
         Try
             Return request(url)
         Catch ex As Exception When InStr(ex.Message, "(404) Not Found") > 0
@@ -240,14 +243,16 @@ Public Module URL
                 .url = url,
                 .html = default404.JoinBy("; "),
                 .timespan = 0,
-                .headers = ResponseHeaders.Header404NotFound
+                .headers = ResponseHeaders.Header404NotFound,
+                .payload = payload
             }
         Catch ex As Exception When TypeOf ex Is WebException
             Return New WebResponseResult With {
                 .url = url,
                 .html = ex.Message,
                 .timespan = 0,
-                .headers = ResponseHeaders.HttpRequestError(ex.Message.Match("\d+").DoCall(AddressOf Integer.Parse))
+                .headers = ResponseHeaders.HttpRequestError(ex.Message.Match("\d+").DoCall(AddressOf Integer.Parse)),
+                .payload = payload
             }
         Catch ex As Exception
             Throw
@@ -328,7 +333,7 @@ Public Module URL
                           Return WebServiceUtils.PostRequest(url, args, throw_httpErr:=True)
                       End Function
 
-        Return runHttpRequest(url, request, New String() {"404 NOT FOUND"})
+        Return runHttpRequest(url, request, New String() {"404 NOT FOUND"}, jsonlite.toJSON(payload, env))
     End Function
 
     <Extension>
@@ -400,6 +405,7 @@ Public Module URL
             Return Internal.debug.stop({
                 data.html,
                 $"url: {data.url}",
+                $"payload: {data.payload}",
                 $"you can set parameter 'throw.http.error' to value FALSE in 'http::content' to disable this error."
             }, env)
         End If
