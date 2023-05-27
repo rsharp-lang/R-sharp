@@ -230,6 +230,13 @@ Public Module URL
                     .timespan = 0,
                     .headers = ResponseHeaders.Header404NotFound
                 }
+            Catch ex As Exception When InStr(ex.Message, "(500)") > 0
+                Return New WebResponseResult With {
+                    .url = url,
+                    .html = ex.Message,
+                    .timespan = 0,
+                    .headers = ResponseHeaders.Header500InternalServerError
+                }
             Catch ex As Exception
                 Throw
             End Try
