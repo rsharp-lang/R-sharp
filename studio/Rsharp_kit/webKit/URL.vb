@@ -353,10 +353,14 @@ Public Module URL
     Public Function content(data As WebResponseResult,
                             Optional [typeof] As Object = Nothing,
                             Optional plain_text As Boolean = False,
+                            Optional throw_http_error As Boolean = True,
                             Optional env As Environment = Nothing) As Object
 
         Dim text As String = data?.html
 
+        If throw_http_error AndAlso data.headers.httpCode <> HTTP_RFC.RFC_OK Then
+            Return Internal.debug.stop({data.html, $"url: {data.url}"}, env)
+        End If
         If plain_text Then
             Return text
         End If
