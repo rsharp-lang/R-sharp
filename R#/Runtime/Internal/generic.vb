@@ -236,6 +236,10 @@ Namespace Runtime.Internal
                 x = UnsafeTryCastGenericArray(x)
             End If
 
+            If Not generics.ContainsKey(funcName) Then
+                Return missingGenericSymbol(funcName, env)
+            End If
+
             If Not generics(funcName).ContainsKey(type) Then
                 If TypeOf x Is Object() Then
                     x = UnsafeTryCastGenericArray(DirectCast(x, Array))
