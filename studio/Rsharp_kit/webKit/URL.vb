@@ -53,6 +53,7 @@
 
 Imports System.Net.Http
 Imports System.Net.Http.Headers
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -210,37 +211,45 @@ Public Module URL
                 .timespan = 0
             }
         Else
-            Try
-                If cache Is Nothing Then
-                    Return HttpGet _
-                        .BuildWebRequest(url, httpHeaders, Nothing, Nothing) _
-                        .UrlGet(echo:=verbose)
-                Else
-                    Return New WebResponseResult With {
-                        .url = url,
-                        .html = cache.QueryCacheText(url, cacheType:=".txt"),
-                        .headers = ResponseHeaders.Header200,
-                        .timespan = 0
-                    }
-                End If
-            Catch ex As Exception When InStr(ex.Message, "(404) Not Found") > 0
-                Return New WebResponseResult With {
-                    .url = url,
-                    .html = default404,
-                    .timespan = 0,
-                    .headers = ResponseHeaders.Header404NotFound
-                }
-            Catch ex As Exception When InStr(ex.Message, "(500)") > 0
-                Return New WebResponseResult With {
-                    .url = url,
-                    .html = ex.Message,
-                    .timespan = 0,
-                    .headers = ResponseHeaders.Header500InternalServerError
-                }
-            Catch ex As Exception
-                Throw
-            End Try
+            Dim request = Function(strUrl As String)
+                              If cache Is Nothing Then
+                                  Return HttpGet _
+                                      .BuildWebRequest(strUrl, httpHeaders, Nothing, Nothing) _
+                                      .UrlGet(echo:=verbose)
+                              Else
+                                  Return New WebResponseResult With {
+                                      .url = strUrl,
+                                      .html = cache.QueryCacheText(url, cacheType:=".txt"),
+                                      .headers = ResponseHeaders.Header200,
+                                      .timespan = 0
+                                  }
+                              End If
+                          End Function
+
+            Return runHttpRequest(url, request, CLRVector.asCharacter(default404))
         End If
+    End Function
+
+    Private Function runHttpRequest(url As String, request As Func(Of String, WebResponseResult), default404 As String()) As WebResponseResult
+        Try
+            Return request(url)
+        Catch ex As Exception When InStr(ex.Message, "(404) Not Found") > 0
+            Return New WebResponseResult With {
+                .url = url,
+                .html = default404.JoinBy("; "),
+                .timespan = 0,
+                .headers = ResponseHeaders.Header404NotFound
+            }
+        Catch ex As Exception When InStr(ex.Message, "(500)") > 0
+            Return New WebResponseResult With {
+                .url = url,
+                .html = ex.Message,
+                .timespan = 0,
+                .headers = ResponseHeaders.Header500InternalServerError
+            }
+        Catch ex As Exception
+            Throw
+        End Try
     End Function
 
     ''' <summary>
@@ -306,32 +315,59 @@ Public Module URL
 
         Dim httpHeaders As Dictionary(Of String, String) = headers?.AsGeneric(Of String)(env)
         Dim verbose As Boolean = env.globalEnvironment.options.verbose
-        Dim args As New List(Of KeyValuePair(Of String, String))
-        Dim value As Object
+        Dim err As New Value(Of Message)
+        Dim args = payload.getPostPayload(getError:=err, env)
 
-        If Not payload Is Nothing Then
-            For Each key As String In payload.slots.Keys
-                value = payload.slots(key)
-
-                If value Is Nothing Then
-                    value = ""
-                ElseIf TypeOf value Is String Then
-                    value = value
-                ElseIf TypeOf value Is Message Then
-                    Return value
-                Else
-                    value = jsonlite.toJSON(value, env)
-
-                    If TypeOf value Is Message Then
-                        Return value
-                    End If
-                End If
-
-                args += New KeyValuePair(Of String, String)(key, value)
-            Next
+        If err.HasValue Then
+            Return err.Value
         End If
 
-        Return WebServiceUtils.PostRequest(url, args)
+        Dim request = Function(strUrl As String)
+                          Return WebServiceUtils.PostRequest(url, args)
+                      End Function
+
+        Return runHttpRequest(url, request, New String() {"404 NOT FOUND"})
+    End Function
+
+    <Extension>
+    Private Iterator Function getPostPayload(payload As list,
+                                             getError As Value(Of Message),
+                                             env As Environment) As IEnumerable(Of KeyValuePair(Of String, String))
+        If payload Is Nothing Then
+            Return
+        End If
+
+        For Each key As String In payload.slots.Keys
+            Dim value As Object = payload.slots(key)
+
+            If value Is Nothing Then
+                value = ""
+            ElseIf TypeOf value Is String Then
+                value = value
+            ElseIf TypeOf value Is Message Then
+                getError.Value = value
+                Return
+            Else
+                value = jsonlite.toJSON(value, env)
+
+                If TypeOf value Is Message Then
+                    getError.Value = value
+                    Return
+                End If
+            End If
+
+            Yield New KeyValuePair(Of String, String)(key, value)
+        Next
+    End Function
+
+    ''' <summary>
+    ''' Test the web response is http error or not via the http status code is not equals to 200(OK)?
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <returns></returns>
+    <ExportAPI("is.http_error")>
+    Public Function is_http_error(data As WebResponseResult) As Boolean
+        Return data.headers.httpCode <> HTTP_RFC.RFC_OK
     End Function
 
     ''' <summary>
