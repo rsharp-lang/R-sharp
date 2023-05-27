@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.Http
+Imports Microsoft.VisualBasic.Net.Protocols.ContentTypes
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Runtime
@@ -409,9 +410,9 @@ Public Module URL
         Dim type = data.headers.headers.Item(HttpHeaderName.ContentType)
         Dim tmp As String = Now.ToString.MD5
 
-        If type = "plain/text" OrElse type = "text/html" Then
+        If type = MIME.Text OrElse type = MIME.Html Then
             Return text
-        ElseIf type = "application/json" Then
+        ElseIf type = MIME.Json OrElse type = MIME.JSONText Then
             Dim jsonlib As New [Imports]("JSON", "base")
             ' imports JSON from base
             Call jsonlib.Evaluate(env)
