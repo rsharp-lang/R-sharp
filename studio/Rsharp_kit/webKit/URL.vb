@@ -324,7 +324,7 @@ Public Module URL
         End If
 
         Dim request = Function(strUrl As String)
-                          Return WebServiceUtils.PostRequest(url, args)
+                          Return WebServiceUtils.PostRequest(url, args, throw_httpErr:=True)
                       End Function
 
         Return runHttpRequest(url, request, New String() {"404 NOT FOUND"})
