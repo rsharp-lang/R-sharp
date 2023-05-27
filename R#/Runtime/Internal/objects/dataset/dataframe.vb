@@ -184,7 +184,9 @@ Namespace Runtime.Internal.Object
         ''' get column by name
         ''' </summary>
         ''' <returns>
-        ''' this property always returns a vector in full size(length is equals to <see cref="nrows"/>)
+        ''' this property always returns a vector in full size(length is equals to <see cref="nrows"/>),
+        ''' orelse the value null if the given <paramref name="columnName"/> is not exists in the 
+        ''' dataframe column fields.
         ''' </returns>
         Default Public ReadOnly Property getColumnVector(columnName As String) As Array
             Get
@@ -278,7 +280,10 @@ Namespace Runtime.Internal.Object
         ''' scalar value by default is the target 
         ''' column contains just one element
         ''' </param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function returns nothing if the given <paramref name="name"/> is not
+        ''' exists in the dataframe fields.
+        ''' </returns>
         Public Function getVector(name As String, Optional fullSize As Boolean = False) As Array
             Dim col As Array = columns.TryGetValue(name)
 
