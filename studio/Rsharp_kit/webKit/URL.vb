@@ -396,7 +396,11 @@ Public Module URL
         Dim text As String = data?.html
 
         If throw_http_error AndAlso data.headers.httpCode <> HTTP_RFC.RFC_OK Then
-            Return Internal.debug.stop({data.html, $"url: {data.url}"}, env)
+            Return Internal.debug.stop({
+                data.html,
+                $"url: {data.url}",
+                $"you can set parameter 'throw.http.error' to value FALSE in 'http::content' to disable this error."
+            }, env)
         End If
         If plain_text Then
             Return text
