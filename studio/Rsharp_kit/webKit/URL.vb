@@ -51,6 +51,7 @@
 
 #End Region
 
+Imports System.Net
 Imports System.Net.Http
 Imports System.Net.Http.Headers
 Imports System.Runtime.CompilerServices
@@ -240,12 +241,12 @@ Public Module URL
                 .timespan = 0,
                 .headers = ResponseHeaders.Header404NotFound
             }
-        Catch ex As Exception When InStr(ex.Message, "(500)") > 0
+        Catch ex As Exception When TypeOf ex Is WebException
             Return New WebResponseResult With {
                 .url = url,
                 .html = ex.Message,
                 .timespan = 0,
-                .headers = ResponseHeaders.Header500InternalServerError
+                .headers = ResponseHeaders.HttpRequestError(ex.Message.Match("\d+").DoCall(AddressOf Integer.Parse))
             }
         Catch ex As Exception
             Throw
