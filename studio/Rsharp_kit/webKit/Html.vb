@@ -117,7 +117,10 @@ Module Html
 
         For Each text As String In tables
             Dim rows = text.GetRowsHTML
-            Dim matrix = rows.Select(Function(r) r.GetColumnsHTML).MatrixTranspose.ToArray
+            Dim matrix = rows _
+                .Select(Function(r) r.GetColumnsHTML) _
+                .MatrixTranspose(safecheck_dimension:=True) _
+                .ToArray
             Dim table As New dataframe With {
                 .columns = New Dictionary(Of String, Array)
             }

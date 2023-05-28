@@ -6,7 +6,7 @@
     "run_dll": {
       "commandName": "Executable",
       "executablePath": "F:\\GCModeller\\src\\R-sharp\\App\\net6.0\\R#.exe",
-      "commandLineArgs": "F:\\biocad_registry\\test\\web_test.R"
+      "commandLineArgs": "F:\\biocad_registry\\test\\get_seqs.R"
     }
   }
 }
