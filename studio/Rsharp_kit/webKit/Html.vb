@@ -109,7 +109,7 @@ Module Html
     ''' <returns></returns>
     ''' 
     <ExportAPI("tables")>
-    Public Function QueryHtmlTables(html As String) As list
+    Public Function QueryHtmlTables(html As String, Optional del_newline As Boolean = True) As list
         Dim tables As String() = html.GetTablesHTML
         Dim result As New list(RType.GetRSharpType(GetType(dataframe))) With {
             .slots = New Dictionary(Of String, Object)
@@ -130,13 +130,13 @@ Module Html
                 Dim name As String = column(Scan0).getPlainText
                 Dim data As String() = column _
                     .Skip(1) _
-                    .Select(AddressOf getPlainText) _
+                    .Select(Function(si) getPlainText(si, strip_inner:=del_newline)) _
                     .ToArray
 
                 table.columns(name) = data
             Next
 
-            result.add(App.NextTempName, table)
+            Call result.add(App.NextTempName, table)
         Next
 
         Return result
