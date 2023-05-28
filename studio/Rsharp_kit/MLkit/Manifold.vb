@@ -135,10 +135,18 @@ Module Manifold
                                    Optional customMapCutoff As Double? = Nothing,
                                    Optional debug As Boolean = False,
                                    Optional KDsearch As Boolean = False,
+                                   Optional spectral_cos As Boolean = True,
                                    Optional env As Environment = Nothing) As Object
         Dim labels As String()
         Dim matrix As Double()()
         Dim report As RunSlavePipeline.SetProgressEventHandler
+        Dim dist As DistanceCalculation
+
+        If spectral_cos Then
+            dist = AddressOf DistanceFunctions.SpectralSimilarity
+        Else
+            dist = AddressOf DistanceFunctions.CosineForNormalizedVectors
+        End If
 
         If TypeOf data Is Rdataframe Then
             labels = DirectCast(data, Rdataframe).getRowNames
@@ -170,7 +178,7 @@ Module Manifold
         End If
 
         Dim umap As New Umap(
-            distance:=AddressOf DistanceFunctions.CosineForNormalizedVectors,
+            distance:=dist,
             dimensions:=dimension,
             numberOfNeighbors:=numberOfNeighbors,
             localConnectivity:=localConnectivity,
