@@ -139,6 +139,16 @@ Module Html
         Return result
     End Function
 
+    ''' <summary>
+    ''' Parsing the title text from the html inputs.
+    ''' </summary>
+    ''' <param name="html"></param>
+    ''' <returns></returns>
+    <ExportAPI("title")>
+    Public Function title(html As String) As String
+        Return html.HTMLTitle
+    End Function
+
     <ExportAPI("link")>
     Public Function links(html As String) As String
         Return html.href
