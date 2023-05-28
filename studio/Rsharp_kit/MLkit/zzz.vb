@@ -51,6 +51,9 @@
 
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.CommandLine
+Imports SMRUCC.Rsharp.Runtime.Interop
+
+<Assembly: RPackageModule>
 
 Public Class zzz
 
