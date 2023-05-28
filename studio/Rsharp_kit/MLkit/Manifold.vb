@@ -114,12 +114,39 @@ Module Manifold
     ''' UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction
     ''' </summary>
     ''' <param name="data">data must be normalized!</param>
-    ''' <param name="dimension"></param>
+    ''' <param name="dimension">
+    ''' default 2, The dimension of the space to embed into.
+    ''' </param>
+    ''' <param name="numberOfNeighbors">
+    ''' default 15, The size of local neighborhood (in terms of number of neighboring sample points) used for manifold approximation.
+    ''' </param>
     ''' <param name="customMapCutoff">
     ''' cutoff value in range ``[0,1]``
     ''' </param>
+    ''' <param name="customNumberOfEpochs">
+    ''' default None, The number of training epochs to be used in optimizing the low dimensional embedding. 
+    ''' Larger values result in more accurate embeddings.
+    ''' </param>
     ''' <param name="KDsearch">
     ''' knn search via KD-tree?
+    ''' </param>
+    ''' <param name="localConnectivity">
+    ''' default 1, The local connectivity required -- i.e. the number of nearest neighbors that should be assumed to be connected at a local level.
+    ''' </param>
+    ''' <param name="setOpMixRatio">
+    ''' default 1.0, The value of this parameter should be between 0.0 and 1.0; a value of 1.0 will use a pure fuzzy union, while 0.0 will use a pure fuzzy intersection.
+    ''' </param>
+    ''' <param name="minDist">
+    ''' default 0.1, The effective minimum distance between embedded points.
+    ''' </param>
+    ''' <param name="spread">
+    ''' default 1.0, The effective scale of embedded points. In combination with ``min_dist`` this determines how clustered/clumped the embedded points are.
+    ''' </param>
+    ''' <param name="learningRate">
+    ''' default 1.0, The initial learning rate for the embedding optimization.
+    ''' </param>
+    ''' <param name="repulsionStrength">
+    ''' default 1.0, Weighting applied to negative samples in low dimensional embedding optimization.
     ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
@@ -136,6 +163,11 @@ Module Manifold
                                    Optional debug As Boolean = False,
                                    Optional KDsearch As Boolean = False,
                                    Optional spectral_cos As Boolean = True,
+                                   Optional setOpMixRatio As Double = 1,
+                                   Optional minDist As Double = 0.1F,
+                                   Optional spread As Double = 1,
+                                   Optional repulsionStrength As Double = 1,
+                                   Optional learningRate As Double = 1.0F,
                                    Optional env As Environment = Nothing) As Object
         Dim labels As String()
         Dim matrix As Double()()
@@ -187,7 +219,12 @@ Module Manifold
             customNumberOfEpochs:=customNumberOfEpochs,
             customMapCutoff:=customMapCutoff,
             progressReporter:=report,
-            kdTreeKNNEngine:=KDsearch
+            spread:=spread,
+            kdTreeKNNEngine:=KDsearch,
+            setOpMixRatio:=setOpMixRatio,
+            minDist:=minDist,
+            learningRate:=learningRate,
+            repulsionStrength:=repulsionStrength
         )
         Dim nEpochs As Integer
 
