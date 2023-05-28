@@ -71,6 +71,12 @@ Namespace Development.CodeAnalysis
             Call ts.WriteLine("//")
 
             For Each type As pkg In pkgs
+                Call ts.WriteLine($"//    imports ""{type.namespace}"" from ""{type.dllName}"";")
+            Next
+
+            Call ts.WriteLine("//")
+
+            For Each type As pkg In pkgs
                 Call ts.WriteLine($"// ref={type.package.FullName}@{type.package.Assembly.ToString}")
             Next
 

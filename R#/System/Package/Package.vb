@@ -119,6 +119,10 @@ Namespace Development.Package
             End Get
         End Property
 
+        ''' <summary>
+        ''' get the .net clr dll assembly basename without extension suffix
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property dllName As String
             Get
                 Return package.Assembly.Location.BaseName
