@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>SMRUCC.Language.CodeDom</RootNamespace>
+    <RootNamespace>SMRUCC.Rsharp.Language.CodeDom</RootNamespace>
     <TargetFrameworks>net6.0-windows;net6.0;net48</TargetFrameworks>
     <AssemblyName>SMRUCC.Language.CodeDom</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
