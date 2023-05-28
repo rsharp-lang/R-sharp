@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8588970bbe4e932b7f95d54aa39f3362, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/CType/ICType.vb"
+﻿#Region "Microsoft.VisualBasic::7a297d56a2ac72ab688c5a5957f0436f, F:/GCModeller/src/R-sharp/R#//Runtime/Interop/CType/ICType.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 18
-    '    Code Lines: 6
-    ' Comment Lines: 7
-    '   Blank Lines: 5
-    '     File Size: 426 B
+    '   Total Lines: 31
+    '    Code Lines: 9
+    ' Comment Lines: 14
+    '   Blank Lines: 8
+    '     File Size: 816 B
 
 
     '     Interface ICTypeList
     ' 
     '         Function: toList
+    ' 
+    '     Interface ICTypeDataframe
+    ' 
+    '         Function: toDataframe
     ' 
     ' 
     ' /********************************************************************************/

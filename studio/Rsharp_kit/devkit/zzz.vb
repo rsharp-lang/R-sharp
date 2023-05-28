@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e6ebc3b59ed7ad6c41625bfaa79aaaea, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//zzz.vb"
+﻿#Region "Microsoft.VisualBasic::4dfbdd1ecbfe2c3092367c41c099e24a, F:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//zzz.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 7
-    '    Code Lines: 4
+    '   Total Lines: 10
+    '    Code Lines: 6
     ' Comment Lines: 0
-    '   Blank Lines: 3
-    '     File Size: 100 B
+    '   Blank Lines: 4
+    '     File Size: 147 B
 
 
     ' Class zzz
     ' 
-    ' 
+    '     Sub: onLoad
     ' 
     ' /********************************************************************************/
 

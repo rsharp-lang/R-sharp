@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d5118f24905e4d708366ea5932234b38, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/BinaryExpressionTree/NameMemberReference.vb"
+﻿#Region "Microsoft.VisualBasic::5f6b51e45a42574f94341342ada4081e, F:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/BinaryExpressionTree/NameMemberReference.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 138
+    '   Total Lines: 140
     '    Code Lines: 107
-    ' Comment Lines: 9
+    ' Comment Lines: 11
     '   Blank Lines: 22
-    '     File Size: 5.90 KB
+    '     File Size: 5.97 KB
 
 
     '     Class ArrayVectorLoopProcessor

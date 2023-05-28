@@ -1,61 +1,64 @@
-﻿#Region "Microsoft.VisualBasic::30f8d1270605a16d9407c54b067aee96, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Package/Imports.vb"
+﻿#Region "Microsoft.VisualBasic::9f0f17f6116d9f46d1d61141114782a1, F:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Package/Imports.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 313
-'    Code Lines: 204
-' Comment Lines: 72
-'   Blank Lines: 37
-'     File Size: 12.97 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Delegate Function
-' 
-' 
-'     Class [Imports]
-' 
-'         Properties: expressionName, isImportsScript, library, packages, scriptSource
-'                     type
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsLibrary, importsPackages
-'                   isImportsAllPackages, LoadLibrary, ToString
-' 
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 360
+    '    Code Lines: 231
+    ' Comment Lines: 85
+    '   Blank Lines: 44
+    '     File Size: 15.10 KB
+
+
+    '     Delegate Function
+    ' 
+    ' 
+    '     Class [Imports]
+    ' 
+    '         Properties: expressionName, isImportsScript, library, packages, scriptSource
+    '                     type
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    ' 
+    '         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsLibrary, importsPackages
+    '                   isImportsAllPackages, LoadLibrary, ToString
+    ' 
+    '         Sub: hook_jsEnv, hook_jsEnv_Internal
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

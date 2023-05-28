@@ -1,53 +1,53 @@
-﻿#Region "Microsoft.VisualBasic::69ddd87f766de0ad7427ad5ab7809c71, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//URL.vb"
+﻿#Region "Microsoft.VisualBasic::a831616251201033918f60e37315b037, F:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//URL.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 390
-'    Code Lines: 261
-' Comment Lines: 90
-'   Blank Lines: 39
-'     File Size: 15.52 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module URL
-' 
-'     Function: [get], content, encodeTokenPart, httpCache, HttpClientPost
-'               HttpCookies, post, upload, urlcomponent, urlencode
-'               wget
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 454
+    '    Code Lines: 313
+    ' Comment Lines: 96
+    '   Blank Lines: 45
+    '     File Size: 18.64 KB
+
+
+    ' Module URL
+    ' 
+    '     Function: [get], content, encodeTokenPart, getPostPayload, httpCache
+    '               HttpClientPost, HttpCookies, is_http_error, post, runHttpRequest
+    '               upload, urlcomponent, urlencode, wget
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

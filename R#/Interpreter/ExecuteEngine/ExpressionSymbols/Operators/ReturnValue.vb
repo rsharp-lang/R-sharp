@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9547aa68edabd31cdd3fe2a03f7fea87, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/ReturnValue.vb"
+﻿#Region "Microsoft.VisualBasic::ac3de0fdf88a17d3e2c41175c522f23c, F:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/ReturnValue.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 50
+    '   Total Lines: 57
     '    Code Lines: 41
-    ' Comment Lines: 0
+    ' Comment Lines: 7
     '   Blank Lines: 9
-    '     File Size: 1.61 KB
+    '     File Size: 1.89 KB
 
 
     '     Class ReturnValue

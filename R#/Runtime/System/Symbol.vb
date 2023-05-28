@@ -1,57 +1,60 @@
-﻿#Region "Microsoft.VisualBasic::276db9ea8fd5f5d46c0848badd134675, D:/GCModeller/src/R-sharp/R#//Runtime/System/Symbol.vb"
+﻿#Region "Microsoft.VisualBasic::091ca34e613c4fab0f588a6f71a44f7f, F:/GCModeller/src/R-sharp/R#//Runtime/System/Symbol.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 214
-'    Code Lines: 130
-' Comment Lines: 57
-'   Blank Lines: 27
-'     File Size: 7.50 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class Symbol
-' 
-'         Properties: [readonly], [typeof], constraint, constraintValid, isCallable
-'                     length, name, stacktrace, typeCode, typeId
-'                     value
-' 
-'         Constructor: (+3 Overloads) Sub New
-'         Function: GetValueViewString, SetValue, ToString, ToVector
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 240
+    '    Code Lines: 144
+    ' Comment Lines: 65
+    '   Blank Lines: 31
+    '     File Size: 8.41 KB
+
+
+    '     Class Symbol
+    ' 
+    '         Properties: [readonly], [typeof], constraint, constraintValid, isCallable
+    '                     length, name, stacktrace, typeCode, typeId
+    '                     value
+    ' 
+    '         Constructor: (+4 Overloads) Sub New
+    ' 
+    '         Function: GetValueViewString, setValue, ToString, ToVector
+    ' 
+    '         Sub: setMutable
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

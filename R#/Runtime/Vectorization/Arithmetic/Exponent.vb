@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bcaa27ace8f6df76b4ca2546daee7c58, D:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/Arithmetic/Exponent.vb"
+﻿#Region "Microsoft.VisualBasic::bcaa27ace8f6df76b4ca2546daee7c58, F:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/Arithmetic/Exponent.vb"
 
     ' Author:
     ' 

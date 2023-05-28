@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::67fad18fa3de504f11d28e9f8859d47e, D:/GCModeller/src/R-sharp/Library/base//base.vb"
+﻿#Region "Microsoft.VisualBasic::330f835bfab56d3c8d2cce41d334f003, F:/GCModeller/src/R-sharp/Library/base//base.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 64
-    '    Code Lines: 34
+    '   Total Lines: 67
+    '    Code Lines: 36
     ' Comment Lines: 23
-    '   Blank Lines: 7
-    '     File Size: 2.35 KB
+    '   Blank Lines: 8
+    '     File Size: 2.41 KB
 
 
     ' Module base

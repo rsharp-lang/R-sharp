@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::92a9304b3edb89151bb44d4032dfe478, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/RequireSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::5a2718267afb35043292b9acb96f6df4, F:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/RequireSyntax.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 85
+    '   Total Lines: 87
     '    Code Lines: 73
-    ' Comment Lines: 2
+    ' Comment Lines: 4
     '   Blank Lines: 10
-    '     File Size: 3.60 KB
+    '     File Size: 3.70 KB
 
 
     '     Module RequireSyntax

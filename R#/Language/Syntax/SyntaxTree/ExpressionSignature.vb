@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fd8884e72f621388e5108867a7ba1878, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/ExpressionSignature.vb"
+﻿#Region "Microsoft.VisualBasic::f4977ef9e6b827c143429283b75cec89, F:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/ExpressionSignature.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 407
-    '    Code Lines: 288
+    '   Total Lines: 426
+    '    Code Lines: 306
     ' Comment Lines: 71
-    '   Blank Lines: 48
-    '     File Size: 14.69 KB
+    '   Blank Lines: 49
+    '     File Size: 15.31 KB
 
 
     '     Module ExpressionSignature
     ' 
-    '         Function: ifElseTriple, isAcceptor, isAnonymous, isByRefCall, isComma
-    '                   isFunctionInvoke, isIdentifier, (+2 Overloads) isKeyword, (+2 Overloads) isLambdaFunction, isLiteral
-    '                   isNamespaceReferenceCall, isOneOfKeywords, isOperator, isSequenceSyntax, isSimpleSymbolIndexer
-    '                   isStackOf, isTuple, isValueAssign, isVectorLoop, parseComplexSymbolIndexer
+    '         Function: ifElseTriple, isAcceptor, isAnonymous, isAnyKeyword, isByRefCall
+    '                   isComma, isFunctionInvoke, isIdentifier, (+2 Overloads) isKeyword, (+2 Overloads) isLambdaFunction
+    '                   isLiteral, isNamespaceReferenceCall, isOneOfKeywords, isOperator, isSequenceSyntax
+    '                   isSimpleSymbolIndexer, isStackOf, isTuple, isValueAssign, isVectorLoop
+    '                   parseComplexSymbolIndexer
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8864d2b7f705e21d2b4bd60af5c13725, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/graphics/graphicsDevice.vb"
+﻿#Region "Microsoft.VisualBasic::15fd8d30de9ef16aa78ca1fe598db319, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/graphics/graphicsDevice.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 84
-    '    Code Lines: 42
+    '   Total Lines: 88
+    '    Code Lines: 45
     ' Comment Lines: 33
-    '   Blank Lines: 9
-    '     File Size: 2.84 KB
+    '   Blank Lines: 10
+    '     File Size: 2.97 KB
 
 
     '     Structure graphicsDevice
     ' 
     '         Properties: Background, isEmpty
     ' 
-    '         Function: getArgumentValue, ToString
+    '         Function: getArgumentValue, GetCurrentDevice, ToString
     ' 
     ' 
     ' /********************************************************************************/

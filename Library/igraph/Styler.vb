@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::282894ac5a2276e245b84b3323d2c811, D:/GCModeller/src/R-sharp/Library/igraph//Styler.vb"
+﻿#Region "Microsoft.VisualBasic::238e96871b7c1a058856345798d9d1ca, F:/GCModeller/src/R-sharp/Library/igraph//Styler.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 236
-    '    Code Lines: 188
+    '   Total Lines: 237
+    '    Code Lines: 189
     ' Comment Lines: 21
     '   Blank Lines: 27
-    '     File Size: 9.24 KB
+    '     File Size: 9.25 KB
 
 
     ' Module Styler

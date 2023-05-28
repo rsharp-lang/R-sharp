@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1f379f37c416497a193914603e16468d, D:/GCModeller/src/R-sharp/snowFall//Context/RPC/RemoteEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::6fd7b0dd5035cd6f314f3c2573de6438, F:/GCModeller/src/R-sharp/snowFall//Context/RPC/RemoteEnvironment.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 162
-    '    Code Lines: 104
+    '   Total Lines: 164
+    '    Code Lines: 106
     ' Comment Lines: 33
     '   Blank Lines: 25
-    '     File Size: 6.09 KB
+    '     File Size: 6.15 KB
 
 
     '     Class RemoteEnvironment

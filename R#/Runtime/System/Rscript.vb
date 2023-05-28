@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::edb9c218eea493c720a8721e96c57573, D:/GCModeller/src/R-sharp/R#//Runtime/System/Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::38c15f7cf3bd340eccbae852d3a99e52, F:/GCModeller/src/R-sharp/R#//Runtime/System/Rscript.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 146
-    '    Code Lines: 87
+    '   Total Lines: 154
+    '    Code Lines: 94
     ' Comment Lines: 40
-    '   Blank Lines: 19
-    '     File Size: 4.93 KB
+    '   Blank Lines: 20
+    '     File Size: 5.23 KB
 
 
     '     Class Rscript
@@ -47,7 +47,7 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: AutoHandleScript, FromFile, FromText, GetByLineNumber, GetByLineRange
-    '                   (+2 Overloads) GetRawText, GetSourceDirectory, GetTokens, ToString
+    '                   GetFileNameDisplay, (+2 Overloads) GetRawText, GetSourceDirectory, GetTokens, ToString
     ' 
     ' 
     ' /********************************************************************************/

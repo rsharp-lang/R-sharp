@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f27df6a06b3c74be50270dd4c7d27a7a, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/Splitter.vb"
+﻿#Region "Microsoft.VisualBasic::d1610c70c5610c92f6cd046b4b8f6343, F:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/Splitter.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 90
-    '    Code Lines: 72
+    '   Total Lines: 89
+    '    Code Lines: 71
     ' Comment Lines: 5
     '   Blank Lines: 13
-    '     File Size: 3.64 KB
+    '     File Size: 3.61 KB
 
 
     '     Module Splitter

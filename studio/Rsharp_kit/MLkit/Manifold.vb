@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0a5eabb2739b0fdbfb7d40d43dbb1f52, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//Manifold.vb"
+﻿#Region "Microsoft.VisualBasic::3d808abefff2490ad2e706d89ebc1c1f, F:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//Manifold.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 194
-    '    Code Lines: 143
-    ' Comment Lines: 26
+    '   Total Lines: 233
+    '    Code Lines: 155
+    ' Comment Lines: 53
     '   Blank Lines: 25
-    '     File Size: 7.65 KB
+    '     File Size: 9.84 KB
 
 
     ' Module Manifold

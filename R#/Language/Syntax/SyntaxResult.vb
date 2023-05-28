@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e2d42b98a00ef77b1689e7f98e547e8c, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxResult.vb"
+﻿#Region "Microsoft.VisualBasic::f3f5df2738fae9ce2a0620198cd2d78c, F:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxResult.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 98
+    '   Total Lines: 104
     '    Code Lines: 64
-    ' Comment Lines: 16
+    ' Comment Lines: 22
     '   Blank Lines: 18
-    '     File Size: 3.72 KB
+    '     File Size: 3.96 KB
 
 
     '     Class SyntaxResult

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::92079b242cdf57892a1b1da582aee259, D:/GCModeller/src/R-sharp/R#/Test//docTest.vb"
+﻿#Region "Microsoft.VisualBasic::acc2103d18970290544a068a29fea2f4, F:/GCModeller/src/R-sharp/R#/Test//docTest.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 15
     ' Comment Lines: 2
     '   Blank Lines: 5
-    '     File Size: 531 B
+    '     File Size: 541 B
 
 
     ' Module docTest

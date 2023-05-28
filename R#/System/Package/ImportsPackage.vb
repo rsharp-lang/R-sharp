@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::db570ac415868d8546480397a72a0593, D:/GCModeller/src/R-sharp/R#//System/Package/ImportsPackage.vb"
+﻿#Region "Microsoft.VisualBasic::75e651e7ec35ec076eb0252e7e0cf14d, F:/GCModeller/src/R-sharp/R#//System/Package/ImportsPackage.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 284
-    '    Code Lines: 196
-    ' Comment Lines: 46
+    '   Total Lines: 293
+    '    Code Lines: 195
+    ' Comment Lines: 56
     '   Blank Lines: 42
-    '     File Size: 11.96 KB
+    '     File Size: 12.29 KB
 
 
     '     Module ImportsPackage

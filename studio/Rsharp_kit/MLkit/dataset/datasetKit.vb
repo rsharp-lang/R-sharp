@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3e724debbe3ee42b085af728dcfd496e, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataset/datasetKit.vb"
+﻿#Region "Microsoft.VisualBasic::6b03cd43a706fc87b281c6e12fdf80f0, F:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataset/datasetKit.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,26 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 361
-    '    Code Lines: 280
+    '   Total Lines: 411
+    '    Code Lines: 320
     ' Comment Lines: 37
-    '   Blank Lines: 44
-    '     File Size: 14.87 KB
+    '   Blank Lines: 54
+    '     File Size: 16.64 KB
 
 
+    ' Class UnionMatrix
+    ' 
+    '     Function: CreateMatrix
+    ' 
+    '     Sub: Add
+    ' 
     ' Module datasetKit
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: binEncoder, boolEncoder, dataDescription, demoMatrix, dimensionRange
-    '               EmbeddingRender, Encoding, factorEncoder, getNormalizeMatrix, mapEncoder
-    '               mapLambda, readMNISTLabelledVector, readModelDataset, Tabular, toDataframe
-    '               toFeatureSet
+    '     Function: addRow, binEncoder, boolEncoder, dataDescription, demoMatrix
+    '               dimensionRange, EmbeddingRender, Encoding, factorEncoder, getNormalizeMatrix
+    '               mapEncoder, mapLambda, readMNISTLabelledVector, readModelDataset, Tabular
+    '               toDataframe, toFeatureSet, toMatrix
     ' 
     ' /********************************************************************************/
 

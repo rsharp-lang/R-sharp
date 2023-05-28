@@ -1,58 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::04178aa6cc1b65561e89e124418e80aa, D:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/PackageModel.vb"
+﻿#Region "Microsoft.VisualBasic::806d575402c88c4a2dc7ac7bb3d10b3c, F:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/PackageModel.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 418
-'    Code Lines: 317
-' Comment Lines: 30
-'   Blank Lines: 71
-'     File Size: 17.92 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class PackageModel
-' 
-'         Properties: assembly, clr, dataSymbols, info, loading
-'                     pkg_dir, symbols, unixman, vignettes
-' 
-'         Function: getDataSymbolName, normPath, ToString, writeSymbols
-' 
-'         Sub: copyAssembly, Flush, saveClrDcouments, saveDataSymbols, saveDependency
-'              saveSymbols, saveUnixManIndex, writeIndex, writeRuntime
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 66
+    '    Code Lines: 34
+    ' Comment Lines: 24
+    '   Blank Lines: 8
+    '     File Size: 2.39 KB
+
+
+    '     Class PackageModel
+    ' 
+    '         Properties: assembly, clr, dataSymbols, info, loading
+    '                     pkg_dir, symbols, tsd, unixman, vignettes
+    ' 
+    '         Function: GetSymbols, ToString
+    ' 
+    '         Sub: Flush
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

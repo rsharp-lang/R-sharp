@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::17a4fa7e602de7c6b0170dc45e5ae4a6, D:/GCModeller/src/R-sharp/R#//Runtime/Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::b0a1d858e2af5f0d27f0cbecad66fdc8, F:/GCModeller/src/R-sharp/R#//Runtime/Extensions.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 193
-    '    Code Lines: 117
-    ' Comment Lines: 50
-    '   Blank Lines: 26
-    '     File Size: 7.33 KB
+    '   Total Lines: 208
+    '    Code Lines: 125
+    ' Comment Lines: 56
+    '   Blank Lines: 27
+    '     File Size: 7.86 KB
 
 
     '     Module Extensions
     ' 
-    '         Function: isCallable, MeasureArrayElementType, MeasureRealElementType, Push, TryCatch
-    '                   verboseOption
+    '         Function: isCallable, MeasureArrayElementType, MeasureRealElementType, Push, strictOption
+    '                   TryCatch, verboseOption
     ' 
     ' 
     ' /********************************************************************************/

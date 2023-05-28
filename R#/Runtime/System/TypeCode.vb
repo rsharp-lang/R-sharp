@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c3fe51c8ebc5ab842586af31afb101b7, D:/GCModeller/src/R-sharp/R#//Runtime/System/TypeCode.vb"
+﻿#Region "Microsoft.VisualBasic::fd692443d83b3735d3bba94eed7eea35, F:/GCModeller/src/R-sharp/R#//Runtime/System/TypeCode.vb"
 
     ' Author:
     ' 
@@ -35,16 +35,16 @@
     ' Code Statistics:
 
     '   Total Lines: 70
-    '    Code Lines: 21
+    '    Code Lines: 20
     ' Comment Lines: 42
-    '   Blank Lines: 7
-    '     File Size: 1.91 KB
+    '   Blank Lines: 8
+    '     File Size: 1.90 KB
 
 
     '     Enum TypeCodes
     ' 
-    '         [boolean], [closure], [dataframe], [double], [formula]
-    '         [integer], [ref], [string], clr_delegate, environment
+    '         [boolean], [closure], [dataframe], [double], [integer]
+    '         [string], clr_delegate, environment
     ' 
     '  
     ' 

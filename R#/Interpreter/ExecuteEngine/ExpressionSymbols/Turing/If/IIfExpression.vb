@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::608f64539d413747299281c738077f1e, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/If/IIfExpression.vb"
+﻿#Region "Microsoft.VisualBasic::e6eb8774d9ff35937db7f5463285566b, F:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/If/IIfExpression.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 56
+    '   Total Lines: 65
     '    Code Lines: 43
-    ' Comment Lines: 3
+    ' Comment Lines: 12
     '   Blank Lines: 10
-    '     File Size: 1.98 KB
+    '     File Size: 2.29 KB
 
 
     '     Class IIfExpression

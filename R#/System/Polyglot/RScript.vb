@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6326cb55aa8b38288caa7d5d7df6d346, D:/GCModeller/src/R-sharp/R#//System/Polyglot/RScript.vb"
+﻿#Region "Microsoft.VisualBasic::4ad1dc2c5e5bf95b5d417715ad1a73c8, F:/GCModeller/src/R-sharp/R#//System/Polyglot/RScript.vb"
 
     ' Author:
     ' 
@@ -38,12 +38,10 @@
     '    Code Lines: 54
     ' Comment Lines: 5
     '   Blank Lines: 10
-    '     File Size: 2.89 KB
+    '     File Size: 2.84 KB
 
 
-    '     Class RScript
-    ' 
-    '         Properties: SuffixName
+    '     Class RScriptLoader
     ' 
     '         Function: LoadScript, ParseScript
     ' 

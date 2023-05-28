@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d2d7e81111223b6e7f901e40fe61f75a, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/makeDataframe.vb"
+﻿#Region "Microsoft.VisualBasic::c067f95478281af3762d0cfa544f861b, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/makeDataframe.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 314
-    '    Code Lines: 227
+    '   Total Lines: 313
+    '    Code Lines: 226
     ' Comment Lines: 41
     '   Blank Lines: 46
-    '     File Size: 12.66 KB
+    '     File Size: 12.62 KB
 
 
     '     Delegate Function

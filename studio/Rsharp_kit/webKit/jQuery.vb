@@ -1,4 +1,58 @@
-﻿
+﻿#Region "Microsoft.VisualBasic::5b9e8b9cabe059d6e3bbb1d70b7883e9, F:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//jQuery.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 88
+    '    Code Lines: 72
+    ' Comment Lines: 0
+    '   Blank Lines: 16
+    '     File Size: 3.16 KB
+
+
+    ' Class jQuery
+    ' 
+    '     Properties: length
+    ' 
+    '     Constructor: (+2 Overloads) Sub New
+    '     Function: EvaluateIndexer, (+2 Overloads) getByIndex, load, setByindex, setByIndex
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.GraphQuery
 Imports Microsoft.VisualBasic.MIME.Html.Document
@@ -86,3 +140,4 @@ Public Class jQuery : Implements RIndexer, RIndex
         Throw New NotImplementedException()
     End Function
 End Class
+

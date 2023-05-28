@@ -1,59 +1,59 @@
-﻿#Region "Microsoft.VisualBasic::166e8c976010533b9edc3265015c9992, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/invoke.vb"
+﻿#Region "Microsoft.VisualBasic::2c8d56ba1cef8335d1a719dfe2f132b8, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/invoke.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 152
-'    Code Lines: 120
-' Comment Lines: 19
-'   Blank Lines: 13
-'     File Size: 6.60 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class invoke
-' 
-'         Properties: ls
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: [stop], getFunction, invalidParameter, invokeInternals, isRInternal
-'                   missingParameter
-' 
-'         Sub: pushEnvir
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 182
+    '    Code Lines: 131
+    ' Comment Lines: 35
+    '   Blank Lines: 16
+    '     File Size: 7.71 KB
+
+
+    '     Class invoke
+    ' 
+    '         Properties: ls
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: [stop], getAllInternals, getFunction, invalidParameter, invokeInternals
+    '                   isRInternal, missingParameter
+    ' 
+    '         Sub: pushEnvir
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

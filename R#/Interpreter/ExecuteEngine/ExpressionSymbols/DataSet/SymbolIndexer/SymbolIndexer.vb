@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a8fda844ff29f9b8e7fef84f4bd1fbe8, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/SymbolIndexer/SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::b045a2b222bbeeb6bedcf261cf149bfa, F:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/SymbolIndexer/SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 652
-    '    Code Lines: 497
-    ' Comment Lines: 72
-    '   Blank Lines: 83
-    '     File Size: 28.74 KB
+    '   Total Lines: 681
+    '    Code Lines: 518
+    ' Comment Lines: 79
+    '   Blank Lines: 84
+    '     File Size: 29.84 KB
 
 
     '     Class SymbolIndexer

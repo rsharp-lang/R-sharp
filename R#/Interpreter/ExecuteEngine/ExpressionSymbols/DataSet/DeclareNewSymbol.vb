@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::53a1754a72731cd5e0cada1eddf806b4, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/DeclareNewSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::43619757fcdd3eff11a476df9151829f, F:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/DeclareNewSymbol.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 360
-    '    Code Lines: 257
-    ' Comment Lines: 48
-    '   Blank Lines: 55
-    '     File Size: 13.66 KB
+    '   Total Lines: 415
+    '    Code Lines: 290
+    ' Comment Lines: 66
+    '   Blank Lines: 59
+    '     File Size: 15.61 KB
 
 
     '     Class DeclareNewSymbol
@@ -46,9 +46,10 @@
     '         Properties: expressionName, hasInitializeExpression, isTuple, names, stackFrame
     '                     symbolSize, type, unit, value
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+4 Overloads) Sub New
     ' 
-    '         Function: Evaluate, getParameterView, PushNames, PushTuple, ToString
+    '         Function: Evaluate, getParameterView, GetSymbolName, PushNames, PushTuple
+    '                   ToString
     ' 
     '         Sub: AddCustomAttributes
     ' 

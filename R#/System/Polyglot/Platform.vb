@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c8c2b14778b585a0c71f5970f2b46ca, D:/GCModeller/src/R-sharp/R#//System/Polyglot/Platform.vb"
+﻿#Region "Microsoft.VisualBasic::0c0fd21bb3f7593baca0b5dd12351689, F:/GCModeller/src/R-sharp/R#//System/Polyglot/Platform.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 92
-    '    Code Lines: 42
-    ' Comment Lines: 35
-    '   Blank Lines: 15
-    '     File Size: 3.98 KB
+    '   Total Lines: 116
+    '    Code Lines: 53
+    ' Comment Lines: 45
+    '   Blank Lines: 18
+    '     File Size: 4.99 KB
 
 
     '     Class Platform
     ' 
     '         Constructor: (+1 Overloads) Sub New
+    ' 
     '         Function: CanHandle, LoadScript, ParseScript, (+2 Overloads) Register
+    ' 
+    '         Sub: __init_load_base_internals
     ' 
     ' 
     ' /********************************************************************************/

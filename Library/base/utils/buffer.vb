@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6caef6aef437a8048d08693d327f308d, D:/GCModeller/src/R-sharp/Library/base//utils/buffer.vb"
+﻿#Region "Microsoft.VisualBasic::c8e4a3b1c6db14cba96bfa06c20051f4, F:/GCModeller/src/R-sharp/Library/base//utils/buffer.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 243
-    '    Code Lines: 174
-    ' Comment Lines: 37
+    '   Total Lines: 253
+    '    Code Lines: 179
+    ' Comment Lines: 42
     '   Blank Lines: 32
-    '     File Size: 9.07 KB
+    '     File Size: 9.46 KB
 
 
     ' Module buffer
     ' 
-    '     Function: escapeString, float, getString, gzipDecompression, normChar
-    '               numberFramework, toInteger, zlibDecompress, zlibStream
+    '     Function: asBuffer, escapeString, float, getString, gzipDecompression
+    '               normChar, numberFramework, toInteger, zlibDecompress, zlibStream
     ' 
     ' /********************************************************************************/
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::934b0447d506dd8d01a51a16a4541973, D:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/GetVectorElement.vb"
+﻿#Region "Microsoft.VisualBasic::4176e2b62014a1e45f451f8b73521b96, F:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/GetVectorElement.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 233
+    '   Total Lines: 236
     '    Code Lines: 158
-    ' Comment Lines: 45
+    ' Comment Lines: 48
     '   Blank Lines: 30
-    '     File Size: 8.48 KB
+    '     File Size: 8.62 KB
 
 
     '     Class GetVectorElement

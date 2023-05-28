@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bc7514eced2ddcf7b2f897515a759395, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecutableLoop.vb"
+﻿#Region "Microsoft.VisualBasic::4f7146511d9694f6c9fe4e02206940b0, F:/GCModeller/src/R-sharp/R#//Interpreter/ExecutableLoop.vb"
 
     ' Author:
     ' 
@@ -34,21 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 235
-    '    Code Lines: 149
+    '   Total Lines: 228
+    '    Code Lines: 143
     ' Comment Lines: 52
-    '   Blank Lines: 34
-    '     File Size: 9.33 KB
+    '   Blank Lines: 33
+    '     File Size: 9.21 KB
 
 
-    '     Enum DebugLevels
-    ' 
-    '         Memory, None, Stack
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
     '     Class ExecutableLoop
     ' 
     '         Constructor: (+1 Overloads) Sub New

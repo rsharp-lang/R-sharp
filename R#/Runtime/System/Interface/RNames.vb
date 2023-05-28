@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2d43686b36e7dbb82ffac724c8a64998, D:/GCModeller/src/R-sharp/R#//Runtime/System/Interface/RNames.vb"
+﻿#Region "Microsoft.VisualBasic::07d57a7c7c74c777c0f2d7381bd09bee, F:/GCModeller/src/R-sharp/R#//Runtime/System/Interface/RNames.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 63
+    '   Total Lines: 90
     '    Code Lines: 22
-    ' Comment Lines: 30
+    ' Comment Lines: 57
     '   Blank Lines: 11
-    '     File Size: 2.21 KB
+    '     File Size: 3.12 KB
 
 
     '     Interface IReflector

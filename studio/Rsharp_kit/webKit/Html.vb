@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::af2c6655070dbfe238afd6fb92ff6e53, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//Html.vb"
+﻿#Region "Microsoft.VisualBasic::7544e1c3358d28873e48da4881253d8e, F:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//Html.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 104
-    '    Code Lines: 73
-    ' Comment Lines: 15
-    '   Blank Lines: 16
-    '     File Size: 3.73 KB
+    '   Total Lines: 128
+    '    Code Lines: 88
+    ' Comment Lines: 20
+    '   Blank Lines: 20
+    '     File Size: 4.49 KB
 
 
     ' Module Html
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: documentDebugView, getPlainText, parse, QueryHtmlTables
+    '     Function: documentDebugView, getPlainText, links, parse, QueryHtmlTables
+    '               title
     ' 
     ' /********************************************************************************/
 

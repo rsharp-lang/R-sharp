@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a321b33a4a7293ff551b3386dc83685f, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/printer/printer.vb"
+﻿#Region "Microsoft.VisualBasic::d5fdc9aa23e1a8ad45833a1b578a2992, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/printer/printer.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 395
-    '    Code Lines: 294
+    '   Total Lines: 399
+    '    Code Lines: 298
     ' Comment Lines: 45
     '   Blank Lines: 56
-    '     File Size: 17.00 KB
+    '     File Size: 17.25 KB
 
 
     '     Delegate Function

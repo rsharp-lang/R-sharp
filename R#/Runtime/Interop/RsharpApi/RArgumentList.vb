@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2dfe6298b3ede6a00d21064c97f07a54, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/RArgumentList.vb"
+﻿#Region "Microsoft.VisualBasic::498b661de41f8caf062712d7f0429df0, F:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/RArgumentList.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 403
-    '    Code Lines: 263
+    '   Total Lines: 416
+    '    Code Lines: 274
     ' Comment Lines: 91
-    '   Blank Lines: 49
-    '     File Size: 17.58 KB
+    '   Blank Lines: 51
+    '     File Size: 17.99 KB
 
 
     '     Class RArgumentList
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: CreateLeftMarginArguments, CreateObjectListArguments, CreateRightMarginArguments, fillOptionalArguments, objectListArgumentIndex
-    '                   objectListArgumentMargin, TryCastListObjects
+    '                   objectListArgumentMargin, TryCastListObjects, TryCastListObjectsInternal
     ' 
     ' 
     ' /********************************************************************************/

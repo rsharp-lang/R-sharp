@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::463fe968bc7b6e4e61552ce9e550c3a2, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//My Project/Settings.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::463fe968bc7b6e4e61552ce9e550c3a2, F:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//My Project/Settings.Designer.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e91db9b5d61e8f6b96adb49a9c5fe526, D:/GCModeller/src/R-sharp/Library/graphics//Render3D/plot3D.vb"
+﻿#Region "Microsoft.VisualBasic::f2fc0864e4559d2d9a5eaf6751d629ff, F:/GCModeller/src/R-sharp/Library/graphics//Render3D/plot3D.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 83
-    '    Code Lines: 73
+    '   Total Lines: 84
+    '    Code Lines: 74
     ' Comment Lines: 0
     '   Blank Lines: 10
-    '     File Size: 3.16 KB
+    '     File Size: 3.19 KB
 
 
     ' Module plot3D

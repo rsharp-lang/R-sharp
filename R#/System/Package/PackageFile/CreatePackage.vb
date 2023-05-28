@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::79eacdf892473aa6bd3a2f594d1e49e8, D:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/CreatePackage.vb"
+﻿#Region "Microsoft.VisualBasic::c71657f62b81aa8acda7bb88c118918f, F:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/CreatePackage.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 505
-    '    Code Lines: 370
-    ' Comment Lines: 63
-    '   Blank Lines: 72
-    '     File Size: 21.19 KB
+    '   Total Lines: 535
+    '    Code Lines: 384
+    ' Comment Lines: 74
+    '   Blank Lines: 77
+    '     File Size: 22.53 KB
 
 
     '     Module CreatePackage

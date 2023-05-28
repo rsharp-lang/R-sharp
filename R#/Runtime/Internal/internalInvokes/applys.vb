@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4b3496af4de353d9f390fbbef0c35fc2, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/applys.vb"
+﻿#Region "Microsoft.VisualBasic::12ed939a8d11c7733976f9602be0e516, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/applys.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 500
-    '    Code Lines: 324
+    '   Total Lines: 536
+    '    Code Lines: 354
     ' Comment Lines: 108
-    '   Blank Lines: 68
-    '     File Size: 21.24 KB
+    '   Blank Lines: 74
+    '     File Size: 22.72 KB
 
 
     '     Module applys

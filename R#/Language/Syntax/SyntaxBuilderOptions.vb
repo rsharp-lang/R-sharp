@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9a45a28cb8d6f607aa5edd388e7a1607, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxBuilderOptions.vb"
+﻿#Region "Microsoft.VisualBasic::23319830e9c7cd048cf9f0ae5b01f137, F:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxBuilderOptions.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 107
-    '    Code Lines: 78
+    '   Total Lines: 110
+    '    Code Lines: 80
     ' Comment Lines: 11
-    '   Blank Lines: 18
-    '     File Size: 3.89 KB
+    '   Blank Lines: 19
+    '     File Size: 3.98 KB
 
 
     '     Delegate Function

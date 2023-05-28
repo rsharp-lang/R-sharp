@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d360f51947d2a545eab9305197d61710, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/Closure/DeclareLambdaFunction.vb"
+﻿#Region "Microsoft.VisualBasic::7d45328638ee8f1b27d02503de1ad036, F:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/Closure/DeclareLambdaFunction.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 237
-    '    Code Lines: 164
+    '   Total Lines: 241
+    '    Code Lines: 167
     ' Comment Lines: 40
-    '   Blank Lines: 33
-    '     File Size: 9.50 KB
+    '   Blank Lines: 34
+    '     File Size: 9.61 KB
 
 
     '     Class DeclareLambdaFunction
@@ -48,7 +48,7 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: CreateLambda, Evaluate, getArguments, GetPrintContent, getReturns
-    '                   getSingle, (+2 Overloads) Invoke, setValueHandler, ToString
+    '                   getSingle, GetSymbolName, (+2 Overloads) Invoke, setValueHandler, ToString
     ' 
     ' 
     ' /********************************************************************************/

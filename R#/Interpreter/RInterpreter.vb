@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c58a292d5500d19418bc6ce11386424d, D:/GCModeller/src/R-sharp/R#//Interpreter/RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::a7da84245b47961aa02194734a64fe9b, F:/GCModeller/src/R-sharp/R#//Interpreter/RInterpreter.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 649
-    '    Code Lines: 387
-    ' Comment Lines: 166
-    '   Blank Lines: 96
-    '     File Size: 26.69 KB
+    '   Total Lines: 659
+    '    Code Lines: 392
+    ' Comment Lines: 170
+    '   Blank Lines: 97
+    '     File Size: 27.00 KB
 
 
     '     Class RInterpreter
     ' 
-    '         Properties: configFile, debug, globalEnvir, redirectError2stdout, Rsharp
-    '                     silent, strict, warnings
+    '         Properties: configFile, debug, globalEnvir, globalSymbols, redirectError2stdout
+    '                     Rsharp, silent, strict, warnings
     ' 
     '         Constructor: (+2 Overloads) Sub New
     ' 

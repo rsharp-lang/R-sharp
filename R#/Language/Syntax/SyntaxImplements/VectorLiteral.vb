@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::20ed5f8a2e00354acbf71309e7dd5361, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/VectorLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::7e8561733ec26d62a34f58685a570dd8, F:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/VectorLiteral.vb"
 
     ' Author:
     ' 
@@ -35,10 +35,10 @@
     ' Code Statistics:
 
     '   Total Lines: 225
-    '    Code Lines: 181
-    ' Comment Lines: 13
+    '    Code Lines: 180
+    ' Comment Lines: 14
     '   Blank Lines: 31
-    '     File Size: 10.12 KB
+    '     File Size: 10.14 KB
 
 
     '     Module VectorLiteralSyntax

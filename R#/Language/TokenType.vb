@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::00118d078c2697c3155f4d05fddcda68, D:/GCModeller/src/R-sharp/R#//Language/TokenType.vb"
+﻿#Region "Microsoft.VisualBasic::b3c65c3beb59e4f78cd29f1c0885b69d, F:/GCModeller/src/R-sharp/R#//Language/TokenType.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 70
+    '   Total Lines: 73
     '    Code Lines: 26
-    ' Comment Lines: 36
+    ' Comment Lines: 39
     '   Blank Lines: 8
-    '     File Size: 1.61 KB
+    '     File Size: 1.67 KB
 
 
     '     Enum TokenType

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::68c2268d1ac086d7154c1224976a317c, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/dev/devtools.vb"
+﻿#Region "Microsoft.VisualBasic::95d116c3797cfe707360fbdca521a411, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/dev/devtools.vb"
 
     ' Author:
     ' 
@@ -34,21 +34,26 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 188
-    '    Code Lines: 105
+    '   Total Lines: 263
+    '    Code Lines: 168
     ' Comment Lines: 62
-    '   Blank Lines: 21
-    '     File Size: 8.24 KB
+    '   Blank Lines: 33
+    '     File Size: 11.58 KB
 
 
+    '     Class NoInspector
+    ' 
+    '         Properties: obj
+    ' 
+    '         Function: ToString, Wrap
+    ' 
     '     Module devtools
     ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: fetchProfileData, flash_load, FNV1aHash, getDllPath, profilerFrames
+    '         Function: fetchProfileData, flash_load, FNV1aHash, getDllPath, getInvokeParameters
+    '                   getSymbolName, getSymbolvalue, profilerFrames, scriptTable, scriptTable1
     '                   stringHashCode
     ' 
-    '         Sub: gc, raiseException, raiseThreadException
+    '         Sub: gc, Main, raiseException, raiseThreadException
     ' 
     ' 
     ' /********************************************************************************/

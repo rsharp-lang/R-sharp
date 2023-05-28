@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4bc55067ecad9786eb3a760eabf73755, D:/GCModeller/src/R-sharp/Library/Rlapack//RMatrix.vb"
+﻿#Region "Microsoft.VisualBasic::710d6b9392f273cde3afb963f34c43bc, F:/GCModeller/src/R-sharp/Library/Rlapack//RMatrix.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 198
-    '    Code Lines: 67
+    '   Total Lines: 199
+    '    Code Lines: 68
     ' Comment Lines: 116
     '   Blank Lines: 15
-    '     File Size: 7.85 KB
+    '     File Size: 7.89 KB
 
 
     ' Module RMatrix

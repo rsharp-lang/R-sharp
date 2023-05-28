@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cfd8b913736a253dd56160d16ba7b522, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/printer/classPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::632822b2cf372a4b94f6e5275cbd6e80, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/printer/classPrinter.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 117
-    '    Code Lines: 84
+    '   Total Lines: 123
+    '    Code Lines: 89
     ' Comment Lines: 14
-    '   Blank Lines: 19
-    '     File Size: 4.56 KB
+    '   Blank Lines: 20
+    '     File Size: 4.72 KB
 
 
     '     Module classPrinter

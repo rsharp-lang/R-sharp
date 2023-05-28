@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7ddfca1b34e34bd14ba2a2493a044559, D:/GCModeller/src/R-sharp/R#//System/Polyglot/ScriptLoader.vb"
+﻿#Region "Microsoft.VisualBasic::a889898b92193b6d0ea286442d28c07b, F:/GCModeller/src/R-sharp/R#//System/Polyglot/ScriptLoader.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 11
     ' Comment Lines: 0
     '   Blank Lines: 5
-    '     File Size: 556 B
+    '     File Size: 573 B
 
 
     '     Class ScriptLoader

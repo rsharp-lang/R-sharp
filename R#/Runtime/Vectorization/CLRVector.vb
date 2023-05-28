@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::be51fdd26ad696db988fec612d5e2e5d, D:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/CLRVector.vb"
+﻿#Region "Microsoft.VisualBasic::d3fd2c12f2012cba91a46e5219a34a7c, F:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/CLRVector.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 346
-    '    Code Lines: 287
-    ' Comment Lines: 20
-    '   Blank Lines: 39
-    '     File Size: 13.54 KB
+    '   Total Lines: 402
+    '    Code Lines: 334
+    ' Comment Lines: 23
+    '   Blank Lines: 45
+    '     File Size: 15.88 KB
 
 
     '     Module CLRVector
     ' 
-    '         Function: asCharacter, asDate, asInteger, (+2 Overloads) asLogical, asLong
-    '                   asNumeric, asRawByte, castVector, parseString, safeCharacters
-    '                   testNull
+    '         Function: asCharacter, asDate, asFloat, asInteger, (+2 Overloads) asLogical
+    '                   asLong, asNumeric, asRawByte, castVector, parseString
+    '                   safeCharacters, testNull
     ' 
     ' 
     ' /********************************************************************************/

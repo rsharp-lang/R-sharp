@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::57819aabf4a5df57e2a2c03c57ad9740, D:/GCModeller/src/R-sharp/Library/graphics//Plot2D/gr2DLabeler.vb"
+﻿#Region "Microsoft.VisualBasic::5226cc25eecfd9c2f1b9c58df6751871, F:/GCModeller/src/R-sharp/Library/graphics//Plot2D/gr2DLabeler.vb"
 
     ' Author:
     ' 
@@ -34,8 +34,8 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 98
-    '    Code Lines: 72
+    '   Total Lines: 99
+    '    Code Lines: 73
     ' Comment Lines: 17
     '   Blank Lines: 9
     '     File Size: 3.95 KB

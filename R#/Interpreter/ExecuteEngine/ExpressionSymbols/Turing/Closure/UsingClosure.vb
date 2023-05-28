@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::867f64ecbfa57962997dac9da01f1008, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/Closure/UsingClosure.vb"
+﻿#Region "Microsoft.VisualBasic::08a47d7e52a9ab6f1f5d087856ec7353, F:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/Closure/UsingClosure.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 94
-    '    Code Lines: 65
+    '   Total Lines: 100
+    '    Code Lines: 70
     ' Comment Lines: 16
-    '   Blank Lines: 13
-    '     File Size: 3.48 KB
+    '   Blank Lines: 14
+    '     File Size: 3.71 KB
 
 
     '     Class UsingClosure
@@ -46,7 +46,7 @@
     '         Properties: expressionName, stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, ToString
+    '         Function: Evaluate, GetSymbolName, ToString
     ' 
     ' 
     ' /********************************************************************************/
