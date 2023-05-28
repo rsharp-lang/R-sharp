@@ -1,62 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::9a5f3efe4ffcc8ea73720e05a4d2f661, D:/GCModeller/src/R-sharp/studio/Rsharp_IL/njl//Language/SyntaxTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 297
-    '    Code Lines: 231
-    ' Comment Lines: 16
-    '   Blank Lines: 50
-    '     File Size: 11.47 KB
+' Summaries:
 
 
-    '     Class SyntaxTree
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: getLines, ParseJlScript
-    ' 
-    '         Sub: endCurrent, importModule, includeFile, requirePackages, startAcceptorDefine
-    '              (+2 Overloads) startClosureDefine, startForLoopDefine, startFunctionDefine, startIfDefine, startUsingDefine
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 297
+'    Code Lines: 231
+' Comment Lines: 16
+'   Blank Lines: 50
+'     File Size: 11.47 KB
+
+
+'     Class SyntaxTree
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: getLines, ParseJlScript
+' 
+'         Sub: endCurrent, importModule, includeFile, requirePackages, startAcceptorDefine
+'              (+2 Overloads) startClosureDefine, startForLoopDefine, startFunctionDefine, startIfDefine, startUsingDefine
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.Language
-Imports SMRUCC.Language.CodeDom
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -65,6 +64,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Language
+Imports SMRUCC.Rsharp.Language.CodeDom
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language.TokenIcer
