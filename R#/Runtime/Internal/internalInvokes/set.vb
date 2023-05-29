@@ -231,6 +231,12 @@ Namespace Runtime.Internal.Invokes
                     elementType = MeasureRealElementType(raw).DoCall(AddressOf RType.GetRSharpType)
                     Return raw.AsEnumerable
                 End With
+            ElseIf type.ImplementInterface(Of IDictionary) Then
+                With DirectCast(x, IDictionary)
+                    Dim raw As Object() = .Values.ToVector
+                    elementType = MeasureRealElementType(raw).DoCall(AddressOf RType.GetRSharpType)
+                    Return raw.AsEnumerable
+                End With
             ElseIf type.IsArray Then
                 With DirectCast(x, Array)
                     elementType = .GetType.GetElementType.DoCall(AddressOf RType.GetRSharpType)
