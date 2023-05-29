@@ -295,8 +295,12 @@ Namespace Runtime.Internal.Object
             Dim rowSize As Integer = Me.GetRowNumbers
 
             If fullSize AndAlso col.Length <> rowSize Then
+                If col.Length = 0 Then
+                    ' column contains no data?
+                    Return Nothing
+                End If
                 If col.Length <> 1 Then
-                    Throw New InvalidProgramException
+                    Throw New InvalidProgramException($"target column '{name}' is in different vector size({col.Length} elements) with the table rows({rowSize} data rows)!")
                 End If
 
                 Dim nrows As Integer = rowSize
