@@ -60,6 +60,12 @@ Imports SMRUCC.Rsharp.Runtime
 <Package("CLR")>
 Public Module CLRTool
 
+    ''' <summary>
+    ''' load assembly from a given dll file
+    ''' </summary>
+    ''' <param name="pstr">the dll file path or the assembly name string</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("assembly")>
     Public Function LoadAssembly(pstr As String, Optional env As Environment = Nothing) As Object
         If pstr.FileExists Then
