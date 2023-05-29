@@ -274,7 +274,7 @@ Namespace Runtime.Vectorization
             End If
 
             If TypeOf x Is Double() Then
-                Return x
+                Return DirectCast(x, Double()).Select(Function(d) CSng(d)).ToArray
             ElseIf TypeOf x Is Single() Then
                 Return DirectCast(x, Single())
             ElseIf DataFramework.IsNumericCollection(x.GetType) Then
@@ -301,6 +301,11 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
+        ''' <summary>
+        ''' cast any .net clr object to a numeric vector
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         Public Function asNumeric(x As Object) As Double()
             If x Is Nothing Then
                 Return {}
