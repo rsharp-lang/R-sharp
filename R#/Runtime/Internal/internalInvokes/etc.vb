@@ -301,15 +301,15 @@ Namespace Runtime.Internal.Invokes
             Dim built As DateTime = core.BuiltTime
             Dim framework As String
 
-#If netcore5 = 1 Then
-            framework = ".NET Core 5.0"
+#If NETCOREAPP Then
+            framework = ".NET 6.0"
 #Else
             framework = ".NET Framework v4.8"
 #End If
 
             Return New list With {
                 .slots = New Dictionary(Of String, Object) From {
-                    {"platform", $"Microsoft VisualStudio 2019/{framework}/Microsoft VisualBasic.NET"},
+                    {"platform", $"Microsoft VisualStudio 2022/{framework}/Microsoft VisualBasic.NET"},
                     {"arch", "x86_64"},
                     {"os", framework},
                     {"system", Win32.OSVersion.VersionString},
