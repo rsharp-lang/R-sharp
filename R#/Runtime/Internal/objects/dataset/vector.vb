@@ -160,7 +160,7 @@ Namespace Runtime.Internal.Object
         End Sub
 
         Private Shared Function loadGenericCollection(input As IEnumerable, model As Type, env As Environment) As Array
-            Dim list As IList = GetType(List(Of )).MakeGenericType(model)
+            Dim list As IList = Activator.CreateInstance(GetType(List(Of )).MakeGenericType(model))
 
             For Each obj As Object In input
                 If Not obj Is Nothing Then
