@@ -153,7 +153,13 @@ Namespace Runtime.Internal.Object.Converts
                     If list.Item(i) Is Nothing Then
                         Call array.SetValue(Nothing, i)
                     Else
-                        Call array.SetValue(listInternal(list.Item(i), args, env), i)
+                        Dim value As Object = list.Item(i)
+
+                        If Not (DataFramework.IsPrimitive(value.GetType) OrElse value.GetType.IsEnum) Then
+                            value = listInternal(value, args, env)
+                        End If
+
+                        Call array.SetValue(value, i)
                     End If
                 Next
 
