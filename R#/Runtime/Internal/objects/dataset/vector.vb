@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::0e3d7d0b2937ced003f9b2c1e5e84001, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vector.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 332
-    '    Code Lines: 228
-    ' Comment Lines: 50
-    '   Blank Lines: 54
-    '     File Size: 12.31 KB
+' Summaries:
 
 
-    '     Class vector
-    ' 
-    '         Properties: data, factor, length, unit
-    ' 
-    '         Constructor: (+7 Overloads) Sub New
-    '         Function: asVector, fromScalar, (+2 Overloads) getByIndex, getByName, getNames
-    '                   hasName, isVectorOf, setByindex, setByIndex, setNames
-    '                   ToString
-    '         Operators: <>, =
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 332
+'    Code Lines: 228
+' Comment Lines: 50
+'   Blank Lines: 54
+'     File Size: 12.31 KB
+
+
+'     Class vector
+' 
+'         Properties: data, factor, length, unit
+' 
+'         Constructor: (+7 Overloads) Sub New
+'         Function: asVector, fromScalar, (+2 Overloads) getByIndex, getByName, getNames
+'                   hasName, isVectorOf, setByindex, setByIndex, setNames
+'                   ToString
+'         Operators: <>, =
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -136,6 +136,9 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <param name="model">element type of the array</param>
         ''' <param name="input"></param>
+        ''' <remarks>
+        ''' try to make the collection data generic in this constructor function
+        ''' </remarks>
         Sub New(model As Type, input As IEnumerable, env As Environment)
             Dim i As i32 = Scan0
 
@@ -143,14 +146,25 @@ Namespace Runtime.Internal.Object
                 model = GetType(Object)
             End If
 
-            ' create an empty vector with 
-            ' allocable data buffer
-            Dim buffer As Array = Array.CreateInstance(model, CInt(BufferSize / 4))
-            Dim objType As Type
+            elementType = RType.GetRSharpType(model)
+
+            If input.GetType.IsArray Then
+                If input.GetType.GetElementType Is model Then
+                    data = CObj(input)
+                Else
+                    data = loadGenericCollection(input, model, env)
+                End If
+            Else
+                data = loadGenericCollection(input, model, env)
+            End If
+        End Sub
+
+        Private Shared Function loadGenericCollection(input As IEnumerable, model As Type, env As Environment) As Array
+            Dim list As IList = GetType(List(Of )).MakeGenericType(model)
 
             For Each obj As Object In input
                 If Not obj Is Nothing Then
-                    objType = obj.GetType
+                    Dim objType As Type = obj.GetType
 
                     If objType Is model Then
                         ' do nothing
@@ -163,22 +177,17 @@ Namespace Runtime.Internal.Object
                     obj = DirectCast(obj, vbObject).target
                 End If
 
-                Call buffer.SetValue(obj, CInt(i))
-
-                If ++i = buffer.Length Then
-                    ' resize vector buffer
-                    data = buffer
-                    buffer = Array.CreateInstance(model, BufferSize + buffer.Length)
-                    Array.ConstrainedCopy(data, Scan0, buffer, Scan0, data.Length)
-                End If
+                Call list.Add(obj)
             Next
 
-            elementType = RType.GetRSharpType(model)
-            ' trim the vector to its acutal size
-            data = Array.CreateInstance(model, length:=i)
-            ' do buffer memory copy
-            Array.ConstrainedCopy(buffer, Scan0, data, Scan0, data.Length)
-        End Sub
+            Dim buffer As Array = Array.CreateInstance(model, length:=list.Count)
+
+            For i As Integer = 0 To buffer.Length - 1
+                Call buffer.SetValue(list.Item(i), i)
+            Next
+
+            Return buffer
+        End Function
 
         Sub New(names As String(), data As Array, envir As Environment)
             If data.AsObjectEnumerator _
