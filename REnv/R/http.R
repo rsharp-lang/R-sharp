@@ -98,7 +98,7 @@ const getHtml = function(url, interval = 3, filetype = "html") {
         # request from remote server
         # if the cache is not hit,
         # and then write it to the cache repository
-        content(requests.get(url));
+        http::content(requests.get(url), plain_text = TRUE);
       }
     },
     interval = interval,
@@ -125,6 +125,6 @@ const getJSON = function(url, interval = 3, raw_text = FALSE) {
   if (raw_text) {
     json_text;
   } else {
-    json_text |> json_decode();
+    json_text |> JSON::json_decode();
   }
 }
