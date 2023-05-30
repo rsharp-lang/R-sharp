@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::0e3d7d0b2937ced003f9b2c1e5e84001, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vector.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 332
-    '    Code Lines: 228
-    ' Comment Lines: 50
-    '   Blank Lines: 54
-    '     File Size: 12.31 KB
+' Summaries:
 
 
-    '     Class vector
-    ' 
-    '         Properties: data, factor, length, unit
-    ' 
-    '         Constructor: (+7 Overloads) Sub New
-    '         Function: asVector, fromScalar, (+2 Overloads) getByIndex, getByName, getNames
-    '                   hasName, isVectorOf, setByindex, setByIndex, setNames
-    '                   ToString
-    '         Operators: <>, =
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 332
+'    Code Lines: 228
+' Comment Lines: 50
+'   Blank Lines: 54
+'     File Size: 12.31 KB
+
+
+'     Class vector
+' 
+'         Properties: data, factor, length, unit
+' 
+'         Constructor: (+7 Overloads) Sub New
+'         Function: asVector, fromScalar, (+2 Overloads) getByIndex, getByName, getNames
+'                   hasName, isVectorOf, setByindex, setByIndex, setNames
+'                   ToString
+'         Operators: <>, =
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -81,6 +81,8 @@ Namespace Runtime.Internal.Object
         Public Property factor As factor
 
         Public ReadOnly Property length As Integer Implements RIndex.length
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            <DebuggerStepThrough>
             Get
                 Return data.Length
             End Get
@@ -199,6 +201,43 @@ Namespace Runtime.Internal.Object
                 .DoCall(AddressOf RType.GetRSharpType)
         End Sub
 
+        Sub New(names As String(), data As Double())
+            Me.data = data
+            Me.setNames(names)
+            Me.elementType = RType.GetRSharpType(GetType(Double))
+        End Sub
+
+        Sub New(names As String(), data As Single())
+            Me.data = data
+            Me.setNames(names)
+            Me.elementType = RType.GetRSharpType(GetType(Single))
+        End Sub
+
+        Sub New(names As String(), data As Integer())
+            Me.data = data
+            Me.setNames(names)
+            Me.elementType = RType.GetRSharpType(GetType(Integer))
+        End Sub
+
+        Sub New(names As String(), data As Long())
+            Me.data = data
+            Me.setNames(names)
+            Me.elementType = RType.GetRSharpType(GetType(Long))
+        End Sub
+
+        Sub New(names As String(), data As Boolean())
+            Me.data = data
+            Me.setNames(names)
+            Me.elementType = RType.GetRSharpType(GetType(Boolean))
+        End Sub
+
+        Sub New(names As String(), data As String())
+            Me.data = data
+            Me.setNames(names)
+            Me.elementType = RType.GetRSharpType(GetType(String))
+        End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getByName(name As String) As Object
             If Not name Like nameIndex Then
                 Return Nothing
@@ -207,13 +246,31 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function hasName(name As String) As Boolean Implements RNames.hasName
             Return name Like nameIndex
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getNames() As String() Implements RNames.getNames
             Return names
         End Function
+
+        Public Sub setNames(names As String())
+            If Not names.IsNullOrEmpty Then
+                If names.Length <> data.Length Then
+                    Throw New InvalidProgramException(sizeMisMatched)
+                Else
+                    Me.names = names
+                    Me.nameIndex = names.Indexing
+                End If
+            Else
+                Me.names = names
+                Me.nameIndex = Nothing
+            End If
+        End Sub
+
+        Const sizeMisMatched As String = "vector names is not equals in length with the vector element data!"
 
         ''' <summary>
         ''' 出错的时候会返回<see cref="Message"/>
@@ -224,7 +281,7 @@ Namespace Runtime.Internal.Object
         Public Function setNames(names() As String, envir As Environment) As Object Implements RNames.setNames
             If Not names.IsNullOrEmpty Then
                 If names.Length <> data.Length Then
-                    Return Internal.debug.stop($"vector names is not equals in length with the vector element data!", envir)
+                    Return Internal.debug.stop(sizeMisMatched, envir)
                 Else
                     Me.names = names
                     Me.nameIndex = names.Indexing
@@ -343,6 +400,7 @@ Namespace Runtime.Internal.Object
             Return result.ToArray
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
             Return $"[{length}] vec<{m_type.ToString}>"
         End Function
@@ -365,6 +423,7 @@ Namespace Runtime.Internal.Object
             }
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function isVectorOf(x As Object, type As TypeCodes) As Boolean
             Return TypeOf x Is vector AndAlso RType.TypeOf(x) Like RType.GetType(type)
         End Function
@@ -383,6 +442,7 @@ Namespace Runtime.Internal.Object
             }
         End Operator
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overloads Shared Operator <>(v As vector, value As String) As vector
             Return vector.asVector(Of Boolean)(Operators.UnaryNot.Not(v = value))
         End Operator
