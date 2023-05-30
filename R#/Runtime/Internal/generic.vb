@@ -218,6 +218,9 @@ Namespace Runtime.Internal
         End Function
 
         Public Function getGenericCallable(ByRef x As Object, type As Type, funcName As String, env As Environment) As [Variant](Of Message, GenericFunction)
+            If Not generics.ContainsKey(funcName) Then
+                Return Internal.debug.stop($"no function named '{funcName}'", env)
+            End If
             If type Is GetType(vbObject) AndAlso Not generics(funcName).ContainsKey(type) Then
                 x = DirectCast(x, vbObject).target
                 type = x.GetType
