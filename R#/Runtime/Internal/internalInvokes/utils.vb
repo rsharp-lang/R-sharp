@@ -273,7 +273,13 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="url"></param>
         ''' <param name="save">the function will returns a stream object if this parameter is nothing</param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function will returns the data stream which is download from the given 
+        ''' <paramref name="url"/> if the <paramref name="save"/> parameter value is 
+        ''' nothing by default, or this function will returns nothing if the <paramref name="save"/> 
+        ''' parameter value is exists and also the http resource data will be placed at 
+        ''' <paramref name="save"/> file location. 
+        ''' </returns>
         <ExportAPI("wget")>
         Public Function wget(url As String, Optional save As String = Nothing, Optional env As Environment = Nothing) As Object
             If url.StringEmpty Then
