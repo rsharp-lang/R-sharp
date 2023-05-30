@@ -264,7 +264,7 @@ Public Module Parallel
         If TypeOf result.value Is Message Then
             Call VBDebugger.EchoLine($"{current_taskName}exit with task error.")
         Else
-            Call VBDebugger.EchoLine($"{current_taskName}exit with no error.")
+            Call VBDebugger.EchoLine($"{current_taskName}exec success.")
         End If
 
         Return App.Exit(0)
