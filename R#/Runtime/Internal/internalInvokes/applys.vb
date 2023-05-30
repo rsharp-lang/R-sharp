@@ -373,11 +373,13 @@ Namespace Runtime.Internal.Invokes
                 Dim argsPreviews As InvokeParameter()
                 Dim i As i32 = 1
 
-                For Each d In REnv.asVector(Of Object)(X) _
-                    .AsObjectEnumerator
-
+                For Each d As Object In REnv.asVector(Of Object)(X).AsObjectEnumerator
                     argsPreviews = invokeArgument(d, ++i)
                     value = apply.Invoke(envir, argsPreviews)
+
+                    If TypeOf value Is ReturnValue Then
+                        value = DirectCast(value, ReturnValue).value.Evaluate(envir)
+                    End If
 
                     If Program.isException(value) Then
                         Return value
