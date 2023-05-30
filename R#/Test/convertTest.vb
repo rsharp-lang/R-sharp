@@ -109,6 +109,7 @@ Public Module convertTest
         Call Console.WriteLine("via as vector general method:")
         Call VBDebugger.BENCHMARK(
             Sub()
+#Disable Warning
                 For i As Integer = 0 To t
                     Call REnv.asVector(Of Integer)(ints)
                     Try
@@ -118,6 +119,7 @@ Public Module convertTest
                     End Try
                     Call REnv.asVector(Of Integer)(intStr)
                 Next
+#Enable Warning
             End Sub)
 
         Call Console.WriteLine("via asinteger generic")

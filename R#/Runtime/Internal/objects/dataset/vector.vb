@@ -58,8 +58,11 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -142,8 +145,6 @@ Namespace Runtime.Internal.Object
         ''' try to make the collection data generic in this constructor function
         ''' </remarks>
         Sub New(model As Type, input As IEnumerable, env As Environment)
-            Dim i As i32 = Scan0
-
             If model Is GetType(Void) Then
                 model = GetType(Object)
             End If
@@ -163,20 +164,27 @@ Namespace Runtime.Internal.Object
 
         Private Shared Function loadGenericCollection(input As IEnumerable, model As Type, env As Environment) As Array
             Dim list As IList = Activator.CreateInstance(GetType(List(Of )).MakeGenericType(model))
+            Dim isObjWrapper As Boolean = model Is GetType(vbObject)
+            Dim isNumeric As Boolean = DataFramework.IsNumericType(model)
+            Dim is_interface As Boolean = model.IsInterface
 
             For Each obj As Object In input
+                If Not isObjWrapper AndAlso TypeOf obj Is vbObject Then
+                    obj = DirectCast(obj, vbObject).target
+                End If
+
                 If Not obj Is Nothing Then
                     Dim objType As Type = obj.GetType
 
                     If objType Is model Then
                         ' do nothing
-                    ElseIf obj.GetType.IsInheritsFrom(model) Then
+                    ElseIf (is_interface AndAlso objType.ImplementInterface(model)) OrElse objType.IsInheritsFrom(model) Then
+                        obj = Conversion.CTypeDynamic(obj, model)
+                    ElseIf isNumeric AndAlso TypeOf obj Is String Then
+                        obj = RCType.CTypeDynamic(CStr(obj).ParseNumeric, model, env)
+                    Else
                         obj = RCType.CTypeDynamic(obj, model, env)
                     End If
-                End If
-
-                If Not model Is GetType(vbObject) AndAlso TypeOf obj Is vbObject Then
-                    obj = DirectCast(obj, vbObject).target
                 End If
 
                 Call list.Add(obj)
