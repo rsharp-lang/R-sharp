@@ -345,6 +345,9 @@ Namespace Runtime.Internal.Invokes
                 For Each key As Object In list.Keys
                     value = apply.Invoke(envir, InvokeParameter.CreateLiterals(list(key), ++i))
 
+                    If TypeOf value Is ReturnValue Then
+                        value = DirectCast(value, ReturnValue).value.Evaluate(envir)
+                    End If
                     If Program.isException(value) Then
                         Return value
                     End If
