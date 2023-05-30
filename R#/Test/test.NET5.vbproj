@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<RootNamespace>test</RootNamespace>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0-windows10.0.17763.0</TargetFramework>
 		<AssemblyName>test</AssemblyName>
 		<Authors>xie.guigang@gcmodeller.org</Authors>
 		<Company>SMRUCC</Company>
@@ -24,7 +24,7 @@
 		<PackageTags>R#,rsharp</PackageTags>
 		<FileVersion>1.5635.*</FileVersion>
 		<OutputType>Exe</OutputType>
-		<StartupObject>test.interpreterTest</StartupObject>
+		<StartupObject>test.test_vector_constructor</StartupObject>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
