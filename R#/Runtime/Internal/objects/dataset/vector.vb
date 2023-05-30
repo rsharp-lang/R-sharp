@@ -138,6 +138,9 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <param name="model">element type of the array</param>
         ''' <param name="input"></param>
+        ''' <remarks>
+        ''' try to make the collection data generic in this constructor function
+        ''' </remarks>
         Sub New(model As Type, input As IEnumerable, env As Environment)
             Dim i As i32 = Scan0
 
@@ -145,14 +148,25 @@ Namespace Runtime.Internal.Object
                 model = GetType(Object)
             End If
 
-            ' create an empty vector with 
-            ' allocable data buffer
-            Dim buffer As Array = Array.CreateInstance(model, CInt(BufferSize / 4))
-            Dim objType As Type
+            elementType = RType.GetRSharpType(model)
+
+            If input.GetType.IsArray Then
+                If input.GetType.GetElementType Is model Then
+                    data = CObj(input)
+                Else
+                    data = loadGenericCollection(input, model, env)
+                End If
+            Else
+                data = loadGenericCollection(input, model, env)
+            End If
+        End Sub
+
+        Private Shared Function loadGenericCollection(input As IEnumerable, model As Type, env As Environment) As Array
+            Dim list As IList = Activator.CreateInstance(GetType(List(Of )).MakeGenericType(model))
 
             For Each obj As Object In input
                 If Not obj Is Nothing Then
-                    objType = obj.GetType
+                    Dim objType As Type = obj.GetType
 
                     If objType Is model Then
                         ' do nothing
@@ -165,22 +179,17 @@ Namespace Runtime.Internal.Object
                     obj = DirectCast(obj, vbObject).target
                 End If
 
-                Call buffer.SetValue(obj, CInt(i))
-
-                If ++i = buffer.Length Then
-                    ' resize vector buffer
-                    data = buffer
-                    buffer = Array.CreateInstance(model, BufferSize + buffer.Length)
-                    Array.ConstrainedCopy(data, Scan0, buffer, Scan0, data.Length)
-                End If
+                Call list.Add(obj)
             Next
 
-            elementType = RType.GetRSharpType(model)
-            ' trim the vector to its acutal size
-            data = Array.CreateInstance(model, length:=i)
-            ' do buffer memory copy
-            Array.ConstrainedCopy(buffer, Scan0, data, Scan0, data.Length)
-        End Sub
+            Dim buffer As Array = Array.CreateInstance(model, length:=list.Count)
+
+            For i As Integer = 0 To buffer.Length - 1
+                Call buffer.SetValue(list.Item(i), i)
+            Next
+
+            Return buffer
+        End Function
 
         Sub New(names As String(), data As Array, envir As Environment)
             If data.AsObjectEnumerator _

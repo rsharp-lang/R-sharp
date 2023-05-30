@@ -327,10 +327,21 @@ Namespace Runtime.Interop
             Return createNormalArguments(envir, arguments:=parameters).ToArray
         End Function
 
+        ''' <summary>
+        ''' Invoke a R-sharp wrap .NET clr function
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <param name="params">no orders, the parameters will be aligned in this clr function invoke process</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' 1. do parameter alignment in this function
+        ''' 2. and then invoke clr function
+        ''' </remarks>
         Public Function Invoke(envir As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
             Dim parameters As New List(Of Object)
 
             Using env As New Environment(envir, stackFrame, isInherits:=True)
+                ' do parameter alignment at first
                 If listObjectMargin <> ListObjectArgumentMargin.none Then
                     For Each value As Object In RArgumentList.CreateObjectListArguments(Me, env, params)
                         If Program.isException(value) Then
@@ -355,6 +366,7 @@ Namespace Runtime.Interop
                     Next
                 End If
 
+                ' and finally invoke the .net clr function
                 Return Invoke(parameters.ToArray, env)
             End Using
         End Function

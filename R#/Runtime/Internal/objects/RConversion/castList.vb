@@ -145,6 +145,25 @@ Namespace Runtime.Internal.Object.Converts
                 Return vector_castList(DirectCast(obj, Array), args, env)
             ElseIf GetVectorElement.IsScalar(obj) Then
                 Return vector_castList(New Object() {obj}, args, env)
+            ElseIf type.ImplementInterface(Of IList) Then
+                Dim list As IList = obj
+                Dim array As Array = Array.CreateInstance(GetType(Object), length:=list.Count)
+
+                For i As Integer = 0 To list.Count - 1
+                    If list.Item(i) Is Nothing Then
+                        Call array.SetValue(Nothing, i)
+                    Else
+                        Dim value As Object = list.Item(i)
+
+                        If Not (DataFramework.IsPrimitive(value.GetType) OrElse value.GetType.IsEnum) Then
+                            value = listInternal(value, args, env)
+                        End If
+
+                        Call array.SetValue(value, i)
+                    End If
+                Next
+
+                Return REnv.TryCastGenericArray(array, env)
             End If
 
             If type.ImplementInterface(Of ICTypeList) Then

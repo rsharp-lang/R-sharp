@@ -808,6 +808,10 @@ RE0:
                                <RListObjectArgument> args As Object,
                                Optional env As Environment = Nothing) As Object
 
+            If TypeOf args Is InvokeParameter() Then
+                args = base.Rlist(args, env)
+            End If
+
             If obj Is Nothing Then
                 Return Nothing
             ElseIf TypeOf obj Is list Then
@@ -829,7 +833,7 @@ RE0:
 
                 Return listdata
             Else
-                Return listInternal(obj, base.Rlist(args, env), env)
+                Return listInternal(obj, args, env)
             End If
         End Function
 
