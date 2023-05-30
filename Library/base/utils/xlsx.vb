@@ -57,9 +57,9 @@ Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME
-Imports Microsoft.VisualBasic.MIME.Office.Excel
-Imports Microsoft.VisualBasic.MIME.Office.Excel.MsHtml
-Imports Microsoft.VisualBasic.MIME.Office.Excel.XML.xl.worksheets
+Imports Microsoft.VisualBasic.MIME.Office.Excel.XLS.MsHtml
+Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.FileIO
+Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.XML.xl.worksheets
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
@@ -71,7 +71,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataFrame
-Imports msXlsx = Microsoft.VisualBasic.MIME.Office.Excel.File
+Imports msXlsx = Microsoft.VisualBasic.MIME.Office.Excel.XLSX.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rsharp = SMRUCC.Rsharp
@@ -192,7 +192,7 @@ Module xlsx
         Dim table As csv
 
         If x.GetType Is GetType(list) AndAlso file.ExtensionSuffix("xlsx") Then
-            Dim zip = Office.Excel.CreateNew
+            Dim zip = Office.Excel.XLSX.CreateNew
             Dim tables As list = DirectCast(x, list)
 
             ' save multiple sheet table
@@ -227,7 +227,7 @@ Module xlsx
                 .SaveTo(file, encoding.CodePage, append:=False)
         Else
             ' save xlsx zip package
-            Dim zip = Office.Excel.CreateNew
+            Dim zip = Office.Excel.XLSX.CreateNew
             zip.WriteSheetTable(table, sheetName)
             Return zip.SaveTo(file)
         End If
