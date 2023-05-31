@@ -100,7 +100,7 @@ Public Module CLRTool
 
     <ExportAPI("call_clr")>
     Public Function call_clr([lib] As Type, name As String,
-                             <RRawVectorArgument>
+                             <RListObjectArgument>
                              Optional args As list = Nothing,
                              Optional env As Environment = Nothing) As Object
 
