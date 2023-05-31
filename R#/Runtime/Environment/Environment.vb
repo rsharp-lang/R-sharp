@@ -568,8 +568,14 @@ Namespace Runtime
         ''' <param name="name"></param>
         ''' <param name="value"></param>
         ''' <param name="mode"></param>
+        ''' <param name="overrides">
+        ''' enable overrides the constant symbol which is in status of lock binding? 
+        ''' </param>
         ''' <returns>返回错误消息或者对象值</returns>
-        Public Function Push(name$, value As Object, [readonly] As Boolean, Optional mode As TypeCodes = TypeCodes.generic) As Object
+        Public Function Push(name$, value As Object, [readonly] As Boolean,
+                             Optional mode As TypeCodes = TypeCodes.generic,
+                             Optional [overrides] As Boolean = False) As Object
+
             If symbols.ContainsKey(name) Then
                 ' 变量可以被重复申明
                 ' 即允许
@@ -586,7 +592,7 @@ Namespace Runtime
                          End Sub)
 
                 ' 只需要设置值就可以了
-                Return symbols(name).setValue(value, Me)
+                Return symbols(name).setValue(value, Me, [overrides]:=[overrides])
 
             ElseIf (Not value Is Nothing) Then
                 Try

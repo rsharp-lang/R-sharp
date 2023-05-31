@@ -91,7 +91,8 @@ Namespace Runtime
                 name:=symbol,
                 value:=hook_jsEnv(libs),
                 [readonly]:=True,
-                mode:=TypeCodes.list
+                mode:=TypeCodes.list,
+                [overrides]:=True
             )
         End Sub
 
