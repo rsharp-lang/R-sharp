@@ -805,6 +805,7 @@ Module clustering
                 Throw New NotImplementedException
         End Select
 
+        Dim dataLabels As String() = x.Keys.ToArray
         Dim isseed As Integer() = Nothing
         Dim result = New DbscanAlgorithm(Of DataSet)(
             metricFunc:=dist,
@@ -843,7 +844,8 @@ Module clustering
             .MinPts = minPts,
             .isseed = isseed _
                 .Select(Function(i) x(i).ID) _
-                .ToArray
+                .ToArray,
+            .dataLabels = dataLabels
         }
     End Function
 End Module

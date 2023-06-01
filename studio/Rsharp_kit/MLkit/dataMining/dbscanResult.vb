@@ -60,10 +60,36 @@
 Imports Microsoft.VisualBasic.DataMining.KMeans
 
 Public Class dbscanResult
+
     Public Property cluster As EntityClusterModel()
     Public Property isseed As String()
     Public Property eps As Double
     Public Property MinPts As Integer
+
+    ''' <summary>
+    ''' keeps the original order of the input dataset 
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property dataLabels As String()
+
+    Public ReadOnly Property classLabels As String()
+        Get
+            Return extractClusterId.ToArray
+        End Get
+    End Property
+
+    Private Iterator Function extractClusterId() As IEnumerable(Of String)
+        Dim cluster_index As Dictionary(Of String, EntityClusterModel) = cluster.ToDictionary(Function(a) a.ID)
+
+        For Each tag As String In dataLabels
+            If cluster_index.ContainsKey(tag) Then
+                Yield cluster_index(tag).Cluster
+            Else
+                Yield "Noise"
+            End If
+        Next
+    End Function
+
 End Class
 
 Public Enum dbScanMethods
