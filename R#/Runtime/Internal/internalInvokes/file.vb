@@ -1,63 +1,63 @@
 ﻿#Region "Microsoft.VisualBasic::36a01e8560441d5442190fc0e435af47, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1541
-    '    Code Lines: 875
-    ' Comment Lines: 519
-    '   Blank Lines: 147
-    '     File Size: 69.41 KB
+' Summaries:
 
 
-    '     Module file
-    ' 
-    '         Function: [erase], basename, buffer, bytes, close
-    '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
-    '                   exists, file, file_ext, filecopy, fileExt
-    '                   fileinfo, fileInfoByFile, filepath, filesize, getRelativePath
-    '                   GetSha1Hash, getwd, handleWriteLargeTextStream, handleWriteTextArray, isSystemDir
-    '                   listDirs, listFiles, loadListInternal, NextTempToken, normalizeFileName
-    '                   normalizePath, openDir, openGzip, openZip, readBin
-    '                   readFromFile, readFromStream, readLines, readList, readText
-    '                   Rhome, saveList, scanZipFiles, setwd, tempdir
-    '                   tempfile, writeLines
-    ' 
-    '         Sub: fileRemove, fileRename, unlinks
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1541
+'    Code Lines: 875
+' Comment Lines: 519
+'   Blank Lines: 147
+'     File Size: 69.41 KB
+
+
+'     Module file
+' 
+'         Function: [erase], basename, buffer, bytes, close
+'                   dataUri, dir_exists, dirCopy, dirCreate, dirname
+'                   exists, file, file_ext, filecopy, fileExt
+'                   fileinfo, fileInfoByFile, filepath, filesize, getRelativePath
+'                   GetSha1Hash, getwd, handleWriteLargeTextStream, handleWriteTextArray, isSystemDir
+'                   listDirs, listFiles, loadListInternal, NextTempToken, normalizeFileName
+'                   normalizePath, openDir, openGzip, openZip, readBin
+'                   readFromFile, readFromStream, readLines, readList, readText
+'                   Rhome, saveList, scanZipFiles, setwd, tempdir
+'                   tempfile, writeLines
+' 
+'         Sub: fileRemove, fileRename, unlinks
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -314,6 +314,7 @@ Namespace Runtime.Internal.Invokes
             Dim result As New List(Of Object)
             Dim toDir As Boolean = [to].Length = 1 AndAlso [to](Scan0).EndsWith("/"c)
             Dim isDir As Boolean = (from.Length > 1 AndAlso [to].Length = 1) OrElse (from.Length = 1 AndAlso from(Scan0).DirectoryExists AndAlso toDir)
+            Dim println = env.WriteLineHandler
 
             If from.Length = 0 Then
                 Return {}
@@ -337,12 +338,16 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop("number of from files is not equals to the number of target file locations!", env)
             ElseIf toDir AndAlso from.Length = 1 AndAlso from(Scan0).Contains("*"c) Then
                 ' dir/wildcard copy to dir?
-                Dim toDirName As String = [to](Scan0) & "/"
+                Dim toDirName As String = [to](Scan0).GetDirectoryFullPath & "/"
                 Dim dirSrc = from(Scan0).ParentPath
                 Dim filePattern = from(Scan0).FileName
                 Dim lookFiles = dirSrc.EnumerateFiles(filePattern).ToArray
 
                 For i As Integer = 0 To lookFiles.Length - 1
+                    If verbose Then
+                        Call println($"[copy] {lookFiles(i)} ({StringFormats.Lanudry(lookFiles(i).FileLength)}) => {toDirName}")
+                    End If
+
                     If lookFiles(i).FileCopy(toDirName) Then
                         Call result.Add(True)
                     Else
