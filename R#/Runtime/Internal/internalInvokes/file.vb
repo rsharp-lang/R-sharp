@@ -312,11 +312,8 @@ Namespace Runtime.Internal.Invokes
                                  Optional env As Environment = Nothing) As Object
 
             Dim result As New List(Of Object)
-            Dim isDir As Boolean = (from.Length > 1 AndAlso [to].Length = 1) OrElse
-                (from.Length = 1 AndAlso
-                 from(Scan0).DirectoryExists AndAlso
-                 [to].Length = 1 AndAlso
-                 [to](Scan0).EndsWith("/"c))
+            Dim toDir As Boolean = [to].Length = 1 AndAlso [to](Scan0).EndsWith("/"c)
+            Dim isDir As Boolean = (from.Length > 1 AndAlso [to].Length = 1) OrElse (from.Length = 1 AndAlso from(Scan0).DirectoryExists AndAlso toDir)
 
             If from.Length = 0 Then
                 Return {}
@@ -338,12 +335,26 @@ Namespace Runtime.Internal.Invokes
                 End If
             ElseIf from.Length <> [to].Length Then
                 Return Internal.debug.stop("number of from files is not equals to the number of target file locations!", env)
+            ElseIf toDir AndAlso from.Length = 1 AndAlso from(Scan0).Contains("*"c) Then
+                ' dir/wildcard copy to dir?
+                Dim toDirName As String = [to](Scan0) & "/"
+                Dim dirSrc = from(Scan0).ParentPath
+                Dim filePattern = from(Scan0).FileName
+                Dim lookFiles = dirSrc.EnumerateFiles(filePattern).ToArray
+
+                For i As Integer = 0 To lookFiles.Length - 1
+                    If lookFiles(i).FileCopy(toDirName) Then
+                        Call result.Add(True)
+                    Else
+                        Call result.Add(lookFiles(i))
+                    End If
+                Next
             Else
                 For i As Integer = 0 To from.Length - 1
                     If from(i).FileCopy([to](i)) Then
-                        result.Add(True)
+                        Call result.Add(True)
                     Else
-                        result.Add(from(i))
+                        Call result.Add(from(i))
                     End If
                 Next
             End If
