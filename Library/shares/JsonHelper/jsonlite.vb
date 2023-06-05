@@ -87,6 +87,10 @@ Module jsonlite
 
         If x Is Nothing Then
             Return "null"
+        ElseIf TypeOf x Is Dictionary(Of String, String) Then
+            Return DirectCast(x, Dictionary(Of String, String)).GetJson
+        ElseIf TypeOf x Is Dictionary(Of String, Double) Then
+            Return DirectCast(x, Dictionary(Of String, Double)).GetJson
         End If
 
         Dim err As Message = Nothing
