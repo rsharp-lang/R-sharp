@@ -1,63 +1,63 @@
 ﻿#Region "Microsoft.VisualBasic::3c1bcd7297e00441f5090a73844018ce, F:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataMining/clustering.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 786
-    '    Code Lines: 535
-    ' Comment Lines: 165
-    '   Blank Lines: 86
-    '     File Size: 33.27 KB
+' Summaries:
 
 
-    ' Module clustering
-    ' 
-    '     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
-    '               dbscan, dbscan_objects, densityA, ensureNotIsDistance, fuzzyCMeans
-    '               hclust, hleaf, hnode, Kmeans, showHclust
-    '               ToHClust
-    ' 
-    '     Sub: Main
-    '     Class point2DReader
-    ' 
-    '         Function: activate, getByDimension, GetDimensions, metric, nodeIs
-    ' 
-    '         Sub: setByDimensin
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 786
+'    Code Lines: 535
+' Comment Lines: 165
+'   Blank Lines: 86
+'     File Size: 33.27 KB
+
+
+' Module clustering
+' 
+'     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
+'               dbscan, dbscan_objects, densityA, ensureNotIsDistance, fuzzyCMeans
+'               hclust, hleaf, hnode, Kmeans, showHclust
+'               ToHClust
+' 
+'     Sub: Main
+'     Class point2DReader
+' 
+'         Function: activate, getByDimension, GetDimensions, metric, nodeIs
+' 
+'         Sub: setByDimensin
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -65,6 +65,7 @@ Imports System.Drawing
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
@@ -72,6 +73,8 @@ Imports Microsoft.VisualBasic.DataMining.BinaryTree
 Imports Microsoft.VisualBasic.DataMining.Clustering
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
 Imports Microsoft.VisualBasic.DataMining.FuzzyCMeans
+Imports Microsoft.VisualBasic.DataMining.HDBSCAN.Distance
+Imports Microsoft.VisualBasic.DataMining.HDBSCAN.Runner
 Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
 Imports Microsoft.VisualBasic.DataMining.KMeans
 Imports Microsoft.VisualBasic.Language
@@ -709,6 +712,47 @@ Module clustering
             }
         End Function
     End Class
+
+    <ExportAPI("hdbscan")>
+    Public Function hdbscan_exec(<RRawVectorArgument>
+                                 data As Object,
+                                 Optional min_points As Integer = 6,
+                                 Optional min_clusters As Integer = 6,
+                                 Optional env As Environment = Nothing) As Object
+
+        Dim dataset As Double()()
+        Dim labels As String()
+
+        If TypeOf data Is Rdataframe Then
+            Dim rows = DirectCast(data, Rdataframe) _
+                .forEachRow _
+                .Select(Function(v)
+                            Return New NamedCollection(Of Double)(v.name, CLRVector.asNumeric(v.value))
+                        End Function) _
+                .ToArray
+
+            labels = rows.Select(Function(v) v.name).ToArray
+            dataset = rows.Select(Function(v) v.value).ToArray
+        Else
+            Return Internal.debug.stop("", env)
+        End If
+
+        Dim opts As New HdbscanParameters(Of Double()) With {
+            .DataSet = dataset,
+            .CacheDistance = True,
+            .MinPoints = min_points,
+            .MinClusterSize = min_clusters,
+            .DistanceFunction = New CosineSimilarity
+        }
+        Dim result As HdbscanResult = HdbscanRunner.Run(opts)
+        Dim clusters As New list With {.slots = New Dictionary(Of String, Object)}
+
+        For i As Integer = 0 To labels.Length - 1
+            Call clusters.add(labels(i), result.Labels(i))
+        Next
+
+        Return clusters
+    End Function
 
     ''' <summary>
     ''' ### DBSCAN density reachability and connectivity clustering
