@@ -9,6 +9,8 @@ const min_clusters as integer = ?"--min_clusters" || 5;
 let raw = read.csv(filepath, row.names = NULL, check.names = FALSE)[, ["x","y"]];
 let export_dir = dirname(filepath);
 
+rownames(raw) = `P${1:nrow(raw)}`;
+
 print("previews of the raw input data:");
 print(head(raw));
 
