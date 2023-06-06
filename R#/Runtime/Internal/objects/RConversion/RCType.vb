@@ -96,7 +96,7 @@ Namespace Runtime.Internal.Object.Converts
         ''' object type
         ''' </summary>
         ''' <param name="obj"></param>
-        ''' <param name="type"></param>
+        ''' <param name="type">Target data type to cast in R# runtime</param>
         ''' <returns>
         ''' an error <see cref="Message"/> will be returns if the conversion error happends
         ''' </returns>
@@ -206,14 +206,28 @@ RE0:
             End If
 
             Try
-                If obj.GetType.IsArray AndAlso obj.GetType.GetElementType Is type Then
-                    If DirectCast(obj, Array).Length = 0 Then
-                        Return Nothing
-                    ElseIf DirectCast(obj, Array).Length > 1 Then
-                        Call env.AddMessage("target array contains multiple elements, while the target conversion type is a single scalar element...")
-                    End If
+                If obj.GetType.IsArray Then
+                    If obj.GetType.GetElementType Is type Then
+                        If DirectCast(obj, Array).Length = 0 Then
+                            Return Nothing
+                        ElseIf DirectCast(obj, Array).Length > 1 Then
+                            Call env.AddMessage("target array contains multiple elements, while the target conversion type is a single scalar element...")
+                        End If
 
-                    Return DirectCast(obj, Array).GetValue(Scan0)
+                        Return DirectCast(obj, Array).GetValue(Scan0)
+                    ElseIf type Is GetType(list) Then
+                        Dim list As New list With {.slots = New Dictionary(Of String, Object)}
+                        Dim arr As Array = obj
+
+                        ' enable simple array cast to list
+                        For i As Integer = 0 To arr.Length - 1
+                            Call list.add($"X_{list.length + 1}", arr(i))
+                        Next
+
+                        Return list
+                    Else
+                        Return Conversion.CTypeDynamic(obj, type)
+                    End If
                 Else
                     For Each i As Type In objType.GetInterfaces
                         If hasInterfaceCast(i, type) Then
