@@ -151,7 +151,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("parLapply")>
-        Public Function parLapply(x As list, FUN As Object,
+        Public Function parLapply(<RRawVectorArgument> x As list, FUN As Object,
                                   Optional group As Integer = -1,
                                   Optional n_threads As Integer = -1,
                                   Optional verbose As Boolean? = Nothing,

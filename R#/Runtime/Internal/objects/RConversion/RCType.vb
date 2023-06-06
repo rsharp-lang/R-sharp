@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::586a553b37b7d1d38f98be6a2cb9990b, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/RCType.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 162
-    '    Code Lines: 113
-    ' Comment Lines: 28
-    '   Blank Lines: 21
-    '     File Size: 7.78 KB
+' Summaries:
 
 
-    '     Class RCType
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: CastToEnum, CTypeDynamic
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 162
+'    Code Lines: 113
+' Comment Lines: 28
+'   Blank Lines: 21
+'     File Size: 7.78 KB
+
+
+'     Class RCType
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: CastToEnum, CTypeDynamic
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -71,7 +71,7 @@ Namespace Runtime.Internal.Object.Converts
         ''' object type
         ''' </summary>
         ''' <param name="obj"></param>
-        ''' <param name="type"></param>
+        ''' <param name="type">Target data type to cast in R# runtime</param>
         ''' <returns>
         ''' an error <see cref="Message"/> will be returns if the conversion error happends
         ''' </returns>
@@ -179,14 +179,28 @@ RE0:
             End If
 
             Try
-                If obj.GetType.IsArray AndAlso obj.GetType.GetElementType Is type Then
-                    If DirectCast(obj, Array).Length = 0 Then
-                        Return Nothing
-                    ElseIf DirectCast(obj, Array).Length > 1 Then
-                        Call env.AddMessage("target array contains multiple elements, while the target conversion type is a single scalar element...")
-                    End If
+                If obj.GetType.IsArray Then
+                    If obj.GetType.GetElementType Is type Then
+                        If DirectCast(obj, Array).Length = 0 Then
+                            Return Nothing
+                        ElseIf DirectCast(obj, Array).Length > 1 Then
+                            Call env.AddMessage("target array contains multiple elements, while the target conversion type is a single scalar element...")
+                        End If
 
-                    Return DirectCast(obj, Array).GetValue(Scan0)
+                        Return DirectCast(obj, Array).GetValue(Scan0)
+                    ElseIf type Is GetType(list) Then
+                        Dim list As New list With {.slots = New Dictionary(Of String, Object)}
+                        Dim arr As Array = obj
+
+                        ' enable simple array cast to list
+                        For i As Integer = 0 To arr.Length - 1
+                            Call list.add($"X_{list.length + 1}", arr(i))
+                        Next
+
+                        Return list
+                    Else
+                        Return Conversion.CTypeDynamic(obj, type)
+                    End If
                 Else
                     Return Conversion.CTypeDynamic(obj, type)
                 End If
