@@ -51,6 +51,8 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
+Imports System.Runtime.Remoting
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -63,8 +65,30 @@ Namespace Runtime.Internal.Object.Converts
 
     Public NotInheritable Class RCType
 
+        Friend ReadOnly castFunc As Dictionary(Of Type, Dictionary(Of Type, Func(Of Object, Object)))
+
+        Shared ReadOnly interfaceCast As New RCType
+        Shared ReadOnly typeCast As New RCType
+
         Private Sub New()
         End Sub
+
+        Shared Sub New()
+            Call interfaceCast.AddCType(GetType(ISequenceData(Of Char, String)), GetType(String), Function(seq) DirectCast(seq, ISequenceData(Of Char, String)).SequenceData)
+        End Sub
+
+        Public Sub AddCType(from As Type, [to] As Type, cast As Func(Of Object, Object))
+            If Not castFunc.ContainsKey(from) Then
+                castFunc.Add(from, New Dictionary(Of Type, Func(Of Object, Object)))
+            End If
+
+            castFunc(from)([to]) = cast
+        End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Private Shared Function hasInterfaceCast([interface] As Type, [to] As Type) As Boolean
+            Return interfaceCast.castFunc.ContainsKey([interface]) AndAlso interfaceCast.castFunc([interface]).ContainsKey([to])
+        End Function
 
         ''' <summary>
         ''' If target <paramref name="type"/> is <see cref="Object"/>, then this function 
@@ -180,9 +204,6 @@ RE0:
                 obj = DirectCast(obj, vector).data
                 GoTo RE0
             End If
-            If obj.GetType.ImplementInterface(Of ISequenceData(Of Char, String)) AndAlso type Is GetType(String) Then
-                Return DirectCast(obj, ISequenceData(Of Char, String)).SequenceData
-            End If
 
             Try
                 If obj.GetType.IsArray AndAlso obj.GetType.GetElementType Is type Then
@@ -194,6 +215,12 @@ RE0:
 
                     Return DirectCast(obj, Array).GetValue(Scan0)
                 Else
+                    For Each i As Type In objType.GetInterfaces
+                        If hasInterfaceCast(i, type) Then
+                            Return interfaceCast.castFunc(i)(type)(obj)
+                        End If
+                    Next
+
                     Return Conversion.CTypeDynamic(obj, type)
                 End If
             Catch ex As Exception
