@@ -146,6 +146,7 @@ Module datasetKit
         Call REnv.Internal.generic.add("fit", GetType(SequenceGraphTransform), AddressOf fitSgt)
     End Sub
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function toMatrix(data As UnionMatrix, args As list, env As Environment) As Rdataframe
         Return data.CreateMatrix
     End Function
@@ -153,6 +154,30 @@ Module datasetKit
     Private Function fitSgt(sgt As SequenceGraphTransform, args As list, env As Environment) As Object
         Dim sequence As Object = args.getBySynonyms("sequence", "seq", "seqs", "sequences")
         Dim result = env.EvaluateFramework(Of String, Dictionary(Of String, Double))(sequence, AddressOf sgt.fit)
+        Dim as_df As Boolean = args.getValue({"dataframe", "df", "matrix"}, env, [default]:=False)
+
+        If as_df Then
+            result = env.EvaluateFramework(Of Dictionary(Of String, Double), Rdataframe)(
+                x:=result,
+                eval:=Function(v)
+                          Dim df As New Rdataframe With {
+                             .columns = New Dictionary(Of String, Array),
+                             .rownames = sgt.alphabets _
+                                .Select(Function(c) c.ToString) _
+                                .ToArray
+                          }
+                          Dim vi As Double()
+
+                          For Each c As Char In sgt.alphabets
+                              vi = sgt.alphabets _
+                                 .Select(Function(ci) v($"{c},{ci}")) _
+                                 .ToArray
+                              df.add(c, vi)
+                          Next
+
+                          Return df
+                      End Function)
+        End If
 
         Return result
     End Function
@@ -169,8 +194,14 @@ Module datasetKit
     End Function
 
     <ExportAPI("SGT")>
-    Public Function SGT(Optional kappa As Double = 1, Optional lengthsensitive As Boolean = False) As SequenceGraphTransform
-        Return New SequenceGraphTransform(kappa:=kappa, lengthsensitive:=lengthsensitive)
+    Public Function SGT(Optional alphabets As Char() = Nothing,
+                        Optional kappa As Double = 1,
+                        Optional lengthsensitive As Boolean = False) As SequenceGraphTransform
+        Return New SequenceGraphTransform(
+            alphabets:=alphabets,
+            kappa:=kappa,
+            lengthsensitive:=lengthsensitive
+        )
     End Function
 
     <ExportAPI("add_sample")>
@@ -190,7 +221,7 @@ Module datasetKit
             general = TryCastGenericArray(general, env)
 
             If Not FeatureVector.CheckSupports(general.GetType.GetElementType) Then
-                Return Internal.debug.stop($"not supports '{name}'!", env)
+                Return Internal.debug.stop($"Not supports '{name}'!", env)
             End If
 
             featureSet(name) = FeatureVector.FromGeneral(name, general)

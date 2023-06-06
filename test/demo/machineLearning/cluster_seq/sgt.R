@@ -8,7 +8,7 @@ imports "dataset" from "MLkit";
 
 sgt = SGT();
 sequence = "BBACACAABA";
-str(fit(sgt, sequence));
+str(fit(sgt, sequence = sequence));
 
 # (A, A)    0.090616
 # (A, B)    0.131002
@@ -19,3 +19,10 @@ str(fit(sgt, sequence));
 # (C, A)    0.137142
 # (C, B)    0.028263
 # (C, C)    0.135335
+
+str(fit(sgt, sequence = sequence, df = TRUE));
+
+	# A	B	C
+# A	0.090616	0.131002	0.261849
+# B	0.086569	0.123042	0.052544
+# C	0.137142	0.028263	0.135335
