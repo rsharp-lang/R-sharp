@@ -20,9 +20,11 @@ str(fit(sgt, sequence = sequence));
 # (C, B)    0.028263
 # (C, C)    0.135335
 
-str(fit(sgt, sequence = sequence, df = TRUE));
+print(fit(sgt, sequence = sequence, df = TRUE));
 
-	# A	B	C
-# A	0.090616	0.131002	0.261849
-# B	0.086569	0.123042	0.052544
-# C	0.137142	0.028263	0.135335
+#                 A          B          C
+# ----------------------------------------
+# <mode>   <double>   <double>   <double>
+# A       0.0906163  0.0865694   0.137142
+# B        0.131002   0.123042  0.0282625
+# C        0.261849   0.052544   0.135335

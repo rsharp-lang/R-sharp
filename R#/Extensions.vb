@@ -54,6 +54,7 @@
 Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
@@ -234,6 +235,10 @@ Public Module Extensions
                     End If
                 Next
 
+                If list.Count = 1 AndAlso Not DataFramework.IsPrimitive(GetType(TOut)) Then
+                    Return list(0)
+                End If
+
                 Return New vector(
                     names:= .getNames,
                     input:=list.ToArray,
@@ -253,6 +258,10 @@ Public Module Extensions
                     list.Add(eval(item))
                 End If
             Next
+
+            If list.Count = 1 AndAlso Not DataFramework.IsPrimitive(GetType(TOut)) Then
+                Return list(0)
+            End If
 
             Return New vector(
                 input:=list.ToArray,
