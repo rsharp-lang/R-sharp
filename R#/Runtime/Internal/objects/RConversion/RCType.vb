@@ -1,56 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::586a553b37b7d1d38f98be6a2cb9990b, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/RCType.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 162
-    '    Code Lines: 113
-    ' Comment Lines: 28
-    '   Blank Lines: 21
-    '     File Size: 7.78 KB
+' Summaries:
 
 
-    '     Class RCType
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: CastToEnum, CTypeDynamic
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 162
+'    Code Lines: 113
+' Comment Lines: 28
+'   Blank Lines: 21
+'     File Size: 7.78 KB
+
+
+'     Class RCType
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: CastToEnum, CTypeDynamic
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Development.Components
@@ -99,7 +100,9 @@ RE0:
                 objType = obj.GetType
             End If
 
-            If (objType Is GetType(vector) AndAlso DirectCast(obj, vector).length = 0) OrElse (objType Is GetType(list) AndAlso DirectCast(obj, list).length = 0) Then
+            If (objType Is GetType(vector) AndAlso DirectCast(obj, vector).length = 0) OrElse
+                (objType Is GetType(list) AndAlso DirectCast(obj, list).length = 0) Then
+
                 If type Is GetType(String) Then
                     Return Nothing
                 End If
@@ -176,6 +179,9 @@ RE0:
             If TypeOf obj Is vector Then
                 obj = DirectCast(obj, vector).data
                 GoTo RE0
+            End If
+            If obj.GetType.ImplementInterface(Of ISequenceData(Of Char, String)) AndAlso type Is GetType(String) Then
+                Return DirectCast(obj, ISequenceData(Of Char, String)).SequenceData
             End If
 
             Try
