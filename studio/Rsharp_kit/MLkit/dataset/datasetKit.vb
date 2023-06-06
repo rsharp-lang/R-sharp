@@ -65,6 +65,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.GraphTheory
 Imports Microsoft.VisualBasic.Data.IO.MessagePack
 Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
@@ -156,6 +157,11 @@ Module datasetKit
                               End Function),
             .rownames = features.rownames
         }
+    End Function
+
+    <ExportAPI("SGT")>
+    Public Function SGT(Optional kappa As Double = 1, Optional lengthsensitive As Boolean = False) As SequenceGraphTransform
+        Return New SequenceGraphTransform(kappa:=kappa, lengthsensitive:=lengthsensitive)
     End Function
 
     <ExportAPI("add_sample")>
