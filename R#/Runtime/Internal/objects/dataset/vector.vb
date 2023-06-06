@@ -167,6 +167,11 @@ Namespace Runtime.Internal.Object
             Dim isObjWrapper As Boolean = model Is GetType(vbObject)
             Dim isNumeric As Boolean = DataFramework.IsNumericType(model)
             Dim is_interface As Boolean = model.IsInterface
+            Dim null_zero As Object = Nothing
+
+            If isNumeric Then
+                null_zero = Conversion.CTypeDynamic(0, model)
+            End If
 
             For Each obj As Object In input
                 If Not isObjWrapper AndAlso TypeOf obj Is vbObject Then
@@ -185,6 +190,10 @@ Namespace Runtime.Internal.Object
                     Else
                         obj = RCType.CTypeDynamic(obj, model, env)
                     End If
+                End If
+
+                If isNumeric AndAlso obj Is Nothing Then
+                    obj = null_zero
                 End If
 
                 Call list.Add(obj)
