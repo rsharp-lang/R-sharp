@@ -4,7 +4,7 @@
 # the alphabets. The higher the value the 
 # stronger the relationship.
 
-imports "" from "MLkit";
+imports "dataset" from "MLkit";
 
 sgt = SGT();
 sequence = "BBACACAABA";

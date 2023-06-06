@@ -136,7 +136,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("fit")>
-        Public Function fit(x As Object, args As list, Optional env As Environment = Nothing) As Object
+        Public Function fit(x As Object, <RListObjectArgument> args As list, Optional env As Environment = Nothing) As Object
             Return generic.invokeGeneric(args, x, env, funcName:="fit")
         End Function
 
