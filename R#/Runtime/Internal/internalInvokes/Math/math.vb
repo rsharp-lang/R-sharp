@@ -135,6 +135,11 @@ Namespace Runtime.Internal.Invokes
             Return EvaluateFramework(Of Double, Boolean)(env, x, eval:=Function(xi) xi.IsNaNImaginary)
         End Function
 
+        <ExportAPI("fit")>
+        Public Function fit(x As Object, args As list, Optional env As Environment = Nothing) As Object
+            Return generic.invokeGeneric(args, x, env, funcName:="fit")
+        End Function
+
         ''' <summary>
         ''' ## Finite, Infinite and NaN Numbers
         ''' 

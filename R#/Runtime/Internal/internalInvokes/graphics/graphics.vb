@@ -349,7 +349,7 @@ Namespace Runtime.Internal.Invokes
                     Call argumentList.add("grDevices", curDev)
                 End If
 
-                Return argumentList.invokeGeneric(graphics, env)
+                Return argumentList.invokeGeneric(graphics, env, funcName:="plot")
             End If
         End Function
 

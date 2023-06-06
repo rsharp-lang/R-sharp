@@ -1656,7 +1656,7 @@ RE0:
                 ' and str function returns the data structure information
                 ' about the given dataset object.
                 ' the print function is print the data details
-                Return DirectCast(argumentsVal, list).invokeGeneric([object], env)
+                Return DirectCast(argumentsVal, list).invokeGeneric([object], env, funcName:="summary")
             End If
         End Function
 

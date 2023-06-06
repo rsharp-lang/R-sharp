@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::6b03cd43a706fc87b281c6e12fdf80f0, F:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataset/datasetKit.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 411
-    '    Code Lines: 320
-    ' Comment Lines: 37
-    '   Blank Lines: 54
-    '     File Size: 16.64 KB
+' Summaries:
 
 
-    ' Class UnionMatrix
-    ' 
-    '     Function: CreateMatrix
-    ' 
-    '     Sub: Add
-    ' 
-    ' Module datasetKit
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: addRow, binEncoder, boolEncoder, dataDescription, demoMatrix
-    '               dimensionRange, EmbeddingRender, Encoding, factorEncoder, getNormalizeMatrix
-    '               mapEncoder, mapLambda, readMNISTLabelledVector, readModelDataset, Tabular
-    '               toDataframe, toFeatureSet, toMatrix
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 411
+'    Code Lines: 320
+' Comment Lines: 37
+'   Blank Lines: 54
+'     File Size: 16.64 KB
+
+
+' Class UnionMatrix
+' 
+'     Function: CreateMatrix
+' 
+'     Sub: Add
+' 
+' Module datasetKit
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: addRow, binEncoder, boolEncoder, dataDescription, demoMatrix
+'               dimensionRange, EmbeddingRender, Encoding, factorEncoder, getNormalizeMatrix
+'               mapEncoder, mapLambda, readMNISTLabelledVector, readModelDataset, Tabular
+'               toDataframe, toFeatureSet, toMatrix
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -80,6 +80,7 @@ Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -142,10 +143,18 @@ Module datasetKit
     Sub New()
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(FeatureFrame), AddressOf toDataframe)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(UnionMatrix), AddressOf toMatrix)
+        Call REnv.Internal.generic.add("fit", GetType(SequenceGraphTransform), AddressOf fitSgt)
     End Sub
 
     Private Function toMatrix(data As UnionMatrix, args As list, env As Environment) As Rdataframe
         Return data.CreateMatrix
+    End Function
+
+    Private Function fitSgt(sgt As SequenceGraphTransform, args As list, env As Environment) As Object
+        Dim sequence As Object = args.getBySynonyms("sequence", "seq", "seqs", "sequences")
+        Dim result = env.EvaluateFramework(Of String, Dictionary(Of String, Double))(sequence, AddressOf sgt.fit)
+
+        Return result
     End Function
 
     Private Function toDataframe(features As FeatureFrame, args As list, env As Environment) As Rdataframe
