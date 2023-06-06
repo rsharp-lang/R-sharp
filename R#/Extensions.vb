@@ -206,7 +206,10 @@ Public Module Extensions
     ''' <param name="eval">求值函数</param>
     ''' <returns></returns>
     <Extension>
-    Public Function EvaluateFramework(Of T, TOut)(env As Environment, x As Object, eval As Func(Of T, TOut)) As Object
+    Public Function EvaluateFramework(Of T, TOut)(env As Environment,
+                                                  x As Object,
+                                                  eval As Func(Of T, TOut),
+                                                  Optional parallel As Boolean = False) As Object
         If x Is Nothing Then
             Return Nothing
         ElseIf TypeOf x Is list Then
@@ -248,6 +251,7 @@ Public Module Extensions
             End With
         ElseIf x.GetType.IsArray Then
             Dim list As New List(Of TOut)
+            Dim cast As New List(Of T)
 
             For Each item As Object In DirectCast(x, Array).AsObjectEnumerator
                 item = RCType.CTypeDynamic(item, GetType(T), env)
@@ -255,12 +259,25 @@ Public Module Extensions
                 If Program.isException(item) Then
                     Return item
                 Else
-                    list.Add(eval(item))
+                    Call cast.Add(item)
                 End If
             Next
 
-            If list.Count = 1 AndAlso Not DataFramework.IsPrimitive(GetType(TOut)) Then
-                Return list(0)
+            If cast.Count = 1 AndAlso Not DataFramework.IsPrimitive(GetType(TOut)) Then
+                Return eval(cast(0))
+            End If 
+
+            If parallel Then
+                Call cast.SeqIterator _
+                    .AsParallel _
+                    .Select(Function(item) (item.i, eval(item.value))) _
+                    .OrderBy(Function(item) item.i) _
+                    .Select(Function(item) item.Item2) _
+                    .DoCall(AddressOf list.AddRange)
+            Else
+                For Each item As T In cast
+                    Call list.Add(eval(item))
+                Next
             End If
 
             Return New vector(
