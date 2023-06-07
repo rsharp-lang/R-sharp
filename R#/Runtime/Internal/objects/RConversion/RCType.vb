@@ -52,7 +52,6 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports System.Runtime.Remoting
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -65,7 +64,7 @@ Namespace Runtime.Internal.Object.Converts
 
     Public NotInheritable Class RCType
 
-        Friend ReadOnly castFunc As Dictionary(Of Type, Dictionary(Of Type, Func(Of Object, Object)))
+        Friend ReadOnly castFunc As New Dictionary(Of Type, Dictionary(Of Type, Func(Of Object, Object)))
 
         Shared ReadOnly interfaceCast As New RCType
         Shared ReadOnly typeCast As New RCType
