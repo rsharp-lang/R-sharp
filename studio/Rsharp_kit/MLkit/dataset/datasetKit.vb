@@ -196,7 +196,7 @@ Module datasetKit
     ''' long-term dependency. Higher the value the lesser
     ''' the long-term dependency captured in the embedding.
     ''' Typical values for kappa are 1, 5, 10.</param>
-    ''' <param name="lengthsensitive">Default False. This is set to true if the embedding of
+    ''' <param name="length_sensitive">Default False. This is set to true if the embedding of
     ''' should have the information of the length of the sequence.
     ''' If set to false then the embedding of two sequences with
     ''' similar pattern but different lengths will be the same.
@@ -205,11 +205,14 @@ Module datasetKit
     <ExportAPI("SGT")>
     Public Function SGT(Optional alphabets As Char() = Nothing,
                         Optional kappa As Double = 1,
-                        Optional lengthsensitive As Boolean = False) As SequenceGraphTransform
+                        Optional length_sensitive As Boolean = False,
+                        Optional full As Boolean = True) As SequenceGraphTransform
+
         Return New SequenceGraphTransform(
             alphabets:=alphabets,
             kappa:=kappa,
-            lengthsensitive:=lengthsensitive
+            lengthsensitive:=length_sensitive,
+            full:=full
         )
     End Function
 
