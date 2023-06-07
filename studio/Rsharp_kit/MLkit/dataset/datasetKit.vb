@@ -193,6 +193,51 @@ Module datasetKit
         }
     End Function
 
+    ''' <summary>
+    ''' Sequence Graph Transform (SGT) — Sequence Embedding for Clustering, Classification, and Search
+    ''' 
+    ''' Sequence Graph Transform (SGT) is a sequence embedding function. SGT extracts 
+    ''' the short- and long-term sequence features and embeds them in a finite-dimensional 
+    ''' feature space. The long and short term patterns embedded in SGT can be tuned 
+    ''' without any increase in the computation.
+    ''' 
+    ''' > https://github.com/cran2367/sgt/blob/25bf28097788fbbf9727abad91ec6e59873947cc/python/sgt-package/sgt/sgt.py
+    ''' </summary>
+    ''' <remarks>
+    ''' Compute embedding of a single or a collection of discrete item
+    ''' sequences. A discrete item sequence is a sequence made from a set
+    ''' discrete elements, also known as alphabet set. For example,
+    ''' suppose the alphabet set is the set of roman letters,
+    ''' {A, B, ..., Z}. This set is made of discrete elements. Examples of
+    ''' sequences from such a set are AABADDSA, UADSFJPFFFOIHOUGD, etc.
+    ''' Such sequence datasets are commonly found in online industry,
+    ''' for example, item purchase history, where the alphabet set is
+    ''' the set of all product items. Sequence datasets are abundant in
+    ''' bioinformatics as protein sequences.
+    ''' Using the embeddings created here, classification and clustering
+    ''' models can be built for sequence datasets.
+    ''' Read more in https://arxiv.org/pdf/1608.03533.pdf
+    ''' </remarks>
+    ''' <param name="alphabets">Optional, except if mode is Spark.
+    ''' The set of alphabets that make up all
+    ''' the sequences in the dataset. If not passed, the
+    ''' alphabet set is automatically computed as the
+    ''' unique set of elements that make all the sequences.
+    ''' A list or 1d-array of the set of elements that make up the
+    ''' sequences. For example, np.array(["A", "B", "C"].
+    ''' If mode is 'spark', the alphabets are necessary.
+    ''' </param>
+    ''' <param name="kappa">
+    ''' Tuning parameter, kappa > 0, to change the extraction of
+    ''' long-term dependency. Higher the value the lesser
+    ''' the long-term dependency captured in the embedding.
+    ''' Typical values for kappa are 1, 5, 10.</param>
+    ''' <param name="lengthsensitive">Default False. This is set to true if the embedding of
+    ''' should have the information of the length of the sequence.
+    ''' If set to false then the embedding of two sequences with
+    ''' similar pattern but different lengths will be the same.
+    ''' lengthsensitive = false is similar to length-normalization.</param>
+    ''' <returns></returns>
     <ExportAPI("SGT")>
     Public Function SGT(Optional alphabets As Char() = Nothing,
                         Optional kappa As Double = 1,
