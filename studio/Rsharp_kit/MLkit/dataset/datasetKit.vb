@@ -134,7 +134,12 @@ Public Class UnionMatrix
 End Class
 
 ''' <summary>
-''' the machine learning dataset toolkit
+''' ### the machine learning dataset toolkit
+''' 
+''' Datasets are collections of raw data gathered during the research process 
+''' usually in the form of numerical data. Many organizations, e.g. government 
+''' agencies, universities or research institutions make the data they have 
+''' collected freely available on the web for other researchers to use.
 ''' </summary>
 <Package("dataset", Category:=APICategories.UtilityTools)>
 <RTypeExport("data_matrix", GetType(UnionMatrix))>
