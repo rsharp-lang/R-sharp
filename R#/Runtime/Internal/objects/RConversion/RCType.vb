@@ -76,6 +76,11 @@ Namespace Runtime.Internal.Object.Converts
             Call interfaceCast.AddCType(GetType(ISequenceData(Of Char, String)), GetType(String), Function(seq) DirectCast(seq, ISequenceData(Of Char, String)).SequenceData)
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function GetCType(from As Type, [to] As Type) As Func(Of Object, Object)
+            Return castFunc(from)([to])
+        End Function
+
         Public Sub AddCType(from As Type, [to] As Type, cast As Func(Of Object, Object))
             If Not castFunc.ContainsKey(from) Then
                 castFunc.Add(from, New Dictionary(Of Type, Func(Of Object, Object)))
@@ -87,6 +92,11 @@ Namespace Runtime.Internal.Object.Converts
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Shared Function hasInterfaceCast([interface] As Type, [to] As Type) As Boolean
             Return interfaceCast.castFunc.ContainsKey([interface]) AndAlso interfaceCast.castFunc([interface]).ContainsKey([to])
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Private Shared Function hasTypeCast(objType As Type, [to] As Type) As Boolean
+            Return typeCast.castFunc.ContainsKey(objType) AndAlso typeCast.castFunc(objType).ContainsKey([to])
         End Function
 
         ''' <summary>
@@ -227,9 +237,12 @@ RE0:
                     Else
                         Return Conversion.CTypeDynamic(obj, type)
                     End If
+                ElseIf hasTypeCast(objType, type) Then
+                    Return typeCast.GetCType(objType, [to]:=type)(obj)
                 Else
                     For Each i As Type In objType.GetInterfaces
                         If hasInterfaceCast(i, type) Then
+                            Call typeCast.AddCType(objType, [to]:=type, cast:=interfaceCast.castFunc(i)(type))
                             Return interfaceCast.castFunc(i)(type)(obj)
                         End If
                     Next
