@@ -120,33 +120,30 @@ Module datasetKit
 
     Private Function fitSgt(sgt As SequenceGraphTransform, args As list, env As Environment) As Object
         Dim sequence As Object = args.getBySynonyms("sequence", "seq", "seqs", "sequences")
-        Dim result = env.EvaluateFramework(Of String, Dictionary(Of String, Double))(sequence, AddressOf sgt.fit)
+        Dim parallel As Boolean = args.getValue(Of Boolean)({"parallel", "par"}, env, [default]:=False)
+        Dim result = env.EvaluateFramework(Of String, Dictionary(Of String, Double))(sequence, AddressOf sgt.fit, parallel:=parallel)
         Dim as_df As Boolean = args.getValue({"dataframe", "df", "matrix"}, env, [default]:=False)
 
-        If as_df Then
-            result = env.EvaluateFramework(Of Dictionary(Of String, Double), Rdataframe)(
-                x:=result,
-                eval:=Function(v)
-                          Dim df As New Rdataframe With {
-                             .columns = New Dictionary(Of String, Array),
-                             .rownames = sgt.alphabets _
-                                .Select(Function(c) c.ToString) _
-                                .ToArray
-                          }
-                          Dim vi As Double()
-
-                          For Each c As Char In sgt.alphabets
-                              vi = sgt.alphabets _
-                                 .Select(Function(ci) v($"{c},{ci}")) _
-                                 .ToArray
-                              df.add(c, vi)
-                          Next
-
-                          Return df
-                      End Function)
+        If Not as_df Then
+            Return result
         End If
 
-        Return result
+        Dim df As New Rdataframe With {
+            .columns = New Dictionary(Of String, Array),
+            .rownames = REnv.asVector(Of Object)(sequence) _
+                .AsObjectEnumerator _
+                .Select(Function(obj) any.ToString(obj)) _
+                .ToArray
+        }
+        Dim matrix As Dictionary(Of String, Double)() = REnv.asVector(Of Dictionary(Of String, Double))(result)
+        Dim v As Double()
+
+        For Each key As String In sgt.feature_names
+            v = matrix.Select(Function(r) r(key)).ToArray
+            df.add(key, v)
+        Next
+
+        Return df
     End Function
 
     Private Function toDataframe(features As FeatureFrame, args As list, env As Environment) As Rdataframe
