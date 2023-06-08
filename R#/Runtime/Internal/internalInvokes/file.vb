@@ -1206,7 +1206,7 @@ Namespace Runtime.Internal.Invokes
                         Return description.Open(FileMode.OpenOrCreate, doClear:=truncate)
                     End If
                 Else
-                    Return description.Open(open, doClear:=False)
+                    Return description.Open(open, doClear:=truncate)
                 End If
             End If
         End Function
