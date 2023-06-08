@@ -88,6 +88,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataSet
 Imports FeatureFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
@@ -128,18 +129,34 @@ Module datasetKit
             Return result
         End If
 
-        Dim df As New Rdataframe With {
-            .columns = New Dictionary(Of String, Array),
-            .rownames = REnv.asVector(Of Object)(sequence) _
+        Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+
+        If TypeOf sequence Is list Then
+            df.rownames = DirectCast(sequence, list).getNames
+        Else
+            df.rownames = REnv.asVector(Of Object)(sequence) _
                 .AsObjectEnumerator _
                 .Select(Function(obj) any.ToString(obj)) _
                 .ToArray
-        }
-        Dim matrix As Dictionary(Of String, Double)() = REnv.asVector(Of Dictionary(Of String, Double))(result)
+        End If
+
+        Dim matrix As Dictionary(Of String, Double)()
         Dim v As Double()
 
+        If TypeOf result Is list Then
+            matrix = df.rownames _
+                .Select(Function(key)
+                            Return DirectCast(DirectCast(result, list).getByName(key), Dictionary(Of String, Double))
+                        End Function) _
+                .ToArray
+        Else
+            matrix = REnv.asVector(Of Dictionary(Of String, Double))(result)
+        End If
+
         For Each key As String In sgt.feature_names
-            v = matrix.Select(Function(r) r(key)).ToArray
+            v = matrix _
+                .Select(Function(r) r(key)) _
+                .ToArray
             df.add(key, v)
         Next
 
@@ -214,6 +231,11 @@ Module datasetKit
             lengthsensitive:=length_sensitive,
             full:=full
         )
+    End Function
+
+    <ExportAPI("estimate_alphabets")>
+    Public Function estimate_alphabets(<RRawVectorArgument> seqs As Object) As Char()
+        Return SequenceGraphTransform.estimate_alphabets(CLRVector.asCharacter(seqs))
     End Function
 
     <ExportAPI("add_sample")>
