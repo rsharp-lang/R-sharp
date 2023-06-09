@@ -281,21 +281,9 @@ Public Module utils
 
         If Not TypeOf row_names Is vector Then
             If indexType.mode = TypeCodes.string OrElse indexType.mode = TypeCodes.double Then
-                row_names = REnv _
-                    .asVector(Of Object)(row_names) _
-                    .AsObjectEnumerator(Of Object) _
-                    .Select(AddressOf any.ToString) _
-                    .DoCall(Function(v)
-                                Return New vector(GetType(String), v, env)
-                            End Function)
+                row_names = New vector(GetType(String), CLRVector.asCharacter(row_names), env)
             ElseIf indexType.mode = TypeCodes.integer Then
-                row_names = REnv _
-                    .asVector(Of Object)(row_names) _
-                    .AsObjectEnumerator(Of Object) _
-                    .Select(Function(i) CInt(i)) _
-                    .DoCall(Function(v)
-                                Return New vector(GetType(Integer), v, env)
-                            End Function)
+                row_names = New vector(GetType(Integer), CLRVector.asInteger(row_names), env)
             Else
                 Return Internal.debug.stop({
                     "invalid data type for set row names!",
@@ -467,6 +455,7 @@ Public Module utils
         ElseIf type Is GetType(IO.DataFrame) Then
             Return DirectCast(x, IO.DataFrame).Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf REnv.isVector(Of EntityObject)(x) Then
+#Disable Warning
             Return DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).SaveDataSet(path:=file, encoding:=encoding, silent:=True)
         ElseIf REnv.isVector(Of DataSet)(x) Then
             Return DirectCast(REnv.asVector(Of DataSet)(x), DataSet()) _
@@ -476,6 +465,7 @@ Public Module utils
                     silent:=True,
                     metaBlank:=0
                 )
+#Enable Warning
         ElseIf type.IsArray OrElse type Is GetType(vector) Then
             Return saveGeneric(x, type, file, encoding.CodePage, env)
         Else

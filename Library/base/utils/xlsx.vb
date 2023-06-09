@@ -249,6 +249,7 @@ Module xlsx
         ElseIf type Is GetType(DataTable) Then
             Return DirectCast(x, DataTable)
         ElseIf REnv.isVector(Of EntityObject)(x) Then
+#Disable Warning
             Return Reflector.GetsRowData(
                 source:=DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).Select(Function(d) CObj(d)),
                 type:=GetType(EntityObject),
@@ -270,6 +271,7 @@ Module xlsx
                 reorderKeys:=0,
                 layout:=Nothing
             ).DoCall(Function(rows) New csv(rows))
+#Enable Warning
         ElseIf type.IsArray OrElse type Is GetType(vector) Then
             Return Reflector.doSave(objSource:=utils.MeasureGenericType(x, type),
                 typeDef:=type,
