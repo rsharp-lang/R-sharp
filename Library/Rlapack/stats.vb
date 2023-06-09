@@ -160,11 +160,10 @@ Module stats
         Dim components = x.pca.Project(npc)
 
         For i As Integer = 0 To npc - 1
-#Disable Warning
-            Dim v As Array = components.Select(Function(r) r(i)).ToArray
+            Dim index As Integer = i
             Dim name As String = $"dim{i + 1}"
-#Enable Warning
-            data.columns.Add(name, v)
+
+            Call data.add(name, components.Select(Function(r) r(index)))
         Next
 
         Return data

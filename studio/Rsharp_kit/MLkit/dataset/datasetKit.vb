@@ -88,6 +88,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataSet
 Imports FeatureFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
@@ -120,33 +121,46 @@ Module datasetKit
 
     Private Function fitSgt(sgt As SequenceGraphTransform, args As list, env As Environment) As Object
         Dim sequence As Object = args.getBySynonyms("sequence", "seq", "seqs", "sequences")
-        Dim result = env.EvaluateFramework(Of String, Dictionary(Of String, Double))(sequence, AddressOf sgt.fit)
+        Dim parallel As Boolean = args.getValue(Of Boolean)({"parallel", "par"}, env, [default]:=False)
+        Dim result = env.EvaluateFramework(Of String, Dictionary(Of String, Double))(sequence, AddressOf sgt.fit, parallel:=parallel)
         Dim as_df As Boolean = args.getValue({"dataframe", "df", "matrix"}, env, [default]:=False)
 
-        If as_df Then
-            result = env.EvaluateFramework(Of Dictionary(Of String, Double), Rdataframe)(
-                x:=result,
-                eval:=Function(v)
-                          Dim df As New Rdataframe With {
-                             .columns = New Dictionary(Of String, Array),
-                             .rownames = sgt.alphabets _
-                                .Select(Function(c) c.ToString) _
-                                .ToArray
-                          }
-                          Dim vi As Double()
-
-                          For Each c As Char In sgt.alphabets
-                              vi = sgt.alphabets _
-                                 .Select(Function(ci) v($"{c},{ci}")) _
-                                 .ToArray
-                              df.add(c, vi)
-                          Next
-
-                          Return df
-                      End Function)
+        If Not as_df Then
+            Return result
         End If
 
-        Return result
+        Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+
+        If TypeOf sequence Is list Then
+            df.rownames = DirectCast(sequence, list).getNames
+        Else
+            df.rownames = REnv.asVector(Of Object)(sequence) _
+                .AsObjectEnumerator _
+                .Select(Function(obj) any.ToString(obj)) _
+                .ToArray
+        End If
+
+        Dim matrix As Dictionary(Of String, Double)()
+        Dim v As Double()
+
+        If TypeOf result Is list Then
+            matrix = df.rownames _
+                .Select(Function(key)
+                            Return DirectCast(DirectCast(result, list).getByName(key), Dictionary(Of String, Double))
+                        End Function) _
+                .ToArray
+        Else
+            matrix = REnv.asVector(Of Dictionary(Of String, Double))(result)
+        End If
+
+        For Each key As String In sgt.feature_names
+            v = matrix _
+                .Select(Function(r) r(key)) _
+                .ToArray
+            df.add(key, v)
+        Next
+
+        Return df
     End Function
 
     Private Function toDataframe(features As FeatureFrame, args As list, env As Environment) As Rdataframe
@@ -199,7 +213,7 @@ Module datasetKit
     ''' long-term dependency. Higher the value the lesser
     ''' the long-term dependency captured in the embedding.
     ''' Typical values for kappa are 1, 5, 10.</param>
-    ''' <param name="lengthsensitive">Default False. This is set to true if the embedding of
+    ''' <param name="length_sensitive">Default False. This is set to true if the embedding of
     ''' should have the information of the length of the sequence.
     ''' If set to false then the embedding of two sequences with
     ''' similar pattern but different lengths will be the same.
@@ -208,12 +222,20 @@ Module datasetKit
     <ExportAPI("SGT")>
     Public Function SGT(Optional alphabets As Char() = Nothing,
                         Optional kappa As Double = 1,
-                        Optional lengthsensitive As Boolean = False) As SequenceGraphTransform
+                        Optional length_sensitive As Boolean = False,
+                        Optional full As Boolean = True) As SequenceGraphTransform
+
         Return New SequenceGraphTransform(
             alphabets:=alphabets,
             kappa:=kappa,
-            lengthsensitive:=lengthsensitive
+            lengthsensitive:=length_sensitive,
+            full:=full
         )
+    End Function
+
+    <ExportAPI("estimate_alphabets")>
+    Public Function estimate_alphabets(<RRawVectorArgument> seqs As Object) As Char()
+        Return SequenceGraphTransform.estimate_alphabets(CLRVector.asCharacter(seqs))
     End Function
 
     <ExportAPI("add_sample")>
