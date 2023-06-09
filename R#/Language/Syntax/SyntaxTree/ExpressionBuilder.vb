@@ -192,7 +192,7 @@ Namespace Language.Syntax.SyntaxParser
 
                 If item.isVectorLoop Then
                     If item.Length = 2 Then
-                        Return New VectorLoop(New SymbolReference(item(Scan0)), New SymbolReference(item(1).text.Trim("@"c)))
+                        Return New VectorLoop(New SymbolReference(item(Scan0)), New Literal(item(1).text.Trim("@"c)))
                     Else
                         ' len = 4
                         '
