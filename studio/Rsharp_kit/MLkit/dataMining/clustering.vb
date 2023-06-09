@@ -254,6 +254,7 @@ Module clustering
         If x Is Nothing Then
             Return Nothing
         ElseIf x.GetType.IsArray Then
+#Disable Warning
             Select Case REnv.MeasureArrayElementType(x)
                 Case GetType(DataSet)
                     model = DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).ToKMeansModels
@@ -262,6 +263,7 @@ Module clustering
                 Case Else
                     Return REnv.Internal.debug.stop(New InvalidProgramException(x.GetType.FullName), env)
             End Select
+#Enable Warning
         ElseIf TypeOf x Is Rdataframe Then
             Dim colNames As String() = DirectCast(x, Rdataframe).columns _
                 .Keys _
