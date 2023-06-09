@@ -134,10 +134,12 @@ Module datasetKit
         If TypeOf sequence Is list Then
             df.rownames = DirectCast(sequence, list).getNames
         Else
+#Disable Warning
             df.rownames = REnv.asVector(Of Object)(sequence) _
                 .AsObjectEnumerator _
                 .Select(Function(obj) any.ToString(obj)) _
                 .ToArray
+#Enable Warning
         End If
 
         Dim matrix As Dictionary(Of String, Double)()
@@ -150,7 +152,9 @@ Module datasetKit
                         End Function) _
                 .ToArray
         Else
+#Disable Warning
             matrix = REnv.asVector(Of Dictionary(Of String, Double))(result)
+#Enable Warning
         End If
 
         For Each key As String In sgt.feature_names
