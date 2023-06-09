@@ -354,6 +354,15 @@ Namespace Language.Syntax.SyntaxParser
                 End If
             End If
 
+            If tokens.Length = 2 Then
+                If tokens(0).name = TokenType.identifier OrElse tokens(0).name = TokenType.keyword Then
+                    If tokens(1).name = TokenType.cliShellInvoke Then
+                        ' xxx@"zzzz"
+                        Return True
+                    End If
+                End If
+            End If
+
             Return False
         End Function
 
