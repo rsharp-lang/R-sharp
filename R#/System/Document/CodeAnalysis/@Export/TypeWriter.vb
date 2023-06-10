@@ -67,6 +67,12 @@ Namespace Development.CodeAnalysis
     Public Class TypeWriter
 
         ReadOnly level As Integer
+
+        ''' <summary>
+        ''' 20230610 this symbol object will be nothing if the 
+        ''' target package module contains no public export api 
+        ''' function
+        ''' </summary>
         ReadOnly symbol As SymbolTypeDefine
         ReadOnly ts As TextWriter
 
@@ -114,6 +120,10 @@ Namespace Development.CodeAnalysis
         End Sub
 
         Private Function GetNetCoreCLRDeclaration() As MethodInfo
+            If symbol Is Nothing Then
+                Return Nothing
+            End If
+
             If TypeOf symbol.source Is MethodInfo Then
                 Return symbol.source
             Else
@@ -121,7 +131,17 @@ Namespace Development.CodeAnalysis
             End If
         End Function
 
+        ''' <summary>
+        ''' start to write a comment document for a target function <see cref="symbol"/>
+        ''' </summary>
+        ''' <param name="context"></param>
         Public Sub Flush(context As GlobalEnvironment)
+            If Not symbol Is Nothing Then
+                Call FlushInternal(context)
+            End If
+        End Sub
+
+        Private Sub FlushInternal(context As GlobalEnvironment)
             Dim type As ProjectType = context.packages.packageDocs.GetAnnotations(GetNetCoreCLRDeclaration.DeclaringType)
             Dim docs As ProjectMember = Nothing
             Dim indent As String = New String(" "c, level * 3)

@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": " run.R --attach task --SetDllDirectory \"C:\\Program Files\\BioNovoGene\\mzkit_win32\\Rstudio\\host\" --R_LIBS_USER \"C:\\etc\\r_env\\.settings\\R#.configs.xml\"",
-      "workingDirectory": "F:\\Temp\\mzkit_win32\\d3dac3d5-c633-48ad-bf24-e2ea915d17b4"
+      "commandLineArgs": "--build /src ../ /save ../CellRender.zip --skip-src-build",
+      "workingDirectory": "F:\\biocad_registry\\.pkg"
     },
     "mzkit_debug": {
       "commandName": "Project",
