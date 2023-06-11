@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::b0a1d858e2af5f0d27f0cbecad66fdc8, F:/GCModeller/src/R-sharp/R#//Runtime/Extensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 208
-    '    Code Lines: 125
-    ' Comment Lines: 56
-    '   Blank Lines: 27
-    '     File Size: 7.86 KB
+' Summaries:
 
 
-    '     Module Extensions
-    ' 
-    '         Function: isCallable, MeasureArrayElementType, MeasureRealElementType, Push, strictOption
-    '                   TryCatch, verboseOption
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 208
+'    Code Lines: 125
+' Comment Lines: 56
+'   Blank Lines: 27
+'     File Size: 7.86 KB
+
+
+'     Module Extensions
+' 
+'         Function: isCallable, MeasureArrayElementType, MeasureRealElementType, Push, strictOption
+'                   TryCatch, verboseOption
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -108,21 +108,13 @@ Namespace Runtime
             Return GetType(Void)
         End Function
 
-        ''' <summary>
-        ''' 这个会遵循类型缩放的原则返回最大的类型
-        ''' </summary>
-        ''' <param name="array"></param>
-        ''' <returns>
-        ''' if all of the element in the given <paramref name="array"/> is nothing
-        ''' then function returns the <paramref name="defaultType"/> value
-        ''' </returns>
-        Public Function MeasureRealElementType(array As Array, Optional defaultType As Type = Nothing) As Type
+        Public Function MeasureVectorTypes(array As Array, Optional unique As Boolean = True) As IEnumerable(Of Type)
             Dim arrayType As Type = array.GetType
             Dim x As Object
             Dim types As New List(Of Type)
 
             If arrayType.HasElementType AndAlso Not arrayType.GetElementType Is GetType(Object) Then
-                Return arrayType.GetElementType
+                Return New Type() {arrayType.GetElementType}
             End If
 
             For i As Integer = 0 To array.Length - 1
@@ -142,51 +134,75 @@ Namespace Runtime
                 End If
             Next
 
+            If unique Then
+                Return types.Distinct
+            Else
+                Return types
+            End If
+        End Function
+
+        Public Function MeasureRealElementType(types As List(Of Type)) As Type
+            If types.Count = 1 OrElse types.Distinct.Count = 1 Then
+                Return types(Scan0)
+            End If
+
+            Dim tg = types _
+                .GroupBy(Function(t) t.FullName) _
+                .OrderByDescending(Function(k) k.Count) _
+                .ToArray
+
+            ' 都是相同类型
+            If tg.Length = 1 Then
+                Return tg(Scan0).First
+            End If
+
+            ' 按照类型缩放原则进行类型的选取
+            Dim allTypes As Type() = tg.Select(Function(g) g.First).ToArray
+
+            ' 排序之后，一般sub type会排在最开始
+            ' base type会排在最后
+            allTypes = allTypes _
+                .Sort(Function(a, b)
+                          If a.IsInheritsFrom(b) Then
+                              Return -1
+                          Else
+                              ' 按照full name排序
+                              Return a.FullName.CompareTo(b.FullName)
+                          End If
+                      End Function) _
+                .ToArray
+
+            ' 如果最开始的类型可以继承自最末尾的类型
+            ' 则返回最末尾的类型
+            If allTypes(Scan0).IsInheritsFrom(allTypes.Last) Then
+                Return allTypes.Last
+            ElseIf allTypes.Any(Function(t) t Is GetType(Double)) AndAlso
+                allTypes.All(Function(t) DataFramework.IsNumericType(t)) Then
+
+                Return GetType(Double)
+            ElseIf allTypes.All(Function(t) DataFramework.IsIntegerType(t)) Then
+                Return GetType(Long)
+            Else
+                ' 反之说明类型间没有继承关系，即互不兼容，则返回object类型
+                Return GetType(Object)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' 这个会遵循类型缩放的原则返回最大的类型
+        ''' </summary>
+        ''' <param name="array"></param>
+        ''' <returns>
+        ''' if all of the element in the given <paramref name="array"/> is nothing
+        ''' then function returns the <paramref name="defaultType"/> value
+        ''' </returns>
+        Public Function MeasureRealElementType(array As Array, Optional defaultType As Type = Nothing) As Type
+            Dim types As List(Of Type) = MeasureVectorTypes(array, unique:=False)
+
             If types.Count = 0 Then
                 Return If(defaultType, GetType(Void))
-            ElseIf types.Count = 1 Then
-                Return types(Scan0)
             Else
-                Dim tg = types _
-                    .GroupBy(Function(t) t.FullName) _
-                    .OrderByDescending(Function(k) k.Count) _
-                    .ToArray
-
-                ' 都是相同类型
-                If tg.Length = 1 Then
-                    Return tg(Scan0).First
-                End If
-
-                ' 按照类型缩放原则进行类型的选取
-                Dim allTypes As Type() = tg.Select(Function(g) g.First).ToArray
-
-                ' 排序之后，一般sub type会排在最开始
-                ' base type会排在最后
-                allTypes = allTypes _
-                    .Sort(Function(a, b)
-                              If a.IsInheritsFrom(b) Then
-                                  Return -1
-                              Else
-                                  ' 按照full name排序
-                                  Return a.FullName.CompareTo(b.FullName)
-                              End If
-                          End Function) _
-                    .ToArray
-
-                ' 如果最开始的类型可以继承自最末尾的类型
-                ' 则返回最末尾的类型
-                If allTypes(Scan0).IsInheritsFrom(allTypes.Last) Then
-                    Return allTypes.Last
-                ElseIf allTypes.Any(Function(t) t Is GetType(Double)) AndAlso
-                    allTypes.All(Function(t) DataFramework.IsNumericType(t)) Then
-
-                    Return GetType(Double)
-                ElseIf allTypes.All(Function(t) DataFramework.IsIntegerType(t)) Then
-                    Return GetType(Long)
-                Else
-                    ' 反之说明类型间没有继承关系，即互不兼容，则返回object类型
-                    Return GetType(Object)
-                End If
+                Return MeasureRealElementType(types)
             End If
         End Function
 
