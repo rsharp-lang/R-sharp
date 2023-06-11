@@ -321,6 +321,8 @@ Namespace Runtime.Internal.Object
 
             If type Is GetType(T) OrElse GetType(T) Is GetType(Object) Then
                 Return New pipeline(objs, RType.GetRSharpType(type))
+            ElseIf type.IsInheritsFrom(GetType(T), strict:=False) Then
+                Return New pipeline(objs, RType.GetRSharpType(type))
             Else
                 Return Message.InCompatibleType(GetType(T), type, env, suppress:=suppress)
             End If
