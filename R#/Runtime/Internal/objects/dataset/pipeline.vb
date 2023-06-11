@@ -317,7 +317,7 @@ Namespace Runtime.Internal.Object
         End Function
 
         Private Shared Function TryCastObjectVector(Of T)(objs As Object(), env As Environment, suppress As Boolean) As pipeline
-            Dim types As List(Of Type) = MeasureVectorTypes(objs, unique:=False)
+            Dim types As Type() = MeasureVectorTypes(objs, unique:=False).ToArray
             Dim type As Type = MeasureVectorType(types)
 
             If type Is GetType(T) OrElse GetType(T) Is GetType(Object) Then

@@ -141,8 +141,8 @@ Namespace Runtime
             End If
         End Function
 
-        Public Function MeasureVectorType(types As List(Of Type)) As Type
-            If types.Count = 1 OrElse types.Distinct.Count = 1 Then
+        Public Function MeasureVectorType(types As Type()) As Type
+            If types.Length = 1 OrElse types.Distinct.Count = 1 Then
                 Return types(Scan0)
             End If
 
@@ -197,9 +197,9 @@ Namespace Runtime
         ''' then function returns the <paramref name="defaultType"/> value
         ''' </returns>
         Public Function MeasureRealElementType(array As Array, Optional defaultType As Type = Nothing) As Type
-            Dim types As List(Of Type) = MeasureVectorTypes(array, unique:=False)
+            Dim types As Type() = MeasureVectorTypes(array, unique:=False).ToArray
 
-            If types.Count = 0 Then
+            If types.Length = 0 Then
                 Return If(defaultType, GetType(Void))
             Else
                 Return MeasureVectorType(types)
