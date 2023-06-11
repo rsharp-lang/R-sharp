@@ -318,14 +318,14 @@ Namespace Runtime.Internal.Object
 
         Private Shared Function TryCastObjectVector(Of T)(objs As Object(), env As Environment, suppress As Boolean) As pipeline
             Dim types As List(Of Type) = MeasureVectorTypes(objs, unique:=False)
-            Dim type As Type = MeasureRealElementType(types)
+            Dim type As Type = MeasureVectorType(types)
 
             If type Is GetType(T) OrElse GetType(T) Is GetType(Object) Then
                 Return New pipeline(objs, RType.GetRSharpType(type))
             ElseIf type.IsInheritsFrom(GetType(T), strict:=False) Then
                 Return New pipeline(objs, RType.GetRSharpType(type))
             ElseIf types.Distinct.All(Function(subtype) subtype.IsInheritsFrom(GetType(T), strict:=False)) Then
-                Return New pipeline(objs, RType.GetRSharpType(T))
+                Return New pipeline(objs, RType.GetRSharpType(GetType(T)))
             Else
                 Return Message.InCompatibleType(GetType(T), type, env, suppress:=suppress)
             End If

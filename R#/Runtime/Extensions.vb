@@ -141,7 +141,7 @@ Namespace Runtime
             End If
         End Function
 
-        Public Function MeasureRealElementType(types As List(Of Type)) As Type
+        Public Function MeasureVectorType(types As List(Of Type)) As Type
             If types.Count = 1 OrElse types.Distinct.Count = 1 Then
                 Return types(Scan0)
             End If
@@ -202,7 +202,7 @@ Namespace Runtime
             If types.Count = 0 Then
                 Return If(defaultType, GetType(Void))
             Else
-                Return MeasureRealElementType(types)
+                Return MeasureVectorType(types)
             End If
         End Function
 
