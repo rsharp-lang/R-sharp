@@ -2998,7 +2998,7 @@ RE0:
             Dim quot As Boolean = args.getValue("quot", env, True)
             Dim maxPrint As Integer = args.getValue("max.print", env, globalEnv.options.maxPrint)
             Dim fields As String() = args.getValue(Of String())("select", env, Nothing)
-            Dim maxWidth As Integer = args.getValue("max.width", env, 128)
+            Dim maxWidth As Integer = args.getValue("max.width", env, 200)
 
             ' keeps pretty print in multiple threading environment
             Static dummy As New Object
