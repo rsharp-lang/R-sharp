@@ -153,12 +153,17 @@ Namespace Runtime.Internal.Object
         ''' <returns>direct cast</returns>
         Public Iterator Function populates(Of T)(env As Environment) As IEnumerable(Of T)
             Dim cast As T
+            Dim objWrapper As Boolean = GetType(T) Is GetType(vbObject)
 
             For Each obj As Object In pipeline
                 If TypeOf obj Is Message Then
                     populatorFirstErr = DirectCast(obj, Message)
                 Else
                     Try
+                        If (Not objWrapper) AndAlso TypeOf obj Is vbObject Then
+                            obj = DirectCast(obj, vbObject).target
+                        End If
+
                         cast = Nothing
                         cast = DirectCast(obj, T)
                     Catch ex As Exception
