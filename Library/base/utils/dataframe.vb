@@ -232,6 +232,12 @@ Module dataframe
         End If
     End Function
 
+    ''' <summary>
+    ''' filter out all data rows that line start with the <paramref name="comment_char"/>, default is ``#`` symbol.
+    ''' </summary>
+    ''' <param name="raw"></param>
+    ''' <param name="comment_char"></param>
+    ''' <returns></returns>
     <Extension>
     Private Function stripCommentRows(raw As csv, comment_char As Char) As csv
         If comment_char = ASCII.NUL Then
@@ -280,8 +286,7 @@ Module dataframe
                             Return table
                         End If
                     End Function) _
-            .stripCommentRows(comment_char) _
-            .Columns _
+            .stripCommentRows(comment_char).Columns _
             .ToArray
         Dim colNames As String() = cols _
             .Select(Function(col) col(Scan0)) _
@@ -290,6 +295,9 @@ Module dataframe
         If check_names Then
             colNames = Internal.Invokes.base.makeNames(colNames, unique:=True)
         Else
+            ' the underlying base type is dictionary
+            ' for columns, this required of the column
+            ' name as dictionary key should be unique!
             colNames = colNames.uniqueNames
         End If
 
