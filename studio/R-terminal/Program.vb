@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::ff6c2ea70d7d22d53949212bfe2c7bea, F:/GCModeller/src/R-sharp/studio/R-terminal//Program.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 252
-    '    Code Lines: 178
-    ' Comment Lines: 37
-    '   Blank Lines: 37
-    '     File Size: 10.10 KB
+' Summaries:
 
 
-    ' Module Program
-    ' 
-    '     Function: Main, (+2 Overloads) QueryCommandLineArgvs, RunExpression, RunRScriptFile, RunScript
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 252
+'    Code Lines: 178
+' Comment Lines: 37
+'   Blank Lines: 37
+'     File Size: 10.10 KB
+
+
+' Module Program
+' 
+'     Function: Main, (+2 Overloads) QueryCommandLineArgvs, RunExpression, RunRScriptFile, RunScript
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -160,25 +160,41 @@ Module Program
             ' query commandline arguments
             ' show commandline help
             Return Program.QueryCommandLineArgvs(script:=filepath, dev:=App.StdOut)
-        ElseIf filepath.ExtensionSuffix("csv") Then
+        ElseIf filepath.ExtensionSuffix("csv", "json") Then
             ' andalso this app could be used as a utils for print table file
-            Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(
-                configs:=ConfigFile.localConfigs
-            )
-
-            Call R.LoadLibrary(
-                packageName:="utils",
-                silent:=True,
-                ignoreMissingStartupPackages:=True
-            )
-
-            Dim result = R.Evaluate($"print(read.csv('{filepath}', row.names = 1, check.names = FALSE));")
-
-            Return Rscript.handleResult(result, R.globalEnvir, Nothing)
+            Return InspectFile(filepath)
         Else
             ' run Rscript file
             Return Program.RunRScriptFile(filepath, args)
         End If
+    End Function
+
+    Private Function InspectFile(filepath As String) As Integer
+        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(
+            configs:=ConfigFile.localConfigs
+        )
+        Dim result As Object
+        Dim expr As String
+
+        Select Case filepath.ExtensionSuffix.ToLower
+            Case "csv"
+                Call R.LoadLibrary(
+                    packageName:="utils",
+                    silent:=True,
+                    ignoreMissingStartupPackages:=True
+                )
+                expr = $"print(read.csv('{filepath}', row.names = 1, check.names = FALSE));"
+            Case "json"
+                Call R.Imports({"JSON"}, baseDll:="base")
+                expr = $"str(JSON::json_decode(readText('{filepath}')));"
+            Case Else
+                Call VBDebugger.EchoLine($"The given file type(*.{filepath.ExtensionSuffix.ToLower}) '{filepath}' is not yet implemented!")
+                Return 405
+        End Select
+
+        result = R.Evaluate(expr)
+
+        Return Rscript.handleResult(result, R.globalEnvir, Nothing)
     End Function
 
     ''' <summary>

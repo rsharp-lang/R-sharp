@@ -236,11 +236,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         ''' <param name="env"></param>
         ''' <returns></returns>
         Private Function importsPackages(env As Environment) As Object
-            Dim names As Index(Of String) = CLRVector.asCharacter(Me.packages.Evaluate(env)) _
-                .Select(Function(o)
-                            Return any.ToString(o, Nothing)
-                        End Function) _
-                .ToArray
+            Dim names As Index(Of String) = CLRVector.asCharacter(Me.packages.Evaluate(env))
             Dim dllName As String = any.ToString(REnv.getFirst(library.Evaluate(env)))
             Dim libDll As Object = GetDllFile(dllName, env)
 
