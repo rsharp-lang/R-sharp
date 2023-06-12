@@ -571,6 +571,7 @@ ReturnTable:
             vectors = New List(Of Object)(values.AsObjectEnumerator)
         End If
 
+#Disable Warning
         If baseElement Is GetType(EntityObject) Then
             For Each item As EntityObject In REnv.asVector(Of EntityObject)(dataset)
                 If isGetter Then
@@ -590,6 +591,7 @@ ReturnTable:
         Else
             Return Internal.debug.stop(New InvalidProgramException, envir)
         End If
+#Enable Warning
 
         Return vectors.ToArray
     End Function

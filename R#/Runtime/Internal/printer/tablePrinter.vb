@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::63492ebab5bd400e2b97e06e2e7ae4b8, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/printer/tablePrinter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 119
-    '    Code Lines: 99
-    ' Comment Lines: 1
-    '   Blank Lines: 19
-    '     File Size: 5.38 KB
+' Summaries:
 
 
-    '     Module tablePrinter
-    ' 
-    '         Function: PartOfTable, ToContent
-    ' 
-    '         Sub: PrintTable
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 119
+'    Code Lines: 99
+' Comment Lines: 1
+'   Blank Lines: 19
+'     File Size: 5.38 KB
+
+
+'     Module tablePrinter
+' 
+'         Function: PartOfTable, ToContent
+' 
+'         Sub: PrintTable
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -66,37 +66,60 @@ Namespace Runtime.Internal.ConsolePrinter
     Module tablePrinter
 
         <Extension>
-        Public Iterator Function ToContent(table As dataframe, maxPrint%, globalEnv As GlobalEnvironment) As IEnumerable(Of ConsoleTableBaseData)
+        Private Function getColumnPrintVector(table As dataframe,
+                                              colname As String,
+                                              nrows As Integer,
+                                              maxWidth%,
+                                              globalEnv As GlobalEnvironment) As NamedCollection(Of String)
+            Dim type As Type = Nothing
+            Dim arr As String() = printer.getStrings(table(colname), type, globalEnv) _
+                .Take(nrows) _
+                .Select(Function(si)
+                            If si IsNot Nothing AndAlso maxWidth > 0 Then
+                                If si.Length > maxWidth Then
+                                    Dim truncated As Integer = si.Length - maxWidth
+
+                                    si = si.Substring(0, maxWidth - 3) & "..."
+                                    si = si & $"|{truncated} chars truncated"
+                                End If
+                            End If
+
+                            Return si
+                        End Function) _
+                .ToArray
+            Dim typeStr As String = $"<{RType.GetRSharpType(type).ToString}>"
+            Dim max As String = {colname, typeStr} _
+                .JoinIterates(arr) _
+                .MaxLengthString
+
+            arr = arr _
+                .Select(Function(str)
+                            If str Is Nothing Then
+                                str = ""
+                            End If
+
+                            Return New String(" "c, max.Length - str.Length) & str
+                        End Function) _
+                .ToArray
+
+            Return New NamedCollection(Of String) With {
+                .name = New String(" "c, max.Length - colname.Length) & colname,
+                .value = {New String(" "c, max.Length - typeStr.Length) & typeStr} _
+                    .JoinIterates(arr) _
+                    .ToArray,
+                .description = max.Length
+            }
+        End Function
+
+        <Extension>
+        Public Iterator Function ToContent(table As dataframe, maxPrint%, maxWidth%, globalEnv As GlobalEnvironment) As IEnumerable(Of ConsoleTableBaseData)
             Dim nrows As Integer = stdNum.Min(table.nrows, maxPrint)
             Dim rowsNames As String() = {"<mode>"}.JoinIterates(table.getRowNames.Take(nrows)).ToArray
             Dim maxRowNames As Integer = rowsNames.MaxLengthString.Length
             Dim maxColumns As Integer = globalEnv.getMaxColumns
             Dim columns As NamedCollection(Of String)() = table.colnames _
                 .Select(Function(colname)
-                            Dim type As Type = Nothing
-                            Dim arr As String() = printer.getStrings(table(colname), type, globalEnv).Take(nrows).ToArray
-                            Dim typeStr As String = $"<{RType.GetRSharpType(type).ToString}>"
-                            Dim max As String = {colname, typeStr} _
-                                .JoinIterates(arr) _
-                                .MaxLengthString
-
-                            arr = arr _
-                                .Select(Function(str)
-                                            If str Is Nothing Then
-                                                str = ""
-                                            End If
-
-                                            Return New String(" "c, max.Length - str.Length) & str
-                                        End Function) _
-                                .ToArray
-
-                            Return New NamedCollection(Of String) With {
-                                .name = New String(" "c, max.Length - colname.Length) & colname,
-                                .value = {New String(" "c, max.Length - typeStr.Length) & typeStr} _
-                                    .JoinIterates(arr) _
-                                    .ToArray,
-                                .description = max.Length
-                            }
+                            Return table.getColumnPrintVector(colname, nrows, maxWidth, globalEnv)
                         End Function) _
                 .ToArray
 
@@ -148,7 +171,7 @@ Namespace Runtime.Internal.ConsolePrinter
                           End Function)
 
         <Extension>
-        Public Sub PrintTable(table As dataframe, maxPrint%, output As RContentOutput, env As GlobalEnvironment)
+        Public Sub PrintTable(table As dataframe, maxPrint%, maxWidth%, output As RContentOutput, env As GlobalEnvironment)
             Dim reachMax As Boolean = table.nrows >= maxPrint
             Dim delta As Integer = table.nrows - maxPrint
             Dim format As ConsoleTableBuilderFormat = formatParser.TryGetValue(
@@ -156,7 +179,7 @@ Namespace Runtime.Internal.ConsolePrinter
                 [default]:=ConsoleTableBuilderFormat.Minimal
             )
 
-            For Each part As ConsoleTableBaseData In table.ToContent(maxPrint%, env)
+            For Each part As ConsoleTableBaseData In table.ToContent(maxPrint%, maxWidth%, env)
                 Call ConsoleTableBuilder _
                     .From(part) _
                     .WithFormat(format) _

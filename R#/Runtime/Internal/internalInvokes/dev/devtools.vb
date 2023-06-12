@@ -183,8 +183,20 @@ Namespace Runtime.Internal.Invokes
             Return str.GetDeterministicHashCode
         End Function
 
-        <ExportAPI("FNV1aHashcode")>
-        Public Function FNV1aHash(<RRawVectorArgument> [set] As Object, Optional env As Environment = Nothing) As Integer
+        ''' <summary>
+        ''' #### FNV-1a non-cryptographic hash function
+        ''' 
+        ''' FNV hashes are designed to be fast while maintaining a low collision rate.
+        ''' The FNV speed allows one to quickly hash lots of data while maintaining a
+        ''' reasonable collision rate. The high dispersion of the FNV hashes makes 
+        ''' them well suited for hashing nearly identical strings such as URLs, hostnames,
+        ''' filenames, text, IP addresses, etc.
+        ''' </summary>
+        ''' <param name="[set]"></param>
+        ''' <param name="env"></param>
+        ''' <returns>Returns the hash as a positive integer</returns>
+        <ExportAPI("FNV1a_hashcode")>
+        Public Function FNV1aHash(<RRawVectorArgument> [set] As Object, Optional env As Environment = Nothing) As Long
             Return FNV1a.GetHashCode(getObjectSet([set], env))
         End Function
 

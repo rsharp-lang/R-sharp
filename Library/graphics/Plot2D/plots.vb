@@ -943,6 +943,7 @@ Module plots
         margin = InteropArgumentHelper.getPadding(margin)
 
         If type Is GetType(DataSet) Then
+#Disable Warning
             Return ViolinPlot.Plot(
                 dataset:=DirectCast(REnv.asVector(Of DataSet)(data), DataSet()),
                 size:=size,
@@ -954,6 +955,7 @@ Module plots
                 labelAngle:=labelAngle,
                 showStats:=showStats
             )
+#Enable Warning
         Else
             Dim dataSet As New NamedCollection(Of Double) With {
                 .name = title,
