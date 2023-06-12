@@ -1,72 +1,72 @@
 ﻿#Region "Microsoft.VisualBasic::1fdc50a70eba24772f29cf51f09969d7, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 3166
-    '    Code Lines: 1476
-    ' Comment Lines: 1423
-    '   Blank Lines: 267
-    '     File Size: 143.88 KB
+' Summaries:
 
 
-    '     Module base
-    ' 
-    '         Function: [date], [stop], allocate, append, appendFinal
-    '                   appendOfList, appendOfVector, (+3 Overloads) argumentList, attachPackageFile, autoDispose
-    '                   c, cat, (+2 Overloads) cbind, checkDimensionsAgree, colnames
-    '                   columnCombine01, columnCombine11, columnVector, commandArgs, days
-    '                   doPrintInternal, factor, factors, getOption, getPosition
-    '                   ifelse, ifelseScalar, ifelseVector, invisible, isDataframe
-    '                   isEmpty, isEmptyArray, isFunction, isList, isNA
-    '                   isNull, isRVector, length, library, makeNames
-    '                   names, ncol, neg, nrow, objectAddInvoke
-    '                   options, options_flush, print, range, rbind
-    '                   Rdataframe, rep, replace, Rlist, Robj_dimension
-    '                   rowBindDataFrame, rownames, seq, sink, source
-    '                   str, strictColumnAppend, summary, t, uniqueNames
-    '                   unitOfT, ValueAt, warning, year
-    ' 
-    '         Sub: safeAddColumn, warnings
-    '         Class PrinterOptions
-    ' 
-    '             Properties: fields, maxPrint, quot
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 3166
+'    Code Lines: 1476
+' Comment Lines: 1423
+'   Blank Lines: 267
+'     File Size: 143.88 KB
+
+
+'     Module base
+' 
+'         Function: [date], [stop], allocate, append, appendFinal
+'                   appendOfList, appendOfVector, (+3 Overloads) argumentList, attachPackageFile, autoDispose
+'                   c, cat, (+2 Overloads) cbind, checkDimensionsAgree, colnames
+'                   columnCombine01, columnCombine11, columnVector, commandArgs, days
+'                   doPrintInternal, factor, factors, getOption, getPosition
+'                   ifelse, ifelseScalar, ifelseVector, invisible, isDataframe
+'                   isEmpty, isEmptyArray, isFunction, isList, isNA
+'                   isNull, isRVector, length, library, makeNames
+'                   names, ncol, neg, nrow, objectAddInvoke
+'                   options, options_flush, print, range, rbind
+'                   Rdataframe, rep, replace, Rlist, Robj_dimension
+'                   rowBindDataFrame, rownames, seq, sink, source
+'                   str, strictColumnAppend, summary, t, uniqueNames
+'                   unitOfT, ValueAt, warning, year
+' 
+'         Sub: safeAddColumn, warnings
+'         Class PrinterOptions
+' 
+'             Properties: fields, maxPrint, quot
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -3048,6 +3048,7 @@ RE0:
             Dim quot As Boolean = args.getValue("quot", env, True)
             Dim maxPrint As Integer = args.getValue("max.print", env, globalEnv.options.maxPrint)
             Dim fields As String() = args.getValue(Of String())("select", env, Nothing)
+            Dim maxWidth As Integer = args.getValue("max.width", env, 200)
 
             ' keeps pretty print in multiple threading environment
             Static dummy As New Object
@@ -3064,7 +3065,8 @@ RE0:
                     Return New PrinterOptions With {
                         .maxPrint = maxPrint,
                         .quot = quot,
-                        .fields = fields
+                        .fields = fields,
+                        .maxWidth = maxWidth
                     }.doPrintInternal(x, x.GetType, env)
                 End SyncLock
             End If
@@ -3078,6 +3080,11 @@ RE0:
             ''' <returns></returns>
             Public Property quot As Boolean = True
             Public Property maxPrint As Integer
+            ''' <summary>
+            ''' apply for table cell text truncated
+            ''' </summary>
+            ''' <returns></returns>
+            Public Property maxWidth As Integer
             ''' <summary>
             ''' fields for select data from the dataframe 
             ''' to print contents, nothing means print all

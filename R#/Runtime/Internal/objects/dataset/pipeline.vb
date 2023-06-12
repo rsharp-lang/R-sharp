@@ -153,12 +153,17 @@ Namespace Runtime.Internal.Object
         ''' <returns>direct cast</returns>
         Public Iterator Function populates(Of T)(env As Environment) As IEnumerable(Of T)
             Dim cast As T
+            Dim objWrapper As Boolean = GetType(T) Is GetType(vbObject)
 
             For Each obj As Object In pipeline
                 If TypeOf obj Is Message Then
                     populatorFirstErr = DirectCast(obj, Message)
                 Else
                     Try
+                        If (Not objWrapper) AndAlso TypeOf obj Is vbObject Then
+                            obj = DirectCast(obj, vbObject).target
+                        End If
+
                         cast = Nothing
                         cast = DirectCast(obj, T)
                     Catch ex As Exception
@@ -317,10 +322,15 @@ Namespace Runtime.Internal.Object
         End Function
 
         Private Shared Function TryCastObjectVector(Of T)(objs As Object(), env As Environment, suppress As Boolean) As pipeline
-            Dim type As Type = MeasureRealElementType(objs)
+            Dim types As Type() = MeasureVectorTypes(objs, unique:=False).ToArray
+            Dim type As Type = MeasureVectorType(types)
 
             If type Is GetType(T) OrElse GetType(T) Is GetType(Object) Then
                 Return New pipeline(objs, RType.GetRSharpType(type))
+            ElseIf type.IsInheritsFrom(GetType(T), strict:=False) Then
+                Return New pipeline(objs, RType.GetRSharpType(type))
+            ElseIf types.Distinct.All(Function(subtype) subtype.IsInheritsFrom(GetType(T), strict:=False)) Then
+                Return New pipeline(objs, RType.GetRSharpType(GetType(T)))
             Else
                 Return Message.InCompatibleType(GetType(T), type, env, suppress:=suppress)
             End If

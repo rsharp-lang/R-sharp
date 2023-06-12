@@ -263,7 +263,7 @@ Namespace Runtime.Internal.ConsolePrinter
                     End If
                 End If
 
-                Call tablePrinter.PrintTable(dataframe, opts.maxPrint, output, env)
+                Call tablePrinter.PrintTable(dataframe, opts.maxPrint, opts.maxWidth, output, env)
             ElseIf valueType Is GetType(vbObject) Then
                 Call DirectCast(x, vbObject).ToString.DoCall(AddressOf output.WriteLine)
             Else
@@ -405,6 +405,11 @@ printSingleElement:
             End If
         End Sub
 
+        ''' <summary>
+        ''' get max width to break the table
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <Extension>
         Friend Function getMaxColumns(env As Environment) As Integer
             If env.globalEnvironment.stdout.env = OutputEnvironments.Html Then

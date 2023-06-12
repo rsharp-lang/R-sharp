@@ -1,0 +1,1 @@
+details@"体内研究 (In Vivo)";
