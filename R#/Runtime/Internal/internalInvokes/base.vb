@@ -669,6 +669,46 @@ Namespace Runtime.Internal.Invokes
             Return REnv.asVector(Repeats(x, times), If(x Is Nothing, GetType(Object), x.GetType), env)
         End Function
 
+        Private Function safeRowBindDataFrame(d As dataframe, row As dataframe, env As Environment) As Object
+            Dim colNames As String() = d.colnames.JoinIterates(row.colnames).Distinct.ToArray
+            Dim rbind As New dataframe With {
+                .columns = New Dictionary(Of String, Array),
+                .rownames = d.getRowNames.JoinIterates(row.getRowNames).uniqueNames.ToArray
+            }
+            Dim totalSize As Integer = d.nrows + row.nrows
+
+            For Each col As String In colNames
+                Dim v1 As Array
+                Dim v2 As Array
+
+                If d.hasName(col) Then
+                    v1 = d.getColumnVector(col)
+                Else
+                    v1 = Nothing
+                End If
+                If row.hasName(col) Then
+                    v2 = row.getColumnVector(col)
+                Else
+                    v2 = Nothing
+                End If
+
+                If v1 Is Nothing Then
+                    v1 = Array.CreateInstance(v2.GetType.GetElementType, d.nrows)
+                End If
+                If v2 Is Nothing Then
+                    v2 = Array.CreateInstance(v1.GetType.GetElementType, row.nrows)
+                End If
+
+                Dim union As Array = Array.CreateInstance(v1.GetType.GetElementType, totalSize)
+
+                Call Array.ConstrainedCopy(v1, Scan0, union, Scan0, v1.Length)
+                Call Array.ConstrainedCopy(v2, Scan0, union, v1.Length, v2.Length)
+                Call rbind.columns.Add(col, REnv.UnsafeTryCastGenericArray(union))
+            Next
+
+            Return rbind
+        End Function
+
         Private Function rowBindDataFrame(d As dataframe, row As dataframe, env As Environment) As Object
             If d.columns.Count <> row.columns.Count Then
                 Return Internal.debug.stop({
@@ -724,10 +764,16 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="d"></param>
         ''' <param name="row"></param>
         ''' <param name="env"></param>
+        ''' <param name="safe">
+        ''' Merge the dataframe safely?
+        ''' </param>
         ''' <returns></returns>
         <ExportAPI("rbind")>
         <RApiReturn(GetType(dataframe))>
-        Public Function rbind(d As dataframe, <RRawVectorArgument> row As Object, env As Environment) As Object
+        Public Function rbind(d As dataframe, <RRawVectorArgument> row As Object,
+                              Optional safe As Boolean = False,
+                              Optional env As Environment = Nothing) As Object
+
             If d Is Nothing Then
                 If TypeOf row Is dataframe Then
                     Return row
@@ -749,7 +795,11 @@ Namespace Runtime.Internal.Invokes
                 Return d
             ElseIf TypeOf row Is dataframe Then
                 ' row bind of two dataframe object
-                Return rowBindDataFrame(d, row, env)
+                If safe Then
+                    Return safeRowBindDataFrame(d, row, env)
+                Else
+                    Return rowBindDataFrame(d, row, env)
+                End If
             Else
                 ' dataframe rbind with a vector row
                 Dim v As Array = REnv.asVector(Of Object)(row)
