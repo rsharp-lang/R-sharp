@@ -86,7 +86,9 @@ Module xlsx
     ''' read a sheet table in xlsx file as a ``dataframe`` object.
     ''' </summary>
     ''' <param name="sheetIndex">
-    ''' the data sheet index or name for read data
+    ''' the data sheet index or name for read data. the index value of 
+    ''' parameter should be start from base 1 if the type is an integer 
+    ''' index
     ''' </param>
     ''' <param name="check_modes">
     ''' check the data type of each column in the dataframe? 
