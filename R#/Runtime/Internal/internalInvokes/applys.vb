@@ -51,6 +51,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
@@ -409,6 +410,157 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <Extension>
+        Private Function lapplyGeneralIDictionary(dict As IDictionary,
+                                                  apply As RFunction,
+                                                  getName As Func(Of SeqValue(Of Object), [Variant](Of String, Message)),
+                                                  hasName As Boolean,
+                                                  env As Environment) As Object
+            Dim i As i32 = Scan0
+            Dim value As Object
+            Dim keyName As [Variant](Of String, Message)
+            Dim list As New Dictionary(Of String, Object)
+            Dim idx As i32 = 1
+
+            For Each d As Object In dict.Keys
+                value = dict(d)
+
+                ' user didn't specific the names function or value
+                ' use the key in the dictionary as the new list name
+                ' by default
+                If Not hasName Then
+                    keyName = any.ToString(d)
+                Else
+                    keyName = getName(New SeqValue(Of Object)(++i, value))
+
+                    If keyName Like GetType(Message) Then
+                        Return keyName.TryCast(Of Message)
+                    End If
+                End If
+
+                value = apply.Invoke(env, invokeArgument(value, ++idx))
+
+                If TypeOf value Is ReturnValue Then
+                    value = DirectCast(value, ReturnValue).Evaluate(env)
+                End If
+
+                If Program.isException(value) Then
+                    Return value
+                Else
+                    list(keyName.VA) = value
+                End If
+            Next
+
+            Return New list With {.slots = list}
+        End Function
+
+        <Extension>
+        Private Function lapplyPipelineStream(pip As pipeline,
+                                              apply As RFunction,
+                                              getName As Func(Of SeqValue(Of Object), [Variant](Of String, Message)),
+                                              env As Environment) As Object
+
+            Dim pops = pip.populates(Of Object)(env)
+            Dim i As i32 = Scan0
+            Dim value As Object
+            Dim keyName As [Variant](Of String, Message)
+            Dim list As New Dictionary(Of String, Object)
+            Dim idx As i32 = 1
+
+            For Each obj As SeqValue(Of Object) In pops.SeqIterator
+                keyName = getName(obj)
+
+                If keyName Like GetType(Message) Then
+                    Return keyName.TryCast(Of Message)
+                Else
+                    value = apply.Invoke(env, invokeArgument(obj.value, ++idx))
+                End If
+
+                If TypeOf value Is ReturnValue Then
+                    value = DirectCast(value, ReturnValue).Evaluate(env)
+                End If
+
+                If Program.isException(value) Then
+                    Return value
+                Else
+                    list(keyName.VA) = value
+                End If
+            Next
+
+            Return New list With {.slots = list}
+        End Function
+
+        <Extension>
+        Private Function lapplyRNameIndex(vec As RIndex,
+                                          apply As RFunction,
+                                          getName As Func(Of SeqValue(Of Object), [Variant](Of String, Message)),
+                                          env As Environment) As Object
+
+            Dim size As Integer = vec.length
+            Dim d As Object
+            Dim value As Object
+            Dim keyName As [Variant](Of String, Message)
+            Dim list As New Dictionary(Of String, Object)
+            Dim idx As i32 = 1
+
+            For i As Integer = 1 To size
+                d = vec.getByIndex(i)
+                keyName = getName(New SeqValue(Of Object)(i - 1, d))
+
+                If keyName Like GetType(Message) Then
+                    Return keyName.TryCast(Of Message)
+                Else
+                    value = apply.Invoke(env, invokeArgument(d, i - 1))
+                End If
+
+                If TypeOf value Is ReturnValue Then
+                    value = DirectCast(value, ReturnValue).Evaluate(env)
+                End If
+
+                If Program.isException(value) Then
+                    Return value
+                Else
+                    list(keyName.VA) = value
+                End If
+            Next
+
+            Return New list With {.slots = list}
+        End Function
+
+        <Extension>
+        Private Function lapplyGeneralSequence(seq As IEnumerable(Of Object),
+                                               apply As RFunction,
+                                               getName As Func(Of SeqValue(Of Object), [Variant](Of String, Message)),
+                                               env As Environment) As Object
+
+            Dim list As New Dictionary(Of String, Object)
+            Dim value As Object
+            Dim keyName As [Variant](Of String, Message)
+            Dim idx As i32 = 1
+
+            For Each d As SeqValue(Of Object) In seq.SeqIterator
+                keyName = getName(d)
+
+                If keyName Like GetType(Message) Then
+                    Return keyName.TryCast(Of Message)
+                Else
+                    value = apply.Invoke(env, invokeArgument(d.value, ++idx))
+                End If
+
+                If TypeOf value Is ReturnValue Then
+                    value = DirectCast(value, ReturnValue).Evaluate(env)
+                End If
+
+                If Program.isException(value) Then
+                    Return value
+                Else
+                    list(keyName.VA) = value
+                End If
+            Next
+
+            Return New list With {.slots = list}
+        End Function
+
         ''' <summary>
         ''' # Apply a Function over a List or Vector
         ''' 
@@ -446,115 +598,36 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Dim apply As RFunction = FUN
-            Dim list As New Dictionary(Of String, Object)
             Dim getName As Func(Of SeqValue(Of Object), [Variant](Of String, Message)) = keyNameAuto(names, envir)
-            Dim value As Object
-            Dim keyName As [Variant](Of String, Message)
-            Dim idx As i32 = 1
 
             If X.GetType.ImplementInterface(Of IDictionary) Then
-                Dim i As i32 = Scan0
-                Dim dict As IDictionary = DirectCast(X, IDictionary)
-
-                For Each d As Object In dict.Keys
-                    value = dict(d)
-
-                    If names Is Nothing Then
-                        keyName = any.ToString(d)
-                    Else
-                        keyName = getName(New SeqValue(Of Object)(++i, value))
-
-                        If keyName Like GetType(Message) Then
-                            Return keyName.TryCast(Of Message)
-                        End If
-                    End If
-
-                    value = apply.Invoke(envir, invokeArgument(value, ++idx))
-
-                    If TypeOf value Is ReturnValue Then
-                        value = DirectCast(value, ReturnValue).Evaluate(envir)
-                    End If
-
-                    If Program.isException(value) Then
-                        Return value
-                    Else
-                        list(keyName.VA) = value
-                    End If
-                Next
+                Return DirectCast(X, IDictionary).lapplyGeneralIDictionary(
+                    apply:=apply,
+                    getName:=getName,
+                    hasName:=Not names Is Nothing,
+                    env:=envir
+                )
             ElseIf TypeOf X Is pipeline Then
-                For Each obj As SeqValue(Of Object) In DirectCast(X, pipeline) _
-                    .populates(Of Object)(envir) _
-                    .SeqIterator
-
-                    keyName = getName(obj)
-
-                    If keyName Like GetType(Message) Then
-                        Return keyName.TryCast(Of Message)
-                    Else
-                        value = apply.Invoke(envir, invokeArgument(obj.value, ++idx))
-                    End If
-
-                    If TypeOf value Is ReturnValue Then
-                        value = DirectCast(value, ReturnValue).Evaluate(envir)
-                    End If
-
-                    If Program.isException(value) Then
-                        Return value
-                    Else
-                        list(keyName.VA) = value
-                    End If
-                Next
+                Return DirectCast(X, pipeline).lapplyPipelineStream(
+                    apply:=apply,
+                    getName:=getName,
+                    env:=envir
+                )
             ElseIf X.GetType.ImplementInterface(Of RIndex) Then
-                Dim vec As RIndex = X
-                Dim size As Integer = vec.length
-                Dim d As Object
-
-                For i As Integer = 1 To size
-                    d = vec.getByIndex(i)
-                    keyName = getName(New SeqValue(Of Object)(i - 1, d))
-
-                    If keyName Like GetType(Message) Then
-                        Return keyName.TryCast(Of Message)
-                    Else
-                        value = apply.Invoke(envir, invokeArgument(d, i - 1))
-                    End If
-
-                    If TypeOf value Is ReturnValue Then
-                        value = DirectCast(value, ReturnValue).Evaluate(envir)
-                    End If
-
-                    If Program.isException(value) Then
-                        Return value
-                    Else
-                        list(keyName.VA) = value
-                    End If
-                Next
+                Return DirectCast(X, RIndex).lapplyRNameIndex(
+                    apply:=apply,
+                    getName:=getName,
+                    env:=envir
+                )
             Else
-                For Each d As SeqValue(Of Object) In REnv.asVector(Of Object)(X) _
+                Return REnv.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
-                    .SeqIterator
-
-                    keyName = getName(d)
-
-                    If keyName Like GetType(Message) Then
-                        Return keyName.TryCast(Of Message)
-                    Else
-                        value = apply.Invoke(envir, invokeArgument(d.value, ++idx))
-                    End If
-
-                    If TypeOf value Is ReturnValue Then
-                        value = DirectCast(value, ReturnValue).Evaluate(envir)
-                    End If
-
-                    If Program.isException(value) Then
-                        Return value
-                    Else
-                        list(keyName.VA) = value
-                    End If
-                Next
+                    .lapplyGeneralSequence(
+                        apply:=apply,
+                        getName:=getName,
+                        env:=envir
+                    )
             End If
-
-            Return New list With {.slots = list}
         End Function
 
         Private Function keyNameAuto(type As Type) As Func(Of Object, String)
@@ -563,50 +636,70 @@ Namespace Runtime.Internal.Invokes
             Return cache.ComputeIfAbsent(
                 key:=type,
                 lazyValue:=Function(key As Type)
-                               If key.ImplementInterface(GetType(INamedValue)) Then
-                                   Return Function(a) DirectCast(a, INamedValue).Key
-                               ElseIf key.ImplementInterface(GetType(IReadOnlyId)) Then
-                                   Return Function(a) DirectCast(a, IReadOnlyId).Identity
-                               ElseIf key.ImplementInterface(GetType(IKeyedEntity(Of String))) Then
-                                   Return Function(a) DirectCast(a, IKeyedEntity(Of String)).Key
-                               ElseIf key Is GetType(Group) Then
-                                   Return Function(g) any.ToString(DirectCast(g, Group).key)
-                               Else
-                                   Return Function() Nothing
-                               End If
+                               Return InternalKeyTypeExtractor(key)
                            End Function)
         End Function
 
+        Private Function InternalKeyTypeExtractor(key As Type) As Func(Of Object, String)
+            If key.ImplementInterface(GetType(INamedValue)) Then
+                Return Function(a) DirectCast(a, INamedValue).Key
+            ElseIf key.ImplementInterface(GetType(IReadOnlyId)) Then
+                Return Function(a) DirectCast(a, IReadOnlyId).Identity
+            ElseIf key.ImplementInterface(GetType(IKeyedEntity(Of String))) Then
+                Return Function(a) DirectCast(a, IKeyedEntity(Of String)).Key
+            ElseIf key Is GetType(Group) Then
+                Return Function(g) any.ToString(DirectCast(g, Group).key)
+            Else
+                Return Function() Nothing
+            End If
+        End Function
+
+        Private Function indexName(i As SeqValue(Of Object)) As [Variant](Of String, Message)
+            Dim name As String = Nothing
+
+            If Not i.value Is Nothing Then
+                name = keyNameAuto(i.value.GetType)(i.value)
+            End If
+
+            If name Is Nothing Then
+                name = $"[[{i.i + 1}]]"
+            End If
+
+            Return name
+        End Function
+
+        Private Class funcEvalKey
+
+            ReadOnly func As RFunction
+            ReadOnly env As Environment
+
+            Sub New(func As RFunction, env As Environment)
+                Me.env = env
+                Me.func = func
+            End Sub
+
+            Public Function GetName(i As SeqValue(Of Object)) As [Variant](Of String, Message)
+                Dim nameVals = func.Invoke(env, invokeArgument(i.value))
+                Dim namesVec As Object
+
+                If TypeOf nameVals Is Message Then
+                    Return DirectCast(nameVals, Message)
+                Else
+                    namesVec = RConversion.asCharacters(nameVals)
+                End If
+
+                Return CStr(getFirst(namesVec))
+            End Function
+        End Class
+
         Public Function keyNameAuto(names As Object, env As Environment) As Func(Of SeqValue(Of Object), [Variant](Of String, Message))
             If names Is Nothing Then
-                Return Function(i)
-                           Dim name As String = Nothing
-
-                           If Not i.value Is Nothing Then
-                               name = keyNameAuto(i.value.GetType)(i.value)
-                           End If
-
-                           If name Is Nothing Then
-                               name = $"[[{i.i + 1}]]"
-                           End If
-
-                           Return name
-                       End Function
+                Return AddressOf indexName
             ElseIf names.GetType.ImplementInterface(Of RFunction) Then
                 Dim func As RFunction = DirectCast(names, RFunction)
+                Dim eval As New funcEvalKey(func, env)
 
-                Return Function(i)
-                           Dim nameVals = func.Invoke(env, invokeArgument(i.value))
-                           Dim namesVec As Object
-
-                           If TypeOf nameVals Is Message Then
-                               Return nameVals
-                           Else
-                               namesVec = RConversion.asCharacters(nameVals)
-                           End If
-
-                           Return getFirst(namesVec)
-                       End Function
+                Return AddressOf eval.GetName
             Else
                 Dim vec As String() = CLRVector.asCharacter(names)
 
