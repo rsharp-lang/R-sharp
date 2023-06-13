@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::12ed939a8d11c7733976f9602be0e516, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/applys.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 536
-    '    Code Lines: 354
-    ' Comment Lines: 108
-    '   Blank Lines: 74
-    '     File Size: 22.72 KB
+' Summaries:
 
 
-    '     Module applys
-    ' 
-    '         Function: apply, checkInternal, (+2 Overloads) keyNameAuto, lapply, parLapply
-    '                   parSapply, sapply
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 536
+'    Code Lines: 354
+' Comment Lines: 108
+'   Blank Lines: 74
+'     File Size: 22.72 KB
+
+
+'     Module applys
+' 
+'         Function: apply, checkInternal, (+2 Overloads) keyNameAuto, lapply, parLapply
+'                   parSapply, sapply
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -447,9 +447,9 @@ Namespace Runtime.Internal.Invokes
 
             Dim apply As RFunction = FUN
             Dim list As New Dictionary(Of String, Object)
-            Dim getName As Func(Of SeqValue(Of Object), String) = keyNameAuto(names, envir)
+            Dim getName As Func(Of SeqValue(Of Object), [Variant](Of String, Message)) = keyNameAuto(names, envir)
             Dim value As Object
-            Dim keyName$
+            Dim keyName As [Variant](Of String, Message)
             Dim idx As i32 = 1
 
             If X.GetType.ImplementInterface(Of IDictionary) Then
@@ -463,6 +463,10 @@ Namespace Runtime.Internal.Invokes
                         keyName = any.ToString(d)
                     Else
                         keyName = getName(New SeqValue(Of Object)(++i, value))
+
+                        If keyName Like GetType(Message) Then
+                            Return keyName.TryCast(Of Message)
+                        End If
                     End If
 
                     value = apply.Invoke(envir, invokeArgument(value, ++idx))
@@ -474,7 +478,7 @@ Namespace Runtime.Internal.Invokes
                     If Program.isException(value) Then
                         Return value
                     Else
-                        list(keyName) = value
+                        list(keyName.VA) = value
                     End If
                 Next
             ElseIf TypeOf X Is pipeline Then
@@ -483,7 +487,12 @@ Namespace Runtime.Internal.Invokes
                     .SeqIterator
 
                     keyName = getName(obj)
-                    value = apply.Invoke(envir, invokeArgument(obj.value, ++idx))
+
+                    If keyName Like GetType(Message) Then
+                        Return keyName.TryCast(Of Message)
+                    Else
+                        value = apply.Invoke(envir, invokeArgument(obj.value, ++idx))
+                    End If
 
                     If TypeOf value Is ReturnValue Then
                         value = DirectCast(value, ReturnValue).Evaluate(envir)
@@ -492,7 +501,7 @@ Namespace Runtime.Internal.Invokes
                     If Program.isException(value) Then
                         Return value
                     Else
-                        list(keyName) = value
+                        list(keyName.VA) = value
                     End If
                 Next
             ElseIf X.GetType.ImplementInterface(Of RIndex) Then
@@ -503,7 +512,12 @@ Namespace Runtime.Internal.Invokes
                 For i As Integer = 1 To size
                     d = vec.getByIndex(i)
                     keyName = getName(New SeqValue(Of Object)(i - 1, d))
-                    value = apply.Invoke(envir, invokeArgument(d, i - 1))
+
+                    If keyName Like GetType(Message) Then
+                        Return keyName.TryCast(Of Message)
+                    Else
+                        value = apply.Invoke(envir, invokeArgument(d, i - 1))
+                    End If
 
                     If TypeOf value Is ReturnValue Then
                         value = DirectCast(value, ReturnValue).Evaluate(envir)
@@ -512,7 +526,7 @@ Namespace Runtime.Internal.Invokes
                     If Program.isException(value) Then
                         Return value
                     Else
-                        list(keyName) = value
+                        list(keyName.VA) = value
                     End If
                 Next
             Else
@@ -521,7 +535,12 @@ Namespace Runtime.Internal.Invokes
                     .SeqIterator
 
                     keyName = getName(d)
-                    value = apply.Invoke(envir, invokeArgument(d.value, ++idx))
+
+                    If keyName Like GetType(Message) Then
+                        Return keyName.TryCast(Of Message)
+                    Else
+                        value = apply.Invoke(envir, invokeArgument(d.value, ++idx))
+                    End If
 
                     If TypeOf value Is ReturnValue Then
                         value = DirectCast(value, ReturnValue).Evaluate(envir)
@@ -530,7 +549,7 @@ Namespace Runtime.Internal.Invokes
                     If Program.isException(value) Then
                         Return value
                     Else
-                        list(keyName) = value
+                        list(keyName.VA) = value
                     End If
                 Next
             End If
@@ -558,7 +577,7 @@ Namespace Runtime.Internal.Invokes
                            End Function)
         End Function
 
-        Public Function keyNameAuto(names As Object, env As Environment) As Func(Of SeqValue(Of Object), String)
+        Public Function keyNameAuto(names As Object, env As Environment) As Func(Of SeqValue(Of Object), [Variant](Of String, Message))
             If names Is Nothing Then
                 Return Function(i)
                            Dim name As String = Nothing
@@ -578,7 +597,13 @@ Namespace Runtime.Internal.Invokes
 
                 Return Function(i)
                            Dim nameVals = func.Invoke(env, invokeArgument(i.value))
-                           Dim namesVec = RConversion.asCharacters(nameVals)
+                           Dim namesVec As Object
+
+                           If TypeOf nameVals Is Message Then
+                               Return nameVals
+                           Else
+                               namesVec = RConversion.asCharacters(nameVals)
+                           End If
 
                            Return getFirst(namesVec)
                        End Function
