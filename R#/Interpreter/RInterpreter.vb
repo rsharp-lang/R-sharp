@@ -318,6 +318,10 @@ Namespace Interpreter
             Call REnv.print(obj,, globalEnvir)
         End Sub
 
+        ''' <summary>
+        ''' do call ``str`` function for inspect the structure of the given <paramref name="obj"/>
+        ''' </summary>
+        ''' <param name="obj"></param>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub Inspect(obj As Object)
             Call REnv.str(obj,, globalEnvir)

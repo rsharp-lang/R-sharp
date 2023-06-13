@@ -77,6 +77,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.Math.DataFrame
+Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
@@ -227,13 +228,23 @@ Module datasetKit
     Public Function SGT(Optional alphabets As Char() = Nothing,
                         Optional kappa As Double = 1,
                         Optional length_sensitive As Boolean = False,
-                        Optional full As Boolean = True) As SequenceGraphTransform
+                        Optional mode As SequenceGraphTransform.Modes = SequenceGraphTransform.Modes.Full,
+                        Optional env As Environment = Nothing) As SequenceGraphTransform
+
+        Dim println = env.WriteLineHandler
+
+        Call println($"SGT algorithm running in mode: {mode.Description}")
+        Call println(New Dictionary(Of String, String) From {
+            {"alphabets", alphabets.JoinBy("")},
+            {"kappa", kappa},
+            {"length.sensitive", length_sensitive}
+        }.GetJson)
 
         Return New SequenceGraphTransform(
             alphabets:=alphabets,
             kappa:=kappa,
             lengthsensitive:=length_sensitive,
-            full:=full
+            mode:=mode
         )
     End Function
 
