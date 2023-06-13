@@ -249,6 +249,9 @@ Namespace Runtime.Internal.Object
             If TypeOf upstream Is Dictionary(Of String, Object).ValueCollection Then
                 upstream = DirectCast(upstream, Dictionary(Of String, Object).ValueCollection).ToArray
             End If
+            If TypeOf upstream Is vbObject Then
+                upstream = DirectCast(upstream, vbObject).target
+            End If
 
             If upstream Is Nothing Then
                 Return Internal.debug.stop("the upstream data can not be nothing!", env)
@@ -324,6 +327,10 @@ Namespace Runtime.Internal.Object
         Private Shared Function TryCastObjectVector(Of T)(objs As Object(), env As Environment, suppress As Boolean) As pipeline
             Dim types As Type() = MeasureVectorTypes(objs, unique:=False).ToArray
             Dim type As Type = MeasureVectorType(types)
+
+            If types.Length = 0 Then
+                Return New pipeline(objs, RType.GetRSharpType(GetType(T)))
+            End If
 
             If type Is GetType(T) OrElse GetType(T) Is GetType(Object) Then
                 Return New pipeline(objs, RType.GetRSharpType(type))

@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports vbObject = SMRUCC.Rsharp.Runtime.Internal.Object.vbObject
 
 Namespace Runtime
@@ -113,6 +114,10 @@ Namespace Runtime
             Dim x As Object
             Dim types As New List(Of Type)
 
+            If array.Length = 0 Then
+                Return New Type() {}
+            End If
+
             If arrayType.HasElementType AndAlso Not arrayType.GetElementType Is GetType(Object) Then
                 Return New Type() {arrayType.GetElementType}
             End If
@@ -142,6 +147,9 @@ Namespace Runtime
         End Function
 
         Public Function MeasureVectorType(types As Type()) As Type
+            If types.Length = 0 Then
+                Return GetType(Object)
+            End If
             If types.Length = 1 OrElse types.Distinct.Count = 1 Then
                 Return types(Scan0)
             End If
