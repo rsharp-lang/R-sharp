@@ -14,13 +14,14 @@
 	  <Title>R# language scrpting host</Title>
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	  <Authors>xieguigang &lt;xie.guigang@gcmodeller.org&gt;</Authors>
-	  <Company>SMRUCC genomics</Company>
+	  <Company>SMRUCC genomics Institute [GuiLin, China]</Company>
 	  <Product>R-sharp Language</Product>
 	  <Description>R# language scrpting host</Description>
 	  <Copyright>xieguigang &lt;xie.guigang@gcmodeller.org&gt; 2023</Copyright>
 	  <PackageIcon>R-sharp.png</PackageIcon>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <PackageTags>R#;R-sharp;.NET</PackageTags>
+	  <Version>2.695.25.1455</Version>
 
   </PropertyGroup>
 
