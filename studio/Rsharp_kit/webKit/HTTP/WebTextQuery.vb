@@ -61,6 +61,7 @@ Public Class WebTextQuery : Inherits WebQueryModule(Of String)
     Implements IHttpGet
 
     Public ReadOnly Property fs As IFileSystemEnvironment
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Get
             Return cache
         End Get
@@ -84,6 +85,8 @@ Public Class WebTextQuery : Inherits WebQueryModule(Of String)
     ''' </summary>
     ''' <param name="context">The query context is the url string</param>
     ''' <returns></returns>
+    ''' 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Protected Overrides Function doParseUrl(context As String) As String
         Return context
     End Function
@@ -94,10 +97,13 @@ Public Class WebTextQuery : Inherits WebQueryModule(Of String)
     ''' <param name="html"></param>
     ''' <param name="schema"></param>
     ''' <returns></returns>
+    ''' 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Protected Overrides Function doParseObject(html As String, schema As Type) As Object
         Return html
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Protected Overrides Function doParseGuid(context As String) As String
         Return MD5(context)
     End Function
