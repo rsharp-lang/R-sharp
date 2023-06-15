@@ -106,7 +106,7 @@ Public Class WebTextQuery : Inherits WebQueryModule(Of String)
         If TypeOf cache Is Directory Then
             Return guid.Substring(2, 2)
         Else
-            Return $"/.cache/${guid.Substring(2, 2)}"
+            Return $"/.cache/{guid.Substring(2, 3)}"
         End If
     End Function
 End Class
