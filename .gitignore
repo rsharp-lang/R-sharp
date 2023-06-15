@@ -462,3 +462,4 @@ studio/R-terminal/My Project/launchSettings.json
 REnv/REnv.nupkg
 test/unitTest/environment/demo_lambda/REnv.zip
 test/demo/excel/New Microsoft Excel Worksheet.xlsx.zip
+/test/demo/buffer/cache.dat
