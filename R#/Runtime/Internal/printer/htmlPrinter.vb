@@ -65,6 +65,13 @@ Namespace Runtime.Internal
         ''' </summary>
         ''' <typeparam name="T"></typeparam>
         ''' <param name="formatter"></param>
+        ''' <remarks>
+        ''' the generic overloads function should be a delegate function of:
+        ''' 
+        ''' ```
+        ''' Delegate GenericFunction(x As <see cref="Object"/>, args As <see cref="list"/>, env As <see cref="Environment"/>) As <see cref="Object"/>
+        ''' ```
+        ''' </remarks>
         Public Sub AttachHtmlFormatter(Of T)(formatter As GenericFunction)
             Call generic.add("html", GetType(T), formatter)
         End Sub
