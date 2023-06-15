@@ -167,7 +167,10 @@ Module HDSutils
             ElseIf allowCreate Then
                 Return HDSutils.createStream(DirectCast(file, String), meta_size:=meta_size)
             Else
-                Return Internal.debug.stop("the given file is not found on your filesystem!", env)
+                Return Internal.debug.stop({
+                     "the given file is not found on your filesystem!",
+                     "You can set the parameter 'allowCreate' = TRUE for enable create a new local file!"
+                }, env)
             End If
         ElseIf TypeOf file Is Stream Then
             Return New StreamPack(DirectCast(file, Stream), [readonly]:=[readonly], meta_size:=meta_size)
