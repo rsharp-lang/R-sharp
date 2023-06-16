@@ -24,6 +24,12 @@ const http_get = function(url, streamTo, interval = 3, filetype = "html") {
 
   if (http.debug) {
     print(`[request] ${url}`);
+    
+    if (is.local_dir) {
+      print("the cache repository is a local directory.");
+    } else {
+      print(`use data pack '${http.cache_dir}' as cache repository!`);
+    }    
   }
 
   const cacheKey   = md5(url);
