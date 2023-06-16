@@ -128,7 +128,9 @@ Namespace Runtime.Internal
                                env As Environment,
                                Optional ByRef callable As GenericFunction = Nothing) As Boolean
 
-            Dim fetch = getGenericCallable(x, type, funcName, env)
+            ' suppress the error: just needs for test the function is exists or not
+            ' no needs to break the program debug at here
+            Dim fetch = getGenericCallable(x, type, funcName, env, suppress:=True)
 
             callable = Nothing
 
@@ -217,9 +219,14 @@ Namespace Runtime.Internal
             End If
         End Function
 
-        Public Function getGenericCallable(ByRef x As Object, type As Type, funcName As String, env As Environment) As [Variant](Of Message, GenericFunction)
+        Public Function getGenericCallable(ByRef x As Object,
+                                           type As Type,
+                                           funcName As String,
+                                           env As Environment,
+                                           Optional suppress As Boolean = False) As [Variant](Of Message, GenericFunction)
+
             If Not generics.ContainsKey(funcName) Then
-                Return Internal.debug.stop($"no function named '{funcName}'", env)
+                Return Internal.debug.stop($"no function named '{funcName}'", env, suppress:=suppress)
             End If
             If type Is GetType(vbObject) AndAlso Not generics(funcName).ContainsKey(type) Then
                 x = DirectCast(x, vbObject).target
