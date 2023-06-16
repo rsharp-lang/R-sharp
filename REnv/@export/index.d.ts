@@ -16,27 +16,27 @@ declare namespace REnv {
      * @param qcut default value Is ``0.1``.
      * @param f default value Is ``10``.
    */
-   function density2DCut(data: any, k?: object, qcut?: number, f?: object): object;
+   function density2DCut(data: any, k?: any, qcut?: any, f?: any): object;
    /**
      * @param interval default value Is ``3``.
      * @param filetype default value Is ``html``.
    */
-   function getHtml(url: any, interval?: object, filetype?: string): object;
+   function getHtml(url: any, interval?: any, filetype?: any): object;
    /**
      * @param interval default value Is ``3``.
    */
-   function getImage(url: any, interval?: object): object;
+   function getImage(url: any, interval?: any): object;
    /**
      * @param interval default value Is ``3``.
      * @param raw_text default value Is ``false``.
    */
-   function getJSON(url: any, interval?: object, raw_text?: boolean): object;
+   function getJSON(url: any, interval?: any, raw_text?: any): object;
    github_url: string;
    /**
      * @param interval default value Is ``3``.
      * @param filetype default value Is ``html``.
    */
-   function http_get(url: any, streamTo: any, interval?: object, filetype?: string): object;
+   function http_get(url: any, streamTo: any, interval?: any, filetype?: any): object;
    /**
    */
    function platformName(): object;
@@ -47,7 +47,7 @@ declare namespace REnv {
      * @param outputdir default value Is ``./``.
      * @param package default value Is ``null``.
    */
-   function Rdocuments(pkgName: any, outputdir?: string, package?: any): object;
+   function Rdocuments(pkgName: any, outputdir?: any, package?: any): object;
    /**
    */
    function scale0_1(x: any): object;
