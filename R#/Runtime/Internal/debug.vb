@@ -67,8 +67,8 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal
 
@@ -134,12 +134,7 @@ Namespace Runtime.Internal
                 End If
             Else
                 If debugMode Then
-                    Dim err As New Exception(REnv.asVector(Of Object)(message) _
-                       .AsObjectEnumerator _
-                       .SafeQuery _
-                       .Select(Function(o) Scripting.ToString(o, "NULL")) _
-                       .JoinBy("; ")
-                    )
+                    Dim err As New Exception(CLRVector.asCharacter(message).JoinBy("; "))
                     Call App.LogException(err)
                     Throw err
                 Else
@@ -175,11 +170,7 @@ Namespace Runtime.Internal
         ''' <returns></returns>
         Friend Shared Function CreateMessageInternal(messages As Object, envir As Environment, level As MSG_TYPES) As Message
             Return New Message With {
-                .message = Runtime.asVector(Of Object)(messages) _
-                    .AsObjectEnumerator _
-                    .SafeQuery _
-                    .Select(Function(o) Scripting.ToString(o, "NULL")) _
-                    .ToArray,
+                .message = CLRVector.asCharacter(messages),
                 .level = level,
                 .environmentStack = envir.DoCall(AddressOf getEnvironmentStack),
                 .trace = devtools.ExceptionData.GetCurrentStackTrace

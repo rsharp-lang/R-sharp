@@ -64,6 +64,9 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
+''' <summary>
+''' HDS stream pack toolkit
+''' </summary>
 <Package("HDS")>
 Module HDSutils
 
@@ -72,6 +75,12 @@ Module HDSutils
         Call Internal.ConsolePrinter.AttachConsoleFormatter(Of StreamBlock)(Function(o) o.ToString)
     End Sub
 
+    ''' <summary>
+    ''' Create a new data pack stream object, this function will clear up the data that sotre in the target <paramref name="file"/>!
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="meta_size"></param>
+    ''' <returns></returns>
     <ExportAPI("createStream")>
     Public Function createStream(file As String, Optional meta_size As Long = 4 * 1024 * 1024) As Object
         Dim pack As New StreamPack(file, meta_size:=meta_size)
@@ -79,6 +88,12 @@ Module HDSutils
         Return pack
     End Function
 
+    ''' <summary>
+    ''' Extract the files inside the HDS pack to a specific filesystem environment
+    ''' </summary>
+    ''' <param name="pack"></param>
+    ''' <param name="fs"></param>
+    ''' <returns></returns>
     <ExportAPI("extract_files")>
     Public Function ExtractFiles(pack As StreamPack, fs As IFileSystemEnvironment) As Object
         For Each file As StreamBlock In pack.files
@@ -114,6 +129,15 @@ Module HDSutils
         Return newPack
     End Function
 
+    ''' <summary>
+    ''' Open a HDS stream pack file, this function will create a new file is the given <paramref name="file"/> is not exists
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="readonly">Indicates that the file content just used for readonly, not allow updates?</param>
+    ''' <param name="allowCreate"></param>
+    ''' <param name="meta_size"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("openStream")>
     <RApiReturn(GetType(StreamPack))>
     Public Function openStream(<RRawVectorArgument> file As Object,
@@ -143,7 +167,10 @@ Module HDSutils
             ElseIf allowCreate Then
                 Return HDSutils.createStream(DirectCast(file, String), meta_size:=meta_size)
             Else
-                Return Internal.debug.stop("the given file is not found on your filesystem!", env)
+                Return Internal.debug.stop({
+                     "the given file is not found on your filesystem!",
+                     "You can set the parameter 'allowCreate' = TRUE for enable create a new local file!"
+                }, env)
             End If
         ElseIf TypeOf file Is Stream Then
             Return New StreamPack(DirectCast(file, Stream), [readonly]:=[readonly], meta_size:=meta_size)
@@ -197,6 +224,12 @@ Module HDSutils
         Return objs
     End Function
 
+    ''' <summary>
+    ''' Get the filesystem tree inside the given HDS pack file
+    ''' </summary>
+    ''' <param name="pack"></param>
+    ''' <param name="showReadme"></param>
+    ''' <returns></returns>
     <ExportAPI("tree")>
     Public Function Tree(pack As StreamPack, Optional showReadme As Boolean = True) As String
         Dim sb As New StringBuilder
@@ -223,6 +256,12 @@ Module HDSutils
         Return pack.OpenBlock(file)
     End Function
 
+    ''' <summary>
+    ''' Read a specific text data from a HDS stream pack
+    ''' </summary>
+    ''' <param name="pack"></param>
+    ''' <param name="fileName"></param>
+    ''' <returns></returns>
     <ExportAPI("getText")>
     Public Function readText(pack As StreamPack, fileName As String) As String
         Dim file As StreamBlock = pack.GetObject(fileName)
@@ -238,6 +277,13 @@ Module HDSutils
         End If
     End Function
 
+    ''' <summary>
+    ''' write data to a HDS stream pack file
+    ''' </summary>
+    ''' <param name="hds"></param>
+    ''' <param name="fileName"></param>
+    ''' <param name="data"></param>
+    ''' <returns></returns>
     <ExportAPI("saveFile")>
     Public Function saveFile(hds As StreamPack, fileName As String, data As Object)
         Using buf As Stream = hds.OpenBlock(fileName)
