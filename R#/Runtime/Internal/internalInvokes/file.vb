@@ -852,6 +852,11 @@ Namespace Runtime.Internal.Invokes
             ElseIf TypeOf con Is WebResponseResult Then
                 ' read web result html text into multuple text lines
                 Return DirectCast(con, WebResponseResult).html.LineTokens
+            ElseIf TypeOf con Is FileReference Then
+                Dim p As FileReference = con
+                Dim text As String = p.fs.ReadAllText(p.filepath)
+
+                Return text.LineTokens
             Else
                 Dim str = CLRVector.asCharacter(con)
                 Dim filepath As String = str.ElementAtOrDefault(Scan0)
@@ -868,6 +873,9 @@ Namespace Runtime.Internal.Invokes
             If Not filepath.FileExists Then
                 If env.globalEnvironment.options.strict Then
                     Return Internal.debug.stop($"the given file '{filepath}' is missing!", env)
+                Else
+                    Call env.AddMessage($"the given file '{filepath}' is missing!")
+                    Return Nothing
                 End If
             End If
 

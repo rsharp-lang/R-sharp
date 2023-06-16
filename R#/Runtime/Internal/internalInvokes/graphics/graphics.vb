@@ -69,6 +69,7 @@ Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -507,6 +508,11 @@ Namespace Runtime.Internal.Invokes
                 Return DirectCast(file, String).LoadImage(base64:=isBase64StringOrFile(DirectCast(file, String)))
             ElseIf TypeOf file Is Stream Then
                 Return Image.FromStream(DirectCast(file, Stream))
+            ElseIf TypeOf file Is FileReference Then
+                Dim p As FileReference = file
+                Dim stream As Stream = p.fs.OpenFile(p.filepath, FileMode.OpenOrCreate, FileAccess.Read)
+
+                Return Image.FromStream(stream)
             Else
                 Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
             End If
