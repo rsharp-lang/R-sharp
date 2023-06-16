@@ -117,6 +117,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Public Overrides ReadOnly Property type As TypeCodes
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
+                ' if the type constrain is nothing
+                ' then use the default value type if 
+                ' has the default value
                 If m_type = TypeCodes.generic Then
                     If Not value Is Nothing Then
                         Return value.type
