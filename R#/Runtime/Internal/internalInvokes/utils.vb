@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::dd95e3fa9913f52d3a4519e873f9cdea, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1272
-    '    Code Lines: 661
-    ' Comment Lines: 497
-    '   Blank Lines: 114
-    '     File Size: 60.80 KB
+' Summaries:
 
 
-    '     Module utils
-    ' 
-    '         Function: create_zip, createAlternativeName, createCommandLine, createTimespan, data
-    '                   dataSearchByPackageDir, debugTool, description, FindSystemFile, GetInstalledPackages
-    '                   head, installPackages, keyGroups, loadByName, md5
-    '                   memorySize, now, package_skeleton, readFile, sendMessage
-    '                   system, systemFile, unzipFile, wget, workdir
-    ' 
-    '         Sub: cls, pause, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1272
+'    Code Lines: 661
+' Comment Lines: 497
+'   Blank Lines: 114
+'     File Size: 60.80 KB
+
+
+'     Module utils
+' 
+'         Function: create_zip, createAlternativeName, createCommandLine, createTimespan, data
+'                   dataSearchByPackageDir, debugTool, description, FindSystemFile, GetInstalledPackages
+'                   head, installPackages, keyGroups, loadByName, md5
+'                   memorySize, now, package_skeleton, readFile, sendMessage
+'                   system, systemFile, unzipFile, wget, workdir
+' 
+'         Sub: cls, pause, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -77,6 +77,7 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Development
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
@@ -271,7 +272,11 @@ Namespace Runtime.Internal.Invokes
         ''' retrieving files using HTTP, HTTPS, FTP and FTPS, the most widely used Internet protocols.
         ''' </summary>
         ''' <param name="url"></param>
-        ''' <param name="save">the function will returns a stream object if this parameter is nothing</param>
+        ''' <param name="save">
+        ''' this parameter could be a character vector for specific a local file path to save the 
+        ''' target remote file, or it also could be a file reference wrapper object for store in 
+        ''' a cache pack. This function will returns a stream object if this parameter is nothing.
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns>
         ''' this function will returns the data stream which is download from the given 
@@ -281,18 +286,31 @@ Namespace Runtime.Internal.Invokes
         ''' <paramref name="save"/> file location. 
         ''' </returns>
         <ExportAPI("wget")>
-        Public Function wget(url As String, Optional save As String = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function wget(url As String, Optional save As Object = Nothing, Optional env As Environment = Nothing) As Object
             If url.StringEmpty Then
                 Return Internal.debug.stop({"Missing url data source for file get!"}, env)
-            ElseIf save.StringEmpty Then
+            ElseIf save Is Nothing OrElse (TypeOf save Is String AndAlso CStr(save).StringEmpty) Then
                 Dim buffer As New MemoryStream
 
+                ' just return a stream data if the save is not specific
                 Http.wget.Download(url, buffer)
                 buffer.Flush()
 
                 Return buffer
+            ElseIf TypeOf save Is String Then
+                Return Http.wget.Download(url, CStr(save))
+            ElseIf TypeOf save Is FileReference Then
+                ' save to a local cache
+                Dim p As FileReference = save
+                Dim buffer As Stream = p.fs.OpenFile(p.filepath, FileMode.OpenOrCreate, FileAccess.Write)
+                Dim result As Boolean
+
+                result = Http.wget.Download(url, buffer)
+                buffer.Flush()
+
+                Return result
             Else
-                Return Http.wget.Download(url, save)
+                Return Internal.debug.stop("The local 'save' target must be nothing or a character vector for specific the file save location on locally!", env)
             End If
         End Function
 

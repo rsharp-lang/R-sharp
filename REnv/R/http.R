@@ -9,19 +9,33 @@ require(JSON);
 #'     save file to local cache.
 #'
 #' @details using of the http get function required of set options of
-#'     ``http.cache_dir`` at first!
+#'     ``http.cache_dir`` at first! The ``http.cache_dir`` could a directory folder
+#'     path to the local filesystem, or a reference symbol name in the global environment
+#'     for get a filesystem wrapper object.
 #'
 const http_get = function(url, streamTo, interval = 3, filetype = "html") {
   const http.cache_dir as string = getOption("http.cache_dir") || stop("You should set of the 'http.cache_dir' option at first!");
   const http.debug as boolean = getOption("http.debug", default = FALSE);
+  const is.local_dir = ![
+    startsWith(http.cache_dir, "$") 
+    || startsWith(http.cache_dir, "!") 
+    || startsWith(http.cache_dir, "&")
+  ];
 
   if (http.debug) {
     print(`[request] ${url}`);
   }
 
-  const cacheKey as string   = md5(url);
-  const prefix as string     = substr(cacheKey, 1, 2);
-  const cache_file as string = `${http.cache_dir}/${prefix}/${cacheKey}.${filetype}`;
+  const cacheKey   = md5(url);
+  const prefix     = substr(cacheKey, 1, 2);
+  const cache_file = {
+     if (is.local_dir) {
+        `${http.cache_dir}/${prefix}/${cacheKey}.${filetype}`;
+     } else {
+        # create a file reference closure object
+        file.allocate(`/${prefix}/${cacheKey}.${filetype}`, fs = get(http.cache_dir, globalenv()));
+     }
+  };
   const hit_cache = list(hit = "yes");
   
   test_cache = (!file.exists(cache_file)) || (file.size(cache_file) <= 0);

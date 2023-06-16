@@ -13,6 +13,9 @@
 	  <RuntimeIdentifiers>win7-x64;win7-x86;win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
 	  <Deterministic>false</Deterministic>
 	  <DefineConstants>netcore5=1</DefineConstants>
+	  <Title>R http services</Title>
+	  <Authors>xieguigang</Authors>
+	  <Company>SMRUCC genomics Institute [GuiLin, China]</Company>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -100,6 +100,11 @@ Namespace Runtime.Interop
             returnTypes = type
         End Sub
 
+        ''' <summary>
+        ''' Create a type reference via the R# type code enumeration 
+        ''' flag for indicate this function return value.
+        ''' </summary>
+        ''' <param name="type"></param>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(type As TypeCodes)
             Call Me.New(New Type() {RType.GetType(type).GetRawElementType})

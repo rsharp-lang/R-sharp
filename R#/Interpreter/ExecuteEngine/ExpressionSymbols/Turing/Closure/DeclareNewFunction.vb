@@ -308,7 +308,22 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 Try
                     ' add parameter symbol into the environment context
                     ' of the target function invoke context
-                    Call DeclareNewSymbol.PushNames(var.names, value, var.type, False, envir, err:=err)
+                    '
+                    ' 20230616 the force type cast of the function invoke parameter
+                    ' has some bug, example like, a parameter has no type constraint
+                    ' a = "xxxxx" will lead cast any parameter invoke value force cast
+                    ' to string type, this type cast will cause bugs
+                    '
+                    ' so we disable the type cast here, if the parameter has no type
+                    ' constrain expression token
+                    '
+                    ' use the typecast from the symbol type constrain at here
+                    ' not use the symbol type at here, due to the reason of symbol
+                    ' type is affected by the default value expression its value
+                    ' type
+                    Dim typecast As TypeCodes = var.m_type
+
+                    Call DeclareNewSymbol.PushNames(var.names, value, typecast, False, envir, err:=err)
                 Catch ex As Exception
                     Return Internal.debug.stop(New Exception($"unknown create parameter symbol error: {var.m_names.FirstOrDefault}(value = {any.ToString(value)})!", ex), envir)
                 End Try

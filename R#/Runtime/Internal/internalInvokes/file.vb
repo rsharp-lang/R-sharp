@@ -170,8 +170,20 @@ Namespace Runtime.Internal.Invokes
         ''' the file/directory To which the link points rather than about the link.
         ''' </remarks>
         <ExportAPI("file.size")>
-        Public Function filesize(x As String) As Long
-            Return x.FileLength
+        <RApiReturn(TypeCodes.integer)>
+        Public Function filesize(x As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return -1
+            ElseIf TypeOf x Is String Then
+                Return CStr(x).FileLength
+            ElseIf TypeOf x Is FileReference Then
+                Dim p As FileReference = x
+                Dim size As Long = p.fs.FileSize(p.filepath)
+
+                Return size
+            Else
+                Return Message.InCompatibleType(GetType(FileReference), x.GetType, env)
+            End If
         End Function
 
         ''' <summary>
@@ -738,9 +750,20 @@ Namespace Runtime.Internal.Invokes
 
             If files Is Nothing Then
                 Return False
+            ElseIf TypeOf files Is FileReference Then
+                Dim p As FileReference = files
+                Dim fs As IFileSystemEnvironment = p.fs
+                Dim check As Boolean = fs.FileExists(p.filepath, ZERO_Nonexists)
+
+                Return check
             End If
 
             Return env.EvaluateFramework(Of String, Boolean)(files, Function(path) path.FileExists(ZERO_Nonexists))
+        End Function
+
+        <ExportAPI("file.allocate")>
+        Public Function file_allocate(filepath As String, fs As IFileSystemEnvironment) As FileReference
+            Return New FileReference With {.fs = fs, .filepath = filepath}
         End Function
 
         ''' <summary>
@@ -829,6 +852,11 @@ Namespace Runtime.Internal.Invokes
             ElseIf TypeOf con Is WebResponseResult Then
                 ' read web result html text into multuple text lines
                 Return DirectCast(con, WebResponseResult).html.LineTokens
+            ElseIf TypeOf con Is FileReference Then
+                Dim p As FileReference = con
+                Dim text As String = p.fs.ReadAllText(p.filepath)
+
+                Return text.LineTokens
             Else
                 Dim str = CLRVector.asCharacter(con)
                 Dim filepath As String = str.ElementAtOrDefault(Scan0)
@@ -845,6 +873,9 @@ Namespace Runtime.Internal.Invokes
             If Not filepath.FileExists Then
                 If env.globalEnvironment.options.strict Then
                     Return Internal.debug.stop($"the given file '{filepath}' is missing!", env)
+                Else
+                    Call env.AddMessage($"the given file '{filepath}' is missing!")
+                    Return Nothing
                 End If
             End If
 
@@ -955,6 +986,13 @@ Namespace Runtime.Internal.Invokes
                 sep = Clang.sprintf(sep)
             End If
 
+            If TypeOf con Is FileReference Then
+                Dim p As FileReference = con
+
+                fs = p.fs
+                con = p.filepath
+            End If
+
             If TypeOf text Is pipeline Then
                 Return DirectCast(text, pipeline) _
                     .populates(Of String)(env) _
@@ -962,8 +1000,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf TypeOf text Is String Then
                 Return DirectCast(text, String).handleWriteTextArray(con, fs, env)
             Else
-                Return REnv.asVector(Of Object)(text) _
-                    .AsObjectEnumerator _
+                Return CLRVector.asCharacter(text) _
                     .JoinBy(sep) _
                     .handleWriteTextArray(con, fs, env)
             End If

@@ -214,6 +214,11 @@ Namespace Runtime.Components
             Return name
         End Function
 
+        ''' <summary>
+        ''' Just wrap parameter value with index
+        ''' </summary>
+        ''' <param name="expressions"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function Create(expressions As IEnumerable(Of Expression)) As InvokeParameter()
             Return expressions _

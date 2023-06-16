@@ -493,15 +493,4 @@ uploadbyfiles:
             Return http.POST(url, headers?.AsGeneric(Of String)(env))
         End Using
     End Function
-
-    ''' <summary>
-    ''' Do file download
-    ''' </summary>
-    ''' <param name="url$"></param>
-    ''' <param name="saveAs$"></param>
-    ''' <returns></returns>
-    <ExportAPI("wget")>
-    Public Function wget(url$, saveAs$) As Boolean
-        Return Http.wget.Download(url, saveAs)
-    End Function
 End Module
