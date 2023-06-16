@@ -120,11 +120,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 ' if the type constrain is nothing
                 ' then use the default value type if 
                 ' has the default value
-                If m_type = TypeCodes.generic Then
-                    If Not value Is Nothing Then
-                        Return value.type
-                    End If
-                End If
+
+                ' 20230616 use the data type comes from the default value
+                ' will case the function parameter un-wanted type cast error
+                ' removes such type extract code 
+                '
+                ' DO NOT USE THE TYPE FROM THE DEFAULT VALUE EXPRESSION
+                '
+                'If m_type = TypeCodes.generic Then
+                '    If Not value Is Nothing Then
+                '        Return value.type
+                '    End If
+                'End If
 
                 Return m_type
             End Get
