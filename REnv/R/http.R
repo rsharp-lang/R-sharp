@@ -26,12 +26,13 @@ const http_get = function(url, streamTo, interval = 3, filetype = "html") {
     print(`[request] ${url}`);
   }
 
-  const cacheKey as string   = md5(url);
-  const prefix as string     = substr(cacheKey, 1, 2);
-  const cache_file as string = {
+  const cacheKey   = md5(url);
+  const prefix     = substr(cacheKey, 1, 2);
+  const cache_file = {
      if (is.local_dir) {
         `${http.cache_dir}/${prefix}/${cacheKey}.${filetype}`;
      } else {
+        # create a file reference closure object
         file.allocate(`/${prefix}/${cacheKey}.${filetype}`, fs = get(http.cache_dir, globalenv()));
      }
   };
