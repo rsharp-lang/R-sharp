@@ -1072,6 +1072,7 @@ Namespace Runtime.Internal.Invokes
                     Call text.SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
                 Else
                     Call fs.WriteText(text, con)
+                    Call fs.Flush()
                 End If
             ElseIf TypeOf con Is Stream Then
                 Dim writer As New StreamWriter(DirectCast(con, Stream))

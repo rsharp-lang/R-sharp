@@ -307,6 +307,7 @@ Namespace Runtime.Internal.Invokes
 
                 result = Http.wget.Download(url, buffer)
                 buffer.Flush()
+                p.fs.Flush()
 
                 Return result
             Else
