@@ -16,7 +16,11 @@ require(JSON);
 const http_get = function(url, streamTo, interval = 3, filetype = "html") {
   const http.cache_dir as string = getOption("http.cache_dir") || stop("You should set of the 'http.cache_dir' option at first!");
   const http.debug as boolean = getOption("http.debug", default = FALSE);
-  const is.local_dir = !startsWith(http.cache_dir, "$");
+  const is.local_dir = ![
+    startsWith(http.cache_dir, "$") 
+    || startsWith(http.cache_dir, "!") 
+    || startsWith(http.cache_dir, "&")
+  ];
 
   if (http.debug) {
     print(`[request] ${url}`);
