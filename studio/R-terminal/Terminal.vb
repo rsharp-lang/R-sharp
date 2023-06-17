@@ -231,12 +231,16 @@ Type 'q()' to quit R.
                 cts.Cancel()
             End Sub
 
-        Call New Shell(New PS1("> "), AddressOf doRunScriptWithSpecialCommand) With {
+        Call New Shell(New PS1("> "), AddressOf doRunScriptWithSpecialCommandSync) With {
             .Quite = "!.R#::quit" & Rnd()
         }.Run()
 
         Return 0
     End Function
+
+    Private Sub doRunScriptWithSpecialCommandSync(script As String)
+        Call doRunScriptWithSpecialCommand(script)
+    End Sub
 
     Private Async Sub doRunScriptWithSpecialCommand(script As String)
         cts = New CancellationTokenSource
@@ -245,7 +249,7 @@ Type 'q()' to quit R.
             Case "CLS"
                 Call Console.Clear()
             Case Else
-                If Not script Is Nothing Then
+                If Not script.StringEmpty Then
                     Await New RunScript(script) _
                         .doRunScript(cts.Token) _
                         .CancelWith(cts.Token)
