@@ -81,6 +81,7 @@ Module Terminal
     Dim R As RInterpreter
     Dim Rtask As Task
     Dim cts As CancellationTokenSource
+    Dim exec As Boolean = False
 
 #Region "enable quit the R# environment in the terminal console mode"
 
@@ -132,13 +133,17 @@ Module Terminal
                  Optional status% = 0,
                  Optional runLast As Boolean = True,
                  Optional envir As Environment = Nothing)
-
+RE0:
         Call Console.Write("Save workspace image? [y/n/c]: ")
 
-        Dim input As String = Console.ReadLine.Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB)
+        ' null string will be return if ctrl+C was pressed
+        Dim input As String = Strings.Trim(Console.ReadLine).Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB)
 
         If input = "c" Then
             ' cancel
+            Return
+        ElseIf cts.IsCancellationRequested Then
+            Call Console.WriteLine()
             Return
         End If
 
@@ -149,8 +154,10 @@ Module Terminal
             If Not saveImage Is Nothing AndAlso TypeOf saveImage.value Is RMethodInfo Then
                 Call DirectCast(saveImage.value, RMethodInfo).Invoke(envir, {})
             End If
-        Else
+        ElseIf input = "n" Then
             ' do nothing for no
+        Else
+            GoTo RE0
         End If
 
         If runLast Then
@@ -240,10 +247,15 @@ Type 'q()' to quit R.
 
     Private Sub doRunScriptWithSpecialCommandSync(script As String)
         Call doRunScriptWithSpecialCommand(script)
+
+        Do While exec
+            Call Thread.Sleep(10)
+        Loop
     End Sub
 
     Private Async Sub doRunScriptWithSpecialCommand(script As String)
         cts = New CancellationTokenSource
+        exec = True
 
         Select Case script
             Case "CLS"
@@ -252,12 +264,16 @@ Type 'q()' to quit R.
                 If Not script.StringEmpty Then
                     Await New RunScript(script) _
                         .doRunScript(cts.Token) _
-                        .CancelWith(cts.Token)
+                        .CancelWith(
+                            cancellationToken:=cts.Token,
+                            swallowCancellationException:=True
+                         )
                 Else
                     Console.WriteLine()
                 End If
         End Select
 
+        exec = False
         Console.Title = "R# language"
     End Sub
 
@@ -279,7 +295,10 @@ Type 'q()' to quit R.
             If Not [error].StringEmpty Then
                 result = REnv.Internal.debug.stop([error], R.globalEnvir)
             Else
-                result = REnv.TryCatch(Function() R.Run(program), debug:=R.debug)
+                result = REnv.TryCatch(
+                    runScript:=Function() R.SetTaskCancelHook(Terminal.cts).Run(program),
+                    debug:=R.debug
+                )
             End If
 
             Return Rscript.handleResult(result, R.globalEnvir, program)
