@@ -627,7 +627,11 @@ Namespace Runtime.Internal.Object
         ''' <summary>
         ''' 这个函数会自动处理空值的情况
         ''' </summary>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function will generated a index row names automatically if
+        ''' the <see cref="rownames"/> data is nothing, or this function will
+        ''' make a copy of the <see cref="rownames"/> array.
+        ''' </returns>
         Public Function getRowNames() As String()
             If rownames.IsNullOrEmpty Then
                 Return nrows _
@@ -635,7 +639,7 @@ Namespace Runtime.Internal.Object
                     .Select(Function(r) $"[{r}, ]") _
                     .ToArray
             Else
-                Return rownames
+                Return rownames.ToArray
             End If
         End Function
 
