@@ -249,12 +249,18 @@ Public Module URL
             }
         Catch ex As Exception When TypeOf ex Is WebException
             Dim rs = DirectCast(ex, WebException).Response
-            Dim read As New StreamReader(rs.GetResponseStream)
-            Dim html As String = read.ReadToEnd
+            Dim msg As String = ex.Message
+
+            If Not rs Is Nothing Then
+                Dim read As New StreamReader(rs.GetResponseStream)
+                Dim html As String = read.ReadToEnd
+
+                msg = msg & vbCrLf & vbCrLf & html
+            End If
 
             Return New WebResponseResult With {
                 .url = url,
-                .html = ex.Message & vbCrLf & vbCrLf & html,
+                .html = msg,
                 .timespan = 0,
                 .headers = ResponseHeaders.HttpRequestError(ex.Message.Match("\d+").DoCall(AddressOf Integer.Parse)),
                 .payload = payload
