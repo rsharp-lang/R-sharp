@@ -224,6 +224,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         Public Function shift(<RRawVectorArgument> x As Object,
                               Optional n As Integer = 1L,
                               Optional fill As Object = "NA",
+                              <RRawVectorArgument(GetType(String))>
                               Optional type As Object = "lag|lead|shift",
                               Optional give_names As Boolean = False,
                               Optional env As Environment = Nothing) As Object
