@@ -83,12 +83,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Friend value As Object
         Friend m_type As TypeCodes
 
+        ''' <summary>
+        ''' Does current value is NULL literal?
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property isNull As Boolean
             Get
                 Return value Is Nothing
             End Get
         End Property
 
+        ''' <summary>
+        ''' Does current value is NA literal?
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property isNA As Boolean
             Get
                 Return type = TypeCodes.NA AndAlso value Is GetType(Void)

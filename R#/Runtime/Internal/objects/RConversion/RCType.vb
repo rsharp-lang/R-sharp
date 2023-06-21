@@ -215,43 +215,47 @@ RE0:
             End If
 
             Try
-                If obj.GetType.IsArray Then
-                    If obj.GetType.GetElementType Is type Then
-                        If DirectCast(obj, Array).Length = 0 Then
-                            Return Nothing
-                        ElseIf DirectCast(obj, Array).Length > 1 Then
-                            Call env.AddMessage("target array contains multiple elements, while the target conversion type is a single scalar element...")
-                        End If
-
-                        Return DirectCast(obj, Array).GetValue(Scan0)
-                    ElseIf type Is GetType(list) Then
-                        Dim list As New list With {.slots = New Dictionary(Of String, Object)}
-                        Dim arr As Array = obj
-
-                        ' enable simple array cast to list
-                        For i As Integer = 0 To arr.Length - 1
-                            Call list.add($"X_{list.length + 1}", arr(i))
-                        Next
-
-                        Return list
-                    Else
-                        Return Conversion.CTypeDynamic(obj, type)
-                    End If
-                ElseIf hasTypeCast(objType, type) Then
-                    Return typeCast.GetCType(objType, [to]:=type)(obj)
-                Else
-                    For Each i As Type In objType.GetInterfaces
-                        If hasInterfaceCast(i, type) Then
-                            Call typeCast.AddCType(objType, [to]:=type, cast:=interfaceCast.castFunc(i)(type))
-                            Return interfaceCast.castFunc(i)(type)(obj)
-                        End If
-                    Next
-
-                    Return Conversion.CTypeDynamic(obj, type)
-                End If
+                Return castUnsure(obj, objType, type, env)
             Catch ex As Exception
                 Return Internal.debug.stop(ex, env, suppress:=True)
             End Try
+        End Function
+
+        Private Shared Function castUnsure(obj As Object, objType As Type, type As Type, env As Environment)
+            If obj.GetType.IsArray Then
+                If obj.GetType.GetElementType Is type Then
+                    If DirectCast(obj, Array).Length = 0 Then
+                        Return Nothing
+                    ElseIf DirectCast(obj, Array).Length > 1 Then
+                        Call env.AddMessage("target array contains multiple elements, while the target conversion type is a single scalar element...")
+                    End If
+
+                    Return DirectCast(obj, Array).GetValue(Scan0)
+                ElseIf type Is GetType(list) Then
+                    Dim list As New list With {.slots = New Dictionary(Of String, Object)}
+                    Dim arr As Array = obj
+
+                    ' enable simple array cast to list
+                    For i As Integer = 0 To arr.Length - 1
+                        Call list.add($"X_{list.length + 1}", arr(i))
+                    Next
+
+                    Return list
+                Else
+                    Return Conversion.CTypeDynamic(obj, type)
+                End If
+            ElseIf hasTypeCast(objType, type) Then
+                Return typeCast.GetCType(objType, [to]:=type)(obj)
+            Else
+                For Each i As Type In objType.GetInterfaces
+                    If hasInterfaceCast(i, type) Then
+                        Call typeCast.AddCType(objType, [to]:=type, cast:=interfaceCast.castFunc(i)(type))
+                        Return interfaceCast.castFunc(i)(type)(obj)
+                    End If
+                Next
+
+                Return Conversion.CTypeDynamic(obj, type)
+            End If
         End Function
 
         Public Shared Function CastToEnum(obj As Object, type As Type, env As Environment) As Object
@@ -270,5 +274,23 @@ RE0:
             End If
         End Function
 
+        Public Shared Function NADefault(type As RType) As Object
+            Select Case type.mode
+                Case TypeCodes.boolean : Return False
+                Case TypeCodes.double : Return Double.NaN
+                Case TypeCodes.integer : Return Long.MinValue
+                Case TypeCodes.string : Return ""
+                Case Else
+                    Return Nothing
+            End Select
+        End Function
+
+        Public Shared Function IsNALiteralValue(obj As Object) As Boolean
+            If obj Is Nothing OrElse Not TypeOf obj Is Type Then
+                Return False
+            Else
+                Return obj Is GetType(Void)
+            End If
+        End Function
     End Class
 End Namespace

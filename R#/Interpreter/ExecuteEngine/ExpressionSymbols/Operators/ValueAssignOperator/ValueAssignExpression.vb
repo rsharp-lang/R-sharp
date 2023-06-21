@@ -476,10 +476,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
                     Select Case symbol
                         Case "NA", "NULL", "TRUE", "FALSE", "NaN"
-                            Return Internal.debug.stop({"invalid (do_set) left-hand side to assignment", "constant symbol is not allowed!", "symbol: " & symbol}, envir)
+                            Return Internal.debug.stop({
+                                "invalid (do_set) left-hand side to assignment",
+                                "constant symbol is not allowed!",
+                                "symbol: " & symbol
+                            }, envir)
                         Case Else
                             If Not symbol.IsPattern(Scanner.RSymbol) Then
-                                Return Internal.debug.stop({"invalid (do_set) left-hand side to assignment", "constant literal is not allowed!", "literal: " & symbol}, envir)
+                                Return Internal.debug.stop({
+                                    "invalid (do_set) left-hand side to assignment",
+                                    "constant literal is not allowed!",
+                                    "literal: " & symbol
+                                }, envir)
                             End If
                     End Select
 
