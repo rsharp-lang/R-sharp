@@ -254,6 +254,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     Dim vec_type As RType = RType.GetRSharpType(MeasureRealElementType(vec))
                     Dim shift_vec As Array = Array.CreateInstance(Runtime.GetType(vec_type.mode), vec.Length)
 
+                    If RCType.IsNALiteralValue(fill) Then
+                        fill = RCType.NADefault(fill)
+                    End If
+
                     fill = RCType.CTypeDynamic(fill, vec_type.raw, env)
 
                     If flag = "lag" OrElse flag = "shift" Then

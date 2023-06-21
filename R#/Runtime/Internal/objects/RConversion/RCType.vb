@@ -274,7 +274,7 @@ RE0:
             End If
         End Function
 
-        Public Function NADefault(type As RType) As Object
+        Public Shared Function NADefault(type As RType) As Object
             Select Case type.mode
                 Case TypeCodes.boolean : Return False
                 Case TypeCodes.double : Return Double.NaN
@@ -283,6 +283,14 @@ RE0:
                 Case Else
                     Return Nothing
             End Select
+        End Function
+
+        Public Shared Function IsNALiteralValue(obj As Object) As Boolean
+            If obj Is Nothing OrElse Not TypeOf obj Is Type Then
+                Return False
+            Else
+                Return obj Is GetType(Void)
+            End If
         End Function
     End Class
 End Namespace
