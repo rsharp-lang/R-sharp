@@ -252,10 +252,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Else
                     Dim vec As Array = TryCastGenericArray(x, env)
                     Dim vec_type As RType = RType.GetRSharpType(MeasureRealElementType(vec))
-                    Dim shift_vec As Array = Array.CreateInstance(Runtime.GetType(vec_type.mode), vec.Length)
+                    Dim shift_vec As Array = Array.CreateInstance(Runtime.GetType(vec_type.mode, elementType:=True), vec.Length)
 
                     If RCType.IsNALiteralValue(fill) Then
-                        fill = RCType.NADefault(fill)
+                        fill = RCType.NADefault(RType.GetRSharpType(shift_vec.GetType.GetElementType))
                     End If
 
                     fill = RCType.CTypeDynamic(fill, vec_type.raw, env)
@@ -265,13 +265,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                             Call shift_vec.SetValue(fill, i)
                         Next
 
-                        Call Array.ConstrainedCopy(vec, n, shift_vec, n, vec.Length - n)
+                        Call Array.ConstrainedCopy(vec, Scan0, shift_vec, n, vec.Length - n)
                     Else
                         For i As Integer = vec.Length - n To vec.Length - 1
                             Call shift_vec.SetValue(fill, i)
                         Next
 
-                        Call Array.ConstrainedCopy(vec, 0, shift_vec, vec.Length - n, n)
+                        Call Array.ConstrainedCopy(vec, n, shift_vec, vec.Length - n, vec.Length - n)
                     End If
 
                     Return shift_vec
