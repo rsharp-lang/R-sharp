@@ -1,68 +1,69 @@
 ﻿#Region "Microsoft.VisualBasic::a7da84245b47961aa02194734a64fe9b, F:/GCModeller/src/R-sharp/R#//Interpreter/RInterpreter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 659
-    '    Code Lines: 392
-    ' Comment Lines: 170
-    '   Blank Lines: 97
-    '     File Size: 27.00 KB
+' Summaries:
 
 
-    '     Class RInterpreter
-    ' 
-    '         Properties: configFile, debug, globalEnvir, globalSymbols, redirectError2stdout
-    '                     Rsharp, silent, strict, warnings
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    ' 
-    '         Function: [Imports], [Set], (+3 Overloads) Evaluate, FromEnvironmentConfiguration, getDataStream
-    '                   InitializeEnvironment, (+3 Overloads) Invoke, (+2 Overloads) LoadLibrary, options, Parse
-    '                   RedirectOutput, Run, RunInternal, Source
-    ' 
-    '         Sub: _construct, (+3 Overloads) Add, (+2 Overloads) Dispose, Inspect, (+2 Overloads) Print
-    '              PrintMemory
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 659
+'    Code Lines: 392
+' Comment Lines: 170
+'   Blank Lines: 97
+'     File Size: 27.00 KB
+
+
+'     Class RInterpreter
+' 
+'         Properties: configFile, debug, globalEnvir, globalSymbols, redirectError2stdout
+'                     Rsharp, silent, strict, warnings
+' 
+'         Constructor: (+2 Overloads) Sub New
+' 
+'         Function: [Imports], [Set], (+3 Overloads) Evaluate, FromEnvironmentConfiguration, getDataStream
+'                   InitializeEnvironment, (+3 Overloads) Invoke, (+2 Overloads) LoadLibrary, options, Parse
+'                   RedirectOutput, Run, RunInternal, Source
+' 
+'         Sub: _construct, (+3 Overloads) Add, (+2 Overloads) Dispose, Inspect, (+2 Overloads) Print
+'              PrintMemory
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports System.Threading
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
@@ -92,6 +93,8 @@ Imports Strings = Microsoft.VisualBasic.Strings
 Namespace Interpreter
 
     Public Class RInterpreter : Implements IDisposable
+
+        Dim cts As CancellationTokenSource
 
         ''' <summary>
         ''' Global runtime environment.(全局环境)
@@ -155,6 +158,16 @@ Namespace Interpreter
             End Get
         End Property
 
+        Public ReadOnly Property isExecCancel As Boolean
+            Get
+                If cts Is Nothing Then
+                    Return False
+                Else
+                    Return cts.IsCancellationRequested
+                End If
+            End Get
+        End Property
+
         ''' <summary>
         ''' 直接无参数调用这个构造函数，则会使用默认的配置文件创建R#脚本解释器引擎实例
         ''' </summary>
@@ -197,6 +210,11 @@ Namespace Interpreter
         Sub New(env As GlobalEnvironment)
             Call _construct(env)
         End Sub
+
+        Public Function SetTaskCancelHook(cts As CancellationTokenSource) As RInterpreter
+            Me.cts = cts
+            Return Me
+        End Function
 
         Public Function RedirectOutput(out As StreamWriter, env As OutputEnvironments) As RInterpreter
             Call globalEnvir.RedirectOutput(out, env)

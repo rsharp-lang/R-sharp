@@ -1,6 +1,4 @@
-﻿Imports System
-Imports System.Threading
-Imports System.Threading.Tasks
+﻿Imports System.Threading
 
 ''' <summary>
 ''' https://github.com/alicommit-malp/easy-async-cancel
