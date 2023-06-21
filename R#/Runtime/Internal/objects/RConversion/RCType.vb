@@ -274,5 +274,15 @@ RE0:
             End If
         End Function
 
+        Public Function NADefault(type As RType) As Object
+            Select Case type.mode
+                Case TypeCodes.boolean : Return False
+                Case TypeCodes.double : Return Double.NaN
+                Case TypeCodes.integer : Return Long.MinValue
+                Case TypeCodes.string : Return ""
+                Case Else
+                    Return Nothing
+            End Select
+        End Function
     End Class
 End Namespace
