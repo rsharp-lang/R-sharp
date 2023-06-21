@@ -2,8 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src ../ /save ../CellRender.zip --skip-src-build",
-      "workingDirectory": "F:\\biocad_registry\\.pkg"
+      "commandLineArgs": "\"G:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=33361 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host"
     },
     "mzkit_debug": {
       "commandName": "Project",
