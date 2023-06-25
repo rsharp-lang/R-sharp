@@ -75,9 +75,7 @@ Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Parallel.Tasks.TaskQueue(Of Long)
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
