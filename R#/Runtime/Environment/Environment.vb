@@ -407,6 +407,13 @@ Namespace Runtime
             End If
         End Sub
 
+        ''' <summary>
+        ''' replace current stackframe information
+        ''' </summary>
+        ''' <param name="stackframe"></param>
+        ''' <remarks>
+        ''' this method used for the internal R# loop, example like for loop/apply loop, etc
+        ''' </remarks>
         <DebuggerStepThrough>
         Public Sub setStackInfo(stackframe As StackFrame)
             _stackFrame = stackframe

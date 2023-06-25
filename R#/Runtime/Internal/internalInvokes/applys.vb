@@ -52,10 +52,9 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
-Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -66,9 +65,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
@@ -210,7 +207,6 @@ Namespace Runtime.Internal.Invokes
 
             Return x
         End Function
-
         ''' <summary>
         ''' parallel sapply
         ''' </summary>
@@ -421,6 +417,12 @@ Namespace Runtime.Internal.Invokes
             Dim keyName As [Variant](Of String, Message)
             Dim list As New Dictionary(Of String, Object)
             Dim idx As i32 = 1
+            Dim asmFile As String = GetType(applys).Assembly.FullName
+            Dim methodTrace As New Method With {
+                .Method = NameOf(lapplyGeneralIDictionary),
+                .[Module] = NameOf(applys),
+                .[Namespace] = "Rsharp_clr_interop"
+            }
 
             For Each d As Object In dict.Keys
                 value = dict(d)
@@ -431,6 +433,7 @@ Namespace Runtime.Internal.Invokes
                 If Not hasName Then
                     keyName = any.ToString(d)
                 Else
+                    ' use the index key name from the user parameter
                     keyName = getName(New SeqValue(Of Object)(++i, value))
 
                     If keyName Like GetType(Message) Then
@@ -438,6 +441,7 @@ Namespace Runtime.Internal.Invokes
                     End If
                 End If
 
+                env.setStackInfo(New StackFrame With {.File = asmFile, .Line = keyName, .Method = methodTrace})
                 value = apply.Invoke(env, invokeArgument(value, ++idx))
 
                 If TypeOf value Is ReturnValue Then
@@ -594,11 +598,14 @@ Namespace Runtime.Internal.Invokes
             If Not TypeOf check Is Boolean Then
                 Return check
             ElseIf X.GetType Is GetType(list) Then
+                ' digest the R# tuple list to .net clr dictionary
                 X = DirectCast(X, list).slots
             End If
 
             Dim apply As RFunction = FUN
             Dim getName As Func(Of SeqValue(Of Object), [Variant](Of String, Message)) = keyNameAuto(names, envir)
+
+            envir = New Environment(envir, "lapply_internal_loop", isInherits:=True)
 
             If X.GetType.ImplementInterface(Of IDictionary) Then
                 Return DirectCast(X, IDictionary).lapplyGeneralIDictionary(
@@ -627,85 +634,6 @@ Namespace Runtime.Internal.Invokes
                         getName:=getName,
                         env:=envir
                     )
-            End If
-        End Function
-
-        Private Function keyNameAuto(type As Type) As Func(Of Object, String)
-            Static cache As New Dictionary(Of Type, Func(Of Object, String))
-
-            Return cache.ComputeIfAbsent(
-                key:=type,
-                lazyValue:=Function(key As Type)
-                               Return InternalKeyTypeExtractor(key)
-                           End Function)
-        End Function
-
-        Private Function InternalKeyTypeExtractor(key As Type) As Func(Of Object, String)
-            If key.ImplementInterface(GetType(INamedValue)) Then
-                Return Function(a) DirectCast(a, INamedValue).Key
-            ElseIf key.ImplementInterface(GetType(IReadOnlyId)) Then
-                Return Function(a) DirectCast(a, IReadOnlyId).Identity
-            ElseIf key.ImplementInterface(GetType(IKeyedEntity(Of String))) Then
-                Return Function(a) DirectCast(a, IKeyedEntity(Of String)).Key
-            ElseIf key Is GetType(Group) Then
-                Return Function(g) any.ToString(DirectCast(g, Group).key)
-            Else
-                Return Function() Nothing
-            End If
-        End Function
-
-        Private Function indexName(i As SeqValue(Of Object)) As [Variant](Of String, Message)
-            Dim name As String = Nothing
-
-            If Not i.value Is Nothing Then
-                name = keyNameAuto(i.value.GetType)(i.value)
-            End If
-
-            If name Is Nothing Then
-                name = $"[[{i.i + 1}]]"
-            End If
-
-            Return name
-        End Function
-
-        Private Class funcEvalKey
-
-            ReadOnly func As RFunction
-            ReadOnly env As Environment
-
-            Sub New(func As RFunction, env As Environment)
-                Me.env = env
-                Me.func = func
-            End Sub
-
-            Public Function GetName(i As SeqValue(Of Object)) As [Variant](Of String, Message)
-                Dim nameVals = func.Invoke(env, invokeArgument(i.value))
-                Dim namesVec As Object
-
-                If TypeOf nameVals Is Message Then
-                    Return DirectCast(nameVals, Message)
-                Else
-                    namesVec = RConversion.asCharacters(nameVals)
-                End If
-
-                Return CStr(getFirst(namesVec))
-            End Function
-        End Class
-
-        Public Function keyNameAuto(names As Object, env As Environment) As Func(Of SeqValue(Of Object), [Variant](Of String, Message))
-            If names Is Nothing Then
-                Return AddressOf indexName
-            ElseIf names.GetType.ImplementInterface(Of RFunction) Then
-                Dim func As RFunction = DirectCast(names, RFunction)
-                Dim eval As New funcEvalKey(func, env)
-
-                Return AddressOf eval.GetName
-            Else
-                Dim vec As String() = CLRVector.asCharacter(names)
-
-                Return Function(i)
-                           Return vec(i)
-                       End Function
             End If
         End Function
     End Module
