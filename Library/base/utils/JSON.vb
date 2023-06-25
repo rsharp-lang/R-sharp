@@ -1,56 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::d94866907aacf0e3bf29f8101d1b87a4, F:/GCModeller/src/R-sharp/Library/base//utils/JSON.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 273
-    '    Code Lines: 166
-    ' Comment Lines: 79
-    '   Blank Lines: 28
-    '     File Size: 10.71 KB
+' Summaries:
 
 
-    ' Module JSON
-    ' 
-    '     Function: buildObject, fromJSON, json_decode, json_encode, parseBSON
-    '               unescape, writeBSON
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 273
+'    Code Lines: 166
+' Comment Lines: 79
+'   Blank Lines: 28
+'     File Size: 10.71 KB
+
+
+' Module JSON
+' 
+'     Function: buildObject, fromJSON, json_decode, json_encode, parseBSON
+'               unescape, writeBSON
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
@@ -121,17 +122,17 @@ Module JSON
         Dim schema As Type = env.globalEnvironment.GetType([typeof])
 
         If env.globalEnvironment.debugMode Then
-            If Schema Is Nothing Then
+            If schema Is Nothing Then
                 Return fromJSON(str, raw:=False, env:=env)
             Else
-                Return str.LoadObject(Schema)
+                Return str.LoadObject(schema)
             End If
         Else
             Try
-                If Schema Is Nothing Then
+                If schema Is Nothing Then
                     Return fromJSON(str, raw:=False, env:=env)
                 Else
-                    Return str.LoadObject(Schema)
+                    Return str.LoadObject(schema)
                 End If
             Catch ex As Exception When throwEx
                 Return Internal.debug.stop(ex, env)
@@ -179,20 +180,7 @@ Module JSON
                              Optional env As Environment = Nothing) As Object
 
         If TypeOf str Is String Then
-            Dim rawElement As JsonElement = New JsonParser().OpenJSON(str)
-
-            If raw Then
-                Return rawElement
-            ElseIf rawElement Is Nothing Then
-                If env.globalEnvironment.options.strict Then
-                    Return Internal.debug.stop("invalid format of the input json string!", env)
-                Else
-                    env.AddMessage("invalid format of the input json string!", MSG_TYPES.WRN)
-                    Return Nothing
-                End If
-            Else
-                Return rawElement.createRObj(env)
-            End If
+            Return CStr(str).parseJSONinternal(raw, env)
         ElseIf TypeOf str Is JsonElement Then
             If raw Then
                 Return str
@@ -201,6 +189,38 @@ Module JSON
             End If
         Else
             Return Message.InCompatibleType(GetType(String), str.GetType, env)
+        End If
+    End Function
+
+    ''' <summary>
+    ''' implements for parse the json string in this function
+    ''' </summary>
+    ''' <param name="str"></param>
+    ''' <param name="raw"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <Extension>
+    Private Function parseJSONinternal(str As String, raw As Boolean, env As Environment) As Object
+        Dim rawElement As JsonElement
+
+        If CStr(str).TextEquals("null") Then
+            env.AddMessage("the given input json string is literal of 'null'.")
+            Return Nothing
+        Else
+            rawElement = New JsonParser().OpenJSON(str)
+        End If
+
+        If raw Then
+            Return rawElement
+        ElseIf rawElement Is Nothing Then
+            If env.globalEnvironment.options.strict Then
+                Return Internal.debug.stop("invalid format of the input json string!", env)
+            Else
+                env.AddMessage("invalid format of the input json string!", MSG_TYPES.WRN)
+                Return Nothing
+            End If
+        Else
+            Return rawElement.createRObj(env)
         End If
     End Function
 
