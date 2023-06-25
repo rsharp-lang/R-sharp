@@ -52,6 +52,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -416,6 +417,12 @@ Namespace Runtime.Internal.Invokes
             Dim keyName As [Variant](Of String, Message)
             Dim list As New Dictionary(Of String, Object)
             Dim idx As i32 = 1
+            Dim asmFile As String = GetType(applys).Assembly.FullName
+            Dim methodTrace As New Method With {
+                .Method = NameOf(lapplyGeneralIDictionary),
+                .[Module] = NameOf(applys),
+                .[Namespace] = "Rsharp_clr_interop"
+            }
 
             For Each d As Object In dict.Keys
                 value = dict(d)
@@ -426,6 +433,7 @@ Namespace Runtime.Internal.Invokes
                 If Not hasName Then
                     keyName = any.ToString(d)
                 Else
+                    ' use the index key name from the user parameter
                     keyName = getName(New SeqValue(Of Object)(++i, value))
 
                     If keyName Like GetType(Message) Then
@@ -433,6 +441,7 @@ Namespace Runtime.Internal.Invokes
                     End If
                 End If
 
+                env.setStackInfo(New StackFrame With {.File = asmFile, .Line = keyName, .Method = methodTrace})
                 value = apply.Invoke(env, invokeArgument(value, ++idx))
 
                 If TypeOf value Is ReturnValue Then
@@ -589,11 +598,14 @@ Namespace Runtime.Internal.Invokes
             If Not TypeOf check Is Boolean Then
                 Return check
             ElseIf X.GetType Is GetType(list) Then
+                ' digest the R# tuple list to .net clr dictionary
                 X = DirectCast(X, list).slots
             End If
 
             Dim apply As RFunction = FUN
             Dim getName As Func(Of SeqValue(Of Object), [Variant](Of String, Message)) = keyNameAuto(names, envir)
+
+            envir = New Environment(envir, "lapply_internal_loop", isInherits:=True)
 
             If X.GetType.ImplementInterface(Of IDictionary) Then
                 Return DirectCast(X, IDictionary).lapplyGeneralIDictionary(
