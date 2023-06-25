@@ -72,6 +72,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
 
 Namespace Runtime.Internal.Invokes
 
@@ -649,6 +650,22 @@ Namespace Runtime.Internal.Invokes
                 Return Function(a) DirectCast(a, IKeyedEntity(Of String)).Key
             ElseIf key Is GetType(Group) Then
                 Return Function(g) any.ToString(DirectCast(g, Group).key)
+            ElseIf key Is GetType(KeyValuePair(Of String, Object)) Then
+                Return Function(t) DirectCast(t, KeyValuePair(Of String, Object)).Key
+            ElseIf key.Name = "KeyValuePair" AndAlso key.GetGenericArguments.FirstOrDefault Is GetType(String) Then
+                Dim getKey = key.GetProperties(PublicProperty) _
+                    .Where(Function(p) p.Name = NameOf(KeyValuePair(Of String, Object).Key)) _
+                    .FirstOrDefault
+
+                ' value could be direct cast to string
+                Return Function(o) CStr(getKey.GetValue(o))
+            ElseIf key.Name = "KeyValuePair" Then
+                Dim getKey = key.GetProperties(PublicProperty) _
+                   .Where(Function(p) p.Name = NameOf(KeyValuePair(Of String, Object).Key)) _
+                   .FirstOrDefault
+
+                ' value should be do type cast to string
+                Return Function(o) any.ToString(getKey.GetValue(o))
             Else
                 Return Function() Nothing
             End If
