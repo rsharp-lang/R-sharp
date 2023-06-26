@@ -16,8 +16,8 @@ pack |> writeText("/smaller_than_large.txt", "afhakjdgaskdhasjkdhaskjdaskdghasdh
 # write a ultra large text file
 pack |> writeText("/large.txt", `number lines at here: ${1:10000}`);
 # 1 and 2 text file should be write in the original region of the large.txt
-pack |> writeText("/1.txt","aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-pack |> writeText("/2.txt","bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+pack |> writeText("/1.txt",">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<");
+pack |> writeText("/2.txt",">bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb<");
 pack |> writeText("/larger.txt", `at line: ${1:100}`);
 
 # check file contents

@@ -302,7 +302,7 @@ Module HDSutils
     Public Function writeText(pack As StreamPack, fileName As String,
                               <RRawVectorArgument>
                               text As Object) As Boolean
-
+        pack.Delete(fileName)
         Return pack.WriteText(CLRVector.asCharacter(text), fileName)
     End Function
 
@@ -315,6 +315,8 @@ Module HDSutils
     ''' <returns></returns>
     <ExportAPI("saveFile")>
     Public Function saveFile(hds As StreamPack, fileName As String, data As Object)
+        Call hds.Delete(fileName)
+
         Using buf As Stream = hds.OpenBlock(fileName)
             Dim write As Byte() = {}
 
