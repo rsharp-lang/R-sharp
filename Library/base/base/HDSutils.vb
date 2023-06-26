@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 ''' <summary>
 ''' HDS stream pack toolkit
@@ -274,15 +275,19 @@ Module HDSutils
             Return Nothing
         Else
             Using buffer As Stream = pack.OpenBlock(file),
-                read As New StreamReader(buffer, encoding:=encoding)
+                read As New StreamReader(buffer, encoding:=encoder)
 
                 Return read.ReadToEnd
             End Using
         End If
     End Function
 
-    Public Function writeText()
+    <ExportAPI("writeText")>
+    Public Function writeText(pack As StreamPack, fileName As String,
+                              <RRawVectorArgument>
+                              text As Object) As Boolean
 
+        Return pack.WriteText(CLRVector.asCharacter(text), fileName)
     End Function
 
     ''' <summary>
