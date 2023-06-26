@@ -58,12 +58,14 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.DataStorage.HDSPack
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports Directory = Microsoft.VisualBasic.FileIO.Directory
 
 ''' <summary>
 ''' HDS stream pack toolkit
@@ -96,10 +98,24 @@ Module HDSutils
     ''' <param name="fs"></param>
     ''' <returns></returns>
     <ExportAPI("extract_files")>
-    Public Function ExtractFiles(pack As StreamPack, fs As IFileSystemEnvironment) As Object
+    Public Function ExtractFiles(pack As StreamPack, fs As Object, Optional env As Environment = Nothing) As Object
+        Dim dir As IFileSystemEnvironment = Nothing
+
+        If fs Is Nothing Then
+            Return Internal.debug.stop("the required target filesystem reference could not be nothing!", env)
+        End If
+        If TypeOf fs Is String Then
+            ' should be a dir path
+            dir = New Directory(CStr(fs))
+        ElseIf fs.GetType.ImplementInterface(Of IFileSystemEnvironment) Then
+            dir = DirectCast(fs, IFileSystemEnvironment)
+        Else
+            Return Message.InCompatibleType(GetType(IFileSystemEnvironment), fs.GetType, env)
+        End If
+
         For Each file As StreamBlock In pack.files
             Dim data = pack.OpenBlock(file)
-            Dim newfile = fs.OpenFile(file.referencePath.ToString, FileMode.OpenOrCreate, FileAccess.Write)
+            Dim newfile = dir.OpenFile(file.referencePath.ToString, FileMode.OpenOrCreate, FileAccess.Write)
 
             Call data.CopyTo(newfile)
             Call newfile.Flush()
