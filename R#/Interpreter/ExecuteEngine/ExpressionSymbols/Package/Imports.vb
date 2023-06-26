@@ -117,7 +117,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
         Public Overrides ReadOnly Property expressionName As ExpressionTypes
             Get
-                Return ExpressionTypes.Require
+                Return ExpressionTypes.Imports
             End Get
         End Property
 
@@ -148,7 +148,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         ''' </summary>
         ''' <param name="packages"></param>
         ''' <param name="library"></param>
-        ''' <param name="source$"></param>
+        ''' <param name="source">The file path of the source R# script file</param>
         Sub New(packages As Expression, library As Expression, Optional source$ = Nothing)
             Me.packages = packages
             Me.library = library

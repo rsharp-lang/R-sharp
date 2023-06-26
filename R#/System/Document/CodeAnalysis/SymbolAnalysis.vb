@@ -1,68 +1,69 @@
 ﻿#Region "Microsoft.VisualBasic::371515d756529428d2f37ef32230de74, F:/GCModeller/src/R-sharp/R#//System/Document/CodeAnalysis/SymbolAnalysis.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 303
-    '    Code Lines: 241
-    ' Comment Lines: 9
-    '   Blank Lines: 53
-    '     File Size: 13.28 KB
+' Summaries:
 
 
-    '     Class SymbolAnalysis
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    ' 
-    '         Function: GetNameEnums, GetSymbolReferenceList, SymbolAccess, ToString
-    ' 
-    '         Sub: GetSymbolReferenceList, (+17 Overloads) GetSymbols, Push
-    '         Class Context
-    ' 
-    '             Constructor: (+2 Overloads) Sub New
-    ' 
-    '             Function: ToString
-    ' 
-    '             Sub: Create, (+2 Overloads) Push
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 303
+'    Code Lines: 241
+' Comment Lines: 9
+'   Blank Lines: 53
+'     File Size: 13.28 KB
+
+
+'     Class SymbolAnalysis
+' 
+'         Constructor: (+2 Overloads) Sub New
+' 
+'         Function: GetNameEnums, GetSymbolReferenceList, SymbolAccess, ToString
+' 
+'         Sub: GetSymbolReferenceList, (+17 Overloads) GetSymbols, Push
+'         Class Context
+' 
+'             Constructor: (+2 Overloads) Sub New
+' 
+'             Function: ToString
+' 
+'             Sub: Create, (+2 Overloads) Push
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
@@ -163,10 +164,36 @@ Namespace Development.CodeAnalysis
                 Case GetType(SequenceLiteral) : GetSymbols(DirectCast(code, SequenceLiteral), context)
                 Case GetType(VectorLiteral) : GetSymbols(DirectCast(code, VectorLiteral), context)
                 Case GetType([Imports]) : GetSymbols(DirectCast(code, [Imports]), context)
+                Case GetType(DeclareLambdaFunction) : GetSymbols(DirectCast(code, DeclareLambdaFunction), context)
 
                 Case Else
                     Throw New NotImplementedException(code.GetType.FullName)
             End Select
+        End Sub
+
+        Private Shared Sub GetSymbols(code As DeclareLambdaFunction, context As Context)
+            ' 20230626 the function parameter is not a symbol that comsume
+            ' from the outside environment
+            '
+            ' For Each name As String In code.parameterNames
+            '    Call context.Push(name, PropertyAccess.Readable)
+            ' Next
+            Dim par As Index(Of String) = code.parameterNames.Indexing
+            Dim ref As New List(Of NamedValue(Of PropertyAccess))
+            Dim context2 As New Context With {
+                .context = New SymbolAnalysis("fetch_lambda"),
+                .ref = ref
+            }
+
+            ' just handling of the lambda closure body
+            Call GetSymbolReferenceList(code.closure, context2)
+
+            ' filter out of the lambda parameter name reference
+            For Each symbol As NamedValue(Of PropertyAccess) In context2.ref
+                If Not symbol.Name Like par Then
+                    Call context.Push(symbol.Name, symbol.Value)
+                End If
+            Next
         End Sub
 
         Private Shared Sub GetSymbols(code As [Imports], context As Context)

@@ -52,7 +52,6 @@
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
-Imports System.Threading
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq

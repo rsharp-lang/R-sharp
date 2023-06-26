@@ -95,7 +95,11 @@ Namespace Development.Package.File
         ''' </summary>
         LinqQuery = 40
 
+        ''' <summary>
+        ''' expression for require load package 
+        ''' </summary>
         Require = 50
+        [Imports] = 51
 
         Constructor = 60
         VectorLoop

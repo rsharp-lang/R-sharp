@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::8a6319e87d30f36834fcfe1e86314d3f, F:/GCModeller/src/R-sharp/Library/base//base/HDSutils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 204
-    '    Code Lines: 157
-    ' Comment Lines: 12
-    '   Blank Lines: 35
-    '     File Size: 7.36 KB
+' Summaries:
 
 
-    ' Module HDSutils
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: createStream, DiskDefragmentation, ExtractFiles, getData, listFiles
-    '               openStream, readText, saveFile, Tree
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 204
+'    Code Lines: 157
+' Comment Lines: 12
+'   Blank Lines: 35
+'     File Size: 7.36 KB
+
+
+' Module HDSutils
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: createStream, DiskDefragmentation, ExtractFiles, getData, listFiles
+'               openStream, readText, saveFile, Tree
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -58,11 +58,14 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.DataStorage.HDSPack
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports Directory = Microsoft.VisualBasic.FileIO.Directory
 
 ''' <summary>
 ''' HDS stream pack toolkit
@@ -95,10 +98,24 @@ Module HDSutils
     ''' <param name="fs"></param>
     ''' <returns></returns>
     <ExportAPI("extract_files")>
-    Public Function ExtractFiles(pack As StreamPack, fs As IFileSystemEnvironment) As Object
+    Public Function ExtractFiles(pack As StreamPack, fs As Object, Optional env As Environment = Nothing) As Object
+        Dim dir As IFileSystemEnvironment = Nothing
+
+        If fs Is Nothing Then
+            Return Internal.debug.stop("the required target filesystem reference could not be nothing!", env)
+        End If
+        If TypeOf fs Is String Then
+            ' should be a dir path
+            dir = New Directory(CStr(fs))
+        ElseIf fs.GetType.ImplementInterface(Of IFileSystemEnvironment) Then
+            dir = DirectCast(fs, IFileSystemEnvironment)
+        Else
+            Return Message.InCompatibleType(GetType(IFileSystemEnvironment), fs.GetType, env)
+        End If
+
         For Each file As StreamBlock In pack.files
             Dim data = pack.OpenBlock(file)
-            Dim newfile = fs.OpenFile(file.referencePath.ToString, FileMode.OpenOrCreate, FileAccess.Write)
+            Dim newfile = dir.OpenFile(file.referencePath.ToString, FileMode.OpenOrCreate, FileAccess.Write)
 
             Call data.CopyTo(newfile)
             Call newfile.Flush()
@@ -263,18 +280,30 @@ Module HDSutils
     ''' <param name="fileName"></param>
     ''' <returns></returns>
     <ExportAPI("getText")>
-    Public Function readText(pack As StreamPack, fileName As String) As String
+    Public Function readText(pack As StreamPack, fileName As String,
+                             Optional encoding As Object = "utf8",
+                             Optional env As Environment = Nothing) As String
+
         Dim file As StreamBlock = pack.GetObject(fileName)
+        Dim encoder = SMRUCC.Rsharp.GetEncoding(encoding)
 
         If file Is Nothing Then
             Return Nothing
         Else
             Using buffer As Stream = pack.OpenBlock(file),
-                read As New StreamReader(buffer)
+                read As New StreamReader(buffer, encoding:=encoder)
 
                 Return read.ReadToEnd
             End Using
         End If
+    End Function
+
+    <ExportAPI("writeText")>
+    Public Function writeText(pack As StreamPack, fileName As String,
+                              <RRawVectorArgument>
+                              text As Object) As Boolean
+        pack.Delete(fileName)
+        Return pack.WriteText(CLRVector.asCharacter(text), fileName)
     End Function
 
     ''' <summary>
@@ -286,6 +315,8 @@ Module HDSutils
     ''' <returns></returns>
     <ExportAPI("saveFile")>
     Public Function saveFile(hds As StreamPack, fileName As String, data As Object)
+        Call hds.Delete(fileName)
+
         Using buf As Stream = hds.OpenBlock(fileName)
             Dim write As Byte() = {}
 
