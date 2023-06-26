@@ -361,7 +361,7 @@ Namespace Runtime.Interop
                         If Program.isException(value) Then
                             Return value
                         Else
-                            parameters.Add(value)
+                            Call parameters.Add(value)
                         End If
                     Next
                 End If

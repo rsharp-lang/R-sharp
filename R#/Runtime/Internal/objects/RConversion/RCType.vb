@@ -74,6 +74,8 @@ Namespace Runtime.Internal.Object.Converts
 
         Shared Sub New()
             Call interfaceCast.AddCType(GetType(ISequenceData(Of Char, String)), GetType(String), Function(seq) DirectCast(seq, ISequenceData(Of Char, String)).SequenceData)
+            ' get script file path from the symbol object
+            Call typeCast.AddCType(GetType(MagicScriptSymbol), GetType(String), Function(script) DirectCast(script, MagicScriptSymbol).fullName)
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -114,6 +116,8 @@ Namespace Runtime.Internal.Object.Converts
                 Return Nothing
             ElseIf type Is GetType(vbObject) Then
                 Return asObject(obj)
+            ElseIf obj.GetType Is GetType(vbObject) Then
+                obj = DirectCast(obj, vbObject).target
             End If
 RE0:
             Dim objType As Type = obj.GetType
@@ -145,13 +149,7 @@ RE0:
                 Return any.ToString([single](obj)).ParseBoolean
             End If
 
-            If objType Is GetType(vbObject) AndAlso Not type Is GetType(Object) Then
-                obj = DirectCast(obj, vbObject).target
-
-                If Not obj Is Nothing AndAlso obj.GetType Is type Then
-                    Return obj
-                End If
-            ElseIf objType Is GetType(RDispose) AndAlso Not type Is GetType(Object) Then
+            If objType Is GetType(RDispose) AndAlso Not type Is GetType(Object) Then
                 obj = DirectCast(obj, RDispose).Value
 
                 If Not obj Is Nothing AndAlso obj.GetType Is type Then
