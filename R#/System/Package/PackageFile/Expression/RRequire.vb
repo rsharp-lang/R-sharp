@@ -74,7 +74,40 @@ Namespace Development.Package.File.Expressions
         End Sub
 
         Public Overrides Sub WriteBuffer(ms As MemoryStream, x As Expression)
-            Call WriteBuffer(ms, DirectCast(x, Require))
+            If TypeOf x Is Require Then
+                Call WriteBuffer(ms, DirectCast(x, Require))
+            Else
+                Call WriteBuffer(ms, DirectCast(x, [Imports]))
+            End If
+        End Sub
+
+        Public Overloads Sub WriteBuffer(ms As MemoryStream, x As [Imports])
+            Using outfile As New BinaryWriter(ms)
+                Call outfile.Write(CInt(ExpressionTypes.Imports))
+                Call outfile.Write(0)
+                Call outfile.Write(CByte(x.type))
+
+                If x.library Is Nothing Then
+                    Call outfile.Write(0)
+                Else
+                    Dim buf = context.GetBuffer(x.library)
+
+                    Call outfile.Write(buf.Length)
+                    Call outfile.Write(buf)
+                End If
+
+                If x.packages Is Nothing Then
+                    Call outfile.Write(0)
+                Else
+                    Dim buf = context.GetBuffer(x.packages)
+
+                    Call outfile.Write(buf.Length)
+                    Call outfile.Write(buf)
+                End If
+
+                Call outfile.Flush()
+                Call saveSize(outfile)
+            End Using
         End Sub
 
         Public Overloads Sub WriteBuffer(ms As MemoryStream, x As Require)
@@ -83,6 +116,9 @@ Namespace Development.Package.File.Expressions
                 Call outfile.Write(0)
                 Call outfile.Write(CByte(x.type))
 
+                ' get count of the package names
+                ' package count should be less than 
+                ' 256
                 Call outfile.Write(CByte(x.packages.Length))
 
                 For Each pkgName As String In x.packages.Select(AddressOf ValueAssignExpression.GetSymbol)
@@ -96,13 +132,35 @@ Namespace Development.Package.File.Expressions
         End Sub
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
-            Dim packageNames As String() = buffer.ToArray _
-                .Skip(1) _
-                .Split(Function(b) b = 0, DelimiterLocation.NotIncludes) _
-                .Select(AddressOf Encoding.ASCII.GetString) _
-                .ToArray
+            If raw.expression = ExpressionTypes.Require Then
+                Dim packageNames As String() = buffer.ToArray _
+                    .Skip(1) _
+                    .Split(Function(b) b = 0, DelimiterLocation.NotIncludes) _
+                    .Select(AddressOf Encoding.ASCII.GetString) _
+                    .ToArray
 
-            Return New Require(packageNames)
+                Return New Require(packageNames)
+            Else
+                Using bin As New BinaryReader(buffer)
+                    Dim byte_size As Integer
+                    Dim [lib] As Expression = Nothing
+                    Dim [pkg] As Expression = Nothing
+
+                    byte_size = bin.ReadInt32
+
+                    If byte_size > 0 Then
+                        [lib] = BlockReader.ParseBlock(bin).Parse(desc)
+                    End If
+
+                    byte_size = bin.ReadInt32
+
+                    If byte_size > 0 Then
+                        pkg = BlockReader.ParseBlock(bin).Parse(desc)
+                    End If
+
+                    Return New [Imports](pkg, [lib])
+                End Using
+            End If
         End Function
     End Class
 End Namespace
