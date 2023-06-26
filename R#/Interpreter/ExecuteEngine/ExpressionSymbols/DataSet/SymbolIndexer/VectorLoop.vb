@@ -179,8 +179,17 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     vec(i) = DirectCast(source(i), list).getByName(memberName)
                 ElseIf TypeOf item Is dataframe Then
                     vec(i) = DirectCast(item, dataframe).getColumnVector(memberName)
+                ElseIf TypeOf item Is String AndAlso item = "" Then
+                    ' is json parser result
+                    ' null literal will be convert to empty string automatically?
+                    vec(i) = Nothing
                 Else
-                    Return Message.InCompatibleType(GetType(list), item.GetType, envir)
+                    Return Message.InCompatibleType(
+                        GetType(list),
+                        item.GetType,
+                        envir,
+                        "invalid data type while get item slot data from a collection set in vector internal loop!"
+                    )
                 End If
             Next
 

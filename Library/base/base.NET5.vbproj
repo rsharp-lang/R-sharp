@@ -10,6 +10,13 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Title>R# language internal base package</Title>
+    <Version>6.0.0.3654</Version>
+    <Authors>xie.guigang@gcmodeller.org</Authors>
+    <Company>SMRUCC genomics</Company>
+    <Product>R# language</Product>
+    <Description>R# language internal base package, includes build-in functions for handling basic data file formats</Description>
+    <PackageTags>netcdf;hdf5;json;xlsx;csv;txt;r-sharp</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
