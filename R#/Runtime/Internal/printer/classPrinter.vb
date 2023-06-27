@@ -77,6 +77,14 @@ Namespace Runtime.Internal.ConsolePrinter
         ''' All of the sub program will be mapping as returns nothing
         ''' </remarks>
         Public Function printClass(obj As Object) As String
+            If obj Is Nothing Then
+                Return "NULL"
+            Else
+                Return printClassImplInternal(obj)
+            End If
+        End Function
+
+        Private Function printClassImplInternal(obj As Object) As String
             Dim type As Type = obj.GetType
             Dim properties As PropertyInfo() = type.getObjProperties.ToArray
             Dim methods As MethodInfo() = type.getObjMethods.ToArray
