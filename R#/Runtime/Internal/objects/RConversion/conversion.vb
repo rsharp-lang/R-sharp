@@ -495,7 +495,7 @@ RE0:
                 End If
             Next
 
-            Return pullNames.ToArray
+            Return pullNames.Distinct.ToArray
         End Function
 
         ''' <summary>
@@ -575,6 +575,16 @@ RE0:
             Return table
         End Function
 
+        Private Function checkList(o As Object) As Boolean
+            If o Is Nothing OrElse TypeOf o Is list Then
+                Return True
+            ElseIf TypeOf o Is String AndAlso CStr(o) = "" Then
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
         ''' <summary>
         ''' cast column list to dataframe
         ''' </summary>
@@ -585,7 +595,7 @@ RE0:
         Private Function castListToDataframe(listData As Dictionary(Of String, Object), env As Environment) As Object
             Dim hasNames As Boolean = TypeOf listData.First.Value Is list
             Dim allNames As String() = Nothing
-            Dim isListMatrix = listData.Values.All(Function(o) TypeOf o Is list)
+            Dim isListMatrix = listData.Values.All(AddressOf checkList)
             ' all of the element key name is integer
             ' or integer index key name
             Dim t As Boolean = listData.Keys.All(Function(k) k.IsPattern("\d+") OrElse k.IsPattern("\[+\d+\]+"))
