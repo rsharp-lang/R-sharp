@@ -496,7 +496,16 @@ RE0:
             If hasNames Then
                 allNames = listData _
                     .Select(Function(d)
-                                Return DirectCast(d.Value, list).getNames
+                                ' 20230626 the empty string generated from the
+                                ' json decode of the null literal
+                                If d.Value Is Nothing Then
+                                    Return Nothing
+                                End If
+                                If TypeOf d.Value Is String AndAlso CStr(d.Value) = "" Then
+                                    Return Nothing
+                                Else
+                                    Return DirectCast(d.Value, list).getNames
+                                End If
                             End Function) _
                     .IteratesALL _
                     .Distinct _
