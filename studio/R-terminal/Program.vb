@@ -126,6 +126,13 @@ Module Program
     Private Function RunExpression(args As CommandLine) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Dim [error] As String = Nothing
+
+        If args.Name.isFilePath(includeWindowsFs:=True) AndAlso (args.Name.Contains("/"c) OrElse args.Name.Contains("\"c)) Then
+            ' is file path but the file is missing
+            Call Rscript.handleResult(Message.Error($"The given script file '{args.Name}' is missing on your file system!", R.globalEnvir.stackFrame), R.globalEnvir)
+            Return 404
+        End If
+
         Dim program As RProgram = RProgram.BuildProgram(args.cli, [error]:=[error])
         Dim result As Object
 
