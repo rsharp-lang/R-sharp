@@ -219,16 +219,36 @@ Namespace Runtime.Internal.Object
             columns = New Dictionary(Of String, Array)(clone.columns)
         End Sub
 
+        ''' <summary>
+        ''' add or replace a column vector
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="key"></param>
+        ''' <param name="value"></param>
+        ''' <returns></returns>
         Public Function add(Of T)(key As String, value As T()) As dataframe
             columns(key) = value
             Return Me
         End Function
 
+        ''' <summary>
+        ''' add or replace a column vector
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="key"></param>
+        ''' <param name="value"></param>
+        ''' <returns></returns>
         Public Function add(Of T)(key As String, value As IEnumerable(Of T)) As dataframe
             columns(key) = value.ToArray
             Return Me
         End Function
 
+        ''' <summary>
+        ''' add or replace a column vector
+        ''' </summary>
+        ''' <param name="key"></param>
+        ''' <param name="value"></param>
+        ''' <returns></returns>
         Public Function add(key As String, value As Array) As dataframe
             columns(key) = value
             Return Me

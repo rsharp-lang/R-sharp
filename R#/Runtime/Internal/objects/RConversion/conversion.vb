@@ -510,17 +510,27 @@ RE0:
             Dim table As New dataframe With {
                 .columns = New Dictionary(Of String, Array)
             }
-            Dim row As list
+            Dim row As Func(Of String, Object)
 
             For Each name As String In allNames
                 table.add(name, Array.CreateInstance(GetType(Object), rows.Length))
             Next
 
             For i As Integer = 0 To rows.Length - 1
-                row = rows(i).Value
+                Dim rowObj = rows(i).Value
 
-                For Each name As String In row.getNames
-                    table.columns(name).SetValue(row.getByName(name), i)
+                If rowObj Is Nothing Then
+                    row = Function() Nothing
+                ElseIf TypeOf rowObj Is String AndAlso CStr(rowObj) = "" Then
+                    row = Function() Nothing
+                Else
+                    With DirectCast(rowObj, list)
+                        row = Function(name) .getByName(name)
+                    End With
+                End If
+
+                For Each name As String In allNames
+                    table.columns(name).SetValue(row(name), i)
                 Next
             Next
 
