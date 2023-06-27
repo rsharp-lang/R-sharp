@@ -544,11 +544,23 @@ RE0:
 
             For Each field As String In listData.Keys
                 Dim raw As Object = listData(field)
+                Dim isNull As Boolean = raw Is Nothing
                 Dim v As Array
+
+                ' json decode of the null literal will be empty string?
+                If Not isNull AndAlso TypeOf raw Is String AndAlso CStr(raw) = "" Then
+                    isNull = True
+                End If
 
                 If hasNames Then
                     v = allnames _
-                        .Select(Function(d) DirectCast(raw, list)(d)) _
+                        .Select(Function(d)
+                                    If isNull Then
+                                        Return Nothing
+                                    Else
+                                        Return DirectCast(raw, list)(d)
+                                    End If
+                                End Function) _
                         .ToArray
                     v = REnv.TryCastGenericArray(v, env)
                 Else
