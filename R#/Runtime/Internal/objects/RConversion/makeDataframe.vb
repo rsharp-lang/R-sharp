@@ -1,62 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::c067f95478281af3762d0cfa544f861b, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/makeDataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 313
-    '    Code Lines: 226
-    ' Comment Lines: 41
-    '   Blank Lines: 46
-    '     File Size: 12.62 KB
+' Summaries:
 
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Module makeDataframe
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: castMultipleColumnsToDataframe, castSingleToDataframe, CheckDimension, createColumnVector, createDataframe
-    '                   fromList, is_ableConverts, PopulateDataSet, (+2 Overloads) RDataframe, TracebackDataFrmae
-    '                   tryTypeLineage
-    ' 
-    '         Sub: [addHandler]
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 313
+'    Code Lines: 226
+' Comment Lines: 41
+'   Blank Lines: 46
+'     File Size: 12.62 KB
+
+
+'     Delegate Function
+' 
+' 
+'     Module makeDataframe
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: castMultipleColumnsToDataframe, castSingleToDataframe, CheckDimension, createColumnVector, createDataframe
+'                   fromList, is_ableConverts, PopulateDataSet, (+2 Overloads) RDataframe, TracebackDataFrmae
+'                   tryTypeLineage
+' 
+'         Sub: [addHandler]
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -209,35 +209,61 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         <Extension>
-        Public Function RDataframe(Of T As {INamedValue, DynamicPropertyBase(Of String)})(rows As IEnumerable(Of T)) As dataframe
-            Dim columns As New Dictionary(Of String, List(Of String))
+        Public Function RMatrix(Of T As {INamedValue, DynamicPropertyBase(Of Double)})(rows As IEnumerable(Of T)) As dataframe
             Dim all As T() = rows.ToArray
-            Dim allProps As String() = all _
-                .Select(Function(t1) t1.Properties.Keys) _
+            Dim rownames As String() = Nothing
+            Dim columns = all.pullColumns(rownames) _
+                .ToDictionary(Function(c) c.Key,
+                              Function(c)
+                                  Return DirectCast(CLRVector.asNumeric(c.Value.ToArray), Array)
+                              End Function)
+
+            Return New dataframe With {
+                .columns = columns,
+                .rownames = rownames
+            }
+        End Function
+
+        <Extension>
+        Private Function pullColumns(Of T As {INamedValue, IDynamicsObject})(allrows As T(), ByRef rownames As String()) As Dictionary(Of String, List(Of Object))
+            Dim columns As New Dictionary(Of String, List(Of Object))
+            Dim allProps As String() = allrows _
+                .Select(Function(t1) t1.GetNames) _
                 .IteratesALL _
                 .Distinct _
                 .ToArray
             Dim names As New List(Of String)
 
             For Each name As String In allProps
-                columns.Add(name, New List(Of String))
+                Call columns.Add(name, New List(Of Object))
             Next
 
-            For Each row As T In all
+            For Each row As T In allrows
                 For Each name As String In allProps
-                    Call columns(name).Add(row(name))
+                    Call columns(name).Add(row.GetItemValue(name))
                 Next
 
                 Call names.Add(row.Key)
             Next
 
+            rownames = names.ToArray
+
+            Return columns
+        End Function
+
+        <Extension>
+        Public Function RDataframe(Of T As {INamedValue, DynamicPropertyBase(Of String)})(rows As IEnumerable(Of T)) As dataframe
+            Dim all As T() = rows.ToArray
+            Dim rownames As String() = Nothing
+            Dim columns = all.pullColumns(rownames) _
+                .ToDictionary(Function(c) c.Key,
+                              Function(c)
+                                  Return DirectCast(CLRVector.asCharacter(c.Value.ToArray), Array)
+                              End Function)
+
             Return New dataframe With {
-                .columns = columns _
-                    .ToDictionary(Function(c) c.Key,
-                                  Function(c)
-                                      Return DirectCast(c.Value.ToArray, Array)
-                                  End Function),
-                .rownames = names.ToArray
+                .columns = columns,
+                .rownames = rownames
             }
         End Function
 
