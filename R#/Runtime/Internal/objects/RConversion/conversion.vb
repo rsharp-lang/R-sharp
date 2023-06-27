@@ -477,6 +477,92 @@ RE0:
             Return table
         End Function
 
+        Private Function checkNames(listData As Dictionary(Of String, Object), env As Environment) As [Variant](Of Message, String())
+            Dim pullNames As New List(Of String)
+
+            For Each d In listData
+                ' 20230626 the empty string generated from the
+                ' json decode of the null literal
+                If d.Value Is Nothing Then
+                    Continue For
+                End If
+                If TypeOf d.Value Is String AndAlso CStr(d.Value) = "" Then
+                    Continue For
+                ElseIf Not TypeOf d.Value Is list Then
+                    Return Message.InCompatibleType(GetType(list), d.Value.GetType, env, $"required of data tuple list by given {d.Value.GetType.FullName} at row with key '{d.Key}'!")
+                Else
+                    pullNames.AddRange(DirectCast(d.Value, list).getNames)
+                End If
+            Next
+
+            Return pullNames.ToArray
+        End Function
+
+        ''' <summary>
+        ''' each item in listdata is a row?
+        ''' </summary>
+        ''' <param name="rows"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' 
+        <Extension>
+        Private Function castListMatrix(rows As KeyValuePair(Of String, Object)(), allNames As String(), env As Environment) As Object
+            Dim table As New dataframe With {
+                .columns = New Dictionary(Of String, Array)
+            }
+            Dim row As list
+
+            For Each name As String In allNames
+                table.add(name, Array.CreateInstance(GetType(Object), rows.Length))
+            Next
+
+            For i As Integer = 0 To rows.Length - 1
+                row = rows(i).Value
+
+                For Each name As String In row.getNames
+                    table.columns(name).SetValue(row.getByName(name), i)
+                Next
+            Next
+
+            For Each name As String In allNames
+                table.columns(name) = REnv.TryCastGenericArray(table.columns(name), env)
+            Next
+
+            Return table
+        End Function
+
+        <Extension>
+        Private Function castListRows(listData As Dictionary(Of String, Object),
+                                      hasNames As Boolean,
+                                      allnames As String(),
+                                      env As Environment) As Object
+
+            Dim table As New dataframe With {
+                .columns = New Dictionary(Of String, Array),
+                .rownames = allnames
+            }
+
+            For Each field As String In listData.Keys
+                Dim raw As Object = listData(field)
+                Dim v As Array
+
+                If hasNames Then
+                    v = allnames _
+                        .Select(Function(d) DirectCast(raw, list)(d)) _
+                        .ToArray
+                    v = REnv.TryCastGenericArray(v, env)
+                Else
+#Disable Warning
+                    v = REnv.TryCastGenericArray(REnv.asVector(Of Object)(raw), env)
+#Enable Warning
+                End If
+
+                Call table.add(field, v)
+            Next
+
+            Return table
+        End Function
+
         ''' <summary>
         ''' cast column list to dataframe
         ''' </summary>
@@ -488,74 +574,27 @@ RE0:
             Dim hasNames As Boolean = TypeOf listData.First.Value Is list
             Dim allNames As String() = Nothing
             Dim isListMatrix = listData.Values.All(Function(o) TypeOf o Is list)
-            Dim table As dataframe
             ' all of the element key name is integer
             ' or integer index key name
             Dim t As Boolean = listData.Keys.All(Function(k) k.IsPattern("\d+") OrElse k.IsPattern("\[+\d+\]+"))
 
             If hasNames Then
-                allNames = listData _
-                    .Select(Function(d)
-                                ' 20230626 the empty string generated from the
-                                ' json decode of the null literal
-                                If d.Value Is Nothing Then
-                                    Return Nothing
-                                End If
-                                If TypeOf d.Value Is String AndAlso CStr(d.Value) = "" Then
-                                    Return Nothing
-                                Else
-                                    Return DirectCast(d.Value, list).getNames
-                                End If
-                            End Function) _
-                    .IteratesALL _
-                    .Distinct _
-                    .ToArray
+                Dim pullNames = checkNames(listData, env)
+
+                If pullNames Like GetType(Message) Then
+                    Return pullNames.TryCast(Of Message)
+                Else
+                    allNames = pullNames
+                End If
             End If
 
             If isListMatrix AndAlso t Then
-                Dim rows = listData.ToArray
-                Dim row As list
-
-                ' each item in listdata is a row?
-                table = New dataframe With {.columns = New Dictionary(Of String, Array)}
-
-                For Each name As String In allNames
-                    table.add(name, Array.CreateInstance(GetType(Object), listData.Count))
-                Next
-
-                For i As Integer = 0 To rows.Length - 1
-                    row = rows(i).Value
-
-                    For Each name As String In row.getNames
-                        table.columns(name).SetValue(row.getByName(name), i)
-                    Next
-                Next
-
-                For Each name As String In allNames
-                    table.columns(name) = REnv.TryCastGenericArray(table.columns(name), env)
-                Next
+                Return listData _
+                    .ToArray _
+                    .castListMatrix(allNames, env)
             Else
-                table = New dataframe With {
-                    .columns = New Dictionary(Of String, Array),
-                    .rownames = allNames
-                }
-
-                For Each field As String In listData.Keys
-                    Dim raw As Object = listData(field)
-                    Dim v As Array
-
-                    If hasNames Then
-                        v = allNames.Select(Function(d) DirectCast(raw, list)(d)).ToArray
-                        v = REnv.TryCastGenericArray(v, env)
-                    Else
-                        v = REnv.TryCastGenericArray(REnv.asVector(Of Object)(raw), env)
-                    End If
-
-                    Call table.add(field, v)
-                Next
+                Return listData.castListRows(hasNames, allNames, env)
             End If
-
-            Return table
         End Function
 
         <Extension>
