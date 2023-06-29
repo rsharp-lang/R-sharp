@@ -1,68 +1,68 @@
 ﻿#Region "Microsoft.VisualBasic::2d03a924566a479492155864a7e0cfe1, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Math/math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 871
-    '    Code Lines: 393
-    ' Comment Lines: 395
-    '   Blank Lines: 83
-    '     File Size: 37.27 KB
+' Summaries:
 
 
-    '     Module math
-    ' 
-    '         Function: abs, cluster1D, cor_test, cos, diff
-    '                   exp, getRandom, isFinite, isInfinite, isNaN
-    '                   log, log10, log2, max, mean
-    '                   median, min, numericClassTags, pearson, pow
-    '                   rnorm, round, rsd, runif, sample
-    '                   sample_int, sd, sin, sqrt, sum
-    '                   var
-    ' 
-    '         Sub: set_seed
-    '         Class corTestResult
-    ' 
-    '             Properties: cor, df, prob2, pvalue, t
-    '                         z
-    ' 
-    '             Function: ToString
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 871
+'    Code Lines: 393
+' Comment Lines: 395
+'   Blank Lines: 83
+'     File Size: 37.27 KB
+
+
+'     Module math
+' 
+'         Function: abs, cluster1D, cor_test, cos, diff
+'                   exp, getRandom, isFinite, isInfinite, isNaN
+'                   log, log10, log2, max, mean
+'                   median, min, numericClassTags, pearson, pow
+'                   rnorm, round, rsd, runif, sample
+'                   sample_int, sd, sin, sqrt, sum
+'                   var
+' 
+'         Sub: set_seed
+'         Class corTestResult
+' 
+'             Properties: cor, df, prob2, pvalue, t
+'                         z
+' 
+'             Function: ToString
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -776,11 +776,61 @@ sample estimates:
         <ExportAPI("sample")>
         Public Function sample(<RRawVectorArgument>
                                x As Object,
-                               size As Integer,
+                               Optional size As Object = Nothing,
                                Optional replace As Boolean = False,
                                Optional prob As Object = Nothing,
                                Optional env As Environment = Nothing) As Object
 
+            If size Is Nothing Then
+                ' return collection shuffle index
+
+                If TypeOf x Is list Then
+                    ' get list shuffle index
+                    Return DirectCast(x, list).shuffle(replace, prob, env)
+                ElseIf TypeOf x Is dataframe Then
+                    ' get dataframe row shuffle
+                    Return DirectCast(x, dataframe).shuffle(replace, prob, env)
+                Else
+#Disable Warning
+                    ' get vector index shuffle
+                    Return REnv.asVector(Of Object)(x).shuffle(replace, prob, env)
+#Enable Warning
+                End If
+            Else
+                Dim size_int As Integer = CLRVector.asInteger(size).FirstOrDefault
+                Dim result = sample(x, size_int, replace, prob, env)
+
+                Return result
+            End If
+        End Function
+
+        <Extension>
+        Private Function shuffle(x As Array, replace As Boolean, prob As Object, env As Environment) As Object
+            Dim index As Integer() = x.Length.SeqIterator(offset:=1).ToArray
+            Dim shuffles As Object = sample(index, size:=x.Length, replace, prob, env)
+            Return shuffles
+        End Function
+
+        <Extension>
+        Private Function shuffle(x As dataframe, replace As Boolean, prob As Object, env As Environment) As Object
+            Dim names As String() = x.rownames
+
+            If names Is Nothing Then
+                Return Internal.debug.stop("the required dataframe row names index could not be nothing!", env)
+            End If
+
+            Dim shuffles As Object = sample(names, size:=x.nrows, replace, prob, env)
+            Return shuffles
+        End Function
+
+        <Extension>
+        Private Function shuffle(x As list, replace As Boolean, prob As Object, env As Environment) As Object
+            Dim names As String() = x.getNames
+            Dim shuffles As Object = sample(names, size:=x.length, replace, prob, env)
+            Return shuffles
+        End Function
+
+        Private Function sample(x As Object, size As Integer, replace As Boolean, prob As Object, env As Environment) As Object
             Dim data As Array = asVector(Of Object)(x)
 
             If data.Length <= size AndAlso replace = False Then
