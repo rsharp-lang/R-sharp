@@ -118,6 +118,17 @@ Namespace Runtime.Components
             Throw ToException()
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function [Error](msg As String, ParamArray stack As StackFrame()) As Message
+            Return New Message With {
+                .message = {msg},
+                .environmentStack = stack,
+                .level = MSG_TYPES.ERR,
+                .source = Nothing,
+                .trace = {}
+            }
+        End Function
+
         ''' <summary>
         ''' create a symbol not found error message
         ''' </summary>
