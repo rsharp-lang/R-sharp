@@ -834,24 +834,41 @@ sample estimates:
         Private Function sample(x As Object, size As Integer, replace As Boolean, prob As Object, env As Environment) As Object
             Dim data As Array = asVector(Of Object)(x)
 
-            If data.Length <= size AndAlso replace = False Then
-                Call env.AddMessage("data size of x is less than sample size, returns the original data vector.")
-                Return data
-            End If
+            'If data.Length <= size AndAlso replace = False Then
+            '    Call env.AddMessage("data size of x is less than sample size, returns the original data vector.")
+            '    Return data
+            'End If
 
+            ' 20230629 index vector is base from 1
+            ' so we needs index-1 when get element value from the data array
             Dim index As Integer() = sample_int(size, size, replace, prob)
             Dim takeSamples As New List(Of Object)
 
             For Each i As Integer In index
-                Call takeSamples.Add(data(i))
+                Call takeSamples.Add(data(i - 1))
             Next
 
             Return takeSamples.ToArray
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="n"></param>
+        ''' <param name="size"></param>
+        ''' <param name="replace"></param>
+        ''' <param name="prob"></param>
+        ''' <returns>
+        ''' returns an integer vector that could be used for represents the element index
+        ''' the generated integer vector in this function is base from 1 
+        ''' </returns>
         <ExportAPI("sample.int")>
         <RApiReturn(GetType(Integer))>
-        Public Function sample_int(n As Integer, Optional size As Object = "n", Optional replace As Boolean = False, Optional prob As Object = Nothing) As Object
+        Public Function sample_int(n As Integer,
+                                   Optional size As Object = "n",
+                                   Optional replace As Boolean = False,
+                                   Optional prob As Object = Nothing) As Object
+
             Dim i As New List(Of Integer)(n.Sequence(offset:=1))
             Dim list As New List(Of Integer)
             Dim seeds As Random = randf.seeds
