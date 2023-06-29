@@ -782,8 +782,9 @@ sample estimates:
                                Optional env As Environment = Nothing) As Object
 
             If size Is Nothing Then
+                ' 20230629
                 ' return collection shuffle index
-
+                '
                 If TypeOf x Is list Then
                     ' get list shuffle index
                     Return DirectCast(x, list).shuffle(replace, prob, env)
