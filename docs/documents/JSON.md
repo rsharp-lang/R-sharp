@@ -19,6 +19,7 @@ JSON (JavaScript Object Notation) is a lightweight data-interchange format.
  support them In one form Or another. It makes sense that a data format that 
  Is interchangeable With programming languages also be based On these structures.
 
++ [unescape](JSON/unescape.1) do string unescape
 + [json_decode](JSON/json_decode.1) ### Decodes a JSON string
 + [json_encode](JSON/json_encode.1) Returns the JSON representation of a value
 + [parseJSON](JSON/parseJSON.1) parse JSON string into the raw JSON model or R data object

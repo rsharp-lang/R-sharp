@@ -43,4 +43,4 @@ Color schema name terms that comes from the ColorBrewer system:
  BrBG:c[3,11], RdGy:c[3,11], PuOr:c[3,11]
  ```
 
-+ [TrIQ](ColorBrewer/TrIQ.1) 
++ [TrIQ](ColorBrewer/TrIQ.1) get cutoff threshold value via TrIQ algorithm
