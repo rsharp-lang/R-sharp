@@ -55,6 +55,7 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.CommandLine
 Imports SMRUCC.Rsharp.Development.Configuration
@@ -126,6 +127,17 @@ Module Program
     Private Function RunExpression(args As CommandLine) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Dim [error] As String = Nothing
+
+        If args.Name.isFilePath(includeWindowsFs:=True) AndAlso (args.Name.Contains("/"c) OrElse args.Name.Contains("\"c)) Then
+            ' is file path but the file is missing
+            Call Message.Error($"The given script file '{args.Name.GetFullPath}'({args.Name}) is missing on your file system!", R.globalEnvir.stackFrame) _
+                .DoCall(Sub(ex)
+                            Rscript.handleResult(ex, R.globalEnvir)
+                        End Sub)
+
+            Return 404
+        End If
+
         Dim program As RProgram = RProgram.BuildProgram(args.cli, [error]:=[error])
         Dim result As Object
 
