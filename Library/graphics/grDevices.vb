@@ -454,6 +454,18 @@ break:
             .ToArray
     End Function
 
+    <ExportAPI("register.color_palette")>
+    Public Function registerCustomPalette(name As String, <RRawVectorArgument> colors As Object, Optional env As Environment = Nothing) As Object
+        Dim colorSet As Color() = RColorPalette _
+            .getColors(colors, -1, [default]:=Nothing) _
+            .Select(Function(c) c.TranslateColor) _
+            .ToArray
+
+        Call Designer.Register(name, colorSet)
+
+        Return Nothing
+    End Function
+
     ''' <summary>
     ''' get color set
     ''' </summary>
