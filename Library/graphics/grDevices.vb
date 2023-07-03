@@ -454,6 +454,13 @@ break:
             .ToArray
     End Function
 
+    ''' <summary>
+    ''' register a custom color palette to the graphics system
+    ''' </summary>
+    ''' <param name="name"></param>
+    ''' <param name="colors"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("register.color_palette")>
     Public Function registerCustomPalette(name As String, <RRawVectorArgument> colors As Object, Optional env As Environment = Nothing) As Object
         Dim colorSet As Color() = RColorPalette _
