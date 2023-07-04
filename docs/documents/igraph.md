@@ -32,7 +32,7 @@ package or create network graph and do network analysis.
 + [edges](igraph/edges.1) get all edges in the given graph model
 + [has.edge](igraph/has.edge.1) 
 + [attributes](igraph/attributes.1) get or set element attribute values
-+ [select](igraph/select.1) Node select by group or other condition
++ [selects](igraph/selects.1) Node select by group or other condition
 + [decompose](igraph/decompose.1) Decompose a graph into components, Creates a separate graph 
 + [extract.sub_graph](igraph/extract.sub_graph.1) extract sub graph component by a specific 
 + [components](igraph/components.1) get subnetwork components directly by test node disconnections

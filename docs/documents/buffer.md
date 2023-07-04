@@ -2,6 +2,7 @@
 
 binary data buffer modules
 
++ [packBuffer](buffer/packBuffer.1) cast a numeric vector as bytes data in network byte order
 + [float](buffer/float.1) apply bit convert of the bytes stream data as floats numbers
 + [integer](buffer/integer.1) apply bit convert of the bytes stream data as integer numbers
 + [zlib_stream](buffer/zlib_stream.1) zip compression of stream data

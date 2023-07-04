@@ -13,6 +13,7 @@ The sciBASIC.NET dataframe api
 + [as.dataframe.raw](dataframe/as.dataframe.raw.1) 
 + [row](dataframe/row.1) 
 + [parseRow](dataframe/parseRow.1) parse text line as csv row.
++ [parseDataframe](dataframe/parseDataframe.1) parse the text data as the dataframe
 + [append.cells](dataframe/append.cells.1) 
 + [append.row](dataframe/append.row.1) 
 + [dataset.colnames](dataframe/dataset.colnames.1) Get/Set column names of the given **`dataset`**
