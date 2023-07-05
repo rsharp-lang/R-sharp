@@ -229,12 +229,19 @@ Namespace Convertor
                     .Sequence(offSet:=1) _
                     .Select(Function(i) i.ToString) _
                     .ToArray
+            Else
+                names = names.uniqueNames
             End If
 
             Dim list As New list
+            Dim obj As Object
+            Dim name As String
 
             For i As Integer = 0 To names.Length - 1
-                Call list.add(names(i), ConvertToR.PullRObject(elements(i), New Dictionary(Of String, Object)))
+                name = names(i)
+                obj = ConvertToR.PullRObject(elements(i), New Dictionary(Of String, Object))
+
+                Call list.add(name, obj)
             Next
 
             Return list
