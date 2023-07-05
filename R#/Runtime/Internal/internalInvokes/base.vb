@@ -673,7 +673,10 @@ Namespace Runtime.Internal.Invokes
             Dim colNames As String() = d.colnames.JoinIterates(row.colnames).Distinct.ToArray
             Dim rbind As New dataframe With {
                 .columns = New Dictionary(Of String, Array),
-                .rownames = d.getRowNames.JoinIterates(row.getRowNames).uniqueNames.ToArray
+                .rownames = d.getRowNames _
+                    .JoinIterates(row.getRowNames) _
+                    .uniqueNames _
+                    .ToArray
             }
             Dim totalSize As Integer = d.nrows + row.nrows
 
@@ -701,8 +704,18 @@ Namespace Runtime.Internal.Invokes
 
                 Dim union As Array = Array.CreateInstance(v1.GetType.GetElementType, totalSize)
 
-                Call Array.ConstrainedCopy(v1, Scan0, union, Scan0, v1.Length)
-                Call Array.ConstrainedCopy(v2, Scan0, union, v1.Length, v2.Length)
+                Try
+                    Call Array.ConstrainedCopy(v1, Scan0, union, Scan0, v1.Length)
+                    Call Array.ConstrainedCopy(v2, Scan0, union, v1.Length, v2.Length)
+                Catch ex As Exception
+                    Return Internal.debug.stop({
+                        $"data type mis-matched while union the data fields('{col}') of two dataframe!",
+                        $"colname: {col}",
+                        $"v1_type: {RType.GetRSharpType(v1.GetType.GetElementType).ToString}",
+                        $"v2_type: {RType.GetRSharpType(v2.GetType.GetElementType).ToString}"
+                    }, env)
+                End Try
+
                 Call rbind.columns.Add(col, REnv.UnsafeTryCastGenericArray(union))
             Next
 
