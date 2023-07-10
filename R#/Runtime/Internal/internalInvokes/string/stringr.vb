@@ -1,59 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::378cd0be4a39a12ca2d6962741192771, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/stringr.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1049
-    '    Code Lines: 664
-    ' Comment Lines: 285
-    '   Blank Lines: 100
-    '     File Size: 43.24 KB
+' Summaries:
 
 
-    '     Module stringr
-    ' 
-    '         Function: [objToString], base64Decode, base64Str, bencode, charAt
-    '                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
-    '                   fromBstring, getElementFormat, grep, html, json
-    '                   loadXml, match, nchar, paste, randomAsciiStr
-    '                   rawBufferBase64, regexp, splitSingleStrAuto, sprintfSingle, str_empty
-    '                   str_pad, (+2 Overloads) str_replace, strPad_internal, strsplit, substr
-    '                   tagvalue, text_equals, tolower, toupper, urldecode
-    '                   xml
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1049
+'    Code Lines: 664
+' Comment Lines: 285
+'   Blank Lines: 100
+'     File Size: 43.24 KB
+
+
+'     Module stringr
+' 
+'         Function: [objToString], base64Decode, base64Str, bencode, charAt
+'                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
+'                   fromBstring, getElementFormat, grep, html, json
+'                   loadXml, match, nchar, paste, randomAsciiStr
+'                   rawBufferBase64, regexp, splitSingleStrAuto, sprintfSingle, str_empty
+'                   str_pad, (+2 Overloads) str_replace, strPad_internal, strsplit, substr
+'                   tagvalue, text_equals, tolower, toupper, urldecode
+'                   xml
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -266,7 +266,7 @@ Namespace Runtime.Internal.Invokes
 #If WINDOWS Then
             winOpt = True
 #Else
-            winOpt = False 
+            winOpt = False
 #End If
 
             If type Is Nothing Then
@@ -897,6 +897,7 @@ Namespace Runtime.Internal.Invokes
         Public Function tagvalue([string] As String(),
                                  Optional delimiter$ = " ",
                                  Optional trim_value As Boolean = True,
+                                 Optional as_list As Boolean = False,
                                  Optional env As Environment = Nothing) As Object
 
             Dim values As NamedValue(Of String)() = [string] _
@@ -905,9 +906,25 @@ Namespace Runtime.Internal.Invokes
                             Return str.GetTagValue(delimiter, trim:=trim_value)
                         End Function) _
                 .ToArray
-            Dim vec As vector = vector.asVector(values.Values)
-            Call vec.setNames(values.Keys, env)
-            Return vec
+
+            If as_list Then
+                Dim vec As New list With {
+                    .slots = New Dictionary(Of String, Object)
+                }
+                Dim names As String() = values _
+                    .Select(Function(a) a.Name) _
+                    .uniqueNames
+
+                For i As Integer = 0 To values.Length - 1
+                    Call vec.add(names(i), values(i).Value)
+                Next
+
+                Return vec
+            Else
+                Dim vec As vector = vector.asVector(values.Values)
+                Call vec.setNames(values.Keys, env)
+                Return vec
+            End If
         End Function
 
         ''' <summary>
