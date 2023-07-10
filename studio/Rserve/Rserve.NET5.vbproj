@@ -111,8 +111,8 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\runtime\Darwinism\Parallel\parallel-netcore5.vbproj" />
+  <ItemGroup>  
+    <ProjectReference Include="..\..\..\runtime\Darwinism\src\Parallel\parallel-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\Rserver\Rserver.NET5.vbproj" />
   </ItemGroup>
