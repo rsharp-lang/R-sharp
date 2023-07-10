@@ -138,7 +138,7 @@ Module stats
 
         Internal.Object.Converts.makeDataframe.addHandler(GetType(DataMatrix), AddressOf matrixDataFrame)
         Internal.Object.Converts.makeDataframe.addHandler(GetType(DistanceMatrix), AddressOf matrixDataFrame)
-        Internal.Object.Converts.makeDataframe.addHandler(GetType(CorrelationMatrix), AddressOf matrixDataFrame)
+        Internal.Object.Converts.makeDataframe.addHandler(GetType(CorrelationMatrix), AddressOf matrixDataFrame2)
         Internal.Object.Converts.makeDataframe.addHandler(GetType(PCAcalls), AddressOf PCATable)
     End Sub
 
@@ -167,6 +167,36 @@ Module stats
         Next
 
         Return data
+    End Function
+
+    Private Function matrixDataFrame2(x As CorrelationMatrix, args As list, env As Environment) As Rdataframe
+        Dim cutoff As Double = args.getValue("cutoff", env, [default]:=0.3)
+        Dim pvalue_cut As Double = args.getValue("pvalue_cut", env, [default]:=0.05)
+        Dim from As New List(Of String)
+        Dim [to] As New List(Of String)
+        Dim cor As New List(Of Double)
+        Dim pvalue As New List(Of Double)
+
+        For Each link In x.GetUniqueTuples
+            Dim cori As Double = x.dist(link.a, link.b)
+            Dim pvali As Double = x.pvalue(link.a, link.b)
+
+            If stdNum.Abs(cori) > cutoff AndAlso pvali < pvalue_cut Then
+                Call from.Add(link.a)
+                Call [to].Add(link.b)
+                Call cor.Add(cori)
+                Call pvalue.Add(pvali)
+            End If
+        Next
+
+        Return New Rdataframe With {
+            .columns = New Dictionary(Of String, Array) From {
+                {"from", from.ToArray},
+                {"to", [to].ToArray},
+                {"cor", cor.ToArray},
+                {"pvalue", pvalue.ToArray}
+            }
+        }
     End Function
 
     Private Function matrixDataFrame(x As DataMatrix, args As list, env As Environment) As Rdataframe
