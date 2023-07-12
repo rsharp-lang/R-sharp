@@ -56,10 +56,25 @@
 
 Namespace Interpreter
 
+    ''' <summary>
+    ''' debug echo verbose level for the R# interpreter engine
+    ''' </summary>
     Public Enum DebugLevels As Byte
+        ''' <summary>
+        ''' no debug echo, normal mode(or production mode)
+        ''' </summary>
         None
+        ''' <summary>
+        ''' debug echo of the memory delta change after execute each expression
+        ''' </summary>
         Memory
+        ''' <summary>
+        ''' print the expression executation stack data
+        ''' </summary>
         Stack
+        ''' <summary>
+        ''' print all data on the console
+        ''' </summary>
         All = Memory Or Stack
     End Enum
 End Namespace
