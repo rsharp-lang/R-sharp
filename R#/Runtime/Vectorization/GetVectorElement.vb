@@ -253,7 +253,30 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
-        Private Shared Function CreateVectorInternal(Of T)(x As Object) As GetVectorElement
+        ''' <summary>
+        ''' if the target input object <paramref name="x"/>is nothing, then this function
+        ''' will returns an instance of <see cref="GetVectorElement"/> with wrap a null
+        ''' value
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        Public Shared Function CreateAny(x As Object) As GetVectorElement
+            Dim any As Type = GetType(Object)
+
+            If x Is Nothing Then
+                Return New GetVectorElement(vec:=Nothing, any)
+            ElseIf TypeOf x Is GetVectorElement AndAlso DirectCast(x, GetVectorElement).elementType Is any Then
+                Return DirectCast(x, GetVectorElement)
+            Else
+                If TypeOf x Is vector Then
+                    x = DirectCast(x, vector).data
+                End If
+
+                Return CreateVectorInternal(Of Object)(x)
+            End If
+        End Function
+
+        Friend Shared Function CreateVectorInternal(Of T)(x As Object) As GetVectorElement
             Dim type As Type = x.GetType
 
             If type Is typedefine(Of T).baseType Then

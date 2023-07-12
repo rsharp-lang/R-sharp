@@ -85,7 +85,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             For Each var As String In symbols
                 Dim tmp = args.getByName(var)
-                Dim getter = GetVectorElement.Create(Of Object)(tmp)
+                Dim getter = GetVectorElement.CreateAny(tmp)
 
                 Call seqs.Add(var, getter)
             Next
