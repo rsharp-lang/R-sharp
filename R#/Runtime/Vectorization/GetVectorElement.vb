@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime.Vectorization
 
@@ -169,6 +170,19 @@ Namespace Runtime.Vectorization
             Me.m_get = Getter()
             Me.elementType = type
         End Sub
+
+        Public Overrides Function ToString() As String
+            Select Case Mode
+                Case VectorTypes.Scalar
+                    Return any.ToString([single], "null")
+                Case VectorTypes.Vector
+                    Return $"[vector, size={size}] [0]{any.ToString([single], "null")}"
+                Case VectorTypes.None
+                    Return "null"
+                Case Else
+                    Return "Error: " & [Error].Message
+            End Select
+        End Function
 
         Public Function CastTo(Of T)(cast As Func(Of Object, T)) As GetVectorElement
             If vector Is Nothing OrElse vector.Length = 0 Then
@@ -286,7 +300,9 @@ Namespace Runtime.Vectorization
                 Return FromCollection(type.IsArray, GetType(T), x)
             Else
                 If GetType(T) Is GetType(Object) Then
-                    If type.ImplementInterface(Of IEnumerable) Then
+                    ' string is a kind of special char collection
+                    ' filter out the string value
+                    If type IsNot GetType(String) AndAlso type.ImplementInterface(Of IEnumerable) Then
                         Return FromCollection(type.IsArray, GetType(T), x)
                     Else
                         Return FromCollection(True, GetType(T), {x})
