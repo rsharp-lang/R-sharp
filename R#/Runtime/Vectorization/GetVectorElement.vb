@@ -283,22 +283,32 @@ Namespace Runtime.Vectorization
                 ' is a scalar
                 Return New GetVectorElement(scalar:=x, type:=type)
             ElseIf type.ImplementInterface(typedefine(Of T).enumerable) Then
-                ' is a generic collection
-                If type.IsArray Then
-                    Return New GetVectorElement(DirectCast(x, Array), GetType(T))
-                Else
-                    ' cast collection to array
-                    Dim list As New List(Of Object)
-
-                    For Each item As Object In DirectCast(x, IEnumerable)
-                        Call list.Add(item)
-                    Next
-
-                    Return New GetVectorElement(list.ToArray, GetType(T))
-                End If
+                Return FromCollection(type.IsArray, GetType(T), x)
             Else
+                If GetType(T) Is GetType(Object) AndAlso type.ImplementInterface(Of IEnumerable) Then
+                    Return FromCollection(type.IsArray, GetType(T), x)
+                Else
+                    Return FromCollection(False, GetType(T), x)
+                End If
+
                 ' do type cast?
                 Return New GetVectorElement(ex:=New InvalidCastException($"Do we require a type cast for {type} -> {GetType(T)}?"))
+            End If
+        End Function
+
+        Private Shared Function FromCollection(isArray As Boolean, type As Type, x As Object) As GetVectorElement
+            ' is a generic collection
+            If isArray Then
+                Return New GetVectorElement(DirectCast(x, Array), type)
+            Else
+                ' cast collection to array
+                Dim list As New List(Of Object)
+
+                For Each item As Object In DirectCast(x, IEnumerable)
+                    Call list.Add(item)
+                Next
+
+                Return New GetVectorElement(list.ToArray, type)
             End If
         End Function
 
