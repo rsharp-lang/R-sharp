@@ -50,6 +50,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -65,7 +66,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
     Public Module reshape2
 
         ''' <summary>
-        ''' Aggregate two sequence
+        ''' Aggregate two or more sequence
         ''' </summary>
         ''' <param name="zip"></param>
         ''' <param name="args"></param>
@@ -81,7 +82,6 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 .Where(Function(s) s <> "zip" AndAlso s <> "args" AndAlso s <> "env") _
                 .ToArray
             Dim seqs As New Dictionary(Of String, GetVectorElement)
-            Dim zipList As New List(Of Object)
 
             For Each var As String In symbols
                 Dim tmp = args.getByName(var)
@@ -97,50 +97,65 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim len As Integer = If(multiple.Length > 0,
                 multiple.Min,
                 seqs.Values.Select(Function(a) a.size).Max)
-            Dim getters = seqs.ToDictionary(Function(a) a.Key, Function(a) a.Value.Getter)
+            Dim getters As Dictionary(Of String, Func(Of Integer, Object)) = seqs _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return a.Value.Getter
+                              End Function)
 
             If zip Is Nothing Then
-                ' just create the tuple list
-                For i As Integer = 0 To len - 1
-                    Dim li As New list With {.slots = New Dictionary(Of String, Object)}
-
-                    For Each item In seqs
-                        Call li.add(item.Key, getters(item.Key)(i))
-                    Next
-
-                    Call zipList.Add(li)
-                Next
-
-                Return zipList.ToArray
+                Return getters.zip(len).ToArray
             Else
                 Dim check = applys.checkInternal(Nothing, zip, env)
 
                 If Program.isException(check) Then
                     Return check
+                Else
+                    Return getters.aggregate(lambda:=zip, len, New Environment(env, "zip_tuples.internal_loops"))
                 End If
+            End If
+        End Function
 
-                Dim lambda As RFunction = zip
-                Dim getterVec = getters.ToArray
-                Dim argv As InvokeParameter() = New InvokeParameter(getters.Count - 1) {}
+        <Extension>
+        Private Function aggregate(getters As Dictionary(Of String, Func(Of Integer, Object)),
+                                   lambda As RFunction,
+                                   len As Integer,
+                                   env As Environment) As Object
 
-                env = New Environment(env, "zip_tuples.internal_loops")
+            Dim getterVec = getters.ToArray
+            Dim argv As InvokeParameter() = New InvokeParameter(getters.Count - 1) {}
+            Dim result As Object
+            Dim zipList As New List(Of Object)
 
-                For i As Integer = 0 To len - 1
-                    For j As Integer = 0 To argv.Length - 1
-                        argv(j) = New InvokeParameter(getterVec(j).Key, getterVec(j).Value(i), i)
-                    Next
-
-                    Dim result = lambda.Invoke(env, argv)
-
-                    If Program.isException(result) Then
-                        Return result
-                    Else
-                        Call zipList.Add(result)
-                    End If
+            For i As Integer = 0 To len - 1
+                For j As Integer = 0 To argv.Length - 1
+                    argv(j) = New InvokeParameter(getterVec(j).Key, getterVec(j).Value(i), i)
                 Next
 
-                Return REnv.TryCastGenericArray(zipList.ToArray, env)
-            End If
+                result = lambda.Invoke(env, argv)
+
+                If Program.isException(result) Then
+                    Return result
+                Else
+                    Call zipList.Add(result)
+                End If
+            Next
+
+            Return REnv.TryCastGenericArray(zipList.ToArray, env)
+        End Function
+
+        <Extension>
+        Private Iterator Function zip(getters As Dictionary(Of String, Func(Of Integer, Object)), len As Integer) As IEnumerable(Of list)
+            ' just create the tuple list
+            For i As Integer = 0 To len - 1
+                Dim li As New list With {.slots = New Dictionary(Of String, Object)}
+
+                For Each item In getters
+                    Call li.add(item.Key, getters(item.Key)(i))
+                Next
+
+                Yield li
+            Next
         End Function
 
         ''' <summary>
