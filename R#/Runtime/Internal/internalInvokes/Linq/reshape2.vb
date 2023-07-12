@@ -90,7 +90,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Call seqs.Add(var, getter)
             Next
 
-            Dim multiple = seqs.Values.Select(Function(a) a.size).Where(Function(a) a > 1).ToArray
+            Dim multiple As Integer() = seqs.Values _
+                .Select(Function(a) a.size) _
+                .Where(Function(a) a > 1) _
+                .ToArray
             Dim len As Integer = If(multiple.Length > 0,
                 multiple.Min,
                 seqs.Values.Select(Function(a) a.size).Max)

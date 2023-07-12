@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::4176e2b62014a1e45f451f8b73521b96, F:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/GetVectorElement.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 236
-    '    Code Lines: 158
-    ' Comment Lines: 48
-    '   Blank Lines: 30
-    '     File Size: 8.62 KB
+' Summaries:
 
 
-    '     Class GetVectorElement
-    ' 
-    '         Properties: [Error], elementType, isNullOrEmpty, Mode, size
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: CastTo, Create, CreateVectorInternal, DoesSizeMatch, (+2 Overloads) Getter
-    '                   IsScalar, Populate
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 236
+'    Code Lines: 158
+' Comment Lines: 48
+'   Blank Lines: 30
+'     File Size: 8.62 KB
+
+
+'     Class GetVectorElement
+' 
+'         Properties: [Error], elementType, isNullOrEmpty, Mode, size
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: CastTo, Create, CreateVectorInternal, DoesSizeMatch, (+2 Overloads) Getter
+'                   IsScalar, Populate
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -285,10 +285,12 @@ Namespace Runtime.Vectorization
             ElseIf type.ImplementInterface(typedefine(Of T).enumerable) Then
                 Return FromCollection(type.IsArray, GetType(T), x)
             Else
-                If GetType(T) Is GetType(Object) AndAlso type.ImplementInterface(Of IEnumerable) Then
-                    Return FromCollection(type.IsArray, GetType(T), x)
-                Else
-                    Return FromCollection(False, GetType(T), x)
+                If GetType(T) Is GetType(Object) Then
+                    If type.ImplementInterface(Of IEnumerable) Then
+                        Return FromCollection(type.IsArray, GetType(T), x)
+                    Else
+                        Return FromCollection(True, GetType(T), {x})
+                    End If
                 End If
 
                 ' do type cast?
