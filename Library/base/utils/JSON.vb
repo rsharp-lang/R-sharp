@@ -180,7 +180,7 @@ Module JSON
                              Optional env As Environment = Nothing) As Object
 
         If TypeOf str Is String Then
-            Return CStr(str).parseJSONinternal(raw, env)
+            Return CStr(str).ParseJSONinternal(raw, env)
         ElseIf TypeOf str Is JsonElement Then
             If raw Then
                 Return str
@@ -189,38 +189,6 @@ Module JSON
             End If
         Else
             Return Message.InCompatibleType(GetType(String), str.GetType, env)
-        End If
-    End Function
-
-    ''' <summary>
-    ''' implements for parse the json string in this function
-    ''' </summary>
-    ''' <param name="str"></param>
-    ''' <param name="raw"></param>
-    ''' <param name="env"></param>
-    ''' <returns></returns>
-    <Extension>
-    Private Function parseJSONinternal(str As String, raw As Boolean, env As Environment) As Object
-        Dim rawElement As JsonElement
-
-        If CStr(str).TextEquals("null") Then
-            env.AddMessage("the given input json string is literal of 'null'.")
-            Return Nothing
-        Else
-            rawElement = New JsonParser().OpenJSON(str)
-        End If
-
-        If raw Then
-            Return rawElement
-        ElseIf rawElement Is Nothing Then
-            If env.globalEnvironment.options.strict Then
-                Return Internal.debug.stop("invalid format of the input json string!", env)
-            Else
-                env.AddMessage("invalid format of the input json string!", MSG_TYPES.WRN)
-                Return Nothing
-            End If
-        Else
-            Return rawElement.createRObj(env)
         End If
     End Function
 
