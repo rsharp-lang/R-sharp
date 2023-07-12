@@ -80,12 +80,16 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim symbols = args.getNames _
                 .Where(Function(s) s <> "zip" AndAlso s <> "args" AndAlso s <> "env") _
                 .ToArray
-            Dim seqs As Dictionary(Of String, GetVectorElement) = symbols _
-                .ToDictionary(Function(a) a,
-                              Function(a)
-                                  Return GetVectorElement.Create(Of Object)(args.getByName(a))
-                              End Function)
+            Dim seqs As New Dictionary(Of String, GetVectorElement)
             Dim zipList As New List(Of Object)
+
+            For Each var As String In symbols
+                Dim tmp = args.getByName(var)
+                Dim getter = GetVectorElement.Create(Of Object)(tmp)
+
+                Call seqs.Add(var, getter)
+            Next
+
             Dim multiple = seqs.Values.Select(Function(a) a.size).Where(Function(a) a > 1).ToArray
             Dim len As Integer = If(multiple.Length > 0,
                 multiple.Min,
