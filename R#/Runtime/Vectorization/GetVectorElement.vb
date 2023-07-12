@@ -200,6 +200,14 @@ Namespace Runtime.Vectorization
             Return castDirect
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <returns>
+        ''' the lambda function accepts a zero-based index value for
+        ''' get element value from a clr vector <see cref="Array"/> 
+        ''' object
+        ''' </returns>
         Public Function Getter() As Func(Of Integer, Object)
             If isNullOrEmpty OrElse vector.Length = 1 Then
                 Return Function() [single]

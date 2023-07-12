@@ -51,7 +51,9 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -61,6 +63,78 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
     Public Module reshape2
+
+        ''' <summary>
+        ''' Aggregate two sequence
+        ''' </summary>
+        ''' <param name="zip"></param>
+        ''' <param name="args"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("zip_tuple")>
+        Public Function tuple(Optional zip As Object = Nothing,
+                              <RListObjectArgument>
+                              Optional args As list = Nothing,
+                              Optional env As Environment = Nothing) As Object
+
+            Dim symbols = args.getNames _
+                .Where(Function(s) s <> "zip" AndAlso s <> "args" AndAlso s <> "env") _
+                .ToArray
+            Dim seqs As Dictionary(Of String, GetVectorElement) = symbols _
+                .ToDictionary(Function(a) a,
+                              Function(a)
+                                  Return GetVectorElement.Create(Of Object)(args.getByName(a))
+                              End Function)
+            Dim zipList As New List(Of Object)
+            Dim multiple = seqs.Values.Select(Function(a) a.size).Where(Function(a) a > 1).ToArray
+            Dim len As Integer = If(multiple.Length > 0,
+                multiple.Min,
+                seqs.Values.Select(Function(a) a.size).Max)
+            Dim getters = seqs.ToDictionary(Function(a) a.Key, Function(a) a.Value.Getter)
+
+            If zip Is Nothing Then
+                ' just create the tuple list
+                For i As Integer = 0 To len - 1
+                    Dim li As New list With {.slots = New Dictionary(Of String, Object)}
+
+                    For Each item In seqs
+                        Call li.add(item.Key, getters(item.Key)(i))
+                    Next
+
+                    Call zipList.Add(li)
+                Next
+
+                Return zipList.ToArray
+            Else
+                Dim check = applys.checkInternal(Nothing, zip, env)
+
+                If Program.isException(check) Then
+                    Return check
+                End If
+
+                Dim lambda As RFunction = zip
+                Dim getterVec = getters.ToArray
+                Dim argv As InvokeParameter() = New InvokeParameter(getters.Count - 1) {}
+
+                env = New Environment(env, "zip_tuples.internal_loops")
+
+                For i As Integer = 0 To len - 1
+                    For j As Integer = 0 To argv.Length - 1
+                        argv(j) = New InvokeParameter(getterVec(j).Key, getterVec(j).Value(i), i)
+                    Next
+
+                    Dim result = lambda.Invoke(env, argv)
+
+                    If Program.isException(result) Then
+                        Return result
+                    Else
+                        Call zipList.Add(result)
+                    End If
+                Next
+
+                Return REnv.TryCastGenericArray(zipList.ToArray, env)
+            End If
+        End Function
 
         ''' <summary>
         ''' melt: Convert an object into a molten data frame.
