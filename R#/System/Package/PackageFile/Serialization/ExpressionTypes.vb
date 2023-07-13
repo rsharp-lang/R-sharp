@@ -63,7 +63,13 @@
 
 Namespace Development.Package.File
 
+    ''' <summary>
+    ''' The R# expression data type
+    ''' </summary>
     Public Enum ExpressionTypes As Integer
+        ''' <summary>
+        ''' literal value or constant value
+        ''' </summary>
         Literal = 1
         VectorLiteral
         SequenceLiteral
