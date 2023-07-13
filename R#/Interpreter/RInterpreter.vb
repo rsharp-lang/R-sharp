@@ -1,62 +1,62 @@
-﻿#Region "Microsoft.VisualBasic::a7da84245b47961aa02194734a64fe9b, F:/GCModeller/src/R-sharp/R#//Interpreter/RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::7aad645cdbb9297e829cbb0e0d751b81, G:/GCModeller/src/R-sharp/R#//Interpreter/RInterpreter.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 659
-'    Code Lines: 392
-' Comment Lines: 170
-'   Blank Lines: 97
-'     File Size: 27.00 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class RInterpreter
-' 
-'         Properties: configFile, debug, globalEnvir, globalSymbols, redirectError2stdout
-'                     Rsharp, silent, strict, warnings
-' 
-'         Constructor: (+2 Overloads) Sub New
-' 
-'         Function: [Imports], [Set], (+3 Overloads) Evaluate, FromEnvironmentConfiguration, getDataStream
-'                   InitializeEnvironment, (+3 Overloads) Invoke, (+2 Overloads) LoadLibrary, options, Parse
-'                   RedirectOutput, Run, RunInternal, Source
-' 
-'         Sub: _construct, (+3 Overloads) Add, (+2 Overloads) Dispose, Inspect, (+2 Overloads) Print
-'              PrintMemory
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 681
+    '    Code Lines: 407
+    ' Comment Lines: 174
+    '   Blank Lines: 100
+    '     File Size: 27.72 KB
+
+
+    '     Class RInterpreter
+    ' 
+    '         Properties: configFile, debug, globalEnvir, globalSymbols, isExecCancel
+    '                     redirectError2stdout, Rsharp, silent, strict, warnings
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    ' 
+    '         Function: [Imports], [Set], (+3 Overloads) Evaluate, FromEnvironmentConfiguration, getDataStream
+    '                   InitializeEnvironment, (+3 Overloads) Invoke, (+2 Overloads) LoadLibrary, options, Parse
+    '                   RedirectOutput, Run, RunInternal, SetTaskCancelHook, Source
+    ' 
+    '         Sub: _construct, (+3 Overloads) Add, (+2 Overloads) Dispose, Inspect, (+2 Overloads) Print
+    '              PrintMemory
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

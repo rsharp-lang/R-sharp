@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::da23cbf6529b8e28487f3f6edb8651f7, F:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataMining/dbscanResult.vb"
+﻿#Region "Microsoft.VisualBasic::c36661ab574428034bae49f421919b99, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataMining/dbscanResult.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 14
-    '    Code Lines: 12
-    ' Comment Lines: 0
-    '   Blank Lines: 2
-    '     File Size: 324 B
+    '   Total Lines: 40
+    '    Code Lines: 28
+    ' Comment Lines: 4
+    '   Blank Lines: 8
+    '     File Size: 1.09 KB
 
 
     ' Class dbscanResult
     ' 
-    '     Properties: cluster, eps, isseed, MinPts
+    '     Properties: classLabels, cluster, dataLabels, eps, isseed
+    '                 MinPts
+    ' 
+    '     Function: extractClusterId
     ' 
     ' Enum dbScanMethods
     ' 

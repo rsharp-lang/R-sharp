@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0cff7f3b09ea2ff36afff8bb0d7bb2c9, F:/GCModeller/src/R-sharp/R#//Runtime/System/InvokeParameter.vb"
+﻿#Region "Microsoft.VisualBasic::c60b0b068ccd0bd53acbf89b7cc6189b, G:/GCModeller/src/R-sharp/R#//Runtime/System/InvokeParameter.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 255
+    '   Total Lines: 260
     '    Code Lines: 174
-    ' Comment Lines: 51
+    ' Comment Lines: 56
     '   Blank Lines: 30
-    '     File Size: 9.91 KB
+    '     File Size: 10.09 KB
 
 
     '     Class InvokeParameter

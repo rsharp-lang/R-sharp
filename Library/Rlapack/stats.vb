@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d6c9f95dbef5e6cd559c47491cbca31b, F:/GCModeller/src/R-sharp/Library/Rlapack//stats.vb"
+﻿#Region "Microsoft.VisualBasic::060bab263ecbb7435de35e47e1416dd2, G:/GCModeller/src/R-sharp/Library/Rlapack//stats.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1245
-    '    Code Lines: 692
+    '   Total Lines: 1274
+    '    Code Lines: 716
     ' Comment Lines: 423
-    '   Blank Lines: 130
-    '     File Size: 51.13 KB
+    '   Blank Lines: 135
+    '     File Size: 52.27 KB
 
 
     ' Module stats
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: matrixDataFrame, PCATable, printMatrix, printTtest, printTwoSampleTTest
+    '     Function: matrixDataFrame, matrixDataFrame2, PCATable, printMatrix, printTtest
+    '               printTwoSampleTTest
     '     Enum p_adjust_methods
     ' 
     '         BH, bonferroni, BY, fdr, hochberg

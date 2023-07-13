@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0100fd72c912323ab8d649b0aae781bb, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/Group.vb"
+﻿#Region "Microsoft.VisualBasic::246f3ec7e2ce82615e5ee038f4831c3a, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/Group.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 110
+    '   Total Lines: 115
     '    Code Lines: 83
-    ' Comment Lines: 8
+    ' Comment Lines: 13
     '   Blank Lines: 19
-    '     File Size: 3.94 KB
+    '     File Size: 4.12 KB
 
 
     '     Structure Group

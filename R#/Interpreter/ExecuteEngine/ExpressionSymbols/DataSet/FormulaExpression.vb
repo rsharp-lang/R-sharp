@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c32dd1e4f480be1a3a41aae0dc0ae7ca, F:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/FormulaExpression.vb"
+﻿#Region "Microsoft.VisualBasic::4c60e0b380d666e66be2ef9c05c0d998, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/FormulaExpression.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 107
+    '   Total Lines: 112
     '    Code Lines: 63
-    ' Comment Lines: 27
+    ' Comment Lines: 32
     '   Blank Lines: 17
-    '     File Size: 3.71 KB
+    '     File Size: 3.92 KB
 
 
     '     Class FormulaExpression

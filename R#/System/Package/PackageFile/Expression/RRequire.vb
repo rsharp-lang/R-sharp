@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::64b33f8a6fd995a0e847d437a785e9db, F:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Expression/RRequire.vb"
+﻿#Region "Microsoft.VisualBasic::e21b6b38eafc12e488d47b5388f4afb7, G:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Expression/RRequire.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 52
-    '    Code Lines: 37
-    ' Comment Lines: 5
-    '   Blank Lines: 10
-    '     File Size: 2.12 KB
+    '   Total Lines: 110
+    '    Code Lines: 81
+    ' Comment Lines: 8
+    '   Blank Lines: 21
+    '     File Size: 4.20 KB
 
 
     '     Class RRequire
@@ -47,7 +47,7 @@
     ' 
     '         Function: GetExpression
     ' 
-    '         Sub: (+2 Overloads) WriteBuffer
+    '         Sub: (+3 Overloads) WriteBuffer
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::95d116c3797cfe707360fbdca521a411, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/dev/devtools.vb"
+﻿#Region "Microsoft.VisualBasic::d0247cc89e2ef139cccac8b89e200024, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/dev/devtools.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 263
-    '    Code Lines: 168
-    ' Comment Lines: 62
+    '   Total Lines: 274
+    '    Code Lines: 167
+    ' Comment Lines: 74
     '   Blank Lines: 33
-    '     File Size: 11.58 KB
+    '     File Size: 12.17 KB
 
 
     '     Class NoInspector

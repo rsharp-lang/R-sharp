@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4ed4d64e75adf6a17fd4e95a578d6406, F:/GCModeller/src/R-sharp/R#//Runtime/Interop/RInteropAttributes/RApiReturnAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::55b17601625d238ccd682a5b7b37cdc8, G:/GCModeller/src/R-sharp/R#//Runtime/Interop/RInteropAttributes/RApiReturnAttribute.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 98
+    '   Total Lines: 103
     '    Code Lines: 62
-    ' Comment Lines: 23
+    ' Comment Lines: 28
     '   Blank Lines: 13
-    '     File Size: 3.61 KB
+    '     File Size: 3.82 KB
 
 
     '     Class RApiReturnAttribute

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0f00467e6f58c29e7d8b76115b6149f0, F:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//Models/SyntaxToken.vb"
+﻿#Region "Microsoft.VisualBasic::3f2f7c4570a7cc749d2165f5d6de9873, G:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//Models/SyntaxToken.vb"
 
     ' Author:
     ' 
@@ -142,4 +142,3 @@ Public Class SyntaxToken
     End Function
 
 End Class
-

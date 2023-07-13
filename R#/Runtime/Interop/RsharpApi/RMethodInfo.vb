@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::833e4d726282242e2cc4e7ee15d4160c, F:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/RMethodInfo.vb"
+﻿#Region "Microsoft.VisualBasic::92c986bbb1e859ea27f7aaf365650a27, G:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/RMethodInfo.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 485
+    '   Total Lines: 497
     '    Code Lines: 319
-    ' Comment Lines: 106
+    ' Comment Lines: 118
     '   Blank Lines: 60
-    '     File Size: 20.16 KB
+    '     File Size: 20.72 KB
 
 
     '     Class RMethodInfo

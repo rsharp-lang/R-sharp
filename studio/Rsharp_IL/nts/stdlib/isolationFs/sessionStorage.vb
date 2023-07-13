@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c0eaf986ef612d92ad2bd96bba0860c9, F:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//stdlib/isolationFs/sessionStorage.vb"
+﻿#Region "Microsoft.VisualBasic::5e04d2b780dfaefabbbb3e2316cdde4a, G:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//stdlib/isolationFs/sessionStorage.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 41
+    '   Total Lines: 40
     '    Code Lines: 32
     ' Comment Lines: 0
-    '   Blank Lines: 9
-    '     File Size: 1.39 KB
+    '   Blank Lines: 8
+    '     File Size: 1.38 KB
 
 
     '     Module sessionStorage
@@ -50,7 +50,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection

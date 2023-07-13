@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5b9e8b9cabe059d6e3bbb1d70b7883e9, F:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//jQuery.vb"
+﻿#Region "Microsoft.VisualBasic::73f145f1f783546beeb6a77ef9f05163, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//jQuery.vb"
 
     ' Author:
     ' 
@@ -34,10 +34,10 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 88
+    '   Total Lines: 87
     '    Code Lines: 72
     ' Comment Lines: 0
-    '   Blank Lines: 16
+    '   Blank Lines: 15
     '     File Size: 3.16 KB
 
 
@@ -51,7 +51,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.GraphQuery
@@ -140,4 +139,3 @@ Public Class jQuery : Implements RIndexer, RIndex
         Throw New NotImplementedException()
     End Function
 End Class
-

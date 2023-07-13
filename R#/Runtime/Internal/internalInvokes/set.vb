@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0881ff32d71e781aa821b260164bb749, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/set.vb"
+﻿#Region "Microsoft.VisualBasic::0263c39df5c95566f35d6e4d2c7e652b, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/set.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 506
-    '    Code Lines: 283
+    '   Total Lines: 512
+    '    Code Lines: 289
     ' Comment Lines: 165
     '   Blank Lines: 58
-    '     File Size: 22.44 KB
+    '     File Size: 22.79 KB
 
 
     '     Module [set]

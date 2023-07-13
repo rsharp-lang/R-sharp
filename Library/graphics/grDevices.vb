@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b94ae2a963b338e36ec46481d2b4881a, F:/GCModeller/src/R-sharp/Library/graphics//grDevices.vb"
+﻿#Region "Microsoft.VisualBasic::24d43fd34c983c200a7ae54196d7ea13, G:/GCModeller/src/R-sharp/Library/graphics//grDevices.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 493
-    '    Code Lines: 336
-    ' Comment Lines: 109
-    '   Blank Lines: 48
-    '     File Size: 20.98 KB
+    '   Total Lines: 512
+    '    Code Lines: 345
+    ' Comment Lines: 116
+    '   Blank Lines: 51
+    '     File Size: 21.69 KB
 
 
     ' Module grDevices
     ' 
     '     Function: adjustAlpha, colorPopulator, colors, getFormatFromSuffix, imageAttrs
-    '               pdfDevice, rgb, saveBitmap, saveImage, svg
-    '               tryMeasureFormat
+    '               pdfDevice, registerCustomPalette, rgb, saveBitmap, saveImage
+    '               svg, tryMeasureFormat
     ' 
     ' /********************************************************************************/
 

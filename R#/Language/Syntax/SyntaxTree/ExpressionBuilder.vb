@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6162b6d3a62a0fddc1faea3a6fbf889b, F:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/ExpressionBuilder.vb"
+﻿#Region "Microsoft.VisualBasic::34429f17f489ce06e9506a325a7338e5, G:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/ExpressionBuilder.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 527
-    '    Code Lines: 415
-    ' Comment Lines: 40
+    '   Total Lines: 535
+    '    Code Lines: 419
+    ' Comment Lines: 44
     '   Blank Lines: 72
-    '     File Size: 24.41 KB
+    '     File Size: 24.76 KB
 
 
     '     Module ExpressionBuilder

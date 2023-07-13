@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b83af7194320f9a8eea3c214472b7098, F:/GCModeller/src/R-sharp/studio/RData//Convertor/ConvertToR.vb"
+﻿#Region "Microsoft.VisualBasic::c5533c3a7297fd3afacb75462680aead, G:/GCModeller/src/R-sharp/studio/RData//Convertor/ConvertToR.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 271
-    '    Code Lines: 194
+    '   Total Lines: 278
+    '    Code Lines: 200
     ' Comment Lines: 34
-    '   Blank Lines: 43
-    '     File Size: 10.18 KB
+    '   Blank Lines: 44
+    '     File Size: 10.36 KB
 
 
     '     Module ConvertToR

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bf166ae42e2ca9b1e02228c7182c53ff, F:/GCModeller/src/R-sharp/studio/Rsharp_IL/njl//Language/InternalParser.vb"
+﻿#Region "Microsoft.VisualBasic::bf166ae42e2ca9b1e02228c7182c53ff, G:/GCModeller/src/R-sharp/studio/Rsharp_IL/njl//Language/InternalParser.vb"
 
     ' Author:
     ' 

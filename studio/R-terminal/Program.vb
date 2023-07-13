@@ -1,51 +1,52 @@
-﻿#Region "Microsoft.VisualBasic::ff6c2ea70d7d22d53949212bfe2c7bea, F:/GCModeller/src/R-sharp/studio/R-terminal//Program.vb"
+﻿#Region "Microsoft.VisualBasic::41a9a2ed4471acd9ff4ca26ecc02729b, G:/GCModeller/src/R-sharp/studio/R-terminal//Program.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 252
-'    Code Lines: 178
-' Comment Lines: 37
-'   Blank Lines: 37
-'     File Size: 10.10 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module Program
-' 
-'     Function: Main, (+2 Overloads) QueryCommandLineArgvs, RunExpression, RunRScriptFile, RunScript
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 280
+    '    Code Lines: 201
+    ' Comment Lines: 38
+    '   Blank Lines: 41
+    '     File Size: 11.32 KB
+
+
+    ' Module Program
+    ' 
+    '     Function: InspectFile, Main, (+2 Overloads) QueryCommandLineArgvs, RunExpression, RunRScriptFile
+    '               RunScript
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

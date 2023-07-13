@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bfd7a2f5b5e5612c4b5e4b33d5c681a7, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/pipeline.vb"
+﻿#Region "Microsoft.VisualBasic::0ce14e736a33bf5748efb19b40faa7eb, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/pipeline.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 278
-    '    Code Lines: 185
-    ' Comment Lines: 51
-    '   Blank Lines: 42
-    '     File Size: 11.97 KB
+    '   Total Lines: 308
+    '    Code Lines: 200
+    ' Comment Lines: 64
+    '   Blank Lines: 44
+    '     File Size: 13.52 KB
 
 
     '     Class pipeline

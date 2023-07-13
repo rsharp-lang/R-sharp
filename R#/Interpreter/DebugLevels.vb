@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4dffd7660a1bebcb71781feb08956653, F:/GCModeller/src/R-sharp/R#//Interpreter/DebugLevels.vb"
+﻿#Region "Microsoft.VisualBasic::38200e924b7841a0d0d5e46dba67b9f8, G:/GCModeller/src/R-sharp/R#//Interpreter/DebugLevels.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 9
+    '   Total Lines: 24
     '    Code Lines: 8
-    ' Comment Lines: 0
+    ' Comment Lines: 15
     '   Blank Lines: 1
-    '     File Size: 165 B
+    '     File Size: 697 B
 
 
     '     Enum DebugLevels

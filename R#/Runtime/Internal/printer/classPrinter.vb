@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::632822b2cf372a4b94f6e5275cbd6e80, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/printer/classPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::3659c8e1fef88e648ded243970411c6a, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/printer/classPrinter.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 123
-    '    Code Lines: 89
+    '   Total Lines: 131
+    '    Code Lines: 96
     ' Comment Lines: 14
-    '   Blank Lines: 20
-    '     File Size: 4.72 KB
+    '   Blank Lines: 21
+    '     File Size: 4.97 KB
 
 
     '     Module classPrinter
     ' 
     '         Function: getMemberValueString, getObjMethods, getObjProperties, getTypeDisplay, printClass
+    '                   printClassImplInternal
     ' 
     ' 
     ' /********************************************************************************/

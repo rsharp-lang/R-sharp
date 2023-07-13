@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3abc42e5309329bc6f79963eacf1a2e0, F:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Serialization/ExpressionTypes.vb"
+﻿#Region "Microsoft.VisualBasic::3c7b0ac077c3c6ca7a1c0c393d6bd089, G:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Serialization/ExpressionTypes.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 74
-    '    Code Lines: 52
-    ' Comment Lines: 6
+    '   Total Lines: 84
+    '    Code Lines: 53
+    ' Comment Lines: 15
     '   Blank Lines: 16
-    '     File Size: 1.37 KB
+    '     File Size: 1.66 KB
 
 
     '     Enum ExpressionTypes

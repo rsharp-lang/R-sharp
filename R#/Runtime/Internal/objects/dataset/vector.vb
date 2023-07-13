@@ -1,58 +1,62 @@
-﻿#Region "Microsoft.VisualBasic::0e3d7d0b2937ced003f9b2c1e5e84001, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vector.vb"
+﻿#Region "Microsoft.VisualBasic::3cfd529f4bb2769e0df76a17dffe7d00, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vector.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 332
-'    Code Lines: 228
-' Comment Lines: 50
-'   Blank Lines: 54
-'     File Size: 12.31 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class vector
-' 
-'         Properties: data, factor, length, unit
-' 
-'         Constructor: (+7 Overloads) Sub New
-'         Function: asVector, fromScalar, (+2 Overloads) getByIndex, getByName, getNames
-'                   hasName, isVectorOf, setByindex, setByIndex, setNames
-'                   ToString
-'         Operators: <>, =
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 418
+    '    Code Lines: 304
+    ' Comment Lines: 48
+    '   Blank Lines: 66
+    '     File Size: 15.66 KB
+
+
+    '     Class vector
+    ' 
+    '         Properties: data, factor, length, unit
+    ' 
+    '         Constructor: (+13 Overloads) Sub New
+    ' 
+    '         Function: asVector, fromScalar, (+2 Overloads) getByIndex, getByName, getNames
+    '                   hasName, isVectorOf, loadGenericCollection, setByindex, setByIndex
+    '                   setNames, ToString
+    ' 
+    '         Sub: setNames
+    ' 
+    '         Operators: <>, =
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::953f6404687214d90b8c716c1faeac8c, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::176626796e3db5e210f295626c4c4bc7, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/dataframe.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 715
-    '    Code Lines: 385
-    ' Comment Lines: 251
+    '   Total Lines: 743
+    '    Code Lines: 388
+    ' Comment Lines: 276
     '   Blank Lines: 79
-    '     File Size: 28.69 KB
+    '     File Size: 29.91 KB
 
 
     '     Class dataframe

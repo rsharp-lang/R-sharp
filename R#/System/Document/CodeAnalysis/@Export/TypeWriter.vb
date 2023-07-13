@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b2c9154c67eb284cd00cb11c5e64f6cc, F:/GCModeller/src/R-sharp/R#//System/Document/CodeAnalysis/@Export/TypeWriter.vb"
+﻿#Region "Microsoft.VisualBasic::8f28a86ef7247c1446a1766babda8923, G:/GCModeller/src/R-sharp/R#//System/Document/CodeAnalysis/@Export/TypeWriter.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 140
-    '    Code Lines: 109
-    ' Comment Lines: 0
-    '   Blank Lines: 31
-    '     File Size: 5.29 KB
+    '   Total Lines: 160
+    '    Code Lines: 117
+    ' Comment Lines: 9
+    '   Blank Lines: 34
+    '     File Size: 5.96 KB
 
 
     '     Class TypeWriter
@@ -47,7 +47,7 @@
     ' 
     '         Function: GetNetCoreCLRDeclaration, ToString
     ' 
-    '         Sub: (+2 Overloads) Flush, WriteFunction, WriteSymbol
+    '         Sub: (+2 Overloads) Flush, FlushInternal, WriteFunction, WriteSymbol
     ' 
     ' 
     ' /********************************************************************************/

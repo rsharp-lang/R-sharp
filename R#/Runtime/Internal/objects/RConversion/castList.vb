@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::35ed5df78cc7f2002764404a3e0d8ffb, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/castList.vb"
+﻿#Region "Microsoft.VisualBasic::a84d60ec1f9694180f6faca62504f747, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/castList.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 261
-    '    Code Lines: 205
+    '   Total Lines: 280
+    '    Code Lines: 220
     ' Comment Lines: 14
-    '   Blank Lines: 42
-    '     File Size: 10.46 KB
+    '   Blank Lines: 46
+    '     File Size: 11.29 KB
 
 
     '     Module castList

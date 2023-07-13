@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::78c092e08651742c25d0a246246925e3, F:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//SyntaxParser/InternalParser.vb"
+﻿#Region "Microsoft.VisualBasic::95840d2b2593ae5fd31105ad8410db6d, G:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//SyntaxParser/InternalParser.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 350
     ' Comment Lines: 37
     '   Blank Lines: 60
-    '     File Size: 18.61 KB
+    '     File Size: 18.60 KB
 
 
     ' Module InternalParser
@@ -498,4 +498,3 @@ Public Module InternalParser
         Return syntax
     End Function
 End Module
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8d5801b5064f688329bb907cfabea170, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/printer/htmlPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::9730e3fc7d4364a67c5753294a7b59d5, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/printer/htmlPrinter.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 28
+    '   Total Lines: 35
     '    Code Lines: 17
-    ' Comment Lines: 5
+    ' Comment Lines: 12
     '   Blank Lines: 6
-    '     File Size: 1007 B
+    '     File Size: 1.33 KB
 
 
     '     Module htmlPrinter

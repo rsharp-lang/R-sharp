@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c44201e3411d0d73cd6d18e1f84c43ea, F:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//JavaScript.vb"
+﻿#Region "Microsoft.VisualBasic::90a1f2285ce58fc9a4a82c1c224db765, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//JavaScript.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 20
+    '   Total Lines: 19
     '    Code Lines: 14
     ' Comment Lines: 3
-    '   Blank Lines: 3
-    '     File Size: 587 B
+    '   Blank Lines: 2
+    '     File Size: 583 B
 
 
     ' Module JavaScript
@@ -48,7 +48,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -69,4 +68,3 @@ Public Module JavaScript
         Return app
     End Function
 End Module
-

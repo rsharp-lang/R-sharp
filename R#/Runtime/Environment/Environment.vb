@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::155d39a4b39d35122e452f2e67d16593, F:/GCModeller/src/R-sharp/R#//Runtime/Environment/Environment.vb"
+﻿#Region "Microsoft.VisualBasic::f223267a6174a6c1f11788f857e711ac, G:/GCModeller/src/R-sharp/R#//Runtime/Environment/Environment.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 833
-    '    Code Lines: 429
-    ' Comment Lines: 304
-    '   Blank Lines: 100
-    '     File Size: 36.22 KB
+    '   Total Lines: 846
+    '    Code Lines: 431
+    ' Comment Lines: 314
+    '   Blank Lines: 101
+    '     File Size: 36.78 KB
 
 
     '     Class Environment

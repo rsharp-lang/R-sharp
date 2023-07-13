@@ -1,53 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::586a553b37b7d1d38f98be6a2cb9990b, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/RCType.vb"
+﻿#Region "Microsoft.VisualBasic::8420e88bd9e94a3614e061014617b6d2, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/RCType.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 162
-'    Code Lines: 113
-' Comment Lines: 28
-'   Blank Lines: 21
-'     File Size: 7.78 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class RCType
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: CastToEnum, CTypeDynamic
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 241
+    '    Code Lines: 177
+    ' Comment Lines: 30
+    '   Blank Lines: 34
+    '     File Size: 11.46 KB
+
+
+    '     Class RCType
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    ' 
+    '         Function: CastToEnum, castUnsure, CTypeDynamic, GetCType, hasInterfaceCast
+    '                   hasTypeCast, IsNALiteralValue, NADefault
+    ' 
+    '         Sub: AddCType
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

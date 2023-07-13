@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5aca11bd66fb83a99abd0a427a6e09a9, F:/GCModeller/src/R-sharp/R#//Runtime/Environment/PolyglotInteropEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::9ed7f325f829f1d6fec15a65fbb218e5, G:/GCModeller/src/R-sharp/R#//Runtime/Environment/PolyglotInteropEnvironment.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 126
-    '    Code Lines: 91
+    '   Total Lines: 127
+    '    Code Lines: 92
     ' Comment Lines: 13
     '   Blank Lines: 22
-    '     File Size: 4.68 KB
+    '     File Size: 4.71 KB
 
 
     '     Class PolyglotInteropEnvironment

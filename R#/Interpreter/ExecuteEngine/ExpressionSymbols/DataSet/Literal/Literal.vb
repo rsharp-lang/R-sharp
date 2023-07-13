@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9e9f2832036321705bc77cce2600ab0e, F:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/Literal/Literal.vb"
+﻿#Region "Microsoft.VisualBasic::33159b2faef434930447bb7aa4ddff17, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/Literal/Literal.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 198
+    '   Total Lines: 206
     '    Code Lines: 152
-    ' Comment Lines: 19
+    ' Comment Lines: 27
     '   Blank Lines: 27
-    '     File Size: 6.22 KB
+    '     File Size: 6.48 KB
 
 
     '     Class Literal

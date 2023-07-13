@@ -1,63 +1,63 @@
-﻿#Region "Microsoft.VisualBasic::36a01e8560441d5442190fc0e435af47, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/file.vb"
+﻿#Region "Microsoft.VisualBasic::df32aa69bb45d84ad5ad755ae9dd5900, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/file.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 1541
-'    Code Lines: 875
-' Comment Lines: 519
-'   Blank Lines: 147
-'     File Size: 69.41 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module file
-' 
-'         Function: [erase], basename, buffer, bytes, close
-'                   dataUri, dir_exists, dirCopy, dirCreate, dirname
-'                   exists, file, file_ext, filecopy, fileExt
-'                   fileinfo, fileInfoByFile, filepath, filesize, getRelativePath
-'                   GetSha1Hash, getwd, handleWriteLargeTextStream, handleWriteTextArray, isSystemDir
-'                   listDirs, listFiles, loadListInternal, NextTempToken, normalizeFileName
-'                   normalizePath, openDir, openGzip, openZip, readBin
-'                   readFromFile, readFromStream, readLines, readList, readText
-'                   Rhome, saveList, scanZipFiles, setwd, tempdir
-'                   tempfile, writeLines
-' 
-'         Sub: fileRemove, fileRename, unlinks
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 1595
+    '    Code Lines: 920
+    ' Comment Lines: 520
+    '   Blank Lines: 155
+    '     File Size: 71.90 KB
+
+
+    '     Module file
+    ' 
+    '         Function: [erase], basename, buffer, bytes, close
+    '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
+    '                   exists, file, file_allocate, file_ext, filecopy
+    '                   fileExt, fileinfo, fileInfoByFile, filepath, filesize
+    '                   getRelativePath, GetSha1Hash, getwd, handleWriteLargeTextStream, handleWriteTextArray
+    '                   isSystemDir, listDirs, listFiles, loadListInternal, NextTempToken
+    '                   normalizeFileName, normalizePath, openDir, openGzip, openZip
+    '                   readBin, readFromFile, readFromStream, readLines, readList
+    '                   readText, Rhome, saveList, scanZipFiles, setwd
+    '                   tempdir, tempfile, writeLines
+    ' 
+    '         Sub: fileRemove, fileRename, unlinks
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

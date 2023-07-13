@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e8b67cec0ca22660fe03cdbcd3e53f68, F:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//HTTP/WebTextQuery.vb"
+﻿#Region "Microsoft.VisualBasic::f52f0c4305c5455f79af53b65f02fab3, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//HTTP/WebTextQuery.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 58
-    '    Code Lines: 38
-    ' Comment Lines: 11
+    '   Total Lines: 64
+    '    Code Lines: 42
+    ' Comment Lines: 13
     '   Blank Lines: 9
-    '     File Size: 1.76 KB
+    '     File Size: 2.01 KB
 
 
     ' Class WebTextQuery

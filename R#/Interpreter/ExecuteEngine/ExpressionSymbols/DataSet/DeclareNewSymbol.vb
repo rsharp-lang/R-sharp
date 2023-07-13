@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::43619757fcdd3eff11a476df9151829f, F:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/DeclareNewSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::7a6ea3494b31cc815c6fc3315dac0052, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/DeclareNewSymbol.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 415
-    '    Code Lines: 290
-    ' Comment Lines: 66
-    '   Blank Lines: 59
-    '     File Size: 15.61 KB
+    '   Total Lines: 425
+    '    Code Lines: 285
+    ' Comment Lines: 80
+    '   Blank Lines: 60
+    '     File Size: 16.08 KB
 
 
     '     Class DeclareNewSymbol

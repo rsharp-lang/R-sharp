@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0c01828739ebe8bc7b44c36421415665, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/graphics/graphics.vb"
+﻿#Region "Microsoft.VisualBasic::7440b7edcdc30ac013453e714b4445cf, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/graphics/graphics.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 554
-    '    Code Lines: 345
+    '   Total Lines: 560
+    '    Code Lines: 350
     ' Comment Lines: 140
-    '   Blank Lines: 69
-    '     File Size: 23.27 KB
+    '   Blank Lines: 70
+    '     File Size: 23.59 KB
 
 
     '     Module graphics

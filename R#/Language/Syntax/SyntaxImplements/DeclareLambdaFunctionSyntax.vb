@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c38c6dbc517ecdfb3a109a4766324b3, F:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/DeclareLambdaFunctionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::a44e7120ebf8f75d9afaf3d0602c16fe, G:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/DeclareLambdaFunctionSyntax.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 94
-    '    Code Lines: 78
+    '   Total Lines: 114
+    '    Code Lines: 95
     ' Comment Lines: 7
-    '   Blank Lines: 9
-    '     File Size: 4.07 KB
+    '   Blank Lines: 12
+    '     File Size: 5.09 KB
 
 
     '     Module DeclareLambdaFunctionSyntax
     ' 
-    '         Function: (+3 Overloads) DeclareLambdaFunction
+    '         Function: (+3 Overloads) DeclareLambdaFunction, GetSymbols
     ' 
     ' 
     ' /********************************************************************************/

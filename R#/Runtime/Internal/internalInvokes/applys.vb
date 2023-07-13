@@ -1,53 +1,53 @@
-﻿#Region "Microsoft.VisualBasic::12ed939a8d11c7733976f9602be0e516, F:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/applys.vb"
+﻿#Region "Microsoft.VisualBasic::041bcebfce44c5eac307081a75fd84df, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/applys.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 536
-'    Code Lines: 354
-' Comment Lines: 108
-'   Blank Lines: 74
-'     File Size: 22.72 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module applys
-' 
-'         Function: apply, checkInternal, (+2 Overloads) keyNameAuto, lapply, parLapply
-'                   parSapply, sapply
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 587
+    '    Code Lines: 395
+    ' Comment Lines: 113
+    '   Blank Lines: 79
+    '     File Size: 24.68 KB
+
+
+    '     Module applys
+    ' 
+    '         Function: apply, checkInternal, lapply, lapplyGeneralIDictionary, lapplyGeneralSequence
+    '                   lapplyPipelineStream, lapplyRNameIndex, parLapply, parSapply, sapply
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

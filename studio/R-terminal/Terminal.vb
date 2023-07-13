@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::63d2b1255346b6c3685d9b015aa0fee7, F:/GCModeller/src/R-sharp/studio/R-terminal//Terminal.vb"
+﻿#Region "Microsoft.VisualBasic::f7ba0a07e8700a9027a141c3df9e4849, G:/GCModeller/src/R-sharp/studio/R-terminal//Terminal.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 225
-    '    Code Lines: 129
-    ' Comment Lines: 59
-    '   Blank Lines: 37
-    '     File Size: 7.57 KB
+    '   Total Lines: 248
+    '    Code Lines: 150
+    ' Comment Lines: 60
+    '   Blank Lines: 38
+    '     File Size: 8.35 KB
 
 
     ' Module Terminal
@@ -47,7 +47,7 @@
     ' 
     '     Function: RunTerminal
     ' 
-    '     Sub: [exit], q, quit
+    '     Sub: [exit], doRunScriptWithSpecialCommandSync, q, quit
     '     Class RunScript
     ' 
     '         Constructor: (+1 Overloads) Sub New

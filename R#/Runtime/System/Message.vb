@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e205b30aed68fa49de935f3b3bd062dc, F:/GCModeller/src/R-sharp/R#//Runtime/System/Message.vb"
+﻿#Region "Microsoft.VisualBasic::4044955e4980ef17ba66a09d6970c75a, G:/GCModeller/src/R-sharp/R#//Runtime/System/Message.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 131
-    '    Code Lines: 75
+    '   Total Lines: 142
+    '    Code Lines: 85
     ' Comment Lines: 38
-    '   Blank Lines: 18
-    '     File Size: 5.13 KB
+    '   Blank Lines: 19
+    '     File Size: 5.55 KB
 
 
     '     Class Message
     ' 
     '         Properties: environmentStack, level, message, source, trace
     ' 
-    '         Function: GenericEnumerator, GetEnumerator, InCompatibleType, SymbolNotFound, SyntaxNotImplemented
-    '                   ToException, ToString
+    '         Function: [Error], GenericEnumerator, GetEnumerator, InCompatibleType, SymbolNotFound
+    '                   SyntaxNotImplemented, ToException, ToString
     ' 
     '         Sub: ThrowCLRError
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::11857104d5ac1f1b285ad13f6bb242e6, F:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//SyntaxParser/TsScanner.vb"
+﻿#Region "Microsoft.VisualBasic::52f67186f8d238b89fc1273173be3f77, G:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//SyntaxParser/TsScanner.vb"
 
     ' Author:
     ' 
@@ -78,4 +78,3 @@ Public Class TsScanner : Inherits Scanner
         commentFlag = "//"
     End Sub
 End Class
-

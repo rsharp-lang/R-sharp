@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9f0f17f6116d9f46d1d61141114782a1, F:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Package/Imports.vb"
+﻿#Region "Microsoft.VisualBasic::dede96e9e142e69459a5c33727ad966f, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Package/Imports.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 360
-    '    Code Lines: 231
+    '   Total Lines: 356
+    '    Code Lines: 227
     ' Comment Lines: 85
     '   Blank Lines: 44
-    '     File Size: 15.10 KB
+    '     File Size: 14.97 KB
 
 
     '     Delegate Function

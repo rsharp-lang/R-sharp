@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0bc616b35d2a11b1353e488fde9ed8e4, F:/GCModeller/src/R-sharp/R#/Test//convertTest.vb"
+﻿#Region "Microsoft.VisualBasic::c291c5714226e2eba1d91a87c66705f8, G:/GCModeller/src/R-sharp/R#/Test//convertTest.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 86
-    '    Code Lines: 71
+    '   Total Lines: 88
+    '    Code Lines: 73
     ' Comment Lines: 0
     '   Blank Lines: 15
-    '     File Size: 2.73 KB
+    '     File Size: 2.77 KB
 
 
     ' Module convertTest
