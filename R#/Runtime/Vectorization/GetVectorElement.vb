@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::4176e2b62014a1e45f451f8b73521b96, F:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/GetVectorElement.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 236
-    '    Code Lines: 158
-    ' Comment Lines: 48
-    '   Blank Lines: 30
-    '     File Size: 8.62 KB
+' Summaries:
 
 
-    '     Class GetVectorElement
-    ' 
-    '         Properties: [Error], elementType, isNullOrEmpty, Mode, size
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: CastTo, Create, CreateVectorInternal, DoesSizeMatch, (+2 Overloads) Getter
-    '                   IsScalar, Populate
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 236
+'    Code Lines: 158
+' Comment Lines: 48
+'   Blank Lines: 30
+'     File Size: 8.62 KB
+
+
+'     Class GetVectorElement
+' 
+'         Properties: [Error], elementType, isNullOrEmpty, Mode, size
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: CastTo, Create, CreateVectorInternal, DoesSizeMatch, (+2 Overloads) Getter
+'                   IsScalar, Populate
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime.Vectorization
 
@@ -170,6 +171,19 @@ Namespace Runtime.Vectorization
             Me.elementType = type
         End Sub
 
+        Public Overrides Function ToString() As String
+            Select Case Mode
+                Case VectorTypes.Scalar
+                    Return any.ToString([single], "null")
+                Case VectorTypes.Vector
+                    Return $"[vector, size={size}] [0]{any.ToString([single], "null")}"
+                Case VectorTypes.None
+                    Return "null"
+                Case Else
+                    Return "Error: " & [Error].Message
+            End Select
+        End Function
+
         Public Function CastTo(Of T)(cast As Func(Of Object, T)) As GetVectorElement
             If vector Is Nothing OrElse vector.Length = 0 Then
                 Return New GetVectorElement({}, GetType(T))
@@ -200,6 +214,14 @@ Namespace Runtime.Vectorization
             Return castDirect
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <returns>
+        ''' the lambda function accepts a zero-based index value for
+        ''' get element value from a clr vector <see cref="Array"/> 
+        ''' object
+        ''' </returns>
         Public Function Getter() As Func(Of Integer, Object)
             If isNullOrEmpty OrElse vector.Length = 1 Then
                 Return Function() [single]
@@ -245,29 +267,66 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
-        Private Shared Function CreateVectorInternal(Of T)(x As Object) As GetVectorElement
+        ''' <summary>
+        ''' if the target input object <paramref name="x"/>is nothing, then this function
+        ''' will returns an instance of <see cref="GetVectorElement"/> with wrap a null
+        ''' value
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        Public Shared Function CreateAny(x As Object) As GetVectorElement
+            Dim any As Type = GetType(Object)
+
+            If x Is Nothing Then
+                Return New GetVectorElement(vec:=Nothing, any)
+            ElseIf TypeOf x Is GetVectorElement AndAlso DirectCast(x, GetVectorElement).elementType Is any Then
+                Return DirectCast(x, GetVectorElement)
+            Else
+                If TypeOf x Is vector Then
+                    x = DirectCast(x, vector).data
+                End If
+
+                Return CreateVectorInternal(Of Object)(x)
+            End If
+        End Function
+
+        Friend Shared Function CreateVectorInternal(Of T)(x As Object) As GetVectorElement
             Dim type As Type = x.GetType
 
             If type Is typedefine(Of T).baseType Then
                 ' is a scalar
                 Return New GetVectorElement(scalar:=x, type:=type)
             ElseIf type.ImplementInterface(typedefine(Of T).enumerable) Then
-                ' is a generic collection
-                If type.IsArray Then
-                    Return New GetVectorElement(DirectCast(x, Array), GetType(T))
-                Else
-                    ' cast collection to array
-                    Dim list As New List(Of Object)
-
-                    For Each item As Object In DirectCast(x, IEnumerable)
-                        Call list.Add(item)
-                    Next
-
-                    Return New GetVectorElement(list.ToArray, GetType(T))
-                End If
+                Return FromCollection(type.IsArray, GetType(T), x)
             Else
+                If GetType(T) Is GetType(Object) Then
+                    ' string is a kind of special char collection
+                    ' filter out the string value
+                    If type IsNot GetType(String) AndAlso type.ImplementInterface(Of IEnumerable) Then
+                        Return FromCollection(type.IsArray, GetType(T), x)
+                    Else
+                        Return FromCollection(True, GetType(T), {x})
+                    End If
+                End If
+
                 ' do type cast?
                 Return New GetVectorElement(ex:=New InvalidCastException($"Do we require a type cast for {type} -> {GetType(T)}?"))
+            End If
+        End Function
+
+        Private Shared Function FromCollection(isArray As Boolean, type As Type, x As Object) As GetVectorElement
+            ' is a generic collection
+            If isArray Then
+                Return New GetVectorElement(DirectCast(x, Array), type)
+            Else
+                ' cast collection to array
+                Dim list As New List(Of Object)
+
+                For Each item As Object In DirectCast(x, IEnumerable)
+                    Call list.Add(item)
+                Next
+
+                Return New GetVectorElement(list.ToArray, type)
             End If
         End Function
 

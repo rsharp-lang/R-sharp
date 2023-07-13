@@ -155,10 +155,12 @@ Namespace Development.Package.File
         End Function
 
         Private Function FindAllDllFiles(projDir As String) As Dictionary(Of String, String)
-#If netcore5 = 1 Then
+#If NETCOREAPP Then
             Return ($"{projDir}/assembly/{CreatePackage.getRuntimeTags}/") _
                 .EnumerateFiles("*.dll") _
-                .ToDictionary(Function(dll) dll.FileName)
+                .ToDictionary(Function(dll)
+                                  Return dll.FileName
+                              End Function)
 #Else
             Return ($"{projDir}/assembly") _
                 .EnumerateFiles("*.dll") _
@@ -206,7 +208,7 @@ Namespace Development.Package.File
 
             Call VBDebugger.EchoLine($"R# package '{meta.Package}' hot load:")
 
-            ' 1. load R symbols
+            ' 1. load R symbols from the package source
             For Each script As String In $"{projDir}/R".ListFiles("*.R")
                 If Not ([error] = temp.buildRscript(script, loading)) Is Nothing Then
                     Return [error]
@@ -218,6 +220,7 @@ Namespace Development.Package.File
             onload = temp.symbols.TryGetValue(".onLoad")
             pkg.dependency = loading.loadingDependency.ToArray
 
+            ' push the symbols(function/constant literal) to the package environment
             For Each symbol As KeyValuePair(Of String, Expression) In temp.symbols _
                 .OrderByDescending(Function(f)
                                        ' 20220915
@@ -244,6 +247,9 @@ Namespace Development.Package.File
             End If
 
             ' 3. run '.onLoad'
+            ' all package symbols has been loaded into the current package
+            ' namespace environment, you can call all internal package
+            ' functions inside the zzz onload function
             If Not onload Is Nothing Then
                 Dim result = onload.Invoke(pkgEnv, params:={})
 
