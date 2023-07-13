@@ -1,61 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::6766b9a677df73880c24886339f13814, F:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/SymbolIndexer/VectorLoop.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 137
-    '    Code Lines: 85
-    ' Comment Lines: 31
-    '   Blank Lines: 21
-    '     File Size: 5.20 KB
+' Summaries:
 
 
-    '     Class VectorLoop
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, getListVector, getVectorList, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 137
+'    Code Lines: 85
+' Comment Lines: 31
+'   Blank Lines: 21
+'     File Size: 5.20 KB
+
+
+'     Class VectorLoop
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, getListVector, getVectorList, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -113,6 +116,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return data
             ElseIf Program.isException(member) Then
                 Return member
+            ElseIf data Is Nothing Then
+                Return Nothing
             End If
 
             Dim memberName As String = any.ToString(REnv.single(member))
@@ -121,6 +126,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return getListVector(DirectCast(data, list), memberName, envir)
             ElseIf TypeOf data Is vector Then
                 data = DirectCast(data, vector).data
+            ElseIf TypeOf data Is LinqPipeline.Group Then
+                data = DirectCast(data, LinqPipeline.Group).group
+            ElseIf data.GetType.ImplementInterface(Of IDictionary) Then
+                data = DirectCast(data, IDictionary).Values.ToArray(Of Object)
             End If
 
             If data Is Nothing Then

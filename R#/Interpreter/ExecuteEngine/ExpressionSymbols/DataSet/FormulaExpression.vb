@@ -116,6 +116,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
         End Function
 
+        ''' <summary>
+        ''' get symbol names from a binary expression or a single symbol reference
+        ''' </summary>
+        ''' <param name="formula"></param>
+        ''' <returns></returns>
         Public Shared Function GetSymbols(formula As Expression) As [Variant](Of String(), Exception)
             If TypeOf formula Is SymbolReference Then
                 Return {DirectCast(formula, SymbolReference).symbol}

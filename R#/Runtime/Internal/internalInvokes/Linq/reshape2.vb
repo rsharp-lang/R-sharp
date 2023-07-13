@@ -50,8 +50,11 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -61,6 +64,99 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
     Public Module reshape2
+
+        ''' <summary>
+        ''' Aggregate two or more sequence
+        ''' </summary>
+        ''' <param name="zip"></param>
+        ''' <param name="args"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("zip_tuple")>
+        Public Function tuple(Optional zip As Object = Nothing,
+                              <RListObjectArgument>
+                              Optional args As list = Nothing,
+                              Optional env As Environment = Nothing) As Object
+
+            Dim symbols = args.getNames _
+                .Where(Function(s) s <> "zip" AndAlso s <> "args" AndAlso s <> "env") _
+                .ToArray
+            Dim seqs As New Dictionary(Of String, GetVectorElement)
+
+            For Each var As String In symbols
+                Dim tmp = args.getByName(var)
+                Dim getter = GetVectorElement.CreateAny(tmp)
+
+                Call seqs.Add(var, getter)
+            Next
+
+            Dim multiple As Integer() = seqs.Values _
+                .Select(Function(a) a.size) _
+                .Where(Function(a) a > 1) _
+                .ToArray
+            Dim len As Integer = If(multiple.Length > 0,
+                multiple.Min,
+                seqs.Values.Select(Function(a) a.size).Max)
+            Dim getters As Dictionary(Of String, Func(Of Integer, Object)) = seqs _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return a.Value.Getter
+                              End Function)
+
+            If zip Is Nothing Then
+                Return getters.zip(len).ToArray
+            Else
+                Dim check = applys.checkInternal(Nothing, zip, env)
+
+                If Program.isException(check) Then
+                    Return check
+                Else
+                    Return getters.aggregate(lambda:=zip, len, New Environment(env, "zip_tuples.internal_loops"))
+                End If
+            End If
+        End Function
+
+        <Extension>
+        Private Function aggregate(getters As Dictionary(Of String, Func(Of Integer, Object)),
+                                   lambda As RFunction,
+                                   len As Integer,
+                                   env As Environment) As Object
+
+            Dim getterVec = getters.ToArray
+            Dim argv As InvokeParameter() = New InvokeParameter(getters.Count - 1) {}
+            Dim result As Object
+            Dim zipList As New List(Of Object)
+
+            For i As Integer = 0 To len - 1
+                For j As Integer = 0 To argv.Length - 1
+                    argv(j) = New InvokeParameter(getterVec(j).Key, getterVec(j).Value(i), i)
+                Next
+
+                result = lambda.Invoke(env, argv)
+
+                If Program.isException(result) Then
+                    Return result
+                Else
+                    Call zipList.Add(result)
+                End If
+            Next
+
+            Return REnv.TryCastGenericArray(zipList.ToArray, env)
+        End Function
+
+        <Extension>
+        Private Iterator Function zip(getters As Dictionary(Of String, Func(Of Integer, Object)), len As Integer) As IEnumerable(Of list)
+            ' just create the tuple list
+            For i As Integer = 0 To len - 1
+                Dim li As New list With {.slots = New Dictionary(Of String, Object)}
+
+                For Each item In getters
+                    Call li.add(item.Key, getters(item.Key)(i))
+                Next
+
+                Yield li
+            Next
+        End Function
 
         ''' <summary>
         ''' melt: Convert an object into a molten data frame.

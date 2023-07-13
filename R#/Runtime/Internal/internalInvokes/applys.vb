@@ -274,7 +274,7 @@ Namespace Runtime.Internal.Invokes
             Return New RObj.vector(names, seq.ToArray, envir)
         End Function
 
-        Private Function checkInternal(X As Object, FUN As Object, env As Environment) As Object
+        Friend Function checkInternal(X As Object, FUN As Object, env As Environment) As Object
             If FUN Is Nothing Then
                 Return Internal.debug.stop({"Missing apply function!"}, env)
             ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then

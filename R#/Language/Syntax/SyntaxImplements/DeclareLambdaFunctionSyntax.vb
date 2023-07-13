@@ -51,10 +51,12 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -62,10 +64,28 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
     Module DeclareLambdaFunctionSyntax
 
+        Private Function GetSymbols(exp As Expression) As [Variant](Of String(), Exception)
+            If TypeOf exp Is SymbolReference Then
+                Return {DirectCast(exp, SymbolReference).symbol}
+            ElseIf TypeOf exp Is VectorLiteral Then
+                Return DirectCast(exp, VectorLiteral) _
+                    .Select(Function(a) ValueAssignExpression.GetSymbol(a)) _
+                    .ToArray
+            Else
+                Return New InvalidExpressionException($"Can not extract symbols from expression: {exp.GetType.FullName}")
+            End If
+        End Function
+
         ''' <summary>
         ''' 只允许拥有一个参数，并且只允许出现一行代码
         ''' </summary>
-        Public Function DeclareLambdaFunction(args As SymbolReference, expression As Expression, lineNum%, opts As SyntaxBuilderOptions) As SyntaxResult
+        Public Function DeclareLambdaFunction(args As Expression, expression As Expression, lineNum%, opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim argSymbols As [Variant](Of String(), Exception) = GetSymbols(args)
+
+            If Not argSymbols Like GetType(String()) Then
+                Return New SyntaxResult(SyntaxError.CreateError(opts, argSymbols.TryCast(Of Exception)))
+            End If
+
             Dim name$ = $"[lambda: {args} -> {expression}]"
             Dim stackframe As New StackFrame With {
                 .File = opts.source.fileName,
@@ -77,7 +97,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                 }
             }
             Dim parameter As New DeclareNewSymbol(
-                names:={args.symbol},
+                names:=argSymbols.TryCast(Of String()),
                 value:=Nothing,
                 type:=TypeCodes.generic,
                 [readonly]:=False,

@@ -114,6 +114,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     .JoinBy(vbCrLf)
         End Function
 
+        ''' <summary>
+        ''' just supports get data via 'key' or 'group'
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
         Public Function getByName(name As String) As Object Implements RNameIndex.getByName
             If name = NameOf(key) Then
                 Return key
