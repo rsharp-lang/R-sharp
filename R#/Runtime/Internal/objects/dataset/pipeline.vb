@@ -66,7 +66,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Namespace Runtime.Internal.Object
 
     ''' <summary>
-    ''' The R# pipeline
+    ''' The R# data pipeline
+    ''' 
+    ''' this model object is a kind of wrapper of the .net clr <see cref="IEnumerable"/> interface
     ''' </summary>
     Public Class pipeline : Inherits RsharpDataObject
         Implements RPipeline
@@ -78,11 +80,18 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         Dim populatorFirstErr As Message
 
+        ''' <summary>
+        ''' The action will be called after finish loop on the sequence. 
+        ''' Null value of this property will be ignored
+        ''' </summary>
+        ''' <returns></returns>
         Public Property [pipeFinalize] As Action
 
         ''' <summary>
         ''' contains an error message in the pipeline populator or 
-        ''' the pipeline data is an error message
+        ''' the pipeline data is an error message. You can get the
+        ''' error message via function <see cref="getError()"/> when
+        ''' this property value is TRUE
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property isError As Boolean Implements RPipeline.isError
@@ -122,6 +131,10 @@ Namespace Runtime.Internal.Object
             elementType = type
         End Sub
 
+        ''' <summary>
+        ''' Gets the R# error message data
+        ''' </summary>
+        ''' <returns></returns>
         Public Function getError() As Message Implements RPipeline.getError
             If Not populatorFirstErr Is Nothing Then
                 Return populatorFirstErr
@@ -148,7 +161,7 @@ Namespace Runtime.Internal.Object
         ''' <summary>
         ''' populate the data element from the pipeline stream
         ''' </summary>
-        ''' <typeparam name="T"></typeparam>
+        ''' <typeparam name="T">the .net clr generic type constraint</typeparam>
         ''' <param name="env"></param>
         ''' <returns>direct cast</returns>
         Public Iterator Function populates(Of T)(env As Environment) As IEnumerable(Of T)
