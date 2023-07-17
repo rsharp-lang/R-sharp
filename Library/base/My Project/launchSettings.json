@@ -6,7 +6,7 @@
     "Profile 1": {
       "commandName": "Executable",
       "executablePath": "\\GCModeller\\src\\R-sharp\\App\\net6.0\\R#.exe",
-      "commandLineArgs": "\"F:\\GCModeller\\src\\R-sharp\\test\\demo\\excel\\xlsx.R\" --debug"
+      "commandLineArgs": "F:\\20230407\\reader_test.R --debug"
     }
   }
 }
