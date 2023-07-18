@@ -214,7 +214,7 @@ Namespace Runtime.Interop
 
             If argument.type.mode = TypeCodes.list Then
                 Dim values = parameterVals(listIndex)
-                Dim result = TryCastListObjectsInternal(values, env)
+                Dim result = TryCastListObjectsInternal(values, env, argument.islazyeval)
 
                 If Program.isException(result) Then
                     Return New Object() {result}
@@ -226,7 +226,7 @@ Namespace Runtime.Interop
             Return parameterVals
         End Function
 
-        Private Shared Function TryCastListObjectsInternal(values As Object, env As Environment) As Object
+        Private Shared Function TryCastListObjectsInternal(values As Object, env As Environment, lazy As Boolean) As Object
             Dim list As New list With {
                 .slots = New Dictionary(Of String, Object)
             }
