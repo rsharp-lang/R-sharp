@@ -589,7 +589,7 @@ Namespace Language.TokenIcer
                     Return New Token With {.name = TokenType.booleanLiteral, .text = text}
                 Case "✔"
                     Return New Token With {.name = TokenType.booleanLiteral, .text = "true"}
-                Case "_", "."
+                Case "_", ".", "..."
                     Return New Token With {.name = TokenType.identifier, .text = text}
                 Case Else
                     If text Like nullLiteral Then
