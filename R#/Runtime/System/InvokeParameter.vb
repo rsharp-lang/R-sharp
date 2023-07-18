@@ -195,18 +195,32 @@ Namespace Runtime.Components
         End Function
 
         ''' <summary>
+        ''' Just get the value part expression, not to evaluate it
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function GetLazyEvaluateExpression() As Expression
+            If value Is Nothing Then
+                Return Nothing
+            ElseIf Not TypeOf value Is ValueAssignExpression Then
+                Return value
+            Else
+                Return DirectCast(value, ValueAssignExpression).value
+            End If
+        End Function
+
+        ''' <summary>
         ''' get value part
         ''' </summary>
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate(envir As Environment) As Object
-            If value Is Nothing Then
+            Dim lazy As Expression = GetLazyEvaluateExpression()
+
+            If lazy Is Nothing Then
                 Return Nothing
-            ElseIf Not TypeOf value Is ValueAssignExpression Then
-                Return value.Evaluate(envir)
             Else
-                Return DirectCast(value, ValueAssignExpression).value.Evaluate(envir)
+                Return lazy.Evaluate(envir)
             End If
         End Function
 

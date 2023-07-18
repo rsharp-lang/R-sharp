@@ -255,12 +255,16 @@ Namespace Runtime.Interop
                     listArgsSlotKey = $"${val.index}"
                 End If
 
-                value = val.Evaluate(env)
+                If Not lazy Then
+                    value = val.Evaluate(env)
+                Else
+                    value = val.GetLazyEvaluateExpression
+                End If
 
                 If Program.isException(value) Then
                     Return value
                 Else
-                    list.slots.Add(listArgsSlotKey, value)
+                    Call list.slots.Add(listArgsSlotKey, value)
                 End If
             Next
 
