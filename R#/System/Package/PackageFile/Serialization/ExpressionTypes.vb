@@ -100,6 +100,7 @@ Namespace Development.Package.File
         ''' A linq query epxression in R# scripting 
         ''' </summary>
         LinqQuery = 40
+        DotDotDot
 
         ''' <summary>
         ''' expression for require load package 

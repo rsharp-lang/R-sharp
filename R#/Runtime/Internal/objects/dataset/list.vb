@@ -530,5 +530,9 @@ Namespace Runtime.Internal.Object
         Public Function checkTuple(names() As String) As Boolean Implements ITupleConstructor.checkTuple
             Return names.All(AddressOf hasName)
         End Function
+
+        Friend Shared Function empty() As Object
+            Return New list With {.slots = New Dictionary(Of String, Object)}
+        End Function
     End Class
 End Namespace
