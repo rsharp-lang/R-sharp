@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::7440b7edcdc30ac013453e714b4445cf, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/graphics/graphics.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 560
-    '    Code Lines: 350
-    ' Comment Lines: 140
-    '   Blank Lines: 70
-    '     File Size: 23.59 KB
+' Summaries:
 
 
-    '     Module graphics
-    ' 
-    '         Properties: curDev
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: bitmap, colorTable, devCur, devOff, drawText
-    '                   getImageObject, isBase64StringOrFile, OpenNewBitmapDevice, plot, rasterFont
-    '                   rasterImage, rasterPixels, readImage, resizeImage, setCurrentDev
-    '                   thumbnail, wmf
-    ' 
-    '         Sub: openNew
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 560
+'    Code Lines: 350
+' Comment Lines: 140
+'   Blank Lines: 70
+'     File Size: 23.59 KB
+
+
+'     Module graphics
+' 
+'         Properties: curDev
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: bitmap, colorTable, devCur, devOff, drawText
+'                   getImageObject, isBase64StringOrFile, OpenNewBitmapDevice, plot, rasterFont
+'                   rasterImage, rasterPixels, readImage, resizeImage, setCurrentDev
+'                   thumbnail, wmf
+' 
+'         Sub: openNew
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -292,10 +292,13 @@ Namespace Runtime.Internal.Invokes
             ElseIf size Is Nothing Then
                 Call curDev.g.DrawImageUnscaled(image, x, y)
             Else
-                Dim sizeVec = graphicsPipeline.getSize(size, env, image.Size.Expression).SizeParser
+#Disable Warning
+                Dim s_size As String = image.Size.Expression
+                Dim sizeVec = graphicsPipeline.getSize(size, env, s_size).SizeParser
                 Dim layout As New Rectangle(x, y, sizeVec.Width, sizeVec.Height)
 
                 Call curDev.g.DrawImage(image, layout)
+#Enable Warning
             End If
 
             Return Nothing
@@ -451,6 +454,47 @@ Namespace Runtime.Internal.Invokes
                                End If
                            End Sub)
             End If
+        End Function
+
+        ''' <summary>
+        ''' ### BMP, JPEG, PNG and TIFF graphics devices
+        ''' 
+        ''' Graphics devices for BMP, JPEG, PNG and TIFF format bitmap files.
+        ''' </summary>
+        ''' <returns></returns>
+        <ExportAPI("png")>
+        Public Function png(Optional image As Object = Nothing, Optional filename As Object = Nothing,
+                            Optional width As Integer = 480, Optional height As Integer = 480,
+                            Optional units As Object = "px", Optional pointsize As Single = 12,
+                            Optional bg As Object = "white", Optional res As Object = Nothing,
+                            Optional family As Object = "", Optional restoreConsole As Boolean = True,
+                            <RRawVectorArgument(GetType(String))>
+                            Optional type As Object = "windows|cairo|cairo-png",
+                            Optional antialias As Boolean = True,
+                            Optional symbolfamily As Object = "default",
+                            Optional env As Environment = Nothing) As Object
+
+            Return bitmap(
+                image:=image,
+                file:=filename,
+                format:=ImageFormats.Png,
+                args:=New list With {
+                    .slots = New Dictionary(Of String, Object) From {
+                        {"width", width},
+                        {"height", height},
+                        {"units", units},
+                        {"pointsize", pointsize},
+                        {"bg", bg},
+                        {"res", res},
+                        {"family", family},
+                        {"restoreConsole", restoreConsole},
+                        {"type", type},
+                        {"antialias", antialias},
+                        {"symbolfamily", symbolfamily}
+                    }
+                },
+                env:=env
+            )
         End Function
 
         Private Function OpenNewBitmapDevice(file As Object, args As list, env As Environment) As Object
