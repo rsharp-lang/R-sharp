@@ -461,6 +461,21 @@ Namespace Runtime.Internal.Invokes
         ''' 
         ''' Graphics devices for BMP, JPEG, PNG and TIFF format bitmap files.
         ''' </summary>
+        ''' <param name="filename">the path Of the output file, up To 511 characters. The page number Is substituted If a C Integer format Is included In the character String, As In the Default, And tilde-expansion Is performed (see path.expand). (The result must be less than 600 characters Long. See postscript For further details.)</param>
+        ''' <param name="width">the width of the device.</param>
+        ''' <param name="height">the height of the device.</param>
+        ''' <param name="units">The units in which height and width are given. Can be px (pixels, the default), in (inches), cm or mm.</param>
+        ''' <param name="pointsize">the default pointsize of plotted text, interpreted as big points (1/72 inch) at res ppi.</param>
+        ''' <param name="bg">the initial background colour: can be overridden by setting par("bg").</param>
+        ''' <param name="res">The nominal resolution In ppi which will be recorded In the bitmap file, If a positive Integer. Also used For units other than the Default. If Not specified, taken As 72 ppi To Set the size Of text And line widths.</param>
+        ''' <param name="family">A length-one character vector specifying the default font family. The default means to use the font numbers on the Windows GDI versions and "sans" on the cairographics versions.</param>
+        ''' <param name="restoreConsole">See the ‘Details’ section of windows. For type == "windows" only.</param>
+        ''' <param name="type">Should be plotting be done using Windows GDI or cairographics?</param>
+        ''' <param name="antialias">Length-one character vector.
+        '''
+        ''' For allowed values And their effect on fonts with type = "windows" see windows: For that type if the argument Is missing the default Is taken from windows.options()$bitmap.aa.win.
+        '''
+        ''' For allowed values And their effect (on fonts And lines, but Not fills) with type = "cairo" see svg.</param>
         ''' <returns></returns>
         <ExportAPI("png")>
         Public Function png(Optional image As Object = Nothing, Optional filename As Object = Nothing,
