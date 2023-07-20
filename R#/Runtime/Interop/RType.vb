@@ -232,6 +232,10 @@ Namespace Runtime.Interop
                 .FirstOrDefault
         End Sub
 
+        ''' <summary>
+        ''' gets the array element type from current r# type <see cref="raw"/>
+        ''' </summary>
+        ''' <returns></returns>
         Public Function GetRawElementType() As Type
             If raw Is GetType(Array) OrElse raw.GetElementType Is Nothing Then
                 Return GetType(Object)
