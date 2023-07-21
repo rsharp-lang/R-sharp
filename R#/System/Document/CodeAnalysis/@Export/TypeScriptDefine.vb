@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::357fe6d9f0604ce9dc1c2ba880336896, G:/GCModeller/src/R-sharp/R#//System/Document/CodeAnalysis/@Export/TypeScriptDefine.vb"
+﻿#Region "Microsoft.VisualBasic::357fe6d9f0604ce9dc1c2ba880336896, D:/GCModeller/src/R-sharp/R#//System/Document/CodeAnalysis/@Export/TypeScriptDefine.vb"
 
     ' Author:
     ' 

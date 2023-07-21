@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::73f145f1f783546beeb6a77ef9f05163, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//jQuery.vb"
+﻿#Region "Microsoft.VisualBasic::73f145f1f783546beeb6a77ef9f05163, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//jQuery.vb"
 
     ' Author:
     ' 

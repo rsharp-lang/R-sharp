@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::36936fac46a538c6ff3e187c29699800, G:/GCModeller/src/R-sharp/Library/base//base/HDSutils.vb"
+﻿#Region "Microsoft.VisualBasic::36936fac46a538c6ff3e187c29699800, D:/GCModeller/src/R-sharp/Library/base//base/HDSutils.vb"
 
     ' Author:
     ' 

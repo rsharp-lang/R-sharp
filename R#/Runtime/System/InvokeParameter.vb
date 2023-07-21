@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c60b0b068ccd0bd53acbf89b7cc6189b, G:/GCModeller/src/R-sharp/R#//Runtime/System/InvokeParameter.vb"
+﻿#Region "Microsoft.VisualBasic::e29fd66e77520629e8e5c9a73aa94d5d, D:/GCModeller/src/R-sharp/R#//Runtime/System/InvokeParameter.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 260
-    '    Code Lines: 174
-    ' Comment Lines: 56
-    '   Blank Lines: 30
-    '     File Size: 10.09 KB
+    '   Total Lines: 274
+    '    Code Lines: 182
+    ' Comment Lines: 60
+    '   Blank Lines: 32
+    '     File Size: 10.51 KB
 
 
     '     Class InvokeParameter
@@ -47,8 +47,8 @@
     '                     isSymbolAssign, name, value
     ' 
     '         Constructor: (+3 Overloads) Sub New
-    '         Function: Create, CreateArguments, CreateLiterals, Evaluate, GetSymbolName
-    '                   ToString
+    '         Function: Create, CreateArguments, CreateLiterals, Evaluate, GetLazyEvaluateExpression
+    '                   GetSymbolName, ToString
     ' 
     ' 
     ' /********************************************************************************/
