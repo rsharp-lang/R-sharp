@@ -80,6 +80,18 @@ Namespace Interpreter.ExecuteEngine
 
         Public MustOverride Function GetSymbolName() As String
 
+        Public Function GetAttributeNames() As IEnumerable(Of String)
+            Return attributes.Keys
+        End Function
+
+        Public Function GetAttributeValue(name As String) As IEnumerable(Of String)
+            If attributes.ContainsKey(name) Then
+                Return attributes(name)
+            Else
+                Return New String() {}
+            End If
+        End Function
+
         Protected Friend Overridable Sub AddCustomAttributes(attrs As IEnumerable(Of NamedValue(Of String())))
             For Each attr As NamedValue(Of String()) In attrs
                 If attributes.ContainsKey(attr.Name) Then
