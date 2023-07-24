@@ -72,6 +72,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports snowFall.Context.RPC
 Imports R = Rserver.RscriptCommandLine.Rscript
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
@@ -350,7 +351,7 @@ Public Class RunParallel
                 Yield New NamedCollection(Of Object)(Nothing, {Message.SymbolNotFound(env, symbol.Name, TypeCodes.generic)})
             Else
                 value = argv.getByName(symbol.Name)
-                seq = Rset.getObjectSet(value, env)
+                seq = ObjectSet.GetObjectSet(value, env)
 
                 Yield New NamedCollection(Of Object)(symbol.Name, seq)
             End If
