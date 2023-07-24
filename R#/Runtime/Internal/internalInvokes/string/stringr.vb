@@ -787,6 +787,23 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ``paste0(..., collapse)`` is equivalent to ``paste(..., sep = "", collapse)``, slightly more efficiently.
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="collapse$"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' 
+        <ExportAPI("paste0")>
+        <RApiReturn(TypeCodes.string)>
+        Public Function paste0(<RListObjectArgument> x As list,
+                               Optional collapse$ = Nothing,
+                               Optional env As Environment = Nothing)
+
+            Return paste(x, sep:="", collapse:=collapse, env:=env)
+        End Function
+
+        ''' <summary>
         ''' ### Concatenate Strings
         ''' 
         ''' string join with given delimiter, concatenate vectors after converting to character.
