@@ -140,7 +140,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim pullAll As String()() = strs.ToArray
             Dim current As String() = pullAll(Scan0)
             Dim str_concatenate As New op_evaluator(AddressOf r_string_concatenate)
-            Dim hasDelimiter As String = Not sep.StringEmpty
+            Dim hasDelimiter As String = Not sep.StringEmpty(whitespaceAsEmpty:=False)
 
             If pullAll.Length = 1 Then
                 Return current
