@@ -67,6 +67,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
@@ -243,7 +244,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                         .ToArray
                 End If
             Else
-                data = [Rset].getObjectSet(rawSeq, env)
+                data = ObjectSet.GetObjectSet(rawSeq, env)
             End If
 
             Return data
