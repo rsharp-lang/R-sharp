@@ -136,16 +136,26 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' </summary>
         ''' <param name="strs">the string collection must be checked for the size before call this function</param>
         ''' <returns></returns>
-        Public Shared Function UnsafeStringConcatenate(strs As IEnumerable(Of String())) As String()
+        Public Shared Function UnsafeStringConcatenate(strs As IEnumerable(Of String()), Optional sep As String = "") As String()
             Dim pullAll As String()() = strs.ToArray
             Dim current As String() = pullAll(Scan0)
             Dim str_concatenate As New op_evaluator(AddressOf r_string_concatenate)
+            Dim hasDelimiter As String = Not sep.StringEmpty
 
             If pullAll.Length = 1 Then
                 Return current
             End If
 
             For Each [next] As String() In pullAll.Skip(1)
+                If hasDelimiter Then
+                    current = StringBinaryExpression.DoStringBinary(Of String)(
+                        a:=current,
+                        b:=sep,
+                        op:=str_concatenate,
+                        env:=Nothing
+                    )
+                End If
+
                 current = StringBinaryExpression.DoStringBinary(Of String)(
                     a:=current,
                     b:=[next],

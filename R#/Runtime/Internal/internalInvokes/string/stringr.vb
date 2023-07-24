@@ -882,7 +882,10 @@ Namespace Runtime.Internal.Invokes
             ElseIf chrs.Count = 1 Then
                 Return chrs(0).JoinBy(sep)
             Else
-                Dim v As String() = StringInterpolation.UnsafeStringConcatenate(strs:=chrs)
+                Dim v As String() = StringInterpolation.UnsafeStringConcatenate(
+                    strs:=chrs,
+                    sep:=sep
+                )
 
                 If Not collapse.StringEmpty Then
                     Return v.JoinBy(collapse)
