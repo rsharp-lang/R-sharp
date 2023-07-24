@@ -347,7 +347,7 @@ Namespace Runtime.Internal.Invokes
             Dim checked As New Index(Of Object)
             Dim flags As New List(Of Boolean)
 
-            For Each item As Object In getObjectSet(x, env)
+            For Each item As Object In ObjectSet.GetObjectSet(x, env)
                 Call flags.Add(item Like checked)
 
                 If Not flags.Last Then
