@@ -94,7 +94,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim current As Array = CLRVector.asCharacter(stringParts(Scan0).Evaluate(envir))
             Dim [next] As Object
-            Dim str_concatenate As New Vectorization.op_evaluator(AddressOf r_string_concatenate)
+            Dim str_concatenate As New op_evaluator(AddressOf r_string_concatenate)
 
             For Each part As Expression In stringParts.Skip(1)
                 [next] = part.Evaluate(envir)
@@ -129,6 +129,32 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim strVec As New vector(currentStrings, RType.GetRSharpType(GetType(String)))
 
             Return strVec
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="strs">the string collection must be checked for the size before call this function</param>
+        ''' <returns></returns>
+        Public Shared Function UnsafeStringConcatenate(strs As IEnumerable(Of String())) As String()
+            Dim pullAll As String()() = strs.ToArray
+            Dim current As String() = pullAll(Scan0)
+            Dim str_concatenate As New op_evaluator(AddressOf r_string_concatenate)
+
+            If pullAll.Length = 1 Then
+                Return current
+            End If
+
+            For Each [next] As String() In pullAll.Skip(1)
+                current = StringBinaryExpression.DoStringBinary(Of String)(
+                    a:=current,
+                    b:=[next],
+                    op:=str_concatenate,
+                    env:=Nothing
+                )
+            Next
+
+            Return current
         End Function
 
         Friend Shared Function r_string_concatenate(x As Object, y As Object, env As Environment) As Object

@@ -140,10 +140,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         ''' <param name="a"></param>
         ''' <param name="b"></param>
         ''' <param name="op"></param>
-        ''' <param name="env"></param>
+        ''' <param name="env">
+        ''' helper for throw error message if the length of <paramref name="a"/> 
+        ''' and <paramref name="b"/> is not equals to each other.
+        ''' </param>
         ''' <returns>
         ''' this function returns a string array or error message
         ''' </returns>
+        ''' <remarks>
+        ''' the <see cref="CLRVector.asCharacter(Object)"/> function will be
+        ''' called in this function automatic for processing the parameter
+        ''' <paramref name="a"/> and <paramref name="b"/> to string vector.
+        ''' </remarks>
         Public Function DoStringBinary(Of Out)(a As Object, b As Object, op As op_evaluator, env As Environment) As Object
             Dim va = CLRVector.asCharacter(a)
             Dim vb = CLRVector.asCharacter(b)
