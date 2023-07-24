@@ -1,4 +1,9 @@
-﻿Namespace Runtime.Vectorization
+﻿Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
+
+Namespace Runtime.Vectorization
 
     Public NotInheritable Class ObjectSet
 
@@ -22,8 +27,8 @@
                     elementType = .elementType
                     Return .data.AsObjectEnumerator
                 End With
-            ElseIf type Is GetType(List) Then
-                With DirectCast(x, List)
+            ElseIf type Is GetType(list) Then
+                With DirectCast(x, list)
                     ' list value as sequence data
                     Dim raw As Object() = .slots.Values.ToArray
                     elementType = MeasureRealElementType(raw).DoCall(AddressOf RType.GetRSharpType)
