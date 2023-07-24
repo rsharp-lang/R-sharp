@@ -1,62 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::d0247cc89e2ef139cccac8b89e200024, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/dev/devtools.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 274
-    '    Code Lines: 167
-    ' Comment Lines: 74
-    '   Blank Lines: 33
-    '     File Size: 12.17 KB
+' Summaries:
 
 
-    '     Class NoInspector
-    ' 
-    '         Properties: obj
-    ' 
-    '         Function: ToString, Wrap
-    ' 
-    '     Module devtools
-    ' 
-    '         Function: fetchProfileData, flash_load, FNV1aHash, getDllPath, getInvokeParameters
-    '                   getSymbolName, getSymbolvalue, profilerFrames, scriptTable, scriptTable1
-    '                   stringHashCode
-    ' 
-    '         Sub: gc, Main, raiseException, raiseThreadException
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 274
+'    Code Lines: 167
+' Comment Lines: 74
+'   Blank Lines: 33
+'     File Size: 12.17 KB
+
+
+'     Class NoInspector
+' 
+'         Properties: obj
+' 
+'         Function: ToString, Wrap
+' 
+'     Module devtools
+' 
+'         Function: fetchProfileData, flash_load, FNV1aHash, getDllPath, getInvokeParameters
+'                   getSymbolName, getSymbolvalue, profilerFrames, scriptTable, scriptTable1
+'                   stringHashCode
+' 
+'         Sub: gc, Main, raiseException, raiseThreadException
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -73,6 +73,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Runtime.Internal.Invokes
 
@@ -197,7 +198,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns>Returns the hash as a positive integer</returns>
         <ExportAPI("FNV1a_hashcode")>
         Public Function FNV1aHash(<RRawVectorArgument> [set] As Object, Optional env As Environment = Nothing) As Long
-            Return FNV1a.GetHashCode(getObjectSet([set], env))
+            Return FNV1a.GetHashCode(ObjectSet.GetObjectSet([set], env))
         End Function
 
         ''' <summary>
