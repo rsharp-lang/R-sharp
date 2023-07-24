@@ -258,11 +258,20 @@ Public Module URL
                 msg = msg & vbCrLf & vbCrLf & html
             End If
 
+            Dim code As String = ex.Message.Match("\d+")
+            Dim code_i32 As Long = Long.Parse(code)
+
+            If code_i32 > Integer.MaxValue OrElse code_i32 < Integer.MinValue Then
+                code_i32 = Integer.MaxValue
+                VBDebugger.EchoLine(ex.Message)
+                ex.Message.Warning
+            End If
+
             Return New WebResponseResult With {
                 .url = url,
                 .html = msg,
                 .timespan = 0,
-                .headers = ResponseHeaders.HttpRequestError(ex.Message.Match("\d+").DoCall(AddressOf Integer.Parse)),
+                .headers = ResponseHeaders.HttpRequestError(CInt(code_i32)),
                 .payload = payload
             }
         Catch ex As Exception
