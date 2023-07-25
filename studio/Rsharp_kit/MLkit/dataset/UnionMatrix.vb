@@ -62,7 +62,7 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
-''' A matrix for the spare numeric (<see cref="Double"/>) data.
+''' A matrix for the sparse numeric (<see cref="Double"/>) data.
 ''' </summary>
 Public Class UnionMatrix
 

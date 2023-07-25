@@ -249,9 +249,9 @@ Module datasetKit
     End Function
 
     ''' <summary>
-    ''' Add a data sample into the target spare sample matrix object
+    ''' Add a data sample into the target sparse sample matrix object
     ''' </summary>
-    ''' <param name="matrix">the spare matrix object</param>
+    ''' <param name="matrix">the sparse matrix object</param>
     ''' <param name="sample_id">the row name, unique sample id</param>
     ''' <param name="x">the sample data, should be in format of [feature_name=>value] key-value tuple list.</param>
     ''' <returns></returns>
