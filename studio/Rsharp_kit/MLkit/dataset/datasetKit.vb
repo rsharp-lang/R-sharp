@@ -248,9 +248,16 @@ Module datasetKit
         Return SequenceGraphTransform.estimate_alphabets(CLRVector.asCharacter(seqs))
     End Function
 
+    ''' <summary>
+    ''' Add a data sample into the target spare sample matrix object
+    ''' </summary>
+    ''' <param name="matrix">the spare matrix object</param>
+    ''' <param name="sample_id">the row name, unique sample id</param>
+    ''' <param name="x">the sample data, should be in format of [feature_name=>value] key-value tuple list.</param>
+    ''' <returns></returns>
     <ExportAPI("add_sample")>
-    Public Function addRow(matrix As UnionMatrix, sampleId As String, data As list) As UnionMatrix
-        Call matrix.Add(sampleId, data)
+    Public Function addRow(matrix As UnionMatrix, sample_id As String, x As list) As UnionMatrix
+        Call matrix.Add(sample_id, x)
         Return matrix
     End Function
 
