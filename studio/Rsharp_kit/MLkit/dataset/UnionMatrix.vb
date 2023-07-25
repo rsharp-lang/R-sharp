@@ -54,6 +54,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.csv.DATA
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -65,7 +66,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 ''' <summary>
 ''' A matrix for the sparse numeric (<see cref="Double"/>) data.
 ''' </summary>
-Public Class UnionMatrix
+Public Class UnionMatrix : Implements MatrixProvider
 
     ReadOnly records As New List(Of NamedValue(Of list))
 
@@ -95,7 +96,7 @@ Public Class UnionMatrix
     ''' clr dataset collection by rows
     ''' </summary>
     ''' <returns></returns>
-    Public Iterator Function CreateClrMatrix() As IEnumerable(Of DataSet)
+    Public Iterator Function CreateClrMatrix() As IEnumerable(Of DataSet) Implements MatrixProvider.GetMatrix
         Dim allFeatures As String() = colnames.ToArray
 
         For Each row As NamedValue(Of list) In records

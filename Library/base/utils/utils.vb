@@ -59,8 +59,10 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
+Imports Microsoft.VisualBasic.Data.csv.DATA
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.Model
@@ -369,6 +371,10 @@ Public Module utils
     ''' row names to be written.
     ''' </param>
     ''' <returns></returns>
+    ''' <remarks>
+    ''' this function will create an empty table file if the given data
+    ''' table object <paramref name="x"/> is nothing.
+    ''' </remarks>
     <ExportAPI("write.csv")>
     <RApiReturn(GetType(Boolean))>
     Public Function write_csv(<RRawVectorArgument> x As Object,
@@ -407,6 +413,17 @@ Public Module utils
         End If
     End Function
 
+    ''' <summary>
+    ''' Save the data table to a local csv file
+    ''' </summary>
+    ''' <param name="env"></param>
+    ''' <param name="x">any clr object/R# object that could be cast to dataframe</param>
+    ''' <param name="file">the file path of the local file</param>
+    ''' <param name="row_names"></param>
+    ''' <param name="fileEncoding"></param>
+    ''' <param name="tsv"></param>
+    ''' <param name="number_format"></param>
+    ''' <returns></returns>
     <Extension>
     Private Function saveTextFile(env As Environment,
                                   x As Object,
@@ -463,8 +480,15 @@ Public Module utils
                     path:=file,
                     encoding:=encoding.CodePage,
                     silent:=True,
-                    metaBlank:=0
+                    metaBlank:=0.0
                 )
+        ElseIf x.GetType.ImplementInterface(Of MatrixProvider) Then
+            Return DirectCast(x, MatrixProvider).GetMatrix.SaveTo(
+                path:=file,
+                encoding:=encoding.CodePage,
+                silent:=True,
+                metaBlank:=0.0
+            )
 #Enable Warning
         ElseIf type.IsArray OrElse type Is GetType(vector) Then
             Return saveGeneric(x, type, file, encoding.CodePage, env)
