@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3c7b0ac077c3c6ca7a1c0c393d6bd089, G:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Serialization/ExpressionTypes.vb"
+﻿#Region "Microsoft.VisualBasic::6993f0f621f7781fb478a9f08bf12ec4, D:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Serialization/ExpressionTypes.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 84
-    '    Code Lines: 53
+    '   Total Lines: 85
+    '    Code Lines: 54
     ' Comment Lines: 15
     '   Blank Lines: 16
-    '     File Size: 1.66 KB
+    '     File Size: 1.68 KB
 
 
     '     Enum ExpressionTypes
@@ -46,11 +46,11 @@
     '         [Break], [Continute], [Do], [Else], [ElseIf]
     '         [For], [If], [IIf], [Return], [TypeOf]
     '         [Using], [With], AcceptorDeclare, Annotation, Binary
-    '         ClosureDeclare, Comment, DotNetMemberReference, ExpressionLiteral, FormulaDeclare
-    '         FunctionByRef, FunctionCall, JSONLiteral, LambdaDeclare, SequenceLiteral
-    '         Shell, Switch, SymbolAssign, SymbolDeclare, SymbolIndex
-    '         SymbolMemberAssign, SymbolNamespaceReference, SymbolRegexp, TryCatch, UnaryNumeric
-    '         VectorLiteral, VectorLoop
+    '         ClosureDeclare, Comment, DotDotDot, DotNetMemberReference, ExpressionLiteral
+    '         FormulaDeclare, FunctionByRef, FunctionCall, JSONLiteral, LambdaDeclare
+    '         SequenceLiteral, Shell, Switch, SymbolAssign, SymbolDeclare
+    '         SymbolIndex, SymbolMemberAssign, SymbolNamespaceReference, SymbolRegexp, TryCatch
+    '         UnaryNumeric, VectorLiteral, VectorLoop
     ' 
     '  
     ' 

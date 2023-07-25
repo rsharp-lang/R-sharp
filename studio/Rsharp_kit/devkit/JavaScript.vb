@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::90a1f2285ce58fc9a4a82c1c224db765, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//JavaScript.vb"
+﻿#Region "Microsoft.VisualBasic::90a1f2285ce58fc9a4a82c1c224db765, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//JavaScript.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c67afb65d911ed7f472eca654cd6d9b5, G:/GCModeller/src/R-sharp/R#//Runtime/Interop/RType.vb"
+﻿#Region "Microsoft.VisualBasic::0aac670e2fcf3629c19c2ac242dd9b64, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RType.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 357
+    '   Total Lines: 361
     '    Code Lines: 220
-    ' Comment Lines: 99
+    ' Comment Lines: 103
     '   Blank Lines: 38
-    '     File Size: 13.84 KB
+    '     File Size: 13.64 KB
 
 
     '     Class RType

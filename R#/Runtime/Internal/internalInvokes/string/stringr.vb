@@ -1,59 +1,59 @@
-﻿#Region "Microsoft.VisualBasic::092b743cfaf54fd921c427185f496b97, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/stringr.vb"
+﻿#Region "Microsoft.VisualBasic::092b743cfaf54fd921c427185f496b97, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/stringr.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    ' /********************************************************************************/
-
-    ' Summaries:
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-    ' Code Statistics:
 
-    '   Total Lines: 1066
-    '    Code Lines: 678
-    ' Comment Lines: 285
-    '   Blank Lines: 103
-    '     File Size: 43.83 KB
+' /********************************************************************************/
+
+' Summaries:
 
 
-    '     Module stringr
-    ' 
-    '         Function: [objToString], base64Decode, base64Str, bencode, charAt
-    '                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
-    '                   fromBstring, getElementFormat, grep, html, json
-    '                   loadXml, match, nchar, paste, randomAsciiStr
-    '                   rawBufferBase64, regexp, splitSingleStrAuto, sprintfSingle, str_empty
-    '                   str_pad, (+2 Overloads) str_replace, strPad_internal, strsplit, substr
-    '                   tagvalue, text_equals, tolower, toupper, urldecode
-    '                   xml
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1066
+'    Code Lines: 678
+' Comment Lines: 285
+'   Blank Lines: 103
+'     File Size: 43.83 KB
+
+
+'     Module stringr
+' 
+'         Function: [objToString], base64Decode, base64Str, bencode, charAt
+'                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
+'                   fromBstring, getElementFormat, grep, html, json
+'                   loadXml, match, nchar, paste, randomAsciiStr
+'                   rawBufferBase64, regexp, splitSingleStrAuto, sprintfSingle, str_empty
+'                   str_pad, (+2 Overloads) str_replace, strPad_internal, strsplit, substr
+'                   tagvalue, text_equals, tolower, toupper, urldecode
+'                   xml
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -78,6 +78,7 @@ Imports Microsoft.VisualBasic.Serialization.Bencoding
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Xml.Models
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -786,14 +787,112 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' string join with given delimiter
+        ''' ``paste0(..., collapse)`` is equivalent to ``paste(..., sep = "", collapse)``, slightly more efficiently.
         ''' </summary>
-        ''' <param name="strings$"></param>
-        ''' <param name="deli$"></param>
+        ''' <param name="x"></param>
+        ''' <param name="collapse$"></param>
+        ''' <param name="env"></param>
         ''' <returns></returns>
+        ''' 
+        <ExportAPI("paste0")>
+        <RApiReturn(TypeCodes.string)>
+        Public Function paste0(<RListObjectArgument> x As list,
+                               Optional collapse$ = Nothing,
+                               Optional env As Environment = Nothing)
+
+            Return paste(x, sep:="", collapse:=collapse, env:=env)
+        End Function
+
+        ''' <summary>
+        ''' ### Concatenate Strings
+        ''' 
+        ''' string join with given delimiter, concatenate vectors after converting to character.
+        ''' </summary>
+        ''' <param name="x">one Or more R objects, to be converted to character vectors.</param>
+        ''' <param name="sep">
+        ''' a character String To separate the terms. Not NA_character_.
+        ''' </param>
+        ''' <param name="collapse">
+        ''' an optional character string to separate the results. Not NA_character_.
+        ''' </param>
+        ''' <returns>A character vector of the concatenated values. This will be of length zero
+        ''' if all the objects are, unless collapse is non-NULL, in which case it is "" 
+        ''' (a single empty string).
+        '''
+        '''        If any input into an element Of the result Is In UTF-8 (And none are declared
+        '''        With encoding "bytes", see Encoding), that element will be In UTF-8, otherwise 
+        '''        In the current encoding In which Case the encoding Of the element Is declared 
+        '''        If the current locale Is either Latin-1 Or UTF-8, at least one Of the corresponding
+        '''        inputs (including separators) had a declared encoding And all inputs were either 
+        '''        ASCII Or declared.
+        '''
+        ''' If an input into an element Is declared With encoding "bytes", no translation will be done
+        ''' Of any Of the elements And the resulting element will have encoding "bytes". If collapse 
+        ''' Is non-NULL, this applies also To the second, collapsing, phase, but some translation may
+        ''' have been done In pasting Object together In the first phase.</returns>
+        ''' <remarks>
+        ''' paste converts its arguments (via as.character) to character strings, 
+        ''' and concatenates them (separating them by the string given by sep). 
+        ''' If the arguments are vectors, they are concatenated term-by-term to 
+        ''' give a character vector result. Vector arguments are recycled as needed,
+        ''' with zero-length arguments being recycled to "" only if recycle0 is not 
+        ''' true or collapse is not NULL.
+        '''
+        ''' Note that paste() coerces NA_character_, the character missing value, To 
+        ''' "NA" which may seem undesirable, e.g., When pasting two character vectors,
+        ''' Or very desirable, e.g. In paste("the value of p is ", p).
+        '''
+        ''' paste0(..., collapse) Is equivalent to paste(..., sep = "", collapse), 
+        ''' slightly more efficiently.
+        '''
+        ''' If a value Is specified For collapse, the values In the result are Then 
+        ''' concatenated into a Single String, With the elements being separated by
+        ''' the value Of collapse.
+        ''' </remarks>
         <ExportAPI("paste")>
-        Friend Function paste(strings$(), Optional deli$ = " ") As Object
-            Return strings.JoinBy(deli)
+        <RApiReturn(TypeCodes.string)>
+        Friend Function paste(<RListObjectArgument> x As list,
+                              Optional sep$ = " ",
+                              Optional collapse$ = Nothing,
+                              Optional env As Environment = Nothing) As Object
+
+            Static args As Index(Of String) = New String() {
+                NameOf(sep),
+                NameOf(collapse),
+                NameOf(env)
+            }
+
+            Dim chrs As New List(Of String())
+            Dim check As Integer = 1
+
+            For Each xi In x.slots
+                If Not xi.Key Like args Then
+                    Call chrs.Add(CLRVector.asCharacter(xi.Value))
+
+                    If chrs.Last.Length <> check Then
+                        If check <> 1 AndAlso chrs.Last.Length <> 1 Then
+                            Return Internal.debug.stop("the required character size should be matches others!", env)
+                        End If
+                    End If
+                End If
+            Next
+
+            If chrs.Count = 0 Then
+                Return Nothing
+            ElseIf chrs.Count = 1 Then
+                Return chrs(0).JoinBy(sep)
+            Else
+                Dim v As String() = StringInterpolation.UnsafeStringConcatenate(
+                    strs:=chrs,
+                    sep:=sep
+                )
+
+                If Not collapse.StringEmpty Then
+                    Return v.JoinBy(collapse)
+                Else
+                    Return v
+                End If
+            End If
         End Function
 
         ''' <summary>
@@ -801,7 +900,7 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="subj">a character vector</param>
         ''' <param name="search$"></param>
-        ''' <param name="replaceAs$"></param>
+        ''' <param name="replaceAs"></param>
         ''' <param name="regexp">
         ''' the search target is a regex pattern expression?
         ''' </param>

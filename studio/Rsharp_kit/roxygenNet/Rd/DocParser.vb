@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::670498b182e641be087f9046b7652405, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//Rd/DocParser.vb"
+﻿#Region "Microsoft.VisualBasic::670498b182e641be087f9046b7652405, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//Rd/DocParser.vb"
 
     ' Author:
     ' 

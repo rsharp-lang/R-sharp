@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::44c68cb1b1e2a9027f804e8aa4e2ea98, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/list.vb"
+﻿#Region "Microsoft.VisualBasic::65dc22408441826f67bed892e7bce7bc, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/list.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 473
-    '    Code Lines: 284
+    '   Total Lines: 477
+    '    Code Lines: 287
     ' Comment Lines: 124
-    '   Blank Lines: 65
-    '     File Size: 17.11 KB
+    '   Blank Lines: 66
+    '     File Size: 17.26 KB
 
 
     '     Class list
@@ -47,10 +47,10 @@
     ' 
     '         Constructor: (+6 Overloads) Sub New
     ' 
-    '         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) getByIndex, (+2 Overloads) getByName
-    '                   getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue, GetVector
-    '                   hasName, namedValues, setByindex, setByIndex, (+2 Overloads) setByName
-    '                   setNames, ToString
+    '         Function: AsGeneric, checkTuple, ctypeInternal, empty, (+2 Overloads) getByIndex
+    '                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
+    '                   GetVector, hasName, namedValues, setByindex, setByIndex
+    '                   (+2 Overloads) setByName, setNames, ToString
     ' 
     '         Sub: add
     ' 
