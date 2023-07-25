@@ -1,56 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::98b881006815546190823412be560691, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataset/UnionMatrix.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 45
-    '    Code Lines: 37
-    ' Comment Lines: 0
-    '   Blank Lines: 8
-    '     File Size: 1.59 KB
+' Summaries:
 
 
-    ' Class UnionMatrix
-    ' 
-    '     Function: CreateMatrix
-    ' 
-    '     Sub: Add
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 45
+'    Code Lines: 37
+' Comment Lines: 0
+'   Blank Lines: 8
+'     File Size: 1.59 KB
+
+
+' Class UnionMatrix
+' 
+'     Function: CreateMatrix
+' 
+'     Sub: Add
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
@@ -60,22 +61,37 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
+''' <summary>
+''' A matrix for the spare numeric (<see cref="Double"/>) data.
+''' </summary>
 Public Class UnionMatrix
 
-    ReadOnly records As New List(Of NamedValue(Of List))
+    ReadOnly records As New List(Of NamedValue(Of list))
 
-    Public Sub Add(recordName As String, data As List)
-        records.Add(New NamedValue(Of List)(recordName, data))
+    ''' <summary>
+    ''' Add a sample into the current data matrix
+    ''' </summary>
+    ''' <param name="recordName">the sample id or the row name</param>
+    ''' <param name="data">
+    ''' the [key=>value] tuple data list, row data in the matrix
+    ''' </param>
+    ''' 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Sub Add(recordName As String, data As list)
+        records.Add(New NamedValue(Of list)(recordName, data))
     End Sub
 
-    Public Function CreateMatrix() As Rdataframe
-        Dim allFeatures As String() = records _
+    Private Function colnames() As IEnumerable(Of String)
+        Return records _
             .Select(Function(v) v.Value.getNames) _
             .IteratesALL _
             .ToArray _
             .DoCall(AddressOf CLRVector.asCharacter) _
-            .Distinct _
-            .ToArray
+            .Distinct
+    End Function
+
+    Public Function CreateMatrix() As Rdataframe
+        Dim allFeatures As String() = colnames.ToArray
         Dim rownames As String() = records.Select(Function(a) a.Name).uniqueNames
         Dim matrix As New Dictionary(Of String, Array)
 
