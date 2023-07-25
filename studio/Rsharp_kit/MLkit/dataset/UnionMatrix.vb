@@ -54,6 +54,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -90,6 +91,36 @@ Public Class UnionMatrix
             .Distinct
     End Function
 
+    ''' <summary>
+    ''' clr dataset collection by rows
+    ''' </summary>
+    ''' <returns></returns>
+    Public Iterator Function CreateClrMatrix() As IEnumerable(Of DataSet)
+        Dim allFeatures As String() = colnames.ToArray
+
+        For Each row As NamedValue(Of list) In records
+            Dim x As list = row.Value
+            Dim v As Object() = allFeatures _
+                .Select(Function(i) If(x.hasName(i), x.slots(i), 0.0)) _
+                .ToArray
+            Dim vec As Double() = CLRVector.asNumeric(v)
+            Dim data As New Dictionary(Of String, Double)
+
+            For i As Integer = 0 To allFeatures.Length - 1
+                Call data.Add(allFeatures(i), vec(i))
+            Next
+
+            Yield New DataSet With {
+                .ID = row.Name,
+                .Properties = data
+            }
+        Next
+    End Function
+
+    ''' <summary>
+    ''' R dataframe object by column
+    ''' </summary>
+    ''' <returns></returns>
     Public Function CreateMatrix() As Rdataframe
         Dim allFeatures As String() = colnames.ToArray
         Dim rownames As String() = records.Select(Function(a) a.Name).uniqueNames
