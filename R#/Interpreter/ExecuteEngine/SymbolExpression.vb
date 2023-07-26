@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d58753533c464f513d3f34e0782c515d, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/SymbolExpression.vb"
+﻿#Region "Microsoft.VisualBasic::d58753533c464f513d3f34e0782c515d, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/SymbolExpression.vb"
 
     ' Author:
     ' 
@@ -79,6 +79,18 @@ Namespace Interpreter.ExecuteEngine
         Protected Friend ReadOnly attributes As New Dictionary(Of String, String())
 
         Public MustOverride Function GetSymbolName() As String
+
+        Public Function GetAttributeNames() As IEnumerable(Of String)
+            Return attributes.Keys
+        End Function
+
+        Public Function GetAttributeValue(name As String) As IEnumerable(Of String)
+            If attributes.ContainsKey(name) Then
+                Return attributes(name)
+            Else
+                Return New String() {}
+            End If
+        End Function
 
         Protected Friend Overridable Sub AddCustomAttributes(attrs As IEnumerable(Of NamedValue(Of String())))
             For Each attr As NamedValue(Of String()) In attrs

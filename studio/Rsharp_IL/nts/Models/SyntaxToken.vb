@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3f2f7c4570a7cc749d2165f5d6de9873, G:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//Models/SyntaxToken.vb"
+﻿#Region "Microsoft.VisualBasic::3f2f7c4570a7cc749d2165f5d6de9873, D:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//Models/SyntaxToken.vb"
 
     ' Author:
     ' 

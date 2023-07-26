@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ae7da5904cb58bb7f5c71c2df54892ec, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/debug.vb"
+﻿#Region "Microsoft.VisualBasic::ae7da5904cb58bb7f5c71c2df54892ec, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/debug.vb"
 
     ' Author:
     ' 
@@ -317,6 +317,10 @@ Namespace Runtime.Internal
         ''' message will be print to <paramref name="stdout"/> if set this parameter
         ''' value TRUE.
         ''' </param>
+        ''' <remarks>
+        ''' parameter <paramref name="redirectError2stdout"/> only works when the parameter
+        ''' <paramref name="stdout"/> is not nothing
+        ''' </remarks>
         Public Shared Sub writeErrMessage(message As Message,
                                           Optional stdout As TextWriter = Nothing,
                                           Optional redirectError2stdout As Boolean = False)

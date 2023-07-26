@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f9cf78a859cd74f19f6794f59da561b5, G:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//stdlib/Math.vb"
+﻿#Region "Microsoft.VisualBasic::f9cf78a859cd74f19f6794f59da561b5, D:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//stdlib/Math.vb"
 
     ' Author:
     ' 
