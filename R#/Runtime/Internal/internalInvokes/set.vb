@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::0263c39df5c95566f35d6e4d2c7e652b, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/set.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 512
-    '    Code Lines: 289
-    ' Comment Lines: 165
-    '   Blank Lines: 58
-    '     File Size: 22.79 KB
+' Summaries:
 
 
-    '     Module [set]
-    ' 
-    '         Function: combn, count, createLoop, crossing, duplicated
-    '                   getObjectSet, indexOf, intersect, jaccard, rev
-    '                   setdiff, table, union
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 512
+'    Code Lines: 289
+' Comment Lines: 165
+'   Blank Lines: 58
+'     File Size: 22.79 KB
+
+
+'     Module [set]
+' 
+'         Function: combn, count, createLoop, crossing, duplicated
+'                   getObjectSet, indexOf, intersect, jaccard, rev
+'                   setdiff, table, union
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -202,58 +202,6 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' 将任意类型的序列输入转换为统一的对象枚举序列
-        ''' </summary>
-        ''' <param name="x"></param>
-        ''' <returns></returns>
-        Public Function getObjectSet(x As Object, env As Environment, Optional ByRef elementType As RType = Nothing) As IEnumerable(Of Object)
-            If x Is Nothing Then
-                Return {}
-            End If
-
-            Dim type As Type = x.GetType
-
-            If type Is GetType(vector) Then
-                With DirectCast(x, vector)
-                    elementType = .elementType
-                    Return .data.AsObjectEnumerator
-                End With
-            ElseIf type Is GetType(list) Then
-                With DirectCast(x, list)
-                    ' list value as sequence data
-                    Dim raw As Object() = .slots.Values.ToArray
-                    elementType = MeasureRealElementType(raw).DoCall(AddressOf RType.GetRSharpType)
-                    Return raw.AsEnumerable
-                End With
-            ElseIf type.ImplementInterface(GetType(IDictionary(Of String, Object))) Then
-                With DirectCast(x, IDictionary(Of String, Object))
-                    Dim raw As Object() = .Values.AsEnumerable.ToArray
-                    elementType = MeasureRealElementType(raw).DoCall(AddressOf RType.GetRSharpType)
-                    Return raw.AsEnumerable
-                End With
-            ElseIf type.ImplementInterface(Of IDictionary) Then
-                With DirectCast(x, IDictionary)
-                    Dim raw As Object() = .Values.ToVector
-                    elementType = MeasureRealElementType(raw).DoCall(AddressOf RType.GetRSharpType)
-                    Return raw.AsEnumerable
-                End With
-            ElseIf type.IsArray Then
-                With DirectCast(x, Array)
-                    elementType = .GetType.GetElementType.DoCall(AddressOf RType.GetRSharpType)
-                    Return .AsObjectEnumerator
-                End With
-            ElseIf type Is GetType(pipeline) Then
-                With DirectCast(x, pipeline)
-                    elementType = .elementType
-                    Return .populates(Of Object)(env)
-                End With
-            Else
-                elementType = RType.GetRSharpType(x.GetType)
-                Return {x}
-            End If
-        End Function
-
-        ''' <summary>
         ''' is a ``table`` liked function for count string occurance number
         ''' </summary>
         ''' <param name="str">
@@ -285,9 +233,9 @@ Namespace Runtime.Internal.Invokes
                                   <RRawVectorArgument> y As Object,
                                   Optional env As Environment = Nothing) As Object
 
-            Dim index_a As New Index(Of Object)(getObjectSet(x, env))
+            Dim index_a As New Index(Of Object)(ObjectSet.GetObjectSet(x, env))
             Dim inter As Object() = index_a _
-                .Intersect(collection:=getObjectSet(y, env)) _
+                .Intersect(collection:=ObjectSet.GetObjectSet(y, env)) _
                 .Distinct _
                 .ToArray
 
@@ -305,8 +253,8 @@ Namespace Runtime.Internal.Invokes
                               <RRawVectorArgument> y As Object,
                               Optional env As Environment = Nothing) As Object
 
-            Dim join As Object() = getObjectSet(x, env) _
-                .JoinIterates(getObjectSet(y, env)) _
+            Dim join As Object() = ObjectSet.GetObjectSet(x, env) _
+                .JoinIterates(ObjectSet.GetObjectSet(y, env)) _
                 .Distinct _
                 .ToArray
             Return join
@@ -399,7 +347,7 @@ Namespace Runtime.Internal.Invokes
             Dim checked As New Index(Of Object)
             Dim flags As New List(Of Boolean)
 
-            For Each item As Object In getObjectSet(x, env)
+            For Each item As Object In ObjectSet.GetObjectSet(x, env)
                 Call flags.Add(item Like checked)
 
                 If Not flags.Last Then

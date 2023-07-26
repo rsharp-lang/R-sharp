@@ -1,65 +1,65 @@
 ﻿#Region "Microsoft.VisualBasic::8ef67779a77d7b12fa1ae91e4893994d, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1567
-    '    Code Lines: 890
-    ' Comment Lines: 500
-    '   Blank Lines: 177
-    '     File Size: 70.78 KB
+' Summaries:
 
 
-    '     Module linq
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: [select], all, any, doWhile, fastIndexing
-    '                   first, getPredicate, groupBy, groupDataframeRows, groupsSummary
-    '                   groupSummary, last, left_join, match, orderBy
-    '                   produceKeyedSequence, progress, projectAs, reverse, rotate_left
-    '                   rotate_right, runFilterPipeline, runWhichFilter, skip, sort
-    '                   sortByKeyFunction, sortByKeyValue, split, splitByPartitionSize, splitCollection
-    '                   splitList, splitVector, take, tryKeyBy, unique
-    '                   where, whichMax, whichMin
-    '         Class SplitPredicateFunction
-    ' 
-    '             Function: AssertEquals, AssertThat, GetPredicate
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1567
+'    Code Lines: 890
+' Comment Lines: 500
+'   Blank Lines: 177
+'     File Size: 70.78 KB
+
+
+'     Module linq
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: [select], all, any, doWhile, fastIndexing
+'                   first, getPredicate, groupBy, groupDataframeRows, groupsSummary
+'                   groupSummary, last, left_join, match, orderBy
+'                   produceKeyedSequence, progress, projectAs, reverse, rotate_left
+'                   rotate_right, runFilterPipeline, runWhichFilter, skip, sort
+'                   sortByKeyFunction, sortByKeyValue, split, splitByPartitionSize, splitCollection
+'                   splitList, splitVector, take, tryKeyBy, unique
+'                   where, whichMax, whichMin
+'         Class SplitPredicateFunction
+' 
+'             Function: AssertEquals, AssertThat, GetPredicate
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -86,8 +86,8 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports obj = Microsoft.VisualBasic.Scripting
+Imports ObjectSet = SMRUCC.Rsharp.Runtime.Vectorization.ObjectSet
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
@@ -292,7 +292,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                     Return New pipeline(seq, DirectCast(sequence(), pipeline).elementType)
                                 End Function)
                 Else
-                    Return Rset.getObjectSet(sequence, env).Take(nscalar).ToArray
+                    Return ObjectSet.GetObjectSet(sequence, env).Take(nscalar).ToArray
                 End If
             ElseIf nvec.GetType.GetElementType Like RType.characters Then
                 If TypeOf sequence Is dataframe Then
@@ -402,7 +402,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                 Return New pipeline(seq, DirectCast(sequence, pipeline).elementType)
                             End Function)
             Else
-                Return Rset.getObjectSet(sequence, env).Skip(n).ToArray
+                Return ObjectSet.GetObjectSet(sequence, env).Skip(n).ToArray
             End If
         End Function
 
@@ -426,7 +426,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
 
             If Not getKey Is Nothing Then
-                Return Rset.getObjectSet(items, envir) _
+                Return ObjectSet.GetObjectSet(items, envir) _
                    .GroupBy(Function(o)
                                 Dim arg = InvokeParameter.CreateLiterals(o)
                                 Return getKey.Invoke(envir, arg)
@@ -436,7 +436,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                            End Function) _
                    .ToArray
             Else
-                Return Rset.getObjectSet(items, envir) _
+                Return ObjectSet.GetObjectSet(items, envir) _
                    .GroupBy(Function(o)
                                 Return o
                             End Function) _
@@ -473,7 +473,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
                 Return New pipeline(projection, project.getReturns(envir))
             Else
-                Dim result As Object() = Rset.getObjectSet(sequence, envir) _
+                Dim result As Object() = ObjectSet.GetObjectSet(sequence, envir) _
                     .Select(doProject) _
                     .ToArray
 
@@ -536,7 +536,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
                 Return subKeys
             Else
-                Dim testResult = Rset.getObjectSet(x, env) _
+                Dim testResult = ObjectSet.GetObjectSet(x, env) _
                     .runWhichFilter(test, env) _
                     .ToArray
 
@@ -699,7 +699,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' </returns>
         <ExportAPI("which.max")>
         <RApiReturn(GetType(Integer))>
-        Public Function whichMax(<RRawVectorArgument> x As Object, Optional eval As Object = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function whichMax(<RRawVectorArgument>
+                                 x As Object,
+                                 Optional eval As Object = Nothing,
+                                 Optional env As Environment = Nothing) As Object
+
             If eval Is Nothing Then
                 If x Is Nothing Then
                     Return New Integer() {}
@@ -714,7 +718,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 End If
             Else
                 Dim lambda = LinqPipeline.lambda.CreateProjectLambda(Of Double)(eval, env)
-                Dim scores = Rset.getObjectSet(x, env).Select(lambda).ToArray
+                Dim scores = ObjectSet.GetObjectSet(x, env).Select(lambda).ToArray
 
                 If scores.Length = 0 Then
                     Return New Integer() {}
@@ -771,7 +775,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 End If
             Else
                 Dim lambda = LinqPipeline.lambda.CreateProjectLambda(Of Double)(eval, env)
-                Dim scores = Rset.getObjectSet(x, env).Select(lambda).ToArray
+                Dim scores = ObjectSet.GetObjectSet(x, env).Select(lambda).ToArray
 
                 If scores.Length = 0 Then
                     Return New Integer() {}
@@ -806,10 +810,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim arg As InvokeParameter()
 
             If test Is Nothing Then
-                Return Rset.getObjectSet(sequence, envir).FirstOrDefault
+                Return ObjectSet.GetObjectSet(sequence, envir).FirstOrDefault
             End If
 
-            For Each item As Object In Rset.getObjectSet(sequence, envir)
+            For Each item As Object In ObjectSet.GetObjectSet(sequence, envir)
                 arg = InvokeParameter.CreateLiterals(item)
                 pass = CLRVector.asLogical(test.Invoke(envir, arg))(Scan0)
 
@@ -843,12 +847,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim arg As InvokeParameter()
 
             If test Is Nothing Then
-                Return Rset.getObjectSet(sequence, envir).LastOrDefault
+                Return ObjectSet.GetObjectSet(sequence, envir).LastOrDefault
             End If
 
             Dim lastVal As Object = Nothing
 
-            For Each item As Object In Rset.getObjectSet(sequence, envir)
+            For Each item As Object In ObjectSet.GetObjectSet(sequence, envir)
                 arg = InvokeParameter.CreateLiterals(item)
                 pass = CLRVector.asLogical(test.Invoke(envir, arg))(Scan0)
 
@@ -1000,7 +1004,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     End If
                 Next
             Else
-                For Each item As Object In Rset.getObjectSet(sequence, env)
+                For Each item As Object In ObjectSet.GetObjectSet(sequence, env)
                     key = keyBy(item)
 
                     If Program.isException(key) Then

@@ -119,8 +119,8 @@ Namespace Runtime.Internal.Object.Converts
         <ExportAPI("as.date")>
         Public Function asDate(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Date()
             ' in R# language
-            Return Rset _
-                .getObjectSet(obj, env) _
+            Return ObjectSet _
+                .GetObjectSet(obj, env) _
                 .Select(Function(o)
                             If TypeOf o Is Date Then
                                 Return CDate(o)
@@ -1287,7 +1287,7 @@ RE0:
         <ExportAPI("as.pipeline")>
         Public Function asPipeline(<RRawVectorArgument> seq As Object, Optional env As Environment = Nothing) As pipeline
             Dim type As RType = Nothing
-            Dim sequence = Rset.getObjectSet(seq, env, elementType:=type)
+            Dim sequence = ObjectSet.GetObjectSet(seq, env, elementType:=type)
 
             Return New pipeline(sequence, type)
         End Function

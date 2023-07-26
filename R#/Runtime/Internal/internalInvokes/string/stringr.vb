@@ -540,8 +540,8 @@ Namespace Runtime.Internal.Invokes
             If text Is Nothing Then
                 Return Nothing
             ElseIf fixed Then
-                Return Rset _
-                    .getObjectSet(text, env) _
+                Return ObjectSet _
+                    .GetObjectSet(text, env) _
                     .Select(Function(o)
                                 Return greps.Any(Function(part) VBStr.InStr(o, part) > 0)
                             End Function) _
@@ -560,7 +560,7 @@ Namespace Runtime.Internal.Invokes
                             End Function) _
                     .DoCall(AddressOf pipeline.CreateFromPopulator)
             Else
-                Return Rset.getObjectSet(text, env) _
+                Return ObjectSet.GetObjectSet(text, env) _
                     .Select(Function(o)
                                 Return textgrep(any.ToString(o))
                             End Function) _
