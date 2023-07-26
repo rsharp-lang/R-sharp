@@ -136,6 +136,13 @@ Namespace Runtime.Internal.Object.Converts
             Return newList
         End Function
 
+        ''' <summary>
+        ''' cast any clr object to R# tuple list object
+        ''' </summary>
+        ''' <param name="obj"></param>
+        ''' <param name="args"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Friend Function listInternal(obj As Object, args As list, env As Environment) As Object
             Dim type As Type
 
@@ -209,7 +216,15 @@ Namespace Runtime.Internal.Object.Converts
 
             With dict
                 For Each key As Object In .Keys
-                    Call objList.Add(any.ToString(key), listInternal(.Item(key), args, env))
+                    Dim value As Object = .Item(key)
+
+                    If value IsNot Nothing Then
+                        If Not DataFramework.IsPrimitive(value.GetType) Then
+                            value = listInternal(value, args, env)
+                        End If
+                    End If
+
+                    Call objList.Add(any.ToString(key), value)
                 Next
             End With
 
