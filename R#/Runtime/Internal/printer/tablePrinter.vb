@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Terminal.TablePrinter
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.TablePrinter.Flags
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports stdNum = System.Math
@@ -171,13 +172,25 @@ Namespace Runtime.Internal.ConsolePrinter
                           End Function)
 
         <Extension>
-        Public Sub PrintTable(table As dataframe, maxPrint%, maxWidth%, output As RContentOutput, env As GlobalEnvironment)
+        Public Function PrintTable(table As dataframe, maxPrint%, maxWidth%, output As RContentOutput, env As GlobalEnvironment) As Message
             Dim reachMax As Boolean = table.nrows >= maxPrint
             Dim delta As Integer = table.nrows - maxPrint
             Dim format As ConsoleTableBuilderFormat = formatParser.TryGetValue(
                 index:=Strings.LCase(env.options.getOption("table.format", NameOf(ConsoleTableBuilderFormat.Minimal))),
                 [default]:=ConsoleTableBuilderFormat.Minimal
             )
+
+            ' the rownames size may be mis-matched with the
+            ' row numbers of current data frame table?
+            If Not table.rownames.IsNullOrEmpty Then
+                If table.rownames.Length <> table.nrows Then
+                    Return Internal.debug.stop({
+                        "The rownames size is mis-matched with the row numbers of current dataframe!",
+                        $"rownames_size: {table.rownames.Length}",
+                        $"table_rownumbers: {table.nrows}"
+                    }, env)
+                End If
+            End If
 
             For Each part As ConsoleTableBaseData In table.ToContent(maxPrint%, maxWidth%, env)
                 Call ConsoleTableBuilder _
@@ -191,6 +204,8 @@ Namespace Runtime.Internal.ConsolePrinter
             If reachMax Then
                 Call output.WriteLine($" [ reached 'max' / getOption(""max.print"") -- omitted {delta} rows ]")
             End If
-        End Sub
+
+            Return Nothing
+        End Function
     End Module
 End Namespace

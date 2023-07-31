@@ -207,13 +207,13 @@ Namespace Runtime.Internal.ConsolePrinter
             RInternalToString(GetType(T)) = formatter
         End Sub
 
-        Friend Sub printInternal(x As Object, listPrefix As String, opts As PrinterOptions, env As GlobalEnvironment)
+        Friend Function printInternal(x As Object, listPrefix As String, opts As PrinterOptions, env As GlobalEnvironment) As Message
             Dim valueType As Type
             Dim output As RContentOutput = env.stdout
 
             If x Is Nothing Then
                 Call output.WriteLine("NULL")
-                Return
+                Return Nothing
             Else
                 valueType = x.GetType
             End If
@@ -243,13 +243,23 @@ Namespace Runtime.Internal.ConsolePrinter
                 End If
 
             ElseIf valueType.ImplementInterface(GetType(IDictionary)) Then
-                Call DirectCast(x, IDictionary).printList(listPrefix, opts, env)
+                Dim err As Message = DirectCast(x, IDictionary).printList(listPrefix, opts, env)
+
+                If Not err Is Nothing Then
+                    Call output.Flush()
+                    Return err
+                End If
             ElseIf valueType Is GetType(list) Then
-                Call DirectCast(x, list) _
+                Dim err As Message = DirectCast(x, list) _
                     .slots _
-                    .DoCall(Sub(list)
-                                Call DirectCast(list, IDictionary).printList(listPrefix, opts, env)
-                            End Sub)
+                    .DoCall(Function(list)
+                                Return DirectCast(list, IDictionary).printList(listPrefix, opts, env)
+                            End Function)
+
+                If Not err Is Nothing Then
+                    Call output.Flush()
+                    Return err
+                End If
             ElseIf valueType Is GetType(dataframe) Then
                 Dim dataframe As dataframe = DirectCast(x, dataframe)
 
@@ -257,14 +267,18 @@ Namespace Runtime.Internal.ConsolePrinter
                     Dim result = dataframe.projectByColumn(opts.fields, env:=env)
 
                     If TypeOf result Is Message Then
-                        Call Internal.debug.PrintMessageInternal(result, env)
-                        Return
+                        Return result
                     Else
                         dataframe = result
                     End If
                 End If
 
-                Call tablePrinter.PrintTable(dataframe, opts.maxPrint, opts.maxWidth, output, env)
+                Dim err As Message = tablePrinter.PrintTable(dataframe, opts.maxPrint, opts.maxWidth, output, env)
+
+                If Not err Is Nothing Then
+                    Call output.Flush()
+                    Return err
+                End If
             ElseIf valueType Is GetType(vbObject) Then
                 Call DirectCast(x, vbObject).ToString.DoCall(AddressOf output.WriteLine)
             Else
@@ -273,14 +287,17 @@ printSingleElement:
             End If
 
             Call output.Flush()
-        End Sub
+
+            Return Nothing
+        End Function
 
         <Extension>
-        Private Sub printList(list As IDictionary, listPrefix$, opts As PrinterOptions, env As GlobalEnvironment)
+        Private Function printList(list As IDictionary, listPrefix$, opts As PrinterOptions, env As GlobalEnvironment) As Message
             Dim output As RContentOutput = env.stdout
+            Dim err As Message
 
             If list Is Nothing Then
-                Return
+                Return Nothing
             End If
 
             For Each objKey As Object In list.Keys
@@ -294,10 +311,16 @@ printSingleElement:
                 End If
 
                 Call output.WriteLine(key)
-                Call printer.printInternal(slotValue, key, opts, env)
+                err = printer.printInternal(slotValue, key, opts, env)
                 Call output.WriteLine()
+
+                If Not err Is Nothing Then
+                    Return err
+                End If
             Next
-        End Sub
+
+            Return Nothing
+        End Function
 
         ''' <summary>
         ''' Debugger test api of <see cref="ToString"/>

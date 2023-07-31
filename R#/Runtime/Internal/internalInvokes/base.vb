@@ -3139,7 +3139,11 @@ RE0:
             ElseIf type Is GetType(Message) Then
                 Return x
             Else
-                Call printer.printInternal(x, "", opts, env:=globalEnv)
+                Dim err = printer.printInternal(x, "", opts, env:=globalEnv)
+
+                If Not err Is Nothing Then
+                    Return err
+                End If
             End If
 
             Return x
