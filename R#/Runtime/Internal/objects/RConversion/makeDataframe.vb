@@ -1,62 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::b5d2a6fe0567e79b0133cc45d4d0214b, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/makeDataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 339
-    '    Code Lines: 247
-    ' Comment Lines: 41
-    '   Blank Lines: 51
-    '     File Size: 13.71 KB
+' Summaries:
 
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Module makeDataframe
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: castMultipleColumnsToDataframe, castSingleToDataframe, CheckDimension, createColumnVector, createDataframe
-    '                   fromList, is_ableConverts, PopulateDataSet, pullColumns, (+2 Overloads) RDataframe
-    '                   RMatrix, TracebackDataFrmae, tryTypeLineage
-    ' 
-    '         Sub: [addHandler]
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 339
+'    Code Lines: 247
+' Comment Lines: 41
+'   Blank Lines: 51
+'     File Size: 13.71 KB
+
+
+'     Delegate Function
+' 
+' 
+'     Module makeDataframe
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: castMultipleColumnsToDataframe, castSingleToDataframe, CheckDimension, createColumnVector, createDataframe
+'                   fromList, is_ableConverts, PopulateDataSet, pullColumns, (+2 Overloads) RDataframe
+'                   RMatrix, TracebackDataFrmae, tryTypeLineage
+' 
+'         Sub: [addHandler]
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -157,11 +157,18 @@ Namespace Runtime.Internal.Object.Converts
             ' row numbers of current data frame table?
             If Not data.rownames.IsNullOrEmpty Then
                 If data.rownames.Length <> data.nrows Then
-                    Return Internal.debug.stop({
+                    Dim msg As New List(Of String) From {
                         "The rownames size is mis-matched with the row numbers of current dataframe!",
                         $"rownames_size: {data.rownames.Length}",
-                        $"table_rownumbers: {data.nrows}"
-                    }, env)
+                        $"table_rownumbers: {data.nrows}",
+                        $"dataframe_dimension: {data.ToString}"
+                    }
+
+                    If data.rownames.Length = 1 Then
+                        msg.Add($"Only a single row names inside current dataframe: ""{data.rownames.First}""")
+                    End If
+
+                    Return Internal.debug.stop(msg, env)
                 End If
             End If
 
@@ -181,7 +188,7 @@ Namespace Runtime.Internal.Object.Converts
         <Extension>
         Public Function CheckDimension(data As dataframe, env As Environment) As Object
             If data.columns.IsNullOrEmpty OrElse data.columns.Count = 1 Then
-                Return data
+                Return data.CheckRowDimension(env)
             End If
 
             Dim max As Integer = data.nrows
@@ -201,7 +208,7 @@ Namespace Runtime.Internal.Object.Converts
 
                 Return Internal.debug.stop(msg.ToArray, env)
             Else
-                Return data
+                Return data.CheckRowDimension(env)
             End If
         End Function
 

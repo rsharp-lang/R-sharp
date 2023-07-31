@@ -357,6 +357,10 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' show the dataframe dimension information
+        ''' </summary>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
             Return $"[{nrows}x{ncols}] ['{columns.Keys.JoinBy("', '")}']"
