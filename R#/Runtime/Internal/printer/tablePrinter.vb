@@ -57,8 +57,10 @@ Imports Microsoft.VisualBasic.ApplicationServices.Terminal.TablePrinter
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.TablePrinter.Flags
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports stdNum = System.Math
 
@@ -179,17 +181,15 @@ Namespace Runtime.Internal.ConsolePrinter
                 index:=Strings.LCase(env.options.getOption("table.format", NameOf(ConsoleTableBuilderFormat.Minimal))),
                 [default]:=ConsoleTableBuilderFormat.Minimal
             )
+            Dim check = table.CheckRowDimension(env)
 
-            ' the rownames size may be mis-matched with the
-            ' row numbers of current data frame table?
-            If Not table.rownames.IsNullOrEmpty Then
-                If table.rownames.Length <> table.nrows Then
-                    Return Internal.debug.stop({
-                        "The rownames size is mis-matched with the row numbers of current dataframe!",
-                        $"rownames_size: {table.rownames.Length}",
-                        $"table_rownumbers: {table.nrows}"
-                    }, env)
-                End If
+            If Program.isException(check) Then
+                Return check
+            Else
+                check = table.CheckDimension(env)
+            End If
+            If Program.isException(check) Then
+                Return check
             End If
 
             For Each part As ConsoleTableBaseData In table.ToContent(maxPrint%, maxWidth%, env)

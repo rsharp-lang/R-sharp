@@ -151,6 +151,23 @@ Namespace Runtime.Internal.Object.Converts
             Return dataframe
         End Function
 
+        <Extension>
+        Public Function CheckRowDimension(data As dataframe, env As Environment) As Object
+            ' the rownames size may be mis-matched with the
+            ' row numbers of current data frame table?
+            If Not data.rownames.IsNullOrEmpty Then
+                If data.rownames.Length <> data.nrows Then
+                    Return Internal.debug.stop({
+                        "The rownames size is mis-matched with the row numbers of current dataframe!",
+                        $"rownames_size: {data.rownames.Length}",
+                        $"table_rownumbers: {data.nrows}"
+                    }, env)
+                End If
+            End If
+
+            Return data
+        End Function
+
         ''' <summary>
         ''' check column dimension is matched to rows or not?
         ''' (arguments imply differing number of rows)
