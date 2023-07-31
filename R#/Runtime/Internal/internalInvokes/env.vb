@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::0b1d472af882c4934fb94da793286883, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/env.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 523
-    '    Code Lines: 282
-    ' Comment Lines: 189
-    '   Blank Lines: 52
-    '     File Size: 23.60 KB
+' Summaries:
 
 
-    '     Module env
-    ' 
-    '         Function: [get], [gettype], [set], [typeof], CallClrMemberFunction
-    '                   CallInternal, CallMemberFunction, doCall, environment, exists
-    '                   getCallLambda, getCurrentTrace, getOutputDevice, globalenv, listOptionItems
-    '                   lockBinding, ls, objects, objectSize, traceback
-    '                   unlockBinding
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 523
+'    Code Lines: 282
+' Comment Lines: 189
+'   Blank Lines: 52
+'     File Size: 23.60 KB
+
+
+'     Module env
+' 
+'         Function: [get], [gettype], [set], [typeof], CallClrMemberFunction
+'                   CallInternal, CallMemberFunction, doCall, environment, exists
+'                   getCallLambda, getCurrentTrace, getOutputDevice, globalenv, listOptionItems
+'                   lockBinding, ls, objects, objectSize, traceback
+'                   unlockBinding
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -70,6 +70,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Invokes
@@ -574,6 +575,61 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("type")>
         Public Function [gettype](name As String, Optional env As Environment = Nothing) As Type
             Return env.globalEnvironment.types.TryGetValue(name)
+        End Function
+
+        ''' <summary>
+        ''' ## Remove Objects from a Specified Environment
+        ''' 
+        ''' remove and rm can be used to remove objects. These can be specified 
+        ''' successively as character strings, or in the character vector list, 
+        ''' or through a combination of both. All objects thus specified will be 
+        ''' removed.
+        '''
+        ''' + If envir Is NULL Then the currently active environment Is searched first.
+        ''' + If inherits Is TRUE Then parents Of the supplied directory are 
+        '''   searched until a variable With the given name Is encountered. A warning 
+        '''   Is printed For Each variable that Is Not found.
+        '''
+        ''' </summary>
+        ''' <param name="x">the objects to be removed, as names (unquoted) or character strings (quoted).</param>
+        ''' <param name="list">a character vector naming objects to be removed.</param>
+        ''' <param name="inherits">should the enclosing frames of the environment be inspected?</param>
+        ''' <param name="envir">the environment to use. See ‘details’.</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' The pos argument can specify the environment from which to remove the 
+        ''' objects in any of several ways: as an integer (the position in the search
+        ''' list); as the character string name of an element in the search list; 
+        ''' or as an environment (including using sys.frame to access the currently
+        ''' active function calls). The envir argument is an alternative way to specify
+        ''' an environment, but is primarily there for back compatibility.
+        '''
+        ''' It Is Not allowed to remove variables from the base environment And base 
+        ''' namespace, nor from any environment which Is locked (see lockEnvironment).
+        '''
+        ''' Earlier versions Of R incorrectly claimed that supplying a character 
+        ''' vector In ... removed the objects named In the character vector, but it
+        ''' removed the character vector. Use the list argument To specify objects 
+        ''' via a character vector.
+        ''' </remarks>
+        <ExportAPI("rm")>
+        Public Function rm(<RListObjectArgument> x As list,
+                           <RRawVectorArgument>
+                           Optional list As Object = Nothing,
+                           Optional [inherits] As Boolean = False,
+                           Optional envir As Environment = Nothing) As Object
+
+            For Each name As String In CLRVector.asCharacter(list)
+                Call envir.Delete(name, seekParent:=[inherits])
+            Next
+
+            For Each name As String In x.getNames
+                If name <> "list" AndAlso name <> "inherits" AndAlso name <> "envir" Then
+                    Call envir.Delete(name, seekParent:=[inherits])
+                End If
+            Next
+
+            Return Nothing
         End Function
     End Module
 End Namespace
