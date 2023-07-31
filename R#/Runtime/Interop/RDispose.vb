@@ -74,6 +74,8 @@ Namespace Runtime.Interop
             End Get
         End Property
 
+        Public Property env As Environment
+
         ''' <summary>
         ''' 
         ''' </summary>
