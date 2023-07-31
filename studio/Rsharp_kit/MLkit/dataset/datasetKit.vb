@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::33d5790cd11049bfe2b912cf8bfa24b2, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataset/datasetKit.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 506
-    '    Code Lines: 360
-    ' Comment Lines: 87
-    '   Blank Lines: 59
-    '     File Size: 21.74 KB
+' Summaries:
 
 
-    ' Module datasetKit
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: addRow, binEncoder, boolEncoder, dataDescription, demoMatrix
-    '               dimensionRange, EmbeddingRender, Encoding, estimate_alphabets, factorEncoder
-    '               fitSgt, getNormalizeMatrix, mapEncoder, mapLambda, readMNISTLabelledVector
-    '               readModelDataset, SGT, Tabular, toDataframe, toFeatureSet
-    '               toMatrix
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 506
+'    Code Lines: 360
+' Comment Lines: 87
+'   Blank Lines: 59
+'     File Size: 21.74 KB
+
+
+' Module datasetKit
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: addRow, binEncoder, boolEncoder, dataDescription, demoMatrix
+'               dimensionRange, EmbeddingRender, Encoding, estimate_alphabets, factorEncoder
+'               fitSgt, getNormalizeMatrix, mapEncoder, mapLambda, readMNISTLabelledVector
+'               readModelDataset, SGT, Tabular, toDataframe, toFeatureSet
+'               toMatrix
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -70,6 +70,7 @@ Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
+Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure.DataPack
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.MIME.application.json
@@ -159,7 +160,6 @@ Module datasetKit
                 .ToArray
             df.add(key, v)
         Next
-
         Return df
     End Function
 
@@ -284,6 +284,25 @@ Module datasetKit
         }
     End Function
 
+    ''' <summary>
+    ''' Convert the sciBASIC general dataframe as the Machine learning general dataset
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="labels"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("as.MLdataset")>
+    Public Function CreateMLdataset(x As FeatureFrame,
+                                    <RRawVectorArgument>
+                                    labels As Object,
+                                    Optional env As Environment = Nothing) As Object
+
+        Dim outputLabels As String() = CLRVector.asCharacter(labels)
+        Dim ds As DataSet = x.Imports(labels:=outputLabels)
+
+        Return ds
+    End Function
+
     <ExportAPI("description")>
     Public Function dataDescription(x As Object, Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
@@ -402,11 +421,47 @@ Module datasetKit
     ''' <summary>
     ''' read the dataset for training the machine learning model
     ''' </summary>
-    ''' <param name="file"></param>
+    ''' <param name="file">a xml data file or a binary stream pack data file</param>
     ''' <returns></returns>
     <ExportAPI("read.ML_model")>
     Public Function readModelDataset(file As String) As DataSet
-        Return file.LoadXml(Of DataSet)
+        If file.ExtensionSuffix("xml") Then
+            Return file.LoadXml(Of DataSet)
+        Else
+            Using buf As Stream = file.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+                Dim reader As New PackReader(buf)
+                Dim ds As New DataSet With {
+                    .DataSamples = New SampleList With {
+                        .items = reader.GetAllSamples.ToArray
+                    },
+                    .NormalizeMatrix = reader.GetMatrix,
+                    .output = reader.output_labels
+                }
+
+                Return ds
+            End Using
+        End If
+    End Function
+
+    ''' <summary>
+    ''' write the data model to file
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
+    <ExportAPI("write.ML_model")>
+    Public Function writeMLDataset(x As DataSet, file As String) As Object
+        If file.ExtensionSuffix("xml") Then
+            Return x.GetXml.SaveTo(file)
+        Else
+            Dim buf As Stream = file.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+
+            Using writer As New PackWriter(buf)
+                Call writer.WriteDataSet(x)
+            End Using
+
+            Return True
+        End If
     End Function
 
     <ExportAPI("read.mnist.labelledvector")>
@@ -455,7 +510,6 @@ Module datasetKit
                 .ToArray
 #Enable Warning
         Next
-
         Return matrix
     End Function
 
