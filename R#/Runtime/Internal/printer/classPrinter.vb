@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 
 Namespace Runtime.Internal.ConsolePrinter
 
@@ -80,6 +81,7 @@ Namespace Runtime.Internal.ConsolePrinter
         Public Function printClass(obj As Object) As String
             If obj Is Nothing Then
                 Return "NULL"
+                ' ElseIf TypeOf obj Is vector Then
             Else
                 Return printClassImplInternal(obj)
             End If

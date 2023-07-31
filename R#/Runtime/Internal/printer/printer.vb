@@ -394,6 +394,13 @@ printSingleElement:
             End If
         End Function
 
+        ''' <summary>
+        ''' populate strings
+        ''' </summary>
+        ''' <param name="xVec"></param>
+        ''' <param name="elementType"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Friend Function getStrings(xVec As Array, ByRef elementType As Type, env As GlobalEnvironment) As IEnumerable(Of String)
             Dim toString As IStringBuilder
 
