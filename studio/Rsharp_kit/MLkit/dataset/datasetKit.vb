@@ -464,7 +464,13 @@ Module datasetKit
         End If
     End Function
 
-    <ExportAPI("read.mnist.labelledvector")>
+    ''' <summary>
+    ''' read mnist dataset messagepack file as R# dataframe object
+    ''' </summary>
+    ''' <param name="messagepack"></param>
+    ''' <param name="takes"></param>
+    ''' <returns></returns>
+    <ExportAPI("read.MNIST.labelledvector")>
     Public Function readMNISTLabelledVector(messagepack As String, Optional takes As Integer = -1) As Rdataframe
         Using file As Stream = messagepack.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
             Return LabelledVector.CreateDataFrame(MsgPackSerializer.Deserialize(Of LabelledVector())(file), takes)
