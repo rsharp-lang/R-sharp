@@ -4,7 +4,7 @@ let raw = read.MNIST.labelledvector(`${@dir}/MNIST-LabelledVectorArray-60000x100
 
 raw[, "num"] = as.numeric(rownames(raw));
 
-rownames(raw) = `num_${rownames(raw)}`;
+rownames(raw) = make.names(`num_${rownames(raw)}`, unique = TRUE);
 
 print(raw);
 
