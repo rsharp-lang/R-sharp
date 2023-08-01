@@ -5,8 +5,8 @@
     },
     "run_dll": {
       "commandName": "Executable",
-      "executablePath": "D:\\GCModeller\\src\\R-sharp\\App\\net6.0\\R#.exe",
-      "commandLineArgs": "D:\\GCModeller\\src\\R-sharp\\test\\demo\\clustering\\dbscan\\HDBSCAN.R --data D:\\GCModeller\\src\\R-sharp\\test\\demo\\clustering\\dbscan\\multishapes.csv"
+      "executablePath": "\\GCModeller\\src\\R-sharp\\App\\net6.0\\R#.exe",
+      "commandLineArgs": "D:\\GCModeller\\src\\R-sharp\\test\\demo\\machineLearning\\umap\\MNIST-dataset.R --debug"
     }
   }
 }
