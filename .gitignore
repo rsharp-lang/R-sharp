@@ -464,3 +464,4 @@ test/unitTest/environment/demo_lambda/REnv.zip
 test/demo/excel/New Microsoft Excel Worksheet.xlsx.zip
 /test/demo/buffer/cache.dat
 test/demo/buffer/demo_test.hds
+test/demo/machineLearning/umap/MNIST-LabelledVectorArray-60000x100.pack

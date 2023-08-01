@@ -2,4 +2,13 @@ imports "dataset" from "MLkit";
 
 let raw = read.MNIST.labelledvector(`${@dir}/MNIST-LabelledVectorArray-60000x100.msgpack`, takes = 10);
 
+raw[, "num"] = as.numeric(rownames(raw));
+
+rownames(raw) = `num_${rownames(raw)}`;
+
 print(raw);
+
+raw = toFeatureSet(raw);
+raw = as.MLdataset(raw, labels = "num");
+
+write.ML_model(raw, file = `${@dir}/MNIST-LabelledVectorArray-60000x100.pack`);
