@@ -109,7 +109,23 @@ Module datasetKit
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(FeatureFrame), AddressOf toDataframe)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(UnionMatrix), AddressOf toMatrix)
         Call REnv.Internal.generic.add("fit", GetType(SequenceGraphTransform), AddressOf fitSgt)
+        Call REnv.Internal.generic.add("dim", GetType(DataSet), AddressOf getDataSetDimension)
     End Sub
+
+    Private Function getDataSetDimension(x As DataSet, args As list, env As Environment) As Object
+        Dim dims As New list With {
+            .slots = New Dictionary(Of String, Object)
+        }
+        Dim idset As String() = x.DataSamples.AsEnumerable.Select(Function(a) a.ID).ToArray
+        Dim features As String() = x.NormalizeMatrix.names
+        Dim labels As String() = x.output
+
+        dims.add("samples", idset)
+        dims.add("features", features)
+        dims.add("outputs", labels)
+
+        Return dims
+    End Function
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function toMatrix(data As UnionMatrix, args As list, env As Environment) As Rdataframe
