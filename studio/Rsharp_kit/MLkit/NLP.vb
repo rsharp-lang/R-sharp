@@ -52,11 +52,8 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.NLP
 Imports Microsoft.VisualBasic.Data.NLP.Model
-Imports Microsoft.VisualBasic.DataStorage.netCDF.Components
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Math.Logical.FuzzyLogic.Models
 Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
@@ -100,6 +97,7 @@ Module NLP
             Dim tokens As Counter() = Counter.Count(x).ToArray
 
             df.add("token", tokens.Select(Function(a) a.token))
+            df.add("nchar", tokens.Select(Function(a) a.nchar))
             df.add("total", tokens.Select(Function(a) a.total))
             df.add("paragraph", {1})
             df.add("sentences", tokens.Select(Function(a) a.sentences))
@@ -131,6 +129,7 @@ Module NLP
                 .ToArray
 
             df.add("token", tokenSet.Select(Function(a) a.union.token))
+            df.add("nchar", tokenSet.Select(Function(a) a.union.nchar))
             df.add("total", tokenSet.Select(Function(a) a.union.total))
             df.add("paragraph", tokenSet.Select(Function(a) a.union.paragraph))
             df.add("sentences", tokenSet.Select(Function(a) a.union.sentences))
@@ -152,6 +151,7 @@ Module NLP
         Dim tokens As Counter() = Counter.Count(x).ToArray
 
         df.add("token", tokens.Select(Function(a) a.token))
+        df.add("nchar", tokens.Select(Function(a) a.nchar))
         df.add("total", tokens.Select(Function(a) a.total))
         df.add("paragraph", tokens.Select(Function(a) a.paragraph))
         df.add("sentences", tokens.Select(Function(a) a.sentences))
