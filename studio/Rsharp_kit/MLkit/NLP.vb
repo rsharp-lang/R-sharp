@@ -72,8 +72,16 @@ Module NLP
     ''' <returns></returns>
     <ExportAPI("segmentation")>
     <RApiReturn(GetType(Paragraph))>
-    Public Function Tokenice(<RRawVectorArgument> text As Object, Optional delimiter As String = ".?!", Optional env As Environment = Nothing) As Object
-        Return env.EvaluateFramework(Of String, Paragraph())(text, eval:=Function(si) Paragraph.Segmentation(si, delimiter).ToArray)
+    Public Function Tokenice(<RRawVectorArgument> text As Object,
+                             Optional delimiter As String = ".?!",
+                             Optional chemical_name_rule As Boolean = False,
+                             Optional env As Environment = Nothing) As Object
+
+        Return env.EvaluateFramework(Of String, Paragraph())(
+            x:=text,
+            eval:=Function(si)
+                      Return Paragraph.Segmentation(si, delimiter, chemical_name_rule).ToArray
+                  End Function)
     End Function
 
     ''' <summary>
