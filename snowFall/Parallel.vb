@@ -93,8 +93,11 @@ Public Module Parallel
     ''' </remarks>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <ExportAPI("snowFall")>
-    Public Function snowFall(port As Integer, Optional env As Environment = Nothing) As Object
-        Return New TaskBuilder(port).Run
+    Public Function snowFall(port As Integer,
+                             Optional master As String = "localhost",
+                             Optional env As Environment = Nothing) As Object
+
+        Return New TaskBuilder(port, master).Run
     End Function
 
     ''' <summary>
