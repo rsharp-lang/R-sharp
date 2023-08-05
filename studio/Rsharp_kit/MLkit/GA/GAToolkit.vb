@@ -52,8 +52,8 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
-Imports Microsoft.VisualBasic.MachineLearning.Darwinism.GAF
 Imports Microsoft.VisualBasic.MachineLearning.Darwinism.GAF.Helper
+Imports Microsoft.VisualBasic.MachineLearning.Darwinism.GAF.Population
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork.DarwinismHybrid
 Imports Microsoft.VisualBasic.Scripting.MetaData

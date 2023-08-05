@@ -131,11 +131,21 @@ Namespace Runtime.Internal.Invokes
         Public Function [objToString](<RRawVectorArgument> x As Object,
                                       Optional format$ = Nothing,
                                       Optional culture As CultureInfo = Nothing,
+                                      <RListObjectArgument>
+                                      Optional args As list = Nothing,
                                       Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return ""
             ElseIf TypeOf x Is WebResponseResult Then
                 Return DirectCast(x, WebResponseResult).html
+            End If
+
+            If Internal.generic.exists("toString") Then
+                Dim func = Internal.generic.getGenericCallable(x, x.GetType, "toString", env)
+
+                If Not func Like GetType(Message) Then
+                    Return func.TryCast(Of GenericFunction)()(x, args, env)
+                End If
             End If
 
             ' NULL will be translate to empty string in R
