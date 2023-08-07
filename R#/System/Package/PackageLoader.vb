@@ -52,7 +52,7 @@
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
+Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCoreApp
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash

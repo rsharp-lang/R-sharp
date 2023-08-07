@@ -52,7 +52,7 @@
 Imports System.ComponentModel
 Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices
-Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
+Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCoreApp
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM

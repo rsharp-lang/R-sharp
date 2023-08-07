@@ -55,7 +55,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
+Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCoreApp
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
