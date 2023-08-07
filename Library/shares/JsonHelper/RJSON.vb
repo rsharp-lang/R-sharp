@@ -96,9 +96,14 @@ Module RJSON
     ''' implements for parse the json string in this function
     ''' </summary>
     ''' <param name="str"></param>
-    ''' <param name="raw"></param>
+    ''' <param name="raw">
+    ''' Returns the raw .net clr json element object data instead of convert it as the R# internal object?
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
+    ''' <remarks>
+    ''' this function may returns an error message if the environment config of `strict` is TRUE
+    ''' </remarks>
     <Extension>
     Public Function ParseJSONinternal(str As String, raw As Boolean, env As Environment) As Object
         Dim rawElement As JsonElement
@@ -114,9 +119,16 @@ Module RJSON
             Return rawElement
         ElseIf rawElement Is Nothing Then
             If env.globalEnvironment.options.strict Then
-                Return Internal.debug.stop("invalid format of the input json string!", env)
+                Return Internal.debug.stop({
+                    $"invalid format of the input json string!",
+                    $"json_str: {str}"
+                }, env)
             Else
-                env.AddMessage("invalid format of the input json string!", MSG_TYPES.WRN)
+                Call env.AddMessage({
+                    $"invalid format of the input json string!",
+                    $"json_str: {str}"
+                }, MSG_TYPES.WRN)
+
                 Return Nothing
             End If
         Else
