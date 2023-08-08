@@ -51,6 +51,7 @@
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 
 <Package("graphics")>
 Module Rgraphics
@@ -81,6 +82,9 @@ Module Rgraphics
     Public Function image(x As Object,
                           Optional col As Object = "YlOrRd",
                           Optional env As Environment = Nothing) As Object
-        Throw New NotImplementedException
+
+        If TypeOf x Is matrix Then
+
+        End If
     End Function
 End Module
