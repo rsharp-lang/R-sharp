@@ -58,6 +58,11 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 
+''' <summary>
+''' The R Graphics Package
+''' 
+''' R functions for base graphics.
+''' </summary>
 <Package("graphics")>
 Module Rgraphics
 
