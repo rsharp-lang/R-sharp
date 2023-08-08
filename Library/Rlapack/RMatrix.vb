@@ -88,7 +88,14 @@ Module RMatrix
     End Sub
 
     Private Function createTable(m As GeneralMatrix, args As list, env As Environment) As Object
+        Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim ncols As Integer = m.ColumnDimension
 
+        For i As Integer = 0 To ncols - 1
+            Call df.add($"x{i + 1}", m.ColumnVector(i).ToArray)
+        Next
+
+        Return df
     End Function
 
     ''' <summary>
