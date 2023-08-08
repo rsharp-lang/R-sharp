@@ -50,6 +50,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
@@ -60,6 +61,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
+''' <summary>
+''' The numeric matrix
+''' </summary>
 <Package("Matrix")>
 Module RMatrix
 
@@ -109,17 +113,26 @@ Module RMatrix
                            Optional ncol As Integer = 1,
                            Optional byrow As Boolean = False,
                            Optional dimnames As String() = Nothing,
-                           Optional sparse As Boolean = False) As GeneralMatrix
+                           Optional sparse As Boolean = False,
+                           Optional env As Environment = Nothing) As GeneralMatrix
 
+        If data Is Nothing Then
+            Return Nothing
+        End If
         If TypeOf data Is vector Then
             data = DirectCast(data, vector).data
         End If
 
-        If TypeOf data Is Double() Then
-            If byrow Then
-            Else
+        data = TryCastGenericArray(data, env)
 
+        If DataFramework.IsNumericCollection(data.GetType) Then
+            Dim v As Double() = CLRVector.asNumeric(data)
+
+            If byrow Then
+                ncol = v.Length / nrow
             End If
+
+            Return New NumericMatrix(v.Split(ncol))
         End If
 
         If sparse Then
