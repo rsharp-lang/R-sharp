@@ -480,17 +480,106 @@ Module datasetKit
         End If
     End Function
 
+    <Extension>
+    Friend Function TakeSubset(Of T)(x As IEnumerable(Of T), takes As Integer) As IEnumerable(Of T)
+        If takes > 0 Then
+            Return x.Take(takes)
+        Else
+            Return x
+        End If
+    End Function
+
     ''' <summary>
-    ''' read mnist dataset messagepack file as R# dataframe object
+    ''' read mnist dataset file as R# dataframe object
     ''' </summary>
-    ''' <param name="messagepack"></param>
-    ''' <param name="takes"></param>
+    ''' <param name="path">The MNIST image data file path</param>
+    ''' <param name="subset">Just take a subset of the target dataset, this parameter is the sample size of the sub dataset</param>
+    ''' <param name="args">
+    ''' + format, format = labelledvector, labelled data vector in message pack format
+    ''' + labelfile, labelfile = /path/to/mnist.labels
+    ''' + dataset, dataset = vector/dataframe/image
+    ''' </param>
     ''' <returns></returns>
-    <ExportAPI("read.MNIST.labelledvector")>
-    Public Function readMNISTLabelledVector(messagepack As String, Optional takes As Integer = -1) As Rdataframe
-        Using file As Stream = messagepack.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
-            Return LabelledVector.CreateDataFrame(MsgPackSerializer.Deserialize(Of LabelledVector())(file), takes)
-        End Using
+    <ExportAPI("read.MNIST")>
+    Public Function readMNISTLabelledVector(path As String,
+                                            Optional subset As Integer = -1,
+                                            <RListObjectArgument>
+                                            Optional args As list = Nothing,
+                                            Optional env As Environment = Nothing) As Object
+
+        Dim format As String = args.getValue("format", env, [default]:="labelledvector")
+        Dim dataset As String = args.getValue("dataset", env, [default]:="vector")
+
+        Select Case format
+            Case "labelledvector"
+                Using file As Stream = path.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+                    Dim rawdata = MsgPackSerializer.Deserialize(Of LabelledVector())(file) _
+                        .TakeSubset(subset) _
+                        .ToArray
+
+                    Select Case dataset
+                        Case "vector"
+                            Return New list With {
+                                .slots = rawdata _
+                                    .Select(Function(r, i) (r, i)) _
+                                    .ToDictionary(Function(v) $"{v.r.UID}-{v.i + 1}",
+                                                  Function(v)
+                                                      Return CObj(CLRVector.asNumeric(v.r.vector))
+                                                  End Function)
+                            }
+                        Case "dataframe"
+                            Return LabelledVector.CreateDataFrame(vector:=rawdata)
+                        Case Else
+                            Return Internal.debug.stop(New NotImplementedException($"the data set format '{dataset}' is not yet implemented!"), env)
+                    End Select
+                End Using
+            Case Else
+                Dim labelfile As String = args.getValue("labelfile", env, [default]:="")
+
+                If labelfile.StringEmpty Then
+                    Return Internal.debug.stop("No 'labelfile' was provided for the MNIST image dataset!", env)
+                End If
+
+                Dim MNIST As New MNIST(imagesFile:=path, labelfile)
+
+                Select Case dataset
+                    Case "vector"
+                        Return New list With {
+                            .slots = MNIST _
+                                .ExtractVectors _
+                                .TakeSubset(subset) _
+                                .ToDictionary(Function(v) v.name,
+                                              Function(v)
+                                                  Return CObj(CLRVector.asNumeric(v))
+                                              End Function)
+                        }
+                    Case "dataframe"
+                        Dim all = MNIST.ExtractVectors.TakeSubset(subset).ToArray
+                        Dim labels As String() = all.Select(Function(v) v.description).ToArray
+                        Dim df As New Rdataframe With {
+                            .rownames = all.Select(Function(v) v.name).ToArray,
+                            .columns = New Dictionary(Of String, Array)
+                        }
+
+                        For i As Integer = 0 To all(0).Length - 1
+                            Call df.add($"X{i + 1}", CLRVector.asNumeric(all.Select(Function(v) v(i)).ToArray))
+                        Next
+
+                        Return df
+                    Case "image"
+                        Return New list With {
+                            .slots = MNIST _
+                                .ExtractImages _
+                                .TakeSubset(subset) _
+                                .ToDictionary(Function(v) v.Name,
+                                              Function(v)
+                                                  Return CObj(v.Value)
+                                              End Function)
+                        }
+                    Case Else
+                        Return Internal.debug.stop(New NotImplementedException($"the data set format '{dataset}' is not yet implemented!"), env)
+                End Select
+        End Select
     End Function
 
     ''' <summary>

@@ -77,12 +77,8 @@ Public NotInheritable Class LabelledVector : Implements INamedValue
         Return Me.GetJson
     End Function
 
-    Public Shared Function CreateDataFrame(vector As LabelledVector(), Optional takes As Integer = -1) As dataframe
+    Public Shared Function CreateDataFrame(vector As LabelledVector()) As dataframe
         Dim size As Integer = vector(Scan0).vector.Length
-
-        If takes > 0 Then
-            vector = vector.Take(takes).ToArray
-        End If
 
         Dim data As New dataframe With {
             .columns = New Dictionary(Of String, Array),
