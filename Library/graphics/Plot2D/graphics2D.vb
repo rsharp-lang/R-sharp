@@ -470,7 +470,7 @@ Module graphics2D
 
         Dim dev As graphicsDevice = curDev
         Dim canvas As Size = InteropArgumentHelper.getSize(dev!size, env).SizeParser
-        Dim pixels As pipeline = pipeline.TryCreatePipeline(Of Pixel)(x, env)
+        Dim pixels As pipeline = pipeline.TryCreatePipeline(Of Pixel)(x, env, suppress:=True)
         Dim dimensionStr As String = InteropArgumentHelper.getSize(dimSize, env, Nothing)
         Dim dimension As Size
 
