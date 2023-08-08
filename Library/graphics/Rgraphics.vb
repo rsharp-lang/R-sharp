@@ -49,6 +49,7 @@
 
 #End Region
 
+Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
@@ -101,7 +102,11 @@ Module Rgraphics
         If TypeOf x Is matrix Then
             Throw New NotImplementedException
         ElseIf x.GetType.ImplementInterface(Of GeneralMatrix) Then
-            Return graphics2D.rasterHeatmap(New RasterMatrix(x), colorName:=col, env:=env)
+            Dim m As GeneralMatrix = DirectCast(x, GeneralMatrix)
+            Dim raster As New RasterMatrix(x)
+            Dim dims As New Size(m.ColumnDimension, m.RowDimension)
+
+            Return graphics2D.rasterHeatmap(raster, colorName:=col, dimSize:=dims, env:=env)
         Else
             Throw New NotImplementedException
         End If

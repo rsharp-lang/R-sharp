@@ -3,6 +3,7 @@
 imports "dataset" from "MLkit";
 
 require(Matrix);
+require(graphics);
 
 setwd(@dir);
 
@@ -26,3 +27,6 @@ let m = matrix(raw[[1]], nrow = 28, byrow = TRUE);
 
 print(m);
 
+bitmap(file = "./test.png") {
+    image(m);
+}
