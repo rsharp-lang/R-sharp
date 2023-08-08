@@ -550,7 +550,7 @@ Module datasetKit
                                 .TakeSubset(subset) _
                                 .ToDictionary(Function(v) v.name,
                                               Function(v)
-                                                  Return CObj(CLRVector.asNumeric(v))
+                                                  Return CObj(CLRVector.asNumeric(v.value))
                                               End Function)
                         }
                     Case "dataframe"
