@@ -1,57 +1,91 @@
 ﻿#Region "Microsoft.VisualBasic::68a8df60b147ec003351f6b4f320200e, D:/GCModeller/src/R-sharp/Library/graphics//Rgraphics.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 35
-    '    Code Lines: 11
-    ' Comment Lines: 22
-    '   Blank Lines: 2
-    '     File Size: 1.36 KB
+' Summaries:
 
 
-    ' Module Rgraphics
-    ' 
-    '     Function: image
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 35
+'    Code Lines: 11
+' Comment Lines: 22
+'   Blank Lines: 2
+'     File Size: 1.36 KB
+
+
+' Module Rgraphics
+' 
+'     Function: image
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
+Imports Microsoft.VisualBasic.Math.LinearAlgebra
+Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports stdVec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
+
+Public Class RasterMatrix : Implements IRasterGrayscaleHeatmap
+
+    Dim m As GeneralMatrix
+
+    Sub New(m As GeneralMatrix)
+        Me.m = m
+    End Sub
+
+    Public Iterator Function GetRasterPixels() As IEnumerable(Of Pixel) Implements IRasterGrayscaleHeatmap.GetRasterPixels
+        Dim y As Integer = 0
+
+        For Each row As stdVec In m.RowVectors
+            Dim v = row.Array
+
+            For x As Integer = 0 To v.Length - 1
+                Yield New PixelData With {
+                    .Scale = v(x),
+                    .X = x,
+                    .Y = y
+                }
+            Next
+
+            y += 1
+        Next
+    End Function
+End Class
 
 <Package("graphics")>
 Module Rgraphics
@@ -80,11 +114,20 @@ Module Rgraphics
     ''' <returns></returns>
     <ExportAPI("image")>
     Public Function image(x As Object,
+                          <RRawVectorArgument>
                           Optional col As Object = "YlOrRd",
                           Optional env As Environment = Nothing) As Object
 
-        If TypeOf x Is matrix Then
+        If x Is Nothing Then
+            Return Nothing
+        End If
 
+        If TypeOf x Is matrix Then
+            Throw New NotImplementedException
+        ElseIf x.GetType.ImplementInterface(Of GeneralMatrix) Then
+            Return graphics2D.rasterHeatmap(New RasterMatrix(x), colorName:=col, env:=env)
+        Else
+            Throw New NotImplementedException
         End If
     End Function
 End Module

@@ -79,6 +79,7 @@ Module RMatrix
                            Dim sb As New StringBuilder
                            Dim file As New StringWriter(sb)
 
+                           Call file.WriteLine()
                            Call tablePrinter.PrintTable(df, maxPrint:=13, maxWidth:=80, output:=file, env.globalEnvironment)
                            Call file.Flush()
 

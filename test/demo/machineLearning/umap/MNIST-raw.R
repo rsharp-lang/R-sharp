@@ -2,6 +2,8 @@
 
 imports "dataset" from "MLkit";
 
+require(Matrix);
+
 setwd(@dir);
 
 const images_set = "mnist_dataset/train-images-idx3-ubyte";
@@ -17,4 +19,10 @@ subset = 10
 );
 
 str(raw);
+
+str(raw[[1]]);
+
+let m = matrix(raw[[1]], nrow = 28, byrow = TRUE);
+
+print(m);
 
