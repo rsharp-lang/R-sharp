@@ -86,6 +86,12 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.ConsolePrinter
 
+    ''' <summary>
+    ''' A delegate function for produce the data handler for build print string 
+    ''' </summary>
+    ''' <param name="printContent"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Public Delegate Function InternalToString(printContent As Boolean, env As GlobalEnvironment) As IStringBuilder
 
     ''' <summary>
@@ -203,7 +209,7 @@ Namespace Runtime.Internal.ConsolePrinter
         ''' </summary>
         ''' <typeparam name="T"></typeparam>
         ''' <param name="formatter"></param>
-        Friend Sub AttachInternalConsoleFormatter(Of T)(formatter As InternalToString)
+        Public Sub AttachInternalConsoleFormatter(Of T)(formatter As InternalToString)
             RInternalToString(GetType(T)) = formatter
         End Sub
 

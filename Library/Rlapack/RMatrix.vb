@@ -1,54 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::710d6b9392f273cde3afb963f34c43bc, D:/GCModeller/src/R-sharp/Library/Rlapack//RMatrix.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 199
-    '    Code Lines: 68
-    ' Comment Lines: 116
-    '   Blank Lines: 15
-    '     File Size: 7.89 KB
+' Summaries:
 
 
-    ' Module RMatrix
-    ' 
-    '     Function: eigen, Matrix
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 199
+'    Code Lines: 68
+' Comment Lines: 116
+'   Blank Lines: 15
+'     File Size: 7.89 KB
+
+
+' Module RMatrix
+' 
+'     Function: eigen, Matrix
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.IO
+Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -56,16 +58,38 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 ''' <summary>
 ''' The numeric matrix
 ''' </summary>
 <Package("Matrix")>
 Module RMatrix
+
+    Sub New()
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(NumericMatrix), AddressOf createTable)
+        Call Internal.ConsolePrinter.AttachInternalConsoleFormatter(Of NumericMatrix)(
+            Function(print, env)
+                Return Function(o) As String
+                           Dim df As Rdataframe = createTable(o, New list With {.slots = New Dictionary(Of String, Object)}, env)
+                           Dim sb As New StringBuilder
+                           Dim file As New StringWriter(sb)
+
+                           Call tablePrinter.PrintTable(df, maxPrint:=13, maxWidth:=80, output:=file, env.globalEnvironment)
+                           Call file.Flush()
+
+                           Return sb.ToString
+                       End Function
+            End Function)
+    End Sub
+
+    Private Function createTable(m As GeneralMatrix, args As list, env As Environment) As Object
+
+    End Function
 
     ''' <summary>
     ''' ## Matrices

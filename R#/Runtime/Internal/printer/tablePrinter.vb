@@ -1,57 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::299a1dcfbd0b6d57fda6841a4bd3015d, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/printer/tablePrinter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 142
-    '    Code Lines: 119
-    ' Comment Lines: 1
-    '   Blank Lines: 22
-    '     File Size: 6.21 KB
+' Summaries:
 
 
-    '     Module tablePrinter
-    ' 
-    '         Function: getColumnPrintVector, PartOfTable, ToContent
-    ' 
-    '         Sub: PrintTable
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 142
+'    Code Lines: 119
+' Comment Lines: 1
+'   Blank Lines: 22
+'     File Size: 6.21 KB
+
+
+'     Module tablePrinter
+' 
+'         Function: getColumnPrintVector, PartOfTable, ToContent
+' 
+'         Sub: PrintTable
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.TablePrinter
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.TablePrinter.Flags
@@ -66,7 +67,7 @@ Imports stdNum = System.Math
 
 Namespace Runtime.Internal.ConsolePrinter
 
-    Module tablePrinter
+    Public Module tablePrinter
 
         <Extension>
         Private Function getColumnPrintVector(table As dataframe,
@@ -174,7 +175,7 @@ Namespace Runtime.Internal.ConsolePrinter
                           End Function)
 
         <Extension>
-        Public Function PrintTable(table As dataframe, maxPrint%, maxWidth%, output As RContentOutput, env As GlobalEnvironment) As Message
+        Public Function PrintTable(table As dataframe, maxPrint%, maxWidth%, output As TextWriter, env As GlobalEnvironment) As Message
             Dim reachMax As Boolean = table.nrows >= maxPrint
             Dim delta As Integer = table.nrows - maxPrint
             Dim format As ConsoleTableBuilderFormat = formatParser.TryGetValue(
