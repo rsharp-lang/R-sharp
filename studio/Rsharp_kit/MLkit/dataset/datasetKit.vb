@@ -54,6 +54,7 @@
 
 #End Region
 
+Imports System.Drawing
 Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
@@ -489,6 +490,19 @@ Module datasetKit
         End If
     End Function
 
+    <ExportAPI("MNIST.dims")>
+    Public Function getMNISTImageSize(file As String) As Object
+        Dim size As Size = MNIST.GetImageSize(file)
+        Dim dims As New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"width", size.Width},
+                {"height", size.Height}
+            }
+        }
+
+        Return dims
+    End Function
+
     ''' <summary>
     ''' read mnist dataset file as R# dataframe object
     ''' </summary>
@@ -560,6 +574,8 @@ Module datasetKit
                             .rownames = all.Select(Function(v) v.name).ToArray,
                             .columns = New Dictionary(Of String, Array)
                         }
+
+                        Call df.add("label", labels)
 
                         For i As Integer = 0 To all(0).Length - 1
                             Call df.add($"X{i + 1}", CLRVector.asNumeric(all.Select(Function(v) v(i)).ToArray))

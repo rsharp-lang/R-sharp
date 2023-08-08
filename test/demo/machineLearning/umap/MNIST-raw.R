@@ -4,7 +4,12 @@ imports "dataset" from "MLkit";
 
 setwd(@dir);
 
-let raw = read.MNIST("mnist_dataset/train-images-idx3-ubyte", 
+const images_set = "mnist_dataset/train-images-idx3-ubyte";
+
+str(MNIST.dims(images_set));
+
+let raw = images_set 
+|> read.MNIST( 
 format = "mnist", 
 dataset = "vector", 
 labelfile = "mnist_dataset/train-labels-idx1-ubyte",
