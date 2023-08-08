@@ -50,6 +50,7 @@
 #End Region
 
 Imports System.Drawing
+Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
@@ -105,8 +106,18 @@ Module Rgraphics
             Dim m As GeneralMatrix = DirectCast(x, GeneralMatrix)
             Dim raster As New RasterMatrix(x)
             Dim dims As New Size(m.ColumnDimension, m.RowDimension)
+            Dim ms As New MemoryStream
 
-            Return graphics2D.rasterHeatmap(raster, colorName:=col, dimSize:=dims, env:=env)
+            Call Internal.Invokes.graphics.bitmap(
+                file:=ms,
+                args:=New list With {.slots = New Dictionary(Of String, Object) From {{"size", $"{dims.Width},{dims.Height}"}}},
+                env:=env
+            )
+            Call graphics2D.rasterHeatmap(raster, colorName:=col, dimSize:=dims, env:=env)
+            Call Internal.Invokes.graphics.devOff(env:=env)
+            Call ms.Flush()
+
+            Return System.Drawing.Image.FromStream(ms)
         Else
             Throw New NotImplementedException
         End If

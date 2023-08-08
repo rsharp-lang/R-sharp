@@ -449,6 +449,10 @@ Module graphics2D
     ''' <param name="gauss"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
+    ''' <remarks>
+    ''' this function will returns nothing, not returns the generated image result
+    ''' target heatmap image always rendering onto current opened graphics device
+    ''' </remarks>
     <ExportAPI("rasterHeatmap")>
     Public Function rasterHeatmap(<RRawVectorArgument>
                                   x As Object,
