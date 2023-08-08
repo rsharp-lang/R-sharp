@@ -120,9 +120,9 @@ Module datasetKit
         Dim features As String() = x.NormalizeMatrix.names
         Dim labels As String() = x.output
 
-        dims.add("samples", idset)
-        dims.add("features", features)
-        dims.add("outputs", labels)
+        Call dims.add("samples", idset)
+        Call dims.add("features", features)
+        Call dims.add("outputs", labels)
 
         Return dims
     End Function
