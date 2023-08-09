@@ -1,10 +1,13 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 <Package("VAE")>
 Module VAE
@@ -28,7 +31,31 @@ Module VAE
     End Function
 
     <ExportAPI("train")>
-    Public Function train(vae As Trainer, ds As DataSet) As Object
+    <RApiReturn(GetType(VAE))>
+    Public Function train(vae As Trainer,
+                          <RRawVectorArgument>
+                          ds As Object,
+                          Optional steps As Integer = Integer.MaxValue,
+                          Optional env As Environment = Nothing) As Object
 
+        Dim dataset_input As Double()()
+
+        If TypeOf ds Is list Then
+            dataset_input = DirectCast(ds, list).slots _
+                .Values _
+                .Select(Function(o) CLRVector.asNumeric(o)) _
+                .ToArray
+        ElseIf TypeOf ds Is DataSet Then
+            dataset_input = DirectCast(ds, DataSet).DataSamples _
+                .AsEnumerable _
+                .Select(Function(si) si.vector) _
+                .ToArray
+        Else
+            Throw New NotImplementedException
+        End If
+
+        Call vae.train_vae(steps, dataset_input)
+
+        Return vae.Vae
     End Function
 End Module
