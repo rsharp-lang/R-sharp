@@ -14,8 +14,9 @@ dataset = "vector",
 labelfile = "../mnist_dataset/train-labels-idx1-ubyte",
 subset = 10
 );
+const norm_raw = lapply(raw, xi -> xi / 255);
 const vae = VAE::vae(dims = MNIST.dims(images_set));
-const encoder = VAE::train(vae, ds = raw);
+const encoder = VAE::train(vae, ds = norm_raw);
 
 for(id in names(raw)) {
     
