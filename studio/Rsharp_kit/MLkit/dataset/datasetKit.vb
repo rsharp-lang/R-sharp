@@ -554,47 +554,52 @@ Module datasetKit
                     Return Internal.debug.stop("No 'labelfile' was provided for the MNIST image dataset!", env)
                 End If
 
-                Dim MNIST As New MNIST(imagesFile:=path, labelfile)
+                Using MNIST As New MNIST(imagesFile:=path, labelfile)
+                    Return MNIST.getMNISTRawDataset(dataset, subset, env)
+                End Using
+        End Select
+    End Function
 
-                Select Case dataset
-                    Case "vector"
-                        Return New list With {
-                            .slots = MNIST _
-                                .ExtractVectors _
-                                .TakeSubset(subset) _
-                                .ToDictionary(Function(v) v.name,
-                                              Function(v)
-                                                  Return CObj(CLRVector.asNumeric(v.value))
-                                              End Function)
-                        }
-                    Case "dataframe"
-                        Dim all = MNIST.ExtractVectors.TakeSubset(subset).ToArray
-                        Dim labels As String() = all.Select(Function(v) v.description).ToArray
-                        Dim df As New Rdataframe With {
-                            .rownames = all.Select(Function(v) v.name).ToArray,
-                            .columns = New Dictionary(Of String, Array)
-                        }
+    <Extension>
+    Private Function getMNISTRawDataset(MNIST As MNIST, dataset As String, subset As Integer, env As Environment) As Object
+        Select Case dataset
+            Case "vector"
+                Return New list With {
+                    .slots = MNIST _
+                        .ExtractVectors _
+                        .TakeSubset(subset) _
+                        .ToDictionary(Function(v) v.name,
+                                      Function(v)
+                                          Return CObj(CLRVector.asNumeric(v.value))
+                                      End Function)
+                }
+            Case "dataframe"
+                Dim all = MNIST.ExtractVectors.TakeSubset(subset).ToArray
+                Dim labels As String() = all.Select(Function(v) v.description).ToArray
+                Dim df As New Rdataframe With {
+                    .rownames = all.Select(Function(v) v.name).ToArray,
+                    .columns = New Dictionary(Of String, Array)
+                }
 
-                        Call df.add("label", labels)
+                Call df.add("label", labels)
 
-                        For i As Integer = 0 To all(0).Length - 1
-                            Call df.add($"X{i + 1}", CLRVector.asNumeric(all.Select(Function(v) v(i)).ToArray))
-                        Next
+                For i As Integer = 0 To all(0).Length - 1
+                    Call df.add($"X{i + 1}", CLRVector.asNumeric(all.Select(Function(v) v(i)).ToArray))
+                Next
 
-                        Return df
-                    Case "image"
-                        Return New list With {
-                            .slots = MNIST _
-                                .ExtractImages _
-                                .TakeSubset(subset) _
-                                .ToDictionary(Function(v) v.Name,
-                                              Function(v)
-                                                  Return CObj(v.Value)
-                                              End Function)
-                        }
-                    Case Else
-                        Return Internal.debug.stop(New NotImplementedException($"the data set format '{dataset}' is not yet implemented!"), env)
-                End Select
+                Return df
+            Case "image"
+                Return New list With {
+                    .slots = MNIST _
+                        .ExtractImages _
+                        .TakeSubset(subset) _
+                        .ToDictionary(Function(v) v.Name,
+                                      Function(v)
+                                          Return CObj(v.Value)
+                                      End Function)
+                }
+            Case Else
+                Return Internal.debug.stop(New NotImplementedException($"the data set format '{dataset}' is not yet implemented!"), env)
         End Select
     End Function
 
