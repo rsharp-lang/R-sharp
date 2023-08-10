@@ -80,6 +80,7 @@ Imports Microsoft.VisualBasic.DataMining.KMeans
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder
+Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder.GMM
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Quantile
@@ -179,7 +180,7 @@ Module clustering
     Public Function gmmf(<RRawVectorArgument>
                          x As Object,
                          Optional components As Integer = 3,
-                         Optional threshold As Double = 0.00001,
+                         Optional threshold As Double = 0.0000001,
                          Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -214,6 +215,26 @@ Module clustering
         End If
 
         Return GMM.Solver.Predicts(seq.populates(Of ClusterEntity)(env), components, threshold)
+    End Function
+
+    <ExportAPI("gmm.predict")>
+    Public Function gmm_predict(x As Mixture) As Integer()
+        Return x.data.Select(Function(di) di.max).ToArray
+    End Function
+
+    <ExportAPI("gmm.predict_proba")>
+    Public Function gmm_predict_proba(x As Mixture) As Object
+        Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim ds = x.data.ToArray
+
+        df.rownames = ds.Select(Function(di) di.dataId).ToArray
+        df.add("max", ds.Select(Function(di) di.max))
+
+        For i As Integer = 0 To x.components.Length - 1
+            df.add($"C{i + 1}", ds.Select(Function(di) di.probs(i)))
+        Next
+
+        Return df
     End Function
 
     ''' <summary>
@@ -866,7 +887,7 @@ Module clustering
                                 Dim id As String = rownames.ElementAtOrDefault(i, i + 1)
                                 Dim row As Dictionary(Of String, Object) = .getRowList(i, drop:=True)
                                 Dim r As New DataSet With {
-                                    .ID = id,
+                                    .id = id,
                                     .Properties = row.AsNumeric
                                 }
 
