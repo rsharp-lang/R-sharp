@@ -4,6 +4,8 @@ imports "VAE" from "MLkit";
 require(Matrix);
 require(graphics);
 
+options(SIMD = "legacy");
+
 setwd(@dir);
 
 const images_set = "../mnist_dataset/train-images-idx3-ubyte";
