@@ -195,6 +195,10 @@ Module clustering
             Return GMM.Solver.Predicts(rowdatas, components)
         End If
 
+        If TypeOf x Is vector Then
+            x = DirectCast(x, vector).data
+        End If
+
         Dim seq As pipeline = pipeline.TryCreatePipeline(Of ClusterEntity)(x, env)
 
         If seq.isError Then
