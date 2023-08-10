@@ -334,7 +334,7 @@ Namespace Development.Configuration
                 Select Case opt
                     Case "f64.format" : Return setOption(opt, If([default], "G"), env)
                     Case "digits" : Return setOption(opt, If([default], "6"), env)
-                    Case "avx_simd" : Return SIMDEnvironment.config.ToString
+                    Case "avx_simd", "simd", "SIMD", "AVX", "avx" : Return SIMDEnvironment.config.ToString
                     Case "system_tempdir" : Return App.SysTemp
 
                     Case Else
