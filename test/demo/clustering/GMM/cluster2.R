@@ -12,4 +12,16 @@ let gmm = gmm(x, 5);
 
 print(gmm.predict_proba(gmm));
 
-write.csv(gmm.predict_proba(gmm), file = "./cluster2.csv", row.names = TRUE);
+x = gmm.predict_proba(gmm);
+
+write.csv(x, file = "./cluster2.csv", row.names = TRUE);
+
+require(ggplot);
+
+bitmap(file = "./cluster2.png") {
+    let xy = rownames(x) |> strsplit(",") |> lapply(i -> as.numeric(i));
+    let xi = sapply(xy, i -> i[1]);
+    let yi = sapply(xy, i -> i[2]); 
+
+    plot(xi, yi, class = x$max);
+}
