@@ -1,63 +1,63 @@
 ﻿#Region "Microsoft.VisualBasic::5da78c319d4484d1288216812c64b1c4, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataMining/clustering.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 834
-    '    Code Lines: 576
-    ' Comment Lines: 165
-    '   Blank Lines: 93
-    '     File Size: 35.15 KB
+' Summaries:
 
 
-    ' Module clustering
-    ' 
-    '     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
-    '               dbscan, dbscan_objects, densityA, ensureNotIsDistance, fuzzyCMeans
-    '               hclust, hdbscan_exec, hleaf, hnode, Kmeans
-    '               showHclust, ToHClust
-    ' 
-    '     Sub: Main
-    '     Class point2DReader
-    ' 
-    '         Function: activate, getByDimension, GetDimensions, metric, nodeIs
-    ' 
-    '         Sub: setByDimensin
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 834
+'    Code Lines: 576
+' Comment Lines: 165
+'   Blank Lines: 93
+'     File Size: 35.15 KB
+
+
+' Module clustering
+' 
+'     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
+'               dbscan, dbscan_objects, densityA, ensureNotIsDistance, fuzzyCMeans
+'               hclust, hdbscan_exec, hleaf, hnode, Kmeans
+'               showHclust, ToHClust
+' 
+'     Sub: Main
+'     Class point2DReader
+' 
+'         Function: activate, getByDimension, GetDimensions, metric, nodeIs
+' 
+'         Sub: setByDimensin
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -79,6 +79,7 @@ Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
 Imports Microsoft.VisualBasic.DataMining.KMeans
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Quantile
@@ -166,6 +167,48 @@ Module clustering
         Next
 
         Return matrix
+    End Function
+
+    ''' <summary>
+    ''' construct a Gaussian Mixture Model with specific n components
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("gmm")>
+    Public Function gmmf(<RRawVectorArgument>
+                         x As Object,
+                         Optional components As Integer = 3,
+                         Optional env As Environment = Nothing) As Object
+
+        If x Is Nothing Then
+            Return Nothing
+        End If
+
+        If TypeOf x Is Rdataframe Then
+            Dim rowdatas As ClusterEntity() = DirectCast(x, Rdataframe).forEachRow() _
+                .Select(Function(v)
+                            Return New ClusterEntity With {.uid = v.name, .entityVector = CLRVector.asNumeric(v.value)}
+                        End Function) _
+                .ToArray
+
+            Return GMM.Solver.Predicts(rowdatas, components)
+        End If
+
+        Dim seq As pipeline = pipeline.TryCreatePipeline(Of ClusterEntity)(x, env)
+
+        If seq.isError Then
+            If x.GetType.IsArray Then
+                x = TryCastGenericArray(x, env)
+                x = GMM.Solver.Predicts(CLRVector.asNumeric(x), components)
+
+                Return x
+            Else
+                Return seq.getError
+            End If
+        End If
+
+        Return GMM.Solver.Predicts(seq.populates(Of ClusterEntity)(env), components)
     End Function
 
     ''' <summary>
