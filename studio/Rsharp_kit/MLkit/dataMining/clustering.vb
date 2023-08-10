@@ -179,6 +179,7 @@ Module clustering
     Public Function gmmf(<RRawVectorArgument>
                          x As Object,
                          Optional components As Integer = 3,
+                         Optional threshold As Double = 0.00001,
                          Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -192,7 +193,7 @@ Module clustering
                         End Function) _
                 .ToArray
 
-            Return GMM.Solver.Predicts(rowdatas, components)
+            Return GMM.Solver.Predicts(rowdatas, components, threshold)
         End If
 
         If TypeOf x Is vector Then
@@ -204,7 +205,7 @@ Module clustering
         If seq.isError Then
             If x.GetType.IsArray Then
                 x = TryCastGenericArray(x, env)
-                x = GMM.Solver.Predicts(CLRVector.asNumeric(x), components)
+                x = GMM.Solver.Predicts(CLRVector.asNumeric(x), components, threshold)
 
                 Return x
             Else
@@ -212,7 +213,7 @@ Module clustering
             End If
         End If
 
-        Return GMM.Solver.Predicts(seq.populates(Of ClusterEntity)(env), components)
+        Return GMM.Solver.Predicts(seq.populates(Of ClusterEntity)(env), components, threshold)
     End Function
 
     ''' <summary>
