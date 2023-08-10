@@ -7,3 +7,4 @@ setwd(@dir);
 let x = as.numeric(readLines("./data1.txt"));
 let gmm = gmm(x, 3);
 
+print(gmm.predict_proba(gmm));
