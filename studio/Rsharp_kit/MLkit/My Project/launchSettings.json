@@ -11,7 +11,7 @@
     "cluster_test": {
       "commandName": "Executable",
       "executablePath": "\\GCModeller\\src\\R-sharp\\App\\net6.0\\R#.exe",
-      "commandLineArgs": "\\GCModeller\\src\\R-sharp\\test\\demo\\clustering\\GMM\\test1.R"
+      "commandLineArgs": "\\GCModeller\\src\\R-sharp\\test\\demo\\clustering\\GMM\\cluster2.R"
     }
   }
 }
