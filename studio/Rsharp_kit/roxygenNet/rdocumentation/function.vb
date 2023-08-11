@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::086620b7522d450ede3f2a86c68f4233, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//rdocumentation/function.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 353
-    '    Code Lines: 301
-    ' Comment Lines: 1
-    '   Blank Lines: 51
-    '     File Size: 16.67 KB
+' Summaries:
 
 
-    ' Class [function]
-    ' 
-    '     Function: (+2 Overloads) argument, blankTemplate, (+3 Overloads) createHtml, typeLink
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 353
+'    Code Lines: 301
+' Comment Lines: 1
+'   Blank Lines: 51
+'     File Size: 16.67 KB
+
+
+' Class [function]
+' 
+'     Function: (+2 Overloads) argument, blankTemplate, (+3 Overloads) createHtml, typeLink
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -115,6 +115,7 @@ Public Class [function]
                 .ToArray
             docs.returns = markdown.Transform(xml.Returns)
             docs.details = markdown.Transform(xml.Remarks)
+            docs.examples = xml.example
         End If
 
         If docs.returns.StringEmpty Then
@@ -226,6 +227,7 @@ Public Class [function]
             !version = assembly.AssemblyVersion
             !copyright = assembly.AssemblyCopyright
             !show_details = If(docs.details.StringEmpty, "none", "block")
+            !examples = docs.examples
 
             If docs.keywords.IsNullOrEmpty Then
                 !display_keywords = "none"
@@ -365,6 +367,12 @@ Public Class [function]
                                            <div class="anchor" id="l_value"></div>
                                            <h5 class="topic--title">Value</h5>
                                            <p>{$value}</p>
+                                       </section>
+
+                                       <section class="topic--examples">
+                                           <div class="anchor" id="l_examples"></div>
+                                           <h5 class="topic--title">Examples</h5>
+                                           <p><pre><code>{$examples}</code></pre></p>
                                        </section>
 
                                        <section style="display: none;">
