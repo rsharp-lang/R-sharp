@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "\"\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=33361 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host"
+      "commandLineArgs": "--build /src D:\\Erica --skip-src-build"
     },
     "mzkit_debug": {
       "commandName": "Project",
