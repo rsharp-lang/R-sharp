@@ -229,6 +229,12 @@ Public Class [function]
             !show_details = If(docs.details.StringEmpty, "none", "block")
             !examples = docs.examples
 
+            If docs.examples.StringEmpty Then
+                !show_examples = "none"
+            Else
+                !show_examples = "block"
+            End If
+
             If docs.keywords.IsNullOrEmpty Then
                 !display_keywords = "none"
             End If
