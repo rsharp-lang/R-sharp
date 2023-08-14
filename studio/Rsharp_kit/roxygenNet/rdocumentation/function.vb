@@ -227,12 +227,13 @@ Public Class [function]
             !version = assembly.AssemblyVersion
             !copyright = assembly.AssemblyCopyright
             !show_details = If(docs.details.StringEmpty, "none", "block")
-            !examples = Strings.Trim(docs.examples).LineTokens.JoinBy("<br />")
 
             If docs.examples.StringEmpty Then
                 !show_examples = "none"
+                !examples = ""
             Else
                 !show_examples = "block"
+                !examples = $"<pre><code>{docs.examples}</code></pre>"
             End If
 
             If docs.keywords.IsNullOrEmpty Then
