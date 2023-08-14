@@ -69,6 +69,11 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Package("graphics")>
 Module Rgraphics
 
+    ''' <summary>
+    ''' Cast the clr image object as the raster data
+    ''' </summary>
+    ''' <param name="img"></param>
+    ''' <returns></returns>
     <ExportAPI("as.raster")>
     Public Function as_raster(img As Image) As RasterScaler
         Return New RasterScaler(New Bitmap(img))
