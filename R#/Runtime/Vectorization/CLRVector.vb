@@ -216,6 +216,13 @@ Namespace Runtime.Vectorization
                 .ToArray
         End Function
 
+        ''' <summary>
+        ''' Try to cast any clr object as the integer vector unsafely
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns>
+        ''' this function will returns nothing if the given object <paramref name="x"/> is nothing
+        ''' </returns>
         Public Function asInteger(x As Object) As Integer()
             If x Is Nothing Then
                 Return Nothing
