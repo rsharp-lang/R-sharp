@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::9adf9990b18273bdcd4656d3f996d1b6, D:/GCModeller/src/R-sharp/R#//System/Document/FunctionDeclare.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 102
-    '    Code Lines: 84
-    ' Comment Lines: 0
-    '   Blank Lines: 18
-    '     File Size: 4.29 KB
+' Summaries:
 
 
-    '     Class FunctionDeclare
-    ' 
-    '         Properties: name, parameters, sourceMap
-    ' 
-    '         Function: GetArgument, (+2 Overloads) ToString, valueText
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 102
+'    Code Lines: 84
+' Comment Lines: 0
+'   Blank Lines: 18
+'     File Size: 4.29 KB
+
+
+'     Class FunctionDeclare
+' 
+'         Properties: name, parameters, sourceMap
+' 
+'         Function: GetArgument, (+2 Overloads) ToString, valueText
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -92,36 +92,10 @@ Namespace Development
                     .JoinBy(", ")}"
             End If
 
-            Static literals As Index(Of String) = {"NULL", "NA", "TRUE", "FALSE", "Inf", "NaN"}
-
             If optionals.Length > 0 Then
                 part2 = optionals _
                     .Select(Function(a)
-                                Dim valHtml As String = a.text
-
-                                If Not valHtml.StringEmpty Then
-                                    If (valHtml.First = """"c AndAlso valHtml.Last = """"c) OrElse
-                                       (valHtml.First = "`"c AndAlso valHtml.Last = "`"c) OrElse
-                                       (valHtml.First = "'"c AndAlso valHtml.Last = "'"c) Then
-
-                                        Dim isColor As Boolean = False
-                                        Dim color As Color = valHtml.Trim(""""c, "'"c, "`"c).TranslateColor(throwEx:=False, success:=isColor)
-
-                                        If isColor Then
-                                            valHtml = $"<span style='color: {color.ToHtmlColor};'><strong>{valHtml}</strong></span>"
-                                        Else
-                                            valHtml = $"<span style='color: brown;'><strong>{valHtml}</strong></span>"
-                                        End If
-                                    End If
-                                Else
-                                    valHtml = "NULL"
-                                End If
-
-                                If valHtml Like literals Then
-                                    valHtml = $"<span style='color: blue;'>{valHtml}</span>"
-                                End If
-
-                                Return $"    <i>{a.name}</i> = {valHtml}"
+                                Return RenderValueColor(a)
                             End Function) _
                     .JoinBy("," & vbCrLf)
 
@@ -133,6 +107,39 @@ Namespace Development
             Else
                 Return $"{part1})"
             End If
+        End Function
+
+        Private Shared Function RenderValueColor(a As NamedValue) As String
+            Dim valHtml As String = a.text
+
+            If Not valHtml.StringEmpty Then
+                If (valHtml.First = """"c AndAlso valHtml.Last = """"c) OrElse
+                   (valHtml.First = "`"c AndAlso valHtml.Last = "`"c) OrElse
+                   (valHtml.First = "'"c AndAlso valHtml.Last = "'"c) Then
+
+                    Dim isColor As Boolean = False
+                    Dim color As Color = valHtml.Trim(""""c, "'"c, "`"c).TranslateColor(throwEx:=False, success:=isColor)
+
+                    If isColor Then
+                        ' current string value is color literal
+                        valHtml = $"<span style='color: {color.ToHtmlColor};'><strong>{valHtml}</strong></span>"
+                    Else
+                        valHtml = $"<span style='color: brown;'><strong>{valHtml}</strong></span>"
+                    End If
+                ElseIf valHtml.IsNumeric(True, True) Then
+                    valHtml = $"<span style='color: green;'>{valHtml}</span>"
+                End If
+            Else
+                valHtml = "NULL"
+            End If
+
+            Static literals As Index(Of String) = {"NULL", "NA", "TRUE", "FALSE", "Inf", "NaN"}
+
+            If valHtml Like literals Then
+                valHtml = $"<span style='color: blue !important;'>{valHtml}</span>"
+            End If
+
+            Return $"    <i>{a.name}</i> = {valHtml}"
         End Function
 
         Public Shared Function GetArgument(arg As DeclareNewSymbol) As NamedValue
