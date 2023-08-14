@@ -111,7 +111,23 @@ Public Module NetworkModule
     End Sub
 
     Private Function getEdgeTable(e As E, args As list, env As Environment) As rDataframe
-        Dim table = e.edges.CreateGraphTable()
+        Dim table = e.edges.CreateGraphTable(e.getNames, is2Dlayout:=True)
+        Dim df As New rDataframe With {
+            .columns = New Dictionary(Of String, Array),
+            .rownames = Nothing
+        }
+
+        Call df.add("source", table.Select(Function(a) a.fromNode))
+        Call df.add("target", table.Select(Function(a) a.toNode))
+        Call df.add("type", table.Select(Function(a) a.interaction))
+        Call df.add("weight", table.Select(Function(a) a.value))
+        Call df.add("self_loop", table.Select(Function(a) a.selfLoop))
+
+        For Each name As String In table.PropertyNames
+            Call df.add(name, table.Select(Function(a) a(name)))
+        Next
+
+        Return df
     End Function
 
     Private Function getNodeTable(v As V, args As list, env As Environment) As rDataframe
