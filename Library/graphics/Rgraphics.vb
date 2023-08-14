@@ -90,6 +90,11 @@ Module Rgraphics
     ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
+    ''' <example>
+    ''' bitmap(file = "./plot.png") {
+    '''     image(matrix(c(1,2,3,4), nrow = 2, byrow = TRUE));
+    ''' }
+    ''' </example>
     <ExportAPI("image")>
     Public Function image(x As Object,
                           <RRawVectorArgument>
