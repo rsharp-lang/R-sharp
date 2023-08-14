@@ -53,6 +53,7 @@ Imports System.Drawing
 Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -67,6 +68,11 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ''' </summary>
 <Package("graphics")>
 Module Rgraphics
+
+    <ExportAPI("as.raster")>
+    Public Function as_raster(img As Image) As RasterScaler
+        Return New RasterScaler(New Bitmap(img))
+    End Function
 
     ''' <summary>
     ''' ## Display a Color Image
