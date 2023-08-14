@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::244afe9bf1d3615eafd5b3c8dc2b0a70, D:/GCModeller/src/R-sharp/Library/igraph//Models/E.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 122
-    '    Code Lines: 93
-    ' Comment Lines: 8
-    '   Blank Lines: 21
-    '     File Size: 4.37 KB
+' Summaries:
 
 
-    ' Class E
-    ' 
-    '     Properties: size, weight
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: EvaluateIndexer, (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, hasName
-    '               setByindex, setByIndex, (+2 Overloads) setByName, setNames
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 122
+'    Code Lines: 93
+' Comment Lines: 8
+'   Blank Lines: 21
+'     File Size: 4.37 KB
+
+
+' Class E
+' 
+'     Properties: size, weight
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: EvaluateIndexer, (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, hasName
+'               setByindex, setByIndex, (+2 Overloads) setByName, setNames
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -65,7 +65,8 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 ''' <summary>
 ''' edge attribute data visistor
 ''' </summary>
-Public Class E : Implements RNames, RNameIndex, RIndex, RIndexer
+Public Class E : Inherits GraphElementCollection
+    Implements RNames, RNameIndex, RIndex, RIndexer
 
     Friend ReadOnly edges As Edge()
     Friend ReadOnly edgeIndex As Dictionary(Of String, Edge)
@@ -89,23 +90,13 @@ Public Class E : Implements RNames, RNameIndex, RIndex, RIndexer
     End Property
 
     Sub New(edges As IEnumerable(Of Edge))
-        Me.edges = edges.ToArray
+        Call MyBase.New(edges.ToArray)
+
+        Me.edges = DirectCast(list, Edge())
         Me.edgeIndex = Me.edges.ToDictionary(Function(e) e.ID)
     End Sub
 
 #Region "edge attribute data visistors"
-
-    Public Function setNames(names() As String, envir As Environment) As Object Implements RNames.setNames
-        Throw New NotImplementedException()
-    End Function
-
-    Public Function hasName(name As String) As Boolean Implements RNames.hasName
-        Throw New NotImplementedException()
-    End Function
-
-    Public Function getNames() As String() Implements IReflector.getNames
-        Throw New NotImplementedException()
-    End Function
 
     ''' <summary>
     ''' get edge data by name

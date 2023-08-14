@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::c7f9f91351aba2800ec80a7bb386ffe0, D:/GCModeller/src/R-sharp/Library/igraph//NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1245
-    '    Code Lines: 811
-    ' Comment Lines: 281
-    '   Blank Lines: 153
-    '     File Size: 48.01 KB
+' Summaries:
 
 
-    ' Module NetworkModule
-    ' 
-    '     Function: addEdge, addEdges, addNode, addNodeData, addNodes
-    '               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
-    '               degree, deleteNode, E, edgeAttributes, emptyNetwork
-    '               eval, extractAdjacenciesSubNetwork, extractSubGraph, getByGroup, getClass
-    '               getEdges, getElementByID, getNodes, graph, hasEdge
-    '               LoadNetwork, LouvainCluster, metaData, nodeAttributes, nodeClass
-    '               nodeMass, nodeNames, printGraph, printNode, SaveNetwork
-    '               setAttributes, summaryNodes, trimEdges, typeGroupOfNodes, V
-    '               weights, xref
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1245
+'    Code Lines: 811
+' Comment Lines: 281
+'   Blank Lines: 153
+'     File Size: 48.01 KB
+
+
+' Module NetworkModule
+' 
+'     Function: addEdge, addEdges, addNode, addNodeData, addNodes
+'               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
+'               degree, deleteNode, E, edgeAttributes, emptyNetwork
+'               eval, extractAdjacenciesSubNetwork, extractSubGraph, getByGroup, getClass
+'               getEdges, getElementByID, getNodes, graph, hasEdge
+'               LoadNetwork, LouvainCluster, metaData, nodeAttributes, nodeClass
+'               nodeMass, nodeNames, printGraph, printNode, SaveNetwork
+'               setAttributes, summaryNodes, trimEdges, typeGroupOfNodes, V
+'               weights, xref
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -105,7 +105,31 @@ Public Module NetworkModule
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of node)(AddressOf printNode)
 
         REnv.Internal.generic.add("summary", GetType(node()), AddressOf summaryNodes)
+
+        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(V), AddressOf getNodeTable)
+        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(E), AddressOf getEdgeTable)
     End Sub
+
+    Private Function getEdgeTable(e As E, args As list, env As Environment) As rDataframe
+        Dim table = e.edges.CreateGraphTable()
+    End Function
+
+    Private Function getNodeTable(v As V, args As list, env As Environment) As rDataframe
+        Dim table = v.vertex.CreateNodesMetaData(v.getNames, is2Dlayout:=True).ToArray
+        Dim df As New rDataframe With {
+            .columns = New Dictionary(Of String, Array),
+            .rownames = table.Select(Function(a) a.ID).ToArray
+        }
+
+        Call df.add("ID", table.Select(Function(a) a.ID))
+        Call df.add("type", table.Select(Function(a) a.NodeType))
+
+        For Each name As String In table.PropertyNames
+            Call df.add(name, table.Select(Function(a) a(name)))
+        Next
+
+        Return df
+    End Function
 
     Private Function summaryNodes(nodes As node(), args As list, env As Environment) As Object
         Dim summary As New StringBuilder
