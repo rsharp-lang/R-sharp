@@ -248,12 +248,14 @@ Module clustering
             Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
             Dim ds = mx.DataSet
             Dim probs = mx.Probs
+            Dim index As Integer = 0
 
             df.rownames = ds.Select(Function(di) di.uid).ToArray
-            df.add("max", ds.Select(Function(di) di.cluster))
+            df.add("max", probs.Select(Function(di) which.Max(di) + 1))
 
             For i As Integer = 0 To mx.Components.Length - 1
-                df.add($"C{i + 1}", ds.Select(Function(di) di.entityVector(i)))
+                index = i
+                df.add($"C{i + 1}", probs.Select(Function(di) di(index)))
             Next
 
             Return df
