@@ -81,11 +81,13 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder
 Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder.GMM
+Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder.GMM.EMGaussianMixtureModel
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -223,18 +225,40 @@ Module clustering
     End Function
 
     <ExportAPI("gmm.predict_proba")>
-    Public Function gmm_predict_proba(x As Mixture) As Object
-        Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
-        Dim ds = x.data.ToArray
+    Public Function gmm_predict_proba(x As Object, Optional env As Environment = Nothing) As Object
+        If x Is Nothing Then
+            Return Nothing
+        End If
 
-        df.rownames = ds.Select(Function(di) di.dataId).ToArray
-        df.add("max", ds.Select(Function(di) di.max))
+        If TypeOf x Is Mixture Then
+            Dim mx As Mixture = DirectCast(x, Mixture)
+            Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+            Dim ds = mx.data.ToArray
 
-        For i As Integer = 0 To x.components.Length - 1
-            df.add($"C{i + 1}", ds.Select(Function(di) di.probs(i)))
-        Next
+            df.rownames = ds.Select(Function(di) di.dataId).ToArray
+            df.add("max", ds.Select(Function(di) di.max))
 
-        Return df
+            For i As Integer = 0 To mx.components.Length - 1
+                df.add($"C{i + 1}", ds.Select(Function(di) di.probs(i)))
+            Next
+
+            Return df
+        ElseIf TypeOf x Is GaussianMixtureModel Then
+            Dim mx As GaussianMixtureModel = DirectCast(x, GaussianMixtureModel)
+            Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+            Dim ds = mx.DataSet
+
+            df.rownames = ds.Select(Function(di) di.uid).ToArray
+            df.add("max", ds.Select(Function(di) di.cluster))
+
+            For i As Integer = 0 To mx.Components.Length - 1
+                df.add($"C{i + 1}", ds.Select(Function(di) di.entityVector(i)))
+            Next
+
+            Return df
+        Else
+            Return Message.InCompatibleType(GetType(GaussianMixtureModel), x.GetType, env)
+        End If
     End Function
 
     ''' <summary>
@@ -887,7 +911,7 @@ Module clustering
                                 Dim id As String = rownames.ElementAtOrDefault(i, i + 1)
                                 Dim row As Dictionary(Of String, Object) = .getRowList(i, drop:=True)
                                 Dim r As New DataSet With {
-                                    .id = id,
+                                    .ID = id,
                                     .Properties = row.AsNumeric
                                 }
 
