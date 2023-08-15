@@ -12,7 +12,7 @@ print(x);
 
 set.seed(1);
 
-let gmm = gmm(x, 4);
+let gmm = gmm(x, 6);
 
 print(gmm.predict_proba(gmm));
 

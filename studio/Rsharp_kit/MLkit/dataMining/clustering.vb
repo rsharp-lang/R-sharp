@@ -219,9 +219,30 @@ Module clustering
         Return GMM.Solver.Predicts(seq.populates(Of ClusterEntity)(env), components, threshold)
     End Function
 
+    ''' <summary>
+    ''' Get cluster assign result
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("gmm.predict")>
-    Public Function gmm_predict(x As Mixture) As Integer()
-        Return x.data.Select(Function(di) di.max).ToArray
+    <RApiReturn(TypeCodes.integer)>
+    Public Function gmm_predict(x As Object, Optional env As Environment = Nothing) As Object
+        If x Is Nothing Then
+            Return Nothing
+        End If
+
+        If TypeOf x Is Mixture Then
+            Return DirectCast(x, Mixture).data _
+                .Select(Function(di) di.max) _
+                .ToArray
+        ElseIf TypeOf x Is GaussianMixtureModel Then
+            Return DirectCast(x, GaussianMixtureModel).Probs _
+                .Select(Function(di) which.Max(di) + 1) _
+                .ToArray
+        Else
+            Return Message.InCompatibleType(GetType(GaussianMixtureModel), x.GetType, env)
+        End If
     End Function
 
     <ExportAPI("gmm.predict_proba")>
