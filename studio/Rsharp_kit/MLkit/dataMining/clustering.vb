@@ -173,7 +173,7 @@ Module clustering
     End Function
 
     ''' <summary>
-    ''' construct a Gaussian Mixture Model with specific n components
+    ''' Construct a Gaussian Mixture Model with specific n components
     ''' </summary>
     ''' <param name="x"></param>
     ''' <param name="env"></param>
@@ -183,6 +183,7 @@ Module clustering
                          x As Object,
                          Optional components As Integer = 3,
                          Optional threshold As Double = 0.0000001,
+                         Optional strict As Boolean = True,
                          Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -192,11 +193,14 @@ Module clustering
         If TypeOf x Is Rdataframe Then
             Dim rowdatas As ClusterEntity() = DirectCast(x, Rdataframe).forEachRow() _
                 .Select(Function(v)
-                            Return New ClusterEntity With {.uid = v.name, .entityVector = CLRVector.asNumeric(v.value)}
+                            Return New ClusterEntity With {
+                                .uid = v.name,
+                                .entityVector = CLRVector.asNumeric(v.value)
+                            }
                         End Function) _
                 .ToArray
 
-            Return GMM.Solver.Predicts(rowdatas, components, threshold)
+            Return GMM.Solver.Predicts(rowdatas, components, threshold, strict:=strict)
         End If
 
         If TypeOf x Is vector Then
@@ -216,7 +220,7 @@ Module clustering
             End If
         End If
 
-        Return GMM.Solver.Predicts(seq.populates(Of ClusterEntity)(env), components, threshold)
+        Return GMM.Solver.Predicts(seq.populates(Of ClusterEntity)(env), components, threshold, strict:=strict)
     End Function
 
     ''' <summary>
