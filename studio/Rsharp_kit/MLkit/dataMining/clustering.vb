@@ -247,6 +247,7 @@ Module clustering
             Dim mx As GaussianMixtureModel = DirectCast(x, GaussianMixtureModel)
             Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
             Dim ds = mx.DataSet
+            Dim probs = mx.Probs
 
             df.rownames = ds.Select(Function(di) di.uid).ToArray
             df.add("max", ds.Select(Function(di) di.cluster))
