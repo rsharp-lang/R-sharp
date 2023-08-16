@@ -81,11 +81,10 @@ Imports SMRUCC.Rsharp.Runtime.Interop.[CType]
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 Namespace Runtime.Internal.Object.Converts
 
-    Module RConversion
+    Public Module RConversion
 
         ''' <summary>
         ''' parse string text content as date time values
