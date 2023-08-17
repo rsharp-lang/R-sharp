@@ -455,12 +455,15 @@ Namespace Runtime.Internal.Object
         End Function
 
         ''' <summary>
-        ''' null <paramref name="value"/> will remove the target slot by <paramref name="name"/>
+        ''' add/updates of the key <paramref name="name"/> associated <paramref name="value"/> data.
         ''' </summary>
         ''' <param name="name"></param>
         ''' <param name="value"></param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' NULL <paramref name="value"/> will remove the target slot by <paramref name="name"/>
+        ''' </remarks>
         Public Function setByName(name As String, value As Object, envir As Environment) As Object Implements RNameIndex.setByName
             If value Is Nothing Then
                 slots.Remove(name)
