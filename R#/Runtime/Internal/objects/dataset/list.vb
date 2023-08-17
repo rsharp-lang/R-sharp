@@ -295,7 +295,12 @@ Namespace Runtime.Internal.Object
                 value = DirectCast(value, Expression).Evaluate(env)
             End If
 
-            If Not value Is Nothing AndAlso value.GetType Is GetType(T) Then
+            If Not value Is Nothing AndAlso
+                (value.GetType Is GetType(T) OrElse
+                value.GetType.IsInheritsFrom(GetType(T), strict:=False)) Then
+
+                ' is current type or is the subtype of the base type T
+                ' then we can returns the object directly
                 Return value
             ElseIf type.IsArray Then
                 value = CObj(asVector(value, type.GetElementType, env))
