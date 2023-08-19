@@ -295,7 +295,12 @@ Namespace Runtime.Internal.Object
                 value = DirectCast(value, Expression).Evaluate(env)
             End If
 
-            If Not value Is Nothing AndAlso value.GetType Is GetType(T) Then
+            If Not value Is Nothing AndAlso
+                (value.GetType Is GetType(T) OrElse
+                value.GetType.IsInheritsFrom(GetType(T), strict:=False)) Then
+
+                ' is current type or is the subtype of the base type T
+                ' then we can returns the object directly
                 Return value
             ElseIf type.IsArray Then
                 value = CObj(asVector(value, type.GetElementType, env))
@@ -450,12 +455,15 @@ Namespace Runtime.Internal.Object
         End Function
 
         ''' <summary>
-        ''' null <paramref name="value"/> will remove the target slot by <paramref name="name"/>
+        ''' add/updates of the key <paramref name="name"/> associated <paramref name="value"/> data.
         ''' </summary>
         ''' <param name="name"></param>
         ''' <param name="value"></param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' NULL <paramref name="value"/> will remove the target slot by <paramref name="name"/>
+        ''' </remarks>
         Public Function setByName(name As String, value As Object, envir As Environment) As Object Implements RNameIndex.setByName
             If value Is Nothing Then
                 slots.Remove(name)
