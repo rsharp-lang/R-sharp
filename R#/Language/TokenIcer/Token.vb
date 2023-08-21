@@ -89,7 +89,15 @@ Namespace Language.TokenIcer
         ''' <summary>
         ''' is value literal of current token type?
         ''' </summary>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this property returns true, if the token type <see cref="name"/> is one of the value:
+        ''' 
+        ''' + <see cref="TokenType.booleanLiteral"/>
+        ''' + <see cref="TokenType.integerLiteral"/>
+        ''' + <see cref="TokenType.missingLiteral"/>
+        ''' + <see cref="TokenType.numberLiteral"/>
+        ''' + <see cref="TokenType.stringLiteral"/>
+        ''' </returns>
         Public ReadOnly Property isLiteral As Boolean
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get

@@ -120,11 +120,22 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
             Return New NamedValue(Of String)(name, value)
         End Function
 
-        Public Function VectorLiteral(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim blocks As List(Of Token()) = tokens _
+        <Extension>
+        Private Function GetVectorElements(tokens As Token()) As List(Of Token())
+            tokens = tokens _
                 .Skip(1) _
                 .Take(tokens.Length - 2) _
-                .SplitByTopLevelDelimiter(TokenType.comma)
+                .ToArray
+
+            If tokens.All(Function(a) a.isLiteral OrElse a.name = TokenType.stringInterpolation) Then
+                Return tokens.Select(Function(a) New Token() {a}).AsList
+            Else
+                Return tokens.SplitByTopLevelDelimiter(TokenType.comma)
+            End If
+        End Function
+
+        Public Function VectorLiteral(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim blocks As List(Of Token()) = tokens.GetVectorElements
             Dim values As New List(Of Expression)
             Dim syntaxTemp As SyntaxResult
 
