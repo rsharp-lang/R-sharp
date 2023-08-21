@@ -39,3 +39,42 @@ let names = [
 ];
 
 print(names);
+
+imports "clr" from "devkit";
+
+const pinyin_lib = clr::open("Microsoft.VisualBasic.Text.GB2312");
+# const zh = lapply(names, function(si) clr::call_clr(pinyin_lib, "GetZhFlags", str = si));
+
+# names(zh) = names;
+
+# str(zh);
+
+# for(name in names(zh)) {
+#     # print(name);
+#     # print(zh[[name]]);
+
+#     flags = zh[[name]];
+#     name = strsplit(name);
+# }
+
+const split_zh = function(si) {
+    si = strsplit(si);
+    zh = sapply(si, ci -> any(clr::call_clr(pinyin_lib, "GetZhFlags", str = ci)));
+    zh = paste(si[zh], sep = " ");
+    en = paste(si[!zh], sep = " ");
+
+    list(zh, en);
+}
+
+const names_split = lapply(names, si -> split_zh(si), names = names);
+
+require(JSON);
+
+str(names_split);
+
+names_split
+|> JSON::json_encode()
+|> writeLines(
+    con = `${@dir}/zh_names.json`
+)
+;

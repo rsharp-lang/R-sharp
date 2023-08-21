@@ -877,7 +877,13 @@ Namespace Runtime.Internal.Invokes
 
             For Each xi In x.slots
                 If Not xi.Key Like args Then
-                    Call chrs.Add(CLRVector.asCharacter(xi.Value))
+                    Dim si As String() = CLRVector.asCharacter(xi.Value)
+
+                    If si.IsNullOrEmpty Then
+                        Call chrs.Add({""})
+                    Else
+                        Call chrs.Add(si)
+                    End If
 
                     If chrs.Last.Length <> check Then
                         If check <> 1 AndAlso chrs.Last.Length <> 1 Then
