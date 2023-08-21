@@ -89,13 +89,17 @@ Namespace Convertor
             If r_char.value Is Nothing Then
                 Return ""
             ElseIf r_char.info.type = RObjectType.CHAR Then
+                If TypeOf r_char.value.data Is Char() Then
+                    Return New String(DirectCast(r_char.value.data, Char()))
+                End If
+
                 Dim bytes As Byte() = DirectCast(r_char.value.data, Byte())
                 Dim encoding As Encoding = Encoding.UTF8
 
                 If r_char.info.gp And CharFlags.UTF8 Then
                     encoding = Encoding.UTF8
                 ElseIf r_char.info.gp And CharFlags.LATIN1 Then
-#If netcore5 = 0 Then
+#If NETCOREAPP Then
                     encoding = Encoding.GetEncoding("Latin1")
 #Else
 #If Not NET48 Then
