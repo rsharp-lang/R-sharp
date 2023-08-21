@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::f5abff83764cd84aceefd81490d8d409, D:/GCModeller/src/R-sharp/studio/RData//Convertor/Constructor.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 111
-    '    Code Lines: 87
-    ' Comment Lines: 6
-    '   Blank Lines: 18
-    '     File Size: 3.94 KB
+' Summaries:
 
 
-    '     Module Constructor
-    ' 
-    '         Function: DecodeCharacters, GetRType, LinkValue, LinkVisitor
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 111
+'    Code Lines: 87
+' Comment Lines: 6
+'   Blank Lines: 18
+'     File Size: 3.94 KB
+
+
+'     Module Constructor
+' 
+'         Function: DecodeCharacters, GetRType, LinkValue, LinkVisitor
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -86,38 +86,38 @@ Namespace Convertor
 
         <Extension>
         Public Function DecodeCharacters(r_char As RObject) As String
-            If r_char.value Is Nothing Then
+            If r_char.value Is Nothing OrElse r_char.value.data.IsNullOrEmpty Then
                 Return ""
-            ElseIf r_char.info.type = RObjectType.CHAR Then
-                If TypeOf r_char.value.data Is Char() Then
-                    Return New String(DirectCast(r_char.value.data, Char()))
-                End If
-
-                Dim bytes As Byte() = DirectCast(r_char.value.data, Byte())
-                Dim encoding As Encoding = Encoding.UTF8
-
-                If r_char.info.gp And CharFlags.UTF8 Then
-                    encoding = Encoding.UTF8
-                ElseIf r_char.info.gp And CharFlags.LATIN1 Then
-#If NETCOREAPP Then
-                    encoding = Encoding.GetEncoding("Latin1")
-#Else
-#If Not NET48 Then
-                    encoding = Encoding.Latin1
-#Else
-                    encoding = Encoding.GetEncoding("Latin1")
-#End If
-#End If
-                ElseIf r_char.info.gp And CharFlags.ASCII Then
-                    encoding = Encoding.ASCII
-                ElseIf r_char.info.gp And CharFlags.BYTES Then
-                    encoding = Encoding.ASCII
-                End If
-
-                Return encoding.GetString(bytes)
-            Else
+            ElseIf r_char.info.type <> RObjectType.CHAR Then
                 Return ""
             End If
+
+            If TypeOf r_char.value.data Is Char() Then
+                Return New String(DirectCast(r_char.value.data, Char()))
+            End If
+
+            Dim bytes As Byte() = DirectCast(r_char.value.data, Byte())
+            Dim encoding As Encoding = Encoding.UTF8
+
+            If r_char.info.gp And CharFlags.UTF8 Then
+                encoding = Encoding.UTF8
+            ElseIf r_char.info.gp And CharFlags.LATIN1 Then
+#If NETCOREAPP Then
+                encoding = Encoding.GetEncoding("Latin1")
+#Else
+#If Not NET48 Then
+                encoding = Encoding.Latin1
+#Else
+                encoding = Encoding.GetEncoding("Latin1")
+#End If
+#End If
+            ElseIf r_char.info.gp And CharFlags.ASCII Then
+                encoding = Encoding.ASCII
+            ElseIf r_char.info.gp And CharFlags.BYTES Then
+                encoding = Encoding.ASCII
+            End If
+
+            Return encoding.GetString(bytes)
         End Function
 
         ''' <summary>
