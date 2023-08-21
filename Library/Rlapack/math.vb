@@ -315,10 +315,6 @@ Module math
     ''' <summary>
     ''' loess fit
     ''' </summary>
-    ''' <param name="formula"></param>
-    ''' <param name="data"></param>
-    ''' <param name="env"></param>
-    ''' <returns></returns>
     <ExportAPI("loess")>
     Public Function loess(formula As FormulaExpression, data As Object, Optional env As Environment = Nothing) As Object
         Throw New NotImplementedException
