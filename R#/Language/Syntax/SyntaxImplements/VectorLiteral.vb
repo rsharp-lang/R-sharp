@@ -127,7 +127,15 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                 .Take(tokens.Length - 2) _
                 .ToArray
 
-            If tokens.All(Function(a) a.isLiteral OrElse a.name = TokenType.stringInterpolation) Then
+            Dim isSimples As Boolean = tokens _
+                .All(Function(a)
+                         Return a.isLiteral OrElse
+                            a.name = TokenType.stringInterpolation OrElse
+                            a.name = TokenType.identifier OrElse
+                            a.name = TokenType.keyword
+                     End Function)
+
+            If isSimples Then
                 Return tokens.Select(Function(a) New Token() {a}).AsList
             Else
                 Return tokens.SplitByTopLevelDelimiter(TokenType.comma)
