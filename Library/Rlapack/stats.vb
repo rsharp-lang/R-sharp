@@ -81,6 +81,7 @@
 #End Region
 
 Imports System.Drawing
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -138,12 +139,33 @@ Module stats
         Internal.ConsolePrinter.AttachConsoleFormatter(Of TwoSampleResult)(AddressOf printTwoSampleTTest)
         Internal.ConsolePrinter.AttachConsoleFormatter(Of FishersExactPvalues)(Function(o) o.ToString)
         Internal.ConsolePrinter.AttachConsoleFormatter(Of FTest)(Function(o) o.ToString)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of MultivariateAnalysisResult)(AddressOf printMvar)
 
         Internal.Object.Converts.makeDataframe.addHandler(GetType(DataMatrix), AddressOf matrixDataFrame)
         Internal.Object.Converts.makeDataframe.addHandler(GetType(DistanceMatrix), AddressOf matrixDataFrame)
         Internal.Object.Converts.makeDataframe.addHandler(GetType(CorrelationMatrix), AddressOf matrixDataFrame2)
         Internal.Object.Converts.makeDataframe.addHandler(GetType(PCAcalls), AddressOf PCATable)
     End Sub
+
+    Private Function printMvar(x As MultivariateAnalysisResult) As String
+        Dim sb As New StringBuilder
+        Dim text As New StringWriter(sb)
+
+        If x.analysis Is Nothing Then
+            Return "NULL"
+        End If
+
+        Select Case x.analysis
+            Case GetType(PLS) : Call x.WritePlsResult(text)
+            Case GetType(OPLS) : Call x.WriteOplsResult(text)
+            Case Else
+                Return $"not implements for {x.analysis.Name}!"
+        End Select
+
+        Call text.Flush()
+
+        Return sb.ToString
+    End Function
 
     ''' <summary>
     ''' 
@@ -1286,7 +1308,10 @@ Module stats
             yval = yfactors.asNumeric(ylabels)
         End If
 
-        Dim ds = New StatisticsObject(xm, yval)
+        Dim ds = New StatisticsObject(xm, yval) With {
+            .decoder = yfactors,
+            .labels = ylabels
+        }
         Dim pls_mvar = PLS.PartialLeastSquares(ds, component:=If(ncomp, -1))
 
         Return pls_mvar
