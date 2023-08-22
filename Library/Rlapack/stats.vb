@@ -1244,6 +1244,29 @@ Module stats
     End Function
 
     ''' <summary>
+    ''' ## Partial Least Squares Discriminant Analysis
+    ''' 
+    ''' ``plsda`` is used to calibrate, validate and use of partial least squares discrimination analysis (PLS-DA) model.
+    ''' </summary>
+    ''' <param name="x">matrix with predictors.</param>
+    ''' <param name="c">vector with class membership (should be either a factor with class
+    ''' names/numbers in case of multiple classes Or a vector with logical values in case
+    ''' of one class model).</param>
+    ''' <param name="ncomp">maximum number Of components To calculate.</param>
+    ''' <param name="center">logical, center or not predictors and response values.</param>
+    ''' <param name="scale">logical, scale (standardize) or not predictors and response values.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("plsda")>
+    Public Function plsda(x As Rdataframe, <RRawVectorArgument> c As Object,
+                          Optional ncomp As Integer? = Nothing,
+                          Optional center As Boolean = True,
+                          Optional scale As Boolean = False,
+                          Optional env As Environment = Nothing)
+
+    End Function
+
+    ''' <summary>
     ''' z-score
     ''' </summary>
     ''' <param name="x"></param>
