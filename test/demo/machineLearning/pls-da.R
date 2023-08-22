@@ -11,4 +11,4 @@ print(labels);
 
 pls = plsda(x, y = labels[, "gender"], ncomp = 3);
 
-str(pls);
+print(pls);

@@ -1309,9 +1309,17 @@ Module stats
         End If
 
         Dim ds = New StatisticsObject(xm, yval) With {
-            .decoder = yfactors,
-            .labels = ylabels
+            .decoder = yfactors
         }
+
+        Call Enumerable.Range(0, x.ncols).DoEach(AddressOf ds.XIndexes.Add)
+        Call Enumerable.Range(0, x.nrows).DoEach(AddressOf ds.YIndexes.Add)
+        Call x.colnames.DoEach(AddressOf ds.XLabels.Add)
+
+        If Not ylabels.IsNullOrEmpty Then
+            Call ylabels.DoEach(AddressOf ds.YLabels.Add)
+        End If
+
         Dim pls_mvar = PLS.PartialLeastSquares(ds, component:=If(ncomp, -1))
 
         Return pls_mvar
