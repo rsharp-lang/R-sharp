@@ -59,6 +59,7 @@ Imports SMRUCC.Rsharp.RDataSet.Struct
 Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Convertor
 
@@ -148,6 +149,15 @@ Namespace Convertor
             Return PullRObject(rdata, New Dictionary(Of String, Object))
         End Function
 
+        <Extension>
+        Private Function hasDimension(rdata As RObject) As Boolean
+            If rdata.attributes IsNot Nothing AndAlso rdata.attributes.symbolName = "dim" Then
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
         ''' <summary>
         ''' Pull all R# object from the RData linked list
         ''' </summary>
@@ -158,17 +168,24 @@ Namespace Convertor
         Private Function PullRObject(rdata As RObject, list As Dictionary(Of String, Object)) As Object
             Dim value As RList = rdata.value
             Dim car As RObject = value.CAR
-            Dim nodeType = value.nodeType
+            Dim nodeType As ListNodeType = value.nodeType
 
             If nodeType = ListNodeType.NA Then
                 Return Nothing
             ElseIf nodeType = ListNodeType.Vector Then
                 ' 已经没有数据了，结束递归
                 If rdata.value.isPrimitive Then
-                    Return rdata.CreateRVector
+                    ' is a numeric matrix
+                    ' if a 'dim' attribute exists in this rdata
+                    If rdata.hasDimension Then
+                        Return rdata.CreateRMatrix
+                    Else
+                        Return rdata.CreateRVector
+                    End If
                 End If
 
                 If RObjectSignature.IsPairList(rdata) Then
+                    ' is rds file reader
                     Return rdata.CreatePairList
                 ElseIf RObjectSignature.IsDataFrame(rdata) Then
                     Return rdata.CreateRTable
@@ -309,6 +326,58 @@ Namespace Convertor
             Else
                 Return Nothing
             End If
+        End Function
+
+        <Extension>
+        Private Function extractMatrixDimNames(robj As RObject) As (rownames As String(), colnames As String())
+            Dim value = robj.value.CAR.value.data
+
+            If value.IsNullOrEmpty Then
+                Return Nothing
+            End If
+
+            Dim dim1 As RObject = value(0)
+            Dim dim2 As RObject = value(1)
+            Dim dimNames1 As String() = Nothing
+            Dim dimNames2 As String() = Nothing
+
+            If Not dim1 Is Nothing Then
+                dimNames1 = CLRVector.asCharacter(dim1.PullRObject(Nothing))
+            End If
+            If Not dim2 Is Nothing Then
+                dimNames2 = CLRVector.asCharacter(dim2.PullRObject(Nothing))
+            End If
+
+            Return (dimNames1, dimNames2)
+        End Function
+
+        <Extension>
+        Private Function CreateRMatrix(robj As RObject) As dataframe
+            Dim v As Array = robj.value.data
+            Dim dims As RObject = robj.attributes
+            Dim dimSize As Integer() = CLRVector.asInteger(dims.value.CAR.value.data)
+            Dim dimnames = dims.value.CDR.extractMatrixDimNames
+            Dim colnames As String() = dimnames.colnames
+            Dim value As Type = v.GetType.GetElementType
+            Dim colvec As Array
+            Dim name As String
+            Dim Matrix As New dataframe With {
+                .columns = New Dictionary(Of String, Array),
+                .rownames = dimnames.rownames
+            }
+            Dim offset As Integer
+
+            For Each i As Integer In Enumerable.Range(0, dimSize(1) - 1)
+                name = $"X_{i + 1}"
+                name = colnames.ElementAtOrDefault(i, name)
+                offset = i * dimSize(0)
+                colvec = Array.CreateInstance(If(value, GetType(Object)), dimSize(0))
+
+                Call Array.ConstrainedCopy(v, offset, colvec, Scan0, colvec.Length)
+                Call Matrix.add(name, colvec)
+            Next
+
+            Return Matrix
         End Function
 
         <Extension>
