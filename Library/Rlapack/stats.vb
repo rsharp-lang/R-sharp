@@ -1267,7 +1267,8 @@ Module stats
         Dim xm As Double()() = x.columns _
             .Select(Function(ci) CLRVector.asNumeric(ci.Value)) _
             .ToArray
-        Dim pls_mvar = PLS.PartialLeastSquares(New StatisticsObject(xm), component:=If(ncomp, -1))
+        Dim ds = New StatisticsObject(xm)
+        Dim pls_mvar = PLS.PartialLeastSquares(ds, component:=If(ncomp, -1))
 
         Return pls_mvar
     End Function

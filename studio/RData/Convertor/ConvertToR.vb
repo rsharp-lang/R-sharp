@@ -367,7 +367,7 @@ Namespace Convertor
             }
             Dim offset As Integer
 
-            For Each i As Integer In Enumerable.Range(0, dimSize(1) - 1)
+            For Each i As Integer In Enumerable.Range(0, dimSize(1))
                 name = $"X_{i + 1}"
                 name = colnames.ElementAtOrDefault(i, name)
                 offset = i * dimSize(0)
