@@ -74,6 +74,7 @@ Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure.DataPack
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.Math.DataFrame
+Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -651,6 +652,30 @@ Module datasetKit
                       End If
                   End Function
         Next
+    End Function
+
+    ''' <summary>
+    ''' encode a given numeric sequence as factors by quantile levels
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="levels">The number of quantile levels to encode the target numeric sequence</param>
+    ''' <returns></returns>
+    <ExportAPI("q_factors")>
+    <RApiReturn(GetType(String))>
+    Public Function q_factors(<RRawVectorArgument> x As Object, levels As Integer) As Object
+        Dim data As Double() = CLRVector.asNumeric(x)
+        Dim qlevels As String() = data _
+            .QuantileLevels(steps:=1 / levels) _
+            .Select(Function(li) CStr(li)) _
+            .ToArray
+        Dim factors = factor.CreateFactor(qlevels)
+        Dim str = qlevels _
+            .Select(Function(li)
+                        Return factors.GetFactor(li).ToString
+                    End Function) _
+            .ToArray
+
+        Return str
     End Function
 
     ''' <summary>

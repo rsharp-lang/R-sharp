@@ -140,6 +140,13 @@ Namespace Runtime.Internal.Object
             Return factor
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="lb"></param>
+        ''' <returns>
+        ''' get 1 based factor level integer value, zero means nothing or missing
+        ''' </returns>
         Public Function GetFactor(lb As String) As Integer
             If lb Is Nothing Then
                 Return 0
