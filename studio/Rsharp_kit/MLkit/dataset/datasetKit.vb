@@ -662,10 +662,10 @@ Module datasetKit
     ''' <returns></returns>
     <ExportAPI("q_factors")>
     <RApiReturn(GetType(String))>
-    Public Function q_factors(<RRawVectorArgument> x As Object, levels As Integer) As Object
+    Public Function q_factors(<RRawVectorArgument> x As Object, levels As Integer, Optional fast As Boolean = True) As Object
         Dim data As Double() = CLRVector.asNumeric(x)
         Dim qlevels As String() = data _
-            .QuantileLevels(steps:=1 / levels) _
+            .QuantileLevels(steps:=1 / levels, fast:=fast) _
             .Select(Function(li) CStr(li)) _
             .ToArray
         Dim factors = factor.CreateFactor(qlevels)
