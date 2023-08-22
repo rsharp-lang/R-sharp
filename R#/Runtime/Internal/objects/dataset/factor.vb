@@ -100,6 +100,13 @@ Namespace Runtime.Internal.Object
             m_type = RType.GetRSharpType(GetType(Integer))
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function asNumeric(labels As IEnumerable(Of String)) As Double()
+            Return labels _
+                .Select(Function(si) CDbl(GetFactor(si))) _
+                .ToArray
+        End Function
+
         Public Shared Function CreateFactor(x$(),
                                             Optional exclude$() = Nothing,
                                             Optional ordered As Boolean = False,
@@ -133,17 +140,19 @@ Namespace Runtime.Internal.Object
             Return factor
         End Function
 
+        Public Function GetFactor(lb As String) As Integer
+            If lb Is Nothing Then
+                Return 0
+            ElseIf Not m_levels.ContainsKey(lb) Then
+                Return 0
+            Else
+                Return m_levels(lb)
+            End If
+        End Function
+
         Public Shared Function asFactor(raw As String(), factor As factor) As vector
             Dim vector As Integer() = raw _
-                .Select(Function(str)
-                            If str Is Nothing Then
-                                Return 0
-                            ElseIf Not factor.m_levels.ContainsKey(str) Then
-                                Return 0
-                            Else
-                                Return factor.m_levels(str)
-                            End If
-                        End Function) _
+                .Select(AddressOf factor.GetFactor) _
                 .ToArray
 
             Return New vector(vector, factor.elementType) With {

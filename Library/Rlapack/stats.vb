@@ -1249,7 +1249,7 @@ Module stats
     ''' ``plsda`` is used to calibrate, validate and use of partial least squares discrimination analysis (PLS-DA) model.
     ''' </summary>
     ''' <param name="x">matrix with predictors.</param>
-    ''' <param name="c">vector with class membership (should be either a factor with class
+    ''' <param name="y">vector with class membership (should be either a factor with class
     ''' names/numbers in case of multiple classes Or a vector with logical values in case
     ''' of one class model).</param>
     ''' <param name="ncomp">maximum number Of components To calculate.</param>
@@ -1258,16 +1258,35 @@ Module stats
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("plsda")>
-    Public Function plsda(x As Rdataframe, <RRawVectorArgument> c As Object,
+    Public Function plsda(x As Rdataframe, <RRawVectorArgument> y As Object,
                           Optional ncomp As Integer? = Nothing,
                           Optional center As Boolean = True,
                           Optional scale As Boolean = False,
-                          Optional env As Environment = Nothing)
+                          Optional env As Environment = Nothing) As Object
 
-        Dim xm As Double()() = x.columns _
-            .Select(Function(ci) CLRVector.asNumeric(ci.Value)) _
+        Dim xm As Double()() = x.forEachRow _
+            .Select(Function(ci) CLRVector.asNumeric(ci.value)) _
             .ToArray
-        Dim ds = New StatisticsObject(xm)
+        Dim ylabels As String() = Nothing
+        Dim yfactors As factor = Nothing
+        Dim yval As Double()
+
+        If y Is Nothing Then
+            Return Internal.debug.stop("the sample class information should not be nothing, it must be a vector of numeric data for regression or a character vector for classification!", env)
+        Else
+            y = REnv.TryCastGenericArray(y, env)
+        End If
+
+        If DataFramework.IsNumericCollection(y.GetType) Then
+            ' regression
+            yval = CLRVector.asNumeric(y)
+        Else
+            ylabels = CLRVector.asCharacter(y)
+            yfactors = factor.CreateFactor(ylabels)
+            yval = yfactors.asNumeric(ylabels)
+        End If
+
+        Dim ds = New StatisticsObject(xm, yval)
         Dim pls_mvar = PLS.PartialLeastSquares(ds, component:=If(ncomp, -1))
 
         Return pls_mvar

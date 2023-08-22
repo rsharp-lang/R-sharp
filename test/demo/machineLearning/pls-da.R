@@ -5,7 +5,10 @@ let ds = sacurine();
 str(ds);
 
 let x = ds$dataMatrix;
+let labels = ds$sampleMetadata;
 
-pls = plsda(x, NULL, ncomp = 3);
+print(labels);
+
+pls = plsda(x, y = labels[, "gender"], ncomp = 3);
 
 str(pls);
