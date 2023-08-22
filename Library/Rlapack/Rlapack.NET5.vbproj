@@ -95,8 +95,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineTrace>True</DefineTrace>
+    <DefineConstants>MATH_DATASET=1</DefineConstants>
     <OutputPath>../../../workbench/win32_desktop/Apps/Rstudio/library</OutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <BaseAddress>4194304</BaseAddress>
@@ -132,6 +132,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|AnyCPU'">
@@ -139,6 +141,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|x64'">
@@ -146,6 +150,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|x64'">
@@ -153,6 +159,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
@@ -160,6 +168,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|AnyCPU'">
@@ -167,6 +177,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|x64'">
@@ -174,6 +186,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|x64'">
@@ -181,6 +195,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0|AnyCPU'">
@@ -188,6 +204,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0-windows|AnyCPU'">
@@ -195,6 +213,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0|x64'">
@@ -202,6 +222,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0-windows|x64'">
@@ -209,6 +231,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='LipidSearch|net6.0|AnyCPU'">
@@ -216,6 +240,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='LipidSearch|net6.0-windows|AnyCPU'">
@@ -223,6 +249,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='LipidSearch|net6.0|x64'">
@@ -230,6 +258,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='LipidSearch|net6.0-windows|x64'">
@@ -237,6 +267,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0|AnyCPU'">
@@ -244,6 +276,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0-windows|AnyCPU'">
@@ -251,6 +285,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0|x64'">
@@ -258,6 +294,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0-windows|x64'">
@@ -265,6 +303,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0|AnyCPU'">
@@ -272,6 +312,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0-windows|AnyCPU'">
@@ -279,6 +321,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0|x64'">
@@ -286,6 +330,8 @@
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>
 	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -333,5 +379,9 @@
 
 
   <Import Project="..\shares\symbolic\symbolic.projitems" Label="Shared" />
+
+
+
+  <Import Project="..\shares\dataframeHelper\dataframeHelper.projitems" Label="Shared" />
 
 </Project>

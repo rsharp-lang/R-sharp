@@ -1277,6 +1277,10 @@ Module stats
     ''' <param name="ncomp">maximum number Of components To calculate.</param>
     ''' <param name="center">logical, center or not predictors and response values.</param>
     ''' <param name="scale">logical, scale (standardize) or not predictors and response values.</param>
+    ''' <param name="list">
+    ''' this function will returns a R# list that contains result data of the PLS-DA analysis by default, 
+    ''' or the raw .NET clr object of the PLS result if this parameter value set to FALSE.
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("plsda")>
@@ -1284,6 +1288,7 @@ Module stats
                           Optional ncomp As Integer? = Nothing,
                           Optional center As Boolean = True,
                           Optional scale As Boolean = False,
+                          Optional list As Boolean = True,
                           Optional env As Environment = Nothing) As Object
 
         Dim xm As Double()() = x.forEachRow _
@@ -1322,7 +1327,33 @@ Module stats
 
         Dim pls_mvar = PLS.PartialLeastSquares(ds, component:=If(ncomp, -1))
 
-        Return pls_mvar
+        If Not list Then
+            Return pls_mvar
+        End If
+
+        Dim score = pls_mvar.GetPLSScore
+        Dim loading = pls_mvar.GetPLSLoading
+        Dim components = pls_mvar.GetComponents.ToArray
+        Dim scoreMN As Rdataframe = MathDataSet.toDataframe(score, Nothing, env)
+        Dim loadingMN As Rdataframe = MathDataSet.toDataframe(loading, Nothing, env)
+        Dim componentDf As New Rdataframe With {
+            .rownames = components.Select(Function(ci) CStr(ci.Order)).ToArray,
+            .columns = New Dictionary(Of String, Array)
+        }
+
+        Call componentDf.add("Component", components.Select(Function(ci) ci.Order))
+        Call componentDf.add("SSCV", components.Select(Function(ci) ci.SSCV))
+        Call componentDf.add("PRESS", components.Select(Function(ci) ci.Press))
+        Call componentDf.add("Q2", components.Select(Function(ci) ci.Q2))
+        Call componentDf.add("Q2(cum)", components.Select(Function(ci) ci.Q2cum))
+
+        Return New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"component", componentDf},
+                {"scoreMN", scoreMN},
+                {"loadingMN", loadingMN}
+            }
+        }
     End Function
 
     ''' <summary>

@@ -181,14 +181,7 @@ Module datasetKit
     End Function
 
     Private Function toDataframe(features As FeatureFrame, args As list, env As Environment) As Rdataframe
-        Return New Rdataframe With {
-            .columns = features.features _
-                .ToDictionary(Function(v) v.Key,
-                              Function(v)
-                                  Return v.Value.vector
-                              End Function),
-            .rownames = features.rownames
-        }
+        Return MathDataSet.toDataframe(features, args, env)
     End Function
 
     ''' <summary>

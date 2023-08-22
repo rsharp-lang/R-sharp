@@ -8335,6 +8335,7 @@ Global
 		Library\shares\dataframeHelper\dataframeHelper.projitems*{361137d5-1024-44fe-b61d-fcebec342c06}*SharedItemsImports = 5
 		Library\shares\JsonHelper\JsonHelper.projitems*{361137d5-1024-44fe-b61d-fcebec342c06}*SharedItemsImports = 5
 		Library\shares\JsonHelper\JsonHelper.projitems*{470aab61-e443-46ea-8e9f-8e67b7750e25}*SharedItemsImports = 5
+		Library\shares\dataframeHelper\dataframeHelper.projitems*{4de5c337-fa74-4eb9-a2ba-a29899031216}*SharedItemsImports = 5
 		Library\shares\R_graphic.interop\R_graphic.interop.projitems*{4de5c337-fa74-4eb9-a2ba-a29899031216}*SharedItemsImports = 5
 		Library\shares\xgboostDataSet_helper\xgboostDataSet_helper.projitems*{4de5c337-fa74-4eb9-a2ba-a29899031216}*SharedItemsImports = 5
 		Library\shares\R_graphic.interop\R_graphic.interop.projitems*{53af2b13-ccd5-4f73-94d5-612191e785a9}*SharedItemsImports = 13
@@ -8350,6 +8351,7 @@ Global
 		studio\Rstudio.common\Rstudio.common.projitems*{c97e077f-466f-44f2-8363-d606fc093e5e}*SharedItemsImports = 5
 		studio\Rstudio.common\Rstudio.common.projitems*{e1995e16-ba23-44ea-81bb-187e93f3d906}*SharedItemsImports = 5
 		..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{e1995e16-ba23-44ea-81bb-187e93f3d906}*SharedItemsImports = 5
+		Library\shares\dataframeHelper\dataframeHelper.projitems*{eaaf480e-e0bd-428f-bfc1-d76e0b5a96a7}*SharedItemsImports = 5
 		Library\shares\R_graphic.interop\R_graphic.interop.projitems*{eaaf480e-e0bd-428f-bfc1-d76e0b5a96a7}*SharedItemsImports = 5
 		Library\shares\symbolic\symbolic.projitems*{eaaf480e-e0bd-428f-bfc1-d76e0b5a96a7}*SharedItemsImports = 5
 		Library\shares\R_graphic.interop\R_graphic.interop.projitems*{f399ca7c-fbd8-4eac-b6b4-c9832a265120}*SharedItemsImports = 5
