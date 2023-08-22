@@ -9,6 +9,6 @@ let labels = ds$sampleMetadata;
 
 print(labels);
 
-pls = plsda(x, y = labels[, "gender"], ncomp = 3);
+pls = plsda(x, y = labels[, "gender"]);
 
 print(pls);
