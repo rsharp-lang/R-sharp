@@ -166,6 +166,11 @@ Namespace Runtime.Internal.Object
             End If
         End Sub
 
+        Sub New(v As IEnumerable(Of Double))
+            Me.elementType = RType.GetRSharpType(GetType(Double))
+            Me.data = v.ToArray
+        End Sub
+
         Private Shared Function loadGenericCollection(input As IEnumerable, model As Type, env As Environment) As Array
             Dim list As IList = Activator.CreateInstance(GetType(List(Of )).MakeGenericType(model))
             Dim isObjWrapper As Boolean = model Is GetType(vbObject)

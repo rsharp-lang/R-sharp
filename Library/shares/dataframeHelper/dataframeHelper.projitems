@@ -10,5 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)dataframeWriter.vb" />
+    <Compile Include="$(MSBuildThisFileDirectory)MathDataSet.vb" />
   </ItemGroup>
 </Project>

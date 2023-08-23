@@ -1,3 +1,4 @@
+imports "utils" from "base";
 
 #' http://www.sph.emory.edu/~dkleinb/datasets/cancer.dat
 #' 
@@ -27,4 +28,8 @@ const classify_cancer = function() {
     exports = cbind(exports, labels = as.numeric(labels));
     rownames(exports) = tags;
     exports;
+}
+
+const sacurine = function() {
+    utils::readRData(file = system.file("data/sacurine.rds", package = "REnv"));
 }

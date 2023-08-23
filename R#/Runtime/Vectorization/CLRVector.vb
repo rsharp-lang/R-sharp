@@ -339,8 +339,12 @@ Namespace Runtime.Vectorization
             ElseIf TypeOf x Is Single() Then
                 Return DirectCast(x, Single()).Select(Function(s) CDbl(s)).ToArray
             ElseIf DataFramework.IsNumericCollection(x.GetType) Then
+                Dim populator = DirectCast(x, IEnumerable) _
+                    .AsQueryable _
+                    .ToArray(Of Object)
+
                 Return (From xi As Object
-                        In DirectCast(x, IEnumerable).AsQueryable
+                        In populator
                         Select CDbl(xi)).ToArray
             ElseIf DataFramework.IsNumericType(x.GetType) Then
                 ' is a single scalar value

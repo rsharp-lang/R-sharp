@@ -1052,7 +1052,7 @@ RE0:
             ElseIf TypeOf x Is Integer() OrElse TypeOf x Is Long() OrElse TypeOf x Is Single() OrElse TypeOf x Is Short() Then
                 Return New vector(DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray, RType.GetRSharpType(GetType(Double)))
             ElseIf TypeOf x Is vector AndAlso DirectCast(x, vector).elementType Like RType.floats Then
-                Return New vector(x)
+                Return New vector(DirectCast(x, vector))
             Else
                 Dim data As Object() = pipeline _
                     .TryCreatePipeline(Of Object)(x, env) _

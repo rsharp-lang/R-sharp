@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 ''' <summary>
 ''' The R Graphics Package
@@ -77,6 +78,11 @@ Module Rgraphics
     <ExportAPI("as.raster")>
     Public Function as_raster(img As Image) As RasterScaler
         Return New RasterScaler(New Bitmap(img))
+    End Function
+
+    <ExportAPI("raster_vec")>
+    Public Function as_vector(raster As RasterScaler) As vec
+        Return New vec(raster.GetRasterData.Select(Function(p) p.Scale))
     End Function
 
     ''' <summary>
