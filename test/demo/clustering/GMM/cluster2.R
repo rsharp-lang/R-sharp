@@ -10,7 +10,9 @@ x[,"Cluster"] = NULL;
 
 print(x);
 
-let gmm = gmm(x, 4);
+set.seed(1);
+
+let gmm = gmm(x, 6);
 
 print(gmm.predict_proba(gmm));
 

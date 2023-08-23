@@ -539,7 +539,7 @@ Namespace Runtime.Internal.Object
             Return names.All(AddressOf hasName)
         End Function
 
-        Friend Shared Function empty() As Object
+        Public Shared Function empty() As Object
             Return New list With {.slots = New Dictionary(Of String, Object)}
         End Function
     End Class

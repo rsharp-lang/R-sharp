@@ -475,7 +475,9 @@ Module graphics2D
         Dim dimension As Size
 
         If pixels.isError Then
-            If x IsNot Nothing AndAlso x.GetType.ImplementInterface(Of IRasterGrayscaleHeatmap) Then
+            If TypeOf x Is RasterScaler Then
+                pixels = pipeline.CreateFromPopulator(DirectCast(x, RasterScaler).GetRasterData)
+            ElseIf x IsNot Nothing AndAlso x.GetType.ImplementInterface(Of IRasterGrayscaleHeatmap) Then
                 pixels = pipeline.CreateFromPopulator(DirectCast(x, IRasterGrayscaleHeatmap).GetRasterPixels)
             Else
                 Return pixels.getError
