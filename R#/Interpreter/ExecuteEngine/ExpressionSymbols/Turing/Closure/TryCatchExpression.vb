@@ -103,6 +103,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Me.sourceMap = sourceMap
         End Sub
 
+        Public Overrides Function ToString() As String
+            Return $"try({exception.ToString} => {{ {[try].ToString} }}) catch {{ {[catch].ToString} }}"
+        End Function
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim tryVal As Object
 
