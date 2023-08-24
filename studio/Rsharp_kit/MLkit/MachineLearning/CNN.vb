@@ -141,6 +141,7 @@ Module CNNTools
 
                 If DataFramework.IsNumericCollection(labels.GetType) Then
                     Dim label As Double() = CLRVector.asNumeric(labels)
+
                     ds = df.forEachRow() _
                         .Select(Function(r, i)
                                     Return New SampleData(CLRVector.asNumeric(r.value), label(i)) With {
