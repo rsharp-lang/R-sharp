@@ -10,7 +10,7 @@ const raw = images_set
 format = "mnist", 
 dataset = "dataframe", 
 labelfile = "../mnist_dataset/train-labels-idx1-ubyte",
-subset = 12001
+subset = 120
 );
 
 str(raw);
@@ -52,3 +52,13 @@ print(result);
 write.csv(result, file = "./demo-test.csv", row.names = TRUE);
 
 CNN::saveModel(cnn, file = "./MNIST.cnn");
+
+cnn = CNN::cnn(file = "./MNIST.cnn");
+
+let result = CNN::predict(cnn, raw);
+
+result[, "label"] = labels;
+
+print(result);
+
+write.csv(result, file = "./demo-test-reader.csv", row.names = TRUE);
