@@ -117,6 +117,7 @@ Module CNNTools
                              <RRawVectorArgument>
                              Optional labels As Object = Nothing,
                              Optional max_loops As Integer = 100,
+                             Optional batch_size As Integer? = Nothing,
                              Optional env As Environment = Nothing) As Object
         Dim cnn_val As CNN
         Dim batchSize As Integer
@@ -157,7 +158,11 @@ Module CNNTools
             Return Message.InCompatibleType(GetType(dataframe), dataset.GetType, env)
         End If
 
-        batchSize = ds.Length / 10
+        If batch_size Is Nothing Then
+            batchSize = ds.Length / 250
+        Else
+            batchSize = CInt(batch_size)
+        End If
 
         If TypeOf cnn Is CNN Then
             cnn_val = cnn
