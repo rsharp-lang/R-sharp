@@ -275,14 +275,25 @@ Module CNNTools
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("saveModel")>
-    Public Function saveModel(model As CeNiN, file As Object, Optional env As Environment = Nothing) As Object
+    Public Function saveModel(model As Object, file As Object, Optional env As Environment = Nothing) As Object
         Dim buffer = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env)
 
         If buffer Like GetType(Message) Then
             Return buffer.TryCast(Of Message)
         End If
 
-        Dim result As Boolean = model.Save(buffer)
+        Dim result As Boolean
+
+        If TypeOf model Is CeNiN Then
+            result = DirectCast(model, CeNiN).Save(buffer)
+        ElseIf TypeOf model Is CNN Then
+            Try
+                Call SaveModelCNN.Write(model, buffer)
+                result = True
+            Catch ex As Exception
+                result = False
+            End Try
+        End If
 
         If TypeOf file Is String Then
             Call buffer.TryCast(Of Stream).Dispose()

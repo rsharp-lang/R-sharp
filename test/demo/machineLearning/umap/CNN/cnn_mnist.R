@@ -50,3 +50,5 @@ result[, "label"] = labels;
 print(result);
 
 write.csv(result, file = "./demo-test.csv", row.names = TRUE);
+
+CNN::saveModel(cnn, file = "./MNIST.cnn");
