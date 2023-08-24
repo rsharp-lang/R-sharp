@@ -10,7 +10,7 @@ const raw = images_set
 format = "mnist", 
 dataset = "dataframe", 
 labelfile = "../mnist_dataset/train-labels-idx1-ubyte",
-subset = 22001
+subset = 25001
 );
 
 str(raw);
