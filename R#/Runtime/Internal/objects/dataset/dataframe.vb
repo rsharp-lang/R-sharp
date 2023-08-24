@@ -371,7 +371,10 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <param name="selector"></param>
         ''' <returns>dataframe</returns>
-        Public Function projectByColumn(selector As Array, env As Environment, Optional fullSize As Boolean = False) As Object
+        Public Function projectByColumn(selector As Array, env As Environment,
+                                        Optional fullSize As Boolean = False,
+                                        Optional reverse As Boolean = False) As Object
+
             Dim indexType As Type = MeasureRealElementType(selector)
             Dim projections As New Dictionary(Of String, Array)
 
