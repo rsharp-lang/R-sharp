@@ -173,7 +173,11 @@ Module CNNTools
     End Function
 
     <ExportAPI("predict")>
-    Public Function predict(cnn As CNN, dataset As Object, Optional env As Environment = Nothing) As Object
+    Public Function predict(cnn As CNN, dataset As Object,
+                            <RRawVectorArgument>
+                            Optional class_labels As Object = "class_%d",
+                            Optional env As Environment = Nothing) As Object
+
         Dim ds As SampleData()
 
         If TypeOf dataset Is dataframe Then
@@ -194,13 +198,34 @@ Module CNNTools
             .rownames = ds.Select(Function(d) d.id).ToArray
         }
         Dim outputs As New List(Of Double())
+        Dim class_types As String()
+
+        Call layer.prepareForNewBatch()
 
         For Each sample As SampleData In ds
             Call outputs.Add(cnn.predict(sample))
         Next
 
+        If TypeOf class_labels Is String Then
+            If outputs(0).Length <> 1 Then
+                ' is template
+                class_types = Enumerable.Range(1, outputs(0).Length) _
+                    .Select(Function(i) CStr(class_labels).Replace("%d", i)) _
+                    .ToArray
+            Else
+                ' is single
+                class_types = {CStr(class_labels)}
+            End If
+        ElseIf class_labels Is Nothing Then
+            class_types = Enumerable.Range(1, outputs(0).Length) _
+                .Select(Function(i) $"class_{i}") _
+                .ToArray
+        Else
+            class_types = CLRVector.asCharacter(class_labels)
+        End If
+
         For i As Integer = 0 To outputs(0).Length - 1
-            Call result.add($"y_{i + 1}", outputs.Select(Function(r) r(i)))
+            Call result.add(class_types(i), outputs.Select(Function(r) r(i)))
         Next
 
         Return result

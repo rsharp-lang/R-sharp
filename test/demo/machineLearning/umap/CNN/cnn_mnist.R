@@ -10,7 +10,7 @@ const raw = images_set
 format = "mnist", 
 dataset = "dataframe", 
 labelfile = "../mnist_dataset/train-labels-idx1-ubyte",
-subset = 100
+subset = 300
 );
 
 str(raw);
@@ -38,7 +38,7 @@ cnn = cnn + input_layer([28, 28])
 + output_layer(class.num = 10)
 ;
 
-cnn = CNN::training(cnn, dataset = raw, labels = as.numeric(labels), max_loops = 50);
+cnn = CNN::training(cnn, dataset = raw, labels = as.numeric(labels), max_loops = 3);
 
 
 raw[, "label"] = NULL;
