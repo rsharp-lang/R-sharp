@@ -72,9 +72,34 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <RTypeExport("cnn", GetType(LayerBuilder))>
 Module CNNTools
 
+    ''' <summary>
+    ''' Create a new CNN model
+    ''' </summary>
+    ''' <param name="file">
+    ''' if the given model file parameter is not default nothing, then the new 
+    ''' CNN model object will be loaded from the specific given file, otherwise 
+    ''' a blank new model object will be created from the CNN layer model 
+    ''' builder.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("cnn")>
-    Public Function cnn_new() As LayerBuilder
-        Return New LayerBuilder
+    <RApiReturn(GetType(CNN), GetType(LayerBuilder))>
+    Public Function cnn_new(<RRawVectorArgument>
+                            Optional file As Object = Nothing,
+                            Optional env As Environment = Nothing) As Object
+
+        If file Is Nothing Then
+            Return New LayerBuilder
+        Else
+            Dim buf = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
+
+            If buf Like GetType(Message) Then
+                Return buf.TryCast(Of Message)
+            End If
+
+            Return ReadModelCNN.Read(buf.TryCast(Of Stream))
+        End If
     End Function
 
     <ROperator("+")>
