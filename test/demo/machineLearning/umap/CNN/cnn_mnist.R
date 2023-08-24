@@ -15,6 +15,19 @@ subset = 100
 
 str(raw);
 
+let labels = raw$label;
+
+raw[, "label"] = NULL;
+
+for(name in colnames(raw)) {
+    let v = as.numeric(raw[, name]);
+
+    if (sum(v) > 0) {
+        v = v / max(v);
+        raw[, name] = v;
+    }    
+}
+
 let cnn = cnn();
 
 cnn = cnn + input_layer([28, 28])
@@ -25,9 +38,9 @@ cnn = cnn + input_layer([28, 28])
 + output_layer(class.num = 10)
 ;
 
-cnn = CNN::training(cnn, dataset = raw, labels = "label", max_loops = 50);
+cnn = CNN::training(cnn, dataset = raw, labels = as.numeric(labels), max_loops = 50);
 
-let labels = raw$label;
+
 raw[, "label"] = NULL;
 
 let result = CNN::predict(cnn, raw);
