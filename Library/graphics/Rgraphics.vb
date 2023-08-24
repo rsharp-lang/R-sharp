@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 ''' <summary>
@@ -74,10 +75,58 @@ Module Rgraphics
     ''' Cast the clr image object as the raster data
     ''' </summary>
     ''' <param name="img"></param>
+    ''' <param name="rgb_stack">
+    ''' A character vector for tells the raster function that extract the signal via rgb stack, 
+    ''' default nothing means just extract the raster data via the image pixel its brightness 
+    ''' value, otherwise this parameter should be a character of of value combination of chars: 
+    ''' ``r``, ``g`` and ``b``.
+    ''' 
+    ''' example as: 
+    ''' 
+    ''' + rgb.stack = ['r'] means just extract the red channel as the raster data
+    ''' + rgb.stack = ['g', 'b'] means extract the raster data via green and blue channel, the raster scale value will be evaluated as g * 10 + b
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("as.raster")>
-    Public Function as_raster(img As Image) As RasterScaler
-        Return New RasterScaler(New Bitmap(img))
+    Public Function as_raster(img As Image, <RRawVectorArgument> Optional rgb_stack As Object = Nothing) As RasterScaler
+        Dim rgbs As String() = CLRVector.asCharacter(rgb_stack)
+        Dim raster_copy As New Bitmap(img)
+        Dim formula As Func(Of Color, Single) = Nothing
+
+        If Not rgbs.IsNullOrEmpty Then
+            Dim get_channels As Func(Of Color, Single()) =
+                Function(c)
+                    Dim s As Single() = New Single(rgbs.Length - 1) {}
+
+                    For i As Integer = 0 To rgbs.Length - 1
+                        Select Case rgbs(i)
+                            Case "r" : s(i) = c.R / 255 * 10
+                            Case "g" : s(i) = c.G / 255 * 10
+                            Case "b" : s(i) = c.B / 255 * 10
+                            Case Else
+                                ' do nothing
+                        End Select
+                    Next
+
+                    Return s
+                End Function
+
+            formula =
+                Function(c)
+                    Dim v As Single() = get_channels(c)
+                    Dim scale As Single = 0
+
+                    Array.Reverse(v)
+
+                    For i As Integer = 0 To v.Length - 1
+                        scale += v(i) * (10 ^ i)
+                    Next
+
+                    Return scale
+                End Function
+        End If
+
+        Return New RasterScaler(raster_copy, formula)
     End Function
 
     <ExportAPI("raster_vec")>
