@@ -34,6 +34,7 @@ cnn = cnn + input_layer([28, 28])
 + conv_layer(6, [5, 5])
 + samp_layer([2, 2])
 + conv_layer(12, [5, 5])
+# + relu_layer()
 + samp_layer([2, 2])
 + output_layer(class.num = 10)
 ;
