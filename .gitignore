@@ -468,3 +468,4 @@ test/demo/machineLearning/umap/MNIST-LabelledVectorArray-60000x100.pack
 test/demo/machineLearning/umap/NIST-text/test.format
 test/demo/machineLearning/umap/NIST-text/test.predict
 test/demo/machineLearning/umap/NIST-text/train.format
+test/demo/machineLearning/umap/CNN/MNIST.cnn
