@@ -171,6 +171,40 @@ Module CNNTools
         Return cnn_val
     End Function
 
+    <ExportAPI("predict")>
+    Public Function predict(cnn As CNN, dataset As Object, Optional env As Environment = Nothing) As Object
+        Dim ds As SampleData()
+
+        If TypeOf dataset Is dataframe Then
+            ds = DirectCast(dataset, dataframe) _
+                .forEachRow _
+                .Select(Function(r)
+                            Return New SampleData(CLRVector.asNumeric(r.value)) With {
+                                .id = r.name
+                            }
+                        End Function) _
+                .ToArray
+        Else
+            Return Message.InCompatibleType(GetType(dataframe), dataset.GetType, env)
+        End If
+
+        Dim result As New dataframe With {
+            .columns = New Dictionary(Of String, Array),
+            .rownames = ds.Select(Function(d) d.id).ToArray
+        }
+        Dim outputs As New List(Of Double())
+
+        For Each sample As SampleData In ds
+            Call outputs.Add(cnn.predict(sample))
+        Next
+
+        For i As Integer = 0 To outputs(0).Length - 1
+            Call result.add($"y_{i + 1}", outputs.Select(Function(r) r(i)))
+        Next
+
+        Return result
+    End Function
+
     ''' <summary>
     ''' load a CNN model from file
     ''' </summary>
