@@ -107,8 +107,8 @@ Module CNNTools
     End Function
 
     <ExportAPI("output_layer")>
-    Public Function output_layer(classNum As Integer) As layer
-        Return layer.buildOutputLayer(classNum)
+    Public Function output_layer(class_num As Integer) As layer
+        Return layer.buildOutputLayer(class_num)
     End Function
 
     <ExportAPI("training")>

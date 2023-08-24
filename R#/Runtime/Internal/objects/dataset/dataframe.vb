@@ -370,6 +370,9 @@ Namespace Runtime.Internal.Object
         ''' ``data[, selector]``
         ''' </summary>
         ''' <param name="selector"></param>
+        ''' <param name="reverse">
+        ''' only works for the character index
+        ''' </param>
         ''' <returns>dataframe</returns>
         Public Function projectByColumn(selector As Array, env As Environment,
                                         Optional fullSize As Boolean = False,
@@ -379,6 +382,14 @@ Namespace Runtime.Internal.Object
             Dim projections As New Dictionary(Of String, Array)
 
             If indexType Like RType.characters Then
+                If reverse Then
+                    Dim negative As Index(Of String) = CLRVector.asCharacter(selector).Indexing
+
+                    selector = colnames _
+                        .Where(Function(c) Not c Like negative) _
+                        .ToArray
+                End If
+
                 For Each key As String In CLRVector.asCharacter(selector)
                     projections(key) = getVector(key, fullSize)
 
