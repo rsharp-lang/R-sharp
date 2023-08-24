@@ -10,7 +10,7 @@ const raw = images_set
 format = "mnist", 
 dataset = "dataframe", 
 labelfile = "../mnist_dataset/train-labels-idx1-ubyte",
-subset = 22001
+subset = 12001
 );
 
 str(raw);
@@ -28,33 +28,7 @@ for(name in colnames(raw)) {
     }    
 }
 
-let cnn = cnn();
-
-cnn = cnn + input_layer([28, 28])
-+ conv_layer(6, [5, 5])
-+ samp_layer([2, 2])
-+ conv_layer(12, [5, 5])
-+ samp_layer([2, 2])
-+ output_layer(class.num = 10)
-;
-
-cnn = CNN::training(cnn, dataset = raw, labels = as.numeric(labels), max.loops = 6, batch.size = 50);
-
-
-raw[, "label"] = NULL;
-
-let result = CNN::predict(cnn, raw);
-
-result[, "label"] = labels;
-
-print(result);
-
-write.csv(result, file = "./demo-test.csv", row.names = TRUE);
-
-CNN::saveModel(cnn, file = "./MNIST.cnn");
-
-cnn = CNN::cnn(file = "./MNIST.cnn");
-
+let cnn = CNN::cnn(file = "./MNIST.cnn");
 let result = CNN::predict(cnn, raw);
 
 result[, "label"] = labels;

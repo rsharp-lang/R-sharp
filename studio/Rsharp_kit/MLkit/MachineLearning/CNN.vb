@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.MachineLearning.Convolutional
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -197,7 +198,7 @@ Module CNNTools
             Return Message.InCompatibleType(GetType(CNN), cnn.GetType, env)
         End If
 
-        cnn_val = cnn_val.train(ds, max_loops)
+        cnn_val = New Trainer(Sub(s) base.print(s,, env)).train(cnn_val, ds, max_loops)
 
         Return cnn_val
     End Function
@@ -255,7 +256,9 @@ Module CNNTools
         End If
 
         For i As Integer = 0 To outputs(0).Length - 1
+#Disable Warning
             Call result.add(class_types(i), outputs.Select(Function(r) r(i)))
+#Enable Warning
         Next
 
         Return result
