@@ -465,3 +465,6 @@ test/demo/excel/New Microsoft Excel Worksheet.xlsx.zip
 /test/demo/buffer/cache.dat
 test/demo/buffer/demo_test.hds
 test/demo/machineLearning/umap/MNIST-LabelledVectorArray-60000x100.pack
+test/demo/machineLearning/umap/NIST-text/test.format
+test/demo/machineLearning/umap/NIST-text/test.predict
+test/demo/machineLearning/umap/NIST-text/train.format
