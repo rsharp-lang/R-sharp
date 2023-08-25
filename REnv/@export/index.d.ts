@@ -50,5 +50,8 @@ declare namespace REnv {
    function Rdocuments(pkgName: any, outputdir?: any, package?: any): object;
    /**
    */
+   function sacurine(): object;
+   /**
+   */
    function scale0_1(x: any): object;
 }

@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::c5533c3a7297fd3afacb75462680aead, D:/GCModeller/src/R-sharp/studio/RData//Convertor/ConvertToR.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 278
-    '    Code Lines: 200
-    ' Comment Lines: 34
-    '   Blank Lines: 44
-    '     File Size: 10.36 KB
+' Summaries:
 
 
-    '     Module ConvertToR
-    ' 
-    '         Function: CreateFactor, CreatePairList, CreateRTable, CreateRVector, PullRawData
-    '                   (+2 Overloads) PullRObject, readColumnNames, readRowNames, ToRObject
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 278
+'    Code Lines: 200
+' Comment Lines: 34
+'   Blank Lines: 44
+'     File Size: 10.36 KB
+
+
+'     Module ConvertToR
+' 
+'         Function: CreateFactor, CreatePairList, CreateRTable, CreateRVector, PullRawData
+'                   (+2 Overloads) PullRObject, readColumnNames, readRowNames, ToRObject
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -59,6 +59,7 @@ Imports SMRUCC.Rsharp.RDataSet.Struct
 Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Convertor
 
@@ -131,15 +132,30 @@ Namespace Convertor
             Dim pullAll As New list With {
                 .slots = New Dictionary(Of String, Object)
             }
-
             ' Pull all R# object from the RData linked list
-            Call rdata.PullRObject(pullAll.slots)
+            Dim pull = rdata.PullRObject(pullAll.slots)
 
-            Return pullAll
+            ' rda: get value from pullAll symbol
+            ' rds: get value from pull symbol
+
+            If pullAll.length = 0 Then
+                Return pull
+            Else
+                Return pullAll
+            End If
         End Function
 
         Public Function PullRObject(rdata As RObject) As Object
             Return PullRObject(rdata, New Dictionary(Of String, Object))
+        End Function
+
+        <Extension>
+        Private Function hasDimension(rdata As RObject) As Boolean
+            If rdata.attributes IsNot Nothing AndAlso rdata.attributes.symbolName = "dim" Then
+                Return True
+            Else
+                Return False
+            End If
         End Function
 
         ''' <summary>
@@ -152,17 +168,24 @@ Namespace Convertor
         Private Function PullRObject(rdata As RObject, list As Dictionary(Of String, Object)) As Object
             Dim value As RList = rdata.value
             Dim car As RObject = value.CAR
-            Dim nodeType = value.nodeType
+            Dim nodeType As ListNodeType = value.nodeType
 
             If nodeType = ListNodeType.NA Then
                 Return Nothing
             ElseIf nodeType = ListNodeType.Vector Then
                 ' 已经没有数据了，结束递归
                 If rdata.value.isPrimitive Then
-                    Return rdata.CreateRVector
+                    ' is a numeric matrix
+                    ' if a 'dim' attribute exists in this rdata
+                    If rdata.hasDimension Then
+                        Return rdata.CreateRMatrix
+                    Else
+                        Return rdata.CreateRVector
+                    End If
                 End If
 
                 If RObjectSignature.IsPairList(rdata) Then
+                    ' is rds file reader
                     Return rdata.CreatePairList
                 ElseIf RObjectSignature.IsDataFrame(rdata) Then
                     Return rdata.CreateRTable
@@ -303,6 +326,58 @@ Namespace Convertor
             Else
                 Return Nothing
             End If
+        End Function
+
+        <Extension>
+        Private Function extractMatrixDimNames(robj As RObject) As (rownames As String(), colnames As String())
+            Dim value = robj.value.CAR.value.data
+
+            If value.IsNullOrEmpty Then
+                Return Nothing
+            End If
+
+            Dim dim1 As RObject = value(0)
+            Dim dim2 As RObject = value(1)
+            Dim dimNames1 As String() = Nothing
+            Dim dimNames2 As String() = Nothing
+
+            If Not dim1 Is Nothing Then
+                dimNames1 = CLRVector.asCharacter(dim1.PullRObject(Nothing))
+            End If
+            If Not dim2 Is Nothing Then
+                dimNames2 = CLRVector.asCharacter(dim2.PullRObject(Nothing))
+            End If
+
+            Return (dimNames1, dimNames2)
+        End Function
+
+        <Extension>
+        Private Function CreateRMatrix(robj As RObject) As dataframe
+            Dim v As Array = robj.value.data
+            Dim dims As RObject = robj.attributes
+            Dim dimSize As Integer() = CLRVector.asInteger(dims.value.CAR.value.data)
+            Dim dimnames = dims.value.CDR.extractMatrixDimNames
+            Dim colnames As String() = dimnames.colnames
+            Dim value As Type = v.GetType.GetElementType
+            Dim colvec As Array
+            Dim name As String
+            Dim Matrix As New dataframe With {
+                .columns = New Dictionary(Of String, Array),
+                .rownames = dimnames.rownames
+            }
+            Dim offset As Integer
+
+            For Each i As Integer In Enumerable.Range(0, dimSize(1))
+                name = $"X_{i + 1}"
+                name = colnames.ElementAtOrDefault(i, name)
+                offset = i * dimSize(0)
+                colvec = Array.CreateInstance(If(value, GetType(Object)), dimSize(0))
+
+                Call Array.ConstrainedCopy(v, offset, colvec, Scan0, colvec.Length)
+                Call Matrix.add(name, colvec)
+            Next
+
+            Return Matrix
         End Function
 
         <Extension>

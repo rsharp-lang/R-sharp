@@ -1,85 +1,87 @@
 ﻿#Region "Microsoft.VisualBasic::060bab263ecbb7435de35e47e1416dd2, D:/GCModeller/src/R-sharp/Library/Rlapack//stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1274
-    '    Code Lines: 716
-    ' Comment Lines: 423
-    '   Blank Lines: 135
-    '     File Size: 52.27 KB
+' Summaries:
 
 
-    ' Module stats
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: matrixDataFrame, matrixDataFrame2, PCATable, printMatrix, printTtest
-    '               printTwoSampleTTest
-    '     Enum p_adjust_methods
-    ' 
-    '         BH, bonferroni, BY, fdr, hochberg
-    '         holm, hommel, none
-    ' 
-    ' 
-    ' 
-    '     Class PCAcalls
-    ' 
-    '         Properties: labels, pca
-    ' 
-    '         Function: ECDF, p_adjust, prcomp, spline, tabulateMode
-    ' 
-    '  
-    ' 
-    '     Function: aov, asDist, ChiSquare, corr, corr_sign
-    '               corrTest, dataframeRow, dist, dnorm, filterMissing
-    '               fisher_test, gammaCDF, getMatrix, getQuantileLevels, mantel_test
-    '               median, mul, (+2 Overloads) pow, quantile, ttest
-    '               ttestBatch, ttestImpl, varTest, z_score, z_scoreByColumn
-    '               z_scoreByRow
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1274
+'    Code Lines: 716
+' Comment Lines: 423
+'   Blank Lines: 135
+'     File Size: 52.27 KB
+
+
+' Module stats
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: matrixDataFrame, matrixDataFrame2, PCATable, printMatrix, printTtest
+'               printTwoSampleTTest
+'     Enum p_adjust_methods
+' 
+'         BH, bonferroni, BY, fdr, hochberg
+'         holm, hommel, none
+' 
+' 
+' 
+'     Class PCAcalls
+' 
+'         Properties: labels, pca
+' 
+'         Function: ECDF, p_adjust, prcomp, spline, tabulateMode
+' 
+'  
+' 
+'     Function: aov, asDist, ChiSquare, corr, corr_sign
+'               corrTest, dataframeRow, dist, dnorm, filterMissing
+'               fisher_test, gammaCDF, getMatrix, getQuantileLevels, mantel_test
+'               median, mul, (+2 Overloads) pow, quantile, ttest
+'               ttestBatch, ttestImpl, varTest, z_score, z_scoreByColumn
+'               z_scoreByRow
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Drawing
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -87,6 +89,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
+Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
@@ -136,12 +139,33 @@ Module stats
         Internal.ConsolePrinter.AttachConsoleFormatter(Of TwoSampleResult)(AddressOf printTwoSampleTTest)
         Internal.ConsolePrinter.AttachConsoleFormatter(Of FishersExactPvalues)(Function(o) o.ToString)
         Internal.ConsolePrinter.AttachConsoleFormatter(Of FTest)(Function(o) o.ToString)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of MultivariateAnalysisResult)(AddressOf printMvar)
 
         Internal.Object.Converts.makeDataframe.addHandler(GetType(DataMatrix), AddressOf matrixDataFrame)
         Internal.Object.Converts.makeDataframe.addHandler(GetType(DistanceMatrix), AddressOf matrixDataFrame)
         Internal.Object.Converts.makeDataframe.addHandler(GetType(CorrelationMatrix), AddressOf matrixDataFrame2)
         Internal.Object.Converts.makeDataframe.addHandler(GetType(PCAcalls), AddressOf PCATable)
     End Sub
+
+    Private Function printMvar(x As MultivariateAnalysisResult) As String
+        Dim sb As New StringBuilder
+        Dim text As New StringWriter(sb)
+
+        If x.analysis Is Nothing Then
+            Return "NULL"
+        End If
+
+        Select Case x.analysis
+            Case GetType(PLS) : Call x.WritePlsResult(text)
+            Case GetType(OPLS) : Call x.WriteOplsResult(text)
+            Case Else
+                Return $"not implements for {x.analysis.Name}!"
+        End Select
+
+        Call text.Flush()
+
+        Return sb.ToString
+    End Function
 
     ''' <summary>
     ''' 
@@ -1059,6 +1083,39 @@ Module stats
         End If
     End Function
 
+    <ExportAPI("lowess")>
+    Public Function Lowess(<RRawVectorArgument> x As Object,
+                           Optional f As Double = 2 / 3,
+                           Optional nsteps As Integer = 3,
+                           Optional env As Environment = Nothing) As Object
+
+        Dim px As Single(), py As Single()
+
+        If TypeOf x Is Rdataframe Then
+            With DirectCast(x, Rdataframe)
+                px = CLRVector.asFloat(!x)
+                py = CLRVector.asFloat(!y)
+            End With
+        ElseIf TypeOf x Is list Then
+            With DirectCast(x, list)
+                px = CLRVector.asFloat(!x)
+                py = CLRVector.asFloat(!y)
+            End With
+        Else
+            Return Internal.debug.stop("", env)
+        End If
+
+        Dim fit = px.Select(Function(xi, i) New PointF(xi, py(i))).Lowess(f, nsteps)
+        Dim result As New Rdataframe With {
+            .columns = New Dictionary(Of String, Array) From {
+                {"x", fit.x},
+                {"y", fit.y}
+            }
+        }
+
+        Return result
+    End Function
+
     ''' <summary>
     ''' ## F Test to Compare Two Variances
     ''' 
@@ -1206,6 +1263,97 @@ Module stats
 
             Return m
         End If
+    End Function
+
+    ''' <summary>
+    ''' ## Partial Least Squares Discriminant Analysis
+    ''' 
+    ''' ``plsda`` is used to calibrate, validate and use of partial least squares discrimination analysis (PLS-DA) model.
+    ''' </summary>
+    ''' <param name="x">matrix with predictors.</param>
+    ''' <param name="y">vector with class membership (should be either a factor with class
+    ''' names/numbers in case of multiple classes Or a vector with logical values in case
+    ''' of one class model).</param>
+    ''' <param name="ncomp">maximum number Of components To calculate.</param>
+    ''' <param name="center">logical, center or not predictors and response values.</param>
+    ''' <param name="scale">logical, scale (standardize) or not predictors and response values.</param>
+    ''' <param name="list">
+    ''' this function will returns a R# list that contains result data of the PLS-DA analysis by default, 
+    ''' or the raw .NET clr object of the PLS result if this parameter value set to FALSE.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("plsda")>
+    Public Function plsda(x As Rdataframe, <RRawVectorArgument> y As Object,
+                          Optional ncomp As Integer? = Nothing,
+                          Optional center As Boolean = True,
+                          Optional scale As Boolean = False,
+                          Optional list As Boolean = True,
+                          Optional env As Environment = Nothing) As Object
+
+        Dim xm As Double()() = x.forEachRow _
+            .Select(Function(ci) CLRVector.asNumeric(ci.value)) _
+            .ToArray
+        Dim ylabels As String() = Nothing
+        Dim yfactors As factor = Nothing
+        Dim yval As Double()
+
+        If y Is Nothing Then
+            Return Internal.debug.stop("the sample class information should not be nothing, it must be a vector of numeric data for regression or a character vector for classification!", env)
+        Else
+            y = REnv.TryCastGenericArray(y, env)
+        End If
+
+        If DataFramework.IsNumericCollection(y.GetType) Then
+            ' regression
+            yval = CLRVector.asNumeric(y)
+        Else
+            ylabels = CLRVector.asCharacter(y)
+            yfactors = factor.CreateFactor(ylabels)
+            yval = yfactors.asNumeric(ylabels)
+        End If
+
+        Dim ds = New StatisticsObject(xm, yval) With {
+            .decoder = yfactors
+        }
+
+        Call Enumerable.Range(0, x.ncols).DoEach(AddressOf ds.XIndexes.Add)
+        Call Enumerable.Range(0, x.nrows).DoEach(AddressOf ds.YIndexes.Add)
+        Call x.colnames.DoEach(AddressOf ds.XLabels.Add)
+
+        If Not ylabels.IsNullOrEmpty Then
+            Call ylabels.DoEach(AddressOf ds.YLabels.Add)
+        End If
+
+        Dim pls_mvar = PLS.PartialLeastSquares(ds, component:=If(ncomp, -1))
+
+        If Not list Then
+            Return pls_mvar
+        End If
+
+        Dim score = pls_mvar.GetPLSScore
+        Dim loading = pls_mvar.GetPLSLoading
+        Dim components = pls_mvar.GetComponents.ToArray
+        Dim scoreMN As Rdataframe = MathDataSet.toDataframe(score, Nothing, env)
+        Dim loadingMN As Rdataframe = MathDataSet.toDataframe(loading, Nothing, env)
+        Dim componentDf As New Rdataframe With {
+            .rownames = components.Select(Function(ci) CStr(ci.Order)).ToArray,
+            .columns = New Dictionary(Of String, Array)
+        }
+
+        Call componentDf.add("Component", components.Select(Function(ci) ci.Order))
+        Call componentDf.add("SSCV", components.Select(Function(ci) ci.SSCV))
+        Call componentDf.add("PRESS", components.Select(Function(ci) ci.Press))
+        Call componentDf.add("Q2", components.Select(Function(ci) ci.Q2))
+        Call componentDf.add("Q2(cum)", components.Select(Function(ci) ci.Q2cum))
+
+        Return New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"component", componentDf},
+                {"scoreMN", scoreMN},
+                {"loadingMN", loadingMN}
+            }
+        }
     End Function
 
     ''' <summary>

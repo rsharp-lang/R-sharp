@@ -2929,6 +2929,9 @@ RE0:
         ''' <returns>
         ''' The warning message as character string, invisibly.
         ''' </returns>
+        ''' <remarks>
+        ''' Create a new wraning message in current environment frame
+        ''' </remarks>
         <ExportAPI("warning")>
         <DebuggerStepThrough>
         Public Function warning(<RRawVectorArgument> message As Object, Optional envir As Environment = Nothing) As Message

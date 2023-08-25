@@ -1573,6 +1573,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' 1. select by name: ``select(name1, name2)``
         ''' 2. field renames: ``select(name1 -> data1)``
         ''' </param>
+        ''' <param name="strict">
+        ''' By default when this function running in strict mode, an error message 
+        ''' will be returned if there is a missing data fields exists in the selector
+        ''' list
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns>
         ''' An object of the same type as .data. The output has the following properties:
@@ -1587,6 +1592,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <ExportAPI("select")>
         <RApiReturn(GetType(dataframe))>
         Public Function [select](_data As dataframe,
+                                 Optional strict As Boolean = True,
                                  <RListObjectArgument>
                                  Optional selectors As list = Nothing,
                                  Optional env As Environment = Nothing) As Object
@@ -1621,7 +1627,21 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 End If
 
                 If Not _data.hasName(src_name) Then
-                    Return Internal.debug.stop($"missing data field '{src_name}' in your dataframe!", env)
+                    Dim message As String() = {
+                        $"missing data field '{src_name}' in your dataframe!",
+                        $"field: {src_name}"
+                    }
+
+                    If src_name = NameOf(strict) Then
+                        Continue For
+                    ElseIf Not strict Then
+                        ' skip of the missing data field in the select function
+                        ' when set strict parameter value to TRUE
+                        Call warning(message, env)
+                        Continue For
+                    End If
+
+                    Return Internal.debug.stop(message, env)
                 ElseIf rename.StringEmpty Then
                     rename = src_name
                 End If

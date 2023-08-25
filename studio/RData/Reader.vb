@@ -418,7 +418,7 @@ Public MustInherit Class Reader
         Dim filetype As FileTypes = file_type(reader)
 
         Select Case filetype
-            Case FileTypes.rdata_binary_v2, FileTypes.rdata_binary_v3
+            Case FileTypes.rdata_binary_v2, FileTypes.rdata_binary_v3, FileTypes.Unknown
                 Return ParseRDataBinary(reader, expand_altrep, debug)
             Case FileTypes.gzip
                 Using ms As New MemoryStream
