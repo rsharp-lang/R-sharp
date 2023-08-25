@@ -457,49 +457,29 @@ Module stats
     ''' different builds of R.
     ''' </remarks>
     <ExportAPI("prcomp")>
-    <RApiReturn(GetType(PCA))>
+    <RApiReturn(GetType(MultivariateAnalysisResult))>
     Public Function prcomp(<RRawVectorArgument>
                            x As Object,
                            Optional scale As Boolean = False,
                            Optional center As Boolean = False,
+                           Optional pc As Integer = 5,
                            Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
             Return Internal.debug.stop("'data' must be of a vector type, was 'NULL'", env)
         End If
 
-        Dim matrix As Double()()
-        Dim labels As String()
+        Dim ds As StatisticsObject
 
         If TypeOf x Is Rdataframe Then
-            With DirectCast(x, Rdataframe)
-                matrix = .nrows _
-                    .Sequence _
-                    .Select(Function(i)
-                                Return CLRVector.asNumeric(.getRowList(i, drop:=False))
-                            End Function) _
-                    .Select(Function(v) DirectCast(v, Double())) _
-                    .ToArray
-                labels = .getRowNames
-            End With
+            ds = DirectCast(x, Rdataframe).GetDataSetCommon(Nothing)
         Else
             Throw New NotImplementedException
         End If
 
-        Dim PCA As New PCA(matrix, center, scale)
-        Dim calls As New PCAcalls With {
-            .labels = labels,
-            .pca = PCA
-        }
+        Dim PCA = ds.PrincipalComponentAnalysis(pc)
 
-        Return calls
+        Return PCA
     End Function
-
-    Public Class PCAcalls
-
-        Public Property pca As PCA
-        Public Property labels As String()
-
-    End Class
 
     ''' <summary>
     ''' 
@@ -1266,6 +1246,47 @@ Module stats
     End Function
 
     ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="y">Y could be nothing for PCA analysis</param>
+    ''' <returns></returns>
+    <Extension>
+    Private Function GetDataSetCommon(x As Rdataframe, y As Array) As StatisticsObject
+        Dim ylabels As String() = Nothing
+        Dim yfactors As factor = Nothing
+        Dim yval As Double()
+        Dim xm As Double()() = x.forEachRow _
+            .Select(Function(ci) CLRVector.asNumeric(ci.value)) _
+            .ToArray
+
+        If Not y Is Nothing Then
+            If DataFramework.IsNumericCollection(y.GetType) Then
+                ' regression
+                yval = CLRVector.asNumeric(y)
+            Else
+                ylabels = CLRVector.asCharacter(y)
+                yfactors = factor.CreateFactor(ylabels)
+                yval = yfactors.asNumeric(ylabels)
+            End If
+        End If
+
+        Dim ds As New StatisticsObject(xm, yval) With {
+            .decoder = yfactors
+        }
+
+        Call Enumerable.Range(0, x.ncols).DoEach(AddressOf ds.XIndexes.Add)
+        Call Enumerable.Range(0, x.nrows).DoEach(AddressOf ds.YIndexes.Add)
+        Call x.colnames.DoEach(AddressOf ds.XLabels.Add)
+
+        If Not ylabels.IsNullOrEmpty Then
+            Call ylabels.DoEach(AddressOf ds.YLabels.Add)
+        End If
+
+        Return ds
+    End Function
+
+    ''' <summary>
     ''' ## Partial Least Squares Discriminant Analysis
     ''' 
     ''' ``plsda`` is used to calibrate, validate and use of partial least squares discrimination analysis (PLS-DA) model.
@@ -1291,40 +1312,13 @@ Module stats
                           Optional list As Boolean = True,
                           Optional env As Environment = Nothing) As Object
 
-        Dim xm As Double()() = x.forEachRow _
-            .Select(Function(ci) CLRVector.asNumeric(ci.value)) _
-            .ToArray
-        Dim ylabels As String() = Nothing
-        Dim yfactors As factor = Nothing
-        Dim yval As Double()
-
         If y Is Nothing Then
             Return Internal.debug.stop("the sample class information should not be nothing, it must be a vector of numeric data for regression or a character vector for classification!", env)
         Else
             y = REnv.TryCastGenericArray(y, env)
         End If
 
-        If DataFramework.IsNumericCollection(y.GetType) Then
-            ' regression
-            yval = CLRVector.asNumeric(y)
-        Else
-            ylabels = CLRVector.asCharacter(y)
-            yfactors = factor.CreateFactor(ylabels)
-            yval = yfactors.asNumeric(ylabels)
-        End If
-
-        Dim ds = New StatisticsObject(xm, yval) With {
-            .decoder = yfactors
-        }
-
-        Call Enumerable.Range(0, x.ncols).DoEach(AddressOf ds.XIndexes.Add)
-        Call Enumerable.Range(0, x.nrows).DoEach(AddressOf ds.YIndexes.Add)
-        Call x.colnames.DoEach(AddressOf ds.XLabels.Add)
-
-        If Not ylabels.IsNullOrEmpty Then
-            Call ylabels.DoEach(AddressOf ds.YLabels.Add)
-        End If
-
+        Dim ds = x.GetDataSetCommon(y)
         Dim pls_mvar = PLS.PartialLeastSquares(ds, component:=If(ncomp, -1))
 
         If Not list Then
