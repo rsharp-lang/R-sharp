@@ -10,7 +10,7 @@ const raw = images_set
 format = "mnist", 
 dataset = "dataframe", 
 labelfile = "../mnist_dataset/train-labels-idx1-ubyte",
-subset = 25001
+subset = 50
 );
 
 str(raw);
@@ -35,7 +35,7 @@ cnn = cnn + input_layer([28, 28])
 + pool_layer([2, 2])
 + conv_layer(12, [5, 5])
 + pool_layer([2, 2])
-# + softmax_layer()
++ softmax_layer()
 + output_layer(class.num = 10)
 ;
 
