@@ -124,12 +124,12 @@ Module CNNTools
         Return layer.buildConvLayer(outMapNum, sz_val)
     End Function
 
-    <ExportAPI("samp_layer")>
-    Public Function samp_layer(<RRawVectorArgument> scaleSize As Object) As layer
+    <ExportAPI("pool_layer")>
+    Public Function pool_layer(<RRawVectorArgument> scaleSize As Object) As layer
         Dim sz As Integer() = CLRVector.asInteger(scaleSize)
         Dim scale As New Dimension(sz(0), sz(1))
 
-        Return layer.buildSampLayer(scale)
+        Return layer.buildPoolLayer(scale)
     End Function
 
     <ExportAPI("output_layer")>
