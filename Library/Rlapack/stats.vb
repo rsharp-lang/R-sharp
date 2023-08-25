@@ -144,7 +144,6 @@ Module stats
         Internal.Object.Converts.makeDataframe.addHandler(GetType(DataMatrix), AddressOf matrixDataFrame)
         Internal.Object.Converts.makeDataframe.addHandler(GetType(DistanceMatrix), AddressOf matrixDataFrame)
         Internal.Object.Converts.makeDataframe.addHandler(GetType(CorrelationMatrix), AddressOf matrixDataFrame2)
-        Internal.Object.Converts.makeDataframe.addHandler(GetType(PCAcalls), AddressOf PCATable)
     End Sub
 
     Private Function printMvar(x As MultivariateAnalysisResult) As String
@@ -165,33 +164,6 @@ Module stats
         Call text.Flush()
 
         Return sb.ToString
-    End Function
-
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="x"></param>
-    ''' <param name="args">
-    ''' npc = i32
-    ''' </param>
-    ''' <param name="env"></param>
-    ''' <returns></returns>
-    Private Function PCATable(x As PCAcalls, args As list, env As Environment) As Rdataframe
-        Dim npc As Integer = args.getValue("npc", env, 2)
-        Dim data As New Rdataframe With {
-            .rownames = x.labels,
-            .columns = New Dictionary(Of String, Array)
-        }
-        Dim components = x.pca.Project(npc)
-
-        For i As Integer = 0 To npc - 1
-            Dim index As Integer = i
-            Dim name As String = $"dim{i + 1}"
-
-            Call data.add(name, components.Select(Function(r) r(index)))
-        Next
-
-        Return data
     End Function
 
     Private Function matrixDataFrame2(x As CorrelationMatrix, args As list, env As Environment) As Rdataframe
