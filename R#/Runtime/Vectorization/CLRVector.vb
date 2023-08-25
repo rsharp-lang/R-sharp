@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::43e6cefe25bc95df71805fee8717f65f, D:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/CLRVector.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 407
-    '    Code Lines: 334
-    ' Comment Lines: 28
-    '   Blank Lines: 45
-    '     File Size: 16.11 KB
+' Summaries:
 
 
-    '     Module CLRVector
-    ' 
-    '         Function: asCharacter, asDate, asFloat, asInteger, (+2 Overloads) asLogical
-    '                   asLong, asNumeric, asRawByte, castVector, parseString
-    '                   safeCharacters, testNull
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 407
+'    Code Lines: 334
+' Comment Lines: 28
+'   Blank Lines: 45
+'     File Size: 16.11 KB
+
+
+'     Module CLRVector
+' 
+'         Function: asCharacter, asDate, asFloat, asInteger, (+2 Overloads) asLogical
+'                   asLong, asNumeric, asRawByte, castVector, parseString
+'                   safeCharacters, testNull
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop.[CType]
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -129,6 +130,8 @@ Namespace Runtime.Vectorization
                 Return New Long() {CLng(x)}
             ElseIf x.GetType.ImplementInterface(GetType(IEnumerable(Of Long))) Then
                 Return DirectCast(x, IEnumerable(Of Long)).ToArray
+            ElseIf x.GetType.ImplementInterface(GetType(ICTypeVector)) Then
+                Return DirectCast(x, ICTypeVector).ToLong
             ElseIf TypeOf x Is Integer() OrElse TypeOf x Is List(Of Integer) Then
                 Return DirectCast(x, IEnumerable(Of Integer)) _
                     .Select(Function(i) CLng(i)) _
@@ -168,6 +171,8 @@ Namespace Runtime.Vectorization
                 Return x
             ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of String)) Then
                 Return DirectCast(x, IEnumerable(Of String)).ToArray
+            ElseIf x.GetType.ImplementInterface(GetType(ICTypeVector)) Then
+                Return DirectCast(x, ICTypeVector).ToFactors
             ElseIf TypeOf x Is String()() Then
                 Return DirectCast(x, String()()) _
                     .Select(Function(r) r(Scan0)) _
@@ -246,6 +251,8 @@ Namespace Runtime.Vectorization
                 Return (From xi As Object
                         In DirectCast(x, IEnumerable).AsQueryable
                         Select CInt(xi)).ToArray
+            ElseIf x.GetType.ImplementInterface(GetType(ICTypeVector)) Then
+                Return DirectCast(x, ICTypeVector).ToInteger
             ElseIf DataFramework.IsNumericType(x.GetType) Then
                 Return New Integer() {CInt(x)}
             ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of Integer)) Then
@@ -278,6 +285,8 @@ Namespace Runtime.Vectorization
 
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
+            ElseIf x.GetType.ImplementInterface(GetType(ICTypeVector)) Then
+                Return DirectCast(x, ICTypeVector).ToFloat
             End If
 
             If TypeOf x Is Double() Then
@@ -346,6 +355,8 @@ Namespace Runtime.Vectorization
                 Return (From xi As Object
                         In populator
                         Select CDbl(xi)).ToArray
+            ElseIf x.GetType.ImplementInterface(GetType(ICTypeVector)) Then
+                Return DirectCast(x, ICTypeVector).ToNumeric
             ElseIf DataFramework.IsNumericType(x.GetType) Then
                 ' is a single scalar value
                 Return New Double() {CDbl(x)}
