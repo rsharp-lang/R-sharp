@@ -262,7 +262,7 @@ Namespace Language.TokenIcer
             "suppress",
             "typeof", "modeof", "valueof",
             "using",
-            "new", "try", "switch"
+            "new", "try", "switch", "of"
         }
 
         Private Function isLINQKeyword(word As String) As Boolean
