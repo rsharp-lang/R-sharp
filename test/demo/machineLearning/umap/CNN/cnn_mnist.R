@@ -35,6 +35,7 @@ cnn = cnn + input_layer([28, 28])
 + pool_layer([2, 2])
 + conv_layer(12, [5, 5])
 + pool_layer([2, 2])
++ softmax_layer()
 + output_layer(class.num = 10)
 ;
 

@@ -124,6 +124,16 @@ Module CNNTools
         Return layer.buildConvLayer(outMapNum, sz_val)
     End Function
 
+    <ExportAPI("softmax_layer")>
+    Public Function softmax_layer() As layer
+        Return layer.buildSoftmaxLayer
+    End Function
+
+    <ExportAPI("relu_layer")>
+    Public Function relu_layer() As layer
+        Return layer.buildReLULayer
+    End Function
+
     <ExportAPI("pool_layer")>
     Public Function pool_layer(<RRawVectorArgument> scaleSize As Object) As layer
         Dim sz As Integer() = CLRVector.asInteger(scaleSize)
