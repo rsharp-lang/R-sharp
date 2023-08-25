@@ -59,11 +59,11 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
-Imports Microsoft.VisualBasic.CommandLine.Parsers
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.Text.Parser
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
 Imports SMRUCC.Rsharp.Runtime
@@ -168,7 +168,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
             Dim valStr As String = CType(REnv.getFirst(val), String)
             Dim tokens As String() = valStr.LineTokens _
-                .Select(Function(line) CLIParser.GetTokens(line)) _
+                .Select(Function(line) DelimiterParser.GetTokens(line)) _
                 .IteratesALL _
                 .Select(Function(str)
                             Return str.Trim(ASCII.TAB, " "c, ASCII.CR, ASCII.LF)

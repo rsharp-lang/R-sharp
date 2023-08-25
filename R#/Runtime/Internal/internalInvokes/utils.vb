@@ -64,7 +64,6 @@ Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
-Imports Microsoft.VisualBasic.CommandLine.Parsers
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.FileIO
@@ -75,6 +74,7 @@ Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.Text.Parser
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Components
@@ -558,7 +558,7 @@ Namespace Runtime.Internal.Invokes
                 .Trim(" "c, ASCII.TAB, ASCII.CR, ASCII.LF) _
                 .LineTokens _
                 .JoinBy(" ") _
-                .DoCall(AddressOf CLIParser.GetTokens)
+                .DoCall(AddressOf DelimiterParser.GetTokens)
             Dim executative As String = tokens(Scan0)
             Dim arguments As String = tokens _
                 .Skip(1) _
