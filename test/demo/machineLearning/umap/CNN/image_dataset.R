@@ -66,10 +66,10 @@ for(v in populate_dataset(1000)) {
     ds_labels[[labelfile]] = labels;
 
     bitmap(file = labelfile, size = x4_size);
-    rasterHeatmap(matrix_set[[1]], region = graphics2D::rect(x =0, y =0, w = unit_size, h = unit_size, float = FALSE));
-    rasterHeatmap(matrix_set[[2]], region = graphics2D::rect(x =unit_size, y =0, w = unit_size, h = unit_size, float = FALSE));
-    rasterHeatmap(matrix_set[[3]], region = graphics2D::rect(x =0, y =unit_size, w = unit_size, h = unit_size, float = FALSE));
-    rasterHeatmap(matrix_set[[4]], region = graphics2D::rect(x =unit_size, y =unit_size, w = unit_size, h = unit_size, float = FALSE));
+    rasterHeatmap(matrix_set[[1]], region = graphics2D::rect(x =0, y =0, w = unit_size, h = unit_size, float = FALSE), colorName = "Gray");
+    rasterHeatmap(matrix_set[[2]], region = graphics2D::rect(x =unit_size, y =0, w = unit_size, h = unit_size, float = FALSE), colorName = "Gray");
+    rasterHeatmap(matrix_set[[3]], region = graphics2D::rect(x =0, y =unit_size, w = unit_size, h = unit_size, float = FALSE), colorName = "Gray");
+    rasterHeatmap(matrix_set[[4]], region = graphics2D::rect(x =unit_size, y =unit_size, w = unit_size, h = unit_size, float = FALSE), colorName = "Gray");
     dev.off();
 }
 
