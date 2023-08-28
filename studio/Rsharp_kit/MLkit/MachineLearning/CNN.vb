@@ -165,6 +165,8 @@ Module CNNTools
     <Extension>
     Private Function sample_dataset_from_df(df As dataframe, labels As Object, env As Environment) As Object
         If TypeOf labels Is String Then
+            ' labels comes from one of the data fields inside the given dataframe
+            ' single class label
             Dim label As Double() = CLRVector.asNumeric(df(CStr(labels)))
 
             df = df.projectByColumn({CStr(labels)}, env, reverse:=True)
@@ -177,6 +179,21 @@ Module CNNTools
                             }
                         End Function) _
                 .ToArray
+        ElseIf TypeOf labels Is list Then
+            Dim li = DirectCast(labels, list)
+
+            If li.data.All(Function(a) DataFramework.IsNumericCollection(a.GetType)) Then
+                ' multiple class
+                Dim ds As New List(Of SampleData)
+
+                For Each row As NamedCollection(Of Object) In df.forEachRow
+                    ds.Add(New SampleData(CLRVector.asNumeric(row.value), CLRVector.asNumeric(li.getByName(row.name))))
+                Next
+
+                Return ds
+            Else
+                Return Message.InCompatibleType(GetType(String), labels.GetType, env)
+            End If
         Else
             labels = REnv.TryCastGenericArray(REnv.asVector(Of Object)(labels), env)
 
