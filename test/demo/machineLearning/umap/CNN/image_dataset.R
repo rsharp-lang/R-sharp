@@ -5,9 +5,10 @@ require(graphics);
 
 setwd(@dir);
 
+const unit_size = 28;
+const x4_size = [unit_size, unit_size] * 2;
+
 let populate_dataset = function(n) {
-    const unit_size = 28;
-    const x4_size = [unit_size, unit_size] * 2;
     const images_set = "../mnist_dataset/train-images-idx3-ubyte";
     const raw = images_set 
     |> read.MNIST( 
@@ -62,6 +63,10 @@ for(v in populate_dataset(6)) {
     let matrix_set = v$matrix_set;
 
     ds_labels[[labelfile]] = labels;
+
+    bitmap(file = labelfile, size = x4_size) {
+        
+    }
 }
 
 require(JSON);

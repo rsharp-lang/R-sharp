@@ -51,6 +51,7 @@
 
 Imports System.Drawing
 Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
@@ -58,6 +59,7 @@ Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -88,45 +90,62 @@ Module Rgraphics
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("as.raster")>
-    Public Function as_raster(img As Image, <RRawVectorArgument> Optional rgb_stack As Object = Nothing) As RasterScaler
+    <RApiReturn(GetType(RasterScaler))>
+    Public Function as_raster(img As Object,
+                              <RRawVectorArgument>
+                              Optional rgb_stack As Object = Nothing,
+                              Optional env As Environment = Nothing) As Object
+
         Dim rgbs As String() = CLRVector.asCharacter(rgb_stack)
-        Dim raster_copy As New Bitmap(img)
         Dim formula As Func(Of Color, Single) = Nothing
 
         If Not rgbs.IsNullOrEmpty Then
-            Dim get_channels As Func(Of Color, Single()) =
-                Function(c)
-                    Dim s As Single() = New Single(rgbs.Length - 1) {}
-
-                    For i As Integer = 0 To rgbs.Length - 1
-                        Select Case rgbs(i)
-                            Case "r" : s(i) = c.R / 255 * 10
-                            Case "g" : s(i) = c.G / 255 * 10
-                            Case "b" : s(i) = c.B / 255 * 10
-                            Case Else
-                                ' do nothing
-                        End Select
-                    Next
-
-                    Return s
-                End Function
-
-            formula =
-                Function(c)
-                    Dim v As Single() = get_channels(c)
-                    Dim scale As Single = 0
-
-                    Array.Reverse(v)
-
-                    For i As Integer = 0 To v.Length - 1
-                        scale += v(i) * (10 ^ i)
-                    Next
-
-                    Return scale
-                End Function
+            formula = rgb_formula(rgbs)
         End If
 
-        Return New RasterScaler(raster_copy, formula)
+        If TypeOf img Is Image OrElse TypeOf img Is Bitmap Then
+            Return New RasterScaler(New Bitmap(CType(img, Image)), formula)
+        ElseIf img.GetType.ImplementInterface(Of GeneralMatrix) Then
+            Return rasetr_matrix(img, formula, env)
+        Else
+            Return Message.InCompatibleType(GetType(Image), img.GetType, env)
+        End If
+    End Function
+
+    Private Function rasetr_matrix(m As NumericMatrix, formula As Func(Of Color, Single), env As Environment) As RasterScaler
+        Return New RasterScaler(m.imageFromMatrix("Gray", env), formula)
+    End Function
+
+    Private Function rgb_formula(rgbs As String()) As Func(Of Color, Single)
+        Dim get_channels As Func(Of Color, Single()) =
+            Function(c)
+                Dim s As Single() = New Single(rgbs.Length - 1) {}
+
+                For i As Integer = 0 To rgbs.Length - 1
+                    Select Case rgbs(i)
+                        Case "r" : s(i) = c.R / 255 * 10
+                        Case "g" : s(i) = c.G / 255 * 10
+                        Case "b" : s(i) = c.B / 255 * 10
+                        Case Else
+                            ' do nothing
+                    End Select
+                Next
+
+                Return s
+            End Function
+
+        Return Function(c)
+                   Dim v As Single() = get_channels(c)
+                   Dim scale As Single = 0
+
+                   Call Array.Reverse(v)
+
+                   For i As Integer = 0 To v.Length - 1
+                       scale += v(i) * (10 ^ i)
+                   Next
+
+                   Return scale
+               End Function
     End Function
 
     <ExportAPI("raster_vec")>
@@ -174,23 +193,29 @@ Module Rgraphics
         If TypeOf x Is matrix Then
             Throw New NotImplementedException
         ElseIf x.GetType.ImplementInterface(Of GeneralMatrix) Then
-            Dim m As GeneralMatrix = DirectCast(x, GeneralMatrix)
-            Dim raster As New RasterMatrix(x)
-            Dim dims As New Size(m.ColumnDimension, m.RowDimension)
-            Dim ms As New MemoryStream
-
-            Call Internal.Invokes.graphics.bitmap(
-                file:=ms,
-                args:=New list With {.slots = New Dictionary(Of String, Object) From {{"size", $"{dims.Width},{dims.Height}"}}},
-                env:=env
-            )
-            Call graphics2D.rasterHeatmap(raster, colorName:=col, dimSize:=dims, env:=env)
-            Call Internal.Invokes.graphics.devOff(env:=env)
-            Call ms.Flush()
-
-            Return System.Drawing.Image.FromStream(ms)
+            Return DirectCast(x, GeneralMatrix).imageFromMatrix(col, env)
         Else
             Throw New NotImplementedException
         End If
+    End Function
+
+    <Extension>
+    Private Function imageFromMatrix(m As GeneralMatrix, colors As Object, env As Environment) As Image
+        Dim raster As New RasterMatrix(m)
+        Dim dims As New Size(m.ColumnDimension, m.RowDimension)
+        Dim ms As New MemoryStream
+
+        Call Internal.Invokes.graphics.bitmap(
+            file:=ms,
+            args:=New list With {.slots = New Dictionary(Of String, Object) From {{"size", $"{dims.Width},{dims.Height}"}}},
+            env:=env
+        )
+        Call graphics2D.rasterHeatmap(raster, colorName:=colors, dimSize:=dims, env:=env)
+        Call Internal.Invokes.graphics.devOff(env:=env)
+        Call ms.Flush()
+
+#Disable Warning
+        Return System.Drawing.Image.FromStream(ms)
+#Enable Warning
     End Function
 End Module
