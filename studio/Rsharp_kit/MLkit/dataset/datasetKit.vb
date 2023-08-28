@@ -449,6 +449,14 @@ Module datasetKit
         Return x.ToTable(markOuput).ToArray
     End Function
 
+    <ExportAPI("as.sampleSet")>
+    Public Function SampleList(x As DataSet) As SampleData()
+        Return x.DataSamples _
+            .AsEnumerable _
+            .Select(Function(si) New SampleData(si)) _
+            .ToArray
+    End Function
+
     ''' <summary>
     ''' read the dataset for training the machine learning model
     ''' </summary>
