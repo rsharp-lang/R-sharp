@@ -54,6 +54,7 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.CNN
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
@@ -185,13 +186,51 @@ Module CNNTools
         End If
     End Function
 
-    <ExportAPI("sample_image_dataset")>
+    <ExportAPI("sample_dataset.image")>
+    <RApiReturn(GetType(SampleData))>
     Public Function sample_image_dataset(<RRawVectorArgument> images As Object,
                                          <RRawVectorArgument>
                                          Optional labels As Object = Nothing,
+                                         <RRawVectorArgument>
+                                         Optional resize As Object = Nothing,
                                          Optional env As Environment = Nothing) As Object
 
+        Dim resize_int As Integer() = CLRVector.asInteger(resize)
+
+        If labels Is Nothing Then
+            ' create sample data for self encoder
+            labels = New list With {.slots = New Dictionary(Of String, Object)}
+        End If
+
         If TypeOf images Is list Then
+            Dim imageList = DirectCast(images, list)
+            Dim ds As New List(Of SampleData)
+
+            If TypeOf labels Is list Then
+                Dim labelSet As list = DirectCast(labels, list)
+                Dim keys = imageList.getNames
+
+                For Each key As String In keys
+                    Dim img As Image = imageList.getByName(key)
+                    Dim v As Double() = RasterScaler.ToRasterVector(img, resize_int)
+                    Dim lable As Double() = CLRVector.asNumeric(labelSet.getByName(key))
+
+                    ds.Add(New SampleData(v, lable))
+                Next
+            Else
+                Dim labelSet As Double() = CLRVector.asNumeric(labels)
+                Dim keys = imageList.getNames
+
+                For i As Integer = 0 To keys.Length - 1
+                    Dim img As Image = imageList.getByName(keys(i))
+                    Dim v As Double() = RasterScaler.ToRasterVector(img, resize_int)
+                    Dim label As Double = labelSet(i)
+
+                    ds.Add(New SampleData(v, label))
+                Next
+            End If
+
+            Return ds.ToArray
         Else
             Dim list = pipeline.TryCreatePipeline(Of Image)(images, env)
 
@@ -201,7 +240,7 @@ Module CNNTools
 
             Dim imageList = list.populates(Of Image)(env).ToArray
 
-
+            Throw New NotImplementedException
         End If
     End Function
 
