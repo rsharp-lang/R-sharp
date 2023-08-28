@@ -151,7 +151,7 @@ Module CNNTools
 
     <ExportAPI("sample_dataset")>
     <RApiReturn(GetType(SampleData))>
-    Public Function sample_dataset(dataset As Object,
+    Public Function sample_dataset(<RRawVectorArgument> dataset As Object,
                                    <RRawVectorArgument>
                                    Optional labels As Object = Nothing,
                                    Optional env As Environment = Nothing) As Object
@@ -182,6 +182,26 @@ Module CNNTools
             Return ds
         Else
             Return Message.InCompatibleType(GetType(dataframe), dataset.GetType, env)
+        End If
+    End Function
+
+    <ExportAPI("sample_image_dataset")>
+    Public Function sample_image_dataset(<RRawVectorArgument> images As Object,
+                                         <RRawVectorArgument>
+                                         Optional labels As Object = Nothing,
+                                         Optional env As Environment = Nothing) As Object
+
+        If TypeOf images Is list Then
+        Else
+            Dim list = pipeline.TryCreatePipeline(Of Image)(images, env)
+
+            If list.isError Then
+                Return list.getError
+            End If
+
+            Dim imageList = list.populates(Of Image)(env).ToArray
+
+
         End If
     End Function
 
