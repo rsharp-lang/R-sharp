@@ -66,7 +66,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports layer = Microsoft.VisualBasic.MachineLearning.CNN.Layer
+Imports layer = Microsoft.VisualBasic.MachineLearning.CNN.layers.Layer
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -88,7 +88,7 @@ Module CNNTools
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("cnn")>
-    <RApiReturn(GetType(CNN), GetType(LayerBuilder))>
+    <RApiReturn(GetType(ConvolutionalNN), GetType(LayerBuilder))>
     Public Function cnn_new(<RRawVectorArgument>
                             Optional file As Object = Nothing,
                             Optional env As Environment = Nothing) As Object
@@ -297,12 +297,12 @@ Module CNNTools
     End Function
 
     <ExportAPI("training")>
-    <RApiReturn(GetType(CNN))>
+    <RApiReturn(GetType(ConvolutionalNN))>
     Public Function training(cnn As Object, dataset As SampleData(),
                              Optional max_loops As Integer = 100,
                              Optional batch_size As Integer? = Nothing,
                              Optional env As Environment = Nothing) As Object
-        Dim cnn_val As CNN
+        Dim cnn_val As ConvolutionalNN
         Dim batchSize As Integer
 
         If batch_size Is Nothing Then
@@ -311,12 +311,12 @@ Module CNNTools
             batchSize = CInt(batch_size)
         End If
 
-        If TypeOf cnn Is CNN Then
+        If TypeOf cnn Is ConvolutionalNN Then
             cnn_val = cnn
         ElseIf TypeOf cnn Is LayerBuilder Then
-            cnn_val = New CNN(layerBuilder:=cnn, batchSize:=batchSize)
+            cnn_val = New ConvolutionalNN(cnn)
         Else
-            Return Message.InCompatibleType(GetType(CNN), cnn.GetType, env)
+            Return Message.InCompatibleType(GetType(ConvolutionalNN), cnn.GetType, env)
         End If
 
         cnn_val = New Trainer(Sub(s) base.print(s,, env)).train(cnn_val, dataset, max_loops)
@@ -325,7 +325,7 @@ Module CNNTools
     End Function
 
     <ExportAPI("predict")>
-    Public Function predict(cnn As CNN, dataset As Object,
+    Public Function predict(cnn As ConvolutionalNN, dataset As Object,
                             <RRawVectorArgument>
                             Optional class_labels As Object = "class_%d",
                             Optional env As Environment = Nothing) As Object
@@ -435,7 +435,7 @@ Module CNNTools
 
         If TypeOf model Is CeNiN Then
             result = DirectCast(model, CeNiN).Save(buffer)
-        ElseIf TypeOf model Is CNN Then
+        ElseIf TypeOf model Is ConvolutionalNN Then
             Try
                 Call SaveModelCNN.Write(model, buffer)
                 result = True
