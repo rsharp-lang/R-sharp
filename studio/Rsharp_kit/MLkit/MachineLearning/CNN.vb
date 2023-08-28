@@ -215,7 +215,7 @@ Module CNNTools
                     Dim v As Double() = RasterScaler.ToRasterVector(img, resize_int)
                     Dim lable As Double() = CLRVector.asNumeric(labelSet.getByName(key))
 
-                    ds.Add(New SampleData(v, lable))
+                    ds.Add(New SampleData(v, lable) With {.id = key})
                 Next
             Else
                 Dim labelSet As Double() = CLRVector.asNumeric(labels)
@@ -226,7 +226,7 @@ Module CNNTools
                     Dim v As Double() = RasterScaler.ToRasterVector(img, resize_int)
                     Dim label As Double = labelSet(i)
 
-                    ds.Add(New SampleData(v, label))
+                    ds.Add(New SampleData(v, label) With {.id = keys(i)})
                 Next
             End If
 

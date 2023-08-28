@@ -303,13 +303,33 @@ Module datasetKit
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("as.MLdataset")>
-    Public Function CreateMLdataset(x As FeatureFrame,
+    Public Function CreateMLdataset(<RRawVectorArgument> x As Object,
                                     <RRawVectorArgument>
-                                    labels As Object,
+                                    Optional labels As Object = Nothing,
                                     Optional env As Environment = Nothing) As Object
+        Dim ds As DataSet
 
-        Dim outputLabels As String() = CLRVector.asCharacter(labels)
-        Dim ds As DataSet = x.Imports(labels:=outputLabels)
+        If TypeOf x Is FeatureFrame Then
+            ds = DirectCast(x, FeatureFrame).Imports(labels:=CLRVector.asCharacter(labels))
+        ElseIf DataFramework.IsCollection(Of Sample)(x.GetType) Then
+            Dim sampleList As New SampleList(DirectCast(x, IEnumerable(Of Sample)))
+            Dim names As String() = sampleList(0).vector _
+                .Select(Function(nil, i) $"x{i + 1}") _
+                .ToArray
+            Dim norm As NormalizeMatrix = NormalizeMatrix.CreateFromSamples(sampleList, names, estimateQuantile:=False)
+
+            ds = New DataSet With {
+                .DataSamples = sampleList,
+                .NormalizeMatrix = norm,
+                .output = sampleList(0).target _
+                    .Select(Function(nil, i) $"y{i + 1}") _
+                    .ToArray
+            }
+        ElseIf DataFramework.IsCollection(Of SampleData)(x.GetType) Then
+            Return SampleData.CreateDataSet(DirectCast(x, IEnumerable(Of SampleData)))
+        Else
+            Return Message.InCompatibleType(GetType(FeatureFrame), x.GetType, env)
+        End If
 
         Return ds
     End Function
@@ -379,7 +399,7 @@ Module datasetKit
             Dim camera As Camera = args.getValue(Of Camera)("camera", env)
 
             If camera Is Nothing Then
-                env.AddMessage("the 3D camera is nothing, default camera value will be apply!", MSG_TYPES.WRN)
+                env.AddMessage("the 3D camera Is nothing, default camera value will be apply!", MSG_TYPES.WRN)
                 camera = New Camera With {
                     .screen = size.SizeParser,
                     .angleX = 120,
