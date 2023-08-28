@@ -146,8 +146,8 @@ Module CNNTools
     End Function
 
     <ExportAPI("output_layer")>
-    Public Function output_layer(class_num As Integer) As layer
-        Return layer.buildOutputLayer(class_num)
+    Public Function output_layer(class_num As Integer()) As layer
+        Return layer.buildOutputLayer(class_num(0))
     End Function
 
     <ExportAPI("sample_dataset")>
