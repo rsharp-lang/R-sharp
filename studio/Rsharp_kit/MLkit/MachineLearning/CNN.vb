@@ -51,6 +51,7 @@
 
 Imports System.Drawing
 Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.MachineLearning.CNN
@@ -147,26 +148,43 @@ Module CNNTools
         Return layer.buildOutputLayer(class_num)
     End Function
 
-    <ExportAPI("training")>
-    <RApiReturn(GetType(CNN))>
-    Public Function training(cnn As Object, dataset As Object,
-                             <RRawVectorArgument>
-                             Optional labels As Object = Nothing,
-                             Optional max_loops As Integer = 100,
-                             Optional batch_size As Integer? = Nothing,
-                             Optional env As Environment = Nothing) As Object
-        Dim cnn_val As CNN
-        Dim batchSize As Integer
-        Dim ds As SampleData()
+    <ExportAPI("sample_dataset")>
+    <RApiReturn(GetType(SampleData))>
+    Public Function sample_dataset(dataset As Object,
+                                   <RRawVectorArgument>
+                                   Optional labels As Object = Nothing,
+                                   Optional env As Environment = Nothing) As Object
 
         If TypeOf dataset Is dataframe Then
-            Dim df As dataframe = DirectCast(dataset, dataframe)
+            Return DirectCast(dataset, dataframe).sample_dataset_from_df(labels, env)
+        Else
+            Return Message.InCompatibleType(GetType(dataframe), dataset.GetType, env)
+        End If
+    End Function
 
-            If TypeOf labels Is String Then
-                Dim label As Double() = CLRVector.asNumeric(df(CStr(labels)))
+    <Extension>
+    Private Function sample_dataset_from_df(df As dataframe, labels As Object, env As Environment) As Object
+        If TypeOf labels Is String Then
+            Dim label As Double() = CLRVector.asNumeric(df(CStr(labels)))
 
-                df = df.projectByColumn({CStr(labels)}, env, reverse:=True)
-                ds = df.forEachRow _
+            df = df.projectByColumn({CStr(labels)}, env, reverse:=True)
+
+            Return df _
+                .forEachRow _
+                .Select(Function(r, i)
+                            Return New SampleData(CLRVector.asNumeric(r.value), label(i)) With {
+                                .id = r.name
+                            }
+                        End Function) _
+                .ToArray
+        Else
+            labels = REnv.TryCastGenericArray(REnv.asVector(Of Object)(labels), env)
+
+            If DataFramework.IsNumericCollection(labels.GetType) Then
+                Dim label As Double() = CLRVector.asNumeric(labels)
+
+                Return df _
+                    .forEachRow() _
                     .Select(Function(r, i)
                                 Return New SampleData(CLRVector.asNumeric(r.value), label(i)) With {
                                     .id = r.name
@@ -174,28 +192,22 @@ Module CNNTools
                             End Function) _
                     .ToArray
             Else
-                labels = REnv.TryCastGenericArray(REnv.asVector(Of Object)(labels), env)
-
-                If DataFramework.IsNumericCollection(labels.GetType) Then
-                    Dim label As Double() = CLRVector.asNumeric(labels)
-
-                    ds = df.forEachRow() _
-                        .Select(Function(r, i)
-                                    Return New SampleData(CLRVector.asNumeric(r.value), label(i)) With {
-                                        .id = r.name
-                                    }
-                                End Function) _
-                        .ToArray
-                Else
-                    Return Message.InCompatibleType(GetType(String), labels.GetType, env)
-                End If
+                Return Message.InCompatibleType(GetType(String), labels.GetType, env)
             End If
-        Else
-            Return Message.InCompatibleType(GetType(dataframe), dataset.GetType, env)
         End If
+    End Function
+
+    <ExportAPI("training")>
+    <RApiReturn(GetType(CNN))>
+    Public Function training(cnn As Object, dataset As SampleData(),
+                             Optional max_loops As Integer = 100,
+                             Optional batch_size As Integer? = Nothing,
+                             Optional env As Environment = Nothing) As Object
+        Dim cnn_val As CNN
+        Dim batchSize As Integer
 
         If batch_size Is Nothing Then
-            batchSize = ds.Length / 250
+            batchSize = dataset.Length / 250
         Else
             batchSize = CInt(batch_size)
         End If
@@ -208,7 +220,7 @@ Module CNNTools
             Return Message.InCompatibleType(GetType(CNN), cnn.GetType, env)
         End If
 
-        cnn_val = New Trainer(Sub(s) base.print(s,, env)).train(cnn_val, ds, max_loops)
+        cnn_val = New Trainer(Sub(s) base.print(s,, env)).train(cnn_val, dataset, max_loops)
 
         Return cnn_val
     End Function
