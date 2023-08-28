@@ -2,6 +2,7 @@ imports ["CNN", "dataset"] from "MLkit";
 imports "Matrix" from "Rlapack";
 
 require(graphics);
+require(graphics2D);
 
 setwd(@dir);
 
@@ -57,16 +58,19 @@ let populate_dataset = function(n) {
 let i = 0;
 let ds_labels = list();
 
-for(v in populate_dataset(6)) {
+for(v in populate_dataset(1000)) {
     let labelfile = `./nist_dataset/${v$filename}.png`;
     let labels = v$labels;
-    let matrix_set = v$matrix_set;
+    let matrix_set = lapply(v$matrix_set, m -> as.raster(m));
 
     ds_labels[[labelfile]] = labels;
 
-    bitmap(file = labelfile, size = x4_size) {
-        
-    }
+    bitmap(file = labelfile, size = x4_size);
+    rasterHeatmap(matrix_set[[1]], region = graphics2D::rect(x =0, y =0, w = unit_size, h = unit_size, float = FALSE));
+    rasterHeatmap(matrix_set[[2]], region = graphics2D::rect(x =unit_size, y =0, w = unit_size, h = unit_size, float = FALSE));
+    rasterHeatmap(matrix_set[[3]], region = graphics2D::rect(x =0, y =unit_size, w = unit_size, h = unit_size, float = FALSE));
+    rasterHeatmap(matrix_set[[4]], region = graphics2D::rect(x =unit_size, y =unit_size, w = unit_size, h = unit_size, float = FALSE));
+    dev.off();
 }
 
 require(JSON);

@@ -503,6 +503,13 @@ Module graphics2D
             dimension = dimensionStr.SizeParser
         End If
 
+        If dev.g Is Nothing Then
+            Return Internal.debug.stop({
+                "the graphics device has not been opened yet, you should use the bitmap function for create a new at first!",
+                "(the acceptor closure syntax of the bitmap function is not working at here!)"
+            }, env)
+        End If
+
         ' create base
         Dim colorSet As String = RColorPalette.getColorSet(colorName, [default]:="jet")
         Dim bitmap As Bitmap = New PixelRender(
