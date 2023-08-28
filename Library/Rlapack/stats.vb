@@ -97,7 +97,6 @@ Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
-Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Math.Statistics
 Imports Microsoft.VisualBasic.Math.Statistics.Distributions
