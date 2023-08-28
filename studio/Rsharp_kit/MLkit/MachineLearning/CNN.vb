@@ -54,6 +54,7 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.CNN
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.Convolutional
@@ -157,6 +158,28 @@ Module CNNTools
 
         If TypeOf dataset Is dataframe Then
             Return DirectCast(dataset, dataframe).sample_dataset_from_df(labels, env)
+        ElseIf TypeOf dataset Is list Then
+            Dim li As list = DirectCast(dataset, list)
+            Dim ds As New List(Of SampleData)
+
+            If TypeOf labels Is list Then
+                Dim labelList As list = DirectCast(labels, list)
+
+                For Each name As String In li.getNames
+                    Call ds.Add(New SampleData(
+                        features:=CLRVector.asNumeric(li.getByName(name)),
+                        labels:=CLRVector.asNumeric(labelList.getByName(name)))
+                    )
+                Next
+            Else
+                Dim v As Double() = CLRVector.asNumeric(labels)
+
+                For Each obj As SeqValue(Of Object) In li.data.SeqIterator
+                    ds.Add(New SampleData(CLRVector.asNumeric(obj.value), v(obj)))
+                Next
+            End If
+
+            Return ds
         Else
             Return Message.InCompatibleType(GetType(dataframe), dataset.GetType, env)
         End If
