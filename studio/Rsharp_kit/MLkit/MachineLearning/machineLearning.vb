@@ -178,7 +178,7 @@ Module machineLearning
 
     Private Sub doFileSave(dataset As MLDataSet, file As String)
         dataset.NormalizeMatrix = NormalizeMatrix.CreateFromSamples(
-            samples:=dataset.DataSamples.items,
+            samples:=dataset.DataSamples,
             names:=dataset.width _
                 .Sequence _
                 .Select(Function(i) $"X_{i + 1}")
