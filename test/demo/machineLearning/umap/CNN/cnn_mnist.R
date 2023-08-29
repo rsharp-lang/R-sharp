@@ -41,7 +41,7 @@ cnn = cnn + input_layer([28, 28])
 
 let ds = sample_dataset(dataset = raw, labels = as.numeric(labels));
 
-cnn = CNN::training(cnn, ds, max.loops = 1, batch.size = 60);
+cnn = CNN::training(cnn, ds, max.loops = 3, batch.size = 60);
 
 
 raw[, "label"] = NULL;
