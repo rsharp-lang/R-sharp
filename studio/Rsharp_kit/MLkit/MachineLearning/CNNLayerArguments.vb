@@ -22,6 +22,7 @@ Public Class CNNLayerArguments
             Case NameOf(CNNTools.lrn_layer) : cnn.buildLocalResponseNormalizationLayer(args!n)
             Case NameOf(CNNTools.tanh_layer) : cnn.buildTanhLayer()
             Case NameOf(CNNTools.full_connected_layer) : cnn.buildFullyConnectedLayer(args!size)
+            Case NameOf(CNNTools.regression_layer) : cnn.buildRegressionLayer()
 
             Case Else
                 Throw New NotImplementedException(type)

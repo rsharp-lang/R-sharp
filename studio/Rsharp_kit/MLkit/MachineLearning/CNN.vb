@@ -161,6 +161,16 @@ Module CNNTools
         Return layer
     End Function
 
+    <ExportAPI("regression_layer")>
+    Public Function regression_layer() As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(regression_layer),
+            .args = New list With {
+                .slots = New Dictionary(Of String, Object)
+            }
+        }
+    End Function
+
     ''' <summary>
     ''' This layer uses different filters to find attributes of the data that
     ''' affects the result. As an example there could be a filter to find
