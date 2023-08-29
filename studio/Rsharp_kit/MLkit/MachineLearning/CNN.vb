@@ -214,9 +214,14 @@ Module CNNTools
     End Function
 
     <ExportAPI("dropout_layer")>
-    Public Function dropout_layer() As CNNLayerArguments
+    Public Function dropout_layer(Optional drop_prob As Double = 0.5) As CNNLayerArguments
         Return New CNNLayerArguments With {
-            .type = NameOf(dropout_layer)
+            .type = NameOf(dropout_layer),
+            .args = New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"drop_prob", drop_prob}
+                }
+            }
         }
     End Function
 
