@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.CNN
+Imports Microsoft.VisualBasic.MachineLearning.CNN.data
 Imports Microsoft.VisualBasic.MachineLearning.CNN.trainers
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.Convolutional
@@ -355,11 +356,11 @@ Module CNNTools
         }
         Dim outputs As New List(Of Double())
         Dim class_types As String()
-
-        Call layer.prepareForNewBatch()
+        Dim data As New DataBlock(cnn.input.dims, cnn.input.out_depth, c:=0)
 
         For Each sample As SampleData In ds
-            Call outputs.Add(cnn.predict(sample))
+            Call data.addImageData(sample.features, sample.features.Max)
+            Call outputs.Add(cnn.predict(data))
         Next
 
         If TypeOf class_labels Is String Then
