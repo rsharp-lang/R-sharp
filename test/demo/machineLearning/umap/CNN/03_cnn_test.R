@@ -15,8 +15,7 @@ cnn = cnn + input_layer([56, 56])
 + conv_layer(5, 64, 1, 2)
 + pool_layer(2, 2, 0)
 + full_connected_layer(4)
-+ relu_layer()
-+ regression_layer()
++ softmax_layer()
 ;
 
 CNN::n_threads(8);

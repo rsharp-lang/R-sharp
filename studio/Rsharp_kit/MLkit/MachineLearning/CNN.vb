@@ -505,7 +505,7 @@ Module CNNTools
                              Optional env As Environment = Nothing) As Object
 
         Dim cnn_val As ConvolutionalNN
-        Dim batchSize As Integer = dataset.Length / 250
+        Dim batchSize As Integer = dataset.Length / 30
         Dim alg As TrainerAlgorithm
 
         If TypeOf cnn Is ConvolutionalNN Then
