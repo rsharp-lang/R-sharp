@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.CNN
+Imports Microsoft.VisualBasic.MachineLearning.CNN.trainers
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.Convolutional
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -302,8 +303,10 @@ Module CNNTools
                              Optional max_loops As Integer = 100,
                              Optional batch_size As Integer? = Nothing,
                              Optional env As Environment = Nothing) As Object
+
         Dim cnn_val As ConvolutionalNN
         Dim batchSize As Integer
+        Dim alg As TrainerAlgorithm
 
         If batch_size Is Nothing Then
             batchSize = dataset.Length / 250
@@ -319,7 +322,8 @@ Module CNNTools
             Return Message.InCompatibleType(GetType(ConvolutionalNN), cnn.GetType, env)
         End If
 
-        cnn_val = New Trainer(Sub(s) base.print(s,, env)).train(cnn_val, dataset, max_loops)
+        alg = New AdaGradTrainer(batchSize, 0.001F).SetKernel(cnn_val)
+        cnn_val = New Trainer(alg, Sub(s) base.print(s,, env)).train(cnn_val, dataset, max_loops)
 
         Return cnn_val
     End Function
