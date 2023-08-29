@@ -48,6 +48,7 @@
 ' /********************************************************************************/
 
 #End Region
+
 Imports System.Drawing
 Imports System.IO
 Imports System.Runtime.CompilerServices
@@ -76,6 +77,11 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <RTypeExport("cnn", GetType(LayerBuilder))>
 Module CNNTools
 
+    ''' <summary>
+    ''' get/set of the CNN parallel thread number
+    ''' </summary>
+    ''' <param name="n"></param>
+    ''' <returns></returns>
     <ExportAPI("n_threads")>
     Public Function n_threads(Optional n As Integer? = Nothing) As Integer
         If Not n Is Nothing Then
