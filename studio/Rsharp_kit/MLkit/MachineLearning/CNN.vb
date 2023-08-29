@@ -76,6 +76,15 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <RTypeExport("cnn", GetType(LayerBuilder))>
 Module CNNTools
 
+    <ExportAPI("n_threads")>
+    Public Function n_threads(Optional n As Integer? = Nothing) As Integer
+        If Not n Is Nothing Then
+            ConvolutionalNN.SetThreads(CInt(n))
+        End If
+
+        Return ConvolutionalNN.GetThreads
+    End Function
+
     ''' <summary>
     ''' Create a new CNN model
     ''' </summary>
