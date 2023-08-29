@@ -20,3 +20,5 @@ cnn = cnn + input_layer([56, 56])
 
 CNN::n_threads(8);
 cnn = CNN::training(cnn, dataset = ds, max.loops = 6, trainer = CNN::ada_grad(batch.size = 50));
+
+CNN::saveModel(cnn, file = "./MNIST-4x.cnn");
