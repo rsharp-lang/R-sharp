@@ -132,34 +132,53 @@ Module CNNTools
     End Function
 
     <ExportAPI("conv_layer")>
-    Public Function conv_layer(outMapNum As Integer, <RRawVectorArgument> kernelSize As Object) As layer
-        Dim kn_sz As Integer() = CLRVector.asInteger(kernelSize)
-        Dim sz_val As New Dimension(kn_sz(0), kn_sz(1))
-
-        Return layer.buildConvLayer(outMapNum, sz_val)
+    Public Function conv_layer(sx As Integer, filters As Integer, stride As Integer, padding As Integer) As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(conv_layer),
+            .args = New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"sx", sx},
+                    {"filters", filters},
+                    {"stride", stride},
+                    {"padding", padding}
+                }
+            }
+        }
     End Function
 
     <ExportAPI("softmax_layer")>
-    Public Function softmax_layer() As layer
-        Return layer.buildSoftmaxLayer
+    Public Function softmax_layer() As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(softmax_layer)
+        }
     End Function
 
     <ExportAPI("relu_layer")>
-    Public Function relu_layer() As layer
-        Return layer.buildReLULayer
+    Public Function relu_layer() As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(relu_layer)
+        }
     End Function
 
     <ExportAPI("pool_layer")>
-    Public Function pool_layer(<RRawVectorArgument> scaleSize As Object) As layer
-        Dim sz As Integer() = CLRVector.asInteger(scaleSize)
-        Dim scale As New Dimension(sz(0), sz(1))
-
-        Return layer.buildPoolLayer(scale)
+    Public Function pool_layer(sx As Integer, stride As Integer, padding As Integer) As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(pool_layer),
+            .args = New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"sx", sx},
+                    {"stride", stride},
+                    {"padding", padding}
+                }
+            }
+        }
     End Function
 
-    <ExportAPI("output_layer")>
-    Public Function output_layer(class_num As Integer) As layer
-        Return layer.buildOutputLayer(class_num, 1)
+    <ExportAPI("dropout_layer")>
+    Public Function dropout_layer() As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(dropout_layer)
+        }
     End Function
 
     <ExportAPI("sample_dataset")>
