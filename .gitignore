@@ -471,3 +471,4 @@ test/demo/machineLearning/umap/NIST-text/train.format
 test/demo/machineLearning/umap/CNN/MNIST.cnn
 test/demo/machineLearning/umap/CNN/images_x4.pack
 test/demo/machineLearning/umap/CNN/demo-test.csv
+test/demo/machineLearning/umap/CNN/demo-test-reader.csv
