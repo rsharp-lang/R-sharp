@@ -13,6 +13,11 @@ Public Class CNNLayerArguments
             Case NameOf(CNNTools.softmax_layer) : cnn.buildSoftmaxLayer()
             Case NameOf(CNNTools.pool_layer) : cnn.buildPoolLayer(args!sx, args!stride, args!padding)
             Case NameOf(CNNTools.dropout_layer) : cnn.buildDropoutLayer()
+            Case NameOf(CNNTools.relu_layer) : cnn.buildReLULayer()
+            Case NameOf(CNNTools.sigmoid_layer) : cnn.buildSigmoidLayer()
+            Case NameOf(CNNTools.lrn_layer) : cnn.buildLocalResponseNormalizationLayer(args!n)
+            Case NameOf(CNNTools.tanh_layer) : cnn.buildTanhLayer()
+            Case NameOf(CNNTools.full_connected_layer) : cnn.buildFullyConnectedLayer(args!size)
 
             Case Else
                 Throw New NotImplementedException(type)

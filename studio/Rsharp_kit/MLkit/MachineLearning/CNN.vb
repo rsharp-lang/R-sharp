@@ -152,6 +152,25 @@ Module CNNTools
         }
     End Function
 
+    <ExportAPI("lrn_layer")>
+    Public Function lrn_layer(Optional n As Integer = 5) As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(lrn_layer),
+            .args = New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"n", n}
+                }
+            }
+        }
+    End Function
+
+    <ExportAPI("tanh_layer")>
+    Public Function tanh_layer() As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(tanh_layer)
+        }
+    End Function
+
     <ExportAPI("softmax_layer")>
     Public Function softmax_layer() As CNNLayerArguments
         Return New CNNLayerArguments With {
@@ -163,6 +182,20 @@ Module CNNTools
     Public Function relu_layer() As CNNLayerArguments
         Return New CNNLayerArguments With {
             .type = NameOf(relu_layer)
+        }
+    End Function
+
+    <ExportAPI("maxout_layer")>
+    Public Function maxout_layer() As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(maxout_layer)
+        }
+    End Function
+
+    <ExportAPI("sigmoid_layer")>
+    Public Function sigmoid_layer() As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(sigmoid_layer)
         }
     End Function
 
@@ -184,6 +217,18 @@ Module CNNTools
     Public Function dropout_layer() As CNNLayerArguments
         Return New CNNLayerArguments With {
             .type = NameOf(dropout_layer)
+        }
+    End Function
+
+    <ExportAPI("full_connected_layer")>
+    Public Function full_connected_layer(size As Integer) As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(full_connected_layer),
+            .args = New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"size", size}
+                }
+            }
         }
     End Function
 
