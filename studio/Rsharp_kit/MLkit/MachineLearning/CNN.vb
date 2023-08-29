@@ -126,6 +126,19 @@ Module CNNTools
         Return args.CreateLayer(cnn)
     End Function
 
+    ''' <summary>
+    ''' The input layer is a simple layer that will pass the data though and
+    ''' create a window into the full training data set. So for instance if
+    ''' we have an image of size 28x28x1 which means that we have 28 pixels
+    ''' in the x axle and 28 pixels in the y axle and one color (gray scale),
+    ''' then this layer might give you a window of another size example 24x24x1
+    ''' that is randomly chosen in order to create some distortion into the
+    ''' dataset so the algorithm don't over-fit the training.
+    ''' </summary>
+    ''' <param name="size"></param>
+    ''' <param name="depth"></param>
+    ''' <param name="c"></param>
+    ''' <returns></returns>
     <ExportAPI("input_layer")>
     Public Function input_layer(<RRawVectorArgument>
                                 size As Object,
@@ -148,6 +161,16 @@ Module CNNTools
         Return layer
     End Function
 
+    ''' <summary>
+    ''' This layer uses different filters to find attributes of the data that
+    ''' affects the result. As an example there could be a filter to find
+    ''' horizontal edges in an image.
+    ''' </summary>
+    ''' <param name="sx"></param>
+    ''' <param name="filters"></param>
+    ''' <param name="stride"></param>
+    ''' <param name="padding"></param>
+    ''' <returns></returns>
     <ExportAPI("conv_layer")>
     Public Function conv_layer(sx As Integer,
                                filters As Integer,
@@ -167,6 +190,21 @@ Module CNNTools
         }
     End Function
 
+    ''' <summary>
+    ''' This layer is useful when we are dealing with ReLU neurons. Why is that?
+    ''' Because ReLU neurons have unbounded activations and we need LRN to normalize
+    ''' that. We want to detect high frequency features with a large response. If we
+    ''' normalize around the local neighborhood of the excited neuron, it becomes even
+    ''' more sensitive as compared to its neighbors.
+    ''' 
+    ''' At the same time, it will dampen the responses that are uniformly large in any
+    ''' given local neighborhood. If all the values are large, then normalizing those
+    ''' values will diminish all of them. So basically we want to encourage some kind
+    ''' of inhibition and boost the neurons with relatively larger activations. This
+    ''' has been discussed nicely in Section 3.3 of the original paper by Krizhevsky et al.
+    ''' </summary>
+    ''' <param name="n"></param>
+    ''' <returns></returns>
     <ExportAPI("lrn_layer")>
     Public Function lrn_layer(Optional n As Integer = 5) As CNNLayerArguments
         Return New CNNLayerArguments With {
@@ -179,6 +217,11 @@ Module CNNTools
         }
     End Function
 
+    ''' <summary>
+    ''' Implements Tanh nonlinearity elementwise x to tanh(x)
+    ''' so the output is between -1 and 1.
+    ''' </summary>
+    ''' <returns></returns>
     <ExportAPI("tanh_layer")>
     Public Function tanh_layer() As CNNLayerArguments
         Return New CNNLayerArguments With {
@@ -186,6 +229,11 @@ Module CNNTools
         }
     End Function
 
+    ''' <summary>
+    ''' [*loss_layers] This layer will squash the result of the activations in the fully
+    ''' connected layer and give you a value of 0 to 1 for all output activations.
+    ''' </summary>
+    ''' <returns></returns>
     <ExportAPI("softmax_layer")>
     Public Function softmax_layer() As CNNLayerArguments
         Return New CNNLayerArguments With {
@@ -193,6 +241,13 @@ Module CNNTools
         }
     End Function
 
+    ''' <summary>
+    ''' This is a layer of neurons that applies the non-saturating activation
+    ''' function f(x)=max(0,x). It increases the nonlinear properties of the
+    ''' decision function and of the overall network without affecting the
+    ''' receptive fields of the convolution layer.
+    ''' </summary>
+    ''' <returns></returns>
     <ExportAPI("relu_layer")>
     Public Function relu_layer() As CNNLayerArguments
         Return New CNNLayerArguments With {
@@ -200,6 +255,12 @@ Module CNNTools
         }
     End Function
 
+    ''' <summary>
+    ''' Implements Maxout nonlinearity that computes x to max(x)
+    ''' where x is a vector of size group_size. Ideally of course,
+    ''' the input size should be exactly divisible by group_size
+    ''' </summary>
+    ''' <returns></returns>
     <ExportAPI("maxout_layer")>
     Public Function maxout_layer() As CNNLayerArguments
         Return New CNNLayerArguments With {
@@ -207,6 +268,11 @@ Module CNNTools
         }
     End Function
 
+    ''' <summary>
+    ''' Implements Sigmoid nonlinearity elementwise x to 1/(1+e^(-x))
+    ''' so the output is between 0 and 1.
+    ''' </summary>
+    ''' <returns></returns>
     <ExportAPI("sigmoid_layer")>
     Public Function sigmoid_layer() As CNNLayerArguments
         Return New CNNLayerArguments With {
@@ -214,6 +280,15 @@ Module CNNTools
         }
     End Function
 
+    ''' <summary>
+    ''' This layer will reduce the dataset by creating a smaller zoomed out
+    ''' version. In essence you take a cluster of pixels take the sum of them
+    ''' and put the result in the reduced position of the new image.
+    ''' </summary>
+    ''' <param name="sx"></param>
+    ''' <param name="stride"></param>
+    ''' <param name="padding"></param>
+    ''' <returns></returns>
     <ExportAPI("pool_layer")>
     Public Function pool_layer(sx As Integer, stride As Integer, padding As Integer) As CNNLayerArguments
         Return New CNNLayerArguments With {
@@ -228,6 +303,12 @@ Module CNNTools
         }
     End Function
 
+    ''' <summary>
+    ''' This layer will remove some random activations in order to
+    ''' defeat over-fitting.
+    ''' </summary>
+    ''' <param name="drop_prob"></param>
+    ''' <returns></returns>
     <ExportAPI("dropout_layer")>
     Public Function dropout_layer(Optional drop_prob As Double = 0.5) As CNNLayerArguments
         Return New CNNLayerArguments With {
@@ -240,6 +321,14 @@ Module CNNTools
         }
     End Function
 
+    ''' <summary>
+    ''' Neurons in a fully connected layer have full connections to all
+    ''' activations in the previous layer, as seen in regular Neural Networks.
+    ''' Their activations can hence be computed with a matrix multiplication
+    ''' followed by a bias offset.
+    ''' </summary>
+    ''' <param name="size"></param>
+    ''' <returns></returns>
     <ExportAPI("full_connected_layer")>
     Public Function full_connected_layer(size As Integer) As CNNLayerArguments
         Return New CNNLayerArguments With {
@@ -402,18 +491,12 @@ Module CNNTools
     <RApiReturn(GetType(ConvolutionalNN))>
     Public Function training(cnn As Object, dataset As SampleData(),
                              Optional max_loops As Integer = 100,
-                             Optional batch_size As Integer? = Nothing,
+                             Optional trainer As TrainerAlgorithm = Nothing,
                              Optional env As Environment = Nothing) As Object
 
         Dim cnn_val As ConvolutionalNN
-        Dim batchSize As Integer
+        Dim batchSize As Integer = dataset.Length / 250
         Dim alg As TrainerAlgorithm
-
-        If batch_size Is Nothing Then
-            batchSize = dataset.Length / 250
-        Else
-            batchSize = CInt(batch_size)
-        End If
 
         If TypeOf cnn Is ConvolutionalNN Then
             cnn_val = cnn
@@ -423,10 +506,96 @@ Module CNNTools
             Return Message.InCompatibleType(GetType(ConvolutionalNN), cnn.GetType, env)
         End If
 
-        alg = New AdaGradTrainer(batchSize, 0.001F).SetKernel(cnn_val)
+        If Not trainer Is Nothing Then
+            alg = trainer
+        Else
+            alg = New AdaGradTrainer(batchSize, 0.001F)
+        End If
+
+        alg = alg.SetKernel(cnn_val)
         cnn_val = New Trainer(alg, Sub(s) base.print(s,, env)).train(cnn_val, dataset, max_loops)
 
         Return cnn_val
+    End Function
+
+    ''' <summary>
+    ''' Adaptive delta will look at the differences between the expected result and the current result to train the network.
+    ''' </summary>
+    ''' <param name="batch_size"></param>
+    ''' <param name="l2_decay"></param>
+    ''' <param name="ro"></param>
+    ''' <returns></returns>
+    <ExportAPI("ada_delta")>
+    Public Function AdaDeltaTrainer(batch_size As Integer, Optional l2_decay As Single = 0.001, Optional ro As Double = 0.95) As TrainerAlgorithm
+        Return New AdaDeltaTrainer(batch_size, l2_decay, ro)
+    End Function
+
+    ''' <summary>
+    ''' The adaptive gradient trainer will over time sum up the square of
+    ''' the gradient and use it to change the weights.
+    ''' </summary>
+    ''' <param name="batch_size"></param>
+    ''' <param name="l2_decay"></param>
+    ''' <returns></returns>
+    <ExportAPI("ada_grad")>
+    Public Function AdaGradTrainer(batch_size As Integer, Optional l2_decay As Single = 0.001) As TrainerAlgorithm
+        Return New AdaGradTrainer(batch_size, l2_decay)
+    End Function
+
+    ''' <summary>
+    ''' Adaptive Moment Estimation is an update to RMSProp optimizer. In this running average of both the
+    ''' gradients and their magnitudes are used.
+    ''' </summary>
+    ''' <param name="batch_size"></param>
+    ''' <param name="l2_decay"></param>
+    ''' <param name="beta1"></param>
+    ''' <param name="beta2"></param>
+    ''' <returns></returns>
+    <ExportAPI("adam")>
+    Public Function AdamTrainer(batch_size As Integer,
+                                Optional l2_decay As Single = 0.001,
+                                Optional beta1 As Double = 0.9,
+                                Optional beta2 As Double = 0.999) As TrainerAlgorithm
+        Return New AdamTrainer(batch_size, l2_decay, beta1, beta2)
+    End Function
+
+    ''' <summary>
+    ''' Another extension of gradient descent is due to Yurii Nesterov from 1983,[7] and has been subsequently generalized
+    ''' </summary>
+    ''' <param name="batch_size"></param>
+    ''' <param name="l2_decay"></param>
+    ''' <returns></returns>
+    <ExportAPI("nesterov")>
+    Public Function NesterovTrainer(batch_size As Integer, Optional l2_decay As Single = 0.001) As TrainerAlgorithm
+        Return New NesterovTrainer(batch_size, l2_decay)
+    End Function
+
+    ''' <summary>
+    ''' Stochastic gradient descent (often shortened in SGD), also known as incremental gradient descent, is a
+    ''' stochastic approximation of the gradient descent optimization method for minimizing an objective function
+    ''' that is written as a sum of differentiable functions. In other words, SGD tries to find minimums or
+    ''' maximums by iteration.
+    ''' </summary>
+    ''' <param name="batch_size"></param>
+    ''' <param name="l2_decay"></param>
+    ''' <returns></returns>
+    <ExportAPI("sgd")>
+    Public Function SGDTrainer(batch_size As Integer, Optional l2_decay As Single = 0.001) As TrainerAlgorithm
+        Return New SGDTrainer(batch_size, l2_decay)
+    End Function
+
+    ''' <summary>
+    ''' This is AdaGrad but with a moving window weighted average
+    ''' so the gradient is not accumulated over the entire history of the run.
+    ''' it's also referred to as Idea #1 in Zeiler paper on AdaDelta.
+    ''' </summary>
+    ''' <param name="batch_size"></param>
+    ''' <param name="l2_decay"></param>
+    ''' <param name="ro"></param>
+    ''' <returns></returns>
+    <ExportAPI("window_grad")>
+    Public Function WindowGradTrainer(batch_size As Integer, Optional l2_decay As Single = 0.001, Optional ro As Double = 0.95) As TrainerAlgorithm
+        Return New WindowGradTrainer(batch_size, l2_decay, ro)
     End Function
 
     <ExportAPI("predict")>
