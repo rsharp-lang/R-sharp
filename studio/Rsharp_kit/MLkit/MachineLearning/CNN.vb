@@ -109,16 +109,26 @@ Module CNNTools
     End Function
 
     <ROperator("+")>
-    Public Function addLayer(cnn As LayerBuilder, layer As layer) As LayerBuilder
-        Return cnn.add(layer)
+    Public Function addLayer(cnn As LayerBuilder, args As CNNLayerArguments) As LayerBuilder
+        Return args.CreateLayer(cnn)
     End Function
 
     <ExportAPI("input_layer")>
-    Public Function input_layer(<RRawVectorArgument> size As Object) As layer
+    Public Function input_layer(<RRawVectorArgument> size As Object, Optional depth As Integer = 1, Optional c As Double = 0) As CNNLayerArguments
         Dim sz As Integer() = CLRVector.asInteger(size)
         Dim sz_val As New Dimension(sz(0), sz(1))
+        Dim layer As New CNNLayerArguments With {
+            .type = NameOf(input_layer),
+            .args = New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"depth", depth},
+                    {"c", c},
+                    {"dims", sz_val}
+                }
+            }
+        }
 
-        Return layer.buildInputLayer(sz_val)
+        Return layer
     End Function
 
     <ExportAPI("conv_layer")>
