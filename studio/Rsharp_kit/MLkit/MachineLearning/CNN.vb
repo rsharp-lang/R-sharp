@@ -48,7 +48,6 @@
 ' /********************************************************************************/
 
 #End Region
-
 Imports System.Drawing
 Imports System.IO
 Imports System.Runtime.CompilerServices
@@ -68,7 +67,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports layer = Microsoft.VisualBasic.MachineLearning.CNN.layers.Layer
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -114,7 +112,11 @@ Module CNNTools
     End Function
 
     <ExportAPI("input_layer")>
-    Public Function input_layer(<RRawVectorArgument> size As Object, Optional depth As Integer = 1, Optional c As Double = 0) As CNNLayerArguments
+    Public Function input_layer(<RRawVectorArgument>
+                                size As Object,
+                                Optional depth As Integer = 1,
+                                Optional c As Double = 0) As CNNLayerArguments
+
         Dim sz As Integer() = CLRVector.asInteger(size)
         Dim sz_val As New Dimension(sz(0), sz(1))
         Dim layer As New CNNLayerArguments With {
@@ -132,7 +134,11 @@ Module CNNTools
     End Function
 
     <ExportAPI("conv_layer")>
-    Public Function conv_layer(sx As Integer, filters As Integer, stride As Integer, padding As Integer) As CNNLayerArguments
+    Public Function conv_layer(sx As Integer,
+                               filters As Integer,
+                               stride As Integer,
+                               padding As Integer) As CNNLayerArguments
+
         Return New CNNLayerArguments With {
             .type = NameOf(conv_layer),
             .args = New list With {
