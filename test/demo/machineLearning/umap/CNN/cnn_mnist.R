@@ -31,12 +31,12 @@ for(name in colnames(raw)) {
 let cnn = cnn();
 
 cnn = cnn + input_layer([28, 28])
-+ conv_layer(6, [5, 5])
-+ pool_layer([2, 2])
-+ conv_layer(12, [5, 5])
-+ pool_layer([2, 2])
-# + softmax_layer()
-+ output_layer(class.num = 10)
++ conv_layer(5, 32, 1, 2)
++ pool_layer(2, 2, 0)
++ conv_layer(5, 64, 1, 2)
++ pool_layer(2, 2, 0)
++ full_connected_layer(10)
++ softmax_layer()
 ;
 
 let ds = sample_dataset(dataset = raw, labels = as.numeric(labels));
