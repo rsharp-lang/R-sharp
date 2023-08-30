@@ -184,8 +184,8 @@ Module CNNTools
     <ExportAPI("conv_layer")>
     Public Function conv_layer(sx As Integer,
                                filters As Integer,
-                               stride As Integer,
-                               padding As Integer) As CNNLayerArguments
+                               Optional stride As Integer = 1,
+                               Optional padding As Integer = 0) As CNNLayerArguments
 
         Return New CNNLayerArguments With {
             .type = NameOf(conv_layer),
