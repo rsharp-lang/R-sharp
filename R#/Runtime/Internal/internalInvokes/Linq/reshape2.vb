@@ -393,6 +393,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim val As Object
             Dim strs As String()
 
+            If l Is Nothing Then
+                Return Nothing
+            End If
+
             For Each name As String In l.getNames
                 val = l.getByName(name)
 
@@ -412,6 +416,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                         "tuple_key: " & name,
                         "tuple_val: " & val.GetType.FullName
                     }, env)
+                End If
+
+                If strs.IsNullOrEmpty Then
+                    Continue For
                 End If
 
                 Call keyVals.Add(New KeyValuePair(Of String, String())(name, strs))
