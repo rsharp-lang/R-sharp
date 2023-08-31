@@ -23,7 +23,7 @@ print(t1);
 print(t2);
 
 
-strs = as.character(1:500000);
+strs = as.character(1:50000);
 
 print(strs);
 
@@ -40,3 +40,7 @@ t2 = now() - t0;
 
 print(t1);
 print(t2);
+
+list1 = list(a = "xxx","b+" ="yyyyyy","zzzzz" = "ttttttt",fff="000000");
+
+str(list1 |> against(["xxx","ttttttt"]));
