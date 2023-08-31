@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::383bc53961b4366a58ebe09f710cb75d, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/BinaryInExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 217
-    '    Code Lines: 161
-    ' Comment Lines: 24
-    '   Blank Lines: 32
-    '     File Size: 8.88 KB
+' Summaries:
 
 
-    '     Class BinaryInExpression
-    ' 
-    '         Properties: [operator], expressionName, left, right, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, findTest, getIndex, testInNumericRange, testListIndex
-    '                   testVectorIndexOf, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 217
+'    Code Lines: 161
+' Comment Lines: 24
+'   Blank Lines: 32
+'     File Size: 8.88 KB
+
+
+'     Class BinaryInExpression
+' 
+'         Properties: [operator], expressionName, left, right, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, findTest, getIndex, testInNumericRange, testListIndex
+'                   testVectorIndexOf, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -75,9 +75,12 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
     ''' <summary>
+    ''' operator for test of left in right?
+    ''' </summary>
+    ''' <remarks>
     ''' + 如果右边参数为序列，则是进行对值的indexOf操作
     ''' + 如果右边参数为列表，则是对key进行查找操作
-    ''' </summary>
+    ''' </remarks>
     Public Class BinaryInExpression : Inherits Expression
         Implements IBinaryExpression
 
@@ -106,7 +109,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Property
 
         ''' <summary>
-        ''' 
+        ''' construct a expression for determine that does <paramref name="a"/> in <paramref name="b"/>?
         ''' </summary>
         ''' <param name="a">left</param>
         ''' <param name="b">right</param>
@@ -140,7 +143,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             If isNameList Then
                 flags = testListIndex(DirectCast(sequence, RNames), testLeft)
             ElseIf seqtype Is GetType(DoubleRange) Then
+                ' x betwen xxx and yyy?
                 flags = testInNumericRange(testLeft, sequence)
+            ElseIf seqtype Is GetType(Index(Of String)) Then
+                Dim left_strs As String() = CLRVector.asCharacter(testLeft)
+                Dim str_index As Index(Of String) = sequence
+                Dim check As Boolean() = left_strs _
+                    .Select(Function(si) si Like str_index) _
+                    .ToArray
+
+                Return check
             Else
                 ' try custom operator at first
                 Dim op = BinaryOperatorEngine.getOperator("in", envir, suppress:=True)
