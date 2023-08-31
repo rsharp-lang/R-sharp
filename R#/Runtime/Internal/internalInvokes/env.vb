@@ -295,6 +295,11 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' list all object symbols inside current environment frame
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("objects")>
         Private Function objects(env As Environment) As String()
             Return env.GetSymbolsNames.ToArray
