@@ -61,7 +61,9 @@ Imports Microsoft.VisualBasic.ComponentModel.DataStructures
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -291,6 +293,39 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return Internal.debug.stop(New NotImplementedException(typeofX.FullName), env)
             End If
+        End Function
+
+        ''' <summary>
+        ''' create subset of the given <paramref name="listSet"/> via 
+        ''' tuple value match against with the given 
+        ''' <paramref name="index_set"/>.
+        ''' </summary>
+        ''' <param name="listSet"></param>
+        ''' <param name="index_set"></param>
+        ''' <returns></returns>
+        <ExportAPI("against")>
+        Public Function match_val_against(listSet As list,
+                                          <RRawVectorArgument>
+                                          index_set As Object,
+                                          Optional env As Environment = Nothing) As Object
+
+            Dim filters As String() = CLRVector.asCharacter(index_set)
+            Dim reshape = reshape2.flip_list(listSet, env)
+
+            If Program.isException(reshape) Then
+                Return reshape
+            End If
+
+            Dim keys As String() = filters _
+                .Select(AddressOf DirectCast(reshape, list).getByName) _
+                .Where(Function(a) Not a Is Nothing) _
+                .Select(Function(a) CLRVector.asCharacter(a)) _
+                .IteratesALL _
+                .Distinct _
+                .ToArray
+            Dim subset As list = listSet.subset(keys)
+
+            Return subset
         End Function
 
         <ExportAPI("loop")>

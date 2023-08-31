@@ -542,5 +542,14 @@ Namespace Runtime.Internal.Object
         Public Shared Function empty() As Object
             Return New list With {.slots = New Dictionary(Of String, Object)}
         End Function
+
+        ''' <summary>
+        ''' A shortcut of function <see cref="getByName(String())"/>
+        ''' </summary>
+        ''' <param name="keys"></param>
+        ''' <returns></returns>
+        Public Function subset(keys() As String) As list
+            Return getByName(keys)
+        End Function
     End Class
 End Namespace
