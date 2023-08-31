@@ -147,6 +147,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 flags = testInNumericRange(testLeft, sequence)
             ElseIf seqtype Is GetType(Index(Of String)) Then
                 Dim left_strs As String() = CLRVector.asCharacter(testLeft)
+                ' string index could be constructed via the ``index_of`` function
                 Dim str_index As Index(Of String) = sequence
                 Dim check As Boolean() = left_strs _
                     .Select(Function(si) si Like str_index) _
