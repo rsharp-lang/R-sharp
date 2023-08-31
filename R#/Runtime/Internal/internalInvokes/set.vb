@@ -260,7 +260,15 @@ Namespace Runtime.Internal.Invokes
             Return join
         End Function
 
-        <ExportAPI("index.of")>
+        ''' <summary>
+        ''' Create the hash index for element search
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="getKey">extract a character vector from one of the elements 
+        ''' inside the collection x, using as the index key.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("index_of")>
         Public Function indexOf(<RRawVectorArgument>
                                 x As Object,
                                 Optional getKey As Object = Nothing,
@@ -272,9 +280,17 @@ Namespace Runtime.Internal.Invokes
                 x = DirectCast(x, vector).data
             End If
 
+            If x.GetType.IsArray Then
+                x = REnv.TryCastGenericArray(x, env)
+            End If
+
             Dim typeofX As Type = x.GetType
 
-            Throw New NotImplementedException
+            If REnv.isVector(Of String)(x) Then
+                Return CLRVector.asCharacter(x).Indexing
+            Else
+                Return Internal.debug.stop(New NotImplementedException(typeofX.FullName), env)
+            End If
         End Function
 
         <ExportAPI("loop")>
