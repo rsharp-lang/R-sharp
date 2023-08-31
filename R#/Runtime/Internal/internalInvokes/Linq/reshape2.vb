@@ -53,6 +53,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -374,6 +375,56 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     Return shift_vec
                 End If
             End If
+        End Function
+
+        ''' <summary>
+        ''' flip the list key-value pair mapping to value-key pair mapping
+        ''' </summary>
+        ''' <param name="l">Should be a tuple list object</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' this function only works for the value is character vector, 
+        ''' null value inside the list will be ignored
+        ''' </remarks>
+        <ExportAPI("flip_list")>
+        Public Function flip_list(l As list, Optional env As Environment = Nothing) As Object
+            Dim keyVals As New List(Of KeyValuePair(Of String, String()))
+            Dim val As Object
+
+            For Each name As String In l.getNames
+                val = l.getByName(name)
+
+                If val Is Nothing Then
+                    Continue For
+                End If
+
+                If TypeOf val Is String OrElse TypeOf val Is String() OrElse TypeOf val Is vector Then
+                    Call keyVals.Add(New KeyValuePair(Of String, String())(name, CLRVector.asCharacter(val)))
+                Else
+                    Return Internal.debug.stop({
+                        "this function only works for the character value!",
+                        "tuple_key: " & name,
+                        "tuple_val: " & val.GetType.FullName
+                    }, env)
+                End If
+            Next
+
+            ' flip the tuple
+            Dim flips = keyVals _
+                .Select(Function(a)
+                            Return a.Value.Select(Function(si) (key:=si, val:=a.Key))
+                        End Function) _
+                .IteratesALL _
+                .GroupBy(Function(t) t.key) _
+                .ToArray
+            Dim newList As New Dictionary(Of String, Object)
+
+            For Each map In flips
+                Call newList.Add(map.Key, map.Select(Function(a) a.val).Distinct.ToArray)
+            Next
+
+            Return New list With {.slots = newList}
         End Function
     End Module
 End Namespace

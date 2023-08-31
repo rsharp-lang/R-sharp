@@ -150,6 +150,11 @@ Namespace Runtime.Vectorization
                 .ToArray
         End Function
 
+        ''' <summary>
+        ''' try to cast any object to .net clr character vector 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         Public Function asCharacter(x As Object) As String()
             If x Is Nothing Then
                 Return Nothing
