@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::7500c3fa3b4b2bb1a217b2696d8351a7, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/reshape2.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 326
-    '    Code Lines: 201
-    ' Comment Lines: 84
-    '   Blank Lines: 41
-    '     File Size: 15.16 KB
+' Summaries:
 
 
-    '     Module reshape2
-    ' 
-    '         Function: aggregate, melt, melt_array, melt_dataframe, melt_list
-    '                   shift, tuple, zip
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 326
+'    Code Lines: 201
+' Comment Lines: 84
+'   Blank Lines: 41
+'     File Size: 15.16 KB
+
+
+'     Module reshape2
+' 
+'         Function: aggregate, melt, melt_array, melt_dataframe, melt_list
+'                   shift, tuple, zip
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -391,6 +391,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         Public Function flip_list(l As list, Optional env As Environment = Nothing) As Object
             Dim keyVals As New List(Of KeyValuePair(Of String, String()))
             Dim val As Object
+            Dim strs As String()
 
             For Each name As String In l.getNames
                 val = l.getByName(name)
@@ -399,8 +400,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     Continue For
                 End If
 
-                If TypeOf val Is String OrElse TypeOf val Is String() OrElse TypeOf val Is vector Then
-                    Call keyVals.Add(New KeyValuePair(Of String, String())(name, CLRVector.asCharacter(val)))
+                If TypeOf val Is String OrElse TypeOf val Is String() Then
+                    strs = CLRVector.asCharacter(val)
+                ElseIf TypeOf val Is Object() Then
+                    strs = CLRVector.asCharacter(val)
+                ElseIf TypeOf val Is vector Then
+                    strs = CLRVector.asCharacter(DirectCast(val, vector).data)
                 Else
                     Return Internal.debug.stop({
                         "this function only works for the character value!",
@@ -408,6 +413,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                         "tuple_val: " & val.GetType.FullName
                     }, env)
                 End If
+
+                Call keyVals.Add(New KeyValuePair(Of String, String())(name, strs))
             Next
 
             ' flip the tuple
