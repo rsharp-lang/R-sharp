@@ -428,7 +428,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             ' flip the tuple
             Dim flips = keyVals _
                 .Select(Function(a)
-                            Return a.Value.Select(Function(si) (key:=si, val:=a.Key))
+                            Return a.Value.SafeQuery _
+                                .Where(Function(si) Not si Is Nothing) _
+                                .Select(Function(si)
+                                            Return (key:=si, val:=a.Key)
+                                        End Function)
                         End Function) _
                 .IteratesALL _
                 .GroupBy(Function(t) t.key) _
