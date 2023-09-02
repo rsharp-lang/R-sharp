@@ -124,6 +124,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Call Me.New(New Literal(funcName), stackFrame, parameters)
         End Sub
 
+        ''' <summary>
+        ''' make a data copy of the function invoke expression itself
+        ''' </summary>
+        ''' <param name="copy"></param>
         Sub New(copy As FunctionInvoke)
             Me.funcName = copy.funcName
             Me.stackFrame = copy.stackFrame
@@ -150,6 +154,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             }
         End Sub
 
+        ''' <summary>
+        ''' Populate all function invoke parameter values
+        ''' </summary>
+        ''' <returns></returns>
         Public Iterator Function EnumerateInvokedParameters() As IEnumerable(Of Expression)
             For Each a In parameters
                 Yield a
@@ -206,6 +214,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Using
         End Function
 
+        ''' <summary>
+        ''' Check and get the object reference to the target invoke function
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <param name="passed"></param>
+        ''' <returns></returns>
         Public Function CheckInvoke(envir As Environment, ByRef passed As Boolean) As Object
             Dim target As Object = getFuncVar(funcName, [namespace], envir)
 
@@ -231,6 +245,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         $"target: {funcName.ToString}",
                         $"schema: {target.GetType.FullName}"
                     }, envir)
+                ElseIf target.GetType.IsInheritsFrom(GetType(RDefaultFunction)) Then
+                    passed = True
+                    Return RDefaultFunctionAttribute.GetDefaultFunction(funcName.ToString, obj:=target)
                 Else
                     passed = True
                     ' regex
@@ -305,6 +322,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Dim funcVar As Object
 
             If (Not [namespace].StringEmpty) AndAlso (Not [namespace] = "n/a") Then
+                ' function symbol reference has the namespace reference
+                ' ns::func                
                 If [namespace] <> ".Internal" Then
                     ' 20220512
                     ' 
