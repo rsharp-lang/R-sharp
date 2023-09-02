@@ -24,4 +24,10 @@ Namespace Runtime.Interop
         End Function
 
     End Class
+
+    ''' <summary>
+    ''' A template for check of the <see cref="RDefaultExpressionAttribute"/>
+    ''' </summary>
+    Public MustInherit Class RDefaultFunction
+    End Class
 End Namespace
