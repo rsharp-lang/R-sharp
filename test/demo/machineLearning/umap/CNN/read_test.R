@@ -29,6 +29,9 @@ for(name in colnames(raw)) {
 }
 
 let cnn = CNN::cnn(file = "./MNIST.cnn");
+
+print(cnn);
+
 let result = cnn(raw);
 
 result[, "label"] = labels;
