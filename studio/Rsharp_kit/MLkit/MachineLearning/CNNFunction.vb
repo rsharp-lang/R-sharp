@@ -12,6 +12,10 @@ Public Class CNNFunction : Inherits RDefaultFunction
 
     Friend cnn As ConvolutionalNN
 
+    Public Overrides Function ToString() As String
+        Return $"CNN<{cnn.ToString}>(...);"
+    End Function
+
     Public Shared Function DoPrediction(cnn As ConvolutionalNN, dataset As Object,
                                         <RRawVectorArgument>
                                         Optional class_labels As Object = "class_%d",

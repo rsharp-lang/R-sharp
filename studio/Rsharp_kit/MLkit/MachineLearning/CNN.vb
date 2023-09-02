@@ -76,6 +76,11 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <RTypeExport("cnn", GetType(LayerBuilder))>
 Module CNNTools
 
+    Sub Main()
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of CNNFunction)(Function(cnn) cnn.ToString)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of ConvolutionalNN)(Function(cnn) cnn.ToString)
+    End Sub
+
     ''' <summary>
     ''' get/set of the CNN parallel thread number
     ''' </summary>

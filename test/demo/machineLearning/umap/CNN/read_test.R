@@ -29,7 +29,7 @@ for(name in colnames(raw)) {
 }
 
 let cnn = CNN::cnn(file = "./MNIST.cnn");
-let result = CNN::predict(cnn, raw);
+let result = cnn(raw);
 
 result[, "label"] = labels;
 
