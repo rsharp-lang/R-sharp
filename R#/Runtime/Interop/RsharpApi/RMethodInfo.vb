@@ -160,9 +160,9 @@ Namespace Runtime.Interop
         End Sub
 
         ''' <summary>
-        ''' 
+        ''' Construct a object class binding instance member function
         ''' </summary>
-        ''' <param name="name"></param>
+        ''' <param name="name">The symbol name of the given function</param>
         ''' <param name="closure"><see cref="MethodInfo"/> from parsing .NET dll module file.</param>
         ''' <param name="target">
         ''' for object instance method used only, nothing means static method
