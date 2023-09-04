@@ -1,4 +1,5 @@
 require(graphics);
+require(CNN);
 
 setwd(@dir);
 
