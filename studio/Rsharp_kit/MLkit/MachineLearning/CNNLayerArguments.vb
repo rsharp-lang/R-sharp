@@ -18,11 +18,13 @@ Public Class CNNLayerArguments
             Case NameOf(CNNTools.pool_layer) : cnn.buildPoolLayer(args!sx, args!stride, args!padding)
             Case NameOf(CNNTools.dropout_layer) : cnn.buildDropoutLayer(args!drop_prob)
             Case NameOf(CNNTools.relu_layer) : cnn.buildReLULayer()
+            Case NameOf(CNNTools.leaky_relu_layer) : cnn.buildLeakyReLULayer()
             Case NameOf(CNNTools.sigmoid_layer) : cnn.buildSigmoidLayer()
             Case NameOf(CNNTools.lrn_layer) : cnn.buildLocalResponseNormalizationLayer(args!n)
             Case NameOf(CNNTools.tanh_layer) : cnn.buildTanhLayer()
             Case NameOf(CNNTools.full_connected_layer) : cnn.buildFullyConnectedLayer(args!size)
             Case NameOf(CNNTools.regression_layer) : cnn.buildRegressionLayer()
+            Case NameOf(CNNTools.conv_transpose_layer) : cnn.buildConv2DTransposeLayer(args!filter, args!filters, args!stride)
 
             Case Else
                 Throw New NotImplementedException(type)

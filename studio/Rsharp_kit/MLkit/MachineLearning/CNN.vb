@@ -204,6 +204,28 @@ Module CNNTools
         }
     End Function
 
+    <ExportAPI("conv_transpose_layer")>
+    Public Function conv_transpose_layer(<RRawVectorArgument>
+                                         filter As Object,
+                                         Optional filters As Integer = 3,
+                                         Optional stride As Integer = 1) As CNNLayerArguments
+
+        Dim sz As Integer() = CLRVector.asInteger(filter)
+        Dim sz_val As New Dimension(sz(0), sz(1))
+        Dim layer As New CNNLayerArguments With {
+            .type = NameOf(conv_transpose_layer),
+            .args = New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"filter", sz_val},
+                    {"filters", filters},
+                    {"stride", stride}
+                }
+            }
+        }
+
+        Return layer
+    End Function
+
     ''' <summary>
     ''' This layer is useful when we are dealing with ReLU neurons. Why is that?
     ''' Because ReLU neurons have unbounded activations and we need LRN to normalize
@@ -266,6 +288,13 @@ Module CNNTools
     Public Function relu_layer() As CNNLayerArguments
         Return New CNNLayerArguments With {
             .type = NameOf(relu_layer)
+        }
+    End Function
+
+    <ExportAPI("leaky_relu_layer")>
+    Public Function leaky_relu_layer() As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(leaky_relu_layer)
         }
     End Function
 
@@ -522,6 +551,29 @@ Module CNNTools
                 Return Message.InCompatibleType(GetType(String), labels.GetType, env)
             End If
         End If
+    End Function
+
+    <ExportAPI("auto_encoder")>
+    <RApiReturn(GetType(CNNFunction))>
+    Public Function auto_encoder(cnn As Object, dataset As SampleData(),
+                                 Optional max_loops As Integer = 100,
+                                 Optional trainer As TrainerAlgorithm = Nothing,
+                                 Optional env As Environment = Nothing) As Object
+        dataset = dataset _
+            .Select(Function(si)
+                        Return New SampleData(si.features, si.features) With {
+                            .id = si.id
+                        }
+                    End Function) _
+            .ToArray
+
+        Return CNNTools.training(
+            cnn:=cnn,
+            dataset:=dataset,
+            max_loops:=max_loops,
+            trainer:=trainer,
+            env:=env
+        )
     End Function
 
     ''' <summary>
