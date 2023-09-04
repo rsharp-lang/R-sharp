@@ -40,13 +40,12 @@ cnn = cnn + input_layer([28, 28])
 ;
 
 let ds = sample_dataset(dataset = raw, labels = as.numeric(labels));
+let cnn_f = CNN::training(cnn, ds, max.loops = 3, trainer = CNN::ada_grad(batch.size = 60));
 
-cnn = CNN::training(cnn, ds, max.loops = 3, trainer = CNN::ada_grad(batch.size = 60));
-
-print(cnn);
+print(cnn_f);
 raw[, "label"] = NULL;
 
-let result = cnn(raw);
+let result = cnn_f(raw);
 
 result[, "label"] = labels;
 
@@ -54,11 +53,11 @@ print(result);
 
 write.csv(result, file = "./demo-test.csv", row.names = TRUE);
 
-CNN::saveModel(cnn, file = "./MNIST.cnn");
+CNN::saveModel(cnn_f, file = "./MNIST.cnn");
 
-cnn = CNN::cnn(file = "./MNIST.cnn");
+cnn_f = CNN::cnn(file = "./MNIST.cnn");
 
-let result = CNN::predict(cnn, raw);
+let result = CNN::predict(cnn_f, raw);
 
 result[, "label"] = labels;
 
