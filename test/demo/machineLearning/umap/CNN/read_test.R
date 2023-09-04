@@ -28,11 +28,11 @@ for(name in colnames(raw)) {
     }    
 }
 
-let cnn = CNN::cnn(file = "./MNIST.cnn");
+let cnn_f = CNN::cnn(file = "./MNIST.cnn");
 
-print(cnn);
+print(cnn_f);
 
-let result = cnn(raw);
+let result = cnn_f(raw);
 
 result[, "label"] = labels;
 
