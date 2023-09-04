@@ -8,7 +8,7 @@ const raster = as.raster(img = readImage(img_src));
 const data = raster_convolution(raster);
 const ds = CNN::sample_dataset(data, labels = ["r","g","b"]);
 
-print(data);
+print(data, max.print = 6);
 
 let encoder = CNN::cnn()
 + input_layer(size = [1,1], depth = 3)
@@ -23,4 +23,6 @@ let encoder = CNN::cnn()
 + regression_layer()
 ;
 
-encoder = CNN::training(cnn = encoder, dataset = ds);
+encoder = CNN::training(cnn = encoder, dataset = ds, max_loops = 3,  trainer = CNN::sgd(batch_size = 30));
+
+CNN::saveModel(encoder, file = "./img_regression.cnn");

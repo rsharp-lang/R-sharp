@@ -626,8 +626,16 @@ Module CNNTools
     ''' <param name="l2_decay"></param>
     ''' <returns></returns>
     <ExportAPI("sgd")>
-    Public Function SGDTrainer(batch_size As Integer, Optional l2_decay As Single = 0.001) As TrainerAlgorithm
-        Return New SGDTrainer(batch_size, l2_decay)
+    Public Function SGDTrainer(batch_size As Integer,
+                               Optional learning_rate As Double = 0.01,
+                               Optional momentum As Double = 0.9,
+                               Optional eps As Double = 0.00000001,
+                               Optional l2_decay As Single = 0.001) As TrainerAlgorithm
+
+        Return New SGDTrainer(batch_size, l2_decay) With {
+            .eps = eps,
+            .learning_rate = learning_rate, .momentum = momentum
+        }
     End Function
 
     ''' <summary>
