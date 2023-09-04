@@ -10,7 +10,7 @@ const raw = images_set
 format = "mnist", 
 dataset = "dataframe", 
 labelfile = "../umap/mnist_dataset/train-labels-idx1-ubyte",
-subset = 60
+subset = 600
 );
 
 let cnn = cnn() 
