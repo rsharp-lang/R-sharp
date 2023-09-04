@@ -24,7 +24,7 @@ Public Class CNNLayerArguments
             Case NameOf(CNNTools.tanh_layer) : cnn.buildTanhLayer()
             Case NameOf(CNNTools.full_connected_layer) : cnn.buildFullyConnectedLayer(args!size)
             Case NameOf(CNNTools.regression_layer) : cnn.buildRegressionLayer()
-            Case NameOf(CNNTools.conv_transpose_layer) : cnn.buildConv2DTransposeLayer(args!filter, args!filters, args!stride)
+            Case NameOf(CNNTools.conv_transpose_layer) : cnn.buildConv2DTransposeLayer(args!dims, args!filter, args!filters, args!stride)
 
             Case Else
                 Throw New NotImplementedException(type)

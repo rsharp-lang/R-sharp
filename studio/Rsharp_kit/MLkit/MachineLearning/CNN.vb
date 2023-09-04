@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.CNN
+Imports Microsoft.VisualBasic.MachineLearning.CNN.data
 Imports Microsoft.VisualBasic.MachineLearning.CNN.trainers
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.Convolutional
@@ -205,20 +206,23 @@ Module CNNTools
     End Function
 
     <ExportAPI("conv_transpose_layer")>
-    Public Function conv_transpose_layer(<RRawVectorArgument>
-                                         filter As Object,
+    Public Function conv_transpose_layer(<RRawVectorArgument> dims As Object,
+                                         <RRawVectorArgument> filter As Object,
                                          Optional filters As Integer = 3,
                                          Optional stride As Integer = 1) As CNNLayerArguments
 
         Dim sz As Integer() = CLRVector.asInteger(filter)
         Dim sz_val As New Dimension(sz(0), sz(1))
+        Dim dims_ints As Integer() = CLRVector.asInteger(dims)
+        Dim dims_val As New OutputDefinition(dims_ints(0), dims_ints(1), dims_ints(2))
         Dim layer As New CNNLayerArguments With {
             .type = NameOf(conv_transpose_layer),
             .args = New list With {
                 .slots = New Dictionary(Of String, Object) From {
                     {"filter", sz_val},
                     {"filters", filters},
-                    {"stride", stride}
+                    {"stride", stride},
+                    {"dims", dims_val}
                 }
             }
         }
