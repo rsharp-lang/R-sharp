@@ -495,6 +495,29 @@ Module CNNTools
                                 }
                             End Function) _
                     .ToArray
+            ElseIf TypeOf labels Is String() Then
+                Dim label_strs As String() = labels
+
+                If df.nrows = label_strs.Length Then
+                    Throw New NotImplementedException
+                Else
+                    ' multiple fileds contains labels vector data
+                    Dim features As String() = df.colnames.Where(Function(si) label_strs.IndexOf(si) <= -1).ToArray
+                    Dim feature_df = df.forEachRow(features).ToArray
+                    Dim labels_df = df.forEachRow(label_strs).ToArray
+                    Dim sample_data As SampleData() = feature_df _
+                        .Select(Function(r, i)
+                                    Return New SampleData(
+                                        features:=CLRVector.asNumeric(r.value),
+                                        labels:=CLRVector.asNumeric(labels_df(i).value)
+                                    ) With {
+                                        .id = r.name
+                                    }
+                                End Function) _
+                        .ToArray
+
+                    Return sample_data
+                End If
             Else
                 Return Message.InCompatibleType(GetType(String), labels.GetType, env)
             End If
