@@ -159,15 +159,21 @@ Module Rgraphics
         Dim g As New List(Of Double)
         Dim b As New List(Of Double)
 
-        For xi As Integer = 0 To raster.size.Width Step stride
-            For yj As Integer = 0 To raster.size.Height Step stride
+        For xi As Integer = 0 To raster.size.Width - 1 Step stride
+            For yj As Integer = 0 To raster.size.Height - 1 Step stride
                 Dim samples As New List(Of Color)
 
                 For kx As Integer = 1 To size
                     For ky As Integer = 1 To size
-                        Call samples.Add(raster.GetPixel(xi + kx, yj + ky))
+                        If xi + kx < raster.size.Width AndAlso yj + ky < raster.size.Height Then
+                            Call samples.Add(raster.GetPixel(xi + kx, yj + ky))
+                        End If
                     Next
                 Next
+
+                If samples.Count = 0 Then
+                    Continue For
+                End If
 
                 Call xl.Add(xi)
                 Call yl.Add(yj)
