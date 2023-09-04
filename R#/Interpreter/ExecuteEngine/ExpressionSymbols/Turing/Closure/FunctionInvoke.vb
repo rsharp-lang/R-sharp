@@ -366,7 +366,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     If Not symbol Is Nothing Then
                         ' is regular expression:  $"xxx"(string)
                         ' or is invokable: xxx(yyy)
-                        If symbol.typeof Is GetType(Regex) OrElse symbol.typeof.ImplementInterface(Of RFunction) Then
+                        If symbol.typeof Is GetType(Regex) OrElse
+                            symbol.typeof.ImplementInterface(Of RFunction) OrElse
+                            symbol.typeof.IsInheritsFrom(GetType(RDefaultFunction)) Then
+
                             funcVar = symbol.value
                         Else
                             funcVar = Nothing

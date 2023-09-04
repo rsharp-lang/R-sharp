@@ -19,14 +19,14 @@ let labels = raw$label;
 
 raw[, "label"] = NULL;
 
-for(name in colnames(raw)) {
-    let v = as.numeric(raw[, name]);
+# for(name in colnames(raw)) {
+#     let v = as.numeric(raw[, name]);
 
-    if (sum(v) > 0) {
-        v = v / max(v);
-        raw[, name] = v;
-    }    
-}
+#     if (sum(v) > 0) {
+#         v = v / max(v);
+#         raw[, name] = v;
+#     }    
+# }
 
 let cnn = cnn();
 
