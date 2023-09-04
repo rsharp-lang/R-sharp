@@ -27,6 +27,10 @@ let cnn = cnn()
 + relu_layer()
 ;
 
+let labels = raw$label;
+
+raw[, "label"] = NULL;
+
 let ds = sample_dataset(dataset = raw, labels = as.numeric(labels));
 let encoder = CNN::auto_encoder(cnn, ds, max.loops = 3, trainer = CNN::ada_grad(batch.size = 60));
 
