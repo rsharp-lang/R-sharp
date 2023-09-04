@@ -148,6 +148,48 @@ Module Rgraphics
                End Function
     End Function
 
+    <ExportAPI("raster_convolution")>
+    Public Function raster_convolution(raster As RasterScaler,
+                                       Optional size As Integer = 3,
+                                       Optional stride As Integer = 1) As dataframe
+        Dim xl As New List(Of Integer)
+        Dim yl As New List(Of Integer)
+        Dim scale As New List(Of Double)
+        Dim r As New List(Of Double)
+        Dim g As New List(Of Double)
+        Dim b As New List(Of Double)
+
+        For xi As Integer = 0 To raster.size.Width Step stride
+            For yj As Integer = 0 To raster.size.Height Step stride
+                Dim samples As New List(Of Color)
+
+                For kx As Integer = 1 To size
+                    For ky As Integer = 1 To size
+                        Call samples.Add(raster.GetPixel(xi + kx, yj + ky))
+                    Next
+                Next
+
+                Call xl.Add(xi)
+                Call yl.Add(yj)
+                Call scale.Add(Aggregate c As Color In samples Into Sum(c.GetBrightness))
+                Call r.Add(Aggregate c As Color In samples Into Average(c.R))
+                Call g.Add(Aggregate c As Color In samples Into Average(c.G))
+                Call b.Add(Aggregate c As Color In samples Into Average(c.B))
+            Next
+        Next
+
+        Return New dataframe With {
+            .columns = New Dictionary(Of String, Array) From {
+                {"x", xl.ToArray},
+                {"y", yl.ToArray},
+                {"scale", scale.ToArray},
+                {"r", r.ToArray},
+                {"g", g.ToArray},
+                {"b", b.ToArray}
+            }
+        }
+    End Function
+
     <ExportAPI("raster_vec")>
     Public Function as_vector(raster As RasterScaler) As vec
         Return New vec(raster.GetRasterData.Select(Function(p) p.Scale))
