@@ -473,3 +473,4 @@ test/demo/machineLearning/umap/CNN/images_x4.pack
 test/demo/machineLearning/umap/CNN/demo-test.csv
 test/demo/machineLearning/umap/CNN/demo-test-reader.csv
 test/demo/machineLearning/CNN_image/img_regression.cnn
+test/demo/machineLearning/CNN_image/MNIST_autoencoder.cnn

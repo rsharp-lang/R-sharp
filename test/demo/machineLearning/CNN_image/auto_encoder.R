@@ -25,6 +25,7 @@ let cnn = cnn()
 + leaky_relu_layer()
 + conv_transpose_layer([28,28,1],[10,10],5,3)
 + relu_layer()
++ softmax_layer()
 ;
 
 let labels = raw$label;
