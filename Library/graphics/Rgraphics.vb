@@ -286,6 +286,7 @@ Module Rgraphics
 
             For i As Integer = 0 To px.Length - 1
                 color = Color.FromArgb(r(i), g(i), b(i))
+                ' raster.SetPixel(px(i) - 1, py(i) - 1, color)
                 buffer.SetPixel(px(i) - 1, py(i) - 1, color)
             Next
 

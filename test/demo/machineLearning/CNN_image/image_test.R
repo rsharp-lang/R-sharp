@@ -30,11 +30,10 @@ let encoder = CNN::cnn()
 + full_connected_layer(20)
 + relu_layer()
 + full_connected_layer(3)
-+ relu_layer()
 + regression_layer()
 ;
 
-encoder = CNN::training(cnn = encoder, dataset = ds, max_loops = 6,  trainer = CNN::sgd(batch_size = 5));
+encoder = CNN::training(cnn = encoder, dataset = ds, max_loops = 20,  trainer = CNN::sgd(batch_size = 5));
 
 CNN::saveModel(encoder, file = "./img_regression.cnn");
 
