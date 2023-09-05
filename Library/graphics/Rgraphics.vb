@@ -268,11 +268,13 @@ Module Rgraphics
             Dim g As Double() = bytes(CLRVector.asNumeric(df!g))
             Dim b As Double() = bytes(CLRVector.asNumeric(df!b))
             Dim poly As New Polygon2D(px, py)
-            Dim raster As New Bitmap(CInt(poly.width), CInt(poly.height))
+            Dim raster As New Bitmap(CInt(poly.width) + 1, CInt(poly.height) + 1)
             Dim buffer As BitmapBuffer = BitmapBuffer.FromBitmap(raster)
+            Dim color As Color
 
             For i As Integer = 0 To px.Length - 1
-                Call buffer.SetPixel(px(i) - 1, py(i) - 1, Color.FromArgb(r(i), g(i), b(i)))
+                color = Color.FromArgb(r(i), g(i), b(i))
+                buffer.SetPixel(px(i) - 1, py(i) - 1, color)
             Next
 
             Call buffer.Dispose()
