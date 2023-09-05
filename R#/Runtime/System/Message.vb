@@ -177,7 +177,7 @@ Namespace Runtime.Components
                 "given: " & given.FullName
             }.DoCall(Function(msg)
                          If Not paramName.StringEmpty Then
-                             msg = msg.JoinIterates({$"parameter: {paramName}"})
+                             msg = msg.JoinIterates({$"parameter: {paramName}"}).ToArray
                          End If
 
                          Return Internal.debug.stop(msg, envir, suppress)

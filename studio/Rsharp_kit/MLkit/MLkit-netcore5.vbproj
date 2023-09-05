@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>MLkit</RootNamespace>
-    <TargetFrameworks>net6.0;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net6.0;net6.0-windows;net48</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
     <AssemblyName>MLkit</AssemblyName>
     <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;gcmodeller_desktop</Configurations>
@@ -12,6 +12,7 @@
     <Copyright>I@XIEGUIGANG.ME</Copyright>
     <Description>MLkit: R# machine learning toolkit library</Description>
     <PackageIcon>Preview Icon - Rect.png</PackageIcon>
+    <UseApplicationFramework>True</UseApplicationFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -249,6 +250,18 @@
     <DebugType>full</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants>MATH_DATASET=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
+    <DefineConstants />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|x64'">
+    <DefineConstants />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net48|x64'">
+    <DefineConstants>UNIX=1,MATH_DATASET=1</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

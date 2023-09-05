@@ -54,7 +54,11 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
+Imports Microsoft.VisualBasic.Imaging.Math2D
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -72,6 +76,10 @@ Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 ''' </summary>
 <Package("graphics")>
 Module Rgraphics
+
+    Sub Main()
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(RasterScaler), AddressOf raster_dataframe)
+    End Sub
 
     ''' <summary>
     ''' Cast the clr image object as the raster data
@@ -148,6 +156,76 @@ Module Rgraphics
                End Function
     End Function
 
+    Public Function raster_dataframe(raster As RasterScaler, args As list, env As Environment) As dataframe
+        Dim pixels = raster.GetRasterData.ToArray
+        Dim df As New dataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim rgb As Boolean = args.getValue(Of Boolean)("rgb", env, [default]:=False)
+
+        Call df.add("x", pixels.Select(Function(a) a.X))
+        Call df.add("y", pixels.Select(Function(a) a.Y))
+        Call df.add("scale", pixels.Select(Function(a) a.Scale))
+
+        If rgb Then
+            Dim colors As Color() = pixels _
+                .Select(Function(p) raster.GetPixel(p.X - 1, p.Y - 1)) _
+                .ToArray
+
+            Call df.add("r", colors.Red)
+            Call df.add("g", colors.Green)
+            Call df.add("b", colors.Blue)
+        End If
+
+        Return df
+    End Function
+
+    <ExportAPI("raster_convolution")>
+    Public Function raster_convolution(raster As RasterScaler,
+                                       Optional size As Integer = 3,
+                                       Optional stride As Integer = 1) As dataframe
+        Dim xl As New List(Of Integer)
+        Dim yl As New List(Of Integer)
+        Dim scale As New List(Of Double)
+        Dim r As New List(Of Double)
+        Dim g As New List(Of Double)
+        Dim b As New List(Of Double)
+
+        For xi As Integer = 0 To raster.size.Width - 1 Step stride
+            For yj As Integer = 0 To raster.size.Height - 1 Step stride
+                Dim samples As New List(Of Color)
+
+                For kx As Integer = 1 To size
+                    For ky As Integer = 1 To size
+                        If xi + kx < raster.size.Width AndAlso yj + ky < raster.size.Height Then
+                            Call samples.Add(raster.GetPixel(xi + kx, yj + ky))
+                        End If
+                    Next
+                Next
+
+                If samples.Count = 0 Then
+                    Continue For
+                End If
+
+                Call xl.Add(xi)
+                Call yl.Add(yj)
+                Call scale.Add(Aggregate c As Color In samples Into Sum(c.GetBrightness))
+                Call r.Add(Aggregate c As Color In samples Into Average(c.R))
+                Call g.Add(Aggregate c As Color In samples Into Average(c.G))
+                Call b.Add(Aggregate c As Color In samples Into Average(c.B))
+            Next
+        Next
+
+        Return New dataframe With {
+            .columns = New Dictionary(Of String, Array) From {
+                {"x", xl.ToArray},
+                {"y", yl.ToArray},
+                {"scale", scale.ToArray},
+                {"r", r.ToArray},
+                {"g", g.ToArray},
+                {"b", b.ToArray}
+            }
+        }
+    End Function
+
     <ExportAPI("raster_vec")>
     Public Function as_vector(raster As RasterScaler) As vec
         Return New vec(raster.GetRasterData.Select(Function(p) p.Scale))
@@ -194,9 +272,34 @@ Module Rgraphics
             Throw New NotImplementedException
         ElseIf x.GetType.ImplementInterface(Of GeneralMatrix) Then
             Return DirectCast(x, GeneralMatrix).imageFromMatrix(col, env)
+        ElseIf TypeOf x Is dataframe Then
+            Dim df As dataframe = DirectCast(x, dataframe)
+            Dim px As Integer() = CLRVector.asInteger(df!x)
+            Dim py As Integer() = CLRVector.asInteger(df!y)
+            Dim r As Double() = bytes(CLRVector.asNumeric(df!r))
+            Dim g As Double() = bytes(CLRVector.asNumeric(df!g))
+            Dim b As Double() = bytes(CLRVector.asNumeric(df!b))
+            Dim poly As New Polygon2D(px, py)
+            Dim raster As New Bitmap(CInt(poly.width) + 1, CInt(poly.height) + 1)
+            Dim buffer As BitmapBuffer = BitmapBuffer.FromBitmap(raster)
+            Dim color As Color
+
+            For i As Integer = 0 To px.Length - 1
+                color = Color.FromArgb(r(i), g(i), b(i))
+                ' raster.SetPixel(px(i) - 1, py(i) - 1, color)
+                buffer.SetPixel(px(i) - 1, py(i) - 1, color)
+            Next
+
+            Call buffer.Dispose()
+
+            Return raster
         Else
             Throw New NotImplementedException
         End If
+    End Function
+
+    Private Function bytes(r As Double()) As Double()
+        Return SIMD.Multiply.f64_scalar_op_multiply_f64(255, SIMD.Divide.f64_op_divide_f64_scalar(r, r.Max))
     End Function
 
     <Extension>

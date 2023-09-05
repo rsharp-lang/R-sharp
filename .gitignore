@@ -472,3 +472,15 @@ test/demo/machineLearning/umap/CNN/MNIST.cnn
 test/demo/machineLearning/umap/CNN/images_x4.pack
 test/demo/machineLearning/umap/CNN/demo-test.csv
 test/demo/machineLearning/umap/CNN/demo-test-reader.csv
+test/demo/machineLearning/CNN_image/img_regression.cnn
+test/demo/machineLearning/CNN_image/MNIST_autoencoder.cnn
+test/demo/machineLearning/CNN_image/decoder_plot/0-10.png
+test/demo/machineLearning/CNN_image/decoder_plot/1-12.png
+test/demo/machineLearning/CNN_image/decoder_plot/1-15.png
+test/demo/machineLearning/CNN_image/decoder_plot/1-17.png
+test/demo/machineLearning/CNN_image/decoder_plot/2-14.png
+test/demo/machineLearning/CNN_image/decoder_plot/3-16.png
+test/demo/machineLearning/CNN_image/decoder_plot/4-11.png
+test/demo/machineLearning/CNN_image/decoder_plot/4-18.png
+test/demo/machineLearning/CNN_image/decoder_plot/5-9.png
+test/demo/machineLearning/CNN_image/decoder_plot/9-13.png

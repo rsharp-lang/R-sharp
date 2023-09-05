@@ -192,7 +192,7 @@ Partial Module CLI
         App.CurrentDirectory = App.HOME
 
         Using pkgMgr As New PackageManager(config)
-            For Each fileName As String In {"base.dll", "igraph.dll", "graphics.dll", "Rlapack.dll"}
+            For Each fileName As String In {"base.dll", "igraph.dll", "graphics.dll", "Rlapack.dll", "MLkit.dll"}
                 For Each dir As String In {"./", "./Library", "./library", "../Library", "../library"}
                     file = $"{dir}/{fileName}"
 

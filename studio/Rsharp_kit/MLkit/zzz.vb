@@ -63,6 +63,7 @@ Public Class zzz
             .AppSummary("Welcome to the SMRUCC Machine Learning toolkit!", "", App.StdOut)
 
         Call clustering.Main()
+        Call CNNTools.Main()
 
         Call Console.WriteLine()
     End Sub

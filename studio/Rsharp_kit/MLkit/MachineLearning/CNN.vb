@@ -77,6 +77,11 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <RTypeExport("cnn", GetType(LayerBuilder))>
 Module CNNTools
 
+    Sub Main()
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of CNNFunction)(Function(cnn) cnn.ToString)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of ConvolutionalNN)(Function(cnn) cnn.ToString)
+    End Sub
+
     ''' <summary>
     ''' get/set of the CNN parallel thread number
     ''' </summary>
@@ -123,7 +128,7 @@ Module CNNTools
                 Return buf.TryCast(Of Message)
             End If
 
-            Return ReadModelCNN.Read(buf.TryCast(Of Stream))
+            Return New CNNFunction With {.cnn = ReadModelCNN.Read(buf.TryCast(Of Stream))}
         End If
     End Function
 
@@ -206,6 +211,31 @@ Module CNNTools
         }
     End Function
 
+    <ExportAPI("conv_transpose_layer")>
+    Public Function conv_transpose_layer(<RRawVectorArgument> dims As Object,
+                                         <RRawVectorArgument> filter As Object,
+                                         Optional filters As Integer = 3,
+                                         Optional stride As Integer = 1) As CNNLayerArguments
+
+        Dim sz As Integer() = CLRVector.asInteger(filter)
+        Dim sz_val As New Dimension(sz(0), sz(1))
+        Dim dims_ints As Integer() = CLRVector.asInteger(dims)
+        Dim dims_val As New OutputDefinition(dims_ints(0), dims_ints(1), dims_ints(2))
+        Dim layer As New CNNLayerArguments With {
+            .type = NameOf(conv_transpose_layer),
+            .args = New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"filter", sz_val},
+                    {"filters", filters},
+                    {"stride", stride},
+                    {"dims", dims_val}
+                }
+            }
+        }
+
+        Return layer
+    End Function
+
     ''' <summary>
     ''' This layer is useful when we are dealing with ReLU neurons. Why is that?
     ''' Because ReLU neurons have unbounded activations and we need LRN to normalize
@@ -268,6 +298,13 @@ Module CNNTools
     Public Function relu_layer() As CNNLayerArguments
         Return New CNNLayerArguments With {
             .type = NameOf(relu_layer)
+        }
+    End Function
+
+    <ExportAPI("leaky_relu_layer")>
+    Public Function leaky_relu_layer() As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(leaky_relu_layer)
         }
     End Function
 
@@ -354,6 +391,13 @@ Module CNNTools
                     {"size", size}
                 }
             }
+        }
+    End Function
+
+    <ExportAPI("gaussian_layer")>
+    Public Function gaussian_layer() As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(gaussian_layer)
         }
     End Function
 
@@ -497,14 +541,60 @@ Module CNNTools
                                 }
                             End Function) _
                     .ToArray
+            ElseIf TypeOf labels Is String() Then
+                Dim label_strs As String() = labels
+
+                If df.nrows = label_strs.Length Then
+                    Throw New NotImplementedException
+                Else
+                    ' multiple fileds contains labels vector data
+                    Dim features As String() = df.colnames.Where(Function(si) label_strs.IndexOf(si) <= -1).ToArray
+                    Dim feature_df = df.forEachRow(features).ToArray
+                    Dim labels_df = df.forEachRow(label_strs).ToArray
+                    Dim sample_data As SampleData() = feature_df _
+                        .Select(Function(r, i)
+                                    Return New SampleData(
+                                        features:=CLRVector.asNumeric(r.value),
+                                        labels:=CLRVector.asNumeric(labels_df(i).value)
+                                    ) With {
+                                        .id = r.name
+                                    }
+                                End Function) _
+                        .ToArray
+
+                    Return sample_data
+                End If
             Else
                 Return Message.InCompatibleType(GetType(String), labels.GetType, env)
             End If
         End If
     End Function
 
+    <ExportAPI("auto_encoder")>
+    <RApiReturn(GetType(CNNFunction))>
+    Public Function auto_encoder(cnn As Object, dataset As SampleData(),
+                                 Optional max_loops As Integer = 100,
+                                 Optional trainer As TrainerAlgorithm = Nothing,
+                                 Optional env As Environment = Nothing) As Object
+        dataset = dataset _
+            .Select(Function(si)
+                        Return New SampleData(si.features, si.features) With {
+                            .id = si.id
+                        }
+                    End Function) _
+            .ToArray
+
+        Return CNNTools.training(
+            cnn:=cnn,
+            dataset:=dataset,
+            max_loops:=max_loops,
+            trainer:=trainer,
+            env:=env
+        )
+    End Function
+
     ''' <summary>
-    ''' 
+    ''' Do CNN network model training
     ''' </summary>
     ''' <param name="cnn"></param>
     ''' <param name="dataset"></param>
@@ -513,7 +603,7 @@ Module CNNTools
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("training")>
-    <RApiReturn(GetType(ConvolutionalNN))>
+    <RApiReturn(GetType(CNNFunction))>
     Public Function training(cnn As Object, dataset As SampleData(),
                              Optional max_loops As Integer = 100,
                              Optional algorithm As TrainerAlgorithm = Nothing,
@@ -540,7 +630,7 @@ Module CNNTools
         alg = alg.SetKernel(cnn_val)
         cnn_val = New Trainer(alg, Sub(s) base.print(s,, env)).train(cnn_val, dataset, max_loops)
 
-        Return cnn_val
+        Return New CNNFunction With {.cnn = cnn_val}
     End Function
 
     ''' <summary>
@@ -605,8 +695,16 @@ Module CNNTools
     ''' <param name="l2_decay"></param>
     ''' <returns></returns>
     <ExportAPI("sgd")>
-    Public Function SGDTrainer(batch_size As Integer, Optional l2_decay As Single = 0.001) As TrainerAlgorithm
-        Return New SGDTrainer(batch_size, l2_decay)
+    Public Function SGDTrainer(batch_size As Integer,
+                               Optional learning_rate As Double = 0.01,
+                               Optional momentum As Double = 0.9,
+                               Optional eps As Double = 0.00000001,
+                               Optional l2_decay As Single = 0.001) As TrainerAlgorithm
+
+        Return New SGDTrainer(batch_size, l2_decay) With {
+            .eps = eps,
+            .learning_rate = learning_rate, .momentum = momentum
+        }
     End Function
 
     ''' <summary>
@@ -624,64 +722,19 @@ Module CNNTools
     End Function
 
     <ExportAPI("predict")>
-    Public Function predict(cnn As ConvolutionalNN, dataset As Object,
+    Public Function predict(cnn As Object, dataset As Object,
                             <RRawVectorArgument>
                             Optional class_labels As Object = "class_%d",
+                            Optional is_generative As Boolean = False,
                             Optional env As Environment = Nothing) As Object
 
-        Dim ds As SampleData()
-
-        If TypeOf dataset Is dataframe Then
-            ds = DirectCast(dataset, dataframe) _
-                .forEachRow _
-                .Select(Function(r)
-                            Return New SampleData(CLRVector.asNumeric(r.value)) With {
-                                .id = r.name
-                            }
-                        End Function) _
-                .ToArray
+        If TypeOf cnn Is ConvolutionalNN Then
+            Return CNNFunction.DoPrediction(cnn, dataset, class_labels, is_generative, env)
+        ElseIf TypeOf cnn Is CNNFunction Then
+            Return DirectCast(cnn, CNNFunction).DoPrediction(dataset, class_labels, is_generative, env)
         Else
-            Return Message.InCompatibleType(GetType(dataframe), dataset.GetType, env)
+            Return Message.InCompatibleType(GetType(CNNFunction), cnn.GetType, env)
         End If
-
-        Dim result As New dataframe With {
-            .columns = New Dictionary(Of String, Array),
-            .rownames = ds.Select(Function(d) d.id).ToArray
-        }
-        Dim outputs As New List(Of Double())
-        Dim class_types As String()
-        Dim data As New DataBlock(cnn.input.dims, cnn.input.out_depth, c:=0)
-
-        For Each sample As SampleData In ds
-            Call data.addImageData(sample.features, sample.features.Max)
-            Call outputs.Add(cnn.predict(data))
-        Next
-
-        If TypeOf class_labels Is String Then
-            If outputs(0).Length <> 1 Then
-                ' is template
-                class_types = Enumerable.Range(1, outputs(0).Length) _
-                    .Select(Function(i) CStr(class_labels).Replace("%d", i)) _
-                    .ToArray
-            Else
-                ' is single
-                class_types = {CStr(class_labels)}
-            End If
-        ElseIf class_labels Is Nothing Then
-            class_types = Enumerable.Range(1, outputs(0).Length) _
-                .Select(Function(i) $"class_{i}") _
-                .ToArray
-        Else
-            class_types = CLRVector.asCharacter(class_labels)
-        End If
-
-        For i As Integer = 0 To outputs(0).Length - 1
-#Disable Warning
-            Call result.add(class_types(i), outputs.Select(Function(r) r(i)))
-#Enable Warning
-        Next
-
-        Return result
     End Function
 
     ''' <summary>
@@ -723,6 +776,7 @@ Module CNNTools
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("saveModel")>
+    <RApiReturn(TypeCodes.boolean)>
     Public Function saveModel(model As Object, file As Object, Optional env As Environment = Nothing) As Object
         Dim buffer = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env)
 
@@ -730,17 +784,16 @@ Module CNNTools
             Return buffer.TryCast(Of Message)
         End If
 
-        Dim result As Boolean
+        Dim result As Boolean = True
 
         If TypeOf model Is CeNiN Then
             result = DirectCast(model, CeNiN).Save(buffer)
         ElseIf TypeOf model Is ConvolutionalNN Then
-            Try
-                Call SaveModelCNN.Write(model, buffer)
-                result = True
-            Catch ex As Exception
-                result = False
-            End Try
+            Call SaveModelCNN.Write(model, buffer)
+        ElseIf TypeOf model Is CNNFunction Then
+            Call SaveModelCNN.Write(DirectCast(model, CNNFunction).cnn, buffer)
+        Else
+            Return Message.InCompatibleType(GetType(ConvolutionalNN), model.GetType, env)
         End If
 
         If TypeOf file Is String Then
