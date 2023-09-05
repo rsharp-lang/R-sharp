@@ -26,6 +26,7 @@ let cnn = cnn()
 + conv_transpose_layer([28,28,1],[10,10],5,3)
 + relu_layer()
 + softmax_layer()
++ regression_layer()
 ;
 
 let labels = raw$label;
