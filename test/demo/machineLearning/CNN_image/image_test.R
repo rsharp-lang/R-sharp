@@ -33,20 +33,25 @@ let encoder = CNN::cnn()
 + regression_layer()
 ;
 
-encoder = CNN::training(cnn = encoder, dataset = ds, max_loops = 50,  trainer = CNN::sgd(batch_size = 5));
+const img = data.frame(x = data$x, y = data$y, scale = data$scale);
+
+encoder = CNN::training(cnn = encoder, dataset = ds, max_loops = 50, 
+    algorithm = CNN::sgd(batch_size = 5), 
+    action = function(t, cnn) {
+        const rgb = CNN::predict(cnn, img, is_generative = TRUE);
+
+        colnames(rgb) = ["r","g","b"];
+
+        rgb[, "x"] = img$x;
+        rgb[, "y"] = img$y;
+
+        print(rgb, max.print = 13);
+
+        bitmap(file = `./plot_${t+1}.png`) {
+            image(rgb);
+        }
+    });
 
 CNN::saveModel(encoder, file = "./img_regression.cnn");
 
-const img = data.frame(x = data$x, y = data$y, scale = data$scale);
-const rgb = encoder(img, is_generative = TRUE);
 
-colnames(rgb) = ["r","g","b"];
-
-rgb[, "x"] = img$x;
-rgb[, "y"] = img$y;
-
-print(rgb, max.print = 13);
-
-bitmap(file = "./plot.png") {
-    image(rgb);
-}
