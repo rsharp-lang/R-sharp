@@ -19,6 +19,7 @@ Public Class CNNFunction : Inherits RDefaultFunction
     Public Shared Function DoPrediction(cnn As ConvolutionalNN, dataset As Object,
                                         <RRawVectorArgument>
                                         Optional class_labels As Object = "class_%d",
+                                        Optional is_generative As Boolean = False,
                                         Optional env As Environment = Nothing) As Object
         Dim ds As SampleData()
 
@@ -43,8 +44,10 @@ Public Class CNNFunction : Inherits RDefaultFunction
         Dim class_types As String()
         Dim data As New DataBlock(cnn.input.dims, cnn.input.out_depth, c:=0)
 
+        ds = SampleData.TransformDataset(ds, is_generative:=is_generative, is_training:=False)
+
         For Each sample As SampleData In ds
-            Call data.addImageData(sample.features, sample.features.Max)
+            Call data.addImageData(sample.features, 1.0)
             Call outputs.Add(cnn.predict(data))
         Next
 
@@ -79,9 +82,10 @@ Public Class CNNFunction : Inherits RDefaultFunction
     Public Function DoPrediction(dataset As Object,
                                  <RRawVectorArgument>
                                  Optional class_labels As Object = "class_%d",
+                                 Optional is_generative As Boolean = False,
                                  Optional env As Environment = Nothing) As Object
 
-        Return DoPrediction(cnn, dataset, class_labels, env)
+        Return DoPrediction(cnn, dataset, class_labels, is_generative, env)
     End Function
 
 End Class

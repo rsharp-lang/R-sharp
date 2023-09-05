@@ -719,12 +719,13 @@ Module CNNTools
     Public Function predict(cnn As Object, dataset As Object,
                             <RRawVectorArgument>
                             Optional class_labels As Object = "class_%d",
+                            Optional is_generative As Boolean = False,
                             Optional env As Environment = Nothing) As Object
 
         If TypeOf cnn Is ConvolutionalNN Then
-            Return CNNFunction.DoPrediction(cnn, dataset, class_labels, env)
+            Return CNNFunction.DoPrediction(cnn, dataset, class_labels, is_generative, env)
         ElseIf TypeOf cnn Is CNNFunction Then
-            Return DirectCast(cnn, CNNFunction).DoPrediction(dataset, class_labels, env)
+            Return DirectCast(cnn, CNNFunction).DoPrediction(dataset, class_labels, is_generative, env)
         Else
             Return Message.InCompatibleType(GetType(CNNFunction), cnn.GetType, env)
         End If
