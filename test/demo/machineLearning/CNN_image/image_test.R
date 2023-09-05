@@ -5,7 +5,7 @@ setwd(@dir);
 
 const img_src = "../../1537192287563.jpg";
 const raster = as.raster(img = readImage(img_src));
-const data = raster_convolution(raster);
+const data = as.data.frame(raster, rgb = TRUE);
 const ds = CNN::sample_dataset(data, labels = ["r","g","b"]);
 
 print(data, max.print = 6);

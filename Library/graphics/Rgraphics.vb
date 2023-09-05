@@ -54,6 +54,7 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Imaging.Math2D
@@ -158,10 +159,21 @@ Module Rgraphics
     Public Function raster_dataframe(raster As RasterScaler, args As list, env As Environment) As dataframe
         Dim pixels = raster.GetRasterData.ToArray
         Dim df As New dataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim rgb As Boolean = args.getValue(Of Boolean)("rgb", env, [default]:=False)
 
         Call df.add("x", pixels.Select(Function(a) a.X))
         Call df.add("y", pixels.Select(Function(a) a.Y))
         Call df.add("scale", pixels.Select(Function(a) a.Scale))
+
+        If rgb Then
+            Dim colors As Color() = pixels _
+                .Select(Function(p) raster.GetPixel(p.X - 1, p.Y - 1)) _
+                .ToArray
+
+            Call df.add("r", colors.Red)
+            Call df.add("g", colors.Green)
+            Call df.add("b", colors.Blue)
+        End If
 
         Return df
     End Function
