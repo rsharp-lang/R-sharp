@@ -17,3 +17,7 @@ const decoder = CNN::cnn(file = "./MNIST_autoencoder.cnn");
 
 print(decoder);
 
+raw[,"label"] = NULL;
+
+const images = decoder(raw);
+
