@@ -7,14 +7,14 @@ const img_src = "../../1537192287563.jpg";
 const raster = as.raster(img = readImage(img_src));
 const data = as.data.frame(raster, rgb = TRUE);
 
-data[, "scale"] = NULL;
+# data[, "scale"] = NULL;
 
 const ds = CNN::sample_dataset(data, labels = ["r","g","b"]);
 
 print(data, max.print = 6);
 
 let encoder = CNN::cnn()
-+ input_layer(size = [1,1], depth = 2)
++ input_layer(size = [1,1], depth = 3)
 + full_connected_layer(20)
 + relu_layer()
 + full_connected_layer(20)
@@ -33,11 +33,11 @@ let encoder = CNN::cnn()
 + regression_layer()
 ;
 
-encoder = CNN::training(cnn = encoder, dataset = ds, max_loops = 20,  trainer = CNN::sgd(batch_size = 5));
+encoder = CNN::training(cnn = encoder, dataset = ds, max_loops = 50,  trainer = CNN::sgd(batch_size = 5));
 
 CNN::saveModel(encoder, file = "./img_regression.cnn");
 
-const img = data.frame(x = data$x, y = data$y);
+const img = data.frame(x = data$x, y = data$y, scale = data$scale);
 const rgb = encoder(img, is_generative = TRUE);
 
 colnames(rgb) = ["r","g","b"];
