@@ -93,6 +93,12 @@ Module CNNTools
 
     ''' <summary>
     ''' Create a new CNN model
+    ''' 
+    ''' Convolutional neural network (CNN) is a regularized type of feed-forward
+    ''' neural network that learns feature engineering by itself via filters 
+    ''' (or kernel) optimization. Vanishing gradients and exploding gradients, 
+    ''' seen during backpropagation in earlier neural networks, are prevented by 
+    ''' using regularized weights over fewer connections.
     ''' </summary>
     ''' <param name="file">
     ''' if the given model file parameter is not default nothing, then the new 
@@ -497,11 +503,20 @@ Module CNNTools
         End If
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="cnn"></param>
+    ''' <param name="dataset"></param>
+    ''' <param name="max_loops"></param>
+    ''' <param name="algorithm"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("training")>
     <RApiReturn(GetType(ConvolutionalNN))>
     Public Function training(cnn As Object, dataset As SampleData(),
                              Optional max_loops As Integer = 100,
-                             Optional trainer As TrainerAlgorithm = Nothing,
+                             Optional algorithm As TrainerAlgorithm = Nothing,
                              Optional env As Environment = Nothing) As Object
 
         Dim cnn_val As ConvolutionalNN
@@ -516,8 +531,8 @@ Module CNNTools
             Return Message.InCompatibleType(GetType(ConvolutionalNN), cnn.GetType, env)
         End If
 
-        If Not trainer Is Nothing Then
-            alg = trainer
+        If Not algorithm Is Nothing Then
+            alg = algorithm
         Else
             alg = New AdaGradTrainer(batchSize, 0.001F)
         End If
