@@ -770,24 +770,14 @@ Module CNNTools
             Return buffer.TryCast(Of Message)
         End If
 
-        Dim result As Boolean
+        Dim result As Boolean = True
 
         If TypeOf model Is CeNiN Then
             result = DirectCast(model, CeNiN).Save(buffer)
         ElseIf TypeOf model Is ConvolutionalNN Then
-            Try
-                Call SaveModelCNN.Write(model, buffer)
-                result = True
-            Catch ex As Exception
-                result = False
-            End Try
+            Call SaveModelCNN.Write(model, buffer)
         ElseIf TypeOf model Is CNNFunction Then
-            Try
-                Call SaveModelCNN.Write(DirectCast(model, CNNFunction).cnn, buffer)
-                result = True
-            Catch ex As Exception
-                result = False
-            End Try
+            Call SaveModelCNN.Write(DirectCast(model, CNNFunction).cnn, buffer)
         Else
             Return Message.InCompatibleType(GetType(ConvolutionalNN), model.GetType, env)
         End If
