@@ -102,7 +102,7 @@ Namespace Runtime.Interop.Operator
                 Try
                     Return method.Invoke(Nothing, {x, y})
                 Catch ex As Exception
-                    Return REnv.debug.stop(New RuntimeError(ToString, ex), internal)
+                    Return REnv.debug.stop(ex, internal)
                 End Try
             End If
         End Function
