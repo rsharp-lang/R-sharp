@@ -73,6 +73,10 @@ Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 <Package("graphics")>
 Module Rgraphics
 
+    Sub Main()
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(RasterScaler), AddressOf raster_dataframe)
+    End Sub
+
     ''' <summary>
     ''' Cast the clr image object as the raster data
     ''' </summary>
@@ -146,6 +150,17 @@ Module Rgraphics
 
                    Return scale
                End Function
+    End Function
+
+    Public Function raster_dataframe(raster As RasterScaler, args As list, env As Environment) As dataframe
+        Dim pixels = raster.GetRasterData.ToArray
+        Dim df As New dataframe With {.columns = New Dictionary(Of String, Array)}
+
+        Call df.add("x", pixels.Select(Function(a) a.X))
+        Call df.add("y", pixels.Select(Function(a) a.Y))
+        Call df.add("scale", pixels.Select(Function(a) a.Scale))
+
+        Return df
     End Function
 
     <ExportAPI("raster_convolution")>

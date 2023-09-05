@@ -59,6 +59,7 @@ Public Class zzz
     Public Shared Sub onLoad()
         Call plots.Main()
         Call geometry2D.Main()
+        Call Rgraphics.Main()
 
         Call RegisterDriver()
     End Sub
