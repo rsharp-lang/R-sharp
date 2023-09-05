@@ -64,6 +64,8 @@ Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
+Imports Microsoft.VisualBasic.Math
+Imports Microsoft.VisualBasic.Imaging.Math2D
 
 ''' <summary>
 ''' The R Graphics Package
@@ -257,9 +259,28 @@ Module Rgraphics
             Throw New NotImplementedException
         ElseIf x.GetType.ImplementInterface(Of GeneralMatrix) Then
             Return DirectCast(x, GeneralMatrix).imageFromMatrix(col, env)
+        ElseIf TypeOf x Is dataframe Then
+            Dim df As dataframe = DirectCast(x, dataframe)
+            Dim px As Integer() = CLRVector.asInteger(df!x)
+            Dim py As Integer() = CLRVector.asInteger(df!y)
+            Dim r As Double() = bytes(CLRVector.asNumeric(df!r))
+            Dim g As Double() = bytes(CLRVector.asNumeric(df!g))
+            Dim b As Double() = bytes(CLRVector.asNumeric(df!b))
+            Dim poly As New Polygon2D(px, py)
+            Dim raster As New Bitmap(CInt(poly.width), CInt(poly.height))
+
+            For i As Integer = 0 To px.Length - 1
+                Call raster.SetPixel(px(i), py(i), Color.FromArgb(r(i), g(i), b(i)))
+            Next
+
+            Return raster
         Else
             Throw New NotImplementedException
         End If
+    End Function
+
+    Private Function bytes(r As Double()) As Double()
+        Return SIMD.Multiply.f64_scalar_op_multiply_f64(255, SIMD.Divide.f64_op_divide_f64_scalar(r, r.Max))
     End Function
 
     <Extension>
