@@ -388,6 +388,13 @@ Module CNNTools
         }
     End Function
 
+    <ExportAPI("gaussian_layer")>
+    Public Function gaussian_layer() As CNNLayerArguments
+        Return New CNNLayerArguments With {
+            .type = NameOf(gaussian_layer)
+        }
+    End Function
+
     <ExportAPI("sample_dataset")>
     <RApiReturn(GetType(SampleData))>
     Public Function sample_dataset(<RRawVectorArgument> dataset As Object,

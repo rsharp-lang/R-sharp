@@ -25,6 +25,7 @@ Public Class CNNLayerArguments
             Case NameOf(CNNTools.full_connected_layer) : cnn.buildFullyConnectedLayer(args!size)
             Case NameOf(CNNTools.regression_layer) : cnn.buildRegressionLayer()
             Case NameOf(CNNTools.conv_transpose_layer) : cnn.buildConv2DTransposeLayer(args!dims, args!filter, args!filters, args!stride)
+            Case NameOf(CNNTools.gaussian_layer) : cnn.buildGaussian()
 
             Case Else
                 Throw New NotImplementedException(type)
