@@ -44,7 +44,7 @@ Public Class CNNFunction : Inherits RDefaultFunction
         Dim class_types As String()
         Dim data As New DataBlock(cnn.input.dims, cnn.input.out_depth, c:=0)
 
-        ds = SampleData.TransformDataset(ds, is_generative:=is_generative, is_training:=False)
+        ds = SampleData.TransformDataset(ds, is_generative:=is_generative, is_training:=False).ToArray
 
         For Each sample As SampleData In ds
             Call data.addImageData(sample.features, 1.0)

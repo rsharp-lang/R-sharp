@@ -14,11 +14,11 @@ let encoder = CNN::cnn()
 + input_layer(size = [1,1], depth = 3)
 + full_connected_layer(20)
 + relu_layer()
-+ full_connected_layer(20)
++ full_connected_layer(100)
 + relu_layer()
-+ full_connected_layer(20)
++ full_connected_layer(120)
 + relu_layer()
-+ full_connected_layer(20)
++ full_connected_layer(80)
 + relu_layer()
 + full_connected_layer(80)
 + relu_layer()
@@ -31,6 +31,6 @@ let encoder = CNN::cnn()
 + regression_layer()
 ;
 
-encoder = CNN::training(cnn = encoder, dataset = ds, max_loops = 5,  trainer = CNN::sgd(batch_size = 130));
+encoder = CNN::training(cnn = encoder, dataset = ds, max_loops = 10,  trainer = CNN::sgd(batch_size = 130));
 
 CNN::saveModel(encoder, file = "./img_regression.cnn");
