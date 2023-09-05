@@ -54,7 +54,10 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
+Imports Microsoft.VisualBasic.Imaging.Math2D
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -64,8 +67,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
-Imports Microsoft.VisualBasic.Math
-Imports Microsoft.VisualBasic.Imaging.Math2D
 
 ''' <summary>
 ''' The R Graphics Package
@@ -268,10 +269,13 @@ Module Rgraphics
             Dim b As Double() = bytes(CLRVector.asNumeric(df!b))
             Dim poly As New Polygon2D(px, py)
             Dim raster As New Bitmap(CInt(poly.width), CInt(poly.height))
+            Dim buffer As BitmapBuffer = BitmapBuffer.FromBitmap(raster)
 
             For i As Integer = 0 To px.Length - 1
-                Call raster.SetPixel(px(i), py(i), Color.FromArgb(r(i), g(i), b(i)))
+                Call buffer.SetPixel(px(i) - 1, py(i) - 1, Color.FromArgb(r(i), g(i), b(i)))
             Next
+
+            Call buffer.Dispose()
 
             Return raster
         Else
