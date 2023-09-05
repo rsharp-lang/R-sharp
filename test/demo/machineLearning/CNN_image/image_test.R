@@ -37,3 +37,17 @@ let encoder = CNN::cnn()
 encoder = CNN::training(cnn = encoder, dataset = ds, max_loops = 6,  trainer = CNN::sgd(batch_size = 5));
 
 CNN::saveModel(encoder, file = "./img_regression.cnn");
+
+const img = data.frame(x = data$x, y = data$y);
+const rgb = encoder(img, is_generative = TRUE);
+
+colnames(rgb) = ["r","g","b"];
+
+rgb[, "x"] = img$x;
+rgb[, "y"] = img$y;
+
+print(rgb, max.print = 13);
+
+bitmap(file = "./plot.png") {
+    image(rgb);
+}
