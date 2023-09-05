@@ -10,7 +10,7 @@ const raw = images_set
 format = "mnist", 
 dataset = "dataframe", 
 labelfile = "../umap/mnist_dataset/train-labels-idx1-ubyte",
-subset = 10
+subset = 300
 );
 
 const decoder = CNN::cnn(file = "./MNIST_autoencoder.cnn");
