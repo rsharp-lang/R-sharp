@@ -574,7 +574,7 @@ Module CNNTools
     <RApiReturn(GetType(CNNFunction))>
     Public Function auto_encoder(cnn As Object, dataset As SampleData(),
                                  Optional max_loops As Integer = 100,
-                                 Optional trainer As TrainerAlgorithm = Nothing,
+                                 Optional algorithm As TrainerAlgorithm = Nothing,
                                  Optional env As Environment = Nothing) As Object
         dataset = dataset _
             .Select(Function(si)
@@ -588,7 +588,7 @@ Module CNNTools
             cnn:=cnn,
             dataset:=dataset,
             max_loops:=max_loops,
-            trainer:=trainer,
+            algorithm:=algorithm,
             env:=env
         )
     End Function
