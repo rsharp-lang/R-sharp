@@ -64,6 +64,7 @@ Imports Microsoft.VisualBasic.MachineLearning.Convolutional
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -575,6 +576,7 @@ Module CNNTools
     Public Function auto_encoder(cnn As Object, dataset As SampleData(),
                                  Optional max_loops As Integer = 100,
                                  Optional algorithm As TrainerAlgorithm = Nothing,
+                                 Optional action As RFunction = Nothing,
                                  Optional env As Environment = Nothing) As Object
         dataset = dataset _
             .Select(Function(si)
@@ -589,7 +591,8 @@ Module CNNTools
             dataset:=dataset,
             max_loops:=max_loops,
             algorithm:=algorithm,
-            env:=env
+            env:=env,
+            action:=action
         )
     End Function
 
@@ -607,11 +610,19 @@ Module CNNTools
     Public Function training(cnn As Object, dataset As SampleData(),
                              Optional max_loops As Integer = 100,
                              Optional algorithm As TrainerAlgorithm = Nothing,
+                             Optional action As RFunction = Nothing,
                              Optional env As Environment = Nothing) As Object
 
         Dim cnn_val As ConvolutionalNN
         Dim batchSize As Integer = dataset.Length / 30
         Dim alg As TrainerAlgorithm
+        Dim callback As Action(Of Integer, ConvolutionalNN) = Nothing
+
+        If Not action Is Nothing Then
+            callback = Sub(i As Integer, nn As ConvolutionalNN)
+                           Call action.Invoke({i, nn}, env)
+                       End Sub
+        End If
 
         If TypeOf cnn Is ConvolutionalNN Then
             cnn_val = cnn
@@ -628,7 +639,8 @@ Module CNNTools
         End If
 
         alg = alg.SetKernel(cnn_val)
-        cnn_val = New Trainer(alg, Sub(s) base.print(s,, env)).train(cnn_val, dataset, max_loops)
+        cnn_val = New Trainer(alg, Sub(s) base.print(s,, env), action:=callback) _
+            .train(cnn_val, dataset, max_loops)
 
         Return New CNNFunction With {.cnn = cnn_val}
     End Function
