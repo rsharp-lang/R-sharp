@@ -259,6 +259,20 @@ Module datasetKit
         Return SequenceGraphTransform.estimate_alphabets(CLRVector.asCharacter(seqs))
     End Function
 
+    <ExportAPI("sample_id")>
+    <RApiReturn(GetType(String))>
+    Public Function sample_id(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Dim data As pipeline = pipeline.TryCreatePipeline(Of SampleData)(x, env)
+
+        If data.isError Then
+            Return data.getError
+        End If
+
+        Return data.populates(Of SampleData)(env) _
+            .Select(Function(si) si.id) _
+            .ToArray
+    End Function
+
     ''' <summary>
     ''' Add a data sample into the target sparse sample matrix object
     ''' </summary>

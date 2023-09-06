@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Linq
+﻿Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.CNN
 Imports Microsoft.VisualBasic.MachineLearning.CNN.data
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
@@ -7,6 +8,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports renv = SMRUCC.Rsharp.Runtime
 
 Public Class CNNFunction : Inherits RDefaultFunction
 
@@ -32,8 +34,8 @@ Public Class CNNFunction : Inherits RDefaultFunction
                             }
                         End Function) _
                 .ToArray
-        ElseIf TypeOf dataset Is SampleData() Then
-            ds = DirectCast(dataset, SampleData())
+        ElseIf TypeOf dataset Is SampleData() OrElse TypeOf dataset Is SampleData Then
+            ds = renv.asVector(Of SampleData)(dataset)
         Else
             Return Message.InCompatibleType(GetType(dataframe), dataset.GetType, env)
         End If
@@ -45,12 +47,18 @@ Public Class CNNFunction : Inherits RDefaultFunction
         Dim outputs As New List(Of Double())
         Dim class_types As String()
         Dim data As New DataBlock(cnn.input.dims, cnn.input.out_depth, c:=0)
+        Dim dd As Integer = ds.Length / 50
+        Dim i As i32 = 0
 
         ds = SampleData.TransformDataset(ds, is_generative:=is_generative, is_training:=False).ToArray
 
         For Each sample As SampleData In ds
             Call data.addImageData(sample.features, 1.0)
             Call outputs.Add(cnn.predict(data))
+
+            If ++i Mod dd = 0 Then
+                Call VBDebugger.EchoLine($"[{i}/{ds.Length}] {(i / ds.Length * 100).ToString("F2")}% ... {sample.id}")
+            End If
         Next
 
         If TypeOf class_labels Is String Then
@@ -81,7 +89,7 @@ Public Class CNNFunction : Inherits RDefaultFunction
     End Function
 
     <RDefaultFunction>
-    Public Function DoPrediction(dataset As Object,
+    Public Function DoPrediction(<RRawVectorArgument> dataset As Object,
                                  <RRawVectorArgument>
                                  Optional class_labels As Object = "class_%d",
                                  Optional is_generative As Boolean = False,
