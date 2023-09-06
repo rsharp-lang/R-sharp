@@ -273,6 +273,50 @@ Module datasetKit
             .ToArray
     End Function
 
+    <ExportAPI("get_feature")>
+    Public Function get_feature(<RRawVectorArgument> x As Object, feature As Integer, Optional env As Environment = Nothing) As Object
+        Dim data As pipeline = pipeline.TryCreatePipeline(Of SampleData)(x, env)
+
+        If data.isError Then
+            Return data.getError
+        Else
+            feature -= 1
+        End If
+
+        Return data.populates(Of SampleData)(env) _
+            .Select(Function(si) si.features(feature)) _
+            .ToArray
+    End Function
+
+    <ExportAPI("sort_samples")>
+    Public Function sort_samples(<RRawVectorArgument> x As Object, <RRawVectorArgument> order_id As Object, Optional env As Environment = Nothing) As Object
+        Dim data As pipeline = pipeline.TryCreatePipeline(Of SampleData)(x, env)
+
+        If data.isError Then
+            Return data.getError
+        End If
+
+        Dim sort As String() = CLRVector.asCharacter(order_id)
+        Dim hash As Dictionary(Of String, SampleData()) = data _
+            .populates(Of SampleData)(env) _
+            .GroupBy(Function(si) si.id) _
+            .ToDictionary(Function(si) si.Key,
+                          Function(si)
+                              Return si.ToArray
+                          End Function)
+
+        Return sort _
+            .Select(Function(id)
+                        If hash.ContainsKey(id) Then
+                            Return hash(id)
+                        Else
+                            Return {}
+                        End If
+                    End Function) _
+            .IteratesALL _
+            .ToArray
+    End Function
+
     ''' <summary>
     ''' Add a data sample into the target sparse sample matrix object
     ''' </summary>
