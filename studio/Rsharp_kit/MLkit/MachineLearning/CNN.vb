@@ -64,6 +64,7 @@ Imports Microsoft.VisualBasic.MachineLearning.Convolutional
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -98,6 +99,12 @@ Module CNNTools
 
     ''' <summary>
     ''' Create a new CNN model
+    ''' 
+    ''' Convolutional neural network (CNN) is a regularized type of feed-forward
+    ''' neural network that learns feature engineering by itself via filters 
+    ''' (or kernel) optimization. Vanishing gradients and exploding gradients, 
+    ''' seen during backpropagation in earlier neural networks, are prevented by 
+    ''' using regularized weights over fewer connections.
     ''' </summary>
     ''' <param name="file">
     ''' if the given model file parameter is not default nothing, then the new 
@@ -568,7 +575,8 @@ Module CNNTools
     <RApiReturn(GetType(CNNFunction))>
     Public Function auto_encoder(cnn As Object, dataset As SampleData(),
                                  Optional max_loops As Integer = 100,
-                                 Optional trainer As TrainerAlgorithm = Nothing,
+                                 Optional algorithm As TrainerAlgorithm = Nothing,
+                                 Optional action As RFunction = Nothing,
                                  Optional env As Environment = Nothing) As Object
         dataset = dataset _
             .Select(Function(si)
@@ -582,8 +590,9 @@ Module CNNTools
             cnn:=cnn,
             dataset:=dataset,
             max_loops:=max_loops,
-            trainer:=trainer,
-            env:=env
+            algorithm:=algorithm,
+            env:=env,
+            action:=action
         )
     End Function
 
@@ -593,20 +602,28 @@ Module CNNTools
     ''' <param name="cnn"></param>
     ''' <param name="dataset"></param>
     ''' <param name="max_loops"></param>
-    ''' <param name="trainer"></param>
+    ''' <param name="algorithm"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("training")>
     <RApiReturn(GetType(CNNFunction))>
     Public Function training(cnn As Object, dataset As SampleData(),
                              Optional max_loops As Integer = 100,
-                             Optional trainer As TrainerAlgorithm = Nothing,
                              Optional verbose As Integer = 25,
+                             Optional algorithm As TrainerAlgorithm = Nothing,
+                             Optional action As RFunction = Nothing,
                              Optional env As Environment = Nothing) As Object
 
         Dim cnn_val As ConvolutionalNN
         Dim batchSize As Integer = dataset.Length / 30
         Dim alg As TrainerAlgorithm
+        Dim callback As Action(Of Integer, ConvolutionalNN) = Nothing
+
+        If Not action Is Nothing Then
+            callback = Sub(i As Integer, nn As ConvolutionalNN)
+                           Call action.Invoke({i, nn}, env)
+                       End Sub
+        End If
 
         If TypeOf cnn Is ConvolutionalNN Then
             cnn_val = cnn
@@ -616,8 +633,8 @@ Module CNNTools
             Return Message.InCompatibleType(GetType(ConvolutionalNN), cnn.GetType, env)
         End If
 
-        If Not trainer Is Nothing Then
-            alg = trainer
+        If Not algorithm Is Nothing Then
+            alg = algorithm
         Else
             alg = New AdaGradTrainer(batchSize, 0.001F)
         End If
@@ -625,7 +642,7 @@ Module CNNTools
         alg = alg.SetKernel(cnn_val)
         cnn_val = New Trainer(alg:=alg,
                               log:=Sub(s) base.print(s,, env),
-                              verbose:=verbose) _
+                              verbose:=verbose, action:=callback) _
             .train(cnn_val, dataset, max_loops)
 
         Return New CNNFunction With {.cnn = cnn_val}
