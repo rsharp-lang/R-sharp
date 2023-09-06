@@ -601,6 +601,7 @@ Module CNNTools
     Public Function training(cnn As Object, dataset As SampleData(),
                              Optional max_loops As Integer = 100,
                              Optional trainer As TrainerAlgorithm = Nothing,
+                             Optional verbose As Boolean = 25,
                              Optional env As Environment = Nothing) As Object
 
         Dim cnn_val As ConvolutionalNN
@@ -622,7 +623,10 @@ Module CNNTools
         End If
 
         alg = alg.SetKernel(cnn_val)
-        cnn_val = New Trainer(alg, Sub(s) base.print(s,, env)).train(cnn_val, dataset, max_loops)
+        cnn_val = New Trainer(alg:=alg,
+                              log:=Sub(s) base.print(s,, env),
+                              verbose:=verbose) _
+            .train(cnn_val, dataset, max_loops)
 
         Return New CNNFunction With {.cnn = cnn_val}
     End Function
