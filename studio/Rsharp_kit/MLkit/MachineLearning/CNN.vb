@@ -601,7 +601,7 @@ Module CNNTools
     Public Function training(cnn As Object, dataset As SampleData(),
                              Optional max_loops As Integer = 100,
                              Optional trainer As TrainerAlgorithm = Nothing,
-                             Optional verbose As Boolean = 25,
+                             Optional verbose As Integer = 25,
                              Optional env As Environment = Nothing) As Object
 
         Dim cnn_val As ConvolutionalNN
