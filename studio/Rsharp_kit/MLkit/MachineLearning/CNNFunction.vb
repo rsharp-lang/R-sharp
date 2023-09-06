@@ -32,6 +32,8 @@ Public Class CNNFunction : Inherits RDefaultFunction
                             }
                         End Function) _
                 .ToArray
+        ElseIf TypeOf dataset Is SampleData() Then
+            ds = DirectCast(dataset, SampleData())
         Else
             Return Message.InCompatibleType(GetType(dataframe), dataset.GetType, env)
         End If
