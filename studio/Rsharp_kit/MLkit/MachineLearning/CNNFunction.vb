@@ -65,7 +65,7 @@ Public Class CNNFunction : Inherits RDefaultFunction
             If outputs(0).Length <> 1 Then
                 ' is template
                 class_types = Enumerable.Range(1, outputs(0).Length) _
-                    .Select(Function(i) CStr(class_labels).Replace("%d", i)) _
+                    .Select(Function(ind) CStr(class_labels).Replace("%d", ind)) _
                     .ToArray
             Else
                 ' is single
@@ -73,15 +73,15 @@ Public Class CNNFunction : Inherits RDefaultFunction
             End If
         ElseIf class_labels Is Nothing Then
             class_types = Enumerable.Range(1, outputs(0).Length) _
-                .Select(Function(i) $"class_{i}") _
+                .Select(Function(ind) $"class_{ind}") _
                 .ToArray
         Else
             class_types = CLRVector.asCharacter(class_labels)
         End If
 
-        For i As Integer = 0 To outputs(0).Length - 1
+        For idx As Integer = 0 To outputs(0).Length - 1
 #Disable Warning
-            Call result.add(class_types(i), outputs.Select(Function(r) r(i)))
+            Call result.add(class_types(idx), outputs.Select(Function(r) r(idx)))
 #Enable Warning
         Next
 
