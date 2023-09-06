@@ -503,6 +503,34 @@ Module datasetKit
         End If
     End Function
 
+    <ExportAPI("write.sample_set")>
+    Public Function writeSampleSet(<RRawVectorArgument> x As Object, file As Object, Optional env As Environment = Nothing) As Object
+        Dim buf = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env)
+        Dim sampleSet As pipeline = pipeline.TryCreatePipeline(Of SampleData)(x, env)
+
+        If buf Like GetType(Message) Then
+            Return buf.TryCast(Of Message)
+        ElseIf sampleSet.isError Then
+            Return sampleSet.getError
+        End If
+
+        Call SampleData.Save(sampleSet.populates(Of SampleData)(env), buf.TryCast(Of Stream))
+        Call buf.TryCast(Of Stream).Flush()
+
+        Return True
+    End Function
+
+    <ExportAPI("read.sample_set")>
+    Public Function readSampleSet(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
+        Dim buf = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
+
+        If buf Like GetType(Message) Then
+            Return buf.TryCast(Of Message)
+        Else
+            Return SampleData.Load(buf.TryCast(Of Stream)).ToArray
+        End If
+    End Function
+
     <Extension>
     Friend Function TakeSubset(Of T)(x As IEnumerable(Of T), takes As Integer) As IEnumerable(Of T)
         If takes > 0 Then
