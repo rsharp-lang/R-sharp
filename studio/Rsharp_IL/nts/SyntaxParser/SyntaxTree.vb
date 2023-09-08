@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::b0935213fd8749429f72e31c46e3d5b8, D:/GCModeller/src/R-sharp/studio/Rsharp_IL/nts//SyntaxParser/SyntaxTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 405
-    '    Code Lines: 295
-    ' Comment Lines: 51
-    '   Blank Lines: 59
-    '     File Size: 16.99 KB
+' Summaries:
 
 
-    ' Class SyntaxTree
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: GetExpressions, ParseFuncInvoke, ParseTsScript, PopOut, PopOutCallerStack
-    '               PopOutClosureStack, PopOutStack, PopOutVectorStack
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 405
+'    Code Lines: 295
+' Comment Lines: 51
+'   Blank Lines: 59
+'     File Size: 16.99 KB
+
+
+' Class SyntaxTree
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: GetExpressions, ParseFuncInvoke, ParseTsScript, PopOut, PopOutCallerStack
+'               PopOutClosureStack, PopOutStack, PopOutVectorStack
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -127,14 +127,14 @@ Public Class SyntaxTree
             Return Nothing
         ElseIf lt.isAnyKeyword("for") Then
             ' for loop
-            buffer.RemoveRange(state.Value.Range.Min + 1, state.Value.Range.Length - 1)
+            buffer.RemoveRange(state.Value.Range.Min + 1, state.Value.Range.Interval - 1)
             buffer.Insert(state.Value.Range.Min + 1, New SyntaxToken(-1, exp.expression))
             Reindex(buffer)
 
             Return Nothing
         ElseIf lt.isAnyKeyword("require") Then
             ' javascript require
-            buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
+            buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Interval + 2)
             exp = New Require(ExpressionCollection.GetExpressions(exp.expression))
             buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, exp.expression))
             Reindex(buffer)
@@ -147,7 +147,7 @@ Public Class SyntaxTree
         If target Like GetType(SymbolReference) Then
             ' invoke function
             ' func(...)
-            buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
+            buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Interval + 2)
             exp = New FunctionInvoke(DirectCast(target.expression, SymbolReference).symbol, opts.GetStackTrace(t), ExpressionCollection.GetExpressions(exp.expression))
             buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, exp.expression))
             Reindex(buffer)
@@ -185,7 +185,7 @@ Public Class SyntaxTree
                         range(range.Length - 1) = New SyntaxToken(-1, New Token(TokenType.close, "]") With {.span = range.Last.TryCast(Of Token).span})
                         exp = range.GetExpression(fromComma:=True, opts)
 
-                        buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                        buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Interval + 1)
                         buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, ExpressionCollection.GetExpressions(exp.expression).First))
                         Reindex(buffer)
 
@@ -228,7 +228,7 @@ Public Class SyntaxTree
             If leftToken.IsToken(TokenType.operator) Then
                 ' operator for binary expression, example like:
                 ' 1 / (...)
-                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Interval + 1)
                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, ExpressionCollection.GetExpressions(exp.expression).First))
                 Reindex(buffer)
 
@@ -265,7 +265,7 @@ Public Class SyntaxTree
                 ' is a possible function declare
                 Dim index = Traceback(buffer, {TokenType.keyword})
 
-                buffer.RemoveRange(state.Value.Range.Min + 1, state.Value.Range.Length - 1)
+                buffer.RemoveRange(state.Value.Range.Min + 1, state.Value.Range.Interval - 1)
                 buffer.Insert(state.Value.Range.Min + 1, New SyntaxToken(-1, exp.expression))
                 Reindex(buffer)
 
@@ -285,30 +285,30 @@ Public Class SyntaxTree
                 Reindex(buffer)
             ElseIf leftToken.TryCast(Of Token) = (TokenType.sequence, ":") Then
                 ' is json value
-                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Interval + 1)
                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                 Reindex(buffer)
             ElseIf leftToken.TryCast(Of Token) = (TokenType.open, "[") Then
                 ' json array [{...}]
-                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Interval + 1)
                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                 Reindex(buffer)
             ElseIf leftToken.TryCast(Of Token) = (TokenType.open, "(") Then
-                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Interval + 1)
                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                 Reindex(buffer)
             ElseIf leftToken.IsToken(TokenType.keyword) Then
                 ' else {}
                 ' else if {}
                 ' try {}
-                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Interval + 1)
                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                 Reindex(buffer)
             ElseIf leftToken.isComma Then
                 ' last element in json literal
                 ' 
                 ' {...,...}
-                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Interval + 1)
                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                 Reindex(buffer)
             End If
@@ -336,7 +336,7 @@ Public Class SyntaxTree
                 Dim index = Traceback(buffer, {TokenType.keyword})
 
                 exp = New VectorLiteral(ExpressionCollection.GetExpressions(exp.expression))
-                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Length + 1)
+                buffer.RemoveRange(state.Value.Range.Min, state.Value.Range.Interval + 1)
                 buffer.Insert(state.Value.Range.Min, New SyntaxToken(-1, exp.expression))
                 Reindex(buffer)
             ElseIf tl.name = TokenType.identifier OrElse tl.name = TokenType.keyword Then
@@ -353,7 +353,7 @@ Public Class SyntaxTree
 
                 Dim indexer As New SymbolIndexer(symbol, index)
 
-                buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Length + 2)
+                buffer.RemoveRange(state.Value.Range.Min - 1, state.Value.Range.Interval + 2)
                 buffer.Insert(state.Value.Range.Min - 1, New SyntaxToken(-1, indexer))
                 Reindex(buffer)
             Else
