@@ -331,4 +331,9 @@ Module HDSutils
         Return True
     End Function
 
+    <ExportAPI("flush")>
+    Public Sub flush(hds As StreamPack)
+        Call DirectCast(hds, IFileSystemEnvironment).Flush()
+    End Sub
+
 End Module
