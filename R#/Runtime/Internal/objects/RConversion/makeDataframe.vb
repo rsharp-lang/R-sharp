@@ -67,6 +67,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
@@ -85,7 +86,17 @@ Namespace Runtime.Internal.Object.Converts
 
         Sub New()
             makesDataframe(GetType(ExceptionData)) = AddressOf TracebackDataFrmae
+            makesDataframe(GetType(NamedValue())) = AddressOf tupleFrame1
         End Sub
+
+        Private Function tupleFrame1(tuples As NamedValue(), args As list, env As Environment) As dataframe
+            Return New dataframe With {
+                .columns = New Dictionary(Of String, Array) From {
+                    {"name", tuples.Select(Function(t) t.name).ToArray},
+                    {"text", tuples.Select(Function(t) t.text).ToArray}
+                }
+            }
+        End Function
 
         ''' <summary>
         ''' Public <see cref="Global.System.Delegate"/> Function IMakeDataFrame(
