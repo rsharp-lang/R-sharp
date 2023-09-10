@@ -1,56 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::041bcebfce44c5eac307081a75fd84df, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/applys.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 587
-    '    Code Lines: 395
-    ' Comment Lines: 113
-    '   Blank Lines: 79
-    '     File Size: 24.68 KB
+' Summaries:
 
 
-    '     Module applys
-    ' 
-    '         Function: apply, checkInternal, lapply, lapplyGeneralIDictionary, lapplyGeneralSequence
-    '                   lapplyPipelineStream, lapplyRNameIndex, parLapply, parSapply, sapply
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 587
+'    Code Lines: 395
+' Comment Lines: 113
+'   Blank Lines: 79
+'     File Size: 24.68 KB
+
+
+'     Module applys
+' 
+'         Function: apply, checkInternal, lapply, lapplyGeneralIDictionary, lapplyGeneralSequence
+'                   lapplyPipelineStream, lapplyRNameIndex, parLapply, parSapply, sapply
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -124,6 +125,12 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("apply")>
         Public Function apply(x As Object, margin As margins, FUN As Object, Optional env As Environment = Nothing) As Object
+            Dim check = checkInternal(x, FUN, env)
+
+            If Not TypeOf check Is Boolean Then
+                Return check
+            End If
+
             If x Is Nothing Then
                 Return New Object() {}
             ElseIf TypeOf x Is dataframe Then
@@ -274,7 +281,11 @@ Namespace Runtime.Internal.Invokes
             Return New RObj.vector(names, seq.ToArray, envir)
         End Function
 
-        Friend Function checkInternal(X As Object, FUN As Object, env As Environment) As Object
+        Friend Function checkInternal(X As Object, ByRef FUN As Object, env As Environment) As Object
+            If TypeOf FUN Is MethodInfo Then
+                FUN = New RMethodInfo("call_clr", DirectCast(FUN, MethodInfo), Nothing)
+            End If
+
             If FUN Is Nothing Then
                 Return Internal.debug.stop({"Missing apply function!"}, env)
             ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then

@@ -1,64 +1,72 @@
 ﻿#Region "Microsoft.VisualBasic::9c28e113c2c5957cdc5f491da980e205, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/doApply.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 19
-    '    Code Lines: 14
-    ' Comment Lines: 0
-    '   Blank Lines: 5
-    '     File Size: 431 B
+' Summaries:
 
 
-    '     Enum margins
-    ' 
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    '     Module doApply
-    ' 
-    '         Function: apply
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 19
+'    Code Lines: 14
+' Comment Lines: 0
+'   Blank Lines: 5
+'     File Size: 431 B
+
+
+'     Enum margins
+' 
+' 
+'  
+' 
+' 
+' 
+'     Module doApply
+' 
+'         Function: apply
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
+Imports SMRUCC.Rsharp.Runtime.Vectorization
+
 Namespace Runtime.Internal.Object
 
+    ''' <summary>
+    ''' row or column?
+    ''' </summary>
     Public Enum margins
         row = 1
         column = 2
@@ -66,13 +74,58 @@ Namespace Runtime.Internal.Object
 
     Module doApply
 
-        Public Function apply(df As dataframe, margin As margins, FUN As Object, env As Environment) As Object
+        Public Function apply(df As dataframe, margin As margins, FUN As RFunction, env As Environment) As Object
+            Dim data As Double()()
+            Dim names As String()
+
             If margin = margins.row Then
+                data = df.forEachRow _
+                    .Select(Function(v) CLRVector.asNumeric(v.value)) _
+                    .ToArray
+                names = df.getRowNames
             Else
+                names = df.colnames
+                data = names _
+                    .Select(Function(c) CLRVector.asNumeric(df(c))) _
+                    .ToArray
 
             End If
 
-            Throw New NotImplementedException
+            Dim vResult As Object() = New Object(data.Length - 1) {}
+
+            For i As Integer = 0 To vResult.Length - 1
+                vResult(i) = FUN.Invoke({data(i)}, env)
+
+                If Program.isException(vResult(i)) Then
+                    Return vResult(i)
+                End If
+            Next
+
+            Dim gvResult As Array = TryCastGenericArray(vResult, env)
+            Dim resultType As Type = gvResult.GetType.GetElementType
+
+            If resultType.IsArray OrElse resultType Is GetType(vector) Then
+                ' create dataframe
+                df = New dataframe With {.columns = New Dictionary(Of String, Array)}
+
+                For i As Integer = 0 To names.Length - 1
+                    Call df.add(names(i), gvResult.GetValue(i))
+                Next
+
+                Return df
+            ElseIf DataFramework.IsPrimitive(resultType) Then
+                ' create vector
+                Return gvResult
+            Else
+                ' create list
+                Dim list As New list With {.slots = New Dictionary(Of String, Object)}
+
+                For i As Integer = 0 To vResult.Length - 1
+                    Call list.add(names(i), gvResult.GetValue(i))
+                Next
+
+                Return list
+            End If
         End Function
     End Module
 End Namespace
