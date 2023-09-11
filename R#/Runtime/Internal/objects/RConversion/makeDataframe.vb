@@ -169,7 +169,7 @@ Namespace Runtime.Internal.Object.Converts
             If Not data.rownames.IsNullOrEmpty Then
                 If data.rownames.Length <> data.nrows Then
                     Dim msg As New List(Of String) From {
-                        "The rownames size is mis-matched with the row numbers of current dataframe!",
+                        $"The rownames size({data.rownames.Length}) is mis-matched with the row numbers({data.nrows}) of current dataframe!",
                         $"rownames_size: {data.rownames.Length}",
                         $"table_rownumbers: {data.nrows}",
                         $"dataframe_dimension: {data.ToString}"
