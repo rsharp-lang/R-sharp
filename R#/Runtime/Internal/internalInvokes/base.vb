@@ -1873,7 +1873,11 @@ RE0:
         ''' </returns>
         <ExportAPI("is.list")>
         Public Function isList(<RRawVectorArgument> x As Object) As Boolean
-            Return TypeOf x Is list
+            If x Is Nothing Then
+                Return False
+            End If
+
+            Return TypeOf x Is list OrElse x.GetType.ImplementInterface(Of IDictionary)
         End Function
 
         ''' <summary>
