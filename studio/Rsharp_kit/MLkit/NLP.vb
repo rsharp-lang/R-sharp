@@ -84,6 +84,27 @@ Module NLP
                   End Function)
     End Function
 
+    <ExportAPI("split_to_sentences")>
+    Public Function split_to_sentences(<RRawVectorArgument>
+                                       text As Object,
+                                       Optional delimiter As String = ".?!",
+                                       Optional env As Environment = Nothing) As Object
+
+        Dim dchars As Char() = delimiter.ToArray
+
+        Return env.EvaluateFramework(Of String, String())(
+            x:=text,
+            eval:=Function(si)
+                      Dim pars As String() = Paragraph.SplitParagraph(si).ToArray
+                      Dim sentences As String() = pars _
+                          .Select(Function(str) str.Split(dchars)) _
+                          .IteratesALL _
+                          .ToArray
+
+                      Return sentences
+                  End Function)
+    End Function
+
     ''' <summary>
     ''' count tokens distribution
     ''' </summary>
