@@ -1,68 +1,68 @@
 ﻿#Region "Microsoft.VisualBasic::06d336d68cd79b34ceaf4375649bfc5c, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Math/math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 944
-    '    Code Lines: 434
-    ' Comment Lines: 418
-    '   Blank Lines: 92
-    '     File Size: 40.47 KB
+' Summaries:
 
 
-    '     Module math
-    ' 
-    '         Function: abs, cluster1D, cor_test, cos, diff
-    '                   exp, fit, getRandom, isFinite, isInfinite
-    '                   isNaN, log, log10, log2, max
-    '                   mean, median, min, numericClassTags, pearson
-    '                   pow, rnorm, round, rsd, runif
-    '                   (+2 Overloads) sample, sample_int, sd, (+3 Overloads) shuffle, sin
-    '                   sqrt, sum, var
-    ' 
-    '         Sub: set_seed
-    '         Class corTestResult
-    ' 
-    '             Properties: cor, df, prob2, pvalue, t
-    '                         z
-    ' 
-    '             Function: ToString
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 944
+'    Code Lines: 434
+' Comment Lines: 418
+'   Blank Lines: 92
+'     File Size: 40.47 KB
+
+
+'     Module math
+' 
+'         Function: abs, cluster1D, cor_test, cos, diff
+'                   exp, fit, getRandom, isFinite, isInfinite
+'                   isNaN, log, log10, log2, max
+'                   mean, median, min, numericClassTags, pearson
+'                   pow, rnorm, round, rsd, runif
+'                   (+2 Overloads) sample, sample_int, sd, (+3 Overloads) shuffle, sin
+'                   sqrt, sum, var
+' 
+'         Sub: set_seed
+'         Class corTestResult
+' 
+'             Properties: cor, df, prob2, pvalue, t
+'                         z
+' 
+'             Function: ToString
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -294,6 +294,41 @@ Namespace Runtime.Internal.Invokes
             Return CLRVector.asNumeric(x) _
                 .Select(Function(d) stdNum.Cos(d)) _
                 .ToArray
+        End Function
+
+        ''' <summary>
+        ''' Product of Vector Elements
+        ''' 
+        ''' prod returns the product of all the values present in its arguments.
+        ''' </summary>
+        ''' <param name="x">numeric or complex or logical vectors.</param>
+        ''' <param name="na_rm">
+        ''' logical. Should missing values be removed?
+        ''' </param>
+        ''' <returns>The product, a numeric (of type "double") or complex vector of length one. NB: the product of an empty set is one, by definition.</returns>
+        ''' <remarks>
+        ''' If na.rm is FALSE an NA value in any of the arguments will cause a value of NA to be returned, otherwise NA values are ignored.
+        ''' This is a generic function: methods can be defined for it directly or via the Summary group generic. For this to work properly, the arguments ... should be unnamed, and dispatch is on the first argument.
+        ''' Logical true values are regarded as one, false values as zero. For historical reasons, NULL is accepted and treated as if it were numeric(0).
+        ''' </remarks>
+        <ExportAPI("prod")>
+        Public Function prod(x As Array, Optional na_rm As Boolean = False) As Double
+            Dim vx As Double() = CLRVector.asNumeric(x)
+            Dim p As Double = 1
+
+            For Each xi As Double In vx
+                If xi.IsNaNImaginary Then
+                    If na_rm Then
+                        Continue For
+                    Else
+                        Return Double.NaN
+                    End If
+                End If
+
+                p = p * xi
+            Next
+
+            Return p
         End Function
 
         ''' <summary>
