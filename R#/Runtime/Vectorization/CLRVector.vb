@@ -116,12 +116,16 @@ Namespace Runtime.Vectorization
             End If
             If TypeOf x Is String Then
                 Return New Long() {Long.Parse(CStr(x))}
+            ElseIf TypeOf x Is Boolean Then
+                Return New Long() {If(CBool(x), 1, 0)}
             ElseIf REnv.isVector(Of String)(x) Then
                 Return asCharacter(x).Select(AddressOf Long.Parse).ToArray
             End If
 
             If TypeOf x Is Long() Then
                 Return x
+            ElseIf TypeOf x Is Boolean() Then
+                Return DirectCast(x, Boolean()).Select(Function(b) If(b, 1&, 0&)).ToArray
             ElseIf DataFramework.IsNumericCollection(x.GetType) Then
                 Return (From xi As Object
                         In DirectCast(x, IEnumerable).AsQueryable

@@ -929,7 +929,13 @@ RE0:
                 Return 0
             ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Return REnv.CTypeOfList(Of Long)(obj, env)
-            ElseIf obj.GetType.IsArray Then
+            Else
+                If TypeOf obj Is vector Then
+                    obj = DirectCast(obj, vector).data
+                End If
+            End If
+
+            If obj.GetType.IsArray Then
                 Dim type As Type = MeasureRealElementType(obj)
 
                 If type Is GetType(String) Then
@@ -953,6 +959,10 @@ RE0:
                     ' SMRUCC/R#.global.<globalEnvironment> at <globalEnvironment>:line n/a
                     Return CLRVector.asCharacter(obj) _
                         .Select(AddressOf Long.Parse) _
+                        .ToArray
+                ElseIf type Is GetType(Boolean) Then
+                    Return CLRVector.asLogical(obj) _
+                        .Select(Function(b) If(b, 1, 0)) _
                         .ToArray
                 Else
                     Return CLRVector.asLong(obj)
