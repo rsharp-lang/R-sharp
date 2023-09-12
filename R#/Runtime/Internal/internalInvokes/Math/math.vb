@@ -284,6 +284,11 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
         End Function
 
+        ''' <summary>
+        ''' evaluate the cosine alpha
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         <ExportAPI("cos")>
         Public Function cos(x As Array) As Double()
             Return CLRVector.asNumeric(x) _

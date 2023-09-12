@@ -728,7 +728,7 @@ Module math
     ''' <param name="x">a numeric data sequence</param>
     ''' <param name="y">another numeric data sequence</param>
     ''' <returns></returns>
-    <ExportAPI("dot_product")>
+    <ExportAPI("cosine")>
     Public Function ssm(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Double
         Dim vx As Double() = CLRVector.asNumeric(x)
         Dim vy As Double() = CLRVector.asNumeric(y)
