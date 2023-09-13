@@ -144,7 +144,9 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="x">
         ''' character vectors containing file paths. Tilde-expansion is done: see path.expand.
         ''' </param>
-        ''' <returns>Double: File size In bytes.</returns>
+        ''' <returns>Double: File size In bytes. For missing file, this function will 
+        ''' returns a negative number -1; and the file is exists on the filesystem, this 
+        ''' function returns ZERO(empty file) or a positive number.</returns>
         ''' <remarks>
         ''' What constitutes a ‘file’ is OS-dependent but includes directories. (However, 
         ''' directory names must not include a trailing backslash or slash on Windows.) 
