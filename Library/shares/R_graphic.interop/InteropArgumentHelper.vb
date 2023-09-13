@@ -56,10 +56,10 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.MIME.Html.CSS
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' R# graphics argument scripting helper
@@ -179,6 +179,10 @@ Public Module InteropArgumentHelper
     ''' <returns>
     ''' a string with value format: width,height
     ''' </returns>
+    ''' <remarks>
+    ''' <see cref="Size"/> value could be parse from the generated 
+    ''' string via the <see cref="SizeParser"/> helper function.
+    ''' </remarks>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function getSize(size As Object, env As Environment, Optional default$ = "2700,2000") As String
         Return graphicsPipeline.getSize(size, env, [default])
