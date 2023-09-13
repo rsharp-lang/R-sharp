@@ -71,6 +71,7 @@ Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 
@@ -231,7 +232,6 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End If
 
             Dim argumentKeys As String()
-            Dim key$
             Dim dotdotdot As Dictionary(Of String, Object) = Nothing
             Dim hasDotDotDot As Boolean = False
             Dim requireKey As String
@@ -255,7 +255,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             arguments = InvokeParameter.CreateArguments(caller_context, params, hasObjectList)
             argumentKeys = arguments.Keys.ToArray
 
-            ' initialize environment
+            ' initialize environment, walk through all parameters of current function
+            ' and then create the parameter values
             For i As Integer = 0 To Me.parameters.Length - 1
                 var = Me.parameters(i)
                 requireKey = var.names(Scan0)
@@ -277,7 +278,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         Return DirectCast(MissingParameters(var, funcName, caller_context), Message)
                     End If
                 Else
-                    key = "$" & i
+                    Dim key = "$" & i
 
                     If arguments.ContainsKey(key) Then
                         value = arguments(key).Evaluate(caller_context)
@@ -349,6 +350,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 End If
                 ' End If
             Next
+
+            ' push the other parameters
+            If hasDotDotDot Then
+                For Each key As String In arguments.Keys.Where(Function(si) Not si.IsPattern("[$]\d+"))
+                    If Not dotdotdot.ContainsKey(key) Then
+                        value = arguments(key).Evaluate(caller_context)
+
+                        If Program.isException(value) Then
+                            Return DirectCast(value, Message)
+                        Else
+                            dotdotdot.Add(key, value)
+                        End If
+                    End If
+                Next
+            End If
 
             Return envir
         End Function
