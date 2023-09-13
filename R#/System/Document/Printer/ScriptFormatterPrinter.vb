@@ -1,55 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::67246310e9053851660fc1ec5f26d537, D:/GCModeller/src/R-sharp/R#//System/Document/Printer/ScriptFormatterPrinter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 96
-    '    Code Lines: 82
-    ' Comment Lines: 0
-    '   Blank Lines: 14
-    '     File Size: 4.40 KB
+' Summaries:
 
 
-    '     Module ScriptFormatterPrinter
-    ' 
-    '         Function: (+5 Overloads) Format, formatLambda
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 96
+'    Code Lines: 82
+' Comment Lines: 0
+'   Blank Lines: 14
+'     File Size: 4.40 KB
+
+
+'     Module ScriptFormatterPrinter
+' 
+'         Function: (+5 Overloads) Format, formatLambda
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Text
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -114,6 +115,16 @@ Namespace Development
             End Select
         End Function
 
+        Public Function Format(str As StringInterpolation) As String
+            Dim sb As New List(Of String)
+
+            For Each part As Expression In str.stringParts
+                Call sb.Add(Format(part))
+            Next
+
+            Return sb.JoinBy(" & ")
+        End Function
+
         Public Function Format(expr As Expression) As String
             Select Case expr.GetType
                 Case GetType(Literal) : Return Format(DirectCast(expr, Literal))
@@ -127,6 +138,8 @@ Namespace Development
                         Return $"{ .operator}{Format(.numeric)}"
                     End With
                 Case GetType(DeclareLambdaFunction) : Return formatLambda(expr)
+                Case GetType(StringInterpolation)
+                    Return Format(DirectCast(expr, StringInterpolation))
                 Case Else
                     If expr.GetType.ImplementInterface(Of IBinaryExpression) Then
                         With DirectCast(expr, IBinaryExpression)
