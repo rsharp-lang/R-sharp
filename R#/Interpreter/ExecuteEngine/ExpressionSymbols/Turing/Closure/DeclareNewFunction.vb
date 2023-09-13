@@ -232,6 +232,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
             Dim argumentKeys As String()
             Dim key$
+            Dim dotdotdot As Dictionary(Of String, Object) = Nothing
+            Dim hasDotDotDot As Boolean = False
+            Dim requireKey As String
+
+            If Me.parameters.Any(Function(par) par.names.Any(Function(si) si = "...")) Then
+                hasDotDotDot = True
+                dotdotdot = New Dictionary(Of String, Object)
+            End If
 
             ' function parameter should be evaluate 
             ' from the parent environment.
@@ -250,17 +258,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             ' initialize environment
             For i As Integer = 0 To Me.parameters.Length - 1
                 var = Me.parameters(i)
+                requireKey = var.names(Scan0)
 
-                If arguments.ContainsKey(var.names(Scan0)) Then
-                    value = arguments(var.names(Scan0)).Evaluate(caller_context)
+                If requireKey = "..." Then
+                    value = dotdotdot
+                ElseIf arguments.ContainsKey(requireKey) Then
+                    value = arguments(requireKey).Evaluate(caller_context)
+
+                    If hasDotDotDot Then
+                        dotdotdot(requireKey) = value
+                    End If
                 ElseIf i >= params.Length Then
                     ' missing, use default value
+                    ' the optional default value not affects the ... parameter
                     If var.hasInitializeExpression Then
                         value = var.value.Evaluate(caller_context)
-
-                        If Program.isException(value) Then
-                            Return DirectCast(value, Message)
-                        End If
                     Else
                         Return DirectCast(MissingParameters(var, funcName, caller_context), Message)
                     End If
@@ -304,6 +316,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 '    Call ValueAssignExpression.doValueAssign(envir, names, True, value)
                 'Else
                 Dim err As Message = Nothing
+
+                If Program.isException(value) Then
+                    Return DirectCast(value, Message)
+                End If
 
                 Try
                     ' add parameter symbol into the environment context
