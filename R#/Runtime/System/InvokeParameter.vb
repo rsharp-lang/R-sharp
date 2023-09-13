@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::e29fd66e77520629e8e5c9a73aa94d5d, D:/GCModeller/src/R-sharp/R#//Runtime/System/InvokeParameter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 274
-    '    Code Lines: 182
-    ' Comment Lines: 60
-    '   Blank Lines: 32
-    '     File Size: 10.51 KB
+' Summaries:
 
 
-    '     Class InvokeParameter
-    ' 
-    '         Properties: haveSymbolName, index, isAcceptor, isFormula, isProbablyVectorNameTuple
-    '                     isSymbolAssign, name, value
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: Create, CreateArguments, CreateLiterals, Evaluate, GetLazyEvaluateExpression
-    '                   GetSymbolName, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 274
+'    Code Lines: 182
+' Comment Lines: 60
+'   Blank Lines: 32
+'     File Size: 10.51 KB
+
+
+'     Class InvokeParameter
+' 
+'         Properties: haveSymbolName, index, isAcceptor, isFormula, isProbablyVectorNameTuple
+'                     isSymbolAssign, name, value
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: Create, CreateArguments, CreateLiterals, Evaluate, GetLazyEvaluateExpression
+'                   GetSymbolName, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,6 +61,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Components
@@ -245,6 +246,18 @@ Namespace Runtime.Components
                 .ToArray
         End Function
 
+        Friend Shared Iterator Function PopulateDotDotDot(dotVals As Object) As IEnumerable(Of KeyValuePair(Of String, Object))
+            If Not TypeOf dotVals Is Dictionary(Of String, Object) Then
+                If TypeOf dotVals Is list Then
+                    dotVals = DirectCast(dotVals, list).slots
+                End If
+            End If
+
+            For Each par As KeyValuePair(Of String, Object) In DirectCast(dotVals, Dictionary(Of String, Object))
+                Yield par
+            Next
+        End Function
+
         ''' <summary>
         ''' 
         ''' </summary>
@@ -262,6 +275,7 @@ Namespace Runtime.Components
             Dim argVals As New Dictionary(Of String, InvokeParameter)
             Dim allArgs As InvokeParameter() = arguments.ToArray
             Dim acceptor As AcceptorClosure = Nothing
+            Dim dotdotdot As InvokeParameter = Nothing
 
             If allArgs.Length > 0 AndAlso allArgs(Scan0).isAcceptor Then
                 acceptor = allArgs(Scan0).value
@@ -285,8 +299,10 @@ Namespace Runtime.Components
                 'If Program.isException(argVal) Then
                 '    Return DirectCast(argVal, Message)
                 'Else
-                If Not argVals.ContainsKey(keyName) Then
-                    Call argVals.Add(keyName, argVal)
+                If Not argVals.ContainsKey(keyName) AndAlso argVal.name <> "..." Then
+                    argVals.Add(keyName, argVal)
+                ElseIf argVal.name = "..." Then
+                    dotdotdot = argVal
                 End If
 
                 If Not acceptor Is Nothing Then
@@ -296,6 +312,17 @@ Namespace Runtime.Components
                 End If
                 ' End If
             Next
+
+            If Not dotdotdot Is Nothing Then
+                ' join the parameters from ... symbol
+                Dim dotVals As Object = dotdotdot.Evaluate(env)
+
+                For Each par As KeyValuePair(Of String, Object) In PopulateDotDotDot(dotVals)
+                    If Not argVals.ContainsKey(par.Key) Then
+                        Call argVals.Add(par.Key, New InvokeParameter(par.Value, argVals.Count))
+                    End If
+                Next
+            End If
 
             If acceptor Is Nothing Then
                 Return argVals
