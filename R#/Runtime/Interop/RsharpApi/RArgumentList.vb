@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::27e89be5e0bde4156509a94bc92d3ce2, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/RArgumentList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 420
-    '    Code Lines: 278
-    ' Comment Lines: 91
-    '   Blank Lines: 51
-    '     File Size: 18.17 KB
+' Summaries:
 
 
-    '     Class RArgumentList
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: CreateLeftMarginArguments, CreateObjectListArguments, CreateRightMarginArguments, fillOptionalArguments, objectListArgumentIndex
-    '                   objectListArgumentMargin, TryCastListObjects, TryCastListObjectsInternal
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 420
+'    Code Lines: 278
+' Comment Lines: 91
+'   Blank Lines: 51
+'     File Size: 18.17 KB
+
+
+'     Class RArgumentList
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: CreateLeftMarginArguments, CreateObjectListArguments, CreateRightMarginArguments, fillOptionalArguments, objectListArgumentIndex
+'                   objectListArgumentMargin, TryCastListObjects, TryCastListObjectsInternal
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -131,6 +131,7 @@ Namespace Runtime.Interop
             Dim normalNames As New List(Of String)
             Dim sequenceIndex As Integer = Scan0
             Dim x As RMethodArgument
+            Dim dotdotdot As Object = Nothing
 
             For Each arg As InvokeParameter In params
                 If arg.isSymbolAssign AndAlso arg.name Like parameterNames Then
@@ -183,10 +184,21 @@ Namespace Runtime.Interop
                     End If
                 Else
                     ' still a list object argument
-                    ' 当前的参数为list object
-                    listObject.Add(arg)
+                    ' current parameter is list object
+                    If arg.name = "..." Then
+                        ' should join the list object with dotdotdot
+                        dotdotdot = arg.Evaluate(env)
+                    Else
+                        Call listObject.Add(arg)
+                    End If
                 End If
             Next
+
+            If Not dotdotdot Is Nothing Then
+                For Each par As KeyValuePair(Of String, Object) In InvokeParameter.PopulateDotDotDot(dotdotdot)
+                    Call listObject.Add(New InvokeParameter(par.Key, par.Value, listObject.Count))
+                Next
+            End If
 
             parameterVals(Scan0) = listObject.ToArray
             parameterVals = fillOptionalArguments(parameterVals, normalNames, declareArguments, parameterNames, [declare].name, 1, env)

@@ -1,6 +1,6 @@
 let f1 <- function(x, ...) {
   f2(...);
-  str(list(...));
+  str(names(list(...)));
 }
 
 let f2 <- function(y) {

@@ -246,6 +246,18 @@ Namespace Runtime.Components
                 .ToArray
         End Function
 
+        Friend Shared Iterator Function PopulateDotDotDot(dotVals As Object) As IEnumerable(Of KeyValuePair(Of String, Object))
+            If Not TypeOf dotVals Is Dictionary(Of String, Object) Then
+                If TypeOf dotVals Is list Then
+                    dotVals = DirectCast(dotVals, list).slots
+                End If
+            End If
+
+            For Each par As KeyValuePair(Of String, Object) In DirectCast(dotVals, Dictionary(Of String, Object))
+                Yield par
+            Next
+        End Function
+
         ''' <summary>
         ''' 
         ''' </summary>
@@ -305,13 +317,7 @@ Namespace Runtime.Components
                 ' join the parameters from ... symbol
                 Dim dotVals As Object = dotdotdot.Evaluate(env)
 
-                If Not TypeOf dotVals Is Dictionary(Of String, Object) Then
-                    If TypeOf dotVals Is list Then
-                        dotVals = DirectCast(dotVals, list).slots
-                    End If
-                End If
-
-                For Each par As KeyValuePair(Of String, Object) In DirectCast(dotVals, Dictionary(Of String, Object))
+                For Each par As KeyValuePair(Of String, Object) In PopulateDotDotDot(dotVals)
                     If Not argVals.ContainsKey(par.Key) Then
                         Call argVals.Add(par.Key, New InvokeParameter(par.Value, argVals.Count))
                     End If
