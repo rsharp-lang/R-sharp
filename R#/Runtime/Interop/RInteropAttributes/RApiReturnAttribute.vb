@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::55b17601625d238ccd682a5b7b37cdc8, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RInteropAttributes/RApiReturnAttribute.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 103
-    '    Code Lines: 62
-    ' Comment Lines: 28
-    '   Blank Lines: 13
-    '     File Size: 3.82 KB
+' Summaries:
 
 
-    '     Class RApiReturnAttribute
-    ' 
-    '         Properties: fields, isClassGraph, returnTypes, unionType
-    ' 
-    '         Constructor: (+4 Overloads) Sub New
-    '         Function: GetActualReturnType, GetClass, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 103
+'    Code Lines: 62
+' Comment Lines: 28
+'   Blank Lines: 13
+'     File Size: 3.82 KB
+
+
+'     Class RApiReturnAttribute
+' 
+'         Properties: fields, isClassGraph, returnTypes, unionType
+' 
+'         Constructor: (+4 Overloads) Sub New
+'         Function: GetActualReturnType, GetClass, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -94,6 +94,19 @@ Namespace Runtime.Interop
         End Property
 
         ''' <summary>
+        ''' the unique reference id of current generated R# runtime <see cref="IRType"/>
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property uuid As String
+            Get
+                Return any.ToString(
+                    obj:=MyBase.TypeId,
+                    null:=$"anonymous_{Me.GetHashCode.ToHexString}"
+                )
+            End Get
+        End Property
+
+        ''' <summary>
         ''' this function returns a typescript language liked union type
         ''' </summary>
         ''' <param name="type"></param>
@@ -134,10 +147,6 @@ Namespace Runtime.Interop
             If Not isClassGraph Then
                 Return Nothing
             Else
-                Dim uuid As String = any.ToString(
-                    obj:=MyBase.TypeId,
-                    null:=$"anonymous_{Me.GetHashCode.ToHexString}"
-                )
                 Return New RS4ClassGraph(uuid, fields)
             End If
         End Function
@@ -149,7 +158,7 @@ Namespace Runtime.Interop
         Public Shared Function GetActualReturnType(api As MethodInfo) As IRType()
             Dim tag As RApiReturnAttribute = api.GetCustomAttribute(Of RApiReturnAttribute)
 
-            If tag Is Nothing Then
+            If tag Is Nothing OrElse tag.returnTypes.IsNullOrEmpty Then
                 Return New IRType() {RType.GetRSharpType(api.ReturnType)}
             ElseIf tag.isClassGraph Then
                 Return New IRType() {tag.GetClass}
@@ -158,6 +167,24 @@ Namespace Runtime.Interop
                     .SafeQuery _
                     .Select(Function(t) RType.GetRSharpType(t)) _
                     .ToArray
+            End If
+        End Function
+
+        Public Shared Function MeasureRReturnInfo(fun As MethodInfo) As IRType
+            Dim tag As RApiReturnAttribute = fun.GetCustomAttribute(Of RApiReturnAttribute)
+
+            If tag Is Nothing OrElse tag.returnTypes.IsNullOrEmpty Then
+                Return RType.GetRSharpType(fun.ReturnType)
+            End If
+
+            If tag.isClassGraph Then
+                Return tag.GetClass
+            End If
+
+            If tag.returnTypes.Length = 1 Then
+                Return RType.GetRSharpType(tag.returnTypes(0))
+            Else
+                Return New RUnionClass(tag.uuid, tag.returnTypes)
             End If
         End Function
     End Class

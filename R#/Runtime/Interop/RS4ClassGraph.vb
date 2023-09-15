@@ -62,6 +62,37 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Interop
 
+    Public Class RUnionClass : Implements IRType
+
+        Public ReadOnly Property className As String Implements IRType.className
+
+        Public ReadOnly Property mode As TypeCodes Implements IRType.mode
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Get
+                Return TypeCodes.list
+            End Get
+        End Property
+
+        Public ReadOnly Property raw As Type Implements IRType.raw
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Get
+                Return GetType(list)
+            End Get
+        End Property
+
+        Public ReadOnly Property unionTypes As Type()
+
+        Sub New(name As String, ParamArray unions As Type())
+            className = name
+            unionTypes = unions
+        End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function getNames() As String() Implements IReflector.getNames
+            Return unionTypes.Select(Function(t) t.Name).ToArray
+        End Function
+    End Class
+
     ''' <summary>
     ''' An clr interface liked type define in R#
     ''' </summary>
