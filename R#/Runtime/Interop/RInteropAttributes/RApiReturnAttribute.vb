@@ -55,6 +55,7 @@
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports any = Microsoft.VisualBasic.Scripting
@@ -124,7 +125,7 @@ Namespace Runtime.Interop
         End Sub
 
         ''' <summary>
-        ''' 
+        ''' Get R# runtime type definition
         ''' </summary>
         ''' <returns>
         ''' this function returns nothing if not <see cref="isClassGraph"/>.
@@ -145,13 +146,18 @@ Namespace Runtime.Interop
             Return $"fun() -> {unionType}"
         End Function
 
-        Public Shared Function GetActualReturnType(api As MethodInfo) As Type()
+        Public Shared Function GetActualReturnType(api As MethodInfo) As IRType()
             Dim tag As RApiReturnAttribute = api.GetCustomAttribute(Of RApiReturnAttribute)
 
             If tag Is Nothing Then
-                Return {api.ReturnType}
+                Return New IRType() {RType.GetRSharpType(api.ReturnType)}
+            ElseIf tag.isClassGraph Then
+                Return New IRType() {tag.GetClass}
             Else
-                Return tag.returnTypes
+                Return tag.returnTypes _
+                    .SafeQuery _
+                    .Select(Function(t) RType.GetRSharpType(t)) _
+                    .ToArray
             End If
         End Function
     End Class

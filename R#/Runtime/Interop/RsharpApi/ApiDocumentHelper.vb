@@ -67,7 +67,6 @@ Namespace Runtime.Interop
             Dim params$
             Dim returns As RType() = RApiReturnAttribute _
                 .GetActualReturnType(api.GetNetCoreCLRDeclaration) _
-                .Select(AddressOf RType.GetRSharpType) _
                 .ToArray
 
             If api.parameters.Length > 3 Then

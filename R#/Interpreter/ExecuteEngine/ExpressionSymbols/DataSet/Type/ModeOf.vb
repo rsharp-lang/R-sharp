@@ -123,7 +123,6 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Return DirectCast(value, RMethodInfo) _
                         .GetNetCoreCLRDeclaration _
                         .DoCall(AddressOf RApiReturnAttribute.GetActualReturnType) _
-                        .Select(AddressOf RType.GetRSharpType) _
                         .ToArray
                 Else
                     Return Message.InCompatibleType(GetType(RMethodInfo), value.GetType, envir)
