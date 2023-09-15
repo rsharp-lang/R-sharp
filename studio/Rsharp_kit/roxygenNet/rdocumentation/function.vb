@@ -133,8 +133,8 @@ Public Class [function]
 
         If Not rtvl Is Nothing AndAlso rtvl.isClassGraph Then
             docs.returns = docs.returns &
-                " the list data also has some specificied data fields: <code>" &
-                rtvl.fields.JoinBy(", ") & "</code>."
+                " the list data also has some specificied data fields: <code>list(" &
+                rtvl.fields.JoinBy(", ") & ")</code>."
         End If
 
         Return createHtml(docs, template, pkg)
