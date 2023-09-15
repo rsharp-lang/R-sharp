@@ -65,7 +65,7 @@ Namespace Runtime.Interop
             Dim rawDeclare$ = raw.FullName
             Dim packageName$ = raw.NamespaceEntry(True).Namespace
             Dim params$
-            Dim returns As RType() = RApiReturnAttribute _
+            Dim returns As IRType() = RApiReturnAttribute _
                 .GetActualReturnType(api.GetNetCoreCLRDeclaration) _
                 .ToArray
 
