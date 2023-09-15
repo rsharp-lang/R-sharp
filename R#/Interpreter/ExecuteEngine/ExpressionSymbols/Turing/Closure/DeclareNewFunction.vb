@@ -481,7 +481,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function getReturns(env As Environment) As RType Implements RFunction.getReturns
+        Public Function getReturns(env As Environment) As IRType Implements RFunction.getReturns
             Return RType.GetRSharpType(GetType(Object))
         End Function
     End Class

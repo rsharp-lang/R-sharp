@@ -291,7 +291,7 @@ RE0:
             Return $"``{name}``"
         End Function
 
-        Public Function getReturns(env As Environment) As RType Implements RFunction.getReturns
+        Public Function getReturns(env As Environment) As IRType Implements RFunction.getReturns
             Return RType.GetRSharpType(GetType(Object))
         End Function
     End Class

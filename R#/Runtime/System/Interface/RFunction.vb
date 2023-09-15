@@ -78,7 +78,7 @@ Namespace Runtime.Components.Interface
         ''' 获取这个函数可能所返回的类型，如果没有额外的信息，这个属性一般是any类型
         ''' </summary>
         ''' <returns></returns>
-        Function getReturns(env As Environment) As RType
+        Function getReturns(env As Environment) As IRType
 
         ''' <summary>
         ''' get the parameter list of current function

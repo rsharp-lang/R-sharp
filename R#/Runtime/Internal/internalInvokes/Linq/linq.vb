@@ -463,6 +463,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
 
             Dim doProject As Func(Of Object, Object) = Function(o) project.Invoke(envir, InvokeParameter.CreateLiterals(o))
+            Dim type As IRType = project.getReturns(envir)
 
             If TypeOf sequence Is pipeline Then
                 ' run in pipeline mode
@@ -471,13 +472,21 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     .populates(Of Object)(envir) _
                     .Select(doProject)
 
-                Return New pipeline(projection, project.getReturns(envir))
+                If TypeOf type Is RType Then
+                    Return New pipeline(projection, DirectCast(type, RType))
+                Else
+                    Return New pipeline(projection, GetType(list))
+                End If
             Else
                 Dim result As Object() = ObjectSet.GetObjectSet(sequence, envir) _
                     .Select(doProject) _
                     .ToArray
 
-                Return New vector(result, project.getReturns(envir))
+                If TypeOf type Is RType Then
+                    Return New vector(result, DirectCast(type, RType))
+                Else
+                    Return New vector(result, RType.list)
+                End If
             End If
         End Function
 

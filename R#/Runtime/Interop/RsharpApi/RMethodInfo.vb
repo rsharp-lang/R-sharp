@@ -92,7 +92,7 @@ Namespace Runtime.Interop
         ''' the return type of current api method
         ''' </summary>
         ''' <returns></returns>
-        Public ReadOnly Property returns As RType
+        Public ReadOnly Property returns As IRType
         ''' <summary>
         ''' A list of parameters of current .NET api that imported
         ''' from the external dll assembly file.
@@ -551,7 +551,7 @@ opt:                    If arg.isOptional Then
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function getReturns(env As Environment) As RType Implements RFunction.getReturns
+        Public Function getReturns(env As Environment) As IRType Implements RFunction.getReturns
             Return returns
         End Function
     End Class
