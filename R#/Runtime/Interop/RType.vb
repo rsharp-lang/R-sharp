@@ -73,9 +73,24 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Namespace Runtime.Interop
 
     ''' <summary>
+    ''' the common model of the .NET clr type and R# runtime type
+    ''' </summary>
+    Public Interface IRType : Inherits IReflector
+
+        ''' <summary>
+        ''' the class name for display and inspect
+        ''' </summary>
+        ''' <returns></returns>
+        ReadOnly Property className As String
+        ReadOnly Property mode As TypeCodes
+        ReadOnly Property raw As Type
+
+    End Interface
+
+    ''' <summary>
     ''' The type wrapper for .NET type to R# language runtime
     ''' </summary>
-    Public Class RType : Implements IReflector
+    Public Class RType : Implements IReflector, IRType
 
         ''' <summary>
         ''' the raw CLR <see cref="Type.FullName"/>
@@ -93,7 +108,7 @@ Namespace Runtime.Interop
         ''' the raw CLR type name
         ''' </summary>
         ''' <returns></returns>
-        Public ReadOnly Property name As String
+        Public ReadOnly Property name As String Implements IRType.className
             Get
                 Return raw.Name
             End Get
@@ -103,7 +118,7 @@ Namespace Runtime.Interop
         ''' The mapped R# data type
         ''' </summary>
         ''' <returns></returns>
-        Public ReadOnly Property mode As TypeCodes
+        Public ReadOnly Property mode As TypeCodes Implements IRType.mode
         Public ReadOnly Property isArray As Boolean
         Public ReadOnly Property isCollection As Boolean
 
@@ -128,10 +143,10 @@ Namespace Runtime.Interop
         End Property
 
         ''' <summary>
-        ''' .NET type
+        ''' based .NET CLR type
         ''' </summary>
         ''' <returns></returns>
-        Public ReadOnly Property raw As Type
+        Public ReadOnly Property raw As Type Implements IRType.raw
         ''' <summary>
         ''' implements interface of <see cref="IDynamicsObject"/>?
         ''' </summary>
