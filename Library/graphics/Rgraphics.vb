@@ -312,7 +312,7 @@ Module Rgraphics
                 Dim raster As New PixelRender(colorSet, 255, defaultColor:=Color.Transparent)
                 Dim pixels As PixelData() = scale.Select(Function(d, i) New PixelData(px(i), py(i), d)).ToArray
 
-                Return raster.RenderRasterImage(pixels, New Size(poly.width, poly.height))
+                Return raster.RenderRasterImage(pixels, New Size(poly.xpoints.Max, poly.ypoints.Max))
             End If
         Else
             Throw New NotImplementedException
