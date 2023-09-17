@@ -129,6 +129,8 @@ Module datasetKit
         End If
 
         Dim d As New Dictionary(Of String, List(Of Double))
+        Dim rownames As New List(Of String)
+        Dim idx As i32 = 1
 
         For Each name In featureNames
             d.Add(name, New List(Of Double))
@@ -144,6 +146,8 @@ Module datasetKit
             For i As Integer = 0 To labels - 1
                 d(labelText(i)).Add(x.labels(i))
             Next
+
+            rownames.Add(If(x.id, (++idx).ToString))
         Next
 
         Return New Rdataframe With {
