@@ -155,7 +155,8 @@ Module datasetKit
                 .ToDictionary(Function(x) x.Key,
                               Function(x)
                                   Return DirectCast(x.Value.ToArray, Array)
-                              End Function)
+                              End Function),
+                .rownames = rownames.ToArray
         }
     End Function
 
