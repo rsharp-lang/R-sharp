@@ -254,6 +254,19 @@ Module datasetKit
         )
     End Function
 
+    <ExportAPI("split_training_test")>
+    <RApiReturn("training", "test")>
+    Public Function split_training_test(ds As SampleData(), Optional ratio As Double = 0.7) As Object
+        Dim len As Integer = ds.Length * ratio
+        ds = ds.Shuffles
+        Return New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"training", ds.Take(len).ToArray},
+                {"test", ds.Skip(len).ToArray}
+            }
+        }
+    End Function
+
     <ExportAPI("estimate_alphabets")>
     Public Function estimate_alphabets(<RRawVectorArgument> seqs As Object) As Char()
         Return SequenceGraphTransform.estimate_alphabets(CLRVector.asCharacter(seqs))
