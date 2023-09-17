@@ -112,7 +112,48 @@ Module datasetKit
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(UnionMatrix), AddressOf toMatrix)
         Call REnv.Internal.generic.add("fit", GetType(SequenceGraphTransform), AddressOf fitSgt)
         Call REnv.Internal.generic.add("dim", GetType(DataSet), AddressOf getDataSetDimension)
+        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(SampleData()), AddressOf sampledataDataSet)
     End Sub
+
+    Private Function sampledataDataSet(ds As SampleData(), args As list, env As Environment) As Object
+        Dim features As Integer = ds(0).features.Length
+        Dim labels As Integer = ds(0).labels.Length
+        Dim featureNames As String() = args.getValue(Of String())("feature.names", env)
+        Dim labelText As String() = args.getValue(Of String())("label.names", env)
+
+        If featureNames.IsNullOrEmpty Then
+            featureNames = features.Sequence.Select(Function(i) $"X{i + 1}").ToArray
+        End If
+        If labelText.IsNullOrEmpty Then
+            labelText = labels.Sequence.Select(Function(i) $"OUT{i + 1}").ToArray
+        End If
+
+        Dim d As New Dictionary(Of String, List(Of Double))
+
+        For Each name In featureNames
+            d.Add(name, New List(Of Double))
+        Next
+        For Each name In labelText
+            d.Add(name, New List(Of Double))
+        Next
+
+        For Each x As SampleData In ds
+            For i As Integer = 0 To features - 1
+                d(featureNames(i)).Add(x.features(i))
+            Next
+            For i As Integer = 0 To labels - 1
+                d(labelText(i)).Add(x.labels(i))
+            Next
+        Next
+
+        Return New Rdataframe With {
+            .columns = d _
+                .ToDictionary(Function(x) x.Key,
+                              Function(x)
+                                  Return DirectCast(x.Value.ToArray, Array)
+                              End Function)
+        }
+    End Function
 
     Private Function getDataSetDimension(x As DataSet, args As list, env As Environment) As Object
         Dim dims As New list With {
