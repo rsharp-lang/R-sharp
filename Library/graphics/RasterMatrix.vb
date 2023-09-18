@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
+﻿Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports stdVec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 
@@ -18,9 +19,9 @@ Public Class RasterMatrix : Implements IRasterGrayscaleHeatmap
 
             For x As Integer = 0 To v.Length - 1
                 Yield New PixelData With {
-                    .scale = v(x),
-                    .x = x,
-                    .y = y
+                    .Scale = v(x),
+                    .X = x,
+                    .Y = y
                 }
             Next
 
