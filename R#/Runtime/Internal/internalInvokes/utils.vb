@@ -96,7 +96,7 @@ Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
 
 Namespace Runtime.Internal.Invokes
 
-    Module utils
+    Public Module utils
 
         ''' <summary>
         ''' # Install Packages from Repositories or Local Files
@@ -620,6 +620,15 @@ Namespace Runtime.Internal.Invokes
             Return std_out
         End Function
 
+        ''' <summary>
+        ''' Create a new temporary work directory environment for the code
+        ''' </summary>
+        ''' <param name="dir"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' the work directory path will be restore to previous work directory
+        ''' when the generated temporary work directory has been close and disposed
+        ''' </remarks>
         <ExportAPI("workdir")>
         Public Function workdir(dir As String) As TemporaryEnvironment
             Return New TemporaryEnvironment(newLocation:=dir)
@@ -691,7 +700,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' Pause the console program.
+        ''' Pause the current console program.
         ''' </summary>
         <ExportAPI("pause")>
         Public Sub pause()
@@ -1045,10 +1054,27 @@ Namespace Runtime.Internal.Invokes
             Return Date.Now
         End Function
 
+        ''' <summary>
+        ''' create the time span value based on the given time ticks
+        ''' </summary>
+        ''' <param name="ticks"></param>
+        ''' <returns></returns>
         <ExportAPI("timespan")>
-        Public Function createTimespan(ticks As Integer) As TimeSpan
-            Return TimeSpan.FromTicks(ticks)
+        Public Function createTimespan(ticks As Double, Optional unit As TimeSpanUnits = TimeSpanUnits.Ticks) As TimeSpan
+            Select Case unit
+                Case TimeSpanUnits.Ticks : Return TimeSpan.FromTicks(ticks)
+
+            End Select
         End Function
+
+        Public Enum TimeSpanUnits As Byte
+            Ticks
+            Milliseconds
+            Seconds
+            Minutes
+            Hours
+            Days
+        End Enum
 
         ''' <summary>
         ''' ### Create a Skeleton for a New Source Package
