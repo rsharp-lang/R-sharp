@@ -67,7 +67,7 @@ Module Program
 
     <ExportAPI("--listen")>
     <Description("Start a local static web server for hosting statics web page files")>
-    <Usage("--listen /wwwroot <directory_path> [--attach <other_directory_path> --parent <parent_process_id> /port <http_port, default=80>]")>
+    <Usage("--listen /wwwroot <directory_path> [--attach <other_directory_path/streampack> --parent <parent_process_id> /port <http_port, default=80>]")>
     Public Function listen(args As CommandLine) As Integer
         Dim wwwroot As String = args <= "/wwwroot"
         Dim port As Integer = args("/port") Or 80
@@ -82,9 +82,13 @@ Module Program
         )
 
         If Not attach.StringEmpty Then
-            Call localfs.fs _
-                .AttachFolder(attach) _
-                .ToArray
+            If attach.DirectoryExists Then
+                Call localfs.fs _
+                    .AttachFolder(attach) _
+                    .ToArray
+            Else
+
+            End If
         End If
 
         Call BackgroundTaskUtils.BindToMaster(parentId:=parent, kill:=localhost)
