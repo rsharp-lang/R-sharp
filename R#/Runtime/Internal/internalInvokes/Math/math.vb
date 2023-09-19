@@ -204,8 +204,8 @@ Namespace Runtime.Internal.Invokes
         ''' parts are.
         ''' </remarks>
         <ExportAPI("diff")>
-        Public Function diff(x As Double()) As Double()
-            Return NumberGroups.diff(x)
+        Public Function diff(<RRawVectorArgument> x As Object) As Double()
+            Return NumberGroups.diff(CLRVector.asNumeric(x))
         End Function
 
         ''' <summary>
@@ -219,16 +219,12 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("round")>
-        Public Function round(x As Array, Optional decimals% = 0) As Double()
-            If x Is Nothing OrElse x.Length = 0 Then
-                Return Nothing
-            Else
-                Dim rounds = From element As Double
-                             In CLRVector.asNumeric(x)
-                             Select stdNum.Round(element, decimals)
+        Public Function round(<RRawVectorArgument> x As Object, Optional decimals% = 0) As Double()
+            Dim rounds = From element As Double
+                         In CLRVector.asNumeric(x)
+                         Select stdNum.Round(element, decimals)
 
-                Return rounds.ToArray
-            End If
+            Return rounds.ToArray
         End Function
 
         ''' <summary>
@@ -243,7 +239,7 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("log")>
-        Public Function log(x As Array, Optional newBase As Double = stdNum.E) As Double()
+        Public Function log(<RRawVectorArgument> x As Object, Optional newBase As Double = stdNum.E) As Double()
             Return CLRVector.asNumeric(x) _
                 .Select(Function(d) stdNum.Log(d, newBase)) _
                 .ToArray
@@ -257,7 +253,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="x"></param>
         ''' <returns></returns>
         <ExportAPI("log2")>
-        Public Function log2(x As Array) As Double()
+        Public Function log2(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
                 .Select(Function(d) stdNum.Log(d, 2)) _
                 .ToArray
@@ -271,14 +267,14 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="x"></param>
         ''' <returns></returns>
         <ExportAPI("log10")>
-        Public Function log10(x As Array) As Double()
+        Public Function log10(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
                 .Select(Function(d) stdNum.Log(d, 10)) _
                 .ToArray
         End Function
 
         <ExportAPI("sin")>
-        Public Function sin(x As Array) As Double()
+        Public Function sin(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
                 .Select(Function(d) stdNum.Sin(d)) _
                 .ToArray
@@ -290,7 +286,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="x"></param>
         ''' <returns></returns>
         <ExportAPI("cos")>
-        Public Function cos(x As Array) As Double()
+        Public Function cos(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
                 .Select(Function(d) stdNum.Cos(d)) _
                 .ToArray
@@ -312,7 +308,7 @@ Namespace Runtime.Internal.Invokes
         ''' Logical true values are regarded as one, false values as zero. For historical reasons, NULL is accepted and treated as if it were numeric(0).
         ''' </remarks>
         <ExportAPI("prod")>
-        Public Function prod(x As Array, Optional na_rm As Boolean = False) As Double
+        Public Function prod(<RRawVectorArgument> x As Object, Optional na_rm As Boolean = False) As Double
             Dim vx As Double() = CLRVector.asNumeric(x)
             Dim p As Double = 1
 
@@ -447,17 +443,17 @@ Namespace Runtime.Internal.Invokes
         ''' allowed for trim = 0, only.</param>
         ''' <returns></returns>
         <ExportAPI("mean")>
-        Public Function mean(x As Array, Optional na_rm As Boolean = False) As Double
-            If x Is Nothing OrElse x.Length = 0 Then
-                Return 0
-            Else
-                Dim array As Double() = CLRVector.asNumeric(x)
+        Public Function mean(<RRawVectorArgument> x As Object, Optional na_rm As Boolean = False) As Double
+            Dim array As Double() = CLRVector.asNumeric(x)
 
-                If na_rm Then
-                    Return array.Where(Function(a) Not a.IsNaNImaginary).Average
-                Else
-                    Return array.Average
-                End If
+            If array.IsNullOrEmpty Then
+                Return 0
+            End If
+
+            If na_rm Then
+                Return array.Where(Function(a) Not a.IsNaNImaginary).Average
+            Else
+                Return array.Average
             End If
         End Function
 
@@ -490,17 +486,17 @@ Namespace Runtime.Internal.Invokes
         ''' a median is a reasonable concept.
         ''' </remarks>
         <ExportAPI("median")>
-        Public Function median(x As Array, Optional na_rm As Boolean = False) As Double
-            If x Is Nothing OrElse x.Length = 0 Then
-                Return 0
-            Else
-                Dim array As Double() = CLRVector.asNumeric(x)
+        Public Function median(<RRawVectorArgument> x As Object, Optional na_rm As Boolean = False) As Double
+            Dim array As Double() = CLRVector.asNumeric(x)
 
-                If na_rm Then
-                    Return array.Where(Function(a) Not a.IsNaNImaginary).Median
-                Else
-                    Return array.Median
-                End If
+            If array.IsNullOrEmpty Then
+                Return 0
+            End If
+
+            If na_rm Then
+                Return array.Where(Function(a) Not a.IsNaNImaginary).Median
+            Else
+                Return array.Median
             End If
         End Function
 
@@ -510,7 +506,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="x">a numeric Or complex vector Or array.</param>
         ''' <returns></returns>
         <ExportAPI("abs")>
-        Public Function abs(x As Array) As Double()
+        Public Function abs(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
                 .Select(AddressOf stdNum.Abs) _
                 .ToArray
@@ -550,7 +546,7 @@ Namespace Runtime.Internal.Invokes
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("rsd")>
-        Public Function rsd(x As Array) As Double
+        Public Function rsd(<RRawVectorArgument> x As Object) As Double
             Return CLRVector.asNumeric(x).RSD
         End Function
 
@@ -569,12 +565,16 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("sd")>
-        Public Function sd(x As Array, Optional sample As Boolean = False) As Double
-            If x Is Nothing OrElse x.Length = 0 Then
+        Public Function sd(<RRawVectorArgument> x As Object, Optional sample As Boolean = False) As Double
+            Dim v = CLRVector.asNumeric(x)
+
+            If v.IsNullOrEmpty Then
                 Return 0
-            Else
-                Return CLRVector.asNumeric(x).SD(isSample:=sample)
             End If
+
+            Dim std As Double = v.SD(isSample:=sample)
+
+            Return std
         End Function
 
         ''' <summary>
@@ -612,7 +612,7 @@ Namespace Runtime.Internal.Invokes
         ''' 5. Outliers can lead To misleading values means Not robust With outliers.
         ''' </returns>
         <ExportAPI("pearson")>
-        Public Function pearson(x As Array, y As Array,
+        Public Function pearson(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object,
                                 Optional MAXIT As Integer = 5000,
                                 Optional env As Environment = Nothing) As Object
 
