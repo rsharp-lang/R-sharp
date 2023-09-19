@@ -63,6 +63,10 @@ Imports Rserver
 
 Module Program
 
+    Sub New()
+
+    End Sub
+
     Public Function Main() As Integer
         Return GetType(Program).RunCLI(App.CommandLine)
     End Function
