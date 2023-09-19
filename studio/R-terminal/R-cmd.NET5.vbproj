@@ -23,6 +23,7 @@
 	  <PackageIcon>Preview Icon - Round.png</PackageIcon>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <Authors>xieguigang</Authors>
+	  <UseApplicationFramework>True</UseApplicationFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

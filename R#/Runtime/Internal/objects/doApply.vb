@@ -60,6 +60,7 @@
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Runtime.Internal.Object
@@ -92,9 +93,24 @@ Namespace Runtime.Internal.Object
             End If
 
             Dim vResult As Object() = New Object(data.Length - 1) {}
+            Dim args As Object() = New Object(FUN.getArguments.Count - 1) {}
+            Dim offset As Integer = 0
+
+            For Each arg In FUN.getArguments
+                If offset = 0 Then
+                    Continue For
+                Else
+                    offset += 1
+                End If
+
+                If Not arg.Value Is Nothing Then
+                    args(offset) = arg.Value.Evaluate(env)
+                End If
+            Next
 
             For i As Integer = 0 To vResult.Length - 1
-                vResult(i) = FUN.Invoke({data(i)}, env)
+                args(0) = data(i)
+                vResult(i) = FUN.Invoke(args, env)
 
                 If Program.isException(vResult(i)) Then
                     Return vResult(i)
