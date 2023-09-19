@@ -1,59 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::94646487253fec71ba078416f1010afd, D:/GCModeller/src/R-sharp/studio/Rserve//Program.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 92
-    '    Code Lines: 72
-    ' Comment Lines: 7
-    '   Blank Lines: 13
-    '     File Size: 3.67 KB
+' Summaries:
 
 
-    ' Module Program
-    ' 
-    '     Function: listen, Main, runSession, start
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 92
+'    Code Lines: 72
+' Comment Lines: 7
+'   Blank Lines: 13
+'     File Size: 3.67 KB
+
+
+' Module Program
+' 
+'     Function: listen, Main, runSession, start
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.ComponentModel
+Imports System.IO
 Imports Flute.Http.Core
 Imports Flute.Http.FileSystem
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Net
 Imports Parallel
@@ -61,13 +63,17 @@ Imports Rserver
 
 Module Program
 
+    Sub New()
+
+    End Sub
+
     Public Function Main() As Integer
         Return GetType(Program).RunCLI(App.CommandLine)
     End Function
 
     <ExportAPI("--listen")>
     <Description("Start a local static web server for hosting statics web page files")>
-    <Usage("--listen /wwwroot <directory_path> [--attach <other_directory_path> --parent <parent_process_id> /port <http_port, default=80>]")>
+    <Usage("--listen /wwwroot <directory_path> [--attach <other_directory_path/streampack> --parent <parent_process_id> /port <http_port, default=80>]")>
     Public Function listen(args As CommandLine) As Integer
         Dim wwwroot As String = args <= "/wwwroot"
         Dim port As Integer = args("/port") Or 80
@@ -82,9 +88,18 @@ Module Program
         )
 
         If Not attach.StringEmpty Then
-            Call localfs.fs _
-                .AttachFolder(attach) _
-                .ToArray
+            If attach.DirectoryExists Then
+                Call localfs.fs _
+                    .AttachFolder(attach) _
+                    .ToArray
+            Else
+                Call localfs.fs _
+                    .AttachFolder(New StreamPack(
+                        buffer:=attach.Open(FileMode.Open, doClear:=False, [readOnly]:=True),
+                        [readonly]:=True
+                    )) _
+                    .ToArray
+            End If
         End If
 
         Call BackgroundTaskUtils.BindToMaster(parentId:=parent, kill:=localhost)

@@ -115,7 +115,11 @@ Namespace Runtime.Vectorization
                 x = REnv.UnsafeTryCastGenericArray(x)
             End If
             If TypeOf x Is String Then
-                Return New Long() {Long.Parse(CStr(x))}
+                Try
+                    Return New Long() {Long.Parse(CStr(x))}
+                Catch ex As Exception
+                    Throw New Exception(ex.Message & $", source string: {x}")
+                End Try
             ElseIf TypeOf x Is Boolean Then
                 Return New Long() {If(CBool(x), 1, 0)}
             ElseIf REnv.isVector(Of String)(x) Then

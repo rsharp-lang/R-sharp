@@ -276,23 +276,44 @@ Module Rgraphics
             Dim df As dataframe = DirectCast(x, dataframe)
             Dim px As Integer() = CLRVector.asInteger(df!x)
             Dim py As Integer() = CLRVector.asInteger(df!y)
-            Dim r As Double() = bytes(CLRVector.asNumeric(df!r))
-            Dim g As Double() = bytes(CLRVector.asNumeric(df!g))
-            Dim b As Double() = bytes(CLRVector.asNumeric(df!b))
             Dim poly As New Polygon2D(px, py)
-            Dim raster As New Bitmap(CInt(poly.width) + 1, CInt(poly.height) + 1)
-            Dim buffer As BitmapBuffer = BitmapBuffer.FromBitmap(raster)
-            Dim color As Color
 
-            For i As Integer = 0 To px.Length - 1
-                color = Color.FromArgb(r(i), g(i), b(i))
-                ' raster.SetPixel(px(i) - 1, py(i) - 1, color)
-                buffer.SetPixel(px(i) - 1, py(i) - 1, color)
-            Next
+            If df.hasName("r") AndAlso df.hasName("g") AndAlso df.hasName("b") Then
+                Dim r As Double() = bytes(CLRVector.asNumeric(df!r))
+                Dim g As Double() = bytes(CLRVector.asNumeric(df!g))
+                Dim b As Double() = bytes(CLRVector.asNumeric(df!b))
+                Dim raster As New Bitmap(CInt(poly.width) + 1, CInt(poly.height) + 1)
+                Dim buffer As BitmapBuffer = BitmapBuffer.FromBitmap(raster)
+                Dim color As Color
 
-            Call buffer.Dispose()
+                For i As Integer = 0 To px.Length - 1
+                    color = Color.FromArgb(r(i), g(i), b(i))
+                    ' raster.SetPixel(px(i) - 1, py(i) - 1, color)
+                    buffer.SetPixel(px(i) - 1, py(i) - 1, color)
+                Next
 
-            Return raster
+                Call buffer.Dispose()
+
+                Return raster
+            Else
+                Dim scale As Double()
+
+                If df.hasName("scale") Then
+                    scale = CLRVector.asNumeric(df!scale)
+                ElseIf df.hasName("intensity") Then
+                    scale = CLRVector.asNumeric(df!intensity)
+                ElseIf df.hasName("heatmap") Then
+                    scale = CLRVector.asNumeric(df!heatmap)
+                Else
+                    Throw New NotImplementedException
+                End If
+
+                Dim colorSet As String = RColorPalette.getColorSet(col, [default]:="jet")
+                Dim raster As New PixelRender(colorSet, 255, defaultColor:=Color.Transparent)
+                Dim pixels As PixelData() = scale.Select(Function(d, i) New PixelData(px(i), py(i), d)).ToArray
+
+                Return raster.RenderRasterImage(pixels, New Size(poly.xpoints.Max, poly.ypoints.Max))
+            End If
         Else
             Throw New NotImplementedException
         End If

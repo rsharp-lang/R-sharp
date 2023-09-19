@@ -332,6 +332,13 @@ Module datasetKit
             .ToArray
     End Function
 
+    ''' <summary>
+    ''' get feature vector by a given feature column index
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="feature">the feature column index in the sample dataset, start based 1.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("get_feature")>
     Public Function get_feature(<RRawVectorArgument> x As Object, feature As Integer, Optional env As Environment = Nothing) As Object
         Dim data As pipeline = pipeline.TryCreatePipeline(Of SampleData)(x, env)

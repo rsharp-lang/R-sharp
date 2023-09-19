@@ -112,8 +112,10 @@
   </ItemGroup>
 
   <ItemGroup>  
-    <ProjectReference Include="..\..\..\runtime\Darwinism\src\Parallel\parallel-netcore5.vbproj" />
-    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\Darwinism\src\Parallel\parallel-netcore5.vbproj" />  
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\BinaryData\BinaryData\binarydata-netcore5.vbproj" />  
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\BinaryData\HDSPack\HDSPack.vbproj" />  
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />  
     <ProjectReference Include="..\Rserver\Rserver.NET5.vbproj" />
   </ItemGroup>
 
