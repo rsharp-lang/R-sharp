@@ -196,6 +196,8 @@ Module HDSutils
         End If
     End Function
 
+
+
     ''' <summary>
     ''' Get files in a specific directory
     ''' </summary>
@@ -206,12 +208,13 @@ Module HDSutils
     Public Function listFiles(pack As StreamPack,
                               Optional dir As String = "/",
                               Optional excludes_dir As Boolean = False,
+                              Optional recursive As Boolean = True,
                               Optional env As Environment = Nothing) As Object
 
         Dim objs As StreamObject()
 
         If dir.StringEmpty OrElse dir = "/" OrElse dir = "\" Then
-            objs = pack.ListFiles.ToArray
+            objs = pack.ListFiles(recursive:=recursive).ToArray
         Else
             Dim folder As StreamGroup = pack.GetObject(dir & "/")
 
@@ -228,7 +231,7 @@ Module HDSutils
                     Return Nothing
                 End If
             Else
-                objs = folder.ListFiles.ToArray
+                objs = folder.ListFiles(recursive:=recursive).ToArray
             End If
         End If
 
