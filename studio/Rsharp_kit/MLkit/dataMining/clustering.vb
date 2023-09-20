@@ -522,6 +522,13 @@ Module clustering
 
         If TypeOf d Is DistanceMatrix Then
             cluster = DirectCast(d, DistanceMatrix).ensureNotIsDistance.BTreeCluster(equals, gt)
+        ElseIf TypeOf d Is Rdataframe Then
+            cluster = DirectCast(d, Rdataframe) _
+                .forEachRow _
+                .Select(Function(ri)
+                            Return New ClusterEntity(ri.name, CLRVector.asNumeric(ri.value))
+                        End Function) _
+                .BTreeClusterVector(equals, gt)
         Else
             Dim data As pipeline = pipeline.TryCreatePipeline(Of DataSet)(d, env)
 
