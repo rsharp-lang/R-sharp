@@ -511,7 +511,7 @@ break:
                                 assem:=asm,
                                 description:="Welcome to use the sciBASIC.NET Color Designer",
                                 SYNOPSIS:=DesignerTerms.TermHelpInfo,
-                                write:=App.StdOut
+                                write:=env.globalEnvironment.stdout
                             )
                         End Sub)
         End If
