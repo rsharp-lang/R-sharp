@@ -338,6 +338,21 @@ printSingleElement:
             Return printer.ToString(x.GetType, env, True)(x)
         End Function
 
+        Private Function toStringArray(o As Object) As String
+            If o Is Nothing Then
+                Return "NULL"
+            ElseIf Not o.GetType.IsArray Then
+                Return any.ToString(o, "NULL", True)
+            End If
+
+            Return DirectCast(o, Array) _
+                .AsObjectEnumerator _
+                .Select(Function(obj)
+                            Return any.ToString(obj, "NULL", True)
+                        End Function) _
+                .JoinBy(", ")
+        End Function
+
         ''' <summary>
         ''' The external string formatter will overrides the internal formatter
         ''' </summary>
@@ -368,14 +383,7 @@ printSingleElement:
             ElseIf elementType.IsEnum Then
                 Return AddressOf enumPrinter.printEnumValue(elementType).Invoke
             ElseIf elementType.IsArray Then
-                Return Function(o) As String
-                           Return DirectCast(o, Array) _
-                              .AsObjectEnumerator _
-                              .Select(Function(obj)
-                                          Return any.ToString(obj, "NULL", True)
-                                      End Function) _
-                              .JoinBy(", ")
-                       End Function
+                Return AddressOf toStringArray
             ElseIf elementType Is GetType(Void) OrElse elementType.FullName = "System.RuntimeType" Then
                 Return Function(obj)
                            ' 20210119
