@@ -14,5 +14,6 @@ bitmap(file = "./wine_PCA.png", size = [3100, 2400]) {
         size = 9
     )
     + geom_text(size = 6)
+    + stat_ellipse()
     ;
 }
