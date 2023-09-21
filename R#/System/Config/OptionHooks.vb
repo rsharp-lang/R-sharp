@@ -58,6 +58,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Math.SIMD
 Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.My.FrameworkInternal
+Imports Microsoft.VisualBasic.Parallel
 
 Namespace Development.Configuration
 
@@ -105,6 +106,8 @@ Namespace Development.Configuration
             hooks("SIMD") = New Action(Of String)(AddressOf configAvxSIMD)
             hooks("AVX") = New Action(Of String)(AddressOf configAvxSIMD)
             hooks("avx") = New Action(Of String)(AddressOf configAvxSIMD)
+            hooks("n_thread") = New Action(Of String)(Sub(n) VectorTask.n_threads = Val(n))
+            hooks("n_threads") = New Action(Of String)(Sub(n) VectorTask.n_threads = Val(n))
         End Sub
 
         Private Sub configMemoryLoads(optVal As String)

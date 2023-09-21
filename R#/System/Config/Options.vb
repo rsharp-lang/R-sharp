@@ -64,6 +64,7 @@ Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Math.SIMD
 Imports Microsoft.VisualBasic.My.FrameworkInternal
 Imports Microsoft.VisualBasic.Net.Protocols.ContentTypes
+Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports REnvironment = SMRUCC.Rsharp.Runtime.Environment
@@ -336,6 +337,7 @@ Namespace Development.Configuration
                     Case "digits" : Return setOption(opt, If([default], "6"), env)
                     Case "avx_simd", "simd", "SIMD", "AVX", "avx" : Return SIMDEnvironment.config.ToString
                     Case "system_tempdir" : Return App.SysTemp
+                    Case "n_threads", "n_thread" : Return VectorTask.n_threads
 
                     Case Else
                         If [default].StringEmpty Then
@@ -350,8 +352,8 @@ Namespace Development.Configuration
         ''' <summary>
         ''' Set configuration value and update the configuration database.
         ''' </summary>
-        ''' <param name="opt$"></param>
-        ''' <param name="value$"></param>
+        ''' <param name="opt"></param>
+        ''' <param name="value"></param>
         ''' <returns></returns>
         ''' <remarks>
         ''' This method will also join/update a variable into the 
