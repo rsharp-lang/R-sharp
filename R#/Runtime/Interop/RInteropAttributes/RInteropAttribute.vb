@@ -131,6 +131,11 @@ Namespace Runtime.Interop
     ''' context environment when do package module imports at 
     ''' function invoke 
     ''' <see cref="ImportsPackage.ImportsStaticInternalImpl"/>
+    ''' 
+    ''' the type export information usually be used for the .NET clr de-serilization
+    ''' operation, example as:
+    ''' 
+    ''' 1. xml de-serialization:  loadXml("...", typeof = "type_export_name")
     ''' </remarks>
     ''' 
     <AttributeUsage(AttributeTargets.Class, AllowMultiple:=True, Inherited:=True)>

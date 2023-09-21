@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::36936fac46a538c6ff3e187c29699800, D:/GCModeller/src/R-sharp/Library/base//base/HDSutils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 281
-    '    Code Lines: 185
-    ' Comment Lines: 56
-    '   Blank Lines: 40
-    '     File Size: 10.54 KB
+' Summaries:
 
 
-    ' Module HDSutils
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: createStream, DiskDefragmentation, ExtractFiles, getData, listFiles
-    '               openStream, readText, saveFile, Tree, writeText
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 281
+'    Code Lines: 185
+' Comment Lines: 56
+'   Blank Lines: 40
+'     File Size: 10.54 KB
+
+
+' Module HDSutils
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: createStream, DiskDefragmentation, ExtractFiles, getData, listFiles
+'               openStream, readText, saveFile, Tree, writeText
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Directory = Microsoft.VisualBasic.FileIO.Directory
+Imports rDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 ''' <summary>
 ''' HDS stream pack toolkit
@@ -76,7 +77,21 @@ Module HDSutils
     Sub New()
         Call Internal.ConsolePrinter.AttachConsoleFormatter(Of StreamGroup)(Function(o) o.ToString)
         Call Internal.ConsolePrinter.AttachConsoleFormatter(Of StreamBlock)(Function(o) o.ToString)
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(StreamObject()), AddressOf fileTable)
     End Sub
+
+    Private Function fileTable(ls As StreamObject(), args As list, env As Environment)
+        Dim df As New rDataframe With {.columns = New Dictionary(Of String, Array)}
+
+        Call df.add("path", ls.Select(Function(f) f.referencePath.ToString))
+        Call df.add("type", ls.Select(Function(f) If(TypeOf f Is StreamGroup, "dir", "file")))
+        Call df.add("offset", ls.Select(Function(f) If(TypeOf f Is StreamGroup, -1, DirectCast(f, StreamBlock).offset)))
+        Call df.add("size", ls.Select(Function(f) If(TypeOf f Is StreamGroup, 0, DirectCast(f, StreamBlock).size)))
+        Call df.add("size(readable)", ls.Select(Function(f) If(TypeOf f Is StreamGroup, 0, StringFormats.Lanudry(DirectCast(f, StreamBlock).size))))
+        Call df.add("desc", ls.Select(Function(f) f.description))
+
+        Return df
+    End Function
 
     ''' <summary>
     ''' Create a new data pack stream object, this function will clear up the data that sotre in the target <paramref name="file"/>!
@@ -206,12 +221,13 @@ Module HDSutils
     Public Function listFiles(pack As StreamPack,
                               Optional dir As String = "/",
                               Optional excludes_dir As Boolean = False,
+                              Optional recursive As Boolean = True,
                               Optional env As Environment = Nothing) As Object
 
         Dim objs As StreamObject()
 
         If dir.StringEmpty OrElse dir = "/" OrElse dir = "\" Then
-            objs = pack.ListFiles.ToArray
+            objs = pack.ListFiles(recursive:=recursive).ToArray
         Else
             Dim folder As StreamGroup = pack.GetObject(dir & "/")
 
@@ -228,7 +244,7 @@ Module HDSutils
                     Return Nothing
                 End If
             Else
-                objs = folder.ListFiles.ToArray
+                objs = folder.ListFiles(recursive:=recursive).ToArray
             End If
         End If
 
