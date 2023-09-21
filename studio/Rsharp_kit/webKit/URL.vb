@@ -297,13 +297,21 @@ Public Module URL
         If fs Is Nothing Then
             Return Internal.debug.stop("the required cache context can not be nothing!", env)
         End If
+
+        Dim cache As WebTextQuery
+
         If TypeOf fs Is String Then
-            Return New WebTextQuery(DirectCast(fs, String))
+            cache = New WebTextQuery(DirectCast(fs, String))
         ElseIf fs.GetType.ImplementInterface(Of IFileSystemEnvironment) Then
-            Return New WebTextQuery(DirectCast(fs, IFileSystemEnvironment))
+            cache = New WebTextQuery(DirectCast(fs, IFileSystemEnvironment))
         Else
             Return Message.InCompatibleType(GetType(IFileSystemEnvironment), fs.GetType, env)
         End If
+
+        Call cache.Clear404URLIndex()
+        Call cache.fs.Flush()
+
+        Return cache
     End Function
 
     ''' <summary>
