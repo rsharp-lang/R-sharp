@@ -9,3 +9,11 @@ print(pca);
 
 require(ggplot);
 
+
+bitmap(file = "./wine_PCA.png") {
+    ggplot(pca$score, aes(x="PC1", y = "PC2"))
+    + geom_point(
+        size = 9
+    );
+}
+
