@@ -112,6 +112,7 @@ Module clustering
             handler:=Function(result, args, env)
                          Return DirectCast(result, dbscanResult).cluster.clusterResultDataFrame(args, env)
                      End Function)
+        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(BTreeCluster), AddressOf treeDf)
 
         Call REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
     End Sub
@@ -151,6 +152,14 @@ Module clustering
         Next
 
         Return summary
+    End Function
+
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function treeDf(tree As BTreeCluster, args As list, env As Environment) As Rdataframe
+        Return tree _
+            .GetClusterResult(vnames:=args.getValue(Of String())("colnames", env)) _
+            .ToArray _
+            .clusterResultDataFrame(args, env)
     End Function
 
     <Extension>
