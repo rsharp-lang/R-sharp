@@ -521,7 +521,9 @@ Module clustering
         End If
 
         If TypeOf d Is DistanceMatrix Then
-            cluster = DirectCast(d, DistanceMatrix).ensureNotIsDistance.BTreeCluster(equals, gt)
+            cluster = DirectCast(d, DistanceMatrix) _
+                .ensureNotIsDistance _
+                .BTreeCluster(equals, gt)
         ElseIf TypeOf d Is Rdataframe Then
             cluster = DirectCast(d, Rdataframe) _
                 .forEachRow _
