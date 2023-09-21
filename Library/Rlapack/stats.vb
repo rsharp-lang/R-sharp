@@ -445,7 +445,7 @@ Module stats
         Dim ds As StatisticsObject
 
         If TypeOf x Is Rdataframe Then
-            ds = DirectCast(x, Rdataframe).GetDataSetCommon(Nothing)
+            ds = DirectCast(x, Rdataframe).GetDataSetCommon(New Double(DirectCast(x, Rdataframe).ncols - 1) {})
         Else
             Throw New NotImplementedException
         End If
