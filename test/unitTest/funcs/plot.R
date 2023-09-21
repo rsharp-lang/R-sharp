@@ -4,11 +4,15 @@ let pca_score = read.csv("./wine_PCA_score.csv", row.names = 1, check.names = FA
 
 require(ggplot);
 
-bitmap(file = "./wine_PCA.png") {
-    ggplot(pca_score, aes(x="PC1", y = "PC2", label = rownames(pca_score)))
+print(pca_score);
+
+pca_score[, "class"] = unlist($"class\d+"(rownames(pca_score)));
+
+bitmap(file = "./wine_PCA.png", size = [3100, 2400]) {
+    ggplot(pca_score, aes(x="PC1", y = "PC2", color = "class", label = rownames(pca_score)))
     + geom_point(
         size = 9
     )
-    + geom_text()
+    + geom_text(size = 6)
     ;
 }
