@@ -6,3 +6,6 @@ let rawdata = read.csv("D:\GCModeller\src\R-sharp\REnv\data\wine.csv", row.names
 let pca = prcomp(rawdata, pc = 3);
 
 print(pca);
+
+require(ggplot);
+

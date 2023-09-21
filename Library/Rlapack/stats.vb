@@ -1248,6 +1248,7 @@ Module stats
             If DataFramework.IsNumericCollection(y.GetType) Then
                 ' regression
                 yval = CLRVector.asNumeric(y)
+                ylabels = x.rownames
             Else
                 ylabels = CLRVector.asCharacter(y)
                 yfactors = factor.CreateFactor(ylabels)
