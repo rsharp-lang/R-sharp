@@ -9,11 +9,14 @@ print(pca);
 
 require(ggplot);
 
+write.csv(pca$score, file = "./wine_PCA_score.csv", row.names = TRUE);
 
 bitmap(file = "./wine_PCA.png") {
-    ggplot(pca$score, aes(x="PC1", y = "PC2"))
+    ggplot(pca$score, aes(x="PC1", y = "PC2", label = rownames(pca$score)))
     + geom_point(
         size = 9
-    );
+    )
+    + geom_text()
+    ;
 }
 
