@@ -293,7 +293,7 @@ Public Module URL
     ''' <returns></returns>
     <ExportAPI("http.cache")>
     <RApiReturn(GetType(WebTextQuery))>
-    Public Function httpCache(fs As Object, Optional env As Environment = Nothing) As Object
+    Public Function httpCache(fs As Object, Optional clear_404 As Boolean = True, Optional env As Environment = Nothing) As Object
         If fs Is Nothing Then
             Return Internal.debug.stop("the required cache context can not be nothing!", env)
         End If
@@ -308,8 +308,10 @@ Public Module URL
             Return Message.InCompatibleType(GetType(IFileSystemEnvironment), fs.GetType, env)
         End If
 
-        Call cache.Clear404URLIndex()
-        Call cache.fs.Flush()
+        If clear_404 Then
+            Call cache.Clear404URLIndex()
+            Call cache.fs.Flush()
+        End If
 
         Return cache
     End Function
