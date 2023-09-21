@@ -436,6 +436,7 @@ Module stats
                            Optional center As Boolean = False,
                            Optional pc As Integer = 5,
                            Optional list As Boolean = True,
+                           Optional threshold As Double = 0.0000001,
                            Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
             Return Internal.debug.stop("'data' must be of a vector type, was 'NULL'", env)
@@ -449,7 +450,7 @@ Module stats
             Throw New NotImplementedException
         End If
 
-        Dim PCA = ds.PrincipalComponentAnalysis(pc)
+        Dim PCA = ds.PrincipalComponentAnalysis(pc, cutoff:=threshold)
 
         If Not list Then
             Return PCA
