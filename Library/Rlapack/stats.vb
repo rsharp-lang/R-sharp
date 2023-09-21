@@ -156,6 +156,7 @@ Module stats
         Select Case x.analysis
             Case GetType(PLS) : Call x.WritePlsResult(text)
             Case GetType(OPLS) : Call x.WriteOplsResult(text)
+            Case GetType(PCA) : Call x.WritePcaResult(text)
             Case Else
                 Return $"not implements for {x.analysis.Name}!"
         End Select
@@ -434,6 +435,7 @@ Module stats
                            Optional scale As Boolean = False,
                            Optional center As Boolean = False,
                            Optional pc As Integer = 5,
+                           Optional list As Boolean = True,
                            Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
             Return Internal.debug.stop("'data' must be of a vector type, was 'NULL'", env)
@@ -449,7 +451,17 @@ Module stats
 
         Dim PCA = ds.PrincipalComponentAnalysis(pc)
 
-        Return PCA
+        If Not list Then
+            Return PCA
+        End If
+
+        Dim result As New list With {.slots = New Dictionary(Of String, Object)}
+
+        result.add("contribution", PCA.Contributions.ToArray)
+        result.add("score", MathDataSet.toDataframe(PCA.GetPCAScore, Nothing, env))
+        result.add("loading", MathDataSet.toDataframe(PCA.GetPCALoading, Nothing, env))
+
+        Return result
     End Function
 
     ''' <summary>
