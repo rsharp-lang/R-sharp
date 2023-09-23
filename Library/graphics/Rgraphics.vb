@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Math
@@ -80,6 +81,28 @@ Module Rgraphics
     Sub Main()
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(RasterScaler), AddressOf raster_dataframe)
     End Sub
+
+    ''' <summary>
+    ''' construct a color heigh map
+    ''' </summary>
+    ''' <param name="colors"></param>
+    ''' <param name="levels"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("color.height_map")>
+    Public Function colorHeightMap(<RRawVectorArgument>
+                                   colors As Object,
+                                   Optional levels As Integer = 255,
+                                   Optional env As Environment = Nothing) As Object
+
+        Dim colorSet = RColorPalette.getColorSet(colors, Nothing)
+
+        If colorSet.StringEmpty Then
+            Return Internal.debug.stop("Invalid color set was provided!", env)
+        End If
+
+        Return New ColorHeightMap(Designer.GetColors(colorSet)).ScaleLevels(levels)
+    End Function
 
     ''' <summary>
     ''' Cast the clr image object as the raster data
