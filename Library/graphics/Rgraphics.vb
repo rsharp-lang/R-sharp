@@ -95,6 +95,9 @@ Module Rgraphics
     ''' 
     ''' + rgb.stack = ['r'] means just extract the red channel as the raster data
     ''' + rgb.stack = ['g', 'b'] means extract the raster data via green and blue channel, the raster scale value will be evaluated as g * 10 + b
+    ''' 
+    ''' andalso this parameter value could be a .net clr color height map ruler object, which could be used for
+    ''' mapping a color sequence to a scale level.
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("as.raster")>
@@ -104,11 +107,16 @@ Module Rgraphics
                               Optional rgb_stack As Object = Nothing,
                               Optional env As Environment = Nothing) As Object
 
-        Dim rgbs As String() = CLRVector.asCharacter(rgb_stack)
         Dim formula As Func(Of Color, Single) = Nothing
 
-        If Not rgbs.IsNullOrEmpty Then
-            formula = rgb_formula(rgbs)
+        If TypeOf rgb_stack Is ColorHeightMap Then
+            formula = AddressOf DirectCast(rgb_stack, ColorHeightMap).GetScale
+        Else
+            Dim rgbs As String() = CLRVector.asCharacter(rgb_stack)
+
+            If Not rgbs.IsNullOrEmpty Then
+                formula = rgb_formula(rgbs)
+            End If
         End If
 
         If TypeOf img Is Image OrElse TypeOf img Is Bitmap Then
