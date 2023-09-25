@@ -8,3 +8,5 @@ bitmap(file = "./lena-RTCP_gray.png") {
     |> RTCP_gray()
     ;
 }
+
+str(RTCP_weight(readImage("./lena.jpg")));
