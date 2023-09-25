@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.Imaging.Filters
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Package("filter")>
@@ -162,5 +163,18 @@ Module ImageFilters
     <ExportAPI("RTCP_gray")>
     Public Function RTCPGray_func(img As Image) As Bitmap
         Return RTCP.RTCPGray(New Bitmap(img))
+    End Function
+
+    <ExportAPI("RTCP_weight")>
+    <RApiReturn("r", "g", "b")>
+    Public Function RTCPWeight(img As Image) As list
+        Dim w = RTCP.MeasureGlobalWeight(New Bitmap(img))
+        Dim c As New list With {.slots = New Dictionary(Of String, Object) From {
+            {"r", w.r},
+            {"g", w.g},
+            {"b", w.b}
+        }}
+
+        Return c
     End Function
 End Module
