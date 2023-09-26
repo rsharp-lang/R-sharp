@@ -448,7 +448,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         <ExportAPI("decompose")>
-        Public Function decompose(df As dataframe, by As String, Optional split As String = "[;,]\s+", Optional env As Environment = Nothing) As dataframe
+        Public Function decompose(df As dataframe, by As String, Optional split As String = "[;,]\s*", Optional env As Environment = Nothing) As dataframe
             Dim ordinal As Integer = df.colnames.IndexOf(by)
 
             If ordinal < 0 Then
