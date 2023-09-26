@@ -53,6 +53,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -444,6 +445,53 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Next
 
             Return New list With {.slots = newList}
+        End Function
+
+        <ExportAPI("decompose")>
+        Public Function decompose(df As dataframe, by As String, Optional split As String = "[;,]\s+", Optional env As Environment = Nothing) As dataframe
+            Dim ordinal As Integer = df.colnames.IndexOf(by)
+
+            If ordinal < 0 Then
+                Return df
+            Else
+                Return df.decompose(by:=ordinal, split, env)
+            End If
+        End Function
+
+        <Extension>
+        Private Function decompose(df As dataframe, by As Integer, split As String, env As Environment) As dataframe
+            Dim cols As String() = df.colnames
+            Dim rows As NamedCollection(Of Object)() = df.forEachRow(cols).ToArray
+            Dim decomposed As New List(Of NamedCollection(Of Object))
+
+            For Each row As NamedCollection(Of Object) In rows
+                Dim str As String = CStr(row(by))
+                Dim tokens As String() = str.StringSplit(split, True)
+
+                If tokens.Length = 1 Then
+                    decomposed.Add(row)
+                Else
+                    For Each si As String In tokens
+                        row = New NamedCollection(Of Object)(row.name, row.value.ToArray)
+                        row(by) = si
+                        decomposed.Add(row)
+                    Next
+                End If
+            Next
+
+            df = New dataframe With {
+                .rownames = decomposed _
+                    .Select(Function(i) i.name) _
+                    .uniqueNames,
+                .columns = New Dictionary(Of String, Array)
+            }
+
+            For i As Integer = 0 To cols.Length - 1
+                by = i
+                df.add(cols(i), decomposed.Select(Function(r) r(by)))
+            Next
+
+            Return df
         End Function
     End Module
 End Namespace
