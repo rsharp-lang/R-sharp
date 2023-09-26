@@ -360,7 +360,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             If Program.isException(index) Then
                 Return index
             ElseIf True = CBool(base.isEmpty(index)) Then
-                Return SymbolIndexer.emptyIndexError(symbolIndex, envir)
+                If Not index Is Nothing Then
+                    If TypeOf index Is String OrElse TypeOf index Is String() Then
+                        index = CLRVector.asCharacter(index).First
+                    Else
+                        Return SymbolIndexer.emptyIndexError(symbolIndex, envir)
+                    End If
+                Else
+                    Return SymbolIndexer.emptyIndexError(symbolIndex, envir)
+                End If
             End If
 
             If targetObj Is Nothing Then
