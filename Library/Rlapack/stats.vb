@@ -91,6 +91,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Calculus
@@ -952,6 +953,47 @@ Module stats
     <ExportAPI("fisher.test")>
     Public Function fisher_test(a%, b%, c%, d%) As FishersExactPvalues
         Return FishersExactTest.FishersExact(a, b, c, d)
+    End Function
+
+    ''' <summary>
+    ''' test spatial cluster via moran index
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="alternative"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("moran.test")>
+    <RApiReturn("observed", "expected", "sd", "p.value")>
+    Public Function moran_test(<RRawVectorArgument> x As Object,
+                               Optional alternative As Hypothesis = Hypothesis.TwoSided,
+                               Optional env As Environment = Nothing) As Object
+        Dim test As MoranTest
+
+        If TypeOf x Is Rdataframe Then
+            Dim df As Rdataframe = x
+            Dim sx As Double() = CLRVector.asNumeric(df!x)
+            Dim sy As Double() = CLRVector.asNumeric(df!y)
+            Dim v As Double() = CLRVector.asNumeric(df!data)
+
+            test = MoranTest.moran_test(v, sx, sy, alternative)
+        Else
+            Dim spatial As pipeline = pipeline.TryCreatePipeline(Of Pixel)(x, env)
+
+            If spatial.isError Then
+                Return spatial.getError
+            End If
+
+            test = MoranTest.moran_test(spatial.populates(Of Pixel)(env), alternative)
+        End If
+
+        Return New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"observed", test.Observed},
+                {"expected", test.Expected},
+                {"sd", test.SD},
+                {"p.value", test.pvalue}
+            }
+        }
     End Function
 
     ''' <summary>
