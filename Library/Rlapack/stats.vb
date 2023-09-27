@@ -246,6 +246,36 @@ Module stats
     End Enum
 
     ''' <summary>
+    ''' The Normal Distribution
+    ''' 
+    ''' Density, distribution function, quantile function and random generation 
+    ''' for the normal distribution with mean equal to mean and standard deviation 
+    ''' equal to sd.
+    ''' </summary>
+    ''' <param name="q">vector of quantiles.</param>
+    ''' <param name="mean">vector of means.</param>
+    ''' <param name="sd">vector of standard deviations.</param>
+    ''' <param name="lower_tail">logical; if TRUE (default), probabilities are P[X \le x]P[X≤x] otherwise, P[X > x]P[X>x].</param>
+    ''' <param name="log_p">logical; if TRUE, probabilities p are given as log(p).</param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' For pnorm, based on
+    ''' 
+    ''' Cody, W. D. (1993) Algorithm 715 SPECFUN – A portable FORTRAN package of 
+    ''' special function routines And test drivers. ACM Transactions on Mathematical 
+    ''' Software 19, 22–32.
+    ''' </remarks>
+    <ExportAPI("pnorm")>
+    Public Function pnorm_func(<RRawVectorArgument> q As Object,
+                               Optional mean As Double = 0,
+                               Optional sd As Double = 1,
+                               Optional lower_tail As Boolean = True,
+                               Optional log_p As Boolean = False) As Object
+
+        Return pnorm.eval(CLRVector.asNumeric(q).AsVector, mean, sd, lower_tail, log_p).ToArray
+    End Function
+
+    ''' <summary>
     ''' ### Adjust P-values for Multiple Comparisons
     ''' 
     ''' Given a set of p-values, returns p-values adjusted 
