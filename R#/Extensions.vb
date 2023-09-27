@@ -55,6 +55,7 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
@@ -250,7 +251,6 @@ Public Module Extensions
                 )
             End With
         ElseIf x.GetType.IsArray Then
-            Dim list As New List(Of TOut)
             Dim cast As New List(Of T)
 
             For Each item As Object In DirectCast(x, Array).AsObjectEnumerator
@@ -263,32 +263,47 @@ Public Module Extensions
                 End If
             Next
 
-            If cast.Count = 1 AndAlso Not DataFramework.IsPrimitive(GetType(TOut)) Then
-                Return eval(cast(0))
-            End If 
-
-            If parallel Then
-                Call cast.SeqIterator _
-                    .AsParallel _
-                    .Select(Function(item) (item.i, eval(item.value))) _
-                    .OrderBy(Function(item) item.i) _
-                    .Select(Function(item) item.Item2) _
-                    .DoCall(AddressOf list.AddRange)
-            Else
-                For Each item As T In cast
-                    Call list.Add(eval(item))
-                Next
-            End If
-
-            Return New vector(
-                input:=list.ToArray,
-                type:=RType.GetRSharpType(GetType(TOut))
-            )
+            Return cast.CastSequence(eval, parallel, env).Value
         ElseIf TypeOf x Is T Then
             Return eval(DirectCast(x, T))
+        ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of T)) Then
+            Return DirectCast(x, IEnumerable(Of T)) _
+                .AsList _
+                .CastSequence(eval, parallel, env) _
+                .Value
         Else
             Return Internal.debug.stop(Message.InCompatibleType(GetType(T), x.GetType, env), env)
         End If
+    End Function
+
+    <Extension>
+    Private Function CastSequence(Of T, TOut)(cast As List(Of T),
+                                              eval As Func(Of T, TOut),
+                                              parallel As Boolean,
+                                              env As Environment) As [Variant](Of vector, TOut)
+        Dim list As New List(Of TOut)
+
+        If cast.Count = 1 AndAlso Not DataFramework.IsPrimitive(GetType(TOut)) Then
+            Return eval(cast(0))
+        End If
+
+        If parallel Then
+            Call cast.SeqIterator _
+                .AsParallel _
+                .Select(Function(item) (item.i, eval(item.value))) _
+                .OrderBy(Function(item) item.i) _
+                .Select(Function(item) item.Item2) _
+                .DoCall(AddressOf list.AddRange)
+        Else
+            For Each item As T In cast
+                Call list.Add(eval(item))
+            Next
+        End If
+
+        Return New vector(
+            input:=list.ToArray,
+            type:=RType.GetRSharpType(GetType(TOut))
+        )
     End Function
 
     ''' <summary>
