@@ -1,4 +1,6 @@
-ozone <- read.csv("https://stats.idre.ucla.edu/stat/r/faq/ozone.csv");
+require(REnv);
+
+data(ozone);
 
 print(ozone);
 
