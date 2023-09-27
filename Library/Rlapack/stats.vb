@@ -270,9 +270,12 @@ Module stats
                                Optional mean As Double = 0,
                                Optional sd As Double = 1,
                                Optional lower_tail As Boolean = True,
-                               Optional log_p As Boolean = False) As Object
+                               Optional log_p As Boolean = False,
+                               Optional resolution As Integer = 97) As Object
 
-        Return pnorm.eval(CLRVector.asNumeric(q).AsVector, mean, sd, lower_tail, log_p).ToArray
+        Return pnorm.eval(CLRVector.asNumeric(q).AsVector,
+                          mean, sd, lower_tail, log_p,
+                          resolution:=resolution).ToArray
     End Function
 
     ''' <summary>
@@ -1004,18 +1007,19 @@ Module stats
                                Optional sx As Double() = Nothing,
                                Optional sy As Double() = Nothing,
                                Optional alternative As Hypothesis = Hypothesis.TwoSided,
+                               Optional resolution As Integer = 97,
                                Optional env As Environment = Nothing) As Object
         Dim test As MoranTest
 
         If Not (sx.IsNullOrEmpty OrElse sy.IsNullOrEmpty) Then
-            test = MoranTest.moran_test(CLRVector.asNumeric(x), sx, sy, alternative)
+            test = MoranTest.moran_test(CLRVector.asNumeric(x), sx, sy, alternative, resolution:=resolution)
         ElseIf TypeOf x Is Rdataframe Then
             Dim df As Rdataframe = x
             Dim v As Double() = CLRVector.asNumeric(df!data)
 
             sx = CLRVector.asNumeric(df!x)
             sy = CLRVector.asNumeric(df!y)
-            test = MoranTest.moran_test(v, sx, sy, alternative)
+            test = MoranTest.moran_test(v, sx, sy, alternative, resolution:=resolution)
         Else
             Dim spatial As pipeline = pipeline.TryCreatePipeline(Of Pixel)(x, env)
 
@@ -1023,7 +1027,7 @@ Module stats
                 Return spatial.getError
             End If
 
-            test = MoranTest.moran_test(spatial.populates(Of Pixel)(env), alternative)
+            test = MoranTest.moran_test(spatial.populates(Of Pixel)(env), alternative, resolution:=resolution)
         End If
 
         Return New list With {
