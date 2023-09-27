@@ -91,6 +91,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Calculus
@@ -952,6 +953,57 @@ Module stats
     <ExportAPI("fisher.test")>
     Public Function fisher_test(a%, b%, c%, d%) As FishersExactPvalues
         Return FishersExactTest.FishersExact(a, b, c, d)
+    End Function
+
+    ''' <summary>
+    ''' Calculate Moran's I quickly for point data
+    ''' 
+    ''' test spatial cluster via moran index
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="alternative">
+    ''' a character sring specifying the alternative hypothesis that is
+    ''' tested against; must be one of "two.sided", "less", or "greater",
+    ''' or any unambiguous abbreviation of these.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("moran.test")>
+    <RApiReturn("observed", "expected", "sd", "p.value")>
+    Public Function moran_test(<RRawVectorArgument> x As Object,
+                               Optional sx As Double() = Nothing,
+                               Optional sy As Double() = Nothing,
+                               Optional alternative As Hypothesis = Hypothesis.TwoSided,
+                               Optional env As Environment = Nothing) As Object
+        Dim test As MoranTest
+
+        If Not (sx.IsNullOrEmpty OrElse sy.IsNullOrEmpty) Then
+            test = MoranTest.moran_test(CLRVector.asNumeric(x), sx, sy, alternative)
+        ElseIf TypeOf x Is Rdataframe Then
+            Dim df As Rdataframe = x
+            Dim v As Double() = CLRVector.asNumeric(df!data)
+
+            sx = CLRVector.asNumeric(df!x)
+            sy = CLRVector.asNumeric(df!y)
+            test = MoranTest.moran_test(v, sx, sy, alternative)
+        Else
+            Dim spatial As pipeline = pipeline.TryCreatePipeline(Of Pixel)(x, env)
+
+            If spatial.isError Then
+                Return spatial.getError
+            End If
+
+            test = MoranTest.moran_test(spatial.populates(Of Pixel)(env), alternative)
+        End If
+
+        Return New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"observed", test.Observed},
+                {"expected", test.Expected},
+                {"sd", test.SD},
+                {"p.value", test.pvalue}
+            }
+        }
     End Function
 
     ''' <summary>
