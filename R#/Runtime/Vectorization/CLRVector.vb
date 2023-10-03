@@ -162,7 +162,9 @@ Namespace Runtime.Vectorization
         ''' try to cast any object to .net clr character vector 
         ''' </summary>
         ''' <param name="x"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function returns nothing if the input object <paramref name="x"/> is nothing
+        ''' </returns>
         Public Function asCharacter(x As Object) As String()
             If x Is Nothing Then
                 Return Nothing

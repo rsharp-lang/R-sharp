@@ -19,6 +19,9 @@ Public Module dataframeWriter
     ''' <param name="x"></param>
     ''' <param name="row_names"></param>
     ''' <param name="env"></param>
+    ''' <param name="formatNumber">
+    ''' Nothing or the .net clr numeric format string
+    ''' </param>
     ''' <returns></returns>
     <Extension>
     Friend Function DataFrameRows(x As Rdataframe, row_names As Object, formatNumber As String, env As Environment) As [Variant](Of Message, File)

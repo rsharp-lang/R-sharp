@@ -384,15 +384,16 @@ Public Module utils
                               Optional fileEncoding As Object = "",
                               Optional tsv As Boolean = False,
                               <RDefaultExpression>
-                              Optional number_format As Object = "~`${getOption('f64.format')}${getOption('digits')}`",
+                              Optional number_format As Object = Nothing,
                               Optional env As Environment = Nothing) As Object
 
         If TypeOf file Is dataframeBuffer Then
+            ' just wrap a buffer object for web service session
             DirectCast(file, dataframeBuffer).dataframe = x
             DirectCast(file, dataframeBuffer).tsv = tsv
             Return file
         ElseIf TypeOf file Is textBuffer Then
-            Dim document = DirectCast(x, Rdataframe).DataFrameRows(row_names, "G8", env)
+            Dim document = DirectCast(x, Rdataframe).DataFrameRows(row_names, formatNumber:=Nothing, env)
             Dim ms As New MemoryStream
             Dim text As String
 
@@ -446,7 +447,9 @@ Public Module utils
 
         Dim type As Type = x.GetType
         Dim encoding As Encodings = TextEncodings.GetEncodings(Rsharp.GetEncoding(fileEncoding))
-        Dim formatNumber As String = CLRVector.asCharacter(number_format).ElementAtOrDefault(Scan0, [default]:="G6")
+        ' format is nothing, means apply the 
+        ' format of .net clr default
+        Dim formatNumber As String = CLRVector.asCharacter(number_format).ElementAtOrDefault(Scan0, [default]:=Nothing)
 
         If type Is GetType(Rdataframe) Then
             x = DirectCast(x, Rdataframe).CheckDimension(env)
