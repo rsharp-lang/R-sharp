@@ -61,6 +61,7 @@
 #End Region
 
 Imports System.Threading
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.Repository
 Imports Microsoft.VisualBasic.ValueTypes
@@ -97,7 +98,12 @@ Namespace Runtime.Internal.Invokes
             Call Internal.Object.Converts.addHandler(GetType(ProfilerFrames), AddressOf profilerFrames)
             Call Internal.Object.Converts.addHandler(GetType(Program), AddressOf scriptTable)
             Call Internal.Object.Converts.addHandler(GetType(ClosureExpression), AddressOf scriptTable1)
+            Call Internal.Object.Converts.addHandler(GetType(PerformanceCounter), AddressOf getCounterTable)
         End Sub
+
+        Private Function getCounterTable(pr As PerformanceCounter, args As list, env As Environment) As dataframe
+
+        End Function
 
         Private Function scriptTable1(closure As ClosureExpression, args As list, env As Environment) As dataframe
             Return scriptTable(closure.program, args, env)
@@ -196,7 +202,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="[set]"></param>
         ''' <param name="env"></param>
         ''' <returns>Returns the hash as a positive integer</returns>
-        <ExportAPI("FNV1a_hashcode")>
+        <ExportAPI("FNV1a")>
         Public Function FNV1aHash(<RRawVectorArgument> [set] As Object, Optional env As Environment = Nothing) As Long
             Return FNV1a.GetHashCode(ObjectSet.GetObjectSet([set], env))
         End Function
@@ -254,6 +260,16 @@ Namespace Runtime.Internal.Invokes
                 Return Nothing
             End If
         End Function
+
+        <ExportAPI("profiler")>
+        Public Function PerformanceCounter() As PerformanceCounter
+            Return New PerformanceCounter
+        End Function
+
+        <ExportAPI("flag")>
+        Public Sub flag(pr As PerformanceCounter, mark As String)
+            pr.Mark(mark)
+        End Sub
 
         ''' <summary>
         ''' ## Garbage Collection
