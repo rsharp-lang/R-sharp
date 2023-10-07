@@ -80,8 +80,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
-        Dim test As Expression
-        Dim loopBody As ClosureExpression
+        Friend ReadOnly test As Expression
+        Friend ReadOnly loopBody As ClosureExpression
 
         Sub New(test As Expression, loopBody As ClosureExpression, stackframe As StackFrame)
             Me.stackFrame = stackframe

@@ -112,6 +112,7 @@ Namespace Development.Package.File
         Public ReadOnly Property RTypeAssert As RTypeOf
         Public ReadOnly Property RShell As RCommandLine
         Public ReadOnly Property RTryCatch As RTryCatch
+        Public ReadOnly Property RWhile As RWhileLoop
 
         Public ReadOnly Property RAnnotation As RAnnotation
 
@@ -152,6 +153,7 @@ Namespace Development.Package.File
             Me.RBreakControls = New RBreakControls(Me)
             Me.RJSON = New RJSON(Me)
             Me.RAnnotation = New RAnnotation(Me)
+            Me.RWhile = New RWhileLoop(Me)
         End Sub
 
         Public Function GetBuffer(x As Expression) As Byte()
@@ -217,6 +219,8 @@ Namespace Development.Package.File
                     Call VBDebugger.WaitOutput()
 
                     Throw ex
+
+                Case GetType(WhileLoop) : Return RWhile.GetBuffer(x)
 
                 Case Else
                     Throw New NotImplementedException(x.GetType.FullName)
