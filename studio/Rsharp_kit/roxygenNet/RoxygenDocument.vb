@@ -103,7 +103,7 @@ Public Class RoxygenDocument
 
         For Each line As String In scriptText.LineIterators
             If Strings.Trim(line).StringEmpty Then
-                Throw New Exception  ' Continue For
+                Continue For
             ElseIf line.StartsWith("#'") Then
                 buffer.Add(line.Substring(2).Trim)
             ElseIf buffer > 0 Then
