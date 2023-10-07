@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::890579421453be51a9f3b01bae7e1d07, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//roxygen.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 156
-    '    Code Lines: 98
-    ' Comment Lines: 37
-    '   Blank Lines: 21
-    '     File Size: 6.24 KB
+' Summaries:
 
 
-    ' Module roxygen
-    ' 
-    '     Function: markdown2Html, ParseDocuments, roxygenize
-    ' 
-    '     Sub: (+2 Overloads) unixMan
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 156
+'    Code Lines: 98
+' Comment Lines: 37
+'   Blank Lines: 21
+'     File Size: 6.24 KB
+
+
+' Module roxygen
+' 
+'     Function: markdown2Html, ParseDocuments, roxygenize
+' 
+'     Sub: (+2 Overloads) unixMan
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -113,7 +113,7 @@ Public Module roxygen
     ''' the package in order to document it: see load for details.
     ''' </remarks>
     <ExportAPI("roxygenize")>
-    Public Function roxygenize(package_dir As String) As Object
+    Public Function roxygenize(package_dir As String, Optional env As Environment = Nothing) As Object
         Dim man_dir As String = $"{package_dir}/man"
         Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{package_dir}/DESCRIPTION")
         Dim man As UnixManPage
@@ -122,13 +122,22 @@ Public Module roxygen
         For Each Rfile As String In ls - l - r - "*.R" <= $"{package_dir}/R"
             Rscript = Rscript.AutoHandleScript(handle:=Rfile)
 
-            For Each symbol As Document In RoxygenDocument.ParseDocuments(Rscript)
-                man = symbol.UnixMan
-                man.COPYRIGHT = $"Copyright © {meta.Author}, {meta.License} Licensed {Now.Year}"
-                man.LICENSE = meta.License
+            Try
+                For Each symbol As Document In RoxygenDocument.ParseDocuments(Rscript)
+                    man = symbol.UnixMan
+                    man.COPYRIGHT = $"Copyright © {meta.Author}, {meta.License} Licensed {Now.Year}"
+                    man.LICENSE = meta.License
 
-                Call man.ToString.SaveTo($"{man_dir}/{symbol.declares.name}.1")
-            Next
+                    Call man _
+                        .ToString _
+                        .SaveTo($"{man_dir}/{symbol.declares.name}.1")
+                Next
+            Catch ex As Exception
+                Return Internal.debug.stop({
+                    $"script syntax parser error: {ex.Message}",
+                    $"RSCRIPT: {Rscript}"
+                }, env)
+            End Try
         Next
 
         Return Nothing
