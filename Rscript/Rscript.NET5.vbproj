@@ -22,6 +22,7 @@
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <PackageTags>R#;R-sharp;.NET</PackageTags>
 	  <Version>2.695.25.1455</Version>
+	  <UseApplicationFramework>True</UseApplicationFramework>
 
   </PropertyGroup>
 

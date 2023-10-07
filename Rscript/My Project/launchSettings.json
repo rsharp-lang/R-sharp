@@ -2,7 +2,8 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=33361 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host"
+      "commandLineArgs": "--build /src ../ /save ./MSI.zip --skip-src-build",
+      "workingDirectory": "D:\\biodeep\\biodeepdb_v3\\spatial\\MSI_analysis-3.0\\.pkg"
     },
     "mzkit_debug": {
       "commandName": "Project",
