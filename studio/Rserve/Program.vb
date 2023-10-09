@@ -73,9 +73,9 @@ Module Program
 
     <ExportAPI("--listen")>
     <Description("Start a local static web server for hosting statics web page files")>
-    <Usage("--listen /wwwroot <directory_path> [--attach <other_directory_path/streampack> --parent <parent_process_id> /port <http_port, default=80>]")>
+    <Usage("--listen [/wwwroot <directory_path> --attach <other_directory_path/streampack> --parent <parent_process_id> /port <http_port, default=80>]")>
     Public Function listen(args As CommandLine) As Integer
-        Dim wwwroot As String = args <= "/wwwroot"
+        Dim wwwroot As String = args("/wwwroot") Or App.CurrentDirectory
         Dim port As Integer = args("/port") Or 80
         Dim attach As String = args("--attach")
         Dim parent As String = args("--parent")
