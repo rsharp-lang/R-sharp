@@ -57,13 +57,14 @@
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language.[Default]
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
 
 Namespace Development.Package.File
 
-    Public Class DESCRIPTION : Implements ICTypeList
+    Public Class DESCRIPTION : Implements ICTypeList, IsEmpty
 
         ''' <summary>
         ''' the package name
@@ -84,7 +85,7 @@ Namespace Development.Package.File
         Public Property License As String
         Public Property meta As Dictionary(Of String, String)
 
-        Public ReadOnly Property isEmpty As Boolean
+        Public ReadOnly Property isEmpty As Boolean Implements IsEmpty.IsEmpty
             Get
                 Return Package.StringEmpty
             End Get

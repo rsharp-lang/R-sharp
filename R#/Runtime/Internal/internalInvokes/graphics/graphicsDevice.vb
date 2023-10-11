@@ -55,6 +55,7 @@
 Imports System.Drawing
 Imports System.IO
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Language.[Default]
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
@@ -63,7 +64,7 @@ Namespace Runtime.Internal.Invokes
     ''' <summary>
     ''' the internal graphics device handle of the R# environment
     ''' </summary>
-    Public Structure graphicsDevice
+    Public Structure graphicsDevice : Implements IsEmpty
 
         ''' <summary>
         ''' the graphics device for plot rendering
@@ -73,7 +74,7 @@ Namespace Runtime.Internal.Invokes
         Dim args As list
         Dim index As Integer
 
-        Public ReadOnly Property isEmpty As Boolean
+        Public ReadOnly Property isEmpty As Boolean Implements IsEmpty.IsEmpty
             Get
                 Return g Is Nothing
             End Get

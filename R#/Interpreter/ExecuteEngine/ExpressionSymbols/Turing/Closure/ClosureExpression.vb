@@ -58,6 +58,7 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports Microsoft.VisualBasic.Language.[Default]
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -67,6 +68,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
     ''' (其实就是一段拥有自己的<see cref="Environment"/>的没有名称的匿名函数)
     ''' </summary>
     Public Class ClosureExpression : Inherits Expression
+        Implements IsEmpty
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -80,7 +82,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Get
         End Property
 
-        Public ReadOnly Property isEmpty As Boolean
+        Public ReadOnly Property isEmpty As Boolean Implements IsEmpty.IsEmpty
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             <DebuggerStepThrough>
             Get
