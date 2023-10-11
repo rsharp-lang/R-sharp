@@ -214,23 +214,37 @@ Namespace Runtime.Internal.Object.Converts
             Dim eleType As RType = RType.any
             Dim type As Type = dict.GetType
 
+            If Not type.GetGenericArguments.ElementAtOrDefault(1) Is Nothing Then
+                eleType = RType.GetRSharpType(type.GetGenericArguments()(1))
+            End If
+
+            ' 20231011 the dictionary is generic, and the value type is already 
+            ' the R# runtime type, no needs for convert to list!
+            Dim isPrimitive As Boolean = eleType.mode = TypeCodes.boolean OrElse
+                eleType.mode = TypeCodes.double OrElse
+                eleType.mode = TypeCodes.integer OrElse
+                eleType.mode = TypeCodes.string OrElse
+                eleType.mode = TypeCodes.list OrElse
+                eleType.mode = TypeCodes.formula OrElse
+                eleType.mode = TypeCodes.environment OrElse
+                eleType.mode = TypeCodes.dataframe
+
             With dict
                 For Each key As Object In .Keys
                     Dim value As Object = .Item(key)
 
                     If value IsNot Nothing Then
-                        If Not DataFramework.IsPrimitive(value.GetType) Then
-                            value = listInternal(value, args, env)
+                        If Not isPrimitive Then
+                            ' dictionary valye is any object
+                            If Not DataFramework.IsPrimitive(value.GetType) Then
+                                value = listInternal(value, args, env)
+                            End If
                         End If
                     End If
 
                     Call objList.Add(any.ToString(key), value)
                 Next
             End With
-
-            If Not type.GetGenericArguments.ElementAtOrDefault(1) Is Nothing Then
-                eleType = RType.GetRSharpType(type.GetGenericArguments()(1))
-            End If
 
             Return New list With {
                 .slots = objList,
