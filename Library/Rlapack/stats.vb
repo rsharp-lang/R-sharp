@@ -1002,7 +1002,7 @@ Module stats
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("moran.test")>
-    <RApiReturn("observed", "expected", "sd", "p.value")>
+    <RApiReturn("observed", "expected", "sd", "p.value", "z", "prob2", "t", "df")>
     Public Function moran_test(<RRawVectorArgument> x As Object,
                                Optional sx As Double() = Nothing,
                                Optional sy As Double() = Nothing,
@@ -1038,7 +1038,11 @@ Module stats
                 {"observed", test.Observed},
                 {"expected", test.Expected},
                 {"sd", test.SD},
-                {"p.value", test.pvalue}
+                {"p.value", test.pvalue},
+                {"z", test.z},
+                {"prob2", test.prob2},
+                {"t", test.t},
+                {"df", test.df}
             }
         }
     End Function
