@@ -1007,19 +1007,21 @@ Module stats
                                Optional sx As Double() = Nothing,
                                Optional sy As Double() = Nothing,
                                Optional alternative As Hypothesis = Hypothesis.TwoSided,
-                               Optional resolution As Integer = 97,
+                               Optional throwMaxIterError As Boolean = False,
                                Optional env As Environment = Nothing) As Object
         Dim test As MoranTest
 
         If Not (sx.IsNullOrEmpty OrElse sy.IsNullOrEmpty) Then
-            test = MoranTest.moran_test(CLRVector.asNumeric(x), sx, sy, alternative, resolution:=resolution)
+            test = MoranTest.moran_test(CLRVector.asNumeric(x), sx, sy, alternative,
+                                        throwMaxIterError:=throwMaxIterError)
         ElseIf TypeOf x Is Rdataframe Then
             Dim df As Rdataframe = x
             Dim v As Double() = CLRVector.asNumeric(df!data)
 
             sx = CLRVector.asNumeric(df!x)
             sy = CLRVector.asNumeric(df!y)
-            test = MoranTest.moran_test(v, sx, sy, alternative, resolution:=resolution)
+            test = MoranTest.moran_test(v, sx, sy, alternative,
+                                        throwMaxIterError:=throwMaxIterError)
         Else
             Dim spatial As pipeline = pipeline.TryCreatePipeline(Of Pixel)(x, env)
 
@@ -1027,7 +1029,8 @@ Module stats
                 Return spatial.getError
             End If
 
-            test = MoranTest.moran_test(spatial.populates(Of Pixel)(env), alternative, resolution:=resolution)
+            test = MoranTest.moran_test(spatial.populates(Of Pixel)(env), alternative,
+                                        throwMaxIterError:=throwMaxIterError)
         End If
 
         Return New list With {
