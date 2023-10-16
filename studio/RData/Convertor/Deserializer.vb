@@ -59,7 +59,7 @@ Namespace Convertor
 
         <Extension>
         Public Function ToObject(Of T As Class)(robj As RObject) As T
-
+            Throw New NotImplementedException
         End Function
 
     End Module
