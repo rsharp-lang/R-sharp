@@ -70,20 +70,35 @@ Namespace Interpreter.ExecuteEngine
     Public MustInherit Class SymbolExpression : Inherits Expression
 
         ''' <summary>
-        ''' the annotation data from the attribute annotation:
+        ''' the annotation data from the attribute annotation, example as:
         ''' 
         ''' ```R
-        ''' 
+        ''' [@name "value"]
+        ''' [@name1 "value2"]
+        ''' const symbol = ...
         ''' ```
         ''' </summary>
         Protected Friend ReadOnly attributes As New Dictionary(Of String, String())
 
+        ''' <summary>
+        ''' The symbol name of current symbol object
+        ''' </summary>
+        ''' <returns></returns>
         Public MustOverride Function GetSymbolName() As String
 
+        ''' <summary>
+        ''' Get all attribute name that tagged with current symbol object.
+        ''' </summary>
+        ''' <returns></returns>
         Public Function GetAttributeNames() As IEnumerable(Of String)
             Return attributes.Keys
         End Function
 
+        ''' <summary>
+        ''' Get values that associated with the current symbol object
+        ''' </summary>
+        ''' <param name="name">the attribute name string for get the value</param>
+        ''' <returns></returns>
         Public Function GetAttributeValue(name As String) As IEnumerable(Of String)
             If attributes.ContainsKey(name) Then
                 Return attributes(name)
@@ -92,6 +107,13 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        ''' <summary>
+        ''' Add custom attribute data into current symbol object
+        ''' </summary>
+        ''' <param name="attrs"></param>
+        ''' <remarks>
+        ''' Call this method at script parser or expression parser code
+        ''' </remarks>
         Protected Friend Overridable Sub AddCustomAttributes(attrs As IEnumerable(Of NamedValue(Of String())))
             For Each attr As NamedValue(Of String()) In attrs
                 If attributes.ContainsKey(attr.Name) Then
