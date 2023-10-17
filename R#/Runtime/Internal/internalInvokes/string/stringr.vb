@@ -86,7 +86,6 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports encoder = SMRUCC.Rsharp.Development.Components.Encoder
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 Imports stdNum = System.Math
 Imports VBStr = Microsoft.VisualBasic.Strings
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
