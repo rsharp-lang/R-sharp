@@ -69,6 +69,89 @@ Namespace Runtime.Internal.Invokes
     Module reflections
 
         ''' <summary>
+        ''' ### Object Attribute Lists
+        ''' 
+        ''' These functions access an object's attributes. The first form 
+        ''' below returns the object's attribute list. The replacement 
+        ''' forms uses the list on the right-hand side of the assignment 
+        ''' as the object's attributes (if appropriate).
+        ''' </summary>
+        ''' <param name="x">any R object</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' Unlike attr it is not an error to set attributes on a NULL object:
+        ''' it will first be coerced to an empty list.
+        ''' 
+        ''' Note that some attributes (namely Class, comment, Dim, dimnames, 
+        ''' names, row.names And tsp) are treated specially And have restrictions
+        ''' On the values which can be Set. (Note that this Is Not True Of 
+        ''' levels which should be Set For factors via the levels replacement 
+        ''' Function.)
+        ''' 
+        ''' Attributes are Not stored internally As a list And should be thought
+        ''' Of As a Set And Not a vector, i.e, the order Of the elements Of 
+        ''' attributes() does Not matter. This Is also reflected by identical()'s
+        ''' behaviour with the default argument attrib.as.set = TRUE. Attributes 
+        ''' must have unique names (and NA is taken as "NA", not a missing value).
+        ''' 
+        ''' Assigning attributes first removes all attributes, Then sets any Dim 
+        ''' attribute And Then the remaining attributes In the order given: this
+        ''' ensures that setting a Dim attribute always precedes the dimnames 
+        ''' attribute.
+        ''' 
+        ''' The mostattributes assignment takes special care For the Dim, names And
+        ''' dimnames attributes, And assigns them only When known To be valid 
+        ''' whereas an attributes assignment would give an Error If any are Not. 
+        ''' It Is principally intended For arrays, And should be used With care
+        ''' On classed objects. For example, it does Not check that row.names
+        ''' are assigned correctly For data frames.
+        ''' 
+        ''' The names Of a pairlist are Not stored As attributes, but are reported 
+        ''' As If they were (And can be Set by the replacement form Of attributes).
+        ''' 
+        ''' NULL objects cannot have attributes And attempts To assign them will
+        ''' promote the Object To an empty list. Both assignment And replacement
+        ''' forms Of attributes are primitive functions.
+        ''' </remarks>
+        <ExportAPI("attributes")>
+        Public Function attributes(x As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return Nothing
+            ElseIf Not TypeOf x Is SymbolExpression Then
+                If TypeOf x Is dataframe Then
+                    Dim df As dataframe = x
+                    Dim attrs As New list With {.slots = New Dictionary(Of String, Object)}
+
+                    Call attrs.add("names", df.colnames)
+                    Call attrs.add("class", "data.frame")
+                    Call attrs.add("row.names", df.getRowNames)
+
+                    Return attrs
+                ElseIf TypeOf x Is list Then
+                    Dim li As list = x
+                    Dim attrs As New list With {
+                        .slots = New Dictionary(Of String, Object) From {
+                            {"names", li.getNames}
+                        }
+                    }
+
+                    Return attrs
+                End If
+
+                Return Nothing
+            Else
+                Dim symbol As SymbolExpression = x
+                Dim attrs As New list With {.slots = New Dictionary(Of String, Object)}
+
+                For Each name As String In symbol.GetAttributeNames
+                    Call attrs.add(name, symbol.GetAttributeValue(name).ToArray)
+                Next
+
+                Return attrs
+            End If
+        End Function
+
+        ''' <summary>
         ''' ### Object Classes
         ''' 
         ''' R possesses a simple generic function mechanism which 
