@@ -74,8 +74,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
     ''' 并且参数也只允许出现一个
     ''' </summary>
     ''' <remarks>
-    ''' lambda函数与普通函数相比，lambda函数是没有environment的
-    ''' 所以lambda函数会更加的轻量化
+    ''' a subclass of <see cref="SymbolExpression"/>
+    ''' 
+    ''' (lambda函数与普通函数相比，lambda函数是没有environment的
+    ''' 所以lambda函数会更加的轻量化)
     ''' </remarks>
     Public Class DeclareLambdaFunction : Inherits SymbolExpression
         Implements RFunction

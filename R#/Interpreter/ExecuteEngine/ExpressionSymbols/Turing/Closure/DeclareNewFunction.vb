@@ -112,6 +112,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
     ''' 
     ''' > Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) The New S Language.
     ''' Wadsworth &amp; Brooks/Cole.
+    ''' 
+    ''' A subclass of <see cref="SymbolExpression"/>
     ''' </remarks>
     Public Class DeclareNewFunction : Inherits SymbolExpression
         Implements RFunction

@@ -70,6 +70,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
     ''' }
     ''' ```
     ''' </summary>
+    ''' <remarks>
+    ''' a subclass of <see cref="SymbolExpression"/>
+    ''' </remarks>
     Public Class UsingClosure : Inherits SymbolExpression
         Implements IRuntimeTrace
 

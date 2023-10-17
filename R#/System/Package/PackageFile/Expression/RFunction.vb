@@ -60,6 +60,7 @@ Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -91,6 +92,7 @@ Namespace Development.Package.File.Expressions
         Public Overrides Sub WriteBuffer(ms As MemoryStream, x As Expression)
             Dim params As Expression()
             Dim body As Expression()
+            Dim attrs As New Dictionary(Of String, String())
 
             Using outfile As New BinaryWriter(ms)
                 Call outfile.Write(CInt(getTypeCode(x)))
@@ -134,10 +136,39 @@ Namespace Development.Package.File.Expressions
                     Call outfile.Write(context.GetBuffer(exec))
                 Next
 
+                If TypeOf x Is SymbolExpression Then
+                    attrs = DirectCast(x, SymbolExpression).attributes
+                End If
+
+                Dim attrJSON As Byte() = Encoding.UTF8.GetBytes(attrs.GetJson)
+
+                ' use for data validation
+                Call outfile.Write(attrs.Count)
+                Call outfile.Write(attrJSON.Length)
+                Call outfile.Write(attrJSON)
+
                 Call outfile.Flush()
                 Call saveSize(outfile)
             End Using
         End Sub
+
+        Public Shared Function ParseAttribute(reader As BinaryReader) As Dictionary(Of String, String())
+            Dim d As Integer = reader.BaseStream.Length - reader.BaseStream.Position
+
+            ' 20231017
+            ' for handling the compatibility with old version package
+            If d < 4 Then
+                Return Nothing
+            End If
+
+            Dim n As Integer = reader.ReadInt32
+            Dim size As Integer = reader.ReadInt32
+            Dim bytes As Byte() = reader.ReadBytes(count:=size)
+            Dim json As String = Encoding.UTF8.GetString(bytes)
+            Dim attrs As Dictionary(Of String, String()) = json.LoadJSON(Of Dictionary(Of String, String()))
+
+            Return attrs
+        End Function
 
         Private Shared Function parseUsingClosure(reader As BinaryReader, desc As DESCRIPTION) As UsingClosure
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader, desc)
@@ -155,7 +186,9 @@ Namespace Development.Package.File.Expressions
                 Call BlockReader.ParseBlock(reader).Parse(desc).DoCall(AddressOf body.Add)
             Next
 
-            Return New UsingClosure(args(Scan0), New ClosureExpression(body.ToArray), sourceMap)
+            Dim use As New UsingClosure(args(Scan0), New ClosureExpression(body.ToArray), sourceMap)
+            use.SetAttributes(ParseAttribute(reader))
+            Return use
         End Function
 
         Private Shared Function parseFormula(reader As BinaryReader, desc As DESCRIPTION) As FormulaExpression
@@ -203,8 +236,9 @@ Namespace Development.Package.File.Expressions
             Dim names As String() = args.Select(Function(a) DirectCast(a, Literal).value.ToString).ToArray
             Dim name$ = $"[{names.JoinBy(", ")}] -> {body(Scan0).ToString}"
             Dim target As New DeclareNewSymbol(names, Nothing, TypeCodes.generic, False, sourceMap)
-
-            Return New DeclareLambdaFunction(name, target, body(Scan0), sourceMap)
+            Dim lambda As New DeclareLambdaFunction(name, target, body(Scan0), sourceMap)
+            lambda.SetAttributes(ParseAttribute(reader))
+            Return lambda
         End Function
 
         Private Shared Function ParseFunction(reader As BinaryReader, desc As DESCRIPTION) As DeclareNewFunction
@@ -230,7 +264,7 @@ Namespace Development.Package.File.Expressions
                 body.Add(BlockReader.ParseBlock(reader).Parse(desc))
             Next
 
-            Return New DeclareNewFunction(
+            Dim func As New DeclareNewFunction(
                 funcName:=funcName,
                 parameters:=args.ToArray,
                 body:=New ClosureExpression(body.ToArray),
@@ -238,6 +272,8 @@ Namespace Development.Package.File.Expressions
             ) With {
                 .[Namespace] = desc.Package
             }
+            func.SetAttributes(ParseAttribute(reader))
+            Return func
         End Function
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression

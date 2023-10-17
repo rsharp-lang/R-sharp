@@ -126,5 +126,14 @@ Namespace Interpreter.ExecuteEngine
             Next
         End Sub
 
+        ''' <summary>
+        ''' Just set value, this function use for the package parser
+        ''' </summary>
+        ''' <param name="attrs"></param>
+        Friend Sub SetAttributes(attrs As Dictionary(Of String, String()))
+            For Each attr As KeyValuePair(Of String, String()) In attrs.SafeQuery
+                attributes(attr.Key) = attr.Value
+            Next
+        End Sub
     End Class
 End Namespace
