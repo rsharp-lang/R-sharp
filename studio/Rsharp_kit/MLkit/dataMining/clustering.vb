@@ -509,19 +509,29 @@ Module clustering
     End Function
 
     ''' <summary>
-    ''' do btree clustering
+    ''' do clustering via binary tree
     ''' </summary>
-    ''' <param name="d"></param>
-    ''' <param name="equals"></param>
-    ''' <param name="gt"></param>
+    ''' <param name="d">the input dataset</param>
+    ''' <param name="equals">the score threshold that asserts that two vector is
+    ''' equals, then they will assigned to a same tree cluster node.</param>
+    ''' <param name="gt">the score threshold that asserts that two vector is not
+    ''' the same but similar to other, then we could put the new vector into the
+    ''' right node of current cluster tree node.</param>
+    ''' <param name="as_hclust">
+    ''' and also converts the tree data as the hclust data model?
+    ''' </param>
     ''' <param name="env"></param>
-    ''' <returns></returns>
+    ''' <returns>
+    ''' the cluster result could be converts from clr object to R# dataframe object
+    ''' via the ``as.data.frame`` function.
+    ''' </returns>
     <ExportAPI("btree")>
     <RApiReturn(GetType(BTreeCluster), GetType(Cluster))>
     Public Function btreeClusterFUN(<RRawVectorArgument> d As Object,
                                     Optional equals As Double = 0.9,
                                     Optional gt As Double = 0.7,
-                                    Optional hclust As Boolean = False,
+                                    Optional as_hclust As Boolean = False,
+                                    Optional method As CompareMethods = CompareMethods.SpectrumDotProduct,
                                     Optional env As Environment = Nothing) As Object
         Dim cluster As BTreeCluster
 
@@ -539,7 +549,7 @@ Module clustering
                 .Select(Function(ri)
                             Return New ClusterEntity(ri.name, CLRVector.asNumeric(ri.value))
                         End Function) _
-                .BTreeClusterVector(equals, gt)
+                .BTreeClusterVector(equals, gt, method)
         Else
             Dim data As pipeline = pipeline.TryCreatePipeline(Of DataSet)(d, env)
 
@@ -548,11 +558,11 @@ Module clustering
             Else
                 cluster = data _
                     .populates(Of DataSet)(env) _
-                    .BTreeCluster(equals, gt)
+                    .BTreeCluster(equals, gt, method)
             End If
         End If
 
-        If hclust Then
+        If as_hclust Then
             Return cluster.ToHClust
         Else
             Return cluster
