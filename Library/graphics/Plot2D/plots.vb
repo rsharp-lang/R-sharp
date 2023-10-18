@@ -777,6 +777,7 @@ Module plots
         Dim ylim As Double = args.getValue("ylim", env, Double.NaN)
         Dim absoluteScale As Boolean = args.getValue("absolute_scale", env, False)
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
+        Dim dpi As Integer = args.getValue("dpi", env, [default]:=100)
 
         If args.hasName("showLegend") Then
             showLegend = getFirst(CLRVector.asLogical(args!showLegend))
@@ -836,7 +837,8 @@ Module plots
                 xlim:=xlim,
                 ylim:=ylim,
                 XaxisAbsoluteScalling:=absoluteScale,
-                YaxisAbsoluteScalling:=absoluteScale
+                YaxisAbsoluteScalling:=absoluteScale,
+                dpi:=dpi
             )
         End If
     End Function

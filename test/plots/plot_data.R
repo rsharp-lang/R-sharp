@@ -29,10 +29,12 @@ print(x);
 print(y);
 print(class);
 
-bitmap(file = "./Rplot.png", size = [2700, 3600]) {
-plot(as.numeric(x), y= as.numeric(y), class = class, point.size = 9, 
+bitmap(file = "./Rplot.png", size = [3000, 3600], dpi = 300) {
+plot(as.numeric(x), y= as.numeric(y), class = class, point.size = 17, 
 shape = "rect",reverse = TRUE, colorSet = "paper", grid.fill = "white" ,
-xlim = 256, ylim = 373, absolute_scale = TRUE);
+# xlim = 256, ylim = 373, 
+padding = "padding: 150px 450px 250px 300px;"
+);
 }
 
 
