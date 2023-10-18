@@ -30,7 +30,7 @@ print(y);
 print(class);
 
 bitmap(file = "./Rplot.png", size = [3300, 3600], dpi = 200) {
-plot(as.numeric(x), y= as.numeric(y), class = class, point.size = 20, 
+plot(as.numeric(x), y= as.numeric(y), class = class, point.size = 16, 
 shape = "rect",reverse = TRUE, colorSet = "paper", grid.fill = "white" ,
 # xlim = 256, ylim = 373, 
 padding = "padding: 150px 800px 300px 400px;",
