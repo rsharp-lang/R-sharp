@@ -525,6 +525,7 @@ Module clustering
                                     Optional equals As Double = 0.9,
                                     Optional gt As Double = 0.7,
                                     Optional as_hclust As Boolean = False,
+                                    Optional method As CompareMethods = CompareMethods.SpectrumDotProduct,
                                     Optional env As Environment = Nothing) As Object
         Dim cluster As BTreeCluster
 
@@ -542,7 +543,7 @@ Module clustering
                 .Select(Function(ri)
                             Return New ClusterEntity(ri.name, CLRVector.asNumeric(ri.value))
                         End Function) _
-                .BTreeClusterVector(equals, gt)
+                .BTreeClusterVector(equals, gt, method)
         Else
             Dim data As pipeline = pipeline.TryCreatePipeline(Of DataSet)(d, env)
 
@@ -551,7 +552,7 @@ Module clustering
             Else
                 cluster = data _
                     .populates(Of DataSet)(env) _
-                    .BTreeCluster(equals, gt)
+                    .BTreeCluster(equals, gt, method)
             End If
         End If
 
