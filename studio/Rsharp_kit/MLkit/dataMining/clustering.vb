@@ -514,6 +514,9 @@ Module clustering
     ''' <param name="d"></param>
     ''' <param name="equals"></param>
     ''' <param name="gt"></param>
+    ''' <param name="as_hclust">
+    ''' and also converts the tree data as the hclust data model?
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("btree")>
@@ -521,7 +524,7 @@ Module clustering
     Public Function btreeClusterFUN(<RRawVectorArgument> d As Object,
                                     Optional equals As Double = 0.9,
                                     Optional gt As Double = 0.7,
-                                    Optional hclust As Boolean = False,
+                                    Optional as_hclust As Boolean = False,
                                     Optional env As Environment = Nothing) As Object
         Dim cluster As BTreeCluster
 
@@ -552,7 +555,7 @@ Module clustering
             End If
         End If
 
-        If hclust Then
+        If as_hclust Then
             Return cluster.ToHClust
         Else
             Return cluster
