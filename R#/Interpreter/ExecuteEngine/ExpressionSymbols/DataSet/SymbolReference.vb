@@ -1,58 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::784afb9b4567aae555616a6c569f5437, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/SymbolReference.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 72
-    '    Code Lines: 53
-    ' Comment Lines: 7
-    '   Blank Lines: 12
-    '     File Size: 2.51 KB
+' Summaries:
 
 
-    '     Class SymbolReference
-    ' 
-    '         Properties: expressionName, symbol, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: Evaluate, GetReferenceObject, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 72
+'    Code Lines: 53
+' Comment Lines: 7
+'   Blank Lines: 12
+'     File Size: 2.51 KB
+
+
+'     Class SymbolReference
+' 
+'         Properties: expressionName, symbol, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: Evaluate, GetReferenceObject, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -94,10 +95,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Me.symbol = symbol
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Return GetReferenceObject(symbol, envir)
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="symbolName"></param>
+        ''' <param name="env"></param>
+        ''' <param name="[inherits]"></param>
+        ''' <returns>
+        ''' this function will returns an error message when the symbol reference
+        ''' could not be solved, otherwise returns the value of the symbol.
+        ''' </returns>
         Public Shared Function GetReferenceObject(symbolName As String, env As Environment, Optional [inherits] As Boolean = True) As Object
             Dim symbol As [Variant](Of Symbol, RMethodInfo) = env.FindSymbol(symbolName, [inherits])
 
