@@ -294,7 +294,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' to lead or lag the input. To create multiple lead/lag vectors, 
         ''' provide multiple values to n; negative values of n will "flip" 
         ''' the value of type, i.e., n=-1 and type='lead' is the same as 
-        ''' n=1 and type='lag'.</param>
+        ''' n=1 and type='lag'.
+        ''' 
+        ''' this parameter could also be a character vector of the names for 
+        ''' removes from a given list, if the input x is a tuple list object
+        ''' </param>
         ''' <param name="fill">
         ''' Value to use for padding when the window goes beyond the input 
         ''' length.
@@ -321,7 +325,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' </remarks>
         <ExportAPI("shift")>
         Public Function shift(<RRawVectorArgument> x As Object,
-                              Optional n As Integer = 1L,
+                              <RRawVectorArgument>
+                              Optional n As Object = 1L,
                               Optional fill As Object = "NA",
                               <RRawVectorArgument(GetType(String))>
                               Optional type As Object = "lag|lead|shift",
@@ -335,18 +340,27 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
 
             If TypeOf x Is list Then
-                Return Internal.debug.stop(New NotImplementedException, env)
+                Dim dels As String() = CLRVector.asCharacter(n)
+                Dim li As list = RConversion.asList(x, list.empty, env)
+
+                For Each name As String In dels.SafeQuery
+                    Call li.slots.Remove(name)
+                Next
+
+                Return li
             ElseIf TypeOf x Is dataframe Then
                 Return Internal.debug.stop(New NotImplementedException, env)
             Else
+                Dim offset As Integer = CLRVector.asInteger(n).First
+
                 ' is array/vector
                 If fill Is Nothing Then
                     If flag = "lag" Then
-                        Return linq.skip(x, n, env)
+                        Return linq.skip(x, offset, env)
                     ElseIf flag = "lead" Then
-                        Return linq.take(x, n, env)
+                        Return linq.take(x, offset, env)
                     Else
-                        Return linq.skip(x, n, env)
+                        Return linq.skip(x, offset, env)
                     End If
                 Else
                     Dim vec As Array = TryCastGenericArray(x, env)
@@ -360,17 +374,17 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     fill = RCType.CTypeDynamic(fill, vec_type.raw, env)
 
                     If flag = "lag" OrElse flag = "shift" Then
-                        For i As Integer = 0 To n - 1
+                        For i As Integer = 0 To offset - 1
                             Call shift_vec.SetValue(fill, i)
                         Next
 
-                        Call Array.ConstrainedCopy(vec, Scan0, shift_vec, n, vec.Length - n)
+                        Call Array.ConstrainedCopy(vec, Scan0, shift_vec, offset, vec.Length - offset)
                     Else
-                        For i As Integer = vec.Length - n To vec.Length - 1
+                        For i As Integer = vec.Length - offset To vec.Length - 1
                             Call shift_vec.SetValue(fill, i)
                         Next
 
-                        Call Array.ConstrainedCopy(vec, n, shift_vec, vec.Length - n, vec.Length - n)
+                        Call Array.ConstrainedCopy(vec, offset, shift_vec, vec.Length - offset, vec.Length - offset)
                     End If
 
                     Return shift_vec
