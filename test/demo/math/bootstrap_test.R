@@ -4,7 +4,7 @@ data(law);
 print(cor(law$LSAT, law$GPA));
 
 #设置bootstrap循环
-let B <- 200; #重复抽样的次数
+let B <- 2000; #重复抽样的次数
 let n <- nrow(law); #样本大小（15个）
 let R <- numeric(B); #储存每次循环后计算得到的相关系数
 
@@ -26,5 +26,5 @@ print(R);
 print(se.R);  #多次抽样的标准差即为标准误
 
 bitmap(file = `${@dir}/law_bootstrap.png`) {
-    plot(hist(R, prob = TRUE));
+    plot(hist(R, prob = TRUE, n = 20));
 }

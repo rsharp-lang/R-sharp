@@ -330,6 +330,57 @@ Module math
     End Function
 
     ''' <summary>
+    ''' ### Non-Parametric Bootstrapping
+    ''' 
+    ''' See Efron and Tibshirani (1993) for details on this function.
+    ''' </summary>
+    ''' <param name="x">a vector containing the data. To bootstrap 
+    ''' more complex data structures (e.g. bivariate data) see the 
+    ''' last example below.</param>
+    ''' <param name="nboot">The number of bootstrap samples desired.</param>
+    ''' <param name="theta">function to be bootstrapped. Takes x as an 
+    ''' argument, and may take additional arguments (see below and last 
+    ''' example).</param>
+    ''' <param name="func">(optional) argument specifying the functional 
+    ''' the distribution of thetahat that is desired. If func is 
+    ''' specified, the jackknife after-bootstrap estimate of its standard
+    ''' error is also returned. See example below.</param>
+    ''' <param name="args">any additional arguments to be passed to theta</param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' list with the following components:
+    '''
+    ''' 1. thetastar       the nboot bootstrap values Of theta
+    ''' 2. func.thetastar  the functional func Of the bootstrap distribution Of thetastar, If func was specified
+    ''' 3. jack.boot.val   the jackknife-after-bootstrap values For func, If func was specified
+    ''' 4. jack.boot.se    the jackknife-after-bootstrap standard Error estimate Of func, If func was specified
+    ''' 5. call            the deparsed call
+    ''' 
+    ''' </returns>
+    ''' <remarks>
+    ''' Efron, B. and Tibshirani, R. (1986). The bootstrap method for 
+    ''' standard errors, confidence intervals, and other measures of 
+    ''' statistical accuracy. Statistical Science, Vol 1., No. 1, pp 1-35.
+    ''' 
+    ''' Efron, B. (1992) Jackknife-after-bootstrap standard errors And 
+    ''' influence functions. J. Roy. Stat. Soc. B, vol 54, pages 83-127
+    ''' 
+    ''' Efron, B. And Tibshirani, R. (1993) An Introduction to the 
+    ''' Bootstrap. Chapman And Hall, New York, London.
+    ''' </remarks>
+    <ExportAPI("bootstrap")>
+    Public Function bootstrap(<RRawVectorArgument>
+                              x As Object,
+                              nboot As Integer,
+                              theta As Object,
+                              Optional func As Object = null,
+                              <RListObjectArgument>
+                              Optional args As list = Nothing,
+                              Optional env As Environment = Nothing) As Object
+
+    End Function
+
+    ''' <summary>
     ''' loess fit
     ''' </summary>
     <ExportAPI("loess")>
