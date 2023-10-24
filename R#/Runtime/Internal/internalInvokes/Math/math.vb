@@ -872,7 +872,9 @@ sample estimates:
         End Function
 
         Private Function sample(x As Object, size As Integer, replace As Boolean, prob As Object, env As Environment) As Object
-            Dim data As Array = asVector(Of Object)(x)
+#Disable Warning
+            Dim data As Array = REnv.asVector(Of Object)(x)
+#Enable Warning
 
             'If data.Length <= size AndAlso replace = False Then
             '    Call env.AddMessage("data size of x is less than sample size, returns the original data vector.")
@@ -881,7 +883,7 @@ sample estimates:
 
             ' 20230629 index vector is base from 1
             ' so we needs index-1 when get element value from the data array
-            Dim index As Integer() = sample_int(size, size, replace, prob)
+            Dim index As Integer() = sample_int(n:=data.Length, size, replace, prob)
             Dim takeSamples As New List(Of Object)
 
             For Each i As Integer In index
