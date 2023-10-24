@@ -74,6 +74,7 @@ Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.Statistics.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -1049,6 +1050,116 @@ sample estimates:
             End If
 
             Throw New NotImplementedException
+        End Function
+
+        ''' <summary>
+        ''' ### Correlation, Variance and Covariance (Matrices)
+        ''' 
+        ''' var, cov and cor compute the variance of x and the covariance or 
+        ''' correlation of x and y if these are vectors. If x and y are matrices 
+        ''' then the covariances (or correlations) between the columns of x and
+        ''' the columns of y are computed.
+        ''' </summary>
+        ''' <param name="x">a numeric vector, matrix or data frame.</param>
+        ''' <param name="y">NULL (default) or a vector, matrix or data frame 
+        ''' with compatible dimensions to x. The default is equivalent to 
+        ''' y = x (but more efficient).</param>
+        ''' <param name="use">an optional character string giving a method for
+        ''' computing covariances in the presence of missing values. This must
+        ''' be (an abbreviation of) one of the strings "everything", "all.obs",
+        ''' "complete.obs", "na.or.complete", or "pairwise.complete.obs".
+        ''' </param>
+        ''' <param name="method">a character string indicating which correlation 
+        ''' coefficient (or covariance) is to be computed. One of "pearson" 
+        ''' (default), "kendall", or "spearman": can be abbreviated.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' For cov and cor one must either give a matrix or data frame for x 
+        ''' or give both x and y.
+        ''' 
+        ''' The inputs must be numeric (as determined by is.numeric: logical 
+        ''' values are also allowed for historical compatibility): the "kendall" 
+        ''' and "spearman" methods make sense for ordered inputs but xtfrm can 
+        ''' be used to find a suitable prior transformation to numbers.
+        '''
+        ''' var is just another interface to cov, where na.rm is used to determine 
+        ''' the default for use when that is unspecified. If na.rm is TRUE then 
+        ''' the complete observations (rows) are used (use = "na.or.complete") to 
+        ''' compute the variance. Otherwise, by default use = "everything".
+        '''
+        ''' If use is "everything", NAs will propagate conceptually, i.e., a 
+        ''' resulting value will be NA whenever one of its contributing observations 
+        ''' is NA.
+        '''
+        ''' If use is "all.obs", then the presence of missing observations will 
+        ''' produce an error. If use is "complete.obs" then missing values are 
+        ''' handled by casewise deletion (and if there are no complete cases, 
+        ''' that gives an error).
+        ''' 
+        ''' "na.or.complete" is the same unless there are no complete cases, that gives
+        ''' NA. Finally, if use has the value "pairwise.complete.obs" then the 
+        ''' correlation or covariance between each pair of variables is computed 
+        ''' using all complete pairs of observations on those variables. This can 
+        ''' result in covariance or correlation matrices which are not positive 
+        ''' semi-definite, as well as NA entries if there are no complete pairs 
+        ''' for that pair of variables. For cov and var, "pairwise.complete.obs" 
+        ''' only works with the "pearson" method. Note that (the equivalent of) 
+        ''' var(double(0), use = *) gives NA for use = "everything" and "na.or.complete", 
+        ''' and gives an error in the other cases.
+        '''
+        ''' The denominator n - 1n−1 is used which gives an unbiased estimator of 
+        ''' the (co)variance for i.i.d. observations. These functions return NA 
+        ''' when there is only one observation (whereas S-PLUS has been returning 
+        ''' NaN).
+        '''
+        ''' For cor(), if method is "kendall" or "spearman", Kendall's \tauτ or Spearman's 
+        ''' \rhoρ statistic is used to estimate a rank-based measure of association. 
+        ''' These are more robust and have been recommended if the data do not 
+        ''' necessarily come from a bivariate normal distribution.
+        ''' 
+        ''' For cov(), a non-Pearson method is unusual but available for the sake of 
+        ''' completeness. Note that "spearman" basically computes cor(R(x), R(y)) (or 
+        ''' cov(., .)) where R(u) := rank(u, na.last = "keep"). In the case of missing 
+        ''' values, the ranks are calculated depending on the value of use, either 
+        ''' based on complete observations, or based on pairwise completeness with 
+        ''' reranking for each pair.
+        '''
+        ''' When there are ties, Kendall's \tau_bτ b
+        ''' is computed, as proposed by Kendall (1945).
+        '''
+        ''' Scaling a covariance matrix into a correlation one can be achieved in 
+        ''' many ways, mathematically most appealing by multiplication with a 
+        ''' diagonal matrix from left and right, or more efficiently by using 
+        ''' sweep(.., FUN = "/") twice. The cov2cor function is even a bit more 
+        ''' efficient, and provided mostly for didactical reasons.
+        ''' </remarks>
+        <ExportAPI("cor")>
+        Public Function cor(<RRawVectorArgument> x As Object,
+                            <RRawVectorArgument>
+                            Optional y As Object = null,
+                            Optional use As Object = "everything",
+                            <RRawVectorArgument(TypeCodes.string)>
+                            Optional method As Object = "pearson|kendall|spearman",
+                            Optional env As Environment = Nothing) As Object
+
+            Dim methodStr As String = CLRVector.asCharacter(method).DefaultFirst("pearson")
+
+            If TypeOf x Is dataframe Then
+                Throw New NotImplementedException
+            Else
+                ' is vector?
+                Dim vx As Double() = CLRVector.asNumeric(x)
+                Dim vy As Double() = CLRVector.asNumeric(y)
+
+                Select Case methodStr.ToLower
+                    Case "pearson" : Return Correlations.GetPearson(vx, vy)
+                    Case "kendall" : Return Correlations.rankKendallTauBeta(vx, vy)
+                    Case "spearman" : Return Correlations.Spearman(vx, vy)
+                    Case Else
+                        Return Internal.debug.stop("method argument value should be one of [pearson kendall spearman]!", env)
+                End Select
+            End If
         End Function
     End Module
 End Namespace
