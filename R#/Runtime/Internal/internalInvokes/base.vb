@@ -137,11 +137,35 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("numeric")>
         Public Function numeric(Optional length As Integer = 0, Optional env As Environment = Nothing) As Object
+            Return __empty(Of Double)(length, env)
+        End Function
+
+        Private Function __empty(Of T)(length As Integer, env As Environment) As Object
             If length < 0 Then
                 Return Internal.debug.stop("invalid 'length' argument value, should be positive or zero!", env)
             End If
 
-            Return New Double(length - 1) {}
+            Return New T(length - 1) {}
+        End Function
+
+        <ExportAPI("logical")>
+        Public Function logical(Optional length As Integer = 0, Optional env As Environment = Nothing) As Object
+            Return __empty(Of Boolean)(length, env)
+        End Function
+
+        <ExportAPI("character")>
+        Public Function character(Optional length As Integer = 0, Optional env As Environment = Nothing) As Object
+            Return __empty(Of String)(length, env)
+        End Function
+
+        <ExportAPI("integer")>
+        Public Function ints(Optional length As Integer = 0, Optional env As Environment = Nothing) As Object
+            Return __empty(Of Long)(length, env)
+        End Function
+
+        <ExportAPI("raw")>
+        Public Function raws(Optional length As Integer = 0, Optional env As Environment = Nothing) As Object
+            Return __empty(Of Byte)(length, env)
         End Function
 
         ''' <summary>
