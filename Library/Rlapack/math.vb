@@ -58,6 +58,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.Bootstrapping.Multivariate
 Imports Microsoft.VisualBasic.Data.csv.IO
@@ -294,12 +295,28 @@ Module math
     ''' <summary>
     ''' Do fixed width cut bins
     ''' </summary>
-    ''' <param name="data">A numeric vector data sequence</param>
+    ''' <param name="x">A numeric vector data sequence</param>
     ''' <param name="step">The width of the bin box.</param>
     ''' <returns></returns>
     <ExportAPI("hist")>
-    Public Function Hist(<RRawVectorArgument> data As Object, Optional step! = 1) As DataBinBox(Of Double)()
-        Return CLRVector.asNumeric(data) _
+    <RApiReturn(GetType(DataBinBox(Of Double)))>
+    Public Function Hist(<RRawVectorArgument>
+                         x As Object,
+                         Optional step!? = Nothing,
+                         Optional n%? = 10,
+                         Optional env As Environment = Nothing) As Object
+
+        Dim v As Double() = CLRVector.asNumeric(x)
+
+        If [step] Is Nothing Then
+            If n Is Nothing Then
+                Return Internal.debug.stop("the historgram parameter step and n should not be both nothing!", env)
+            End If
+
+            [step] = New DoubleRange(v).Length / n
+        End If
+
+        Return v _
             .Hist([step]) _
             .ToArray
     End Function
