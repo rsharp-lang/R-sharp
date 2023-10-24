@@ -54,6 +54,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports System.Security.Principal
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.Bootstrapping.Multivariate
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
@@ -112,10 +113,13 @@ Public Class lmCall
     Const format As String = "G7"
 
     Private Function weightLmSummary(wf As WeightedFit) As list
+        Dim formula = DirectCast(DirectCast(lm, WeightedFit).Polynomial, Polynomial)
+
         Return New list With {
             .slots = New Dictionary(Of String, Object) From {
                 {"F", wf.FisherF},
-                {"factors", wf.Polynomial.Factors}
+                {"factors", wf.Polynomial.Factors},
+                {"f(x)", formula.ToString(variables, format)}
             }
         }
     End Function
