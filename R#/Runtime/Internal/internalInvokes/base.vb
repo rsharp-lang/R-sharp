@@ -119,6 +119,32 @@ Namespace Runtime.Internal.Invokes
     Public Module base
 
         ''' <summary>
+        ''' ### Numeric Vectors
+        ''' 
+        ''' Creates or coerces objects of type "numeric". is.numeric 
+        ''' is a more general test of an object being interpretable 
+        ''' as numbers.
+        ''' </summary>
+        ''' <param name="length">A non-negative integer specifying 
+        ''' the desired length. Double values will be coerced to integer: 
+        ''' supplying an argument of length other than one is an error.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' numeric is identical to double. It creates a double-precision 
+        ''' vector of the specified length with each element equal to 0.
+        ''' </remarks>
+        <ExportAPI("numeric")>
+        Public Function numeric(Optional length As Integer = 0, Optional env As Environment = Nothing) As Object
+            If length < 0 Then
+                Return Internal.debug.stop("invalid 'length' argument value, should be positive or zero!", env)
+            End If
+
+            Return New Double(length - 1) {}
+        End Function
+
+        ''' <summary>
         ''' ### Argument List of a Function
         ''' 
         ''' Displays the argument names and corresponding default values of a 
