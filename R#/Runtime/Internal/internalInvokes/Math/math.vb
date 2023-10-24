@@ -1073,7 +1073,9 @@ sample estimates:
         ''' coefficient (or covariance) is to be computed. One of "pearson" 
         ''' (default), "kendall", or "spearman": can be abbreviated.</param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' For r &lt;- cor(*, use = "all.obs"), it is now guaranteed that all(abs(r) &lt;= 1).
+        ''' </returns>
         ''' <remarks>
         ''' For cov and cor one must either give a matrix or data frame for x 
         ''' or give both x and y.
