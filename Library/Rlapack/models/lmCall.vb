@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Public Class lmCall
 
@@ -82,6 +83,22 @@ Public Class lmCall
         End Get
     End Property
 
+    Public ReadOnly Property factors As Double()
+        Get
+            Return lm.Polynomial.Factors
+        End Get
+    End Property
+
+    Public ReadOnly Property summary As list
+        Get
+            If TypeOf lm Is WeightedFit Then
+                Return weightLmSummary(lm)
+            Else
+                Return Nothing
+            End If
+        End Get
+    End Property
+
     Sub New(name As String, variables As String())
         Me.name = name
         Me.variables = variables
@@ -92,22 +109,36 @@ Public Class lmCall
         Return lm.GetY(x)
     End Function
 
-    Public Overrides Function ToString() As String
-        If TypeOf lm Is WeightedFit Then
-            Dim formula = DirectCast(DirectCast(lm, WeightedFit).Polynomial, Polynomial)
-            Dim wf As WeightedFit = lm
+    Const format As String = "G7"
 
-            Return $"
+    Private Function weightLmSummary(wf As WeightedFit) As list
+        Return New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"F", wf.FisherF},
+                {"factors", wf.Polynomial.Factors}
+            }
+        }
+    End Function
+
+    Private Function weightLmString(wf As WeightedFit) As String
+        Dim formula = DirectCast(DirectCast(lm, WeightedFit).Polynomial, Polynomial)
+
+        Return $"
 Call:
-lm(formula = {formula.ToString(variables, "G3")}, data = <{data}>, weights = {weights})
+lm(formula = {formula.ToString(variables, format)}, data = <{data}>, weights = {weights})
 
 Coefficients:
 (Intercept)            {variables(Scan0)}  
-  {formula.Factors(Scan0).ToString("G4")}    {formula.Factors(1).ToString("G4")}
+  {formula.Factors(Scan0).ToString(format)}    {formula.Factors(1).ToString(format)}
 
 R2: {lm.R2}
 F-statistic: {wf.FisherF}
 "
+    End Function
+
+    Public Overrides Function ToString() As String
+        If TypeOf lm Is WeightedFit Then
+            Return weightLmString(lm)
         ElseIf TypeOf lm Is FitResult Then
             Dim formula = DirectCast(DirectCast(lm, FitResult).Polynomial, Polynomial)
 
