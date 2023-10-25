@@ -81,7 +81,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports stdNum = System.Math
+Imports std = System.Math
 
 Namespace Runtime.Internal.Invokes
 
@@ -89,6 +89,27 @@ Namespace Runtime.Internal.Invokes
     ''' R# math module
     ''' </summary>
     Module math
+
+        ''' <summary>
+        ''' ### Sign Function
+        ''' 
+        ''' sign returns a vector with the signs of the corresponding 
+        ''' elements of x (the sign of a real number is 1, 0, or -1−1 
+        ''' if the number is positive, zero, or negative, respectively).
+        ''' 
+        ''' Note that sign does not operate on complex vectors.
+        ''' </summary>
+        ''' <param name="x">a numeric vector</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' This is an internal generic primitive function: methods can 
+        ''' be defined for it directly or via the Math group generic.
+        ''' </remarks>
+        <ExportAPI("sign")>
+        Public Function sign(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of Double, Integer)(x, Function(xi) std.Sign(xi))
+        End Function
 
         ''' <summary>
         ''' ## Finite, Infinite and NaN Numbers
@@ -223,7 +244,7 @@ Namespace Runtime.Internal.Invokes
         Public Function round(<RRawVectorArgument> x As Object, Optional decimals% = 0) As Double()
             Dim rounds = From element As Double
                          In CLRVector.asNumeric(x)
-                         Select stdNum.Round(element, decimals)
+                         Select std.Round(element, decimals)
 
             Return rounds.ToArray
         End Function
@@ -240,9 +261,9 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("log")>
-        Public Function log(<RRawVectorArgument> x As Object, Optional newBase As Double = stdNum.E) As Double()
+        Public Function log(<RRawVectorArgument> x As Object, Optional newBase As Double = std.E) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(Function(d) stdNum.Log(d, newBase)) _
+                .Select(Function(d) std.Log(d, newBase)) _
                 .ToArray
         End Function
 
@@ -256,7 +277,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("log2")>
         Public Function log2(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(Function(d) stdNum.Log(d, 2)) _
+                .Select(Function(d) std.Log(d, 2)) _
                 .ToArray
         End Function
 
@@ -270,14 +291,14 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("log10")>
         Public Function log10(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(Function(d) stdNum.Log(d, 10)) _
+                .Select(Function(d) std.Log(d, 10)) _
                 .ToArray
         End Function
 
         <ExportAPI("sin")>
         Public Function sin(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(Function(d) stdNum.Sin(d)) _
+                .Select(Function(d) std.Sin(d)) _
                 .ToArray
         End Function
 
@@ -289,7 +310,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("cos")>
         Public Function cos(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(Function(d) stdNum.Cos(d)) _
+                .Select(Function(d) std.Cos(d)) _
                 .ToArray
         End Function
 
@@ -365,7 +386,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("sqrt")>
         Public Function sqrt(x As Array) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(AddressOf stdNum.Sqrt) _
+                .Select(AddressOf std.Sqrt) _
                 .ToArray
         End Function
 
@@ -379,7 +400,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("exp")>
         Public Function exp(x As Array) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(AddressOf stdNum.Exp) _
+                .Select(AddressOf std.Exp) _
                 .ToArray
         End Function
 
@@ -509,7 +530,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("abs")>
         Public Function abs(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(AddressOf stdNum.Abs) _
+                .Select(AddressOf std.Abs) _
                 .ToArray
         End Function
 
@@ -978,7 +999,7 @@ sample estimates:
 
             Dim groups = data _
                 .populates(Of Object)(env) _
-                .GroupBy(AddressOf evalFUNC.Invoke, Function(a, b) stdNum.Abs(a - b) <= offset) _
+                .GroupBy(AddressOf evalFUNC.Invoke, Function(a, b) std.Abs(a - b) <= offset) _
                 .ToArray
 
             Return groups _
@@ -999,7 +1020,7 @@ sample estimates:
             Dim means As Double() = groups.Select(Function(a) a.Average).ToArray
 
             For Each xj As Double In data
-                Dim d = means.Select(Function(xi) stdNum.Abs(xi - xj)).ToArray
+                Dim d = means.Select(Function(xi) std.Abs(xi - xj)).ToArray
                 Dim i As Integer = which.Min(d)
 
                 Call tags.Add(i + 1)
