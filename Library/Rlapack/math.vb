@@ -78,12 +78,15 @@ Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -334,9 +337,9 @@ Module math
     ''' 
     ''' See Efron and Tibshirani (1993) for details on this function.
     ''' </summary>
-    ''' <param name="x">a vector containing the data. To bootstrap 
-    ''' more complex data structures (e.g. bivariate data) see the 
-    ''' last example below.</param>
+    ''' <param name="x">a vector or a dataframe that containing the data. 
+    ''' To bootstrap more complex data structures (e.g. bivariate data) 
+    ''' see the last example below.</param>
     ''' <param name="nboot">The number of bootstrap samples desired.</param>
     ''' <param name="theta">function to be bootstrapped. Takes x as an 
     ''' argument, and may take additional arguments (see below and last 
@@ -356,6 +359,8 @@ Module math
     ''' 4. jack.boot.se    the jackknife-after-bootstrap standard Error estimate Of func, If func was specified
     ''' 5. call            the deparsed call
     ''' 
+    ''' and this function will returns the bootstrap data collection if the
+    ''' <paramref name="theta"/> function is not specificed.
     ''' </returns>
     ''' <remarks>
     ''' Efron, B. and Tibshirani, R. (1986). The bootstrap method for 
@@ -369,15 +374,100 @@ Module math
     ''' Bootstrap. Chapman And Hall, New York, London.
     ''' </remarks>
     <ExportAPI("bootstrap")>
+    <RApiReturn("thetastar", "func.thetastar", "jack.boot.val", "jack.boot.se", "call")>
     Public Function bootstrap(<RRawVectorArgument>
                               x As Object,
                               nboot As Integer,
-                              theta As Object,
+                              Optional theta As Object = Nothing,
                               Optional func As Object = null,
                               <RListObjectArgument>
                               Optional args As list = Nothing,
                               Optional env As Environment = Nothing) As Object
 
+        Dim thetaFunc As RFunction
+        Dim check = applys.checkInternal(Nothing, theta, env)
+
+        If TypeOf check Is Message Then
+            Return check
+        Else
+            thetaFunc = theta
+        End If
+
+        Dim thetastar As New List(Of Object)
+        Dim isIndex As Boolean = False
+
+        If x Is Nothing Then
+            Return Nothing
+        End If
+
+        Dim str_x As String = x.ToString
+
+        If TypeOf x Is Rdataframe Then
+            Dim df = DirectCast(x, Rdataframe)
+            Dim colnames As String() = df.colnames
+            Dim rows = df.forEachRow(colnames).ToArray
+            Dim boots = rows.Samples(rows.Length, nboot, replace:=True).ToArray
+            Dim result As Object
+
+            For Each sample As SeqValue(Of NamedCollection(Of Object)()) In boots
+                df = reshape2.ConstructDataframe(sample.value, colnames)
+                result = thetaFunc.Invoke({df}, env)
+
+                If Program.isException(result) Then
+                    Return result
+                Else
+                    thetastar.Add(result)
+                End If
+            Next
+        Else
+            Dim arr As Array = REnv.UnsafeTryCastGenericArray(REnv.asVector(Of Object)(x))
+            Dim type As Type = arr.GetType
+            Dim boots = arr.AsObjectEnumerator _
+                .Samples(arr.Length, nboot, replace:=True) _
+                .ToArray
+
+            If DataFramework.IsCollection(Of Integer)(type) OrElse
+                DataFramework.IsCollection(Of Long)(type) Then
+                isIndex = True
+            End If
+
+            If thetastar Is Nothing Then
+                Return New list With {
+                    .slots = boots _
+                        .ToDictionary(Function(i) (i.i + 1).ToString,
+                                      Function(i)
+                                          Return CObj(i.value)
+                                      End Function)}
+            Else
+                Dim result As Object
+
+                For Each sample As SeqValue(Of Object()) In boots
+                    result = thetaFunc.Invoke({sample}, env)
+
+                    If Program.isException(result) Then
+                        Return result
+                    Else
+                        thetastar.Add(result)
+                    End If
+                Next
+            End If
+        End If
+
+        If isIndex Then
+            Return thetastar.ToArray
+        Else
+            Return New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"thetastar", thetastar.ToArray},
+                    {"func.thetastar", Nothing},
+                    {"jack.boot.val", Nothing},
+                    {"jack.boot.se", Nothing},
+                    {"call", $"bootstrap(x = {str_x}, nboot = {nboot}, 
+theta = {objToString(thetaFunc, env:=env)}
+);"}
+                }
+            }
+        End If
     End Function
 
     ''' <summary>

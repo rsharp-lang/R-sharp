@@ -317,7 +317,7 @@ Namespace Runtime
         End Function
 
         ''' <summary>
-        ''' 
+        ''' Cast a possible object array to a generic type constrained array
         ''' </summary>
         ''' <param name="vec"></param>
         ''' <returns>
