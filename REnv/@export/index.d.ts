@@ -14,9 +14,9 @@ declare namespace REnv {
    /**
      * @param k default value Is ``6``.
      * @param qcut default value Is ``0.1``.
-     * @param f default value Is ``10``.
+     * @param 0 default value Is ``10``.
    */
-   function density2DCut(data: any, k?: any, qcut?: any, f?: any): object;
+   function density2DCut(data: any, k?: any, qcut?: any, 0?: any): object;
    /**
      * @param interval default value Is ``3``.
      * @param filetype default value Is ``html``.
