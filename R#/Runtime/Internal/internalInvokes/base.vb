@@ -737,11 +737,19 @@ Namespace Runtime.Internal.Invokes
         ''' integer or double vector.</param>
         ''' <returns></returns>
         <ExportAPI("rep")>
-        Public Function rep(x As Object,
+        Public Function rep(<RRawVectorArgument>
+                            x As Object,
                             times As Integer,
                             Optional env As Environment = Nothing) As Object
 
-            Return REnv.asVector(Repeats(x, times), If(x Is Nothing, GetType(Object), x.GetType), env)
+            Dim out As New List(Of Object)
+            Dim vx = REnv.asVector(Of Object)(x)
+
+            For i As Integer = 1 To times
+                out.AddRange(vx.AsObjectEnumerator)
+            Next
+
+            Return REnv.TryCastGenericArray(out.ToArray, env)
         End Function
 
         Private Function safeRowBindDataFrame(d As dataframe, row As dataframe, env As Environment) As Object
