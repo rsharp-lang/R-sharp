@@ -752,6 +752,56 @@ Namespace Runtime.Internal.Invokes
             Return REnv.TryCastGenericArray(out.ToArray, env)
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="times">an integer-valued vector giving the (non-negative) 
+        ''' number of times to repeat each element if of length length(x), or to
+        ''' repeat the whole vector if of length 1. Negative or NA values are an 
+        ''' error. A double vector is accepted, other inputs being coerced to an
+        ''' integer or double vector.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("rep.int")>
+        Public Function rep_int(<RRawVectorArgument>
+                                x As Object,
+                                times As Integer,
+                                Optional env As Environment = Nothing) As Object
+
+            Return rep(x, times, env)
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="length_out">non-negative integer. The desired 
+        ''' length of the output vector. Other inputs will be coerced to 
+        ''' a double vector and the first element taken. Ignored if NA 
+        ''' or invalid.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("rep_len")>
+        Public Function rep_len(<RRawVectorArgument>
+                                x As Object,
+                                length_out As Integer,
+                                Optional env As Environment = Nothing) As Object
+
+            Dim out As New List(Of Object)
+            Dim vx = REnv.asVector(Of Object)(x)
+
+            For i As Integer = 1 To Integer.MaxValue
+                out.AddRange(vx.AsObjectEnumerator)
+
+                If out.Count >= length_out Then
+                    Exit For
+                End If
+            Next
+
+            Return REnv.TryCastGenericArray(out.Take(length_out).ToArray, env)
+        End Function
+
         Private Function safeRowBindDataFrame(d As dataframe, row As dataframe, env As Environment) As Object
             Dim colNames As String() = d.colnames.JoinIterates(row.colnames).Distinct.ToArray
             Dim rbind As New dataframe With {
