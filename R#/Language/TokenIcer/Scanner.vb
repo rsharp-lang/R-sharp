@@ -557,7 +557,7 @@ Namespace Language.TokenIcer
             End If
         End Function
 
-        Friend Shared ReadOnly RNullLiteral As String() = {"NULL", "NA", "Inf", "NA_real_"}
+        Friend Shared ReadOnly RNullLiteral As String() = {"NULL", "NA", "Inf", "NA_real_", "NA_integer_"}
 
         Public Shared Function MeasureToken(text As String,
                                             keywords As Index(Of String),
