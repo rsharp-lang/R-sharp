@@ -91,6 +91,135 @@ Namespace Runtime.Internal.Invokes
     Module math
 
         ''' <summary>
+        ''' ### Rounding of Numbers
+        ''' 
+        ''' floor takes a single numeric argument x and returns a 
+        ''' numeric vector containing the largest integers not
+        ''' greater than the corresponding elements of x.
+        ''' </summary>
+        ''' <param name="x">
+        ''' a numeric vector. Or, for round and signif, a complex vector.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' These are generic functions: methods can be defined 
+        ''' for them individually or via the Math group generic.
+        ''' 
+        ''' Note that for rounding off a 5, the IEC 60559 standard 
+        ''' (see also ‘IEEE 754’) is expected to be used, ‘go to 
+        ''' the even digit’. Therefore round(0.5) is 0 and 
+        ''' round(-1.5) is -2. However, this is dependent on OS 
+        ''' services and on representation error (since e.g. 0.15 
+        ''' is not represented exactly, the rounding rule applies 
+        ''' to the represented number and not to the printed number, 
+        ''' and so round(0.15, 1) could be either 0.1 or 0.2).
+        ''' 
+        ''' Rounding to a negative number of digits means rounding 
+        ''' to a power of ten, so for example round(x, digits = -2) 
+        ''' rounds to the nearest hundred.
+        ''' 
+        ''' For signif the recognized values of digits are 1...22, 
+        ''' and non-missing values are rounded to the nearest integer 
+        ''' in that range. Complex numbers are rounded to retain the 
+        ''' specified number of digits in the larger of the components. 
+        ''' Each element of the vector is rounded individually, 
+        ''' unlike printing.
+        ''' 
+        ''' These are all primitive functions.
+        ''' </remarks>
+        <ExportAPI("floor")>
+        Public Function floor(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of Double, Double)(x, Function(xi) std.Floor(xi))
+        End Function
+
+        ''' <summary>
+        ''' ### Rounding of Numbers
+        ''' 
+        ''' ceiling takes a single numeric argument x and returns
+        ''' a numeric vector containing the smallest integers not 
+        ''' less than the corresponding elements of x.
+        ''' </summary>
+        ''' <param name="x">
+        ''' a numeric vector. Or, for round and signif, a complex vector.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' These are generic functions: methods can be defined 
+        ''' for them individually or via the Math group generic.
+        ''' 
+        ''' Note that for rounding off a 5, the IEC 60559 standard 
+        ''' (see also ‘IEEE 754’) is expected to be used, ‘go to 
+        ''' the even digit’. Therefore round(0.5) is 0 and 
+        ''' round(-1.5) is -2. However, this is dependent on OS 
+        ''' services and on representation error (since e.g. 0.15 
+        ''' is not represented exactly, the rounding rule applies 
+        ''' to the represented number and not to the printed number, 
+        ''' and so round(0.15, 1) could be either 0.1 or 0.2).
+        ''' 
+        ''' Rounding to a negative number of digits means rounding 
+        ''' to a power of ten, so for example round(x, digits = -2) 
+        ''' rounds to the nearest hundred.
+        ''' 
+        ''' For signif the recognized values of digits are 1...22, 
+        ''' and non-missing values are rounded to the nearest integer 
+        ''' in that range. Complex numbers are rounded to retain the 
+        ''' specified number of digits in the larger of the components. 
+        ''' Each element of the vector is rounded individually, 
+        ''' unlike printing.
+        ''' 
+        ''' These are all primitive functions.
+        ''' </remarks>
+        <ExportAPI("ceiling")>
+        Public Function ceiling(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of Double, Double)(x, Function(xi) std.Ceiling(xi))
+        End Function
+
+        ''' <summary>
+        ''' ### Rounding of Numbers
+        ''' 
+        ''' trunc takes a single numeric argument x and returns a 
+        ''' numeric vector containing the integers formed by truncating 
+        ''' the values in x toward 0.
+        ''' </summary>
+        ''' <param name="x">
+        ''' a numeric vector. Or, for round and signif, a complex vector.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' These are generic functions: methods can be defined 
+        ''' for them individually or via the Math group generic.
+        ''' 
+        ''' Note that for rounding off a 5, the IEC 60559 standard 
+        ''' (see also ‘IEEE 754’) is expected to be used, ‘go to 
+        ''' the even digit’. Therefore round(0.5) is 0 and 
+        ''' round(-1.5) is -2. However, this is dependent on OS 
+        ''' services and on representation error (since e.g. 0.15 
+        ''' is not represented exactly, the rounding rule applies 
+        ''' to the represented number and not to the printed number, 
+        ''' and so round(0.15, 1) could be either 0.1 or 0.2).
+        ''' 
+        ''' Rounding to a negative number of digits means rounding 
+        ''' to a power of ten, so for example round(x, digits = -2) 
+        ''' rounds to the nearest hundred.
+        ''' 
+        ''' For signif the recognized values of digits are 1...22, 
+        ''' and non-missing values are rounded to the nearest integer 
+        ''' in that range. Complex numbers are rounded to retain the 
+        ''' specified number of digits in the larger of the components. 
+        ''' Each element of the vector is rounded individually, 
+        ''' unlike printing.
+        ''' 
+        ''' These are all primitive functions.
+        ''' </remarks>
+        <ExportAPI("trunc")>
+        Public Function trunc(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of Double, Double)(x, Function(xi) std.Truncate(xi))
+        End Function
+
+        ''' <summary>
         ''' ### Sign Function
         ''' 
         ''' sign returns a vector with the signs of the corresponding 
