@@ -3082,6 +3082,35 @@ RE0:
         End Sub
 
         ''' <summary>
+        ''' ### Diagnostic Messages
+        ''' 
+        ''' Generate a diagnostic message from its arguments.
+        ''' </summary>
+        ''' <param name="x">zero or more objects which can be coerced 
+        ''' to character (and which are pasted together with no separator) 
+        ''' or (for message only) a single condition object.</param>
+        <ExportAPI("message")>
+        Public Sub println_message(<RListObjectArgument> x As list,
+                                   Optional domain As Object = null,
+                                   Optional appendLF As Boolean = True,
+                                   Optional env As Environment = Nothing)
+
+            x.slots.Remove(NameOf(domain))
+            x.slots.Remove(NameOf(appendLF))
+            x.slots.Remove(NameOf(env))
+
+            Dim si As String() = CLRVector.asCharacter(x.slots.Values)
+            Dim msg As String = si.JoinBy("")
+
+            If appendLF Then
+                msg &= vbLf
+            End If
+
+            Call env.globalEnvironment.stdout.Write(msg)
+            Call env.globalEnvironment.stdout.Flush()
+        End Sub
+
+        ''' <summary>
         ''' # Concatenate and Print
         ''' 
         ''' Outputs the objects, concatenating the representations. 
