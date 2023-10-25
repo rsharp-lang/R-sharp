@@ -379,7 +379,7 @@ Module math
                               x As Object,
                               nboot As Integer,
                               Optional theta As Object = Nothing,
-                              Optional func As Object = null,
+                              Optional func As Object = Nothing,
                               <RListObjectArgument>
                               Optional args As list = Nothing,
                               Optional env As Environment = Nothing) As Object
