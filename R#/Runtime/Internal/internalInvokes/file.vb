@@ -96,6 +96,11 @@ Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 
 Namespace Runtime.Internal.Invokes
 
+    Public Enum endianness
+        big
+        little
+    End Enum
+
     ''' <summary>
     ''' #### File Manipulation
     ''' 
@@ -310,7 +315,7 @@ Namespace Runtime.Internal.Invokes
         ''' but is more likely to do so as from R 3.4.0.
         ''' </summary>
         ''' <param name="from"></param>
-        ''' <param name="to"></param>
+        ''' <param name="To"></param>
         ''' <returns>
         ''' These functions return a logical vector indicating which operation succeeded 
         ''' for each of the files attempted. Using a missing value for a file or path 
@@ -348,7 +353,7 @@ Namespace Runtime.Internal.Invokes
                     Next
                 End If
             ElseIf from.Length <> [to].Length Then
-                Return Internal.debug.stop("number of from files is not equals to the number of target file locations!", env)
+                Return Internal.debug.stop("number Of from files Is Not equals To the number Of target file locations!", env)
             ElseIf toDir AndAlso from.Length = 1 AndAlso from(Scan0).Contains("*"c) Then
                 ' dir/wildcard copy to dir?
                 Dim toDirName As String = [to](Scan0).GetDirectoryFullPath & "/"
@@ -399,7 +404,7 @@ Namespace Runtime.Internal.Invokes
         ''' copy file contents in one dir to another dir
         ''' </summary>
         ''' <param name="from"></param>
-        ''' <param name="to"></param>
+        ''' <param name="To"></param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("dir.copy")>
@@ -1291,7 +1296,7 @@ Namespace Runtime.Internal.Invokes
                                 Optional n As Integer = 1,
                                 Optional size As Integer = -1,
                                 Optional signed As Boolean = True,
-                                Optional endian As Object = ".Platform$endian",
+                                Optional endian As endianness = endianness.big,
                                 Optional env As Environment = Nothing) As Object
 
             Dim buf = GetFileStream(con, FileAccess.Read, env)
@@ -1302,9 +1307,9 @@ Namespace Runtime.Internal.Invokes
 
             Dim br As New BinaryReader(buf.TryCast(Of Stream))
             Dim cwhat = WhatReader.LoadWhat(what)
+            Dim rwhat = WhatReader.ReadWhat(what)
 
-
-            Return file.ReadBinary
+            Throw New NotImplementedException
         End Function
 
         ''' <summary>
