@@ -122,6 +122,10 @@ Namespace Runtime.Components
         ''' A data table liked compound type
         ''' </summary>
         [dataframe]
+        ''' <summary>
+        ''' <see cref="Byte"/>
+        ''' </summary>
+        [raw]
 #End Region
     End Enum
 End Namespace

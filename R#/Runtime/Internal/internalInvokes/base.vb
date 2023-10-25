@@ -70,6 +70,7 @@
 
 #End Region
 
+Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices
@@ -163,9 +164,25 @@ Namespace Runtime.Internal.Invokes
             Return __empty(Of Long)(length, env)
         End Function
 
+        ''' <summary>
+        ''' Create the raw bytes vector
+        ''' </summary>
+        ''' <param name="length"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' A vector of the raw bytes data if the given <paramref name="length"/>
+        ''' greater than zero or a .net clr <see cref="MemoryStream"/> object that 
+        ''' could be used for the file write connection if used the default <paramref name="length"/>
+        ''' value: zero.
+        ''' </returns>
         <ExportAPI("raw")>
+        <RApiReturn(TypeCodes.raw)>
         Public Function raws(Optional length As Integer = 0, Optional env As Environment = Nothing) As Object
-            Return __empty(Of Byte)(length, env)
+            If length <= 0 Then
+                Return New MemoryStream
+            Else
+                Return __empty(Of Byte)(length, env)
+            End If
         End Function
 
         ''' <summary>
