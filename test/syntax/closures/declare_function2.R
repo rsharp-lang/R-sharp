@@ -8,3 +8,13 @@ const .term_maps = function(type = ["genes","disease","compounds"], x) {
 	
 	f(x);
 }
+
+str(.term_maps );
+
+const ff = 1;
+
+print(ff);
+
+print(3.5F);
+
+print(4L);

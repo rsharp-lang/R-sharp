@@ -559,6 +559,8 @@ Namespace Language.TokenIcer
 
         Friend Shared ReadOnly RNullLiteral As String() = {"NULL", "NA", "Inf", "NA_real_", "NA_integer_"}
 
+        Const NumericNotation As String = "(" & NumericPattern & ")+F"
+
         Public Shared Function MeasureToken(text As String,
                                             keywords As Index(Of String),
                                             nullLiteral As Index(Of String),
@@ -608,9 +610,17 @@ Namespace Language.TokenIcer
                     ElseIf text.IsPattern("\d+L") Then
                         ' integer literal
                         Return New Token With {.name = TokenType.integerLiteral, .text = CInt(Val(text)).ToString}
-                    ElseIf text.IsPattern(NumericPattern & "F") Then
+                    ElseIf text.IsPattern(NumericNotation) Then
                         ' float literal
-                        Return New Token With {.name = TokenType.numberLiteral, .text = Val(text).ToString}
+                        If text = "f" OrElse text = "F" Then
+                            ' there is a bug about regexp matches
+                            Return New Token With {.name = TokenType.identifier, .text = text}
+                        Else
+                            Return New Token With {
+                                .name = TokenType.numberLiteral,
+                                .text = Val(text).ToString
+                            }
+                        End If
                     ElseIf text.IsPattern(RSymbol) Then
                         Return New Token With {.name = TokenType.identifier, .text = text}
                     End If
