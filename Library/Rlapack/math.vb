@@ -394,7 +394,6 @@ Module math
         End If
 
         Dim thetastar As New List(Of Object)
-        Dim isIndex As Boolean = False
 
         If x Is Nothing Then
             Return Nothing
@@ -420,16 +419,10 @@ Module math
                 End If
             Next
         Else
-            Dim arr As Array = REnv.UnsafeTryCastGenericArray(REnv.asVector(Of Object)(x))
-            Dim type As Type = arr.GetType
+            Dim arr As Array = REnv.asVector(Of Object)(x)
             Dim boots = arr.AsObjectEnumerator _
                 .Samples(arr.Length, nboot, replace:=True) _
                 .ToArray
-
-            If DataFramework.IsCollection(Of Integer)(type) OrElse
-                DataFramework.IsCollection(Of Long)(type) Then
-                isIndex = True
-            End If
 
             If thetastar Is Nothing Then
                 Return New list With {
@@ -453,21 +446,17 @@ Module math
             End If
         End If
 
-        If isIndex Then
-            Return thetastar.ToArray
-        Else
-            Return New list With {
-                .slots = New Dictionary(Of String, Object) From {
-                    {"thetastar", thetastar.ToArray},
-                    {"func.thetastar", Nothing},
-                    {"jack.boot.val", Nothing},
-                    {"jack.boot.se", Nothing},
-                    {"call", $"bootstrap(x = {str_x}, nboot = {nboot}, 
+        Return New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"thetastar", thetastar.ToArray},
+                {"func.thetastar", Nothing},
+                {"jack.boot.val", Nothing},
+                {"jack.boot.se", Nothing},
+                {"call", $"bootstrap(x = {str_x}, nboot = {nboot}, 
 theta = {objToString(thetaFunc, env:=env)}
 );"}
-                }
             }
-        End If
+        }
     End Function
 
     ''' <summary>
