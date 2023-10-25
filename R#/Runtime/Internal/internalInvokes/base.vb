@@ -109,7 +109,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
-Imports stdNum = System.Math
+Imports std = System.Math
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 Namespace Runtime.Internal.Invokes
@@ -118,6 +118,64 @@ Namespace Runtime.Internal.Invokes
     ''' 在这个模块之中仅包含有最基本的数据操作函数
     ''' </summary>
     Public Module base
+
+        ''' <summary>
+        ''' ### Logical Operators
+        ''' 
+        ''' isTRUE(x) is the same as { is.logical(x) &amp;&amp; length(x) == 1 &amp;&amp; !is.na(x) &amp;&amp; x }; 
+        ''' isFALSE() is defined analogously. Consequently, if(isTRUE(cond)) may be preferable to if(cond) because 
+        ''' of NAs.
+        ''' 
+        ''' In earlier R versions, isTRUE &lt;- function(x) identical(x, TRUE), had the drawback to be false e.g., 
+        ''' for x &lt;- c(val = TRUE).
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("isTRUE")>
+        Public Function isTRUE(<RRawVectorArgument> x As Object) As Boolean
+            Dim vx = REnv.asVector(Of Object)(x)
+
+            If vx.IsNullOrEmpty OrElse vx.Length > 1 Then
+                Return False
+            Else
+                x = vx.GetValue(0)
+
+                If TypeOf x Is Boolean Then
+                    Return x
+                Else
+                    Return False
+                End If
+            End If
+        End Function
+
+        ''' <summary>
+        ''' ### Logical Operators
+        ''' 
+        ''' isTRUE(x) is the same as { is.logical(x) &amp;&amp; length(x) == 1 &amp;&amp; !is.na(x) &amp;&amp; x }; 
+        ''' isFALSE() is defined analogously. Consequently, if(isTRUE(cond)) may be preferable to if(cond) because 
+        ''' of NAs.
+        ''' 
+        ''' In earlier R versions, isTRUE &lt;- function(x) identical(x, TRUE), had the drawback to be false e.g., 
+        ''' for x &lt;- c(val = TRUE).
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("isFALSE")>
+        Public Function isFALSE(<RRawVectorArgument> x As Object) As Boolean
+            Dim vx = REnv.asVector(Of Object)(x)
+
+            If vx.IsNullOrEmpty OrElse vx.Length > 1 Then
+                Return False
+            Else
+                x = vx.GetValue(0)
+
+                If TypeOf x Is Boolean Then
+                    Return Not CBool(x)
+                Else
+                    Return False
+                End If
+            End If
+        End Function
 
         ''' <summary>
         ''' ### Numeric Vectors
@@ -1872,8 +1930,8 @@ RE0:
                 Return New Integer() {CInt(offset)}
             Else
                 Return New Integer() {
-                    stdNum.Floor(offset) - 1,
-                    stdNum.Floor(offset) + 1
+                    std.Floor(offset) - 1,
+                    std.Floor(offset) + 1
                 }
             End If
         End Function

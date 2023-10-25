@@ -453,7 +453,10 @@ Namespace Runtime
         ''' <param name="value">
         ''' 
         ''' </param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function returns an empty collection if the 
+        ''' given <paramref name="value"/> is nothing.
+        ''' </returns>
         ''' <remarks>
         ''' ##### 20210526 因为这个函数会涉及到转换类型的操作，所以性能损耗会非常严重
         ''' 
