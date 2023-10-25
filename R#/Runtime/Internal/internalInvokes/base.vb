@@ -3150,14 +3150,37 @@ RE0:
         ''' <returns></returns>
         <ExportAPI("sQuote")>
         Public Function sQuote(x As String, <RDefaultExpression> Optional q As Object = "~getOption(""useFancyQuotes"")") As String
-            Dim c As String = """"
+            Dim cl As String = "'"
+            Dim cr As String = cl
             Dim qb As Boolean = CLRVector.asLogical(q).DefaultFirst(True)
 
             If qb Then
 
             End If
 
-            Return {c, x, c}.JoinBy("")
+            Return {cl, x, cr}.JoinBy("")
+        End Function
+
+        ''' <summary>
+        ''' ### Quote Text
+        ''' 
+        ''' Single or double quote text by combining with appropriate 
+        ''' single or double left and right quotation marks.
+        ''' </summary>
+        ''' <param name="x">an R object, to be coerced to a character vector.</param>
+        ''' <param name="q">the kind of quotes to be used, see ‘Details’.</param>
+        ''' <returns></returns>
+        <ExportAPI("dQuote")>
+        Public Function dQuote(x As String, <RDefaultExpression> Optional q As Object = "~getOption(""useFancyQuotes"")") As String
+            Dim cl As String = """"
+            Dim cr As String = cl
+            Dim qb As Boolean = CLRVector.asLogical(q).DefaultFirst(True)
+
+            If qb Then
+
+            End If
+
+            Return {cl, x, cr}.JoinBy("")
         End Function
 
         ''' <summary>
