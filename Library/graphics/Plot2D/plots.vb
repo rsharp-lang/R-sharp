@@ -224,7 +224,7 @@ Module plots
             Return findY.TryCast(Of Message)
         End If
 
-        Dim y As Double() = findY.TryCast(Of Double())
+        Dim y As Double() = findY?.TryCast(Of Double())
         Dim ptSize As Single = args.getValue({"point_size", "point.size"}, env, 15)
         Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
         Dim reverse As Boolean = args.getValue("reverse", env, False)
