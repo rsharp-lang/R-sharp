@@ -114,6 +114,9 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 Imports RgraphicsDev = SMRUCC.Rsharp.Runtime.Internal.Invokes.graphics
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter
 
 ''' <summary>
 ''' chartting plots for R#
@@ -215,7 +218,13 @@ Module plots
 
     Public Function plotArray(vec As Array, args As list, env As Environment) As Object
         Dim x As Double() = CLRVector.asNumeric(vec)
-        Dim y As Double() = args.findNumberVector(size:=x.Length, env)
+        Dim findY = args.findNumberVector(size:=x.Length, env)
+
+        If findY Like GetType(Message) Then
+            Return findY.TryCast(Of Message)
+        End If
+
+        Dim y As Double() = findY.TryCast(Of Double())
         Dim ptSize As Single = args.getValue({"point_size", "point.size"}, env, 15)
         Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
         Dim reverse As Boolean = args.getValue("reverse", env, False)
@@ -346,16 +355,54 @@ Module plots
         Return plotSerials(line, args, env)
     End Function
 
+    ''' <summary>
+    ''' A helper function for find the y vector
+    ''' </summary>
+    ''' <param name="args"></param>
+    ''' <param name="size"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <Extension>
-    Private Function findNumberVector(args As list, size As Integer, env As Environment) As Double()
+    Private Function findNumberVector(args As list, size As Integer, env As Environment) As [Variant](Of Double(), Message)
         For Each value As Object In From obj As Object
                                     In args.data
                                     Where Not TypeOf obj Is String
 
+            If TypeOf value Is ValueAssignExpression Then
+                Dim assign As ValueAssignExpression = value
+
+                If assign.isByRef Then
+                    Continue For
+                End If
+                If assign.symbolSize > 1 Then
+                    Continue For
+                End If
+
+                If TypeOf assign.targetSymbols(0) Is SymbolReference Then
+                    Dim symbol As SymbolReference = assign.targetSymbols(0)
+
+                    If Not symbol.symbol.TextEquals("y") Then
+                        Continue For
+                    Else
+                        value = assign.value
+                    End If
+                Else
+                    Continue For
+                End If
+            End If
+
+            If TypeOf value Is Expression Then
+                value = DirectCast(value, Expression).Evaluate(env)
+            End If
+
+            If Program.isException(value) Then
+                Return DirectCast(value, Message)
+            End If
+
             value = CLRVector.asNumeric(value)
 
-            If TypeOf value Is Double() AndAlso DirectCast(value, Double()).Length = size Then
-                Return value
+            If DirectCast(value, Double()).Length = size Then
+                Return DirectCast(value, Double())
             End If
         Next
 
