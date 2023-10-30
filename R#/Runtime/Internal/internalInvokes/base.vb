@@ -70,6 +70,7 @@
 
 #End Region
 
+Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices
@@ -108,7 +109,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
-Imports stdNum = System.Math
+Imports std = System.Math
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 Namespace Runtime.Internal.Invokes
@@ -117,6 +118,130 @@ Namespace Runtime.Internal.Invokes
     ''' 在这个模块之中仅包含有最基本的数据操作函数
     ''' </summary>
     Public Module base
+
+        ''' <summary>
+        ''' ### Logical Operators
+        ''' 
+        ''' isTRUE(x) is the same as { is.logical(x) &amp;&amp; length(x) == 1 &amp;&amp; !is.na(x) &amp;&amp; x }; 
+        ''' isFALSE() is defined analogously. Consequently, if(isTRUE(cond)) may be preferable to if(cond) because 
+        ''' of NAs.
+        ''' 
+        ''' In earlier R versions, isTRUE &lt;- function(x) identical(x, TRUE), had the drawback to be false e.g., 
+        ''' for x &lt;- c(val = TRUE).
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("isTRUE")>
+        Public Function isTRUE(<RRawVectorArgument> x As Object) As Boolean
+            Dim vx = REnv.asVector(Of Object)(x)
+
+            If vx.IsNullOrEmpty OrElse vx.Length > 1 Then
+                Return False
+            Else
+                x = vx.GetValue(0)
+
+                If TypeOf x Is Boolean Then
+                    Return x
+                Else
+                    Return False
+                End If
+            End If
+        End Function
+
+        ''' <summary>
+        ''' ### Logical Operators
+        ''' 
+        ''' isTRUE(x) is the same as { is.logical(x) &amp;&amp; length(x) == 1 &amp;&amp; !is.na(x) &amp;&amp; x }; 
+        ''' isFALSE() is defined analogously. Consequently, if(isTRUE(cond)) may be preferable to if(cond) because 
+        ''' of NAs.
+        ''' 
+        ''' In earlier R versions, isTRUE &lt;- function(x) identical(x, TRUE), had the drawback to be false e.g., 
+        ''' for x &lt;- c(val = TRUE).
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("isFALSE")>
+        Public Function isFALSE(<RRawVectorArgument> x As Object) As Boolean
+            Dim vx = REnv.asVector(Of Object)(x)
+
+            If vx.IsNullOrEmpty OrElse vx.Length > 1 Then
+                Return False
+            Else
+                x = vx.GetValue(0)
+
+                If TypeOf x Is Boolean Then
+                    Return Not CBool(x)
+                Else
+                    Return False
+                End If
+            End If
+        End Function
+
+        ''' <summary>
+        ''' ### Numeric Vectors
+        ''' 
+        ''' Creates or coerces objects of type "numeric". is.numeric 
+        ''' is a more general test of an object being interpretable 
+        ''' as numbers.
+        ''' </summary>
+        ''' <param name="length">A non-negative integer specifying 
+        ''' the desired length. Double values will be coerced to integer: 
+        ''' supplying an argument of length other than one is an error.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' numeric is identical to double. It creates a double-precision 
+        ''' vector of the specified length with each element equal to 0.
+        ''' </remarks>
+        <ExportAPI("numeric")>
+        Public Function numeric(Optional length As Integer = 0, Optional env As Environment = Nothing) As Object
+            Return __empty(Of Double)(length, env)
+        End Function
+
+        Private Function __empty(Of T)(length As Integer, env As Environment) As Object
+            If length < 0 Then
+                Return Internal.debug.stop("invalid 'length' argument value, should be positive or zero!", env)
+            End If
+
+            Return New T(length - 1) {}
+        End Function
+
+        <ExportAPI("logical")>
+        Public Function logical(Optional length As Integer = 0, Optional env As Environment = Nothing) As Object
+            Return __empty(Of Boolean)(length, env)
+        End Function
+
+        <ExportAPI("character")>
+        Public Function character(Optional length As Integer = 0, Optional env As Environment = Nothing) As Object
+            Return __empty(Of String)(length, env)
+        End Function
+
+        <ExportAPI("integer")>
+        Public Function ints(Optional length As Integer = 0, Optional env As Environment = Nothing) As Object
+            Return __empty(Of Long)(length, env)
+        End Function
+
+        ''' <summary>
+        ''' Create the raw bytes vector
+        ''' </summary>
+        ''' <param name="length"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' A vector of the raw bytes data if the given <paramref name="length"/>
+        ''' greater than zero or a .net clr <see cref="MemoryStream"/> object that 
+        ''' could be used for the file write connection if used the default <paramref name="length"/>
+        ''' value: zero.
+        ''' </returns>
+        <ExportAPI("raw")>
+        <RApiReturn(TypeCodes.raw)>
+        Public Function raws(Optional length As Integer = 0, Optional env As Environment = Nothing) As Object
+            If length <= 0 Then
+                Return New MemoryStream
+            Else
+                Return __empty(Of Byte)(length, env)
+            End If
+        End Function
 
         ''' <summary>
         ''' ### Argument List of a Function
@@ -670,11 +795,69 @@ Namespace Runtime.Internal.Invokes
         ''' integer or double vector.</param>
         ''' <returns></returns>
         <ExportAPI("rep")>
-        Public Function rep(x As Object,
+        Public Function rep(<RRawVectorArgument>
+                            x As Object,
                             times As Integer,
                             Optional env As Environment = Nothing) As Object
 
-            Return REnv.asVector(Repeats(x, times), If(x Is Nothing, GetType(Object), x.GetType), env)
+            Dim out As New List(Of Object)
+            Dim vx = REnv.asVector(Of Object)(x)
+
+            For i As Integer = 1 To times
+                out.AddRange(vx.AsObjectEnumerator)
+            Next
+
+            Return REnv.TryCastGenericArray(out.ToArray, env)
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="times">an integer-valued vector giving the (non-negative) 
+        ''' number of times to repeat each element if of length length(x), or to
+        ''' repeat the whole vector if of length 1. Negative or NA values are an 
+        ''' error. A double vector is accepted, other inputs being coerced to an
+        ''' integer or double vector.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("rep.int")>
+        Public Function rep_int(<RRawVectorArgument>
+                                x As Object,
+                                times As Integer,
+                                Optional env As Environment = Nothing) As Object
+
+            Return rep(x, times, env)
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="length_out">non-negative integer. The desired 
+        ''' length of the output vector. Other inputs will be coerced to 
+        ''' a double vector and the first element taken. Ignored if NA 
+        ''' or invalid.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("rep_len")>
+        Public Function rep_len(<RRawVectorArgument>
+                                x As Object,
+                                length_out As Integer,
+                                Optional env As Environment = Nothing) As Object
+
+            Dim out As New List(Of Object)
+            Dim vx = REnv.asVector(Of Object)(x)
+
+            For i As Integer = 1 To Integer.MaxValue
+                out.AddRange(vx.AsObjectEnumerator)
+
+                If out.Count >= length_out Then
+                    Exit For
+                End If
+            Next
+
+            Return REnv.TryCastGenericArray(out.Take(length_out).ToArray, env)
         End Function
 
         Private Function safeRowBindDataFrame(d As dataframe, row As dataframe, env As Environment) As Object
@@ -1747,8 +1930,8 @@ RE0:
                 Return New Integer() {CInt(offset)}
             Else
                 Return New Integer() {
-                    stdNum.Floor(offset) - 1,
-                    stdNum.Floor(offset) + 1
+                    std.Floor(offset) - 1,
+                    std.Floor(offset) + 1
                 }
             End If
         End Function
@@ -2954,6 +3137,79 @@ RE0:
         <ExportAPI("warnings")>
         Public Sub warnings(Optional all As Boolean = False, Optional env As GlobalEnvironment = Nothing)
             Call debug.PrintWarningMessages(env.messages, env, all)
+        End Sub
+
+        ''' <summary>
+        ''' ### Quote Text
+        ''' 
+        ''' Single or double quote text by combining with appropriate 
+        ''' single or double left and right quotation marks.
+        ''' </summary>
+        ''' <param name="x">an R object, to be coerced to a character vector.</param>
+        ''' <param name="q">the kind of quotes to be used, see ‘Details’.</param>
+        ''' <returns></returns>
+        <ExportAPI("sQuote")>
+        Public Function sQuote(x As String, <RDefaultExpression> Optional q As Object = "~getOption(""useFancyQuotes"")") As String
+            Dim cl As String = "'"
+            Dim cr As String = cl
+            Dim qb As Boolean = CLRVector.asLogical(q).DefaultFirst(True)
+
+            If qb Then
+
+            End If
+
+            Return {cl, x, cr}.JoinBy("")
+        End Function
+
+        ''' <summary>
+        ''' ### Quote Text
+        ''' 
+        ''' Single or double quote text by combining with appropriate 
+        ''' single or double left and right quotation marks.
+        ''' </summary>
+        ''' <param name="x">an R object, to be coerced to a character vector.</param>
+        ''' <param name="q">the kind of quotes to be used, see ‘Details’.</param>
+        ''' <returns></returns>
+        <ExportAPI("dQuote")>
+        Public Function dQuote(x As String, <RDefaultExpression> Optional q As Object = "~getOption(""useFancyQuotes"")") As String
+            Dim cl As String = """"
+            Dim cr As String = cl
+            Dim qb As Boolean = CLRVector.asLogical(q).DefaultFirst(True)
+
+            If qb Then
+
+            End If
+
+            Return {cl, x, cr}.JoinBy("")
+        End Function
+
+        ''' <summary>
+        ''' ### Diagnostic Messages
+        ''' 
+        ''' Generate a diagnostic message from its arguments.
+        ''' </summary>
+        ''' <param name="x">zero or more objects which can be coerced 
+        ''' to character (and which are pasted together with no separator) 
+        ''' or (for message only) a single condition object.</param>
+        <ExportAPI("message")>
+        Public Sub println_message(<RListObjectArgument> x As list,
+                                   Optional domain As Object = null,
+                                   Optional appendLF As Boolean = True,
+                                   Optional env As Environment = Nothing)
+
+            x.slots.Remove(NameOf(domain))
+            x.slots.Remove(NameOf(appendLF))
+            x.slots.Remove(NameOf(env))
+
+            Dim si As String() = CLRVector.asCharacter(x.slots.Values)
+            Dim msg As String = si.JoinBy("")
+
+            If appendLF Then
+                msg &= vbLf
+            End If
+
+            Call env.globalEnvironment.stdout.Write(msg)
+            Call env.globalEnvironment.stdout.Flush()
         End Sub
 
         ''' <summary>

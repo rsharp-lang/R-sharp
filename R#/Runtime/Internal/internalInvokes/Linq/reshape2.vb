@@ -461,8 +461,19 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return New list With {.slots = newList}
         End Function
 
+        ''' <summary>
+        ''' split dataframe by a cell string value split result
+        ''' </summary>
+        ''' <param name="df"></param>
+        ''' <param name="by">the colname for do the cell content split</param>
+        ''' <param name="split">the delimiter string expression for split the cell contents</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("decompose")>
-        Public Function decompose(df As dataframe, by As String, Optional split As String = "[;,]\s*", Optional env As Environment = Nothing) As dataframe
+        Public Function decompose(df As dataframe, by As String,
+                                  Optional split As String = "[;,]\s*",
+                                  Optional env As Environment = Nothing) As dataframe
+
             Dim ordinal As Integer = df.colnames.IndexOf(by)
 
             If ordinal < 0 Then
@@ -472,6 +483,15 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
         End Function
 
+        ''' <summary>
+        ''' split dataframe by a cell string value split result
+        ''' </summary>
+        ''' <param name="df"></param>
+        ''' <param name="by">the column index</param>
+        ''' <param name="split">the delimiter string for split the text in a cell</param>
+        ''' <param name="env"></param>
+        ''' <returns>A new dataframe object that split by the 
+        ''' given column its cell text value</returns>
         <Extension>
         Private Function decompose(df As dataframe, by As Integer, split As String, env As Environment) As dataframe
             Dim cols As String() = df.colnames
@@ -493,16 +513,29 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 End If
             Next
 
-            df = New dataframe With {
-                .rownames = decomposed _
-                    .Select(Function(i) i.name) _
-                    .uniqueNames,
-                .columns = New Dictionary(Of String, Array)
-            }
+            Return decomposed.ConstructDataframe(cols)
+        End Function
 
+        ''' <summary>
+        ''' Re-construct a dataframe object from a given set of the row data.
+        ''' </summary>
+        ''' <param name="rows">the row data collection</param>
+        ''' <param name="cols">the column names</param>
+        ''' <returns></returns>
+        <Extension>
+        Public Function ConstructDataframe(rows As IReadOnlyCollection(Of NamedCollection(Of Object)), cols As String()) As dataframe
+            Dim df = New dataframe With {
+               .rownames = rows _
+                  .Select(Function(i) i.name) _
+                  .uniqueNames,
+               .columns = New Dictionary(Of String, Array)
+            }
+            Dim by As Integer
+
+            ' project rows
             For i As Integer = 0 To cols.Length - 1
                 by = i
-                df.add(cols(i), decomposed.Select(Function(r) r(by)))
+                df.add(cols(i), rows.Select(Function(r) r(by)))
             Next
 
             Return df

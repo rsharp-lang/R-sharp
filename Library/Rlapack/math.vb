@@ -58,6 +58,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.Bootstrapping.Multivariate
 Imports Microsoft.VisualBasic.Data.csv.IO
@@ -77,12 +78,15 @@ Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -294,12 +298,28 @@ Module math
     ''' <summary>
     ''' Do fixed width cut bins
     ''' </summary>
-    ''' <param name="data">A numeric vector data sequence</param>
+    ''' <param name="x">A numeric vector data sequence</param>
     ''' <param name="step">The width of the bin box.</param>
     ''' <returns></returns>
     <ExportAPI("hist")>
-    Public Function Hist(<RRawVectorArgument> data As Object, Optional step! = 1) As DataBinBox(Of Double)()
-        Return CLRVector.asNumeric(data) _
+    <RApiReturn(GetType(DataBinBox(Of Double)))>
+    Public Function Hist(<RRawVectorArgument>
+                         x As Object,
+                         Optional step!? = Nothing,
+                         Optional n%? = 10,
+                         Optional env As Environment = Nothing) As Object
+
+        Dim v As Double() = CLRVector.asNumeric(x)
+
+        If [step] Is Nothing Then
+            If n Is Nothing Then
+                Return Internal.debug.stop("the historgram parameter step and n should not be both nothing!", env)
+            End If
+
+            [step] = New DoubleRange(v).Length / n
+        End If
+
+        Return v _
             .Hist([step]) _
             .ToArray
     End Function
@@ -310,6 +330,133 @@ Module math
         Dim prob As Double() = raw.AsVector / raw.Max
 
         Return prob.Gini
+    End Function
+
+    ''' <summary>
+    ''' ### Non-Parametric Bootstrapping
+    ''' 
+    ''' See Efron and Tibshirani (1993) for details on this function.
+    ''' </summary>
+    ''' <param name="x">a vector or a dataframe that containing the data. 
+    ''' To bootstrap more complex data structures (e.g. bivariate data) 
+    ''' see the last example below.</param>
+    ''' <param name="nboot">The number of bootstrap samples desired.</param>
+    ''' <param name="theta">function to be bootstrapped. Takes x as an 
+    ''' argument, and may take additional arguments (see below and last 
+    ''' example).</param>
+    ''' <param name="func">(optional) argument specifying the functional 
+    ''' the distribution of thetahat that is desired. If func is 
+    ''' specified, the jackknife after-bootstrap estimate of its standard
+    ''' error is also returned. See example below.</param>
+    ''' <param name="args">any additional arguments to be passed to theta</param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' list with the following components:
+    '''
+    ''' 1. thetastar       the nboot bootstrap values Of theta
+    ''' 2. func.thetastar  the functional func Of the bootstrap distribution Of thetastar, If func was specified
+    ''' 3. jack.boot.val   the jackknife-after-bootstrap values For func, If func was specified
+    ''' 4. jack.boot.se    the jackknife-after-bootstrap standard Error estimate Of func, If func was specified
+    ''' 5. call            the deparsed call
+    ''' 
+    ''' and this function will returns the bootstrap data collection if the
+    ''' <paramref name="theta"/> function is not specificed.
+    ''' </returns>
+    ''' <remarks>
+    ''' Efron, B. and Tibshirani, R. (1986). The bootstrap method for 
+    ''' standard errors, confidence intervals, and other measures of 
+    ''' statistical accuracy. Statistical Science, Vol 1., No. 1, pp 1-35.
+    ''' 
+    ''' Efron, B. (1992) Jackknife-after-bootstrap standard errors And 
+    ''' influence functions. J. Roy. Stat. Soc. B, vol 54, pages 83-127
+    ''' 
+    ''' Efron, B. And Tibshirani, R. (1993) An Introduction to the 
+    ''' Bootstrap. Chapman And Hall, New York, London.
+    ''' </remarks>
+    <ExportAPI("bootstrap")>
+    <RApiReturn("thetastar", "func.thetastar", "jack.boot.val", "jack.boot.se", "call")>
+    Public Function bootstrap(<RRawVectorArgument>
+                              x As Object,
+                              nboot As Integer,
+                              Optional theta As Object = Nothing,
+                              Optional func As Object = Nothing,
+                              <RListObjectArgument>
+                              Optional args As list = Nothing,
+                              Optional env As Environment = Nothing) As Object
+
+        Dim thetaFunc As RFunction
+        Dim check = applys.checkInternal(Nothing, theta, env)
+
+        If TypeOf check Is Message Then
+            Return check
+        Else
+            thetaFunc = theta
+        End If
+
+        Dim thetastar As New List(Of Object)
+
+        If x Is Nothing Then
+            Return Nothing
+        End If
+
+        Dim str_x As String = x.ToString
+
+        If TypeOf x Is Rdataframe Then
+            Dim df = DirectCast(x, Rdataframe)
+            Dim colnames As String() = df.colnames
+            Dim rows = df.forEachRow(colnames).ToArray
+            Dim boots = rows.Samples(rows.Length, nboot, replace:=True).ToArray
+            Dim result As Object
+
+            For Each sample As SeqValue(Of NamedCollection(Of Object)()) In boots
+                df = reshape2.ConstructDataframe(sample.value, colnames)
+                result = thetaFunc.Invoke({df}, env)
+
+                If Program.isException(result) Then
+                    Return result
+                Else
+                    thetastar.Add(result)
+                End If
+            Next
+        Else
+            Dim arr As Array = REnv.asVector(Of Object)(x)
+            Dim boots = arr.AsObjectEnumerator _
+                .Samples(arr.Length, nboot, replace:=True) _
+                .ToArray
+
+            If thetastar Is Nothing Then
+                Return New list With {
+                    .slots = boots _
+                        .ToDictionary(Function(i) (i.i + 1).ToString,
+                                      Function(i)
+                                          Return CObj(i.value)
+                                      End Function)}
+            Else
+                Dim result As Object
+
+                For Each sample As SeqValue(Of Object()) In boots
+                    result = thetaFunc.Invoke({sample}, env)
+
+                    If Program.isException(result) Then
+                        Return result
+                    Else
+                        thetastar.Add(result)
+                    End If
+                Next
+            End If
+        End If
+
+        Return New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"thetastar", thetastar.ToArray},
+                {"func.thetastar", Nothing},
+                {"jack.boot.val", Nothing},
+                {"jack.boot.se", Nothing},
+                {"call", $"bootstrap(x = {str_x}, nboot = {nboot}, 
+theta = {objToString(thetaFunc, env:=env)}
+);"}
+            }
+        }
     End Function
 
     ''' <summary>

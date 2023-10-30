@@ -93,9 +93,13 @@ Imports BASICString = Microsoft.VisualBasic.Strings
 Imports Clang = Microsoft.VisualBasic.Language.C
 Imports fsOptions = Microsoft.VisualBasic.FileIO.SearchOption
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Invokes
+
+    Public Enum endianness
+        big
+        little
+    End Enum
 
     ''' <summary>
     ''' #### File Manipulation
@@ -311,7 +315,7 @@ Namespace Runtime.Internal.Invokes
         ''' but is more likely to do so as from R 3.4.0.
         ''' </summary>
         ''' <param name="from"></param>
-        ''' <param name="to"></param>
+        ''' <param name="To"></param>
         ''' <returns>
         ''' These functions return a logical vector indicating which operation succeeded 
         ''' for each of the files attempted. Using a missing value for a file or path 
@@ -349,7 +353,7 @@ Namespace Runtime.Internal.Invokes
                     Next
                 End If
             ElseIf from.Length <> [to].Length Then
-                Return Internal.debug.stop("number of from files is not equals to the number of target file locations!", env)
+                Return Internal.debug.stop("number Of from files Is Not equals To the number Of target file locations!", env)
             ElseIf toDir AndAlso from.Length = 1 AndAlso from(Scan0).Contains("*"c) Then
                 ' dir/wildcard copy to dir?
                 Dim toDirName As String = [to](Scan0).GetDirectoryFullPath & "/"
@@ -400,7 +404,7 @@ Namespace Runtime.Internal.Invokes
         ''' copy file contents in one dir to another dir
         ''' </summary>
         ''' <param name="from"></param>
-        ''' <param name="to"></param>
+        ''' <param name="To"></param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("dir.copy")>
@@ -1254,13 +1258,58 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' ### ransfer Binary Data To and From Connections
         ''' 
-        ''' Read binary data from or write binary data to a connection or raw vector.
+        ''' Read binary data from or write binary data to a connection
+        ''' or raw vector.
         ''' </summary>
-        ''' <param name="file">A connection Object Or a character String naming a file Or a raw vector.</param>
+        ''' <param name="con">A connection Object Or a character 
+        ''' String naming a file Or a raw vector.</param>
+        ''' <param name="n">
+        ''' numeric. The (maximal) number of records to be read. 
+        ''' You can use an over-estimate here, but not too large 
+        ''' as storage is reserved for n items.
+        ''' </param>
+        ''' <param name="size">
+        ''' Integer.The number Of bytes per element In the Byte 
+        ''' stream. The Default, NA_integer_, uses the natural 
+        ''' size. Size changing Is Not supported For raw And 
+        ''' complex vectors.
+        ''' </param>
+        ''' <param name="signed">
+        ''' logical. Only used for integers of sizes 1 and 2, when 
+        ''' it determines if the quantity on file should be regarded
+        ''' as a signed or unsigned integer.
+        ''' </param>
+        ''' <param name="endian">The endian-ness ("big" Or "little") 
+        ''' Of the target system For the file. Using "swap" will force 
+        ''' swapping endian-ness.
+        ''' </param>
+        ''' <param name="what">
+        ''' Either an object whose mode will give the mode of the 
+        ''' vector to be read, or a character vector of length one 
+        ''' describing the mode: one of "numeric", "double", 
+        ''' "integer", "int", "logical", "complex", "character", 
+        ''' "raw".
+        ''' </param>
         ''' <returns></returns>
         <ExportAPI("readBin")>
-        Public Function readBin(file As String) As Object
-            Return file.ReadBinary
+        Public Function readBin(<RRawVectorArgument> con As Object, what As What,
+                                Optional n As Integer = 1,
+                                Optional size As Integer = -1,
+                                Optional signed As Boolean = True,
+                                Optional endian As endianness = endianness.big,
+                                Optional env As Environment = Nothing) As Object
+
+            Dim buf = GetFileStream(con, FileAccess.Read, env)
+
+            If buf Like GetType(Message) Then
+                Return buf.TryCast(Of Message)
+            End If
+
+            Dim br As New BinaryReader(buf.TryCast(Of Stream))
+            Dim cwhat = WhatReader.LoadWhat(what)
+            Dim rwhat = WhatReader.ReadWhat(what)
+
+            Throw New NotImplementedException
         End Function
 
         ''' <summary>

@@ -74,13 +74,14 @@ Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.Statistics.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports stdNum = System.Math
+Imports std = System.Math
 
 Namespace Runtime.Internal.Invokes
 
@@ -88,6 +89,156 @@ Namespace Runtime.Internal.Invokes
     ''' R# math module
     ''' </summary>
     Module math
+
+        ''' <summary>
+        ''' ### Rounding of Numbers
+        ''' 
+        ''' floor takes a single numeric argument x and returns a 
+        ''' numeric vector containing the largest integers not
+        ''' greater than the corresponding elements of x.
+        ''' </summary>
+        ''' <param name="x">
+        ''' a numeric vector. Or, for round and signif, a complex vector.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' These are generic functions: methods can be defined 
+        ''' for them individually or via the Math group generic.
+        ''' 
+        ''' Note that for rounding off a 5, the IEC 60559 standard 
+        ''' (see also ‘IEEE 754’) is expected to be used, ‘go to 
+        ''' the even digit’. Therefore round(0.5) is 0 and 
+        ''' round(-1.5) is -2. However, this is dependent on OS 
+        ''' services and on representation error (since e.g. 0.15 
+        ''' is not represented exactly, the rounding rule applies 
+        ''' to the represented number and not to the printed number, 
+        ''' and so round(0.15, 1) could be either 0.1 or 0.2).
+        ''' 
+        ''' Rounding to a negative number of digits means rounding 
+        ''' to a power of ten, so for example round(x, digits = -2) 
+        ''' rounds to the nearest hundred.
+        ''' 
+        ''' For signif the recognized values of digits are 1...22, 
+        ''' and non-missing values are rounded to the nearest integer 
+        ''' in that range. Complex numbers are rounded to retain the 
+        ''' specified number of digits in the larger of the components. 
+        ''' Each element of the vector is rounded individually, 
+        ''' unlike printing.
+        ''' 
+        ''' These are all primitive functions.
+        ''' </remarks>
+        <ExportAPI("floor")>
+        Public Function floor(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of Double, Double)(x, Function(xi) std.Floor(xi))
+        End Function
+
+        ''' <summary>
+        ''' ### Rounding of Numbers
+        ''' 
+        ''' ceiling takes a single numeric argument x and returns
+        ''' a numeric vector containing the smallest integers not 
+        ''' less than the corresponding elements of x.
+        ''' </summary>
+        ''' <param name="x">
+        ''' a numeric vector. Or, for round and signif, a complex vector.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' These are generic functions: methods can be defined 
+        ''' for them individually or via the Math group generic.
+        ''' 
+        ''' Note that for rounding off a 5, the IEC 60559 standard 
+        ''' (see also ‘IEEE 754’) is expected to be used, ‘go to 
+        ''' the even digit’. Therefore round(0.5) is 0 and 
+        ''' round(-1.5) is -2. However, this is dependent on OS 
+        ''' services and on representation error (since e.g. 0.15 
+        ''' is not represented exactly, the rounding rule applies 
+        ''' to the represented number and not to the printed number, 
+        ''' and so round(0.15, 1) could be either 0.1 or 0.2).
+        ''' 
+        ''' Rounding to a negative number of digits means rounding 
+        ''' to a power of ten, so for example round(x, digits = -2) 
+        ''' rounds to the nearest hundred.
+        ''' 
+        ''' For signif the recognized values of digits are 1...22, 
+        ''' and non-missing values are rounded to the nearest integer 
+        ''' in that range. Complex numbers are rounded to retain the 
+        ''' specified number of digits in the larger of the components. 
+        ''' Each element of the vector is rounded individually, 
+        ''' unlike printing.
+        ''' 
+        ''' These are all primitive functions.
+        ''' </remarks>
+        <ExportAPI("ceiling")>
+        Public Function ceiling(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of Double, Double)(x, Function(xi) std.Ceiling(xi))
+        End Function
+
+        ''' <summary>
+        ''' ### Rounding of Numbers
+        ''' 
+        ''' trunc takes a single numeric argument x and returns a 
+        ''' numeric vector containing the integers formed by truncating 
+        ''' the values in x toward 0.
+        ''' </summary>
+        ''' <param name="x">
+        ''' a numeric vector. Or, for round and signif, a complex vector.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' These are generic functions: methods can be defined 
+        ''' for them individually or via the Math group generic.
+        ''' 
+        ''' Note that for rounding off a 5, the IEC 60559 standard 
+        ''' (see also ‘IEEE 754’) is expected to be used, ‘go to 
+        ''' the even digit’. Therefore round(0.5) is 0 and 
+        ''' round(-1.5) is -2. However, this is dependent on OS 
+        ''' services and on representation error (since e.g. 0.15 
+        ''' is not represented exactly, the rounding rule applies 
+        ''' to the represented number and not to the printed number, 
+        ''' and so round(0.15, 1) could be either 0.1 or 0.2).
+        ''' 
+        ''' Rounding to a negative number of digits means rounding 
+        ''' to a power of ten, so for example round(x, digits = -2) 
+        ''' rounds to the nearest hundred.
+        ''' 
+        ''' For signif the recognized values of digits are 1...22, 
+        ''' and non-missing values are rounded to the nearest integer 
+        ''' in that range. Complex numbers are rounded to retain the 
+        ''' specified number of digits in the larger of the components. 
+        ''' Each element of the vector is rounded individually, 
+        ''' unlike printing.
+        ''' 
+        ''' These are all primitive functions.
+        ''' </remarks>
+        <ExportAPI("trunc")>
+        Public Function trunc(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of Double, Double)(x, Function(xi) std.Truncate(xi))
+        End Function
+
+        ''' <summary>
+        ''' ### Sign Function
+        ''' 
+        ''' sign returns a vector with the signs of the corresponding 
+        ''' elements of x (the sign of a real number is 1, 0, or -1−1 
+        ''' if the number is positive, zero, or negative, respectively).
+        ''' 
+        ''' Note that sign does not operate on complex vectors.
+        ''' </summary>
+        ''' <param name="x">a numeric vector</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' This is an internal generic primitive function: methods can 
+        ''' be defined for it directly or via the Math group generic.
+        ''' </remarks>
+        <ExportAPI("sign")>
+        Public Function sign(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of Double, Integer)(x, Function(xi) std.Sign(xi))
+        End Function
 
         ''' <summary>
         ''' ## Finite, Infinite and NaN Numbers
@@ -222,7 +373,7 @@ Namespace Runtime.Internal.Invokes
         Public Function round(<RRawVectorArgument> x As Object, Optional decimals% = 0) As Double()
             Dim rounds = From element As Double
                          In CLRVector.asNumeric(x)
-                         Select stdNum.Round(element, decimals)
+                         Select std.Round(element, decimals)
 
             Return rounds.ToArray
         End Function
@@ -239,9 +390,9 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("log")>
-        Public Function log(<RRawVectorArgument> x As Object, Optional newBase As Double = stdNum.E) As Double()
+        Public Function log(<RRawVectorArgument> x As Object, Optional newBase As Double = std.E) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(Function(d) stdNum.Log(d, newBase)) _
+                .Select(Function(d) std.Log(d, newBase)) _
                 .ToArray
         End Function
 
@@ -255,7 +406,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("log2")>
         Public Function log2(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(Function(d) stdNum.Log(d, 2)) _
+                .Select(Function(d) std.Log(d, 2)) _
                 .ToArray
         End Function
 
@@ -269,14 +420,14 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("log10")>
         Public Function log10(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(Function(d) stdNum.Log(d, 10)) _
+                .Select(Function(d) std.Log(d, 10)) _
                 .ToArray
         End Function
 
         <ExportAPI("sin")>
         Public Function sin(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(Function(d) stdNum.Sin(d)) _
+                .Select(Function(d) std.Sin(d)) _
                 .ToArray
         End Function
 
@@ -288,7 +439,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("cos")>
         Public Function cos(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(Function(d) stdNum.Cos(d)) _
+                .Select(Function(d) std.Cos(d)) _
                 .ToArray
         End Function
 
@@ -364,7 +515,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("sqrt")>
         Public Function sqrt(x As Array) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(AddressOf stdNum.Sqrt) _
+                .Select(AddressOf std.Sqrt) _
                 .ToArray
         End Function
 
@@ -378,7 +529,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("exp")>
         Public Function exp(x As Array) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(AddressOf stdNum.Exp) _
+                .Select(AddressOf std.Exp) _
                 .ToArray
         End Function
 
@@ -508,7 +659,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("abs")>
         Public Function abs(<RRawVectorArgument> x As Object) As Double()
             Return CLRVector.asNumeric(x) _
-                .Select(AddressOf stdNum.Abs) _
+                .Select(AddressOf std.Abs) _
                 .ToArray
         End Function
 
@@ -977,7 +1128,7 @@ sample estimates:
 
             Dim groups = data _
                 .populates(Of Object)(env) _
-                .GroupBy(AddressOf evalFUNC.Invoke, Function(a, b) stdNum.Abs(a - b) <= offset) _
+                .GroupBy(AddressOf evalFUNC.Invoke, Function(a, b) std.Abs(a - b) <= offset) _
                 .ToArray
 
             Return groups _
@@ -998,7 +1149,7 @@ sample estimates:
             Dim means As Double() = groups.Select(Function(a) a.Average).ToArray
 
             For Each xj As Double In data
-                Dim d = means.Select(Function(xi) stdNum.Abs(xi - xj)).ToArray
+                Dim d = means.Select(Function(xi) std.Abs(xi - xj)).ToArray
                 Dim i As Integer = which.Min(d)
 
                 Call tags.Add(i + 1)
@@ -1049,6 +1200,118 @@ sample estimates:
             End If
 
             Throw New NotImplementedException
+        End Function
+
+        ''' <summary>
+        ''' ### Correlation, Variance and Covariance (Matrices)
+        ''' 
+        ''' var, cov and cor compute the variance of x and the covariance or 
+        ''' correlation of x and y if these are vectors. If x and y are matrices 
+        ''' then the covariances (or correlations) between the columns of x and
+        ''' the columns of y are computed.
+        ''' </summary>
+        ''' <param name="x">a numeric vector, matrix or data frame.</param>
+        ''' <param name="y">NULL (default) or a vector, matrix or data frame 
+        ''' with compatible dimensions to x. The default is equivalent to 
+        ''' y = x (but more efficient).</param>
+        ''' <param name="use">an optional character string giving a method for
+        ''' computing covariances in the presence of missing values. This must
+        ''' be (an abbreviation of) one of the strings "everything", "all.obs",
+        ''' "complete.obs", "na.or.complete", or "pairwise.complete.obs".
+        ''' </param>
+        ''' <param name="method">a character string indicating which correlation 
+        ''' coefficient (or covariance) is to be computed. One of "pearson" 
+        ''' (default), "kendall", or "spearman": can be abbreviated.</param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' For r &lt;- cor(*, use = "all.obs"), it is now guaranteed that all(abs(r) &lt;= 1).
+        ''' </returns>
+        ''' <remarks>
+        ''' For cov and cor one must either give a matrix or data frame for x 
+        ''' or give both x and y.
+        ''' 
+        ''' The inputs must be numeric (as determined by is.numeric: logical 
+        ''' values are also allowed for historical compatibility): the "kendall" 
+        ''' and "spearman" methods make sense for ordered inputs but xtfrm can 
+        ''' be used to find a suitable prior transformation to numbers.
+        '''
+        ''' var is just another interface to cov, where na.rm is used to determine 
+        ''' the default for use when that is unspecified. If na.rm is TRUE then 
+        ''' the complete observations (rows) are used (use = "na.or.complete") to 
+        ''' compute the variance. Otherwise, by default use = "everything".
+        '''
+        ''' If use is "everything", NAs will propagate conceptually, i.e., a 
+        ''' resulting value will be NA whenever one of its contributing observations 
+        ''' is NA.
+        '''
+        ''' If use is "all.obs", then the presence of missing observations will 
+        ''' produce an error. If use is "complete.obs" then missing values are 
+        ''' handled by casewise deletion (and if there are no complete cases, 
+        ''' that gives an error).
+        ''' 
+        ''' "na.or.complete" is the same unless there are no complete cases, that gives
+        ''' NA. Finally, if use has the value "pairwise.complete.obs" then the 
+        ''' correlation or covariance between each pair of variables is computed 
+        ''' using all complete pairs of observations on those variables. This can 
+        ''' result in covariance or correlation matrices which are not positive 
+        ''' semi-definite, as well as NA entries if there are no complete pairs 
+        ''' for that pair of variables. For cov and var, "pairwise.complete.obs" 
+        ''' only works with the "pearson" method. Note that (the equivalent of) 
+        ''' var(double(0), use = *) gives NA for use = "everything" and "na.or.complete", 
+        ''' and gives an error in the other cases.
+        '''
+        ''' The denominator n - 1n−1 is used which gives an unbiased estimator of 
+        ''' the (co)variance for i.i.d. observations. These functions return NA 
+        ''' when there is only one observation (whereas S-PLUS has been returning 
+        ''' NaN).
+        '''
+        ''' For cor(), if method is "kendall" or "spearman", Kendall's \tauτ or Spearman's 
+        ''' \rhoρ statistic is used to estimate a rank-based measure of association. 
+        ''' These are more robust and have been recommended if the data do not 
+        ''' necessarily come from a bivariate normal distribution.
+        ''' 
+        ''' For cov(), a non-Pearson method is unusual but available for the sake of 
+        ''' completeness. Note that "spearman" basically computes cor(R(x), R(y)) (or 
+        ''' cov(., .)) where R(u) := rank(u, na.last = "keep"). In the case of missing 
+        ''' values, the ranks are calculated depending on the value of use, either 
+        ''' based on complete observations, or based on pairwise completeness with 
+        ''' reranking for each pair.
+        '''
+        ''' When there are ties, Kendall's \tau_bτ b
+        ''' is computed, as proposed by Kendall (1945).
+        '''
+        ''' Scaling a covariance matrix into a correlation one can be achieved in 
+        ''' many ways, mathematically most appealing by multiplication with a 
+        ''' diagonal matrix from left and right, or more efficiently by using 
+        ''' sweep(.., FUN = "/") twice. The cov2cor function is even a bit more 
+        ''' efficient, and provided mostly for didactical reasons.
+        ''' </remarks>
+        <ExportAPI("cor")>
+        Public Function cor(<RRawVectorArgument> x As Object,
+                            <RRawVectorArgument>
+                            Optional y As Object = null,
+                            Optional use As Object = "everything",
+                            <RRawVectorArgument(TypeCodes.string)>
+                            Optional method As Object = "pearson|kendall|spearman",
+                            Optional env As Environment = Nothing) As Object
+
+            Dim methodStr As String = CLRVector.asCharacter(method).DefaultFirst("pearson")
+
+            If TypeOf x Is dataframe Then
+                Throw New NotImplementedException
+            Else
+                ' is vector?
+                Dim vx As Double() = CLRVector.asNumeric(x)
+                Dim vy As Double() = CLRVector.asNumeric(y)
+
+                Select Case methodStr.ToLower
+                    Case "pearson" : Return Correlations.GetPearson(vx, vy)
+                    Case "kendall" : Return Correlations.rankKendallTauBeta(vx, vy)
+                    Case "spearman" : Return Correlations.Spearman(vx, vy)
+                    Case Else
+                        Return Internal.debug.stop("method argument value should be one of [pearson kendall spearman]!", env)
+                End Select
+            End If
         End Function
     End Module
 End Namespace

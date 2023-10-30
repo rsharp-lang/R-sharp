@@ -74,7 +74,7 @@ Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 Namespace Runtime.Internal.Invokes
 
     <Package("applys")>
-    Module applys
+    Public Module applys
 
         ''' <summary>
         ''' ### Apply Functions Over Array Margins
@@ -281,7 +281,23 @@ Namespace Runtime.Internal.Invokes
             Return New RObj.vector(names, seq.ToArray, envir)
         End Function
 
-        Friend Function checkInternal(X As Object, ByRef FUN As Object, env As Environment) As Object
+        ''' <summary>
+        ''' check for the argument error
+        ''' </summary>
+        ''' <param name="X">check for the input argument, should be nothing if no needed</param>
+        ''' <param name="FUN">should be implements a R# function interface.</param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' this function returns nothing if no errors, otherwise a
+        ''' error message will be generated if:
+        ''' 
+        ''' 1. the input <paramref name="X"/> may be a error message, or
+        ''' 2. the given <paramref name="FUN"/> is not implements the <see cref="RFunction"/> interface.
+        ''' </returns>
+        ''' <remarks>this function will convert the <paramref name="FUN"/> 
+        ''' from a clr <see cref="MethodInfo"/> pointer to <see cref="RMethodInfo"/> 
+        ''' automatically.</remarks>
+        Public Function checkInternal(X As Object, ByRef FUN As Object, env As Environment) As Object
             If TypeOf FUN Is MethodInfo Then
                 FUN = New RMethodInfo("call_clr", DirectCast(FUN, MethodInfo), Nothing)
             End If

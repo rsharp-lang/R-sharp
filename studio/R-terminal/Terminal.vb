@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::f7ba0a07e8700a9027a141c3df9e4849, D:/GCModeller/src/R-sharp/studio/R-terminal//Terminal.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 248
-    '    Code Lines: 150
-    ' Comment Lines: 60
-    '   Blank Lines: 38
-    '     File Size: 8.35 KB
+' Summaries:
 
 
-    ' Module Terminal
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: RunTerminal
-    ' 
-    '     Sub: [exit], doRunScriptWithSpecialCommandSync, q, quit
-    '     Class RunScript
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 248
+'    Code Lines: 150
+' Comment Lines: 60
+'   Blank Lines: 38
+'     File Size: 8.35 KB
+
+
+' Module Terminal
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: RunTerminal
+' 
+'     Sub: [exit], doRunScriptWithSpecialCommandSync, q, quit
+'     Class RunScript
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -221,7 +221,11 @@ Type 'q()' to quit R.
         ' Call R.LoadLibrary("utils")
         ' Call R.LoadLibrary("grDevices")
         ' Call R.LoadLibrary("stats")
-        For Each pkgName As String In R.configFile.GetStartupLoadingPackages
+        For Each pkgName As String In R.configFile _
+            .GetStartupLoadingPackages _
+            .Join({"REnv"}) _
+            .Distinct
+
             Call R.LoadLibrary(packageName:=pkgName, silent:=True)
         Next
 
