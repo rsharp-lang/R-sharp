@@ -1,6 +1,6 @@
 @echo off
 
-SET R_HOME=../App\net6.0-windows
+SET R_HOME=../App/net6.0
 SET REnv="%R_HOME%/R#.exe"
 SET updater=../studio/code_banner.R
 
