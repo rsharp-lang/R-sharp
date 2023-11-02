@@ -23,7 +23,7 @@ print(`banner data from '${banner_xml}'!`);
 print(banner);
 
 # only apply of the banner to the project source file?
-projects = list.files(proj_folder, pattern = "*.vbproj", recursive = TRUE);
+let projects = list.files(proj_folder, pattern = "*.vbproj", recursive = TRUE);
 
 print(`get ${length(projects)} target source projects!`);
 print(projects);
