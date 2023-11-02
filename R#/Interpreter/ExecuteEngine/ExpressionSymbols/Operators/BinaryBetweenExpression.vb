@@ -59,6 +59,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Linq
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -91,10 +92,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim rangeVal As Object() = REnv.asVector(Of Object)(range.Evaluate(envir))
+            Dim range_eval = range.Evaluate(envir)
+            Dim set_eval = collectionSet.Evaluate(envir)
+
+            If Program.isException(range_eval) Then
+                Return range_eval
+            ElseIf Program.isException(set_eval) Then
+                Return set_eval
+            End If
+
+            Dim rangeVal As Object() = REnv.asVector(Of Object)(range_eval)
             Dim min As IComparable = rangeVal(Scan0)
             Dim max As IComparable = rangeVal(1)
-            Dim values As Object() = REnv.asVector(Of Object)(collectionSet.Evaluate(envir))
+            Dim values As Object() = REnv.asVector(Of Object)(set_eval)
             Dim flags As New List(Of Boolean)
 
             For Each a As Object In values

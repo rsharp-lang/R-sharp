@@ -444,10 +444,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("commandline")>
         Public Function createCommandLine(<RListObjectArgument> argv As list, Optional env As Environment = Nothing) As String
             If argv.length = 1 Then
-                Return REnv _
-                    .asVector(Of Object)(argv.slots.First.Value) _
-                    .AsObjectEnumerator _
-                    .Select(AddressOf any.ToString) _
+                Return CLRVector.asCharacter(argv.slots.First.Value) _
                     .Select(Function(str) str.CLIToken) _
                     .JoinBy(" ")
             Else
@@ -564,10 +561,7 @@ Namespace Runtime.Internal.Invokes
                 .Skip(1) _
                 .Select(Function(str) str.CLIToken) _
                 .JoinBy(" ")
-            Dim inputStr As String() = REnv.asVector(Of Object)(input) _
-                .AsObjectEnumerator _
-                .Select(AddressOf any.ToString) _
-                .ToArray
+            Dim inputStr As String() = CLRVector.asCharacter(input)
             Dim std_out As String
 
             If env.globalEnvironment.debugMode Then

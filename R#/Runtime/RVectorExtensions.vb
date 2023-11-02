@@ -487,7 +487,10 @@ Namespace Runtime
 
             If GetType(T) Is GetType(Object) Then
                 If value.GetType.IsArray Then
-                    Return DirectCast(value, Array)
+                    ' try to handling the bug of direct cast, example as int32[] to object[]
+                    Return DirectCast(value, Array) _
+                        .AsObjectEnumerator _
+                        .ToArray
                 ElseIf value.GetType.ImplementInterface(Of RIndex) Then
                     Dim index As RIndex = DirectCast(value, RIndex)
                     Dim list As New List(Of Object)
