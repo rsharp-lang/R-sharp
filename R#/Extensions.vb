@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::c1ad449e02462bb901845a5871403caf, D:/GCModeller/src/R-sharp/R#//Extensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 271
-    '    Code Lines: 198
-    ' Comment Lines: 42
-    '   Blank Lines: 31
-    '     File Size: 9.87 KB
+' Summaries:
 
 
-    ' Module Extensions
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: AsRReturn, Buffer, EvaluateFramework, GetEncoding, GetObject
-    '               GetString, ParseDebugLevel, SafeCreateColumns, toList
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 271
+'    Code Lines: 198
+' Comment Lines: 42
+'   Blank Lines: 31
+'     File Size: 9.87 KB
+
+
+' Module Extensions
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: AsRReturn, Buffer, EvaluateFramework, GetEncoding, GetObject
+'               GetString, ParseDebugLevel, SafeCreateColumns, toList
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -195,6 +195,32 @@ Public Module Extensions
         Return cols
     End Function
 
+    <Extension>
+    Private Function evaluateList(Of T, TOut)(x As list,
+                                              eval As Func(Of T, TOut),
+                                              parallel As Boolean,
+                                              env As Environment) As Object
+
+        Dim seq = x.AsGeneric(Of T)(env).AsList
+        Dim eval2 = Function(xi As KeyValuePair(Of String, T)) As TOut
+                        Return eval(xi.Value)
+                    End Function
+        Dim result = seq.CastSequence(eval2, parallel)
+        Dim list As New list With {.slots = New Dictionary(Of String, Object)}
+
+        If result Like GetType(TOut) Then
+            Return result.TryCast(Of TOut)
+        End If
+
+        Dim outs As TOut() = result.TryCast(Of vector).data
+
+        For i As Integer = 0 To outs.Length - 1
+            Call list.slots.Add(seq(i).Key, outs(i))
+        Next
+
+        Return list
+    End Function
+
     ''' <summary>
     ''' 一个R对象通用的求值框架函数
     ''' </summary>
@@ -214,17 +240,7 @@ Public Module Extensions
         If x Is Nothing Then
             Return Nothing
         ElseIf TypeOf x Is list Then
-            Return DirectCast(x, list) _
-                .AsGeneric(Of T)(env) _
-                .ToDictionary(Function(a) a.Key,
-                              Function(a)
-                                  Return CObj(eval(a.Value))
-                              End Function) _
-                .DoCall(Function(list)
-                            Return New list With {
-                                .slots = list
-                            }
-                        End Function)
+            Return DirectCast(x, list).evaluateList(eval, parallel, env)
         ElseIf TypeOf x Is vector Then
             With DirectCast(x, vector)
                 Dim list As New List(Of TOut)
@@ -263,24 +279,32 @@ Public Module Extensions
                 End If
             Next
 
-            Return cast.CastSequence(eval, parallel, env).Value
+            Return cast.CastSequence(eval, parallel).Value
         ElseIf TypeOf x Is T Then
             Return eval(DirectCast(x, T))
         ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of T)) Then
             Return DirectCast(x, IEnumerable(Of T)) _
                 .AsList _
-                .CastSequence(eval, parallel, env) _
+                .CastSequence(eval, parallel) _
                 .Value
         Else
             Return Internal.debug.stop(Message.InCompatibleType(GetType(T), x.GetType, env), env)
         End If
     End Function
 
+    ''' <summary>
+    ''' the parallel will not break the input sequence order
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <typeparam name="TOut"></typeparam>
+    ''' <param name="cast"></param>
+    ''' <param name="eval"></param>
+    ''' <param name="parallel"></param>
+    ''' <returns></returns>
     <Extension>
     Private Function CastSequence(Of T, TOut)(cast As List(Of T),
                                               eval As Func(Of T, TOut),
-                                              parallel As Boolean,
-                                              env As Environment) As [Variant](Of vector, TOut)
+                                              parallel As Boolean) As [Variant](Of vector, TOut)
         Dim list As New List(Of TOut)
 
         If cast.Count = 1 AndAlso Not DataFramework.IsPrimitive(GetType(TOut)) Then
@@ -288,6 +312,7 @@ Public Module Extensions
         End If
 
         If parallel Then
+            ' keeps the input order
             Call cast.SeqIterator _
                 .AsParallel _
                 .Select(Function(item) (item.i, eval(item.value))) _
