@@ -91,17 +91,19 @@ Module Manifold
                 .ToArray
         End If
         If colNames.IsNullOrEmpty Then
+            ' ensure not null
             colNames = projection(Scan0) _
                 .Select(Function(r, i) $"dimension_{i + 1}") _
                 .ToArray
         End If
 
         Dim nsize As Integer = projection(Scan0).Length
+        Dim oldSize As Integer = colNames.TryCount
 
-        If colNames.Length < nsize Then
+        If oldSize < nsize Then
             ReDim Preserve colNames(nsize - 1)
 
-            For i As Integer = colNames.Length To nsize - 1
+            For i As Integer = oldSize To nsize - 1
                 colNames(i) = $"dim_{i}"
             Next
         End If
