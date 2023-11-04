@@ -96,6 +96,16 @@ Module Manifold
                 .ToArray
         End If
 
+        Dim nsize As Integer = projection(Scan0).Length
+
+        If colNames.Length < nsize Then
+            ReDim Preserve colNames(nsize - 1)
+
+            For i As Integer = colNames.Length To nsize - 1
+                colNames(i) = $"dim_{i}"
+            Next
+        End If
+
         For i As Integer = 0 To colNames.Length - 1
 #Disable Warning
             table.columns(colNames(i)) = projection _
