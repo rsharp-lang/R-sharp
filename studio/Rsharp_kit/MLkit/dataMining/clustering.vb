@@ -172,11 +172,17 @@ Module clustering
         Dim colVals As Array
         Dim row_names = args.getValue(Of Object)("row.names", env, Nothing)
 
-        For Each column As String() In table.Columns
+        For Each column As String() In table.Columns.Skip(1)
             header = column(Scan0)
             colVals = column.Skip(1).ToArray
             matrix.columns.Add(header, colVals)
         Next
+
+        If row_names Is Nothing Then
+            matrix.rownames = table.Columns.First
+        Else
+            matrix.rownames = CLRVector.asCharacter(row_names)
+        End If
 
         Return matrix
     End Function
