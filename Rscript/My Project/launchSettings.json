@@ -7,7 +7,7 @@
     },
     "mzkit_debug": {
       "commandName": "Project",
-      "commandLineArgs": "\"G:/mzkit/src/mzkit/rstudio/pipeline/umap.R\" --input \"Z:\\tmp/mzkit_win32/.matrix_cache/f5dfc234eafd0716742e3b14b72a70c0.dat\" --save \"Z:/tmp/mzkit_win32/.matrix_cache/f5dfc234eafd0716742e3b14b72a70c0_umap3.csv\" --knn \"17\" --knniter \"61\" --localconnectivity \"1.5\" --bandwidth \"2.15\" --learningrate \"0.61\" --spectral_cos --SetDllDirectory G:/mzkit/dist/bin/Rstudio/host",
+      "commandLineArgs": "\"G:/mzkit/src/mzkit/rstudio/pipeline/umap.R\" --input \"Z:\\tmp/mzkit_win32/.matrix_cache/f5dfc234eafd0716742e3b14b72a70c0.dat\" --save \"Z:/tmp/mzkit_win32/.matrix_cache/f5dfc234eafd0716742e3b14b72a70c0_umap3.csv\" --knn \"35\" --knniter \"64\" --localconnectivity \"1.05\" --bandwidth \"1.05\" --learningrate \"0.91\" --spectral_cos --read_bin --SetDllDirectory G:/mzkit/dist/bin/Rstudio/host",
       "workingDirectory": "G:\\mzkit\\dist\\bin\\Rstudio\\bin"
     },
     "mzkit_desktop_debug": {
