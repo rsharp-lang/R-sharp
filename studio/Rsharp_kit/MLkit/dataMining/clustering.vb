@@ -179,7 +179,10 @@ Module clustering
         Next
 
         If row_names Is Nothing Then
-            matrix.rownames = table.Columns.First
+            matrix.rownames = table.Columns _
+                .First _
+                .Skip(1) _
+                .ToArray
         Else
             matrix.rownames = CLRVector.asCharacter(row_names)
         End If
