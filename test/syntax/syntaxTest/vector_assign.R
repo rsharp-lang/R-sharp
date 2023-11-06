@@ -1,2 +1,2 @@
-into[into > 500] = 500;
+into[into > 500] = exp(500);
 msdata[, "into"] = into;
