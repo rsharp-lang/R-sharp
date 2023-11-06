@@ -119,7 +119,7 @@ Namespace Runtime.Serialize
                     Dim vec2 As vectorBuffer
 
                     If TypeOf result Is Message Then
-                        Throw DirectCast(result, Message).ToException
+                        Throw DirectCast(result, Message).ToCLRException
                     Else
                         vec2 = DirectCast(result, vectorBuffer)
                         vec2.Serialize(tmp)
