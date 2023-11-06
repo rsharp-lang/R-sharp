@@ -1336,7 +1336,7 @@ Module stats
     Private Function GetDataSetCommon(x As Rdataframe, y As Array) As StatisticsObject
         Dim ylabels As String() = Nothing
         Dim yfactors As factor = Nothing
-        Dim yval As Double()
+        Dim yval As Double() = Nothing
         Dim xm As Double()() = x.forEachRow _
             .Select(Function(ci) CLRVector.asNumeric(ci.value)) _
             .ToArray

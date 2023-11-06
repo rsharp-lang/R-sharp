@@ -281,8 +281,11 @@ Module clustering
             df.rownames = ds.Select(Function(di) di.dataId).ToArray
             df.add("max", ds.Select(Function(di) di.max))
 
+            Dim offset As Integer
+
             For i As Integer = 0 To mx.components.Length - 1
-                df.add($"C{i + 1}", ds.Select(Function(di) di.probs(i)))
+                offset = i
+                df.add($"C{i + 1}", ds.Select(Function(di) di.probs(offset)))
             Next
 
             Return df

@@ -137,7 +137,7 @@ Namespace Runtime.Components
     ''' </summary>
     ''' <remarks>
     ''' this enum flag code used for the export functions parameters,
-    ''' example as <see cref="file.readBin(Object, What, Integer, Integer, Boolean, Object, Environment)"/>;
+    ''' example as <see cref="file.readBin(Object, What, Integer, Integer, Boolean, endianness, Environment)"/>;
     ''' for compose type, use <see cref="TypeCodes"/>
     ''' </remarks>
     Public Enum What
