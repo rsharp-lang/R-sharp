@@ -68,6 +68,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -245,7 +246,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             If value Is Nothing Then
                 getValue = Function() Nothing
             Else
-                Dim valueVec As Array = Runtime.asVector(Of Object)(value)
+                Dim valueVec As Array = renv.asVector(Of Object)(value)
                 Dim i As i32 = Scan0
 
                 If valueVec.Length = 1 Then
@@ -257,7 +258,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 End If
             End If
 
-            Dim elementType As Type = Runtime.MeasureArrayElementType(targetVector)
+            Dim elementType As Type = MeasureArrayElementType(targetVector)
             Dim val As Object
 
             For Each i As Integer In DirectCast(index, Integer())
