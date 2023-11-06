@@ -64,6 +64,9 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
+    ''' <summary>
+    ''' a[xxx] = value
+    ''' </summary>
     Public Class MemberValueAssign : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
