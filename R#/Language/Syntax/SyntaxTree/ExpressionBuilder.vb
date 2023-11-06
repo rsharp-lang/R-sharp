@@ -274,9 +274,9 @@ Namespace Language.Syntax.SyntaxParser
                     If Not result Is Nothing Then
                         Return result
                     End If
-                ElseIf code(1).First = ("[", TokenType.open) AndAlso code(1).Last = ("]", TokenType.close) AndAlso code(2).isOperator("<-", "=") Then
+                ElseIf code(1).First = (TokenType.open, "[") AndAlso code(1).Last = (TokenType.close, "]") AndAlso code(2).isOperator("<-", "=") Then
                     ' a[xxx] = xxx
-                    Dim symbolIndex As SyntaxResult = SymbolIndexerSyntax.SymbolIndexer(code(0).JoinIterates(code(1)), opts)
+                    Dim symbolIndex As SyntaxResult = SymbolIndexerSyntax.SymbolIndexer(code(0).JoinIterates(code(1)).ToArray, opts)
                     Dim val As SyntaxResult = opts.ParseExpression(code.Skip(3).IteratesALL, opts)
 
                     If symbolIndex.isException Then
