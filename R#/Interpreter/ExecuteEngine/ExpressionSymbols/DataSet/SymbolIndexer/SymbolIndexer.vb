@@ -60,7 +60,6 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
@@ -77,7 +76,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports stdNum = System.Math
+Imports std = System.Math
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -514,7 +513,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 .SlideWindows(2) _
                 .Where(Function(d) d.Length = 2) _
                 .All(Function(d)
-                         Return stdNum.Abs(d.Last - d.First) = 1
+                         Return std.Abs(d.Last - d.First) = 1
                      End Function) Then
 
                 Dim buffer As Byte()

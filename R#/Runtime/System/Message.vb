@@ -104,20 +104,20 @@ Namespace Runtime.Components
         Public Property source As Expression
 
         ''' <summary>
-        ''' Convert R# error message to VB.NET exception object
+        ''' Convert R# error message to VB.NET clr exception object
         ''' </summary>
         ''' <returns></returns>
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function ToException() As RuntimeError
+        Public Function ToCLRException() As RuntimeError
             Return New RuntimeError(Me)
         End Function
 
         ''' <summary>
-        ''' throw the <see cref="Exception"/> data that cast from <see cref="ToException()"/>
+        ''' throw the <see cref="Exception"/> data that cast from <see cref="ToCLRException()"/>
         ''' </summary>
         Public Sub ThrowCLRError()
-            Throw ToException()
+            Throw ToCLRException()
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

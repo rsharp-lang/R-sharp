@@ -262,6 +262,11 @@ Partial Module CLI
         Dim save As String = args("/save") Or "stdout"
         Dim R As New RInterpreter
 
+        If scriptfile.StringEmpty Then
+            Call Console.WriteLine("missing `/script` argument value!")
+            Return 404
+        End If
+
         Call R.Imports({"package_utils", "automation"}, "devkit.dll")
         Call R.LoadLibrary("JSON", silent:=True)
         Call R.Set("_", R.Evaluate($"package_utils::parse('{scriptfile}');"))

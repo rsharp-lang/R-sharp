@@ -154,7 +154,17 @@ Module clustering
         Return summary
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="tree"></param>
+    ''' <param name="args">
+    ''' colnames could be optional
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    <Extension>
     Public Function treeDf(tree As BTreeCluster, args As list, env As Environment) As Rdataframe
         Return tree _
             .GetClusterResult(vnames:=args.getValue(Of String())("colnames", env)) _
@@ -281,8 +291,11 @@ Module clustering
             df.rownames = ds.Select(Function(di) di.dataId).ToArray
             df.add("max", ds.Select(Function(di) di.max))
 
+            Dim offset As Integer
+
             For i As Integer = 0 To mx.components.Length - 1
-                df.add($"C{i + 1}", ds.Select(Function(di) di.probs(i)))
+                offset = i
+                df.add($"C{i + 1}", ds.Select(Function(di) di.probs(offset)))
             Next
 
             Return df
@@ -912,6 +925,68 @@ Module clustering
         Next
 
         Return clusters
+    End Function
+
+    ''' <summary>
+    ''' ### K-NN Classifier in R Programming
+    ''' 
+    ''' K-Nearest Neighbor or K-NN is a Supervised Non-linear classification 
+    ''' algorithm. K-NN is a Non-parametric algorithm i.e it doesn’t make any 
+    ''' assumption about underlying data or its distribution. It is one of 
+    ''' the simplest and widely used algorithm which depends on it’s k value
+    ''' (Neighbors) and finds it’s applications in many industries like 
+    ''' finance industry, healthcare industry etc.
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="k"></param>
+    ''' <param name="jaccard"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' In the KNN algorithm, K specifies the number of neighbors and its 
+    ''' algorithm is as follows:
+    '''
+    ''' + Choose the number K Of neighbor.
+    ''' + Take the K Nearest Neighbor Of unknown data point according To distance.
+    ''' + Among the K-neighbors, Count the number Of data points In Each category.
+    ''' + Assign the New data point To a category, where you counted the most neighbors.
+    ''' 
+    ''' For the Nearest Neighbor classifier, the distance between two points 
+    ''' Is expressed in the form of Euclidean Distance.
+    ''' </remarks>
+    <ExportAPI("knn")>
+    Public Function knn(<RRawVectorArgument>
+                        x As Object,
+                        Optional k As Integer = 16,
+                        Optional jaccard As Double = 0.6,
+                        Optional env As Environment = Nothing) As Object
+
+        Dim data As ClusterEntity()
+        Dim colnames As String()
+
+        If x Is Nothing Then
+            Return Nothing
+        End If
+
+        If TypeOf x Is Rdataframe Then
+            Dim df As Rdataframe = x
+
+            colnames = df.colnames
+            data = df.forEachRow _
+                .Select(Function(d)
+                            Return New ClusterEntity(d.name, CLRVector.asNumeric(d.value))
+                        End Function) _
+                .ToArray
+        Else
+            Return Message.InCompatibleType(GetType(Rdataframe), x.GetType, env)
+        End If
+
+        Dim graph As New KNNGraph(data)
+        Dim clusters As BTreeCluster = graph.GetGraph(k, jaccard)
+        Dim args As New list With {.slots = New Dictionary(Of String, Object) From {{"colnames", colnames}}}
+        Dim result As Rdataframe = clusters.treeDf(args, env)
+
+        Return result
     End Function
 
     ''' <summary>

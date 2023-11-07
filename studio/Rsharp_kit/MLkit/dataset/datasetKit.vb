@@ -757,8 +757,11 @@ Module datasetKit
 
                 Call df.add("label", labels)
 
+                Dim offset As Integer
+
                 For i As Integer = 0 To all(0).Length - 1
-                    Call df.add($"X{i + 1}", CLRVector.asNumeric(all.Select(Function(v) v(i)).ToArray))
+                    offset = i
+                    df.add($"X{i + 1}", CLRVector.asNumeric(all.Select(Function(v) v(offset)).ToArray))
                 Next
 
                 Return df
