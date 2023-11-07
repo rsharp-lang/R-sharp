@@ -603,8 +603,15 @@ RE0:
         ''' <returns></returns>
         <Extension>
         Private Function castListToDataframe(listData As Dictionary(Of String, Object), env As Environment) As Object
-            Dim hasNames As Boolean = TypeOf listData.First.Value Is list
+            Dim hasNames As Boolean
             Dim allNames As String() = Nothing
+
+            If listData.IsNullOrEmpty Then
+                Return Nothing
+            Else
+                hasNames = TypeOf listData.First.Value Is list
+            End If
+
             Dim isListMatrix = listData.Values.All(AddressOf checkList)
             ' all of the element key name is integer
             ' or integer index key name
