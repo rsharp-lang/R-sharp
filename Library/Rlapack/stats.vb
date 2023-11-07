@@ -278,6 +278,11 @@ Module stats
                           resolution:=resolution).ToArray
     End Function
 
+    <ExportAPI("dnorm")>
+    Public Function dnorm(<RRawVectorArgument> x As Object, Optional mean As Double = 0, Optional sd As Double = 1) As Object
+        Return pnorm.ProbabilityDensity(CLRVector.asNumeric(x).AsVector, mean, sd).ToArray
+    End Function
+
     ''' <summary>
     ''' ### Adjust P-values for Multiple Comparisons
     ''' 
