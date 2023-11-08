@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src ../ /save ./MSI.zip --skip-src-build",
-      "workingDirectory": "D:\\biodeep\\biodeepdb_v3\\spatial\\MSI_analysis-3.0\\.pkg"
+      "commandLineArgs": "--lambda \"biodeepMSMS::doMSMSalignment\"",
+      "workingDirectory": "D:\\biodeep\\biodeep_pipeline\\biodeepMSMS_v5\\workflow\\workflow_test"
     },
     "mzkit_debug": {
       "commandName": "Project",
