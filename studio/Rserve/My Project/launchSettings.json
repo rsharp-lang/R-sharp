@@ -2,7 +2,7 @@
   "profiles": {
     "Rserve.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--listen /wwwroot ./ /port 83 --attach \"F:\\test_pack.hds\""
+      "commandLineArgs": "--listen /wwwroot \"D:\\mzkit\\dist\\bin/../../src/mzkit/webview/\" /port 6001 --parent=8124 --attach F:/Temp/mzkit_win32/9465ce9a7904ba9fa5a354804734cbc4"
     }
   }
 }
