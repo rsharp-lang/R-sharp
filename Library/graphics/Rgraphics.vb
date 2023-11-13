@@ -258,6 +258,11 @@ Module Rgraphics
         }
     End Function
 
+    ''' <summary>
+    ''' Convert a raster image object data as an intensity scale vector
+    ''' </summary>
+    ''' <param name="raster">A specific raster image object</param>
+    ''' <returns></returns>
     <ExportAPI("raster_vec")>
     Public Function as_vector(raster As RasterScaler) As vec
         Return New vec(raster.GetRasterData.Select(Function(p) p.Scale))
