@@ -86,23 +86,49 @@ Module Rgraphics
     ''' <summary>
     ''' construct a color heigh map
     ''' </summary>
-    ''' <param name="colors"></param>
+    ''' <param name="colors">
+    ''' the color set for construct the color height map, the colors used
+    ''' in this parameter is used as the checkpoint for evaluate the 
+    ''' intensity scale value. A raster image object also could be used
+    ''' in this parameter.
+    ''' </param>
     ''' <param name="levels"></param>
+    ''' <param name="desc">
+    ''' should this function reverse the color vector order?
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("color.height_map")>
     Public Function colorHeightMap(<RRawVectorArgument>
                                    colors As Object,
                                    Optional levels As Integer = 255,
+                                   Optional desc As Boolean = False,
                                    Optional env As Environment = Nothing) As Object
 
         Dim colorSet = RColorPalette.getColorSet(colors, Nothing)
+        Dim colorList As Color()
 
-        If colorSet.StringEmpty Then
-            Return Internal.debug.stop("Invalid color set was provided!", env)
+        If TypeOf colors Is Image Then
+            ' get colors from a raster image, based on the grayscale value
+            colorList = BitmapBuffer.FromImage(DirectCast(colors, Image)) _
+                .GetPixelsAll _
+                .Distinct _
+                .OrderBy(Function(c) c.GrayScale) _
+                .ToArray
+        Else
+            ' get colors from a color palette value
+            If colorSet.StringEmpty Then
+                Return Internal.debug.stop("Invalid color set was provided!", env)
+            Else
+                colorList = Designer.GetColors(colorSet)
+            End If
         End If
 
-        Return New ColorHeightMap(Designer.GetColors(colorSet)).ScaleLevels(levels)
+        If desc Then
+            colorList = colorList.Reverse.ToArray
+        End If
+
+        Return New ColorHeightMap(colorList).ScaleLevels(levels)
     End Function
 
     ''' <summary>
