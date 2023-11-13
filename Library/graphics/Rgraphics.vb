@@ -144,7 +144,8 @@ Module Rgraphics
     ''' example as: 
     ''' 
     ''' + rgb.stack = ['r'] means just extract the red channel as the raster data
-    ''' + rgb.stack = ['g', 'b'] means extract the raster data via green and blue channel, the raster scale value will be evaluated as g * 10 + b
+    ''' + rgb.stack = ['g', 'b'] means extract the raster data via green and blue channel, 
+    '''     the raster scale value will be evaluated as g * 10 + b
     ''' 
     ''' andalso this parameter value could be a .net clr color height map ruler object, which could be used for
     ''' mapping a color sequence to a scale level.
