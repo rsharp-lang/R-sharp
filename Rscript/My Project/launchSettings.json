@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--lambda \"biodeepMSMS::doMSMSalignment\"",
+      "commandLineArgs": "\"D:\\mzkit\\src\\mzkit\\rstudio\\services\\MSI-host.R\" --debug=33361 --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host",
       "workingDirectory": "D:\\biodeep\\biodeep_pipeline\\biodeepMSMS_v5\\workflow\\workflow_test"
     },
     "mzkit_debug": {
