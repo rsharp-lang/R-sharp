@@ -142,7 +142,8 @@ Namespace Development.CodeAnalysis
             Select Case code.GetType
                 Case GetType(BinaryExpression),
                      GetType(BinaryInExpression),
-                     GetType(BinaryOrExpression)
+                     GetType(BinaryOrExpression),
+                     GetType(BinaryBetweenExpression)
 
                     Call GetSymbols(DirectCast(code, IBinaryExpression), context)
 
