@@ -90,6 +90,10 @@ Namespace Runtime.Internal
 
         ReadOnly generics As New Dictionary(Of String, Dictionary(Of Type, GenericFunction))
 
+        Sub New()
+
+        End Sub
+
         ''' <summary>
         ''' overloads <paramref name="name"/> = (
         '''    x As <see cref="Object"/>, 

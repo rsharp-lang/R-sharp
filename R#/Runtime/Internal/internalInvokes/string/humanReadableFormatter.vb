@@ -54,11 +54,24 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 
 Namespace Runtime.Internal.Invokes
 
     <Package("humanReadable")>
     Module humanReadableFormatter
+
+        Sub New()
+            Call Internal.generic.add("toString", GetType(TimeSpan), AddressOf timespan_string)
+            Call Internal.generic.add("toString", GetType(TimeSpan()), AddressOf timespan_string)
+        End Sub
+
+        Private Function timespan_string(spans As TimeSpan(), args As list, env As Environment) As Object
+            Dim show_ms As Boolean = args.getValue({"showMs", "show_ms", "show.ms"}, env, [default]:=False)
+            Dim s As String() = timespanStr(spans, show_ms)
+
+            Return s
+        End Function
 
         ''' <summary>
         ''' convert byte number into human readable size string
