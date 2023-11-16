@@ -63,6 +63,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
     Public Class BinaryBetweenExpression : Inherits Expression
+        Implements IBinaryExpression
 
         ''' <summary>
         ''' left
@@ -82,6 +83,24 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         Public Overrides ReadOnly Property expressionName As ExpressionTypes
             Get
                 Return ExpressionTypes.Binary
+            End Get
+        End Property
+
+        Public ReadOnly Property left As Expression Implements IBinaryExpression.left
+            Get
+                Return collectionSet
+            End Get
+        End Property
+
+        Public ReadOnly Property right As Expression Implements IBinaryExpression.right
+            Get
+                Return range
+            End Get
+        End Property
+
+        Public ReadOnly Property [operator] As String Implements IBinaryExpression.operator
+            Get
+                Return "between"
             End Get
         End Property
 
