@@ -72,6 +72,13 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
+    ''' <summary>
+    ''' the abstract model of expression:
+    ''' 
+    ''' ```
+    ''' left op right
+    ''' ```
+    ''' </summary>
     Public Interface IBinaryExpression
 
         ReadOnly Property left As Expression

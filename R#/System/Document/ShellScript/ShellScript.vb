@@ -272,8 +272,7 @@ Namespace Development.CommandLine
 
                 Case GetType(SymbolIndexer) : Call analysisTree(DirectCast(expr, SymbolIndexer), attrs)
                 Case GetType(VectorLiteral) : Call analysisTree(DirectCast(expr, VectorLiteral), attrs)
-                Case GetType(BinaryExpression) : Call analysisTree(DirectCast(expr, BinaryExpression), attrs)
-                Case GetType(BinaryInExpression) : Call analysisTree(DirectCast(expr, BinaryInExpression), attrs)
+                Case GetType(BinaryExpression), GetType(BinaryInExpression), GetType(BinaryBetweenExpression) : Call analysisTree(DirectCast(expr, IBinaryExpression), attrs)
                 Case GetType(ElseBranch) : Call analysisTree(DirectCast(expr, ElseBranch), attrs)
                 Case GetType(StringInterpolation) : Call analysisTree(DirectCast(expr, StringInterpolation), attrs)
                 Case GetType(ValueAssignExpression) : Call analysisTree(DirectCast(expr, ValueAssignExpression), attrs)
@@ -390,12 +389,7 @@ Namespace Development.CommandLine
             Call analysisTree(DirectCast(expr.closure.body, ClosureExpression), attrs)
         End Sub
 
-        Private Sub analysisTree(expr As BinaryInExpression, attrs As ArgumentInfo)
-            Call AnalysisTree(expr.left, attrs)
-            Call AnalysisTree(expr.left, attrs)
-        End Sub
-
-        Private Sub analysisTree(expr As BinaryExpression, attrs As ArgumentInfo)
+        Private Sub analysisTree(expr As IBinaryExpression, attrs As ArgumentInfo)
             Call AnalysisTree(expr.left, attrs)
             Call AnalysisTree(expr.right, attrs)
         End Sub
