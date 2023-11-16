@@ -1056,10 +1056,33 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("timespan")>
         Public Function createTimespan(x As Object,
                                        Optional unit As TimeSpanUnits = TimeSpanUnits.Ticks,
+                                       Optional character As Boolean = False,
                                        Optional env As Environment = Nothing) As Object
 
+            If x Is Nothing Then
+                If character Then
+                    Return ""
+                End If
+
+                Return Nothing
+            End If
+
+            Dim cast = castTS(x, unit, env)
+
+            If cast Like GetType(Message) Then
+                Return cast.TryCast(Of Message)
+            End If
+
+            If character Then
+                Return StringFormats.Lanudry(cast.TryCast(Of TimeSpan))
+            Else
+                Return cast.TryCast(Of TimeSpan)
+            End If
+        End Function
+
+        Private Function castTS(x As Object, unit As TimeSpanUnits, env As Environment) As [Variant](Of TimeSpan, Message)
             If TypeOf x Is TimeSpan Then
-                Return x
+                Return DirectCast(x, TimeSpan)
             End If
 
             Dim data As Double() = CLRVector.asNumeric(x)

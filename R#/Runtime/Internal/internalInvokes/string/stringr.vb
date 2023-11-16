@@ -86,7 +86,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports encoder = SMRUCC.Rsharp.Development.Components.Encoder
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports stdNum = System.Math
+Imports std = System.Math
 Imports VBStr = Microsoft.VisualBasic.Strings
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
@@ -1223,7 +1223,7 @@ Namespace Runtime.Internal.Invokes
 
             Dim v1 = GetVectorElement.Create(Of String)(x)
             Dim v2 = GetVectorElement.Create(Of String)(y)
-            Dim size As Integer = stdNum.Max(v1.size, v2.size)
+            Dim size As Integer = std.Max(v1.size, v2.size)
             Dim op As op_evaluator =
                 Function(xi, yi, envir)
                     Return TextEquals(DirectCast(xi, String), DirectCast(yi, String), null_equals, empty_equals)

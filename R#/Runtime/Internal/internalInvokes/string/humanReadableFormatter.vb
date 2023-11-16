@@ -70,9 +70,19 @@ Namespace Runtime.Internal.Invokes
             Return bytes.SafeQuery.Select(AddressOf StringFormats.Lanudry).ToArray
         End Function
 
+        ''' <summary>
+        ''' cast timespan value to human readable string
+        ''' </summary>
+        ''' <param name="spans"></param>
+        ''' <returns></returns>
         <ExportAPI("time_span")>
-        Public Function timespanStr(spans As TimeSpan()) As String()
-            Return spans.SafeQuery.Select(AddressOf StringFormats.Lanudry).ToArray
+        Public Function timespanStr(spans As TimeSpan(), Optional show_ms As Boolean = True) As String()
+            Return spans _
+                .SafeQuery _
+                .Select(Function(ti)
+                            Return StringFormats.Lanudry(ti, showMs:=show_ms)
+                        End Function) _
+                .ToArray
         End Function
 
         ''' <summary>
