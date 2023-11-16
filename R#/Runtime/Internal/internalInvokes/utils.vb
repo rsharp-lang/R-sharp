@@ -1051,16 +1051,34 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' create the time span value based on the given time ticks
         ''' </summary>
-        ''' <param name="ticks"></param>
+        ''' <param name="x"></param>
         ''' <returns></returns>
         <ExportAPI("timespan")>
-        Public Function createTimespan(ticks As Double, Optional unit As TimeSpanUnits = TimeSpanUnits.Ticks) As TimeSpan
-            Select Case unit
-                Case TimeSpanUnits.Ticks : Return TimeSpan.FromTicks(ticks)
+        Public Function createTimespan(x As Object,
+                                       Optional unit As TimeSpanUnits = TimeSpanUnits.Ticks,
+                                       Optional env As Environment = Nothing) As Object
 
+            If TypeOf x Is TimeSpan Then
+                Return x
+            End If
+
+            Dim data As Double() = CLRVector.asNumeric(x)
+
+            Select Case unit
+                Case TimeSpanUnits.Ticks : Return TimeSpan.FromTicks(data(0))
+                Case TimeSpanUnits.Days : Return TimeSpan.FromDays(data(0))
+                Case TimeSpanUnits.Hours : Return TimeSpan.FromHours(data(0))
+                Case TimeSpanUnits.Milliseconds : Return TimeSpan.FromMilliseconds(data(0))
+                Case TimeSpanUnits.Minutes : Return TimeSpan.FromMinutes(data(0))
+                Case TimeSpanUnits.Seconds : Return TimeSpan.FromSeconds(data(0))
+                Case Else
+                    Return Internal.debug.stop($"invalid data unit value: {unit}!", env)
             End Select
         End Function
 
+        ''' <summary>
+        ''' the data unit of the timespan value
+        ''' </summary>
         Public Enum TimeSpanUnits As Byte
             Ticks
             Milliseconds
