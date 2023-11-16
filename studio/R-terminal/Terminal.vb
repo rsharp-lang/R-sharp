@@ -185,12 +185,13 @@ RE0:
     Sub New()
         Dim Rcore = GetType(RInterpreter).Assembly.FromAssembly
         Dim framework = GetType(App).Assembly.FromAssembly
+        Dim Rterm = GetType(Terminal).Assembly.FromAssembly
 
         Call MarkdownRender.Print($"
   `` , __         ``  | 
   ``/|/  \  |  |  ``  | Documentation: https://r_lang.dev.SMRUCC.org/
   `` |___/--+--+--``  |
-  `` | \  --+--+--``  | Version ``{Rcore.AssemblyVersion}`` (**{Rcore.BuiltTime.ToString}**)
+  `` | \  --+--+--``  | Version ``{Rcore.AssemblyVersion}`` (**{Rterm.BuiltTime.ToString}**)
   `` |  \_/ |  |  ``  | sciBASIC.NET Runtime: ``{framework.AssemblyVersion}``         
                   
 Welcome to the R# language

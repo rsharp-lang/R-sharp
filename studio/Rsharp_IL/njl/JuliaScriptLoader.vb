@@ -61,6 +61,8 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
+' https://stackoverflow.com/questions/55970064/calling-local-julia-package-from-c
+
 Public Class JuliaScriptLoader : Inherits ScriptLoader
 
     Public Overrides ReadOnly Iterator Property SuffixNames As IEnumerable(Of String)
