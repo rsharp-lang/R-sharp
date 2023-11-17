@@ -79,16 +79,65 @@ Namespace Runtime.Internal.Object
             Return result
         End Function
 
+        ''' <summary>
+        ''' colSums: Form Row and Column Sums and Means
+        ''' 
+        ''' Form row and column sums and means for numeric arrays (or data frames).
+        ''' </summary>
+        ''' <param name="x">
+        ''' an array of two or more dimensions, containing numeric, 
+        ''' complex, integer or logical values, or a numeric data 
+        ''' frame. For .colSums() etc, a numeric, integer or logical 
+        ''' matrix (or vector of length m * n).
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("colSums")>
         Public Function colSums(x As dataframe, Optional env As Environment = Nothing) As vector
             Dim names As String() = x.colnames
             Dim vec As Double() = names _
                 .Select(Function(v)
+                            ' get the column vector, and then evaluate the sum of the column
                             Return CLRVector.asNumeric(x.columns(v)).Sum
                         End Function) _
                 .ToArray
 
             Return New vector(names, vec, env)
+        End Function
+
+        <ExportAPI("colMeans")>
+        Public Function colMeans(x As dataframe, Optional env As Environment = Nothing) As vector
+            Dim names As String() = x.colnames
+            Dim vec As Double() = names _
+                .Select(Function(v)
+                            ' get the column vector, and then evaluate the average of the column
+                            Return CLRVector.asNumeric(x.columns(v)).Average
+                        End Function) _
+                .ToArray
+
+            Return New vector(names, vec, env)
+        End Function
+
+        <ExportAPI("rowSums")>
+        Public Function rowSums(x As dataframe, Optional env As Environment = Nothing) As vector
+            Dim sums = x.forEachRow _
+                .Select(Function(r) CLRVector.asNumeric(r.value)) _
+                .Select(Function(r) r.Sum) _
+                .ToArray
+            Dim v As New vector(x.rownames, sums, env)
+
+            Return v
+        End Function
+
+        <ExportAPI("rowMeans")>
+        Public Function rowMeans(x As dataframe, Optional env As Environment = Nothing) As vector
+            Dim avgs = x.forEachRow _
+                .Select(Function(r) CLRVector.asNumeric(r.value)) _
+                .Select(Function(r) r.Average) _
+                .ToArray
+            Dim v As New vector(x.rownames, avgs, env)
+
+            Return v
         End Function
 
         ''' <summary>
