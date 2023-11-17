@@ -90,6 +90,7 @@ Namespace Runtime.Internal.Object
         ''' <param name="env"></param>
         ''' <returns></returns>
         Function getRow(index As Object, env As Environment) As Object
+        Function getRowNames() As String()
 
     End Interface
 

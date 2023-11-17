@@ -239,10 +239,19 @@ RE0:
             Return dict
         End Function
 
+        ''' <summary>
+        ''' try to get the dataframe rownames
+        ''' </summary>
+        ''' <param name="[object]"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Function getRowNames([object] As Object, envir As Environment) As Object
             If [object].GetType Is GetType(dataframe) Then
                 Return DirectCast([object], dataframe).rownames
+            ElseIf [object].GetType.ImplementInterface(Of IdataframeReader) Then
+                Return DirectCast([object], IdataframeReader).getRowNames
             Else
+                ' get column names?
                 Return getNames([object], envir)
             End If
         End Function
