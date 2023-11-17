@@ -57,7 +57,7 @@
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
     ''' <summary>
-    ''' 
+    ''' enumerate all kinds of the symbol indexer syntax inside current R-sharp language
     ''' </summary>
     ''' <remarks><see cref="Byte"/></remarks>
     Public Enum SymbolIndexers As Byte

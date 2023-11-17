@@ -212,6 +212,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
         End Function
 
+        ''' <summary>
+        ''' x[selector, ] get dataframe rows, make subset of the observation samples
+        ''' </summary>
+        ''' <param name="data"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Function getDataframeRowRange(data As dataframe, env As Environment) As Object
             Dim indexVec As VectorLiteral = index
 
