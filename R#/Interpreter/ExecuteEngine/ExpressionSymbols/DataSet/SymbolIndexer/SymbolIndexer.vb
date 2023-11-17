@@ -195,12 +195,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return getByIndex(obj, indexer, envir)
             ElseIf indexType = SymbolIndexers.dataframeColumns Then
                 If Not TypeOf obj Is dataframe Then
+                    If obj.GetType.ImplementInterface(Of IdataframeReader) Then
+                        Return DirectCast(obj, IdataframeReader).getColumn(indexer, envir)
+                    End If
+
                     Return Message.InCompatibleType(GetType(dataframe), obj.GetType, envir)
                 Else
                     Return getColumn(obj, indexer, envir)
                 End If
             ElseIf indexType = SymbolIndexers.dataframeRows Then
                 If Not TypeOf obj Is dataframe Then
+                    If obj.GetType.ImplementInterface(Of IdataframeReader) Then
+                        Return DirectCast(obj, IdataframeReader).getRow(indexer, envir)
+                    End If
+
                     Return Message.InCompatibleType(GetType(dataframe), obj.GetType, envir)
                 Else
                     Return DirectCast(obj, dataframe) _
