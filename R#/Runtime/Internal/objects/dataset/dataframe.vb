@@ -72,6 +72,28 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Namespace Runtime.Internal.Object
 
     ''' <summary>
+    ''' syntax helper for a readonly dataframe liked clr object
+    ''' </summary>
+    Public Interface IdataframeReader
+
+        ''' <summary>
+        ''' get column feature data from current readonly dataframe liked clr object
+        ''' </summary>
+        ''' <param name="index"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        Function getColumn(index As Object, env As Environment) As Object
+        ''' <summary>
+        ''' get row samples data from current readonly dataframe liked clr object
+        ''' </summary>
+        ''' <param name="index"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        Function getRow(index As Object, env As Environment) As Object
+
+    End Interface
+
+    ''' <summary>
     ''' A data frame, a matrix-like structure whose columns 
     ''' may be of differing types (numeric, logical, factor 
     ''' and character and so on).
