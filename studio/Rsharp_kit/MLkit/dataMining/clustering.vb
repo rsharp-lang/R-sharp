@@ -77,6 +77,7 @@ Imports Microsoft.VisualBasic.DataMining.HDBSCAN.Distance
 Imports Microsoft.VisualBasic.DataMining.HDBSCAN.Runner
 Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
 Imports Microsoft.VisualBasic.DataMining.KMeans
+Imports Microsoft.VisualBasic.DataMining.Lloyds
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder
@@ -472,6 +473,29 @@ Module clustering
         End If
     End Function
 
+    <ExportAPI("lloyds")>
+    Public Function Lloyds(<RRawVectorArgument>
+                           x As Object,
+                           Optional k% = 3,
+                           Optional env As Environment = Nothing) As Object
+
+        If x Is Nothing Then
+            Return Nothing
+        End If
+
+        Dim model = getDataModel(x, env)
+
+        If model Like GetType(Message) Then
+            Return model.TryCast(Of Message)
+        End If
+
+        Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
+        Dim alg As New LloydsMethodClustering(maps.GetPoints(model.TryCast(Of EntityClusterModel())), k:=k)
+        Dim result = maps.GetObjects(alg.Clustering).ToArray
+
+        Return result
+    End Function
+
     ''' <summary>
     ''' Hierarchical Clustering
     ''' 
@@ -675,7 +699,7 @@ Module clustering
 
         For Each key As String In btree.members
             Call New Cluster(key) With {
-                .distance = New Distance(0, 1)
+                .Distance = New Distance(0, 1)
             }.DoCall(AddressOf node.AddChild)
         Next
 
