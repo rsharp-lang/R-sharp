@@ -9,7 +9,7 @@
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;Rsharp_app_release;mzkit;mzkit_win32;gcmodeller_desktop</Configurations>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-	  <AssemblyVersion>2.33.856.6961</AssemblyVersion>
+	  <AssemblyVersion>2.33.*</AssemblyVersion>
 	  <Deterministic>false</Deterministic>
 	  <RuntimeIdentifiers>win7-x64;win7-x86;win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
 	  <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
@@ -24,7 +24,7 @@
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <Authors>xieguigang</Authors>
 	  <UseApplicationFramework>True</UseApplicationFramework>
-	  <FileVersion>2.33.856.6961</FileVersion>
+	  <FileVersion>2.33.*</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
