@@ -208,18 +208,14 @@ Namespace Development.Package
 
                 ' imports package and export api
                 Return env.ImportsStaticInternalImpl(package, strict:=strict)
-            Catch ex As Exception
-                If TypeOf ex Is MissingMethodException Then
-                    With DirectCast(ex, MissingMethodException)
-                        If .Message = ".ctor" AndAlso Microsoft.VisualBasic.InStr(ex.StackTrace, "GetCustomAttribute") > 0 Then
-                            Throw New TypeLoadException(String.Format(obsoleteAssemblyImage, package.FullName), ex)
-                        Else
-                            Throw
-                        End If
-                    End With
+            Catch ex As MissingMethodException
+                If ex.Message = ".ctor" AndAlso Microsoft.VisualBasic.InStr(ex.StackTrace, "GetCustomAttribute") > 0 Then
+                    Throw New TypeLoadException(String.Format(obsoleteAssemblyImage, package.FullName), ex)
                 Else
                     Throw
                 End If
+            Catch ex As Exception
+                Throw New Exception($"error while loading package: {package.Namespace} from ""{package.Assembly.Location}"".", ex)
             End Try
         End Function
 
