@@ -18,7 +18,7 @@ let result2 = kmeans(rawdata, centers = 9, bisecting = TRUE);
 
 write.csv(result, file = "./kmeans.csv");
 write.csv(result2, file = "./bisecting_kmeans.csv");
-write.csv(lloyds_result, file = "./lloyds_result");
+write.csv(lloyds_result, file = "./lloyds_result.csv");
 
 lloyds_result = as.data.frame(lloyds_result);
 result = as.data.frame(result);
