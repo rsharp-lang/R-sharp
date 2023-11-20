@@ -376,34 +376,6 @@ Module clustering
         Return classes
     End Function
 
-    <ExportAPI("bisecting_Kmeans")>
-    Public Function BisectingKmeans(<RRawVectorArgument>
-                                    x As Object,
-                                    Optional centers As Integer = 3,
-                                    Optional env As Environment = Nothing) As Object
-        If x Is Nothing Then
-            Return Nothing
-        End If
-
-        Dim model = getDataModel(x, env)
-
-        If model Like GetType(Message) Then
-            Return model.TryCast(Of Message)
-        End If
-
-        Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
-        Dim kmeans As New BisectingKMeans(maps.GetVectors(model.TryCast(Of EntityClusterModel)), k:=centers)
-        Dim result = kmeans.runBisectingKMeans().ToArray
-        Dim kmeans_result As New List(Of EntityClusterModel)
-        Dim i As i32 = 1
-
-        For Each cluster In result
-            Call kmeans_result.AddRange(maps.GetObjects(cluster.DataPoints, setClass:=++i))
-        Next
-
-        Return kmeans_result.ToArray
-    End Function
-
     Private Function getDataModel(x As Object, env As Environment) As [Variant](Of Message, EntityClusterModel())
         Dim model As EntityClusterModel()
 
@@ -466,6 +438,7 @@ Module clustering
     Public Function Kmeans(<RRawVectorArgument>
                            x As Object,
                            Optional centers% = 3,
+                           Optional bisecting As Boolean = False,
                            Optional parallel As Boolean = True,
                            Optional debug As Boolean = False,
                            Optional env As Environment = Nothing) As Object
@@ -480,9 +453,23 @@ Module clustering
             Return model.TryCast(Of Message)
         End If
 
-        Return model.TryCast(Of EntityClusterModel()) _
-            .Kmeans(centers, debug, parallel) _
-            .ToArray
+        If bisecting Then
+            Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
+            Dim kmeans As New BisectingKMeans(maps.GetVectors(model.TryCast(Of EntityClusterModel)), k:=centers)
+            Dim result = kmeans.runBisectingKMeans().ToArray
+            Dim kmeans_result As New List(Of EntityClusterModel)
+            Dim i As i32 = 1
+
+            For Each cluster In result
+                Call kmeans_result.AddRange(maps.GetObjects(cluster.DataPoints, setClass:=++i))
+            Next
+
+            Return kmeans_result.ToArray
+        Else
+            Return model.TryCast(Of EntityClusterModel()) _
+                .Kmeans(centers, debug, parallel) _
+                .ToArray
+        End If
     End Function
 
     ''' <summary>
