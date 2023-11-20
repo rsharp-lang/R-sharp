@@ -70,6 +70,7 @@ Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
 Imports Microsoft.VisualBasic.DataMining.BinaryTree
+Imports Microsoft.VisualBasic.DataMining.BisectingKMeans
 Imports Microsoft.VisualBasic.DataMining.Clustering
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
 Imports Microsoft.VisualBasic.DataMining.FuzzyCMeans
@@ -375,37 +376,38 @@ Module clustering
         Return classes
     End Function
 
-    ''' <summary>
-    ''' K-Means Clustering
-    ''' </summary>
-    ''' <param name="x">
-    ''' numeric matrix of data, or an object that can be coerced 
-    ''' to such a matrix (such as a numeric vector or a data 
-    ''' frame with all numeric columns).
-    ''' </param>
-    ''' <param name="centers">
-    ''' either the number of clusters, say k, or a set of initial 
-    ''' (distinct) cluster centres. If a number, a random set of 
-    ''' (distinct) rows in x is chosen as the initial centres.
-    ''' </param>
-    ''' <param name="parallel"></param>
-    ''' <param name="debug"></param>
-    ''' <param name="env"></param>
-    ''' <returns></returns>
-    <ExportAPI("kmeans")>
-    <RApiReturn(GetType(EntityClusterModel))>
-    Public Function Kmeans(<RRawVectorArgument>
-                           x As Object,
-                           Optional centers% = 3,
-                           Optional parallel As Boolean = True,
-                           Optional debug As Boolean = False,
-                           Optional env As Environment = Nothing) As Object
-
-        Dim model As EntityClusterModel()
-
+    <ExportAPI("bisecting_Kmeans")>
+    Public Function BisectingKmeans(<RRawVectorArgument>
+                                    x As Object,
+                                    Optional centers As Integer = 3,
+                                    Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
             Return Nothing
-        ElseIf x.GetType.IsArray Then
+        End If
+
+        Dim model = getDataModel(x, env)
+
+        If model Like GetType(Message) Then
+            Return model.TryCast(Of Message)
+        End If
+
+        Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
+        Dim kmeans As New BisectingKMeans(maps.GetVectors(model.TryCast(Of EntityClusterModel)), k:=centers)
+        Dim result = kmeans.runBisectingKMeans().ToArray
+        Dim kmeans_result As New List(Of EntityClusterModel)
+        Dim i As i32 = 1
+
+        For Each cluster In result
+            Call kmeans_result.AddRange(maps.GetObjects(cluster.DataPoints, setClass:=++i))
+        Next
+
+        Return kmeans_result.ToArray
+    End Function
+
+    Private Function getDataModel(x As Object, env As Environment) As [Variant](Of Message, EntityClusterModel())
+        Dim model As EntityClusterModel()
+
+        If x.GetType.IsArray Then
 #Disable Warning
             Select Case REnv.MeasureArrayElementType(x)
                 Case GetType(DataSet)
@@ -439,7 +441,48 @@ Module clustering
             Return REnv.Internal.debug.stop(New InvalidProgramException(x.GetType.FullName), env)
         End If
 
-        Return model.Kmeans(centers, debug, parallel).ToArray
+        Return model
+    End Function
+
+    ''' <summary>
+    ''' K-Means Clustering
+    ''' </summary>
+    ''' <param name="x">
+    ''' numeric matrix of data, or an object that can be coerced 
+    ''' to such a matrix (such as a numeric vector or a data 
+    ''' frame with all numeric columns).
+    ''' </param>
+    ''' <param name="centers">
+    ''' either the number of clusters, say k, or a set of initial 
+    ''' (distinct) cluster centres. If a number, a random set of 
+    ''' (distinct) rows in x is chosen as the initial centres.
+    ''' </param>
+    ''' <param name="parallel"></param>
+    ''' <param name="debug"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("kmeans")>
+    <RApiReturn(GetType(EntityClusterModel))>
+    Public Function Kmeans(<RRawVectorArgument>
+                           x As Object,
+                           Optional centers% = 3,
+                           Optional parallel As Boolean = True,
+                           Optional debug As Boolean = False,
+                           Optional env As Environment = Nothing) As Object
+
+        If x Is Nothing Then
+            Return Nothing
+        End If
+
+        Dim model = getDataModel(x, env)
+
+        If model Like GetType(Message) Then
+            Return model.TryCast(Of Message)
+        End If
+
+        Return model.TryCast(Of EntityClusterModel()) _
+            .Kmeans(centers, debug, parallel) _
+            .ToArray
     End Function
 
     ''' <summary>
@@ -645,7 +688,7 @@ Module clustering
 
         For Each key As String In btree.members
             Call New Cluster(key) With {
-                .Distance = New Distance(0, 1)
+                .distance = New Distance(0, 1)
             }.DoCall(AddressOf node.AddChild)
         Next
 
