@@ -70,7 +70,6 @@ Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
 Imports Microsoft.VisualBasic.DataMining.BinaryTree
-Imports Microsoft.VisualBasic.DataMining.BisectingKMeans
 Imports Microsoft.VisualBasic.DataMining.Clustering
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
 Imports Microsoft.VisualBasic.DataMining.FuzzyCMeans
@@ -92,6 +91,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports BisectingKMeans = Microsoft.VisualBasic.DataMining.BisectingKMeans.BisectingKMeans
 Imports Distance = Microsoft.VisualBasic.DataMining.HierarchicalClustering.Hierarchy.Distance
 Imports Point2D = System.Drawing.Point
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
@@ -455,8 +455,8 @@ Module clustering
 
         If bisecting Then
             Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
-            Dim kmeans As New BisectingKMeans(maps.GetVectors(model.TryCast(Of EntityClusterModel)), k:=centers)
-            Dim result = kmeans.runBisectingKMeans().ToArray
+            Dim bikmeans As New BisectingKMeans(maps.GetVectors(model.TryCast(Of EntityClusterModel())), k:=centers)
+            Dim result = bikmeans.runBisectingKMeans().ToArray
             Dim kmeans_result As New List(Of EntityClusterModel)
             Dim i As i32 = 1
 
