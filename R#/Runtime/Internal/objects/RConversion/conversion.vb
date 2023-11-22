@@ -876,10 +876,15 @@ RE0:
         End Function
 
         ''' <summary>
+        ''' ### Lists – Generic and Dotted Pairs
+        ''' 
+        ''' Functions to construct, coerce and check for both kinds of R lists.
         ''' Cast the raw dictionary object to R# list object
         ''' </summary>
-        ''' <param name="obj">
-        ''' this function will make a data copy if the input data is already a <see cref="list"/>
+        ''' <param name="x">
+        ''' object to be coerced or tested.
+        ''' this function will make a data copy if the input 
+        ''' data is already a <see cref="list"/>
         ''' </param>
         ''' <param name="args">
         ''' for dataframe type:
@@ -889,9 +894,58 @@ RE0:
         ''' 
         ''' </param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' this function supports the generic function calls
+        ''' 
+        ''' Almost all lists in R internally are Generic Vectors, whereas traditional 
+        ''' dotted pair lists (as in LISP) remain available but rarely seen by users 
+        ''' (except as formals of functions).
+        ''' 
+        ''' The arguments To list Or pairlist are Of the form value Or tag = value. The 
+        ''' functions Return a list Or dotted pair list composed Of its arguments With
+        ''' Each value either tagged Or untagged, depending On how the argument was 
+        ''' specified.
+        '''
+        ''' alist handles its arguments as if they described function arguments. So the 
+        ''' values are Not evaluated, And tagged arguments with no value are allowed 
+        ''' whereas list simply ignores them. alist Is most often used in conjunction 
+        ''' with formals.
+        '''
+        ''' as.list attempts to coerce its argument to a list. For functions, this returns 
+        ''' the concatenation of the list of formal arguments And the function body. For 
+        ''' expressions, the list of constituent elements Is returned. as.list Is generic, 
+        ''' And as the default method calls as.vector(mode = "list") for a non-list, 
+        ''' methods for as.vector may be invoked. as.list turns a factor into a list of 
+        ''' one-element factors, keeping names. Other attributes may be dropped unless the 
+        ''' argument already Is a list Or expression. (This Is inconsistent with functions 
+        ''' such as as.character which always drop attributes, And Is for efficiency since 
+        ''' lists can be expensive to copy.)
+        '''
+        ''' Is.list returns TRUE if And only if its argument Is a list Or a pairlist of 
+        ''' length > 0>0. Is.pairlist returns TRUE if And only if the argument Is a pairlist 
+        ''' Or NULL (see below).
+        '''
+        ''' The "environment" method for as.list copies the name-value pairs (for names Not 
+        ''' beginning with a dot) from an environment to a named list. The user can request 
+        ''' that all named objects are copied. Unless sorted = TRUE, the list Is in no 
+        ''' particular order (the order depends on the order of creation of objects And whether 
+        ''' the environment Is hashed). No enclosing environments are searched. (Objects 
+        ''' copied are duplicated so this can be an expensive operation.) Note that there 
+        ''' Is an inverse operation, the as.environment() method for list objects.
+        '''
+        ''' An empty pairlist, pairlist() Is the same As NULL. This Is different from list(): 
+        ''' some but Not all operations will promote an empty pairlist To an empty list.
+        '''
+        ''' as.pairlist Is implemented as as.vector(x, "pairlist"), And hence will dispatch 
+        ''' methods for the generic function as.vector. Lists are copied element-by-element 
+        ''' into a pairlist And the names of the list used as tags for the pairlist the return 
+        ''' value for other types of argument Is undocumented.
+        '''
+        ''' list, Is.list And Is.pairlist are primitive functions.
+        ''' </remarks>
         <ExportAPI("as.list")>
         <RApiReturn(GetType(list))>
-        Public Function asList(<RRawVectorArgument> obj As Object,
+        Public Function asList(<RRawVectorArgument> x As Object,
                                <RListObjectArgument> args As Object,
                                Optional env As Environment = Nothing) As Object
 
@@ -899,17 +953,17 @@ RE0:
                 args = base.Rlist(args, env)
             End If
 
-            If obj Is Nothing Then
+            If x Is Nothing Then
                 Return Nothing
-            ElseIf TypeOf obj Is list Then
+            ElseIf TypeOf x Is list Then
                 ' just make a list data copy
-                Return New list(DirectCast(obj, list).elementType) With {
-                    .slots = New Dictionary(Of String, Object)(DirectCast(obj, list).slots)
+                Return New list(DirectCast(x, list).elementType) With {
+                    .slots = New Dictionary(Of String, Object)(DirectCast(x, list).slots)
                 }
-            ElseIf obj.GetType.ImplementInterface(Of IDictionary) Then
-                Return DirectCast(obj, IDictionary).dictionaryToRList(args, env)
-            ElseIf TypeOf obj Is Size OrElse TypeOf obj Is SizeF Then
-                Dim size As SizeF = If(TypeOf obj Is Size, DirectCast(obj, Size).SizeF, DirectCast(obj, SizeF))
+            ElseIf x.GetType.ImplementInterface(Of IDictionary) Then
+                Return DirectCast(x, IDictionary).dictionaryToRList(args, env)
+            ElseIf TypeOf x Is Size OrElse TypeOf x Is SizeF Then
+                Dim size As SizeF = If(TypeOf x Is Size, DirectCast(x, Size).SizeF, DirectCast(x, SizeF))
                 Dim listdata As New list With {
                     .elementType = RType.GetRSharpType(GetType(Double)),
                     .slots = New Dictionary(Of String, Object) From {
@@ -920,7 +974,7 @@ RE0:
 
                 Return listdata
             Else
-                Return listInternal(obj, args, env)
+                Return listInternal(x, args, env)
             End If
         End Function
 
