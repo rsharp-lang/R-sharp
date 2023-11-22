@@ -227,6 +227,7 @@ Public Module utils
     <ExportAPI("read.csv")>
     <RApiReturn(GetType(Rdataframe))>
     Public Function read_csv(file As Object,
+                             Optional header As Boolean = True,
                              <RRawVectorArgument>
                              Optional row_names As Object = Nothing,
                              Optional check_names As Boolean = True,
@@ -273,7 +274,8 @@ Public Module utils
                 check_modes:=check_modes,
                 comment_char:=comment_char,
                 skip_rows:=skip_rows,
-                env:=env
+                env:=env,
+                header:=header
             )
         End If
     End Function

@@ -221,14 +221,18 @@ Module dataframe
     End Function
 
     <Extension>
-    Private Function measureColumnVector(col As String(), check_modes As Boolean) As Array
+    Private Function measureColumnVector(col As String(), check_modes As Boolean, header As Boolean) As Array
+        ' if header then first row is used as headers
+        ' skip first row, otherwise do nothing
+        Dim offset As Integer = If(header, 1, 0)
+
         If check_modes Then
             Return col _
-                .Skip(1) _
+                .Skip(offset) _
                 .ToArray _
                 .DoCall(AddressOf TypeCast.DataImports.ParseVector)
         Else
-            Return DirectCast(col.Skip(1).ToArray, Array)
+            Return DirectCast(col.Skip(offset).ToArray, Array)
         End If
     End Function
 
@@ -272,6 +276,7 @@ Module dataframe
     Public Function rawToDataFrame(raw As csv,
                                    <RRawVectorArgument>
                                    Optional row_names As Object = Nothing,
+                                   Optional header As Boolean = True,
                                    Optional check_names As Boolean = True,
                                    Optional check_modes As Boolean = True,
                                    Optional comment_char As Char = "#"c,
@@ -288,9 +293,16 @@ Module dataframe
                     End Function) _
             .stripCommentRows(comment_char).Columns _
             .ToArray
+        ' get first row as the column headers
         Dim colNames As String() = cols _
             .Select(Function(col) col(Scan0)) _
             .ToArray
+
+        If header = False Then
+            colNames = cols _
+                .Select(Function(col, i) $"V{i + 1}") _
+                .ToArray
+        End If
 
         If check_names Then
             colNames = Internal.Invokes.base.makeNames(colNames, unique:=True)
@@ -306,7 +318,7 @@ Module dataframe
                 .SeqIterator _
                 .AsParallel _
                 .Select(Function(i)
-                            Return (i.i, colVec:=i.value.measureColumnVector(check_modes))
+                            Return (i.i, colVec:=i.value.measureColumnVector(check_modes, header))
                         End Function) _
                 .OrderBy(Function(i) i.i) _
                 .ToDictionary(Function(col) colNames(col.i),
