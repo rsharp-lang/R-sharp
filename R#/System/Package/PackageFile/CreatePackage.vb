@@ -331,6 +331,15 @@ Namespace Development.Package.File
                 Dim attr As IEnumerable(Of RPackageModuleAttribute)
 
                 If assembly Is Nothing Then
+                    ' 20231122
+                    ' skip of the native image which is maybe shipped
+                    ' with the nuget package or .net framework.
+                    If dll.BaseName.StartsWith("System.") OrElse dll.BaseName.StartsWith("Microsoft.") Then
+                        Continue For
+                    End If
+                End If
+
+                If assembly Is Nothing Then
                     Dim tokens = dll.ParentPath.Split("\"c, "/"c)
                     Dim levelsToAssemblyFolder = tokens _
                         .Reverse _
