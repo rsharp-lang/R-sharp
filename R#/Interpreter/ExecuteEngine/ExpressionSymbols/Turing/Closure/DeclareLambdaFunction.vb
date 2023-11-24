@@ -181,7 +181,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
             For i As Integer = 0 To parameter.symbolSize - 1
                 argVal = arguments(i)
-                env.Push(parameter.names(i), argVal, True, TypeCodes.generic)
+                argVal = env.Push(parameter.names(i), argVal, [readonly]:=False, TypeCodes.generic, [overrides]:=True)
+
+                If TypeOf argVal Is Message Then
+                    Return argVal
+                End If
             Next
 
             Dim result As Object = closure.Evaluate(env)
