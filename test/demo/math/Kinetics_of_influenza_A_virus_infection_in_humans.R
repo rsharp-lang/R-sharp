@@ -1,9 +1,9 @@
 # Kinetics of influenza A virus infection in humans
 # DOI: 10.3390/v7102875
 
-require(base.math);
+require(math);
 
-setwd(!script$dir);
+setwd(@dir);
 
 # config kinetics parameters
 let p     <- 3e-2;
@@ -22,7 +22,7 @@ let Kinetics_of_influenza_A_virus_infection_in_humans = [
 
 # do run kinetics system simulation
 Kinetics_of_influenza_A_virus_infection_in_humans
-:> deSolve(y0, a = 0, b = 7)
-:> as.data.frame 
-:> write.csv(file = "./Kinetics_of_influenza_A_virus_infection_in_humans.csv")
+|> deSolve(y0, a = 0, b = 7)
+|> as.data.frame 
+|> write.csv(file = "./Kinetics_of_influenza_A_virus_infection_in_humans.csv")
 ;
