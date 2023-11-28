@@ -165,6 +165,15 @@ Namespace Runtime.Internal.Object
             slots = New Dictionary(Of String, Object)
         End Sub
 
+        Sub New(ParamArray data As (key As String, val As Object)())
+            elementType = RType.any
+            slots = New Dictionary(Of String, Object)
+
+            For Each item As (key As String, val As Object) In data
+                slots(item.key) = item.val
+            Next
+        End Sub
+
         ''' <summary>
         ''' add key-value directly 
         ''' </summary>
