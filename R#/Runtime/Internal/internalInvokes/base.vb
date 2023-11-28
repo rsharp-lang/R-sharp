@@ -3328,6 +3328,9 @@ RE0:
             If args Is Nothing Then
                 args = New list With {.slots = New Dictionary(Of String, Object)}
             End If
+            If TypeOf x Is Message Then
+                Return x
+            End If
 
             Dim quot As Boolean = args.getValue("quot", env, True)
             Dim maxPrint As Integer = args.getValue("max.print", env, globalEnv.options.maxPrint)

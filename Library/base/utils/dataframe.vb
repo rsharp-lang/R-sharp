@@ -93,7 +93,7 @@ Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 <Package("dataframe", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gcmodeller.org")>
 Module dataframe
 
-    Sub New()
+    Friend Sub Main()
         Call RPrinter.AttachConsoleFormatter(Of DataSet)(AddressOf RowToString)
         Call RPrinter.AttachConsoleFormatter(Of DataSet())(AddressOf printTable)
         Call RPrinter.AttachConsoleFormatter(Of EntityObject())(AddressOf printTable)
