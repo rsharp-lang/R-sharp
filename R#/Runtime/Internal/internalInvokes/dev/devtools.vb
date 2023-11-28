@@ -207,6 +207,16 @@ Namespace Runtime.Internal.Invokes
             Return FNV1a.GetHashCode(ObjectSet.GetObjectSet([set], env))
         End Function
 
+        <ExportAPI("nilsimsa")>
+        Public Function Nilsimsa(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of String, String)(
+                x, eval:=Function(si)
+                             Dim hash As New Nilsimsa()
+                             hash.digest(si)
+                             Return hash.hexdigest
+                         End Function)
+        End Function
+
         ''' <summary>
         ''' Load R script in directory
         ''' 
