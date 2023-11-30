@@ -1,6 +1,6 @@
 ///<reference path="token.ts" />
 
-import { token, tokenType, logical } from './token';
+import { token, tokenType, logical, operators } from './token';
 
 export class TokenParser {
 
@@ -121,6 +121,16 @@ export class TokenParser {
             return <token>{
                 text: text,
                 type: tokenType.symbol
+            }
+        } else if (text in operators) {
+            return <token>{
+                text: text,
+                type: tokenType.operator
+            }
+        } else {
+            return <token>{
+                text: text,
+                type: tokenType.number
             }
         }
     }
