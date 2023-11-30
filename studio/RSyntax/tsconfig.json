@@ -6,7 +6,7 @@
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "outDir": "../dist",
-    "outFile": "../../build/linq.js",
+    "outFile": "../../REnv/templates/R_syntax.js",
     "declaration": true
   },
   "exclude": [
