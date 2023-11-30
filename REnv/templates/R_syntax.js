@@ -22,7 +22,8 @@ define("token", ["require", "exports"], function (require, exports) {
     exports.operators = {
         "+": 1, "-": 1, "*": 1, "\\": 1, "/": 1,
         "^": 1, "%": 1,
-        "$": 1, "&": 1, "|": 1
+        "$": 1, "&": 1, "|": 1, "!": 1, ":": 1,
+        ";": 1
     };
 });
 ///<reference path="token.ts" />
@@ -136,6 +137,18 @@ define("parser", ["require", "exports", "token"], function (require, exports, to
                 return {
                     text: text,
                     type: token_1.tokenType.symbol
+                };
+            }
+            else if (text in token_1.operators) {
+                return {
+                    text: text,
+                    type: token_1.tokenType.operator
+                };
+            }
+            else {
+                return {
+                    text: text,
+                    type: token_1.tokenType.number
                 };
             }
         };
