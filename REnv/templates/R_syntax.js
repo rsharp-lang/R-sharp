@@ -7,24 +7,25 @@ define("token", ["require", "exports"], function (require, exports) {
         tokenType[tokenType["character"] = 1] = "character";
         tokenType[tokenType["logical"] = 2] = "logical";
         tokenType[tokenType["factor"] = 3] = "factor";
-        tokenType[tokenType["symbol"] = 4] = "symbol";
-        tokenType[tokenType["operator"] = 5] = "operator";
-        tokenType[tokenType["comment"] = 6] = "comment";
-        tokenType[tokenType["newLine"] = 7] = "newLine";
-        tokenType[tokenType["whitespace"] = 8] = "whitespace";
+        tokenType[tokenType["keyword"] = 4] = "keyword";
+        tokenType[tokenType["symbol"] = 5] = "symbol";
+        tokenType[tokenType["operator"] = 6] = "operator";
+        tokenType[tokenType["comment"] = 7] = "comment";
+        tokenType[tokenType["newLine"] = 8] = "newLine";
+        tokenType[tokenType["whitespace"] = 9] = "whitespace";
     })(tokenType = exports.tokenType || (exports.tokenType = {}));
-    exports.logical = {
-        "TRUE": 1,
-        "true": 1,
-        "FALSE": 1,
-        "false": 1
-    };
-    exports.operators = {
-        "+": 1, "-": 1, "*": 1, "\\": 1, "/": 1,
-        "^": 1, "%": 1,
-        "$": 1, "&": 1, "|": 1, "!": 1, ":": 1,
-        ";": 1
-    };
+    function renderTextSet(chars) {
+        var set = {};
+        for (var _i = 0, chars_1 = chars; _i < chars_1.length; _i++) {
+            var char = chars_1[_i];
+            set[char] = 1;
+        }
+        return set;
+    }
+    exports.renderTextSet = renderTextSet;
+    exports.logical = renderTextSet(["true", "false", "TRUE", "FALSE", "True", "False"]);
+    exports.keywords = renderTextSet(["imports", "from", "require", "if", "else", "for", "function", "let", "const", "return", "", "", "", "", "", "", ""]);
+    exports.operators = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|", "", ""]);
 });
 ///<reference path="token.ts" />
 define("parser", ["require", "exports", "token"], function (require, exports, token_1) {
@@ -115,6 +116,16 @@ define("parser", ["require", "exports", "token"], function (require, exports, to
                 }
             }
             else if (c == " " || c == "\t") {
+                if (this.buf.length > 0) {
+                    // populate previous token
+                    return this.measureToken();
+                }
+                else {
+                    return {
+                        type: token_1.tokenType.whitespace,
+                        text: c
+                    };
+                }
             }
             return null;
         };
@@ -130,6 +141,12 @@ define("parser", ["require", "exports", "token"], function (require, exports, to
                 return {
                     text: text,
                     type: token_1.tokenType.logical
+                };
+            }
+            else if (text in token_1.keywords) {
+                return {
+                    text: text,
+                    type: token_1.tokenType.keyword
                 };
             }
             else if (text.match(/[a-zA-Z_\.]/ig).index == 0) {
@@ -156,7 +173,7 @@ define("parser", ["require", "exports", "token"], function (require, exports, to
     }());
     exports.TokenParser = TokenParser;
 });
-define("app", ["require", "exports", "parser"], function (require, exports, parser_1) {
+define("app", ["require", "exports", "parser", "token"], function (require, exports, parser_1, token_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     function parseText(str) {
@@ -173,6 +190,18 @@ define("app", ["require", "exports", "parser"], function (require, exports, pars
         var html = "";
         for (var _i = 0, tokens_1 = tokens; _i < tokens_1.length; _i++) {
             var t = tokens_1[_i];
+            switch (t.type) {
+                case token_2.tokenType.newLine:
+                    html = html + "\n";
+                    break;
+                case token_2.tokenType.whitespace,
+                    token_2.tokenType.operator,
+                    token_2.tokenType.symbol:
+                    html = html + t.text;
+                    break;
+                default:
+                    html = html + ("<span class=\"" + t.type + "\">" + t.text + "</span>");
+            }
         }
         return html;
     }

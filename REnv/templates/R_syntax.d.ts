@@ -4,17 +4,20 @@ declare module "token" {
         character = 1,
         logical = 2,
         factor = 3,
-        symbol = 4,
-        operator = 5,
-        comment = 6,
-        newLine = 7,
-        whitespace = 8
+        keyword = 4,
+        symbol = 5,
+        operator = 6,
+        comment = 7,
+        newLine = 8,
+        whitespace = 9
     }
     export interface token {
         text: string;
         type: tokenType;
     }
+    export function renderTextSet(chars: string[]): object;
     export const logical: {};
+    export const keywords: {};
     export const operators: {};
 }
 declare module "parser" {
