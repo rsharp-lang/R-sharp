@@ -8,7 +8,17 @@ export function parseText(str: string): token[] {
     return tokens;
 }
 
-export function highlights(str: string) {
+/**
+ * parse the script text to syntax highlight html content
+*/
+export function highlights(str: string): string {
+    var tokens = parseText(str);
+    var html: string = "";
 
+    for (let t of tokens) {
+
+    }
+
+    return html;
 }
 

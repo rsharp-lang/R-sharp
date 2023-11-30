@@ -6,10 +6,24 @@ export enum tokenType {
     symbol,
     operator,
     comment,
-    newLine
+    newLine,
+    whitespace
 }
 
 export interface token {
     text: string;
     type: tokenType;
+}
+
+export const logical: {} = {
+    "TRUE": 1,
+    "true": 1,
+    "FALSE": 1,
+    "false": 1
+};
+
+export const operators: {} = {
+    "+": 1, "-": 1, "*": 1, "\\": 1, "/": 1,
+    "^": 1, "%": 1,
+    "$": 1, "&": 1, "|": 1
 }
