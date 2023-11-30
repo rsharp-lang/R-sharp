@@ -3,6 +3,7 @@ export enum tokenType {
     character,
     logical,
     factor,
+    keyword,
     symbol,
     operator,
     comment,
@@ -15,16 +16,17 @@ export interface token {
     type: tokenType;
 }
 
-export const logical: {} = {
-    "TRUE": 1,
-    "true": 1,
-    "FALSE": 1,
-    "false": 1
-};
+export function renderTextSet(chars: string[]): object {
+    var set = {};
 
-export const operators: {} = {
-    "+": 1, "-": 1, "*": 1, "\\": 1, "/": 1,
-    "^": 1, "%": 1,
-    "$": 1, "&": 1, "|": 1, "!": 1, ":": 1,
-    ";": 1
+    for (let char of chars) {
+        set[char] = 1;
+    }
+
+    return set;
 }
+
+export const logical: {} = renderTextSet(["true", "false", "TRUE", "FALSE", "True", "False"]);
+export const keywords: {} = renderTextSet(["imports", "from", "require", "if", "else", "for", "function", "let", "const", "return", "", "", "", "", "", "", ""]);
+export const operators: {} = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|", "", ""]);
+

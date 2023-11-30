@@ -1,6 +1,6 @@
 ///<reference path="token.ts" />
 
-import { token, tokenType, logical, operators } from './token';
+import { token, tokenType, logical, operators, keywords } from './token';
 
 export class TokenParser {
 
@@ -97,7 +97,15 @@ export class TokenParser {
                 this.buf.push(c);
             }
         } else if (c == " " || c == "\t") {
-
+            if (this.buf.length > 0) {
+                // populate previous token
+                return this.measureToken();
+            } else {
+                return <token>{
+                    type: tokenType.whitespace,
+                    text: c
+                };
+            }
         }
 
         return null;
@@ -115,6 +123,11 @@ export class TokenParser {
             return <token>{
                 text: text,
                 type: tokenType.logical
+            }
+        } else if (text in keywords) {
+            return <token>{
+                text: text,
+                type: tokenType.keyword
             }
         } else if (text.match(/[a-zA-Z_\.]/ig).index == 0) {
             // symbol
