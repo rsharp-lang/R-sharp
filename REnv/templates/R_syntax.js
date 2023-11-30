@@ -1,4 +1,4 @@
-define("app", ["require", "exports"], function (require, exports) {
+define("token", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var tokenType;
@@ -12,9 +12,11 @@ define("app", ["require", "exports"], function (require, exports) {
         tokenType[tokenType["comment"] = 6] = "comment";
         tokenType[tokenType["newLine"] = 7] = "newLine";
     })(tokenType = exports.tokenType || (exports.tokenType = {}));
-    function parseText(str) {
-    }
-    exports.parseText = parseText;
+});
+///<reference path="token.ts" />
+define("parser", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var TokenParser = /** @class */ (function () {
         function TokenParser(source) {
             this.source = source;
@@ -38,5 +40,16 @@ define("app", ["require", "exports"], function (require, exports) {
         return TokenParser;
     }());
     exports.TokenParser = TokenParser;
+});
+define("app", ["require", "exports", "parser"], function (require, exports, parser_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    function parseText(str) {
+        var parser = new parser_1.TokenParser(str);
+        var tokens = parser.getTokens();
+        return tokens;
+    }
+    function highlights(str) {
+    }
 });
 //# sourceMappingURL=R_syntax.js.map

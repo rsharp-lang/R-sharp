@@ -1,4 +1,4 @@
-declare module "app" {
+declare module "token" {
     export enum tokenType {
         number = 0,
         character = 1,
@@ -13,7 +13,9 @@ declare module "app" {
         text: string;
         type: tokenType;
     }
-    export function parseText(str: string): void;
+}
+declare module "parser" {
+    import { token } from "token";
     export class TokenParser {
         source: string;
         escaped: boolean;
@@ -27,3 +29,4 @@ declare module "app" {
         getTokens(): token[];
     }
 }
+declare module "app" { }
