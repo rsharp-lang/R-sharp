@@ -16,6 +16,7 @@ local.properties
 .settings/
 .loadpath
 
+node_modules/
 packages/
 .vs/
 App/
