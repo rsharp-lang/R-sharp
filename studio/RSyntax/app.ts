@@ -12,10 +12,9 @@ export function parseText(str: string): token[] {
  * parse the script text to syntax highlight html content
 */
 export function highlights(str: string): string {
-    var tokens = parseText(str);
     var html: string = "";
 
-    for (let t of tokens) {
+    for (let t of parseText(str)) {
         switch (t.type) {
             case tokenType.newLine:
                 html = html + "\n";

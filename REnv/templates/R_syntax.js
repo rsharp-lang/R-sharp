@@ -25,7 +25,7 @@ define("token", ["require", "exports"], function (require, exports) {
     exports.renderTextSet = renderTextSet;
     exports.logical = renderTextSet(["true", "false", "TRUE", "FALSE", "True", "False"]);
     exports.keywords = renderTextSet(["imports", "from", "require", "if", "else", "for", "function", "let", "const", "return", "", "", "", "", "", "", ""]);
-    exports.operators = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|", "", ""]);
+    exports.operators = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|", ";", ""]);
 });
 ///<reference path="token.ts" />
 define("parser", ["require", "exports", "token"], function (require, exports, token_1) {
@@ -186,10 +186,9 @@ define("app", ["require", "exports", "parser", "token"], function (require, expo
      * parse the script text to syntax highlight html content
     */
     function highlights(str) {
-        var tokens = parseText(str);
         var html = "";
-        for (var _i = 0, tokens_1 = tokens; _i < tokens_1.length; _i++) {
-            var t = tokens_1[_i];
+        for (var _i = 0, _a = parseText(str); _i < _a.length; _i++) {
+            var t = _a[_i];
             switch (t.type) {
                 case token_2.tokenType.newLine:
                     html = html + "\n";

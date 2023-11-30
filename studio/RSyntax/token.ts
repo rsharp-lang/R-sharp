@@ -28,5 +28,5 @@ export function renderTextSet(chars: string[]): object {
 
 export const logical: {} = renderTextSet(["true", "false", "TRUE", "FALSE", "True", "False"]);
 export const keywords: {} = renderTextSet(["imports", "from", "require", "if", "else", "for", "function", "let", "const", "return", "", "", "", "", "", "", ""]);
-export const operators: {} = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|", "", ""]);
+export const operators: {} = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|", ";", ""]);
 
