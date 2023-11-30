@@ -49,7 +49,9 @@ define("app", ["require", "exports", "parser"], function (require, exports, pars
         var tokens = parser.getTokens();
         return tokens;
     }
+    exports.parseText = parseText;
     function highlights(str) {
     }
+    exports.highlights = highlights;
 });
 //# sourceMappingURL=R_syntax.js.map

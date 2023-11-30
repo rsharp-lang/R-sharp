@@ -29,4 +29,8 @@ declare module "parser" {
         getTokens(): token[];
     }
 }
-declare module "app" { }
+declare module "app" {
+    import { token } from "token";
+    export function parseText(str: string): token[];
+    export function highlights(str: string): void;
+}
