@@ -185,7 +185,52 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     End If
 
                     Return Nothing
+                ElseIf targetType.ImplementInterface(GetType(IDictionary)) Then
+                    Dim key_type As Type = targetType.GetGenericArguments.FirstOrDefault
+                    Dim value_type As Type = targetType.GetGenericArguments.ElementAtOrDefault(1)
+
+                    ' 20231201
+                    ' handling of the clr dictionary key value assigned
+                    If key_type Is GetType(String) Then
+                        Dim list As IDictionary = targetObj
+
+                        If value Is Nothing Then
+                            ' removes elements
+                            For Each key As String In indexStr
+                                Call list.Remove(key)
+                            Next
+                        Else
+                            Dim data As Object = REnv.asVector(value, value_type, envir)
+
+                            If TypeOf data Is Message Then
+                                Return data
+                            Else
+                                Dim push As Array = DirectCast(data, Array)
+                                Dim [single] As Object = push.GetValue(0)
+                                Dim scalar As Boolean = push.Length = 1
+
+                                If push.Length = 0 Then
+                                    Return Internal.debug.stop("the value should not be empty when deal with a clr dictionary object value assign!", envir)
+                                ElseIf indexStr.Length <> push.Length AndAlso push.Length > 1 Then
+                                    Return Internal.debug.stop($"the value length({push.Length}) should be equals to the key size({indexStr.Length})!", envir)
+                                End If
+
+                                For i As Integer = 0 To indexStr.Length - 1
+                                    If scalar Then
+                                        list(indexStr(i)) = [single]
+                                    Else
+                                        list(indexStr(i)) = push.GetValue(i)
+                                    End If
+                                Next
+                            End If
+                        End If
+
+                        Return Nothing
+                    Else
+                        GoTo invalid_index
+                    End If
                 Else
+invalid_index:
                     Return Internal.debug.stop({
                         $"Target symbol can not be indexed by name!",
                         $"SymbolName: {symbolIndex.symbol}",
@@ -246,7 +291,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             If value Is Nothing Then
                 getValue = Function() Nothing
             Else
-                Dim valueVec As Array = renv.asVector(Of Object)(value)
+                Dim valueVec As Array = REnv.asVector(Of Object)(value)
                 Dim i As i32 = Scan0
 
                 If valueVec.Length = 1 Then
