@@ -87,14 +87,14 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CFD_win32|x64'">
     <DocumentationFile>Rscript.xml</DocumentationFile>
-    <OutputPath>../App\</OutputPath>
+    <OutputPath>../../../../CFD/assembly/bin/Rstudio/bin</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'gcmodeller_desktop|net6.0-windows' ">
