@@ -474,6 +474,21 @@ Namespace Interpreter
             End If
         End Function
 
+        Public Function Invoke(funcName As String, ParamArray args As (name As String, value As Object)()) As Object
+            Dim find As Object = FunctionInvoke.GetFunctionVar(New Literal(funcName), globalEnvir)
+            Dim parameters As InvokeParameter() = args _
+                .Select(Function(a, i)
+                            Return New InvokeParameter(a.name, a.value, i + 1)
+                        End Function) _
+                .ToArray
+
+            If TypeOf find Is Message Then
+                Return find
+            Else
+                Return DirectCast(find, RFunction).Invoke(globalEnvir, parameters)
+            End If
+        End Function
+
         ''' <summary>
         ''' Run R# script program from text data.
         ''' </summary>
