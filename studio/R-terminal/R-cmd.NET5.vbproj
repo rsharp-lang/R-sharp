@@ -91,7 +91,7 @@
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CFD_win32|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net6.0-windows|x64'">
     <DocumentationFile>R#.xml</DocumentationFile>
     <OutputPath>../../../../../CFD\assembly\bin\Rstudio\bin/</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
