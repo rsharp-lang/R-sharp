@@ -130,7 +130,7 @@ Namespace Runtime.Interop
         Friend ReadOnly listObjectMargin As ListObjectArgumentMargin = ListObjectArgumentMargin.none
 
         ''' <summary>
-        ''' 
+        ''' wrap the .net clr lambda expression
         ''' </summary>
         ''' <param name="name"></param>
         ''' <param name="closure">

@@ -376,9 +376,17 @@ Module stats
     ''' 
     <ExportAPI("ecdf")>
     Public Function ecdf0(<RRawVectorArgument> x As Object) As Object
-        Dim vx As New stdVector(CLRVector.asNumeric(x))
-        vx = vx / vx.Max
+        Dim ecdf As New Distributions.ECDF(CLRVector.asNumeric(x))
+        Dim wrap As Func(Of Object, Object) =
+            Function(q As Array)
+                Dim vq As Double() = CLRVector.asNumeric(q)
+                Dim t As Double() = vq.Select(Function(qi) ecdf.FindThreshold(qi)).ToArray
+                Return t
+            End Function
+        Dim x_json As String = "[" & ecdf.X.Take(6).JoinBy(", ") & "...]"
+        Dim name As String = $"ecdf(x={x_json})"
 
+        Return New RMethodInfo(name, wrap)
     End Function
 
     ''' <summary>
