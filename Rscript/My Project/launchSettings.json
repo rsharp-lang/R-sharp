@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "G:/CFD/src/Rstudio/Moira-CFD.R --SetDllDirectory G:/CFD/assembly/bin/Rstudio/host --debug 100 --model \"G:\\CFD\\src\\desktop\\demo_model.png\""
+      "commandLineArgs": "G:/CFD/src/Rstudio/Moira-CFD.R --SetDllDirectory G:/CFD/assembly/bin/Rstudio/host --debug 101 --model \"G:\\CFD\\src\\desktop\\demo_model.png\""
     },
     "mzkit_debug": {
       "commandName": "Project",
