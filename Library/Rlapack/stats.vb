@@ -351,11 +351,61 @@ Module stats
     ''' <summary>
     ''' ## Empirical Cumulative Distribution Function
     ''' 
+    ''' Compute an empirical cumulative distribution function, with several methods for 
+    ''' plotting, printing and computing with such an “ecdf” object.
+    ''' </summary>
+    ''' <param name="x">
+    ''' numeric vector of the observations for ecdf; for the methods, an object 
+    ''' inheriting from class "ecdf".
+    ''' </param>
+    ''' <returns>
+    ''' For ecdf, a function of class "ecdf", inheriting from the "stepfun" class,
+    ''' and hence inheriting a knots() method.
+    ''' </returns>
+    ''' <remarks>
+    ''' The objects of class "ecdf" are not intended to be used for permanent storage 
+    ''' and may change structure between versions of R (and did at R 3.0.0). They 
+    ''' can usually be re-created by
+    '''
+    ''' ```R
+    ''' eval(attr(old_obj, "call"), environment(old_obj))
+    ''' ```
+    ''' 
+    ''' since the data used Is stored As part Of the Object's environment.
+    ''' </remarks>
+    ''' 
+    <ExportAPI("ecdf")>
+    Public Function ecdf0(<RRawVectorArgument> x As Object) As Object
+        Dim vx As New stdVector(CLRVector.asNumeric(x))
+        vx = vx / vx.Max
+
+    End Function
+
+    ''' <summary>
+    ''' ## Empirical Cumulative Distribution Function
+    ''' 
     ''' Compute an empirical cumulative distribution function
     ''' </summary>
-    ''' <param name="FUNC"></param>
-    ''' <returns></returns>
+    ''' <param name="FUNC">function for run value integral, this function should 
+    ''' accept a number as parameter and produce new number as output.</param>
+    ''' <param name="range">
+    ''' the value range of the target function to do integral
+    ''' </param>
+    ''' <param name="p0">
+    ''' the y0 value for the integral
+    ''' </param>
+    ''' <param name="resolution">
+    ''' the RK4 integral algorithm resolution
+    ''' </param>
+    ''' <returns>
+    ''' this function returns a tuple list object that contains the data slots:
+    ''' 
+    ''' + ``ecdf``: the result value of the integral, a numeric scalar value
+    ''' + ``x``: a numeric vector for x axis
+    ''' + ``y``: a numeric vector for y axis
+    ''' </returns>
     <ExportAPI("CDF")>
+    <RApiReturn("ecdf", "x", "y")>
     Public Function ECDF(FUNC As Object,
                          <RRawVectorArgument>
                          range As Object,
