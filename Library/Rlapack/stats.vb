@@ -378,7 +378,7 @@ Module stats
     Public Function ecdf0(<RRawVectorArgument> x As Object) As Object
         Dim ecdf As New Distributions.ECDF(CLRVector.asNumeric(x))
         Dim wrap As Func(Of Object, Object) =
-            Function(q As Array)
+            Function(q As Object)
                 Dim vq As Double() = CLRVector.asNumeric(q)
                 Dim t As Double() = vq.Select(Function(qi) ecdf.FindThreshold(qi)).ToArray
                 Return t
