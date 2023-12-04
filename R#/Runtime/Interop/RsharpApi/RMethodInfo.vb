@@ -143,7 +143,7 @@ Namespace Runtime.Interop
                 .target = closure.Target
             }
             Me.returns = RApiReturnAttribute.MeasureRReturnInfo(closure.Method)
-            Me.parameters = closure.Method.DoCall(AddressOf parseParameters)
+            Me.parameters = parseParameters(closure.Method, is_lambda:=True)
             Me.listObjectMargin = RArgumentList.objectListArgumentMargin(Me)
 
             Call setRuntimeTraceback()
@@ -171,7 +171,7 @@ Namespace Runtime.Interop
             Me.name = name
             Me.api = New MethodInvoke With {.method = closure, .target = target}
             Me.returns = RApiReturnAttribute.MeasureRReturnInfo(closure)
-            Me.parameters = closure.DoCall(AddressOf parseParameters)
+            Me.parameters = parseParameters(closure, is_lambda:=False)
             Me.invisible = RSuppressPrintAttribute.IsPrintInvisible(closure)
             Me.listObjectMargin = RArgumentList.objectListArgumentMargin(Me)
 
@@ -259,10 +259,10 @@ Namespace Runtime.Interop
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Private Shared Function parseParameters(method As MethodInfo) As RMethodArgument()
+        Private Shared Function parseParameters(method As MethodInfo, is_lambda As Boolean) As RMethodArgument()
             Return method _
                 .GetParameters _
-                .Select(AddressOf RMethodArgument.ParseArgument) _
+                .Select(Function(a) RMethodArgument.ParseArgument(a, is_lambda)) _
                 .ToArray
         End Function
 

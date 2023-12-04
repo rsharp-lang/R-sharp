@@ -104,6 +104,9 @@ Namespace Runtime.Interop
             Me.parser = If(parser, GetType(DefaultVectorParser))
         End Sub
 
+        ''' <summary>
+        ''' construct a vector flag with any object type and use the <see cref="DefaultVectorParser"/>.
+        ''' </summary>
         Sub New()
             Me.vector = Nothing
             Me.parser = GetType(DefaultVectorParser)

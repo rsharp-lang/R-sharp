@@ -157,7 +157,7 @@ Namespace Runtime.Interop
             Return markdown()
         End Function
 
-        Public Shared Function ParseArgument(p As ParameterInfo) As RMethodArgument
+        Public Shared Function ParseArgument(p As ParameterInfo, is_lambda As Boolean) As RMethodArgument
             ' System.MissingMethodException: .ctor 
             Dim rawVectorFlag = p.GetCustomAttribute(Of RRawVectorArgumentAttribute)
             Dim [default] = p.GetCustomAttribute(Of RDefaultValueAttribute)
@@ -165,6 +165,14 @@ Namespace Runtime.Interop
             Dim isByref As Boolean = Not p.GetCustomAttribute(Of RByRefValueAssignAttribute) Is Nothing
             Dim hasExpression As Boolean = Not p.GetCustomAttribute(Of RDefaultExpressionAttribute) Is Nothing
             Dim islazyeval As Boolean = Not p.GetCustomAttribute(Of RLazyExpressionAttribute) Is Nothing
+
+            If is_lambda AndAlso p.ParameterType Is GetType(Object) Then
+                ' 20231204
+                ' object type of the clr lambda parameter always be a vector
+                If rawVectorFlag Is Nothing Then
+                    rawVectorFlag = New RRawVectorArgumentAttribute
+                End If
+            End If
 
             Return New RMethodArgument With {
                 .name = p.Name,
