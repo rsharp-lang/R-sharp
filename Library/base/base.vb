@@ -52,6 +52,7 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Data.IO.MessagePack
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.DataFrame.Impute
 Imports Microsoft.VisualBasic.MIME.application.rdf_xml.Turtle
@@ -114,5 +115,34 @@ Public Module base
         Else
             Return reader.ReadObjects.ToArray
         End If
+    End Function
+
+    <ExportAPI("load.msgpack")>
+    Public Function loadMsgPack(<RRawVectorArgument> file As Object, [typeof] As Object, Optional env As Environment = Nothing) As Object
+        Dim stream = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
+
+        If stream Like GetType(Message) Then
+            Return stream.TryCast(Of Message)
+        End If
+
+        Dim rtype As RType = env.globalEnvironment.GetType([typeof])
+
+        If rtype.raw Is GetType(Object) Then
+            Return Internal.debug.stop("a valid type schema must be provided to construct the .net clr data set!", env)
+        End If
+
+        Dim type As Type = rtype.raw
+
+        If Not type.IsArray Then
+            type = type.MakeArrayType
+        End If
+
+        Dim value As Object = MsgPackSerializer.Deserialize(type, stream.TryCast(Of Stream))
+
+        If TypeOf file Is String Then
+            Call stream.TryCast(Of Stream).Dispose()
+        End If
+
+        Return value
     End Function
 End Module
