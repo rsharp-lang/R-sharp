@@ -117,6 +117,13 @@ Public Module base
         End If
     End Function
 
+    ''' <summary>
+    ''' A helper function for load the messagepack dataset
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="[typeof]"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("load.msgpack")>
     Public Function loadMsgPack(<RRawVectorArgument> file As Object, [typeof] As Object, Optional env As Environment = Nothing) As Object
         Dim stream = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
