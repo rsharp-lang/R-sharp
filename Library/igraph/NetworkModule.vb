@@ -429,7 +429,8 @@ Public Module NetworkModule
     <ExportAPI("save.network")>
     <RApiReturn(GetType(Boolean))>
     Public Function SaveNetwork(g As Object, file$,
-                                Optional properties As String() = Nothing,
+                                <RRawVectorArgument(TypeCodes.string)>
+                                Optional properties As Object = "*",
                                 Optional meta As MetaData = Nothing,
                                 Optional env As Environment = Nothing) As Object
 
@@ -440,7 +441,7 @@ Public Module NetworkModule
         End If
 
         If g.GetType Is GetType(NetworkGraph) Then
-            tables = DirectCast(g, NetworkGraph).Tabular(properties, meta:=meta)
+            tables = DirectCast(g, NetworkGraph).Tabular(CLRVector.asCharacter(properties), meta:=meta)
         ElseIf g.GetType Is GetType(NetworkTables) Then
             tables = g
 
