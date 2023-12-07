@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -56,6 +57,8 @@ Namespace Runtime.Vectorization
                     elementType = .elementType
                     Return .populates(Of Object)(env)
                 End With
+            ElseIf type Is GetType(Group) Then
+                Return GetObjectSet(DirectCast(x, Group).group, env, elementType)
             Else
                 elementType = RType.GetRSharpType(x.GetType)
                 Return {x}
