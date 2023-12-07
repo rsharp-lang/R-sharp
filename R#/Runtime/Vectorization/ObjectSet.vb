@@ -7,6 +7,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Vectorization
 
+    ''' <summary>
+    ''' data collection helper
+    ''' </summary>
     Public NotInheritable Class ObjectSet
 
         Private Sub New()
