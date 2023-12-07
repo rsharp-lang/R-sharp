@@ -592,49 +592,52 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
         End Function
 
+        Private Function booleanFilter(seq As IEnumerable(Of Object)) As [Variant](Of Boolean(), Message)
+            Dim booleans As New List(Of Boolean)
+
+            For Each obj As Object In seq
+                If TypeOf obj Is Message Then
+                    Return obj
+                Else
+                    With DirectCast(obj, (Boolean, Object))
+                        booleans.Add(.Item1)
+                    End With
+                End If
+            Next
+
+            Return booleans.ToArray
+        End Function
+
+        Private Iterator Function objectPopulator(seq As IEnumerable(Of Object)) As IEnumerable(Of Object)
+            For Each obj As Object In seq
+                If TypeOf obj Is Message Then
+                    Yield obj
+                    Return
+                Else
+                    With DirectCast(obj, (Boolean, Object))
+                        If .Item1 Then
+                            Yield .Item2
+                        End If
+                    End With
+                End If
+            Next
+        End Function
+
         Private Function runFilterPipeline(sequence As Object,
                                            test As Object,
                                            pipelineFilter As Boolean,
                                            env As Environment) As Object
 
             Return DirectCast(sequence, pipeline) _
-                    .populates(Of Object)(env) _
-                    .runWhichFilter(test, env) _
-                    .DoCall(Function(seq)
-                                If pipelineFilter Then
-                                    Return Iterator Function() As IEnumerable(Of Object)
-                                               For Each obj As Object In seq
-                                                   If TypeOf obj Is Message Then
-                                                       Yield obj
-                                                       Return
-                                                   Else
-                                                       With DirectCast(obj, (Boolean, Object))
-                                                           If .Item1 Then
-                                                               Yield .Item2
-                                                           End If
-                                                       End With
-                                                   End If
-                                               Next
-                                           End Function() _
-                                       .DoCall(Function(pip)
-                                                   Return New pipeline(pip, DirectCast(sequence, pipeline).elementType)
-                                               End Function)
-                                Else
-                                    Dim booleans As New List(Of Boolean)
-
-                                    For Each obj As Object In seq
-                                        If TypeOf obj Is Message Then
-                                            Return obj
-                                        Else
-                                            With DirectCast(obj, (Boolean, Object))
-                                                booleans.Add(.Item1)
-                                            End With
-                                        End If
-                                    Next
-
-                                    Return booleans.ToArray
-                                End If
-                            End Function)
+                .populates(Of Object)(env) _
+                .runWhichFilter(test, env) _
+                .DoCall(Function(seq)
+                            If pipelineFilter Then
+                                Return New pipeline(objectPopulator(seq), DirectCast(sequence, pipeline).elementType)
+                            Else
+                                Return booleanFilter(seq).Value
+                            End If
+                        End Function)
         End Function
 
         Private Function getPredicate(test As Object, env As Environment) As [Variant](Of Predicate(Of Object), Message)
