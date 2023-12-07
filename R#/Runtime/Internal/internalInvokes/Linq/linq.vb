@@ -118,11 +118,14 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         ''' <summary>
-        ''' 
+        ''' A left join is a type of relational join operation that combines 
+        ''' two datasets based on a common column or variable. The result of 
+        ''' a left join includes all the rows from the left dataset and any 
+        ''' matching rows from the right dataset.
         ''' </summary>
         ''' <param name="left"></param>
         ''' <param name="right"></param>
-        ''' <param name="by"></param>
+        ''' <param name="by">the field name that used for join two data table</param>
         ''' <returns></returns>
         <ExportAPI("left_join")>
         Public Function left_join(left As dataframe, right As dataframe,
@@ -545,43 +548,47 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
                 Return subKeys
             Else
-                Dim testResult = ObjectSet.GetObjectSet(x, env) _
-                    .runWhichFilter(test, env) _
-                    .ToArray
+                Return whichGenericClrSet(x, test, pipelineFilter, env)
+            End If
+        End Function
 
-                If pipelineFilter Then
-                    Dim objs As New List(Of Object)
+        Private Function whichGenericClrSet(x As Object, test As Object, pipelineFilter As Boolean, env As Environment) As Object
+            Dim testResult = ObjectSet.GetObjectSet(x, env) _
+                .runWhichFilter(test, env) _
+                .ToArray
 
-                    ' returns the object vector where test result is true
-                    For Each obj As Object In testResult
-                        If TypeOf obj Is Message Then
-                            Return obj
-                        Else
-                            With DirectCast(obj, (Boolean, Object))
-                                If .Item1 Then
-                                    Call objs.Add(.Item2)
-                                End If
-                            End With
-                        End If
-                    Next
+            If pipelineFilter Then
+                Dim objs As New List(Of Object)
 
-                    Return REnv.TryCastGenericArray(objs.ToArray, env)
-                Else
-                    Dim booleans As New List(Of Boolean)
+                ' returns the object vector where test result is true
+                For Each obj As Object In testResult
+                    If TypeOf obj Is Message Then
+                        Return obj
+                    Else
+                        With DirectCast(obj, (Boolean, Object))
+                            If .Item1 Then
+                                Call objs.Add(.Item2)
+                            End If
+                        End With
+                    End If
+                Next
 
-                    ' returns the logical test vector result
-                    For Each obj As Object In testResult
-                        If TypeOf obj Is Message Then
-                            Return obj
-                        Else
-                            With DirectCast(obj, (Boolean, Object))
-                                booleans.Add(.Item1)
-                            End With
-                        End If
-                    Next
+                Return REnv.TryCastGenericArray(objs.ToArray, env)
+            Else
+                Dim booleans As New List(Of Boolean)
 
-                    Return booleans.ToArray
-                End If
+                ' returns the logical test vector result
+                For Each obj As Object In testResult
+                    If TypeOf obj Is Message Then
+                        Return obj
+                    Else
+                        With DirectCast(obj, (Boolean, Object))
+                            booleans.Add(.Item1)
+                        End With
+                    End If
+                Next
+
+                Return booleans.ToArray
             End If
         End Function
 
