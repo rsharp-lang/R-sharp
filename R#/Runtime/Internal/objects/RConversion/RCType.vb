@@ -214,6 +214,9 @@ RE0:
             If TypeOf obj Is vector Then
                 obj = DirectCast(obj, vector).data
                 GoTo RE0
+            ElseIf obj Is GetType(void) AndAlso type IsNot GetType(type) Then
+                ' cast NA to nothing
+                Return Nothing
             End If
 
             Try
