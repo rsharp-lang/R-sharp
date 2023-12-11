@@ -28,11 +28,13 @@ Namespace Development.Components
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property integer_max As Integer = Integer.MaxValue
+        Public ReadOnly Property uinteger_max As Long = UInteger.MaxValue
 
         Public Function toList() As list Implements ICTypeList.toList
             Return New list With {
                 .slots = New Dictionary(Of String, Object) From {
-                    {"integer.max", integer_max}
+                    {"integer.max", integer_max},
+                    {"uinteger.max", uinteger_max}
                 }
             }
         End Function
