@@ -337,7 +337,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         Friend Shared Function GetSymbol(symbolName As Expression) As String
             Select Case symbolName.GetType
                 Case GetType(Literal)
-                    Return CStr(DirectCast(symbolName, Literal).value)
+                    With DirectCast(symbolName, Literal)
+                        If .type = TypeCodes.string Then
+                            Return CStr(.value)
+                        Else
+                            ' other literal value, example like number,
+                            ' logical, is not a name
+                            Return Nothing
+                        End If
+                    End With
                 Case GetType(SymbolReference)
                     Return DirectCast(symbolName, SymbolReference).symbol
                 Case Else
