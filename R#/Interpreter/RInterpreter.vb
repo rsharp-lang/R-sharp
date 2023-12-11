@@ -73,6 +73,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -186,6 +187,7 @@ Namespace Interpreter
             _globalEnvir.Push("PI", stdNum.PI, True, TypeCodes.double)
             _globalEnvir.Push("E", stdNum.E, True, TypeCodes.double)
             _globalEnvir.Push(".GlobalEnv", globalEnvir, True, TypeCodes.environment)
+            _globalEnvir.Push(".Machine", New DotMachine().toList, True, TypeCodes.list)
 
             For Each dllName As String In env.options.environments.SafeQuery
                 Dim searchContext As New List(Of String)

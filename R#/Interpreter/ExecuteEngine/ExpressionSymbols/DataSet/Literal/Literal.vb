@@ -103,6 +103,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End Get
         End Property
 
+        Public ReadOnly Property isNumeric As Boolean
+            Get
+                Return type = TypeCodes.double OrElse type = TypeCodes.integer OrElse type = TypeCodes.raw
+            End Get
+        End Property
+
         Public Shared ReadOnly Property NULL As Literal
             Get
                 Return New Literal With {
