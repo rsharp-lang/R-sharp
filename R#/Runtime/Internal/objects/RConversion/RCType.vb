@@ -216,8 +216,15 @@ RE0:
                 obj = DirectCast(obj, vector).data
                 GoTo RE0
             ElseIf obj Is GetType(Void) AndAlso type IsNot GetType(Type) Then
+                Dim warn As String = $"literal NA has been cast to nothing while required of target should be {type.FullName}!"
+
                 ' cast NA to nothing
-                Call env.AddMessage($"literal NA has been cast to nothing while required of target should be {type.FullName}!", MSG_TYPES.WRN)
+                If env Is Nothing Then
+                    Call warn.Warning
+                Else
+                    Call env.AddMessage(warn, MSG_TYPES.WRN)
+                End If
+
                 Return Nothing
             End If
 
