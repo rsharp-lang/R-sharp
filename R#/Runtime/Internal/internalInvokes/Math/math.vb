@@ -283,7 +283,25 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("is.nan")>
         Public Function isNaN(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
-            Return EvaluateFramework(Of Double, Boolean)(env, x, eval:=Function(xi) xi.IsNaNImaginary)
+            If GetType(Void) Is x Then
+                Return True
+            End If
+
+            Dim test As New List(Of Boolean)
+            Dim nums = CLRVector.asNumeric(x)
+            Dim i As Integer = 0
+
+            For Each el As Object In ObjectSet.GetObjectSet(x, env)
+                If el Is GetType(Void) Then
+                    test.Add(True)
+                Else
+                    test.Add(nums(i).IsNaNImaginary)
+                End If
+
+                i += 1
+            Next
+
+            Return test.ToArray
         End Function
 
         <ExportAPI("fit")>

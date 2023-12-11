@@ -149,6 +149,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
             Dim type As Type = MeasureRealElementType(vector.ToArray)
 
+            If vector.Any(Function(a) a Is GetType(Void)) Then
+                type = GetType(Object)
+            End If
+
             If Not type Is GetType(Void) AndAlso Not type Is GetType(Object) Then
                 Return New vector(type, vector, envir)
             Else
