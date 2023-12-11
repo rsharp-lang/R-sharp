@@ -56,6 +56,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -318,6 +319,18 @@ Namespace Runtime.Internal.Object
                 Else
                     Return Message.InCompatibleType(GetType(T), upstream_type, env, suppress:=suppress)
                 End If
+            ElseIf DataFramework.IsNumericType(upstream_type) AndAlso DataFramework.IsNumericType(GetType(T)) Then
+                Dim vec As Array = Array.CreateInstance(GetType(T), 1)
+                vec(0) = Conversion.CTypeDynamic(upstream, GetType(T))
+                Return CreateFromPopulator(DirectCast(vec, T()))
+            ElseIf DataFramework.IsNumericCollection(upstream_type) AndAlso DataFramework.IsNumericType(GetType(T)) Then
+                Dim pull As Func(Of IEnumerable(Of T)) =
+                    Iterator Function() As IEnumerable(Of T)
+                        For Each el As Object In DirectCast(upstream, IEnumerable)
+                            Yield Conversion.CTypeDynamic(el, GetType(T))
+                        Next
+                    End Function
+                Return CreateFromPopulator(pull())
             Else
                 Return Message.InCompatibleType(GetType(T), upstream_type, env, suppress:=suppress)
             End If
