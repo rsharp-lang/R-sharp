@@ -186,6 +186,7 @@ Namespace Interpreter
             _globalEnvir.Push("PI", stdNum.PI, True, TypeCodes.double)
             _globalEnvir.Push("E", stdNum.E, True, TypeCodes.double)
             _globalEnvir.Push(".GlobalEnv", globalEnvir, True, TypeCodes.environment)
+            _globalEnvir.Push(".Machine", globalEnvir, True, TypeCodes.list)
 
             For Each dllName As String In env.options.environments.SafeQuery
                 Dim searchContext As New List(Of String)
