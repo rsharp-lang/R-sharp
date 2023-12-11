@@ -24,6 +24,27 @@ Namespace Development.Components
     Public Class DotMachine : Implements ICTypeList
 
         ''' <summary>
+        ''' the smallest positive floating-point number x such that 1 + x != 1. 
+        ''' It equals double.base ^ ulp.digits if either double.base is 2 or 
+        ''' double.rounding is 0; otherwise, it is (double.base ^ double.ulp.digits) / 2. 
+        ''' Normally 2.220446e-16.
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property double_eps As Double = Double.Epsilon
+        ''' <summary>
+        ''' a small positive floating-point number x such that 1 - x != 1. It equals 
+        ''' double.base ^ double.neg.ulp.digits if double.base is 2 or double.rounding 
+        ''' is 0; otherwise, it is (double.base ^ double.neg.ulp.digits) / 2. Normally
+        ''' 1.110223e-16. As double.neg.ulp.digits is bounded below by -(double.digits + 3),
+        ''' double.neg.eps may not be the smallest number that can alter 1 by subtraction.
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property double_neg_eps As Double = 0.0000000000000001110223
+
+        Public ReadOnly Property double_xmin As Double = Double.MinValue
+        Public ReadOnly Property double_xmax As Double = Double.MaxValue
+
+        ''' <summary>
         ''' the largest integer which can be represented. Always 2^{31} - 1 = 21474836472
         ''' </summary>
         ''' <returns></returns>
