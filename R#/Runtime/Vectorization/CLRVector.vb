@@ -387,6 +387,10 @@ Namespace Runtime.Vectorization
                 Return DirectCast(x, TimeSpan()).Select(Function(d) d.TotalMilliseconds).ToArray
             ElseIf TypeOf x Is Object() Then
                 Return DirectCast(x, Object()).Select(Function(d) CDbl(d)).ToArray
+            ElseIf TypeOf x Is Boolean() Then
+                Return DirectCast(x, Boolean()) _
+                    .Select(Function(xi) If(xi, 1.0, 0.0)) _
+                    .ToArray
             Else
                 Throw New InvalidCastException(x.GetType.FullName)
             End If
