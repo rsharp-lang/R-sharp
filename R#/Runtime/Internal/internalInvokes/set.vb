@@ -77,6 +77,52 @@ Namespace Runtime.Internal.Invokes
     Module [set]
 
         ''' <summary>
+        ''' unset — Unset the feature slots value from a given variable
+        ''' </summary>
+        ''' <param name="x">
+        ''' should be a tuple list object or dataframe object
+        ''' </param>
+        ''' <param name="args">the features names to deletes from the given object <paramref name="x"/>.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' the orginal object will be modified by this function
+        ''' </remarks>
+        <ExportAPI("unset")>
+        Public Function unset(x As Object,
+                              <RListObjectArgument>
+                              Optional args As list = Nothing,
+                              Optional env As Environment = Nothing) As Object
+
+            If x Is Nothing Then
+                Return x
+            End If
+
+            Dim names As String() = CLRVector.asCharacter(args.slots.Values)
+
+            If names.IsNullOrEmpty Then
+                Call env.AddMessage("no slot features name was provided to deletes...", MSG_TYPES.WRN)
+                Return x
+            End If
+
+            If TypeOf x Is list Then
+                Dim ls As list = x
+
+            ElseIf TypeOf x Is dataframe Then
+                Dim df As dataframe = x
+
+            ElseIf x.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Dim dict As IDictionary = x
+
+
+            Else
+                Return Message.InCompatibleType(GetType(list), x.GetType, env)
+            End If
+
+            Return x
+        End Function
+
+        ''' <summary>
         ''' ### Cross Tabulation and Table Creation
         ''' 
         ''' table uses the cross-classifying factors to build
