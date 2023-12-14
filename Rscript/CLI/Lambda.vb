@@ -69,16 +69,20 @@ Partial Module CLI
 
     <ExportAPI("--lambda")>
     <Description("Execute R# function with parameters")>
-    <Usage("--lambda <delegate_name> [--request </path/to/del_func_parameters.json, default=""./.r_env/run.json""> --SetDllDirectory <dll_directory>]")>
+    <Usage("--lambda <delegate_name> [--request </path/to/del_func_parameters.json, default=""./.r_env/run.json""> --SetDllDirectory <dll_directory> --attach <pkg_directory>]")>
     Public Function execLambda(args As CommandLine) As Integer
         Dim SetDllDirectory As String = args("--SetDllDirectory")
         Dim renv As New RInterpreter
         Dim del_func As String = args.SingleValue
         Dim request_argv As String = args("--request") Or "./.r_env/run.json".GetFullPath
         Dim options_argv As String = args("--options") Or "./.r_env/options.json".GetFullPath
+        Dim attach As String = args("--attach")
 
         If Not SetDllDirectory.StringEmpty Then
             Call renv.globalEnvir.options.setOption("SetDllDirectory", SetDllDirectory)
+        End If
+        If attach.DirectoryExists Then
+
         End If
 
         Dim func As NamedValue(Of String) = del_func.GetTagValue("::", trim:=True, failureNoName:=True)
