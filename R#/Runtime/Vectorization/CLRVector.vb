@@ -176,7 +176,9 @@ Namespace Runtime.Vectorization
                 x = DirectCast(x, list).slots.Values.ToArray
             End If
 
-            If x.GetType.IsArray Then
+            Dim typeof_x As Type = x.GetType
+
+            If typeof_x.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
             End If
 
