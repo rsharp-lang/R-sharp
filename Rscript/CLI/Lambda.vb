@@ -87,7 +87,18 @@ Partial Module CLI
         Call LoadLibrary(renv, ignoreMissingStartupPackages:=True, "base", "utils", "grDevices", "math", "stats")
 
         ' set options
-        Dim opts As list = renv.getLambdaArguments(file:=options_argv)
+        Dim opts_val = renv.getLambdaArguments(file:=options_argv)
+        Dim opts As list = TryCast(opts_val, list)
+
+        If opts Is Nothing Then
+            If TypeOf opts_val Is Message Then
+                Return handleResult(opts_val, renv.globalEnvir)
+            End If
+
+            opts = New list With {
+                .slots = New Dictionary(Of String, Object)
+            }
+        End If
 
         For Each name As String In opts.getNames
             Call renv.globalEnvir.options.setOption(
