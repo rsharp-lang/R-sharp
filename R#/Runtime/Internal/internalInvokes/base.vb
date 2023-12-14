@@ -3577,7 +3577,7 @@ RE0:
         End Function
 
         <Extension>
-        Friend Function attachPackageFile(R As RInterpreter, zip As String) As Object
+        Public Function attachPackageFile(R As RInterpreter, zip As String) As Object
             Dim tmpDir As String = TempFileSystem.GetAppSysTempFile("_package", App.PID.ToHexString, zip.BaseName)
             Call UnZip.ImprovedExtractToDirectory(zip, tmpDir, Overwrite.Always)
             Return PackageLoader2.LoadPackage(tmpDir, R.globalEnvir)
