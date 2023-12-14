@@ -498,6 +498,9 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="asText_encoding">
         ''' if this parameter is not nothing, then the output will be convert as text
         ''' </param>
+        ''' <param name="wrap">
+        ''' wrap the result as memory stream object instead of the raw bytes vector output
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns>
         ''' this function returns a text data or memory stream buffer object.
@@ -507,7 +510,7 @@ Namespace Runtime.Internal.Invokes
         ''' ``asText_encoding`` assign of value ``utf8`` usually. 
         ''' </remarks>
         <ExportAPI("base64_decode")>
-        <RApiReturn(GetType(String), GetType(Byte))>
+        <RApiReturn(GetType(String), GetType(Byte), GetType(MemoryStream))>
         Public Function base64Decode(base64 As String,
                                      Optional asText_encoding As Object = Nothing,
                                      Optional wrap As Boolean = True,
