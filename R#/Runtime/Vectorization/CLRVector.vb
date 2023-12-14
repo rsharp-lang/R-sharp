@@ -186,15 +186,17 @@ Namespace Runtime.Vectorization
                 Return New String() {DirectCast(x, String)}
             ElseIf TypeOf x Is String() Then
                 Return x
-            ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of String)) Then
+            ElseIf typeof_x.ImplementInterface(Of IEnumerable(Of String)) Then
                 Return DirectCast(x, IEnumerable(Of String)).ToArray
-            ElseIf x.GetType.ImplementInterface(GetType(ICTypeVector)) Then
+            ElseIf typeof_x.ImplementInterface(Of IEnumerable(Of Object)) Then
+                Return fromObjectCollection(DirectCast(x, IEnumerable(Of Object)))
+            ElseIf typeof_x.ImplementInterface(GetType(ICTypeVector)) Then
                 Return DirectCast(x, ICTypeVector).ToFactors
             ElseIf TypeOf x Is String()() Then
                 Return DirectCast(x, String()()) _
                     .Select(Function(r) r(Scan0)) _
                     .ToArray
-            ElseIf x.GetType.IsArray Then
+            ElseIf typeof_x.IsArray Then
                 ' force cast any object to string
                 Dim objs = DirectCast(x, Array) _
                     .AsObjectEnumerator _
@@ -205,14 +207,21 @@ Namespace Runtime.Vectorization
                         .Select(Function(a) any.ToString(DirectCast(a, Array).GetValueOrDefault(Scan0))) _
                         .ToArray
                 Else
-                    Return objs _
-                        .Select(Function(a) any.ToString(a)) _
-                        .ToArray
+                    Return fromObjectCollection(objs)
                 End If
+            ElseIf typeof_x.ImplementInterface(Of IEnumerable) Then
+                Return fromObjectCollection(From o As Object In DirectCast(x, IEnumerable) Select o)
             Else
                 ' is a single value
                 Return New String() {any.ToString(x)}
             End If
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Private Function fromObjectCollection(objs As IEnumerable(Of Object)) As String()
+            Return objs _
+                .Select(Function(a) any.ToString(a)) _
+                .ToArray
         End Function
 
         Public Function asRawByte(x As Object) As Byte()
