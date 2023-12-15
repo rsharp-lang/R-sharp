@@ -246,6 +246,20 @@ Module stats
     End Enum
 
     ''' <summary>
+    ''' calculates ``C(n, k)``.
+    ''' </summary>
+    ''' <param name="number">n</param>
+    ''' <param name="number_chosen">k</param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' https://en.wikipedia.org/wiki/Combination
+    ''' </remarks>
+    <ExportAPI("combin")>
+    Public Function combin(number As Integer, number_chosen As Integer) As Double
+        Return SpecialFunctions.Combination(number, number_chosen)
+    End Function
+
+    ''' <summary>
     ''' The Normal Distribution
     ''' 
     ''' Density, distribution function, quantile function and random generation 
