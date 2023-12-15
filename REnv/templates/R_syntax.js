@@ -117,7 +117,8 @@ var TokenParser = /** @class */ (function () {
     };
     TokenParser.prototype.measureToken = function () {
         var text = this.buf.join("");
-        if (text == "NULL" || text == "NA") {
+        var test_symbol = text.match(/[a-zA-Z_\.]/ig);
+        if (text == "NULL" || text == "NA" || text == "NaN" || text == "Inf") {
             return {
                 text: text,
                 type: "factor"
@@ -135,7 +136,7 @@ var TokenParser = /** @class */ (function () {
                 type: "keyword"
             };
         }
-        else if (text.match(/[a-zA-Z_\.]/ig).index == 0) {
+        else if (test_symbol.index == 0) {
             // symbol
             return {
                 text: text,

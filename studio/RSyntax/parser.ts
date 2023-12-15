@@ -112,9 +112,10 @@ class TokenParser {
     }
 
     private measureToken(): token {
-        var text: string = this.buf.join("");
+        const text: string = this.buf.join("");
+        const test_symbol = text.match(/[a-zA-Z_\.]/ig);
 
-        if (text == "NULL" || text == "NA") {
+        if (text == "NULL" || text == "NA" || text == "NaN" || text == "Inf") {
             return <token>{
                 text: text,
                 type: "factor"
@@ -129,7 +130,7 @@ class TokenParser {
                 text: text,
                 type: "keyword"
             }
-        } else if (text.match(/[a-zA-Z_\.]/ig).index == 0) {
+        } else if (test_symbol.index == 0) {
             // symbol
             return <token>{
                 text: text,
