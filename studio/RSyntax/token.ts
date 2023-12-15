@@ -20,7 +20,7 @@ namespace Token {
     }
 
     export const logical: {} = renderTextSet(["true", "false", "TRUE", "FALSE", "True", "False"]);
-    export const operators: {} = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|"]);
+    export const operators: {} = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|", ",", "~", "?"]);
     export const stacks: {} = renderTextSet(["[", "]", "(", ")", "{", "}"]);
     export const keywords: {} = renderTextSet([
         "imports", "from", "require",

@@ -10,7 +10,7 @@ var Token;
         return set;
     }
     Token.logical = renderTextSet(["true", "false", "TRUE", "FALSE", "True", "False"]);
-    Token.operators = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|"]);
+    Token.operators = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|", ",", "~", "?"]);
     Token.stacks = renderTextSet(["[", "]", "(", ")", "{", "}"]);
     Token.keywords = renderTextSet([
         "imports", "from", "require",
