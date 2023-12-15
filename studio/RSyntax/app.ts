@@ -28,7 +28,6 @@ function highlights(str: string, verbose: boolean = true): string {
                 html = html + "\n";
                 break;
             case "whitespace":
-            case "operator":
             case "symbol":
                 html = html + escape_op(t.text);
                 break;

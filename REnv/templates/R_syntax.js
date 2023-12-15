@@ -232,7 +232,6 @@ function highlights(str, verbose) {
                 html = html + "\n";
                 break;
             case "whitespace":
-            case "operator":
             case "symbol":
                 html = html + escape_op(t.text);
                 break;
