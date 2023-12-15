@@ -1,5 +1,6 @@
 declare namespace Token {
-    type tokenType = "number" | "character" | "logical" | "factor" | "keyword" | "symbol" | "operator" | "comment" | "newLine" | "whitespace" | "bracket" | "terminator";
+    type tokenType = "number" | "character" | "logical" | "factor" | "keyword" | "symbol" | "operator" | "comment" | "newLine" | "whitespace" | "bracket" | "terminator" | "color";
+    const html_color: RegExp;
     interface token {
         text: string;
         type: tokenType;

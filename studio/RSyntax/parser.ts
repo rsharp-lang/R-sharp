@@ -72,6 +72,8 @@ class TokenParser {
 
             if (c == this.escape_char) {
                 const pull_str = this.buf.join("");
+                const type: Token.tokenType = Token.html_color.test(pull_str) ? "color" : "character";
+
                 // end escape
                 this.escaped = false;
                 this.escape_char = null;
@@ -79,7 +81,7 @@ class TokenParser {
 
                 return <token>{
                     text: pull_str,
-                    type: "character"
+                    type: type
                 }
             } else {
                 // do nothing

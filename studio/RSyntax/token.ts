@@ -1,6 +1,8 @@
 namespace Token {
 
-    export type tokenType = "number" | "character" | "logical" | "factor" | "keyword" | "symbol" | "operator" | "comment" | "newLine" | "whitespace" | "bracket" | "terminator";
+    export type tokenType = "number" | "character" | "logical" | "factor" | "keyword" | "symbol" | "operator" | "comment" | "newLine" | "whitespace" | "bracket" | "terminator" | "color";
+    export const html_color = /"[#][a-zA-Z0-9]{6}"/ig;
+
 
     export interface token {
         text: string;
@@ -25,6 +27,6 @@ namespace Token {
         "if", "else", "for", "break", "while",
         "function", "return",
         "let", "const",
-        "stop", "invisible", "", "", ""
+        "stop", "invisible"
     ]);
 }

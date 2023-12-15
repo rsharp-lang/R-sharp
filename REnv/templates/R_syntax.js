@@ -1,5 +1,6 @@
 var Token;
 (function (Token) {
+    Token.html_color = /"[#][a-zA-Z0-9]{6}"/ig;
     function renderTextSet(chars) {
         var set = {};
         for (var _i = 0, chars_1 = chars; _i < chars_1.length; _i++) {
@@ -16,7 +17,7 @@ var Token;
         "if", "else", "for", "break", "while",
         "function", "return",
         "let", "const",
-        "stop", "invisible", "", "", ""
+        "stop", "invisible"
     ]);
 })(Token || (Token = {}));
 ///<reference path="token.ts" />
@@ -84,13 +85,14 @@ var TokenParser = /** @class */ (function () {
             this.buf.push(c);
             if (c == this.escape_char) {
                 var pull_str = this.buf.join("");
+                var type = Token.html_color.test(pull_str) ? "color" : "character";
                 // end escape
                 this.escaped = false;
                 this.escape_char = null;
                 this.buf = [];
                 return {
                     text: pull_str,
-                    type: "character"
+                    type: type
                 };
             }
             else {
