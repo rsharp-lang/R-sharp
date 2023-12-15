@@ -44,6 +44,11 @@ class TokenParser {
                         tokens.push(<token>{
                             text: c, type: "newLine"
                         });
+                    } else if (c in Token.stacks) {
+                        this.buf = [];
+                        tokens.push(<token>{
+                            text: c, type: "bracket"
+                        });
                     }
                 }
             }

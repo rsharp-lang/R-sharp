@@ -53,6 +53,12 @@ var TokenParser = /** @class */ (function () {
                             text: c, type: "newLine"
                         });
                     }
+                    else if (c in Token.stacks) {
+                        this.buf = [];
+                        tokens.push({
+                            text: c, type: "bracket"
+                        });
+                    }
                 }
             }
         }
