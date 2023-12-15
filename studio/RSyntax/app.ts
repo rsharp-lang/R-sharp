@@ -18,17 +18,17 @@ function highlights(str: string): string {
 
     for (let t of parseText(str)) {
         switch (t.type) {
-            case Token.tokenType.newLine:
+            case "newLine":
                 html = html + "\n";
                 break;
-            case Token.tokenType.whitespace,
-                Token.tokenType.operator,
-                Token.tokenType.symbol:
+            case "whitespace":
+            case "operator":
+            case "symbol":
                 html = html + t.text;
                 break;
 
             default:
-                html = html + `<span class="${Token.tokenType[t.type]}">${t.text}</span>`;
+                html = html + `<span class="${t.type}">${t.text}</span>`;
         }
     }
 

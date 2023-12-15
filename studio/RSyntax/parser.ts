@@ -48,7 +48,7 @@ class TokenParser {
 
                 return <token>{
                     text: this.buf.join(""),
-                    type: Token.tokenType.character
+                    type: "character"
                 }
             } else {
                 // do nothing
@@ -64,7 +64,7 @@ class TokenParser {
 
                 return <token>{
                     text: this.buf.join(""),
-                    type: Token.tokenType.comment
+                    type: "comment"
                 }
             } else {
                 this.buf.push(c);
@@ -100,7 +100,7 @@ class TokenParser {
                 return this.measureToken();
             } else {
                 return <token>{
-                    type: Token.tokenType.whitespace,
+                    type: "whitespace",
                     text: c
                 };
             }
@@ -115,33 +115,33 @@ class TokenParser {
         if (text == "NULL" || text == "NA") {
             return <token>{
                 text: text,
-                type: Token.tokenType.factor
+                type: "factor"
             }
         } else if (text in Token.logical) {
             return <token>{
                 text: text,
-                type: Token.tokenType.logical
+                type: "logical"
             }
         } else if (text in Token.keywords) {
             return <token>{
                 text: text,
-                type: Token.tokenType.keyword
+                type: "keyword"
             }
         } else if (text.match(/[a-zA-Z_\.]/ig).index == 0) {
             // symbol
             return <token>{
                 text: text,
-                type: Token.tokenType.symbol
+                type: "symbol"
             }
         } else if (text in Token.operators) {
             return <token>{
                 text: text,
-                type: Token.tokenType.operator
+                type: "operator"
             }
         } else {
             return <token>{
                 text: text,
-                type: Token.tokenType.number
+                type: "number"
             }
         }
     }

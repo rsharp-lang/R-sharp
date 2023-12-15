@@ -1,16 +1,5 @@
 declare namespace Token {
-    enum tokenType {
-        number = 0,
-        character = 1,
-        logical = 2,
-        factor = 3,
-        keyword = 4,
-        symbol = 5,
-        operator = 6,
-        comment = 7,
-        newLine = 8,
-        whitespace = 9
-    }
+    type tokenType = "number" | "character" | "logical" | "factor" | "keyword" | "symbol" | "operator" | "comment" | "newLine" | "whitespace";
     interface token {
         text: string;
         type: tokenType;

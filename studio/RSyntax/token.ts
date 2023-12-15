@@ -1,17 +1,6 @@
 namespace Token {
 
-    export enum tokenType {
-        number,
-        character,
-        logical,
-        factor,
-        keyword,
-        symbol,
-        operator,
-        comment,
-        newLine,
-        whitespace
-    }
+    export type tokenType = "number" | "character" | "logical" | "factor" | "keyword" | "symbol" | "operator" | "comment" | "newLine" | "whitespace";
 
     export interface token {
         text: string;
@@ -31,5 +20,4 @@ namespace Token {
     export const logical: {} = renderTextSet(["true", "false", "TRUE", "FALSE", "True", "False"]);
     export const keywords: {} = renderTextSet(["imports", "from", "require", "if", "else", "for", "function", "let", "const", "return", "", "", "", "", "", "", ""]);
     export const operators: {} = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|", ";", ""]);
-
 }

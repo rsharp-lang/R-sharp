@@ -1,18 +1,5 @@
 var Token;
 (function (Token) {
-    var tokenType;
-    (function (tokenType) {
-        tokenType[tokenType["number"] = 0] = "number";
-        tokenType[tokenType["character"] = 1] = "character";
-        tokenType[tokenType["logical"] = 2] = "logical";
-        tokenType[tokenType["factor"] = 3] = "factor";
-        tokenType[tokenType["keyword"] = 4] = "keyword";
-        tokenType[tokenType["symbol"] = 5] = "symbol";
-        tokenType[tokenType["operator"] = 6] = "operator";
-        tokenType[tokenType["comment"] = 7] = "comment";
-        tokenType[tokenType["newLine"] = 8] = "newLine";
-        tokenType[tokenType["whitespace"] = 9] = "whitespace";
-    })(tokenType = Token.tokenType || (Token.tokenType = {}));
     function renderTextSet(chars) {
         var set = {};
         for (var _i = 0, chars_1 = chars; _i < chars_1.length; _i++) {
@@ -66,7 +53,7 @@ var TokenParser = /** @class */ (function () {
                 this.escape_char = null;
                 return {
                     text: this.buf.join(""),
-                    type: Token.tokenType.character
+                    type: "character"
                 };
             }
             else {
@@ -80,7 +67,7 @@ var TokenParser = /** @class */ (function () {
                 this.escape_comment = false;
                 return {
                     text: this.buf.join(""),
-                    type: Token.tokenType.comment
+                    type: "comment"
                 };
             }
             else {
@@ -118,7 +105,7 @@ var TokenParser = /** @class */ (function () {
             }
             else {
                 return {
-                    type: Token.tokenType.whitespace,
+                    type: "whitespace",
                     text: c
                 };
             }
@@ -130,38 +117,38 @@ var TokenParser = /** @class */ (function () {
         if (text == "NULL" || text == "NA") {
             return {
                 text: text,
-                type: Token.tokenType.factor
+                type: "factor"
             };
         }
         else if (text in Token.logical) {
             return {
                 text: text,
-                type: Token.tokenType.logical
+                type: "logical"
             };
         }
         else if (text in Token.keywords) {
             return {
                 text: text,
-                type: Token.tokenType.keyword
+                type: "keyword"
             };
         }
         else if (text.match(/[a-zA-Z_\.]/ig).index == 0) {
             // symbol
             return {
                 text: text,
-                type: Token.tokenType.symbol
+                type: "symbol"
             };
         }
         else if (text in Token.operators) {
             return {
                 text: text,
-                type: Token.tokenType.operator
+                type: "operator"
             };
         }
         else {
             return {
                 text: text,
-                type: Token.tokenType.number
+                type: "number"
             };
         }
     };
@@ -182,16 +169,16 @@ function highlights(str) {
     for (var _i = 0, _a = parseText(str); _i < _a.length; _i++) {
         var t = _a[_i];
         switch (t.type) {
-            case Token.tokenType.newLine:
+            case "newLine":
                 html = html + "\n";
                 break;
-            case Token.tokenType.whitespace,
-                Token.tokenType.operator,
-                Token.tokenType.symbol:
+            case "whitespace":
+            case "operator":
+            case "symbol":
                 html = html + t.text;
                 break;
             default:
-                html = html + ("<span class=\"" + Token.tokenType[t.type] + "\">" + t.text + "</span>");
+                html = html + ("<span class=\"" + t.type + "\">" + t.text + "</span>");
         }
     }
     return html;
