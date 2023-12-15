@@ -110,6 +110,9 @@ var TokenParser = /** @class */ (function () {
                 };
             }
         }
+        else {
+            this.buf.push(c);
+        }
         return null;
     };
     TokenParser.prototype.measureToken = function () {

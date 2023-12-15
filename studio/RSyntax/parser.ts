@@ -104,6 +104,8 @@ class TokenParser {
                     text: c
                 };
             }
+        } else {
+            this.buf.push(c);
         }
 
         return null;
