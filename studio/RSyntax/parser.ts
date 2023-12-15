@@ -1,8 +1,8 @@
 ///<reference path="token.ts" />
 
-import { token, tokenType, logical, operators, keywords } from './token';
+type token = Token.token;
 
-export class TokenParser {
+class TokenParser {
 
     escaped: boolean = false;
     escape_char: string | null = null;
@@ -50,7 +50,7 @@ export class TokenParser {
 
                 return <token>{
                     text: this.buf.join(""),
-                    type: tokenType.character
+                    type: Token.tokenType.character
                 }
             } else {
                 // do nothing
@@ -66,7 +66,7 @@ export class TokenParser {
 
                 return <token>{
                     text: this.buf.join(""),
-                    type: tokenType.comment
+                    type: Token.tokenType.comment
                 }
             } else {
                 this.buf.push(c);
@@ -102,7 +102,7 @@ export class TokenParser {
                 return this.measureToken();
             } else {
                 return <token>{
-                    type: tokenType.whitespace,
+                    type: Token.tokenType.whitespace,
                     text: c
                 };
             }
@@ -117,33 +117,33 @@ export class TokenParser {
         if (text == "NULL" || text == "NA") {
             return <token>{
                 text: text,
-                type: tokenType.factor
+                type: Token.tokenType.factor
             }
-        } else if (text in logical) {
+        } else if (text in Token.logical) {
             return <token>{
                 text: text,
-                type: tokenType.logical
+                type: Token.tokenType.logical
             }
-        } else if (text in keywords) {
+        } else if (text in Token.keywords) {
             return <token>{
                 text: text,
-                type: tokenType.keyword
+                type: Token.tokenType.keyword
             }
         } else if (text.match(/[a-zA-Z_\.]/ig).index == 0) {
             // symbol
             return <token>{
                 text: text,
-                type: tokenType.symbol
+                type: Token.tokenType.symbol
             }
-        } else if (text in operators) {
+        } else if (text in Token.operators) {
             return <token>{
                 text: text,
-                type: tokenType.operator
+                type: Token.tokenType.operator
             }
         } else {
             return <token>{
                 text: text,
-                type: tokenType.number
+                type: Token.tokenType.number
             }
         }
     }

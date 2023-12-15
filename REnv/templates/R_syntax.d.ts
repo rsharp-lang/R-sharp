@@ -1,5 +1,13 @@
-declare module "token" {
-    export enum tokenType {
+declare module "app" {
+    type token = Token.token;
+    export function parseText(str: string): token[];
+    /**
+     * parse the script text to syntax highlight html content
+    */
+    export function highlights(str: string): string;
+}
+declare namespace Token {
+    enum tokenType {
         number = 0,
         character = 1,
         logical = 2,
@@ -11,42 +19,32 @@ declare module "token" {
         newLine = 8,
         whitespace = 9
     }
-    export interface token {
+    interface token {
         text: string;
         type: tokenType;
     }
-    export function renderTextSet(chars: string[]): object;
-    export const logical: {};
-    export const keywords: {};
-    export const operators: {};
+    function renderTextSet(chars: string[]): object;
+    const logical: {};
+    const keywords: {};
+    const operators: {};
 }
-declare module "parser" {
-    import { token } from "token";
-    export class TokenParser {
-        source: string;
-        escaped: boolean;
-        escape_char: string | null;
-        escape_comment: boolean;
-        /**
-         * for get char at index
-        */
-        i: number;
-        str_len: number;
-        /**
-         * the token text buffer
-        */
-        buf: string[];
-        constructor(source: string);
-        getTokens(): token[];
-        private walkChar;
-        private measureToken;
-    }
-}
-declare module "app" {
-    import { token } from "token";
-    export function parseText(str: string): token[];
+declare type token = Token.token;
+declare class TokenParser {
+    source: string;
+    escaped: boolean;
+    escape_char: string | null;
+    escape_comment: boolean;
     /**
-     * parse the script text to syntax highlight html content
+     * for get char at index
     */
-    export function highlights(str: string): string;
+    i: number;
+    str_len: number;
+    /**
+     * the token text buffer
+    */
+    buf: string[];
+    constructor(source: string);
+    getTokens(): token[];
+    private walkChar;
+    private measureToken;
 }

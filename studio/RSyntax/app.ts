@@ -1,5 +1,4 @@
-import { TokenParser } from "./parser";
-import { token, tokenType } from "./token";
+type token = Token.token;
 
 export function parseText(str: string): token[] {
     var parser = new TokenParser(str);
@@ -16,12 +15,12 @@ export function highlights(str: string): string {
 
     for (let t of parseText(str)) {
         switch (t.type) {
-            case tokenType.newLine:
+            case Token.tokenType.newLine:
                 html = html + "\n";
                 break;
-            case tokenType.whitespace,
-                tokenType.operator,
-                tokenType.symbol:
+            case Token.tokenType.whitespace,
+                Token.tokenType.operator,
+                Token.tokenType.symbol:
                 html = html + t.text;
                 break;
 
