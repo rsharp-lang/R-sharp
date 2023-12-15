@@ -30,12 +30,11 @@ class TokenParser {
         while (this.i < this.str_len) {
             if (tmp = this.walkChar(this.source.charAt(this.i++))) {
                 tokens.push(tmp);
-                this.buf = [];
             }
         }
 
         if (this.buf.length > 0) {
-            tokens.push(this.measureToken());
+            tokens.push(this.measureToken(null));
         }
 
         return tokens;
@@ -83,7 +82,7 @@ class TokenParser {
 
             if (this.buf.length > 0) {
                 // populate previous token
-                return this.measureToken();
+                return this.measureToken(c);
             } else {
                 this.buf.push(c);
             }
@@ -94,24 +93,34 @@ class TokenParser {
 
             if (this.buf.length > 0) {
                 // populate previous token
-                return this.measureToken();
+                return this.measureToken(c);
             } else {
                 this.buf.push(c);
             }
         } else if (c == " " || c == "\t") {
             if (this.buf.length > 0) {
                 // populate previous token
-                return this.measureToken();
+                return this.measureToken(c);
             } else {
                 return <token>{
                     type: "whitespace",
                     text: c
                 };
             }
+        } else if (c == "\r" || c == "\n") {
+            if (this.buf.length > 0) {
+                // populate previous token
+                return this.measureToken(c);
+            } else {
+                return <token>{
+                    type: "newLine",
+                    text: c
+                };
+            }
         } else if (c in Token.stacks) {
             if (this.buf.length > 0) {
                 // populate previous token
-                return this.measureToken();
+                return this.measureToken(c);
             } else {
                 return <token>{
                     type: "bracket",
@@ -125,9 +134,15 @@ class TokenParser {
         return null;
     }
 
-    private measureToken(): token {
+    private measureToken(push_next: string): token {
         const text: string = this.buf.join("");
         const test_symbol = text.match(/[a-zA-Z_\.]/ig);
+
+        this.buf = [];
+
+        if (push_next) {
+            this.buf.push(push_next);
+        }
 
         if (text == "NULL" || text == "NA" || text == "NaN" || text == "Inf") {
             return <token>{

@@ -39,11 +39,10 @@ var TokenParser = /** @class */ (function () {
         while (this.i < this.str_len) {
             if (tmp = this.walkChar(this.source.charAt(this.i++))) {
                 tokens.push(tmp);
-                this.buf = [];
             }
         }
         if (this.buf.length > 0) {
-            tokens.push(this.measureToken());
+            tokens.push(this.measureToken(null));
         }
         return tokens;
     };
@@ -83,7 +82,7 @@ var TokenParser = /** @class */ (function () {
             this.escape_comment = true;
             if (this.buf.length > 0) {
                 // populate previous token
-                return this.measureToken();
+                return this.measureToken(c);
             }
             else {
                 this.buf.push(c);
@@ -95,7 +94,7 @@ var TokenParser = /** @class */ (function () {
             this.escaped = true;
             if (this.buf.length > 0) {
                 // populate previous token
-                return this.measureToken();
+                return this.measureToken(c);
             }
             else {
                 this.buf.push(c);
@@ -104,7 +103,7 @@ var TokenParser = /** @class */ (function () {
         else if (c == " " || c == "\t") {
             if (this.buf.length > 0) {
                 // populate previous token
-                return this.measureToken();
+                return this.measureToken(c);
             }
             else {
                 return {
@@ -113,10 +112,22 @@ var TokenParser = /** @class */ (function () {
                 };
             }
         }
+        else if (c == "\r" || c == "\n") {
+            if (this.buf.length > 0) {
+                // populate previous token
+                return this.measureToken(c);
+            }
+            else {
+                return {
+                    type: "newLine",
+                    text: c
+                };
+            }
+        }
         else if (c in Token.stacks) {
             if (this.buf.length > 0) {
                 // populate previous token
-                return this.measureToken();
+                return this.measureToken(c);
             }
             else {
                 return {
@@ -130,9 +141,13 @@ var TokenParser = /** @class */ (function () {
         }
         return null;
     };
-    TokenParser.prototype.measureToken = function () {
+    TokenParser.prototype.measureToken = function (push_next) {
         var text = this.buf.join("");
         var test_symbol = text.match(/[a-zA-Z_\.]/ig);
+        this.buf = [];
+        if (push_next) {
+            this.buf.push(push_next);
+        }
         if (text == "NULL" || text == "NA" || text == "NaN" || text == "Inf") {
             return {
                 text: text,
