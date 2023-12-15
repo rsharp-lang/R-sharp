@@ -42,6 +42,9 @@ var TokenParser = /** @class */ (function () {
                 this.buf = [];
             }
         }
+        if (this.buf.length > 0) {
+            tokens.push(this.measureToken());
+        }
         return tokens;
     };
     TokenParser.prototype.walkChar = function (c) {
@@ -168,10 +171,16 @@ function parseText(str) {
 /**
  * parse the script text to syntax highlight html content
 */
-function highlights(str) {
+function highlights(str, verbose) {
+    if (verbose === void 0) { verbose = true; }
     var html = "";
-    for (var _i = 0, _a = parseText(str); _i < _a.length; _i++) {
-        var t = _a[_i];
+    var syntax = parseText(str);
+    if (verbose) {
+        console.log("view of the syntax tokens:");
+        console.table(syntax);
+    }
+    for (var _i = 0, syntax_1 = syntax; _i < syntax_1.length; _i++) {
+        var t = syntax_1[_i];
         switch (t.type) {
             case "newLine":
                 html = html + "\n";

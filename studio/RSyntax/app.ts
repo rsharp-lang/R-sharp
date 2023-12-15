@@ -13,10 +13,16 @@ function parseText(str: string): token[] {
 /**
  * parse the script text to syntax highlight html content
 */
-function highlights(str: string): string {
-    var html: string = "";
+function highlights(str: string, verbose: boolean = true): string {
+    let html: string = "";
+    let syntax = parseText(str);
 
-    for (let t of parseText(str)) {
+    if (verbose) {
+        console.log("view of the syntax tokens:");
+        console.table(syntax);
+    }
+
+    for (let t of syntax) {
         switch (t.type) {
             case "newLine":
                 html = html + "\n";

@@ -34,6 +34,10 @@ class TokenParser {
             }
         }
 
+        if (this.buf.length > 0) {
+            tokens.push(this.measureToken());
+        }
+
         return tokens;
     }
 
