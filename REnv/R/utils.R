@@ -55,7 +55,10 @@ const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
 		}
 	}
 	const syntax_script = system.file("templates/R_syntax.js", package = "REnv");
-	const assets = `${dirname(dirname(outputdir))}/.assets/`;
+	# 20231215 the previous dir name ".assets" will be ignored by 
+	# the github page workflow
+	# so change the dir name to current "_assets"
+	const assets = `${dirname(dirname(outputdir))}/_assets/`;
 
 	file.copy(syntax_script, assets);
 
