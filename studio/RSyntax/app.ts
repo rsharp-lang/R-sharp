@@ -32,6 +32,10 @@ function highlights(str: string, verbose: boolean = true): string {
                 html = html + escape_op(t.text);
                 break;
 
+            case "color":
+                html = html + `<span style="background-color: ${t.text.replace("'", "").replace('"', "")}; color: white; font-weight: bold;">${t.text}</span>`;
+                break;
+
             default:
                 html = html + `<span class="${t.type}">${t.text}</span>`;
         }
