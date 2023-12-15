@@ -93,6 +93,13 @@ Module buffer
     ''' <param name="sizeOf"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
+    ''' <example>
+    ''' # load numeric vector from a base64 encoded string
+    ''' let raw = base64_decode("the base64 text", wrap = FALSE);
+    ''' let vec = buffer::float(raw, networkOrder = TRUE, sizeOf = 64);
+    ''' 
+    ''' print(vec);
+    ''' </example>
     <ExportAPI("float")>
     <RApiReturn(GetType(Double))>
     Public Function float(<RRawVectorArgument> stream As Object,

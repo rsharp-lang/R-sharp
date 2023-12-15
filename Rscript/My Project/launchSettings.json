@@ -2,7 +2,8 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "G:/CFD/src/Rstudio/Moira-CFD.R --SetDllDirectory G:/CFD/assembly/bin/Rstudio/host --debug 101 --model \"G:\\CFD\\src\\desktop\\demo_model.png\""
+      "commandLineArgs": "--lambda GCModeller::KEGG_MapRender --attach D:\\GCModeller\\src\\workbench\\pkg",
+      "workingDirectory": "Z:\\项目以外内容\\测试项目\\test\\kegg\\test_map"
     },
     "mzkit_debug": {
       "commandName": "Project",

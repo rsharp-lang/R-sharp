@@ -55,6 +55,7 @@
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCoreApp
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -324,6 +325,8 @@ Namespace Development.Package.File
 
             Call Console.WriteLine($"       ==> build package for .NET runtime [{runtime}].")
 
+            Dim dllIndex As New StringBuilder
+
             ' run documentation for dll modules which is marked as r package
             ' unixMan(pkg As pkg, output As String, env As Environment)
             For Each dll As String In ls - l - r - "*.dll" <= $"{package_dir}/assembly/{runtime}/"
@@ -363,12 +366,15 @@ Namespace Development.Package.File
                     Continue For
                 End If
 
+                Call dllIndex.AppendLine($"<h2>Library: {dll.FileName}</h2>")
+
                 For Each pkg As Package In PackageLoader.ParsePackages(dll:=dll)
                     out = $"{package_dir}/man/{dll.BaseName}/{pkg.namespace}"
                     outputHtml = $"{package_dir}/vignettes/{dll.BaseName}/{pkg.namespace}"
 
                     Call pkgModList.Add(pkg)
                     Call Console.WriteLine($"         -> load: {pkg.info.Namespace}")
+                    Call dllIndex.AppendLine($"<p><a href=""./{dll.BaseName}/{pkg.namespace}.html"">{pkg.namespace}</a></p>")
 
                     Try
                         ' create unix man page
@@ -380,6 +386,8 @@ Namespace Development.Package.File
                     End Try
                 Next
             Next
+
+            Call dllIndex.SaveTo(path:=$"{package_dir}/vignettes/index.html")
 
             ' generate the typescript definition header files
             For Each group As IGrouping(Of String, Package) In pkgModList.GroupBy(Function(m) m.namespace)

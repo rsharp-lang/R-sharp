@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>{$title}</title>
+    <title>get all ms1 scan data points</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <style rel="stylesheet" type="text/css">
@@ -142,16 +142,12 @@
         }
 
         .character {
-            color: brown;
+            color: red;
         }
 
         .comment {
             color: green;
             font-style: italic;
-        }
-
-        .number {
-            color: skyblue;
         }
 
         .keyword {
@@ -165,7 +161,7 @@
         }
 
         .bracket {
-            color: rgb(197, 1, 197);
+            color: darkmagenta;
             font-weight: bold;
         }
     </style>
@@ -176,51 +172,68 @@
 
         <table style="width: 100%;">
             <tr>
-                <td>{$name_title} {{$package}}</td>
+                <td>ms1_scans {mzweb}</td>
                 <td style="text-align: right;">R Documentation</td>
             </tr>
         </table>
 
-        <h2>{$title}</h2>
+        <h2>get all ms1 scan data points</h2>
 
         <h3>Description</h3>
 
-        {$summary}
+
 
         <h3>Usage</h3>
 
         <div style="width: 100%; padding-left: 3%; color: black;">
-            <pre><code class='language-R' style="color: black; font-weight:normal;">{$usage};</code></pre>
+            <pre><code class='language-R' style="color: black; font-weight:normal;"><strong>ms1_scans</strong>(<i>mzpack</i>);</code></pre>
         </div>
 
         <h3>Arguments</h3>
 
         <table>
-            {$arguments}
+
+            <dt>mzpack</dt>
+            <dd>
+                <p>
+                <p>-</p>
+                </p>
+            </dd>
+
         </table>
 
 
-        <h3 style="display: {$show_details};">Details</h3>
+        <h3 style="display: none;">Details</h3>
 
-        {$details}
+
 
 
         <h3>Value</h3>
 
-        {$value}
+        this function returns data object of type <a
+            href="/clr/BioNovoGene/Analytical/MassSpectrometry/Math/ms1_scan[].html">ms1_scan[]</a>.
 
-        <h3 style="display: {$show_examples};">Examples</h3>
+        <h3 style="display: block;">Examples</h3>
 
-        {$examples}
+        <pre><code id="example_r"> require(mzkit);
+
+ imports "mzweb" from "mzkit";
+            
+ let red = "#FF0000";
+ let blue = "#0000FF";
+ let green = "#00FF00";
+
+ let rawdata = open.mzpack(file = "./rawdata.mzPack");
+ # get all ms1 scan data points
+ let ms1 = rawdata |> ms1_scans();</code></pre>
 
         <hr />
-        <div style="text-align: center;">[Package <em>{$package}</em> version {$version} <a
-                href="../{$package}.html">Index</a>]
+        <div style="text-align: center;">[Package <em>mzweb</em> version 1.0.0.0 <a href="../mzweb.html">Index</a>]
         </div>
     </div>
 </body>
 
-<script type="text/javascript" src="../../_assets/R_syntax.js"></script>
+<script type="text/javascript" src="../templates/R_syntax.js"></script>
 <script type="text/javascript">
     let example_code = document.getElementById("example_r");
     let highlights_str = highlights(example_code.innerText);

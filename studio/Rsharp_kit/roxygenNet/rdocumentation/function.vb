@@ -114,7 +114,7 @@ Public Class [function]
                 .ToArray
             docs.returns = markdown.Transform(xml.Returns)
             docs.details = markdown.Transform(xml.Remarks)
-            docs.examples = xml.example
+            docs.examples = " " & xml.example
         End If
 
         If docs.returns.StringEmpty Then
@@ -227,12 +227,12 @@ Public Class [function]
             !copyright = assembly.AssemblyCopyright
             !show_details = If(docs.details.StringEmpty, "none", "block")
 
-            If docs.examples.StringEmpty Then
+            If Strings.Trim(docs.examples).StringEmpty Then
                 !show_examples = "none"
                 !examples = ""
             Else
                 !show_examples = "block"
-                !examples = $"<pre><code>{docs.examples}</code></pre>"
+                !examples = $"<pre><code id=""example_r"">{docs.examples}</code></pre>"
             End If
 
             If docs.keywords.IsNullOrEmpty Then
