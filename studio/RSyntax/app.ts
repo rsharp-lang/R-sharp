@@ -33,7 +33,7 @@ function highlights(str: string, verbose: boolean = true): string {
                 break;
 
             case "color":
-                html = html + `<span style="background-color: ${t.text.replace(/'/ig, "").replace(/"/ig, "")}; color: white; font-weight: bold;">${t.text}</span>`;
+                html = html + `<span class="color" style="font-style: italic; background-color: ${t.text.replace(/'/ig, "").replace(/"/ig, "")}; color: white; font-weight: bold;">${t.text}</span>`;
                 break;
 
             default:
