@@ -54,6 +54,10 @@ const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
 			[pkgName]::namespace;
 		}
 	}
+	const syntax_script = system.file("templates/R_syntax.js", package = "REnv");
+	const assets = `${dirname(dirname(outputdir))}/.assets/`;
+
+	file.copy(syntax_script, assets);
 
 	for(f in names(functions)) {
 		functions[[f]]
