@@ -8,10 +8,10 @@ var Token;
         }
         return set;
     }
-    Token.renderTextSet = renderTextSet;
     Token.logical = renderTextSet(["true", "false", "TRUE", "FALSE", "True", "False"]);
     Token.keywords = renderTextSet(["imports", "from", "require", "if", "else", "for", "function", "let", "const", "return", "", "", "", "", "", "", ""]);
     Token.operators = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|", ";", ""]);
+    Token.stacks = renderTextSet(["[", "]", "(", ")", "{", "}"]);
 })(Token || (Token = {}));
 ///<reference path="token.ts" />
 var TokenParser = /** @class */ (function () {
@@ -109,6 +109,18 @@ var TokenParser = /** @class */ (function () {
             else {
                 return {
                     type: "whitespace",
+                    text: c
+                };
+            }
+        }
+        else if (c in Token.stacks) {
+            if (this.buf.length > 0) {
+                // populate previous token
+                return this.measureToken();
+            }
+            else {
+                return {
+                    type: "bracket",
                     text: c
                 };
             }

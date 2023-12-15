@@ -108,6 +108,16 @@ class TokenParser {
                     text: c
                 };
             }
+        } else if (c in Token.stacks) {
+            if (this.buf.length > 0) {
+                // populate previous token
+                return this.measureToken();
+            } else {
+                return <token>{
+                    type: "bracket",
+                    text: c
+                };
+            }
         } else {
             this.buf.push(c);
         }

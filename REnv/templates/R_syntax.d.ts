@@ -1,13 +1,13 @@
 declare namespace Token {
-    type tokenType = "number" | "character" | "logical" | "factor" | "keyword" | "symbol" | "operator" | "comment" | "newLine" | "whitespace";
+    type tokenType = "number" | "character" | "logical" | "factor" | "keyword" | "symbol" | "operator" | "comment" | "newLine" | "whitespace" | "bracket";
     interface token {
         text: string;
         type: tokenType;
     }
-    function renderTextSet(chars: string[]): object;
     const logical: {};
     const keywords: {};
     const operators: {};
+    const stacks: {};
 }
 declare class TokenParser {
     source: string;
