@@ -1,7 +1,5 @@
 ///<reference path="token.ts" />
 
-type token = Token.token;
-
 class TokenParser {
 
     escaped: boolean = false;

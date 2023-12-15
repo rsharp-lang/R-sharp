@@ -1,11 +1,3 @@
-declare module "app" {
-    type token = Token.token;
-    export function parseText(str: string): token[];
-    /**
-     * parse the script text to syntax highlight html content
-    */
-    export function highlights(str: string): string;
-}
 declare namespace Token {
     enum tokenType {
         number = 0,
@@ -28,7 +20,6 @@ declare namespace Token {
     const keywords: {};
     const operators: {};
 }
-declare type token = Token.token;
 declare class TokenParser {
     source: string;
     escaped: boolean;
@@ -48,3 +39,9 @@ declare class TokenParser {
     private walkChar;
     private measureToken;
 }
+declare type token = Token.token;
+declare function parseText(str: string): token[];
+/**
+ * parse the script text to syntax highlight html content
+*/
+declare function highlights(str: string): string;

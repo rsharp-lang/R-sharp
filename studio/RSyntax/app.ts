@@ -1,6 +1,9 @@
+///<reference path="token.ts" />
+///<reference path="parser.ts" />
+
 type token = Token.token;
 
-export function parseText(str: string): token[] {
+function parseText(str: string): token[] {
     var parser = new TokenParser(str);
     var tokens = parser.getTokens();
 
@@ -10,7 +13,7 @@ export function parseText(str: string): token[] {
 /**
  * parse the script text to syntax highlight html content
 */
-export function highlights(str: string): string {
+function highlights(str: string): string {
     var html: string = "";
 
     for (let t of parseText(str)) {

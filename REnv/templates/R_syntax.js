@@ -1,36 +1,3 @@
-define("app", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    function parseText(str) {
-        var parser = new TokenParser(str);
-        var tokens = parser.getTokens();
-        return tokens;
-    }
-    exports.parseText = parseText;
-    /**
-     * parse the script text to syntax highlight html content
-    */
-    function highlights(str) {
-        var html = "";
-        for (var _i = 0, _a = parseText(str); _i < _a.length; _i++) {
-            var t = _a[_i];
-            switch (t.type) {
-                case Token.tokenType.newLine:
-                    html = html + "\n";
-                    break;
-                case Token.tokenType.whitespace,
-                    Token.tokenType.operator,
-                    Token.tokenType.symbol:
-                    html = html + t.text;
-                    break;
-                default:
-                    html = html + ("<span class=\"" + t.type + "\">" + t.text + "</span>");
-            }
-        }
-        return html;
-    }
-    exports.highlights = highlights;
-});
 var Token;
 (function (Token) {
     var tokenType;
@@ -200,4 +167,33 @@ var TokenParser = /** @class */ (function () {
     };
     return TokenParser;
 }());
+///<reference path="token.ts" />
+///<reference path="parser.ts" />
+function parseText(str) {
+    var parser = new TokenParser(str);
+    var tokens = parser.getTokens();
+    return tokens;
+}
+/**
+ * parse the script text to syntax highlight html content
+*/
+function highlights(str) {
+    var html = "";
+    for (var _i = 0, _a = parseText(str); _i < _a.length; _i++) {
+        var t = _a[_i];
+        switch (t.type) {
+            case Token.tokenType.newLine:
+                html = html + "\n";
+                break;
+            case Token.tokenType.whitespace,
+                Token.tokenType.operator,
+                Token.tokenType.symbol:
+                html = html + t.text;
+                break;
+            default:
+                html = html + ("<span class=\"" + t.type + "\">" + t.text + "</span>");
+        }
+    }
+    return html;
+}
 //# sourceMappingURL=R_syntax.js.map
