@@ -191,7 +191,7 @@ function highlights(str) {
                 html = html + t.text;
                 break;
             default:
-                html = html + ("<span class=\"" + t.type + "\">" + t.text + "</span>");
+                html = html + ("<span class=\"" + Token.tokenType[t.type] + "\">" + t.text + "</span>");
         }
     }
     return html;
