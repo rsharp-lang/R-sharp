@@ -156,7 +156,7 @@ Namespace Runtime.Internal.ConsolePrinter
         Private Function PartOfTable(part As List(Of NamedCollection(Of String)), nrows As Integer) As ConsoleTableBaseData
             Dim data As New ConsoleTableBaseData With {
                 .Column = New List(Of Object)(part.Select(Function(v) CObj(v.name))),
-                .Rows = New List(Of List(Of Object))
+                .Rows = New List(Of Object())
             }
             Dim index As Integer
 
