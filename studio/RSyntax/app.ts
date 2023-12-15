@@ -21,7 +21,9 @@ function highlights(str: string): string {
             case "newLine":
                 html = html + "\n";
                 break;
-            case "whitespace": case "operator": case "symbol":
+            case "whitespace":
+            case "operator":
+            case "symbol":
                 html = html + t.text;
                 break;
 
