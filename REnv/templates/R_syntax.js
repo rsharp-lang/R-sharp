@@ -9,9 +9,15 @@ var Token;
         return set;
     }
     Token.logical = renderTextSet(["true", "false", "TRUE", "FALSE", "True", "False"]);
-    Token.keywords = renderTextSet(["imports", "from", "require", "if", "else", "for", "function", "let", "const", "return", "", "", "", "", "", "", ""]);
-    Token.operators = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|", ";", ""]);
+    Token.operators = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|"]);
     Token.stacks = renderTextSet(["[", "]", "(", ")", "{", "}"]);
+    Token.keywords = renderTextSet([
+        "imports", "from", "require",
+        "if", "else", "for", "break", "while",
+        "function", "return",
+        "let", "const",
+        "stop", "invisible", "", "", ""
+    ]);
 })(Token || (Token = {}));
 ///<reference path="token.ts" />
 var TokenParser = /** @class */ (function () {
@@ -57,6 +63,12 @@ var TokenParser = /** @class */ (function () {
                         this.buf = [];
                         tokens.push({
                             text: c, type: "bracket"
+                        });
+                    }
+                    else if (c == ";") {
+                        this.buf = [];
+                        tokens.push({
+                            text: c, type: "terminator"
                         });
                     }
                 }
@@ -157,6 +169,18 @@ var TokenParser = /** @class */ (function () {
             else {
                 return {
                     type: "bracket",
+                    text: c
+                };
+            }
+        }
+        else if (c == ";") {
+            if (this.buf.length > 0) {
+                // populate previous token
+                return this.measureToken(c);
+            }
+            else {
+                return {
+                    type: "terminator",
                     text: c
                 };
             }

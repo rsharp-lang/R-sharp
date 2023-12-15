@@ -1,6 +1,6 @@
 namespace Token {
 
-    export type tokenType = "number" | "character" | "logical" | "factor" | "keyword" | "symbol" | "operator" | "comment" | "newLine" | "whitespace" | "bracket";
+    export type tokenType = "number" | "character" | "logical" | "factor" | "keyword" | "symbol" | "operator" | "comment" | "newLine" | "whitespace" | "bracket" | "terminator";
 
     export interface token {
         text: string;
@@ -18,7 +18,13 @@ namespace Token {
     }
 
     export const logical: {} = renderTextSet(["true", "false", "TRUE", "FALSE", "True", "False"]);
-    export const keywords: {} = renderTextSet(["imports", "from", "require", "if", "else", "for", "function", "let", "const", "return", "", "", "", "", "", "", ""]);
-    export const operators: {} = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|", ";", ""]);
+    export const operators: {} = renderTextSet(["+", "-", "*", "/", "\\", "!", "$", "%", "^", "&", "=", "<", ">", ":", "|"]);
     export const stacks: {} = renderTextSet(["[", "]", "(", ")", "{", "}"]);
+    export const keywords: {} = renderTextSet([
+        "imports", "from", "require",
+        "if", "else", "for", "break", "while",
+        "function", "return",
+        "let", "const",
+        "stop", "invisible", "", "", ""
+    ]);
 }

@@ -49,6 +49,11 @@ class TokenParser {
                         tokens.push(<token>{
                             text: c, type: "bracket"
                         });
+                    } else if (c == ";") {
+                        this.buf = [];
+                        tokens.push(<token>{
+                            text: c, type: "terminator"
+                        })
                     }
                 }
             }
@@ -150,6 +155,16 @@ class TokenParser {
             } else {
                 return <token>{
                     type: "bracket",
+                    text: c
+                };
+            }
+        } else if (c == ";") {
+            if (this.buf.length > 0) {
+                // populate previous token
+                return this.measureToken(c);
+            } else {
+                return <token>{
+                    type: "terminator",
                     text: c
                 };
             }
