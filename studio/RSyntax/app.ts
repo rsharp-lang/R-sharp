@@ -24,7 +24,7 @@ function highlights(str: string): string {
             case "whitespace":
             case "operator":
             case "symbol":
-                html = html + t.text;
+                html = html + escape_op(t.text);
                 break;
 
             default:
@@ -35,3 +35,13 @@ function highlights(str: string): string {
     return html;
 }
 
+function escape_op(str: string): string {
+    if (!str) {
+        return "";
+    } else {
+        return str
+            .replace("&", "&amp;")
+            .replace(">", "&gt;")
+            .replace("<", "&lt;");
+    }
+}

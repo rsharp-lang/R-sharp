@@ -34,3 +34,4 @@ declare function parseText(str: string): token[];
  * parse the script text to syntax highlight html content
 */
 declare function highlights(str: string): string;
+declare function escape_op(str: string): string;

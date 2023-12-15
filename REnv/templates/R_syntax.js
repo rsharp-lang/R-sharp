@@ -179,12 +179,23 @@ function highlights(str) {
             case "whitespace":
             case "operator":
             case "symbol":
-                html = html + t.text;
+                html = html + escape_op(t.text);
                 break;
             default:
                 html = html + ("<span class=\"" + t.type + "\">" + t.text + "</span>");
         }
     }
     return html;
+}
+function escape_op(str) {
+    if (!str) {
+        return "";
+    }
+    else {
+        return str
+            .replace("&", "&amp;")
+            .replace(">", "&gt;")
+            .replace("<", "&lt;");
+    }
 }
 //# sourceMappingURL=R_syntax.js.map

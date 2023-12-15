@@ -140,6 +140,20 @@
         div.vignettes a:hover {
             background: rgb(85%, 85%, 85%);
         }
+
+        .character {
+            color: red;
+        }
+
+        .comment {
+            color: green;
+            font-style: italic;
+        }
+
+        .keyword {
+            color: blue;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -203,11 +217,13 @@
 
 <script type="text/javascript" src="../templates/R_syntax.js"></script>
 <script type="text/javascript">
-    let example_code = document.getElementById("example_r").innerText;
-    let highlights_str = highlights(example_code);
+    let example_code = document.getElementById("example_r");
+    let highlights_str = highlights(example_code.innerText);
 
-    console.log(example_code);
+    console.log(example_code.innerText);
     console.log(highlights_str);
+
+    example_code.innerHTML = highlights_str;
 </script>
 
 </html>
