@@ -69,7 +69,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
     <ExportAPI("--build")>
     <Description("build R# package")>
-    <Usage("--build [/src <folder, default=./> --skip-src-build /save <Rpackage.zip>]")>
+    <Usage("--build [/src <folder, default=./> --skip-src-build /save <Rpackage.zip> --github-page <syntax highlight, default=""../../_assets/R_syntax.js"">]")>
     <Argument("/src", False, CLITypes.File, PipelineTypes.std_in,
               AcceptTypes:={GetType(String)},
               Description:="A folder path that contains the R source files and meta data files of the target R package, 
@@ -79,10 +79,14 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{src}/DESCRIPTION")
         Dim save$ = args("/save") Or $"{src}/../{meta.Package}_{meta.Version}.zip"
         Dim skipSourceBuild As Boolean = args("--skip-src-build")
+        Dim r_syntax As String = args("--github-page") Or "../../_assets/R_syntax.js"
 
         If meta.isEmpty Then
             Call Console.WriteLine($"Missing 'DESCRIPTION' meta data file at: {src.GetDirectoryFullPath}, check of your commandline input please!")
             Return 500
+        Else
+            ' config for publish document files on github page
+            Call App.JoinVariable("r_syntax.js", r_syntax)
         End If
 
         ' build .net5 assembly via dotnet msbuild command?

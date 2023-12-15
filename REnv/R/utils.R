@@ -42,10 +42,12 @@ const platformName = function() {
 #'    save the html documents.
 #' 
 const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
+	const R_syntax_js = getOption("r_syntax.js", default = "../../_assets/R_syntax.js");
 	const template as string = "templates/Rdocumentation.html" 
 	|> system.file(package = "REnv") 
 	|> readText()
-	;
+	|> gsub("%r_syntax%", R_syntax_js)
+	;	
 	const functions = pkgName |> getFunctions();
 	const docs_dir = {
 		if (typeof pkgName is "string") {

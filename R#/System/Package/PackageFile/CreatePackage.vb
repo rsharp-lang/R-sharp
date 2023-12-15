@@ -301,6 +301,8 @@ Namespace Development.Package.File
             If Not plugin.FileExists Then
                 Return Nothing
             Else
+                ' config for github page publish
+                Call REngine.globalEnvir.options.setOption("r_syntax.js", App.GetVariable("r_syntax.js"), REngine.globalEnvir)
                 Call REngine.LoadLibrary("JSON", silent:=True)
                 Call PackageLoader.ParsePackages(plugin) _
                     .Where(Function(pkg) pkg.namespace = "roxygen") _
