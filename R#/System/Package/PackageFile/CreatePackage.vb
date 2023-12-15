@@ -329,6 +329,9 @@ Namespace Development.Package.File
 
             Dim dllIndex As New StringBuilder
 
+            Call dllIndex.AppendLine($"<pre>{$"{package_dir}/DESCRIPTION".ReadAllText}</pre>")
+            Call dllIndex.AppendLine("<br />")
+
             ' run documentation for dll modules which is marked as r package
             ' unixMan(pkg As pkg, output As String, env As Environment)
             For Each dll As String In ls - l - r - "*.dll" <= $"{package_dir}/assembly/{runtime}/"
@@ -369,6 +372,7 @@ Namespace Development.Package.File
                 End If
 
                 Call dllIndex.AppendLine($"<h2>Library: {dll.FileName}</h2>")
+                Call dllIndex.AppendLine("<ul>")
 
                 For Each pkg As Package In PackageLoader.ParsePackages(dll:=dll)
                     out = $"{package_dir}/man/{dll.BaseName}/{pkg.namespace}"
@@ -376,7 +380,7 @@ Namespace Development.Package.File
 
                     Call pkgModList.Add(pkg)
                     Call Console.WriteLine($"         -> load: {pkg.info.Namespace}")
-                    Call dllIndex.AppendLine($"<p><a href=""./{dll.BaseName}/{pkg.namespace}.html"">{pkg.namespace}</a></p>")
+                    Call dllIndex.AppendLine($"<li><a href=""./{dll.BaseName}/{pkg.namespace}.html"">{pkg.namespace}</a></li>")
 
                     Try
                         ' create unix man page
@@ -387,6 +391,8 @@ Namespace Development.Package.File
 
                     End Try
                 Next
+
+                Call dllIndex.AppendLine("</ul>")
             Next
 
             Call dllIndex.SaveTo(path:=$"{package_dir}/vignettes/index.html")
