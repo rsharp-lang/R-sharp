@@ -130,7 +130,7 @@ class TokenParser {
                 text: text,
                 type: "keyword"
             }
-        } else if (test_symbol.index == 0) {
+        } else if (test_symbol && (test_symbol.length > 0)) {
             // symbol
             return <token>{
                 text: text,
