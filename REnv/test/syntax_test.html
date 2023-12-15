@@ -219,6 +219,8 @@
 
  imports "mzweb" from "mzkit";
             
+ let red = "#FF0000";
+
  let rawdata = open.mzpack(file = "./rawdata.mzPack");
  # get all ms1 scan data points
  let ms1 = rawdata |> ms1_scans();</code></pre>
