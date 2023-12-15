@@ -11,6 +11,11 @@ export enum tokenType {
     whitespace
 }
 
+/**
+ * pattern for match the number token
+*/
+export const number_regexp = /[-]?\d+(\.\d+)?([eE][-]?\d+)?/ig;
+
 export interface token {
     text: string;
     type: tokenType;
