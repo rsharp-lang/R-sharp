@@ -30,6 +30,22 @@ class TokenParser {
         while (this.i < this.str_len) {
             if (tmp = this.walkChar(this.source.charAt(this.i++))) {
                 tokens.push(tmp);
+
+                if (this.buf.length == 1) {
+                    const c = this.buf[0];
+
+                    if (c == " " || c == "\t") {
+                        this.buf = [];
+                        tokens.push(<token>{
+                            text: c, type: "whitespace"
+                        });
+                    } else if (c == "\r" || c == "\n") {
+                        this.buf = [];
+                        tokens.push(<token>{
+                            text: c, type: "newLine"
+                        });
+                    }
+                }
             }
         }
 
@@ -68,7 +84,7 @@ class TokenParser {
 
                 // end comment line
                 this.escape_comment = false;
-                this.buf = [];
+                this.buf = [c];
 
                 return <token>{
                     text: pull_comment,

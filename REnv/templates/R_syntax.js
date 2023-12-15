@@ -39,6 +39,21 @@ var TokenParser = /** @class */ (function () {
         while (this.i < this.str_len) {
             if (tmp = this.walkChar(this.source.charAt(this.i++))) {
                 tokens.push(tmp);
+                if (this.buf.length == 1) {
+                    var c = this.buf[0];
+                    if (c == " " || c == "\t") {
+                        this.buf = [];
+                        tokens.push({
+                            text: c, type: "whitespace"
+                        });
+                    }
+                    else if (c == "\r" || c == "\n") {
+                        this.buf = [];
+                        tokens.push({
+                            text: c, type: "newLine"
+                        });
+                    }
+                }
             }
         }
         if (this.buf.length > 0) {
@@ -70,7 +85,7 @@ var TokenParser = /** @class */ (function () {
                 var pull_comment = this.buf.join("");
                 // end comment line
                 this.escape_comment = false;
-                this.buf = [];
+                this.buf = [c];
                 return {
                     text: pull_comment,
                     type: "comment"
