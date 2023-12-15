@@ -50,11 +50,13 @@ var TokenParser = /** @class */ (function () {
         if (this.escaped) {
             this.buf.push(c);
             if (c == this.escape_char) {
+                var pull_str = this.buf.join("");
                 // end escape
                 this.escaped = false;
                 this.escape_char = null;
+                this.buf = [];
                 return {
-                    text: this.buf.join(""),
+                    text: pull_str,
                     type: "character"
                 };
             }
@@ -65,10 +67,12 @@ var TokenParser = /** @class */ (function () {
         }
         if (this.escape_comment) {
             if (c == "\r" || c == "\n") {
+                var pull_comment = this.buf.join("");
                 // end comment line
                 this.escape_comment = false;
+                this.buf = [];
                 return {
-                    text: this.buf.join(""),
+                    text: pull_comment,
                     type: "comment"
                 };
             }

@@ -45,12 +45,14 @@ class TokenParser {
             this.buf.push(c);
 
             if (c == this.escape_char) {
+                const pull_str = this.buf.join("");
                 // end escape
                 this.escaped = false;
                 this.escape_char = null;
+                this.buf = [];
 
                 return <token>{
-                    text: this.buf.join(""),
+                    text: pull_str,
                     type: "character"
                 }
             } else {
@@ -62,11 +64,14 @@ class TokenParser {
 
         if (this.escape_comment) {
             if (c == "\r" || c == "\n") {
+                const pull_comment = this.buf.join("");
+
                 // end comment line
                 this.escape_comment = false;
+                this.buf = [];
 
                 return <token>{
-                    text: this.buf.join(""),
+                    text: pull_comment,
                     type: "comment"
                 }
             } else {
