@@ -232,7 +232,7 @@ Public Class [function]
                 !examples = ""
             Else
                 !show_examples = "block"
-                !examples = $"<pre><code>{docs.examples}</code></pre>"
+                !examples = $"<pre><code id=""example_r"">{docs.examples}</code></pre>"
             End If
 
             If docs.keywords.IsNullOrEmpty Then
