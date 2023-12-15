@@ -1,6 +1,6 @@
 namespace Token {
 
-    export type tokenType = "number" | "character" | "logical" | "factor" | "keyword" | "symbol" | "operator" | "comment" | "newLine" | "whitespace" | "bracket" | "terminator" | "color";
+    export type tokenType = "number" | "character" | "logical" | "factor" | "keyword" | "symbol" | "operator" | "comment" | "newLine" | "whitespace" | "bracket" | "terminator" | "color" | "delimiter";
     export const html_color = /"[#][a-zA-Z0-9]{6}"/ig;
 
 

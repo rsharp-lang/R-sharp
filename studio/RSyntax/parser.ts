@@ -54,6 +54,11 @@ class TokenParser {
                         tokens.push(<token>{
                             text: c, type: "terminator"
                         })
+                    } else if (c == ",") {
+                        this.buf = [];
+                        tokens.push(<token>{
+                            text: c, type: "delimiter"
+                        })
                     }
                 }
             }
@@ -167,6 +172,16 @@ class TokenParser {
             } else {
                 return <token>{
                     type: "terminator",
+                    text: c
+                };
+            }
+        } else if (c == ",") {
+            if (this.buf.length > 0) {
+                // populate previous token
+                return this.measureToken(c);
+            } else {
+                return <token>{
+                    type: "delimiter",
                     text: c
                 };
             }
