@@ -353,6 +353,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Else
                 Dim offset As Integer = CLRVector.asInteger(n).First
 
+                If TypeOf x Is vector Then
+                    x = DirectCast(x, vector).data
+                End If
+
                 ' is array/vector
                 If fill Is Nothing Then
                     If flag = "lag" Then
