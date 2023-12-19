@@ -1292,7 +1292,7 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("readBin")>
-        Public Function readBin(<RRawVectorArgument> con As Object, what As What,
+        Public Function readBin(<RRawVectorArgument> con As Object, what As Object,
                                 Optional n As Integer = 1,
                                 Optional size As Integer = -1,
                                 Optional signed As Boolean = True,
@@ -1306,10 +1306,28 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Dim br As New BinaryReader(buf.TryCast(Of Stream))
-            Dim cwhat = WhatReader.LoadWhat(what)
-            Dim rwhat = WhatReader.ReadWhat(what)
 
-            Throw New NotImplementedException
+            If what Is Nothing Then
+                what = Components.What.raw
+            End If
+
+            If TypeOf what Is What Then
+                Dim cwhat = WhatReader.LoadWhat(DirectCast(what, What))
+                Dim rwhat = WhatReader.ReadWhat(DirectCast(what, What))
+
+                Throw New NotImplementedException
+            ElseIf TypeOf what Is String Then
+                Dim fname As String = $"readBin.{what}"
+                Dim f As GenericFunction = generic.get(fname, GetType(String))
+
+                If f Is Nothing Then
+                    Return generic.missingGenericSymbol(fname, env)
+                End If
+
+                Return f(buf.TryCast(Of Stream), list.empty, env)
+            Else
+                Return Message.InCompatibleType(GetType(What), what.GetType, env)
+            End If
         End Function
 
         ''' <summary>

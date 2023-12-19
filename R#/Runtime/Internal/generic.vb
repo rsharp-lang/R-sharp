@@ -77,7 +77,7 @@ Namespace Runtime.Internal
     Public Delegate Function GenericFunction(x As Object, args As list, env As Environment) As Object
 
     ''' <summary>
-    ''' Typped generic function invoke
+    ''' Typped generic function invoke. the generic function is overloads by the parameter type
     ''' </summary>
     ''' <remarks>
     ''' supports call primitive functions:
@@ -91,8 +91,24 @@ Namespace Runtime.Internal
         ReadOnly generics As New Dictionary(Of String, Dictionary(Of Type, GenericFunction))
 
         Sub New()
-
         End Sub
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="type"></param>
+        ''' <returns>
+        ''' this function returns nothing if the target function symbol/type 
+        ''' is not exists in the generic function pool.
+        ''' </returns>
+        Public Function [get](name As String, type As Type) As GenericFunction
+            If Not generics.ContainsKey(name) Then
+                Return Nothing
+            Else
+                Return generics(name).TryGetValue(type)
+            End If
+        End Function
 
         ''' <summary>
         ''' overloads <paramref name="name"/> = (
@@ -180,7 +196,7 @@ Namespace Runtime.Internal
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Private Function missingGenericSymbol(funcName As String, env As Environment) As Message
+        Friend Function missingGenericSymbol(funcName As String, env As Environment) As Message
             Return debug.stop({$"missing loader entry for generic function '{funcName}'!", "consider load required package at first!"}, env)
         End Function
 
@@ -223,6 +239,15 @@ Namespace Runtime.Internal
             End If
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="x">this function will auto cast the data type of this input parameter x</param>
+        ''' <param name="type"></param>
+        ''' <param name="funcName"></param>
+        ''' <param name="env"></param>
+        ''' <param name="suppress"></param>
+        ''' <returns></returns>
         Public Function getGenericCallable(ByRef x As Object,
                                            type As Type,
                                            funcName As String,
