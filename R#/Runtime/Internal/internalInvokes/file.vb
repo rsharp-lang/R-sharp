@@ -1318,7 +1318,7 @@ Namespace Runtime.Internal.Invokes
                 Throw New NotImplementedException
             ElseIf TypeOf what Is String Then
                 Dim fname As String = $"readBin.{what}"
-                Dim f As GenericFunction = generic.get(fname, GetType(String))
+                Dim f As GenericFunction = generic.get(fname, GetType(Stream))
 
                 If f Is Nothing Then
                     Return generic.missingGenericSymbol(fname, env)
