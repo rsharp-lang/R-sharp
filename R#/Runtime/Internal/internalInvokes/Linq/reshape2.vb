@@ -375,6 +375,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                         fill = RCType.NADefault(RType.GetRSharpType(shift_vec.GetType.GetElementType))
                     End If
 
+                    If fill = "NA" Then
+                        fill = 0
+                    End If
+
                     fill = RCType.CTypeDynamic(fill, vec_type.raw, env)
 
                     If flag = "lag" OrElse flag = "shift" Then
