@@ -1343,7 +1343,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("writeBin")>
-        Public Function writeBin([object] As Object, con As Object,
+        Public Function writeBin(<RRawVectorArgument> [object] As Object, con As Object,
                                  Optional size As Integer = NA_integer_,
                                  Optional endian As endianness = endianness.big,
                                  Optional useBytes As Boolean = False,
