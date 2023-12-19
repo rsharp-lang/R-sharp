@@ -1294,7 +1294,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("readBin")>
         Public Function readBin(<RRawVectorArgument> con As Object, what As Object,
                                 Optional n As Integer = 1,
-                                Optional size As Integer = -1,
+                                Optional size As Integer = NA_integer_,
                                 Optional signed As Boolean = True,
                                 Optional endian As endianness = endianness.big,
                                 Optional env As Environment = Nothing) As Object
@@ -1328,6 +1328,52 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return Message.InCompatibleType(GetType(What), what.GetType, env)
             End If
+        End Function
+
+        Const NA_integer_ = Integer.MinValue
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="[object]"></param>
+        ''' <param name="con"></param>
+        ''' <param name="size"></param>
+        ''' <param name="endian"></param>
+        ''' <param name="useBytes"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("writeBin")>
+        Public Function writeBin([object] As Object, con As Object,
+                                 Optional size As Integer = NA_integer_,
+                                 Optional endian As endianness = endianness.big,
+                                 Optional useBytes As Boolean = False,
+                                 Optional env As Environment = Nothing) As Object
+
+            Dim buf = GetFileStream(con, FileAccess.Write, env)
+
+            If buf Like GetType(Message) Then
+                Return buf.TryCast(Of Message)
+            End If
+
+            If [object] Is Nothing Then
+                Return False
+            End If
+
+            If Not generic.exists("writeBin") Then
+                Return generic.missingGenericSymbol("writeBin", env)
+            End If
+
+            Dim f As GenericFunction = generic.get("writeBin", [object].GetType())
+
+            If f Is Nothing Then
+                Return generic.missingGenericSymbol("writeBin", env)
+            End If
+
+            Return f([object], New list With {
+               .slots = New Dictionary(Of String, Object) From {
+                  {"con", buf.TryCast(Of Stream)}
+               }
+            }, env)
         End Function
 
         ''' <summary>
