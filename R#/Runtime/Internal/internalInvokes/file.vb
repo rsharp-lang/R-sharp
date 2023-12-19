@@ -1324,7 +1324,13 @@ Namespace Runtime.Internal.Invokes
                     Return generic.missingGenericSymbol(fname, env)
                 End If
 
-                Return f(buf.TryCast(Of Stream), list.empty, env)
+                Dim out = f(buf.TryCast(Of Stream), list.empty, env)
+
+                If TypeOf con Is String Then
+                    Call buf.TryCast(Of Stream).Dispose()
+                End If
+
+                Return out
             Else
                 Return Message.InCompatibleType(GetType(What), what.GetType, env)
             End If
@@ -1369,11 +1375,17 @@ Namespace Runtime.Internal.Invokes
                 Return generic.missingGenericSymbol("writeBin", env)
             End If
 
-            Return f([object], New list With {
+            Dim out = f([object], New list With {
                .slots = New Dictionary(Of String, Object) From {
                   {"con", buf.TryCast(Of Stream)}
                }
             }, env)
+
+            If TypeOf con Is String Then
+                Call buf.TryCast(Of Stream).Dispose()
+            End If
+
+            Return out
         End Function
 
         ''' <summary>
