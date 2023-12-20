@@ -329,7 +329,7 @@ Namespace Development.Package.File
 
             Dim dllIndex As New StringBuilder
 
-            Call dllIndex.AppendLine($"<pre>{$"{package_dir}/DESCRIPTION".ReadAllText}</pre>")
+            Call dllIndex.AppendLine($"<pre>{$"{package_dir}/DESCRIPTION".ReadAllText.Replace("&", "&amp;").Replace("<", "&lt;")}</pre>")
             Call dllIndex.AppendLine("<br />")
 
             ' run documentation for dll modules which is marked as r package
