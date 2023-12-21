@@ -48,7 +48,7 @@ const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
 
 	for(t in __clr) {
 		clr_docs(t)
-		|> writeLines(con = `${vignettes_root}/clr/${[t]::FullName}.html`);
+		|> writeLines(con = `${vignettes_root}/clr/${gsub([t]::FullName, ".", "/")}.html`);
 	}
 
 	invisible(NULL);
