@@ -99,11 +99,19 @@ Public Class [function]
             type = AssemblyInfo.GetType(ref.Value)
 
             If Not type Is Nothing Then
-                clr_types.Add(type)
+                push_clr(type)
                 Yield (link, type)
             End If
         Next
     End Function
+
+    Private Shared Sub push_clr(t As Type)
+        If t.IsArray Then
+            t = t.GetElementType
+        End If
+
+        Call clr_types.Add(t)
+    End Sub
 
     Public Function createHtml(api As RMethodInfo, template As String, env As Environment) As String
         Dim xml As ProjectMember = env.globalEnvironment _
@@ -172,10 +180,9 @@ Public Class [function]
             docs.returns = docs.returns & "<ul>"
 
             For Each type As Type In unions_type
+                push_clr(type)
                 docs.returns = docs.returns & $"<li>{typeLink(type)}</li>"
             Next
-
-            clr_types.AddRange(unions_type)
 
             docs.returns = docs.returns & "</ul>"
         End If
@@ -200,7 +207,14 @@ Public Class [function]
                 If type Is GetType(Object) Then
                     Return "<i>any</i> kind"
                 Else
-                    Return $"<a href=""/vignettes/clr/{type.FullName.Replace("."c, "/"c)}.html"">{type.Name}</a>"
+                    Dim ns As String = type.Namespace.Replace("."c, "/"c)
+                    Dim fileName As String = type.Name
+
+                    If type.IsArray Then
+                        fileName = type.GetElementType.Name
+                    End If
+
+                    Return $"<a href=""/vignettes/clr/{ns}/{fileName}.html"">{type.Name}</a>"
                 End If
         End Select
     End Function
