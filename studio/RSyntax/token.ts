@@ -37,6 +37,8 @@ namespace Token {
         "if", "else", "for", "break", "while",
         "function", "return",
         "let", "const",
-        "stop", "invisible"
+        "stop", "invisible",
+        "export", "namespace", "class",
+        "string", "double", "integer", "list"
     ]);
 }

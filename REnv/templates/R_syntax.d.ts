@@ -34,7 +34,7 @@ declare class TokenParser {
     private walkChar;
     private measureToken;
 }
-type token = Token.token;
+declare type token = Token.token;
 declare function parseText(str: string): token[];
 /**
  * parse the script text to syntax highlight html content
