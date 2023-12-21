@@ -164,6 +164,17 @@ Public Class [function]
                 rtvl.fields.JoinBy(", ") & ")</code>."
         End If
 
+        If Not unions_type.IsNullOrEmpty Then
+            docs.returns = docs.returns & "<br /><h4>clr value class</h4>"
+            docs.returns = docs.returns & "<ul>"
+
+            For Each type As Type In unions_type
+                docs.returns = docs.returns & $"<li>{typeLink(type)}</li>"
+            Next
+
+            docs.returns = docs.returns & "</ul>"
+        End If
+
         Return createHtml(docs, template, pkg)
     End Function
 
