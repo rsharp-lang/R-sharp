@@ -183,7 +183,7 @@ Public Class [function]
         Return createHtml(docs, template, pkg)
     End Function
 
-    Private Shared Function typeLink(type As Type) As String
+    Friend Shared Function typeLink(type As Type) As String
         Dim rtype As RType = RType.GetRSharpType(type)
 
         Select Case rtype.mode

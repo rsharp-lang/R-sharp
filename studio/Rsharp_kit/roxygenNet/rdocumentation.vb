@@ -102,8 +102,28 @@ Public Module rdocumentation
 
         Call html.AppendLine($"<title>{clr.Name}</title>")
         Call html.AppendLine($"<p>{xml.Summary}</p>")
+        Call html.AppendLine($"<pre><code id=""ts"">{ts_code(clr, xml)}</code></pre>")
 
         Return html.ToString
+    End Function
+
+    Private Function ts_code(type As Type, xml As ProjectType) As String
+        Dim ts As New StringBuilder
+
+        Call ts.AppendLine($"#namespace {type.Namespace}")
+        Call ts.AppendLine($"export class {type.Name} {{")
+
+        For Each member As PropertyInfo In type.GetProperties(PublicProperty)
+            If Not member.CanRead Then
+                Continue For
+            End If
+
+            Call ts.AppendLine($"   {member.Name}: {[function].typeLink(member.PropertyType)};")
+        Next
+
+        Call ts.AppendLine("}")
+
+        Return ts.ToString
     End Function
 
     ''' <summary>
