@@ -156,7 +156,7 @@ Public Class [function]
                 If type Is GetType(Object) Then
                     Return "<i>any</i> kind"
                 Else
-                    Return $"<a href=""/clr/{type.FullName.Replace("."c, "/"c)}.html"">{type.Name}</a>"
+                    Return $"<a href=""/vignettes/clr/{type.FullName.Replace("."c, "/"c)}.html"">{type.Name}</a>"
                 End If
         End Select
     End Function
