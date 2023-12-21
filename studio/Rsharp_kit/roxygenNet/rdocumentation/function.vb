@@ -73,6 +73,8 @@ Public Class [function]
 
     ReadOnly markdown As New MarkdownHTML
 
+    Shared ReadOnly clr_types As New List(Of Type)
+
     Public Function createHtml(api As RFunction, env As Environment) As String
         If TypeOf api Is RMethodInfo Then
             Return createHtml(DirectCast(api, RMethodInfo), env)
@@ -97,6 +99,7 @@ Public Class [function]
             type = AssemblyInfo.GetType(ref.Value)
 
             If Not type Is Nothing Then
+                clr_types.Add(type)
                 Yield (link, type)
             End If
         Next
@@ -171,6 +174,8 @@ Public Class [function]
             For Each type As Type In unions_type
                 docs.returns = docs.returns & $"<li>{typeLink(type)}</li>"
             Next
+
+            clr_types.AddRange(unions_type)
 
             docs.returns = docs.returns & "</ul>"
         End If
