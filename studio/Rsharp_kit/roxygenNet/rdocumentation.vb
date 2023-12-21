@@ -95,7 +95,7 @@ Public Module rdocumentation
            .GetAnnotations(clr)
 
         If xml Is Nothing Then
-            Return ""
+            xml = New ProjectType
         End If
 
         Dim html As New StringBuilder(template)
@@ -113,7 +113,7 @@ Public Module rdocumentation
         Dim ts As New StringBuilder
 
         Call ts.AppendLine()
-        Call ts.AppendLine($"#namespace {type.Namespace}")
+        Call ts.AppendLine($"# namespace {type.Namespace}")
         Call ts.AppendLine($"export class {type.Name} {{")
 
         For Each member As PropertyInfo In type.GetProperties(PublicProperty)
@@ -122,6 +122,15 @@ Public Module rdocumentation
             ElseIf Not member.GetIndexParameters.IsNullOrEmpty Then
                 Continue For
             End If
+
+            Dim docs As String = xml.GetProperties(member.Name) _
+                .SafeQuery _
+                .Select(Function(i) i.Summary) _
+                .JoinBy(vbCrLf)
+
+            For Each line As String In docs.LineTokens
+                Call ts.AppendLine($"   # {line}")
+            Next
 
             Call ts.AppendLine($"   {member.Name}: {[function].typeLink(member.PropertyType)};")
         Next
