@@ -119,6 +119,8 @@ Public Module rdocumentation
         For Each member As PropertyInfo In type.GetProperties(PublicProperty)
             If Not member.CanRead Then
                 Continue For
+            ElseIf Not member.GetIndexParameters.IsNullOrEmpty Then
+                Continue For
             End If
 
             Call ts.AppendLine($"   {member.Name}: {[function].typeLink(member.PropertyType)};")
