@@ -19,6 +19,13 @@ const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
     |> gsub("%r_css%", css_ref)
     |> gsub("%r_highlights%", R_highlights)
 	;	
+	const clr_template = "templates/clr_template.html"
+	|> system.file(package = "REnv") 
+	|> readText()
+	|> gsub("%r_syntax%", R_syntax_js)
+    |> gsub("%r_css%", css_ref)
+    |> gsub("%r_highlights%", R_highlights)
+	;	
 	const functions = pkgName |> getFunctions();
 	const docs_dir = {
 		if (typeof pkgName is "string") {
@@ -57,7 +64,7 @@ const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
 	let __clr = rdocumentation::pull_clr_types();
 
 	for(t in __clr) {
-		clr_docs(t)
+		clr_docs(t, clr_template)
 		|> writeLines(con = `${vignettes_root}/clr/${gsub([t]::FullName, ".", "/")}.html`);
 	}
 

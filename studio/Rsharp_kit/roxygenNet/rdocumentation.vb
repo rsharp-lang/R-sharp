@@ -88,7 +88,7 @@ Public Module rdocumentation
     ''' this function just works on the properties
     ''' </remarks>
     <ExportAPI("clr_docs")>
-    Public Function clr_docs(clr As Type, Optional env As Environment = Nothing) As String
+    Public Function clr_docs(clr As Type, template As String, Optional env As Environment = Nothing) As String
         Dim xml As ProjectType = env.globalEnvironment _
            .packages _
            .packageDocs _
@@ -98,11 +98,13 @@ Public Module rdocumentation
             Return ""
         End If
 
-        Dim html As New StringBuilder
+        Dim html As New StringBuilder(template)
 
-        Call html.AppendLine($"<title>{clr.Name}</title>")
-        Call html.AppendLine($"<p>{xml.Summary}</p>")
-        Call html.AppendLine($"<pre><code id=""ts"">{ts_code(clr, xml)}</code></pre>")
+        Call html.Replace("{$title}", clr.FullName)
+        Call html.Replace("{$name_title}", clr.Name)
+        Call html.Replace("{$namespace}", clr.Namespace)
+        Call html.Replace("{$summary}", xml.Summary)
+        Call html.Replace("{$declare}", ts_code(clr, xml))
 
         Return html.ToString
     End Function
