@@ -53,6 +53,7 @@ Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serialization
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.text.markdown
@@ -84,11 +85,16 @@ Public Class [function]
         Dim r As New Regex("[@][<]code[>].*?[<]/code[>]", RegexICSng)
         Dim list = r.Matches(doc_str).ToArray
         Dim type As Type
-        Dim ref As String
+        Dim ref As NamedValue(Of String)
 
         For Each link As String In list
-            ref = link.GetValue
-            type = Type.GetType(ref)
+            ref = link.GetValue.GetTagValue(":", trim:=True)
+
+            If ref.Name <> "T" Then
+                Continue For
+            End If
+
+            type = Type.GetType(ref.Value)
 
             If Not type Is Nothing Then
                 Yield (link, type)

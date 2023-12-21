@@ -13,6 +13,10 @@
     "mzkit_desktop_debug": {
       "commandName": "Project",
       "commandLineArgs": "\"D:\\mzkit\\src\\mzkit\\rstudio\\pipeline\\buildMSIIndex.R\" --imzML \"\\\\192.168.1.254\\backup3\\项目以外内容\\2023\\空间代谢组学\\布鲁克ATT测试\\20231129\\regions-total ion count.imzML\" --cache \"E:\\export.mzPack\" --SetDllDirectory \\mzkit\\dist\\bin\\Rstudio\\host  --into_cutoff 0.01"
+    },
+    "docs_test": {
+      "commandName": "Project",
+      "commandLineArgs": "--build /src D:\\mzkit\\Rscript\\Library\\mzkit_app --skip-src-build --github-page https://mzkit.org/assets/js/R_syntax.js"
     }
   }
 }
