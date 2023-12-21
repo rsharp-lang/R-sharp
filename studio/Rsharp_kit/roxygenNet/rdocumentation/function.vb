@@ -94,7 +94,7 @@ Public Class [function]
                 Continue For
             End If
 
-            type = Type.GetType(ref.Value)
+            type = AssemblyInfo.GetType(ref.Value)
 
             If Not type Is Nothing Then
                 Yield (link, type)
@@ -141,14 +141,14 @@ Public Class [function]
             docs.examples = " " & xml.example
         End If
 
+        Dim unions_type As Type() = api.GetUnionTypes.ToArray
+
         If docs.returns.StringEmpty Then
             ' generate document automatically based on the return type
-            Dim types As Type() = api.GetUnionTypes.ToArray
-
-            If types.Length = 1 Then
-                docs.returns = $"this function returns data object of type {typeLink(types(Scan0))}."
-            ElseIf types.Length > 1 Then
-                docs.returns = $"this function returns data object in these one of the listed data types: {types.Select(AddressOf typeLink).JoinBy(", ")}."
+            If unions_type.Length = 1 Then
+                docs.returns = $"this function returns data object of type {typeLink(unions_type(Scan0))}."
+            ElseIf unions_type.Length > 1 Then
+                docs.returns = $"this function returns data object in these one of the listed data types: {unions_type.Select(AddressOf typeLink).JoinBy(", ")}."
             End If
         Else
             For Each link In ParseTypeReference(docs.returns)
