@@ -10,7 +10,7 @@ imports "rdocumentation" from "roxygenNet";
 #' 
 const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
 	const R_syntax_js = getOption("r_syntax.js", default = "../../_assets/R_syntax.js");
-    const css_ref = `${dirname(R_syntax_js)}/page.css`;
+    const css_ref = `${dirname(R_syntax_js, fullpath = FALSE)}/page.css`;
 	const template as string = "templates/Rdocumentation.html" 
 	|> system.file(package = "REnv") 
 	|> readText()
