@@ -72,6 +72,11 @@ Public Module rdocumentation
         Return New [function]().createHtml(func, template, env)
     End Function
 
+    <ExportAPI("pull_clr_types")>
+    Public Function pull_clr_types() As Type()
+        Return [function].clr_types.PopAll
+    End Function
+
     ''' <summary>
     ''' 
     ''' </summary>

@@ -73,7 +73,7 @@ Public Class [function]
 
     ReadOnly markdown As New MarkdownHTML
 
-    Shared ReadOnly clr_types As New List(Of Type)
+    Friend Shared ReadOnly clr_types As New List(Of Type)
 
     Public Function createHtml(api As RFunction, env As Environment) As String
         If TypeOf api Is RMethodInfo Then
