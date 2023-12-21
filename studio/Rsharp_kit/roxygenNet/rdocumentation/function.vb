@@ -165,7 +165,7 @@ Public Class [function]
         End If
 
         If Not unions_type.IsNullOrEmpty Then
-            docs.returns = docs.returns & "<br /><h4>clr value class</h4>"
+            docs.returns = docs.returns & "<h4>clr value class</h4>"
             docs.returns = docs.returns & "<ul>"
 
             For Each type As Type In unions_type
