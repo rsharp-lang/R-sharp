@@ -54,6 +54,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serialization
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.text.markdown
@@ -192,6 +193,10 @@ Public Class [function]
 
     Friend Shared Function typeLink(type As Type) As String
         Dim rtype As RType = RType.GetRSharpType(type)
+
+        If type.ImplementInterface(GetType(IDictionary)) Then
+            rtype = RType.list
+        End If
 
         Select Case rtype.mode
             Case TypeCodes.boolean,

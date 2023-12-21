@@ -112,6 +112,7 @@ Public Module rdocumentation
     Private Function ts_code(type As Type, xml As ProjectType) As String
         Dim ts As New StringBuilder
 
+        Call ts.AppendLine()
         Call ts.AppendLine($"#namespace {type.Namespace}")
         Call ts.AppendLine($"export class {type.Name} {{")
 
