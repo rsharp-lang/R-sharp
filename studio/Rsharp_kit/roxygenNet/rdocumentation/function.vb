@@ -49,6 +49,7 @@
 
 #End Region
 
+Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serialization
@@ -57,6 +58,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.text.markdown
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Runtime
@@ -76,6 +78,22 @@ Public Class [function]
         Else
             Throw New NotImplementedException(api.GetType.FullName)
         End If
+    End Function
+
+    Private Shared Iterator Function ParseTypeReference(doc_str As String) As IEnumerable(Of (str As String, Type))
+        Dim r As New Regex("[@][<]code[>].*?[<]/code[>]", RegexICSng)
+        Dim list = r.Matches(doc_str).ToArray
+        Dim type As Type
+        Dim ref As String
+
+        For Each link As String In list
+            ref = link.GetValue
+            type = Type.GetType(ref)
+
+            If Not type Is Nothing Then
+                Yield (link, type)
+            End If
+        Next
     End Function
 
     Public Function createHtml(api As RMethodInfo, template As String, env As Environment) As String
@@ -126,6 +144,10 @@ Public Class [function]
             ElseIf types.Length > 1 Then
                 docs.returns = $"this function returns data object in these one of the listed data types: {types.Select(AddressOf typeLink).JoinBy(", ")}."
             End If
+        Else
+            For Each link In ParseTypeReference(docs.returns)
+                docs.returns = docs.returns.Replace(link.str, typeLink(link.Item2))
+            Next
         End If
 
         Dim rtvl = api.GetRApiReturns
