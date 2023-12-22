@@ -373,7 +373,12 @@ Module datasetKit
 
         Return data.populates(Of SampleData)(env) _
             .Select(Function(si)
-                        Return New SampleData(features.Select(Function(i) si.features(i)).ToArray, si.labels)
+                        Return New SampleData(
+                            features:=features.Select(Function(i) si.features(i)).ToArray,
+                            labels:=si.labels
+                        ) With {
+                            .id = si.id
+                        }
                     End Function) _
             .ToArray
     End Function
@@ -669,6 +674,7 @@ Module datasetKit
     End Function
 
     <ExportAPI("read.sample_set")>
+    <RApiReturn(GetType(SampleData))>
     Public Function readSampleSet(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
         Dim buf = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
 
