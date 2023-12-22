@@ -137,22 +137,9 @@ Module Program
                         End Sub)
 
             Return 404
-        End If
-
-        Dim program As RProgram = RProgram.BuildProgram(args.cli, [error]:=[error])
-        Dim result As Object
-
-        If Not [error] Is Nothing Then
-            result = REnv.Internal.debug.stop([error], R.globalEnvir)
         Else
-#If DEBUG Then
-            result = R.Run(program)
-#Else
-            result = REnv.TryCatch(Function() R.Run(program), debug:=R.debug)
-#End If
+            Return CLI.runExpression(args.cli)
         End If
-
-        Return Rscript.handleResult(result, R.globalEnvir, program)
     End Function
 
     ''' <summary>

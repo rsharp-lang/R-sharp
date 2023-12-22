@@ -459,6 +459,13 @@ Namespace Development.CommandLine
                 End If
             End If
 
+            ' 20231222
+            ' handling of the duplicated command argument names when parse
+            ' the help information of the R# shell script
+            If argumentList.ContainsKey(name) Then
+                Throw New DuplicateNameException($"there is a duplicated commandline argument key '{name}' inside your script!")
+            End If
+
             Call argumentList.Add(name, attrs)
             Call New CommandLineArgument With {
                 .name = name,

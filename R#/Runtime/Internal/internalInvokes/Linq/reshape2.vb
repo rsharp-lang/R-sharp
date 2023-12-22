@@ -353,6 +353,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Else
                 Dim offset As Integer = CLRVector.asInteger(n).First
 
+                If TypeOf x Is vector Then
+                    x = DirectCast(x, vector).data
+                End If
+
                 ' is array/vector
                 If fill Is Nothing Then
                     If flag = "lag" Then
@@ -369,6 +373,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
                     If RCType.IsNALiteralValue(fill) Then
                         fill = RCType.NADefault(RType.GetRSharpType(shift_vec.GetType.GetElementType))
+                    End If
+
+                    If fill = "NA" Then
+                        fill = 0
                     End If
 
                     fill = RCType.CTypeDynamic(fill, vec_type.raw, env)

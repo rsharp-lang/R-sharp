@@ -487,8 +487,11 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("dirname")>
         <RApiReturn(GetType(String))>
-        Public Function dirname(<RRawVectorArgument> fileNames As Object, Optional env As Environment = Nothing) As Object
-            Return env.EvaluateFramework(Of String, String)(fileNames, Function(path) path.ParentPath)
+        Public Function dirname(<RRawVectorArgument> fileNames As Object,
+                                Optional fullpath As Boolean = True,
+                                Optional env As Environment = Nothing) As Object
+
+            Return env.EvaluateFramework(Of String, String)(fileNames, Function(path) path.ParentPath(full:=fullpath))
         End Function
 
         ''' <summary>
@@ -1292,9 +1295,9 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("readBin")>
-        Public Function readBin(<RRawVectorArgument> con As Object, what As What,
+        Public Function readBin(<RRawVectorArgument> con As Object, what As Object,
                                 Optional n As Integer = 1,
-                                Optional size As Integer = -1,
+                                Optional size As Integer = NA_integer_,
                                 Optional signed As Boolean = True,
                                 Optional endian As endianness = endianness.big,
                                 Optional env As Environment = Nothing) As Object
@@ -1306,10 +1309,86 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Dim br As New BinaryReader(buf.TryCast(Of Stream))
-            Dim cwhat = WhatReader.LoadWhat(what)
-            Dim rwhat = WhatReader.ReadWhat(what)
 
-            Throw New NotImplementedException
+            If what Is Nothing Then
+                what = Components.What.raw
+            End If
+
+            If TypeOf what Is What Then
+                Dim cwhat = WhatReader.LoadWhat(DirectCast(what, What))
+                Dim rwhat = WhatReader.ReadWhat(DirectCast(what, What))
+
+                Throw New NotImplementedException
+            ElseIf TypeOf what Is String Then
+                Dim fname As String = $"readBin.{what}"
+                Dim f As GenericFunction = generic.get(fname, GetType(Stream))
+
+                If f Is Nothing Then
+                    Return generic.missingGenericSymbol(fname, env)
+                End If
+
+                Dim out = f(buf.TryCast(Of Stream), list.empty, env)
+
+                If TypeOf con Is String Then
+                    Call buf.TryCast(Of Stream).Dispose()
+                End If
+
+                Return out
+            Else
+                Return Message.InCompatibleType(GetType(What), what.GetType, env)
+            End If
+        End Function
+
+        Const NA_integer_ = Integer.MinValue
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="[object]"></param>
+        ''' <param name="con"></param>
+        ''' <param name="size"></param>
+        ''' <param name="endian"></param>
+        ''' <param name="useBytes"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("writeBin")>
+        Public Function writeBin(<RRawVectorArgument> [object] As Object, con As Object,
+                                 Optional size As Integer = NA_integer_,
+                                 Optional endian As endianness = endianness.big,
+                                 Optional useBytes As Boolean = False,
+                                 Optional env As Environment = Nothing) As Object
+
+            Dim buf = GetFileStream(con, FileAccess.Write, env)
+
+            If buf Like GetType(Message) Then
+                Return buf.TryCast(Of Message)
+            End If
+
+            If [object] Is Nothing Then
+                Return False
+            End If
+
+            If Not generic.exists("writeBin") Then
+                Return generic.missingGenericSymbol("writeBin", env)
+            End If
+
+            Dim f As GenericFunction = generic.get("writeBin", [object].GetType())
+
+            If f Is Nothing Then
+                Return generic.missingGenericSymbol("writeBin", env)
+            End If
+
+            Dim out = f([object], New list With {
+               .slots = New Dictionary(Of String, Object) From {
+                  {"con", buf.TryCast(Of Stream)}
+               }
+            }, env)
+
+            If TypeOf con Is String Then
+                Call buf.TryCast(Of Stream).Dispose()
+            End If
+
+            Return out
         End Function
 
         ''' <summary>
