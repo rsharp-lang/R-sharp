@@ -362,7 +362,7 @@ Module datasetKit
     ''' this parameter value could be a:
     ''' 
     ''' 1. the sample id collection
-    ''' 2. a feature index
+    ''' 2. a feature index, start from base 1
     ''' </param>
     ''' <param name="desc">
     ''' sort the feature data in desc order, this parameter only works when the
@@ -388,7 +388,7 @@ Module datasetKit
 
         If sort.TryCount = 1 AndAlso sort(0).IsPattern("\d+") Then
             ' is a feature index
-            Dim i As Integer = Integer.Parse(sort(0))
+            Dim i As Integer = Integer.Parse(sort(0)) - 1
 
             Return data.populates(Of SampleData)(env) _
                 .Sort(
