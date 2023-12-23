@@ -355,6 +355,64 @@ Module datasetKit
     End Function
 
     ''' <summary>
+    ''' Makes the feature projection
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="features">the feature column index in the sample dataset, start based 1.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("project_features")>
+    Public Function project_features(<RRawVectorArgument> x As Object, features As Integer(), Optional env As Environment = Nothing) As Object
+        Dim data As pipeline = pipeline.TryCreatePipeline(Of SampleData)(x, env)
+
+        If data.isError Then
+            Return data.getError
+        Else
+            features = features.Select(Function(offset) offset - 1).ToArray
+        End If
+
+        Return data.populates(Of SampleData)(env) _
+            .Select(Function(si)
+                        Return New SampleData(
+                            features:=features.Select(Function(i) si.features(i)).ToArray,
+                            labels:=si.labels
+                        ) With {
+                            .id = si.id
+                        }
+                    End Function) _
+            .ToArray
+    End Function
+
+    ''' <summary>
+    ''' Makes the feature projection
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="features">the feature column index in the sample dataset, start based 1.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("project_features")>
+    Public Function project_features(<RRawVectorArgument> x As Object, features As Integer(), Optional env As Environment = Nothing) As Object
+        Dim data As pipeline = pipeline.TryCreatePipeline(Of SampleData)(x, env)
+
+        If data.isError Then
+            Return data.getError
+        Else
+            features = features.Select(Function(offset) offset - 1).ToArray
+        End If
+
+        Return data.populates(Of SampleData)(env) _
+            .Select(Function(si)
+                        Return New SampleData(
+                            features:=features.Select(Function(i) si.features(i)).ToArray,
+                            labels:=si.labels
+                        ) With {
+                            .id = si.id
+                        }
+                    End Function) _
+            .ToArray
+    End Function
+
+    ''' <summary>
     ''' sort the sample dataset
     ''' </summary>
     ''' <param name="x">should be a collection of the sample dataset</param>
@@ -685,6 +743,7 @@ Module datasetKit
     End Function
 
     <ExportAPI("read.sample_set")>
+    <RApiReturn(GetType(SampleData))>
     Public Function readSampleSet(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
         Dim buf = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
 
