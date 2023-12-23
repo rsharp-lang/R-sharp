@@ -354,8 +354,30 @@ Module datasetKit
             .ToArray
     End Function
 
+    ''' <summary>
+    ''' sort the sample dataset
+    ''' </summary>
+    ''' <param name="x">should be a collection of the sample dataset</param>
+    ''' <param name="order_id">
+    ''' this parameter value could be a:
+    ''' 
+    ''' 1. the sample id collection
+    ''' 2. a feature index
+    ''' </param>
+    ''' <param name="desc">
+    ''' sort the feature data in desc order, this parameter only works when the
+    ''' order id parameter is a single feature index value.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' the input sample data will be sorted based on the given <paramref name="order_id"/> vector.
+    ''' </returns>
     <ExportAPI("sort_samples")>
-    Public Function sort_samples(<RRawVectorArgument> x As Object, <RRawVectorArgument> order_id As Object, Optional env As Environment = Nothing) As Object
+    Public Function sort_samples(<RRawVectorArgument> x As Object,
+                                 <RRawVectorArgument> order_id As Object,
+                                 Optional desc As Boolean = False,
+                                 Optional env As Environment = Nothing) As Object
+
         Dim data As pipeline = pipeline.TryCreatePipeline(Of SampleData)(x, env)
 
         If data.isError Then
@@ -363,6 +385,25 @@ Module datasetKit
         End If
 
         Dim sort As String() = CLRVector.asCharacter(order_id)
+
+        If sort.TryCount = 1 AndAlso sort(0).IsPattern("\d+") Then
+            ' is a feature index
+            Dim i As Integer = Integer.Parse(sort(0))
+
+            Return data.populates(Of SampleData)(env) _
+                .Sort(
+                    by:=Function(a) a.features(i),
+                    desc:=desc
+                ) _
+                .ToArray
+        Else
+            Return data.sortById(sort, env)
+        End If
+    End Function
+
+    <Extension>
+    Private Function sortById(data As pipeline, sort As String(), env As Environment) As SampleData()
+        ' sort by sample id matches
         Dim hash As Dictionary(Of String, SampleData()) = data _
             .populates(Of SampleData)(env) _
             .GroupBy(Function(si) si.id) _
@@ -370,7 +411,6 @@ Module datasetKit
                           Function(si)
                               Return si.ToArray
                           End Function)
-
         Return sort _
             .Select(Function(id)
                         If hash.ContainsKey(id) Then
