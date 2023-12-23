@@ -487,8 +487,11 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("dirname")>
         <RApiReturn(GetType(String))>
-        Public Function dirname(<RRawVectorArgument> fileNames As Object, Optional env As Environment = Nothing) As Object
-            Return env.EvaluateFramework(Of String, String)(fileNames, Function(path) path.ParentPath)
+        Public Function dirname(<RRawVectorArgument> fileNames As Object,
+                                Optional fullpath As Boolean = True,
+                                Optional env As Environment = Nothing) As Object
+
+            Return env.EvaluateFramework(Of String, String)(fileNames, Function(path) path.ParentPath(full:=fullpath))
         End Function
 
         ''' <summary>

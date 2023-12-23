@@ -68,6 +68,11 @@ Namespace Development
 
         ReadOnly projects As New Dictionary(Of String, Project)
 
+        ''' <summary>
+        ''' get xml document of a given clr type
+        ''' </summary>
+        ''' <param name="package"></param>
+        ''' <returns></returns>
         Public Function GetAnnotations(package As Type) As ProjectType
             Dim assembly As LibraryAssembly = package.Assembly
             Dim project As Project

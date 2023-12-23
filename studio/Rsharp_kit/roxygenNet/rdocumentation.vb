@@ -1,55 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::72b39157b2f0b2b4c892af3b380a73af, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//rdocumentation.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 67
-    '    Code Lines: 51
-    ' Comment Lines: 8
-    '   Blank Lines: 8
-    '     File Size: 2.56 KB
+' Summaries:
 
 
-    ' Module rdocumentation
-    ' 
-    '     Function: getFunctions, getPkgApisList, rdocumentation
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 67
+'    Code Lines: 51
+' Comment Lines: 8
+'   Blank Lines: 8
+'     File Size: 2.56 KB
+
+
+' Module rdocumentation
+' 
+'     Function: getFunctions, getPkgApisList, rdocumentation
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Reflection
+Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
@@ -70,6 +72,72 @@ Public Module rdocumentation
     <ExportAPI("documentation")>
     Public Function rdocumentation(func As RFunction, template As String, Optional env As Environment = Nothing) As String
         Return New [function]().createHtml(func, template, env)
+    End Function
+
+    <ExportAPI("pull_clr_types")>
+    Public Function pull_clr_types() As Type()
+        Return [function].clr_types.PopAll
+    End Function
+
+    ''' <summary>
+    ''' make documents based on a given clr type meta data
+    ''' </summary>
+    ''' <param name="clr">a given clr type</param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' this function just works on the properties
+    ''' </remarks>
+    <ExportAPI("clr_docs")>
+    Public Function clr_docs(clr As Type, template As String, Optional env As Environment = Nothing) As String
+        Dim xml As ProjectType = env.globalEnvironment _
+           .packages _
+           .packageDocs _
+           .GetAnnotations(clr)
+
+        If xml Is Nothing Then
+            xml = New ProjectType
+        End If
+
+        Dim html As New StringBuilder(template)
+
+        Call html.Replace("{$title}", clr.FullName)
+        Call html.Replace("{$name_title}", clr.Name)
+        Call html.Replace("{$namespace}", clr.Namespace)
+        Call html.Replace("{$summary}", xml.Summary)
+        Call html.Replace("{$declare}", ts_code(clr, xml))
+
+        Return html.ToString
+    End Function
+
+    Private Function ts_code(type As Type, xml As ProjectType) As String
+        Dim ts As New StringBuilder
+
+        Call ts.AppendLine()
+        Call ts.AppendLine($"# namespace {type.Namespace}")
+        Call ts.AppendLine($"export class {type.Name} {{")
+
+        For Each member As PropertyInfo In type.GetProperties(PublicProperty)
+            If Not member.CanRead Then
+                Continue For
+            ElseIf Not member.GetIndexParameters.IsNullOrEmpty Then
+                Continue For
+            End If
+
+            Dim docs As String = xml.GetProperties(member.Name) _
+                .SafeQuery _
+                .Select(Function(i) i.Summary) _
+                .JoinBy(vbCrLf)
+
+            For Each line As String In docs.LineTokens
+                Call ts.AppendLine($"   # {line}")
+            Next
+
+            Call ts.AppendLine($"   {member.Name}: {[function].typeLink(member.PropertyType)};")
+        Next
+
+        Call ts.AppendLine("}")
+
+        Return ts.ToString
     End Function
 
     ''' <summary>
