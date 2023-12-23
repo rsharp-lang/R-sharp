@@ -215,6 +215,13 @@ Module Rgraphics
                End Function
     End Function
 
+    ''' <summary>
+    ''' [x,y,scale]
+    ''' </summary>
+    ''' <param name="raster"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Public Function raster_dataframe(raster As RasterScaler, args As list, env As Environment) As dataframe
         Dim pixels = raster.GetRasterData.ToArray
         Dim df As New dataframe With {.columns = New Dictionary(Of String, Array)}

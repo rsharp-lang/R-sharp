@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.CNN
 Imports Microsoft.VisualBasic.MachineLearning.CNN.data
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -24,6 +25,15 @@ Public Class CNNFunction : Inherits RDefaultFunction
                                         Optional is_generative As Boolean = False,
                                         Optional env As Environment = Nothing) As Object
         Dim ds As SampleData()
+
+        If TypeOf dataset Is vector Then
+            dataset = DirectCast(dataset, vector).data
+            dataset = renv.TryCastGenericArray(dataset, env)
+        End If
+
+        If Program.isException(dataset) Then
+            Return dataset
+        End If
 
         If TypeOf dataset Is dataframe Then
             ds = DirectCast(dataset, dataframe) _
