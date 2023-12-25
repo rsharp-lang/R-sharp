@@ -924,13 +924,33 @@ sample estimates:
             Return [if].ToArray
         End Function
 
+        ''' <summary>
+        ''' ### The Normal Distribution
+        ''' 
+        ''' Density, distribution function, quantile function and random generation for 
+        ''' the normal distribution with mean equal to mean and standard deviation equal 
+        ''' to sd.
+        ''' </summary>
+        ''' <param name="n">	
+        ''' number of observations. If length(n) > 1, the length is taken to 
+        ''' be the number required.
+        ''' </param>
+        ''' <param name="mean">vector of means.</param>
+        ''' <param name="sd">vector of standard deviations.</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' dnorm gives the density, 
+        ''' pnorm gives the distribution function, 
+        ''' qnorm gives the quantile function, 
+        ''' and rnorm generates random deviates.
+        ''' </remarks>
         <ExportAPI("rnorm")>
         Public Function rnorm(n%, Optional mean# = 0, Optional sd# = 1) As Double()
             Dim rnd As Random = randf.seeds
             Dim gauss As New List(Of Double)
 
             For i As Integer = 0 To n - 1
-                gauss.Add(rnd.NextGaussian(mean, sd))
+                Call gauss.Add(rnd.NextGaussian(mean, sd))
             Next
 
             Return gauss.ToArray
