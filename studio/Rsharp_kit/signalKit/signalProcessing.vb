@@ -182,8 +182,10 @@ Module signalProcessing
         Dim gauss As New GaussianFit(opts)
         Dim peaks = gauss.fit(signal, max_peaks)
         Dim peak_df As New RDataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim mu As Double() = peaks.Select(Function(p) p.mean).ToArray
 
-        Call peak_df.add("x", peaks.Select(Function(p) p.mean).AsVector * x_axis)
+        Call peak_df.add("x", mu.AsVector * x_axis)
+        Call peak_df.add("mean", mu)
         Call peak_df.add("width", peaks.Select(Function(p) p.variance))
         Call peak_df.add("weight", peaks.Select(Function(p) p.weight))
 
