@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Data.Signal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.SignalProcessing
+Imports Microsoft.VisualBasic.Math.SignalProcessing.EmGaussian
 Imports Microsoft.VisualBasic.Math.SignalProcessing.PeakFinding
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
@@ -130,6 +131,31 @@ Module signalProcessing
             .reference = App.NextTempName,
             .Strength = CLRVector.asNumeric(signals)
         }
+    End Function
+
+    ''' <summary>
+    ''' Fit time/spectrum/other sequential data with a set of gaussians
+    ''' by expectation-maximization algoritm.
+    ''' </summary>
+    ''' <param name="sig"></param>
+    ''' <param name="max_peaks"></param>
+    ''' <param name="max_loops"></param>
+    ''' <param name="eps"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("gaussian_fit")>
+    Public Function gaussian_fit(sig As Object,
+                                 Optional max_peaks As Integer = 100,
+                                 Optional max_loops As Integer = 1000,
+                                 Optional eps As Double = 0.00001,
+                                 Optional env As Environment = Nothing) As Object
+
+        Dim opts As New Opts With {
+            .maxIterations = max_loops,
+            .maxNumber = max_peaks,
+            .tolerance = eps
+        }
+        Dim gauss As New GaussianFit(opts)
     End Function
 
     <ExportAPI("resampler")>
