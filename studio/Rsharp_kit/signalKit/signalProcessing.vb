@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::0d26937ce30caa21770f053171d8abae, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//signalProcessing.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 148
-    '    Code Lines: 115
-    ' Comment Lines: 12
-    '   Blank Lines: 21
-    '     File Size: 6.23 KB
+' Summaries:
 
 
-    ' Module signalProcessing
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asGeneral, asMatrix, FindAllSignalPeaks, peakTable, printSignal
-    '               writeCDF
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 148
+'    Code Lines: 115
+' Comment Lines: 12
+'   Blank Lines: 21
+'     File Size: 6.23 KB
+
+
+' Module signalProcessing
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asGeneral, asMatrix, FindAllSignalPeaks, peakTable, printSignal
+'               writeCDF
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.Signal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.SignalProcessing
 Imports Microsoft.VisualBasic.Math.SignalProcessing.EmGaussian
 Imports Microsoft.VisualBasic.Math.SignalProcessing.PeakFinding
@@ -66,7 +67,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("signalProcessing")>
 Module signalProcessing
@@ -144,7 +144,8 @@ Module signalProcessing
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("gaussian_fit")>
-    Public Function gaussian_fit(sig As Object,
+    Public Function gaussian_fit(<RRawVectorArgument>
+                                 sig As Object,
                                  Optional max_peaks As Integer = 100,
                                  Optional max_loops As Integer = 1000,
                                  Optional eps As Double = 0.00001,
@@ -155,7 +156,36 @@ Module signalProcessing
             .maxNumber = max_peaks,
             .tolerance = eps
         }
+        Dim signal As Double()
+        Dim x_axis As Double()
+
+        If TypeOf sig Is GeneralSignal Then
+            signal = DirectCast(sig, GeneralSignal).Strength
+            x_axis = DirectCast(sig, GeneralSignal).Measures
+        ElseIf TypeOf sig Is Signal Then
+            signal = DirectCast(sig, Signal).intensities.ToArray
+            x_axis = DirectCast(sig, Signal).times.ToArray
+        ElseIf TypeOf sig Is RDataframe Then
+            signal = DirectCast(sig, RDataframe).getVector(Of Double)("signal", "strength", "intensity", "data", "y")
+            x_axis = DirectCast(sig, RDataframe).getVector(Of Double)("time", "x")
+
+            If x_axis.IsNullOrEmpty Then
+                x_axis = seq2(1, signal.Length, by:=1)
+            End If
+        Else
+            signal = CLRVector.asNumeric(sig)
+            x_axis = seq2(1, signal.Length, by:=1)
+        End If
+
         Dim gauss As New GaussianFit(opts)
+        Dim peaks = gauss.fit(signal, max_peaks)
+        Dim peak_df As New RDataframe With {.columns = New Dictionary(Of String, Array)}
+
+        Call peak_df.add("x", peaks.Select(Function(p) p.mean))
+        Call peak_df.add("width", peaks.Select(Function(p) p.variance))
+        Call peak_df.add("weight", peaks.Select(Function(p) p.weight))
+
+        Return peak_df
     End Function
 
     <ExportAPI("resampler")>
