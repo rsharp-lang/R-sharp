@@ -134,6 +134,11 @@ Module signalProcessing
         }
     End Function
 
+    <ExportAPI("gaussian_bin")>
+    Public Function gaussian_bin(sig As GeneralSignal, Optional max As Integer = 100) As Object
+        Return sig.TimeBins(max)
+    End Function
+
     ''' <summary>
     ''' Fit time/spectrum/other sequential data with a set of gaussians
     ''' by expectation-maximization algoritm.

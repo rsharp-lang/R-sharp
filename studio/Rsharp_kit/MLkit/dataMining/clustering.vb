@@ -214,6 +214,7 @@ Module clustering
                          Optional components As Integer = 3,
                          Optional threshold As Double = 0.0000001,
                          Optional strict As Boolean = True,
+                         Optional verbose As Boolean = False,
                          Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -230,6 +231,7 @@ Module clustering
                         End Function) _
                 .ToArray
 
+            ' nd
             Return GMM.Solver.Predicts(rowdatas, components, threshold, strict:=strict)
         End If
 
@@ -241,8 +243,10 @@ Module clustering
 
         If seq.isError Then
             If x.GetType.IsArray Then
+                ' 1d
                 x = TryCastGenericArray(x, env)
-                x = GMM.Solver.Predicts(CLRVector.asNumeric(x), components, threshold)
+                x = GMM.Solver.Predicts(CLRVector.asNumeric(x), components, threshold,
+                      verbose:=verbose)
 
                 Return x
             Else
@@ -250,6 +254,7 @@ Module clustering
             End If
         End If
 
+        ' nd
         Return GMM.Solver.Predicts(seq.populates(Of ClusterEntity)(env), components, threshold, strict:=strict)
     End Function
 
