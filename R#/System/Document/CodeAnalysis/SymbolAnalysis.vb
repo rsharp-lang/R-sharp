@@ -131,7 +131,10 @@ Namespace Development.CodeAnalysis
         End Function
 
         Private Shared Sub GetSymbolReferenceList(code As Expression, context As Context)
-            If code Is Nothing OrElse TypeOf code Is Literal Then
+            If code Is Nothing OrElse         ' 20231225
+                TypeOf code Is Literal OrElse ' is kind of data literal, example as 1, TRUE, "string", no symbol reference at here
+                TypeOf code Is Regexp Then    ' is kind of expression $"\d+", no symbol reference at here
+
                 Return
             ElseIf TypeOf code Is Require Then
                 ' require(xxx)
