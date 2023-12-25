@@ -147,7 +147,7 @@ Module signalProcessing
     Public Function gaussian_fit(<RRawVectorArgument>
                                  sig As Object,
                                  Optional max_peaks As Integer = 100,
-                                 Optional max_loops As Integer = 1000,
+                                 Optional max_loops As Integer = 10000,
                                  Optional eps As Double = 0.00001,
                                  Optional env As Environment = Nothing) As Object
 
@@ -177,11 +177,13 @@ Module signalProcessing
             x_axis = seq2(1, signal.Length, by:=1)
         End If
 
+        signal = SIMD.Divide.f64_op_divide_f64_scalar(signal, signal.Max)
+
         Dim gauss As New GaussianFit(opts)
         Dim peaks = gauss.fit(signal, max_peaks)
         Dim peak_df As New RDataframe With {.columns = New Dictionary(Of String, Array)}
 
-        Call peak_df.add("x", peaks.Select(Function(p) p.mean))
+        Call peak_df.add("x", peaks.Select(Function(p) p.mean).AsVector * x_axis)
         Call peak_df.add("width", peaks.Select(Function(p) p.variance))
         Call peak_df.add("weight", peaks.Select(Function(p) p.weight))
 
