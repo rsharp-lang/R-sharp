@@ -284,6 +284,31 @@ Module clustering
         End If
     End Function
 
+    <ExportAPI("gmm.components")>
+    Public Function gmm_components(x As Object) As Object
+        If x Is Nothing Then
+            Return Nothing
+        End If
+
+        If TypeOf x Is Mixture Then
+            Dim comps = DirectCast(x, Mixture).components
+            Dim df As New Rdataframe With {
+                .columns = New Dictionary(Of String, Array),
+                .rownames = comps _
+                    .Select(Function(c, i) $"C{i + 1}") _
+                    .ToArray
+            }
+
+            Call df.add("mean", comps.Select(Function(c) c.Mean))
+            Call df.add("stdev", comps.Select(Function(c) c.Stdev))
+            Call df.add("weight", comps.Select(Function(c) c.Weight))
+
+            Return df
+        Else
+            Throw New NotImplementedException
+        End If
+    End Function
+
     <ExportAPI("gmm.predict_proba")>
     Public Function gmm_predict_proba(x As Object, Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
