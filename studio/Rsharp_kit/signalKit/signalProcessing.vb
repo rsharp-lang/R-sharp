@@ -178,7 +178,7 @@ Module signalProcessing
             x_axis = seq2(1, signal.Length, by:=1)
         End If
 
-        signal = SIMD.Divide.f64_op_divide_f64_scalar(signal, signal.Max)
+        ' signal = SIMD.Divide.f64_op_divide_f64_scalar(signal, signal.Max)
 
         Dim gauss As New GaussianFit(opts)
         Dim peaks = gauss.fit(signal, max_peaks)
