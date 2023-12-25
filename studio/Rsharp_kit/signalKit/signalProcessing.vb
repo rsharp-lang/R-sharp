@@ -53,6 +53,7 @@
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.Signal
 Imports Microsoft.VisualBasic.Language
@@ -183,8 +184,10 @@ Module signalProcessing
         Dim peaks = gauss.fit(signal, max_peaks)
         Dim peak_df As New RDataframe With {.columns = New Dictionary(Of String, Array)}
         Dim mu As Double() = peaks.Select(Function(p) p.mean).ToArray
+        Dim x_range As New DoubleRange(x_axis)
+        Dim mean_range As New DoubleRange(0, 1)
 
-        Call peak_df.add("x", mu.AsVector * x_axis)
+        Call peak_df.add("x", mu.Select(Function(mi) mean_range.ScaleMapping(mi, x_range)))
         Call peak_df.add("mean", mu)
         Call peak_df.add("width", peaks.Select(Function(p) p.variance))
         Call peak_df.add("weight", peaks.Select(Function(p) p.weight))
