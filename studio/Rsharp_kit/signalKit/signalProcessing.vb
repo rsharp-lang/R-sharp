@@ -105,7 +105,17 @@ Module signalProcessing
             .ToArray
     End Function
 
+    ''' <summary>
+    ''' Create a new general signal
+    ''' </summary>
+    ''' <param name="measure"></param>
+    ''' <param name="signals"></param>
+    ''' <param name="title$"></param>
+    ''' <param name="meta"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("as.signal")>
+    <RApiReturn(GetType(GeneralSignal))>
     Public Function asGeneral(measure As Double(), signals As Double(),
                               Optional title$ = "general signal",
                               <RListObjectArgument>
@@ -119,6 +129,13 @@ Module signalProcessing
             .meta = meta.AsGeneric(Of String)(env),
             .reference = App.NextTempName,
             .Strength = CLRVector.asNumeric(signals)
+        }
+    End Function
+
+    <ExportAPI("resampler")>
+    Public Function resampler_f(sig As GeneralSignal, Optional max_dx As Double = Double.MaxValue) As LinearFunction
+        Return New LinearFunction With {
+            .linear = Resampler.CreateSampler(sig, max_dx)
         }
     End Function
 
