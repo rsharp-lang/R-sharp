@@ -299,9 +299,9 @@ Module clustering
                     .ToArray
             }
 
-            Call df.add("mean", comps.Select(Function(c) c.Mean))
-            Call df.add("stdev", comps.Select(Function(c) c.Stdev))
-            Call df.add("weight", comps.Select(Function(c) c.Weight))
+            Call df.add("mean", comps.Select(Function(c) If(c.Mean.IsNaNImaginary, Double.NaN, c.Mean)))
+            Call df.add("stdev", comps.Select(Function(c) If(c.Stdev.IsNaNImaginary, Double.NaN, c.Stdev)))
+            Call df.add("weight", comps.Select(Function(c) If(c.Weight.IsNaNImaginary, Double.NaN, c.Weight)))
 
             Return df
         Else
