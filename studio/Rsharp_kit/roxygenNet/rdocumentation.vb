@@ -75,8 +75,15 @@ Public Module rdocumentation
     End Function
 
     <ExportAPI("pull_clr_types")>
-    Public Function pull_clr_types() As Type()
-        Return [function].clr_types.PopAll
+    Public Function pull_clr_types(Optional generic_excludes As Boolean = False) As Type()
+        If Not generic_excludes Then
+            ' gets all
+            Return [function].clr_types.PopAll
+        Else
+            Return [function].clr_types.PopAll _
+                .Where(Function(t) t.GetGenericArguments.IsNullOrEmpty) _
+                .ToArray
+        End If
     End Function
 
     ''' <summary>

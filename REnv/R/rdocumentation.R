@@ -61,7 +61,7 @@ const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
 	|> writeLines(con = `${outputdir}/../${docs_dir}.html`)
 	;
 
-	let __clr = rdocumentation::pull_clr_types();
+	let __clr = rdocumentation::pull_clr_types(generic.excludes = TRUE);
 
 	for(t in __clr) {
 		clr_docs(t, clr_template)
