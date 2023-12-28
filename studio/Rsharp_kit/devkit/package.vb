@@ -209,6 +209,7 @@ Module package
     ''' <param name="dll"></param>
     ''' <returns></returns>
     <ExportAPI("parseDll")>
+    <RApiReturn(GetType(SMRUCC.Rsharp.Development.Package.Package))>
     Public Function parseDll(dll As String) As Object
         Return PackageLoader.ParsePackages(dll:=dll).ToArray
     End Function
