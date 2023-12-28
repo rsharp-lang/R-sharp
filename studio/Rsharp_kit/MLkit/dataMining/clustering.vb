@@ -71,6 +71,7 @@ Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
 Imports Microsoft.VisualBasic.DataMining.BinaryTree
 Imports Microsoft.VisualBasic.DataMining.Clustering
+Imports Microsoft.VisualBasic.DataMining.ComponentModel
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
 Imports Microsoft.VisualBasic.DataMining.FuzzyCMeans
 Imports Microsoft.VisualBasic.DataMining.HDBSCAN.Distance
@@ -447,6 +448,30 @@ Module clustering
         Return model
     End Function
 
+    Dim m_traceback As TraceBackAlgorithm
+
+    ''' <summary>
+    ''' get the clustering traceback
+    ''' </summary>
+    ''' <returns></returns>
+    <ExportAPI("getTraceback")>
+    Public Function getTraceback() As list
+        If m_traceback Is Nothing Then
+            Return Nothing
+        Else
+            Dim points_traceback = m_traceback.GetTraceBack.ToArray
+            Dim list = points_traceback _
+                .ToDictionary(Function(pt) pt.name,
+                              Function(pt)
+                                  Return CObj(pt.ToArray)
+                              End Function)
+
+            m_traceback = Nothing
+
+            Return New list With {.slots = list}
+        End If
+    End Function
+
     ''' <summary>
     ''' K-Means Clustering
     ''' </summary>
@@ -472,6 +497,7 @@ Module clustering
                            Optional bisecting As Boolean = False,
                            Optional parallel As Boolean = True,
                            Optional debug As Boolean = False,
+                           Optional traceback As Boolean = False,
                            Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -486,10 +512,16 @@ Module clustering
 
         If bisecting Then
             Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
-            Dim bikmeans As New BisectingKMeans(maps.GetVectors(model.TryCast(Of EntityClusterModel())), k:=centers)
+            Dim bikmeans As New BisectingKMeans(
+                dataList:=maps.GetVectors(model.TryCast(Of EntityClusterModel())),
+                k:=centers,
+                traceback:=traceback
+            )
             Dim result = bikmeans.runBisectingKMeans().ToArray
             Dim kmeans_result As New List(Of EntityClusterModel)
             Dim i As i32 = 1
+
+            m_traceback = bikmeans
 
             For Each cluster In result
                 Call kmeans_result.AddRange(maps.GetObjects(cluster.DataPoints, setClass:=++i))
