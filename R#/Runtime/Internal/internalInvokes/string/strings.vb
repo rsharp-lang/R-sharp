@@ -56,17 +56,19 @@ Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports baseString = Microsoft.VisualBasic.Strings
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Invokes
 
     ''' <summary>
     ''' Simulation of the <see cref="baseString"/> module
     ''' </summary>
+    ''' 
+    <Package("strings")>
     Module strings
 
         <ExportAPI("stack_str")>

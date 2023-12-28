@@ -64,6 +64,7 @@ Imports System.Threading
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.Repository
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Package
@@ -92,6 +93,7 @@ Namespace Runtime.Internal.Invokes
 
     End Class
 
+    <Package("devtools")>
     Module devtools
 
         Sub Main()
