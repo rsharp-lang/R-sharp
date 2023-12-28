@@ -7,6 +7,7 @@ the R# math module
 + [deSolve](math/deSolve.1) solve a given ODE system
 + [hist](math/hist.1) Do fixed width cut bins
 + [gini](math/gini.1) 
++ [bootstrap](math/bootstrap.1) ### Non-Parametric Bootstrapping
 + [loess](math/loess.1) loess fit
 + [glm](math/glm.1) ## Fitting Generalized Linear Models
 + [binomial](math/binomial.1) ## Family Objects for Models
@@ -14,6 +15,6 @@ the R# math module
 + [lm](math/lm.1) ### Fitting Linear Models
 + [as.formula](math/as.formula.1) create a lambda function based on the ``lm`` result.
 + [predict](math/predict.1) ### Model Predictions
-+ [dot_product](math/dot_product.1) Evaluate cos similarity of two vector
++ [cosine](math/cosine.1) Evaluate cos similarity of two vector
 + [sim](math/sim.1) Create a similarity matrix
 + [RamerDouglasPeucker](math/RamerDouglasPeucker.1) ### Ramer-Douglas-Peucker algorithm for curve fitting with a PolyLine

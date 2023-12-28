@@ -1,7 +1,7 @@
 .\" man page create by R# package system.
 .TH LINQ 1 2002-May "left_join" "left_join"
 .SH NAME
-left_join \- 
+left_join \- A left join is a type of relational join operation that combines
 .SH SYNOPSIS
 \fIleft_join(\fBleft\fR as <generic> dataframe, 
 \fBright\fR as <generic> dataframe, 
@@ -9,6 +9,13 @@ left_join \-
 \fBby_y\fR as string = \fB<NULL>\fR, 
 \fBby\fR as string = \fB<NULL>\fR, 
 [\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+A left join is a type of relational join operation that combines 
+ two datasets based on a common column or variable. The result of 
+ a left join includes all the rows from the left dataset and any 
+ matching rows from the right dataset.
+.PP
 .SH OPTIONS
 .PP
 \fBleft\fB \fR\- -. 
@@ -17,7 +24,7 @@ left_join \-
 \fBright\fB \fR\- -. 
 .PP
 .PP
-\fBby\fB \fR\- -. 
+\fBby\fB \fR\- the field name that used for join two data table. 
 .PP
 .SH SEE ALSO
 linq

@@ -1,0 +1,71 @@
+.\" man page create by R# package system.
+.TH GRAPHICS 1 2002-May "png" "png"
+.SH NAME
+png \- BMP, JPEG, PNG and TIFF graphics devices
+.SH SYNOPSIS
+\fIpng(\fBimage\fR as any = \fB<NULL>\fR, 
+\fBfilename\fR as any = \fB<NULL>\fR, 
+\fBwidth\fR as integer = 480, 
+\fBheight\fR as integer = 480, 
+\fBunits\fR as any = "px", 
+\fBpointsize\fR as double = 12, 
+\fBbg\fR as any = "white", 
+\fBres\fR as any = \fB<NULL>\fR, 
+\fBfamily\fR as any = "", 
+\fBrestoreConsole\fR as boolean = TRUE, 
+\fBtype\fR as any = ["windows","cairo","cairo-png"], 
+\fBantialias\fR as boolean = TRUE, 
+\fBsymbolfamily\fR as any = "default", 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+BMP, JPEG, PNG and TIFF graphics devices
+ 
+ Graphics devices for BMP, JPEG, PNG and TIFF format bitmap files.
+.PP
+.SH OPTIONS
+.PP
+\fBfilename\fB \fR\- the path Of the output file, up To 511 characters. The page number Is substituted If a C Integer format Is included In the character String, As In the Default, And tilde-expansion Is performed (see path.expand). (The result must be less than 600 characters Long. See postscript For further details.). 
+.PP
+.PP
+\fBwidth\fB \fR\- the width of the device.. 
+.PP
+.PP
+\fBheight\fB \fR\- the height of the device.. 
+.PP
+.PP
+\fBunits\fB \fR\- The units in which height and width are given. Can be px (pixels, the default), in (inches), cm or mm.. 
+.PP
+.PP
+\fBpointsize\fB \fR\- the default pointsize of plotted text, interpreted as big points (1/72 inch) at res ppi.. 
+.PP
+.PP
+\fBbg\fB \fR\- the initial background colour: can be overridden by setting par("bg").. 
+.PP
+.PP
+\fBres\fB \fR\- The nominal resolution In ppi which will be recorded In the bitmap file, If a positive Integer. Also used For units other than the Default. If Not specified, taken As 72 ppi To Set the size Of text And line widths.. 
+.PP
+.PP
+\fBfamily\fB \fR\- A length-one character vector specifying the default font family. The default means to use the font numbers on the Windows GDI versions and "sans" on the cairographics versions.. 
+.PP
+.PP
+\fBrestoreConsole\fB \fR\- See the ‘Details’ section of windows. For type == "windows" only.. 
+.PP
+.PP
+\fBtype\fB \fR\- Should be plotting be done using Windows GDI or cairographics?. 
+.PP
+.PP
+\fBantialias\fB \fR\- Length-one character vector.
+
+ For allowed values And their effect on fonts with type = "windows" see windows: For that type if the argument Is missing the default Is taken from windows.options()$bitmap.aa.win.
+
+ For allowed values And their effect (on fonts And lines, but Not fills) with type = "cairo" see svg.. 
+.PP
+.SH SEE ALSO
+graphics
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

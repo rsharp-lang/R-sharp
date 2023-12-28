@@ -8,4 +8,5 @@ The R# Graphics Devices and Support for Colours and Fonts
 + [graphics.attrs](grDevices/graphics.attrs.1) 
 + [rgb](grDevices/rgb.1) # RGB Color Specification
 + [alpha](grDevices/alpha.1) adjust color alpha value
++ [register.color_palette](grDevices/register.color_palette.1) register a custom color palette to the graphics system
 + [colors](grDevices/colors.1) get color set

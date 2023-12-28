@@ -1,0 +1,39 @@
+.\" man page create by R# package system.
+.TH GRAPHICS 1 2000-Jan "as.raster" "as.raster"
+.SH NAME
+as.raster \- Cast the clr image object as the raster data
+.SH SYNOPSIS
+\fIas.raster(\fBimg\fR as any, 
+\fBrgb_stack\fR as any = \fB<NULL>\fR, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Cast the clr image object as the raster data
+.PP
+.SH OPTIONS
+.PP
+\fBimg\fB \fR\- -. 
+.PP
+.PP
+\fBrgb_stack\fB \fR\- 
+ A character vector for tells the raster function that extract the signal via rgb stack, 
+ default nothing means just extract the raster data via the image pixel its brightness 
+ value, otherwise this parameter should be a character of of value combination of chars: 
+ \fBr\fR, \fBg\fR and \fBb\fR.
+ 
+ example as: 
+ 
+ + rgb.stack = ['r'] means just extract the red channel as the raster data
+ + rgb.stack = ['g', 'b'] means extract the raster data via green and blue channel, 
+     the raster scale value will be evaluated as g * 10 + b
+ 
+ andalso this parameter value could be a .net clr color height map ruler object, which could be used for
+ mapping a color sequence to a scale level.
+. 
+.PP
+.SH SEE ALSO
+graphics
+.SH FILES
+.PP
+graphics.dll
+.PP

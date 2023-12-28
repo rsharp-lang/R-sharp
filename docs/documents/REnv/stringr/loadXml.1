@@ -3,7 +3,8 @@
 .SH NAME
 loadXml \- load a .NET object from the xml data file
 .SH SYNOPSIS
-\fIloadXml(\fBfile\fR as string, 
+\fIloadXml(\fBfile\fR as any, 
+\fBtypeof\fR as any = \fB<NULL>\fR, 
 [\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP
@@ -11,7 +12,13 @@ load a .NET object from the xml data file
 .PP
 .SH OPTIONS
 .PP
-\fBfile\fB \fR\- -. 
+\fBfile\fB \fR\- 
+ any kind of data value inputs:
+ 
+ 1. file path to the xml document file
+ 2. the xml document content text
+ 3. a stream object that contains the xml document text data
+. 
 .PP
 .PP
 \fBenv\fB \fR\- -. 

@@ -1,0 +1,35 @@
+.\" man page create by R# package system.
+.TH DATASET 4 2000-Jan "read.MNIST" "read.MNIST"
+.SH NAME
+read.MNIST \- read mnist dataset file as R# dataframe object
+.SH SYNOPSIS
+\fIread.MNIST(\fBpath\fR as string, 
+\fBsubset\fR as integer = -1, 
+..., 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+read mnist dataset file as R# dataframe object
+.PP
+.SH OPTIONS
+.PP
+\fBpath\fB \fR\- The MNIST image data file path. 
+.PP
+.PP
+\fBsubset\fB \fR\- Just take a subset of the target dataset, this parameter is the sample size of the sub dataset. 
+.PP
+.PP
+\fBargs\fB \fR\- 
+ + format, format = labelledvector, labelled data vector in message pack format
+ + labelfile, labelfile = /path/to/mnist.labels
+ + dataset, dataset = vector/dataframe/image
+. 
+.PP
+.SH SEE ALSO
+dataset
+.SH FILES
+.PP
+MLkit.dll
+.PP
+.SH COPYRIGHT
+I@XIEGUIGANG.ME

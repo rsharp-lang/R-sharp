@@ -1,0 +1,56 @@
+.\" man page create by R# package system.
+.TH CLUSTERING 2 2000-Jan "knn" "knn"
+.SH NAME
+knn \- K-NN Classifier in R Programming
+.SH SYNOPSIS
+\fIknn(\fBx\fR as any, 
+\fBk\fR as integer = 16, 
+\fBjaccard\fR as double = 0.6, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+K-NN Classifier in R Programming
+ 
+ K-Nearest Neighbor or K-NN is a Supervised Non-linear classification 
+ algorithm. K-NN is a Non-parametric algorithm i.e it doesn’t make any 
+ assumption about underlying data or its distribution. It is one of 
+ the simplest and widely used algorithm which depends on it’s k value
+ (Neighbors) and finds it’s applications in many industries like 
+ finance industry, healthcare industry etc.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- -. 
+.PP
+.PP
+\fBk\fB \fR\- -. 
+.PP
+.PP
+\fBjaccard\fB \fR\- -. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH DETAILS
+.PP
+In the KNN algorithm, K specifies the number of neighbors and its 
+ algorithm is as follows:
+
+ + Choose the number K Of neighbor.
+ + Take the K Nearest Neighbor Of unknown data point according To distance.
+ + Among the K-neighbors, Count the number Of data points In Each category.
+ + Assign the New data point To a category, where you counted the most neighbors.
+ 
+ For the Nearest Neighbor classifier, the distance between two points 
+ Is expressed in the form of Euclidean Distance.
+.PP
+.SH SEE ALSO
+clustering
+.SH FILES
+.PP
+MLkit.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@live.com\fR
+.SH COPYRIGHT
+I@XIEGUIGANG.ME

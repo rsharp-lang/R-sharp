@@ -1,0 +1,33 @@
+.\" man page create by R# package system.
+.TH BASE 1 2002-May "raw" "raw"
+.SH NAME
+raw \- Create the raw bytes vector
+.SH SYNOPSIS
+\fIraw(\fBlength\fR as integer = 0, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Create the raw bytes vector
+.PP
+.SH OPTIONS
+.PP
+\fBlength\fB \fR\- -. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+A vector of the raw bytes data if the given **`length`**
+ greater than zero or a .net clr @\fBT:System.IO.MemoryStream\fR object that 
+ could be used for the file write connection if used the default **`length`**
+ value: zero.
+.PP
+.SH SEE ALSO
+base
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

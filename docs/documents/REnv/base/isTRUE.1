@@ -1,0 +1,29 @@
+.\" man page create by R# package system.
+.TH BASE 1 2002-May "isTRUE" "isTRUE"
+.SH NAME
+isTRUE \- Logical Operators
+.SH SYNOPSIS
+\fIisTRUE(\fBx\fR as any);\fR
+.SH DESCRIPTION
+.PP
+Logical Operators
+ 
+ isTRUE(x) is the same as { is.logical(x) && length(x) == 1 && !is.na(x) && x }; 
+ isFALSE() is defined analogously. Consequently, if(isTRUE(cond)) may be preferable to if(cond) because 
+ of NAs.
+ 
+ In earlier R versions, isTRUE <- function(x) identical(x, TRUE), had the drawback to be false e.g., 
+ for x <- c(val = TRUE).
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+base
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

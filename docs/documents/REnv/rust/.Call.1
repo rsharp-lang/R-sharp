@@ -1,0 +1,53 @@
+.\" man page create by R# package system.
+.TH RUST 1 2002-May ".Call" ".Call"
+.SH NAME
+.Call \- Modern Interfaces to VisualBasic.NET code
+.SH SYNOPSIS
+\fI.Call(\fBNAME\fR as string, 
+\fBPACKAGE\fR as string, 
+..., 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Modern Interfaces to VisualBasic.NET code
+ 
+ Functions to pass R# objects to compiled VisualBasic.NET code that has been loaded into R#.
+.PP
+.SH OPTIONS
+.PP
+\fBNAME\fB \fR\- 
+ a character string giving the name of a C function, or an object 
+ of class "NativeSymbolInfo", "RegisteredNativeSymbol" or 
+ "NativeSymbol" referring to such a name.. 
+.PP
+.PP
+\fBPACKAGE\fB \fR\- 
+ If supplied, confine the search For a character String .NAME To 
+ the DLL given by this argument (plus the conventional extension, 
+ '.so’, ‘.dll’, ...).
+ This argument follows ... And so its name cannot be abbreviated.
+ This Is intended to add safety for packages, which can ensure by 
+ using this argument that no other package can override their 
+ external symbols, And also speeds up the search (see 'Note’).
+. 
+.PP
+.PP
+\fBargs\fB \fR\- 
+ arguments to be passed to the compiled code. Up to 65 for .Call.
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+An R object constructed in the compiled code.
+.PP
+.SH SEE ALSO
+rust
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

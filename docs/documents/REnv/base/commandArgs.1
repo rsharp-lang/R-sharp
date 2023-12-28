@@ -1,0 +1,44 @@
+.\" man page create by R# package system.
+.TH BASE 1 2002-May "commandArgs" "commandArgs"
+.SH NAME
+commandArgs \- commandArgs: Extract Command Line Arguments
+.SH SYNOPSIS
+\fIcommandArgs(\fBtrailingOnly\fR as boolean = FALSE, 
+\fBparse_args\fR as boolean = FALSE);\fR
+.SH DESCRIPTION
+.PP
+commandArgs: Extract Command Line Arguments
+ 
+ Provides access to a copy of the command line arguments supplied when this R session was invoked.
+.PP
+.SH OPTIONS
+.PP
+\fBtrailingOnly\fB \fR\- 
+ logical. Should only arguments after --args be returned?
+. 
+.PP
+.SH VALUE
+.PP
+A character vector containing the name of the executable and the user-supplied command 
+ line arguments. The first element is the name of the executable by which R was invoked. 
+ The exact form of this element is platform dependent: it may be the fully qualified name,
+ or simply the last component (or basename) of the application, or for an embedded R it 
+ can be anything the programmer supplied.
+ 
+ if \fBtrailingOnly = TRUE\fR, a character vector Of those arguments (If any) supplied 
+ after \fB--args\fR.
+.PP
+.SH DETAILS
+.PP
+These arguments are captured before the standard R command line processing takes place. 
+ This means that they are the unmodified values. This is especially useful with the --args 
+ command-line flag to R, as all of the command line after that flag is skipped.
+.PP
+.SH SEE ALSO
+base
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3
