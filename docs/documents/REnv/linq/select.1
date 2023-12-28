@@ -1,0 +1,70 @@
+.\" man page create by R# package system.
+.TH LINQ 1 2002-May "select" "select"
+.SH NAME
+select \- Keep or drop columns using their names and types
+.SH SYNOPSIS
+\fIselect(\fB_data\fR as <generic> dataframe, 
+\fBstrict\fR as boolean = TRUE, 
+..., 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Keep or drop columns using their names and types
+ 
+ Select (and optionally rename) variables in a data frame, using a 
+ concise mini-language that makes it easy to refer to variables 
+ based on their name (e.g. a:f selects all columns from a on the 
+ left to f on the right) or type (e.g. where(is.numeric) selects all
+ numeric columns).
+.PP
+.SH OPTIONS
+.PP
+\fB_data\fB \fR\- 
+ A data frame, data frame extension (e.g. a tibble), or a lazy data 
+ frame (e.g. from dbplyr or dtplyr). See Methods, below, for more 
+ details.
+. 
+.PP
+.PP
+\fBselectors\fB \fR\- 
+ <tidy-select> One or more unquoted expressions separated by commas. 
+ Variable names can be used as if they were positions in the data frame, 
+ so expressions like x:y can be used to select a range of variables.
+ 
+ syntax for the selectors:
+ 
+ 1. select by name: \fBselect(name1, name2)\fR
+ 2. field renames: \fBselect(name1 -> data1)\fR
+. 
+.PP
+.PP
+\fBstrict\fB \fR\- 
+ By default when this function running in strict mode, an error message 
+ will be returned if there is a missing data fields exists in the selector
+ list
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+An object of the same type as .data. The output has the following properties:
+
+ 1. Rows are Not affected.
+ 2. Output columns are a subset Of input columns, potentially With a 
+    different order. Columns will be renamed If new_name = old_name 
+    form Is used.
+ 3. Data frame attributes are preserved.
+ 4. Groups are maintained; you can't select off grouping variables.
+.PP
+.SH SEE ALSO
+linq
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@live.com\fR
+.SH COPYRIGHT
+GPL3

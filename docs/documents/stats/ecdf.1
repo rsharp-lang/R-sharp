@@ -1,0 +1,45 @@
+.\" man page create by R# package system.
+.TH STATS 1 2000-Jan "ecdf" "ecdf"
+.SH NAME
+ecdf \- Empirical Cumulative Distribution Function
+.SH SYNOPSIS
+\fIecdf(\fBx\fR as any);\fR
+.SH DESCRIPTION
+.PP
+Empirical Cumulative Distribution Function
+ 
+ Compute an empirical cumulative distribution function, with several methods for 
+ plotting, printing and computing with such an “ecdf” object.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- 
+ numeric vector of the observations for ecdf; for the methods, an object 
+ inheriting from class "ecdf".
+. 
+.PP
+.SH VALUE
+.PP
+For ecdf, a function of class "ecdf", inheriting from the "stepfun" class,
+ and hence inheriting a knots() method.
+.PP
+.SH DETAILS
+.PP
+The objects of class "ecdf" are not intended to be used for permanent storage 
+ and may change structure between versions of R (and did at R 3.0.0). They 
+ can usually be re-created by
+
+ \fBR
+ eval(attr(old_obj, "call"), environment(old_obj))
+ \fR`
+ 
+ since the data used Is stored As part Of the Object's environment.
+.PP
+.SH SEE ALSO
+stats
+.SH FILES
+.PP
+Rlapack.dll
+.PP
+.SH COPYRIGHT
+GPL3

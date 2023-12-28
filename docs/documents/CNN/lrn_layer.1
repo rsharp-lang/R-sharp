@@ -1,0 +1,32 @@
+.\" man page create by R# package system.
+.TH CNN 1 2000-Jan "lrn_layer" "lrn_layer"
+.SH NAME
+lrn_layer \- This layer is useful when we are dealing with ReLU neurons. Why is that?
+.SH SYNOPSIS
+\fIlrn_layer(\fBn\fR as integer = 5);\fR
+.SH DESCRIPTION
+.PP
+This layer is useful when we are dealing with ReLU neurons. Why is that?
+ Because ReLU neurons have unbounded activations and we need LRN to normalize
+ that. We want to detect high frequency features with a large response. If we
+ normalize around the local neighborhood of the excited neuron, it becomes even
+ more sensitive as compared to its neighbors.
+ 
+ At the same time, it will dampen the responses that are uniformly large in any
+ given local neighborhood. If all the values are large, then normalizing those
+ values will diminish all of them. So basically we want to encourage some kind
+ of inhibition and boost the neurons with relatively larger activations. This
+ has been discussed nicely in Section 3.3 of the original paper by Krizhevsky et al.
+.PP
+.SH OPTIONS
+.PP
+\fBn\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+CNN
+.SH FILES
+.PP
+MLkit.dll
+.PP
+.SH COPYRIGHT
+I@XIEGUIGANG.ME

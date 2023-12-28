@@ -1,0 +1,36 @@
+.\" man page create by R# package system.
+.TH CNN 1 2000-Jan "input_layer" "input_layer"
+.SH NAME
+input_layer \- The input layer is a simple layer that will pass the data though and
+.SH SYNOPSIS
+\fIinput_layer(\fBsize\fR as any, 
+\fBdepth\fR as integer = 1, 
+\fBc\fR as double = 0);\fR
+.SH DESCRIPTION
+.PP
+The input layer is a simple layer that will pass the data though and
+ create a window into the full training data set. So for instance if
+ we have an image of size 28x28x1 which means that we have 28 pixels
+ in the x axle and 28 pixels in the y axle and one color (gray scale),
+ then this layer might give you a window of another size example 24x24x1
+ that is randomly chosen in order to create some distortion into the
+ dataset so the algorithm don't over-fit the training.
+.PP
+.SH OPTIONS
+.PP
+\fBsize\fB \fR\- -. 
+.PP
+.PP
+\fBdepth\fB \fR\- -. 
+.PP
+.PP
+\fBc\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+CNN
+.SH FILES
+.PP
+MLkit.dll
+.PP
+.SH COPYRIGHT
+I@XIEGUIGANG.ME

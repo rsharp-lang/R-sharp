@@ -1,11 +1,39 @@
 .\" man page create by R# package system.
 .TH MATH 1 2002-May "rnorm" "rnorm"
 .SH NAME
-rnorm \- 
+rnorm \- The Normal Distribution
 .SH SYNOPSIS
 \fIrnorm(\fBn\fR as integer, 
 \fBmean\fR as double = 0, 
 \fBsd\fR as double = 1);\fR
+.SH DESCRIPTION
+.PP
+The Normal Distribution
+ 
+ Density, distribution function, quantile function and random generation for 
+ the normal distribution with mean equal to mean and standard deviation equal 
+ to sd.
+.PP
+.SH OPTIONS
+.PP
+\fBn\fB \fR\- 	
+ number of observations. If length(n) > 1, the length is taken to 
+ be the number required.
+. 
+.PP
+.PP
+\fBmean\fB \fR\- vector of means.. 
+.PP
+.PP
+\fBsd\fB \fR\- vector of standard deviations.. 
+.PP
+.SH DETAILS
+.PP
+dnorm gives the density, 
+ pnorm gives the distribution function, 
+ qnorm gives the quantile function, 
+ and rnorm generates random deviates.
+.PP
 .SH SEE ALSO
 math
 .SH FILES

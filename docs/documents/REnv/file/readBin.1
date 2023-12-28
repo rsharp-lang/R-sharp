@@ -3,16 +3,61 @@
 .SH NAME
 readBin \- ransfer Binary Data To and From Connections
 .SH SYNOPSIS
-\fIreadBin(\fBfile\fR as string);\fR
+\fIreadBin(\fBcon\fR as any, 
+\fBwhat\fR as any, 
+\fBn\fR as integer = 1, 
+\fBsize\fR as integer = -2147483648, 
+\fBsigned\fR as boolean = TRUE, 
+\fBendian\fR as <integer> endianness = [big], 
+[\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP
 ransfer Binary Data To and From Connections
  
- Read binary data from or write binary data to a connection or raw vector.
+ Read binary data from or write binary data to a connection
+ or raw vector.
 .PP
 .SH OPTIONS
 .PP
-\fBfile\fB \fR\- A connection Object Or a character String naming a file Or a raw vector.. 
+\fBcon\fB \fR\- A connection Object Or a character 
+ String naming a file Or a raw vector.. 
+.PP
+.PP
+\fBn\fB \fR\- 
+ numeric. The (maximal) number of records to be read. 
+ You can use an over-estimate here, but not too large 
+ as storage is reserved for n items.
+. 
+.PP
+.PP
+\fBsize\fB \fR\- 
+ Integer.The number Of bytes per element In the Byte 
+ stream. The Default, NA_integer_, uses the natural 
+ size. Size changing Is Not supported For raw And 
+ complex vectors.
+. 
+.PP
+.PP
+\fBsigned\fB \fR\- 
+ logical. Only used for integers of sizes 1 and 2, when 
+ it determines if the quantity on file should be regarded
+ as a signed or unsigned integer.
+. 
+.PP
+.PP
+\fBendian\fB \fR\- The endian-ness ("big" Or "little") 
+ Of the target system For the file. Using "swap" will force 
+ swapping endian-ness.
+. 
+.PP
+.PP
+\fBwhat\fB \fR\- 
+ Either an object whose mode will give the mode of the 
+ vector to be read, or a character vector of length one 
+ describing the mode: one of "numeric", "double", 
+ "integer", "int", "logical", "complex", "character", 
+ "raw".
+. 
 .PP
 .SH SEE ALSO
 file

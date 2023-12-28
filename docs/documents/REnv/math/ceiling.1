@@ -1,0 +1,59 @@
+.\" man page create by R# package system.
+.TH MATH 1 2002-May "ceiling" "ceiling"
+.SH NAME
+ceiling \- Rounding of Numbers
+.SH SYNOPSIS
+\fIceiling(\fBx\fR as any, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Rounding of Numbers
+ 
+ ceiling takes a single numeric argument x and returns
+ a numeric vector containing the smallest integers not 
+ less than the corresponding elements of x.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- 
+ a numeric vector. Or, for round and signif, a complex vector.
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH DETAILS
+.PP
+These are generic functions: methods can be defined 
+ for them individually or via the Math group generic.
+ 
+ Note that for rounding off a 5, the IEC 60559 standard 
+ (see also ‘IEEE 754’) is expected to be used, ‘go to 
+ the even digit’. Therefore round(0.5) is 0 and 
+ round(-1.5) is -2. However, this is dependent on OS 
+ services and on representation error (since e.g. 0.15 
+ is not represented exactly, the rounding rule applies 
+ to the represented number and not to the printed number, 
+ and so round(0.15, 1) could be either 0.1 or 0.2).
+ 
+ Rounding to a negative number of digits means rounding 
+ to a power of ten, so for example round(x, digits = -2) 
+ rounds to the nearest hundred.
+ 
+ For signif the recognized values of digits are 1...22, 
+ and non-missing values are rounded to the nearest integer 
+ in that range. Complex numbers are rounded to retain the 
+ specified number of digits in the larger of the components. 
+ Each element of the vector is rounded individually, 
+ unlike printing.
+ 
+ These are all primitive functions.
+.PP
+.SH SEE ALSO
+math
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

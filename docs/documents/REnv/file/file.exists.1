@@ -3,7 +3,9 @@
 .SH NAME
 file.exists \- \fBfile.exists\fR returns a logical vector indicating whether the files named by its
 .SH SYNOPSIS
-\fIfile.exists(\fBfiles\fR as string);\fR
+\fIfile.exists(\fBfiles\fR as any, 
+\fBZERO_Nonexists\fR as boolean = FALSE, 
+[\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP
 \fBfile.exists\fR returns a logical vector indicating whether the files named by its 
@@ -23,6 +25,10 @@ file.exists \- \fBfile.exists\fR returns a logical vector indicating whether the
 \fBfiles\fB \fR\- 
  character vectors, containing file names or paths.
 . 
+.PP
+.SH VALUE
+.PP
+this function returns FALSE if the given files value is NULL
 .PP
 .SH SEE ALSO
 file

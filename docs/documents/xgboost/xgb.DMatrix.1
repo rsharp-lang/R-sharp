@@ -1,0 +1,40 @@
+.\" man page create by R# package system.
+.TH XGBOOST 1 2000-Jan "xgb.DMatrix" "xgb.DMatrix"
+.SH NAME
+xgb.DMatrix \- Construct xgb.DMatrix object
+.SH SYNOPSIS
+\fIxgb.DMatrix(\fBdata\fR as <generic> dataframe, 
+\fBlabel\fR as double = \fB<NULL>\fR, 
+\fBvalidate_set\fR as boolean = FALSE, 
+\fBcategorical_features\fR as string = \fB<NULL>\fR, 
+\fBfeature_names\fR as string = \fB<NULL>\fR, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Construct xgb.DMatrix object
+ 
+ Construct xgb.DMatrix object from either a dense matrix, 
+ a sparse matrix, or a local file. Supported input file 
+ formats are either a libsvm text file or a binary file 
+ that was created previously by xgb.DMatrix.save).
+.PP
+.SH OPTIONS
+.PP
+\fBdata\fB \fR\- 
+ a matrix object (either numeric or integer), a dgCMatrix 
+ object, or a character string representing a filename.
+. 
+.PP
+.PP
+\fBlabel\fB \fR\- 
+ labels for training data should be integer value
+. 
+.PP
+.SH SEE ALSO
+xgboost
+.SH FILES
+.PP
+MLkit.dll
+.PP
+.SH COPYRIGHT
+I@XIEGUIGANG.ME

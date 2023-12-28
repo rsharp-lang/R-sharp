@@ -167,6 +167,7 @@ Namespace Runtime.Components
                      End Function)
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function InCompatibleType(require As Type, given As Type, envir As Environment,
                                                 Optional message$ = "The given type is incompatible with the required type!",
                                                 Optional paramName$ = Nothing,
@@ -182,6 +183,18 @@ Namespace Runtime.Components
 
                          Return Internal.debug.stop(msg, envir, suppress)
                      End Function)
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function NullOrStrict(strict As Boolean, symbol As String, env As Environment) As Object
+            If Not strict Then
+                Return Nothing
+            Else
+                Return Internal.debug.stop({
+                    $"the required symbol object '{symbol}' should not be nothing!",
+                    $"symbol: {symbol}"
+                }, env)
+            End If
         End Function
 
         Public Function ToErrorText() As String

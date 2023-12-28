@@ -1,0 +1,61 @@
+.\" man page create by R# package system.
+.TH ENV 1 2002-May "rm" "rm"
+.SH NAME
+rm \- Remove Objects from a Specified Environment
+.SH SYNOPSIS
+\fIrm(..., 
+\fBlist\fR as any = \fB<NULL>\fR, 
+\fBinherits\fR as boolean = FALSE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Remove Objects from a Specified Environment
+ 
+ remove and rm can be used to remove objects. These can be specified 
+ successively as character strings, or in the character vector list, 
+ or through a combination of both. All objects thus specified will be 
+ removed.
+
+ + If envir Is NULL Then the currently active environment Is searched first.
+ + If inherits Is TRUE Then parents Of the supplied directory are 
+   searched until a variable With the given name Is encountered. A warning 
+   Is printed For Each variable that Is Not found.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- the objects to be removed, as names (unquoted) or character strings (quoted).. 
+.PP
+.PP
+\fBlist\fB \fR\- a character vector naming objects to be removed.. 
+.PP
+.PP
+\fBinherits\fB \fR\- should the enclosing frames of the environment be inspected?. 
+.PP
+.PP
+\fBenvir\fB \fR\- the environment to use. See ‘details’.. 
+.PP
+.SH DETAILS
+.PP
+The pos argument can specify the environment from which to remove the 
+ objects in any of several ways: as an integer (the position in the search
+ list); as the character string name of an element in the search list; 
+ or as an environment (including using sys.frame to access the currently
+ active function calls). The envir argument is an alternative way to specify
+ an environment, but is primarily there for back compatibility.
+
+ It Is Not allowed to remove variables from the base environment And base 
+ namespace, nor from any environment which Is locked (see lockEnvironment).
+
+ Earlier versions Of R incorrectly claimed that supplying a character 
+ vector In ... removed the objects named In the character vector, but it
+ removed the character vector. Use the list argument To specify objects 
+ via a character vector.
+.PP
+.SH SEE ALSO
+env
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

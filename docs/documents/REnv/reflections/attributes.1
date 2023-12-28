@@ -1,0 +1,64 @@
+.\" man page create by R# package system.
+.TH REFLECTIONS 1 2002-May "attributes" "attributes"
+.SH NAME
+attributes \- Object Attribute Lists
+.SH SYNOPSIS
+\fIattributes(\fBx\fR as any, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Object Attribute Lists
+ 
+ These functions access an object's attributes. The first form 
+ below returns the object's attribute list. The replacement 
+ forms uses the list on the right-hand side of the assignment 
+ as the object's attributes (if appropriate).
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- any R object. 
+.PP
+.SH DETAILS
+.PP
+Unlike attr it is not an error to set attributes on a NULL object:
+ it will first be coerced to an empty list.
+ 
+ Note that some attributes (namely Class, comment, Dim, dimnames, 
+ names, row.names And tsp) are treated specially And have restrictions
+ On the values which can be Set. (Note that this Is Not True Of 
+ levels which should be Set For factors via the levels replacement 
+ Function.)
+ 
+ Attributes are Not stored internally As a list And should be thought
+ Of As a Set And Not a vector, i.e, the order Of the elements Of 
+ attributes() does Not matter. This Is also reflected by identical()'s
+ behaviour with the default argument attrib.as.set = TRUE. Attributes 
+ must have unique names (and NA is taken as "NA", not a missing value).
+ 
+ Assigning attributes first removes all attributes, Then sets any Dim 
+ attribute And Then the remaining attributes In the order given: this
+ ensures that setting a Dim attribute always precedes the dimnames 
+ attribute.
+ 
+ The mostattributes assignment takes special care For the Dim, names And
+ dimnames attributes, And assigns them only When known To be valid 
+ whereas an attributes assignment would give an Error If any are Not. 
+ It Is principally intended For arrays, And should be used With care
+ On classed objects. For example, it does Not check that row.names
+ are assigned correctly For data frames.
+ 
+ The names Of a pairlist are Not stored As attributes, but are reported 
+ As If they were (And can be Set by the replacement form Of attributes).
+ 
+ NULL objects cannot have attributes And attempts To assign them will
+ promote the Object To an empty list. Both assignment And replacement
+ forms Of attributes are primitive functions.
+.PP
+.SH SEE ALSO
+reflections
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

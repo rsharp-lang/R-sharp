@@ -1,9 +1,22 @@
 .\" man page create by R# package system.
 .TH UTILS 1 2002-May "workdir" "workdir"
 .SH NAME
-workdir \- 
+workdir \- Create a new temporary work directory environment for the code
 .SH SYNOPSIS
 \fIworkdir(\fBdir\fR as string);\fR
+.SH DESCRIPTION
+.PP
+Create a new temporary work directory environment for the code
+.PP
+.SH OPTIONS
+.PP
+\fBdir\fB \fR\- -. 
+.PP
+.SH DETAILS
+.PP
+the work directory path will be restore to previous work directory
+ when the generated temporary work directory has been close and disposed
+.PP
 .SH SEE ALSO
 utils
 .SH FILES

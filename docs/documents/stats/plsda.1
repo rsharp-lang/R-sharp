@@ -1,0 +1,53 @@
+.\" man page create by R# package system.
+.TH STATS 1 2000-Jan "plsda" "plsda"
+.SH NAME
+plsda \- Partial Least Squares Discriminant Analysis
+.SH SYNOPSIS
+\fIplsda(\fBx\fR as <generic> dataframe, 
+\fBy\fR as any, 
+\fBncomp\fR as integer = \fB<NULL>\fR, 
+\fBcenter\fR as boolean = TRUE, 
+\fBscale\fR as boolean = FALSE, 
+\fBlist\fR as boolean = TRUE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Partial Least Squares Discriminant Analysis
+ 
+ \fBplsda\fR is used to calibrate, validate and use of partial least squares discrimination analysis (PLS-DA) model.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- matrix with predictors.. 
+.PP
+.PP
+\fBy\fB \fR\- vector with class membership (should be either a factor with class
+ names/numbers in case of multiple classes Or a vector with logical values in case
+ of one class model).. 
+.PP
+.PP
+\fBncomp\fB \fR\- maximum number Of components To calculate.. 
+.PP
+.PP
+\fBcenter\fB \fR\- logical, center or not predictors and response values.. 
+.PP
+.PP
+\fBscale\fB \fR\- logical, scale (standardize) or not predictors and response values.. 
+.PP
+.PP
+\fBlist\fB \fR\- 
+ this function will returns a R# list that contains result data of the PLS-DA analysis by default, 
+ or the raw .NET clr object of the PLS result if this parameter value set to FALSE.
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+stats
+.SH FILES
+.PP
+Rlapack.dll
+.PP
+.SH COPYRIGHT
+GPL3

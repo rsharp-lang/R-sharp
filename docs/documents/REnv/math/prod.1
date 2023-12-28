@@ -1,0 +1,40 @@
+.\" man page create by R# package system.
+.TH MATH 1 2002-May "prod" "prod"
+.SH NAME
+prod \- Product of Vector Elements
+.SH SYNOPSIS
+\fIprod(\fBx\fR as any, 
+\fBna_rm\fR as boolean = FALSE);\fR
+.SH DESCRIPTION
+.PP
+Product of Vector Elements
+ 
+ prod returns the product of all the values present in its arguments.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- numeric or complex or logical vectors.. 
+.PP
+.PP
+\fBna_rm\fB \fR\- 
+ logical. Should missing values be removed?
+. 
+.PP
+.SH VALUE
+.PP
+The product, a numeric (of type "double") or complex vector of length one. NB: the product of an empty set is one, by definition.
+.PP
+.SH DETAILS
+.PP
+If na.rm is FALSE an NA value in any of the arguments will cause a value of NA to be returned, otherwise NA values are ignored.
+ This is a generic function: methods can be defined for it directly or via the Summary group generic. For this to work properly, the arguments ... should be unnamed, and dispatch is on the first argument.
+ Logical true values are regarded as one, false values as zero. For historical reasons, NULL is accepted and treated as if it were numeric(0).
+.PP
+.SH SEE ALSO
+math
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

@@ -5,6 +5,7 @@ basename \- removes all of the path up to and including the last path separator 
 .SH SYNOPSIS
 \fIbasename(\fBfileNames\fR as string, 
 \fBwithExtensionName\fR as boolean = FALSE, 
+\fBstrict\fR as any = CALL "AS.LOGICAL"(CALL "GETOPTION"("STRICT")), 
 [\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP

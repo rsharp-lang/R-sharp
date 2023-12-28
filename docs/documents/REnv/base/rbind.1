@@ -5,6 +5,7 @@ rbind \- Combine R Objects by Rows or Columns
 .SH SYNOPSIS
 \fIrbind(\fBd\fR as <generic> dataframe, 
 \fBrow\fR as any, 
+\fBsafe\fR as boolean = FALSE, 
 [\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP
@@ -23,6 +24,11 @@ Combine R Objects by Rows or Columns
 .PP
 .PP
 \fBenv\fB \fR\- -. 
+.PP
+.PP
+\fBsafe\fB \fR\- 
+ Merge the dataframe safely?
+. 
 .PP
 .SH SEE ALSO
 base

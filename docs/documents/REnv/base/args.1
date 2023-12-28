@@ -1,0 +1,43 @@
+.\" man page create by R# package system.
+.TH BASE 1 2002-May "args" "args"
+.SH NAME
+args \- Argument List of a Function
+.SH SYNOPSIS
+\fIargs(\fBname\fR as any, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Argument List of a Function
+ 
+ Displays the argument names and corresponding default values of a 
+ (non-primitive or primitive) function.
+.PP
+.SH OPTIONS
+.PP
+\fBname\fB \fR\- 
+ a function (a primitive or a closure, i.e., “non-primitive”). If name 
+ is a character string then the function with that name is found and 
+ used.
+. 
+.PP
+.SH VALUE
+.PP
++ For a closure, a closure with identical formal argument list but an empty (NULL) body.
+ + For a primitive (function), a closure with the documented usage And NULL body. 
+    Note that some primitives do Not make use of named arguments And match by position 
+    rather than name.
+ + NULL in case of a non-function.
+.PP
+.SH DETAILS
+.PP
+This function is mainly used interactively to print the argument list 
+ of a function. For programming, consider using formals instead.
+.PP
+.SH SEE ALSO
+base
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

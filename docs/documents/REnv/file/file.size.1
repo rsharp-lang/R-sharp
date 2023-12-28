@@ -3,7 +3,8 @@
 .SH NAME
 file.size \- Extract File Information
 .SH SYNOPSIS
-\fIfile.size(\fBx\fR as string);\fR
+\fIfile.size(\fBx\fR as any, 
+[\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP
 Extract File Information
@@ -18,7 +19,9 @@ Extract File Information
 .PP
 .SH VALUE
 .PP
-Double: File size In bytes.
+Double: File size In bytes. For missing file, this function will 
+ returns a negative number -1; and the file is exists on the filesystem, this 
+ function returns ZERO(empty file) or a positive number.
 .PP
 .SH DETAILS
 .PP

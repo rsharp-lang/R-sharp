@@ -3,15 +3,17 @@
 .SH NAME
 hist \- Do fixed width cut bins
 .SH SYNOPSIS
-\fIhist(\fBdata\fR as any, 
-\fBstep\fR as double = 1);\fR
+\fIhist(\fBx\fR as any, 
+\fBstep\fR as double = \fB<NULL>\fR, 
+\fBn\fR as integer = 10, 
+[\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP
 Do fixed width cut bins
 .PP
 .SH OPTIONS
 .PP
-\fBdata\fB \fR\- A numeric vector data sequence. 
+\fBx\fB \fR\- A numeric vector data sequence. 
 .PP
 .PP
 \fBstep\fB \fR\- The width of the bin box.. 
