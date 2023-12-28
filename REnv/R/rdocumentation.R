@@ -7,6 +7,12 @@ imports "rdocumentation" from "roxygenNet";
 #'    or the package character text name.
 #' @param outputdir the output directory path for 
 #'    save the html documents.
+#' @param package a character vector for display the package name
+#' 
+#' @details the parameter pkgName is different with package parameter, for
+#' 
+#' 1. package parameter is standard for the R# zip package its namespace
+#' 2. pkgName parameter usually be one of a clr dll module
 #' 
 const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
 	const R_syntax_js = getOption("r_syntax.js", default = "../../_assets/R_syntax.js");

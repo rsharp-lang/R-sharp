@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.Text
 Imports roxygenNet
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.CommandLine
+Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.RDataSet.Convertor
@@ -200,5 +201,15 @@ Module package
         Next
 
         Return Nothing
+    End Function
+
+    ''' <summary>
+    ''' parse the clr package module
+    ''' </summary>
+    ''' <param name="dll"></param>
+    ''' <returns></returns>
+    <ExportAPI("parseDll")>
+    Public Function parseDll(dll As String) As Object
+        Return PackageLoader.ParsePackages(dll:=dll).ToArray
     End Function
 End Module

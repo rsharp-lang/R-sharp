@@ -527,6 +527,57 @@ Module clustering
     End Function
 
     ''' <summary>
+    ''' Silhouette Coefficient
+    ''' </summary>
+    ''' <param name="x">the cluster result</param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' Silhouette score is used to evaluate the quality of clusters created using clustering 
+    ''' algorithms such as K-Means in terms of how well samples are clustered with other samples 
+    ''' that are similar to each other. The Silhouette score is calculated for each sample of 
+    ''' different clusters. To calculate the Silhouette score for each observation/data point, 
+    ''' the following distances need to be found out for each observations belonging to all the 
+    ''' clusters:
+    ''' 
+    ''' Mean distance between the observation And all other data points In the same cluster. This
+    ''' distance can also be called a mean intra-cluster distance. The mean distance Is denoted by a
+    ''' Mean distance between the observation And all other data points Of the Next nearest cluster.
+    ''' This distance can also be called a mean nearest-cluster distance. The mean distance Is 
+    ''' denoted by b
+    ''' 
+    ''' Silhouette score, S, for Each sample Is calculated Using the following formula:
+    ''' 
+    ''' \(S = \frac{(b - a)}{max(a, b)}\)
+    ''' 
+    ''' The value Of the Silhouette score varies from -1 To 1. If the score Is 1, the cluster Is
+    ''' dense And well-separated than other clusters. A value near 0 represents overlapping clusters
+    ''' With samples very close To the decision boundary Of the neighboring clusters. A negative 
+    ''' score [-1, 0] indicates that the samples might have got assigned To the wrong clusters.
+    ''' </remarks>
+    <ExportAPI("silhouette_score")>
+    Public Function silhouette_score(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Dim points As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(x, env)
+        Dim data As IEnumerable(Of ClusterEntity)
+
+        If points.isError Then
+            points = pipeline.TryCreatePipeline(Of ClusterEntity)(x, env)
+
+            If points.isError Then
+                Return points.getError
+            Else
+                data = points.populates(Of ClusterEntity)(env)
+            End If
+        Else
+            Dim pull = points.populates(Of EntityClusterModel)(env).ToArray
+            Dim mapper As New DataSetConvertor(pull)
+
+            data = mapper.GetVectors(pull)
+        End If
+
+        Return data.Silhouette
+    End Function
+
+    ''' <summary>
     ''' Hierarchical Clustering
     ''' 
     ''' Hierarchical cluster analysis on a set of dissimilarities and methods for analyzing it.
