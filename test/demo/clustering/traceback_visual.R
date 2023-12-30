@@ -6,6 +6,7 @@ let rawdata = read.csv("./feature_regions.csv", row.names = 1, check.names = FAL
 let traceback = "./traceback.json"
 |> readText()
 |> JSON::json_decode()
+|> getTraceback()
 ;
 
 rawdata[, "Cluster"] = NULL;
@@ -13,17 +14,17 @@ rawdata[, "x"] = as.numeric(rawdata$x);
 rawdata[, "y"] = as.numeric(rawdata$y);
 
 print(rawdata, max.print = 13);
-str(traceback);
+# str(traceback);
 
-const v = function(id, offset) {
-    let v = traceback[[id]];
-    v[offset];
-}
+# const v = function(id, offset) {
+#     let v = traceback[[id]];
+#     v[offset];
+# }
 const x = rawdata$x;
 const y = rawdata$y;
 
 for(i in 1:18) {
-    let labels = sapply(rownames(rawdata), id -> v(id, offset = i));
+    let labels = traceback(i, sort = rownames(rawdata));
 
     print(labels);
 

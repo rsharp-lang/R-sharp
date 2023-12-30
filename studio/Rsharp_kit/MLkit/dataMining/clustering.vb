@@ -455,7 +455,19 @@ Module clustering
     ''' </summary>
     ''' <returns></returns>
     <ExportAPI("getTraceback")>
-    Public Function getTraceback() As TracebackMatrix
+    <RApiReturn(GetType(TracebackMatrix))>
+    Public Function getTraceback(Optional x As list = Nothing, Optional env As Environment = Nothing) As Object
+        If Not x Is Nothing Then
+            Dim data As NamedCollection(Of String)() = x _
+                .AsGeneric(Of String())(env) _
+                .Select(Function(t)
+                            Return New NamedCollection(Of String)(t.Key, t.Value)
+                        End Function) _
+                .ToArray
+
+            Return New TracebackMatrix With {.data = data}
+        End If
+
         If m_traceback Is Nothing Then
             Return Nothing
         Else
@@ -879,7 +891,7 @@ Module clustering
             Dim list As New List(Of String)
 
             For Each item As EntityClusterModel In entities.populates(Of EntityClusterModel)(env)
-                item.Cluster = labels.TryGetValue(item.ID, "no_class")
+                item.Cluster = labels.TryGetValue(item.ID, [default]:="no_class")
                 list.Add(item.Cluster)
             Next
 

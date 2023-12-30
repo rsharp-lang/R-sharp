@@ -2,9 +2,12 @@
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
-Public Class TracebackMatrix : Implements RIndex, ICTypeList
+Public Class TracebackMatrix : Inherits RDefaultFunction
+    Implements RIndex, ICTypeList
 
     Friend data As NamedCollection(Of String)()
 
@@ -17,6 +20,25 @@ Public Class TracebackMatrix : Implements RIndex, ICTypeList
             Return data(0).Length
         End Get
     End Property
+
+    <RDefaultFunction>
+    Public Function getByIndex(i As Integer,
+                               <RRawVectorArgument>
+                               Optional sort As Object = Nothing,
+                               Optional env As Environment = Nothing) As Object
+
+        If sort Is Nothing Then
+            Return getByIndex(i)
+        End If
+
+        Dim sortId As String() = CLRVector.asCharacter(sort)
+        Dim list As Dictionary(Of String, String) = DirectCast(getByIndex(i), list).AsGeneric(Of String)(env)
+        Dim labels As String() = sortId _
+            .Select(Function(id) list.TryGetValue(id, [default]:="no_class")) _
+            .ToArray
+
+        Return labels
+    End Function
 
     ''' <summary>
     ''' 
@@ -56,4 +78,5 @@ Public Class TracebackMatrix : Implements RIndex, ICTypeList
                               End Function)
         }
     End Function
+
 End Class
