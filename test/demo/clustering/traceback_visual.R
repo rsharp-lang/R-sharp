@@ -1,9 +1,10 @@
 require(JSON);
+require(clustering);
 
 setwd(@dir);
 
 let rawdata = read.csv("./feature_regions.csv", row.names = 1, check.names = FALSE);
-let traceback = "./traceback.json"
+let tracer = "./traceback.json"
 |> readText()
 |> JSON::json_decode()
 |> getTraceback()
@@ -24,7 +25,7 @@ const x = rawdata$x;
 const y = rawdata$y;
 
 for(i in 1:18) {
-    let labels = traceback(i, sort = rownames(rawdata));
+    let labels = tracer(i, sort = rownames(rawdata));
 
     print(labels);
 
