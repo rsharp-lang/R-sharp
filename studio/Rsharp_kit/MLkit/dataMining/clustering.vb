@@ -455,20 +455,16 @@ Module clustering
     ''' </summary>
     ''' <returns></returns>
     <ExportAPI("getTraceback")>
-    Public Function getTraceback() As list
+    Public Function getTraceback() As TracebackMatrix
         If m_traceback Is Nothing Then
             Return Nothing
         Else
             Dim points_traceback = m_traceback.GetTraceBack.ToArray
-            Dim list = points_traceback _
-                .ToDictionary(Function(pt) pt.name,
-                              Function(pt)
-                                  Return CObj(pt.ToArray)
-                              End Function)
+            Dim list As New TracebackMatrix With {
+                .data = points_traceback
+            }
 
-            m_traceback = Nothing
-
-            Return New list With {.slots = list}
+            Return list
         End If
     End Function
 
