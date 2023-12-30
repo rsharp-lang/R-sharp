@@ -2,8 +2,9 @@
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
+Imports SMRUCC.Rsharp.Runtime.Interop.CType
 
-Public Class TracebackMatrix : Implements RIndex
+Public Class TracebackMatrix : Implements RIndex, ICTypeList
 
     Friend data As NamedCollection(Of String)()
 
@@ -44,5 +45,15 @@ Public Class TracebackMatrix : Implements RIndex
 
     Public Function setByindex(i() As Integer, value As Array, envir As Environment) As Object Implements RIndex.setByindex
         Return Internal.debug.stop("data is readonly!", envir)
+    End Function
+
+    Public Function toList() As list Implements ICTypeList.toList
+        Return New list With {
+            .slots = data _
+                .ToDictionary(Function(a) a.name,
+                              Function(a)
+                                  Return CObj(a.ToArray)
+                              End Function)
+        }
     End Function
 End Class
