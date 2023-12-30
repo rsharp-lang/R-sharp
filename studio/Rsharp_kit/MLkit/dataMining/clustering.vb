@@ -850,6 +850,57 @@ Module clustering
     End Function
 
     ''' <summary>
+    ''' get or set the cluster class labels
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="[class]"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("clusters")>
+    Public Function clusters(<RRawVectorArgument> x As Object,
+                             <RRawVectorArgument>
+                             <RByRefValueAssign>
+                             Optional [class] As Object = Nothing,
+                             Optional env As Environment = Nothing) As Object
+
+        Dim entities As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(x, env)
+
+        If entities.isError Then
+            Return entities.getError
+        End If
+
+        If [class] Is Nothing Then
+            ' get cluster labels
+            Return entities.populates(Of EntityClusterModel)(env) _
+                .Select(Function(i) i.Cluster) _
+                .ToArray
+        End If
+
+        ' set cluster labels
+        If TypeOf [class] Is list Then
+            Dim labels As Dictionary(Of String, String) = DirectCast([class], list) _
+                .AsGeneric(Of String)(env)
+            Dim list As New List(Of String)
+
+            For Each item As EntityClusterModel In entities.populates(Of EntityClusterModel)(env)
+                item.Cluster = labels.TryGetValue(item.ID, "no_class")
+                list.Add(item.Cluster)
+            Next
+
+            Return list.ToArray
+        Else
+            Dim labels As String() = CLRVector.asCharacter([class])
+            Dim pull As EntityClusterModel() = entities.populates(Of EntityClusterModel)(env).ToArray
+
+            For i As Integer = 0 To pull.Length - 1
+                pull(i).Cluster = labels(i)
+            Next
+
+            Return labels
+        End If
+    End Function
+
+    ''' <summary>
     ''' ### get cluster result data
     ''' 
     ''' </summary>
