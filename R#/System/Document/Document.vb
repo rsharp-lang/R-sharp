@@ -76,6 +76,12 @@ Namespace Development
         Public Property examples As String
         Public Property see_also As String
 
+        Public ReadOnly Property symbol_name As String
+            Get
+                Return declares.name
+            End Get
+        End Property
+
         Public Overrides Function ToString() As String
             Return title
         End Function

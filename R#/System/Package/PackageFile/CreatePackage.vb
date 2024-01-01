@@ -285,16 +285,6 @@ Namespace Development.Package.File
 #End If
         End Function
 
-        Private Function ExportSymbolVignettes(symbols As IEnumerable(Of Document), desc As DESCRIPTION, package_dir As String) As Object
-            Dim output_dir As String = $"{package_dir}/vignettes/R"
-
-            For Each symbol As Document In symbols
-
-            Next
-
-            Return Nothing
-        End Function
-
         ''' <summary>
         ''' create unix .1 man page file and html help documents
         ''' </summary>
@@ -336,7 +326,10 @@ Namespace Development.Package.File
             If Program.isException(err) Then
                 Return err
             Else
-                err = ExportSymbolVignettes(DirectCast(err, list).data.As(Of Document), file.info, package_dir)
+                Dim docs = DirectCast(err, list).data.As(Of Document).ToArray
+                Dim pkg As DESCRIPTION = file.info
+
+                Call REngine.Invoke("REnv::__RSymbolDocumentation", docs, pkg, $"{package_dir}/vignettes/R", REngine.globalEnvir)
             End If
 
             Call Console.WriteLine($"       ==> build package for .NET runtime [{runtime}].")
