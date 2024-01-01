@@ -9,6 +9,13 @@ declare namespace REnv {
       function onLoad(): object;
    }
    /**
+     * @param outputdir default value Is ``./``.
+   */
+   function __RSymbolDocumentation(symbols: any, package: any, outputdir?: any): object;
+   /**
+   */
+   function __template(): object;
+   /**
    */
    function classify_cancer(): object;
    /**
