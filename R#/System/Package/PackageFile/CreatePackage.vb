@@ -322,6 +322,7 @@ Namespace Development.Package.File
             Dim outputHtml As String
             Dim runtime As String = getRuntimeTags()
             Dim pkgModList As New List(Of Package)
+            Dim docs_symbols As New List(Of String)
 
             If Program.isException(err) Then
                 Return err
@@ -329,6 +330,7 @@ Namespace Development.Package.File
                 Dim docs = DirectCast(err, list).data.As(Of Document).ToArray
                 Dim pkg As DESCRIPTION = file.info
 
+                docs_symbols.AddRange(docs.Select(Function(s) s.symbol_name))
                 err = REngine.Invoke("REnv::__RSymbolDocumentation", docs, pkg, $"{package_dir}/vignettes/R", REngine.globalEnvir)
             End If
 
@@ -338,6 +340,15 @@ Namespace Development.Package.File
 
             Call dllIndex.AppendLine($"<pre>{$"{package_dir}/DESCRIPTION".ReadAllText.Replace("&", "&amp;").Replace("<", "&lt;")}</pre>")
             Call dllIndex.AppendLine("<br />")
+
+            Call dllIndex.AppendLine("<h2>R Package Symbols</h2>")
+            Call dllIndex.AppendLine("<ul>")
+
+            For Each name As String In docs_symbols
+                Call dllIndex.AppendLine($"<li><a href=""./R/docs/{name}.html"">{name}</a></li>")
+            Next
+
+            Call dllIndex.AppendLine("</ul>")
 
             ' run documentation for dll modules which is marked as r package
             ' unixMan(pkg As pkg, output As String, env As Environment)
