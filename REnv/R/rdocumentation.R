@@ -11,7 +11,7 @@ const __RSymbolDocumentation = function(symbols, package, outputdir = "./") {
 		# export html documents
 		func 
 		|> rdocumentation::documentation(_template_html, desc = package)
-		|> writeLines(con = `${outputdir}/${name}.html`)
+		|> writeLines(con = `${outputdir}/docs/${name}.html`)
 		;
 	}
 
