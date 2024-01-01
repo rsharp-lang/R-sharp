@@ -60,6 +60,9 @@ Imports Microsoft.VisualBasic.Text.Xml.Models
 
 Namespace Development
 
+    ''' <summary>
+    ''' R comment documentation model
+    ''' </summary>
     Public Class Document
 
         Public Property title As String
@@ -77,6 +80,10 @@ Namespace Development
             Return title
         End Function
 
+        ''' <summary>
+        ''' convert R documentation to unix man page
+        ''' </summary>
+        ''' <returns></returns>
         Public Function UnixMan() As UnixManPage
             Dim man As New UnixManPage With {
                 .AUTHOR = author.SafeQuery.JoinBy(","),

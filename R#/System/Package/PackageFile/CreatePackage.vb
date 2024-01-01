@@ -315,13 +315,13 @@ Namespace Development.Package.File
             Call Console.WriteLine("       ==> roxygen::roxygenize")
 
             ' run documentation for rscript in R folder
-            Dim err As Message = REngine.Invoke("roxygen::roxygenize", {package_dir, REngine.globalEnvir})
+            Dim err As Object = REngine.Invoke("roxygen::roxygenize", {package_dir, REngine.globalEnvir})
             Dim out As String
             Dim outputHtml As String
             Dim runtime As String = getRuntimeTags()
             Dim pkgModList As New List(Of Package)
 
-            If Not err Is Nothing Then
+            If Program.isException(err) Then
                 Return err
             End If
 
