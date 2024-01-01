@@ -53,12 +53,15 @@ Imports System.Reflection
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp
+Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -66,12 +69,29 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 
+''' <summary>
+''' 
+''' </summary>
 <Package("rdocumentation")>
 Public Module rdocumentation
 
     <ExportAPI("documentation")>
-    Public Function rdocumentation(func As RFunction, template As String, Optional env As Environment = Nothing) As String
-        Return New [function]().createHtml(func, template, env)
+    <RApiReturn(TypeCodes.string)>
+    Public Function rdocumentation(func As Object,
+                                   Optional template As String = Nothing,
+                                   Optional desc As DESCRIPTION = Nothing,
+                                   Optional env As Environment = Nothing) As Object
+
+        If TypeOf func Is RFunction Then
+            Return New [function]().createHtml(DirectCast(func, RFunction), template, env)
+        ElseIf TypeOf func Is Document Then
+            Dim docs As Document = DirectCast(func, Document)
+            Dim html As String = [function].createHtml(docs, template, desc.Package, desc.Version, desc.Author, desc.License)
+
+            Return html
+        Else
+            Return Message.InCompatibleType(GetType(RFunction), func.GetType, env)
+        End If
     End Function
 
     <ExportAPI("pull_clr_types")>
