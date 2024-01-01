@@ -329,7 +329,7 @@ Namespace Development.Package.File
                 Dim docs = DirectCast(err, list).data.As(Of Document).ToArray
                 Dim pkg As DESCRIPTION = file.info
 
-                Call REngine.Invoke("REnv::__RSymbolDocumentation", docs, pkg, $"{package_dir}/vignettes/R", REngine.globalEnvir)
+                err = REngine.Invoke("REnv::__RSymbolDocumentation", docs, pkg, $"{package_dir}/vignettes/R", REngine.globalEnvir)
             End If
 
             Call Console.WriteLine($"       ==> build package for .NET runtime [{runtime}].")
