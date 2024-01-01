@@ -280,6 +280,7 @@ Public Class [function]
             !title = docs.title
             !summary = docs.description
             !arguments = docs.parameters _
+                .SafeQuery _
                 .Select(Function(arg)
                             Return $"
 <dt>{arg.name.Replace("_", ".")}</dt>
