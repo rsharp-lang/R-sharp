@@ -222,6 +222,7 @@ Public Module rdocumentation
                 End If
 
                 Call ts.AppendLine($"   {member.Name}: {[function].typeLink(type)} = {CULng(DirectCast(member, FieldInfo).GetValue(Nothing))};")
+                Call ts.AppendLine()
             Else
                 Call ts.AppendLine($"   {member.Name}: {[function].typeLink(type)};")
             End If
