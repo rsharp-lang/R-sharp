@@ -71,6 +71,68 @@ Namespace Runtime.Internal.Invokes
     Module reflections
 
         ''' <summary>
+        ''' ### Object Attributes
+        ''' 
+        ''' Get or set specific attributes of an object.
+        ''' </summary>
+        ''' <param name="x">an object whose attributes are to be accessed.</param>
+        ''' <param name="which">a non-empty character string specifying which attribute is to be accessed.</param>
+        ''' <param name="exact">logical: should which be matched exactly?</param>
+        ''' <param name="value">an object, the new value of the attribute, or NULL to remove the attribute.</param>
+        ''' <param name="env"></param>
+        ''' <returns>For the extractor, the value of the attribute matched, or NULL if no exact 
+        ''' match is found and no or more than one partial match is found.</returns>
+        ''' <remarks>
+        ''' These functions provide access to a single attribute of an object. The replacement 
+        ''' form causes the named attribute to take the value specified (or create a new attribute
+        ''' with the value given).
+        ''' 
+        ''' The extraction Function first looks For an exact match To which amongst the attributes 
+        ''' Of x, Then (unless exact = True) a unique Partial match. (Setting options(warnPartialMatchAttr = True) 
+        ''' causes Partial matches To give warnings.)
+        ''' 
+        ''' The replacement Function only uses exact matches.
+        ''' 
+        ''' Note that some attributes (namely Class, comment, Dim, dimnames, names, row.names And tsp) 
+        ''' are treated specially And have restrictions On the values which can be Set. (Note that 
+        ''' this Is Not True Of levels which should be Set For factors via the levels replacement 
+        ''' Function.)
+        ''' 
+        ''' The extractor Function allows (And does Not match) empty And missing values Of which: the 
+        ''' replacement Function does Not.
+        ''' 
+        ''' NULL objects cannot have attributes And attempting To assign one by attr gives an Error.
+        ''' 
+        ''' Both are primitive functions.
+        ''' </remarks>
+        ''' <example>
+        ''' # create a 2 by 5 matrix
+        ''' x &lt;- 110
+        ''' attr(x,"dim") &lt;- c(2, 5)
+        ''' </example>
+        <ExportAPI("attr")>
+        Public Function attr(<RRawVectorArgument> x As Object, which As String,
+                             Optional exact As Boolean = False,
+                             <RByRefValueAssign> <RRawVectorArgument>
+                             Optional value As Object = Nothing,
+                             Optional env As Environment = Nothing) As Object
+
+            If Not TypeOf x Is RsharpDataObject Then
+                Return Nothing
+            End If
+
+            If value Is Nothing Then
+                ' get attribute
+                Return DirectCast(x, RsharpDataObject).getAttribute(which)
+            Else
+                ' set attribute value
+                DirectCast(x, RsharpDataObject).setAttribute(which, value)
+            End If
+
+            Return value
+        End Function
+
+        ''' <summary>
         ''' ### Object Attribute Lists
         ''' 
         ''' These functions access an object's attributes. The first form 
@@ -120,22 +182,26 @@ Namespace Runtime.Internal.Invokes
             If x Is Nothing Then
                 Return Nothing
             ElseIf Not TypeOf x Is SymbolExpression Then
-                If TypeOf x Is dataframe Then
-                    Dim df As dataframe = x
-                    Dim attrs As New list With {.slots = New Dictionary(Of String, Object)}
+                If TypeOf x Is RsharpDataObject Then
+                    Dim attrs As list = list.empty
+                    Dim obj As RsharpDataObject = x
 
-                    Call attrs.add("names", df.colnames)
-                    Call attrs.add("class", "data.frame")
-                    Call attrs.add("row.names", df.getRowNames)
+                    For Each name As String In obj.getAttributeNames
+                        Call attrs.add(name, obj.getAttribute(name))
+                    Next
 
-                    Return attrs
-                ElseIf TypeOf x Is list Then
-                    Dim li As list = x
-                    Dim attrs As New list With {
-                        .slots = New Dictionary(Of String, Object) From {
-                            {"names", li.getNames}
-                        }
-                    }
+                    If TypeOf x Is dataframe Then
+                        Dim df As dataframe = x
+
+                        attrs.slots("names") = df.colnames
+                        attrs.slots("class") = "data.frame"
+                        attrs.slots("row.names") = df.getRowNames
+                    ElseIf TypeOf x Is list Then
+                        Dim li As list = x
+
+                        attrs.slots("names") = li.getNames
+                        attrs.slots("length") = li.length
+                    End If
 
                     Return attrs
                 End If

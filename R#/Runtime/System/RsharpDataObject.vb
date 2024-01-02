@@ -57,10 +57,20 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Components
 
+    Public Interface IAttributeReflector
+
+        ''' <summary>
+        ''' Get all attribute name that tagged with current symbol object.
+        ''' </summary>
+        ''' <returns></returns>
+        Function getAttributeNames() As IEnumerable(Of String)
+
+    End Interface
+
     ''' <summary>
     ''' the R# data object with specific element data type
     ''' </summary>
-    Public MustInherit Class RsharpDataObject
+    Public MustInherit Class RsharpDataObject : Implements IAttributeReflector
 
         Protected m_type As RType = RType.any
         Protected m_attributes As New Dictionary(Of String, Object)
@@ -87,6 +97,14 @@ Namespace Runtime.Components
         Public Sub setAttribute(name As String, val As Object)
             m_attributes(name) = val
         End Sub
+
+        ''' <summary>
+        ''' Get all attribute name that tagged with current symbol object.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function getAttributeNames() As IEnumerable(Of String) Implements IAttributeReflector.getAttributeNames
+            Return m_attributes.Keys
+        End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String

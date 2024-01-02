@@ -53,6 +53,7 @@
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.ExecuteEngine
 
@@ -68,6 +69,7 @@ Namespace Interpreter.ExecuteEngine
     ''' 4. <see cref="UsingClosure"/>
     ''' </remarks>
     Public MustInherit Class SymbolExpression : Inherits Expression
+        Implements IAttributeReflector
 
         ''' <summary>
         ''' the annotation data from the attribute annotation, example as:
@@ -90,7 +92,7 @@ Namespace Interpreter.ExecuteEngine
         ''' Get all attribute name that tagged with current symbol object.
         ''' </summary>
         ''' <returns></returns>
-        Public Function GetAttributeNames() As IEnumerable(Of String)
+        Public Function GetAttributeNames() As IEnumerable(Of String) Implements IAttributeReflector.getAttributeNames
             Return attributes.Keys
         End Function
 
