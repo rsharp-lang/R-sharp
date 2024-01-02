@@ -172,6 +172,7 @@ Public Module rdocumentation
         Dim cls_name As String = type.Name
         Dim members As IEnumerable(Of MemberInfo)
         Dim is_enum As Boolean = type.IsEnum
+        Dim docs As String = Nothing
 
         Call ts.AppendLine()
         Call ts.AppendLine($"# namespace {type.Namespace}")
@@ -191,10 +192,14 @@ Public Module rdocumentation
         End If
 
         For Each member As MemberInfo In members
-            Dim docs As String = xml.GetProperties(member.Name) _
-                .SafeQuery _
-                .Select(Function(i) i.Summary) _
-                .JoinBy(vbCrLf)
+            If is_enum Then
+                docs = xml.GetField(member.Name)?.Summary
+            Else
+                docs = xml.GetProperties(member.Name) _
+                    .SafeQuery _
+                    .Select(Function(i) i.Summary) _
+                    .JoinBy(vbCrLf)
+            End If
 
             docs = [function].markdown.Transform(docs)
             docs = [function].HandlingTypeReferenceInDocs(docs)
