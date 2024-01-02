@@ -115,6 +115,8 @@ Module machineLearning
         Return SoftmaxLayer.Softmax(CLRVector.asNumeric(V)).DoCall(AddressOf vector.asVector)
     End Function
 
+
+
     <ExportAPI("raw_samples")>
     Public Function getRawSamples(x As MLDataSet) As Sample()
         Return x.DataSamples.items
