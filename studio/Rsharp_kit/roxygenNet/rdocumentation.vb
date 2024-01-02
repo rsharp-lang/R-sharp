@@ -51,7 +51,6 @@
 
 Imports System.ComponentModel
 Imports System.Reflection
-Imports System.Runtime.InteropServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -110,9 +109,9 @@ Public Module rdocumentation
 
         If Not generic_excludes Then
             ' gets all
-            pull = [function].clr_types.PopAll
+            pull = clr_xml.clr_types.PopAll
         Else
-            pull = [function].clr_types.PopAll _
+            pull = clr_xml.clr_types.PopAll _
                 .Where(Function(t) t.GetGenericArguments.IsNullOrEmpty) _
                 .ToArray
         End If
@@ -161,7 +160,7 @@ Public Module rdocumentation
         Call html.Replace("{$title}", clr.FullName)
         Call html.Replace("{$name_title}", clr.Name)
         Call html.Replace("{$namespace}", clr.Namespace)
-        Call html.Replace("{$summary}", [function].HandlingTypeReferenceInDocs(desc))
+        Call html.Replace("{$summary}", clr_xml.HandlingTypeReferenceInDocs(desc))
         Call html.Replace("{$declare}", ts_code(clr, xml))
 
         Return html.ToString
@@ -202,7 +201,7 @@ Public Module rdocumentation
             End If
 
             docs = [function].markdown.Transform(docs)
-            docs = [function].HandlingTypeReferenceInDocs(docs)
+            docs = clr_xml.HandlingTypeReferenceInDocs(docs)
             docs = docs _
                 .Replace("<p>", "") _
                 .Replace("</p>", "") _
@@ -226,10 +225,10 @@ Public Module rdocumentation
                     Call ts.AppendLine($"   [@desc ""{desc.Description}""]")
                 End If
 
-                Call ts.AppendLine($"   {member.Name}: {[function].typeLink(type)} = {CULng(DirectCast(member, FieldInfo).GetValue(Nothing))};")
+                Call ts.AppendLine($"   {member.Name}: {clr_xml.typeLink(type)} = {CULng(DirectCast(member, FieldInfo).GetValue(Nothing))};")
                 Call ts.AppendLine()
             Else
-                Call ts.AppendLine($"   {member.Name}: {[function].typeLink(type)};")
+                Call ts.AppendLine($"   {member.Name}: {clr_xml.typeLink(type)};")
             End If
         Next
 
