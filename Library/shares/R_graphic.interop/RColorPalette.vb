@@ -55,6 +55,8 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
@@ -223,7 +225,17 @@ Module RColorPalette
     ''' <param name="color"></param>
     ''' <param name="default$"></param>
     ''' <returns></returns>
-    Public Function getColor(color As Object, Optional default$ = "black") As String
+    Public Function getColor(color As Object, Optional default$ = "black", Optional env As Environment = Nothing) As String
+        If TypeOf color Is ValueAssignExpression Then
+            color = DirectCast(color, ValueAssignExpression).value.Evaluate(env)
+
+            If Program.isException(color) Then
+                Return [default]
+            Else
+                Return getColor(color, default$, env)
+            End If
+        End If
+
         If color Is Nothing Then
             Return [default]
         ElseIf TypeOf color Is vector Then
