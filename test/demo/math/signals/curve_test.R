@@ -3,7 +3,7 @@ let f = function(x, a, b, c) {
 }
 
 let x = 1:12;
-let x2 = 1:13 step 0.1;
+let x2 = 0:15 step 0.1;
 let y = [17 19 21 28 33 38 37 37 31 23 19 18];
 
 let pars1 = curve_fit(f, x, y, a = 1, b = 1, c = 1);
