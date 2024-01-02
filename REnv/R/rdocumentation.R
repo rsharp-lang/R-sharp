@@ -94,6 +94,7 @@ const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
 
 	let __clr = rdocumentation::pull_clr_types(generic.excludes = TRUE);
 
+	# visit the clr type reference tree
 	for(i in 1:1000) {
 		if (length(__clr) > 0) {
 			for(t in __clr) {
