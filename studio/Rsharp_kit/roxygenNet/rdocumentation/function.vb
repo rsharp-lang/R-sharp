@@ -228,7 +228,7 @@ Public Class [function]
                         fileName = type.GetElementType.Name
                     End If
 
-                    If desc.StringEmpty Then
+                    If Not desc.StringEmpty Then
                         Return $"<a href=""/vignettes/clr/{ns}/{fileName}.html"">{desc}({type.Name})</a>"
                     Else
                         Return $"<a href=""/vignettes/clr/{ns}/{fileName}.html"">{type.Name}</a>"
