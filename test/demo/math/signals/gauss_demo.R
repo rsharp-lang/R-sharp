@@ -7,5 +7,5 @@ print(peaks);
 setwd(@dir);
 
 bitmap(file = "./demo_vector.png") {
-    plot(v);
+    plot((1:length(v))/length(v), v, line = TRUE);
 }
