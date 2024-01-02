@@ -90,6 +90,12 @@ Namespace Runtime.Components
             End Set
         End Property
 
+        ''' <summary>
+        ''' get attribute value by name
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="[default]"></param>
+        ''' <returns></returns>
         Public Function getAttribute(name As String, Optional [default] As Object = Nothing) As Object
             If m_attributes Is Nothing Then
                 Return [default]
@@ -102,6 +108,11 @@ Namespace Runtime.Components
             End If
         End Function
 
+        ''' <summary>
+        ''' tag a named attribute data with current R# runtime object
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="val"></param>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub setAttribute(name As String, val As Object)
             If m_attributes Is Nothing Then
