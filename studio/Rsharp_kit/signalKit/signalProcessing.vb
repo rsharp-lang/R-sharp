@@ -74,7 +74,30 @@ Module signalProcessing
 
     Sub New()
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(SignalPeak()), AddressOf peakTable)
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Variable()), AddressOf gaussPeaks)
     End Sub
+
+    Private Function gaussPeaks(peaks As Variable(), args As list, env As Environment) As RDataframe
+        Dim peak_df As New RDataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim mu As Double() = peaks.Select(Function(p) p.mean).ToArray
+
+        If args.hasName("x.axis") Then
+            Dim x_range As New DoubleRange(CLRVector.asNumeric(args("x.axis")))
+            Dim mean_range As New DoubleRange(0, 1)
+            Dim map_x As IEnumerable(Of Double) = mu _
+                .Select(Function(mi)
+                            Return mean_range.ScaleMapping(mi, x_range)
+                        End Function)
+
+            Call peak_df.add("x", map_x)
+        End If
+
+        Call peak_df.add("mean", mu)
+        Call peak_df.add("width", peaks.Select(Function(p) p.variance))
+        Call peak_df.add("weight", peaks.Select(Function(p) p.weight))
+
+        Return peak_df
+    End Function
 
     Private Function peakTable(sigs As SignalPeak(), args As list, env As Environment) As RDataframe
         Dim data As New Dictionary(Of String, Array) From {
@@ -147,14 +170,19 @@ Module signalProcessing
     ''' <param name="max_peaks"></param>
     ''' <param name="max_loops"></param>
     ''' <param name="eps"></param>
+    ''' <param name="gauss_clr">
+    ''' returns the clr raw object of the gauss peaks
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("gaussian_fit")>
+    <RApiReturn(GetType(RDataframe), GetType(Variable))>
     Public Function gaussian_fit(<RRawVectorArgument>
                                  sig As Object,
                                  Optional max_peaks As Integer = 100,
                                  Optional max_loops As Integer = 10000,
                                  Optional eps As Double = 0.00001,
+                                 Optional gauss_clr As Boolean = False,
                                  Optional env As Environment = Nothing) As Object
 
         Dim opts As New Opts With {
@@ -187,17 +215,12 @@ Module signalProcessing
 
         Dim gauss As New GaussianFit(opts)
         Dim peaks = gauss.fit(signal, max_peaks)
-        Dim peak_df As New RDataframe With {.columns = New Dictionary(Of String, Array)}
-        Dim mu As Double() = peaks.Select(Function(p) p.mean).ToArray
-        Dim x_range As New DoubleRange(x_axis)
-        Dim mean_range As New DoubleRange(0, 1)
 
-        Call peak_df.add("x", mu.Select(Function(mi) mean_range.ScaleMapping(mi, x_range)))
-        Call peak_df.add("mean", mu)
-        Call peak_df.add("width", peaks.Select(Function(p) p.variance))
-        Call peak_df.add("weight", peaks.Select(Function(p) p.weight))
-
-        Return peak_df
+        If gauss_clr Then
+            Return peaks
+        Else
+            Return gaussPeaks(peaks, New list(("x.axis", x_axis)), env)
+        End If
     End Function
 
     <ExportAPI("resampler")>
