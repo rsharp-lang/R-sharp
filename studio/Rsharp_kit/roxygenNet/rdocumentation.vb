@@ -49,6 +49,7 @@
 
 #End Region
 
+Imports System.ComponentModel
 Imports System.Reflection
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
@@ -167,18 +168,28 @@ Public Module rdocumentation
 
     Private Function ts_code(type As Type, xml As ProjectType) As String
         Dim ts As New StringBuilder
+        Dim cls_name As String = type.Name
+        Dim members As IEnumerable(Of MemberInfo)
+        Dim is_enum As Boolean = type.IsEnum
 
         Call ts.AppendLine()
         Call ts.AppendLine($"# namespace {type.Namespace}")
-        Call ts.AppendLine($"export class {type.Name} {{")
+        Call ts.AppendLine($"export class {cls_name} {{")
 
-        For Each member As PropertyInfo In type.GetProperties(PublicProperty)
-            If Not member.CanRead Then
-                Continue For
-            ElseIf Not member.GetIndexParameters.IsNullOrEmpty Then
-                Continue For
-            End If
+        If is_enum Then
+            members = type.GetFields _
+                .Where(Function(f) f.FieldType Is type) _
+                .Select(Function(f) DirectCast(f, MemberInfo)) _
+                .ToArray
+        Else
+            members = type.GetProperties(PublicProperty) _
+                .Where(Function(p)
+                           Return p.CanRead AndAlso p.GetIndexParameters.IsNullOrEmpty
+                       End Function) _
+                .Select(Function(p) DirectCast(p, MemberInfo))
+        End If
 
+        For Each member As MemberInfo In members
             Dim docs As String = xml.GetProperties(member.Name) _
                 .SafeQuery _
                 .Select(Function(i) i.Summary) _
@@ -196,7 +207,23 @@ Public Module rdocumentation
                 Call ts.AppendLine($"   # {line}")
             Next
 
-            Call ts.AppendLine($"   {member.Name}: {[function].typeLink(member.PropertyType)};")
+            If TypeOf member Is PropertyInfo Then
+                type = DirectCast(member, PropertyInfo).PropertyType
+            Else
+                type = DirectCast(member, FieldInfo).FieldType
+            End If
+
+            If is_enum Then
+                Dim desc As DescriptionAttribute = member.GetCustomAttribute(Of DescriptionAttribute)
+
+                If Not desc Is Nothing Then
+                    Call ts.AppendLine($"   [@desc ""{desc.Description}""]")
+                End If
+
+                Call ts.AppendLine($"   {member.Name}: {[function].typeLink(type)} = {DirectCast(member, FieldInfo).GetValue(Nothing)};")
+            Else
+                Call ts.AppendLine($"   {member.Name}: {[function].typeLink(type)};")
+            End If
         Next
 
         Call ts.AppendLine("}")
