@@ -6,6 +6,6 @@ let peaks = gaussian_fit(v,  max_peaks = 8);
 print(peaks);
 setwd(@dir);
 
-bitmap(file = "./demo_vector.png") {
+bitmap(file = "./demo_vector.png", padding = [100, 200, 150, 200], fill = "white") {
     plot((1:length(v))/length(v), v, line = TRUE);
 }

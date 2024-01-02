@@ -57,6 +57,8 @@ Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -114,7 +116,17 @@ Public Module InteropArgumentHelper
         Return Nothing
     End Function
 
-    Public Function getPadding(padding As Object, Optional default$ = g.DefaultPadding) As String
+    Public Function getPadding(padding As Object, Optional default$ = g.DefaultPadding, Optional env As Environment = Nothing) As String
+        If TypeOf padding Is ValueAssignExpression Then
+            padding = DirectCast(padding, ValueAssignExpression).Evaluate(env)
+
+            If Program.isException(padding) Then
+                Return [default]
+            Else
+                Return getPadding(padding, default$, env)
+            End If
+        End If
+
         If padding Is Nothing Then
             Return [default]
         End If

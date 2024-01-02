@@ -821,21 +821,15 @@ Module plots
 
         Dim serials As SerialData() = DirectCast(data, SerialData())
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="2100,1600")
-        Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 150px 150px 200px 200px;")
+        Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 150px 150px 200px 200px;", env:=env)
         Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
-        Dim showLegend As Boolean
         Dim spline As Splines = args.getValue(Of Splines)("interplot", env, Splines.None)
         Dim xlim As Double = args.getValue("xlim", env, Double.NaN)
         Dim ylim As Double = args.getValue("ylim", env, Double.NaN)
         Dim absoluteScale As Boolean = args.getValue("absolute_scale", env, False)
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
         Dim dpi As Integer = args.getValue("dpi", env, [default]:=100)
-
-        If args.hasName("showLegend") Then
-            showLegend = getFirst(CLRVector.asLogical(args!showLegend))
-        Else
-            showLegend = True
-        End If
+        Dim showLegend As Boolean = args.getValue(Of Boolean)({"showLegend", "legend", "legend.show"}, env, [default]:=True)
 
         If args.CheckGraphicsDeviceExists Then
             ' draw on current graphics context
@@ -859,7 +853,7 @@ Module plots
                 YtickFormat:=args.getValue("y.format", env, "F2"),
                 interplot:=spline,
                 axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.Win7VeryLarge),
-                gridFill:=RColorPalette.getColor(args("grid.fill"), "lightgray"),
+                gridFill:=RColorPalette.getColor(If(args("grid.fill"), args("fill")), "lightgray"),
                 xlim:=xlim,
                 ylim:=ylim,
                 XaxisAbsoluteScalling:=absoluteScale,
@@ -885,7 +879,7 @@ Module plots
                 YtickFormat:=args.getValue("y.format", env, "F2"),
                 interplot:=spline,
                 axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.Win7VeryLarge),
-                gridFill:=RColorPalette.getColor(args("grid.fill"), "lightgray"),
+                gridFill:=RColorPalette.getColor(If(args("grid.fill"), args("fill")), "lightgray"),
                 xlim:=xlim,
                 ylim:=ylim,
                 XaxisAbsoluteScalling:=absoluteScale,
