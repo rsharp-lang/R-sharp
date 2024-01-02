@@ -393,7 +393,35 @@ Module plots
 
             Return plotSerials(lines, args, env)
         Else
-            Return plotSerials(line, args, env)
+            Dim fit_names As String() = args.getNames _
+                .Where(Function(s)
+                           Return TypeOf args(s) Is list AndAlso DirectCast(args(s), list).hasNames("x", "y")
+                       End Function) _
+                .ToArray
+            Dim lines As New List(Of SerialData) From {line}
+            Dim color = args.getValue("color", env, "black").TranslateColor
+            Dim maxy As Double = y.Max
+
+            For Each name As String In fit_names
+                Dim serial_data As list = args(name)
+                Dim x_axis As Double() = CLRVector.asNumeric(serial_data!x)
+                Dim y_axis As Double() = CLRVector.asNumeric(serial_data!y)
+
+                line = New SerialData With {
+                    .pointSize = ptSize,
+                    .title = name,
+                    .shape = shape,
+                    .color = color,
+                    .pts = x_axis _
+                        .Select(Function(xi, i)
+                                    Return New PointData(xi, If(reverse, maxy - y_axis(i), y_axis(i)))
+                                End Function) _
+                        .ToArray
+                }
+                lines.Add(line)
+            Next
+
+            Return plotSerials(lines, args, env)
         End If
     End Function
 
