@@ -1,24 +1,36 @@
 imports "utils.docs" from "roxygenNet";
 imports "rdocumentation" from "roxygenNet";
 
-#' Create html documents for ``R#`` package module
-#' 
-#' @param pkgName the ``R#`` package module itself 
-#'    or the package character text name.
-#' @param outputdir the output directory path for 
-#'    save the html documents.
-#' 
-const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
+const __RSymbolDocumentation = function(symbols, package, outputdir = "./") {
+	let _template_html = __template()$template;
+	let name as string = NULL;
+
+	for(func in symbols) {
+		name <- [func]::symbol_name;
+		
+		# export html documents
+		func 
+		|> rdocumentation::documentation(_template_html, desc = package)
+		|> writeLines(con = `${outputdir}/docs/${name}.html`)
+		;
+	}
+
+	invisible(NULL);
+}
+
+const __template = function() {
 	const R_syntax_js = getOption("r_syntax.js", default = "../../_assets/R_syntax.js");
     const css_ref = `${dirname(R_syntax_js, fullpath = FALSE)}/page.css`;
     const R_highlights = `${dirname(R_syntax_js, fullpath = FALSE)}/highlights.js`;
-	const template as string = "templates/Rdocumentation.html" 
+
+	const template = "templates/Rdocumentation.html" 
 	|> system.file(package = "REnv") 
 	|> readText()
 	|> gsub("%r_syntax%", R_syntax_js)
     |> gsub("%r_css%", css_ref)
     |> gsub("%r_highlights%", R_highlights)
 	;	
+
 	const clr_template = "templates/clr_template.html"
 	|> system.file(package = "REnv") 
 	|> readText()
@@ -26,6 +38,25 @@ const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
     |> gsub("%r_css%", css_ref)
     |> gsub("%r_highlights%", R_highlights)
 	;	
+
+	list(template, clr_template);
+}
+
+#' Create html documents for ``R#`` package module
+#' 
+#' @param pkgName the ``R#`` package module itself 
+#'    or the package character text name.
+#' @param outputdir the output directory path for 
+#'    save the html documents.
+#' @param package a character vector for display the package name
+#' 
+#' @details the parameter pkgName is different with package parameter, for
+#' 
+#' 1. package parameter is standard for the R# zip package its namespace
+#' 2. pkgName parameter usually be one of a clr dll module
+#' 
+const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
+	const [template, clr_template] = __template();
 	const functions = pkgName |> getFunctions();
 	const docs_dir = {
 		if (typeof pkgName is "string") {

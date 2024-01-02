@@ -51,9 +51,11 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Scripting.MetaData
 
 Namespace Runtime.Internal.Invokes
 
+    <Package("time")>
     Module time
 
         <ExportAPI("hours")>

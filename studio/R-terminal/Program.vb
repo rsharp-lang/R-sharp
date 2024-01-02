@@ -66,7 +66,6 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Module Program
 

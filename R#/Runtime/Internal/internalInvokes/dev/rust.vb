@@ -55,6 +55,7 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.DynamicInterop
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -64,6 +65,8 @@ Namespace Runtime.Internal.Invokes
     ''' <summary>
     ''' the rust language helper
     ''' </summary>
+    ''' 
+    <Package("rust")>
     Public Module rust
 
         Private Function SolveCLibrary(x As String, env As Environment) As String

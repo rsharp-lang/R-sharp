@@ -12,7 +12,7 @@ rawdata[, "y"] = as.numeric(rawdata$y);
 print(rawdata, max.print = 13);
 
 let result2 = kmeans(rawdata, centers = 18, bisecting = TRUE, traceback = TRUE);
-let debug = getTraceback();
+let debug = getTraceback() |> as.list();
 
 print("kmeans clustering algorithm traceback:");
 str(debug);

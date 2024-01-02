@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataStructures
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
@@ -74,6 +75,8 @@ Namespace Runtime.Internal.Invokes
     ''' <summary>
     ''' Set Operations
     ''' </summary>
+    ''' 
+    <Package("set")>
     Module [set]
 
         ''' <summary>

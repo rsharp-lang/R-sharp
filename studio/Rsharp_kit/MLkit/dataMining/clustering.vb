@@ -455,20 +455,28 @@ Module clustering
     ''' </summary>
     ''' <returns></returns>
     <ExportAPI("getTraceback")>
-    Public Function getTraceback() As list
+    <RApiReturn(GetType(TracebackMatrix))>
+    Public Function getTraceback(Optional x As list = Nothing, Optional env As Environment = Nothing) As Object
+        If Not x Is Nothing Then
+            Dim data As NamedCollection(Of String)() = x _
+                .AsGeneric(Of String())(env) _
+                .Select(Function(t)
+                            Return New NamedCollection(Of String)(t.Key, t.Value)
+                        End Function) _
+                .ToArray
+
+            Return New TracebackMatrix With {.data = data}
+        End If
+
         If m_traceback Is Nothing Then
             Return Nothing
         Else
             Dim points_traceback = m_traceback.GetTraceBack.ToArray
-            Dim list = points_traceback _
-                .ToDictionary(Function(pt) pt.name,
-                              Function(pt)
-                                  Return CObj(pt.ToArray)
-                              End Function)
+            Dim list As New TracebackMatrix With {
+                .data = points_traceback
+            }
 
-            m_traceback = Nothing
-
-            Return New list With {.slots = list}
+            Return list
         End If
     End Function
 
@@ -556,6 +564,57 @@ Module clustering
         Dim result = maps.GetObjects(alg.Clustering).ToArray
 
         Return result
+    End Function
+
+    ''' <summary>
+    ''' Silhouette Coefficient
+    ''' </summary>
+    ''' <param name="x">the cluster result</param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' Silhouette score is used to evaluate the quality of clusters created using clustering 
+    ''' algorithms such as K-Means in terms of how well samples are clustered with other samples 
+    ''' that are similar to each other. The Silhouette score is calculated for each sample of 
+    ''' different clusters. To calculate the Silhouette score for each observation/data point, 
+    ''' the following distances need to be found out for each observations belonging to all the 
+    ''' clusters:
+    ''' 
+    ''' Mean distance between the observation And all other data points In the same cluster. This
+    ''' distance can also be called a mean intra-cluster distance. The mean distance Is denoted by a
+    ''' Mean distance between the observation And all other data points Of the Next nearest cluster.
+    ''' This distance can also be called a mean nearest-cluster distance. The mean distance Is 
+    ''' denoted by b
+    ''' 
+    ''' Silhouette score, S, for Each sample Is calculated Using the following formula:
+    ''' 
+    ''' \(S = \frac{(b - a)}{max(a, b)}\)
+    ''' 
+    ''' The value Of the Silhouette score varies from -1 To 1. If the score Is 1, the cluster Is
+    ''' dense And well-separated than other clusters. A value near 0 represents overlapping clusters
+    ''' With samples very close To the decision boundary Of the neighboring clusters. A negative 
+    ''' score [-1, 0] indicates that the samples might have got assigned To the wrong clusters.
+    ''' </remarks>
+    <ExportAPI("silhouette_score")>
+    Public Function silhouette_score(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Dim points As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(x, env)
+        Dim data As IEnumerable(Of ClusterEntity)
+
+        If points.isError Then
+            points = pipeline.TryCreatePipeline(Of ClusterEntity)(x, env)
+
+            If points.isError Then
+                Return points.getError
+            Else
+                data = points.populates(Of ClusterEntity)(env)
+            End If
+        Else
+            Dim pull = points.populates(Of EntityClusterModel)(env).ToArray
+            Dim mapper As New DataSetConvertor(pull)
+
+            data = mapper.GetVectors(pull)
+        End If
+
+        Return data.Silhouette
     End Function
 
     ''' <summary>
@@ -796,6 +855,57 @@ Module clustering
                      End Function) _
             .Select(Function(v) v.Value) _
             .ToArray
+    End Function
+
+    ''' <summary>
+    ''' get or set the cluster class labels
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="[class]"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("clusters")>
+    Public Function clusters(<RRawVectorArgument> x As Object,
+                             <RRawVectorArgument>
+                             <RByRefValueAssign>
+                             Optional [class] As Object = Nothing,
+                             Optional env As Environment = Nothing) As Object
+
+        Dim entities As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(x, env)
+
+        If entities.isError Then
+            Return entities.getError
+        End If
+
+        If [class] Is Nothing Then
+            ' get cluster labels
+            Return entities.populates(Of EntityClusterModel)(env) _
+                .Select(Function(i) i.Cluster) _
+                .ToArray
+        End If
+
+        ' set cluster labels
+        If TypeOf [class] Is list Then
+            Dim labels As Dictionary(Of String, String) = DirectCast([class], list) _
+                .AsGeneric(Of String)(env)
+            Dim list As New List(Of String)
+
+            For Each item As EntityClusterModel In entities.populates(Of EntityClusterModel)(env)
+                item.Cluster = labels.TryGetValue(item.ID, [default]:="no_class")
+                list.Add(item.Cluster)
+            Next
+
+            Return list.ToArray
+        Else
+            Dim labels As String() = CLRVector.asCharacter([class])
+            Dim pull As EntityClusterModel() = entities.populates(Of EntityClusterModel)(env).ToArray
+
+            For i As Integer = 0 To pull.Length - 1
+                pull(i).Cluster = labels(i)
+            Next
+
+            Return labels
+        End If
     End Function
 
     ''' <summary>

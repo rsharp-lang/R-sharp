@@ -274,14 +274,18 @@ Public Class [function]
         }
     End Function
 
-    Public Function createHtml(docs As Document, template As String, pkg As RPackage) As String
+    Private Function createHtml(docs As Document, template As String, pkg As RPackage) As String
         Dim assembly As AssemblyInfo = pkg.package.Assembly.FromAssembly
+        Dim ns_str As String = pkg.namespace
+        Dim default_author$ = assembly.AssemblyCompany
+        Dim version As String = assembly.AssemblyVersion
+        Dim copyright As String = assembly.AssemblyCopyright
 
-        If template.StringEmpty Then
-            template = blankTemplate.ToString
-        End If
+        Return createHtml(docs, template, ns_str, version, default_author, copyright)
+    End Function
 
-        With New ScriptBuilder(template)
+    Public Shared Function createHtml(docs As Document, template$, namespace$, ver$, default_author$, copyright$) As String
+        With New ScriptBuilder(If(template, function_template.blankTemplate.ToString))
             !name_title = docs.declares.name
             !usage = docs.declares _
                 .ToString(html:=True) _
@@ -289,6 +293,7 @@ Public Class [function]
             !title = docs.title
             !summary = docs.description
             !arguments = docs.parameters _
+                .SafeQuery _
                 .Select(Function(arg)
                             Return $"
 <dt>{arg.name.Replace("_", ".")}</dt>
@@ -298,9 +303,9 @@ Public Class [function]
                 .JoinBy(vbCrLf)
             !value = docs.returns Or "This function has no value returns.".AsDefault
             !details = docs.details
-            !package = pkg.namespace
-            !version = assembly.AssemblyVersion
-            !copyright = assembly.AssemblyCopyright
+            !package = namespace$
+            !version = ver
+            !copyright = copyright
             !show_details = If(docs.details.StringEmpty, "none", "block")
 
             If Strings.Trim(docs.examples).StringEmpty Then
@@ -316,7 +321,7 @@ Public Class [function]
             End If
 
             If docs.author.IsNullOrEmpty Then
-                !author = assembly.AssemblyCompany.Replace("<", "&lt;")
+                !author = Strings.Trim(default_author).Replace("<", "&lt;")
             Else
                 !author = docs.author.JoinBy(", ")
             End If

@@ -73,6 +73,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.Statistics.Linq
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
@@ -88,6 +89,8 @@ Namespace Runtime.Internal.Invokes
     ''' <summary>
     ''' R# math module
     ''' </summary>
+    ''' 
+    <Package("math")>
     Module math
 
         ''' <summary>
