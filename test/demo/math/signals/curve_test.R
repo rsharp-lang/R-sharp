@@ -16,6 +16,7 @@ setwd(@dir);
 
 # stop();
 
-bitmap(file = "./curve_fit.png", fill = "white") {
-    plot(x, y, line = TRUE, fit1 = list(x = x2, y = f(x2, pars1$a, pars1$b, pars1$c)));
+bitmap(file = "./curve_fit.png", fill = "white", padding = [100, 200, 100, 200]) {
+    plot(x, y, line = TRUE, color = "blue",
+         fit1 = list(x = x2, y = f(x2, pars1$a, pars1$b, pars1$c), color = "red"));
 }
