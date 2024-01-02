@@ -94,9 +94,17 @@ const Rdocuments = function(pkgName, outputdir = "./", package = NULL) {
 
 	let __clr = rdocumentation::pull_clr_types(generic.excludes = TRUE);
 
-	for(t in __clr) {
-		clr_docs(t, clr_template)
-		|> writeLines(con = `${vignettes_root}/clr/${gsub([t]::FullName, ".", "/")}.html`);
+	for(i in 1:1000) {
+		if (length(__clr) > 0) {
+			for(t in __clr) {
+				clr_docs(t, clr_template)
+				|> writeLines(con = `${vignettes_root}/clr/${gsub([t]::FullName, ".", "/")}.html`);
+			}
+
+			__clr = rdocumentation::pull_clr_types(generic.excludes = TRUE);
+		} else {
+			break;
+		}
 	}
 
 	invisible(NULL);
