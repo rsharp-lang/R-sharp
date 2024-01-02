@@ -228,8 +228,13 @@ Module plots
         Dim ptSize As Single = args.getValue({"point_size", "point.size"}, env, 15)
         Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
         Dim reverse As Boolean = args.getValue("reverse", env, False)
-        Dim drawLine As Boolean = y Is Nothing
+        Dim drawLine As Boolean = (y Is Nothing) OrElse CLRVector.asLogical(args!line).DefaultFirst(False)
         Dim shape As LegendStyles = args.getValue("shape", env, "Circle").ParseLegendStyle
+
+        ' only x, no y(y is nothing): draw line
+        ' x,y: draw line for scatter points when set line parameter to TRUE
+        ' plot(x,y, line = TRUE);
+        ' plot(x,y)  # default is draw scatter plot
 
         args.slots!line = drawLine
 
