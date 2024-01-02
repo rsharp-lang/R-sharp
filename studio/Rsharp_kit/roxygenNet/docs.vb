@@ -64,6 +64,7 @@ Imports Microsoft.VisualBasic.MIME.text.markdown
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
+Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
@@ -386,5 +387,30 @@ table caption {font-size:14px;font-weight:bolder;}
 
     Public Function PackageIndex()
         Throw New NotImplementedException
+    End Function
+
+    <ExportAPI("markdown_transform")>
+    <Extension>
+    Public Function MarkdownTransform(doc As Document) As Document
+        Return New Document With {
+            .author = doc.author.ToArray,
+            .declares = doc.declares,
+            .description = [function].markdown.Transform(doc.description),
+            .details = [function].markdown.Transform(doc.details),
+            .examples = doc.examples,
+            .keywords = doc.keywords.ToArray,
+            .parameters = doc.parameters _
+                .SafeQuery _
+                .Select(Function(par)
+                            Return New NamedValue(
+                                name:=par.name,
+                                value:=[function].markdown.Transform(par.text)
+                            )
+                        End Function) _
+                .ToArray,
+            .returns = [function].markdown.Transform(doc.returns),
+            .see_also = doc.see_also,
+            .title = [function].markdown.Transform(doc.title)
+        }
     End Function
 End Module

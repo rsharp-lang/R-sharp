@@ -86,7 +86,7 @@ Public Module rdocumentation
         If TypeOf func Is RFunction Then
             Return New [function]().createHtml(DirectCast(func, RFunction), template, env)
         ElseIf TypeOf func Is Document Then
-            Dim docs As Document = DirectCast(func, Document)
+            Dim docs As Document = DirectCast(func, Document).MarkdownTransform
             Dim html As String = [function].createHtml(docs, template, desc.Package, desc.Version, desc.Author, desc.License)
 
             Return html
