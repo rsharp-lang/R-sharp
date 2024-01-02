@@ -367,7 +367,12 @@ Module plots
 
             If TypeOf fit Is gaussVariable() Then
                 For Each peak As gaussVariable In DirectCast(fit, gaussVariable())
-                    If peak.variance = 0 Then
+                    If peak.variance = 0 OrElse
+                        peak.weight = 0.0 OrElse
+                        peak.variance.IsNaNImaginary OrElse
+                        peak.weight.IsNaNImaginary OrElse
+                        peak.mean.IsNaNImaginary Then
+
                         Continue For
                     End If
 
