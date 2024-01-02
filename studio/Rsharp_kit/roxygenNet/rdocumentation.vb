@@ -51,6 +51,7 @@
 
 Imports System.ComponentModel
 Imports System.Reflection
+Imports System.Runtime.InteropServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -220,7 +221,7 @@ Public Module rdocumentation
                     Call ts.AppendLine($"   [@desc ""{desc.Description}""]")
                 End If
 
-                Call ts.AppendLine($"   {member.Name}: {[function].typeLink(type)} = {DirectCast(member, FieldInfo).GetValue(Nothing)};")
+                Call ts.AppendLine($"   {member.Name}: {[function].typeLink(type)} = {CULng(DirectCast(member, FieldInfo).GetValue(Nothing))};")
             Else
                 Call ts.AppendLine($"   {member.Name}: {[function].typeLink(type)};")
             End If
