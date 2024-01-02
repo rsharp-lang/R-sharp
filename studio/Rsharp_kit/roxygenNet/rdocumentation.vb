@@ -174,6 +174,7 @@ Public Module rdocumentation
             docs = docs _
                 .Replace("<p>", "") _
                 .Replace("</p>", "") _
+                .Replace("<br />", "") _
                 .Trim
 
             For Each line As String In docs.LineTokens
