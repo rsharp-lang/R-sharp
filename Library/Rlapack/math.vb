@@ -1000,7 +1000,8 @@ theta = {objToString(thetaFunc, env:=env)}
     Public Function curve_fit(f As Object,
                               <RRawVectorArgument> xdata As Object,
                               <RRawVectorArgument> ydata As Object,
-                              <RRawVectorArgument> args As Object,
+                              <RRawVectorArgument>
+                              <RListObjectArgument> args As Object,
                               Optional env As Environment = Nothing) As Object
 
         If TypeOf f Is RFunction Then
