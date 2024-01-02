@@ -7,7 +7,7 @@ let y = f(x, 20, 1 , 5) + runif(length(x), -1.5, 1.5);
 
 x = x + runif(length(x), -1.5, 1.5);
 
-let pars = curve_fit(f, x, y, A = 0.5, B = 0.5, C = 0.5);
+let pars = curve_fit(f, x, y, A = 10, B = 0.5, C = 4);
 
 str(pars);
 setwd(@dir);
