@@ -332,6 +332,11 @@ Namespace Development.Package.File
 
                 docs_symbols.AddRange(docs.Select(Function(s) s.symbol_name))
                 err = REngine.Invoke("REnv::__RSymbolDocumentation", docs, pkg, $"{package_dir}/vignettes/R", REngine.globalEnvir)
+
+                If Program.isException(err) AndAlso pkg.Package = "REnv" Then
+                    ' 20240102 ignores the data of REnv package bootstrapping in first time
+                    err = Nothing
+                End If
             End If
 
             Call Console.WriteLine($"       ==> build package for .NET runtime [{runtime}].")
