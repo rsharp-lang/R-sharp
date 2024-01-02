@@ -1,5 +1,11 @@
 imports "signalProcessing" from "signalKit";
 
-let peaks = gaussian_fit([0, 0.1, 0.2, 0.5, 0.9, 0.4, 0.35, 0.2, 0.1, 0],  max_peaks = 2);
+let v = [0, 0.1, 0.2, 0.5, 0.9, 1.3, 0.99, 0.7, 0.35, 0.4, 0.5, 0.6, 0.65, 0.45, 0.4, 0.35, 0.2, 0.1, 0];
+let peaks = gaussian_fit(v,  max_peaks = 8);
 
 print(peaks);
+setwd(@dir);
+
+bitmap(file = "./demo_vector.png") {
+    plot(v);
+}
