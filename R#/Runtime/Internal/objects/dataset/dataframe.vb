@@ -166,7 +166,8 @@ Namespace Runtime.Internal.Object
     ''' Statistical Models in S eds J. M. Chambers and T. J. 
     ''' Hastie, Wadsworth &amp; Brooks/Cole.
     ''' </remarks>
-    Public Class dataframe : Implements RNames
+    Public Class dataframe : Inherits RsharpDataObject
+        Implements RNames
 
         ''' <summary>
         ''' 长度为1或者长度为n
