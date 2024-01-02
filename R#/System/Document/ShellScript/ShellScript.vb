@@ -409,7 +409,7 @@ Namespace Development.CommandLine
         Private Sub analysisTree(expr As DeclareNewSymbol)
             Dim type As TypeCodes = expr.type
             Dim attrs As New ArgumentInfo(type) With {
-                .attrs = expr.attributes
+                .attrs = expr.GetAttributes
             }
 
             If TypeOf expr.m_value Is ArgumentValue Then

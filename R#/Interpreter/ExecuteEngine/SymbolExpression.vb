@@ -88,6 +88,27 @@ Namespace Interpreter.ExecuteEngine
         ''' <returns></returns>
         Public MustOverride Function GetSymbolName() As String
 
+        Public Function GetAttributes() As Dictionary(Of String, String())
+            If attributes Is Nothing Then
+                attributes = New Dictionary(Of String, String())
+            End If
+
+            Return attributes
+        End Function
+
+        ''' <summary>
+        ''' does a specific attribute exists in current symbol?
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
+        Public Function hasAttribute(name As String) As Boolean
+            If attributes Is Nothing Then
+                Return False
+            Else
+                Return attributes.ContainsKey(name)
+            End If
+        End Function
+
         ''' <summary>
         ''' Get all attribute name that tagged with current symbol object.
         ''' </summary>
