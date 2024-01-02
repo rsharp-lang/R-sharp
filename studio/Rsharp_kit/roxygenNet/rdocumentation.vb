@@ -94,6 +94,11 @@ Public Module rdocumentation
         End If
     End Function
 
+    ''' <summary>
+    ''' pull all clr type in the cache and then clear up the cache
+    ''' </summary>
+    ''' <param name="generic_excludes"></param>
+    ''' <returns></returns>
     <ExportAPI("pull_clr_types")>
     Public Function pull_clr_types(Optional generic_excludes As Boolean = False) As Type()
         If Not generic_excludes Then
@@ -130,7 +135,7 @@ Public Module rdocumentation
         Call html.Replace("{$title}", clr.FullName)
         Call html.Replace("{$name_title}", clr.Name)
         Call html.Replace("{$namespace}", clr.Namespace)
-        Call html.Replace("{$summary}", xml.Summary)
+        Call html.Replace("{$summary}", [function].HandlingTypeReferenceInDocs(xml.Summary))
         Call html.Replace("{$declare}", ts_code(clr, xml))
 
         Return html.ToString
@@ -154,6 +159,8 @@ Public Module rdocumentation
                 .SafeQuery _
                 .Select(Function(i) i.Summary) _
                 .JoinBy(vbCrLf)
+
+            docs = [function].HandlingTypeReferenceInDocs(docs)
 
             For Each line As String In docs.LineTokens
                 Call ts.AppendLine($"   # {line}")
