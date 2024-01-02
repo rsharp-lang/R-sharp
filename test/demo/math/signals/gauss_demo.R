@@ -9,5 +9,5 @@ print(as.data.frame(peaks));
 setwd(@dir);
 
 bitmap(file = "./demo_vector.png", padding = [100, 200, 150, 200], fill = "white") {
-    plot((1:length(v))/length(v), v,  fit = peaks,  line = TRUE);
+    plot((1:length(v))/length(v), v,    line = TRUE);
 }
