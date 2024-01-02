@@ -406,12 +406,17 @@ Module plots
                 Dim serial_data As list = args(name)
                 Dim x_axis As Double() = CLRVector.asNumeric(serial_data!x)
                 Dim y_axis As Double() = CLRVector.asNumeric(serial_data!y)
+                Dim color_line As Color = color
+
+                If serial_data.hasName("color") Then
+                    color_line = serial_data.getValue("color", env, "black").TranslateColor
+                End If
 
                 line = New SerialData With {
                     .pointSize = ptSize,
                     .title = name,
                     .shape = shape,
-                    .color = color,
+                    .color = color_line,
                     .pts = x_axis _
                         .Select(Function(xi, i)
                                     Return New PointData(xi, If(reverse, maxy - y_axis(i), y_axis(i)))
