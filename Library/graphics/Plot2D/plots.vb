@@ -367,6 +367,10 @@ Module plots
 
             If TypeOf fit Is gaussVariable() Then
                 For Each peak As gaussVariable In DirectCast(fit, gaussVariable())
+                    If peak.variance = 0 Then
+                        Continue For
+                    End If
+
                     line = New SerialData With {
                         .pointSize = ptSize,
                         .title = peak.ToString,
