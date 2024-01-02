@@ -73,7 +73,12 @@ Namespace Runtime.Components
     Public MustInherit Class RsharpDataObject : Implements IAttributeReflector
 
         Protected m_type As RType = RType.any
-        Protected m_attributes As New Dictionary(Of String, Object)
+
+        ''' <summary>
+        ''' holds the custom attribute data that tagged with current R# runtime object
+        ''' this dictionary object value is created in lazy mode
+        ''' </summary>
+        Protected m_attributes As Dictionary(Of String, Object)
 
         Public Overridable Property elementType As RType
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -86,6 +91,10 @@ Namespace Runtime.Components
         End Property
 
         Public Function getAttribute(name As String, Optional [default] As Object = Nothing) As Object
+            If m_attributes Is Nothing Then
+                m_attributes = New Dictionary(Of String, Object)
+            End If
+
             If m_attributes.ContainsKey(name) Then
                 Return m_attributes(name)
             Else
@@ -95,6 +104,10 @@ Namespace Runtime.Components
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub setAttribute(name As String, val As Object)
+            If m_attributes Is Nothing Then
+                m_attributes = New Dictionary(Of String, Object)
+            End If
+
             m_attributes(name) = val
         End Sub
 
@@ -103,7 +116,11 @@ Namespace Runtime.Components
         ''' </summary>
         ''' <returns></returns>
         Public Function getAttributeNames() As IEnumerable(Of String) Implements IAttributeReflector.getAttributeNames
-            Return m_attributes.Keys
+            If m_attributes Is Nothing Then
+                Return New String() {}
+            Else
+                Return m_attributes.Keys
+            End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
