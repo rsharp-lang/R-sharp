@@ -80,7 +80,7 @@ Namespace Interpreter.ExecuteEngine
         ''' const symbol = ...
         ''' ```
         ''' </summary>
-        Protected Friend ReadOnly attributes As New Dictionary(Of String, String())
+        Protected attributes As Dictionary(Of String, String())
 
         ''' <summary>
         ''' The symbol name of current symbol object
@@ -93,6 +93,9 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         ''' <returns></returns>
         Public Function GetAttributeNames() As IEnumerable(Of String) Implements IAttributeReflector.getAttributeNames
+            If attributes Is Nothing Then
+                Return New String() {}
+            End If
             Return attributes.Keys
         End Function
 
@@ -102,6 +105,10 @@ Namespace Interpreter.ExecuteEngine
         ''' <param name="name">the attribute name string for get the value</param>
         ''' <returns></returns>
         Public Function GetAttributeValue(name As String) As IEnumerable(Of String)
+            If attributes Is Nothing Then
+                Return New String() {}
+            End If
+
             If attributes.ContainsKey(name) Then
                 Return attributes(name)
             Else
@@ -117,6 +124,10 @@ Namespace Interpreter.ExecuteEngine
         ''' Call this method at script parser or expression parser code
         ''' </remarks>
         Protected Friend Overridable Sub AddCustomAttributes(attrs As IEnumerable(Of NamedValue(Of String())))
+            If attributes Is Nothing Then
+                attributes = New Dictionary(Of String, String())
+            End If
+
             For Each attr As NamedValue(Of String()) In attrs
                 If attributes.ContainsKey(attr.Name) Then
                     attributes(attr.Name) = attributes(attr.Name) _
@@ -133,6 +144,10 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         ''' <param name="attrs"></param>
         Friend Sub SetAttributes(attrs As Dictionary(Of String, String()))
+            If attributes Is Nothing Then
+                attributes = New Dictionary(Of String, String())
+            End If
+
             For Each attr As KeyValuePair(Of String, String()) In attrs.SafeQuery
                 attributes(attr.Key) = attr.Value
             Next

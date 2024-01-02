@@ -92,7 +92,7 @@ Namespace Runtime.Components
 
         Public Function getAttribute(name As String, Optional [default] As Object = Nothing) As Object
             If m_attributes Is Nothing Then
-                m_attributes = New Dictionary(Of String, Object)
+                Return [default]
             End If
 
             If m_attributes.ContainsKey(name) Then
