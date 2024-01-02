@@ -84,7 +84,7 @@ Public Class [function]
         End If
     End Function
 
-    Private Shared Iterator Function ParseTypeReference(doc_str As String) As IEnumerable(Of (str As String, Type))
+    Public Shared Iterator Function ParseTypeReference(doc_str As String) As IEnumerable(Of (str As String, Type))
         Dim r As New Regex("[@][<]code[>].*?[<]/code[>]", RegexICSng)
         Dim list = r.Matches(doc_str).ToArray
         Dim type As Type
@@ -104,6 +104,18 @@ Public Class [function]
                 Yield (link, type)
             End If
         Next
+    End Function
+
+    Public Shared Function HandlingTypeReferenceInDocs(doc_str As String) As String
+        If doc_str.StringEmpty Then
+            Return ""
+        End If
+
+        For Each link In ParseTypeReference(doc_str)
+            doc_str = doc_str.Replace(link.str, typeLink(link.Item2))
+        Next
+
+        Return doc_str
     End Function
 
     Private Shared Sub push_clr(t As Type)
@@ -163,10 +175,11 @@ Public Class [function]
                 docs.returns = $"this function returns data object in these one of the listed data types: {unions_type.Select(AddressOf typeLink).JoinBy(", ")}."
             End If
         Else
-            For Each link In ParseTypeReference(docs.returns)
-                docs.returns = docs.returns.Replace(link.str, typeLink(link.Item2))
-            Next
+            docs.returns = HandlingTypeReferenceInDocs(docs.returns)
         End If
+
+        docs.description = HandlingTypeReferenceInDocs(docs.description)
+        docs.details = HandlingTypeReferenceInDocs(docs.details)
 
         Dim rtvl = api.GetRApiReturns
 
@@ -240,7 +253,7 @@ Public Class [function]
     Private Function argument(arg As param) As NamedValue
         Return New NamedValue With {
             .name = arg.name,
-            .text = markdown.Transform(arg.text)
+            .text = HandlingTypeReferenceInDocs(markdown.Transform(arg.text))
         }
     End Function
 
