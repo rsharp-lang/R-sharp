@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::8550c2fcef812053ca1ce3c0bbee5edd, D:/GCModeller/src/R-sharp/Library/graphics//Plot2D/plots.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1020
-    '    Code Lines: 790
-    ' Comment Lines: 130
-    '   Blank Lines: 100
-    '     File Size: 46.22 KB
+' Summaries:
 
 
-    ' Module plots
-    ' 
-    '     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
-    '               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
-    '               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotArray, plotContourLayers
-    '               plotFormula, plotLinearYFit, plotLmCall, plotODEResult, plotPieChart
-    '               PlotPolygon, plotSerials, plotVector, printImage, UpSetPlot
-    ' 
-    '     Sub: Main, TryGetClassData
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1020
+'    Code Lines: 790
+' Comment Lines: 130
+'   Blank Lines: 100
+'     File Size: 46.22 KB
+
+
+' Module plots
+' 
+'     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
+'               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
+'               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotArray, plotContourLayers
+'               plotFormula, plotLinearYFit, plotLmCall, plotODEResult, plotPieChart
+'               PlotPolygon, plotSerials, plotVector, printImage, UpSetPlot
+' 
+'     Sub: Main, TryGetClassData
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -101,8 +101,11 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Rlapack
 Imports SMRUCC.Rsharp
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
@@ -110,13 +113,11 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
+Imports gaussVariable = Microsoft.VisualBasic.Math.SignalProcessing.EmGaussian.Variable
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 Imports RgraphicsDev = SMRUCC.Rsharp.Runtime.Internal.Invokes.graphics
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Interpreter
+Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 
 ''' <summary>
 ''' chartting plots for R#
@@ -357,7 +358,34 @@ Module plots
             }
         End If
 
-        Return plotSerials(line, args, env)
+        If args.hasName("fit") Then
+            Dim fit As Object = args!fit
+            Dim lines As New List(Of SerialData) From {line}
+            Dim x_axis As Double() = line.x
+            Dim color = args.getValue("color", env, "black").TranslateColor
+            Dim maxy As Double = y.Max
+
+            If TypeOf fit Is gaussVariable() Then
+                For Each peak As gaussVariable In DirectCast(fit, gaussVariable())
+                    line = New SerialData With {
+                        .pointSize = ptSize,
+                        .title = peak.ToString,
+                        .shape = shape,
+                        .color = color,
+                        .pts = x_axis _
+                            .Select(Function(xi)
+                                        Return New PointData(xi, If(reverse, maxy - peak.gauss(xi), peak.gauss(xi)))
+                                    End Function) _
+                            .ToArray
+                    }
+                    lines.Add(line)
+                Next
+            End If
+
+            Return plotSerials(lines, args, env)
+        Else
+            Return plotSerials(line, args, env)
+        End If
     End Function
 
     ''' <summary>
@@ -819,7 +847,7 @@ Module plots
             data = {DirectCast(data, SerialData)}
         End If
 
-        Dim serials As SerialData() = DirectCast(data, SerialData())
+        Dim serials As SerialData() = DirectCast(data, IEnumerable(Of SerialData)).ToArray
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="2100,1600")
         Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 150px 150px 200px 200px;", env:=env)
         Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
