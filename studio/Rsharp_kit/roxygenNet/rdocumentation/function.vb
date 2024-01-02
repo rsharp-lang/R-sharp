@@ -72,8 +72,7 @@ Imports RPackage = SMRUCC.Rsharp.Development.Package.Package
 
 Public Class [function]
 
-    ReadOnly markdown As New MarkdownHTML
-
+    Friend Shared ReadOnly markdown As New MarkdownHTML
     Friend Shared ReadOnly clr_types As New List(Of Type)
 
     Public Function createHtml(api As RFunction, env As Environment) As String

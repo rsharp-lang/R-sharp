@@ -131,11 +131,20 @@ Public Module rdocumentation
         End If
 
         Dim html As New StringBuilder(template)
+        Dim desc As String = xml.Summary
+
+        If desc.StringEmpty Then
+            desc = xml.Remarks
+        Else
+            desc = {desc, If(xml.Remarks, "")}.JoinBy(vbCrLf & vbCrLf)
+        End If
+
+        desc = [function].markdown.Transform(desc)
 
         Call html.Replace("{$title}", clr.FullName)
         Call html.Replace("{$name_title}", clr.Name)
         Call html.Replace("{$namespace}", clr.Namespace)
-        Call html.Replace("{$summary}", [function].HandlingTypeReferenceInDocs(xml.Summary))
+        Call html.Replace("{$summary}", [function].HandlingTypeReferenceInDocs(desc))
         Call html.Replace("{$declare}", ts_code(clr, xml))
 
         Return html.ToString
@@ -160,6 +169,7 @@ Public Module rdocumentation
                 .Select(Function(i) i.Summary) _
                 .JoinBy(vbCrLf)
 
+            docs = [function].markdown.Transform(docs)
             docs = [function].HandlingTypeReferenceInDocs(docs)
 
             For Each line As String In docs.LineTokens
