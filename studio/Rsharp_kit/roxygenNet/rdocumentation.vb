@@ -49,6 +49,7 @@
 
 #End Region
 
+Imports System.ComponentModel
 Imports System.Reflection
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
@@ -85,7 +86,7 @@ Public Module rdocumentation
         If TypeOf func Is RFunction Then
             Return New [function]().createHtml(DirectCast(func, RFunction), template, env)
         ElseIf TypeOf func Is Document Then
-            Dim docs As Document = DirectCast(func, Document)
+            Dim docs As Document = DirectCast(func, Document).MarkdownTransform
             Dim html As String = [function].createHtml(docs, template, desc.Package, desc.Version, desc.Author, desc.License)
 
             Return html
@@ -94,16 +95,36 @@ Public Module rdocumentation
         End If
     End Function
 
+    ''' <summary>
+    ''' pull all clr type in the cache and then clear up the cache
+    ''' </summary>
+    ''' <param name="generic_excludes"></param>
+    ''' <returns></returns>
     <ExportAPI("pull_clr_types")>
     Public Function pull_clr_types(Optional generic_excludes As Boolean = False) As Type()
+        Dim pull As Type()
+        Dim outlist As New List(Of Type)
+
+        Static visited As New Index(Of Type)
+
         If Not generic_excludes Then
             ' gets all
-            Return [function].clr_types.PopAll
+            pull = clr_xml.clr_types.PopAll
         Else
-            Return [function].clr_types.PopAll _
+            pull = clr_xml.clr_types.PopAll _
                 .Where(Function(t) t.GetGenericArguments.IsNullOrEmpty) _
                 .ToArray
         End If
+
+        ' break the circle reference dead loop
+        For Each clr_type As Type In pull
+            If Not clr_type Like visited Then
+                visited.Add(clr_type)
+                outlist.Add(clr_type)
+            End If
+        Next
+
+        Return outlist.ToArray
     End Function
 
     ''' <summary>
@@ -126,11 +147,20 @@ Public Module rdocumentation
         End If
 
         Dim html As New StringBuilder(template)
+        Dim desc As String = xml.Summary
+
+        If desc.StringEmpty Then
+            desc = xml.Remarks
+        Else
+            desc = {desc, If(xml.Remarks, "")}.JoinBy(vbCrLf & vbCrLf)
+        End If
+
+        desc = [function].markdown.Transform(desc)
 
         Call html.Replace("{$title}", clr.FullName)
         Call html.Replace("{$name_title}", clr.Name)
         Call html.Replace("{$namespace}", clr.Namespace)
-        Call html.Replace("{$summary}", xml.Summary)
+        Call html.Replace("{$summary}", clr_xml.HandlingTypeReferenceInDocs(desc))
         Call html.Replace("{$declare}", ts_code(clr, xml))
 
         Return html.ToString
@@ -138,28 +168,68 @@ Public Module rdocumentation
 
     Private Function ts_code(type As Type, xml As ProjectType) As String
         Dim ts As New StringBuilder
+        Dim cls_name As String = type.Name
+        Dim members As IEnumerable(Of MemberInfo)
+        Dim is_enum As Boolean = type.IsEnum
+        Dim docs As String = Nothing
 
         Call ts.AppendLine()
         Call ts.AppendLine($"# namespace {type.Namespace}")
-        Call ts.AppendLine($"export class {type.Name} {{")
+        Call ts.AppendLine($"export class {cls_name} {{")
 
-        For Each member As PropertyInfo In type.GetProperties(PublicProperty)
-            If Not member.CanRead Then
-                Continue For
-            ElseIf Not member.GetIndexParameters.IsNullOrEmpty Then
-                Continue For
+        If is_enum Then
+            members = type.GetFields _
+                .Where(Function(f) f.FieldType Is type) _
+                .Select(Function(f) DirectCast(f, MemberInfo)) _
+                .ToArray
+        Else
+            members = type.GetProperties(PublicProperty) _
+                .Where(Function(p)
+                           Return p.CanRead AndAlso p.GetIndexParameters.IsNullOrEmpty
+                       End Function) _
+                .Select(Function(p) DirectCast(p, MemberInfo))
+        End If
+
+        For Each member As MemberInfo In members
+            If is_enum Then
+                docs = xml.GetField(member.Name)?.Summary
+            Else
+                docs = xml.GetProperties(member.Name) _
+                    .SafeQuery _
+                    .Select(Function(i) i.Summary) _
+                    .JoinBy(vbCrLf)
             End If
 
-            Dim docs As String = xml.GetProperties(member.Name) _
-                .SafeQuery _
-                .Select(Function(i) i.Summary) _
-                .JoinBy(vbCrLf)
+            docs = [function].markdown.Transform(docs)
+            docs = clr_xml.HandlingTypeReferenceInDocs(docs)
+            docs = docs _
+                .Replace("<p>", "") _
+                .Replace("</p>", "") _
+                .Replace("<br />", "") _
+                .Trim
 
             For Each line As String In docs.LineTokens
                 Call ts.AppendLine($"   # {line}")
             Next
 
-            Call ts.AppendLine($"   {member.Name}: {[function].typeLink(member.PropertyType)};")
+            If TypeOf member Is PropertyInfo Then
+                type = DirectCast(member, PropertyInfo).PropertyType
+            Else
+                type = DirectCast(member, FieldInfo).FieldType
+            End If
+
+            If is_enum Then
+                Dim desc As DescriptionAttribute = member.GetCustomAttribute(Of DescriptionAttribute)
+
+                If Not desc Is Nothing Then
+                    Call ts.AppendLine($"   [@desc ""{desc.Description}""]")
+                End If
+
+                Call ts.AppendLine($"   {member.Name}: {clr_xml.typeLink(type)} = {CULng(DirectCast(member, FieldInfo).GetValue(Nothing))};")
+                Call ts.AppendLine()
+            Else
+                Call ts.AppendLine($"   {member.Name}: {clr_xml.typeLink(type)};")
+            End If
         Next
 
         Call ts.AppendLine("}")

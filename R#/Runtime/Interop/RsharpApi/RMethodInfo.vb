@@ -160,6 +160,14 @@ Namespace Runtime.Interop
         End Sub
 
         ''' <summary>
+        ''' construct a R# runtime function from a static clr function
+        ''' </summary>
+        ''' <param name="func"></param>
+        Sub New(func As MethodInfo)
+            Call Me.New(func.Name, func, Nothing)
+        End Sub
+
+        ''' <summary>
         ''' Construct a object class binding instance member function
         ''' </summary>
         ''' <param name="name">The symbol name of the given function</param>
