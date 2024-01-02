@@ -193,9 +193,14 @@ Public Class [function]
 
     Friend Shared Function typeLink(type As Type) As String
         Dim rtype As RType = RType.GetRSharpType(type)
+        Dim desc As String = ""
 
         If type.ImplementInterface(GetType(IDictionary)) Then
             rtype = RType.list
+        End If
+        If type Is GetType(IEnumerable(Of )) Then
+            type = type.GetGenericArguments.First
+            desc = "iterates"
         End If
 
         Select Case rtype.mode
@@ -210,7 +215,11 @@ Public Class [function]
             Case Else
 
                 If type Is GetType(Object) Then
-                    Return "<i>any</i> kind"
+                    If desc.StringEmpty Then
+                        Return "<i>any</i> kind"
+                    Else
+                        Return $"<i>{desc}(any)</i> kind"
+                    End If
                 Else
                     Dim ns As String = type.Namespace.Replace("."c, "/"c)
                     Dim fileName As String = type.Name
@@ -219,7 +228,11 @@ Public Class [function]
                         fileName = type.GetElementType.Name
                     End If
 
-                    Return $"<a href=""/vignettes/clr/{ns}/{fileName}.html"">{type.Name}</a>"
+                    If desc.StringEmpty Then
+                        Return $"<a href=""/vignettes/clr/{ns}/{fileName}.html"">{desc}({type.Name})</a>"
+                    Else
+                        Return $"<a href=""/vignettes/clr/{ns}/{fileName}.html"">{type.Name}</a>"
+                    End If
                 End If
         End Select
     End Function
