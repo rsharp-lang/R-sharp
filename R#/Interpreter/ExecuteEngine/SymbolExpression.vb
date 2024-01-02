@@ -80,7 +80,7 @@ Namespace Interpreter.ExecuteEngine
         ''' const symbol = ...
         ''' ```
         ''' </summary>
-        Protected attributes As Dictionary(Of String, String())
+        Protected Friend attributes As Dictionary(Of String, String())
 
         ''' <summary>
         ''' The symbol name of current symbol object
