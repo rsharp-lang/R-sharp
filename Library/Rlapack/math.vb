@@ -1000,8 +1000,7 @@ theta = {objToString(thetaFunc, env:=env)}
     Public Function curve_fit(f As Object,
                               <RRawVectorArgument> xdata As Object,
                               <RRawVectorArgument> ydata As Object,
-                              <RRawVectorArgument>
-                              <RListObjectArgument> args As Object,
+                              <RListObjectArgument> args As list,
                               Optional env As Environment = Nothing) As Object
 
         If TypeOf f Is RFunction Then
@@ -1025,25 +1024,24 @@ theta = {objToString(thetaFunc, env:=env)}
             .Skip(1) _
             .Select(Function(a) a.Name) _
             .ToArray
+        Dim is_list_pars As Boolean = Not (args.length = 1 AndAlso args.getNames.First = NameOf(args))
 
-        If TypeOf args Is list Then
+        If is_list_pars Then
             ' is named vector
-            Dim argList As list = args
-
             b0 = pars _
                 .Select(Function(a)
-                            Return argList.getValue(Of Double)(a, env, [default]:=0.0)
+                            Return args.getValue(Of Double)(a, env, [default]:=0.0)
                         End Function) _
                 .ToArray
         Else
-            b0 = CLRVector.asNumeric(args)
+            b0 = CLRVector.asNumeric(args.data.First)
         End If
 
         fit = Function(xi, par)
                   Dim a As Object() = New Object(b0.Length) {}
                   a(0) = xi
                   For i As Integer = 1 To b0.Length
-                      a(i) = par(i, 0)
+                      a(i) = par(i - 1, 0)
                   Next
                   Return REnv.single(CLRVector.asNumeric(lambda.Invoke(a, env)))
               End Function
@@ -1051,8 +1049,10 @@ theta = {objToString(thetaFunc, env:=env)}
         Dim gauss As New GaussNewtonSolver(fit)
         Dim result = gauss.Fit(xy, b0)
 
-        If TypeOf args Is list Then
-            Dim arguments As New list With {.slots = New Dictionary(Of String, Object)}
+        If is_list_pars Then
+            Dim arguments As New list With {
+                .slots = New Dictionary(Of String, Object)
+            }
 
             For i As Integer = 0 To pars.Length - 1
                 Call arguments.add(pars(i), result(i))
