@@ -171,6 +171,10 @@ Public Module rdocumentation
 
             docs = [function].markdown.Transform(docs)
             docs = [function].HandlingTypeReferenceInDocs(docs)
+            docs = docs _
+                .Replace("<p>", "") _
+                .Replace("</p>", "") _
+                .Trim
 
             For Each line As String In docs.LineTokens
                 Call ts.AppendLine($"   # {line}")
