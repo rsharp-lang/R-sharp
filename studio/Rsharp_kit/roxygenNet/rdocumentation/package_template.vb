@@ -101,9 +101,15 @@ table caption {font-size:14px;font-weight:bolder;}
 
                        <div id="main-wrapper">
                            <table class="table-three-line" style="display: {$clr_type_display}">
+                               <caption>.NET clr type export</caption>
                                <tbody>{$typeList}</tbody>
                            </table>
+
+                           <br/>
+                           <br/>
+
                            <table class="table-three-line">
+                               <caption>.NET clr function exports</caption>
                                <tbody>{$apiList}</tbody>
                            </table>
                        </div>
