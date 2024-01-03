@@ -100,7 +100,7 @@ table caption {font-size:14px;font-weight:bolder;}
                        </blockquote>
 
                        <div id="main-wrapper">
-                           <table class="table-three-line">
+                           <table class="table-three-line" style="display: {$clr_type_display}">
                                <tbody>{$typeList}</tbody>
                            </table>
                            <table class="table-three-line">

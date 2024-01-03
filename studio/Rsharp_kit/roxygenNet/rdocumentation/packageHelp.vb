@@ -92,21 +92,8 @@ Public Module packageHelp
         Next
     End Function
 
-    Public Function createHtml(clr_pkg As Package, globalEnv As GlobalEnvironment,
-                               Optional template$ = Nothing,
-                               Optional package As String = Nothing) As String
-
-        Static defaultTemplate As [Default](Of String) = "<!DOCTYPE html>" & package_template.getDefaultTemplate().ToString
-
-        ' get template
-        Dim docs As New ScriptBuilder(template Or defaultTemplate)
-        Dim annotations As AnnotationDocs = globalEnv.packages.packageDocs
-        ' extract all clr function which tagged with
-        ' exportapi attribute
-        Dim apiList As String() = clr_pkg _
-            .buildExportApiHelpIndex(globalEnv) _
-            .ToArray
-        ' extract all clr type export data
+    <Extension>
+    Private Iterator Function buildClrExportHelpIndex(clr_pkg As Package, globalEnv As GlobalEnvironment) As IEnumerable(Of String)
         Dim clr_exports As New List(Of NamedValue(Of Type))
 
         For Each export As RTypeExportAttribute In clr_pkg.package _
@@ -122,16 +109,40 @@ Public Module packageHelp
         Dim export_docs As New StringBuilder
 
         For Each type In clr_exports
+            Dim clr_name As String = type.Value.GetTypeElement(strict:=False).Name
             Dim clr_docs As New ScriptBuilder(
                 <tr>
-                    <td id=<%= type.Name %>><a href=<%= innerLink %>><%= type.Value.Name %></a></td>
+                    <td id=<%= type.Name %>><a href="{$link}"><%= type.Name %>: <%= clr_name %></a></td>
                     <td>{$summary}</td>
                 </tr>)
+
+            clr_docs!link = clr_xml.typeLink(type.Value).href
+            clr_docs!summary = 
+
+            clr_xml.push_clr(type)
+
+            Yield clr_docs.ToString
         Next
+    End Function
 
-        docs!typeList = export_docs.ToString
+    Public Function createHtml(clr_pkg As Package, globalEnv As GlobalEnvironment,
+                               Optional template$ = Nothing,
+                               Optional package As String = Nothing) As String
 
-        Dim desc As String = ""
+        Static defaultTemplate As [Default](Of String) = "<!DOCTYPE html>" & package_template.getDefaultTemplate().ToString
+
+        ' get template
+        Dim docs As New ScriptBuilder(template Or defaultTemplate)
+        Dim annotations As AnnotationDocs = globalEnv.packages.packageDocs
+        ' extract all clr function which tagged with
+        ' exportapi attribute
+        Dim apiList As String() = clr_pkg _
+            .buildExportApiHelpIndex(globalEnv) _
+            .ToArray
+        ' extract all clr type export data
+        Dim export_docs As String() = clr_pkg _
+            .buildClrExportHelpIndex(globalEnv) _
+            .ToArray
 
         'If TypeOf pkgName Is String Then
         '    package = If(package, any.ToString(pkgName))
@@ -153,10 +164,10 @@ Public Module packageHelp
         Dim remakrs As String = clr_pkg _
             .GetPackageDescription(globalEnv, remarks:=True) _
             .DoCall(AddressOf markdown.Transform)
-
-        desc = clr_pkg _
+        Dim desc As String = clr_pkg _
             .GetPackageDescription(globalEnv) _
             .DoCall(AddressOf markdown.Transform)
+
         package = If(package, clr_pkg.namespace)
 
         With docs
@@ -164,8 +175,15 @@ Public Module packageHelp
             !packageDescription = desc
             !packageRemarks = remakrs
             !apiList = apiList.JoinBy(vbCrLf)
+            !typeList = export_docs.JoinBy(vbCrLf)
             !base_dll = clr_pkg.dllName
             !package = package
+
+            If export_docs.IsNullOrEmpty Then
+                !clr_type_display = "none"
+            Else
+                !clr_type_display = "block"
+            End If
         End With
 
         docs!shortDescription = Mid(desc.StripHTMLTags.TrimNewLine, 1, 64) & "..."

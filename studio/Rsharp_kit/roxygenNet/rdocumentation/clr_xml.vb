@@ -54,6 +54,11 @@ Public Class clr_xml
         Call clr_types.Add(t)
     End Sub
 
+    ''' <summary>
+    ''' this function generates the html anchor html text for link to the document of clr type
+    ''' </summary>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
     Friend Shared Function typeLink(type As Type) As String
         Dim rtype As RType = RType.GetRSharpType(type)
         Dim desc As String = ""
