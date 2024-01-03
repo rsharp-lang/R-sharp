@@ -59,7 +59,9 @@ Public Class clr_xml
             If Not type Is Nothing Then
                 [property] = type.GetProperty(name:=pname)
                 html = $"{typeLink(type)}.<a href=""{typeLink([property].PropertyType).href([default]:="#")}"">{pname}</a>"
+
                 push_clr(type)
+                push_clr([property].PropertyType)
 
                 Yield (link, html)
             End If
