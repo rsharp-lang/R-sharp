@@ -83,7 +83,13 @@ Imports pkg = SMRUCC.Rsharp.Development.Package.Package
 <Package("roxygen", Category:=APICategories.SoftwareTools)>
 Public Module roxygen
 
+    ''' <summary>
+    ''' parse the R# symbol documents from a given r source script
+    ''' </summary>
+    ''' <param name="script"></param>
+    ''' <returns>A tuple list of the R# symbol documents.</returns>
     <ExportAPI("parse")>
+    <RApiReturn(GetType(Document))>
     Public Function ParseDocuments(script As String) As list
         Dim list As New list(GetType(Document))
         Dim R As Rscript = Rscript.AutoHandleScript(handle:=script)
@@ -154,7 +160,8 @@ Public Module roxygen
     ''' <returns></returns>
     <ExportAPI("markdown2Html")>
     Public Function markdown2Html(markdown As String) As String
-        Return New MarkdownHTML().Transform(text:=markdown)
+        Static html As New MarkdownHTML
+        Return html.Transform(text:=markdown)
     End Function
 
     ''' <summary>

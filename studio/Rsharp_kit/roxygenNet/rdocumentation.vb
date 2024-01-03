@@ -71,11 +71,21 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 
 ''' <summary>
-''' 
+''' Make documents for R# symbol object
 ''' </summary>
 <Package("rdocumentation")>
 Public Module rdocumentation
 
+    ''' <summary>
+    ''' make documentation for a R# function or symbol
+    ''' </summary>
+    ''' <param name="func">the specific R# function or symbol</param>
+    ''' <param name="template">the html template string</param>
+    ''' <param name="desc">the package <see cref="DESCRIPTION"/> metadata for the R# symbol if 
+    ''' the given <paramref name="func"/> object is a kind of the R source code <see cref="Document"/> 
+    ''' object.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("documentation")>
     <RApiReturn(TypeCodes.string)>
     Public Function rdocumentation(func As Object,
@@ -128,7 +138,7 @@ Public Module rdocumentation
     End Function
 
     ''' <summary>
-    ''' make documents based on a given clr type meta data
+    ''' make documents based on a given clr <see cref="Type"/> meta data
     ''' </summary>
     ''' <param name="clr">a given clr type</param>
     ''' <returns></returns>
@@ -244,7 +254,8 @@ Public Module rdocumentation
     ''' the ``R#`` package module name or the module object itself.
     ''' </param>
     ''' <param name="env"></param>
-    ''' <returns></returns>
+    ''' <returns>A tuple list of the R# functions that parsed
+    ''' from the target clr package module.</returns>
     <ExportAPI("getFunctions")>
     Public Function getFunctions(package As Object, Optional env As Environment = Nothing) As Object
         Dim apis = getPkgApisList(package, env)
