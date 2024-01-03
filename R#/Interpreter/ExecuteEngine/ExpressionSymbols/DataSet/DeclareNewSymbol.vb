@@ -178,7 +178,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <returns></returns>
         Public ReadOnly Property unit As String
             Get
-                Return attributes.TryGetValue("unit").FirstOrDefault
+                Return GetAttributeValue("unit").FirstOrDefault
             End Get
         End Property
 
@@ -253,7 +253,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
             Dim argumentType As ArgumentGetters = CommandLineSyntax.IsArgumentGetter(assert:=value)
 
-            If argumentType <> ArgumentGetters.FALSE AndAlso attributes.ContainsKey("config") Then
+            If argumentType <> ArgumentGetters.FALSE AndAlso hasAttribute("config") Then
                 Dim argument As ArgumentValue
                 Dim config As String = attributes("config").First
 
@@ -311,7 +311,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 End If
 
                 If value.GetType.IsArray Then
-                    If attributes.ContainsKey("unit") Then
+                    If hasAttribute("unit") Then
                         value = New vector(value, RType.GetType(type)) With {
                             .unit = New unit With {.name = unit}
                         }
