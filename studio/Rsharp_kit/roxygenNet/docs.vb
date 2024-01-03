@@ -80,7 +80,7 @@ Imports any = Microsoft.VisualBasic.Scripting
 Module docs
 
     ''' <summary>
-    ''' default template for the package module in a dll assembly file:
+    ''' default template for a clr package module in a dll assembly file:
     ''' 
     ''' ```
     ''' imports name from dll
@@ -236,17 +236,26 @@ table caption {font-size:14px;font-weight:bolder;}
 
         Static defaultTemplate As [Default](Of String) = "<!DOCTYPE html>" & getDefaultTemplate().ToString
 
+        ' get template
         Dim docs As New ScriptBuilder(template Or defaultTemplate)
         Dim apiList As New List(Of String)
         Dim annotations As AnnotationDocs = globalEnv.packages.packageDocs
         Dim Rapi As RMethodInfo
 
+        ' extract all clr function which tagged with
+        ' exportapi attribute
         For Each api As NamedValue(Of MethodInfo) In apis.TryCast(Of NamedValue(Of MethodInfo)())
             Rapi = New RMethodInfo(api)
             apiList += annotations _
                 .GetAnnotations(api.Value, requireNoneNull:=True) _
                 .DoCall(AddressOf Rapi.apiDocsHtml)
         Next
+
+        ' extract all clr type export data
+        Dim clr_exports As New List(Of NamedValue(Of Type))
+
+
+
 
         Dim desc As String = ""
 

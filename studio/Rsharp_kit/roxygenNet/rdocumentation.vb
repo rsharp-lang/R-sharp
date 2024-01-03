@@ -285,6 +285,8 @@ Public Module rdocumentation
             Return ImportsPackage _
                 .GetAllApi(DirectCast(package, Development.Package.Package)) _
                 .ToArray
+        ElseIf TypeOf package Is Type Then
+            Return ImportsPackage.GetAllApi(Development.Package.Package.)
         Else
             Return Components _
                 .Message _

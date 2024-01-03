@@ -131,6 +131,11 @@ Namespace Development.Package
 
         Dim assemblyInfoCache As AssemblyInfo
 
+        ''' <summary>
+        ''' construct from a clr runtime type
+        ''' </summary>
+        ''' <param name="info"></param>
+        ''' <param name="package"></param>
         Sub New(info As PackageAttribute, package As Type)
             Me.info = info
             Me.package = package
@@ -216,6 +221,16 @@ Namespace Development.Package
 
                 Return docs
             End If
+        End Function
+
+        Public Shared Function ParseClrType(clr As Type) As Package
+            Dim ns_attr = clr.GetCustomAttribute(Of PackageAttribute)
+
+            If ns_attr Is Nothing Then
+                ns_attr = New PackageAttribute(clr.NamespaceEntry(nullWrapper:=True))
+            End If
+
+            Return New Package(ns_attr, clr)
         End Function
 
         Public Overrides Function ToString() As String
