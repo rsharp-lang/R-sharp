@@ -165,7 +165,7 @@ Public Module rdocumentation
             desc = {desc, If(xml.Remarks, "")}.JoinBy(vbCrLf & vbCrLf)
         End If
 
-        desc = [function].markdown.Transform(desc)
+        desc = roxygen.markdown.Transform(desc)
 
         Call html.Replace("{$title}", clr.FullName)
         Call html.Replace("{$name_title}", clr.Name)
@@ -210,7 +210,7 @@ Public Module rdocumentation
                     .JoinBy(vbCrLf)
             End If
 
-            docs = [function].markdown.Transform(docs)
+            docs = roxygen.markdown.Transform(docs)
             docs = clr_xml.HandlingTypeReferenceInDocs(docs)
             docs = docs _
                 .Replace("<p>", "") _
