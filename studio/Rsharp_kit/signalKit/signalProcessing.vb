@@ -106,6 +106,7 @@ Module signalProcessing
         Dim res As Double = CLRVector.asNumeric(args.getBySynonyms("res", "resolution")).DefaultFirst([default]:=1000)
         Dim padding As String = InteropArgumentHelper.getPadding(args.getBySynonyms("padding", "margin"), [default]:="padding: 100px 1200px 200px 200px;", env:=env)
         Dim fill As String = RColorPalette.getColor(args.getBySynonyms("fill", "grid.fill"), [default]:="white", env:=env)
+        Dim sine As Boolean = args.getValue(Of Boolean)({"sine", "sin"}, env)
 
         If x_range.IsNullOrEmpty Then
             x_range = {0, 1}
@@ -132,7 +133,12 @@ Module signalProcessing
             Dim sum As Double = 0
 
             For i As Integer = 0 To decompose.Length - 1
-                yi = decompose(i).gaussian(xi)
+                If sine Then
+                    yi = decompose(i).sine(xi)
+                Else
+                    yi = decompose(i).gaussian(xi)
+                End If
+
                 sum += yi
                 y(i)(offset) = New PointData(xi, yi)
             Next
