@@ -367,11 +367,12 @@ Module plots
 
             If TypeOf fit Is gaussVariable() Then
                 For Each peak As gaussVariable In DirectCast(fit, gaussVariable())
-                    If peak.variance = 0 OrElse
-                        peak.weight = 0.0 OrElse
-                        peak.variance.IsNaNImaginary OrElse
-                        peak.weight.IsNaNImaginary OrElse
-                        peak.mean.IsNaNImaginary Then
+                    If peak.width = 0 OrElse
+                        peak.height = 0.0 OrElse
+                        peak.center.IsNaNImaginary OrElse
+                        peak.height.IsNaNImaginary OrElse
+                        peak.width.IsNaNImaginary OrElse
+                        peak.offset.IsNaNImaginary Then
 
                         Continue For
                     End If
@@ -383,7 +384,7 @@ Module plots
                         .color = color,
                         .pts = x_axis _
                             .Select(Function(xi)
-                                        Return New PointData(xi, If(reverse, maxy - peak.gauss(xi), peak.gauss(xi)))
+                                        Return New PointData(xi, If(reverse, maxy - peak.gaussian(xi), peak.gaussian(xi)))
                                     End Function) _
                             .ToArray
                     }
