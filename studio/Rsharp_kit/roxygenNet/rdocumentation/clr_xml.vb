@@ -44,11 +44,14 @@ Public Class clr_xml
         Dim html As String
         Dim pname As String
         Dim [property] As PropertyInfo
+        Dim field As FieldInfo
+        Dim method As MethodInfo
+        Dim ptype As Type
 
         For Each link As String In list
             ref = link.GetValue.GetTagValue(":", trim:=True)
 
-            If ref.Name <> "P" Then
+            If ref.Name <> "P" OrElse ref.Name <> "F" OrElse ref.Name <> "M" Then
                 Continue For
             End If
 
@@ -57,11 +60,24 @@ Public Class clr_xml
             pname = clr_type.Last
 
             If Not type Is Nothing Then
-                [property] = type.GetProperty(name:=pname)
-                html = $"{typeLink(type)}.<a href=""{typeLink([property].PropertyType).href([default]:="#")}"">{pname}</a>"
+                Select Case ref.Name
+                    Case "P"
+                        [property] = type.GetProperty(name:=pname)
+                        ptype = [property].PropertyType
+                    Case "F"
+                        field = type.GetField(name:=pname)
+                        ptype = field.FieldType
+                    Case "M"
+                        method = type.GetMethod(name:=pname)
+                        ptype = method.ReturnType
+                    Case Else
+                        Throw New Exception("this exception will be never happended!")
+                End Select
+
+                html = $"{typeLink(type)}.<a href=""{typeLink(ptype).href([default]:="#")}"">{pname}</a>"
 
                 push_clr(type)
-                push_clr([property].PropertyType)
+                push_clr(ptype)
 
                 Yield (link, html)
             End If

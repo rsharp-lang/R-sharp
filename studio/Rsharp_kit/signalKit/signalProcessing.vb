@@ -83,7 +83,19 @@ Module signalProcessing
     Sub New()
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(SignalPeak()), AddressOf peakTable)
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Variable()), AddressOf gaussPeaks)
+        Call Internal.generic.add("plot", GetType(Variable()), AddressOf plotPeaksDecomposition)
     End Sub
+
+    ''' <summary>
+    ''' visual of the signal decomposition result
+    ''' </summary>
+    ''' <param name="decompose"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    Private Function plotPeaksDecomposition(decompose As Variable(), args As list, env As Environment) As Object
+
+    End Function
 
     Private Function gaussPeaks(peaks As Variable(), args As list, env As Environment) As RDataframe
         Dim peak_df As New RDataframe With {.columns = New Dictionary(Of String, Array)}
