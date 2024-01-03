@@ -102,6 +102,7 @@ Module signalProcessing
     Private Function plotPeaksDecomposition(decompose As Variable(), args As list, env As Environment) As Object
         Dim x_range As Double() = CLRVector.asNumeric(args.getBySynonyms("x", "x.range"))
         Dim res As Double = CLRVector.asNumeric(args.getBySynonyms("res", "resolution")).DefaultFirst([default]:=1000)
+        Dim padding As String = InteropArgumentHelper.getPadding(args.getBySynonyms("padding", "margin"), [default]:="padding: 100px 200px 200px 200px;", env:=env)
 
         If x_range.IsNullOrEmpty Then
             x_range = {0, 1}
@@ -163,7 +164,9 @@ Module signalProcessing
         Next
 #Enable Warning
 
-        Return Scatter.Plot(signals, drawLine:=True, fill:=False)
+        Return Scatter.Plot(signals, padding:=padding,
+            drawLine:=True, fill:=False,
+            XtickFormat:="F2", YtickFormat:="G3")
     End Function
 
     Private Function gaussPeaks(peaks As Variable(), args As list, env As Environment) As RDataframe

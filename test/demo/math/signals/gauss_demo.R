@@ -14,5 +14,5 @@ bitmap(file = "./demo_vector.png", padding = [100, 200, 150, 200], fill = "white
 
 
 bitmap(file = "./decompose_peaks.png") {
-    plot(peaks);
+    plot(peaks, x = 1:3);
 }
