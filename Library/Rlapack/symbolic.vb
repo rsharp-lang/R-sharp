@@ -168,4 +168,10 @@ Module symbolic
             .OrderBy(Function(a) a.fitness) _
             .ToArray
     End Function
+
+    <ExportAPI("ga_fit")>
+    <RApiReturn(GetType(EvolutionResult))>
+    Public Function fit2(x As Double(), y As Double(), Optional env As Environment = Nothing) As Object
+
+    End Function
 End Module
