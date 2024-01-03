@@ -8,7 +8,7 @@ let peaks = gaussian_peak( center = [1.6, 4.9, 2.3, 1.944, 5.5],
 setwd(@dir);
 
 bitmap(file = "./view_data.png") {
-    plot(peaks, x = 1:10 step 0.5);
+    plot(peaks, x = 1:10 step 0.5, sin = FALSE);
 }
 
 let signal = as.signal(1:10 step 0.25, peaks);
@@ -19,5 +19,5 @@ let peaks_guess = gaussian_fit(signal,  max_peaks = 3,
   gauss_clr = TRUE, sine_kernel = TRUE);
 
 bitmap(file = "./decompose_peaks.png") {
-    plot(peaks_guess, x = 1:10 step 0.5);
+    plot(peaks_guess, x = 1:10 step 0.5, sin = TRUE);
 }
