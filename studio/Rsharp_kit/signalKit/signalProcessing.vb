@@ -319,6 +319,7 @@ Module signalProcessing
                                  Optional max_loops As Integer = 10000,
                                  Optional eps As Double = 0.00001,
                                  Optional gauss_clr As Boolean = False,
+                                 Optional sine_kernel As Boolean = False,
                                  Optional env As Environment = Nothing) As Object
 
         Dim opts As New Opts With {
@@ -349,7 +350,7 @@ Module signalProcessing
 
         ' signal = SIMD.Divide.f64_op_divide_f64_scalar(signal, signal.Max)
 
-        Dim gauss As New GaussianFit(opts)
+        Dim gauss As New GaussianFit(opts, sine_kernel)
         Dim peaks = gauss.fit(x_axis, signal, max_peaks)
 
         If gauss_clr Then
