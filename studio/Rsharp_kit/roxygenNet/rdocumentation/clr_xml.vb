@@ -1,4 +1,5 @@
-﻿Imports System.Text.RegularExpressions
+﻿Imports System.Reflection
+Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -41,6 +42,8 @@ Public Class clr_xml
         Dim ref As NamedValue(Of String)
         Dim clr_type As String()
         Dim html As String
+        Dim pname As String
+        Dim [property] As PropertyInfo
 
         For Each link As String In list
             ref = link.GetValue.GetTagValue(":", trim:=True)
@@ -51,9 +54,11 @@ Public Class clr_xml
 
             clr_type = ref.Value.Split("."c)
             type = AssemblyInfo.GetType(clr_type.Take(clr_type.Length - 1).JoinBy("."))
+            pname = clr_type.Last
 
             If Not type Is Nothing Then
-                html = $"{typeLink(type)}.{clr_type.Last}"
+                [property] = type.GetProperty(name:=pname)
+                html = $"{typeLink(type)}.<a href=""{typeLink([property].PropertyType).href([default]:="#")}"">{pname}</a>"
                 push_clr(type)
 
                 Yield (link, html)

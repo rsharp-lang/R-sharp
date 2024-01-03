@@ -122,7 +122,7 @@ Public Module packageHelp
                 xml = New ProjectType
             End If
 
-            clr_docs!link = clr_xml.typeLink(type.Value).href
+            clr_docs!link = clr_xml.typeLink(type.Value).href([default]:="#")
             clr_docs!summary = clr_xml.HandlingTypeReferenceInDocs(roxygen.markdown.Transform(xml.Summary))
 
             clr_xml.push_clr(type)
