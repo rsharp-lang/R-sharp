@@ -236,20 +236,29 @@ Module signalProcessing
     ''' <returns></returns>
     <ExportAPI("as.signal")>
     <RApiReturn(GetType(GeneralSignal))>
-    Public Function asGeneral(measure As Double(), signals As Double(),
+    Public Function asGeneral(measure As Double(), <RRawVectorArgument> signals As Object,
                               Optional title$ = "general signal",
                               <RListObjectArgument>
                               Optional meta As list = Nothing,
                               Optional env As Environment = Nothing) As GeneralSignal
 
-        Return New GeneralSignal With {
-            .description = title,
-            .Measures = CLRVector.asNumeric(measure),
-            .measureUnit = "n/a",
-            .meta = meta.AsGeneric(Of String)(env),
-            .reference = App.NextTempName,
-            .Strength = CLRVector.asNumeric(signals)
-        }
+        Dim peaks As pipeline = pipeline.TryCreatePipeline(Of Variable)(signals, env)
+
+        If peaks.isError Then
+            Return New GeneralSignal With {
+                .description = title,
+                .Measures = CLRVector.asNumeric(measure),
+                .measureUnit = "n/a",
+                .meta = meta.AsGeneric(Of String)(env),
+                .reference = App.NextTempName,
+                .Strength = CLRVector.asNumeric(signals)
+            }
+        Else
+            Dim gauss As Variable() = peaks.populates(Of Variable)(env).ToArray
+            Dim sig As GeneralSignal = gauss.Compose(measure)
+
+            Return sig
+        End If
     End Function
 
     <ExportAPI("gaussian_bin")>
