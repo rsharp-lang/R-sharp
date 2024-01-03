@@ -51,7 +51,7 @@ Public Class clr_xml
         For Each link As String In list
             ref = link.GetValue.GetTagValue(":", trim:=True)
 
-            If ref.Name <> "P" OrElse ref.Name <> "F" OrElse ref.Name <> "M" Then
+            If ref.Name <> "P" AndAlso ref.Name <> "F" AndAlso ref.Name <> "M" Then
                 Continue For
             End If
 
