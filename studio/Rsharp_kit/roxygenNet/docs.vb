@@ -135,12 +135,12 @@ Module docs
     <Extension>
     Public Function MarkdownTransform(doc As Document) As Document
         Return New Document With {
-            .author = doc.author.ToArray,
+            .author = doc.author.SafeQuery.ToArray,
             .declares = doc.declares,
             .description = roxygen.markdown.Transform(doc.description),
             .details = roxygen.markdown.Transform(doc.details),
             .examples = doc.examples,
-            .keywords = doc.keywords.ToArray,
+            .keywords = doc.keywords.SafeQuery.ToArray,
             .parameters = doc.parameters _
                 .SafeQuery _
                 .Select(Function(par)
