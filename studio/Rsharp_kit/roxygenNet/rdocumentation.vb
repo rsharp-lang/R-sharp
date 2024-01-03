@@ -167,6 +167,10 @@ Public Module rdocumentation
 
         desc = roxygen.markdown.Transform(desc)
 
+        If Not clr.BaseType Is GetType(Object) Then
+            desc = desc & "<br />" & $"<p>this class extends from {clr_xml.typeLink(clr.BaseType)} class.</p>"
+        End If
+
         Call html.Replace("{$title}", clr.FullName)
         Call html.Replace("{$name_title}", clr.Name)
         Call html.Replace("{$namespace}", clr.Namespace)
@@ -182,10 +186,15 @@ Public Module rdocumentation
         Dim members As IEnumerable(Of MemberInfo)
         Dim is_enum As Boolean = type.IsEnum
         Dim docs As String = Nothing
+        Dim extends As String = ""
+
+        If Not type.BaseType Is GetType(Object) Then
+            extends = $"extends {clr_xml.typeLink(type.BaseType)} "
+        End If
 
         Call ts.AppendLine()
         Call ts.AppendLine($"# namespace {type.Namespace}")
-        Call ts.AppendLine($"export class {cls_name} {{")
+        Call ts.AppendLine($"export class {cls_name} {extends}{{")
 
         If is_enum Then
             members = type.GetFields _
