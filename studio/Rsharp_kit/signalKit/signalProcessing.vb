@@ -89,6 +89,8 @@ Module signalProcessing
     Friend Sub Main()
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(SignalPeak()), AddressOf peakTable)
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Variable()), AddressOf gaussPeaks)
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(GeneralSignal), AddressOf printSignalDf)
+
         Call Internal.generic.add("plot", GetType(Variable()), AddressOf plotPeaksDecomposition)
     End Sub
 
@@ -172,21 +174,11 @@ Module signalProcessing
     End Function
 
     Private Function gaussPeaks(peaks As Variable(), args As list, env As Environment) As RDataframe
-        Dim peak_df As New RDataframe With {.columns = New Dictionary(Of String, Array)}
-        Dim mu As Double() = peaks.Select(Function(p) p.center).ToArray
+        Dim peak_df As New RDataframe With {
+            .columns = New Dictionary(Of String, Array)
+        }
 
-        If args.hasName("x.axis") Then
-            Dim x_range As New DoubleRange(CLRVector.asNumeric(args("x.axis")))
-            Dim mean_range As New DoubleRange(0, 1)
-            Dim map_x As IEnumerable(Of Double) = mu _
-                .Select(Function(mi)
-                            Return mean_range.ScaleMapping(mi, x_range)
-                        End Function)
-
-            Call peak_df.add("x", map_x)
-        End If
-
-        Call peak_df.add("mean", mu) ' center
+        Call peak_df.add("center", peaks.Select(Function(p) p.center)) ' center
         Call peak_df.add("width", peaks.Select(Function(p) p.width))
         Call peak_df.add("height", peaks.Select(Function(p) p.height))
         Call peak_df.add("offset", peaks.Select(Function(p) p.offset))
@@ -211,8 +203,13 @@ Module signalProcessing
         }
     End Function
 
-    Private Function printSignal(sig As GeneralSignal)
-        Throw New NotImplementedException
+    Private Function printSignalDf(sig As GeneralSignal, args As list, env As Environment) As RDataframe
+        Dim df As New RDataframe With {.columns = New Dictionary(Of String, Array)}
+
+        Call df.add("x", sig.Measures)
+        Call df.add("y", sig.Strength)
+
+        Return df
     End Function
 
     <ExportAPI("findpeaks")>
@@ -353,7 +350,7 @@ Module signalProcessing
         ' signal = SIMD.Divide.f64_op_divide_f64_scalar(signal, signal.Max)
 
         Dim gauss As New GaussianFit(opts)
-        Dim peaks = gauss.fit(signal, max_peaks)
+        Dim peaks = gauss.fit(x_axis, signal, max_peaks)
 
         If gauss_clr Then
             Return peaks

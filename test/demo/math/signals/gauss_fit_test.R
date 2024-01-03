@@ -13,4 +13,10 @@ bitmap(file = "./view_data.png") {
 
 let signal = as.signal(1:10 step 0.25, peaks);
 
-print(signal);
+print(as.data.frame(signal));
+
+let peaks_guess = gaussian_fit(signal,  max_peaks = 8, gauss_clr = TRUE);
+
+bitmap(file = "./decompose_peaks.png") {
+    plot(peaks_guess, x = 1:10 step 0.5);
+}
