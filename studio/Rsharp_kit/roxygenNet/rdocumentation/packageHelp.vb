@@ -107,6 +107,7 @@ Public Module packageHelp
         Next
 
         Dim export_docs As New StringBuilder
+        Dim Rdocs = globalEnv.packages.packageDocs
 
         For Each type In clr_exports
             Dim clr_name As String = type.Value.GetTypeElement(strict:=False).Name
@@ -115,9 +116,14 @@ Public Module packageHelp
                     <td id=<%= type.Name %>><a href="{$link}"><%= type.Name %>: <%= clr_name %></a></td>
                     <td>{$summary}</td>
                 </tr>)
+            Dim xml As ProjectType = Rdocs.GetAnnotations(type)
+
+            If xml Is Nothing Then
+                xml = New ProjectType
+            End If
 
             clr_docs!link = clr_xml.typeLink(type.Value).href
-            clr_docs!summary = 
+            clr_docs!summary = clr_xml.HandlingTypeReferenceInDocs(roxygen.markdown.Transform(xml.Summary))
 
             clr_xml.push_clr(type)
 
