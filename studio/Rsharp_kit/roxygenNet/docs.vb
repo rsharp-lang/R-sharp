@@ -52,6 +52,7 @@
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -78,120 +79,6 @@ Imports any = Microsoft.VisualBasic.Scripting
 ''' </summary>
 <Package("utils.docs", Category:=APICategories.SoftwareTools, Publisher:="I@xieguigang.me")>
 Module docs
-
-    ''' <summary>
-    ''' default template for a clr package module in a dll assembly file:
-    ''' 
-    ''' ```
-    ''' imports name from dll
-    ''' ```
-    ''' </summary>
-    ''' <returns></returns>
-    Private Function getDefaultTemplate() As XElement
-        Return <html lang="zh-CN">
-                   <head>
-                       <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-                       <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
-                       <meta charset="utf-8"/>
-                       <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
-
-                       <title>{$packageName}</title>
-
-                       <meta name="author" content="xie.guigang@gcmodeller.org"/>
-                       <meta name="copyright" content="SMRUCC genomics Copyright (c) 2022"/>
-                       <meta name="keywords" content="R#; {$packageName}; {$base_dll}"/>
-                       <meta name="generator" content="https://github.com/rsharp-lang"/>
-                       <meta name="theme-color" content="#333"/>
-                       <meta name="description" content="{$shortDescription}"/>
-
-                       <meta class="foundation-data-attribute-namespace"/>
-                       <meta class="foundation-mq-xxlarge"/>
-                       <meta class="foundation-mq-xlarge"/>
-                       <meta class="foundation-mq-large"/>
-                       <meta class="foundation-mq-medium"/>
-                       <meta class="foundation-mq-small"/>
-                       <meta class="foundation-mq-topbar"/>
-
-                       <style>
-
-.table-three-line {
-border-collapse:collapse; /* 关键属性：合并表格内外边框(其实表格边框有2px，外面1px，里面还有1px哦) */
-border:solid #000000; /* 设置边框属性；样式(solid=实线)、颜色(#999=灰) */
-border-width:2px 0 2px 0px; /* 设置边框状粗细：上 右 下 左 = 对应：1px 0 0 1px */
-}
-.left-1{
-    border:solid #000000;border-width:1px 1px 2px 0px;padding:2px;
-    font-weight:bolder;
-}
-.right-1{
-    border:solid #000000;border-width:1px 0px 2px 1px;padding:2px;
-    font-weight:bolder;
-}
-.mid-1{
-    border:solid #000000;border-width:1px 1px 2px 1px;padding:2px;
-    font-weight:bolder;
-}
-.left{
-    border:solid #000000;border-width:1px 1px 1px 0px;padding:2px;
-}
-.right{
-    border:solid #000000;border-width:1px 0px 1px 1px;padding:2px;
-}
-.mid{
-    border:solid #000000;border-width:1px 1px 1px 1px;padding:2px;
-}
-table caption {font-size:14px;font-weight:bolder;}
-</style>
-                   </head>
-                   <body>
-                       <table width="100%" summary=<%= "page for {{$packageName}}" %>>
-                           <tbody>
-                               <tr>
-                                   <td>{{$packageName}}</td><td style="text-align: right;">R# Documentation</td>
-                               </tr>
-                           </tbody>
-                       </table>
-
-                       <h1>{$packageName}</h1>
-                       <hr/>
-                       <p style="
-    font-size: 1.125em;
-    line-height: .8em;
-    margin-left: 0.5%;
-    background-color: #fbfbfb;
-    padding: 24px;
-">
-                           <code>
-                               <span style="color: blue;">require</span>(<span style="color: black; font-weight: bold;">{$package}</span>);
-                               <br/>
-                               <br/>
-                               <span style="color: green;">{$desc_comments}</span><br/>
-                               <span style="color: blue;">imports</span><span style="color: brown"> "{$packageName}"</span><span style="color: blue;"> from</span><span style="color: brown"> "{$base_dll}"</span>;
-                           </code>
-                       </p>
-
-                       <p>{$packageDescription}</p>
-
-                       <blockquote>
-                           <p style="font-style: italic; font-size: 0.9em;">
-                           {$packageRemarks}
-                           </p>
-                       </blockquote>
-
-                       <div id="main-wrapper">
-                           <table class="table-three-line">
-                               <tbody>{$typeList}</tbody>
-                           </table>
-                           <table class="table-three-line">
-                               <tbody>{$apiList}</tbody>
-                           </table>
-                       </div>
-
-                       <hr/>
-                       <div style="text-align: center;">[<a href="../index.html">Document Index</a>]</div>
-                   </body>
-               </html>
-    End Function
 
     ReadOnly markdown As New MarkdownHTML
 
@@ -242,7 +129,7 @@ table caption {font-size:14px;font-weight:bolder;}
             Return apis.TryCast(Of Message)
         End If
 
-        Static defaultTemplate As [Default](Of String) = "<!DOCTYPE html>" & getDefaultTemplate().ToString
+        Static defaultTemplate As [Default](Of String) = "<!DOCTYPE html>" & package_template.getDefaultTemplate().ToString
 
         ' get template
         Dim docs As New ScriptBuilder(template Or defaultTemplate)
@@ -277,6 +164,18 @@ table caption {font-size:14px;font-weight:bolder;}
                 value:=export.model
             ))
         Next
+
+        Dim export_docs As New StringBuilder
+
+        For Each type In clr_exports
+            Dim clr_docs As New ScriptBuilder(
+                <tr>
+                    <td id=<%= type.Name %>><a href=<%= innerLink %>><%= type.Value.Name %></a></td>
+                    <td>{$summary}</td>
+                </tr>)
+        Next
+
+        docs!typeList = export_docs.ToString
 
         Dim desc As String = ""
 
