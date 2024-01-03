@@ -69,6 +69,14 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
+''' <summary>
+''' Signal processing is an electrical engineering subfield that focuses on analyzing, 
+''' modifying and synthesizing signals, such as sound, images, potential fields, seismic 
+''' signals, altimetry processing, and scientific measurements. Signal processing 
+''' techniques are used to optimize transmissions, digital storage efficiency, correcting
+''' distorted signals, subjective video quality, and to also detect or pinpoint components 
+''' of interest in a measured signal.
+''' </summary>
 <Package("signalProcessing")>
 Module signalProcessing
 
