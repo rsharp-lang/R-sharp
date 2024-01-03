@@ -94,7 +94,7 @@ Module signalProcessing
     ''' <param name="env"></param>
     ''' <returns></returns>
     Private Function plotPeaksDecomposition(decompose As Variable(), args As list, env As Environment) As Object
-
+        Throw New NotImplementedException
     End Function
 
     Private Function gaussPeaks(peaks As Variable(), args As list, env As Environment) As RDataframe
