@@ -49,30 +49,24 @@
 
 #End Region
 
-Imports SMRUCC.Rsharp.Development.Package
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
-Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.MIME.text.markdown
-Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
 Imports Microsoft.VisualBasic.Text.Xml.Models
-Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports any = Microsoft.VisualBasic.Scripting
 
 ''' <summary>
 ''' helper class module for create help documents for the clr type package
@@ -160,17 +154,17 @@ Public Module packageHelp
             .GetPackageDescription(globalEnv, remarks:=True) _
             .DoCall(AddressOf markdown.Transform)
 
-        desc = DirectCast(pkgName, Development.Package.Package) _
+        desc = clr_pkg _
             .GetPackageDescription(globalEnv) _
             .DoCall(AddressOf markdown.Transform)
-        package = If(package, DirectCast(pkgName, Development.Package.Package).namespace)
+        package = If(package, clr_pkg.namespace)
 
         With docs
-            !packageName = DirectCast(pkgName, Development.Package.Package).namespace
+            !packageName = clr_pkg.namespace
             !packageDescription = desc
             !packageRemarks = remakrs
             !apiList = apiList.JoinBy(vbCrLf)
-            !base_dll = DirectCast(pkgName, Development.Package.Package).dllName
+            !base_dll = clr_pkg.dllName
             !package = package
         End With
 
