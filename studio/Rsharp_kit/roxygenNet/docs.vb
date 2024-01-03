@@ -180,6 +180,9 @@ table caption {font-size:14px;font-weight:bolder;}
 
                        <div id="main-wrapper">
                            <table class="table-three-line">
+                               <tbody>{$typeList}</tbody>
+                           </table>
+                           <table class="table-three-line">
                                <tbody>{$apiList}</tbody>
                            </table>
                        </div>
@@ -227,12 +230,17 @@ table caption {font-size:14px;font-weight:bolder;}
     ''' pdf help manual file.
     ''' </remarks>
     <ExportAPI("makehtml.docs")>
+    <RApiReturn(TypeCodes.string)>
     Public Function makeHtmlDocs(pkgName As Object,
                                  Optional template$ = Nothing,
                                  Optional package As String = Nothing,
-                                 Optional globalEnv As GlobalEnvironment = Nothing) As String
+                                 Optional globalEnv As GlobalEnvironment = Nothing) As Object
 
         Dim apis = rdocumentation.getPkgApisList(pkgName, globalEnv)
+
+        If apis Like GetType(Message) Then
+            Return apis.TryCast(Of Message)
+        End If
 
         Static defaultTemplate As [Default](Of String) = "<!DOCTYPE html>" & getDefaultTemplate().ToString
 
@@ -253,9 +261,22 @@ table caption {font-size:14px;font-weight:bolder;}
 
         ' extract all clr type export data
         Dim clr_exports As New List(Of NamedValue(Of Type))
+        Dim clr_pkg = rdocumentation.getPkg(pkgName, env:=globalEnv)
 
+        If clr_pkg Like GetType(Message) Then
+            Return clr_pkg.TryCast(Of Message)
+        End If
 
+        For Each export As RTypeExportAttribute In clr_pkg _
+            .TryCast(Of Development.Package.Package).package _
+            .GetCustomAttributes(Of RTypeExportAttribute) _
+            .SafeQuery
 
+            Call clr_exports.Add(New NamedValue(Of Type)(
+                name:=export.name,
+                value:=export.model
+            ))
+        Next
 
         Dim desc As String = ""
 

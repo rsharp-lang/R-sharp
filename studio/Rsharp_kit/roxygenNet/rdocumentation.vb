@@ -286,7 +286,24 @@ Public Module rdocumentation
                 .GetAllApi(DirectCast(package, Development.Package.Package)) _
                 .ToArray
         ElseIf TypeOf package Is Type Then
-            Return ImportsPackage.GetAllApi(Development.Package.Package.)
+            Return ImportsPackage _
+                .GetAllApi(Development.Package.Package.ParseClrType(DirectCast(package, Type))) _
+                .ToArray
+        Else
+            Return Components _
+                .Message _
+                .InCompatibleType(GetType(String), package.GetType, env)
+        End If
+    End Function
+
+    Friend Function getPkg(package As Object, env As Environment) As [Variant](Of Message, Development.Package.Package)
+        If TypeOf package Is String Then
+            Return env.globalEnvironment.packages _
+                .FindPackage(any.ToString(package), Nothing)
+        ElseIf TypeOf package Is Development.Package.Package Then
+            Return DirectCast(package, Development.Package.Package)
+        ElseIf TypeOf package Is Type Then
+            Return Development.Package.Package.ParseClrType(DirectCast(package, Type))
         Else
             Return Components _
                 .Message _
