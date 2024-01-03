@@ -189,6 +189,8 @@ Public Module rdocumentation
         Dim extends As String = ""
 
         If Not type.BaseType Is GetType(Object) Then
+            clr_xml.push_clr(type.BaseType)
+            ' add code show the class extends tree
             extends = $"extends {clr_xml.typeLink(type.BaseType)} "
         End If
 
