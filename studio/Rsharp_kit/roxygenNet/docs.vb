@@ -137,8 +137,8 @@ Module docs
         Return New Document With {
             .author = doc.author.ToArray,
             .declares = doc.declares,
-            .description = [function].markdown.Transform(doc.description),
-            .details = [function].markdown.Transform(doc.details),
+            .description = roxygen.markdown.Transform(doc.description),
+            .details = roxygen.markdown.Transform(doc.details),
             .examples = doc.examples,
             .keywords = doc.keywords.ToArray,
             .parameters = doc.parameters _
@@ -146,13 +146,13 @@ Module docs
                 .Select(Function(par)
                             Return New NamedValue(
                                 name:=par.name,
-                                value:=[function].markdown.Transform(par.text)
+                                value:=roxygen.markdown.Transform(par.text)
                             )
                         End Function) _
                 .ToArray,
-            .returns = [function].markdown.Transform(doc.returns),
+            .returns = roxygen.markdown.Transform(doc.returns),
             .see_also = doc.see_also,
-            .title = [function].markdown.Transform(doc.title)
+            .title = roxygen.markdown.Transform(doc.title)
         }
     End Function
 End Module

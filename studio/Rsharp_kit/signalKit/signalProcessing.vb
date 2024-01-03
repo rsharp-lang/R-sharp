@@ -79,7 +79,7 @@ Module signalProcessing
 
     Private Function gaussPeaks(peaks As Variable(), args As list, env As Environment) As RDataframe
         Dim peak_df As New RDataframe With {.columns = New Dictionary(Of String, Array)}
-        Dim mu As Double() = peaks.Select(Function(p) p.mean).ToArray
+        Dim mu As Double() = peaks.Select(Function(p) p.center).ToArray
 
         If args.hasName("x.axis") Then
             Dim x_range As New DoubleRange(CLRVector.asNumeric(args("x.axis")))
@@ -92,9 +92,10 @@ Module signalProcessing
             Call peak_df.add("x", map_x)
         End If
 
-        Call peak_df.add("mean", mu)
-        Call peak_df.add("width", peaks.Select(Function(p) p.variance))
-        Call peak_df.add("weight", peaks.Select(Function(p) p.weight))
+        Call peak_df.add("mean", mu) ' center
+        Call peak_df.add("width", peaks.Select(Function(p) p.width))
+        Call peak_df.add("height", peaks.Select(Function(p) p.height))
+        Call peak_df.add("offset", peaks.Select(Function(p) p.offset))
 
         Return peak_df
     End Function
