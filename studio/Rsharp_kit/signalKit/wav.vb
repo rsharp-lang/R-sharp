@@ -76,7 +76,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Package("wav", Category:=APICategories.UtilityTools)>
 Public Module wavToolkit
 
-    Sub New()
+    Friend Sub Main()
         Call Internal.ConsolePrinter.AttachConsoleFormatter(Of WaveFile)(AddressOf wavToString)
     End Sub
 

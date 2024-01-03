@@ -86,7 +86,7 @@ Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 <RTypeExport("signal_peak", GetType(Variable))>
 Module signalProcessing
 
-    Sub New()
+    Friend Sub Main()
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(SignalPeak()), AddressOf peakTable)
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Variable()), AddressOf gaussPeaks)
         Call Internal.generic.add("plot", GetType(Variable()), AddressOf plotPeaksDecomposition)
