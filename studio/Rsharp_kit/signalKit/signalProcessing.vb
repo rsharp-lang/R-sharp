@@ -258,6 +258,41 @@ Module signalProcessing
     End Function
 
     ''' <summary>
+    ''' generates a set of the gauss peaks
+    ''' </summary>
+    ''' <param name="center"></param>
+    ''' <param name="height"></param>
+    ''' <param name="width"></param>
+    ''' <param name="offset"></param>
+    ''' <returns></returns>
+    <ExportAPI("gaussian_peak")>
+    <RApiReturn(GetType(Variable))>
+    Public Function gaussian_peak(<RRawVectorArgument> center As Object,
+                                  <RRawVectorArgument> height As Object,
+                                  <RRawVectorArgument> width As Object,
+                                  <RRawVectorArgument> Optional offset As Object = 0) As Object
+
+        Dim center_vec = GetVectorElement.Create(Of Double)(CLRVector.asNumeric(center))
+        Dim height_vec = GetVectorElement.Create(Of Double)(CLRVector.asNumeric(height))
+        Dim width_vec = GetVectorElement.Create(Of Double)(CLRVector.asNumeric(width))
+        Dim offset_vec = GetVectorElement.Create(Of Double)(CLRVector.asNumeric(offset))
+        Dim npeaks As Integer = Aggregate arg As GetVectorElement
+                                In {center_vec, height_vec, width_vec, offset_vec}
+                                Into Max(arg.size)
+
+        Return Enumerable.Range(0, npeaks) _
+            .Select(Function(i)
+                        Return New Variable(
+                            center:=center_vec(i),
+                            width:=width_vec(i),
+                            height:=height_vec(i),
+                            offset:=offset_vec(i)
+                        )
+                    End Function) _
+            .ToArray
+    End Function
+
+    ''' <summary>
     ''' Fit time/spectrum/other sequential data with a set of gaussians
     ''' by expectation-maximization algoritm.
     ''' </summary>
