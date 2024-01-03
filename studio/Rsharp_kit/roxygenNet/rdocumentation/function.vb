@@ -54,7 +54,6 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serialization
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.MIME.text.markdown
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Xml.Models
@@ -66,8 +65,6 @@ Imports any = Microsoft.VisualBasic.Scripting
 Imports RPackage = SMRUCC.Rsharp.Development.Package.Package
 
 Public Class [function]
-
-    Friend Shared ReadOnly markdown As New MarkdownHTML
 
     Public Function createHtml(api As RFunction, env As Environment) As String
         If TypeOf api Is RMethodInfo Then

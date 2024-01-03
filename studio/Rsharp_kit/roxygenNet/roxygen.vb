@@ -84,6 +84,11 @@ Imports pkg = SMRUCC.Rsharp.Development.Package.Package
 Public Module roxygen
 
     ''' <summary>
+    ''' engine for convert the markdown document text to html text
+    ''' </summary>
+    Friend ReadOnly markdown As New MarkdownHTML
+
+    ''' <summary>
     ''' parse the R# symbol documents from a given r source script
     ''' </summary>
     ''' <param name="script"></param>
@@ -160,8 +165,9 @@ Public Module roxygen
     ''' <returns></returns>
     <ExportAPI("markdown2Html")>
     Public Function markdown2Html(markdown As String) As String
-        Static html As New MarkdownHTML
-        Return html.Transform(text:=markdown)
+        SyncLock roxygen.markdown
+            Return roxygen.markdown.Transform(text:=markdown)
+        End SyncLock
     End Function
 
     ''' <summary>

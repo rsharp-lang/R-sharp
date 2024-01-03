@@ -79,33 +79,39 @@ Imports any = Microsoft.VisualBasic.Scripting
 ''' </summary>
 Public Module packageHelp
 
-    Public Function createHtml(clr_pkg As Package, globalEnv As GlobalEnvironment,
-                               Optional template$ = Nothing,
-                               Optional package As String = Nothing) As String
-
+    <Extension>
+    Private Iterator Function buildExportApiHelpIndex(clr_pkg As Package, globalEnv As GlobalEnvironment) As IEnumerable(Of String)
         Dim apis = rdocumentation.getPkgApisList(clr_pkg, globalEnv)
+        Dim Rapi As RMethodInfo
+        Dim annotations As AnnotationDocs = globalEnv.packages.packageDocs
 
         If apis Like GetType(Message) Then
             Call globalEnv.AddMessage(apis.TryCast(Of Message))
         End If
 
+        For Each api As NamedValue(Of MethodInfo) In apis.TryCast(Of NamedValue(Of MethodInfo)()).SafeQuery
+            Rapi = New RMethodInfo(api)
+
+            Yield annotations _
+                .GetAnnotations(api.Value, requireNoneNull:=True) _
+                .DoCall(AddressOf Rapi.apiDocsHtml)
+        Next
+    End Function
+
+    Public Function createHtml(clr_pkg As Package, globalEnv As GlobalEnvironment,
+                               Optional template$ = Nothing,
+                               Optional package As String = Nothing) As String
+
         Static defaultTemplate As [Default](Of String) = "<!DOCTYPE html>" & package_template.getDefaultTemplate().ToString
 
         ' get template
         Dim docs As New ScriptBuilder(template Or defaultTemplate)
-        Dim apiList As New List(Of String)
         Dim annotations As AnnotationDocs = globalEnv.packages.packageDocs
-        Dim Rapi As RMethodInfo
-
         ' extract all clr function which tagged with
         ' exportapi attribute
-        For Each api As NamedValue(Of MethodInfo) In apis.TryCast(Of NamedValue(Of MethodInfo)())
-            Rapi = New RMethodInfo(api)
-            apiList += annotations _
-                .GetAnnotations(api.Value, requireNoneNull:=True) _
-                .DoCall(AddressOf Rapi.apiDocsHtml)
-        Next
-
+        Dim apiList As String() = clr_pkg _
+            .buildExportApiHelpIndex(globalEnv) _
+            .ToArray
         ' extract all clr type export data
         Dim clr_exports As New List(Of NamedValue(Of Type))
 
@@ -133,41 +139,40 @@ Public Module packageHelp
 
         Dim desc As String = ""
 
-        If TypeOf pkgName Is String Then
-            package = If(package, any.ToString(pkgName))
-            desc = globalEnv.packages _
-                .GetPackageDocuments(any.ToString(pkgName)) _
-                .DoCall(AddressOf markdown.Transform)
+        'If TypeOf pkgName Is String Then
+        '    package = If(package, any.ToString(pkgName))
+        '    desc = globalEnv.packages _
+        '        .GetPackageDocuments(any.ToString(pkgName)) _
+        '        .DoCall(AddressOf markdown.Transform)
 
-            With docs
-                !packageName = any.ToString(pkgName)
-                !packageDescription = desc
-                !packageRemarks = globalEnv.packages _
-                    .GetPackageDocuments(any.ToString(pkgName), remarks:=True) _
-                    .DoCall(AddressOf markdown.Transform)
-                !apiList = apiList.JoinBy(vbCrLf)
-                !base_dll = "*"
-                !package = package
-            End With
-        Else
-            Dim remakrs As String = DirectCast(pkgName, Development.Package.Package) _
-                .GetPackageDescription(globalEnv, remarks:=True) _
-                .DoCall(AddressOf markdown.Transform)
+        '    With docs
+        '        !packageName = any.ToString(pkgName)
+        '        !packageDescription = desc
+        '        !packageRemarks = globalEnv.packages _
+        '            .GetPackageDocuments(any.ToString(pkgName), remarks:=True) _
+        '            .DoCall(AddressOf markdown.Transform)
+        '        !apiList = apiList.JoinBy(vbCrLf)
+        '        !base_dll = "*"
+        '        !package = package
+        '    End With
+        'Else
+        Dim remakrs As String = clr_pkg _
+            .GetPackageDescription(globalEnv, remarks:=True) _
+            .DoCall(AddressOf markdown.Transform)
 
-            desc = DirectCast(pkgName, Development.Package.Package) _
-                .GetPackageDescription(globalEnv) _
-                .DoCall(AddressOf markdown.Transform)
-            package = If(package, DirectCast(pkgName, Development.Package.Package).namespace)
+        desc = DirectCast(pkgName, Development.Package.Package) _
+            .GetPackageDescription(globalEnv) _
+            .DoCall(AddressOf markdown.Transform)
+        package = If(package, DirectCast(pkgName, Development.Package.Package).namespace)
 
-            With docs
-                !packageName = DirectCast(pkgName, Development.Package.Package).namespace
-                !packageDescription = desc
-                !packageRemarks = remakrs
-                !apiList = apiList.JoinBy(vbCrLf)
-                !base_dll = DirectCast(pkgName, Development.Package.Package).dllName
-                !package = package
-            End With
-        End If
+        With docs
+            !packageName = DirectCast(pkgName, Development.Package.Package).namespace
+            !packageDescription = desc
+            !packageRemarks = remakrs
+            !apiList = apiList.JoinBy(vbCrLf)
+            !base_dll = DirectCast(pkgName, Development.Package.Package).dllName
+            !package = package
+        End With
 
         docs!shortDescription = Mid(desc.StripHTMLTags.TrimNewLine, 1, 64) & "..."
 
