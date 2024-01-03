@@ -11,3 +11,8 @@ setwd(@dir);
 bitmap(file = "./demo_vector.png", padding = [100, 200, 150, 200], fill = "white") {
     plot((1:length(v))/length(v), v,    line = TRUE);
 }
+
+
+bitmap(file = "./decompose_peaks.png") {
+    plot(peaks);
+}

@@ -107,7 +107,7 @@ Module signalProcessing
             x_range = {0, 1}
         End If
 
-        Dim x_axis As Double() = seq(x_range.Min, x_range.Max, by:=(x_range.Max - x_range.Min) / res)
+        Dim x_axis As Double() = seq(x_range.Min, x_range.Max, by:=(x_range.Max - x_range.Min) / res).ToArray
         Dim y As PointData()() = New PointData(decompose.Length - 1)() {}
         Dim yi As Double
         Dim conv As New List(Of PointData)
