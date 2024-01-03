@@ -51,11 +51,16 @@
 
 #End Region
 
+Imports System.Drawing
+Imports System.Drawing.Drawing2D
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
+Imports Microsoft.VisualBasic.Data.ChartPlots
+Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.Signal
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
@@ -78,6 +83,7 @@ Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 ''' of interest in a measured signal.
 ''' </summary>
 <Package("signalProcessing")>
+<RTypeExport("signal_peak", GetType(Variable))>
 Module signalProcessing
 
     Sub New()
@@ -94,7 +100,70 @@ Module signalProcessing
     ''' <param name="env"></param>
     ''' <returns></returns>
     Private Function plotPeaksDecomposition(decompose As Variable(), args As list, env As Environment) As Object
-        Throw New NotImplementedException
+        Dim x_range As Double() = CLRVector.asNumeric(args.getBySynonyms("x", "x.range"))
+        Dim res As Double = CLRVector.asNumeric(args.getBySynonyms("res", "resolution")).DefaultFirst([default]:=1000)
+
+        If x_range.IsNullOrEmpty Then
+            x_range = {0, 1}
+        End If
+
+        Dim x_axis As Double() = seq(x_range.Min, x_range.Max, by:=(x_range.Max - x_range.Min) / res)
+        Dim y As PointData()() = New PointData(decompose.Length - 1)() {}
+        Dim yi As Double
+        Dim conv As New List(Of PointData)
+        Dim offset As Integer = 0
+        Dim colors As Color() = Designer.GetColors(
+            term:=RColorPalette.getColorSet(
+                colorSet:=args.getBySynonyms("colors", "colorSet"),
+                [default]:="paper"
+            ),
+            n:=decompose.Length + 1
+        )
+
+        For i As Integer = 0 To decompose.Length - 1
+            y(i) = New PointData(x_axis.Length - 1) {}
+        Next
+
+        For Each xi As Double In x_axis
+            Dim sum As Double = 0
+
+            For i As Integer = 0 To decompose.Length - 1
+                yi = decompose(i).gaussian(xi)
+                sum += yi
+                y(i)(offset) = New PointData(xi, yi)
+            Next
+
+            conv.Add(New PointData(xi, sum))
+            offset += 1
+        Next
+
+        Dim signals As New List(Of SerialData)
+
+#Disable Warning
+        Call signals.Add(New SerialData With {
+            .color = Color.Black,
+            .lineType = DashStyle.Solid,
+            .pointSize = 5,
+            .pts = conv.ToArray,
+            .shape = LegendStyles.Square,
+            .width = 2,
+            .title = "signal"
+        })
+
+        For i As Integer = 0 To decompose.Length - 1
+            Call signals.Add(New SerialData With {
+                .color = colors(i),
+                .lineType = DashStyle.Dash,
+                .pointSize = 5,
+                .pts = y(i),
+                .shape = LegendStyles.Triangle,
+                .title = decompose(i).ToString,
+                .width = 2
+            })
+        Next
+#Enable Warning
+
+        Return Scatter.Plot(signals, drawLine:=True, fill:=False)
     End Function
 
     Private Function gaussPeaks(peaks As Variable(), args As list, env As Environment) As RDataframe
