@@ -12,9 +12,10 @@ Public Class clr_xml
 
     Friend Shared ReadOnly clr_types As New List(Of Type)
 
+    Shared ReadOnly regexp_clrtags As New Regex("[@][<]code[>].*?[<]/code[>]", RegexICSng)
+
     Public Shared Iterator Function ParseTypeReference(doc_str As String) As IEnumerable(Of (str As String, Type))
-        Dim r As New Regex("[@][<]code[>].*?[<]/code[>]", RegexICSng)
-        Dim list = r.Matches(doc_str).ToArray
+        Dim list = regexp_clrtags.Matches(doc_str).ToArray
         Dim type As Type
         Dim ref As NamedValue(Of String)
 
@@ -34,6 +35,32 @@ Public Class clr_xml
         Next
     End Function
 
+    Public Shared Iterator Function ParsePropertyReference(doc_str As String) As IEnumerable(Of (str As String, html_replace As String))
+        Dim list = regexp_clrtags.Matches(doc_str).ToArray
+        Dim type As Type
+        Dim ref As NamedValue(Of String)
+        Dim clr_type As String()
+        Dim html As String
+
+        For Each link As String In list
+            ref = link.GetValue.GetTagValue(":", trim:=True)
+
+            If ref.Name <> "P" Then
+                Continue For
+            End If
+
+            clr_type = ref.Value.Split("."c)
+            type = AssemblyInfo.GetType(clr_type.Take(clr_type.Length - 1).JoinBy("."))
+
+            If Not type Is Nothing Then
+                html = $"{typeLink(type)}.{clr_type.Last}"
+                push_clr(type)
+
+                Yield (link, html)
+            End If
+        Next
+    End Function
+
     Public Shared Function HandlingTypeReferenceInDocs(doc_str As String) As String
         If doc_str.StringEmpty Then
             Return ""
@@ -41,6 +68,9 @@ Public Class clr_xml
 
         For Each link In ParseTypeReference(doc_str)
             doc_str = doc_str.Replace(link.str, typeLink(link.Item2))
+        Next
+        For Each link In ParsePropertyReference(doc_str)
+            doc_str = doc_str.Replace(link.str, link.html_replace)
         Next
 
         Return doc_str
