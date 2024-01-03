@@ -52,27 +52,21 @@
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
-Imports System.Text
-Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
-Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.text.markdown
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
-Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
 Imports Microsoft.VisualBasic.Text.Xml.Models
-Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports any = Microsoft.VisualBasic.Scripting
 
 ''' <summary>
 ''' R# help document tools
@@ -123,199 +117,18 @@ Module docs
                                  Optional package As String = Nothing,
                                  Optional globalEnv As GlobalEnvironment = Nothing) As Object
 
-        Dim apis = rdocumentation.getPkgApisList(pkgName, globalEnv)
-
-        If apis Like GetType(Message) Then
-            Return apis.TryCast(Of Message)
-        End If
-
-        Static defaultTemplate As [Default](Of String) = "<!DOCTYPE html>" & package_template.getDefaultTemplate().ToString
-
-        ' get template
-        Dim docs As New ScriptBuilder(template Or defaultTemplate)
-        Dim apiList As New List(Of String)
-        Dim annotations As AnnotationDocs = globalEnv.packages.packageDocs
-        Dim Rapi As RMethodInfo
-
-        ' extract all clr function which tagged with
-        ' exportapi attribute
-        For Each api As NamedValue(Of MethodInfo) In apis.TryCast(Of NamedValue(Of MethodInfo)())
-            Rapi = New RMethodInfo(api)
-            apiList += annotations _
-                .GetAnnotations(api.Value, requireNoneNull:=True) _
-                .DoCall(AddressOf Rapi.apiDocsHtml)
-        Next
-
-        ' extract all clr type export data
-        Dim clr_exports As New List(Of NamedValue(Of Type))
-        Dim clr_pkg = rdocumentation.getPkg(pkgName, env:=globalEnv)
+        Dim clr_pkg As [Variant](Of Message, Package) = rdocumentation.getPkg(pkgName, env:=globalEnv)
 
         If clr_pkg Like GetType(Message) Then
             Return clr_pkg.TryCast(Of Message)
-        End If
-
-        For Each export As RTypeExportAttribute In clr_pkg _
-            .TryCast(Of Development.Package.Package).package _
-            .GetCustomAttributes(Of RTypeExportAttribute) _
-            .SafeQuery
-
-            Call clr_exports.Add(New NamedValue(Of Type)(
-                name:=export.name,
-                value:=export.model
-            ))
-        Next
-
-        Dim export_docs As New StringBuilder
-
-        For Each type In clr_exports
-            Dim clr_docs As New ScriptBuilder(
-                <tr>
-                    <td id=<%= type.Name %>><a href=<%= innerLink %>><%= type.Value.Name %></a></td>
-                    <td>{$summary}</td>
-                </tr>)
-        Next
-
-        docs!typeList = export_docs.ToString
-
-        Dim desc As String = ""
-
-        If TypeOf pkgName Is String Then
-            package = If(package, any.ToString(pkgName))
-            desc = globalEnv.packages _
-                .GetPackageDocuments(any.ToString(pkgName)) _
-                .DoCall(AddressOf markdown.Transform)
-
-            With docs
-                !packageName = any.ToString(pkgName)
-                !packageDescription = desc
-                !packageRemarks = globalEnv.packages _
-                    .GetPackageDocuments(any.ToString(pkgName), remarks:=True) _
-                    .DoCall(AddressOf markdown.Transform)
-                !apiList = apiList.JoinBy(vbCrLf)
-                !base_dll = "*"
-                !package = package
-            End With
         Else
-            Dim remakrs As String = DirectCast(pkgName, Development.Package.Package) _
-                .GetPackageDescription(globalEnv, remarks:=True) _
-                .DoCall(AddressOf markdown.Transform)
-
-            desc = DirectCast(pkgName, Development.Package.Package) _
-                .GetPackageDescription(globalEnv) _
-                .DoCall(AddressOf markdown.Transform)
-            package = If(package, DirectCast(pkgName, Development.Package.Package).namespace)
-
-            With docs
-                !packageName = DirectCast(pkgName, Development.Package.Package).namespace
-                !packageDescription = desc
-                !packageRemarks = remakrs
-                !apiList = apiList.JoinBy(vbCrLf)
-                !base_dll = DirectCast(pkgName, Development.Package.Package).dllName
-                !package = package
-            End With
+            Return packageHelp.createHtml(
+                clr_pkg:=clr_pkg.TryCast(Of Package),
+                globalEnv:=globalEnv,
+                template:=template,
+                package:=package
+            )
         End If
-
-        docs!shortDescription = Mid(desc.StripHTMLTags.TrimNewLine, 1, 64) & "..."
-
-        If Not desc.StringEmpty Then
-            desc = desc.LineTokens.FirstOrDefault
-            desc = "#' " & desc.StripHTMLTags.TrimNewLine.Trim
-            docs!desc_comments = desc
-        End If
-
-        Return docs.ToString
-    End Function
-
-    <Extension>
-    Private Function apiDocsHtml(api As RMethodInfo, apiDocs As ProjectMember) As String
-        Dim innerLink As String = $"./{api.namespace}/{api.name}.html"
-        Dim docs =
-            <tr>
-                <td id=<%= api.name %>><a href=<%= innerLink %>><%= api.name %></a></td>
-                <td>{$summary}</td>
-            </tr>
-        Dim html As New ScriptBuilder(docs)
-        Dim displayRemarks As String
-        Dim parameters$ = ""
-
-        If api.parameters.Length > 0 Then
-            parameters = apiDocs.parameterTable(api)
-        End If
-
-        With html
-            !summary = markdown.Transform(apiDocs.Summary)
-            !remarks = markdown.Transform(apiDocs.Remarks)
-            !usage = api.GetPrintContent _
-                .DoCall(AddressOf markdown.Transform) _
-                .Replace("<br />", "")
-            !parameters = parameters
-
-            If apiDocs.Returns.StringEmpty Then
-                !value = ""
-            Else
-                !value = "<h4>Value</h4>" & markdown.Transform(apiDocs.Returns)
-            End If
-
-            If apiDocs.Remarks.StringEmpty Then
-                displayRemarks = "none"
-            Else
-                displayRemarks = "block"
-            End If
-        End With
-
-        Return sprintf(html.ToString, displayRemarks)
-    End Function
-
-    <Extension>
-    Private Function parameterTable(docs As ProjectMember, api As RMethodInfo) As String
-        Dim list As New ScriptBuilder(
-            <div>
-                <h4>Arguments</h4>
-
-                <ul>
-                   {$list}
-                </ul>
-            </div>)
-        Dim args As New List(Of XElement)
-        Dim paramIndex = api.parameters.ToDictionary(Function(a) a.name)
-
-        If docs.Params.IsNullOrEmpty Then
-            Return ""
-        End If
-
-        Static env_names As Index(Of String) = {"env", "envir"}
-
-        For Each arg In docs.Params.SafeQuery
-            ' skip of the default environment parameter
-            If arg.name Like env_names AndAlso paramIndex.ContainsKey(arg.name) Then
-                If paramIndex(arg.name).type.mode = TypeCodes.environment Then
-                    Continue For
-                End If
-            End If
-
-            args +=
-                <li>
-                    <code><%= arg.name %></code>: {$info}
-                </li>
-        Next
-
-        list!list = args _
-            .Select(Function(e, i)
-                        Dim li As New ScriptBuilder(e)
-
-                        li!info = markdown _
-                            .Transform(docs.Params(i).text) _
-                            .GetStackValue("<p>", "</p>")
-
-                        Return li.ToString
-                    End Function) _
-            .JoinBy(vbCrLf)
-
-        Return list.ToString
-    End Function
-
-    Public Function PackageIndex()
-        Throw New NotImplementedException
     End Function
 
     <ExportAPI("markdown_transform")>
