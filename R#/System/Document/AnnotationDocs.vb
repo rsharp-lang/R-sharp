@@ -106,22 +106,24 @@ Namespace Development
             Dim clr_docs As String = $"{clr_package_dir.ParentPath.ParentPath}/package/clr"
             Dim xml_name As String = docXml.FileName
 
-            If Not docXml.FileExists Then
-                ' get xml docs from app path or annotation folder
-                ' in app home folder
-                For Each dir As String In {"/", "Annotation", "Library"}
-                    docXml = $"{App.HOME}/{dir}/{assembly.Location.BaseName}.xml"
+            If docXml.FileExists Then
+                Return docXml
+            End If
 
-                    If docXml.FileExists Then
-                        Return docXml
-                    End If
-                Next
-
-                docXml = $"{clr_docs}/{xml_name}"
+            ' get xml docs from app path or annotation folder
+            ' in app home folder
+            For Each dir As String In {"/", "Annotation", "Library"}
+                docXml = $"{App.HOME}/{dir}/{assembly.Location.BaseName}.xml"
 
                 If docXml.FileExists Then
                     Return docXml
                 End If
+            Next
+
+            docXml = $"{clr_docs}/{xml_name}"
+
+            If docXml.FileExists Then
+                Return docXml
             End If
 
             ' no related document file could be found
