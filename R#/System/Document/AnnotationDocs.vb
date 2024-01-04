@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::3824de13a225cf9592d3e5d570688458, D:/GCModeller/src/R-sharp/R#//System/Document/AnnotationDocs.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 93
-    '    Code Lines: 57
-    ' Comment Lines: 21
-    '   Blank Lines: 15
-    '     File Size: 3.47 KB
+' Summaries:
 
 
-    '     Class AnnotationDocs
-    ' 
-    '         Function: (+2 Overloads) GetAnnotations
-    ' 
-    '         Sub: PrintHelp
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 93
+'    Code Lines: 57
+' Comment Lines: 21
+'   Blank Lines: 15
+'     File Size: 3.47 KB
+
+
+'     Class AnnotationDocs
+' 
+'         Function: (+2 Overloads) GetAnnotations
+' 
+'         Sub: PrintHelp
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -77,20 +77,8 @@ Namespace Development
             Dim assembly As LibraryAssembly = package.Assembly
             Dim project As Project
             Dim projectKey As String = assembly.ToString
-            Dim docXml As String = assembly.Location.TrimSuffix & ".xml"
             Dim type As ProjectType
-
-            If Not docXml.FileExists Then
-                ' get xml docs from app path or annotation folder
-                ' in app home folder
-                For Each dir As String In {"/", "Annotation", "Library"}
-                    docXml = $"{App.HOME}/{dir}/{assembly.Location.BaseName}.xml"
-
-                    If docXml.FileExists Then
-                        Exit For
-                    End If
-                Next
-            End If
+            Dim docXml As String = get_clr_xml_document(assembly)
 
             If docXml.FileExists AndAlso Not projects.ContainsKey(projectKey) Then
                 projects(projectKey) = ProjectSpace.CreateDocProject(docXml)
@@ -104,6 +92,42 @@ Namespace Development
             End If
 
             Return type
+        End Function
+
+        ''' <summary>
+        ''' a helper function for get the xml comment document for a given dll file
+        ''' </summary>
+        ''' <param name="assembly"></param>
+        ''' <returns>the file path to the xml document file, could be nothing if not found</returns>
+        Private Shared Function get_clr_xml_document(assembly As LibraryAssembly) As String
+            Dim docXml As String = assembly.Location.TrimSuffix & ".xml"
+            Dim clr_package_dir As String = assembly.Location.ParentPath
+            Dim is_package_assembly As Boolean = clr_package_dir.BaseName = "assembly"
+            Dim clr_docs As String = $"{clr_package_dir.ParentPath.ParentPath}/package/clr"
+            Dim xml_name As String = docXml.FileName
+
+            If docXml.FileExists Then
+                Return docXml
+            End If
+
+            ' get xml docs from app path or annotation folder
+            ' in app home folder
+            For Each dir As String In {"/", "Annotation", "Library"}
+                docXml = $"{App.HOME}/{dir}/{assembly.Location.BaseName}.xml"
+
+                If docXml.FileExists Then
+                    Return docXml
+                End If
+            Next
+
+            docXml = $"{clr_docs}/{xml_name}"
+
+            If docXml.FileExists Then
+                Return docXml
+            End If
+
+            ' no related document file could be found
+            Return Nothing
         End Function
 
         ''' <summary>
