@@ -77,7 +77,7 @@ class TokenParser {
 
             if (c == this.escape_char) {
                 const pull_str = this.buf.join("");
-                const type: Token.tokenType = Token.html_color.test(pull_str) ? "color" : "character";
+                const type: Token.tokenType = Token.isColorLiteral(pull_str) ? "color" : "character";
 
                 // end escape
                 this.escaped = false;

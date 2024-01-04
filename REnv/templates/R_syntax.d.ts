@@ -1,5 +1,8 @@
 declare namespace Token {
     type tokenType = "undefined" | "number" | "character" | "logical" | "factor" | "keyword" | "symbol" | "operator" | "comment" | "newLine" | "whitespace" | "bracket" | "terminator" | "color" | "delimiter";
+    /**
+     * regexp for test html colors
+    */
     const html_color: RegExp;
     /**
      * pattern for match the number token
@@ -14,6 +17,7 @@ declare namespace Token {
     const operators: {};
     const stacks: {};
     const keywords: {};
+    function isColorLiteral(pull_str: string): boolean;
 }
 declare class TokenParser {
     source: string;
@@ -34,7 +38,7 @@ declare class TokenParser {
     private walkChar;
     private measureToken;
 }
-declare type token = Token.token;
+type token = Token.token;
 declare function parseText(str: string): token[];
 /**
  * parse the script text to syntax highlight html content
