@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::6f7e94ca63a9b745d35791fde095993f, D:/GCModeller/src/R-sharp/Library/Rlapack//math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 783
-    '    Code Lines: 487
-    ' Comment Lines: 201
-    '   Blank Lines: 95
-    '     File Size: 31.67 KB
+' Summaries:
 
 
-    ' Module math
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asFormula, asLmcall, binomial, create_deSolve_DataFrame, DiffEntropy
-    '               getBinTable, getMax, getMin, Gini, glm
-    '               Hist, lm, loess, predict, RamerDouglasPeucker
-    '               (+2 Overloads) RK4, sim, ssm, summaryFit
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 783
+'    Code Lines: 487
+' Comment Lines: 201
+'   Blank Lines: 95
+'     File Size: 31.67 KB
+
+
+' Module math
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asFormula, asLmcall, binomial, create_deSolve_DataFrame, DiffEntropy
+'               getBinTable, getMax, getMin, Gini, glm
+'               Hist, lm, loess, predict, RamerDouglasPeucker
+'               (+2 Overloads) RK4, sim, ssm, summaryFit
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -77,6 +77,7 @@ Imports Microsoft.VisualBasic.Math.Information
 Imports Microsoft.VisualBasic.Math.Interpolation
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
+Imports Microsoft.VisualBasic.Math.Scripting
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter
