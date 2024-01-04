@@ -107,9 +107,23 @@ Namespace Development.Package.File
         End Function
 
         ''' <summary>
-        ''' enumerates all dll files
+        ''' enumerate all xml files for clr assembly dll documentation
         ''' </summary>
         ''' <returns></returns>
+        Public Iterator Function GetAllPackageClrXmlDocumentFiles() As IEnumerable(Of String)
+            For Each dll As String In assembly
+                Dim xml As String = $"{dll.ParentPath}/{dll.BaseName}.xml"
+
+                If xml.FileExists Then
+                    Yield xml.GetFullPath
+                End If
+            Next
+        End Function
+
+        ''' <summary>
+        ''' enumerates all dll files
+        ''' </summary>
+        ''' <returns>dll file file path in full name</returns>
         Public Iterator Function GenericEnumerator() As IEnumerator(Of String) Implements Enumeration(Of String).GenericEnumerator
             For Each dll As String In assembly
                 Yield dll
