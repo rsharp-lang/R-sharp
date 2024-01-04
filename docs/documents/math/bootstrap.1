@@ -1,0 +1,78 @@
+.\" man page create by R# package system.
+.TH MATH 2 2000-Jan "bootstrap" "bootstrap"
+.SH NAME
+bootstrap \- Non-Parametric Bootstrapping
+.SH SYNOPSIS
+\fIbootstrap(\fBx\fR as any, 
+\fBnboot\fR as integer, 
+\fBtheta\fR as any = \fB<NULL>\fR, 
+\fBfunc\fR as any = \fB<NULL>\fR, 
+..., 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Non-Parametric Bootstrapping
+ 
+ See Efron and Tibshirani (1993) for details on this function.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- a vector or a dataframe that containing the data. 
+ To bootstrap more complex data structures (e.g. bivariate data) 
+ see the last example below.. 
+.PP
+.PP
+\fBnboot\fB \fR\- The number of bootstrap samples desired.. 
+.PP
+.PP
+\fBtheta\fB \fR\- function to be bootstrapped. Takes x as an 
+ argument, and may take additional arguments (see below and last 
+ example).. 
+.PP
+.PP
+\fBfunc\fB \fR\- (optional) argument specifying the functional 
+ the distribution of thetahat that is desired. If func is 
+ specified, the jackknife after-bootstrap estimate of its standard
+ error is also returned. See example below.. 
+.PP
+.PP
+\fBargs\fB \fR\- any additional arguments to be passed to theta. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+list with the following components:
+
+ 1. thetastar       the nboot bootstrap values Of theta
+ 2. func.thetastar  the functional func Of the bootstrap distribution Of thetastar, If func was specified
+ 3. jack.boot.val   the jackknife-after-bootstrap values For func, If func was specified
+ 4. jack.boot.se    the jackknife-after-bootstrap standard Error estimate Of func, If func was specified
+ 5. call            the deparsed call
+ 
+ and this function will returns the bootstrap data collection if the
+ **`theta`** function is not specificed.
+.PP
+.SH DETAILS
+.PP
+Efron, B. and Tibshirani, R. (1986). The bootstrap method for 
+ standard errors, confidence intervals, and other measures of 
+ statistical accuracy. Statistical Science, Vol 1., No. 1, pp 1-35.
+ 
+ Efron, B. (1992) Jackknife-after-bootstrap standard errors And 
+ influence functions. J. Roy. Stat. Soc. B, vol 54, pages 83-127
+ 
+ Efron, B. And Tibshirani, R. (1993) An Introduction to the 
+ Bootstrap. Chapman And Hall, New York, London.
+.PP
+.SH SEE ALSO
+math
+.SH FILES
+.PP
+Rlapack.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@live.com\fR
+.SH COPYRIGHT
+GPL3

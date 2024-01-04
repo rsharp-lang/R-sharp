@@ -1,11 +1,37 @@
 .\" man page create by R# package system.
 .TH LINQ 1 2002-May "first" "first"
 .SH NAME
-first \- 
+first \- Returns the first element of a sequence.
 .SH SYNOPSIS
 \fIfirst(\fBsequence\fR as any, 
 \fBtest\fR as <generic> RFunction = \fB<NULL>\fR, 
 [\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Returns the first element of a sequence.
+.PP
+.SH OPTIONS
+.PP
+\fBsequence\fB \fR\- 
+ The System.Collections.Generic.IEnumerable`1 to return 
+ the first element of.
+. 
+.PP
+.PP
+\fBtest\fB \fR\- An element test assert lambda function
+ for find the first element which matched with this test 
+ condition. 
+.PP
+.PP
+\fBenvir\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+The first element in the specified sequence. NULL
+ value will be returned if there is no element could be found
+ in the given seuqnece or under the given **`test`**
+ condition.
+.PP
 .SH SEE ALSO
 linq
 .SH FILES

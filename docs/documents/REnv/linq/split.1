@@ -16,7 +16,9 @@ split content sequence with a given condition as element delimiter.
 \fBx\fB \fR\- a given data sequence. 
 .PP
 .PP
-\fBdelimiter\fB \fR\- an element test function to determine that element is a delimiter object. 
+\fBdelimiter\fB \fR\- 
+ an element test function to determine that element is a delimiter object
+. 
 .PP
 .PP
 \fBargv\fB \fR\- 
@@ -26,6 +28,14 @@ split content sequence with a given condition as element delimiter.
 .PP
 .PP
 \fBenv\fB \fR\- -. 
+.PP
+.SH DETAILS
+.PP
+the generated result is different between the vector/list:
+ 
+ + for vector data: split the value array directly
+ + for list data: split the list keys array and then break the input list 
+       data into multiple parts by keys
 .PP
 .SH SEE ALSO
 linq

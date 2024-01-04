@@ -1,0 +1,40 @@
+.\" man page create by R# package system.
+.TH STATS 1 2000-Jan "moran.test" "moran.test"
+.SH NAME
+moran.test \- Calculate Moran's I quickly for point data
+.SH SYNOPSIS
+\fImoran.test(\fBx\fR as any, 
+\fBsx\fR as double = \fB<NULL>\fR, 
+\fBsy\fR as double = \fB<NULL>\fR, 
+\fBalternative\fR as <integer> Hypothesis = [TwoSided], 
+\fBthrowMaxIterError\fR as boolean = FALSE, 
+\fBparallel\fR as boolean = TRUE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Calculate Moran's I quickly for point data
+ 
+ test spatial cluster via moran index
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- -. 
+.PP
+.PP
+\fBalternative\fB \fR\- 
+ a character sring specifying the alternative hypothesis that is
+ tested against; must be one of "two.sided", "less", or "greater",
+ or any unambiguous abbreviation of these.
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+stats
+.SH FILES
+.PP
+Rlapack.dll
+.PP
+.SH COPYRIGHT
+GPL3

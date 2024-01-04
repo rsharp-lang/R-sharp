@@ -408,6 +408,18 @@ Namespace Runtime
         End Sub
 
         ''' <summary>
+        ''' add error/warning message
+        ''' </summary>
+        ''' <param name="msg"></param>
+        Public Sub AddMessage(msg As Message)
+            Call messages.Add(msg)
+
+            If globalEnvironment.verboseOption Then
+                Call base.print(msg,, Me)
+            End If
+        End Sub
+
+        ''' <summary>
         ''' replace current stackframe information
         ''' </summary>
         ''' <param name="stackframe"></param>

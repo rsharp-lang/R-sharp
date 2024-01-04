@@ -71,6 +71,7 @@ Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
 Imports Microsoft.VisualBasic.DataMining.BinaryTree
 Imports Microsoft.VisualBasic.DataMining.Clustering
+Imports Microsoft.VisualBasic.DataMining.ComponentModel
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
 Imports Microsoft.VisualBasic.DataMining.FuzzyCMeans
 Imports Microsoft.VisualBasic.DataMining.HDBSCAN.Distance
@@ -214,6 +215,7 @@ Module clustering
                          Optional components As Integer = 3,
                          Optional threshold As Double = 0.0000001,
                          Optional strict As Boolean = True,
+                         Optional verbose As Boolean = False,
                          Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -230,6 +232,7 @@ Module clustering
                         End Function) _
                 .ToArray
 
+            ' nd
             Return GMM.Solver.Predicts(rowdatas, components, threshold, strict:=strict)
         End If
 
@@ -241,8 +244,10 @@ Module clustering
 
         If seq.isError Then
             If x.GetType.IsArray Then
+                ' 1d
                 x = TryCastGenericArray(x, env)
-                x = GMM.Solver.Predicts(CLRVector.asNumeric(x), components, threshold)
+                x = GMM.Solver.Predicts(CLRVector.asNumeric(x), components, threshold,
+                      verbose:=verbose)
 
                 Return x
             Else
@@ -250,6 +255,7 @@ Module clustering
             End If
         End If
 
+        ' nd
         Return GMM.Solver.Predicts(seq.populates(Of ClusterEntity)(env), components, threshold, strict:=strict)
     End Function
 
@@ -276,6 +282,31 @@ Module clustering
                 .ToArray
         Else
             Return Message.InCompatibleType(GetType(GaussianMixtureModel), x.GetType, env)
+        End If
+    End Function
+
+    <ExportAPI("gmm.components")>
+    Public Function gmm_components(x As Object) As Object
+        If x Is Nothing Then
+            Return Nothing
+        End If
+
+        If TypeOf x Is Mixture Then
+            Dim comps = DirectCast(x, Mixture).components
+            Dim df As New Rdataframe With {
+                .columns = New Dictionary(Of String, Array),
+                .rownames = comps _
+                    .Select(Function(c, i) $"C{i + 1}") _
+                    .ToArray
+            }
+
+            Call df.add("mean", comps.Select(Function(c) If(c.Mean.IsNaNImaginary, Double.NaN, c.Mean)))
+            Call df.add("stdev", comps.Select(Function(c) If(c.Stdev.IsNaNImaginary, Double.NaN, c.Stdev)))
+            Call df.add("weight", comps.Select(Function(c) If(c.Weight.IsNaNImaginary, Double.NaN, c.Weight)))
+
+            Return df
+        Else
+            Throw New NotImplementedException
         End If
     End Function
 
@@ -417,6 +448,38 @@ Module clustering
         Return model
     End Function
 
+    Dim m_traceback As TraceBackAlgorithm
+
+    ''' <summary>
+    ''' get the clustering traceback
+    ''' </summary>
+    ''' <returns></returns>
+    <ExportAPI("getTraceback")>
+    <RApiReturn(GetType(TracebackMatrix))>
+    Public Function getTraceback(Optional x As list = Nothing, Optional env As Environment = Nothing) As Object
+        If Not x Is Nothing Then
+            Dim data As NamedCollection(Of String)() = x _
+                .AsGeneric(Of String())(env) _
+                .Select(Function(t)
+                            Return New NamedCollection(Of String)(t.Key, t.Value)
+                        End Function) _
+                .ToArray
+
+            Return New TracebackMatrix With {.data = data}
+        End If
+
+        If m_traceback Is Nothing Then
+            Return Nothing
+        Else
+            Dim points_traceback = m_traceback.GetTraceBack.ToArray
+            Dim list As New TracebackMatrix With {
+                .data = points_traceback
+            }
+
+            Return list
+        End If
+    End Function
+
     ''' <summary>
     ''' K-Means Clustering
     ''' </summary>
@@ -442,6 +505,7 @@ Module clustering
                            Optional bisecting As Boolean = False,
                            Optional parallel As Boolean = True,
                            Optional debug As Boolean = False,
+                           Optional traceback As Boolean = False,
                            Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -456,10 +520,16 @@ Module clustering
 
         If bisecting Then
             Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
-            Dim bikmeans As New BisectingKMeans(maps.GetVectors(model.TryCast(Of EntityClusterModel())), k:=centers)
+            Dim bikmeans As New BisectingKMeans(
+                dataList:=maps.GetVectors(model.TryCast(Of EntityClusterModel())),
+                k:=centers,
+                traceback:=traceback
+            )
             Dim result = bikmeans.runBisectingKMeans().ToArray
             Dim kmeans_result As New List(Of EntityClusterModel)
             Dim i As i32 = 1
+
+            m_traceback = bikmeans
 
             For Each cluster In result
                 Call kmeans_result.AddRange(maps.GetObjects(cluster.DataPoints, setClass:=++i))
@@ -494,6 +564,57 @@ Module clustering
         Dim result = maps.GetObjects(alg.Clustering).ToArray
 
         Return result
+    End Function
+
+    ''' <summary>
+    ''' Silhouette Coefficient
+    ''' </summary>
+    ''' <param name="x">the cluster result</param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' Silhouette score is used to evaluate the quality of clusters created using clustering 
+    ''' algorithms such as K-Means in terms of how well samples are clustered with other samples 
+    ''' that are similar to each other. The Silhouette score is calculated for each sample of 
+    ''' different clusters. To calculate the Silhouette score for each observation/data point, 
+    ''' the following distances need to be found out for each observations belonging to all the 
+    ''' clusters:
+    ''' 
+    ''' Mean distance between the observation And all other data points In the same cluster. This
+    ''' distance can also be called a mean intra-cluster distance. The mean distance Is denoted by a
+    ''' Mean distance between the observation And all other data points Of the Next nearest cluster.
+    ''' This distance can also be called a mean nearest-cluster distance. The mean distance Is 
+    ''' denoted by b
+    ''' 
+    ''' Silhouette score, S, for Each sample Is calculated Using the following formula:
+    ''' 
+    ''' \(S = \frac{(b - a)}{max(a, b)}\)
+    ''' 
+    ''' The value Of the Silhouette score varies from -1 To 1. If the score Is 1, the cluster Is
+    ''' dense And well-separated than other clusters. A value near 0 represents overlapping clusters
+    ''' With samples very close To the decision boundary Of the neighboring clusters. A negative 
+    ''' score [-1, 0] indicates that the samples might have got assigned To the wrong clusters.
+    ''' </remarks>
+    <ExportAPI("silhouette_score")>
+    Public Function silhouette_score(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Dim points As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(x, env)
+        Dim data As IEnumerable(Of ClusterEntity)
+
+        If points.isError Then
+            points = pipeline.TryCreatePipeline(Of ClusterEntity)(x, env)
+
+            If points.isError Then
+                Return points.getError
+            Else
+                data = points.populates(Of ClusterEntity)(env)
+            End If
+        Else
+            Dim pull = points.populates(Of EntityClusterModel)(env).ToArray
+            Dim mapper As New DataSetConvertor(pull)
+
+            data = mapper.GetVectors(pull)
+        End If
+
+        Return data.Silhouette
     End Function
 
     ''' <summary>
@@ -734,6 +855,57 @@ Module clustering
                      End Function) _
             .Select(Function(v) v.Value) _
             .ToArray
+    End Function
+
+    ''' <summary>
+    ''' get or set the cluster class labels
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="[class]"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("clusters")>
+    Public Function clusters(<RRawVectorArgument> x As Object,
+                             <RRawVectorArgument>
+                             <RByRefValueAssign>
+                             Optional [class] As Object = Nothing,
+                             Optional env As Environment = Nothing) As Object
+
+        Dim entities As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(x, env)
+
+        If entities.isError Then
+            Return entities.getError
+        End If
+
+        If [class] Is Nothing Then
+            ' get cluster labels
+            Return entities.populates(Of EntityClusterModel)(env) _
+                .Select(Function(i) i.Cluster) _
+                .ToArray
+        End If
+
+        ' set cluster labels
+        If TypeOf [class] Is list Then
+            Dim labels As Dictionary(Of String, String) = DirectCast([class], list) _
+                .AsGeneric(Of String)(env)
+            Dim list As New List(Of String)
+
+            For Each item As EntityClusterModel In entities.populates(Of EntityClusterModel)(env)
+                item.Cluster = labels.TryGetValue(item.ID, [default]:="no_class")
+                list.Add(item.Cluster)
+            Next
+
+            Return list.ToArray
+        Else
+            Dim labels As String() = CLRVector.asCharacter([class])
+            Dim pull As EntityClusterModel() = entities.populates(Of EntityClusterModel)(env).ToArray
+
+            For i As Integer = 0 To pull.Length - 1
+                pull(i).Cluster = labels(i)
+            Next
+
+            Return labels
+        End If
     End Function
 
     ''' <summary>

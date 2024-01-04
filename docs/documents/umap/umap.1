@@ -1,0 +1,97 @@
+.\" man page create by R# package system.
+.TH UMAP 1 2000-Jan "umap" "umap"
+.SH NAME
+umap \- UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction
+.SH SYNOPSIS
+\fIumap(\fBdata\fR as any, 
+\fBdimension\fR as integer = 2, 
+\fBnumberOfNeighbors\fR as integer = 15, 
+\fBlocalConnectivity\fR as double = 1, 
+\fBKnnIter\fR as integer = 64, 
+\fBbandwidth\fR as double = 1, 
+\fBcustomNumberOfEpochs\fR as integer = \fB<NULL>\fR, 
+\fBcustomMapCutoff\fR as double = \fB<NULL>\fR, 
+\fBdebug\fR as boolean = FALSE, 
+\fBKDsearch\fR as boolean = FALSE, 
+\fBspectral_cos\fR as boolean = TRUE, 
+\fBsetOpMixRatio\fR as double = 1, 
+\fBminDist\fR as double = 0.10000000149011612, 
+\fBspread\fR as double = 1, 
+\fBrepulsionStrength\fR as double = 1, 
+\fBlearningRate\fR as double = 1, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction
+.PP
+.SH OPTIONS
+.PP
+\fBdata\fB \fR\- data must be normalized!. 
+.PP
+.PP
+\fBdimension\fB \fR\- 
+ default 2, The dimension of the space to embed into.
+. 
+.PP
+.PP
+\fBnumberOfNeighbors\fB \fR\- 
+ default 15, The size of local neighborhood (in terms of number of neighboring sample points) used for manifold approximation.
+. 
+.PP
+.PP
+\fBcustomMapCutoff\fB \fR\- 
+ cutoff value in range \fB[0,1]\fR
+. 
+.PP
+.PP
+\fBcustomNumberOfEpochs\fB \fR\- 
+ default None, The number of training epochs to be used in optimizing the low dimensional embedding. 
+ Larger values result in more accurate embeddings.
+. 
+.PP
+.PP
+\fBKDsearch\fB \fR\- 
+ knn search via KD-tree?
+. 
+.PP
+.PP
+\fBlocalConnectivity\fB \fR\- 
+ default 1, The local connectivity required -- i.e. the number of nearest neighbors that should be assumed to be connected at a local level.
+. 
+.PP
+.PP
+\fBsetOpMixRatio\fB \fR\- 
+ default 1.0, The value of this parameter should be between 0.0 and 1.0; a value of 1.0 will use a pure fuzzy union, while 0.0 will use a pure fuzzy intersection.
+. 
+.PP
+.PP
+\fBminDist\fB \fR\- 
+ default 0.1, The effective minimum distance between embedded points.
+. 
+.PP
+.PP
+\fBspread\fB \fR\- 
+ default 1.0, The effective scale of embedded points. In combination with \fBmin_dist\fR this determines how clustered/clumped the embedded points are.
+. 
+.PP
+.PP
+\fBlearningRate\fB \fR\- 
+ default 1.0, The initial learning rate for the embedding optimization.
+. 
+.PP
+.PP
+\fBrepulsionStrength\fB \fR\- 
+ default 1.0, Weighting applied to negative samples in low dimensional embedding optimization.
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+umap
+.SH FILES
+.PP
+MLkit.dll
+.PP
+.SH COPYRIGHT
+I@XIEGUIGANG.ME

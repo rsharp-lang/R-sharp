@@ -1,63 +1,71 @@
 ﻿#Region "Microsoft.VisualBasic::0d26937ce30caa21770f053171d8abae, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//signalProcessing.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 148
-    '    Code Lines: 115
-    ' Comment Lines: 12
-    '   Blank Lines: 21
-    '     File Size: 6.23 KB
+' Summaries:
 
 
-    ' Module signalProcessing
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asGeneral, asMatrix, FindAllSignalPeaks, peakTable, printSignal
-    '               writeCDF
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 148
+'    Code Lines: 115
+' Comment Lines: 12
+'   Blank Lines: 21
+'     File Size: 6.23 KB
+
+
+' Module signalProcessing
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asGeneral, asMatrix, FindAllSignalPeaks, peakTable, printSignal
+'               writeCDF
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Drawing
+Imports System.Drawing.Drawing2D
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
+Imports Microsoft.VisualBasic.Data.ChartPlots
+Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.Signal
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.SignalProcessing
+Imports Microsoft.VisualBasic.Math.SignalProcessing.EmGaussian
 Imports Microsoft.VisualBasic.Math.SignalProcessing.PeakFinding
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
@@ -65,14 +73,124 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
-Imports REnv = SMRUCC.Rsharp.Runtime
 
+''' <summary>
+''' Signal processing is an electrical engineering subfield that focuses on analyzing, 
+''' modifying and synthesizing signals, such as sound, images, potential fields, seismic 
+''' signals, altimetry processing, and scientific measurements. Signal processing 
+''' techniques are used to optimize transmissions, digital storage efficiency, correcting
+''' distorted signals, subjective video quality, and to also detect or pinpoint components 
+''' of interest in a measured signal.
+''' </summary>
 <Package("signalProcessing")>
+<RTypeExport("signal_peak", GetType(Variable))>
 Module signalProcessing
 
-    Sub New()
+    Friend Sub Main()
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(SignalPeak()), AddressOf peakTable)
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Variable()), AddressOf gaussPeaks)
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(GeneralSignal), AddressOf printSignalDf)
+
+        Call Internal.generic.add("plot", GetType(Variable()), AddressOf plotPeaksDecomposition)
     End Sub
+
+    ''' <summary>
+    ''' visual of the signal decomposition result
+    ''' </summary>
+    ''' <param name="decompose"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    Private Function plotPeaksDecomposition(decompose As Variable(), args As list, env As Environment) As Object
+        Dim x_range As Double() = CLRVector.asNumeric(args.getBySynonyms("x", "x.range"))
+        Dim res As Double = CLRVector.asNumeric(args.getBySynonyms("res", "resolution")).DefaultFirst([default]:=1000)
+        Dim padding As String = InteropArgumentHelper.getPadding(args.getBySynonyms("padding", "margin"), [default]:="padding: 100px 1200px 200px 200px;", env:=env)
+        Dim fill As String = RColorPalette.getColor(args.getBySynonyms("fill", "grid.fill"), [default]:="white", env:=env)
+        Dim sine As Boolean = args.getValue(Of Boolean)({"sine", "sin"}, env)
+
+        If x_range.IsNullOrEmpty Then
+            x_range = {0, 1}
+        End If
+
+        Dim x_axis As Double() = seq(x_range.Min, x_range.Max, by:=(x_range.Max - x_range.Min) / res).ToArray
+        Dim y As PointData()() = New PointData(decompose.Length - 1)() {}
+        Dim yi As Double
+        Dim conv As New List(Of PointData)
+        Dim offset As Integer = 0
+        Dim colors As Color() = Designer.GetColors(
+            term:=RColorPalette.getColorSet(
+                colorSet:=args.getBySynonyms("colors", "colorSet"),
+                [default]:="paper"
+            ),
+            n:=decompose.Length + 1
+        )
+
+        For i As Integer = 0 To decompose.Length - 1
+            y(i) = New PointData(x_axis.Length - 1) {}
+        Next
+
+        For Each xi As Double In x_axis
+            Dim sum As Double = 0
+
+            For i As Integer = 0 To decompose.Length - 1
+                If sine Then
+                    yi = decompose(i).sine(xi)
+                Else
+                    yi = decompose(i).gaussian(xi)
+                End If
+
+                sum += yi
+                y(i)(offset) = New PointData(xi, yi)
+            Next
+
+            conv.Add(New PointData(xi, sum))
+            offset += 1
+        Next
+
+        Dim signals As New List(Of SerialData)
+
+#Disable Warning
+        Call signals.Add(New SerialData With {
+            .color = Color.Black,
+            .lineType = DashStyle.Solid,
+            .pointSize = 5,
+            .pts = conv.ToArray,
+            .shape = LegendStyles.Square,
+            .width = 2,
+            .title = "signal"
+        })
+
+        For i As Integer = 0 To decompose.Length - 1
+            Call signals.Add(New SerialData With {
+                .color = colors(i),
+                .lineType = DashStyle.Dash,
+                .pointSize = 5,
+                .pts = y(i),
+                .shape = LegendStyles.Triangle,
+                .title = decompose(i).ToString,
+                .width = 2
+            })
+        Next
+#Enable Warning
+
+        Return Scatter.Plot(signals, padding:=padding,
+            drawLine:=True, fill:=False,
+            XtickFormat:="F2", YtickFormat:="G3",
+            gridFill:=fill)
+    End Function
+
+    Private Function gaussPeaks(peaks As Variable(), args As list, env As Environment) As RDataframe
+        Dim peak_df As New RDataframe With {
+            .columns = New Dictionary(Of String, Array)
+        }
+
+        Call peak_df.add("center", peaks.Select(Function(p) p.center)) ' center
+        Call peak_df.add("width", peaks.Select(Function(p) p.width))
+        Call peak_df.add("height", peaks.Select(Function(p) p.height))
+        Call peak_df.add("offset", peaks.Select(Function(p) p.offset))
+
+        Return peak_df
+    End Function
 
     Private Function peakTable(sigs As SignalPeak(), args As list, env As Environment) As RDataframe
         Dim data As New Dictionary(Of String, Array) From {
@@ -91,8 +209,13 @@ Module signalProcessing
         }
     End Function
 
-    Private Function printSignal(sig As GeneralSignal)
-        Throw New NotImplementedException
+    Private Function printSignalDf(sig As GeneralSignal, args As list, env As Environment) As RDataframe
+        Dim df As New RDataframe With {.columns = New Dictionary(Of String, Array)}
+
+        Call df.add("x", sig.Measures)
+        Call df.add("y", sig.Strength)
+
+        Return df
     End Function
 
     <ExportAPI("findpeaks")>
@@ -105,20 +228,148 @@ Module signalProcessing
             .ToArray
     End Function
 
+    ''' <summary>
+    ''' Create a new general signal
+    ''' </summary>
+    ''' <param name="measure"></param>
+    ''' <param name="signals"></param>
+    ''' <param name="title$"></param>
+    ''' <param name="meta"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("as.signal")>
-    Public Function asGeneral(measure As Double(), signals As Double(),
+    <RApiReturn(GetType(GeneralSignal))>
+    Public Function asGeneral(measure As Double(), <RRawVectorArgument> signals As Object,
                               Optional title$ = "general signal",
                               <RListObjectArgument>
                               Optional meta As list = Nothing,
                               Optional env As Environment = Nothing) As GeneralSignal
 
-        Return New GeneralSignal With {
-            .description = title,
-            .Measures = CLRVector.asNumeric(measure),
-            .measureUnit = "n/a",
-            .meta = meta.AsGeneric(Of String)(env),
-            .reference = App.NextTempName,
-            .Strength = CLRVector.asNumeric(signals)
+        Dim peaks As pipeline = pipeline.TryCreatePipeline(Of Variable)(signals, env)
+
+        If peaks.isError Then
+            Return New GeneralSignal With {
+                .description = title,
+                .Measures = CLRVector.asNumeric(measure),
+                .measureUnit = "n/a",
+                .meta = meta.AsGeneric(Of String)(env),
+                .reference = App.NextTempName,
+                .Strength = CLRVector.asNumeric(signals)
+            }
+        Else
+            Dim gauss As Variable() = peaks.populates(Of Variable)(env).ToArray
+            Dim sig As GeneralSignal = gauss.Compose(measure)
+
+            Return sig
+        End If
+    End Function
+
+    <ExportAPI("gaussian_bin")>
+    Public Function gaussian_bin(sig As GeneralSignal, Optional max As Integer = 100) As Object
+        Return sig.TimeBins(max)
+    End Function
+
+    ''' <summary>
+    ''' generates a set of the gauss peaks
+    ''' </summary>
+    ''' <param name="center"></param>
+    ''' <param name="height"></param>
+    ''' <param name="width"></param>
+    ''' <param name="offset"></param>
+    ''' <returns></returns>
+    <ExportAPI("gaussian_peak")>
+    <RApiReturn(GetType(Variable))>
+    Public Function gaussian_peak(<RRawVectorArgument> center As Object,
+                                  <RRawVectorArgument> height As Object,
+                                  <RRawVectorArgument> width As Object,
+                                  <RRawVectorArgument> Optional offset As Object = 0) As Object
+
+        Dim center_vec = GetVectorElement.Create(Of Double)(CLRVector.asNumeric(center))
+        Dim height_vec = GetVectorElement.Create(Of Double)(CLRVector.asNumeric(height))
+        Dim width_vec = GetVectorElement.Create(Of Double)(CLRVector.asNumeric(width))
+        Dim offset_vec = GetVectorElement.Create(Of Double)(CLRVector.asNumeric(offset))
+        Dim npeaks As Integer = Aggregate arg As GetVectorElement
+                                In {center_vec, height_vec, width_vec, offset_vec}
+                                Into Max(arg.size)
+
+        Return Enumerable.Range(0, npeaks) _
+            .Select(Function(i)
+                        Return New Variable(
+                            center:=center_vec(i),
+                            width:=width_vec(i),
+                            height:=height_vec(i),
+                            offset:=offset_vec(i)
+                        )
+                    End Function) _
+            .ToArray
+    End Function
+
+    ''' <summary>
+    ''' Fit time/spectrum/other sequential data with a set of gaussians
+    ''' by expectation-maximization algoritm.
+    ''' </summary>
+    ''' <param name="sig"></param>
+    ''' <param name="max_peaks"></param>
+    ''' <param name="max_loops"></param>
+    ''' <param name="eps"></param>
+    ''' <param name="gauss_clr">
+    ''' returns the clr raw object of the gauss peaks
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("gaussian_fit")>
+    <RApiReturn(GetType(RDataframe), GetType(Variable))>
+    Public Function gaussian_fit(<RRawVectorArgument>
+                                 sig As Object,
+                                 Optional max_peaks As Integer = 100,
+                                 Optional max_loops As Integer = 10000,
+                                 Optional eps As Double = 0.00001,
+                                 Optional gauss_clr As Boolean = False,
+                                 Optional sine_kernel As Boolean = False,
+                                 Optional env As Environment = Nothing) As Object
+
+        Dim opts As New Opts With {
+            .maxIterations = max_loops,
+            .maxNumber = max_peaks,
+            .tolerance = eps
+        }
+        Dim signal As Double()
+        Dim x_axis As Double()
+
+        If TypeOf sig Is GeneralSignal Then
+            signal = DirectCast(sig, GeneralSignal).Strength
+            x_axis = DirectCast(sig, GeneralSignal).Measures
+        ElseIf TypeOf sig Is Signal Then
+            signal = DirectCast(sig, Signal).intensities.ToArray
+            x_axis = DirectCast(sig, Signal).times.ToArray
+        ElseIf TypeOf sig Is RDataframe Then
+            signal = DirectCast(sig, RDataframe).getVector(Of Double)("signal", "strength", "intensity", "data", "y")
+            x_axis = DirectCast(sig, RDataframe).getVector(Of Double)("time", "x")
+
+            If x_axis.IsNullOrEmpty Then
+                x_axis = seq2(1, signal.Length, by:=1)
+            End If
+        Else
+            signal = CLRVector.asNumeric(sig)
+            x_axis = seq2(1, signal.Length, by:=1)
+        End If
+
+        ' signal = SIMD.Divide.f64_op_divide_f64_scalar(signal, signal.Max)
+
+        Dim gauss As New GaussianFit(opts, sine_kernel)
+        Dim peaks = gauss.fit(x_axis, signal, max_peaks)
+
+        If gauss_clr Then
+            Return peaks
+        Else
+            Return gaussPeaks(peaks, New list(("x.axis", x_axis)), env)
+        End If
+    End Function
+
+    <ExportAPI("resampler")>
+    Public Function resampler_f(sig As GeneralSignal, Optional max_dx As Double = Double.MaxValue) As LinearFunction
+        Return New LinearFunction With {
+            .linear = Resampler.CreateSampler(sig, max_dx)
         }
     End Function
 

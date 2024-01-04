@@ -12,3 +12,4 @@ HDS stream pack toolkit
 + [getText](HDS/getText.1) Read a specific text data from a HDS stream pack
 + [writeText](HDS/writeText.1) 
 + [saveFile](HDS/saveFile.1) write data to a HDS stream pack file
++ [flush](HDS/flush.1) 

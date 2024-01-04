@@ -1,0 +1,36 @@
+.\" man page create by R# package system.
+.TH DEVTOOLS 1 2002-May "FNV1a" "FNV1a"
+.SH NAME
+FNV1a \- FNV-1a non-cryptographic hash function
+.SH SYNOPSIS
+\fIFNV1a(\fBset\fR as any, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+FNV-1a non-cryptographic hash function
+ 
+ FNV hashes are designed to be fast while maintaining a low collision rate.
+ The FNV speed allows one to quickly hash lots of data while maintaining a
+ reasonable collision rate. The high dispersion of the FNV hashes makes 
+ them well suited for hashing nearly identical strings such as URLs, hostnames,
+ filenames, text, IP addresses, etc.
+.PP
+.SH OPTIONS
+.PP
+\fB[set]\fB \fR\- -. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+Returns the hash as a positive integer
+.PP
+.SH SEE ALSO
+devtools
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

@@ -1,5 +1,7 @@
 imports "utils" from "base";
 
+#' Load the internal cancer classify demo dataset
+#' 
 #' http://www.sph.emory.edu/~dkleinb/datasets/cancer.dat
 #' 
 const classify_cancer = function() {

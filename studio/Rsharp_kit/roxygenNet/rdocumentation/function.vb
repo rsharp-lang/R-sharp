@@ -49,32 +49,22 @@
 
 #End Region
 
-Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serialization
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.MIME.text.markdown
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports Microsoft.VisualBasic.Text
-Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 Imports RPackage = SMRUCC.Rsharp.Development.Package.Package
 
 Public Class [function]
-
-    ReadOnly markdown As New MarkdownHTML
-
-    Friend Shared ReadOnly clr_types As New List(Of Type)
 
     Public Function createHtml(api As RFunction, env As Environment) As String
         If TypeOf api Is RMethodInfo Then
@@ -83,36 +73,6 @@ Public Class [function]
             Throw New NotImplementedException(api.GetType.FullName)
         End If
     End Function
-
-    Private Shared Iterator Function ParseTypeReference(doc_str As String) As IEnumerable(Of (str As String, Type))
-        Dim r As New Regex("[@][<]code[>].*?[<]/code[>]", RegexICSng)
-        Dim list = r.Matches(doc_str).ToArray
-        Dim type As Type
-        Dim ref As NamedValue(Of String)
-
-        For Each link As String In list
-            ref = link.GetValue.GetTagValue(":", trim:=True)
-
-            If ref.Name <> "T" Then
-                Continue For
-            End If
-
-            type = AssemblyInfo.GetType(ref.Value)
-
-            If Not type Is Nothing Then
-                push_clr(type)
-                Yield (link, type)
-            End If
-        Next
-    End Function
-
-    Private Shared Sub push_clr(t As Type)
-        If t.IsArray Then
-            t = t.GetElementType
-        End If
-
-        Call clr_types.Add(t)
-    End Sub
 
     Public Function createHtml(api As RMethodInfo, template As String, env As Environment) As String
         Dim xml As ProjectMember = env.globalEnvironment _
@@ -158,15 +118,16 @@ Public Class [function]
         If docs.returns.StringEmpty Then
             ' generate document automatically based on the return type
             If unions_type.Length = 1 Then
-                docs.returns = $"this function returns data object of type {typeLink(unions_type(Scan0))}."
+                docs.returns = $"this function returns data object of type { clr_xml.typeLink(unions_type(Scan0))}."
             ElseIf unions_type.Length > 1 Then
-                docs.returns = $"this function returns data object in these one of the listed data types: {unions_type.Select(AddressOf typeLink).JoinBy(", ")}."
+                docs.returns = $"this function returns data object in these one of the listed data types: {unions_type.Select(AddressOf clr_xml.typeLink).JoinBy(", ")}."
             End If
         Else
-            For Each link In ParseTypeReference(docs.returns)
-                docs.returns = docs.returns.Replace(link.str, typeLink(link.Item2))
-            Next
+            docs.returns = clr_xml.HandlingTypeReferenceInDocs(docs.returns)
         End If
+
+        docs.description = clr_xml.HandlingTypeReferenceInDocs(docs.description)
+        docs.details = clr_xml.HandlingTypeReferenceInDocs(docs.details)
 
         Dim rtvl = api.GetRApiReturns
 
@@ -181,8 +142,8 @@ Public Class [function]
             docs.returns = docs.returns & "<ul>"
 
             For Each type As Type In unions_type
-                push_clr(type)
-                docs.returns = docs.returns & $"<li>{typeLink(type)}</li>"
+                clr_xml.push_clr(type)
+                docs.returns = docs.returns & $"<li>{clr_xml.typeLink(type)}</li>"
             Next
 
             docs.returns = docs.returns & "</ul>"
@@ -191,43 +152,10 @@ Public Class [function]
         Return createHtml(docs, template, pkg)
     End Function
 
-    Friend Shared Function typeLink(type As Type) As String
-        Dim rtype As RType = RType.GetRSharpType(type)
-
-        If type.ImplementInterface(GetType(IDictionary)) Then
-            rtype = RType.list
-        End If
-
-        Select Case rtype.mode
-            Case TypeCodes.boolean,
-                 TypeCodes.double,
-                 TypeCodes.integer,
-                 TypeCodes.list,
-                 TypeCodes.NA,
-                 TypeCodes.string
-
-                Return rtype.mode.Description
-            Case Else
-
-                If type Is GetType(Object) Then
-                    Return "<i>any</i> kind"
-                Else
-                    Dim ns As String = type.Namespace.Replace("."c, "/"c)
-                    Dim fileName As String = type.Name
-
-                    If type.IsArray Then
-                        fileName = type.GetElementType.Name
-                    End If
-
-                    Return $"<a href=""/vignettes/clr/{ns}/{fileName}.html"">{type.Name}</a>"
-                End If
-        End Select
-    End Function
-
     Private Function argument(arg As param) As NamedValue
         Return New NamedValue With {
             .name = arg.name,
-            .text = markdown.Transform(arg.text)
+            .text = clr_xml.HandlingTypeReferenceInDocs(markdown.Transform(arg.text))
         }
     End Function
 
@@ -261,14 +189,18 @@ Public Class [function]
         }
     End Function
 
-    Public Function createHtml(docs As Document, template As String, pkg As RPackage) As String
+    Private Function createHtml(docs As Document, template As String, pkg As RPackage) As String
         Dim assembly As AssemblyInfo = pkg.package.Assembly.FromAssembly
+        Dim ns_str As String = pkg.namespace
+        Dim default_author$ = assembly.AssemblyCompany
+        Dim version As String = assembly.AssemblyVersion
+        Dim copyright As String = assembly.AssemblyCopyright
 
-        If template.StringEmpty Then
-            template = blankTemplate.ToString
-        End If
+        Return createHtml(docs, template, ns_str, version, default_author, copyright)
+    End Function
 
-        With New ScriptBuilder(template)
+    Public Shared Function createHtml(docs As Document, template$, namespace$, ver$, default_author$, copyright$) As String
+        With New ScriptBuilder(If(template, function_template.blankTemplate.ToString))
             !name_title = docs.declares.name
             !usage = docs.declares _
                 .ToString(html:=True) _
@@ -276,6 +208,7 @@ Public Class [function]
             !title = docs.title
             !summary = docs.description
             !arguments = docs.parameters _
+                .SafeQuery _
                 .Select(Function(arg)
                             Return $"
 <dt>{arg.name.Replace("_", ".")}</dt>
@@ -285,9 +218,9 @@ Public Class [function]
                 .JoinBy(vbCrLf)
             !value = docs.returns Or "This function has no value returns.".AsDefault
             !details = docs.details
-            !package = pkg.namespace
-            !version = assembly.AssemblyVersion
-            !copyright = assembly.AssemblyCopyright
+            !package = namespace$
+            !version = ver
+            !copyright = copyright
             !show_details = If(docs.details.StringEmpty, "none", "block")
 
             If Strings.Trim(docs.examples).StringEmpty Then
@@ -303,7 +236,7 @@ Public Class [function]
             End If
 
             If docs.author.IsNullOrEmpty Then
-                !author = assembly.AssemblyCompany.Replace("<", "&lt;")
+                !author = Strings.Trim(default_author).Replace("<", "&lt;")
             Else
                 !author = docs.author.JoinBy(", ")
             End If

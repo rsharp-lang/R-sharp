@@ -1,0 +1,93 @@
+.\" man page create by R# package system.
+.TH RESHAPE2 1 2002-May "shift" "shift"
+.SH NAME
+shift \- shift: Fast lead/lag for vectors and lists
+.SH SYNOPSIS
+\fIshift(\fBx\fR as any, 
+\fBn\fR as any = 1, 
+\fBfill\fR as any = "NA", 
+\fBtype\fR as any = ["lag","lead","shift"], 
+\fBgive_names\fR as boolean = FALSE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+shift: Fast lead/lag for vectors and lists
+ 
+ lead or lag vectors, lists, data.frames or data.tables implemented in VisualBasic for speed.
+ 
+ shift accepts vectors, lists, data.frames or data.tables. It always 
+ returns a list except when the input is a vector and length(n) == 1 
+ in which case a vector is returned, for convenience. This is so that 
+ it can be used conveniently within data.table's syntax. For example, 
+ DT[, (cols) := shift(.SD, 1L), by=id] would lag every column of .SD by
+ 1 for each group and DT[, newcol := colA + shift(colB)] would assign 
+ the sum of two vectors to newcol.
+
+ Argument n allows multiple values. For example, DT[, (cols) := shift(.SD, 1:2), by=id] 
+ would lag every column of .SD by 1 And 2 for each group. If .SD contained
+ four columns, the first two elements of the list would correspond to 
+ lag=1 And lag=2 for the first column of .SD, the next two for second 
+ column of .SD And so on. Please see examples for more.
+
+ shift Is designed mainly for use in data.tables along with := Or set. 
+ Therefore, it returns an unnamed list by default as assigning names for 
+ each group over And over can be quite time consuming with many groups. 
+ It may be useful to set names automatically in other cases, which can 
+ be done by setting give.names to TRUE.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- 
+ A vector, list, data.frame Or data.table.. 
+.PP
+.PP
+\fBn\fB \fR\- integer vector denoting the offset by which 
+ to lead or lag the input. To create multiple lead/lag vectors, 
+ provide multiple values to n; negative values of n will "flip" 
+ the value of type, i.e., n=-1 and type='lead' is the same as 
+ n=1 and type='lag'.
+ 
+ this parameter could also be a character vector of the names for 
+ removes from a given list, if the input x is a tuple list object
+. 
+.PP
+.PP
+\fBfill\fB \fR\- 
+ Value to use for padding when the window goes beyond the input 
+ length.
+. 
+.PP
+.PP
+\fBtype\fB \fR\- default is "lag" (look "backwards"). The other 
+ possible values "lead" (look "forwards") and "shift" (behave same 
+ as "lag" except given names).. 
+.PP
+.PP
+\fBgive_names\fB \fR\- default is FALSE which returns an unnamed
+ list. When TRUE, names are automatically generated corresponding 
+ to type and n. If answer is an atomic vector, then the argument 
+ is ignored.. 
+.PP
+.SH VALUE
+.PP
+A list containing the lead/lag of input x.
+.PP
+.SH DETAILS
+.PP
+The function behavior is different at here when compare with the 
+ \fBshift\fR function of the \fBdata.table\fR package from the original
+ R language: the shift function from R language not allow the **`fill`**
+ data be nothing, but the \fBshift\fR function in R# language will 
+ behavior a different result: when the **`fill`** value
+ is nothing at here, this function will becomes skip for **`type`**
+ is \fBlag\fR or \fBshift\fR and this function will becomes take for **`type`**
+ is \fBlead\fR.
+.PP
+.SH SEE ALSO
+reshape2
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

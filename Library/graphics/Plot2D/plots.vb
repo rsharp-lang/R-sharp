@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::8550c2fcef812053ca1ce3c0bbee5edd, D:/GCModeller/src/R-sharp/Library/graphics//Plot2D/plots.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1020
-    '    Code Lines: 790
-    ' Comment Lines: 130
-    '   Blank Lines: 100
-    '     File Size: 46.22 KB
+' Summaries:
 
 
-    ' Module plots
-    ' 
-    '     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
-    '               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
-    '               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotArray, plotContourLayers
-    '               plotFormula, plotLinearYFit, plotLmCall, plotODEResult, plotPieChart
-    '               PlotPolygon, plotSerials, plotVector, printImage, UpSetPlot
-    ' 
-    '     Sub: Main, TryGetClassData
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1020
+'    Code Lines: 790
+' Comment Lines: 130
+'   Blank Lines: 100
+'     File Size: 46.22 KB
+
+
+' Module plots
+' 
+'     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
+'               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
+'               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotArray, plotContourLayers
+'               plotFormula, plotLinearYFit, plotLmCall, plotODEResult, plotPieChart
+'               PlotPolygon, plotSerials, plotVector, printImage, UpSetPlot
+' 
+'     Sub: Main, TryGetClassData
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -101,8 +101,11 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Rlapack
 Imports SMRUCC.Rsharp
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
@@ -110,13 +113,11 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
+Imports gaussVariable = Microsoft.VisualBasic.Math.SignalProcessing.EmGaussian.Variable
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 Imports RgraphicsDev = SMRUCC.Rsharp.Runtime.Internal.Invokes.graphics
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Interpreter
+Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 
 ''' <summary>
 ''' chartting plots for R#
@@ -228,8 +229,13 @@ Module plots
         Dim ptSize As Single = args.getValue({"point_size", "point.size"}, env, 15)
         Dim classList As String() = args.getValue(Of String())("class", env, Nothing)
         Dim reverse As Boolean = args.getValue("reverse", env, False)
-        Dim drawLine As Boolean = y Is Nothing
+        Dim drawLine As Boolean = (y Is Nothing) OrElse CLRVector.asLogical(args!line).DefaultFirst(False)
         Dim shape As LegendStyles = args.getValue("shape", env, "Circle").ParseLegendStyle
+
+        ' only x, no y(y is nothing): draw line
+        ' x,y: draw line for scatter points when set line parameter to TRUE
+        ' plot(x,y, line = TRUE);
+        ' plot(x,y)  # default is draw scatter plot
 
         args.slots!line = drawLine
 
@@ -352,7 +358,77 @@ Module plots
             }
         End If
 
-        Return plotSerials(line, args, env)
+        If args.hasName("fit") Then
+            Dim fit As Object = args!fit
+            Dim lines As New List(Of SerialData) From {line}
+            Dim x_axis As Double() = line.x
+            Dim color = args.getValue("color", env, "black").TranslateColor
+            Dim maxy As Double = y.Max
+
+            If TypeOf fit Is gaussVariable() Then
+                For Each peak As gaussVariable In DirectCast(fit, gaussVariable())
+                    If peak.width = 0 OrElse
+                        peak.height = 0.0 OrElse
+                        peak.center.IsNaNImaginary OrElse
+                        peak.height.IsNaNImaginary OrElse
+                        peak.width.IsNaNImaginary OrElse
+                        peak.offset.IsNaNImaginary Then
+
+                        Continue For
+                    End If
+
+                    line = New SerialData With {
+                        .pointSize = ptSize,
+                        .title = peak.ToString,
+                        .shape = shape,
+                        .color = color,
+                        .pts = x_axis _
+                            .Select(Function(xi)
+                                        Return New PointData(xi, If(reverse, maxy - peak.gaussian(xi), peak.gaussian(xi)))
+                                    End Function) _
+                            .ToArray
+                    }
+                    lines.Add(line)
+                Next
+            End If
+
+            Return plotSerials(lines, args, env)
+        Else
+            Dim fit_names As String() = args.getNames _
+                .Where(Function(s)
+                           Return TypeOf args(s) Is list AndAlso DirectCast(args(s), list).hasNames("x", "y")
+                       End Function) _
+                .ToArray
+            Dim lines As New List(Of SerialData) From {line}
+            Dim color = args.getValue("color", env, "black").TranslateColor
+            Dim maxy As Double = y.Max
+
+            For Each name As String In fit_names
+                Dim serial_data As list = args(name)
+                Dim x_axis As Double() = CLRVector.asNumeric(serial_data!x)
+                Dim y_axis As Double() = CLRVector.asNumeric(serial_data!y)
+                Dim color_line As Color = color
+
+                If serial_data.hasName("color") Then
+                    color_line = serial_data.getValue("color", env, "black").TranslateColor
+                End If
+
+                line = New SerialData With {
+                    .pointSize = ptSize,
+                    .title = name,
+                    .shape = shape,
+                    .color = color_line,
+                    .pts = x_axis _
+                        .Select(Function(xi, i)
+                                    Return New PointData(xi, If(reverse, maxy - y_axis(i), y_axis(i)))
+                                End Function) _
+                        .ToArray
+                }
+                lines.Add(line)
+            Next
+
+            Return plotSerials(lines, args, env)
+        End If
     End Function
 
     ''' <summary>
@@ -814,23 +890,17 @@ Module plots
             data = {DirectCast(data, SerialData)}
         End If
 
-        Dim serials As SerialData() = DirectCast(data, SerialData())
+        Dim serials As SerialData() = DirectCast(data, IEnumerable(Of SerialData)).ToArray
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="2100,1600")
-        Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 150px 150px 200px 200px;")
+        Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 150px 150px 200px 200px;", env:=env)
         Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
-        Dim showLegend As Boolean
         Dim spline As Splines = args.getValue(Of Splines)("interplot", env, Splines.None)
         Dim xlim As Double = args.getValue("xlim", env, Double.NaN)
         Dim ylim As Double = args.getValue("ylim", env, Double.NaN)
         Dim absoluteScale As Boolean = args.getValue("absolute_scale", env, False)
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
         Dim dpi As Integer = args.getValue("dpi", env, [default]:=100)
-
-        If args.hasName("showLegend") Then
-            showLegend = getFirst(CLRVector.asLogical(args!showLegend))
-        Else
-            showLegend = True
-        End If
+        Dim showLegend As Boolean = args.getValue(Of Boolean)({"showLegend", "legend", "legend.show"}, env, [default]:=True)
 
         If args.CheckGraphicsDeviceExists Then
             ' draw on current graphics context
@@ -854,7 +924,7 @@ Module plots
                 YtickFormat:=args.getValue("y.format", env, "F2"),
                 interplot:=spline,
                 axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.Win7VeryLarge),
-                gridFill:=RColorPalette.getColor(args("grid.fill"), "lightgray"),
+                gridFill:=RColorPalette.getColor(If(args("grid.fill"), args("fill")), "lightgray", env),
                 xlim:=xlim,
                 ylim:=ylim,
                 XaxisAbsoluteScalling:=absoluteScale,
@@ -880,7 +950,7 @@ Module plots
                 YtickFormat:=args.getValue("y.format", env, "F2"),
                 interplot:=spline,
                 axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.Win7VeryLarge),
-                gridFill:=RColorPalette.getColor(args("grid.fill"), "lightgray"),
+                gridFill:=RColorPalette.getColor(If(args("grid.fill"), args("fill")), "lightgray", env),
                 xlim:=xlim,
                 ylim:=ylim,
                 XaxisAbsoluteScalling:=absoluteScale,

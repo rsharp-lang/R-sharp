@@ -1,0 +1,46 @@
+.\" man page create by R# package system.
+.TH DATASET 4 2000-Jan "sort_samples" "sort_samples"
+.SH NAME
+sort_samples \- sort the sample dataset
+.SH SYNOPSIS
+\fIsort_samples(\fBx\fR as any, 
+\fBorder_id\fR as any, 
+\fBdesc\fR as boolean = FALSE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+sort the sample dataset
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- should be a collection of the sample dataset. 
+.PP
+.PP
+\fBorder_id\fB \fR\- 
+ this parameter value could be a:
+ 
+ 1. the sample id collection
+ 2. a feature index, start from base 1
+. 
+.PP
+.PP
+\fBdesc\fB \fR\- 
+ sort the feature data in desc order, this parameter only works when the
+ order id parameter is a single feature index value.
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+the input sample data will be sorted based on the given **`order_id`** vector.
+.PP
+.SH SEE ALSO
+dataset
+.SH FILES
+.PP
+MLkit.dll
+.PP
+.SH COPYRIGHT
+I@XIEGUIGANG.ME

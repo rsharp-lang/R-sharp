@@ -71,6 +71,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Net
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
@@ -96,6 +97,7 @@ Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
 
 Namespace Runtime.Internal.Invokes
 
+    <Package("utils")>
     Public Module utils
 
         ''' <summary>

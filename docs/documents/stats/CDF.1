@@ -16,7 +16,31 @@ Empirical Cumulative Distribution Function
 .PP
 .SH OPTIONS
 .PP
-\fBFUNC\fB \fR\- -. 
+\fBFUNC\fB \fR\- function for run value integral, this function should 
+ accept a number as parameter and produce new number as output.. 
+.PP
+.PP
+\fBrange\fB \fR\- 
+ the value range of the target function to do integral
+. 
+.PP
+.PP
+\fBp0\fB \fR\- 
+ the y0 value for the integral
+. 
+.PP
+.PP
+\fBresolution\fB \fR\- 
+ the RK4 integral algorithm resolution
+. 
+.PP
+.SH VALUE
+.PP
+this function returns a tuple list object that contains the data slots:
+ 
+ + \fBecdf\fR: the result value of the integral, a numeric scalar value
+ + \fBx\fR: a numeric vector for x axis
+ + \fBy\fR: a numeric vector for y axis
 .PP
 .SH SEE ALSO
 stats

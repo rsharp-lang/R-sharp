@@ -138,6 +138,10 @@ Namespace Development.Package.File.Expressions
 
                 If TypeOf x Is SymbolExpression Then
                     attrs = DirectCast(x, SymbolExpression).attributes
+
+                    If attrs Is Nothing Then
+                        attrs = New Dictionary(Of String, String())
+                    End If
                 End If
 
                 Dim attrJSON As Byte() = Encoding.UTF8.GetBytes(attrs.GetJson)

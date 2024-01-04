@@ -196,6 +196,16 @@ Namespace Runtime.Internal.Object
             Return slots.ContainsKey(name)
         End Function
 
+        ''' <summary>
+        ''' check that all name inside the given <paramref name="names"/> is
+        ''' exists in current data list.
+        ''' </summary>
+        ''' <param name="names"></param>
+        ''' <returns></returns>
+        Public Function hasNames(ParamArray names As String()) As Boolean
+            Return names.All(AddressOf hasName)
+        End Function
+
         Public Function getNames() As String() Implements RNames.getNames
             Return slots.Keys.ToArray
         End Function

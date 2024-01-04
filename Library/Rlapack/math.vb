@@ -1,59 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::6f7e94ca63a9b745d35791fde095993f, D:/GCModeller/src/R-sharp/Library/Rlapack//math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 783
-    '    Code Lines: 487
-    ' Comment Lines: 201
-    '   Blank Lines: 95
-    '     File Size: 31.67 KB
+' Summaries:
 
 
-    ' Module math
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asFormula, asLmcall, binomial, create_deSolve_DataFrame, DiffEntropy
-    '               getBinTable, getMax, getMin, Gini, glm
-    '               Hist, lm, loess, predict, RamerDouglasPeucker
-    '               (+2 Overloads) RK4, sim, ssm, summaryFit
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 783
+'    Code Lines: 487
+' Comment Lines: 201
+'   Blank Lines: 95
+'     File Size: 31.67 KB
+
+
+' Module math
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asFormula, asLmcall, binomial, create_deSolve_DataFrame, DiffEntropy
+'               getBinTable, getMax, getMin, Gini, glm
+'               Hist, lm, loess, predict, RamerDouglasPeucker
+'               (+2 Overloads) RK4, sim, ssm, summaryFit
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -76,6 +77,7 @@ Imports Microsoft.VisualBasic.Math.Information
 Imports Microsoft.VisualBasic.Math.Interpolation
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
+Imports Microsoft.VisualBasic.Math.Scripting
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter
@@ -976,6 +978,90 @@ theta = {objToString(thetaFunc, env:=env)}
                     {"y", pointList.Y}
                 }
             }
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Use non-linear least squares to fit a function, f, to data.
+    ''' 
+    ''' Assumes ``ydata = f(xdata, args) + eps``.
+    ''' </summary>
+    ''' <param name="f">The model function, f(x, …). It must take the independent variable 
+    ''' as the first argument and the parameters to fit as separate remaining arguments.
+    ''' </param>
+    ''' <param name="xdata">The independent variable where the data is measured. Should usually
+    ''' be an M-length sequence or an (k,M)-shaped array for functions with k predictors, 
+    ''' and each element should be float convertible if it is an array like object.</param>
+    ''' <param name="ydata">The dependent data, a length M array - nominally f(xdata, ...).</param>
+    ''' <param name="args">arguments to fit in the given function <paramref name="f"/>.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("curve_fit")>
+    <RApiReturn(GetType(Double))>
+    Public Function curve_fit(f As Object,
+                              <RRawVectorArgument> xdata As Object,
+                              <RRawVectorArgument> ydata As Object,
+                              <RListObjectArgument> args As list,
+                              Optional env As Environment = Nothing) As Object
+
+        If TypeOf f Is RFunction Then
+            ' do nothing
+        ElseIf TypeOf f Is MethodInfo Then
+            f = New RMethodInfo(DirectCast(f, MethodInfo))
+        Else
+            Return Message.InCompatibleType(GetType(RFunction), f.GetType, env)
+        End If
+
+        Dim lambda As RFunction = DirectCast(f, RFunction)
+        Dim x As Double() = CLRVector.asNumeric(xdata)
+        Dim y As Double() = CLRVector.asNumeric(ydata)
+        Dim xy As DataPoint() = x _
+            .Select(Function(xi, i) New DataPoint(xi, y(i))) _
+            .ToArray
+        Dim fit As GaussNewtonSolver.FitFunction
+        Dim b0 As Double()
+        ' the first parameter is xi
+        Dim pars = lambda.getArguments _
+            .Skip(1) _
+            .Select(Function(a) a.Name) _
+            .ToArray
+        Dim is_list_pars As Boolean = Not (args.length = 1 AndAlso args.getNames.First = NameOf(args))
+
+        If is_list_pars Then
+            ' is named vector
+            b0 = pars _
+                .Select(Function(a)
+                            Return args.getValue(Of Double)(a, env, [default]:=0.0)
+                        End Function) _
+                .ToArray
+        Else
+            b0 = CLRVector.asNumeric(args.data.First)
+        End If
+
+        fit = Function(xi, par)
+                  Dim a As Object() = New Object(b0.Length) {}
+                  a(0) = xi
+                  For i As Integer = 1 To b0.Length
+                      a(i) = par(i - 1, 0)
+                  Next
+                  Return REnv.single(CLRVector.asNumeric(lambda.Invoke(a, env)))
+              End Function
+
+        Dim gauss As New GaussNewtonSolver(fit)
+        Dim result = gauss.Fit(xy, b0)
+
+        If is_list_pars Then
+            Dim arguments As New list With {
+                .slots = New Dictionary(Of String, Object)
+            }
+
+            For i As Integer = 0 To pars.Length - 1
+                Call arguments.add(pars(i), result(i))
+            Next
+
+            Return arguments
+        Else
+            Return result
         End If
     End Function
 End Module

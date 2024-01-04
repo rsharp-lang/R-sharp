@@ -1,0 +1,51 @@
+.\" man page create by R# package system.
+.TH CLUSTERING 2 2000-Jan "btree" "btree"
+.SH NAME
+btree \- do clustering via binary tree
+.SH SYNOPSIS
+\fIbtree(\fBd\fR as any, 
+\fBequals\fR as double = 0.9, 
+\fBgt\fR as double = 0.7, 
+\fBas_hclust\fR as boolean = FALSE, 
+\fBmethod\fR as <integer> CompareMethods = [SpectrumDotProduct], 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+do clustering via binary tree
+.PP
+.SH OPTIONS
+.PP
+\fBd\fB \fR\- the input dataset. 
+.PP
+.PP
+\fBequals\fB \fR\- the score threshold that asserts that two vector is
+ equals, then they will assigned to a same tree cluster node.. 
+.PP
+.PP
+\fBgt\fB \fR\- the score threshold that asserts that two vector is not
+ the same but similar to other, then we could put the new vector into the
+ right node of current cluster tree node.. 
+.PP
+.PP
+\fBas_hclust\fB \fR\- 
+ and also converts the tree data as the hclust data model?
+. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+the cluster result could be converts from clr object to R# dataframe object
+ via the \fBas.data.frame\fR function.
+.PP
+.SH SEE ALSO
+clustering
+.SH FILES
+.PP
+MLkit.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@live.com\fR
+.SH COPYRIGHT
+I@XIEGUIGANG.ME

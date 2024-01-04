@@ -4,7 +4,7 @@
 wget \- retrieving files using HTTP, HTTPS, FTP and FTPS, the most widely used Internet protocols.
 .SH SYNOPSIS
 \fIwget(\fBurl\fR as string, 
-\fBsave\fR as string = \fB<NULL>\fR, 
+\fBsave\fR as any = \fB<NULL>\fR, 
 [\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP
@@ -15,10 +15,22 @@ retrieving files using HTTP, HTTPS, FTP and FTPS, the most widely used Internet 
 \fBurl\fB \fR\- -. 
 .PP
 .PP
-\fBsave\fB \fR\- the function will returns a stream object if this parameter is nothing. 
+\fBsave\fB \fR\- 
+ this parameter could be a character vector for specific a local file path to save the 
+ target remote file, or it also could be a file reference wrapper object for store in 
+ a cache pack. This function will returns a stream object if this parameter is nothing.
+. 
 .PP
 .PP
 \fBenv\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+this function will returns the data stream which is download from the given 
+ **`url`** if the **`save`** parameter value is 
+ nothing by default, or this function will returns nothing if the **`save`** 
+ parameter value is exists and also the http resource data will be placed at 
+ **`save`** file location.
 .PP
 .SH SEE ALSO
 utils

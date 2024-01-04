@@ -25,6 +25,7 @@
 	  <Authors>xieguigang</Authors>
 	  <UseApplicationFramework>True</UseApplicationFramework>
 	  <FileVersion>2.33.*</FileVersion>
+	  <IncludeSymbols>True</IncludeSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -86,6 +86,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
@@ -117,6 +118,8 @@ Namespace Runtime.Internal.Invokes
     ''' <summary>
     ''' 在这个模块之中仅包含有最基本的数据操作函数
     ''' </summary>
+    ''' 
+    <Package("base")>
     Public Module base
 
         ''' <summary>

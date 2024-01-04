@@ -737,11 +737,6 @@ Module stats
         Throw New NotImplementedException
     End Function
 
-    <ExportAPI("dnorm")>
-    Public Function dnorm(x As Double(), Optional mean As Double = 0, Optional sd As Double = 1) As Object
-        Return Distributions.pnorm.ProbabilityDensity(x.AsVector, mean, sd).Array
-    End Function
-
     ''' <summary>
     ''' ### Sample Quantiles
     ''' 

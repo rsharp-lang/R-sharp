@@ -83,7 +83,18 @@ Imports pkg = SMRUCC.Rsharp.Development.Package.Package
 <Package("roxygen", Category:=APICategories.SoftwareTools)>
 Public Module roxygen
 
+    ''' <summary>
+    ''' engine for convert the markdown document text to html text
+    ''' </summary>
+    Friend ReadOnly markdown As New MarkdownHTML
+
+    ''' <summary>
+    ''' parse the R# symbol documents from a given r source script
+    ''' </summary>
+    ''' <param name="script"></param>
+    ''' <returns>A tuple list of the R# symbol documents.</returns>
     <ExportAPI("parse")>
+    <RApiReturn(GetType(Document))>
     Public Function ParseDocuments(script As String) As list
         Dim list As New list(GetType(Document))
         Dim R As Rscript = Rscript.AutoHandleScript(handle:=script)
@@ -106,18 +117,20 @@ Public Module roxygen
     ''' <param name="package_dir">
     ''' Location of package top level directory. Default is working directory.
     ''' </param>
-    ''' <returns>NULL</returns>
+    ''' <returns>a tuple list of the R function documentation symbols data</returns>
     ''' <remarks>
     ''' Note that roxygen2 is a dynamic documentation system: it works by inspecting 
     ''' loaded objects in the package. This means that you must be able to load 
     ''' the package in order to document it: see load for details.
     ''' </remarks>
     <ExportAPI("roxygenize")>
+    <RApiReturn(GetType(list))>
     Public Function roxygenize(package_dir As String, Optional env As Environment = Nothing) As Object
         Dim man_dir As String = $"{package_dir}/man"
         Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{package_dir}/DESCRIPTION")
         Dim man As UnixManPage
         Dim Rscript As Rscript
+        Dim vignettes As New Dictionary(Of String, Object)
 
         For Each Rfile As String In ls - l - r - "*.R" <= $"{package_dir}/R"
             Rscript = Rscript.AutoHandleScript(handle:=Rfile)
@@ -127,6 +140,8 @@ Public Module roxygen
                     man = symbol.UnixMan
                     man.COPYRIGHT = $"Copyright © {meta.Author}, {meta.License} Licensed {Now.Year}"
                     man.LICENSE = meta.License
+
+                    vignettes(symbol.declares.name) = symbol
 
                     Call man _
                         .ToString _
@@ -140,7 +155,7 @@ Public Module roxygen
             End Try
         Next
 
-        Return Nothing
+        Return New list With {.slots = vignettes}
     End Function
 
     ''' <summary>
@@ -150,7 +165,9 @@ Public Module roxygen
     ''' <returns></returns>
     <ExportAPI("markdown2Html")>
     Public Function markdown2Html(markdown As String) As String
-        Return New MarkdownHTML().Transform(text:=markdown)
+        SyncLock roxygen.markdown
+            Return roxygen.markdown.Transform(text:=markdown)
+        End SyncLock
     End Function
 
     ''' <summary>

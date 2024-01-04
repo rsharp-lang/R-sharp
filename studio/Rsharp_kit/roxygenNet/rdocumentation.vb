@@ -49,16 +49,20 @@
 
 #End Region
 
+Imports System.ComponentModel
 Imports System.Reflection
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp
+Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -66,21 +70,75 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 
+''' <summary>
+''' Make documents for R# symbol object
+''' </summary>
 <Package("rdocumentation")>
 Public Module rdocumentation
 
+    ''' <summary>
+    ''' make documentation for a R# function or symbol
+    ''' </summary>
+    ''' <param name="func">the specific R# function or symbol</param>
+    ''' <param name="template">the html template string</param>
+    ''' <param name="desc">the package <see cref="DESCRIPTION"/> metadata for the R# symbol if 
+    ''' the given <paramref name="func"/> object is a kind of the R source code <see cref="Document"/> 
+    ''' object.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("documentation")>
-    Public Function rdocumentation(func As RFunction, template As String, Optional env As Environment = Nothing) As String
-        Return New [function]().createHtml(func, template, env)
-    End Function
+    <RApiReturn(TypeCodes.string)>
+    Public Function rdocumentation(func As Object,
+                                   Optional template As String = Nothing,
+                                   Optional desc As DESCRIPTION = Nothing,
+                                   Optional env As Environment = Nothing) As Object
 
-    <ExportAPI("pull_clr_types")>
-    Public Function pull_clr_types() As Type()
-        Return [function].clr_types.PopAll
+        If TypeOf func Is RFunction Then
+            Return New [function]().createHtml(DirectCast(func, RFunction), template, env)
+        ElseIf TypeOf func Is Document Then
+            Dim docs As Document = DirectCast(func, Document).MarkdownTransform
+            Dim html As String = [function].createHtml(docs, template, desc.Package, desc.Version, desc.Author, desc.License)
+
+            Return html
+        Else
+            Return Message.InCompatibleType(GetType(RFunction), func.GetType, env)
+        End If
     End Function
 
     ''' <summary>
-    ''' make documents based on a given clr type meta data
+    ''' pull all clr type in the cache and then clear up the cache
+    ''' </summary>
+    ''' <param name="generic_excludes"></param>
+    ''' <returns></returns>
+    <ExportAPI("pull_clr_types")>
+    Public Function pull_clr_types(Optional generic_excludes As Boolean = False) As Type()
+        Dim pull As Type()
+        Dim outlist As New List(Of Type)
+
+        Static visited As New Index(Of Type)
+
+        If Not generic_excludes Then
+            ' gets all
+            pull = clr_xml.clr_types.PopAll
+        Else
+            pull = clr_xml.clr_types.PopAll _
+                .Where(Function(t) t.GetGenericArguments.IsNullOrEmpty) _
+                .ToArray
+        End If
+
+        ' break the circle reference dead loop
+        For Each clr_type As Type In pull
+            If Not clr_type Like visited Then
+                visited.Add(clr_type)
+                outlist.Add(clr_type)
+            End If
+        Next
+
+        Return outlist.ToArray
+    End Function
+
+    ''' <summary>
+    ''' make documents based on a given clr <see cref="Type"/> meta data
     ''' </summary>
     ''' <param name="clr">a given clr type</param>
     ''' <returns></returns>
@@ -99,11 +157,24 @@ Public Module rdocumentation
         End If
 
         Dim html As New StringBuilder(template)
+        Dim desc As String = xml.Summary
+
+        If desc.StringEmpty Then
+            desc = xml.Remarks
+        Else
+            desc = {desc, If(xml.Remarks, "")}.JoinBy(vbCrLf & vbCrLf)
+        End If
+
+        desc = roxygen.markdown.Transform(desc)
+
+        If Not clr.BaseType Is GetType(Object) Then
+            desc = desc & "<br />" & $"<p>this class extends from {clr_xml.typeLink(clr.BaseType)} class.</p>"
+        End If
 
         Call html.Replace("{$title}", clr.FullName)
         Call html.Replace("{$name_title}", clr.Name)
         Call html.Replace("{$namespace}", clr.Namespace)
-        Call html.Replace("{$summary}", xml.Summary)
+        Call html.Replace("{$summary}", clr_xml.HandlingTypeReferenceInDocs(desc))
         Call html.Replace("{$declare}", ts_code(clr, xml))
 
         Return html.ToString
@@ -111,28 +182,75 @@ Public Module rdocumentation
 
     Private Function ts_code(type As Type, xml As ProjectType) As String
         Dim ts As New StringBuilder
+        Dim cls_name As String = type.Name
+        Dim members As IEnumerable(Of MemberInfo)
+        Dim is_enum As Boolean = type.IsEnum
+        Dim docs As String = Nothing
+        Dim extends As String = ""
+
+        If Not type.BaseType Is GetType(Object) Then
+            clr_xml.push_clr(type.BaseType)
+            ' add code show the class extends tree
+            extends = $"extends {clr_xml.typeLink(type.BaseType)} "
+        End If
 
         Call ts.AppendLine()
         Call ts.AppendLine($"# namespace {type.Namespace}")
-        Call ts.AppendLine($"export class {type.Name} {{")
+        Call ts.AppendLine($"export class {cls_name} {extends}{{")
 
-        For Each member As PropertyInfo In type.GetProperties(PublicProperty)
-            If Not member.CanRead Then
-                Continue For
-            ElseIf Not member.GetIndexParameters.IsNullOrEmpty Then
-                Continue For
+        If is_enum Then
+            members = type.GetFields _
+                .Where(Function(f) f.FieldType Is type) _
+                .Select(Function(f) DirectCast(f, MemberInfo)) _
+                .ToArray
+        Else
+            members = type.GetProperties(PublicProperty) _
+                .Where(Function(p)
+                           Return p.CanRead AndAlso p.GetIndexParameters.IsNullOrEmpty
+                       End Function) _
+                .Select(Function(p) DirectCast(p, MemberInfo))
+        End If
+
+        For Each member As MemberInfo In members
+            If is_enum Then
+                docs = xml.GetField(member.Name)?.Summary
+            Else
+                docs = xml.GetProperties(member.Name) _
+                    .SafeQuery _
+                    .Select(Function(i) i.Summary) _
+                    .JoinBy(vbCrLf)
             End If
 
-            Dim docs As String = xml.GetProperties(member.Name) _
-                .SafeQuery _
-                .Select(Function(i) i.Summary) _
-                .JoinBy(vbCrLf)
+            docs = roxygen.markdown.Transform(docs)
+            docs = clr_xml.HandlingTypeReferenceInDocs(docs)
+            docs = docs _
+                .Replace("<p>", "") _
+                .Replace("</p>", "") _
+                .Replace("<br />", "") _
+                .Trim
 
             For Each line As String In docs.LineTokens
                 Call ts.AppendLine($"   # {line}")
             Next
 
-            Call ts.AppendLine($"   {member.Name}: {[function].typeLink(member.PropertyType)};")
+            If TypeOf member Is PropertyInfo Then
+                type = DirectCast(member, PropertyInfo).PropertyType
+            Else
+                type = DirectCast(member, FieldInfo).FieldType
+            End If
+
+            If is_enum Then
+                Dim desc As DescriptionAttribute = member.GetCustomAttribute(Of DescriptionAttribute)
+
+                If Not desc Is Nothing Then
+                    Call ts.AppendLine($"   [@desc ""{desc.Description}""]")
+                End If
+
+                Call ts.AppendLine($"   {member.Name}: {clr_xml.typeLink(type)} = {CULng(DirectCast(member, FieldInfo).GetValue(Nothing))};")
+                Call ts.AppendLine()
+            Else
+                Call ts.AppendLine($"   {member.Name}: {clr_xml.typeLink(type)};")
+            End If
         Next
 
         Call ts.AppendLine("}")
@@ -147,7 +265,8 @@ Public Module rdocumentation
     ''' the ``R#`` package module name or the module object itself.
     ''' </param>
     ''' <param name="env"></param>
-    ''' <returns></returns>
+    ''' <returns>A tuple list of the R# functions that parsed
+    ''' from the target clr package module.</returns>
     <ExportAPI("getFunctions")>
     Public Function getFunctions(package As Object, Optional env As Environment = Nothing) As Object
         Dim apis = getPkgApisList(package, env)
@@ -177,6 +296,25 @@ Public Module rdocumentation
             Return ImportsPackage _
                 .GetAllApi(DirectCast(package, Development.Package.Package)) _
                 .ToArray
+        ElseIf TypeOf package Is Type Then
+            Return ImportsPackage _
+                .GetAllApi(Development.Package.Package.ParseClrType(DirectCast(package, Type))) _
+                .ToArray
+        Else
+            Return Components _
+                .Message _
+                .InCompatibleType(GetType(String), package.GetType, env)
+        End If
+    End Function
+
+    Friend Function getPkg(package As Object, env As Environment) As [Variant](Of Message, Development.Package.Package)
+        If TypeOf package Is String Then
+            Return env.globalEnvironment.packages _
+                .FindPackage(any.ToString(package), Nothing)
+        ElseIf TypeOf package Is Development.Package.Package Then
+            Return DirectCast(package, Development.Package.Package)
+        ElseIf TypeOf package Is Type Then
+            Return Development.Package.Package.ParseClrType(DirectCast(package, Type))
         Else
             Return Components _
                 .Message _

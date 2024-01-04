@@ -8,7 +8,7 @@ write.csv \- Data Output
 \fBrow_names\fR as any = TRUE, 
 \fBfileEncoding\fR as any = "", 
 \fBtsv\fR as boolean = FALSE, 
-\fBnumber_format\fR as any = "" & CALL "GETOPTION"("F64.FORMAT") & "" & CALL "GETOPTION"("DIGITS"), 
+\fBnumber_format\fR as any = \fB<NULL>\fR, 
 [\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP
@@ -47,6 +47,11 @@ Data Output
  x are to be written along with x, or a character vector of 
  row names to be written.
 . 
+.PP
+.SH DETAILS
+.PP
+this function will create an empty table file if the given data
+ table object **`x`** is nothing.
 .PP
 .SH SEE ALSO
 utils

@@ -1,0 +1,51 @@
+.\" man page create by R# package system.
+.TH STATS 1 2000-Jan "pnorm" "pnorm"
+.SH NAME
+pnorm \- The Normal Distribution
+.SH SYNOPSIS
+\fIpnorm(\fBq\fR as any, 
+\fBmean\fR as double = 0, 
+\fBsd\fR as double = 1, 
+\fBlower_tail\fR as boolean = TRUE, 
+\fBlog_p\fR as boolean = FALSE, 
+\fBresolution\fR as integer = 97);\fR
+.SH DESCRIPTION
+.PP
+The Normal Distribution
+ 
+ Density, distribution function, quantile function and random generation 
+ for the normal distribution with mean equal to mean and standard deviation 
+ equal to sd.
+.PP
+.SH OPTIONS
+.PP
+\fBq\fB \fR\- vector of quantiles.. 
+.PP
+.PP
+\fBmean\fB \fR\- vector of means.. 
+.PP
+.PP
+\fBsd\fB \fR\- vector of standard deviations.. 
+.PP
+.PP
+\fBlower_tail\fB \fR\- logical; if TRUE (default), probabilities are P[X \le x]P[X≤x] otherwise, P[X > x]P[X>x].. 
+.PP
+.PP
+\fBlog_p\fB \fR\- logical; if TRUE, probabilities p are given as log(p).. 
+.PP
+.SH DETAILS
+.PP
+For pnorm, based on
+ 
+ Cody, W. D. (1993) Algorithm 715 SPECFUN – A portable FORTRAN package of 
+ special function routines And test drivers. ACM Transactions on Mathematical 
+ Software 19, 22–32.
+.PP
+.SH SEE ALSO
+stats
+.SH FILES
+.PP
+Rlapack.dll
+.PP
+.SH COPYRIGHT
+GPL3

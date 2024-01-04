@@ -1,9 +1,20 @@
 .\" man page create by R# package system.
 .TH UTILS 1 2002-May "timespan" "timespan"
 .SH NAME
-timespan \- 
+timespan \- create the time span value based on the given time ticks
 .SH SYNOPSIS
-\fItimespan(\fBticks\fR as integer);\fR
+\fItimespan(\fBx\fR as any, 
+\fBunit\fR as <integer> TimeSpanUnits = [Ticks], 
+\fBcharacter\fR as boolean = FALSE, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+create the time span value based on the given time ticks
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- -. 
+.PP
 .SH SEE ALSO
 utils
 .SH FILES

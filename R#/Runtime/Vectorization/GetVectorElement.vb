@@ -92,6 +92,11 @@ Namespace Runtime.Vectorization
             End Get
         End Property
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="i">zero-based vector element index value</param>
+        ''' <returns></returns>
         Default Public ReadOnly Property item(i As Integer) As Object
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get

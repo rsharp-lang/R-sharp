@@ -63,10 +63,20 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
+''' <summary>
+''' Waveform Audio File Format (WAVE, or WAV due to its filename extension; pronounced /wæv/ or /weɪv/) 
+''' is an audio file format standard, developed by IBM and Microsoft, for storing an audio bitstream on
+''' personal computers. It is the main format used on Microsoft Windows systems for uncompressed audio. 
+''' The usual bitstream encoding is the linear pulse-code modulation (LPCM) format.
+'''
+''' WAV Is an application Of the Resource Interchange File Format (RIFF) bitstream format method For 
+''' storing data In chunks, And thus Is similar To the 8SVX And the Audio Interchange File Format (AIFF) 
+''' format used On Amiga And Macintosh computers, respectively.
+''' </summary>
 <Package("wav", Category:=APICategories.UtilityTools)>
 Public Module wavToolkit
 
-    Sub New()
+    Friend Sub Main()
         Call Internal.ConsolePrinter.AttachConsoleFormatter(Of WaveFile)(AddressOf wavToString)
     End Sub
 

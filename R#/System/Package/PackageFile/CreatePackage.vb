@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -70,6 +71,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Development.Package.File
@@ -315,14 +317,26 @@ Namespace Development.Package.File
             Call Console.WriteLine("       ==> roxygen::roxygenize")
 
             ' run documentation for rscript in R folder
-            Dim err As Message = REngine.Invoke("roxygen::roxygenize", {package_dir, REngine.globalEnvir})
+            Dim err As Object = REngine.Invoke("roxygen::roxygenize", {package_dir, REngine.globalEnvir})
             Dim out As String
             Dim outputHtml As String
             Dim runtime As String = getRuntimeTags()
             Dim pkgModList As New List(Of Package)
+            Dim docs_symbols As New List(Of String)
 
-            If Not err Is Nothing Then
+            If Program.isException(err) Then
                 Return err
+            Else
+                Dim docs = DirectCast(err, list).data.As(Of Document).ToArray
+                Dim pkg As DESCRIPTION = file.info
+
+                docs_symbols.AddRange(docs.Select(Function(s) s.symbol_name))
+                err = REngine.Invoke("REnv::__RSymbolDocumentation", docs, pkg, $"{package_dir}/vignettes/R", REngine.globalEnvir)
+
+                If Program.isException(err) AndAlso pkg.Package = "REnv" Then
+                    ' 20240102 ignores the data of REnv package bootstrapping in first time
+                    err = Nothing
+                End If
             End If
 
             Call Console.WriteLine($"       ==> build package for .NET runtime [{runtime}].")
@@ -331,6 +345,15 @@ Namespace Development.Package.File
 
             Call dllIndex.AppendLine($"<pre>{$"{package_dir}/DESCRIPTION".ReadAllText.Replace("&", "&amp;").Replace("<", "&lt;")}</pre>")
             Call dllIndex.AppendLine("<br />")
+
+            Call dllIndex.AppendLine("<h2>R Package Symbols</h2>")
+            Call dllIndex.AppendLine("<ul>")
+
+            For Each name As String In docs_symbols
+                Call dllIndex.AppendLine($"<li><a href=""./R/docs/{name}.html"">{name}</a></li>")
+            Next
+
+            Call dllIndex.AppendLine("</ul>")
 
             ' run documentation for dll modules which is marked as r package
             ' unixMan(pkg As pkg, output As String, env As Environment)
@@ -405,7 +428,7 @@ Namespace Development.Package.File
                 Call ts.SaveTo($"{package_dir}/@export/{group.Key}.d.ts")
             Next
 
-            If Not err Is Nothing Then
+            If Program.isException(err) Then
                 Return err
             Else
                 Call Console.WriteLine("        " & "[*] Loading unix man page index...")
