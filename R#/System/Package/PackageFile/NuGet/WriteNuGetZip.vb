@@ -284,6 +284,7 @@ Namespace Development.Package.File
             ' pack assembly folder
             Dim contents As String() = assembly.GetAllPackageContentFiles.ToArray
             Dim assemblyDirFull As String = assembly.directory.GetDirectoryFullPath
+            Dim xmls As String() = assembly.GetAllPackageClrXmlDocumentFiles.ToArray
 
             Call zip.WriteFiles(
                 files:=contents,
@@ -292,6 +293,14 @@ Namespace Development.Package.File
                 compression:=CompressionLevel.Fastest,
                 relativeDir:=assemblyDirFull,
                 parent:="lib/assembly"
+            )
+            Call zip.WriteFiles(
+                files:=xmls,
+                mode:=ZipArchiveMode.Create,
+                fileOverwrite:=Overwrite.Always,
+                compression:=CompressionLevel.Fastest,
+                relativeDir:=assemblyDirFull,
+                parent:="package/clr"
             )
         End Sub
 
