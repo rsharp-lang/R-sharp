@@ -176,15 +176,22 @@ Namespace Runtime.Internal.Object
             Yield New NamedValue(Of PropertyInfo)(p.Name, p)
 
             For Each a As CustomAttributeData In attrs
+                name = Nothing
+
+#If NETCOREAPP Then
                 ' try get name
                 If a.AttributeType Is GetType(ColumnAttribute) Then
                     nameAttr = a.NamedArguments.Where(Function(pa) pa.MemberName = "Name").FirstOrDefault
                     name = nameAttr.TypedValue.Value
-                ElseIf a.AttributeType.Name = "ColumnAttribute" Then
-                    typeAttr = a.ConstructorArguments.FirstOrDefault
-                    name = typeAttr.Value
-                Else
-                    name = Nothing
+                End If
+#End If
+                If name Is Nothing Then
+                    If a.AttributeType.Name = "ColumnAttribute" Then
+                        typeAttr = a.ConstructorArguments.FirstOrDefault
+                        name = typeAttr.Value
+                    Else
+                        name = Nothing
+                    End If
                 End If
 
                 If Not name Is Nothing AndAlso name <> p.Name Then
