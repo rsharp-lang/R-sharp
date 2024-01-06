@@ -154,6 +154,10 @@ Namespace Runtime.Internal.Object
             Call Me.New(RType.GetRSharpType(type))
         End Sub
 
+        Sub New(type As TypeCodes)
+            Call Me.New(RType.GetType(type))
+        End Sub
+
         ''' <summary>
         ''' 
         ''' </summary>
