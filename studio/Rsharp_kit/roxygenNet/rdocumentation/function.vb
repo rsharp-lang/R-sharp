@@ -111,6 +111,7 @@ Public Class [function]
             docs.returns = markdown.Transform(xml.Returns)
             docs.details = markdown.Transform(xml.Remarks)
             docs.examples = " " & xml.example
+            docs.author = {markdown.Transform(xml.author)}
         End If
 
         Dim unions_type As Type() = api.GetUnionTypes.ToArray
@@ -222,6 +223,13 @@ Public Class [function]
             !version = ver
             !copyright = copyright
             !show_details = If(docs.details.StringEmpty, "none", "block")
+            !authors = docs.author.JoinBy("<br />")
+
+            If docs.author.IsNullOrEmpty Then
+                !show_authors = "none"
+            Else
+                !show_authors = "bloc"
+            End If
 
             If Strings.Trim(docs.examples).StringEmpty Then
                 !show_examples = "none"
