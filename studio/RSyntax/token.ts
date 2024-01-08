@@ -36,14 +36,14 @@ namespace Token {
     export const stacks: {} = renderTextSet(["[", "]", "(", ")", "{", "}"]);
     export const keywords: {} = renderTextSet([
         "imports", "from", "require",
-        "if", "else", "for", "break", "while",
+        "if", "else", "for", "break", "while", "next",
         "in", "between",
         "function", "return",
-        "let", "const",
+        "let", "const", "as",
         "stop", "invisible",
         "export", "namespace", "class",
         "extends", "implements",  // typescript keywords
-        "string", "double", "integer", "list",
+        "string", "double", "integer", "list", "boolean",
         "typeof"
     ]);
 
