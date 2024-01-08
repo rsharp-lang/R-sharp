@@ -255,7 +255,12 @@ Module plots
                                     env As Environment) As Object
 
         Dim uniqClass As String() = classList.Distinct.ToArray
-        Dim colors As Dictionary(Of String, Color) = uniqClass.CreateColorMaps(args!colorSet, env)
+        ' make the category colorset shuffle?
+        ' this may be usefull when too much category class to assign
+        Dim shuffles As Boolean = CLRVector.asLogical(args.getBySynonyms("shuffles", "colorset.shuffles")).DefaultFirst([default]:=False)
+        Dim colors As Dictionary(Of String, Color) = uniqClass.CreateColorMaps(
+            args.getBySynonyms("colorSet", "colors", "color_set"), env,
+            shuffles:=shuffles)
         Dim classSerials As New Dictionary(Of String, List(Of PointData))
 
         If classList.Length <> x.Length Then
