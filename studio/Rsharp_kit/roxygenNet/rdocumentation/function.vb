@@ -228,7 +228,7 @@ Public Class [function]
             If docs.author.IsNullOrEmpty Then
                 !show_authors = "none"
             Else
-                !show_authors = "bloc"
+                !show_authors = "block"
             End If
 
             If Strings.Trim(docs.examples).StringEmpty Then
