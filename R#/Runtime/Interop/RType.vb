@@ -123,6 +123,31 @@ Namespace Runtime.Interop
         Public ReadOnly Property isCollection As Boolean
 
         ''' <summary>
+        ''' is R# runtime type?
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property isPrimitive As Boolean
+            Get
+                Select Case mode
+                    Case TypeCodes.boolean,
+                         TypeCodes.dataframe,
+                         TypeCodes.double,
+                         TypeCodes.environment,
+                         TypeCodes.formula,
+                         TypeCodes.integer,
+                         TypeCodes.list,
+                         TypeCodes.NA,
+                         TypeCodes.raw,
+                         TypeCodes.string
+
+                        Return True
+                    Case Else
+                        Return False
+                End Select
+            End Get
+        End Property
+
+        ''' <summary>
         ''' Is dictionary of string and value types?
         ''' </summary>
         ''' <returns></returns>

@@ -51,6 +51,7 @@
 
 Imports System.ComponentModel
 Imports System.Reflection
+Imports System.Runtime.ConstrainedExecution
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -59,6 +60,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
@@ -156,8 +158,9 @@ Public Module rdocumentation
             xml = New ProjectType
         End If
 
-        Dim html As New StringBuilder(template)
+        Dim html As New ScriptBuilder(template)
         Dim desc As String = xml.Summary
+        Dim tree As New List(Of (title As String, Type))
 
         If desc.StringEmpty Then
             desc = xml.Remarks
@@ -167,20 +170,44 @@ Public Module rdocumentation
 
         desc = roxygen.markdown.Transform(desc)
 
-        If Not clr.BaseType Is GetType(Object) Then
-            desc = desc & "<br />" & $"<p>this class extends from {clr_xml.typeLink(clr.BaseType)} class.</p>"
+        With html
+            !title = clr.FullName
+            !name_title = clr.Name
+            !namespace = clr.Namespace
+            !summary = clr_xml.HandlingTypeReferenceInDocs(desc)
+            !declare = ts_code(clr, xml, tree:=tree)
+        End With
+
+        Dim tree_html As New StringBuilder
+
+        If tree.Any Then
+            tree_html.AppendLine("<ol>")
+
+            For Each r As (title As String, type As Type) In tree
+                Call clr_xml.push_clr(r.type)
+
+                ' generates the clr reference tree list node
+                tree_html.AppendLine($"<li>{r.title}: {clr_xml.typeLink(r.type)}</li>")
+            Next
+
+            tree_html.AppendLine("</ol>")
+        Else
+            tree_html.AppendLine("this clr type has no other .net clr type reference.")
         End If
 
-        Call html.Replace("{$title}", clr.FullName)
-        Call html.Replace("{$name_title}", clr.Name)
-        Call html.Replace("{$namespace}", clr.Namespace)
-        Call html.Replace("{$summary}", clr_xml.HandlingTypeReferenceInDocs(desc))
-        Call html.Replace("{$declare}", ts_code(clr, xml))
+        html!clr_tree = tree_html.ToString
 
         Return html.ToString
     End Function
 
-    Private Function ts_code(type As Type, xml As ProjectType) As String
+    ''' <summary>
+    ''' generates the type definition code of the given .net clr <paramref name="type"/>
+    ''' </summary>
+    ''' <param name="type"></param>
+    ''' <param name="xml"></param>
+    ''' <param name="tree"></param>
+    ''' <returns></returns>
+    Private Function ts_code(type As Type, xml As ProjectType, ByRef tree As List(Of (title As String, type As Type))) As String
         Dim ts As New StringBuilder
         Dim cls_name As String = type.Name
         Dim members As IEnumerable(Of MemberInfo)
@@ -189,9 +216,11 @@ Public Module rdocumentation
         Dim extends As String = ""
 
         If Not type.BaseType Is GetType(Object) Then
-            clr_xml.push_clr(type.BaseType)
+            Call clr_xml.push_clr(type.BaseType)
+
             ' add code show the class extends tree
             extends = $"extends {clr_xml.typeLink(type.BaseType)} "
+            tree.Add(($"this class extends from {clr_xml.typeLink(type.BaseType)} class", type.BaseType))
         End If
 
         Call ts.AppendLine()
@@ -250,6 +279,12 @@ Public Module rdocumentation
                 Call ts.AppendLine()
             Else
                 Call ts.AppendLine($"   {member.Name}: {clr_xml.typeLink(type)};")
+            End If
+
+            Dim rtype As RType = RType.GetRSharpType(type)
+
+            If Not rtype.isPrimitive Then
+                Call tree.Add(($"use by {If(TypeOf member Is PropertyInfo, "property", "field")} member {member.Name}", type))
             End If
         Next
 
