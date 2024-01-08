@@ -223,9 +223,15 @@ Public Class [function]
             !version = ver
             !copyright = copyright
             !show_details = If(docs.details.StringEmpty, "none", "block")
-            !authors = docs.author.JoinBy("<br />")
+            ' !authors = docs.author.JoinBy("<br />")
 
-            If Not docs.author.IsNullOrEmpty Then
+            docs.author = docs.author _
+                .SafeQuery _
+                .Where(Function(s) Not Strings.Trim(s) _
+                .StringEmpty(testEmptyFactor:=True)) _
+                .ToArray
+
+            If docs.author.IsNullOrEmpty AndAlso default_author.StringEmpty Then
                 !show_authors = "none"
             Else
                 !show_authors = "block"
@@ -244,9 +250,9 @@ Public Class [function]
             End If
 
             If docs.author.IsNullOrEmpty Then
-                !author = Strings.Trim(default_author).Replace("<", "&lt;")
+                !authors = Strings.Trim(default_author).Replace("<", "&lt;")
             Else
-                !author = docs.author.JoinBy(", ")
+                !authors = docs.author.JoinBy(", ").Replace("<", "&lt;")
             End If
 
             Return .ToString
