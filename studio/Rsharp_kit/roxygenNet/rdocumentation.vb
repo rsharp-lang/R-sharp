@@ -187,7 +187,7 @@ Public Module rdocumentation
                 Call clr_xml.push_clr(r.type)
 
                 ' generates the clr reference tree list node
-                tree_html.AppendLine($"<li>{r.title}: {clr_xml.typeLink(r.type)}</li>")
+                tree_html.AppendLine($"<li>{r.title}: {clr_xml.typeLink(r.type, show_clr_array:=False)}</li>")
             Next
 
             tree_html.AppendLine("</ol>")

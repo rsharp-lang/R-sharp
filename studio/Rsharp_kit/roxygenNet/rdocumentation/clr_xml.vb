@@ -112,7 +112,7 @@ Public Class clr_xml
     ''' </summary>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Friend Shared Function typeLink(type As Type) As String
+    Friend Shared Function typeLink(type As Type, Optional show_clr_array As Boolean = True) As String
         Dim rtype As RType = RType.GetRSharpType(type)
         Dim desc As String = ""
 
@@ -144,15 +144,20 @@ Public Class clr_xml
                 Else
                     Dim ns As String = type.Namespace.Replace("."c, "/"c)
                     Dim fileName As String = type.Name
+                    Dim typeName As String = type.Name
 
                     If type.IsArray Then
                         fileName = type.GetElementType.Name
+
+                        If Not show_clr_array Then
+                            typeName = fileName
+                        End If
                     End If
 
                     If Not desc.StringEmpty Then
-                        Return $"<a href=""/vignettes/clr/{ns}/{fileName}.html"">{desc}({type.Name})</a>"
+                        Return $"<a href=""/vignettes/clr/{ns}/{fileName}.html"">{desc}({typeName})</a>"
                     Else
-                        Return $"<a href=""/vignettes/clr/{ns}/{fileName}.html"">{type.Name}</a>"
+                        Return $"<a href=""/vignettes/clr/{ns}/{fileName}.html"">{typeName}</a>"
                     End If
                 End If
         End Select
