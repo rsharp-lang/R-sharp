@@ -284,7 +284,7 @@ Public Module rdocumentation
             Dim rtype As RType = RType.GetRSharpType(type)
 
             If Not rtype.isPrimitive Then
-                Call tree.Add(($"use by {If(TypeOf member Is PropertyInfo, "property", "field")} member {member.Name}", type))
+                Call tree.Add(($"use by <i>{If(TypeOf member Is PropertyInfo, "property", "field")}</i> member <code>{member.Name}</code>", type))
             End If
         Next
 
