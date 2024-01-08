@@ -225,7 +225,7 @@ Public Class [function]
             !show_details = If(docs.details.StringEmpty, "none", "block")
             !authors = docs.author.JoinBy("<br />")
 
-            If docs.author.IsNullOrEmpty Then
+            If Not docs.author.IsNullOrEmpty Then
                 !show_authors = "none"
             Else
                 !show_authors = "block"
