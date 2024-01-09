@@ -1670,6 +1670,5 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             Return newDf
         End Function
-
     End Module
 End Namespace

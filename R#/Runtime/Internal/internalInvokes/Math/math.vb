@@ -1037,6 +1037,34 @@ sample estimates:
             End If
         End Function
 
+        <ExportAPI("shuffle")>
+        Public Function shuffle(<RRawVectorArgument>
+                                x As Object,
+                                Optional env As Environment = Nothing) As Object
+
+            If TypeOf x Is list Then
+                Dim li As list = x
+                Dim names As String() = li.getNames.Shuffles
+
+                Return li.getByName(names)
+            ElseIf TypeOf x Is dataframe Then
+                ' get dataframe row shuffle
+                Dim df As dataframe = x
+                Dim rows = df.forEachRow.Shuffles
+
+                Return dataframe.CreateDataFrame(rows, df.colnames)
+            ElseIf TypeOf x Is vector Then
+                Dim vec As vector = x
+                Dim data = vec.data.AsObjectEnumerator.Shuffles
+
+                Return New vector(data, vec.elementType)
+            Else
+                Dim vec = REnv.asVector(Of Object)(x).AsObjectEnumerator.ToArray
+                vec = vec.Shuffles
+                Return vec
+            End If
+        End Function
+
         <Extension>
         Private Function shuffle(x As Array, replace As Boolean, prob As Object, env As Environment) As Object
             Dim index As Integer() = x.Length.SeqIterator(offset:=1).ToArray
