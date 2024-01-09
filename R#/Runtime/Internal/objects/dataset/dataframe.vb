@@ -313,6 +313,16 @@ Namespace Runtime.Internal.Object
             Return Nothing
         End Function
 
+        Public Function getBySynonym(ParamArray synonym As String()) As Array
+            For Each name As String In synonym
+                If columns.ContainsKey(name) Then
+                    Return columns(name)
+                End If
+            Next
+
+            Return Nothing
+        End Function
+
         ''' <summary>
         ''' get a vector from column data
         ''' </summary>
