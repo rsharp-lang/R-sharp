@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::81e33b9bd1258f673093306f6439324d, D:/GCModeller/src/R-sharp/Library/graphics//Plot2D/graphics2D.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 637
-    '    Code Lines: 476
-    ' Comment Lines: 84
-    '   Blank Lines: 77
-    '     File Size: 26.01 KB
+' Summaries:
 
 
-    ' Module graphics2D
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asciiArt, axisTicks, colorMapLegend, contourPolygon, contourTracing
-    '               DrawCircle, drawLegends, DrawRectangle, DrawTriangle, layout_grid
-    '               legend, line2D, measureString, offset2D, paddingString
-    '               paddingVector, plotColorMap, point2D, pointsVector, rasterHeatmap
-    '               (+2 Overloads) rectangle, scale, size, sizeVector
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 637
+'    Code Lines: 476
+' Comment Lines: 84
+'   Blank Lines: 77
+'     File Size: 26.01 KB
+
+
+' Module graphics2D
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asciiArt, axisTicks, colorMapLegend, contourPolygon, contourTracing
+'               DrawCircle, drawLegends, DrawRectangle, DrawTriangle, layout_grid
+'               legend, line2D, measureString, offset2D, paddingString
+'               paddingVector, plotColorMap, point2D, pointsVector, rasterHeatmap
+'               (+2 Overloads) rectangle, scale, size, sizeVector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -89,7 +89,8 @@ Imports Canvas = Microsoft.VisualBasic.Imaging.Graphics2D
 ''' 2D graphics
 ''' </summary>
 <Package("graphics2D")>
-Module graphics2D
+<RTypeExport("colormap", GetType(ColorMapLegend))>
+Module graphics2DTools
 
     Sub New()
         Call Internal.generic.add("plot", GetType(ColorMapLegend), AddressOf plotColorMap)
@@ -106,8 +107,22 @@ Module graphics2D
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="0,0")
         Dim margin As String = InteropArgumentHelper.getPadding(args!padding)
+        Dim barmap As Boolean = CLRVector.asLogical(args.getBySynonyms("bar")).DefaultFirst([default]:=False)
 
-        If Not size.SizeParser.IsValidGDIParameter Then
+        If barmap Then
+            Dim g As Canvas = New Size(256, 1).CreateGDIDevice
+            Dim colors As Brush() = legend.ScaleColors(n:=256) _
+                .Select(Function(c) DirectCast(New SolidBrush(c), Brush)) _
+                .ToArray
+
+            For i As Integer = 0 To colors.Length - 1
+                Call g.FillRectangle(colors(i), New Rectangle(i, 0, 1, 1))
+            Next
+
+            Call g.Flush()
+
+            Return g.ImageResource
+        ElseIf Not size.SizeParser.IsValidGDIParameter Then
             ' draw on current graphics context
             Dim dev As graphicsDevice = curDev
             Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
@@ -193,6 +208,12 @@ Module graphics2D
         Return layouts.ToArray
     End Function
 
+    ''' <summary>
+    ''' create a valid css padding string
+    ''' </summary>
+    ''' <param name="padding"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("paddingString")>
     Public Function paddingString(<RRawVectorArgument> padding As Object, Optional env As Environment = Nothing) As String
         Return InteropArgumentHelper.getPadding(padding, "padding: 0px 0px 0px 0px;")
@@ -211,9 +232,25 @@ Module graphics2D
         Return v
     End Function
 
+    ''' <summary>
+    ''' create a new color map legend
+    ''' </summary>
+    ''' <param name="colors"></param>
+    ''' <param name="ticks"></param>
+    ''' <param name="title"></param>
+    ''' <param name="mapLevels"></param>
+    ''' <param name="format"></param>
+    ''' <param name="tickAxisStroke"></param>
+    ''' <param name="tickFont"></param>
+    ''' <param name="titleFont"></param>
+    ''' <param name="unmapColor"></param>
+    ''' <param name="foreColor"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("colorMap.legend")>
-    Public Function colorMapLegend(<RRawVectorArgument>
-                                   colors As Object, ticks As Double(),
+    Public Function colorMapLegend(<RRawVectorArgument> colors As Object,
+                                   <RRawVectorArgument>
+                                   Optional ticks As Object = "0,1",
                                    Optional title As String = "Color Map",
                                    Optional mapLevels As Integer = 60,
                                    Optional format As String = "G3",
@@ -226,6 +263,7 @@ Module graphics2D
 
         Dim colorName As String = RColorPalette.getColorSet(colors)
         Dim foreColorEx As Color = RColorPalette.getColor(foreColor, [default]:="black").TranslateColor
+        Dim ticks_vec As Double() = CLRVector.asNumeric(ticks)
 
         Return New ColorMapLegend(colorName, mapLevels) With {
             .format = format,
@@ -234,7 +272,7 @@ Module graphics2D
             .ruleOffset = 5,
             .tickAxisStroke = Stroke.TryParse(tickAxisStroke).GDIObject,
             .tickFont = CSSFont.TryParse(tickFont).GDIObject(300),
-            .ticks = ticks,
+            .ticks = ticks_vec,
             .title = title,
             .titleFont = CSSFont.TryParse(titleFont).GDIObject(300),
             .unmapColor = RColorPalette.getColor(unmapColor, [default]:=Nothing),
