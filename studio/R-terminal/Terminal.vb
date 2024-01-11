@@ -187,6 +187,10 @@ RE0:
     ''' </summary>
     ''' <param name="x">should be a R# function</param>
     ''' <param name="env"></param>
+    ''' <example>
+    ''' # view the example code for function c();
+    ''' example(c);
+    ''' </example>
     <ExportAPI("example")>
     Public Function example(x As Object, Optional env As Environment = Nothing) As Object
         If x Is Nothing OrElse TypeOf x IsNot RMethodInfo Then
@@ -199,7 +203,7 @@ RE0:
         If docs Is Nothing Then
             Return Nothing
         Else
-            Return docs.example
+            Return vbCrLf & " " & docs.example
         End If
     End Function
 #End Region
