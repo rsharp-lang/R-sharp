@@ -162,7 +162,7 @@
     <ROW Component="System.Security.Permissions.dll" ComponentId="{24BBC942-0A58-4AC9-B4BA-FDB715AF9FE1}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Security.Permissions.dll"/>
     <ROW Component="System.Windows.Extensions.dll" ComponentId="{E8414299-7574-4BFD-B147-989961EB7BBB}" Directory_="net6.0_2_Dir" Attributes="0" KeyPath="System.Windows.Extensions.dll"/>
     <ROW Component="System.Windows.Extensions.dll_1" ComponentId="{967B7D80-1BB0-4575-8AC7-14BE6924DCE9}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Windows.Extensions.dll_1"/>
-    <ROW Component="base.1.0.0.nupkg" ComponentId="{9C27DAFC-42C5-476A-A366-0D4C0E770E2C}" Directory_="nuget_Dir" Attributes="0" KeyPath="base.1.0.0.nupkg" Type="0"/>
+    <ROW Component="base.1.0.0.nupkg" ComponentId="{9C27DAFC-42C5-476A-A366-0D4C0E770E2C}" Directory_="nuget_Dir" Attributes="0" KeyPath="devkit.1.0.0.nupkg" Type="0"/>
     <ROW Component="base.deps.json" ComponentId="{F0ED4640-E075-4B48-BD03-A876C6EF8803}" Directory_="bin_Dir" Attributes="0" KeyPath="base.deps.json" Type="0"/>
     <ROW Component="base.dll" ComponentId="{848C8B58-E62F-4C6F-BAD0-3EECAEB58663}" Directory_="bin_Dir" Attributes="256" KeyPath="base.dll"/>
     <ROW Component="batch.dll" ComponentId="{AB571461-637A-4F5E-BE28-32470BF6AA9E}" Directory_="bin_Dir" Attributes="256" KeyPath="batch.dll"/>
@@ -314,7 +314,6 @@
     <ROW File="Rserver.deps.json" Component_="base.deps.json" FileName="RSERVE~3.JSO|Rserver.deps.json" Attributes="0" SourcePath="..\App\net6.0\Rserver.deps.json" SelfReg="false"/>
     <ROW File="signalKit.deps.json" Component_="base.deps.json" FileName="SIGNAL~1.JSO|signalKit.deps.json" Attributes="0" SourcePath="..\App\net6.0\signalKit.deps.json" SelfReg="false"/>
     <ROW File="signalKit.dll" Component_="signalKit.dll" FileName="SIGNAL~1.DLL|signalKit.dll" Attributes="0" SourcePath="..\App\net6.0\signalKit.dll" SelfReg="false"/>
-    <ROW File="base.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="BASE10~1.NUP|base.1.0.0.nupkg" Attributes="0" SourcePath="..\App\base.1.0.0.nupkg" SelfReg="false"/>
     <ROW File="devkit.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="DEVKIT~1.NUP|devkit.1.0.0.nupkg" Attributes="0" SourcePath="..\App\devkit.1.0.0.nupkg" SelfReg="false"/>
     <ROW File="graphics.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="GRAPHI~1.NUP|graphics.1.0.0.nupkg" Attributes="0" SourcePath="..\App\graphics.1.0.0.nupkg" SelfReg="false"/>
     <ROW File="igraph.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="IGRAPH~1.NUP|igraph.1.0.0.nupkg" Attributes="0" SourcePath="..\App\igraph.1.0.0.nupkg" SelfReg="false"/>
@@ -327,7 +326,6 @@
     <ROW File="Rlapack.5.0.1.2389.nupkg" Component_="base.1.0.0.nupkg" FileName="RLAPAC~1.NUP|Rlapack.5.0.1.2389.nupkg" Attributes="0" SourcePath="..\App\Rlapack.5.0.1.2389.nupkg" SelfReg="false"/>
     <ROW File="roxygenNet.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="ROXYGE~1.NUP|roxygenNet.1.0.0.nupkg" Attributes="0" SourcePath="..\App\roxygenNet.1.0.0.nupkg" SelfReg="false"/>
     <ROW File="Rserver.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="RSERVE~1.NUP|Rserver.1.0.0.nupkg" Attributes="0" SourcePath="..\App\Rserver.1.0.0.nupkg" SelfReg="false"/>
-    <ROW File="Rstudio.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="RSTUDI~1.NUP|Rstudio.1.0.0.nupkg" Attributes="0" SourcePath="..\App\Rstudio.1.0.0.nupkg" SelfReg="false"/>
     <ROW File="snowFall.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="SNOWFA~1.NUP|snowFall.1.0.0.nupkg" Attributes="0" SourcePath="..\App\snowFall.1.0.0.nupkg" SelfReg="false"/>
     <ROW File="webKit.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="WEBKIT~1.NUP|webKit.1.0.0.nupkg" Attributes="0" SourcePath="..\App\webKit.1.0.0.nupkg" SelfReg="false"/>
     <ROW File="batch.deps.json" Component_="base.deps.json" FileName="BATCHD~1.JSO|batch.deps.json" Attributes="0" SourcePath="..\App\net6.0\batch.deps.json" SelfReg="false"/>
@@ -358,6 +356,7 @@
     <ROW File="System.Security.Cryptography.ProtectedData.dll_1" Component_="System.Security.Cryptography.ProtectedData.dll_1" FileName="SYSTE~10.DLL|System.Security.Cryptography.ProtectedData.dll" Attributes="0" SourcePath="..\App\net6.0\System.Security.Cryptography.ProtectedData.dll" SelfReg="false"/>
     <ROW File="System.Security.Permissions.dll" Component_="System.Security.Permissions.dll" FileName="SYSTE~11.DLL|System.Security.Permissions.dll" Attributes="0" SourcePath="..\App\net6.0\System.Security.Permissions.dll" SelfReg="false"/>
     <ROW File="System.Windows.Extensions.dll_1" Component_="System.Windows.Extensions.dll_1" FileName="SYSTE~12.DLL|System.Windows.Extensions.dll" Attributes="0" SourcePath="..\App\net6.0\System.Windows.Extensions.dll" SelfReg="false"/>
+    <ROW File="base.6.0.0.3654.nupkg" Component_="base.1.0.0.nupkg" FileName="BASE60~1.NUP|base.6.0.0.3654.nupkg" Attributes="0" SourcePath="..\App\base.6.0.0.3654.nupkg" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
