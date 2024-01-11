@@ -394,6 +394,10 @@ Namespace Runtime.Internal.Invokes
         ''' A special situation occurs When there Is no (after omission 
         ''' Of NAs) nonempty argument left, see min.
         ''' </remarks>
+        ''' <example>
+        ''' # [2] 1 6
+        ''' range(1:6);
+        ''' </example>
         <ExportAPI("range")>
         <RApiReturn(GetType(Double))>
         Public Function range(<RRawVectorArgument>
@@ -526,6 +530,15 @@ Namespace Runtime.Internal.Invokes
         '''
         ''' seq.int, seq_along And seq_len are primitive.
         ''' </remarks>
+        ''' <example>
+        ''' seq(1, 5);
+        ''' # is equals to
+        ''' 1:5;
+        ''' 
+        ''' seq(1, 5, by = 0.1);
+        ''' # is equals to
+        ''' 1:5 step 0.1;
+        ''' </example>
         <ExportAPI("seq")>
         Public Function seq(from As Object, [to] As Object,
                             Optional by As Object = 1.0,
@@ -616,6 +629,14 @@ Namespace Runtime.Internal.Invokes
         ''' NULL or an expression or a vector of an appropriate mode. 
         ''' (With no arguments the value is NULL.)
         ''' </returns>
+        ''' <example>
+        ''' # for the vector literal, use the syntax of [] literal is better:
+        ''' 
+        ''' # use c() function
+        ''' c(1,2,3,4,5,6)
+        ''' # is equals to the vector literal syntax
+        ''' [1 2 3 4 5 6]
+        ''' </example>
         <ExportAPI("c")>
         Public Function c(<RListObjectArgument> values As Object, Optional env As Environment = Nothing) As Object
             Dim list As New List(Of Object)
