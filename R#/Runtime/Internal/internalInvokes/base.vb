@@ -134,6 +134,19 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="x"></param>
         ''' <returns></returns>
+        ''' <example>
+        ''' # TRUE
+        ''' isTRUE(TRUE);
+        ''' 
+        ''' # FALSE
+        ''' isTRUE("TRUE");
+        ''' 
+        ''' # FALSE
+        ''' isTRUE(FALSE);
+        ''' 
+        ''' # FALSE
+        ''' isTRUE([TRUE TRUE]);
+        ''' </example>
         <ExportAPI("isTRUE")>
         Public Function isTRUE(<RRawVectorArgument> x As Object) As Boolean
             Dim vx = REnv.asVector(Of Object)(x)
