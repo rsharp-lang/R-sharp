@@ -223,9 +223,10 @@ RE0:
 Welcome to the R# language
 ")
         Call Console.WriteLine()
-        Call Console.WriteLine("Type 'demo()' for some demos, 'help()' for on-line help, or
+        Call Console.WriteLine("Type 'ls(""REnv"")' for get internal functions, 'example' for view function usage example 
+code, example as 'example(example)', or
 'help.start()' for an HTML browser interface to help.
-Type 'q()' to quit R.
+Type 'q()' to quit R#.
 ")
     End Sub
 
