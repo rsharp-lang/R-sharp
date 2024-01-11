@@ -21,7 +21,6 @@
 + [corr](stats/corr.1) matrix correlation
 + [corr_sign](stats/corr_sign.1) 
 + [corr.test](stats/corr.test.1) Find the correlations, sample sizes, and probability 
-+ [dnorm](stats/dnorm.1) 
 + [quantile](stats/quantile.1) ### Sample Quantiles
 + [median](stats/median.1) 
 + [level](stats/level.1) get quantile levels

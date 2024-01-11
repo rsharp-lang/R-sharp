@@ -7,11 +7,14 @@ R# data clustering tools
 + [gmm.components](clustering/gmm.components.1) 
 + [gmm.predict_proba](clustering/gmm.predict_proba.1) 
 + [cmeans](clustering/cmeans.1) ### the cmeans algorithm module
++ [getTraceback](clustering/getTraceback.1) get the clustering traceback
 + [kmeans](clustering/kmeans.1) K-Means Clustering
 + [lloyds](clustering/lloyds.1) 
++ [silhouette_score](clustering/silhouette_score.1) Silhouette Coefficient
 + [hclust](clustering/hclust.1) Hierarchical Clustering
 + [btree](clustering/btree.1) do clustering via binary tree
 + [density](clustering/density.1) evaluate density of the raw data
++ [clusters](clustering/clusters.1) get or set the cluster class labels
 + [cluster.groups](clustering/cluster.groups.1) ### get cluster result data
 + [dbscan_objects](clustering/dbscan_objects.1) find objects from a given set of 2d points
 + [hdbscan](clustering/hdbscan.1) 

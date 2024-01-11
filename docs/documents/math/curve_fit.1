@@ -1,0 +1,46 @@
+.\" man page create by R# package system.
+.TH MATH 2 2000-Jan "curve_fit" "curve_fit"
+.SH NAME
+curve_fit \- Use non-linear least squares to fit a function, f, to data.
+.SH SYNOPSIS
+\fIcurve_fit(\fBf\fR as any, 
+\fBxdata\fR as any, 
+\fBydata\fR as any, 
+..., 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Use non-linear least squares to fit a function, f, to data.
+ 
+ Assumes \fBydata = f(xdata, args) + eps\fR.
+.PP
+.SH OPTIONS
+.PP
+\fBf\fB \fR\- The model function, f(x, …). It must take the independent variable 
+ as the first argument and the parameters to fit as separate remaining arguments.
+. 
+.PP
+.PP
+\fBxdata\fB \fR\- The independent variable where the data is measured. Should usually
+ be an M-length sequence or an (k,M)-shaped array for functions with k predictors, 
+ and each element should be float convertible if it is an array like object.. 
+.PP
+.PP
+\fBydata\fB \fR\- The dependent data, a length M array - nominally f(xdata, ...).. 
+.PP
+.PP
+\fBargs\fB \fR\- arguments to fit in the given function **`f`**.. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH SEE ALSO
+math
+.SH FILES
+.PP
+Rlapack.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@live.com\fR
+.SH COPYRIGHT
+GPL3

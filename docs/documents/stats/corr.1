@@ -5,7 +5,8 @@ corr \- matrix correlation
 .SH SYNOPSIS
 \fIcorr(\fBx\fR as <generic> dataframe, 
 \fBy\fR as <generic> dataframe = \fB<NULL>\fR, 
-\fBspearman\fR as boolean = FALSE);\fR
+\fBspearman\fR as boolean = FALSE, 
+\fBpositive\fR as boolean = FALSE);\fR
 .SH DESCRIPTION
 .PP
 matrix correlation
@@ -13,6 +14,11 @@ matrix correlation
 .SH OPTIONS
 .PP
 \fBx\fB \fR\- evaluate correlation for each row elements. 
+.PP
+.PP
+\fBpositive\fB \fR\- 
+ only takes the positive part of the correlation matrix?
+. 
 .PP
 .SH SEE ALSO
 stats

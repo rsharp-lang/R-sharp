@@ -3,9 +3,9 @@
 2D graphics
 
 + [layout.grid](graphics2D/layout.grid.1) 
-+ [paddingString](graphics2D/paddingString.1) 
++ [paddingString](graphics2D/paddingString.1) create a valid css padding string
 + [paddingVector](graphics2D/paddingVector.1) 
-+ [colorMap.legend](graphics2D/colorMap.legend.1) 
++ [colorMap.legend](graphics2D/colorMap.legend.1) create a new color map legend
 + [legend](graphics2D/legend.1) create a legend element
 + [measureString](graphics2D/measureString.1) 
 + [draw.legend](graphics2D/draw.legend.1) 
