@@ -77,7 +77,7 @@ Namespace Runtime.Interop
 
             Return $"let ``{api.name}`` as function({params}) -> ``{returns.JoinBy("|")}`` {{
     #
-    # .NET API information
+    # .NET clr API information
     #
     # module: {rawDeclare}
     # LibPath: {raw.Assembly.Location.ParentPath}

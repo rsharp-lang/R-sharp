@@ -180,6 +180,20 @@ RE0:
     Public Sub [exit](status As Integer)
         Call App.Exit(status)
     End Sub
+
+    ''' <summary>
+    ''' get example usage of the specific function
+    ''' </summary>
+    ''' <param name="x">should be a R# function</param>
+    ''' <param name="env"></param>
+    <ExportAPI("example")>
+    Public Function example(x As Object, Optional env As Environment = Nothing) As Object
+        If x Is Nothing OrElse TypeOf x IsNot RMethodInfo Then
+            Return Nothing
+        End If
+
+        Dim docs = DirectCast(x, RMethodInfo).GetPrintContent
+    End Function
 #End Region
 
     Sub New()
