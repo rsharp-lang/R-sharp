@@ -158,7 +158,7 @@ Module clustering
     End Function
 
     ''' <summary>
-    ''' 
+    ''' <see cref="clusterResultDataFrame"/>
     ''' </summary>
     ''' <param name="tree"></param>
     ''' <param name="args">
@@ -175,6 +175,15 @@ Module clustering
             .clusterResultDataFrame(args, env)
     End Function
 
+    ''' <summary>
+    ''' generates a cluster result dataframe with data:
+    ''' 
+    ''' rownames, [Cluster, ...property_names...]
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <Extension>
     Public Function clusterResultDataFrame(data As EntityClusterModel(), args As list, env As Environment) As Rdataframe
         Dim table As File = data.ToCsvDoc
@@ -1207,9 +1216,22 @@ Module clustering
             Return Message.InCompatibleType(GetType(Rdataframe), x.GetType, env)
         End If
 
+        Call VBDebugger.EchoLine("build kd-tree for the input dataset...")
+
         Dim graph As New KNNGraph(data)
+
+        Call VBDebugger.EchoLine("build kd-tree finished!")
+        Call VBDebugger.EchoLine("do knn search and build binary avl-tree for run clustering...")
+
         Dim clusters As BTreeCluster = graph.GetGraph(k, jaccard)
-        Dim args As New list With {.slots = New Dictionary(Of String, Object) From {{"colnames", colnames}}}
+        Dim args As New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"colnames", colnames}
+            }
+        }
+
+        Call VBDebugger.EchoLine("export cluster dataframe...")
+
         Dim result As Rdataframe = clusters.treeDf(args, env)
 
         Return result

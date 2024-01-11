@@ -18,3 +18,4 @@ the R# math module
 + [cosine](math/cosine.1) Evaluate cos similarity of two vector
 + [sim](math/sim.1) Create a similarity matrix
 + [RamerDouglasPeucker](math/RamerDouglasPeucker.1) ### Ramer-Douglas-Peucker algorithm for curve fitting with a PolyLine
++ [curve_fit](math/curve_fit.1) Use non-linear least squares to fit a function, f, to data.

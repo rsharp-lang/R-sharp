@@ -51,11 +51,15 @@
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.NLP
+Imports Microsoft.VisualBasic.Data.NLP.LDA
 Imports Microsoft.VisualBasic.Data.NLP.Model
+Imports Microsoft.VisualBasic.Data.NLP.Word2Vec
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -64,6 +68,95 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ''' </summary>
 <Package("NLP")>
 Module NLP
+
+    Private Function getText(text As Object, env As Environment) As [Variant](Of Message, Paragraph())
+        Dim pull As pipeline = pipeline.TryCreatePipeline(Of String)(text, env)
+
+        If pull.isError Then
+            pull = pipeline.TryCreatePipeline(Of Paragraph)(text, env)
+
+            If pull.isError Then
+                Return pull.getError
+            Else
+                Return pull _
+                    .populates(Of Paragraph)(env) _
+                    .ToArray
+            End If
+        Else
+            Return pull.populates(Of String)(env) _
+                .Select(Function(si) Paragraph.Segmentation(text:=si)) _
+                .IteratesALL _
+                .ToArray
+        End If
+    End Function
+
+    ''' <summary>
+    ''' create a corpus for LDA modelling
+    ''' </summary>
+    ''' <param name="text">a vector of the character string data or a collection 
+    ''' of the text <see cref="Paragraph"/> data.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("ldaCorpus")>
+    <RApiReturn(GetType(Corpus))>
+    Public Function ldaCorpus(<RRawVectorArgument> text As Object, Optional env As Environment = Nothing) As Object
+        Dim pull = getText(text, env)
+
+        If pull Like GetType(Message) Then
+            Return pull.TryCast(Of Message)
+        End If
+
+        Dim rawdata As Paragraph() = pull
+        Dim corpus As New Corpus
+
+        For Each p As Paragraph In rawdata
+            For Each line As Sentence In p.sentences
+                Call corpus.addDocument(document:=line.GetWords)
+            Next
+        Next
+
+        Return corpus
+    End Function
+
+    ''' <summary>
+    ''' word2vec embedding
+    ''' </summary>
+    ''' <param name="text">a vector of the character string data or a collection 
+    ''' of the text <see cref="Paragraph"/> data.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("word2vec")>
+    <RApiReturn(GetType(VectorModel))>
+    Public Function word2vec(<RRawVectorArgument> text As Object,
+                             Optional method As TrainMethod = TrainMethod.Skip_Gram,
+                             Optional freq As Integer = 3,
+                             Optional win_size As Integer = 5,
+                             Optional env As Environment = Nothing) As Object
+
+        Dim pull = getText(text, env)
+
+        If pull Like GetType(Message) Then
+            Return pull.TryCast(Of Message)
+        End If
+
+        Dim rawdata As Paragraph() = pull
+        Dim wv As Word2Vec = (New Word2VecFactory()) _
+            .setMethod(method) _
+            .setNumOfThread(1) _
+            .setFreqThresold(freq) _
+            .setWindow(win_size) _
+            .build()
+
+        For Each p As Paragraph In rawdata
+            For Each line As Sentence In p.sentences
+                Call wv.readTokens(line)
+            Next
+        Next
+
+        Call wv.training()
+
+        Return wv.outputVector
+    End Function
 
     ''' <summary>
     ''' split the given text into multiple parts

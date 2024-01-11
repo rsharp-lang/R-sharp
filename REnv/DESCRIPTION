@@ -1,10 +1,11 @@
 Package: REnv
 Type: Package
 Title: R Environment Programming Utils
-Version: 1.0.0.1254
-Date: 2021-01-25
-Author: xieguigang
-Maintainer: xieguigang <gg.xie@bionovogene.com>
-Description: An internal package for R environment programming on unix platform.
+Version: 1.3.354.9981
+Date: 2024-01-08
+Author: xieguigang <xie.guigang@gcmodeller.org>
+Maintainer: xieguigang <xie.guigang@gcmodeller.org>
+Description: An internal utils package for R# environment programming on 
+    unix platform, build R# packages, load demo datasets, etc.
 License: MIT
 RoxygenNote: 7.1.1

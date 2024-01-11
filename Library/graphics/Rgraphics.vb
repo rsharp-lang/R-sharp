@@ -416,7 +416,7 @@ Module Rgraphics
             args:=New list With {.slots = New Dictionary(Of String, Object) From {{"size", $"{dims.Width},{dims.Height}"}}},
             env:=env
         )
-        Call graphics2D.rasterHeatmap(raster, colorName:=colors, dimSize:=dims, env:=env)
+        Call graphics2DTools.rasterHeatmap(raster, colorName:=colors, dimSize:=dims, env:=env)
         Call Internal.Invokes.graphics.devOff(env:=env)
         Call ms.Flush()
 

@@ -1,0 +1,69 @@
+.\" man page create by R# package system.
+.TH REFLECTIONS 1 2002-May "attr" "attr"
+.SH NAME
+attr \- Object Attributes
+.SH SYNOPSIS
+\fIattr(\fBx\fR as any, 
+\fBwhich\fR as string, 
+\fBexact\fR as boolean = FALSE, 
+\fBvalue\fR as any = \fB<NULL>\fR, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Object Attributes
+ 
+ Get or set specific attributes of an object.
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- an object whose attributes are to be accessed.. 
+.PP
+.PP
+\fBwhich\fB \fR\- a non-empty character string specifying which attribute is to be accessed.. 
+.PP
+.PP
+\fBexact\fB \fR\- logical: should which be matched exactly?. 
+.PP
+.PP
+\fBvalue\fB \fR\- an object, the new value of the attribute, or NULL to remove the attribute.. 
+.PP
+.PP
+\fBenv\fB \fR\- -. 
+.PP
+.SH VALUE
+.PP
+For the extractor, the value of the attribute matched, or NULL if no exact 
+ match is found and no or more than one partial match is found.
+.PP
+.SH DETAILS
+.PP
+These functions provide access to a single attribute of an object. The replacement 
+ form causes the named attribute to take the value specified (or create a new attribute
+ with the value given).
+ 
+ The extraction Function first looks For an exact match To which amongst the attributes 
+ Of x, Then (unless exact = True) a unique Partial match. (Setting options(warnPartialMatchAttr = True) 
+ causes Partial matches To give warnings.)
+ 
+ The replacement Function only uses exact matches.
+ 
+ Note that some attributes (namely Class, comment, Dim, dimnames, names, row.names And tsp) 
+ are treated specially And have restrictions On the values which can be Set. (Note that 
+ this Is Not True Of levels which should be Set For factors via the levels replacement 
+ Function.)
+ 
+ The extractor Function allows (And does Not match) empty And missing values Of which: the 
+ replacement Function does Not.
+ 
+ NULL objects cannot have attributes And attempting To assign one by attr gives an Error.
+ 
+ Both are primitive functions.
+.PP
+.SH SEE ALSO
+reflections
+.SH FILES
+.PP
+REnv.dll
+.PP
+.SH COPYRIGHT
+GPL3

@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::7bfafd8ba0bd18b9008ba33d51051e75, R-sharp\Library\R_graphic.interop\RColorPalette.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 168
-    '    Code Lines: 134
-    ' Comment Lines: 15
-    '   Blank Lines: 19
-    '     File Size: 6.69 KB
+' Summaries:
 
 
-    ' Module RColorPalette
-    ' 
-    '     Function: CreateColorMaps, getColor, getColors, getColorSequence, getColorSet
-    '               GetRawColor
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 168
+'    Code Lines: 134
+' Comment Lines: 15
+'   Blank Lines: 19
+'     File Size: 6.69 KB
+
+
+' Module RColorPalette
+' 
+'     Function: CreateColorMaps, getColor, getColors, getColorSequence, getColorSet
+'               GetRawColor
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -96,17 +96,31 @@ Module RColorPalette
         End If
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="uniqClass"></param>
+    ''' <param name="colorArguments"></param>
+    ''' <param name="env"></param>
+    ''' <param name="[default]"></param>
+    ''' <param name="shuffles">
+    ''' this options not working on the situation when the <paramref name="colorArguments"/> 
+    ''' is a tuple list unique key-value mapping
+    ''' </param>
+    ''' <returns></returns>
     <Extension>
     Public Function CreateColorMaps(uniqClass As String(),
                                     colorArguments As Object,
                                     env As Environment,
-                                    Optional [default] As String = "Clusters") As Dictionary(Of String, Color)
+                                    Optional [default] As String = "Clusters",
+                                    Optional shuffles As Boolean = False) As Dictionary(Of String, Color)
 
         If TypeOf colorArguments Is list Then
             ' key -> color mapping
             Dim colorList As list = DirectCast(colorArguments, list)
             Dim colors As New Dictionary(Of String, Color)
 
+            ' shuffles will not working
             For Each classLabel As String In uniqClass
                 colors(classLabel) = RColorPalette.GetRawColor(colorList.getByName(classLabel))
             Next
@@ -116,7 +130,13 @@ Module RColorPalette
             ' string vector
             ' mapping in orders
             Dim colorSet As String() = RColorPalette.getColors(colorArguments, uniqClass.Length, [default])
-            Dim colors As Dictionary(Of String, Color) = uniqClass.CreateColorMaps(colorSet)
+            Dim colors As Dictionary(Of String, Color)
+
+            If shuffles Then
+                colorSet = colorSet.Shuffles
+            End If
+
+            colors = uniqClass.CreateColorMaps(colorSet)
 
             Return colors
         End If

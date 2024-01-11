@@ -659,22 +659,35 @@ Module stats
     ''' matrix correlation
     ''' </summary>
     ''' <param name="x">evaluate correlation for each row elements</param>
+    ''' <param name="positive">
+    ''' only takes the positive part of the correlation matrix?
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("corr")>
     <RApiReturn(GetType(CorrelationMatrix))>
-    Public Function corr(x As Rdataframe, Optional y As Rdataframe = Nothing, Optional spearman As Boolean = False) As Object
+    Public Function corr(x As Rdataframe, Optional y As Rdataframe = Nothing,
+                         Optional spearman As Boolean = False,
+                         Optional positive As Boolean = False) As Object
+
+        Dim cor As CorrelationMatrix
+
         If y Is Nothing Then
             Dim rows As DataSet() = x.getRowNames _
                 .Select(Function(id, index)
                             Return x.dataframeRow(Of Double, DataSet)(id, index)
                         End Function) _
                 .ToArray
-            Dim cor As CorrelationMatrix = rows.Correlation(spearman)
 
-            Return cor
+            cor = rows.Correlation(spearman)
         Else
             Throw New NotImplementedException
         End If
+
+        If positive Then
+            cor = cor.PositiveMatrix
+        End If
+
+        Return cor
     End Function
 
     <ExportAPI("corr_sign")>

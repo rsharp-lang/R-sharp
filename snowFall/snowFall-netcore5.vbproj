@@ -4,7 +4,7 @@
     <RootNamespace>snowFall</RootNamespace>
     <TargetFrameworks>net6.0;net6.0-windows</TargetFrameworks>
     <AssemblyName>snowFall</AssemblyName>
-    <Description>High Performance Parallel Compute Library on Unix .NET 5 runtime for R# scripting</Description>
+    <Description>High Performance Parallel Compute Library on Unix .NET 6 runtime for R# scripting</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Copyright>I@xieguigang.me</Copyright>
@@ -17,6 +17,8 @@
     <RepositoryType>git</RepositoryType>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <OptionStrict>Off</OptionStrict>
+    <Title>package library for R# parallel programming on unix .netcore environment</Title>
+    <IncludeSymbols>True</IncludeSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

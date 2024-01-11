@@ -1,0 +1,49 @@
+.\" man page create by R# package system.
+.TH CLUSTERING 2 2000-Jan "silhouette_score" "silhouette_score"
+.SH NAME
+silhouette_score \- Silhouette Coefficient
+.SH SYNOPSIS
+\fIsilhouette_score(\fBx\fR as any, 
+[\fB<Environment>\fR]);\fR
+.SH DESCRIPTION
+.PP
+Silhouette Coefficient
+.PP
+.SH OPTIONS
+.PP
+\fBx\fB \fR\- the cluster result. 
+.PP
+.SH DETAILS
+.PP
+Silhouette score is used to evaluate the quality of clusters created using clustering 
+ algorithms such as K-Means in terms of how well samples are clustered with other samples 
+ that are similar to each other. The Silhouette score is calculated for each sample of 
+ different clusters. To calculate the Silhouette score for each observation/data point, 
+ the following distances need to be found out for each observations belonging to all the 
+ clusters:
+ 
+ Mean distance between the observation And all other data points In the same cluster. This
+ distance can also be called a mean intra-cluster distance. The mean distance Is denoted by a
+ Mean distance between the observation And all other data points Of the Next nearest cluster.
+ This distance can also be called a mean nearest-cluster distance. The mean distance Is 
+ denoted by b
+ 
+ Silhouette score, S, for Each sample Is calculated Using the following formula:
+ 
+ \(S = \frac{(b - a)}{max(a, b)}\)
+ 
+ The value Of the Silhouette score varies from -1 To 1. If the score Is 1, the cluster Is
+ dense And well-separated than other clusters. A value near 0 represents overlapping clusters
+ With samples very close To the decision boundary Of the neighboring clusters. A negative 
+ score [-1, 0] indicates that the samples might have got assigned To the wrong clusters.
+.PP
+.SH SEE ALSO
+clustering
+.SH FILES
+.PP
+MLkit.dll
+.PP
+.SH AUTHOR
+Written by \fBxie.guigang@live.com\fR
+.SH COPYRIGHT
+I@XIEGUIGANG.ME
