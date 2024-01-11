@@ -60,6 +60,7 @@
 
 Imports System.Threading
 Imports Microsoft.VisualBasic.ApplicationServices.Development
+Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.UnixBash
@@ -192,7 +193,14 @@ RE0:
             Return Nothing
         End If
 
-        Dim docs = DirectCast(x, RMethodInfo).GetPrintContent
+        Dim rdocumentation = env.globalEnvironment.packages.packageDocs
+        Dim docs As ProjectMember = rdocumentation.GetAnnotations(DirectCast(x, RMethodInfo).GetNetCoreCLRDeclaration)
+
+        If docs Is Nothing Then
+            Return Nothing
+        Else
+            Return docs.example
+        End If
     End Function
 #End Region
 
