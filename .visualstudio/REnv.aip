@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="19.0" version="19.0" Modules="professional" RootPath="." Language="en" Id="{26CBFD8E-EF17-4481-941B-06411A2B29B3}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="19.0" version="20.7.1" Modules="professional" RootPath="." Language="en" Id="{26CBFD8E-EF17-4481-941B-06411A2B29B3}">
+  <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
+    <ROW Name="HiddenItems" Value="ActSyncAppComponent;CPLAppletComponent;AppXAppDetailsComponent;FixupComponent;AppXCapabilitiesComponent;AppXDependenciesComponent;AppXProductDetailsComponent;AppXVisualAssetsComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
+  </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
-    <ROW Property="AI_CURRENT_YEAR" Value="2022" ValueLocId="-"/>
     <ROW Property="AI_EXTERNALUIUNINSTALLERNAME" MultiBuildValue="DefaultBuild:aiui"/>
     <ROW Property="AI_FINDEXE_TITLE" Value="Select the installation package for [|ProductName]" ValueLocId="AI.Property.FindExeTitle"/>
     <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_INTERNET_CONNECTION"/>
@@ -11,19 +13,19 @@
     <ROW Property="ALLUSERS" Value="1" MultiBuildValue="DefaultBuild:"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPCONTACT" Value="xie.guigang@gcmodeller.org"/>
-    <ROW Property="ARPHELPLINK" Value="https://github.com/rsharp-lang/R-sharp"/>
+    <ROW Property="ARPHELPLINK" Value="https://rsharp.net"/>
     <ROW Property="ARPNOREPAIR" Value="1" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="ARPPRODUCTICON" Value="PrideIconRound.exe" Type="8"/>
     <ROW Property="ARPSYSTEMCOMPONENT" Value="1"/>
     <ROW Property="ARPURLINFOABOUT" Value="https://github.com/rsharp-lang/R-sharp"/>
     <ROW Property="ARPURLUPDATEINFO" Value="https://github.com/rsharp-lang/R-sharp"/>
     <ROW Property="AiWinUI" MultiBuildValue="DefaultBuild:1"/>
-    <ROW Property="Manufacturer" Value="SMRUCC"/>
+    <ROW Property="Manufacturer" Value="SMRUCC genomics institution[GuiLin China]"/>
     <ROW Property="MsiLogging" MultiBuildValue="DefaultBuild:vp"/>
-    <ROW Property="ProductCode" Value="1033:{2D2256C2-F00B-4511-9292-AE9F2EAF6227} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{8F857CF6-7E1B-4BA3-ACA8-462289B97127} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="RSharp"/>
-    <ROW Property="ProductVersion" Value="1.0.0" Type="32"/>
+    <ROW Property="ProductVersion" Value="1.2.0" Options="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{8A7A2B89-A347-40C8-B830-2020CAC32DB5}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -58,7 +60,7 @@
     <ROW Directory="win_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
-    <ROW Component="AI_CustomARPName" ComponentId="{3FFADE65-A5D5-4AB6-9E90-F0DB356C194B}" Directory_="APPDIR" Attributes="260" KeyPath="DisplayName" Options="1"/>
+    <ROW Component="AI_CustomARPName" ComponentId="{7CAB7F49-4A0E-4311-87F3-7EFFBBA40D6B}" Directory_="APPDIR" Attributes="260" KeyPath="DisplayName" Options="1"/>
     <ROW Component="AI_ExePath" ComponentId="{254A8CF2-653A-41D0-B0EF-2FBD06615D7C}" Directory_="APPDIR" Attributes="260" KeyPath="AI_ExePath"/>
     <ROW Component="APPDIR" ComponentId="{76D04525-DDB8-4375-9C3C-33C235783FE7}" Directory_="APPDIR" Attributes="0"/>
     <ROW Component="Flute.Http.dll" ComponentId="{76B4B11A-7827-4F4D-A894-BF8D558F55EC}" Directory_="bin_Dir" Attributes="256" KeyPath="Flute.Http.dll"/>
@@ -73,23 +75,30 @@
     <ROW Component="Microsoft.VisualBasic.Data.Framework.dll" ComponentId="{AA7A0435-BA30-497F-B9B8-9FFCF2174942}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.Framework.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.GraphQuery.dll" ComponentId="{D7D8B510-CFD5-4965-8B75-F7E44373A50F}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.GraphQuery.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.GraphTheory.dll" ComponentId="{A50B472F-8177-43A8-8E0E-8B2F906414A0}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.GraphTheory.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Data.IO.HDF5.dll" ComponentId="{4F5ACF82-77BD-4592-81AE-7F9933CABEF8}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.IO.HDF5.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.IO.MessagePack.dll" ComponentId="{539A2A5C-2217-4D2C-9F7D-0594962C87E3}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.IO.MessagePack.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Data.IO.SQLite3.dll" ComponentId="{BC38B78E-0D3F-435D-8CA3-DFD4D567A3CF}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.IO.SQLite3.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.Signal.IO.dll" ComponentId="{0457D0CF-A557-48D3-B888-74019869029D}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.Signal.IO.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.Storage.dll" ComponentId="{B387383C-DD9C-45AF-A053-0DDAD02B0FCD}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.Storage.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.TrinityNLP.dll" ComponentId="{BCFD3EE8-B03D-4735-8595-7C290047A0E5}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.TrinityNLP.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.Wave.dll" ComponentId="{36ADE33C-7B43-4A2D-8E89-159B9348E8F7}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.Wave.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.visualize.Network.IO.Extensions.dll" ComponentId="{A203FA8E-57CC-4436-A172-DF4E2F67F08F}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.visualize.Network.IO.Extensions.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Data.visualize.Network.Layouts.dll" ComponentId="{8982D370-9E0A-43D2-9AB0-64FC243080A4}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.visualize.Network.Layouts.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.visualize.Network.Visualizer.dll" ComponentId="{66AAFDAD-B677-4FF7-9DC8-3D7E23479BFB}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.visualize.Network.Visualizer.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.visualize.Network.dll" ComponentId="{5BDF73F9-CA01-47B5-B420-7F1743DA0A99}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.visualize.Network.dll"/>
     <ROW Component="Microsoft.VisualBasic.Data.visualize.dll" ComponentId="{D55B3FEA-95B0-4D94-AC49-C8A5755908F1}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.visualize.dll"/>
     <ROW Component="Microsoft.VisualBasic.DataMining.BinaryTreeClustering.dll" ComponentId="{24AB0349-C327-4DE1-944C-AF146D22EBF1}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.DataMining.BinaryTreeClustering.dll"/>
     <ROW Component="Microsoft.VisualBasic.DataMining.DensityQuery.dll" ComponentId="{C521118B-9D02-419D-870C-CE073913D1FB}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.DataMining.DensityQuery.dll"/>
+    <ROW Component="Microsoft.VisualBasic.DataMining.DynamicProgramming.dll" ComponentId="{D5938586-CFCE-40FF-90A9-6E826AB095DE}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.DataMining.DynamicProgramming.dll"/>
+    <ROW Component="Microsoft.VisualBasic.DataMining.FeatureFrame.dll" ComponentId="{51DA1D3B-1DC8-48E1-8A3B-695A8F5068A0}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.DataMining.FeatureFrame.dll"/>
     <ROW Component="Microsoft.VisualBasic.DataMining.Framework.dll" ComponentId="{F718BAF1-47BD-4139-8AFD-6DC58BD7AA3D}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.DataMining.Framework.dll"/>
     <ROW Component="Microsoft.VisualBasic.DataMining.HiddenMarkovChain.dll" ComponentId="{6274FCC7-0927-4033-918A-3CDAD049D635}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.DataMining.HiddenMarkovChain.dll"/>
+    <ROW Component="Microsoft.VisualBasic.DataMining.HierarchicalClustering.Plot.dll" ComponentId="{A6ACEDAC-E303-4F49-AACC-9393EB8B93F5}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.DataMining.HierarchicalClustering.Plot.dll"/>
     <ROW Component="Microsoft.VisualBasic.DataMining.HierarchicalClustering.dll" ComponentId="{BAF5EED8-813F-4D36-8DD2-6F0BCFD3CBC8}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.DataMining.HierarchicalClustering.dll"/>
     <ROW Component="Microsoft.VisualBasic.DataMining.UMAP.dll" ComponentId="{022B900F-1A6A-4CC5-82DF-F8B186F3BD97}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.DataMining.UMAP.dll"/>
     <ROW Component="Microsoft.VisualBasic.DataStorage.HDSPack.dll" ComponentId="{8E04A3C3-7915-4DA9-AFEC-5F3A12B60E76}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.DataStorage.HDSPack.dll"/>
     <ROW Component="Microsoft.VisualBasic.DataStorage.netCDF.dll" ComponentId="{80FE20ED-A263-46DB-AF25-791A4951615D}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.DataStorage.netCDF.dll"/>
+    <ROW Component="Microsoft.VisualBasic.DeepLearning.dll" ComponentId="{B705B9A9-E0FD-4EE5-A1EF-215B3AC1D3E6}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.DeepLearning.dll"/>
     <ROW Component="Microsoft.VisualBasic.Imaging.PDF.dll" ComponentId="{F91ED988-5B5A-40CA-BFBB-14373BF04842}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Imaging.PDF.dll"/>
     <ROW Component="Microsoft.VisualBasic.Imaging.Physics.dll" ComponentId="{6A06A084-4FC4-4026-9402-E6DA7B6AC01D}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Imaging.Physics.dll"/>
     <ROW Component="Microsoft.VisualBasic.Imaging.dll" ComponentId="{2BF8C719-6DF9-45CE-A760-EE2F93EFFDDA}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Imaging.dll"/>
@@ -97,9 +106,14 @@
     <ROW Component="Microsoft.VisualBasic.MIME.Office.Excel.dll" ComponentId="{2AAF12DA-D8A1-407A-A94E-21166ED36DC0}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MIME.Office.Excel.dll"/>
     <ROW Component="Microsoft.VisualBasic.MIME.application.json.dll" ComponentId="{A62A8E6E-AAB0-4C39-8074-4845D10175A6}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MIME.application.json.dll"/>
     <ROW Component="Microsoft.VisualBasic.MIME.application.pdf.dll" ComponentId="{26B9C284-049B-45B8-9889-BAA7F6A5627E}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MIME.application.pdf.dll"/>
+    <ROW Component="Microsoft.VisualBasic.MIME.application.rdf_xml.dll" ComponentId="{602BA63A-1434-4829-9A9C-99777483A6B0}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MIME.application.rdf_xml.dll"/>
     <ROW Component="Microsoft.VisualBasic.MIME.application.xml.dll" ComponentId="{A495BAF4-16BB-4314-AC33-BBD49EB303AC}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MIME.application.xml.dll"/>
     <ROW Component="Microsoft.VisualBasic.MIME.text.markdown.dll" ComponentId="{664CCE96-90D7-4A19-9278-0BC0E08D0FD6}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MIME.text.markdown.dll"/>
+    <ROW Component="Microsoft.VisualBasic.MachineLearning.Data.Extensions.dll" ComponentId="{689E3771-303A-4BFB-8809-A346A6DD4ED7}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MachineLearning.Data.Extensions.dll"/>
     <ROW Component="Microsoft.VisualBasic.MachineLearning.Debugger.dll" ComponentId="{AD851D51-3DF2-4C7E-A155-C7979855D2D7}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MachineLearning.Debugger.dll"/>
+    <ROW Component="Microsoft.VisualBasic.MachineLearning.MLDataStorage.dll" ComponentId="{2AAC7324-4038-43D1-8389-79BDAC11209E}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MachineLearning.MLDataStorage.dll"/>
+    <ROW Component="Microsoft.VisualBasic.MachineLearning.TensorFlow.dll" ComponentId="{D605A272-27A0-41B2-A2EA-E51B2F4A80CD}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MachineLearning.TensorFlow.dll"/>
+    <ROW Component="Microsoft.VisualBasic.MachineLearning.VAE.dll" ComponentId="{1412996E-17C0-4C7A-A20F-D428079AB9B9}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MachineLearning.VAE.dll"/>
     <ROW Component="Microsoft.VisualBasic.MachineLearning.XGBoost.DataSet.dll" ComponentId="{D2D4BE10-B715-439F-9353-7464C8BDAD20}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MachineLearning.XGBoost.DataSet.dll"/>
     <ROW Component="Microsoft.VisualBasic.MachineLearning.XGBoost.dll" ComponentId="{B16F65E3-5FE7-4E34-9B38-D02C21BB050A}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MachineLearning.XGBoost.dll"/>
     <ROW Component="Microsoft.VisualBasic.MachineLearning.dll" ComponentId="{6A7A3A53-9302-4F06-AF16-A01C2FD971D1}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MachineLearning.dll"/>
@@ -112,6 +126,7 @@
     <ROW Component="Microsoft.VisualBasic.Math.SignalProcessing.dll" ComponentId="{FDB1C890-76A9-48FA-877A-7B5B0B0BFE13}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Math.SignalProcessing.dll"/>
     <ROW Component="Microsoft.VisualBasic.Math.Statistics.ANOVA.dll" ComponentId="{D294AEE6-9093-4D69-B04E-CF061CFD6287}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Math.Statistics.ANOVA.dll"/>
     <ROW Component="Microsoft.VisualBasic.Math.Statistics.dll" ComponentId="{F0D23E2A-C9D5-44BE-90A4-687C9E93824B}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Math.Statistics.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Math.Symbolic.GeneticProgramming.dll" ComponentId="{F8B0BA42-C22F-4CF2-A910-6F57CF12F899}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Math.Symbolic.GeneticProgramming.dll"/>
     <ROW Component="Microsoft.VisualBasic.Network.dll" ComponentId="{D28CD97D-868A-4668-BEE3-7E9ECA5F3F88}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Network.dll"/>
     <ROW Component="Microsoft.VisualBasic.Runtime.dll" ComponentId="{40BBD2FC-67D4-401D-BA52-ACED8C5B4CB2}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Runtime.dll"/>
     <ROW Component="Microsoft.Win32.SystemEvents.dll" ComponentId="{2774C2C8-91E3-40A8-AA68-90F54E03472A}" Directory_="bin_Dir" Attributes="0" KeyPath="Microsoft.Win32.SystemEvents.dll"/>
@@ -136,13 +151,22 @@
     <ROW Component="System.Composition.Hosting.dll" ComponentId="{4ADA447D-8DEF-4DA9-B6AA-3A7B887B63CA}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Composition.Hosting.dll"/>
     <ROW Component="System.Composition.Runtime.dll" ComponentId="{8EEF4720-82F7-4129-B283-F13FA5793A06}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Composition.Runtime.dll"/>
     <ROW Component="System.Composition.TypedParts.dll" ComponentId="{12F7FC02-4254-4E37-B499-682C74589E99}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Composition.TypedParts.dll"/>
+    <ROW Component="System.Configuration.ConfigurationManager.dll" ComponentId="{DAA19D21-8980-40D0-B561-865665BCA5BF}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Configuration.ConfigurationManager.dll"/>
     <ROW Component="System.Drawing.Common.dll" ComponentId="{0479B124-8E8B-4502-A99F-E241C26E4195}" Directory_="net6.0_Dir" Attributes="0" KeyPath="System.Drawing.Common.dll"/>
     <ROW Component="System.Drawing.Common.dll_3" ComponentId="{CEEBD859-46BF-4540-BEA9-EEF481738BB5}" Directory_="net6.0_2_Dir" Attributes="0" KeyPath="System.Drawing.Common.dll_3"/>
     <ROW Component="System.Drawing.Common.dll_4" ComponentId="{2AFCF56B-41F3-4D9D-AA6E-F29C5E933B93}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Drawing.Common.dll_4"/>
+    <ROW Component="System.Numerics.Tensors.dll" ComponentId="{5CD925EC-3B06-4347-9625-E21F9821F4EA}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Numerics.Tensors.dll"/>
     <ROW Component="System.Resources.Extensions.dll" ComponentId="{763205A3-2C56-4EAF-BDAB-3FE2D09C4642}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Resources.Extensions.dll"/>
+    <ROW Component="System.Security.Cryptography.ProtectedData.dll" ComponentId="{437AD23D-AE89-4152-BB1B-BF22DAA85E7A}" Directory_="net6.0_2_Dir" Attributes="0" KeyPath="System.Security.Cryptography.ProtectedData.dll"/>
+    <ROW Component="System.Security.Cryptography.ProtectedData.dll_1" ComponentId="{23C1AB11-C2CB-493A-8AB1-F789A10A8F6A}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Security.Cryptography.ProtectedData.dll_1"/>
+    <ROW Component="System.Security.Permissions.dll" ComponentId="{24BBC942-0A58-4AC9-B4BA-FDB715AF9FE1}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Security.Permissions.dll"/>
+    <ROW Component="System.Windows.Extensions.dll" ComponentId="{E8414299-7574-4BFD-B147-989961EB7BBB}" Directory_="net6.0_2_Dir" Attributes="0" KeyPath="System.Windows.Extensions.dll"/>
+    <ROW Component="System.Windows.Extensions.dll_1" ComponentId="{967B7D80-1BB0-4575-8AC7-14BE6924DCE9}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Windows.Extensions.dll_1"/>
     <ROW Component="base.1.0.0.nupkg" ComponentId="{9C27DAFC-42C5-476A-A366-0D4C0E770E2C}" Directory_="nuget_Dir" Attributes="0" KeyPath="base.1.0.0.nupkg" Type="0"/>
     <ROW Component="base.deps.json" ComponentId="{F0ED4640-E075-4B48-BD03-A876C6EF8803}" Directory_="bin_Dir" Attributes="0" KeyPath="base.deps.json" Type="0"/>
     <ROW Component="base.dll" ComponentId="{848C8B58-E62F-4C6F-BAD0-3EECAEB58663}" Directory_="bin_Dir" Attributes="256" KeyPath="base.dll"/>
+    <ROW Component="batch.dll" ComponentId="{AB571461-637A-4F5E-BE28-32470BF6AA9E}" Directory_="bin_Dir" Attributes="256" KeyPath="batch.dll"/>
+    <ROW Component="batch.exe" ComponentId="{BD49A362-E04C-4D0B-B360-BCBD53A36C47}" Directory_="bin_Dir" Attributes="256" KeyPath="batch.exe"/>
     <ROW Component="devkit.dll" ComponentId="{5F40894B-BF36-4010-A517-3CD9EDD8B6F6}" Directory_="bin_Dir" Attributes="256" KeyPath="devkit.dll"/>
     <ROW Component="graphics.dll" ComponentId="{2A16B8A8-5DD7-46B3-B82A-49D0E7BE7313}" Directory_="bin_Dir" Attributes="256" KeyPath="graphics.dll"/>
     <ROW Component="help" ComponentId="{799B0B1A-49F5-4A89-9A0A-A029EFA8C728}" Directory_="help_Dir" Attributes="0"/>
@@ -306,6 +330,34 @@
     <ROW File="Rstudio.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="RSTUDI~1.NUP|Rstudio.1.0.0.nupkg" Attributes="0" SourcePath="..\App\Rstudio.1.0.0.nupkg" SelfReg="false"/>
     <ROW File="snowFall.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="SNOWFA~1.NUP|snowFall.1.0.0.nupkg" Attributes="0" SourcePath="..\App\snowFall.1.0.0.nupkg" SelfReg="false"/>
     <ROW File="webKit.1.0.0.nupkg" Component_="base.1.0.0.nupkg" FileName="WEBKIT~1.NUP|webKit.1.0.0.nupkg" Attributes="0" SourcePath="..\App\webKit.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="batch.deps.json" Component_="base.deps.json" FileName="BATCHD~1.JSO|batch.deps.json" Attributes="0" SourcePath="..\App\net6.0\batch.deps.json" SelfReg="false"/>
+    <ROW File="batch.dll" Component_="batch.dll" FileName="batch.dll" Attributes="0" SourcePath="..\App\net6.0\batch.dll" SelfReg="false"/>
+    <ROW File="batch.exe" Component_="batch.exe" FileName="batch.exe" Attributes="0" SourcePath="..\App\net6.0\batch.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="batch.runtimeconfig.json" Component_="base.deps.json" FileName="BATCHR~1.JSO|batch.runtimeconfig.json" Attributes="0" SourcePath="..\App\net6.0\batch.runtimeconfig.json" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.BinaryData.deps.json" Component_="base.deps.json" FileName="MICROS~6.JSO|Microsoft.VisualBasic.Data.BinaryData.deps.json" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.Data.BinaryData.deps.json" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.IO.HDF5.dll" Component_="Microsoft.VisualBasic.Data.IO.HDF5.dll" FileName="MICRO~52.DLL|Microsoft.VisualBasic.Data.IO.HDF5.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.Data.IO.HDF5.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.IO.SQLite3.dll" Component_="Microsoft.VisualBasic.Data.IO.SQLite3.dll" FileName="MICRO~53.DLL|Microsoft.VisualBasic.Data.IO.SQLite3.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.Data.IO.SQLite3.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.Storage.deps.json" Component_="base.deps.json" FileName="MICROS~7.JSO|Microsoft.VisualBasic.Data.Storage.deps.json" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.Data.Storage.deps.json" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.visualize.Network.Layouts.dll" Component_="Microsoft.VisualBasic.Data.visualize.Network.Layouts.dll" FileName="MICRO~54.DLL|Microsoft.VisualBasic.Data.visualize.Network.Layouts.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.Data.visualize.Network.Layouts.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.DataMining.DynamicProgramming.dll" Component_="Microsoft.VisualBasic.DataMining.DynamicProgramming.dll" FileName="MICRO~55.DLL|Microsoft.VisualBasic.DataMining.DynamicProgramming.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.DataMining.DynamicProgramming.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.DataMining.FeatureFrame.dll" Component_="Microsoft.VisualBasic.DataMining.FeatureFrame.dll" FileName="MICRO~56.DLL|Microsoft.VisualBasic.DataMining.FeatureFrame.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.DataMining.FeatureFrame.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.DataMining.HierarchicalClustering.Plot.dll" Component_="Microsoft.VisualBasic.DataMining.HierarchicalClustering.Plot.dll" FileName="MICRO~57.DLL|Microsoft.VisualBasic.DataMining.HierarchicalClustering.Plot.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.DataMining.HierarchicalClustering.Plot.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.DeepLearning.deps.json" Component_="base.deps.json" FileName="MICROS~8.JSO|Microsoft.VisualBasic.DeepLearning.deps.json" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.DeepLearning.deps.json" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.DeepLearning.dll" Component_="Microsoft.VisualBasic.DeepLearning.dll" FileName="MICRO~58.DLL|Microsoft.VisualBasic.DeepLearning.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.DeepLearning.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.MachineLearning.Data.Extensions.dll" Component_="Microsoft.VisualBasic.MachineLearning.Data.Extensions.dll" FileName="MICRO~59.DLL|Microsoft.VisualBasic.MachineLearning.Data.Extensions.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.MachineLearning.Data.Extensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.MachineLearning.MLDataStorage.dll" Component_="Microsoft.VisualBasic.MachineLearning.MLDataStorage.dll" FileName="MICRO~60.DLL|Microsoft.VisualBasic.MachineLearning.MLDataStorage.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.MachineLearning.MLDataStorage.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.MachineLearning.TensorFlow.dll" Component_="Microsoft.VisualBasic.MachineLearning.TensorFlow.dll" FileName="MICRO~61.DLL|Microsoft.VisualBasic.MachineLearning.TensorFlow.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.MachineLearning.TensorFlow.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.MachineLearning.VAE.dll" Component_="Microsoft.VisualBasic.MachineLearning.VAE.dll" FileName="MICRO~62.DLL|Microsoft.VisualBasic.MachineLearning.VAE.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.MachineLearning.VAE.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Math.Symbolic.GeneticProgramming.dll" Component_="Microsoft.VisualBasic.Math.Symbolic.GeneticProgramming.dll" FileName="MICRO~63.DLL|Microsoft.VisualBasic.Math.Symbolic.GeneticProgramming.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.Math.Symbolic.GeneticProgramming.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.MIME.application.rdf_xml.dll" Component_="Microsoft.VisualBasic.MIME.application.rdf_xml.dll" FileName="MICRO~64.DLL|Microsoft.VisualBasic.MIME.application.rdf_xml.dll" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.MIME.application.rdf_xml.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.MIME.application.rdf_xml.dll.config" Component_="base.deps.json" FileName="MICROS~6.CON|Microsoft.VisualBasic.MIME.application.rdf_xml.dll.config" Attributes="0" SourcePath="..\App\net6.0\Microsoft.VisualBasic.MIME.application.rdf_xml.dll.config" SelfReg="false"/>
+    <ROW File="System.Security.Cryptography.ProtectedData.dll" Component_="System.Security.Cryptography.ProtectedData.dll" FileName="SYSTEM~2.DLL|System.Security.Cryptography.ProtectedData.dll" Attributes="0" SourcePath="..\App\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll" SelfReg="false"/>
+    <ROW File="System.Windows.Extensions.dll" Component_="System.Windows.Extensions.dll" FileName="SYSTEM~3.DLL|System.Windows.Extensions.dll" Attributes="0" SourcePath="..\App\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll" SelfReg="false"/>
+    <ROW File="System.Configuration.ConfigurationManager.dll" Component_="System.Configuration.ConfigurationManager.dll" FileName="SYSTEM~8.DLL|System.Configuration.ConfigurationManager.dll" Attributes="0" SourcePath="..\App\net6.0\System.Configuration.ConfigurationManager.dll" SelfReg="false"/>
+    <ROW File="System.Numerics.Tensors.dll" Component_="System.Numerics.Tensors.dll" FileName="SYSTEM~9.DLL|System.Numerics.Tensors.dll" Attributes="0" SourcePath="..\App\net6.0\System.Numerics.Tensors.dll" SelfReg="false"/>
+    <ROW File="System.Security.Cryptography.ProtectedData.dll_1" Component_="System.Security.Cryptography.ProtectedData.dll_1" FileName="SYSTE~10.DLL|System.Security.Cryptography.ProtectedData.dll" Attributes="0" SourcePath="..\App\net6.0\System.Security.Cryptography.ProtectedData.dll" SelfReg="false"/>
+    <ROW File="System.Security.Permissions.dll" Component_="System.Security.Permissions.dll" FileName="SYSTE~11.DLL|System.Security.Permissions.dll" Attributes="0" SourcePath="..\App\net6.0\System.Security.Permissions.dll" SelfReg="false"/>
+    <ROW File="System.Windows.Extensions.dll_1" Component_="System.Windows.Extensions.dll_1" FileName="SYSTE~12.DLL|System.Windows.Extensions.dll" Attributes="0" SourcePath="..\App\net6.0\System.Windows.Extensions.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -331,6 +383,7 @@
     <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;azure\fragments\SequenceDialogs.aip"/>
     <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
     <ROW Fragment="StaticUIStrings.aip" Path="&lt;AI_FRAGS&gt;StaticUIStrings.aip"/>
+    <ROW Fragment="Themes.aip" Path="&lt;AI_FRAGS&gt;Themes.aip"/>
     <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;azure\fragments\UI.aip"/>
     <ROW Fragment="Validation.aip" Path="&lt;AI_FRAGS&gt;Validation.aip"/>
     <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;azure\fragments\VerifyRemoveDlg.aip"/>
@@ -409,6 +462,7 @@
     <ROW Action="AI_GetArpIconPath" Type="1" Source="aicustact.dll" Target="GetArpIconPath"/>
     <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
     <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
     <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH" Target="[AI_SETUPEXEPATH_ORIGINAL]"/>
     <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
     <ROW Action="AI_RemoveExternalUIStub" Type="1" Source="ExternalUICleaner.dll" Target="RemoveExternalUIStub"/>
@@ -522,6 +576,28 @@
     <ROW Feature_="MainFeature" Component_="signalKit.dll"/>
     <ROW Feature_="MainFeature" Component_="base.1.0.0.nupkg"/>
     <ROW Feature_="MainFeature" Component_="library"/>
+    <ROW Feature_="MainFeature" Component_="batch.dll"/>
+    <ROW Feature_="MainFeature" Component_="batch.exe"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Data.IO.HDF5.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Data.IO.SQLite3.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Data.visualize.Network.Layouts.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.DataMining.DynamicProgramming.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.DataMining.FeatureFrame.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.DataMining.HierarchicalClustering.Plot.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.DeepLearning.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.MachineLearning.Data.Extensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.MachineLearning.MLDataStorage.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.MachineLearning.TensorFlow.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.MachineLearning.VAE.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Math.Symbolic.GeneticProgramming.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.MIME.application.rdf_xml.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Security.Cryptography.ProtectedData.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Windows.Extensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Configuration.ConfigurationManager.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Numerics.Tensors.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Security.Cryptography.ProtectedData.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Security.Permissions.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Windows.Extensions.dll_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="PrideIconRound.exe" SourcePath="..\docs\images\rstudio-icons-main\Icons\Windows\Round\Pride Icon - Round.ico" Index="0"/>
@@ -562,6 +638,7 @@
     <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="103"/>
     <ROW Action="AI_AppSearchEx" Sequence="102"/>
     <ROW Action="AI_DetectSoftware" Sequence="101"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
     <ROW Condition="( Version9X OR ( NOT VersionNT64 ) OR ( VersionNT64 AND ((VersionNT64 &lt;&gt; 600) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT64 &lt;&gt; 600) OR (MsiNTProductType = 1)) AND ((VersionNT64 &lt;&gt; 601) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT64 &lt;&gt; 601) OR (MsiNTProductType = 1)) AND ((VersionNT64 &lt;&gt; 602) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT64 &lt;&gt; 602) OR (MsiNTProductType = 1)) AND ((VersionNT64 &lt;&gt; 603) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT64 &lt;&gt; 603) OR (MsiNTProductType = 1)) ) )" Description="[ProductName] cannot be installed on the following Windows versions: [WindowsTypeNT64Display]." DescriptionLocId="AI.LaunchCondition.NoSpecificNT64" IsPredefined="true" Builds="DefaultBuild"/>
@@ -579,8 +656,11 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
     <ROW Registry="AI_ExePath" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Value="[AI_SETUPEXEPATH]" Component_="AI_ExePath"/>
+    <ROW Registry="AdvancedInstaller" Root="-1" Key="Software\Caphyon\Advanced Installer" Name="\"/>
+    <ROW Registry="Caphyon" Root="-1" Key="Software\Caphyon" Name="\"/>
     <ROW Registry="Comments" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="Comments" Value="[ARPCOMMENTS]" Component_="AI_CustomARPName"/>
     <ROW Registry="Contact" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="Contact" Value="[ARPCONTACT]" Component_="AI_CustomARPName"/>
+    <ROW Registry="CurrentVersion" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion" Name="\"/>
     <ROW Registry="DisplayIcon" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="DisplayIcon" Value="[ARP_ICON_PATH]" Component_="AI_CustomARPName"/>
     <ROW Registry="DisplayName" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="DisplayName" Value="[AI_PRODUCTNAME_ARP]" Component_="AI_CustomARPName"/>
     <ROW Registry="DisplayVersion" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="DisplayVersion" Value="[ProductVersion]" Component_="AI_CustomARPName"/>
@@ -588,18 +668,28 @@
     <ROW Registry="HelpLink" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="HelpLink" Value="[ARPHELPLINK]" Component_="AI_CustomARPName"/>
     <ROW Registry="HelpTelephone" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="HelpTelephone" Value="[ARPHELPTELEPHONE]" Component_="AI_CustomARPName"/>
     <ROW Registry="InstallLocation" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="InstallLocation" Value="[APPDIR]" Component_="AI_CustomARPName"/>
+    <ROW Registry="LZMA" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA" Name="\"/>
+    <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
+    <ROW Registry="Microsoft" Root="-1" Key="Software\Microsoft" Name="\"/>
     <ROW Registry="ModifyPath" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="ModifyPath" Value="[AI_UNINSTALLER] /i [ProductCode] AI_UNINSTALLER_CTP=1" Component_="AI_CustomARPName"/>
     <ROW Registry="NoRepair" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="NoRepair" Value="#1" Component_="AI_CustomARPName" VirtualValue="#"/>
     <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
+    <ROW Registry="ProductCode" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]" Name="\"/>
+    <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
+    <ROW Registry="ProductNameProductVersion" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="\"/>
+    <ROW Registry="ProductVersion" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="\"/>
     <ROW Registry="Publisher" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="Publisher" Value="[Manufacturer]" Component_="AI_CustomARPName"/>
     <ROW Registry="Readme" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="Readme" Value="[ARPREADME]" Component_="AI_CustomARPName"/>
+    <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
     <ROW Registry="URLInfoAbout" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="URLInfoAbout" Value="[ARPURLINFOABOUT]" Component_="AI_CustomARPName"/>
     <ROW Registry="URLUpdateInfo" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="URLUpdateInfo" Value="[ARPURLUPDATEINFO]" Component_="AI_CustomARPName"/>
+    <ROW Registry="Uninstall" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall" Name="\"/>
     <ROW Registry="UninstallPath" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="UninstallPath" Value="[AI_UNINSTALLER] /x [ProductCode] AI_UNINSTALLER_CTP=1" Component_="AI_CustomARPName"/>
     <ROW Registry="UninstallString" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="UninstallString" Value="[AI_UNINSTALLER] /x [ProductCode] AI_UNINSTALLER_CTP=1" Component_="AI_CustomARPName"/>
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
     <ROW Registry="VersionMajor" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="VersionMajor" Value="#1" Component_="AI_CustomARPName" VirtualValue="#"/>
     <ROW Registry="VersionMinor" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="VersionMinor" Value="#0" Component_="AI_CustomARPName" VirtualValue="#"/>
+    <ROW Registry="Windows" Root="-1" Key="Software\Microsoft\Windows" Name="\"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
     <ROW Shortcut="R" Directory_="SHORTCUTDIR" Name="R#" Component_="R.exe" Target="[#R.exe]" Hotkey="0" Icon_="R.exe" IconIndex="0" ShowCmd="1" WkDir="bin_Dir"/>
