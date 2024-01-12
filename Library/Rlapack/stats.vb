@@ -118,8 +118,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports stdNum = System.Math
+Imports std = System.Math
 Imports stdVector = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
+Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 ''' <summary>
 ''' ### The R Stats Package 
@@ -179,7 +180,7 @@ Module stats
             Dim cori As Double = x.dist(link.a, link.b)
             Dim pvali As Double = x.pvalue(link.a, link.b)
 
-            If stdNum.Abs(cori) > cutoff AndAlso pvali < pvalue_cut Then
+            If std.Abs(cori) > cutoff AndAlso pvali < pvalue_cut Then
                 Call from.Add(link.a)
                 Call [to].Add(link.b)
                 Call cor.Add(cori)
@@ -1354,7 +1355,7 @@ Module stats
         Call output.add("SSB_sum_of_squares_between_groups", anova.SSB_sum_of_squares_between_groups)
         Call output.add("SSB", anova.SSB)
         Call output.add("SSW", anova.SSW)
-        Call output.add("Residual standard error", stdNum.Sqrt(anova.SSW))
+        Call output.add("Residual standard error", std.Sqrt(anova.SSW))
         Call output.add("SS_total_sum_of_squares", anova.SS_total_sum_of_squares)
         Call output.add("allObservationsMean", anova.allObservationsMean)
         Call output.add("Critical number", criticalNumber)
@@ -1480,12 +1481,18 @@ Module stats
                           Optional env As Environment = Nothing) As Object
 
         If y Is Nothing Then
-            Return Internal.debug.stop("the sample class information should not be nothing, it must be a vector of numeric data for regression or a character vector for classification!", env)
+            Return Internal.debug.stop({
+                "the sample class information should not be nothing",
+                "it must be a vector of numeric data for regression or a character vector for classification!"}, env)
         Else
+            If TypeOf y Is vec Then
+                y = DirectCast(y, vec).data
+            End If
+
             y = REnv.TryCastGenericArray(y, env)
         End If
 
-        Dim ds = x.GetDataSetCommon(y)
+        Dim ds As StatisticsObject = x.GetDataSetCommon(y)
         Dim pls_mvar = PLS.PartialLeastSquares(ds, component:=If(ncomp, -1))
 
         If Not list Then
