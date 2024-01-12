@@ -1454,6 +1454,58 @@ Module stats
         Return ds
     End Function
 
+    <ExportAPI("opls")>
+    Public Function oplsr(x As Rdataframe, <RRawVectorArgument> y As Object,
+                          Optional ncomp As Integer? = Nothing,
+                          Optional center As Boolean = True,
+                          Optional scale As Boolean = False,
+                          Optional list As Boolean = True,
+                          Optional env As Environment = Nothing) As Object
+
+        If y Is Nothing Then
+            Return Internal.debug.stop({
+                "the sample class information should not be nothing",
+                "it must be a vector of numeric data for regression or a character vector for classification!"}, env)
+        Else
+            If TypeOf y Is vec Then
+                y = DirectCast(y, vec).data
+            End If
+
+            y = REnv.TryCastGenericArray(y, env)
+        End If
+
+        Dim ds As StatisticsObject = x.GetDataSetCommon(y)
+        Dim opls_mvar = OPLS.OrthogonalProjectionsToLatentStructures(ds, component:=If(ncomp, -1))
+
+        If Not list Then
+            Return opls_mvar
+        End If
+
+        Dim score = opls_mvar.GetPLSScore
+        Dim loading = opls_mvar.GetPLSLoading
+        Dim components = opls_mvar.GetComponents.ToArray
+        Dim scoreMN As Rdataframe = MathDataSet.toDataframe(score, Nothing, env)
+        Dim loadingMN As Rdataframe = MathDataSet.toDataframe(loading, Nothing, env)
+        Dim componentDf As New Rdataframe With {
+            .rownames = components.Select(Function(ci) CStr(ci.Order)).ToArray,
+            .columns = New Dictionary(Of String, Array)
+        }
+
+        Call componentDf.add("Component", components.Select(Function(ci) ci.Order))
+        Call componentDf.add("SSCV", components.Select(Function(ci) ci.SSCV))
+        Call componentDf.add("PRESS", components.Select(Function(ci) ci.Press))
+        Call componentDf.add("Q2", components.Select(Function(ci) ci.Q2))
+        Call componentDf.add("Q2(cum)", components.Select(Function(ci) ci.Q2cum))
+
+        Return New list With {
+            .slots = New Dictionary(Of String, Object) From {
+                {"component", componentDf},
+                {"scoreMN", scoreMN},
+                {"loadingMN", loadingMN}
+            }
+        }
+    End Function
+
     ''' <summary>
     ''' ## Partial Least Squares Discriminant Analysis
     ''' 
@@ -1473,6 +1525,7 @@ Module stats
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("plsda")>
+    <RApiReturn("component", "scoreMN", "loadingMN")>
     Public Function plsda(x As Rdataframe, <RRawVectorArgument> y As Object,
                           Optional ncomp As Integer? = Nothing,
                           Optional center As Boolean = True,
