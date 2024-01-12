@@ -360,6 +360,7 @@ Module RMatrix
             Dim bvec As Object() = equ _
                 .Select(Function(v) v.value.Evaluate(env)) _
                 .ToArray
+            Dim rows As New List(Of Double())
 
             For Each item As Object In bvec
                 If TypeOf item Is Message Then
@@ -367,9 +368,27 @@ Module RMatrix
                 End If
             Next
 
+            ' get matrix from equations
+            For Each eq As ValueAssignExpression In equ
+                ' left should be binary expression 
+                Dim math As BinaryExpression = TryCast(eq.targetSymbols(0), BinaryExpression)
+
+                If math Is Nothing Then
+                    Return Internal.debug.stop("the equation expression should be a math binary expression!", env)
+                Else
+                    Dim row As New List(Of Double)
+
+                    Call extractVector(math, row)
+                    Call rows.Add(row.ToArray)
+                End If
+
+                If rows.Last.Any(Function(d) d.IsNaNImaginary) Then
+                    Return Internal.debug.stop("syntax error when parse the equation!", env)
+                End If
+            Next
+
             b = CLRVector.asNumeric(bvec)
-
-
+            a = New NumericMatrix(rows.Select(Function(r) r.ToArray))
         Else
             Return Message.InCompatibleType(GetType(dataframe), problem.GetType, env)
         End If
@@ -378,4 +397,22 @@ Module RMatrix
 
         Return New vector(solve.ToArray)
     End Function
+
+    Private Sub extractVector(exp As BinaryExpression, ByRef row As List(Of Double))
+        If TypeOf exp.left Is Literal Then
+            row.Add(CDbl(exp.left.Evaluate(Nothing)))
+        ElseIf TypeOf exp.left Is SymbolReference Then
+            ' do nothing
+        Else
+            Call extractVector(exp.left, row)
+        End If
+
+        If TypeOf exp.right Is Literal Then
+            Call row.Add(CDbl(exp.right.Evaluate(Nothing)))
+        ElseIf TypeOf exp.right Is SymbolReference Then
+            ' do nothing 
+        Else
+            Call extractVector(exp.right, row)
+        End If
+    End Sub
 End Module
