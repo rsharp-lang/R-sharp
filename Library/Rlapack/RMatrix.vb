@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Solvers
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -338,8 +339,23 @@ Module RMatrix
         Dim b As vec
 
         If TypeOf problem Is Rdataframe Then
+            Dim m = DirectCast(problem, Rdataframe) _
+                .forEachRow() _
+                .Select(Function(r) CLRVector.asNumeric(r.value)) _
+                .ToArray
 
+            a = New NumericMatrix(m)
+            b = CLRVector.asNumeric(y)
         ElseIf TypeOf problem Is VectorLiteral Then
+            Dim equ As ValueAssignExpression() = DirectCast(problem, VectorLiteral) _
+                .Select(Function(exp) TryCast(exp, ValueAssignExpression)) _
+                .ToArray
+
+            ' check expression type:
+            ' all expression should be the value assign expression?
+            If Not equ.All(Function(exp) Not exp Is Nothing) Then
+                Return Internal.debug.stop("all of the input problem equation expression must be value assign expression, example like: a + b = y", env)
+            End If
 
         Else
             Return Message.InCompatibleType(GetType(dataframe), problem.GetType, env)
