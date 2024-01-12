@@ -56,13 +56,17 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
+Imports Microsoft.VisualBasic.Math.LinearAlgebra.Solvers
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports vec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 
 ''' <summary>
 ''' The numeric matrix
@@ -325,11 +329,24 @@ Module RMatrix
     ''' <param name="env"></param>
     ''' <returns>a vector of the result x</returns>
     <ExportAPI("gauss_solve")>
-    Public Function gauss_solve(<RRawVectorArgument> <RLazyExpression>
+    Public Function gauss_solve(<RRawVectorArgument>
                                 problem As Object,
                                 <RRawVectorArgument>
                                 Optional y As Object = Nothing,
                                 Optional env As Environment = Nothing) As Object
+        Dim a As NumericMatrix
+        Dim b As vec
 
+        If TypeOf problem Is Rdataframe Then
+
+        ElseIf TypeOf problem Is VectorLiteral Then
+
+        Else
+            Return Message.InCompatibleType(GetType(dataframe), problem.GetType, env)
+        End If
+
+        Dim solve As vec = GaussianElimination.Solve(a, b)
+
+        Return New vector(solve.ToArray)
     End Function
 End Module

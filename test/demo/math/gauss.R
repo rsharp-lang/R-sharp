@@ -6,6 +6,8 @@ let problem = ~[
     -2*x + y + 2*z = -3
 ];
 
+print(problem);
+
 let x = gauss_solve(problem);
 
 print(x);
