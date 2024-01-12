@@ -357,6 +357,19 @@ Module RMatrix
                 Return Internal.debug.stop("all of the input problem equation expression must be value assign expression, example like: a + b = y", env)
             End If
 
+            Dim bvec As Object() = equ _
+                .Select(Function(v) v.value.Evaluate(env)) _
+                .ToArray
+
+            For Each item As Object In bvec
+                If TypeOf item Is Message Then
+                    Return item
+                End If
+            Next
+
+            b = CLRVector.asNumeric(bvec)
+
+
         Else
             Return Message.InCompatibleType(GetType(dataframe), problem.GetType, env)
         End If
