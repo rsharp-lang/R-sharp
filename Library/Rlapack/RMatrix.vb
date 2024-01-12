@@ -407,12 +407,17 @@ Module RMatrix
             Call extractVector(exp.left, row)
         End If
 
-        If TypeOf exp.right Is Literal Then
-            Call row.Add(CDbl(exp.right.Evaluate(Nothing)))
-        ElseIf TypeOf exp.right Is SymbolReference Then
-            ' do nothing 
-        Else
-            Call extractVector(exp.right, row)
+        If exp.operator <> "*" Then
+            Dim sign As Double = If(exp.operator = "-", -1, 1)
+
+            If TypeOf exp.right Is Literal Then
+                Call row.Add(sign * CDbl(exp.right.Evaluate(Nothing)))
+            ElseIf TypeOf exp.right Is SymbolReference Then
+                ' do nothing 
+                Call row.Add(sign * 1)
+            Else
+                Call extractVector(exp.right, row)
+            End If
         End If
     End Sub
 End Module
