@@ -397,7 +397,18 @@ Namespace Runtime.Vectorization
             ElseIf TypeOf x Is TimeSpan() Then
                 Return DirectCast(x, TimeSpan()).Select(Function(d) d.TotalMilliseconds).ToArray
             ElseIf TypeOf x Is Object() Then
-                Return DirectCast(x, Object()).Select(Function(d) CDbl(d)).ToArray
+                Return DirectCast(x, Object()) _
+                    .Select(Function(d)
+                                ' x may be a array of array
+                                If d Is Nothing Then
+                                    Return 0
+                                ElseIf d.GetType.IsArray Then
+                                    Return CDbl(DirectCast(d, Array)(0))
+                                Else
+                                    Return CDbl(d)
+                                End If
+                            End Function) _
+                    .ToArray
             ElseIf TypeOf x Is Boolean() Then
                 Return DirectCast(x, Boolean()) _
                     .Select(Function(xi) If(xi, 1.0, 0.0)) _
