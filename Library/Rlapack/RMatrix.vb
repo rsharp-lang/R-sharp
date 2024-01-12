@@ -292,4 +292,44 @@ Module RMatrix
             }
         }
     End Function
+
+    ''' <summary>
+    ''' ### Gaussian elimination
+    ''' 
+    ''' In mathematics, Gaussian elimination, also known as row reduction, is an algorithm 
+    ''' for solving systems of linear equations. It consists of a sequence of row-wise 
+    ''' operations performed on the corresponding matrix of coefficients. This method can 
+    ''' also be used to compute the rank of a matrix, the determinant of a square matrix, 
+    ''' and the inverse of an invertible matrix. The method is named after Carl Friedrich 
+    ''' Gauss (1777–1855). To perform row reduction on a matrix, one uses a sequence of
+    ''' elementary row operations to modify the matrix until the lower left-hand corner of 
+    ''' the matrix is filled with zeros, as much as possible. There are three types of 
+    ''' elementary row operations:
+    ''' 
+    ''' + Swapping two rows,
+    ''' + Multiplying a row by a nonzero number,
+    ''' + Adding a multiple Of one row To another row.
+    ''' 
+    ''' Using these operations, a matrix can always be transformed into an upper triangular
+    ''' matrix, And In fact one that Is In row echelon form. Once all Of the leading coefficients 
+    ''' (the leftmost nonzero entry In Each row) are 1, And every column containing a leading
+    ''' coefficient has zeros elsewhere, the matrix Is said To be In reduced row echelon form.
+    ''' This final form Is unique; In other words, it Is independent Of the sequence Of row
+    ''' operations used. For example, In the following sequence Of row operations (where two 
+    ''' elementary operations On different rows are done at the first And third steps), the 
+    ''' third And fourth matrices are the ones In row echelon form, And the final matrix Is 
+    ''' the unique reduced row echelon form.
+    ''' </summary>
+    ''' <param name="problem"></param>
+    ''' <param name="y"></param>
+    ''' <param name="env"></param>
+    ''' <returns>a vector of the result x</returns>
+    <ExportAPI("gauss_solve")>
+    Public Function gauss_solve(<RRawVectorArgument> <RLazyExpression>
+                                problem As Object,
+                                <RRawVectorArgument>
+                                Optional y As Object = Nothing,
+                                Optional env As Environment = Nothing) As Object
+
+    End Function
 End Module
