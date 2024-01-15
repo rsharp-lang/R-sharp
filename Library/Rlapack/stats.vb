@@ -466,6 +466,11 @@ Module stats
     ''' <summary>
     ''' Interpolating Splines
     ''' </summary>
+    ''' <param name="data">
+    ''' a set of the point data, could be a dataframe object that contains two data 
+    ''' field: x and y, or a tuple list object contains two slot element: x and y.
+    ''' or just a vector of the clr <see cref="Point"/> or <see cref="PointF"/> object
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("spline")>
     Public Function spline(<RRawVectorArgument>
