@@ -62,12 +62,37 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports rDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 ''' <summary>
 ''' NLP tools
 ''' </summary>
 <Package("NLP")>
 Module NLP
+
+    Sub Main()
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(VectorModel), AddressOf exportWordVector)
+    End Sub
+
+    Private Function exportWordVector(vec As VectorModel, args As list, env As Environment) As rDataframe
+        Dim mat = vec.wordMap.ToArray
+        Dim df As New rDataframe With {
+            .rownames = mat.Select(Function(t) t.Key).ToArray,
+            .columns = New Dictionary(Of String, Array)
+        }
+        Dim colnames As String() = Enumerable _
+            .Range(0, vec.vectorSize) _
+            .Select(Function(i) $"V{i + 1}") _
+            .ToArray
+        Dim offset As Integer
+
+        For i As Integer = 0 To vec.vectorSize - 1
+            offset = i
+            df.add(colnames(i), mat.Select(Function(v) v.Value(offset)))
+        Next
+
+        Return df
+    End Function
 
     Private Function getText(text As Object, env As Environment) As [Variant](Of Message, Paragraph())
         Dim pull As pipeline = pipeline.TryCreatePipeline(Of String)(text, env)
