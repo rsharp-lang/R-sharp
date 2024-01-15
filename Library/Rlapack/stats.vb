@@ -1418,45 +1418,27 @@ Module stats
     End Function
 
     ''' <summary>
-    ''' 
+    ''' common method for construct dataset for run pca/plsda/oplsda analysis
     ''' </summary>
     ''' <param name="x"></param>
     ''' <param name="y">Y could be nothing for PCA analysis</param>
     ''' <returns></returns>
     <Extension>
     Private Function GetDataSetCommon(x As Rdataframe, y As Array) As StatisticsObject
-        Dim ylabels As String() = Nothing
-        Dim yfactors As factor = Nothing
-        Dim yval As Double() = Nothing
-        Dim xm As Double()() = x.forEachRow _
-            .Select(Function(ci) CLRVector.asNumeric(ci.value)) _
-            .ToArray
+        Dim colnames As String() = x.colnames
 
-        If Not y Is Nothing Then
-            If DataFramework.IsNumericCollection(y.GetType) Then
-                ' regression
-                yval = CLRVector.asNumeric(y)
-                ylabels = x.rownames
-            Else
-                ylabels = CLRVector.asCharacter(y)
-                yfactors = factor.CreateFactor(ylabels)
-                yval = yfactors.asNumeric(ylabels)
-            End If
+        If Not y.IsNullOrEmpty Then
+            y = REnv.UnsafeTryCastGenericArray(y)
         End If
 
-        Dim ds As New StatisticsObject(xm, yval) With {
-            .decoder = yfactors
-        }
-
-        Call Enumerable.Range(0, x.ncols).DoEach(AddressOf ds.XIndexes.Add)
-        Call Enumerable.Range(0, x.nrows).DoEach(AddressOf ds.YIndexes.Add)
-        Call x.colnames.DoEach(AddressOf ds.XLabels.Add)
-
-        If Not ylabels.IsNullOrEmpty Then
-            Call ylabels.DoEach(AddressOf ds.YLabels.Add)
-        End If
-
-        Return ds
+        Return x.forEachRow _
+            .Select(Function(r)
+                        Return New NamedCollection(Of Double)(
+                            name:=r.name,
+                            value:=CLRVector.asNumeric(r.value)
+                        )
+                    End Function) _
+            .CommonDataSet(colnames, labels:=y)
     End Function
 
     <ExportAPI("opls")>
