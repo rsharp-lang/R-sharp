@@ -72,7 +72,18 @@ Module NLP
 
     Sub Main()
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(VectorModel), AddressOf exportWordVector)
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Bigram()), AddressOf bigramTable)
     End Sub
+
+    Private Function bigramTable(bi As Bigram(), args As list, env As Environment) As rDataframe
+        Dim df As New rDataframe With {.columns = New Dictionary(Of String, Array)}
+
+        Call df.add("i", From t In bi Select t.i)
+        Call df.add("j", From t In bi Select t.j)
+        Call df.add("n", From t In bi Select t.count)
+
+        Return df
+    End Function
 
     Private Function exportWordVector(vec As VectorModel, args As list, env As Environment) As rDataframe
         Dim mat = vec.wordMap.ToArray
@@ -221,6 +232,32 @@ Module NLP
 
                       Return sentences
                   End Function)
+    End Function
+
+    <ExportAPI("bigram")>
+    <RApiReturn(GetType(Bigram))>
+    Public Function bigram_func(<RRawVectorArgument> text As Object, Optional env As Environment = Nothing) As Object
+        Dim pull As pipeline = pipeline.TryCreatePipeline(Of Paragraph)(text, env)
+        Dim data As Paragraph()
+
+        If pull.isError Then
+            pull = pipeline.TryCreatePipeline(Of String)(text, env)
+
+            If pull.isError Then
+                Return pull.getError
+            End If
+
+            data = pull.populates(Of String)(env) _
+                .Select(Function(si) Paragraph.Segmentation(si)) _
+                .IteratesALL _
+                .ToArray
+        Else
+            data = pull.populates(Of Paragraph)(env).ToArray
+        End If
+
+        Return Bigram.ParseText(data) _
+            .OrderByDescending(Function(t) t.count) _
+            .ToArray
     End Function
 
     ''' <summary>
