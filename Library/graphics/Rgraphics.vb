@@ -64,6 +64,7 @@ Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
@@ -369,12 +370,15 @@ Module Rgraphics
         Dim px As Integer() = CLRVector.asInteger(df!x)
         Dim py As Integer() = CLRVector.asInteger(df!y)
         Dim poly As New Polygon2D(px, py)
+        Dim size = InteropArgumentHelper _
+            .getSize(args.getBySynonyms("size", "Size", "dims"), env, [default]:=$"{poly.width},{poly.height}") _
+            .SizeParser
 
         If df.hasName("r") AndAlso df.hasName("g") AndAlso df.hasName("b") Then
             Dim r As Double() = bytes(CLRVector.asNumeric(df!r))
             Dim g As Double() = bytes(CLRVector.asNumeric(df!g))
             Dim b As Double() = bytes(CLRVector.asNumeric(df!b))
-            Dim raster As New Bitmap(CInt(poly.width) + 1, CInt(poly.height) + 1)
+            Dim raster As New Bitmap(size.Width + 1, size.Height + 1)
             Dim buffer As BitmapBuffer = BitmapBuffer.FromBitmap(raster)
             Dim color As Color
 
@@ -406,12 +410,7 @@ Module Rgraphics
                 .Select(Function(d, i) New PixelData(px(i), py(i), d)) _
                 .ToArray
 
-            Return raster.RenderRasterImage(pixels,
-                size:=New Size(
-                    width:=poly.xpoints.Max,
-                    height:=poly.ypoints.Max
-                )
-            )
+            Return raster.RenderRasterImage(pixels, size:=size)
         End If
     End Function
 
