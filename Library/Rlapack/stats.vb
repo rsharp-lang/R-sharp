@@ -1713,9 +1713,10 @@ Module stats
     <ExportAPI("poisson_disk")>
     Public Function PoissonDiskGenerator_func(Optional minDist As Single = 5.0F,
                                               Optional sampleRange As Single = 256.0F,
-                                              Optional k As Integer = 30) As Object
+                                              Optional k As Integer = 30,
+                                              Optional dart As Image = Nothing) As Object
 
-        Dim vx = PoissonDiskGenerator.Generate(minDist, sampleRange, k)
+        Dim vx = PoissonDiskGenerator.Generate(minDist, sampleRange, k, dart)
         Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
 
         Call df.add("x", vx.Select(Function(vi) vi.x))
