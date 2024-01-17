@@ -333,6 +333,8 @@ Module Rgraphics
     Public Function image(x As Object,
                           <RRawVectorArgument>
                           Optional col As Object = "YlOrRd",
+                          <RListObjectArgument>
+                          Optional args As list = Nothing,
                           Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -344,7 +346,7 @@ Module Rgraphics
         ElseIf x.GetType.ImplementInterface(Of GeneralMatrix) Then
             Return DirectCast(x, GeneralMatrix).imageFromMatrix(col, env)
         ElseIf TypeOf x Is dataframe Then
-            Return DirectCast(x, dataframe).rasetrFromDataframe(col, env)
+            Return DirectCast(x, dataframe).rasetrFromDataframe(col, args, env)
         Else
             Throw New NotImplementedException
         End If
@@ -363,7 +365,7 @@ Module Rgraphics
     ''' <param name="env"></param>
     ''' <returns></returns>
     <Extension>
-    Private Function rasetrFromDataframe(df As dataframe, col As Object, env As Environment) As Object
+    Private Function rasetrFromDataframe(df As dataframe, col As Object, args As list, env As Environment) As Object
         Dim px As Integer() = CLRVector.asInteger(df!x)
         Dim py As Integer() = CLRVector.asInteger(df!y)
         Dim poly As New Polygon2D(px, py)
