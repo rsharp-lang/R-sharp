@@ -216,7 +216,7 @@ Module Rgraphics
     End Function
 
     ''' <summary>
-    ''' [x,y,scale]
+    ''' convert raster object to dataframe. [x,y,scale]
     ''' </summary>
     ''' <param name="raster"></param>
     ''' <param name="args"></param>
@@ -350,6 +350,18 @@ Module Rgraphics
         End If
     End Function
 
+    ''' <summary>
+    ''' dataframe object should contains data fields:
+    ''' 
+    ''' 1. x and y(required)
+    ''' 2. r, g, b for color(optional)
+    ''' 3. scale, intensity, heatmap for color scale(optional)
+    ''' 
+    ''' </summary>
+    ''' <param name="df"></param>
+    ''' <param name="col"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <Extension>
     Private Function rasetrFromDataframe(df As dataframe, col As Object, env As Environment) As Object
         Dim px As Integer() = CLRVector.asInteger(df!x)
