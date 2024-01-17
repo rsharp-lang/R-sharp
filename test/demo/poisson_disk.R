@@ -1,3 +1,5 @@
+require(graphics);
+
 let xy = poisson_disk();
 
 xy[, "scale"] = 1;

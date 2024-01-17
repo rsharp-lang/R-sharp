@@ -1716,7 +1716,7 @@ Module stats
                                               Optional k As Integer = 30) As Object
 
         Dim vx = PoissonDiskGenerator.Generate(minDist, sampleRange, k)
-        Dim df As New Rdataframe
+        Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
 
         Call df.add("x", vx.Select(Function(vi) vi.x))
         Call df.add("y", vx.Select(Function(vi) vi.y))
