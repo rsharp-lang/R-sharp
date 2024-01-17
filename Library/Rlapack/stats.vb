@@ -1702,6 +1702,27 @@ Module stats
 
         Return result
     End Function
+
+    ''' <summary>
+    ''' Fast Poisson Disk Sampling in Arbitrary Dimensions. Robert Bridson. ACM SIGGRAPH 2007
+    ''' </summary>
+    ''' <param name="minDist">the minimumx distance between any of the two samples.</param>
+    ''' <param name="sampleRange">the range of generated samples. From 0[inclusive] to sampleRange[inclusive]</param>
+    ''' <param name="k">the time of throw darts. Higher k generate better result but slower.</param>
+    ''' <returns></returns>
+    <ExportAPI("poisson_disk")>
+    Public Function PoissonDiskGenerator_func(Optional minDist As Single = 5.0F,
+                                              Optional sampleRange As Single = 256.0F,
+                                              Optional k As Integer = 30) As Object
+
+        Dim vx = PoissonDiskGenerator.Generate(minDist, sampleRange, k)
+        Dim df As New Rdataframe
+
+        Call df.add("x", vx.Select(Function(vi) vi.x))
+        Call df.add("y", vx.Select(Function(vi) vi.y))
+
+        Return df
+    End Function
 End Module
 
 Public Enum SplineAlgorithms
