@@ -135,7 +135,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             If data Is Nothing Then
                 Return Nothing
             ElseIf data.GetType.IsArray Then
-                Return getVectorList(data, memberName, envir)
+                Return getVectorList(data, memberName, index.type, envir)
             End If
 
             Return Message.InCompatibleType(GetType(list), data.GetType, envir)
@@ -152,98 +152,118 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' the same size and the element order with the input 
         ''' data vector.
         ''' </returns>
-        Private Shared Function getVectorList(data As Array, memberName As String, envir As Environment) As Object
-            Dim vec As Object() = New Object(data.Length - 1) {}
-            Dim item As Object
-
-            For i As Integer = 0 To vec.Length - 1
-                item = data(i)
-
-                If item Is Nothing Then
-                    vec(i) = Nothing
-                ElseIf TypeOf item Is list Then
-                    vec(i) = DirectCast(item, list).getByName(memberName)
-                ElseIf TypeOf item Is dataframe Then
-                    vec(i) = DirectCast(item, dataframe).getColumnVector(memberName)
-                Else
-                    Return Message.InCompatibleType(GetType(list), item.GetType, envir)
-                End If
-            Next
-
-            Return REnv.TryCastGenericArray(REnv.MeltArray(vec), env:=envir)
-        End Function
-
-        Private Shared Function getListVector(datalist As list, memberName As String, indexMode As TypeCodes, envir As Environment)
-            Dim vec As Object() = New Object(datalist.length - 1) {}
-            Dim source As Object() = datalist.data.ToArray
-            Dim item As Object
+        Private Shared Function getVectorList(data As Array, memberName As String, indexMode As TypeCodes, envir As Environment) As Object
+            Dim source As Object() = data.AsObjectEnumerator.ToArray
 
             If indexMode = TypeCodes.integer Then
                 ' get by index
                 ' this index value is 1-based
-                Dim index As Integer = Integer.Parse(memberName)
-
-                ' for each element item in the source data list
-                For i As Integer = 0 To vec.Length - 1
-                    item = source(i)
-
-                    If item Is Nothing Then
-                        vec(i) = Nothing
-                    ElseIf TypeOf item Is list Then
-                        vec(i) = DirectCast(source(i), list).getByIndex(index)
-                    ElseIf TypeOf item Is dataframe Then
-                        Dim df = DirectCast(item, dataframe)
-                        Dim colnames As String() = df.colnames
-                        Dim col As String = colnames(index - 1)
-
-                        vec(i) = df.getColumnVector(col)
-                    ElseIf TypeOf item Is String AndAlso item = "" Then
-                        ' is json parser result
-                        ' null literal will be convert to empty string automatically?
-                        vec(i) = Nothing
-                    ElseIf TypeOf item Is vector Then
-                        vec(i) = DirectCast(item, vector).getByIndex(index)
-                    ElseIf item.GetType.IsArray Then
-                        vec(i) = DirectCast(item, Array).GetValue(index - 1)
-                    Else
-                        Return Message.InCompatibleType(
-                            GetType(list),
-                            item.GetType,
-                            envir,
-                            "invalid data type while get item slot data from a collection set in vector internal loop!"
-                        )
-                    End If
-                Next
+                Return __getVectorList(source, index:=Integer.Parse(memberName), envir)
             Else
                 ' get by name
-                ' for each element item in the source data list
-                For i As Integer = 0 To vec.Length - 1
-                    item = source(i)
-
-                    If item Is Nothing Then
-                        vec(i) = Nothing
-                    ElseIf TypeOf item Is list Then
-                        vec(i) = DirectCast(source(i), list).getByName(memberName)
-                    ElseIf TypeOf item Is dataframe Then
-                        vec(i) = DirectCast(item, dataframe).getColumnVector(memberName)
-                    ElseIf TypeOf item Is String AndAlso item = "" Then
-                        ' is json parser result
-                        ' null literal will be convert to empty string automatically?
-                        vec(i) = Nothing
-                    Else
-                        Return Message.InCompatibleType(
-                            GetType(list),
-                            item.GetType,
-                            envir,
-                            "invalid data type while get item slot data from a collection set in vector internal loop!"
-                        )
-                    End If
-                Next
+                Return __getVectorList(source, memberName, envir)
             End If
+        End Function
+
+        ''' <summary>
+        ''' get by name
+        ''' </summary>
+        ''' <param name="source"></param>
+        ''' <param name="memberName"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        Private Shared Function __getVectorList(source As Object(), memberName As String, envir As Environment) As Object
+            Dim vec As Object() = New Object(source.Length - 1) {}
+            Dim item As Object
+
+            ' for each element item in the source data list
+            For i As Integer = 0 To vec.Length - 1
+                item = source(i)
+
+                If item Is Nothing Then
+                    vec(i) = Nothing
+                ElseIf TypeOf item Is list Then
+                    vec(i) = DirectCast(source(i), list).getByName(memberName)
+                ElseIf TypeOf item Is dataframe Then
+                    vec(i) = DirectCast(item, dataframe).getColumnVector(memberName)
+                ElseIf TypeOf item Is String AndAlso item = "" Then
+                    ' is json parser result
+                    ' null literal will be convert to empty string automatically?
+                    vec(i) = Nothing
+                Else
+                    Return Message.InCompatibleType(
+                        GetType(list),
+                        item.GetType,
+                        envir,
+                        "invalid data type while get item slot data from a collection set in vector internal loop!"
+                    )
+                End If
+            Next
 
             ' 20230206
             ' handling of the vector bugs
             Return REnv.TryCastGenericArray(REnv.MeltArray(vec), env:=envir)
+        End Function
+
+        ''' <summary>
+        ''' get by index
+        ''' </summary>
+        ''' <param name="source"></param>
+        ''' <param name="index">this index value is 1-based</param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        Private Shared Function __getVectorList(source As Object(), index As Integer, envir As Environment) As Object
+            Dim vec As Object() = New Object(source.Length - 1) {}
+            Dim item As Object
+
+            ' for each element item in the source data list
+            For i As Integer = 0 To vec.Length - 1
+                item = source(i)
+
+                If item Is Nothing Then
+                    vec(i) = Nothing
+                ElseIf TypeOf item Is list Then
+                    vec(i) = DirectCast(source(i), list).getByIndex(index)
+                ElseIf TypeOf item Is dataframe Then
+                    Dim df = DirectCast(item, dataframe)
+                    Dim colnames As String() = df.colnames
+                    Dim col As String = colnames(index - 1)
+
+                    vec(i) = df.getColumnVector(col)
+                ElseIf TypeOf item Is String AndAlso item = "" Then
+                    ' is json parser result
+                    ' null literal will be convert to empty string automatically?
+                    vec(i) = Nothing
+                ElseIf TypeOf item Is vector Then
+                    vec(i) = DirectCast(item, vector).getByIndex(index)
+                ElseIf item.GetType.IsArray Then
+                    vec(i) = DirectCast(item, Array).GetValue(index - 1)
+                Else
+                    Return Message.InCompatibleType(
+                        GetType(list),
+                        item.GetType,
+                        envir,
+                        "invalid data type while get item slot data from a collection set in vector internal loop!"
+                    )
+                End If
+            Next
+
+            ' 20230206
+            ' handling of the vector bugs
+            Return REnv.TryCastGenericArray(REnv.MeltArray(vec), env:=envir)
+        End Function
+
+        Private Shared Function getListVector(datalist As list, memberName As String, indexMode As TypeCodes, envir As Environment)
+            Dim source As Object() = datalist.data.ToArray
+
+            If indexMode = TypeCodes.integer Then
+                ' get by index
+                ' this index value is 1-based
+                Return __getVectorList(source, index:=Integer.Parse(memberName), envir)
+            Else
+                ' get by name
+                Return __getVectorList(source, memberName, envir)
+            End If
         End Function
     End Class
 End Namespace
