@@ -1015,7 +1015,7 @@ Namespace Runtime.Internal.Invokes
                               Optional safe As Boolean = False,
                               Optional env As Environment = Nothing) As Object
 
-            If d Is Nothing Then
+            If d Is Nothing OrElse d.empty Then
                 If TypeOf row Is dataframe Then
                     Return row
                 Else
