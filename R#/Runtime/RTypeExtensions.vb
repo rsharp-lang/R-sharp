@@ -54,6 +54,7 @@
 Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -161,7 +162,7 @@ Namespace Runtime
                     Return TypeCodes.boolean
                 Case GetType(Dictionary(Of String, Object)), GetType(Dictionary(Of String, Object)()), GetType(list)
                     Return TypeCodes.list
-                Case GetType(RMethodInfo), GetType(DeclareNewFunction)
+                Case GetType(RMethodInfo), GetType(DeclareNewFunction), GetType(RFunction)
                     Return TypeCodes.closure
                 Case Else
                     ' if strict, then the environment type comes from the

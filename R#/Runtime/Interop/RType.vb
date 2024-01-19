@@ -230,6 +230,8 @@ Namespace Runtime.Interop
         ''' <returns></returns>
         Friend Shared ReadOnly Property any As RType = GetRSharpType(GetType(Object))
 
+        Friend Shared ReadOnly Property closure As RType = GetRSharpType(GetType(RFunction))
+
         Private Sub New(raw As Type)
             If raw.IsValueType AndAlso
                raw.Namespace = "System" AndAlso
