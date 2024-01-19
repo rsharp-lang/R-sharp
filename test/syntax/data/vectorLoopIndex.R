@@ -9,3 +9,5 @@ let vl = list(
 str(vl);
 
 print(vl@{1});
+print(vl@{10});
+print(vl@{100});
