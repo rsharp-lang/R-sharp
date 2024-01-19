@@ -406,7 +406,9 @@ Module plots
                 .ToArray
             Dim lines As New List(Of SerialData) From {line}
             Dim color = args.getValue("color", env, "black").TranslateColor
-            Dim maxy As Double = y.Max
+
+            ' plot(data)  only x, no y(means y is nothing)
+            Dim maxy As Double = If(y.IsNullOrEmpty, x.Max, y.Max)
 
             For Each name As String In fit_names
                 Dim serial_data As list = args(name)
