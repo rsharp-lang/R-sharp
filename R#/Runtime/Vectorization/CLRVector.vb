@@ -180,6 +180,7 @@ Namespace Runtime.Vectorization
 
             If typeof_x.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
+                typeof_x = x.GetType
             End If
 
             If TypeOf x Is String Then
@@ -196,6 +197,10 @@ Namespace Runtime.Vectorization
                 Return DirectCast(x, String()()) _
                     .Select(Function(r) r(Scan0)) _
                     .ToArray
+            ElseIf typeof_x Is GetType(Long()) Then
+                Return DirectCast(x, Long()).Select(Function(l) l.ToString).ToArray
+            ElseIf typeof_x Is GetType(Integer()) Then
+                Return DirectCast(x, Integer()).Select(Function(i) i.ToString).ToArray
             ElseIf typeof_x.IsArray Then
                 ' force cast any object to string
                 Dim objs = DirectCast(x, Array) _
