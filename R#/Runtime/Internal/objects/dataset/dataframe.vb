@@ -189,7 +189,10 @@ Namespace Runtime.Internal.Object
         ''' <summary>
         ''' column <see cref="Array.Length"/>
         ''' </summary>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' the row number is tested based on the ncol, if the ncol is zero, then the 
+        ''' function GetRowNumbers will returns zero directly.
+        ''' </returns>
         Public ReadOnly Property nrows As Integer
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
@@ -200,7 +203,19 @@ Namespace Runtime.Internal.Object
         Public ReadOnly Property ncols As Integer
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
-                Return columns.Count
+                Return columns.TryCount
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' current dataframe object contains any data or not?
+        ''' </summary>
+        ''' <returns>empty is true means contains no rows data or no columns</returns>
+        Public ReadOnly Property empty As Boolean
+            Get
+                ' due to the reason of work routine of GetRowNumbers() function
+                ' we just needs to test nrows is equals to ZERO or not
+                Return nrows = 0
             End Get
         End Property
 
@@ -720,7 +735,7 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <returns></returns>
         Public Function GetRowNumbers() As Integer
-            If columns.Count = 0 Then
+            If columns.TryCount = 0 Then
                 Return 0
             Else
                 Return Aggregate col As Array

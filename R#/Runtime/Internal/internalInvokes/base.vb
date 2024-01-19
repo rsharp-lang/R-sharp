@@ -951,6 +951,14 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Private Function rowBindDataFrame(d As dataframe, row As dataframe, env As Environment) As Object
+            ' 20240119
+            ' one of them maybe empty
+            If d.empty Then
+                Return row
+            ElseIf row.empty Then
+                Return d
+            End If
+
             If d.columns.Count <> row.columns.Count Then
                 Return Internal.debug.stop({
                     $"mismatch column size between two dataframe!",
@@ -1015,7 +1023,7 @@ Namespace Runtime.Internal.Invokes
                               Optional safe As Boolean = False,
                               Optional env As Environment = Nothing) As Object
 
-            If d Is Nothing Then
+            If d Is Nothing OrElse d.empty Then
                 If TypeOf row Is dataframe Then
                     Return row
                 Else
@@ -2037,9 +2045,12 @@ RE0:
         ''' ``NULL`` is often returned by expressions and functions whose 
         ''' value is undefined.
         ''' 
-        ''' is.null is a primitive function.
+        ''' ``is.null`` is a primitive function.
         ''' </summary>
         ''' <param name="x">an object to be tested or coerced.</param>
+        ''' <param name="els">
+        ''' does function test for the elements inside x, not the given object x?
+        ''' </param>
         ''' <returns>is.null returns TRUE if its argument's value is NULL and FALSE otherwise.</returns>
         ''' <remarks>
         ''' ``NULL`` can be indexed (see Extract) in just about any syntactically 
@@ -2057,8 +2068,22 @@ RE0:
         ''' And structure).
         ''' </remarks>
         <ExportAPI("is.null")>
-        Public Function isNull(x As Object) As Boolean
-            Return x Is Nothing
+        <RApiReturn(TypeCodes.boolean)>
+        Public Function isNull(<RRawVectorArgument> x As Object,
+                               Optional els As Boolean = False,
+                               Optional env As Environment = Nothing) As Object
+
+            If x Is Nothing Then
+                Return True
+            End If
+
+            If els Then
+                Return ObjectSet.GetObjectSet(x, env) _
+                    .Select(Function(o) o Is Nothing) _
+                    .ToArray
+            Else
+                Return False
+            End If
         End Function
 
         ''' <summary>

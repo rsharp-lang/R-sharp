@@ -62,12 +62,48 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports rDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 ''' <summary>
 ''' NLP tools
 ''' </summary>
 <Package("NLP")>
 Module NLP
+
+    Sub Main()
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(VectorModel), AddressOf exportWordVector)
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Bigram()), AddressOf bigramTable)
+    End Sub
+
+    Private Function bigramTable(bi As Bigram(), args As list, env As Environment) As rDataframe
+        Dim df As New rDataframe With {.columns = New Dictionary(Of String, Array)}
+
+        Call df.add("i", From t In bi Select t.i)
+        Call df.add("j", From t In bi Select t.j)
+        Call df.add("n", From t In bi Select t.count)
+
+        Return df
+    End Function
+
+    Private Function exportWordVector(vec As VectorModel, args As list, env As Environment) As rDataframe
+        Dim mat = vec.wordMap.ToArray
+        Dim df As New rDataframe With {
+            .rownames = mat.Select(Function(t) t.Key).ToArray,
+            .columns = New Dictionary(Of String, Array)
+        }
+        Dim colnames As String() = Enumerable _
+            .Range(0, vec.vectorSize) _
+            .Select(Function(i) $"V{i + 1}") _
+            .ToArray
+        Dim offset As Integer
+
+        For i As Integer = 0 To vec.vectorSize - 1
+            offset = i
+            df.add(colnames(i), mat.Select(Function(v) v.Value(offset)))
+        Next
+
+        Return df
+    End Function
 
     Private Function getText(text As Object, env As Environment) As [Variant](Of Message, Paragraph())
         Dim pull As pipeline = pipeline.TryCreatePipeline(Of String)(text, env)
@@ -196,6 +232,32 @@ Module NLP
 
                       Return sentences
                   End Function)
+    End Function
+
+    <ExportAPI("bigram")>
+    <RApiReturn(GetType(Bigram))>
+    Public Function bigram_func(<RRawVectorArgument> text As Object, Optional env As Environment = Nothing) As Object
+        Dim pull As pipeline = pipeline.TryCreatePipeline(Of Paragraph)(text, env)
+        Dim data As Paragraph()
+
+        If pull.isError Then
+            pull = pipeline.TryCreatePipeline(Of String)(text, env)
+
+            If pull.isError Then
+                Return pull.getError
+            End If
+
+            data = pull.populates(Of String)(env) _
+                .Select(Function(si) Paragraph.Segmentation(si)) _
+                .IteratesALL _
+                .ToArray
+        Else
+            data = pull.populates(Of Paragraph)(env).ToArray
+        End If
+
+        Return Bigram.ParseText(data) _
+            .OrderByDescending(Function(t) t.count) _
+            .ToArray
     End Function
 
     ''' <summary>

@@ -231,7 +231,9 @@ Public Module Extensions
     ''' (输入的数据源)
     ''' </param>
     ''' <param name="eval">求值函数</param>
-    ''' <returns></returns>
+    ''' <returns>this function returns nothing if the parameter input <paramref name="x"/> has 
+    ''' no value, and also may returns an error <see cref="Message"/> if error happends!
+    ''' </returns>
     <Extension>
     Public Function EvaluateFramework(Of T, TOut)(env As Environment,
                                                   x As Object,

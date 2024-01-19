@@ -84,6 +84,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder
 Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder.GMM
 Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder.GMM.EMGaussianMixtureModel
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Quantile
@@ -604,7 +605,10 @@ Module clustering
     ''' score [-1, 0] indicates that the samples might have got assigned To the wrong clusters.
     ''' </remarks>
     <ExportAPI("silhouette_score")>
-    Public Function silhouette_score(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+    Public Function silhouette_score(<RRawVectorArgument> x As Object,
+                                     Optional traceback As TracebackMatrix = Nothing,
+                                     Optional env As Environment = Nothing) As Object
+
         Dim points As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(x, env)
         Dim data As IEnumerable(Of ClusterEntity)
 
@@ -623,7 +627,20 @@ Module clustering
             data = mapper.GetVectors(pull)
         End If
 
-        Return data.Silhouette
+        If traceback Is Nothing Then
+            Return data.Silhouette
+        Else
+            Dim itr As New TraceBackIterator(traceback.data)
+            Dim curveLine = TraceBackAlgorithm.MeasureCurve(data.ToArray, itr).ToArray
+            Dim df As New Rdataframe With {
+                .columns = New Dictionary(Of String, Array)
+            }
+
+            Call df.add("x", curveLine.X.AsEnumerable)
+            Call df.add("y", curveLine.Y.AsEnumerable)
+
+            Return df
+        End If
     End Function
 
     ''' <summary>

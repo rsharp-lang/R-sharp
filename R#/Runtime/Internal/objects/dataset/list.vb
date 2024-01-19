@@ -395,6 +395,14 @@ Namespace Runtime.Internal.Object
             Return getNames.GetJson
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="i">1-based index</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' the given index value <paramref name="i"/> should be a integer value from 1-based.
+        ''' </remarks>
         Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex, ITupleConstructor.getByIndex
             If i > length Then
                 Return Nothing

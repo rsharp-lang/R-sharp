@@ -466,6 +466,11 @@ Module stats
     ''' <summary>
     ''' Interpolating Splines
     ''' </summary>
+    ''' <param name="data">
+    ''' a set of the point data, could be a dataframe object that contains two data 
+    ''' field: x and y, or a tuple list object contains two slot element: x and y.
+    ''' or just a vector of the clr <see cref="Point"/> or <see cref="PointF"/> object
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("spline")>
     Public Function spline(<RRawVectorArgument>
@@ -1413,45 +1418,27 @@ Module stats
     End Function
 
     ''' <summary>
-    ''' 
+    ''' common method for construct dataset for run pca/plsda/oplsda analysis
     ''' </summary>
     ''' <param name="x"></param>
     ''' <param name="y">Y could be nothing for PCA analysis</param>
     ''' <returns></returns>
     <Extension>
     Private Function GetDataSetCommon(x As Rdataframe, y As Array) As StatisticsObject
-        Dim ylabels As String() = Nothing
-        Dim yfactors As factor = Nothing
-        Dim yval As Double() = Nothing
-        Dim xm As Double()() = x.forEachRow _
-            .Select(Function(ci) CLRVector.asNumeric(ci.value)) _
-            .ToArray
+        Dim colnames As String() = x.colnames
 
-        If Not y Is Nothing Then
-            If DataFramework.IsNumericCollection(y.GetType) Then
-                ' regression
-                yval = CLRVector.asNumeric(y)
-                ylabels = x.rownames
-            Else
-                ylabels = CLRVector.asCharacter(y)
-                yfactors = factor.CreateFactor(ylabels)
-                yval = yfactors.asNumeric(ylabels)
-            End If
+        If Not y.IsNullOrEmpty Then
+            y = REnv.UnsafeTryCastGenericArray(y)
         End If
 
-        Dim ds As New StatisticsObject(xm, yval) With {
-            .decoder = yfactors
-        }
-
-        Call Enumerable.Range(0, x.ncols).DoEach(AddressOf ds.XIndexes.Add)
-        Call Enumerable.Range(0, x.nrows).DoEach(AddressOf ds.YIndexes.Add)
-        Call x.colnames.DoEach(AddressOf ds.XLabels.Add)
-
-        If Not ylabels.IsNullOrEmpty Then
-            Call ylabels.DoEach(AddressOf ds.YLabels.Add)
-        End If
-
-        Return ds
+        Return x.forEachRow _
+            .Select(Function(r)
+                        Return New NamedCollection(Of Double)(
+                            name:=r.name,
+                            value:=CLRVector.asNumeric(r.value)
+                        )
+                    End Function) _
+            .CommonDataSet(colnames, labels:=y)
     End Function
 
     <ExportAPI("opls")>
@@ -1714,6 +1701,28 @@ Module stats
         Dim result = env.EvaluateFramework(Of Double, Double)(x, Function(xi) gamma.GetCDF(xi))
 
         Return result
+    End Function
+
+    ''' <summary>
+    ''' Fast Poisson Disk Sampling in Arbitrary Dimensions. Robert Bridson. ACM SIGGRAPH 2007
+    ''' </summary>
+    ''' <param name="minDist">the minimumx distance between any of the two samples.</param>
+    ''' <param name="sampleRange">the range of generated samples. From 0[inclusive] to sampleRange[inclusive]</param>
+    ''' <param name="k">the time of throw darts. Higher k generate better result but slower.</param>
+    ''' <returns></returns>
+    <ExportAPI("poisson_disk")>
+    Public Function PoissonDiskGenerator_func(Optional minDist As Single = 5.0F,
+                                              Optional sampleRange As Single = 256.0F,
+                                              Optional k As Integer = 30,
+                                              Optional dart As Image = Nothing) As Object
+
+        Dim vx = PoissonDiskGenerator.Generate(minDist, sampleRange, k, dart)
+        Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+
+        Call df.add("x", vx.Select(Function(vi) vi.x))
+        Call df.add("y", vx.Select(Function(vi) vi.y))
+
+        Return df
     End Function
 End Module
 

@@ -64,6 +64,7 @@ Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
@@ -216,7 +217,7 @@ Module Rgraphics
     End Function
 
     ''' <summary>
-    ''' [x,y,scale]
+    ''' convert raster object to dataframe. [x,y,scale]
     ''' </summary>
     ''' <param name="raster"></param>
     ''' <param name="args"></param>
@@ -333,6 +334,8 @@ Module Rgraphics
     Public Function image(x As Object,
                           <RRawVectorArgument>
                           Optional col As Object = "YlOrRd",
+                          <RListObjectArgument>
+                          Optional args As list = Nothing,
                           Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -344,23 +347,38 @@ Module Rgraphics
         ElseIf x.GetType.ImplementInterface(Of GeneralMatrix) Then
             Return DirectCast(x, GeneralMatrix).imageFromMatrix(col, env)
         ElseIf TypeOf x Is dataframe Then
-            Return DirectCast(x, dataframe).rasetrFromDataframe(col, env)
+            Return DirectCast(x, dataframe).rasetrFromDataframe(col, args, env)
         Else
             Throw New NotImplementedException
         End If
     End Function
 
+    ''' <summary>
+    ''' dataframe object should contains data fields:
+    ''' 
+    ''' 1. x and y(required)
+    ''' 2. r, g, b for color(optional)
+    ''' 3. scale, intensity, heatmap for color scale(optional)
+    ''' 
+    ''' </summary>
+    ''' <param name="df"></param>
+    ''' <param name="col"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <Extension>
-    Private Function rasetrFromDataframe(df As dataframe, col As Object, env As Environment) As Object
+    Private Function rasetrFromDataframe(df As dataframe, col As Object, args As list, env As Environment) As Object
         Dim px As Integer() = CLRVector.asInteger(df!x)
         Dim py As Integer() = CLRVector.asInteger(df!y)
         Dim poly As New Polygon2D(px, py)
+        Dim size = InteropArgumentHelper _
+            .getSize(args.getBySynonyms("size", "Size", "dims"), env, [default]:=$"{poly.width},{poly.height}") _
+            .SizeParser
 
         If df.hasName("r") AndAlso df.hasName("g") AndAlso df.hasName("b") Then
             Dim r As Double() = bytes(CLRVector.asNumeric(df!r))
             Dim g As Double() = bytes(CLRVector.asNumeric(df!g))
             Dim b As Double() = bytes(CLRVector.asNumeric(df!b))
-            Dim raster As New Bitmap(CInt(poly.width) + 1, CInt(poly.height) + 1)
+            Dim raster As New Bitmap(size.Width + 1, size.Height + 1)
             Dim buffer As BitmapBuffer = BitmapBuffer.FromBitmap(raster)
             Dim color As Color
 
@@ -392,12 +410,7 @@ Module Rgraphics
                 .Select(Function(d, i) New PixelData(px(i), py(i), d)) _
                 .ToArray
 
-            Return raster.RenderRasterImage(pixels,
-                size:=New Size(
-                    width:=poly.xpoints.Max,
-                    height:=poly.ypoints.Max
-                )
-            )
+            Return raster.RenderRasterImage(pixels, size:=size)
         End If
     End Function
 
