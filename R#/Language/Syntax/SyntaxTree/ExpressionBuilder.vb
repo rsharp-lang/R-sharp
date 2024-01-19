@@ -198,7 +198,17 @@ Namespace Language.Syntax.SyntaxParser
                         '
                         ' 0 1 2 
                         ' x @ y
-                        Return New VectorLoop(New SymbolReference(item(Scan0)), New SymbolReference(item(2).text.Trim("@"c)))
+                        Dim str As String = item(2).text.Trim("@"c)
+                        Dim index As Expression
+
+                        If str.IsPattern("\d+") Then
+                            ' is array index
+                            index = New Literal(Integer.Parse(str))
+                        Else
+                            index = New SymbolReference(str)
+                        End If
+
+                        Return New VectorLoop(New SymbolReference(item(Scan0)), index)
                     End If
                 ElseIf item.isLiteral Then
                     Return SyntaxImplements.LiteralSyntax(item(Scan0), opts)
