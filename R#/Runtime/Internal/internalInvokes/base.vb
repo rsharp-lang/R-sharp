@@ -951,6 +951,14 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Private Function rowBindDataFrame(d As dataframe, row As dataframe, env As Environment) As Object
+            ' 20240119
+            ' one of them maybe empty
+            If d.empty Then
+                Return row
+            ElseIf row.empty Then
+                Return d
+            End If
+
             If d.columns.Count <> row.columns.Count Then
                 Return Internal.debug.stop({
                     $"mismatch column size between two dataframe!",
