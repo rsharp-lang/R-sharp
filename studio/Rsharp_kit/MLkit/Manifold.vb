@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::3d808abefff2490ad2e706d89ebc1c1f, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//Manifold.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 233
-    '    Code Lines: 155
-    ' Comment Lines: 53
-    '   Blank Lines: 25
-    '     File Size: 9.84 KB
+' Summaries:
 
 
-    ' Module Manifold
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asGraph, exportUmapTable, umapProjection
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 233
+'    Code Lines: 155
+' Comment Lines: 53
+'   Blank Lines: 25
+'     File Size: 9.84 KB
+
+
+' Module Manifold
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asGraph, exportUmapTable, umapProjection
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -58,6 +58,8 @@ Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.DataMining.UMAP
+Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
@@ -124,7 +126,7 @@ Module Manifold
     ''' <summary>
     ''' UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction
     ''' </summary>
-    ''' <param name="data">data must be normalized!</param>
+    ''' <param name="data">data must be normalized! matrix value could be a dataframe object, or clr type <see cref="INumericMatrix"/>.</param>
     ''' <param name="dimension">
     ''' default 2, The dimension of the space to embed into.
     ''' </param>
@@ -196,8 +198,14 @@ Module Manifold
             matrix = DirectCast(data, Rdataframe) _
                 .forEachRow _
                 .Select(Function(r)
-                            Return r.Select(Function(n) CDbl(n)).ToArray
+                            ' convert each row as vector
+                            Return CLRVector.asNumeric(r.value)
                         End Function) _
+                .ToArray
+        ElseIf data.GetType.ImplementInterface(Of INumericMatrix) Then
+            matrix = DirectCast(data, INumericMatrix).ArrayPack
+            labels = matrix _
+                .Select(Function(r, i) i.ToString) _
                 .ToArray
         Else
             Dim raw As pipeline = pipeline.TryCreatePipeline(Of DataSet)(data, env)
@@ -212,6 +220,7 @@ Module Manifold
             labels = rawMatrix.Keys(distinct:=False)
             matrix = rawMatrix.Select(Function(r) r(cols)).ToArray
         End If
+
         If debug OrElse env.globalEnvironment.debugMode Then
             report = AddressOf RunSlavePipeline.SendProgress
         Else
