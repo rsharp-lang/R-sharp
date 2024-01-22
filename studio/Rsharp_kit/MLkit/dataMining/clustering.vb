@@ -613,7 +613,13 @@ Module clustering
         Dim points As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(x, env)
         Dim data As IEnumerable(Of ClusterEntity)
 
-        If points.isError Then
+        If TypeOf x Is Rdataframe Then
+            data = DirectCast(x, Rdataframe) _
+                .forEachRow _
+                .Select(Function(r)
+                            Return New ClusterEntity(r.name, CLRVector.asNumeric(r.value))
+                        End Function)
+        ElseIf points.isError Then
             points = pipeline.TryCreatePipeline(Of ClusterEntity)(x, env)
 
             If points.isError Then
