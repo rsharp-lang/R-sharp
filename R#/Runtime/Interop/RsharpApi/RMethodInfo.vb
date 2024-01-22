@@ -81,7 +81,8 @@ Namespace Runtime.Interop
     ''' <summary>
     ''' Use for R# package method, a wrapper for the .NET clr function <see cref="MethodInfo"/>.
     ''' </summary>
-    Public Class RMethodInfo : Implements RFunction, RPrint, INamespaceReferenceSymbol, IRuntimeTrace
+    Public Class RMethodInfo : Inherits RsharpDataObject
+        Implements RFunction, RPrint, INamespaceReferenceSymbol, IRuntimeTrace
 
         ''' <summary>
         ''' The function name
@@ -145,6 +146,7 @@ Namespace Runtime.Interop
             Me.returns = RApiReturnAttribute.MeasureRReturnInfo(closure.Method)
             Me.parameters = parseParameters(closure.Method, is_lambda:=True)
             Me.listObjectMargin = RArgumentList.objectListArgumentMargin(Me)
+            Me.elementType = RType.any
 
             Call setRuntimeTraceback()
         End Sub
@@ -182,6 +184,7 @@ Namespace Runtime.Interop
             Me.parameters = parseParameters(closure, is_lambda:=False)
             Me.invisible = RSuppressPrintAttribute.IsPrintInvisible(closure)
             Me.listObjectMargin = RArgumentList.objectListArgumentMargin(Me)
+            Me.elementType = RType.any
 
             Call setRuntimeTraceback()
         End Sub
