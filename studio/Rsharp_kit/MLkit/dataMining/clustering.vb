@@ -503,7 +503,8 @@ Module clustering
     ''' (distinct) cluster centres. If a number, a random set of 
     ''' (distinct) rows in x is chosen as the initial centres.
     ''' </param>
-    ''' <param name="parallel"></param>
+    ''' <param name="n_threads">the parallel options, for configs the number of 
+    ''' cpu cores for run the parallel task code.</param>
     ''' <param name="debug"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
