@@ -513,7 +513,7 @@ Module clustering
                            x As Object,
                            Optional centers% = 3,
                            Optional bisecting As Boolean = False,
-                           Optional parallel As Boolean = True,
+                           Optional n_threads As Integer = 16,
                            Optional debug As Boolean = False,
                            Optional traceback As Boolean = False,
                            Optional env As Environment = Nothing) As Object
@@ -533,7 +533,8 @@ Module clustering
             Dim bikmeans As New BisectingKMeans(
                 dataList:=maps.GetVectors(model.TryCast(Of EntityClusterModel())),
                 k:=centers,
-                traceback:=traceback
+                traceback:=traceback,
+                n_threads:=n_threads
             )
             Dim result = bikmeans.runBisectingKMeans().ToArray
             Dim kmeans_result As New List(Of EntityClusterModel)
@@ -548,7 +549,7 @@ Module clustering
             Return kmeans_result.ToArray
         Else
             Return model.TryCast(Of EntityClusterModel()) _
-                .Kmeans(centers, debug, parallel) _
+                .Kmeans(centers, debug, n_threads:=n_threads) _
                 .ToArray
         End If
     End Function
