@@ -463,6 +463,9 @@ Module clustering
     ''' <summary>
     ''' get the clustering traceback
     ''' </summary>
+    ''' <param name="x">
+    ''' the json data for construct the traceback matrix object
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("getTraceback")>
     <RApiReturn(GetType(TracebackMatrix))>
