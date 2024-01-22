@@ -607,6 +607,7 @@ Module clustering
     <ExportAPI("silhouette_score")>
     Public Function silhouette_score(<RRawVectorArgument> x As Object,
                                      Optional traceback As TracebackMatrix = Nothing,
+                                     Optional raw_clr As Boolean = False,
                                      Optional env As Environment = Nothing) As Object
 
         Dim points As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(x, env)
@@ -632,14 +633,20 @@ Module clustering
         Else
             Dim itr As New TraceBackIterator(traceback.data)
             Dim curveLine = TraceBackAlgorithm.MeasureCurve(data.ToArray, itr).ToArray
-            Dim df As New Rdataframe With {
-                .columns = New Dictionary(Of String, Array)
-            }
 
-            Call df.add("x", curveLine.X.AsEnumerable)
-            Call df.add("y", curveLine.Y.AsEnumerable)
+            If raw_clr Then
+                Return curveLine
+            Else
+                Dim df As New Rdataframe With {
+                    .columns = New Dictionary(Of String, Array)
+                }
 
-            Return df
+                Call df.add("num_class", curveLine.Select(Function(t) t.num_class))
+                Call df.add("silhouette", curveLine.Select(Function(t) t.silhouette))
+                Call df.add("dunn", curveLine.Select(Function(t) t.dunn))
+
+                Return df
+            End If
         End If
     End Function
 
