@@ -607,6 +607,9 @@ Module clustering
     ''' <param name="debug"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
+    ''' <remarks>
+    ''' the canopy seed data is only works for the native k-means algorithm currently.
+    ''' </remarks>
     <ExportAPI("kmeans")>
     <RApiReturn(GetType(EntityClusterModel))>
     Public Function Kmeans_func(<RRawVectorArgument> x As Object,
