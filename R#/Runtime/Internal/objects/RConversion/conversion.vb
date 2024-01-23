@@ -701,7 +701,10 @@ RE0:
             End If
 
             If type Is Nothing Then
-                Return Internal.debug.stop(New InvalidProgramException("unknown type handler..."), env)
+                Return Internal.debug.stop({
+                    $"unknown type handler...",
+                    $"typeof_input: {x.GetType.FullName}"
+                }, env)
             Else
                 Return Internal.debug.stop(New InvalidProgramException("missing api for handle of data: " & type.FullName), env)
             End If
