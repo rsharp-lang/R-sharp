@@ -109,6 +109,7 @@ Module clustering
     Friend Sub Main()
         Call REnv.Internal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
 
+        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(Bisecting.Cluster()), AddressOf clustersDf1)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(FuzzyCMeansEntity()), AddressOf cmeansSummary)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(
@@ -123,6 +124,38 @@ Module clustering
 
     Private Function showHclust(cluster As Cluster) As String
         Return cluster.ToConsoleLine
+    End Function
+
+    Private Function clustersDf1(clusters As Bisecting.Cluster(), args As list, env As Environment) As Rdataframe
+        Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim width As Integer = clusters(0).centroid.Length
+        Dim v As List(Of Double)() = New List(Of Double)(width - 1) {}
+        Dim rownames As New List(Of String)
+        Dim class_id As New List(Of Integer)
+
+        For i As Integer = 0 To width - 1
+            v(i) = New List(Of Double)
+        Next
+
+        For Each c As Bisecting.Cluster In clusters
+            For Each p As ClusterEntity In c
+                Call rownames.Add(p.uid)
+                Call class_id.Add(c.Cluster)
+
+                For i As Integer = 0 To width - 1
+                    Call v(i).Add(p(i))
+                Next
+            Next
+        Next
+
+        df.add("clusters", class_id)
+        df.rownames = rownames.ToArray
+
+        For i As Integer = 0 To width - 1
+            Call df.add($"V{i + 1}", v(i))
+        Next
+
+        Return df
     End Function
 
     Public Function clusterSummary(result As Object, args As list, env As Environment) As Object
