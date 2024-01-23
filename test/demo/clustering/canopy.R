@@ -63,7 +63,7 @@ print(k_native, max.print = 6);
 
 write.csv(k_native, file = "./canopy-native-kmeans.csv");
 
-bitmap(file = `./canopy-kmeans.png`) {
+bitmap(file = `./canopy-native-kmeans.png`) {
     plot(as.numeric(k_native$x), as.numeric(k_native$y), 
         class     = k_native$Cluster, 
         grid.fill = "white",
