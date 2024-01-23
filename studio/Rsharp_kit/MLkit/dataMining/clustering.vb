@@ -534,6 +534,14 @@ Module clustering
     ''' <param name="x"></param>
     ''' <param name="T1"></param>
     ''' <param name="T2"></param>
+    ''' <param name="seed">
+    ''' use the canopy method as kmeans seed or just used for clustering?
+    ''' 
+    ''' set this parameter to value true means used the result as seed, then a seed object of 
+    ''' type <see cref="CanopySeeds"/> will be generated from this function. otherwise parameter 
+    ''' value false means the result is a collection of the <see cref="Bisecting.Cluster"/> 
+    ''' result, you can convert the cluster result to a dataframe via ``as.data.frame`` method.
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     ''' <remarks>
@@ -547,6 +555,7 @@ Module clustering
     Public Function Canopy(<RRawVectorArgument> x As Object,
                            Optional T1 As Double = Double.NaN,
                            Optional T2 As Double = Double.NaN,
+                           Optional seed As Boolean = True,
                            Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -561,11 +570,18 @@ Module clustering
 
         Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
         Dim data As IEnumerable(Of ClusterEntity) = maps.GetVectors(model.TryCast(Of EntityClusterModel()))
+        Dim builder As CanopyBuilder
 
         If T1.IsNaNImaginary OrElse T2.IsNaNImaginary Then
-            Return New CanopyBuilder(data).Solve
+            builder = New CanopyBuilder(data)
         Else
-            Return New CanopyBuilder(data, T1, T2).Solve
+            builder = New CanopyBuilder(data, T1, T2)
+        End If
+
+        If seed Then
+            Return builder.KMeansSeeds
+        Else
+            Return builder.Solve
         End If
     End Function
 
@@ -581,6 +597,10 @@ Module clustering
     ''' either the number of clusters, say k, or a set of initial 
     ''' (distinct) cluster centres. If a number, a random set of 
     ''' (distinct) rows in x is chosen as the initial centres.
+    ''' 
+    ''' this parameter value could be an integer value or a seed value object 
+    ''' in clr type <see cref="CanopySeeds"/> which is produced via the 
+    ''' ``canopy`` function.
     ''' </param>
     ''' <param name="n_threads">the parallel options, for configs the number of 
     ''' cpu cores for run the parallel task code.</param>
@@ -591,7 +611,7 @@ Module clustering
     <RApiReturn(GetType(EntityClusterModel))>
     Public Function Kmeans(<RRawVectorArgument>
                            x As Object,
-                           Optional centers% = 3,
+                           Optional centers As Object = 3,
                            Optional bisecting As Boolean = False,
                            Optional n_threads As Integer = 16,
                            Optional debug As Boolean = False,
@@ -608,11 +628,19 @@ Module clustering
             Return model.TryCast(Of Message)
         End If
 
+        Dim nk As Integer
+
+        If TypeOf centers Is CanopySeeds Then
+            nk = DirectCast(centers, CanopySeeds).k
+        Else
+            nk = CLRVector.asInteger(centers).DefaultFirst(3)
+        End If
+
         If bisecting Then
             Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
             Dim bikmeans As New BisectingKMeans(
                 dataList:=maps.GetVectors(model.TryCast(Of EntityClusterModel())),
-                k:=centers,
+                k:=nk,
                 traceback:=traceback,
                 n_threads:=n_threads
             )
@@ -627,9 +655,11 @@ Module clustering
             Next
 
             Return kmeans_result.ToArray
+        ElseIf TypeOf centers Is CanopySeeds Then
+
         Else
             Return model.TryCast(Of EntityClusterModel()) _
-                .Kmeans(centers, debug, n_threads:=n_threads) _
+                .Kmeans(nk, debug, n_threads:=n_threads) _
                 .ToArray
         End If
     End Function
