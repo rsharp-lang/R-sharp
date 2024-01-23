@@ -612,9 +612,68 @@ Module clustering
     <ExportAPI("silhouette_score")>
     Public Function silhouette_score(<RRawVectorArgument> x As Object,
                                      Optional traceback As TracebackMatrix = Nothing,
-                                     Optional raw_clr As Boolean = False,
                                      Optional env As Environment = Nothing) As Object
 
+        Dim pull = dataSetCommon(x, env)
+
+        If pull Like GetType(Message) Then
+            Return pull.TryCast(Of Message)
+        End If
+
+        If traceback Is Nothing Then
+            Return pull.TryCast(Of IEnumerable(Of ClusterEntity)).Silhouette
+        Else
+            Dim itr As New TraceBackIterator(traceback.data)
+            Dim data = pull.TryCast(Of IEnumerable(Of ClusterEntity)).ToArray
+            Dim curveLine = EvaluationScore.SilhouetteCoeff(data, itr).ToArray
+
+            Dim df As New Rdataframe With {
+                .columns = New Dictionary(Of String, Array)
+            }
+
+            Call df.add("num_class", curveLine.Select(Function(t) t.X))
+            Call df.add("silhouette", curveLine.Select(Function(t) t.Y))
+
+            Return df
+        End If
+    End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="traceback"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("calinski_harabasz")>
+    Public Function calinski_harabasz(<RRawVectorArgument> x As Object,
+                                      Optional traceback As TracebackMatrix = Nothing,
+                                      Optional env As Environment = Nothing) As Object
+        Dim pull = dataSetCommon(x, env)
+
+        If pull Like GetType(Message) Then
+            Return pull.TryCast(Of Message)
+        End If
+
+        If traceback Is Nothing Then
+            Return pull.TryCast(Of IEnumerable(Of ClusterEntity)).calinskiharabasz
+        Else
+            Dim itr As New TraceBackIterator(traceback.data)
+            Dim data = pull.TryCast(Of IEnumerable(Of ClusterEntity)).ToArray
+            Dim curveLine = EvaluationScore.CalinskiHarabaszs(data, itr).ToArray
+
+            Dim df As New Rdataframe With {
+                .columns = New Dictionary(Of String, Array)
+            }
+
+            Call df.add("num_class", curveLine.Select(Function(t) t.X))
+            Call df.add("calinski_harabasz", curveLine.Select(Function(t) t.Y))
+
+            Return df
+        End If
+    End Function
+
+    Private Function dataSetCommon(x As Object, env As Environment) As [Variant](Of Message, IEnumerable(Of ClusterEntity))
         Dim points As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(x, env)
         Dim data As IEnumerable(Of ClusterEntity)
 
@@ -639,29 +698,7 @@ Module clustering
             data = mapper.GetVectors(pull)
         End If
 
-        If traceback Is Nothing Then
-            Return data.Silhouette
-        Else
-            Dim itr As New TraceBackIterator(traceback.data)
-            Dim curveLine = TraceBackAlgorithm.MeasureCurve(data.ToArray, itr).ToArray
-
-            If raw_clr Then
-                Return curveLine
-            Else
-                Dim df As New Rdataframe With {
-                    .columns = New Dictionary(Of String, Array)
-                }
-
-                Call df.add("num_class", curveLine.Select(Function(t) t.num_class))
-                Call df.add("silhouette", curveLine.Select(Function(t) t.silhouette))
-                Call df.add("dunn", curveLine.Select(Function(t) t.dunn))
-                Call df.add("davidBouldin", curveLine.Select(Function(t) t.davidBouldin))
-                Call df.add("calinskiHarabasz", curveLine.Select(Function(t) t.calinskiHarabasz))
-                Call df.add("maximumDiameter", curveLine.Select(Function(t) t.maximumDiameter))
-
-                Return df
-            End If
-        End If
+        Return data
     End Function
 
     ''' <summary>
