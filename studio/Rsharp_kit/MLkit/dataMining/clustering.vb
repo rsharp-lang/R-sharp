@@ -94,7 +94,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports BisectingKMeans = Microsoft.VisualBasic.DataMining.BisectingKMeans.BisectingKMeans
+Imports BisectingKMeans = Microsoft.VisualBasic.DataMining.KMeans.Bisecting.BisectingKMeans
 Imports Distance = Microsoft.VisualBasic.DataMining.HierarchicalClustering.Hierarchy.Distance
 Imports Point2D = System.Drawing.Point
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
