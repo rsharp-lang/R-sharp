@@ -494,6 +494,48 @@ Module clustering
     End Function
 
     ''' <summary>
+    ''' 
+    ''' 
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="T1"></param>
+    ''' <param name="T2"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' value of <paramref name="T1"/> should greater than <paramref name="T2"/>, example as:
+    ''' 
+    ''' ```
+    ''' T1 = 8 and T2 = 4
+    ''' ```
+    ''' </remarks>
+    <ExportAPI("canopy")>
+    Public Function Canopy(<RRawVectorArgument> x As Object,
+                           Optional T1 As Double = Double.NaN,
+                           Optional T2 As Double = Double.NaN,
+                           Optional env As Environment = Nothing) As Object
+
+        If x Is Nothing Then
+            Return Nothing
+        End If
+
+        Dim model = getDataModel(x, env)
+
+        If model Like GetType(Message) Then
+            Return model.TryCast(Of Message)
+        End If
+
+        Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
+        Dim data As IEnumerable(Of ClusterEntity) = maps.GetVectors(model.TryCast(Of EntityClusterModel()))
+
+        If T1.IsNaNImaginary OrElse T2.IsNaNImaginary Then
+            Return New CanopyBuilder(data).Solve
+        Else
+            Return New CanopyBuilder(data, T1, T2).Solve
+        End If
+    End Function
+
+    ''' <summary>
     ''' K-Means Clustering
     ''' </summary>
     ''' <param name="x">
