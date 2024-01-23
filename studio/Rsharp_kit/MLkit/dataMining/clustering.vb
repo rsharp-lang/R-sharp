@@ -655,6 +655,9 @@ Module clustering
                 Call df.add("num_class", curveLine.Select(Function(t) t.num_class))
                 Call df.add("silhouette", curveLine.Select(Function(t) t.silhouette))
                 Call df.add("dunn", curveLine.Select(Function(t) t.dunn))
+                Call df.add("davidBouldin", curveLine.Select(Function(t) t.davidBouldin))
+                Call df.add("calinskiHarabasz", curveLine.Select(Function(t) t.calinskiHarabasz))
+                Call df.add("maximumDiameter", curveLine.Select(Function(t) t.maximumDiameter))
 
                 Return df
             End If
