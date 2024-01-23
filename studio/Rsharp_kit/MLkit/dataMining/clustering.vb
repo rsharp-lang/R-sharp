@@ -609,15 +609,13 @@ Module clustering
     ''' <returns></returns>
     <ExportAPI("kmeans")>
     <RApiReturn(GetType(EntityClusterModel))>
-    Public Function Kmeans(<RRawVectorArgument>
-                           x As Object,
-                           Optional centers As Object = 3,
-                           Optional bisecting As Boolean = False,
-                           Optional n_threads As Integer = 16,
-                           Optional debug As Boolean = False,
-                           Optional traceback As Boolean = False,
-                           Optional env As Environment = Nothing) As Object
-
+    Public Function Kmeans_func(<RRawVectorArgument> x As Object,
+                                Optional centers As Object = 3,
+                                Optional bisecting As Boolean = False,
+                                Optional n_threads As Integer = 16,
+                                Optional debug As Boolean = False,
+                                Optional traceback As Boolean = False,
+                                Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
             Return Nothing
         End If
@@ -656,7 +654,10 @@ Module clustering
 
             Return kmeans_result.ToArray
         ElseIf TypeOf centers Is CanopySeeds Then
-
+            Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
+            Dim target As ClusterEntity() = maps.GetVectors(model.TryCast(Of EntityClusterModel())).ToArray
+            Dim kmeans As New KMeansAlgorithm(Of ClusterEntity)(debug, n_threads:=n_threads)
+            Dim result As ClusterCollection(Of ClusterEntity) = kmeans.ClusterDataSet(target, DirectCast(centers, CanopySeeds), Function(v) New ClusterEntity(v))
         Else
             Return model.TryCast(Of EntityClusterModel()) _
                 .Kmeans(nk, debug, n_threads:=n_threads) _
