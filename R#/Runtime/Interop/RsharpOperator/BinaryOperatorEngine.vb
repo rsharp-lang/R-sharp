@@ -96,32 +96,47 @@ Namespace Runtime.Interop.Operator
             Next
         End Sub
 
+        Private Function dateTimeEqualsTo(a As Object, b As Object, env As Environment) As Object
+            Return BinaryCoreInternal(Of Date, Date, Boolean)(
+                x:=CLRVector.asDate(a),
+                y:=CLRVector.asDate(b),
+                [do]:=Function(x, y, env2)
+                          Dim dx = DirectCast(x, Date)
+                          Dim dy = DirectCast(y, Date)
+
+                          If dx.Year <> dy.Year Then
+                              Return False
+                          ElseIf dx.Month <> dy.Month Then
+                              Return False
+                          ElseIf dx.Day <> dy.Day Then
+                              Return False
+                          Else
+                              Return True
+                          End If
+                      End Function,
+                env:=env
+            )
+        End Function
+
+        Private Function timespanAdd(a As Object, b As Object, env As Environment) As Object
+            Return BinaryCoreInternal(Of TimeSpan, TimeSpan, TimeSpan)(
+                x:=asVector(Of TimeSpan)(a),
+                y:=asVector(Of TimeSpan)(b),
+                [do]:=Function(x, y, env2)
+                          Return DirectCast(x, TimeSpan) + DirectCast(y, TimeSpan)
+                      End Function,
+                env:=env
+            )
+        End Function
+
         Private Sub addEtcTypeCompres()
             Dim dateType As RType = RType.GetRSharpType(GetType(Date))
-            Dim equalsTo As IBinaryOperator =
-                Function(a, b, env)
-                    Return BinaryCoreInternal(Of Date, Date, Boolean)(
-                            x:=CLRVector.asDate(a),
-                            y:=CLRVector.asDate(b),
-                            [do]:=Function(x, y, env2)
-                                      Dim dx = DirectCast(x, Date)
-                                      Dim dy = DirectCast(y, Date)
-
-                                      If dx.Year <> dy.Year Then
-                                          Return False
-                                      ElseIf dx.Month <> dy.Month Then
-                                          Return False
-                                      ElseIf dx.Day <> dy.Day Then
-                                          Return False
-                                      Else
-                                          Return True
-                                      End If
-                                  End Function,
-                            env:=env
-                        )
-                End Function
+            Dim timespan As RType = RType.GetRSharpType(GetType(TimeSpan))
+            Dim equalsTo As IBinaryOperator = AddressOf dateTimeEqualsTo
+            Dim addTo As IBinaryOperator = AddressOf timespanAdd
 
             Call addBinary(dateType, dateType, "==", equalsTo, Nothing)
+            Call addBinary(timespan, timespan, "+", addTo, Nothing)
         End Sub
 
         ' 20221016 为了更加高效率的实现SIMD相关的功能
