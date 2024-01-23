@@ -122,6 +122,7 @@ Module clustering
         Call REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
     End Sub
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function showHclust(cluster As Cluster) As String
         Return cluster.ToConsoleLine
     End Function
