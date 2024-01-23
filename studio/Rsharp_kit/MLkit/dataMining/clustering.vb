@@ -658,6 +658,8 @@ Module clustering
             Dim target As ClusterEntity() = maps.GetVectors(model.TryCast(Of EntityClusterModel())).ToArray
             Dim kmeans As New KMeansAlgorithm(Of ClusterEntity)(debug, n_threads:=n_threads)
             Dim result As ClusterCollection(Of ClusterEntity) = kmeans.ClusterDataSet(target, DirectCast(centers, CanopySeeds), Function(v) New ClusterEntity(v))
+
+            Return result.PopulateObjects(maps).ToArray
         Else
             Return model.TryCast(Of EntityClusterModel()) _
                 .Kmeans(nk, debug, n_threads:=n_threads) _
