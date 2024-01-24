@@ -94,7 +94,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports BisectingKMeans = Microsoft.VisualBasic.DataMining.BisectingKMeans.BisectingKMeans
+Imports BisectingKMeans = Microsoft.VisualBasic.DataMining.KMeans.Bisecting.BisectingKMeans
 Imports Distance = Microsoft.VisualBasic.DataMining.HierarchicalClustering.Hierarchy.Distance
 Imports Point2D = System.Drawing.Point
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
@@ -109,6 +109,7 @@ Module clustering
     Friend Sub Main()
         Call REnv.Internal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
 
+        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(Bisecting.Cluster()), AddressOf clustersDf1)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(FuzzyCMeansEntity()), AddressOf cmeansSummary)
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(
@@ -121,8 +122,41 @@ Module clustering
         Call REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
     End Sub
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function showHclust(cluster As Cluster) As String
         Return cluster.ToConsoleLine
+    End Function
+
+    Private Function clustersDf1(clusters As Bisecting.Cluster(), args As list, env As Environment) As Rdataframe
+        Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim width As Integer = clusters(0).centroid.Length
+        Dim v As List(Of Double)() = New List(Of Double)(width - 1) {}
+        Dim rownames As New List(Of String)
+        Dim class_id As New List(Of Integer)
+
+        For i As Integer = 0 To width - 1
+            v(i) = New List(Of Double)
+        Next
+
+        For Each c As Bisecting.Cluster In clusters
+            For Each p As ClusterEntity In c
+                Call rownames.Add(p.uid)
+                Call class_id.Add(c.Cluster)
+
+                For i As Integer = 0 To width - 1
+                    Call v(i).Add(p(i))
+                Next
+            Next
+        Next
+
+        df.add("clusters", class_id)
+        df.rownames = rownames.ToArray
+
+        For i As Integer = 0 To width - 1
+            Call df.add($"V{i + 1}", v(i))
+        Next
+
+        Return df
     End Function
 
     Public Function clusterSummary(result As Object, args As list, env As Environment) As Object
@@ -494,32 +528,34 @@ Module clustering
     End Function
 
     ''' <summary>
-    ''' K-Means Clustering
+    ''' 
+    ''' 
     ''' </summary>
-    ''' <param name="x">
-    ''' numeric matrix of data, or an object that can be coerced 
-    ''' to such a matrix (such as a numeric vector or a data 
-    ''' frame with all numeric columns).
+    ''' <param name="x"></param>
+    ''' <param name="T1"></param>
+    ''' <param name="T2"></param>
+    ''' <param name="seed">
+    ''' use the canopy method as kmeans seed or just used for clustering?
+    ''' 
+    ''' set this parameter to value true means used the result as seed, then a seed object of 
+    ''' type <see cref="CanopySeeds"/> will be generated from this function. otherwise parameter 
+    ''' value false means the result is a collection of the <see cref="Bisecting.Cluster"/> 
+    ''' result, you can convert the cluster result to a dataframe via ``as.data.frame`` method.
     ''' </param>
-    ''' <param name="centers">
-    ''' either the number of clusters, say k, or a set of initial 
-    ''' (distinct) cluster centres. If a number, a random set of 
-    ''' (distinct) rows in x is chosen as the initial centres.
-    ''' </param>
-    ''' <param name="n_threads">the parallel options, for configs the number of 
-    ''' cpu cores for run the parallel task code.</param>
-    ''' <param name="debug"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
-    <ExportAPI("kmeans")>
-    <RApiReturn(GetType(EntityClusterModel))>
-    Public Function Kmeans(<RRawVectorArgument>
-                           x As Object,
-                           Optional centers% = 3,
-                           Optional bisecting As Boolean = False,
-                           Optional n_threads As Integer = 16,
-                           Optional debug As Boolean = False,
-                           Optional traceback As Boolean = False,
+    ''' <remarks>
+    ''' value of <paramref name="T1"/> should greater than <paramref name="T2"/>, example as:
+    ''' 
+    ''' ```
+    ''' T1 = 8 and T2 = 4
+    ''' ```
+    ''' </remarks>
+    <ExportAPI("canopy")>
+    Public Function Canopy(<RRawVectorArgument> x As Object,
+                           Optional T1 As Double = Double.NaN,
+                           Optional T2 As Double = Double.NaN,
+                           Optional seed As Boolean = True,
                            Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -532,11 +568,80 @@ Module clustering
             Return model.TryCast(Of Message)
         End If
 
+        Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
+        Dim data As IEnumerable(Of ClusterEntity) = maps.GetVectors(model.TryCast(Of EntityClusterModel()))
+        Dim builder As CanopyBuilder
+
+        If T1.IsNaNImaginary OrElse T2.IsNaNImaginary Then
+            builder = New CanopyBuilder(data)
+        Else
+            builder = New CanopyBuilder(data, T1, T2)
+        End If
+
+        If seed Then
+            Return builder.KMeansSeeds
+        Else
+            Return builder.Solve
+        End If
+    End Function
+
+    ''' <summary>
+    ''' K-Means Clustering
+    ''' </summary>
+    ''' <param name="x">
+    ''' numeric matrix of data, or an object that can be coerced 
+    ''' to such a matrix (such as a numeric vector or a data 
+    ''' frame with all numeric columns).
+    ''' </param>
+    ''' <param name="centers">
+    ''' either the number of clusters, say k, or a set of initial 
+    ''' (distinct) cluster centres. If a number, a random set of 
+    ''' (distinct) rows in x is chosen as the initial centres.
+    ''' 
+    ''' this parameter value could be an integer value or a seed value object 
+    ''' in clr type <see cref="CanopySeeds"/> which is produced via the 
+    ''' ``canopy`` function.
+    ''' </param>
+    ''' <param name="n_threads">the parallel options, for configs the number of 
+    ''' cpu cores for run the parallel task code.</param>
+    ''' <param name="debug"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' the canopy seed data is only works for the native k-means algorithm currently.
+    ''' </remarks>
+    <ExportAPI("kmeans")>
+    <RApiReturn(GetType(EntityClusterModel))>
+    Public Function Kmeans_func(<RRawVectorArgument> x As Object,
+                                Optional centers As Object = 3,
+                                Optional bisecting As Boolean = False,
+                                Optional n_threads As Integer = 16,
+                                Optional debug As Boolean = False,
+                                Optional traceback As Boolean = False,
+                                Optional env As Environment = Nothing) As Object
+        If x Is Nothing Then
+            Return Nothing
+        End If
+
+        Dim model = getDataModel(x, env)
+
+        If model Like GetType(Message) Then
+            Return model.TryCast(Of Message)
+        End If
+
+        Dim nk As Integer
+
+        If TypeOf centers Is CanopySeeds Then
+            nk = DirectCast(centers, CanopySeeds).k
+        Else
+            nk = CLRVector.asInteger(centers).DefaultFirst(3)
+        End If
+
         If bisecting Then
             Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
             Dim bikmeans As New BisectingKMeans(
                 dataList:=maps.GetVectors(model.TryCast(Of EntityClusterModel())),
-                k:=centers,
+                k:=nk,
                 traceback:=traceback,
                 n_threads:=n_threads
             )
@@ -551,9 +656,16 @@ Module clustering
             Next
 
             Return kmeans_result.ToArray
+        ElseIf TypeOf centers Is CanopySeeds Then
+            Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
+            Dim target As ClusterEntity() = maps.GetVectors(model.TryCast(Of EntityClusterModel())).ToArray
+            Dim kmeans As New KMeansAlgorithm(Of ClusterEntity)(debug, n_threads:=n_threads)
+            Dim result As ClusterCollection(Of ClusterEntity) = kmeans.ClusterDataSet(target, DirectCast(centers, CanopySeeds), Function(v) New ClusterEntity(v))
+
+            Return result.PopulateObjects(maps).ToArray
         Else
             Return model.TryCast(Of EntityClusterModel()) _
-                .Kmeans(centers, debug, n_threads:=n_threads) _
+                .Kmeans(nk, debug, n_threads:=n_threads) _
                 .ToArray
         End If
     End Function
@@ -612,9 +724,68 @@ Module clustering
     <ExportAPI("silhouette_score")>
     Public Function silhouette_score(<RRawVectorArgument> x As Object,
                                      Optional traceback As TracebackMatrix = Nothing,
-                                     Optional raw_clr As Boolean = False,
                                      Optional env As Environment = Nothing) As Object
 
+        Dim pull = dataSetCommon(x, env)
+
+        If pull Like GetType(Message) Then
+            Return pull.TryCast(Of Message)
+        End If
+
+        If traceback Is Nothing Then
+            Return pull.TryCast(Of IEnumerable(Of ClusterEntity)).Silhouette
+        Else
+            Dim itr As New TraceBackIterator(traceback.data)
+            Dim data = pull.TryCast(Of IEnumerable(Of ClusterEntity)).ToArray
+            Dim curveLine = EvaluationScore.SilhouetteCoeff(data, itr).ToArray
+
+            Dim df As New Rdataframe With {
+                .columns = New Dictionary(Of String, Array)
+            }
+
+            Call df.add("num_class", curveLine.Select(Function(t) t.X))
+            Call df.add("silhouette", curveLine.Select(Function(t) t.Y))
+
+            Return df
+        End If
+    End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="traceback"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("calinski_harabasz")>
+    Public Function calinski_harabasz(<RRawVectorArgument> x As Object,
+                                      Optional traceback As TracebackMatrix = Nothing,
+                                      Optional env As Environment = Nothing) As Object
+        Dim pull = dataSetCommon(x, env)
+
+        If pull Like GetType(Message) Then
+            Return pull.TryCast(Of Message)
+        End If
+
+        If traceback Is Nothing Then
+            Return pull.TryCast(Of IEnumerable(Of ClusterEntity)).calinskiharabasz
+        Else
+            Dim itr As New TraceBackIterator(traceback.data)
+            Dim data = pull.TryCast(Of IEnumerable(Of ClusterEntity)).ToArray
+            Dim curveLine = EvaluationScore.CalinskiHarabaszs(data, itr).ToArray
+
+            Dim df As New Rdataframe With {
+                .columns = New Dictionary(Of String, Array)
+            }
+
+            Call df.add("num_class", curveLine.Select(Function(t) t.X))
+            Call df.add("calinski_harabasz", curveLine.Select(Function(t) t.Y))
+
+            Return df
+        End If
+    End Function
+
+    Private Function dataSetCommon(x As Object, env As Environment) As [Variant](Of Message, IEnumerable(Of ClusterEntity))
         Dim points As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(x, env)
         Dim data As IEnumerable(Of ClusterEntity)
 
@@ -639,26 +810,7 @@ Module clustering
             data = mapper.GetVectors(pull)
         End If
 
-        If traceback Is Nothing Then
-            Return data.Silhouette
-        Else
-            Dim itr As New TraceBackIterator(traceback.data)
-            Dim curveLine = TraceBackAlgorithm.MeasureCurve(data.ToArray, itr).ToArray
-
-            If raw_clr Then
-                Return curveLine
-            Else
-                Dim df As New Rdataframe With {
-                    .columns = New Dictionary(Of String, Array)
-                }
-
-                Call df.add("num_class", curveLine.Select(Function(t) t.num_class))
-                Call df.add("silhouette", curveLine.Select(Function(t) t.silhouette))
-                Call df.add("dunn", curveLine.Select(Function(t) t.dunn))
-
-                Return df
-            End If
-        End If
+        Return data
     End Function
 
     ''' <summary>
