@@ -974,22 +974,26 @@ Namespace Runtime.Internal.Invokes
                 End If
             Next
 
-            Dim colNames = d.columns.Keys.ToArray
+            Dim colNames As String() = d.columns.Keys.ToArray
+            ' re-order columns, make the column orders keeps the same
+            ' between two dataframe objects
             Dim copy As dataframe = d.projectByColumn(colNames, fullSize:=True, env:=env)
             Dim copy2 As dataframe = row.projectByColumn(colNames, fullSize:=True, env:=env)
-            Dim totalRows As Integer = copy.nrows + copy2.nrows
+            Dim r1 As Integer = copy.nrows
+            Dim r2 As Integer = copy2.nrows
+            Dim totalRows As Integer = r1 + r2
 
             For Each col As String In colNames
-                Dim a As Array = copy.columns(col)
-                Dim b As Array = copy2.columns(col)
+                Dim a As GetVectorElement = GetVectorElement.CreateAny(copy.columns(col))
+                Dim b As GetVectorElement = GetVectorElement.CreateAny(copy2.columns(col))
                 Dim vec As Object() = New Object(totalRows - 1) {}
 
-                For i As Integer = 0 To a.Length - 1
-                    vec(i) = a.GetValue(i)
+                For i As Integer = 0 To r1 - 1
+                    vec(i) = a(i)
                 Next
 
-                For i As Integer = 0 To b.Length - 1
-                    vec(i + a.Length) = b.GetValue(i)
+                For i As Integer = 0 To r2 - 1
+                    vec(i + r1) = b(i)
                 Next
 
                 copy.columns(col) = vec
@@ -998,6 +1002,7 @@ Namespace Runtime.Internal.Invokes
             copy.rownames = copy _
                 .getRowNames _
                 .JoinIterates(copy2.getRowNames) _
+                .uniqueNames _
                 .ToArray
 
             Return copy
