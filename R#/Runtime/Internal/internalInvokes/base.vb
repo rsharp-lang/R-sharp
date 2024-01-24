@@ -1086,9 +1086,10 @@ Namespace Runtime.Internal.Invokes
                     ' so no nrow-1 for create vec
                     Dim vec = New Object(nrow) {}
                     Dim v2 = d.columns(colnames(i))
+                    Dim getter = GetVectorElement.CreateAny(v2)
 
                     For j As Integer = 0 To v2.Length - 1
-                        vec(j) = v2(j)
+                        vec(j) = getter(j)
                     Next
 
                     vec(v2.Length) = v(i)

@@ -86,6 +86,10 @@ Namespace Runtime.Vectorization
         Public ReadOnly Property [Error] As Exception
         Public ReadOnly Property elementType As Type
 
+        ''' <summary>
+        ''' does the given input vector data is nothing or a clr array with zero elements inside?
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property isNullOrEmpty As Boolean
             Get
                 Return vector Is Nothing OrElse vector.Length = 0
@@ -93,10 +97,12 @@ Namespace Runtime.Vectorization
         End Property
 
         ''' <summary>
-        ''' 
+        ''' get elements inside current vector with i index
         ''' </summary>
         ''' <param name="i">zero-based vector element index value</param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this property unify the array get element and scalar value getter
+        ''' </returns>
         Default Public ReadOnly Property item(i As Integer) As Object
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
@@ -291,6 +297,16 @@ Namespace Runtime.Vectorization
                     x = DirectCast(x, vector).data
                 End If
 
+                Return CreateVectorInternal(Of Object)(x)
+            End If
+        End Function
+
+        Public Shared Function CreateAny(x As Array) As GetVectorElement
+            Dim any As Type = GetType(Object)
+
+            If x Is Nothing Then
+                Return New GetVectorElement(vec:=Nothing, any)
+            Else
                 Return CreateVectorInternal(Of Object)(x)
             End If
         End Function
