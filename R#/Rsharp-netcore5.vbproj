@@ -235,4 +235,8 @@
     <ProjectReference Include="..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Runtime\Internal\objects\base\" />
+  </ItemGroup>
+
 </Project>

@@ -55,14 +55,18 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports any = Microsoft.VisualBasic.Scripting
+Imports anys = Microsoft.VisualBasic.Scripting
 Imports expr = SMRUCC.Rsharp.Interpreter.ExecuteEngine.Expression
 
-Namespace Runtime.Internal.Object
+Namespace Runtime.Internal.Invokes.LinqPipeline
 
-    Module dataframeBase
+    ''' <summary>
+    ''' some common dataframe operations
+    ''' </summary>
+    Module dataframe_methods
 
         <ExportAPI("aggregate")>
         Public Function eval(x As dataframe, <RLazyExpression> expr As expr, Optional env As Environment = Nothing) As Object
@@ -153,7 +157,7 @@ Namespace Runtime.Internal.Object
         <ExportAPI("rename")>
         Public Function rename(x As dataframe,
                                <RListObjectArgument>
-                               Optional renames As list = Nothing,
+                               Optional renames As List = Nothing,
                                Optional env As Environment = Nothing) As Object
 
             If x Is Nothing Then
@@ -182,7 +186,7 @@ Namespace Runtime.Internal.Object
                 Else
                     ' new = old
                     newName = nameMap.Name
-                    oldName = any.ToString(nameMap.Value)
+                    oldName = anys.ToString(nameMap.Value)
                 End If
 
                 copy.columns(newName) = copy.columns(oldName)
