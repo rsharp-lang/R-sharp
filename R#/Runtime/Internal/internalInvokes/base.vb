@@ -982,6 +982,7 @@ Namespace Runtime.Internal.Invokes
             Dim r1 As Integer = copy.nrows
             Dim r2 As Integer = copy2.nrows
             Dim totalRows As Integer = r1 + r2
+            Dim oldRownames As String() = copy.getRowNames
 
             For Each col As String In colNames
                 Dim a As GetVectorElement = GetVectorElement.CreateAny(copy.columns(col))
@@ -999,8 +1000,7 @@ Namespace Runtime.Internal.Invokes
                 copy.columns(col) = vec
             Next
 
-            copy.rownames = copy _
-                .getRowNames _
+            copy.rownames = oldRownames _
                 .JoinIterates(copy2.getRowNames) _
                 .uniqueNames _
                 .ToArray
