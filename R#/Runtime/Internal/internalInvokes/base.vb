@@ -1088,11 +1088,11 @@ Namespace Runtime.Internal.Invokes
                     Dim v2 = d.columns(colnames(i))
                     Dim getter = GetVectorElement.CreateAny(v2)
 
-                    For j As Integer = 0 To v2.Length - 1
+                    For j As Integer = 0 To vec.Length - 1
                         vec(j) = getter(j)
                     Next
 
-                    vec(v2.Length) = v(i)
+                    vec(vec.Length - 1) = v(i)
                     d.columns(colnames(i)) = REnv.TryCastGenericArray(vec, env)
                 Next
 
