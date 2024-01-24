@@ -1010,8 +1010,9 @@ Namespace Runtime.Internal.Invokes
         ''' by columns or rows, respectively. These are generic functions with 
         ''' methods for other R classes.
         ''' </summary>
-        ''' <param name="d"></param>
-        ''' <param name="row"></param>
+        ''' <param name="d">should be a dataframe object</param>
+        ''' <param name="row">should be another dataframe object, or a vector 
+        ''' for combine a row or a tuple list for combine as a row.</param>
         ''' <param name="env"></param>
         ''' <param name="safe">
         ''' Merge the dataframe safely?
@@ -1024,9 +1025,10 @@ Namespace Runtime.Internal.Invokes
                               Optional env As Environment = Nothing) As Object
 
             If d Is Nothing OrElse d.empty Then
+                ' deal with the situation when target is null or empty
                 If TypeOf row Is dataframe Then
                     Return row
-                Else
+                ElseIf Not TypeOf row Is list Then
                     Dim tbl As New dataframe With {
                         .columns = New Dictionary(Of String, Array)
                     }
@@ -1036,6 +1038,20 @@ Namespace Runtime.Internal.Invokes
                     ' and this new dataframe just contains one element
                     For i As Integer = 0 To v.Length - 1
                         tbl.columns($"v{i + 1}") = {v.GetValue(i)}
+                    Next
+
+                    Return tbl
+                Else
+                    Dim rowList As list = DirectCast(row, list)
+                    Dim tbl As New dataframe With {
+                        .columns = New Dictionary(Of String, Array)
+                    }
+                    Dim vobj As Object
+
+                    For Each name As String In rowList.getNames
+                        vobj = rowList(name)
+                        vobj = REnv.asVector(Of Object)(vobj)
+                        tbl.columns(name) = REnv.UnsafeTryCastGenericArray(vobj)
                     Next
 
                     Return tbl
@@ -1056,8 +1072,10 @@ Namespace Runtime.Internal.Invokes
                 Dim nrow As Integer = d.nrows
 
                 If v.Length <> colnames.Length Then
+                    ' the vector is append as a row of the dataframe, so the vector
+                    ' length should be equals to the columns in the dataframe
                     Return Internal.debug.stop({
-                        $"mismatch column size between dataframe and vector row!",
+                        $"mis-matched column size between dataframe and row vector size!",
                         $"({v.Length}) columns: {CLRVector.asCharacter(v).GetJson}",
                         $"({colnames.Length}) columns: {d.colnames.GetJson}"
                     }, env)
