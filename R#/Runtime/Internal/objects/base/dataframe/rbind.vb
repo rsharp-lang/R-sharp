@@ -6,7 +6,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 
-Namespace Runtime.Internal.Object.base.dataframeOp
+Namespace Runtime.Internal.Object.baseOp.dataframeOp
 
     ''' <summary>
     ''' rbind function helpers
