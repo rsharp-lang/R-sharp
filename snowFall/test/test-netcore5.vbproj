@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>imaging_netcore5</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <StartupObject>imaging_netcore5.Program</StartupObject>
     <Configurations>Debug;Release;Rsharp_app_release</Configurations>
