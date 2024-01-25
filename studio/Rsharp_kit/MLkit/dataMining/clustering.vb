@@ -452,46 +452,6 @@ Module clustering
         Return classes
     End Function
 
-    Private Function getDataModel(x As Object, env As Environment) As [Variant](Of Message, EntityClusterModel())
-        Dim model As EntityClusterModel()
-
-        If x.GetType.IsArray Then
-#Disable Warning
-            Select Case REnv.MeasureArrayElementType(x)
-                Case GetType(DataSet)
-                    model = DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).ToKMeansModels
-                Case GetType(EntityClusterModel)
-                    model = REnv.asVector(Of EntityClusterModel)(x)
-                Case Else
-                    Return REnv.Internal.debug.stop(New InvalidProgramException(x.GetType.FullName), env)
-            End Select
-#Enable Warning
-        ElseIf TypeOf x Is Rdataframe Then
-            Dim colNames As String() = DirectCast(x, Rdataframe).columns _
-                .Keys _
-                .ToArray
-
-            model = DirectCast(x, Rdataframe) _
-                .forEachRow _
-                .Select(Function(r)
-                            Return New EntityClusterModel With {
-                                .ID = r.name,
-                                .Properties = colNames _
-                                    .SeqIterator _
-                                    .ToDictionary(Function(c) c.value,
-                                                  Function(i)
-                                                      Return CType(r(i), Double)
-                                                  End Function)
-                            }
-                        End Function) _
-                .ToArray
-        Else
-            Return REnv.Internal.debug.stop(New InvalidProgramException(x.GetType.FullName), env)
-        End If
-
-        Return model
-    End Function
-
     Dim m_traceback As TraceBackAlgorithm
 
     ''' <summary>
@@ -562,7 +522,7 @@ Module clustering
             Return Nothing
         End If
 
-        Dim model = getDataModel(x, env)
+        Dim model = DataMiningDataSet.getDataModel(x, env)
 
         If model Like GetType(Message) Then
             Return model.TryCast(Of Message)
@@ -623,7 +583,7 @@ Module clustering
             Return Nothing
         End If
 
-        Dim model = getDataModel(x, env)
+        Dim model = DataMiningDataSet.getDataModel(x, env)
 
         If model Like GetType(Message) Then
             Return model.TryCast(Of Message)
@@ -680,7 +640,7 @@ Module clustering
             Return Nothing
         End If
 
-        Dim model = getDataModel(x, env)
+        Dim model = DataMiningDataSet.getDataModel(x, env)
 
         If model Like GetType(Message) Then
             Return model.TryCast(Of Message)

@@ -11,5 +11,6 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)dataframeWriter.vb" />
     <Compile Include="$(MSBuildThisFileDirectory)MathDataSet.vb" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataMiningDataSet.vb" />
   </ItemGroup>
 </Project>
