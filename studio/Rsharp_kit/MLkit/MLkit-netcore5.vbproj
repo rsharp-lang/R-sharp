@@ -54,7 +54,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <DefineConstants>DATAMINING_DATASET=1,UNIX=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
     <OutputPath>../../../App\</OutputPath>
   </PropertyGroup>
 
@@ -66,7 +66,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
     <OutputPath>../../../App\</OutputPath>
   </PropertyGroup>
 
@@ -78,7 +78,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
     <OutputPath>../../../../../../\mzkit\dist\bin\Rstudio\library\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
@@ -226,7 +226,7 @@
     <Optimize>False</Optimize>
     <DebugType>full</DebugType>
     <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0|AnyCPU'">
