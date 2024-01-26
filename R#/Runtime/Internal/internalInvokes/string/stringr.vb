@@ -93,6 +93,9 @@ Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 Namespace Runtime.Internal.Invokes
 
+    ''' <summary>
+    ''' the R text data helper
+    ''' </summary>
     <Package("stringr")>
     Public Module stringr
 
