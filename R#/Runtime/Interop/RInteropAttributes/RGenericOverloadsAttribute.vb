@@ -55,13 +55,26 @@
 
 Namespace Runtime.Interop
 
+    ''' <summary>
+    ''' construct a flag that indicates that target clr function will 
+    ''' be overloads in R# environment, the function overloads is 
+    ''' determined based on the data type of the first parameter. 
+    ''' 
+    ''' the function overloads in R# usually be ``plot(...)``, ``as.data.frame(...)``,
+    ''' typically.
+    ''' </summary>
     <AttributeUsage(AttributeTargets.Method, AllowMultiple:=True, Inherited:=True)>
     Public Class RGenericOverloadsAttribute : Inherits RInteropAttribute
 
         Public ReadOnly Property FunctionName As String
 
         ''' <summary>
+        ''' construct a flag that indicates that target clr function will 
+        ''' be overloads in R# environment, the function overloads is 
+        ''' determined based on the data type of the first parameter. 
         ''' 
+        ''' the function overloads in R# usually be ``plot(...)``, ``as.data.frame(...)``,
+        ''' typically.
         ''' </summary>
         ''' <param name="func">
         ''' The name of the target function for overloads

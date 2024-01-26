@@ -194,7 +194,8 @@ Namespace Development.Package.File
                 Case GetType(Require), GetType([Imports]) : Return RImports.GetBuffer(x)
                 Case GetType(UnaryNot), GetType(UnaryNumeric) : Return RUnary.GetBuffer(x)
                 Case GetType(VectorLiteral) : Return RVector.GetBuffer(x)
-                Case GetType(SymbolReference), GetType(NamespaceFunctionSymbolReference) : Return RSymbolRef.GetBuffer(x)
+                Case GetType(SymbolReference), GetType(NamespaceFunctionSymbolReference), GetType(HomeSymbol)
+                    Return RSymbolRef.GetBuffer(x)
 
                 Case GetType(SymbolIndexer), GetType(DotNetObject), GetType(VectorLoop) : Return RSymbolIndex.GetBuffer(x)
                 Case GetType(ValueAssignExpression), GetType(MemberValueAssign) : Return RSymbolAssign.GetBuffer(x)

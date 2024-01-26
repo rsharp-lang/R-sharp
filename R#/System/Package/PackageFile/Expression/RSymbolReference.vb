@@ -59,6 +59,7 @@ Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
@@ -75,9 +76,24 @@ Namespace Development.Package.File.Expressions
                 Call WriteBuffer(ms, DirectCast(x, SymbolReference))
             ElseIf TypeOf x Is NamespaceFunctionSymbolReference Then
                 Call WriteBuffer(ms, DirectCast(x, NamespaceFunctionSymbolReference))
+            ElseIf TypeOf x Is HomeSymbol Then
+                Call WriteBuffer(ms, DirectCast(x, HomeSymbol))
             Else
                 Throw New NotImplementedException(x.GetType.FullName)
             End If
+        End Sub
+
+        Private Overloads Sub WriteBuffer(ms As MemoryStream, x As HomeSymbol)
+            Using outfile As New BinaryWriter(ms)
+                Call outfile.Write(CInt(ExpressionTypes.SymbolReference))
+                Call outfile.Write(0)
+                Call outfile.Write(CByte(x.type))
+
+                Call outfile.Write(Encoding.ASCII.GetBytes("@HOME"))
+
+                Call outfile.Flush()
+                Call saveSize(outfile)
+            End Using
         End Sub
 
         Private Overloads Sub WriteBuffer(ms As MemoryStream, x As NamespaceFunctionSymbolReference)
@@ -111,9 +127,12 @@ Namespace Development.Package.File.Expressions
 
         Private Function parseSymbol(buffer As MemoryStream, desc As DESCRIPTION) As Expression
             Dim symbolName As String = Encoding.ASCII.GetString(buffer.ToArray)
-            Dim ref As New SymbolReference(symbolName)
 
-            Return ref
+            If symbolName = "@HOME" Then
+                Return New HomeSymbol
+            Else
+                Return New SymbolReference(symbolName)
+            End If
         End Function
 
         Private Function parseFunctionRef(io As BinaryReader, desc As DESCRIPTION) As Expression

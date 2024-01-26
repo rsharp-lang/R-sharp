@@ -13,11 +13,12 @@
     <Description>MLkit: R# machine learning toolkit library</Description>
     <PackageIcon>Preview Icon - Rect.png</PackageIcon>
     <UseApplicationFramework>True</UseApplicationFramework>
+    <DefineConstants>DATAMINING_DATASET=1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>MLkit.xml</DocumentationFile>
-    <DefineConstants>netcore5=1</DefineConstants>
+   
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -53,7 +54,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
     <OutputPath>../../../App\</OutputPath>
   </PropertyGroup>
 
@@ -65,7 +66,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
     <OutputPath>../../../App\</OutputPath>
   </PropertyGroup>
 
@@ -77,7 +78,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
     <OutputPath>../../../../../../\mzkit\dist\bin\Rstudio\library\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
@@ -96,7 +97,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,MATH_DATASET=1,UNIX=1</DefineConstants>
     <OutputPath>../../../../workbench/win32_desktop/Apps/Rstudio/library</OutputPath>
   </PropertyGroup>
 
@@ -185,7 +186,7 @@
     <Optimize>False</Optimize>
     <DebugType>full</DebugType>
     <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,MATH_DATASET=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0-windows|x64'">
@@ -193,7 +194,7 @@
     <Optimize>False</Optimize>
     <DebugType>full</DebugType>
     <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,MATH_DATASET=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0|AnyCPU'">
@@ -201,7 +202,7 @@
     <Optimize>False</Optimize>
     <DebugType>full</DebugType>
     <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,MATH_DATASET=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0-windows|AnyCPU'">
@@ -217,7 +218,7 @@
     <Optimize>False</Optimize>
     <DebugType>full</DebugType>
     <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,MATH_DATASET=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0-windows|x64'">
@@ -225,7 +226,7 @@
     <Optimize>False</Optimize>
     <DebugType>full</DebugType>
     <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0|AnyCPU'">
@@ -261,7 +262,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net48|x64'">
-    <DefineConstants>UNIX=1,MATH_DATASET=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

@@ -133,7 +133,7 @@ Namespace Runtime.Internal
             Call GetType(ranking).DoCall(AddressOf pushEnvir)
             Call GetType(TableJoint).DoCall(AddressOf pushEnvir)
             Call GetType(rust).DoCall(AddressOf pushEnvir)
-            Call GetType(dataframeBase).DoCall(AddressOf pushEnvir)
+            Call GetType(dataframe_methods).DoCall(AddressOf pushEnvir)
             Call GetType(bitView).DoCall(AddressOf pushEnvir)
             Call GetType(search).DoCall(AddressOf pushEnvir)
             Call GetType(humanReadableFormatter).DoCall(AddressOf pushEnvir)

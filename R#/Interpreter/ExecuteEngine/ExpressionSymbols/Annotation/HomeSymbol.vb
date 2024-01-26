@@ -58,7 +58,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
 
     ''' <summary>
-    ''' ``@HOME``
+    ''' ``@HOME`` for just get the directory path of the R# program file where it is.
     ''' </summary>
     Public Class HomeSymbol : Inherits Expression
 

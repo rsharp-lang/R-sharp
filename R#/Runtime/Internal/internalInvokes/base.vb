@@ -103,6 +103,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object].baseOp.dataframeOp
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -897,112 +898,6 @@ Namespace Runtime.Internal.Invokes
             Return REnv.TryCastGenericArray(out.Take(length_out).ToArray, env)
         End Function
 
-        Private Function safeRowBindDataFrame(d As dataframe, row As dataframe, env As Environment) As Object
-            Dim colNames As String() = d.colnames.JoinIterates(row.colnames).Distinct.ToArray
-            Dim rbind As New dataframe With {
-                .columns = New Dictionary(Of String, Array),
-                .rownames = d.getRowNames _
-                    .JoinIterates(row.getRowNames) _
-                    .uniqueNames _
-                    .ToArray
-            }
-            Dim totalSize As Integer = d.nrows + row.nrows
-
-            For Each col As String In colNames
-                Dim v1 As Array
-                Dim v2 As Array
-
-                If d.hasName(col) Then
-                    v1 = d.getColumnVector(col)
-                Else
-                    v1 = Nothing
-                End If
-                If row.hasName(col) Then
-                    v2 = row.getColumnVector(col)
-                Else
-                    v2 = Nothing
-                End If
-
-                If v1 Is Nothing Then
-                    v1 = Array.CreateInstance(v2.GetType.GetElementType, d.nrows)
-                End If
-                If v2 Is Nothing Then
-                    v2 = Array.CreateInstance(v1.GetType.GetElementType, row.nrows)
-                End If
-
-                Dim union As Array = Array.CreateInstance(v1.GetType.GetElementType, totalSize)
-
-                Try
-                    Call Array.ConstrainedCopy(v1, Scan0, union, Scan0, v1.Length)
-                    Call Array.ConstrainedCopy(v2, Scan0, union, v1.Length, v2.Length)
-                Catch ex As Exception
-                    Return Internal.debug.stop({
-                        $"data type mis-matched while union the data fields('{col}') of two dataframe!",
-                        $"colname: {col}",
-                        $"v1_type: {RType.GetRSharpType(v1.GetType.GetElementType).ToString}",
-                        $"v2_type: {RType.GetRSharpType(v2.GetType.GetElementType).ToString}"
-                    }, env)
-                End Try
-
-                Call rbind.columns.Add(col, REnv.UnsafeTryCastGenericArray(union))
-            Next
-
-            Return rbind
-        End Function
-
-        Private Function rowBindDataFrame(d As dataframe, row As dataframe, env As Environment) As Object
-            ' 20240119
-            ' one of them maybe empty
-            If d.empty Then
-                Return row
-            ElseIf row.empty Then
-                Return d
-            End If
-
-            If d.columns.Count <> row.columns.Count Then
-                Return Internal.debug.stop({
-                    $"mismatch column size between two dataframe!",
-                    $"({d.ncols}) columns: {d.colnames.GetJson}",
-                    $"({row.ncols}) columns: {row.colnames.GetJson}",
-                    $"diffs: {DirectCast([set].setdiff(d.colnames, row.colnames, env), String()).GetJson}"
-                }, env)
-            End If
-
-            For Each col In row.columns
-                If Not d.hasName(col.Key) Then
-                    Return Internal.debug.stop({$"names do not match previous names", $"missing: {col.Key}"}, env)
-                End If
-            Next
-
-            Dim colNames = d.columns.Keys.ToArray
-            Dim copy As dataframe = d.projectByColumn(colNames, fullSize:=True, env:=env)
-            Dim copy2 As dataframe = row.projectByColumn(colNames, fullSize:=True, env:=env)
-            Dim totalRows As Integer = copy.nrows + copy2.nrows
-
-            For Each col As String In colNames
-                Dim a As Array = copy.columns(col)
-                Dim b As Array = copy2.columns(col)
-                Dim vec As Object() = New Object(totalRows - 1) {}
-
-                For i As Integer = 0 To a.Length - 1
-                    vec(i) = a.GetValue(i)
-                Next
-
-                For i As Integer = 0 To b.Length - 1
-                    vec(i + a.Length) = b.GetValue(i)
-                Next
-
-                copy.columns(col) = vec
-            Next
-
-            copy.rownames = copy _
-                .getRowNames _
-                .JoinIterates(copy2.getRowNames) _
-                .ToArray
-
-            Return copy
-        End Function
-
         ''' <summary>
         ''' ### Combine R Objects by Rows or Columns
         ''' 
@@ -1010,8 +905,9 @@ Namespace Runtime.Internal.Invokes
         ''' by columns or rows, respectively. These are generic functions with 
         ''' methods for other R classes.
         ''' </summary>
-        ''' <param name="d"></param>
-        ''' <param name="row"></param>
+        ''' <param name="d">should be a dataframe object</param>
+        ''' <param name="row">should be another dataframe object, or a vector 
+        ''' for combine a row or a tuple list for combine as a row.</param>
         ''' <param name="env"></param>
         ''' <param name="safe">
         ''' Merge the dataframe safely?
@@ -1024,9 +920,10 @@ Namespace Runtime.Internal.Invokes
                               Optional env As Environment = Nothing) As Object
 
             If d Is Nothing OrElse d.empty Then
+                ' deal with the situation when target is null or empty
                 If TypeOf row Is dataframe Then
                     Return row
-                Else
+                ElseIf Not TypeOf row Is list Then
                     Dim tbl As New dataframe With {
                         .columns = New Dictionary(Of String, Array)
                     }
@@ -1039,15 +936,29 @@ Namespace Runtime.Internal.Invokes
                     Next
 
                     Return tbl
+                Else
+                    Dim rowList As list = DirectCast(row, list)
+                    Dim tbl As New dataframe With {
+                        .columns = New Dictionary(Of String, Array)
+                    }
+                    Dim vobj As Object
+
+                    For Each name As String In rowList.getNames
+                        vobj = rowList(name)
+                        vobj = REnv.asVector(Of Object)(vobj)
+                        tbl.columns(name) = REnv.UnsafeTryCastGenericArray(vobj)
+                    Next
+
+                    Return tbl
                 End If
             ElseIf row Is Nothing Then
                 Return d
             ElseIf TypeOf row Is dataframe Then
                 ' row bind of two dataframe object
                 If safe Then
-                    Return safeRowBindDataFrame(d, row, env)
+                    Return rbindOp.safeRowBindDataFrame(d, row, env)
                 Else
-                    Return rowBindDataFrame(d, row, env)
+                    Return rbindOp.rowBindDataFrame(d, row, env)
                 End If
             Else
                 ' dataframe rbind with a vector row
@@ -1056,8 +967,10 @@ Namespace Runtime.Internal.Invokes
                 Dim nrow As Integer = d.nrows
 
                 If v.Length <> colnames.Length Then
+                    ' the vector is append as a row of the dataframe, so the vector
+                    ' length should be equals to the columns in the dataframe
                     Return Internal.debug.stop({
-                        $"mismatch column size between dataframe and vector row!",
+                        $"mis-matched column size between dataframe and row vector size!",
                         $"({v.Length}) columns: {CLRVector.asCharacter(v).GetJson}",
                         $"({colnames.Length}) columns: {d.colnames.GetJson}"
                     }, env)
@@ -1068,12 +981,13 @@ Namespace Runtime.Internal.Invokes
                     ' so no nrow-1 for create vec
                     Dim vec = New Object(nrow) {}
                     Dim v2 = d.columns(colnames(i))
+                    Dim getter = GetVectorElement.CreateAny(v2)
 
-                    For j As Integer = 0 To v2.Length - 1
-                        vec(j) = v2(j)
+                    For j As Integer = 0 To vec.Length - 1
+                        vec(j) = getter(j)
                     Next
 
-                    vec(v2.Length) = v(i)
+                    vec(vec.Length - 1) = v(i)
                     d.columns(colnames(i)) = REnv.TryCastGenericArray(vec, env)
                 Next
 

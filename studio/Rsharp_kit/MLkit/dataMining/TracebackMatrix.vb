@@ -21,6 +21,18 @@ Public Class TracebackMatrix : Inherits RDefaultFunction
         End Get
     End Property
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="i">1-based index value</param>
+    ''' <param name="sort"></param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' this function returns a tuple list of mapping the cluster entity 
+    ''' unique id to the class id by default, otherwise a character vector 
+    ''' of the class id will be returns if the parameter sort has been 
+    ''' specificed.
+    ''' </returns>
     <RDefaultFunction>
     Public Function getByIndex(i As Integer,
                                <RRawVectorArgument>
