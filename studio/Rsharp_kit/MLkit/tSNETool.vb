@@ -75,6 +75,7 @@ Module tSNETool
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(tSNEDataSet), AddressOf createResultTable)
     End Sub
 
+    <RGenericOverloads("as.data.frame")>
     Private Function createResultTable(result As tSNEDataSet, args As list, env As Environment) As dataframe
         Return result.GetOutput
     End Function

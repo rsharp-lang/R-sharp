@@ -77,6 +77,7 @@ Module Manifold
         Call Internal.generic.add("plot", GetType(Umap), AddressOf datasetKit.EmbeddingRender)
     End Sub
 
+    <RGenericOverloads("as.data.frame")>
     Private Function exportUmapTable(umap As Umap, args As list, env As Environment) As Rdataframe
         Dim labels As String() = CLRVector.asCharacter(args.getByName("labels"))
         Dim colNames As String() = CLRVector.asCharacter(args.getByName("dimension"))
@@ -129,7 +130,8 @@ Module Manifold
     ''' default 2, The dimension of the space to embed into.
     ''' </param>
     ''' <param name="numberOfNeighbors">
-    ''' default 15, The size of local neighborhood (in terms of number of neighboring sample points) used for manifold approximation.
+    ''' default 15, The size of local neighborhood (in terms of number of neighboring sample points) 
+    ''' used for manifold approximation.
     ''' </param>
     ''' <param name="customMapCutoff">
     ''' cutoff value in range ``[0,1]``
@@ -142,16 +144,19 @@ Module Manifold
     ''' knn search via KD-tree?
     ''' </param>
     ''' <param name="localConnectivity">
-    ''' default 1, The local connectivity required -- i.e. the number of nearest neighbors that should be assumed to be connected at a local level.
+    ''' default 1, The local connectivity required -- i.e. the number of nearest neighbors that should 
+    ''' be assumed to be connected at a local level.
     ''' </param>
     ''' <param name="setOpMixRatio">
-    ''' default 1.0, The value of this parameter should be between 0.0 and 1.0; a value of 1.0 will use a pure fuzzy union, while 0.0 will use a pure fuzzy intersection.
+    ''' default 1.0, The value of this parameter should be between 0.0 and 1.0; a value of 1.0 will use 
+    ''' a pure fuzzy union, while 0.0 will use a pure fuzzy intersection.
     ''' </param>
     ''' <param name="minDist">
     ''' default 0.1, The effective minimum distance between embedded points.
     ''' </param>
     ''' <param name="spread">
-    ''' default 1.0, The effective scale of embedded points. In combination with ``min_dist`` this determines how clustered/clumped the embedded points are.
+    ''' default 1.0, The effective scale of embedded points. In combination with ``min_dist`` this determines 
+    ''' how clustered/clumped the embedded points are.
     ''' </param>
     ''' <param name="learningRate">
     ''' default 1.0, The initial learning rate for the embedding optimization.
