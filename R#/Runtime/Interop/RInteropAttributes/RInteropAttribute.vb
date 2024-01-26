@@ -148,6 +148,15 @@ Namespace Runtime.Interop
         Public ReadOnly Property name As String
         Public ReadOnly Property model As Type
 
+        Sub New(target As Type)
+            Call Me.New(target.Name, target)
+        End Sub
+
+        ''' <summary>
+        ''' export type with given alias name
+        ''' </summary>
+        ''' <param name="name">the type alias name in R# runtime environment</param>
+        ''' <param name="target"></param>
         Sub New(name As String, target As Type)
             Me.name = name
             Me.model = target
