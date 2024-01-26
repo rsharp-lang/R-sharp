@@ -532,9 +532,16 @@ Module clustering
         Dim data As IEnumerable(Of ClusterEntity) = maps.GetVectors(model.TryCast(Of EntityClusterModel()))
         Dim builder As CanopyBuilder
 
-        If T1.IsNaNImaginary OrElse T2.IsNaNImaginary Then
+        If T2.IsNaNImaginary Then
             builder = New CanopyBuilder(data)
         Else
+            If T1.IsNaNImaginary Then
+                T1 = T2 * 2
+            End If
+            If T1 < T2 Then
+                Return Internal.debug.stop($"value of T1({T1}) should greater than T2({T2}).", env)
+            End If
+
             builder = New CanopyBuilder(data, T1, T2)
         End If
 
