@@ -15,6 +15,10 @@ Module DataMiningDataSet
     Public Function getDataModel(x As Object, env As Environment) As [Variant](Of Message, EntityClusterModel())
         Dim model As EntityClusterModel()
 
+        If x Is Nothing Then
+            Return Internal.debug.stop("the given dataset should not be nothing!", env)
+        End If
+
         If x.GetType.IsArray Then
 #Disable Warning
             Select Case REnv.MeasureArrayElementType(x)
