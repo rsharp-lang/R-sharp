@@ -115,6 +115,7 @@ Module datasetKit
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(SampleData()), AddressOf sampledataDataSet)
     End Sub
 
+    <RGenericOverloads("as.data.frame")>
     Private Function sampledataDataSet(ds As SampleData(), args As list, env As Environment) As Object
         Dim features As Integer = ds(0).features.Length
         Dim labels As Integer = ds(0).labels.Length
@@ -175,11 +176,13 @@ Module datasetKit
         Return dims
     End Function
 
+    <RGenericOverloads("as.data.frame")>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function toMatrix(data As UnionMatrix, args As list, env As Environment) As Rdataframe
         Return data.CreateMatrix
     End Function
 
+    <RGenericOverloads("as.data.frame")>
     Private Function fitSgt(sgt As SequenceGraphTransform, args As list, env As Environment) As Object
         Dim sequence As Object = args.getBySynonyms("sequence", "seq", "seqs", "sequences")
         Dim parallel As Boolean = args.getValue(Of Boolean)({"parallel", "par"}, env, [default]:=False)
@@ -224,6 +227,7 @@ Module datasetKit
                 .ToArray
             df.add(key, v)
         Next
+
         Return df
     End Function
 
@@ -553,6 +557,7 @@ Module datasetKit
         }
     End Function
 
+    <RGenericOverloads("plot")>
     Friend Function EmbeddingRender(input As IDataEmbedding, args As list, env As Environment) As GraphicsData
         Dim size$ = InteropArgumentHelper.getSize(args!size, env)
         Dim pointSize# = args.getValue("point_size", env, 15.0)

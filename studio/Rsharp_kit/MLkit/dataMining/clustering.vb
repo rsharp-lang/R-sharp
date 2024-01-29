@@ -177,6 +177,7 @@ Module clustering
         End If
     End Function
 
+    <RGenericOverloads("as.data.frame")>
     Public Function cmeansSummary(cmeans As FuzzyCMeansEntity(), args As list, env As Environment) As Rdataframe
         Dim summary As New Rdataframe With {
             .rownames = cmeans.Keys,
@@ -203,6 +204,7 @@ Module clustering
     ''' <returns></returns>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <Extension>
+    <RGenericOverloads("as.data.frame")>
     Public Function treeDf(tree As BTreeCluster, args As list, env As Environment) As Rdataframe
         Return tree _
             .GetClusterResult(vnames:=args.getValue(Of String())("colnames", env)) _
@@ -219,6 +221,8 @@ Module clustering
     ''' <param name="args"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
+    ''' 
+    <RGenericOverloads("as.data.frame")>
     <Extension>
     Public Function clusterResultDataFrame(data As EntityClusterModel(), args As list, env As Environment) As Rdataframe
         Dim table As File = data.ToCsvDoc

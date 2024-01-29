@@ -79,6 +79,7 @@ Module validation
         REnv.Internal.generic.add("plot", GetType(ROC), AddressOf PlotROC)
     End Sub
 
+    <RGenericOverloads("plot")>
     Public Function PlotROC(roc As ROC, args As list, env As Environment) As Object
         Dim line As SerialData = ROCPlot.CreateSerial(roc)
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, "2700,2400")
@@ -93,6 +94,7 @@ Module validation
         Return ROCPlot.Plot(line, size:=size)
     End Function
 
+    <RGenericOverloads("as.data.frame")>
     Public Function Tabular(x As Object, args As list, env As Environment) As Rdataframe
         Dim input As Evaluation.Validation() = DirectCast(x, Evaluation.Validation())
         Dim dataframe As New Rdataframe With {
