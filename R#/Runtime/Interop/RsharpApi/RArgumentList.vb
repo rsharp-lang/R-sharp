@@ -395,6 +395,8 @@ Namespace Runtime.Interop
 
                         If argv.requireRawExpression AndAlso arg.isAcceptor Then
                             argVal = arg.value
+                        ElseIf argv.islazyeval Then
+                            argVal = arg.GetLazyEvaluateExpression
                         Else
                             argVal = arg.Evaluate(env)
                         End If
