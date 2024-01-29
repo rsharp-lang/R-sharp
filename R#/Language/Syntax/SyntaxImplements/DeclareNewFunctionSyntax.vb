@@ -53,6 +53,7 @@
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -119,6 +120,14 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
             Dim bodyPart As SyntaxResult
             ' test if is an inline function
             Dim bodyPart2 = parts.Skip(2).IteratesALL.ToArray
+
+            If bodyPart2.IsNullOrEmpty Then
+                Dim allspan = code.IteratesALL.ToArray
+                Dim t0 As CodeSpan = allspan.First.span
+                Dim t1 As CodeSpan = allspan.Last.span
+
+                Return New SyntaxResult(SyntaxError.CreateError(opts, "no function body was found!", t0, t1))
+            End If
 
             If bodyPart2(Scan0) = (TokenType.open, "{") AndAlso bodyPart2.Last = (TokenType.close, "}") Then
                 bodyPart = bodyPart2 _
