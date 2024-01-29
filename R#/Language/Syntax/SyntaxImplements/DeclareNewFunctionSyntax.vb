@@ -122,9 +122,13 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
             Dim bodyPart2 = parts.Skip(2).IteratesALL.ToArray
 
             If bodyPart2.IsNullOrEmpty Then
-                Dim allspan = code.IteratesALL.ToArray
-                Dim t0 As CodeSpan = allspan.First.span
-                Dim t1 As CodeSpan = allspan.Last.span
+                Dim allspan As CodeSpan() = code _
+                    .IteratesALL _
+                    .Where(Function(ti) Not ti.span Is Nothing) _
+                    .Select(Function(ti) ti.span) _
+                    .ToArray
+                Dim t0 As CodeSpan = allspan.First
+                Dim t1 As CodeSpan = allspan.Last
 
                 Return New SyntaxResult(SyntaxError.CreateError(opts, "no function body was found!", t0, t1))
             End If
