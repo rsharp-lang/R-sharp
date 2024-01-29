@@ -514,6 +514,13 @@ Namespace Runtime.Internal.Invokes
             )
         End Function
 
+        ''' <summary>
+        ''' image data is nothing
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="args"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Function OpenNewBitmapDevice(file As Object, args As list, env As Environment) As Object
             ' just open a new device
             Dim size As SizeF = args.getSize(env, [default]:=New SizeF(2700, 2000))
@@ -530,6 +537,8 @@ Namespace Runtime.Internal.Invokes
                     Call println($"open a new bitmap canvas devices:")
                     Call println($"  (width={size.Width}, height={size.Height})")
                 End If
+
+                Call env.AddMessage("neither image plot data nor file stream is missing, a gdi graphics object will be returns!")
 
                 Return New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill, dpi:=$"{dpi},{dpi}")
             Else
