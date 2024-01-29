@@ -288,7 +288,7 @@ Namespace Runtime.Internal.Object
                 End If
             Next
 
-            If Not hasHit Then
+            If (Not hasHit) OrElse (value Is Nothing) Then
                 Return [default]
             ElseIf TypeOf value Is Message Then
                 err = value

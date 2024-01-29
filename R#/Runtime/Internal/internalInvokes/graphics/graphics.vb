@@ -519,7 +519,7 @@ Namespace Runtime.Internal.Invokes
             Dim size As SizeF = args.getSize(env, [default]:=New SizeF(2700, 2000))
             Dim backColor As Object = args.getValue(Of Object)({"fill", "color", "background"}, env)
             Dim fill As Color = graphicsPipeline.GetRawColor(backColor, [default]:=NameOf(Color.Transparent))
-            Dim dpi As Integer = args.getValue(Of Integer)({"dpi", "res"}, env, [default]:=100)
+            Dim dpi As Integer = args.getValue({"dpi", "res"}, env, [default]:=100)
 
             If file Is Nothing Then
                 ' just open a new canvas object and returns to user?
