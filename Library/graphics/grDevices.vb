@@ -142,7 +142,7 @@ Public Module grDevices
                         Optional env As Environment = Nothing) As Object
 
         If image Is Nothing Then
-            Dim size As Size = graphicsPipeline.getSize(args!size, env, "2700,2000").SizeParser
+            Dim size As SizeF = graphicsPipeline.getSize(args, env, New SizeF(2700, 2000))
             ' just open a new device
             Dim buffer = GetFileStream(file, FileAccess.Write, env)
             Dim fill As Color = graphicsPipeline.GetRawColor(args!fill, [default]:="white")
