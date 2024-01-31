@@ -360,7 +360,8 @@ Namespace Runtime.Internal.Object
                 ' undefined column was selected
                 Return Nothing
             ElseIf col.IsNullOrEmpty Then
-                ' is empty column
+                ' 20240131
+                ' is empty column,
                 ' make it empty safely
                 Return New Object(nrows - 1) {}
             End If
