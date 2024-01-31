@@ -205,7 +205,9 @@ Namespace Runtime.Internal.Object.Converts
             Dim max As Integer = data.nrows
             Dim noneAgree As (key$, size%)() = data.columns _
                 .Where(Function(col)
-                           Return col.Value.Length <> max AndAlso col.Value.Length <> 1
+                           ' 0 all row element value in current col is empty(or NULL)
+                           ' 1 all row element value in current col is the same(scalar value)
+                           Return col.Value.Length <> max AndAlso col.Value.Length > 1
                        End Function) _
                 .Select(Function(col) (col.Key, col.Value.Length)) _
                 .ToArray
