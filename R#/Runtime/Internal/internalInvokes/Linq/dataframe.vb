@@ -228,14 +228,14 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim cols As String() = x.colnames
             Dim ordinal As Integer = cols.IndexOf(duplicates)
             Dim groups = x.forEachRow() _
-                .Zip(ranks) _
+                .Select(Function(r, i) (row:=r, score:=ranks(i))) _
                 .GroupBy(Function(r)
                              ' group by duplicated key
                              Return anys.ToString(r.Item1(ordinal))
                          End Function) _
                 .Select(Function(r)
                             ' get the top score item for make unique row
-                            Return r.OrderByDescending(Function(t) t.Second).First.First
+                            Return r.OrderByDescending(Function(t) t.score).First.row
                         End Function) _
                 .ToArray
             Dim df As New dataframe With {
