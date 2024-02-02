@@ -136,6 +136,10 @@ Namespace Runtime.Internal.Object
             _slots = list
         End Sub
 
+        Sub New(list As IDictionary(Of String, Object))
+            _slots = New Dictionary(Of String, Object)(list)
+        End Sub
+
         Sub New(table As IDictionary)
             _slots = New Dictionary(Of String, Object)
 
