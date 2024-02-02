@@ -502,6 +502,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' a logical vector or array. NAs are allowed and omitted
         ''' (treated as if FALSE).
         ''' </param>
+        ''' <param name="first">
+        ''' get the first index element where the assert is TRUE, this parameter
+        ''' works for test expression is nothing
+        ''' </param>
         ''' <returns>
         ''' an integer vector with length equal to sum(x), i.e., to 
         ''' the number of TRUEs in x; Basically, the result is 
@@ -512,16 +516,42 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' x to logical: only arguments with typeof logical are 
         ''' accepted and others give an error.
         ''' </remarks>
+        ''' <example>
+        ''' x = [TRUE FALSE FALSE TRUE];
+        ''' 
+        ''' print(which(x));
+        ''' # [1] 1 4
+        ''' 
+        ''' # just returns the first element index which is assert as TRUE
+        ''' print(which(x, first = TRUE));
+        ''' # [1] 1
+        ''' </example>
         <ExportAPI("which")>
         Private Function where(<RRawVectorArgument>
                                x As Object,
                                Optional test As Object = Nothing,
                                Optional pipelineFilter As Boolean = True,
+                               Optional first As Boolean = False,
                                Optional env As Environment = Nothing) As Object
 
             If test Is Nothing Then
-                ' test for which index
-                Return which.IsTrue(CLRVector.asLogical(x), offset:=1)
+                If first Then
+                    ' assert for first which index
+                    Dim asserts As Boolean() = CLRVector.asLogical(x)
+
+                    For i As Integer = 0 To asserts.Length - 1
+                        If asserts(i) Then
+                            ' index offset start from 1 in R# language
+                            Return i + 1
+                        End If
+                    Next
+
+                    ' all is false
+                    Return Nothing
+                Else
+                    ' assert for all which index
+                    Return which.IsTrue(CLRVector.asLogical(x), offset:=1)
+                End If
             ElseIf TypeOf x Is pipeline Then
                 ' run in pipeline mode
                 Return runFilterPipeline(x, test, pipelineFilter, env)
