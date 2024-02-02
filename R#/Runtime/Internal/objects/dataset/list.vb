@@ -217,6 +217,11 @@ Namespace Runtime.Internal.Object
         Public Function getNames() As String() Implements RNames.getNames
             Dim names As String() = slots.Keys.ToArray
 
+            If length = 0 Then
+                ' an empty string collection
+                Return If(names, New String() {})
+            End If
+
             ' [[1]]
             If names.All(Function(s) s.IsPattern("\d+") OrElse s.IsPattern("\[\[\d+\]\]")) Then
                 Return Nothing
