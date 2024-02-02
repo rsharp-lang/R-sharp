@@ -8,3 +8,7 @@ str(x);
 
 print(x[[4]]);
 print(x[4]);
+
+x[[4]] = 99999;
+
+print(x[4]);
