@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::65dc22408441826f67bed892e7bce7bc, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/list.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 477
-    '    Code Lines: 287
-    ' Comment Lines: 124
-    '   Blank Lines: 66
-    '     File Size: 17.26 KB
+' Summaries:
 
 
-    '     Class list
-    ' 
-    '         Properties: data, length, slots
-    ' 
-    '         Constructor: (+6 Overloads) Sub New
-    ' 
-    '         Function: AsGeneric, checkTuple, ctypeInternal, empty, (+2 Overloads) getByIndex
-    '                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
-    '                   GetVector, hasName, namedValues, setByindex, setByIndex
-    '                   (+2 Overloads) setByName, setNames, ToString
-    ' 
-    '         Sub: add
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 477
+'    Code Lines: 287
+' Comment Lines: 124
+'   Blank Lines: 66
+'     File Size: 17.26 KB
+
+
+'     Class list
+' 
+'         Properties: data, length, slots
+' 
+'         Constructor: (+6 Overloads) Sub New
+' 
+'         Function: AsGeneric, checkTuple, ctypeInternal, empty, (+2 Overloads) getByIndex
+'                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
+'                   GetVector, hasName, namedValues, setByindex, setByIndex
+'                   (+2 Overloads) setByName, setNames, ToString
+' 
+'         Sub: add
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -196,6 +196,8 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <param name="name"></param>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function hasName(name As String) As Boolean Implements RNames.hasName
             Return slots.ContainsKey(name)
         End Function
@@ -206,14 +208,30 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <param name="names"></param>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function hasNames(ParamArray names As String()) As Boolean
             Return names.All(AddressOf hasName)
+        End Function
+
+        ''' <summary>
+        ''' get names with uncheck default index
+        ''' </summary>
+        ''' <returns></returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function slotKeys() As String()
+            Return _slots.Keys.ToArray
         End Function
 
         ''' <summary>
         ''' this function may returns nothing if all index names are default index, example as: [[1]]
         ''' </summary>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' for get key names safely(avoid null reference) in the clr code, 
+        ''' expression like ``slots.Keys.ToArray`` could be used. analso the
+        ''' function <see cref="slotKeys()"/> works for this situation.
+        ''' </remarks>
         Public Function getNames() As String() Implements RNames.getNames
             Dim names As String() = slots.Keys.ToArray
 

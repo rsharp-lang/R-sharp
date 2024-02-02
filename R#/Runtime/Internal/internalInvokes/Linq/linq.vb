@@ -1010,7 +1010,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             If TypeOf sequence Is list Then
                 Dim list As list = DirectCast(sequence, list)
 
-                For Each name As String In list.getNames
+                For Each name As String In list.slots.Keys.ToArray
                     key = keyBy(list.slots(name))
 
                     If Program.isException(key) Then
