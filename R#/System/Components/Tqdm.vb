@@ -26,7 +26,7 @@ Namespace Development.Components
             Dim size As Integer = list.length
             Dim d As Integer = size / 50
 
-            For Each key As String In Tqdm.Wrap(list.getNames, bar:=bar)
+            For Each key As String In Tqdm.Wrap(list.slotKeys, bar:=bar)
                 If d <= 1 OrElse (n Mod d = 0) Then
                     Call bar.SetLabel(key)
                 End If
