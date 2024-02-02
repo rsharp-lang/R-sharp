@@ -210,8 +210,19 @@ Namespace Runtime.Internal.Object
             Return names.All(AddressOf hasName)
         End Function
 
+        ''' <summary>
+        ''' this function may returns nothing if all index names are default index, example as: [[1]]
+        ''' </summary>
+        ''' <returns></returns>
         Public Function getNames() As String() Implements RNames.getNames
-            Return slots.Keys.ToArray
+            Dim names As String() = slots.Keys.ToArray
+
+            ' [[1]]
+            If names.All(Function(s) s.IsPattern("\[\[\d+\]\]")) Then
+                Return Nothing
+            Else
+                Return names
+            End If
         End Function
 
         Public Iterator Function namedValues() As IEnumerable(Of NamedValue(Of Object))
