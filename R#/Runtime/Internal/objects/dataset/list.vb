@@ -218,7 +218,7 @@ Namespace Runtime.Internal.Object
             Dim names As String() = slots.Keys.ToArray
 
             ' [[1]]
-            If names.All(Function(s) s.IsPattern("\[\[\d+\]\]")) Then
+            If names.All(Function(s) s.IsPattern("\d+") OrElse s.IsPattern("\[\[\d+\]\]")) Then
                 Return Nothing
             Else
                 Return names
@@ -422,10 +422,10 @@ Namespace Runtime.Internal.Object
                 i -= 1
             End If
 
-            Dim names = getNames()
+            Dim names As ICollection(Of String) = _slots.Keys
             Dim key As String = names(i)
 
-            Return slots(key)
+            Return _slots(key)
         End Function
 
         Public Function getByIndex(i() As Integer) As Array Implements RIndex.getByIndex
