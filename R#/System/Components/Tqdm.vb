@@ -15,6 +15,10 @@ Namespace Development.Components
             End Get
         End Property
 
+        ''' <summary>
+        ''' wrap tqdm from this function
+        ''' </summary>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Iterator Function getKeys() As IEnumerable(Of String)
             Dim bar As Tqdm.ProgressBar = Nothing

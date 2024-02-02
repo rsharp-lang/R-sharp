@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -243,6 +244,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                         .Values _
                         .ToArray
                 End If
+            ElseIf TypeOf rawSeq Is tqdmList Then
+                Dim tqdm As tqdmList = rawSeq
+                Dim pull As Func(Of IEnumerable(Of Object)) =
+                    Iterator Function() As IEnumerable(Of Object)
+                        For Each key As String In tqdm.getKeys
+                            Yield tqdm(key)
+                        Next
+                    End Function
+
+                data = pull
             Else
                 data = ObjectSet.GetObjectSet(rawSeq, env)
             End If
