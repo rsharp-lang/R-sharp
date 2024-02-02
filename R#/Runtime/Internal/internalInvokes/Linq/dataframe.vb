@@ -51,11 +51,13 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports anys = Microsoft.VisualBasic.Scripting
@@ -157,7 +159,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <ExportAPI("rename")>
         Public Function rename(x As dataframe,
                                <RListObjectArgument>
-                               Optional renames As List = Nothing,
+                               Optional renames As list = Nothing,
                                Optional env As Environment = Nothing) As Object
 
             If x Is Nothing Then
@@ -194,6 +196,63 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Next
 
             Return copy
+        End Function
+
+        ''' <summary>
+        ''' make rank unique of the element rows inside a dataframe
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="duplicates">
+        ''' the column field name which contains the duplictaed keys for the element rows.
+        ''' </param>
+        ''' <param name="ranking">the column field name for the ranking score or 
+        ''' a numeric vector of the ranking scores for each corresponding element
+        ''' rows.</param>
+        ''' <param name="env"></param>
+        ''' <returns>a new dataframe object with duplicated rows removed</returns>
+        <ExportAPI("rank_unique")>
+        Public Function rank_unique(x As dataframe, duplicates As String, <RRawVectorArgument> ranking As Object, Optional env As Environment = Nothing) As Object
+            Dim ranking_str As String() = CLRVector.asCharacter(ranking)
+            Dim ranks As Double()
+
+            If ranking_str.IsNullOrEmpty Then
+                Return Internal.debug.stop("the required of the ranking score should not be nothing!", env)
+            End If
+            If ranking_str.Length = 1 Then
+                ' is column field name
+                ranks = CLRVector.asNumeric(x(ranking_str(0)))
+            Else
+                ranks = CLRVector.asNumeric(ranking_str)
+            End If
+
+            Dim cols As String() = x.colnames
+            Dim ordinal As Integer = cols.IndexOf(duplicates)
+            Dim groups = x.forEachRow() _
+                .Zip(ranks) _
+                .GroupBy(Function(r)
+                             ' group by duplicated key
+                             Return anys.ToString(r.Item1(ordinal))
+                         End Function) _
+                .Select(Function(r)
+                            ' get the top score item for make unique row
+                            Return r.OrderByDescending(Function(t) t.Second).First.First
+                        End Function) _
+                .ToArray
+            Dim df As New dataframe With {
+                .columns = New Dictionary(Of String, Array),
+                .rownames = groups.Keys(distinct:=False)
+            }
+            Dim v As Object()
+
+            For i As Integer = 0 To cols.Length - 1
+                ordinal = i
+                v = groups _
+                    .Select(Function(r) r(ordinal)) _
+                    .ToArray
+                df.add(cols(i), UnsafeTryCastGenericArray(v))
+            Next
+
+            Return df
         End Function
     End Module
 End Namespace
