@@ -122,10 +122,10 @@ Namespace Runtime.Internal.Invokes
                 Return New tqdmList With {
                     .list = New list(DirectCast(x, IDictionary(Of String, Object)))
                 }
-            ElseIf x.GetType.ImplementInterface(Of IDictionary) Then
-                Return New tqdmList With {
-                    .list = New list(DirectCast(x, IDictionary))
-                }
+                'ElseIf x.GetType.ImplementInterface(Of IDictionary) Then
+                '    Return New tqdmList With {
+                '        .list = New list(DirectCast(x, IDictionary))
+                '    }
             Else
                 Dim pull As Object() = REnv.asVector(Of Object)(x)
                 Dim bar = Tqdm.Wrap(pull, width:=width, printsPerSecond:=prints_perSecond, useColor:=use_color)
